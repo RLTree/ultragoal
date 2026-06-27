@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:distribution-sharing-surface-claim-separation:local_proof_used_as_workspace_sharing"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/local_proof_used_as_workspace_sharing",
+      "value": false
+    }
+  ],
+  "notes": "distribution-sharing-surface-claim-separation must fail when local_proof_used_as_workspace_sharing is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/local_proof_used_as_workspace_sharing",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/local_proof_used_as_workspace_sharing",
+      "expectation": "mandatory_law_specific_guard_not_enforced:distribution-sharing-surface-claim-separation:local_proof_used_as_workspace_sharing"
+    }
+  ]
+}

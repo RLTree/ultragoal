@@ -1,0 +1,227 @@
+{
+  "accessibility_gate": {
+    "evidence": {
+      "digest": "sha256:135341d618fdb786a5c60dbb32c96c3d98129663e66c347b90769b96b9ad5f58",
+      "path": "docs/product-fitness-and-quality-in-use.md"
+    },
+    "journey_binding": "product-fitness-gate-journey"
+  },
+  "actor_disjoint": true,
+  "assumption_tests": [
+    {
+      "evidence": {
+        "digest": "sha256:138bc73bd4f7ed77d50ba38215e5428011aa60dd6c3009f367c60c649664db2a",
+        "path": "fixtures/red/product-fitness-missing-receipt.json"
+      },
+      "hypothesis": "Product Cohesion alone does not prove product success",
+      "id": "assumption-product-fitness-separate-from-cohesion"
+    }
+  ],
+  "business_or_mission_outcome": {
+    "evidence": {
+      "digest": "sha256:ffafbc5023d1c32efe7383aa9eab84999c5d29ea7392cc759d786b1e5d7a9c78",
+      "path": "validation_artifacts/harness/product-fitness-mission.txt"
+    },
+    "outcome": "Reduce product-proof theater in Harness Ultragoal fitted repositories"
+  },
+  "claim": {
+    "id": "CLAIM-001",
+    "repeated_use_claimed": false,
+    "title": "Harness Ultragoal Product Fitness enforcement exists"
+  },
+  "claim_ceiling": "package_static_fixture_only",
+  "cognitive_load_gate": {
+    "burden_assessment": "Product Fitness is routed through one skill and one standards row",
+    "evidence": {
+      "digest": "sha256:4ed3ed5ca2c58c273a79f98cc89e763cbd0550b816d23f31e25ce6e16a084565",
+      "path": "skills/product-fitness-gate/SKILL.md"
+    }
+  },
+  "context_of_use": {
+    "context": "Codex app and local repo setup or retrofit session",
+    "evidence": {
+      "digest": "sha256:708cc570cfce3172fb4b1106d3ce6cdfd60ee1212e5f09e948ac7f14c3a07238",
+      "path": "validation_artifacts/harness/product-fitness-context.txt"
+    }
+  },
+  "continuance_signal": {
+    "evidence": {
+      "digest": "sha256:fc81806d67d16a093ac2e91e8fc143f1501cf35823bad4d4bf3ef19494addeda",
+      "path": "validation_artifacts/harness/product-fitness-continuance-not-claimed.txt"
+    },
+    "required": false
+  },
+  "critical_journey": {
+    "id": "product-fitness-gate-journey",
+    "steps": [
+      "classify product-impacting claim",
+      "require product fitness receipt",
+      "reject substitution proof",
+      "withhold unsupported product claims"
+    ]
+  },
+  "desired_user_outcome": {
+    "evidence": {
+      "digest": "sha256:275f22f01d11a40bbfa88635b17f9231aad29b63ec1e07ab777047c6f2b0237c",
+      "path": "validation_artifacts/harness/product-fitness-outcome.txt"
+    },
+    "outcome": "The agent blocks product success claims unless Product Fitness evidence exists or the claim is withheld"
+  },
+  "first_value_event": {
+    "event": "validator rejects a product-success substitution red fixture",
+    "evidence": {
+      "digest": "sha256:e040945cd5ed3e599a17d3b6781c1b9f07c0f1b292a1972445d8aed3a0069899",
+      "path": "fixtures/red/product-fitness-install-substituted-for-success.json"
+    }
+  },
+  "generated_at": "2026-06-27T00:43:18Z",
+  "job_to_be_done": {
+    "evidence": {
+      "digest": "sha256:37fed1fbe4da7e91d27a24774560c367c427f7a87bfb84e30ae569017d52b59b",
+      "path": "validation_artifacts/harness/product-fitness-job.txt"
+    },
+    "job": "Fit a repository with product proof rules without relying on memory"
+  },
+  "producer_actor_id": "harness-ultragoal-validator",
+  "proof_surface": {
+    "evidence": {
+      "digest": "sha256:135341d618fdb786a5c60dbb32c96c3d98129663e66c347b90769b96b9ad5f58",
+      "path": "docs/product-fitness-and-quality-in-use.md"
+    },
+    "kind": "package_static_fixture"
+  },
+  "quality_in_use_metrics": [
+    {
+      "dimension": "effectiveness",
+      "evidence": {
+        "digest": "sha256:e7855cf60003a4b33a902f4d0340a0387158114abddf67494a3a4b20d5650df8",
+        "path": "fixtures/red/product-fitness-output-substituted-for-outcome.json"
+      },
+      "measure": "product success substitutions fail"
+    },
+    {
+      "dimension": "efficiency",
+      "evidence": {
+        "digest": "sha256:4ed3ed5ca2c58c273a79f98cc89e763cbd0550b816d23f31e25ce6e16a084565",
+        "path": "skills/product-fitness-gate/SKILL.md"
+      },
+      "measure": "agents route directly to product-fitness-gate"
+    },
+    {
+      "dimension": "satisfaction",
+      "evidence": {
+        "digest": "sha256:135341d618fdb786a5c60dbb32c96c3d98129663e66c347b90769b96b9ad5f58",
+        "path": "docs/product-fitness-and-quality-in-use.md"
+      },
+      "measure": "claim ceiling tells operators what is unsupported"
+    },
+    {
+      "dimension": "freedom_from_risk",
+      "evidence": {
+        "digest": "sha256:2f7751c7eb087cdfadfd8cadae02473b4e642753182f6900a4091a630cee541c",
+        "path": "validator/src/audit/product/fitness.rs"
+      },
+      "measure": "validator rejects proof substitution"
+    },
+    {
+      "dimension": "context_coverage",
+      "evidence": {
+        "digest": "sha256:f8539cca3efc6d1e701066429a4ada106807123d84362baf42d4017e29c60a3e",
+        "path": "templates/agent-standards/enforcement.json"
+      },
+      "measure": "init, retrofit, proof-gate, standards, and product-cohesion routing name Product Fitness"
+    }
+  ],
+  "receipt_digest": "sha256:7260dc0cf76d214730c86fb847d66832b35c598de76076e7cbb08f9f116da737",
+  "receipt_version": "1.0.0",
+  "recovery_burden_gate": {
+    "evidence": {
+      "digest": "sha256:d722f836030fe20ff522f2285e073fcf309bd1e093b8bac38c2f34c998628c06",
+      "path": "templates/PRODUCT_FITNESS.md"
+    },
+    "recovery_path": "Withhold the claim and add blocker when Product Fitness proof is missing"
+  },
+  "reviewer_actor_id": "harness-product-simplicity-falsifier",
+  "schema": "harness-ultragoal.product-fitness-receipt.v1",
+  "substitution_rejections": [
+    {
+      "reason": "Install success proves reachability, not product outcome",
+      "rejected_substitute": "install success"
+    },
+    {
+      "reason": "First run proves initial execution, not product success or retention",
+      "rejected_substitute": "first run"
+    },
+    {
+      "reason": "Smoke tests prove a narrow technical path, not user value",
+      "rejected_substitute": "smoke test"
+    },
+    {
+      "reason": "Test pass proves its own surface, not user value",
+      "rejected_substitute": "test pass"
+    },
+    {
+      "reason": "Package publication proves distribution state, not product success",
+      "rejected_substitute": "package publication"
+    },
+    {
+      "reason": "Reviewer approval is not audience-bound user evidence",
+      "rejected_substitute": "reviewer approved"
+    },
+    {
+      "reason": "Opinion is not audience-bound user evidence",
+      "rejected_substitute": "opinion"
+    },
+    {
+      "reason": "Feature delivery is output, not user outcome",
+      "rejected_substitute": "feature delivered"
+    },
+    {
+      "reason": "Happy-path-only proof does not prove quality in use",
+      "rejected_substitute": "happy path"
+    },
+    {
+      "reason": "Fixture proof does not prove real context of use",
+      "rejected_substitute": "fixture"
+    },
+    {
+      "reason": "Daily-driver claims require continuance evidence",
+      "rejected_substitute": "daily driver"
+    },
+    {
+      "reason": "Single-run evidence does not prove retention or repeated use",
+      "rejected_substitute": "single run"
+    },
+    {
+      "reason": "Unresolved entrypoint confusion blocks product fitness",
+      "rejected_substitute": "entrypoint confusion"
+    },
+    {
+      "reason": "Power hidden by interface blocks product fitness",
+      "rejected_substitute": "hidden power"
+    }
+  ],
+  "target_audience": {
+    "evidence": {
+      "digest": "sha256:80ac19aeaf943a7fa9751a4dbd0c0b100521adb31e5102980a034baca32a74c9",
+      "path": "validation_artifacts/harness/product-fitness-audience.txt"
+    },
+    "name": "Harness Ultragoal repo-fitting agent operator"
+  },
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937"
+  },
+  "user_evidence": [
+    {
+      "audience": "Harness Ultragoal repo-fitting agent operator",
+      "context": "Codex app and local repo setup or retrofit session",
+      "evidence": {
+        "digest": "sha256:07e90f5410d53c6eaf2bfb4d9d02cdcb63a258fce8b5594631e24a842e94b0ce",
+        "path": "docs/exec-plans/active/mandatory-product-fitness-quality-in-use-enforcement.md"
+      },
+      "job": "Fit a repository with product proof rules without relying on memory",
+      "outcome": "Unsupported product success claims are withheld"
+    }
+  ]
+}

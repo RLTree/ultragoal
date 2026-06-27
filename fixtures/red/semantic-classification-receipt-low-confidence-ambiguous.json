@@ -1,0 +1,39 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_ambiguous_without_reviewer"
+  },
+  "id": "semantic-classification-receipt-low-confidence-ambiguous",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-receipt-low-confidence-ambiguous.semantic-classification-receipt.json",
+          "digest": "sha256:9e23db07aa91fa3fdfa7d300907a6295031a73def17ee9dff7ebabeb1cef906a"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "low-confidence ambiguous classification must require reviewer classification",
+  "postconditions": [
+    {
+      "expectation": "semantic_classification_ambiguous_without_reviewer",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

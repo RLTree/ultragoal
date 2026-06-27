@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "omitted-init-skill",
+  "expected_failure": {
+    "check_id": "skill-inventory-closure",
+    "error": "required_skill_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plugin_manifest/skills/2/name",
+      "value": "not-agent-first-repo-init"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/skills/2/name",
+      "expectation": "required_skill_missing"
+    }
+  ],
+  "notes": "schema rejects missing required fresh repo init skill"
+}

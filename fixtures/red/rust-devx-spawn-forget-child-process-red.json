@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-spawn-forget-child-process-red",
+  "expected_failure": {
+    "check_id": "rust-memory-resource-discipline",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:spawn_forget_child_process"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-memory-resource-discipline.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/spawn_forget_child_process",
+      "value": false
+    }
+  ],
+  "notes": "spawn-and-forget tasks or child processes without kill/reap policy fail",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/spawn_forget_child_process",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/spawn_forget_child_process",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:spawn_forget_child_process"
+    }
+  ]
+}

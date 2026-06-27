@@ -1,0 +1,168 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-fitness-daily-driver-receipt-mismatch",
+  "expected_failure": {
+    "check_id": "product-fitness-proof",
+    "error": "product_fitness_daily_driver_overclaim"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Daily driver product success for the run console"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "The product is daily driver ready using the Product Fitness receipt."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "value": {
+        "user_facing": true,
+        "product_surface": true,
+        "ui_or_control_surface": true,
+        "surface_classification": "run_console",
+        "rationale": "Daily-driver product claim."
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-PRODUCT-FITNESS-CLAIM",
+        "claim_id": "CLAIM-001",
+        "kind": "product::fitness::receipt",
+        "surface": "product::fitness",
+        "path": "validation_artifacts/harness/product-fitness-receipt.json",
+        "digest": "sha256:2785c6f5721f6250524881e332eab4701809541d3246ab189b9113d2f19ae286",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "verdict": "current"
+        }
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/requires_product_cohesion",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "runtime_cli",
+        "product::cohesion",
+        "ui_browser",
+        "runtime_api",
+        "product::fitness"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-PRODUCT-COHESION-CLAIM",
+        "claim_id": "CLAIM-001",
+        "kind": "product_cohesion_receipt",
+        "surface": "product::cohesion",
+        "path": "validation_artifacts/product-cohesion/journey-receipt.json",
+        "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "verdict": "current"
+        },
+        "product_cohesion_task": {
+          "primary_journey_id": "intent-to-proof",
+          "ui_evidence_paths": [
+            "validation_artifacts/product-cohesion/expected-ui.png"
+          ],
+          "expected_interruption_rate": "rare",
+          "exhausted_harness_evidence_paths": [
+            "validation_artifacts/product-cohesion/harness-paths.json"
+          ]
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-UI-PRODUCT-CLAIM",
+        "claim_id": "CLAIM-001",
+        "kind": "ui_interaction",
+        "surface": "ui_browser",
+        "path": "validation_artifacts/product-cohesion/expected-ui.png",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "verdict": "current"
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-HARNESS-PRODUCT-CLAIM",
+        "claim_id": "CLAIM-001",
+        "kind": "runtime_execution",
+        "surface": "runtime_api",
+        "path": "validation_artifacts/product-cohesion/harness-paths.json",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "verdict": "current"
+        }
+      }
+    }
+  ],
+  "notes": "Daily-driver claim text cannot be satisfied by a receipt that does not claim/prove repeated use.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/valid/non-product-feature-completion.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "product_fitness_daily_driver_overclaim"
+    }
+  ]
+}

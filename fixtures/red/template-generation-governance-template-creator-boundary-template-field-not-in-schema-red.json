@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "template-generation-governance-template-creator-boundary-template-field-not-in-schema-red",
+  "expected_failure": {
+    "check_id": "template-generation-governance-template-creator-boundary",
+    "error": "mandatory_law_specific_guard_not_enforced:template-generation-governance-template-creator-boundary:template_field_not_in_schema"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/template_field_not_in_schema",
+      "value": false
+    }
+  ],
+  "notes": "template-generation-governance-template-creator-boundary must fail when template_field_not_in_schema is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/template_field_not_in_schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/template_field_not_in_schema",
+      "expectation": "mandatory_law_specific_guard_not_enforced:template-generation-governance-template-creator-boundary:template_field_not_in_schema"
+    }
+  ]
+}

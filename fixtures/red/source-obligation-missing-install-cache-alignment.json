@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-missing-install-cache-alignment",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "source-installed-cache-alignment: source_obligation_missing_row"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/85"
+    }
+  ],
+  "notes": "Plugin availability claims require separate source, installed-plugin, cache-package, package-sync, package-hygiene, and per-surface receipts.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/85/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations",
+      "expectation": "source-installed-cache-alignment source_obligation_missing_row"
+    }
+  ]
+}

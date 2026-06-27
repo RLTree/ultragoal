@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-review-cadence-current-surface",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "stale_review_cadence_in_current_surface"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/obligations/0/claim_ceiling_impact",
+      "value": "Material review uses gpt-5.4-mini xhigh provisional approval, then candidate-freeze and true sign-off against frozen anchors."
+    }
+  ],
+  "notes": "Current review-control surfaces must not preserve retired provisional/freeze/xhigh cadence language after the single gpt-5.5 high sign-off contract is active.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/0/claim_ceiling_impact",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations/0/claim_ceiling_impact",
+      "expectation": "stale_review_cadence_in_current_surface"
+    }
+  ]
+}

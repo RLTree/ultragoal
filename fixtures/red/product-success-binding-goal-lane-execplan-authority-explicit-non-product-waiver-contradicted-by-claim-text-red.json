@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-binding-goal-lane-execplan-authority-explicit-non-product-waiver-contradicted-by-claim-text-red",
+  "expected_failure": {
+    "check_id": "product-success-binding-goal-lane-execplan-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-binding-goal-lane-execplan-authority:explicit_non_product_waiver_contradicted_by_claim_text"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/explicit_non_product_waiver_contradicted_by_claim_text",
+      "value": false
+    }
+  ],
+  "notes": "product-success-binding-goal-lane-execplan-authority must fail when explicit_non_product_waiver_contradicted_by_claim_text is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/explicit_non_product_waiver_contradicted_by_claim_text",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/explicit_non_product_waiver_contradicted_by_claim_text",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-binding-goal-lane-execplan-authority:explicit_non_product_waiver_contradicted_by_claim_text"
+    }
+  ]
+}

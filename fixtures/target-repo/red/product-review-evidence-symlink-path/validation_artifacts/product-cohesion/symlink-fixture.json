@@ -1,0 +1,5 @@
+{
+  "schema": "harness-ultragoal.target-fixture-symlink.v1",
+  "link_path": "validation_artifacts/product-cohesion/escape-review-signoff.json",
+  "target_path": "../../../../valid-product-cohesion/validation_artifacts/product-cohesion/review-signoff.json"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "duplicate-red-fixture-rows",
+  "expected_failure": {
+    "check_id": "red-fixture-coverage",
+    "error": "duplicate_red_fixture_rows"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/validator_receipt/required_red_fixture_ids/0",
+      "value": "hand-written-ready-receipt"
+    }
+  ],
+  "notes": "duplicate or omit red fixture rows in receipt",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/required_red_fixture_ids/0",
+      "expectation": "duplicate_red_fixture_rows"
+    }
+  ]
+}

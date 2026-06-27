@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "moving-value-drift-stable-text",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "moving_value_drift_in_stable_text"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/obligations/0/claim_ceiling_impact",
+      "value": "Current proof anchor is sha256:1111111111111111111111111111111111111111111111111111111111111111 with 36/36 checks and 321/321 red fixtures."
+    }
+  ],
+  "notes": "Stable obligation/current-claim surfaces must not carry hand-maintained moving proof values such as digests, run IDs, or stale fixture counts.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/0/claim_ceiling_impact",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations/0/claim_ceiling_impact",
+      "expectation": "moving_value_drift_in_stable_text"
+    }
+  ]
+}

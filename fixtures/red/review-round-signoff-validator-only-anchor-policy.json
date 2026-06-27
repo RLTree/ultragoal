@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-signoff-validator-only-anchor-policy",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/anchor_policy",
+      "value": "validator_only"
+    }
+  ],
+  "notes": "material sign-off cannot downgrade to validator-only anchoring; validator, review-target, and archive anchors are mandatory.",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/anchor_policy",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/anchor_policy",
+      "expectation": "validator_only sign-off is schema-invalid"
+    }
+  ]
+}

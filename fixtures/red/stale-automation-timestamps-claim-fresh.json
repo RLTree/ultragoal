@@ -1,0 +1,44 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-automation-timestamps-claim-fresh",
+  "expected_failure": {
+    "check_id": "automation-tick-freshness",
+    "error": "automation_timestamps_stale_but_claim_fresh"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/automation_tick_receipt/last_tick_at",
+      "value": "2026-06-15T00:00:00Z"
+    },
+    {
+      "op": "replace",
+      "path": "/automation_tick_receipt/last_success_at",
+      "value": "2026-06-15T00:00:00Z"
+    },
+    {
+      "op": "replace",
+      "path": "/automation_tick_receipt/validator_computed_drift_verdict",
+      "value": "fresh"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/automation_tick_receipt/validator_computed_drift_verdict",
+      "expectation": "automation_timestamps_stale_but_claim_fresh"
+    }
+  ],
+  "notes": "timestamps exceed freshness policy while computed verdict claims fresh"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "human-audit-disposition-decomposition-judgment-claim-blocking-semantic-review-raising-claim-ceiling-without-evidence-red",
+  "expected_failure": {
+    "check_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:semantic_review_raising_claim_ceiling_without_evidence"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/semantic_review_raising_claim_ceiling_without_evidence",
+      "value": false
+    }
+  ],
+  "notes": "human-audit-disposition-decomposition-judgment-claim-blocking must fail when semantic_review_raising_claim_ceiling_without_evidence is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/semantic_review_raising_claim_ceiling_without_evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/semantic_review_raising_claim_ceiling_without_evidence",
+      "expectation": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:semantic_review_raising_claim_ceiling_without_evidence"
+    }
+  ]
+}

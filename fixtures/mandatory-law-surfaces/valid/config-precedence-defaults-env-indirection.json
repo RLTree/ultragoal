@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "config-precedence-defaults-env-indirection",
+  "standards_row_id": "config-precedence-defaults-env-indirection",
+  "source_obligation_id": "config-precedence-defaults-env-indirection",
+  "foundational_trace_id": "config-precedence-defaults-env-indirection",
+  "validator_check_id": "config-precedence-defaults-env-indirection",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/config-precedence-defaults-env-indirection.json",
+  "red_fixture_ids": [
+    "config-precedence-defaults-env-indirection-default-overriding-repo-policy-red",
+    "config-precedence-defaults-env-indirection-env-var-typo-treated-as-empty-string-red",
+    "config-precedence-defaults-env-indirection-unknown-config-accepted-red",
+    "config-precedence-defaults-env-indirection-secret-leaked-in-receipt-red",
+    "config-precedence-defaults-env-indirection-cache-config-diverging-from-source-red",
+    "config-precedence-defaults-env-indirection-cli-arg-changing-candidate-id-without-receipt-binding-red",
+    "config-precedence-defaults-env-indirection-app-config-claim-inferred-from-repo-config-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "config_claims_withheld_without_typed_precedence_and_redacted_env_receipt",
+  "behavior_failure_modes": [
+    "config_precedence_defaults_env_indirection_default_overriding_repo_policy",
+    "config_precedence_defaults_env_indirection_env_var_typo_treated_as_empty_string",
+    "config_precedence_defaults_env_indirection_unknown_config_accepted",
+    "config_precedence_defaults_env_indirection_secret_leaked_in_receipt",
+    "config_precedence_defaults_env_indirection_cache_config_diverging_from_source",
+    "config_precedence_defaults_env_indirection_cli_arg_changing_candidate_id_without_receipt_binding",
+    "config_precedence_defaults_env_indirection_app_config_claim_inferred_from_repo_config"
+  ],
+  "law_specific": {
+    "default_overriding_repo_policy": true,
+    "env_var_typo_treated_as_empty_string": true,
+    "unknown_config_accepted": true,
+    "secret_leaked_in_receipt": true,
+    "cache_config_diverging_from_source": true,
+    "cli_arg_changing_candidate_id_without_receipt_binding": true,
+    "app_config_claim_inferred_from_repo_config": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

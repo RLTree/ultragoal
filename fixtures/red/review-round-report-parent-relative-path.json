@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-parent-relative-path",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_report_artifact_invalid"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/review_report/path",
+      "value": "../outside-review.md"
+    }
+  ],
+  "notes": "review report paths must not escape the package through parent segments",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/review_report/path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0/review_report/path",
+      "expectation": "parent-relative review report path rejected"
+    }
+  ]
+}

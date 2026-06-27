@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-live-surface-install-substitution",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "product_live_surface_substitute_not_rejected:install_success"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/substitutions_rejected/1"
+    }
+  ],
+  "notes": "Live-surface proof fails when install success is not rejected as a substitute.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/substitutions_rejected/1",
+      "expectation": "product_live_surface_substitute_not_rejected:install_success"
+    }
+  ]
+}

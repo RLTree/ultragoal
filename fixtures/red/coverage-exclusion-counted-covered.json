@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-exclusion-counted-covered",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_exclusion_counted_as_covered"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "100 percent coverage is complete"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-COV-003",
+        "claim_id": "CLAIM-001",
+        "kind": "coverage_receipt",
+        "surface": "static",
+        "path": "artifacts/static/coverage-exclusion-counted-covered-receipt.json",
+        "digest": "sha256:4cfb9d7550dbbebab7e2e4c909479a65ba8fb9689f3da5bab01097c2c6f0685f",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "notes": "Generated/vendor/external exclusions require review and must not be counted as covered.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "coverage_exclusion_counted_as_covered"
+    }
+  ]
+}

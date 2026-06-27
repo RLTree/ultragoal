@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "template-generation-governance-template-creator-boundary-package-inventory-omits-template-red",
+  "expected_failure": {
+    "check_id": "template-generation-governance-template-creator-boundary",
+    "error": "mandatory_law_specific_guard_not_enforced:template-generation-governance-template-creator-boundary:package_inventory_omits_template"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/package_inventory_omits_template",
+      "value": false
+    }
+  ],
+  "notes": "template-generation-governance-template-creator-boundary must fail when package_inventory_omits_template is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/package_inventory_omits_template",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/package_inventory_omits_template",
+      "expectation": "mandatory_law_specific_guard_not_enforced:template-generation-governance-template-creator-boundary:package_inventory_omits_template"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "custom-agent-name-mismatch",
+  "expected_failure": {
+    "check_id": "plugin-inventory-closure",
+    "error": "custom_agent_name_mismatch"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plugin_manifest/agents/8/app_visible_name",
+      "value": "wrong_agent_name"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/agents/8/app_visible_name",
+      "expectation": "custom_agent_name_mismatch"
+    }
+  ],
+  "notes": "manifest app_visible_name must match TOML name"
+}

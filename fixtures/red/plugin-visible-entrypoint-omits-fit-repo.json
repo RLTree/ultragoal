@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-visible-entrypoint-omits-fit-repo",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plugin_flow_entrypoint_not_visible"
+  },
+  "base_fixture_path": ".codex-plugin/plugin.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/interface/defaultPrompt",
+      "value": [
+        "Use harness-engineering to turn this repo into an agent-first repo.",
+        "Use ultragoal to harden this goal contract before execution."
+      ]
+    }
+  ],
+  "notes": "Visible plugin prompts must route operators through harness-ultragoal:fit-repo first.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/schema",
+      "expectation": "plugin_flow_entrypoint_not_visible"
+    }
+  ]
+}

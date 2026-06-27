@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "subagent-custom-agent-sandbox-approval-inheritance",
+  "standards_row_id": "subagent-custom-agent-sandbox-approval-inheritance",
+  "source_obligation_id": "subagent-custom-agent-sandbox-approval-inheritance",
+  "foundational_trace_id": "subagent-custom-agent-sandbox-approval-inheritance",
+  "validator_check_id": "subagent-custom-agent-sandbox-approval-inheritance",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
+  "red_fixture_ids": [
+    "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
+    "subagent-custom-agent-sandbox-approval-inheritance-child-sandbox-not-broader-red",
+    "subagent-custom-agent-sandbox-approval-inheritance-approval-policy-inherited-red",
+    "subagent-custom-agent-sandbox-approval-inheritance-runtime-overrides-reapplied-red",
+    "subagent-custom-agent-sandbox-approval-inheritance-model-recorded-red",
+    "subagent-custom-agent-sandbox-approval-inheritance-workspace-recorded-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "custom_agent_claims_withheld_without_launch_receipt",
+  "behavior_failure_modes": [
+    "subagent_custom_agent_sandbox_approval_inheritance_parent_sandbox_recorded",
+    "subagent_custom_agent_sandbox_approval_inheritance_child_sandbox_not_broader",
+    "subagent_custom_agent_sandbox_approval_inheritance_approval_policy_inherited",
+    "subagent_custom_agent_sandbox_approval_inheritance_runtime_overrides_reapplied",
+    "subagent_custom_agent_sandbox_approval_inheritance_model_recorded",
+    "subagent_custom_agent_sandbox_approval_inheritance_workspace_recorded"
+  ],
+  "law_specific": {
+    "parent_sandbox_recorded": true,
+    "child_sandbox_not_broader": true,
+    "approval_policy_inherited": true,
+    "runtime_overrides_reapplied": true,
+    "model_recorded": true,
+    "workspace_recorded": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

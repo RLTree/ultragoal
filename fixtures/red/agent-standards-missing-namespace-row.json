@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-standards-missing-namespace-row",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_required_row_missing:namespace-progressive-disclosure"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/rows/50"
+    }
+  ],
+  "notes": "The central standards required-id set must include namespace-progressive-disclosure.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/rows/50/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows",
+      "expectation": "agent_standards_required_row_missing:namespace-progressive-disclosure"
+    }
+  ]
+}

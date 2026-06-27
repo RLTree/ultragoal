@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-flow-missing-required-edge",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plugin_flow_required_edge_missing"
+  },
+  "base_fixture_path": "docs/plugin-cohesion-manifest.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/edges/1"
+    }
+  ],
+  "notes": "Setup-critical product flow edges must be required rather than only described in prose.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/edges/1",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/edges",
+      "expectation": "plugin_flow_required_edge_missing"
+    }
+  ]
+}

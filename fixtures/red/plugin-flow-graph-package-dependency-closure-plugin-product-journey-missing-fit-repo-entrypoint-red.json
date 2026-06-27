@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:plugin-flow-graph-package-dependency-closure-plugin-product-journey:missing_fit_repo_entrypoint"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_fit_repo_entrypoint",
+      "value": false
+    }
+  ],
+  "notes": "plugin-flow-graph-package-dependency-closure-plugin-product-journey must fail when missing_fit_repo_entrypoint is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_fit_repo_entrypoint",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_fit_repo_entrypoint",
+      "expectation": "mandatory_law_specific_guard_not_enforced:plugin-flow-graph-package-dependency-closure-plugin-product-journey:missing_fit_repo_entrypoint"
+    }
+  ]
+}

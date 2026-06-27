@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "capability-gap-extraction-harness-capability-promotion-stale-unowned-capability-gap-red",
+  "expected_failure": {
+    "check_id": "capability-gap-extraction-harness-capability-promotion",
+    "error": "mandatory_law_specific_guard_not_enforced:capability-gap-extraction-harness-capability-promotion:stale_unowned_capability_gap"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_unowned_capability_gap",
+      "value": false
+    }
+  ],
+  "notes": "capability-gap-extraction-harness-capability-promotion must fail when stale_unowned_capability_gap is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_unowned_capability_gap",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_unowned_capability_gap",
+      "expectation": "mandatory_law_specific_guard_not_enforced:capability-gap-extraction-harness-capability-promotion:stale_unowned_capability_gap"
+    }
+  ]
+}

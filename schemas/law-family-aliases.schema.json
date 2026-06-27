@@ -1,0 +1,120 @@
+{
+  "$id": "https://harness-ultragoal.local/schemas/law-family-aliases.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Harness Ultragoal Law Family Aliases",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.law-family-aliases.v1"
+    },
+    "canonical_authority": {
+      "const": "source_obligation_and_mandatory_law_ids"
+    },
+    "canonical_law_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "canonical_id_replacement_allowed": {
+      "const": false
+    },
+    "aliases_claim_authority": {
+      "const": false
+    },
+    "doctrine_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "doctrine_vocabulary": {
+      "type": "array",
+      "minItems": 11,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "tightening": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "governed_classes_are_not_waivers": { "const": true },
+        "namespace_law_has_zero_exceptions": { "const": true },
+        "every_path_resolves_to_exactly_one_governed_class": { "const": true },
+        "bootstrap_receipts_are_transition_only": { "const": true },
+        "coverage_requires_exact_100_percent_and_empty_uncovered_records": { "const": true },
+        "product_fitness_ownership_disposition_first_class": { "const": true },
+        "same_law_id_enforcement_required_across_all_surfaces": { "const": true }
+      },
+      "required": [
+        "governed_classes_are_not_waivers",
+        "namespace_law_has_zero_exceptions",
+        "every_path_resolves_to_exactly_one_governed_class",
+        "bootstrap_receipts_are_transition_only",
+        "coverage_requires_exact_100_percent_and_empty_uncovered_records",
+        "product_fitness_ownership_disposition_first_class",
+        "same_law_id_enforcement_required_across_all_surfaces"
+      ]
+    },
+    "aliases": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hu_id": {
+            "enum": [
+              "HU-001", "HU-002", "HU-003", "HU-004", "HU-005", "HU-006",
+              "HU-007", "HU-008", "HU-009", "HU-010", "HU-011", "HU-012",
+              "HU-013", "HU-014", "HU-015", "HU-016", "HU-017", "HU-018",
+              "HU-019", "HU-020", "HU-021", "HU-022", "HU-023", "HU-024"
+            ]
+          },
+          "family_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authority_role": {
+            "const": "explanatory_family_alias_only"
+          },
+          "claim_authority": {
+            "const": "none"
+          },
+          "replaces_canonical_law_ids": {
+            "const": false
+          },
+          "canonical_law_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "hu_id",
+          "family_name",
+          "authority_role",
+          "claim_authority",
+          "replaces_canonical_law_ids",
+          "canonical_law_ids"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "canonical_authority",
+    "canonical_law_count",
+    "canonical_id_replacement_allowed",
+    "aliases_claim_authority",
+    "doctrine_source",
+    "doctrine_vocabulary",
+    "tightening",
+    "aliases"
+  ]
+}

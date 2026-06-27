@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "offline-schema-catalog-resolver-portability-stale-schema-id-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:offline-schema-catalog-resolver-portability:stale_schema_id"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/offline-schema-catalog-resolver-portability.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_schema_id",
+      "value": false
+    }
+  ],
+  "notes": "offline-schema-catalog-resolver-portability must fail when stale_schema_id is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_schema_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_schema_id",
+      "expectation": "mandatory_law_specific_guard_not_enforced:offline-schema-catalog-resolver-portability:stale_schema_id"
+    }
+  ]
+}

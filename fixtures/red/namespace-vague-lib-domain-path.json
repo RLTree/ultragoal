@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-vague-lib-domain-path",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_vague_lib_domain_path"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "skills/lib/SKILL.md"
+    }
+  ],
+  "notes": "Vague lib domain folders fail namespace law.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/resources/-",
+      "expectation": "namespace_vague_lib_domain_path"
+    }
+  ]
+}

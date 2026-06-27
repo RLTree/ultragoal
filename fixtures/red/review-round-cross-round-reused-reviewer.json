@@ -1,0 +1,36 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-cross-round-reused-reviewer",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_reused_reviewer"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/prior_round_reviewer_agent_ids",
+      "value": [
+        "agent-contract-claim-fixture"
+      ]
+    }
+  ],
+  "notes": "fresh-context reviewers cannot reuse a reviewer id from a prior round",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/prior_round_reviewer_agent_ids",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/prior_round_reviewer_agent_ids",
+      "expectation": "cross-round reuse rejected"
+    }
+  ]
+}

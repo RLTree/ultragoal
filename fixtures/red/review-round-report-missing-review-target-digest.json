@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-missing-review-target-digest",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_report_artifact_mismatch"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/review_report/path",
+      "value": "fixtures/review-round/reports/contract_adversary_missing_review_target_digest.md"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/review_report/digest",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "notes": "review report artifact reference must remain byte-digest bound; report prose is narrative only",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

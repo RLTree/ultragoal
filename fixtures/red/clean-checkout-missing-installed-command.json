@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "clean-checkout-missing-installed-command",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "clean_checkout_missing_installed_command"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/installed_check_command"
+    }
+  ],
+  "notes": "Command discovery fails without an installed-package command.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/installed_check_command",
+      "expectation": "clean_checkout_missing_installed_command"
+    }
+  ]
+}

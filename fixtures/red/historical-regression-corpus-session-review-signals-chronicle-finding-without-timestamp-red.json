@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
+  "expected_failure": {
+    "check_id": "historical-regression-corpus-session-review-signals",
+    "error": "mandatory_law_specific_guard_not_enforced:historical-regression-corpus-session-review-signals:chronicle_finding_without_timestamp"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/historical-regression-corpus-session-review-signals.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/chronicle_finding_without_timestamp",
+      "value": false
+    }
+  ],
+  "notes": "historical-regression-corpus-session-review-signals must fail when chronicle_finding_without_timestamp is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/chronicle_finding_without_timestamp",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/chronicle_finding_without_timestamp",
+      "expectation": "mandatory_law_specific_guard_not_enforced:historical-regression-corpus-session-review-signals:chronicle_finding_without_timestamp"
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "expected_failure": {
+    "check_id": "lane-scope-overlap",
+    "error": "active_lane_mutable_resource_overlap"
+  },
+  "id": "shared-port-active-lanes",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/port_allocations",
+      "value": [
+        {
+          "name": "app",
+          "port": 4173
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/lanes/1",
+      "value": {
+        "acceptance_scope": [
+          "completion manifest shape",
+          "lane registry shape",
+          "ready receipt placeholder shape",
+          "validator receipt placeholder shape"
+        ],
+        "actor_binding": {
+          "actor_id": "actor-2",
+          "actor_status": "current",
+          "latest_heartbeat_receipt": {
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "path": "heartbeat.json"
+          },
+          "launch_receipt": {
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "path": "launch.json"
+          },
+          "thread_or_session_id": "thread-2",
+          "validated_at": "2026-06-16T00:00:00Z"
+        },
+        "artifact_root": "validation_artifacts/valid",
+        "base_commit": "abcdef0",
+        "branch": "codex/fixture-2",
+        "browser_profile_roots": [
+          ".browser/lane-001"
+        ],
+        "claim_ids": [
+          "CLAIM-001"
+        ],
+        "covered_claim_ids": [
+          "CLAIM-001"
+        ],
+        "current_commit": "abcdef0",
+        "dependencies": [],
+        "execplan": "docs/exec-plans/active/fixture.md",
+        "forbidden_paths": [
+          "src/unrelated-secondary"
+        ],
+        "id": "LANE-002",
+        "lane_objective": "Validate the static fixture contract shape for proposal package schema development.",
+        "lane_size_evidence": {
+          "independent_outcome": "This lane owns a complete restartable fixture validation outcome with schema, receipt, red-packet coverage, target proof, and reviewable package evidence.",
+          "owned_path_groups": [
+            "fixture bundle examples",
+            "red packet validation artifacts",
+            "target-repo receipt fixtures"
+          ],
+          "why_not_parent_inline": "The lane is large enough to need isolated ownership and review receipts rather than parent-inline edits.",
+          "why_not_smaller": "Splitting smaller would separate schemas, fixtures, receipts, and target audit proof that must be validated together.",
+          "work_units": [
+            "schema fixture upkeep",
+            "semantic red fixture upkeep",
+            "receipt provenance verification",
+            "target-repo audit validation"
+          ]
+        },
+        "lane_type": "implementation",
+        "last_heartbeat": "2026-06-16T00:00:00Z",
+        "macro_lane_rationale": "This fixture lane is intentionally scoped to cover the complete static schema fixture contract, not a tiny implementation task.",
+        "merge_base_at_validation": "abcdef0",
+        "owned_paths": [
+          "fixtures/valid-secondary"
+        ],
+        "owner": "fixture-agent-2",
+        "port_allocations": [
+          {
+            "name": "app-2",
+            "port": 4173
+          }
+        ],
+        "ready_receipt": {
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "path": "READY_FOR_MERGE-2.json"
+        },
+        "scratch_roots": [
+          ".scratch/fixture"
+        ],
+        "state_roots": [
+          ".state/fixture"
+        ],
+        "status": "ready_for_review",
+        "target_branch": "main",
+        "target_freshness": {
+          "checked_at": "2026-06-16T00:00:00Z",
+          "live_target_receipt": {
+            "command": {
+              "artifact_digest": "sha256:36ef9ef233ee66b42a6ae4c4975355db2c9a34d6b31afde237cce44f59c158fc",
+              "artifact_path": "artifacts/lane-target.json",
+              "command": "git -C /repo rev-parse main && git -C /repo merge-base HEAD main",
+              "completed_at": "2026-06-16T00:00:00Z",
+              "cwd": "/repo",
+              "exit": 0,
+              "id": "cmd-live-target-001",
+              "started_at": "2026-06-16T00:00:00Z"
+            },
+            "observed_branch": "main",
+            "observed_merge_base": "abcdef0",
+            "observed_target_head": "abcdef0",
+            "observed_workspace": "/repo"
+          },
+          "merge_base_includes_target_head": true,
+          "target_head_matches_live": true
+        },
+        "target_head_at_launch": "abcdef0",
+        "target_head_at_validation": "abcdef0",
+        "teardown": {
+          "receipt": {
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "path": "teardown.json"
+          },
+          "required": true,
+          "status": "ready"
+        },
+        "thread_or_session_id": "thread-2",
+        "tool_cache_roots": [],
+        "workspace": "/repo",
+        "workspace_status": {
+          "clean": true,
+          "dirty_paths": [],
+          "observed_branch": "codex/fixture-2",
+          "observed_clean": true,
+          "observed_head": "abcdef0",
+          "observed_workspace": "/repo",
+          "status_command_receipt": {
+            "artifact_digest": "sha256:5afb27e091ca518cac19e4b08c6fb6af5e865f020a739b3495a694e75a26abe2",
+            "artifact_path": "status.json",
+            "command": "git -C /repo status --porcelain && git -C /repo rev-parse HEAD",
+            "completed_at": "2026-06-16T00:00:00Z",
+            "cwd": "/repo",
+            "exit": 0,
+            "id": "cmd-worktree-status-001",
+            "started_at": "2026-06-16T00:00:00Z"
+          },
+          "status_receipt": {
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "path": "status.json"
+          }
+        }
+      }
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "adds second active lane sharing a port allocation with another active lane",
+  "postconditions": [
+    {
+      "expectation": "active_lane_mutable_resource_overlap",
+      "path": "/lane_registry/lanes/0/port_allocations"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/lane_registry/lanes/0"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

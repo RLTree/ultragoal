@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "automation-generic-keep-working-reminder",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "automation_generic_reminder_prompt"
+  },
+  "base_fixture_path": "fixtures/template-integrity/valid/template-integrity.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/automation_prompt",
+      "value": "Keep working on the project and tell Tree if anything important happens."
+    }
+  ],
+  "notes": "Generic reminder prompts cannot serve as Ultragoal orchestrator automation contracts.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/automation_prompt",
+      "expectation": "automation_generic_reminder_prompt"
+    }
+  ]
+}

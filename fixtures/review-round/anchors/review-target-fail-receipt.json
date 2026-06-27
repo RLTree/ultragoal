@@ -1,0 +1,10 @@
+{
+  "schema": "harness-ultragoal.review-target-receipt.v1",
+  "status": "fail",
+  "package_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "validator_receipt": {
+    "path": "fixtures/review-round/anchors/validator-receipt.json",
+    "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+  }
+}

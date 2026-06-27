@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "install-app-installed-runtime-only",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "App is installed"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:5c2efe360c9befb15c3d4be65479b05dc0c80c4b180446677c6aaea5984f202d",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": true,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification for generic app installation wording."
+      }
+    }
+  ],
+  "notes": "App installation claims require install visibility proof, not runtime-only evidence.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-strategy-positioning-research-eval-before-lane-planning",
+  "standards_row_id": "product-strategy-positioning-research-eval-before-lane-planning",
+  "source_obligation_id": "product-strategy-positioning-research-eval-before-lane-planning",
+  "foundational_trace_id": "product-strategy-positioning-research-eval-before-lane-planning",
+  "validator_check_id": "product-strategy-positioning-research-eval-before-lane-planning",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-strategy-positioning-research-eval-before-lane-planning.json",
+  "red_fixture_ids": [
+    "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-feature-list-accepted-as-strategy-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-generic-audience-accepted-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-vanity-metric-accepted-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-positioning-route-without-proof-needed-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-research-notes-without-source-map-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-eval-protocol-without-negative-paths-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-first-value-path-missing-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-continuance-signal-missing-red",
+    "product-strategy-positioning-research-eval-before-lane-planning-deep-research-v2-precedent-cited-without-required-planning-artifacts-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_lane_planning_claims_withheld_without_strategy_research_eval_artifacts",
+  "behavior_failure_modes": [
+    "product_strategy_positioning_research_eval_before_lane_planning_product_lane_plan_without_strategy_artifact",
+    "product_strategy_positioning_research_eval_before_lane_planning_feature_list_accepted_as_strategy",
+    "product_strategy_positioning_research_eval_before_lane_planning_generic_audience_accepted",
+    "product_strategy_positioning_research_eval_before_lane_planning_vanity_metric_accepted",
+    "product_strategy_positioning_research_eval_before_lane_planning_positioning_route_without_proof_needed",
+    "product_strategy_positioning_research_eval_before_lane_planning_research_notes_without_source_map",
+    "product_strategy_positioning_research_eval_before_lane_planning_eval_protocol_without_negative_paths",
+    "product_strategy_positioning_research_eval_before_lane_planning_first_value_path_missing",
+    "product_strategy_positioning_research_eval_before_lane_planning_continuance_signal_missing",
+    "product_strategy_positioning_research_eval_before_lane_planning_deep_research_v2_precedent_cited_without_required_planning_artifacts"
+  ],
+  "law_specific": {
+    "product_lane_plan_without_strategy_artifact": true,
+    "feature_list_accepted_as_strategy": true,
+    "generic_audience_accepted": true,
+    "vanity_metric_accepted": true,
+    "positioning_route_without_proof_needed": true,
+    "research_notes_without_source_map": true,
+    "eval_protocol_without_negative_paths": true,
+    "first_value_path_missing": true,
+    "continuance_signal_missing": true,
+    "deep_research_v2_precedent_cited_without_required_planning_artifacts": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

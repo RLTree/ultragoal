@@ -1,0 +1,47 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "disguised-tiny-lane",
+  "expected_failure": {
+    "check_id": "macro-lane-sizing",
+    "error": "lane_too_small_or_overlapping"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/lane_size_evidence",
+      "value": {
+        "independent_outcome": "This describes only a narrow one-file text adjustment that does not form an independent macro lane outcome.",
+        "owned_path_groups": [
+          "single file group",
+          "single validation group"
+        ],
+        "work_units": [
+          "edit one document line",
+          "run one local check",
+          "report one result"
+        ],
+        "why_not_parent_inline": "This rationale is long enough for schema but still admits parent inline handling.",
+        "why_not_smaller": "This rationale is long enough for schema but still describes an already tiny task."
+      }
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/lane_size_evidence",
+      "expectation": "lane_too_small_or_overlapping"
+    }
+  ],
+  "notes": "tiny lane with enough acceptance items but weak structured size evidence"
+}

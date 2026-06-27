@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-watch-observation-as-completion-red",
+  "expected_failure": {
+    "check_id": "rust-command-loop-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:watch_observation_as_completion"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-command-loop-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/watch_observation_as_completion",
+      "value": false
+    }
+  ],
+  "notes": "watcher/editor observations cannot become completion receipts",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/watch_observation_as_completion",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/watch_observation_as_completion",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:watch_observation_as_completion"
+    }
+  ]
+}

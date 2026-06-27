@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-unreleased-after-upstream-merge",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_release_missing"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/lane_registry/lanes/1/dependency_release"
+    }
+  ],
+  "notes": "when an upstream lane is merged and root post-merge verification passed, the orchestrator must record launch, resume, or re-block proof for newly unblocked downstream work",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/lanes/1/dependencies/0",
+      "exists": true
+    },
+    {
+      "path": "/lane_registry/lanes/1/dependency_release",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/1/dependency_release",
+      "expectation": "downstream unblocked work without launch/resume/re-block receipt fails"
+    }
+  ]
+}

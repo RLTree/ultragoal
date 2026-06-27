@@ -1,0 +1,24 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-scope-repo-walk-disabled",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "coverage_source_unclassified"
+  },
+  "base_fixture_path": "templates/.harness/coverage-manifest.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/repo_walk_policy/classify_all_nonignored_files",
+      "value": false
+    }
+  ],
+  "notes": "Coverage scope authority must require repo walk classification of all nonignored files.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [{ "path": "/repo_walk_policy/classify_all_nonignored_files", "exists": true }],
+  "postconditions": [{ "path": "/repo_walk_policy/classify_all_nonignored_files", "expectation": "coverage_source_unclassified" }]
+}

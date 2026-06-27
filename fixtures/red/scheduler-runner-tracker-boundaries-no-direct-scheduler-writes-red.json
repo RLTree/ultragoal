@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "scheduler-runner-tracker-boundaries-no-direct-scheduler-writes-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:scheduler-runner-tracker-boundaries:no_direct_scheduler_writes"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/no_direct_scheduler_writes",
+      "value": false
+    }
+  ],
+  "notes": "scheduler-runner-tracker-boundaries must fail when no_direct_scheduler_writes is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/no_direct_scheduler_writes",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/no_direct_scheduler_writes",
+      "expectation": "mandatory_law_specific_guard_not_enforced:scheduler-runner-tracker-boundaries:no_direct_scheduler_writes"
+    }
+  ]
+}

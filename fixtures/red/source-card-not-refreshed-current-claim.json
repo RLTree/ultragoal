@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-card-not-refreshed-current-claim",
+  "expected_failure": {
+    "check_id": "source-card-freshness",
+    "error": "source_card_not_refreshed_overclaim"
+  },
+  "base_fixture_path": "docs/source-cards.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/1/cited_claims",
+      "value": [
+        {
+          "proposal_claim": "current implementation",
+          "source_support": "Current implementation is source-backed and live."
+        }
+      ]
+    }
+  ],
+  "notes": "A not_refreshed source card must lower the current-source claim ceiling instead of supporting live/current implementation claims.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/1/retrieval_receipt/status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/1/cited_claims",
+      "expectation": "source_card_not_refreshed_overclaim"
+    }
+  ]
+}

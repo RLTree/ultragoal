@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-feedback-disposition-same-round-satisfaction-source-obligation-parity-red",
+  "expected_failure": {
+    "check_id": "review-feedback-disposition-same-round-satisfaction",
+    "error": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:source_obligation_parity"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/source_obligation_parity",
+      "value": false
+    }
+  ],
+  "notes": "review-feedback-disposition-same-round-satisfaction must fail when source-obligation law lacks same-law first-class enforcement parity is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/source_obligation_parity",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/source_obligation_parity",
+      "expectation": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:source_obligation_parity"
+    }
+  ]
+}

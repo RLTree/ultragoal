@@ -1,0 +1,9 @@
+{
+  "schema": "harness-ultragoal.validator-receipt.v1",
+  "status": "pass",
+  "run_id": "ultragoal-audit-fixture-review-round",
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

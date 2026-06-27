@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "repo-knowledge-index-core-beliefs",
+  "standards_row_id": "repo-knowledge-index-core-beliefs",
+  "source_obligation_id": "repo-knowledge-index-core-beliefs",
+  "foundational_trace_id": "repo-knowledge-index-core-beliefs",
+  "validator_check_id": "repo-knowledge-index-core-beliefs",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
+  "red_fixture_ids": [
+    "repo-knowledge-index-core-beliefs-law-docs-indexed-red",
+    "repo-knowledge-index-core-beliefs-core-beliefs-indexed-red",
+    "repo-knowledge-index-core-beliefs-owner-freshness-source-red",
+    "repo-knowledge-index-core-beliefs-validator-receipt-path-red",
+    "repo-knowledge-index-core-beliefs-claim-impact-recorded-red",
+    "repo-knowledge-index-core-beliefs-no-hidden-author-memory-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "law_claims_withheld_without_fresh_knowledge_index",
+  "behavior_failure_modes": [
+    "repo_knowledge_index_core_beliefs_law_docs_indexed",
+    "repo_knowledge_index_core_beliefs_core_beliefs_indexed",
+    "repo_knowledge_index_core_beliefs_owner_freshness_source",
+    "repo_knowledge_index_core_beliefs_validator_receipt_path",
+    "repo_knowledge_index_core_beliefs_claim_impact_recorded",
+    "repo_knowledge_index_core_beliefs_no_hidden_author_memory"
+  ],
+  "law_specific": {
+    "law_docs_indexed": true,
+    "core_beliefs_indexed": true,
+    "owner_freshness_source": true,
+    "validator_receipt_path": true,
+    "claim_impact_recorded": true,
+    "no_hidden_author_memory": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

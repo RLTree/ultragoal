@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/coverage-manifest.schema.json",
+  "title": "Harness Ultragoal Coverage Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_version",
+    "repo_root_digest",
+    "generated_at",
+    "owner",
+    "policy",
+    "coverage_command_id",
+    "coverage_command_path",
+    "coverage_receipt_output_path",
+    "source_discovery_rules",
+    "repo_owned_source_roots",
+    "generated_roots",
+    "vendor_roots",
+    "external_roots",
+    "required_measured_dimensions_per_root",
+    "required_target_paths",
+    "exclusions",
+    "changed_file_coupling_policy",
+    "repo_walk_policy",
+    "behavior_dimension_mapping",
+    "policy_mutation_gate",
+    "receipt_freshness_binding",
+    "tool_generated_proof_policy",
+    "fast_full_gate_split",
+    "claim_ceiling_when_incomplete"
+  ],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.coverage-manifest.v1" },
+    "manifest_version": { "type": "integer", "minimum": 1 },
+    "repo_root_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "generated_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
+    "owner": { "type": "string", "minLength": 1 },
+    "policy": { "enum": ["100_percent_required", "ratchet_floor", "blocked_or_withheld"] },
+    "coverage_command_id": { "type": "string", "minLength": 1 },
+    "coverage_command_path": { "const": ".harness/coverage-command" },
+    "coverage_receipt_output_path": { "type": "string", "minLength": 1 },
+    "source_discovery_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "ignore"],
+      "properties": {
+        "include": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "ignore": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "repo_owned_source_roots": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "generated_roots": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "vendor_roots": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "external_roots": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "required_measured_dimensions_per_root": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["root", "dimensions"],
+        "properties": {
+          "root": { "type": "string", "minLength": 1 },
+          "dimensions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["line", "branch", "function", "region", "ui_state", "artifact"] }
+          }
+        }
+      }
+    },
+    "required_target_paths": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "kind", "rationale", "reviewed", "counts_as_covered"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["generated", "vendor", "external"] },
+          "rationale": { "type": "string", "minLength": 1 },
+          "reviewed": { "const": true },
+          "counts_as_covered": { "const": false }
+        }
+      }
+    },
+    "changed_file_coupling_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "changed_files", "changed_files_digest", "blocker_path"],
+      "properties": {
+        "required": { "const": true },
+        "changed_files": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "changed_files_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+        "blocker_path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "repo_walk_policy": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "behavior_dimension_mapping": { "type": "object", "additionalProperties": { "type": "array", "items": { "enum": ["line", "branch", "function", "region", "ui_state", "artifact"] } } },
+    "policy_mutation_gate": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "receipt_freshness_binding": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "tool_generated_proof_policy": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "fast_full_gate_split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fast_gate", "full_gate", "fast_supports_completion", "full_required_for_completion", "missing_claim_context_fails"],
+      "properties": {
+        "fast_gate": { "const": "scripts/check-coverage-fast" },
+        "full_gate": { "const": "scripts/check-coverage-full" },
+        "fast_supports_completion": { "const": false },
+        "full_required_for_completion": { "const": true },
+        "missing_claim_context_fails": { "const": true }
+      }
+    },
+    "claim_ceiling_when_incomplete": { "enum": ["ratchet_floor_only", "withheld_or_blocked"] }
+  }
+}

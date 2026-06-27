@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-thread-id-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:missing_thread_id"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_thread_id",
+      "value": false
+    }
+  ],
+  "notes": "active-setup-to-idle-orchestration-thread-bound-heartbeat must fail when missing_thread_id is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_thread_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_thread_id",
+      "expectation": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:missing_thread_id"
+    }
+  ]
+}

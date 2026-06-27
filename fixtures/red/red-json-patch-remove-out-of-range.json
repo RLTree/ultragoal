@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "red-json-patch-remove-out-of-range",
+  "expected_failure": {
+    "check_id": "red-fixture-coverage",
+    "error": "red_fixture_json_pointer_invalid"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/999"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/schema",
+      "expectation": "out-of-range JSON patch remove must return a structured red fixture error"
+    }
+  ],
+  "notes": "out-of-range JSON patch remove must return a structured red fixture error"
+}

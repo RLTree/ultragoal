@@ -1,0 +1,72 @@
+{
+  "schema": "harness-ultragoal.fit-repo-receipt.v1",
+  "repo_root": ".",
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "plugin_source_path": ".",
+  "installed_plugin_path": "",
+  "cache_package_path": "",
+  "app_registry_exposure": "not_checked",
+  "plugin_version": "0.0.9",
+  "entrypoint_contract": {
+    "id": "harness-ultragoal:fit-repo",
+    "version": "1"
+  },
+  "target_classification": "fresh_repo",
+  "runtime_surface_classification": "none",
+  "product_surface_classification": "developer_tool",
+  "templates": [
+    "templates/AGENTS.md",
+    "templates/PLANS.md"
+  ],
+  "scripts": [
+    "templates/scripts/check",
+    "templates/scripts/check-agent-standards"
+  ],
+  "standards_rows": [
+    "coverage-proof-accountability",
+    "coverage-scope-authority",
+    "plugin-product-cohesion-authority"
+  ],
+  "coverage_surfaces": [
+    "templates/.harness/coverage-manifest.json",
+    "templates/.harness/coverage-command",
+    "templates/scripts/check-coverage-full"
+  ],
+  "worktree_environment_surfaces": [
+    "templates/.codex/setup-worktree-env.sh",
+    "templates/.codex/environments/environment.toml"
+  ],
+  "ultragoal_bundle_surfaces": [
+    "templates/GOAL_CONTRACT.md"
+  ],
+  "orchestrator_automation_surfaces": [
+    "templates/.codex/automations/ultragoal-orchestrator/automation.toml"
+  ],
+  "checks": [
+    {
+      "id": "fit-repo-static-fixture",
+      "command": "cargo run --offline -- --root . audit",
+      "exit": 0,
+      "stdout": {
+        "path": "validation_artifacts/ultragoal-audit/validator-stdout.txt",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "stderr": {
+        "path": "validation_artifacts/ultragoal-audit/validator-stderr.txt",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "blockers": [],
+  "withheld_claims": [
+    "live_app_registry",
+    "marketplace_publication"
+  ],
+  "claim_ceiling": "package_static_fixture_only",
+  "generated_at": "2026-06-24T00:00:00Z",
+  "producer_actor_id": "fixture-author",
+  "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

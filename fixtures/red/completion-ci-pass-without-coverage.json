@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "completion-ci-pass-without-coverage",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_check_pass_substitution"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "CI passed and all checks passed, ready for release"
+    }
+  ],
+  "notes": "Coverage authority red fixture for coverage_check_pass_substitution.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "coverage_check_pass_substitution"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "source-installed-cache-alignment",
+  "standards_row_id": "source-installed-cache-alignment",
+  "source_obligation_id": "source-installed-cache-alignment",
+  "foundational_trace_id": "source-installed-cache-alignment",
+  "validator_check_id": "source-installed-cache-alignment",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/source-installed-cache-alignment.json",
+  "red_fixture_ids": [
+    "source-installed-cache-alignment-source-obligation-parity-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "source_repo_checks_do_not_close_installed_cache_or_app_visibility_claims",
+  "behavior_failure_modes": [
+    "source_installed_cache_alignment_source_obligation_parity"
+  ],
+  "law_specific": {
+    "source_obligation_parity": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

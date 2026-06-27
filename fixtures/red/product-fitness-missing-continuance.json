@@ -1,0 +1,38 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-fitness-missing-continuance",
+  "expected_failure": {
+    "check_id": "product-fitness-proof",
+    "error": "product_fitness_continuance_missing"
+  },
+  "base_fixture_path": "validation_artifacts/harness/product-fitness-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/claim/repeated_use_claimed",
+      "value": true
+    },
+    {
+      "op": "remove",
+      "path": "/continuance_signal/evidence"
+    }
+  ],
+  "notes": "Product Fitness mandatory enforcement red fixture.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "validation_artifacts/harness/product-fitness-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/claim/repeated_use_claimed",
+      "expectation": "product_fitness_continuance_missing"
+    }
+  ]
+}

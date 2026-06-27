@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "clean-room-rebuild-author-memory-independence",
+  "standards_row_id": "clean-room-rebuild-author-memory-independence",
+  "source_obligation_id": "clean-room-rebuild-author-memory-independence",
+  "foundational_trace_id": "clean-room-rebuild-author-memory-independence",
+  "validator_check_id": "clean-room-rebuild-author-memory-independence",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/clean-room-rebuild-author-memory-independence.json",
+  "red_fixture_ids": [
+    "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
+    "clean-room-rebuild-author-memory-independence-private-path-dependency-red",
+    "clean-room-rebuild-author-memory-independence-hidden-cache-dependency-red",
+    "clean-room-rebuild-author-memory-independence-generated-artifact-not-reproducible-red",
+    "clean-room-rebuild-author-memory-independence-source-only-rebuild-used-for-installed-cache-proof-red",
+    "clean-room-rebuild-author-memory-independence-stale-artifact-surviving-rebuild-red",
+    "clean-room-rebuild-author-memory-independence-clean-room-receipt-omitted-from-final-packet-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "reproducibility_claims_withheld_without_clean_room_rebuild_receipt",
+  "behavior_failure_modes": [
+    "clean_room_rebuild_author_memory_independence_command_missing_from_clean_checkout",
+    "clean_room_rebuild_author_memory_independence_private_path_dependency",
+    "clean_room_rebuild_author_memory_independence_hidden_cache_dependency",
+    "clean_room_rebuild_author_memory_independence_generated_artifact_not_reproducible",
+    "clean_room_rebuild_author_memory_independence_source_only_rebuild_used_for_installed_cache_proof",
+    "clean_room_rebuild_author_memory_independence_stale_artifact_surviving_rebuild",
+    "clean_room_rebuild_author_memory_independence_clean_room_receipt_omitted_from_final_packet"
+  ],
+  "law_specific": {
+    "command_missing_from_clean_checkout": true,
+    "private_path_dependency": true,
+    "hidden_cache_dependency": true,
+    "generated_artifact_not_reproducible": true,
+    "source_only_rebuild_used_for_installed_cache_proof": true,
+    "stale_artifact_surviving_rebuild": true,
+    "clean_room_receipt_omitted_from_final_packet": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

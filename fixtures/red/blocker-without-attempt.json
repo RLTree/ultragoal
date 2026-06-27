@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "blocker-without-attempt",
+  "expected_failure": {
+    "check_id": "backlog-attempt-proof",
+    "error": "blocker_without_attempt_evidence"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/verification_backlog/rows/0/attempts"
+    }
+  ],
+  "notes": "remove backlog attempts for blocker row",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/verification_backlog/rows/0/attempts",
+      "expectation": "blocker_without_attempt_evidence"
+    }
+  ]
+}

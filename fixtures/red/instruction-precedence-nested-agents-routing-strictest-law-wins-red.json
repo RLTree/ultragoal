@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "instruction-precedence-nested-agents-routing-strictest-law-wins-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:instruction-precedence-nested-agents-routing:strictest_law_wins"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/strictest_law_wins",
+      "value": false
+    }
+  ],
+  "notes": "instruction-precedence-nested-agents-routing must fail when strictest_law_wins is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/strictest_law_wins",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/strictest_law_wins",
+      "expectation": "mandatory_law_specific_guard_not_enforced:instruction-precedence-nested-agents-routing:strictest_law_wins"
+    }
+  ]
+}

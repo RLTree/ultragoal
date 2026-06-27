@@ -1,0 +1,156 @@
+{
+  "behavior_dimension_mapping": {
+    "branching_error_behavior": [
+      "branch"
+    ],
+    "cli_tooling": [
+      "function"
+    ],
+    "generated_authority": [
+      "artifact"
+    ],
+    "install_cache_package": [
+      "artifact"
+    ],
+    "library_api": [
+      "function"
+    ],
+    "product_ui_control_surface": [
+      "ui_state"
+    ],
+    "security_trust_boundary": [
+      "branch",
+      "function"
+    ],
+    "workflow_orchestration": [
+      "branch",
+      "artifact"
+    ]
+  },
+  "changed_file_coupling_policy": {
+    "blocker_path": "VERIFICATION_BACKLOG.json",
+    "changed_files": [
+      "fixtures/valid/minimal-goal-run.json",
+      "fixtures/valid/non-product-feature-completion.json"
+    ],
+    "changed_files_digest": "sha256:1eba2fa86c7172c904b1fc9b05ba739e4097a295621399994e90eb1a32fb0960",
+    "required": true
+  },
+  "claim_ceiling_when_incomplete": "withheld_or_blocked",
+  "coverage_command_id": "repo-authoritative-coverage",
+  "coverage_command_path": ".harness/coverage-command",
+  "coverage_receipt_output_path": "validation_artifacts/coverage/coverage-receipt.json",
+  "exclusions": [],
+  "external_roots": [],
+  "fast_full_gate_split": {
+    "fast_gate": "scripts/check-coverage-fast",
+    "fast_supports_completion": false,
+    "full_gate": "scripts/check-coverage-full",
+    "full_required_for_completion": true,
+    "missing_claim_context_fails": true
+  },
+  "generated_at": "2026-06-24T00:00:00Z",
+  "generated_roots": [],
+  "manifest_version": 1,
+  "owner": "repo-owner",
+  "policy": "100_percent_required",
+  "policy_mutation_gate": {
+    "block_claim_ceiling_raise_without_proof": true,
+    "block_dimension_removal": true,
+    "block_floor_lowering": true,
+    "block_repo_owned_reclassification": true,
+    "block_target_narrowing": true,
+    "material_review_required": true
+  },
+  "receipt_freshness_binding": {
+    "changed_files_digest_required": true,
+    "command_digest_required": true,
+    "machine_report_digest_required": true,
+    "manifest_digest_required": true,
+    "source_tree_digest_required": true,
+    "workspace_binding_required": true
+  },
+  "repo_owned_source_roots": [
+    "src",
+    "scripts",
+    "validator",
+    "schemas",
+    "templates"
+  ],
+  "repo_root_digest": "sha256:35ce71a27d11339dcdd520321e4e0f5d0d1b7a66ce7e6820e3be1d2a657034d0",
+  "repo_walk_policy": {
+    "classify_all_nonignored_files": true,
+    "ignored_local_state_cannot_be_target": true,
+    "required": true,
+    "unclassified_source_blocks": true
+  },
+  "required_measured_dimensions_per_root": [
+    {
+      "dimensions": [
+        "line",
+        "branch",
+        "function"
+      ],
+      "root": "src"
+    },
+    {
+      "dimensions": [
+        "line",
+        "function"
+      ],
+      "root": "scripts"
+    },
+    {
+      "dimensions": [
+        "line",
+        "branch",
+        "function"
+      ],
+      "root": "validator"
+    },
+    {
+      "dimensions": [
+        "artifact"
+      ],
+      "root": "schemas"
+    },
+    {
+      "dimensions": [
+        "artifact",
+        "ui_state"
+      ],
+      "root": "templates"
+    }
+  ],
+  "required_target_paths": [
+    "src",
+    "scripts",
+    "validator",
+    "schemas",
+    "templates"
+  ],
+  "schema": "harness-ultragoal.coverage-manifest.v1",
+  "source_discovery_rules": {
+    "ignore": [
+      ".git/**",
+      ".codex-worktree/**",
+      "target/**",
+      "node_modules/**",
+      "__pycache__/**"
+    ],
+    "include": [
+      "src/**",
+      "scripts/**",
+      "validator/**",
+      "schemas/**",
+      "templates/**"
+    ]
+  },
+  "tool_generated_proof_policy": {
+    "command_exit_zero_required": true,
+    "hand_written_receipts_rejected": true,
+    "machine_readable_report_required": true,
+    "prose_percent_rejected": true
+  },
+  "vendor_roots": []
+}

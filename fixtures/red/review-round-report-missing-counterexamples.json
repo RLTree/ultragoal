@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-missing-counterexamples",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_counterexamples_missing"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/counterexamples_attempted",
+      "value": []
+    }
+  ],
+  "notes": "typed review receipt must carry counterexamples attempted; Markdown report prose is narrative only",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the typed receipt mutation"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-weak-disposition",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "source_obligation_weak_disposition"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/obligations/2/enforcement_disposition",
+      "value": "reviewer_and_backlog"
+    }
+  ],
+  "notes": "Weak or deferrable foundational-law dispositions fail source-obligation coverage.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations/2/enforcement_disposition",
+      "expectation": "source_obligation_weak_disposition"
+    }
+  ]
+}

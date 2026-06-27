@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "material-review-blocked-missing-reviewer-registry-model-evidence",
+  "expected_failure": {
+    "check_id": "material-review-scope-gate",
+    "error": "materiality_reviewer_registry_evidence_missing"
+  },
+  "base_fixture_path": "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewer_registry_evidence",
+      "value": []
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewer_registry_evidence",
+      "expectation": "materiality_reviewer_registry_evidence_missing"
+    }
+  ],
+  "notes": "Material review scope gate red fixture."
+}

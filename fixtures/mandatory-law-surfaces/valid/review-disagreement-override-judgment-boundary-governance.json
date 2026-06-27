@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "review-disagreement-override-judgment-boundary-governance",
+  "standards_row_id": "review-disagreement-override-judgment-boundary-governance",
+  "source_obligation_id": "review-disagreement-override-judgment-boundary-governance",
+  "foundational_trace_id": "review-disagreement-override-judgment-boundary-governance",
+  "validator_check_id": "review-disagreement-override-judgment-boundary-governance",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/review-disagreement-override-judgment-boundary-governance.json",
+  "red_fixture_ids": [
+    "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red",
+    "review-disagreement-override-judgment-boundary-governance-human-approval-closing-mandatory-law-red",
+    "review-disagreement-override-judgment-boundary-governance-disagreement-marked-resolved-in-prose-only-red",
+    "review-disagreement-override-judgment-boundary-governance-non-goal-without-claim-removal-red",
+    "review-disagreement-override-judgment-boundary-governance-reviewer-raising-confidence-above-evidence-red",
+    "review-disagreement-override-judgment-boundary-governance-judgment-only-product-fitness-claim-counted-as-proof-red",
+    "review-disagreement-override-judgment-boundary-governance-final-packet-hiding-open-disagreement-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "review_claims_withheld_without_override_boundary_governance",
+  "behavior_failure_modes": [
+    "review_disagreement_override_judgment_boundary_governance_reviewer_signoff_overriding_failing_validator",
+    "review_disagreement_override_judgment_boundary_governance_human_approval_closing_mandatory_law",
+    "review_disagreement_override_judgment_boundary_governance_disagreement_marked_resolved_in_prose_only",
+    "review_disagreement_override_judgment_boundary_governance_non_goal_without_claim_removal",
+    "review_disagreement_override_judgment_boundary_governance_reviewer_raising_confidence_above_evidence",
+    "review_disagreement_override_judgment_boundary_governance_judgment_only_product_fitness_claim_counted_as_proof",
+    "review_disagreement_override_judgment_boundary_governance_final_packet_hiding_open_disagreement"
+  ],
+  "law_specific": {
+    "reviewer_signoff_overriding_failing_validator": true,
+    "human_approval_closing_mandatory_law": true,
+    "disagreement_marked_resolved_in_prose_only": true,
+    "non_goal_without_claim_removal": true,
+    "reviewer_raising_confidence_above_evidence": true,
+    "judgment_only_product_fitness_claim_counted_as_proof": true,
+    "final_packet_hiding_open_disagreement": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

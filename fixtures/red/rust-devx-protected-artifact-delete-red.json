@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-protected-artifact-delete-red",
+  "expected_failure": {
+    "check_id": "workspace-artifact-cache-garbage-collection",
+    "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:protected_artifact_delete"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/workspace-artifact-cache-garbage-collection.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/protected_artifact_delete",
+      "value": false
+    }
+  ],
+  "notes": "protected active-claim artifacts cannot be deleted without replacement proof",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/protected_artifact_delete",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/protected_artifact_delete",
+      "expectation": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:protected_artifact_delete"
+    }
+  ]
+}

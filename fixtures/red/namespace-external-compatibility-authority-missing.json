@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-external-compatibility-authority-missing",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_class_authority_missing"
+  },
+  "base_fixture_path": "docs/namespace-class-registry.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/classes/-",
+      "value": {
+        "id": "missing-external-authority",
+        "kind": "external_compatibility",
+        "surface_globs": [
+          "schemas/external/**/*.schema.json"
+        ],
+        "description": "external compatibility classes require a live authority path",
+        "authority": "offline_schema_catalog",
+        "authority_path": "missing-external-contract.json",
+        "maximal_factoring_required": true,
+        "waiver_allowed": false,
+        "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+      }
+    }
+  ],
+  "notes": "External compatibility namespace classes require a live authority path.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "expectation": "namespace_class_authority_missing"
+    }
+  ]
+}

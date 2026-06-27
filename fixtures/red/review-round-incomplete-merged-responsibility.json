@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-incomplete-merged-responsibility",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_hollow_evidence_artifacts"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/reviewers/3/evidence_artifacts_checked/5"
+    }
+  ],
+  "notes": "merged personas must still bind evidence for their merged responsibility focus path",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3/evidence_artifacts_checked/5",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/3/evidence_artifacts_checked",
+      "expectation": "merged responsibility evidence coverage rejected"
+    }
+  ]
+}

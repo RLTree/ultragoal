@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "standards-gardener-missing-promotion-receipt",
+  "expected_failure": {
+    "check_id": "standards-gardener-promotion",
+    "error": "standards_gardener_receipt_missing"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/88/standards_gardening_receipt_path"
+    }
+  ],
+  "notes": "Standards-gardener promotion claims must point at a typed receipt; prose-only gardening is not enough.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/88/standards_gardening_receipt_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations/88/standards_gardening_receipt_path",
+      "expectation": "standards_gardener_receipt_missing"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "harness-ultragoal.semantic-classification-receipt.v1",
+  "claim_id": "CLAIM-001",
+  "canonical_text_digest": "sha256:128d492c210bfbd977c04219c7845cc7dc1f6b199e060fb642342dc621467fca",
+  "classifier_contract_id": "ultragoal-semantic-classification",
+  "classifier_contract_version": "v1",
+  "generated_at": "2026-06-18T05:38:49Z",
+  "producer_actor_id": "fixture-producer",
+  "classifier_actor_id": "fixture-semantic-reviewer",
+  "actor_disjoint": true,
+  "confidence": 0.82,
+  "ambiguity": false,
+  "required_proof_gates": [
+    "runtime_execution",
+    "ready_for_merge_receipt"
+  ],
+  "receipt_digest": "sha256:ba71dbaa76d5bf299012ca9f6a38bbde8a04de4d579e8be0633c57c07fadf2a2",
+  "classifier_implementation_kind": "deterministic_backstop",
+  "detected_semantic_classes": [
+    "install_visible_selectable_active_in_codex",
+    "runtime_cli_backend_only_engine_only"
+  ],
+  "rationale": "Install class receipts must declare the install visibility gate.",
+  "claim_ceiling_recommendation": "validate_install_visibility_before_inclusion"
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/goal-binding.schema.json",
+  "title": "Harness Ultragoal Goal Binding",
+  "type": "object",
+  "required": [
+    "status",
+    "objective",
+    "contract_path",
+    "checked_at"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "bound",
+        "unavailable",
+        "blocked"
+      ]
+    },
+    "goal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contract_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "get_goal_receipt": {
+      "allOf": [
+        {
+          "$ref": "common-defs.schema.json#/$defs/goalToolReceipt"
+        },
+        {
+          "properties": {
+            "tool_name": {
+              "const": "get_goal"
+            }
+          }
+        }
+      ]
+    },
+    "create_goal_receipt": {
+      "$ref": "common-defs.schema.json#/$defs/goalToolReceipt"
+    },
+    "tool_names": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "get_goal",
+          "create_goal",
+          "update_goal"
+        ]
+      }
+    },
+    "receipt_matches_binding": {
+      "type": "object",
+      "required": [
+        "goal_id",
+        "objective",
+        "contract_path",
+        "active_status"
+      ],
+      "properties": {
+        "goal_id": {
+          "const": true
+        },
+        "objective": {
+          "const": true
+        },
+        "contract_path": {
+          "const": true
+        },
+        "active_status": {
+          "const": true
+        }
+      },
+      "additionalProperties": false,
+      "description": "Validator-derived equality result. Producers must compute this from get_goal_receipt fields, not self-attest it from prose."
+    },
+    "checked_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "gap_reason": {
+      "type": "string"
+    },
+    "discovery_probe_receipt": {
+      "$ref": "common-defs.schema.json#/$defs/goalToolProbeReceipt"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "bound"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "goal_id",
+          "get_goal_receipt",
+          "tool_names",
+          "receipt_matches_binding"
+        ],
+        "properties": {
+          "tool_names": {
+            "contains": {
+              "const": "get_goal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "unavailable",
+              "blocked"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gap_reason",
+          "discovery_probe_receipt"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

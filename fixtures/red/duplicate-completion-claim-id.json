@@ -1,0 +1,103 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "duplicate_completion_claim_id remains the first failing error"
+    }
+  ],
+  "id": "duplicate-completion-claim-id",
+  "expected_failure": {
+    "check_id": "claim-scope-closure",
+    "error": "duplicate_completion_claim_id"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0",
+      "value": {
+        "allowed_evidence_surfaces": [
+          "runtime_cli"
+        ],
+        "claim_ceiling_effect": "included",
+        "claim_kind": "feature_completion",
+        "claim_scope": "required",
+        "claim_surface": "runtime_cli",
+        "description": "A duplicate included claim tries to advertise install visibility while a later same-id row hides it.",
+        "evidence": [
+          {
+            "claim_id": "CLAIM-001",
+            "commit": "abcdef0",
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "freshness": {
+              "checked_at": "2026-06-16T00:00:00Z",
+              "current_commit": "abcdef0",
+              "evidence_commit": "abcdef0",
+              "policy": "target head and evidence commit must match",
+              "verdict": "current"
+            },
+            "id": "EV-LIVE-RUNTIME-001",
+            "kind": "live_beneficial_e2e",
+            "live_beneficial_task": {
+              "acceptance_criteria": [
+                "output artifact records the completed engine transformation"
+              ],
+              "description": "Run a real engine-only CLI transformation and inspect the produced artifact.",
+              "output_artifact_path": "validation_artifacts/runtime/engine-output.md",
+              "quality_inspection_result": "artifact is suitable for validating engine-only runtime behavior",
+              "real_input_path": "validation_artifacts/runtime/engine-input.md"
+            },
+            "observed_at": "2026-06-16T00:00:00Z",
+            "path": "validation_artifacts/runtime/engine-output.md",
+            "produced_by_command_id": "cmd-static-001",
+            "surface": "runtime_cli",
+            "workspace": "/repo"
+          }
+        ],
+        "id": "CLAIM-001",
+        "product_applicability": {
+          "product_surface": false,
+          "rationale": "This is engine-only CLI work with no user-facing product, UI, or control surface claim.",
+          "surface_classification": "engine_runtime_only",
+          "ui_or_control_surface": false,
+          "user_facing": false
+        },
+        "requires_goal_binding": false,
+        "requires_observability": false,
+        "requires_product_cohesion": false,
+        "semantic_classification_receipts": [
+          {
+            "digest": "sha256:48d1f4c80af2e704698748c0c58f7ca15c572e178a10ac7dac4edb160a3ca902",
+            "path": "validation_artifacts/semantic-classification/non-product-feature-completion/CLAIM-001.semantic-classification-receipt.json"
+          }
+        ],
+        "semantic_text_classification": {
+          "actor_disjoint": true,
+          "classifier_actor_id": "fixture-semantic-reviewer",
+          "distribution_claim": false,
+          "install_visibility_claim": false,
+          "producer_actor_id": "fixture-producer",
+          "product_or_ui_claim": false,
+          "publication_claim": false,
+          "rationale": "Independent deterministic classification: this text is limited to engine_runtime_only behavior and carries no install, publication, or consumer product claim.",
+          "text_digest": "sha256:128d492c210bfbd977c04219c7845cc7dc1f6b199e060fb642342dc621467fca"
+        },
+        "status": "proven_live",
+        "title": "The extension is present in Codex after reload"
+      }
+    }
+  ],
+  "notes": "duplicate claim id must fail before map-based semantic checks can hide the first row"
+}

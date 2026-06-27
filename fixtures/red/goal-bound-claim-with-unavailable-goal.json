@@ -1,0 +1,110 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "goal-bound-claim-with-unavailable-goal",
+  "expected_failure": {
+    "check_id": "goal-binding-receipt-match",
+    "error": "goal_bound_claim_without_bound_goal"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/goal_binding/status",
+      "value": "bound"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/goal_id",
+      "value": "goal-1"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/get_goal_receipt",
+      "value": {
+        "tool_name": "get_goal",
+        "thread_id": "thread-x",
+        "workspace": "/wrong",
+        "observed_goal_id": "other-goal",
+        "observed_status": "active",
+        "observed_objective": "Different objective",
+        "observed_contract_path": "OTHER.md",
+        "output_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "observed_at": "2026-06-16T00:00:00Z"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/tool_names",
+      "value": [
+        "get_goal"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/receipt_matches_binding",
+      "value": {
+        "goal_id": true,
+        "objective": true,
+        "contract_path": true,
+        "active_status": true
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_static"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "goal_binding"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/requires_goal_binding",
+      "value": true
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "materializes target condition through JSON Patch before semantic validation",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/requires_goal_binding",
+      "expectation": "goal_bound_claim_without_bound_goal"
+    }
+  ]
+}

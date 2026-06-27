@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "material-review-full-scope-code-runtime-change",
+  "expected_failure": {
+    "check_id": "material-review-scope-gate",
+    "error": "material_signoff_requires_full_scope"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/materiality_gate/decision",
+      "value": "DELTA_REVIEW_ALLOWED"
+    },
+    {
+      "op": "replace",
+      "path": "/materiality_gate/material_triggers",
+      "value": [
+        "material_code_runtime_change"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/materiality_gate/output_may_be_used_for_material_signoff",
+      "value": false
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/materiality_gate/decision",
+      "expectation": "material_signoff_requires_full_scope"
+    }
+  ],
+  "notes": "Material review scope gate red fixture."
+}

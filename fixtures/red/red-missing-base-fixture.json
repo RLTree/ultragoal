@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "red-missing-base-fixture",
+  "expected_failure": {
+    "check_id": "red-fixture-coverage",
+    "error": "base_fixture_missing"
+  },
+  "base_fixture_path": "fixtures/valid/missing-red-base-fixture.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/schema",
+      "value": "unreachable"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/schema",
+      "expectation": "missing red base fixture must return a structured red fixture error"
+    }
+  ],
+  "notes": "missing red base fixture must return a structured red fixture error"
+}

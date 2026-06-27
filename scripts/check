@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+
+bash scripts/check-agent-standards "$root"
+
+coverage_cmd_file=".harness/coverage-command"
+if [[ ! -f "$coverage_cmd_file" ]]; then
+  echo "setup blocker: no repo coverage command configured at $coverage_cmd_file" >&2
+  echo "record a coverage ratchet blocker or add a real coverage command before completion claims" >&2
+  exit 2
+fi
+
+bash scripts/check-coverage-full "$root"

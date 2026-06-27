@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/codex-registry-exposure.schema.json",
+  "title": "Codex Active Custom Agent Registry Exposure Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "captured_at",
+    "source",
+    "session_id",
+    "round_id",
+    "agent_types"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.multi-agent-registry-exposure.v1"
+    },
+    "captured_at": {
+      "type": "string",
+      "minLength": 20
+    },
+    "source": {
+      "const": "multi_agent_v1.tool_registry"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "round_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_types": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "$ref": "#/$defs/agentTypeExposure"
+      }
+    }
+  },
+  "$defs": {
+    "agentTypeExposure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_type",
+        "persona",
+        "custom_agent_path",
+        "disk_cache_synced",
+        "global_toml_present",
+        "exposed"
+      ],
+      "properties": {
+        "agent_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "persona": {
+          "type": "string",
+          "minLength": 1
+        },
+        "custom_agent_path": {
+          "type": "string",
+          "pattern": "^custom-agents/harness-[a-z-]+\\.toml$"
+        },
+        "disk_cache_synced": {
+          "type": "boolean"
+        },
+        "global_toml_present": {
+          "type": "boolean"
+        },
+        "exposed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-law-present-only-as-prose",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_law_present_only_as_prose"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/47"
+    }
+  ],
+  "notes": "Namespace law fails when it exists only as prose without the source-obligation machine binding.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/47/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations",
+      "expectation": "namespace_law_present_only_as_prose"
+    }
+  ]
+}

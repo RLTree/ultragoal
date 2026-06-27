@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "claim_text_requires_unproven_surface remains the first failing error"
+    }
+  ],
+  "id": "publication-attestation-runtime-surface-mismatch",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "The plugin is published in the workspace registry."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "external"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence/0/kind",
+      "value": "live_beneficial_e2e"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence/0/surface",
+      "value": "runtime_cli"
+    }
+  ],
+  "notes": "publication requires one external attestation evidence row on the external surface; split claim_surface plus runtime evidence is not proof"
+}

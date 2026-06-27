@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "schema-evolution-receipt-migration-stale-version-invalidation-old-product-fitness-receipt-accepted-after-schema-change-red",
+  "expected_failure": {
+    "check_id": "schema-evolution-receipt-migration-stale-version-invalidation",
+    "error": "mandatory_law_specific_guard_not_enforced:schema-evolution-receipt-migration-stale-version-invalidation:old_product_fitness_receipt_accepted_after_schema_change"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/schema-evolution-receipt-migration-stale-version-invalidation.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/old_product_fitness_receipt_accepted_after_schema_change",
+      "value": false
+    }
+  ],
+  "notes": "schema-evolution-receipt-migration-stale-version-invalidation must fail when old_product_fitness_receipt_accepted_after_schema_change is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/old_product_fitness_receipt_accepted_after_schema_change",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/old_product_fitness_receipt_accepted_after_schema_change",
+      "expectation": "mandatory_law_specific_guard_not_enforced:schema-evolution-receipt-migration-stale-version-invalidation:old_product_fitness_receipt_accepted_after_schema_change"
+    }
+  ]
+}

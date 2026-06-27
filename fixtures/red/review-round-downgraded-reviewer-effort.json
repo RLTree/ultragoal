@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-downgraded-reviewer-effort",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/reasoning_effort",
+      "value": "medium"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/live_spawn_receipt/reasoning_effort",
+      "value": "medium"
+    }
+  ],
+  "notes": "four-persona review receipts must bind the required high reviewer effort",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/reasoning_effort",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0/reasoning_effort",
+      "expectation": "downgraded effort rejected"
+    }
+  ]
+}

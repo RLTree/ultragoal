@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "runtime-tool-identity-digest-mismatch",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "runtime_tool_identity_digest_mismatch"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/artifact_digests/0/digest",
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "notes": "Runtime proof fails when artifact digest does not match live file bytes.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/artifact_digests/0/digest",
+      "expectation": "runtime_tool_identity_digest_mismatch"
+    }
+  ]
+}

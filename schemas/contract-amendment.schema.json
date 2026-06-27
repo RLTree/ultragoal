@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/contract-amendment.schema.json",
+  "title": "Harness Ultragoal Contract Amendment",
+  "type": "object",
+  "required": [
+    "schema",
+    "amendment_id",
+    "previous_contract_hash",
+    "new_contract_hash",
+    "previous_amendment_hash",
+    "amendment_hash",
+    "change_class",
+    "monotonicity",
+    "affected_claim_ids",
+    "removed_or_weakened_claim_ids",
+    "before_claim_ceiling",
+    "after_claim_ceiling",
+    "derived_removed_or_weakened_claim_ids",
+    "derived_claim_delta_matches_declared",
+    "approval",
+    "backlog_updates",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.contract-amendment.v1"
+    },
+    "amendment_id": {
+      "type": "string",
+      "pattern": "^AMEND-[0-9]{3,}$"
+    },
+    "previous_contract_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "new_contract_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "previous_amendment_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "amendment_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "change_class": {
+      "enum": [
+        "strengthens",
+        "clarifies",
+        "weakens",
+        "scope_change"
+      ]
+    },
+    "monotonicity": {
+      "enum": [
+        "preserves_or_strengthens",
+        "weakens_with_user_approval",
+        "invalid"
+      ]
+    },
+    "affected_claim_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      }
+    },
+    "removed_or_weakened_claim_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      },
+      "uniqueItems": true
+    },
+    "before_claim_ceiling": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      },
+      "uniqueItems": true
+    },
+    "after_claim_ceiling": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      },
+      "uniqueItems": true
+    },
+    "approval": {
+      "type": "object",
+      "required": [
+        "required",
+        "status"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "not_required",
+            "approved",
+            "rejected",
+            "missing"
+          ]
+        },
+        "artifact": {
+          "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "backlog_updates": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      }
+    },
+    "created_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "derived_removed_or_weakened_claim_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      },
+      "description": "Validator-derived list from before/after required claim and claim ceiling comparison."
+    },
+    "derived_claim_delta_matches_declared": {
+      "type": "boolean",
+      "description": "True only when derived_removed_or_weakened_claim_ids equals removed_or_weakened_claim_ids."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "change_class": {
+            "const": "weakens"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "monotonicity": {
+            "const": "weakens_with_user_approval"
+          },
+          "approval": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "approved"
+              }
+            },
+            "required": [
+              "artifact"
+            ]
+          },
+          "backlog_updates": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "removed_or_weakened_claim_ids": {
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "monotonicity": {
+            "const": "weakens_with_user_approval"
+          },
+          "approval": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "approved"
+              }
+            },
+            "required": [
+              "artifact"
+            ]
+          },
+          "backlog_updates": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "derived_removed_or_weakened_claim_ids": {
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "derived_claim_delta_matches_declared": {
+            "const": true
+          },
+          "monotonicity": {
+            "const": "weakens_with_user_approval"
+          },
+          "approval": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "approved"
+              }
+            },
+            "required": [
+              "artifact"
+            ]
+          },
+          "backlog_updates": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "harness-ultragoal.product-cohesion-review.v1",
+  "reviewer": "package-author",
+  "actor_disjoint": false,
+  "method": "static target repo fixture audit",
+  "status": "pass",
+  "reviewers": [
+    "package-author"
+  ],
+  "authority": "target_repo_gate"
+}

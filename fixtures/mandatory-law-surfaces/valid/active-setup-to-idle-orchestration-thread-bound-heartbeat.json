@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+  "standards_row_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+  "source_obligation_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+  "foundational_trace_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+  "validator_check_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+  "red_fixture_ids": [
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-multi-lane-setup-complete-without-transition-receipt-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-detached-reminder-substituted-for-heartbeat-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-thread-id-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-first-wave-launch-receipt-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-stale-lane-thread-red",
+    "active-setup-to-idle-orchestration-thread-bound-heartbeat-wakeup-that-emits-prose-only-status-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "orchestration_claims_withheld_without_setup_to_idle_transition_and_thread_bound_heartbeat",
+  "behavior_failure_modes": [
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_multi_lane_setup_complete_without_transition_receipt",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_detached_reminder_substituted_for_heartbeat",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_missing_thread_id",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_missing_first_wave_launch_receipt",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_automation_tick_without_cursor_inspection",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_stale_lane_thread",
+    "active_setup_to_idle_orchestration_thread_bound_heartbeat_wakeup_that_emits_prose_only_status"
+  ],
+  "law_specific": {
+    "multi_lane_setup_complete_without_transition_receipt": true,
+    "detached_reminder_substituted_for_heartbeat": true,
+    "missing_thread_id": true,
+    "missing_first_wave_launch_receipt": true,
+    "automation_tick_without_cursor_inspection": true,
+    "stale_lane_thread": true,
+    "wakeup_that_emits_prose_only_status": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

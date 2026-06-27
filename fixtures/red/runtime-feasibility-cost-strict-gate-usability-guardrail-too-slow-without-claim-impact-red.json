@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
+  "expected_failure": {
+    "check_id": "runtime-feasibility-cost-strict-gate-usability",
+    "error": "mandatory_law_specific_guard_not_enforced:runtime-feasibility-cost-strict-gate-usability:guardrail_too_slow_without_claim_impact"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/runtime-feasibility-cost-strict-gate-usability.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/guardrail_too_slow_without_claim_impact",
+      "value": false
+    }
+  ],
+  "notes": "runtime-feasibility-cost-strict-gate-usability must fail when guardrail_too_slow_without_claim_impact is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/guardrail_too_slow_without_claim_impact",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/guardrail_too_slow_without_claim_impact",
+      "expectation": "mandatory_law_specific_guard_not_enforced:runtime-feasibility-cost-strict-gate-usability:guardrail_too_slow_without_claim_impact"
+    }
+  ]
+}

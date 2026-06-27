@@ -1,0 +1,221 @@
+{
+  "cache": {
+    "cache_mode": "isolated_no_cache",
+    "cargo_incremental": "0",
+    "cargo_target_dir": "target",
+    "remote_cache": "none",
+    "rustc_wrapper": "unset",
+    "warm_cache_supports_no_cache_claim": false
+  },
+  "claim_ceiling": "rust_devx_observation_bound",
+  "claim_support": {
+    "excluded": [
+      "completion",
+      "review_readiness",
+      "release_readiness",
+      "product_success",
+      "update_goal_eligibility"
+    ],
+    "supported": [
+      "clean_checkout_no_hidden_cache"
+    ]
+  },
+  "command": {
+    "argv": [
+      "target/debug/ultragoal",
+      "--root",
+      ".",
+      "rust",
+      "clean-proof",
+      "--receipt",
+      "validation_artifacts/rust/clean-proof-receipt.json"
+    ],
+    "name": "clean_proof",
+    "proof_surface": "clean_checkout_no_hidden_cache",
+    "raw_tools_are_observations_only": true
+  },
+  "commands": [
+    "ultragoal rust toolchain verify",
+    "ultragoal rust fast",
+    "ultragoal rust standard",
+    "ultragoal rust release",
+    "ultragoal rust clean-proof",
+    "ultragoal rust watch",
+    "ultragoal rust memory prove",
+    "ultragoal rust dependency audit",
+    "ultragoal rust coverage prove --exact",
+    "ultragoal rust workspace topology check"
+  ],
+  "digests": {
+    "candidate": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937",
+    "cargo_config": "sha256:6a60d9d70c9ad7f839042e7dfe5e2c993e8db8f27a83acb71e36a3b723d1fa91",
+    "cargo_lock": "sha256:ee05ce5f44fb7ce1e1544f585ac36d155367c58109be2c7b29f90b6fcbf6a1c8",
+    "cargo_workspace": "sha256:b8d083a304e1ff96717b16610ef9a0dd1cf3bfaaebd4d06d9f4320b045849f41",
+    "fixture_catalog": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+    "law_graph": "sha256:350c6fde8886926396d11f4cc0624c29da2e7f167d32ee323526ad78a6db97f0",
+    "rust_toolchain": "sha256:2d157d0deed991e8b3cd711051cd4c1aace1c7ecbfc94df49bf3eaaf8f573d56",
+    "schema_catalog": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+    "source": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937",
+    "source_obligation": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
+    "standards": "sha256:f8539cca3efc6d1e701066429a4ada106807123d84362baf42d4017e29c60a3e"
+  },
+  "generated_at": "2026-06-27T00:47:19Z",
+  "issuer": {
+    "authority": "cli_control_plane",
+    "tool": "ultragoal"
+  },
+  "law_ids": [
+    "rust-cache-no-cache-honesty"
+  ],
+  "observation_failures": [],
+  "observed_tools": [
+    "cargo",
+    "rustc",
+    "rustup"
+  ],
+  "policy_version": "2026-06-26.gate-91.v1",
+  "resource_discipline": {
+    "blind_cleanup_allowed": false,
+    "bounded_resources": true,
+    "memory_proof_surface": false,
+    "spawn_and_forget_allowed": false,
+    "tracing_gc_core_allowed": false,
+    "unbounded_channels_allowed": false
+  },
+  "root": ".",
+  "schema": "harness-ultragoal.rust-devx-receipt.v1",
+  "schema_version": "v1",
+  "staleness_policy": {
+    "invalidates_on": [
+      "source_digest_change",
+      "package_digest_change",
+      "cargo_lock_change",
+      "toolchain_change",
+      "schema_catalog_change",
+      "law_graph_change",
+      "fixture_catalog_change",
+      "command_identity_change",
+      "cache_mode_change"
+    ]
+  },
+  "status": "pass",
+  "telemetry": {
+    "wall_clock_ms": 0
+  },
+  "tool_observations": {
+    "missing_tool_is_claim_blocking": true,
+    "operation": "clean_proof",
+    "probes": [
+      {
+        "args": [
+          "--version",
+          "--verbose"
+        ],
+        "id": "rustc-version",
+        "observation": {
+          "available": true,
+          "status_code": 0,
+          "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_excerpt": "",
+          "stdout_digest": "sha256:eb85b3cc21f8b923b0e190434d905c53234c16c92d8a8a887b0317b8c25ce890",
+          "stdout_excerpt": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2",
+          "success": true
+        },
+        "program": "rustc",
+        "required": true
+      },
+      {
+        "args": [
+          "--version",
+          "--verbose"
+        ],
+        "id": "cargo-version",
+        "observation": {
+          "available": true,
+          "status_code": 0,
+          "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_excerpt": "",
+          "stdout_digest": "sha256:bc14720cb7c6a89a25b3485497b066115f0e4e350d4489687db64d2e77ba384c",
+          "stdout_excerpt": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\nrelease: 1.95.0\ncommit-hash: f2d3ce0bd7f24a49f8f72d9000448f8838c4e850\ncommit-date: 2026-03-21\nhost: aarch64-apple-darwin\nlibgit2: 1.9.2 (sys:0.20.4 vendored)\nlibcurl: 8.7.1 (sys:0.4.83+curl-8.15.0 system ssl:(SecureTransport) LibreSSL/3.3.6)\nssl: OpenSSL 3.5.4 30 Sep 2025\nos: Mac OS 27.0.0 [64-bit]",
+          "success": true
+        },
+        "program": "cargo",
+        "required": true
+      },
+      {
+        "args": [
+          "show",
+          "active-toolchain"
+        ],
+        "id": "active-toolchain",
+        "observation": {
+          "available": true,
+          "status_code": 0,
+          "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_excerpt": "",
+          "stdout_digest": "sha256:5c5825dfd28a334de61ea00bad6389050ed417fd7e6979d9681c31c20d5df5e7",
+          "stdout_excerpt": "1.95.0-aarch64-apple-darwin (overridden by '/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/rust-toolchain.toml')",
+          "success": true
+        },
+        "program": "rustup",
+        "required": true
+      },
+      {
+        "args": [
+          "metadata",
+          "--format-version=1",
+          "--locked",
+          "--no-deps"
+        ],
+        "id": "cargo-metadata-locked",
+        "observation": {
+          "available": true,
+          "status_code": 0,
+          "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_excerpt": "",
+          "stdout_digest": "sha256:46b98ea9043594b10610aedccaf800945a7a877bc53facabbaef109a752aba85",
+          "stdout_excerpt": "{\"packages\":[{\"name\":\"ultragoal-validator\",\"version\":\"0.1.0\",\"id\":\"path+file:///Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator#ultragoal-validator@0.1.0\",\"license\":\"MIT\",\"license_file\":null,\"description\":null,\"source\":null,\"dependencies\":[{\"name\":\"serde\",\"source\":\"registry+https://github.com/rust-lang/crates.io-index\",\"req\":\"^1.0.228\",\"kind\":null,\"rename\":null,\"optional\":false,\"uses_default_features\":true,\"features\":[\"derive\"],\"target\":null,\"registry\":null},{\"name\":\"serde",
+          "success": true
+        },
+        "program": "cargo",
+        "required": true
+      }
+    ],
+    "raw_output_is_authority": false
+  },
+  "toolchain": {
+    "active_toolchain": {
+      "available": true,
+      "status_code": 0,
+      "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_excerpt": "",
+      "stdout_digest": "sha256:5c5825dfd28a334de61ea00bad6389050ed417fd7e6979d9681c31c20d5df5e7",
+      "stdout_excerpt": "1.95.0-aarch64-apple-darwin (overridden by '/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/rust-toolchain.toml')",
+      "success": true
+    },
+    "cargo_version": {
+      "available": true,
+      "status_code": 0,
+      "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_excerpt": "",
+      "stdout_digest": "sha256:bc14720cb7c6a89a25b3485497b066115f0e4e350d4489687db64d2e77ba384c",
+      "stdout_excerpt": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\nrelease: 1.95.0\ncommit-hash: f2d3ce0bd7f24a49f8f72d9000448f8838c4e850\ncommit-date: 2026-03-21\nhost: aarch64-apple-darwin\nlibgit2: 1.9.2 (sys:0.20.4 vendored)\nlibcurl: 8.7.1 (sys:0.4.83+curl-8.15.0 system ssl:(SecureTransport) LibreSSL/3.3.6)\nssl: OpenSSL 3.5.4 30 Sep 2025\nos: Mac OS 27.0.0 [64-bit]",
+      "success": true
+    },
+    "components_required": [
+      "clippy",
+      "llvm-tools-preview",
+      "rustfmt"
+    ],
+    "rustc_version": {
+      "available": true,
+      "status_code": 0,
+      "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_excerpt": "",
+      "stdout_digest": "sha256:eb85b3cc21f8b923b0e190434d905c53234c16c92d8a8a887b0317b8c25ce890",
+      "stdout_excerpt": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2",
+      "success": true
+    },
+    "toolchain_file_present": true
+  }
+}

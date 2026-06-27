@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/fit-repo-receipt.schema.json",
+  "title": "Harness Ultragoal Fit Repo Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "repo_root",
+    "target_revision",
+    "plugin_source_path",
+    "installed_plugin_path",
+    "cache_package_path",
+    "app_registry_exposure",
+    "plugin_version",
+    "entrypoint_contract",
+    "target_classification",
+    "runtime_surface_classification",
+    "product_surface_classification",
+    "templates",
+    "scripts",
+    "standards_rows",
+    "coverage_surfaces",
+    "worktree_environment_surfaces",
+    "ultragoal_bundle_surfaces",
+    "orchestrator_automation_surfaces",
+    "checks",
+    "blockers",
+    "withheld_claims",
+    "claim_ceiling",
+    "generated_at",
+    "producer_actor_id",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.fit-repo-receipt.v1"
+    },
+    "repo_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "git_commit",
+            "package_digest"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "plugin_source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "installed_plugin_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cache_package_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "app_registry_exposure": {
+      "enum": [
+        "exposed",
+        "not_exposed",
+        "not_checked",
+        "unavailable"
+      ]
+    },
+    "plugin_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entrypoint_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "const": "harness-ultragoal:fit-repo"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "target_classification": {
+      "enum": [
+        "fresh_repo",
+        "retrofit_repo",
+        "blocked_unclassified_repo"
+      ]
+    },
+    "runtime_surface_classification": {
+      "enum": [
+        "none",
+        "cli",
+        "service",
+        "workflow_engine",
+        "local_app",
+        "browser_app",
+        "dashboard",
+        "run_console",
+        "plugin",
+        "package",
+        "marketplace",
+        "external_integration"
+      ]
+    },
+    "product_surface_classification": {
+      "enum": [
+        "none",
+        "developer_tool",
+        "operator_control",
+        "consumer_user_facing",
+        "internal_user_facing",
+        "ambiguous_requires_blocker"
+      ]
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "standards_rows": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "coverage_surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "worktree_environment_surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ultragoal_bundle_surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "orchestrator_automation_surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "command",
+          "exit",
+          "stdout",
+          "stderr"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exit": {
+            "type": "integer"
+          },
+          "stdout": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          },
+          "stderr": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "owner",
+          "reason",
+          "affected_claim_ids",
+          "required_repair",
+          "claim_ceiling"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "affected_claim_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required_repair": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_ceiling": {
+            "enum": [
+              "withheld_or_blocked",
+              "package_static_fixture_only"
+            ]
+          }
+        }
+      }
+    },
+    "withheld_claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claim_ceiling": {
+      "enum": [
+        "withheld_or_blocked",
+        "package_static_fixture_only"
+      ]
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "producer_actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receipt_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    }
+  }
+}

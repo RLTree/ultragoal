@@ -1,0 +1,176 @@
+use std::collections::{BTreeMap, BTreeSet};
+use std::path::Path;
+
+pub(crate) fn failures(root: &Path, manifest_paths: &[String]) -> Vec<String> {
+    let mut paths = manifest_paths
+        .iter()
+        .filter(|path| is_validator_rust_source(path))
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    paths.extend(repo_source_paths(root));
+    let mut out = Vec::new();
+    out.extend(forbidden_top_level_clusters(&paths));
+    out.extend(maximal_factoring_failures(&paths));
+    out.extend(generic_leaf_name_failures(&paths));
+    out.extend(history_name_failures(&paths));
+    out
+}
+
+fn repo_source_paths(root: &Path) -> Vec<String> {
+    crate::package::inventory::closure::actual_files(root)
+        .unwrap_or_default()
+        .into_iter()
+        .filter(|path| is_validator_rust_source(path))
+        .collect()
+}
+
+fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {
+    let top_level = paths
+        .iter()
+        .filter_map(|path| path.strip_prefix("validator/src/"))
+        .filter(|tail| !tail.contains('/'))
+        .collect::<Vec<_>>();
+    let internal = top_level
+        .iter()
+        .filter(|file| {
+            file.starts_with("internal_")
+                || file.starts_with("internal-")
+                || file.starts_with("internal.")
+                || file.starts_with("iinternal_")
+        })
+        .map(|file| format!("validator/src/{file}"))
+        .collect::<Vec<_>>();
+    if internal.is_empty() {
+        return Vec::new();
+    }
+    vec![remediating_failure(
+        "namespace_validator_source_top_level_internal_cluster",
+        "validator/src",
+        "internal",
+        &internal,
+        "move_repo_owned_validator_tests_into_validator_src_self_tests_semantic_domain_dirs",
+        false,
+    )]
+}
+
+fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    let mut by_dir_prefix: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
+    for path in paths {
+        let stem = source_stem(path);
+        if route_file(stem) || !stem.contains('_') {
+            continue;
+        }
+        let prefix = stem.split('_').next().unwrap_or("");
+        if prefix.len() < 2 {
+            continue;
+        }
+        by_dir_prefix
+            .entry((parent_dir(path).to_string(), prefix.to_string()))
+            .or_default()
+            .push(path.to_string());
+    }
+    by_dir_prefix
+        .into_iter()
+        .filter(|(_, examples)| examples.len() > 1)
+        .map(|((dir, prefix), examples)| {
+            remediating_failure(
+                "namespace_validator_source_residual_prefix_encoding",
+                &dir,
+                &prefix,
+                &examples,
+                "promote_shared_underscore_namespace_segment_into_directory_module_boundary_until_filename_is_a_semantic_leaf",
+                false,
+            )
+        })
+        .collect()
+}
+
+fn generic_leaf_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    paths
+        .iter()
+        .filter(|path| {
+            let stem = source_stem(path);
+            matches!(
+                stem,
+                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
+            )
+        })
+        .map(|path| {
+            remediating_failure(
+                "namespace_validator_source_generic_leaf",
+                parent_dir(path),
+                source_stem(path),
+                &[path.to_string()],
+                "rename_generic_source_leaf_to_the_domain_behavior_it_owns_or_route_it_under_a_semantic_module",
+                false,
+            )
+        })
+        .collect()
+}
+
+fn history_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    paths
+        .iter()
+        .filter(|path| {
+            let stem = source_stem(path);
+            stem.starts_with("coverage_wave")
+                || stem.contains("_coverage_wave")
+                || stem.contains("_wave")
+                || stem.starts_with("wave_")
+                || stem.starts_with("iinternal_")
+        })
+        .map(|path| {
+            remediating_failure(
+                "namespace_validator_source_history_name",
+                parent_dir(path),
+                first_token(path),
+                &[path.to_string()],
+                "rename_repo_owned_validator_source_by_domain_behavior_not_creation_history",
+                false,
+            )
+        })
+        .collect()
+}
+
+fn remediating_failure(
+    code: &str,
+    directory: &str,
+    prefix: &str,
+    examples: &[String],
+    repair: &str,
+    exception_allowed: bool,
+) -> String {
+    let sample = examples
+        .iter()
+        .take(5)
+        .cloned()
+        .collect::<Vec<_>>()
+        .join(",");
+    format!(
+        "{code}:directory={directory};prefix={prefix};count={};examples={sample};why=prefix_or_history_name_is_standing_in_for_semantic_directory;repair={repair};claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed={exception_allowed}",
+        examples.len()
+    )
+}
+
+fn is_validator_rust_source(path: &str) -> bool {
+    (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
+        && path.ends_with(".rs")
+}
+
+fn route_file(stem: &str) -> bool {
+    matches!(stem, "mod" | "lib" | "main")
+}
+
+fn parent_dir(path: &str) -> &str {
+    path.rsplit_once('/').map(|(dir, _)| dir).unwrap_or("")
+}
+
+fn first_token(path: &str) -> &str {
+    let name = path.rsplit('/').next().unwrap_or(path);
+    name.split(['_', '-', '.']).next().unwrap_or("")
+}
+
+fn source_stem(path: &str) -> &str {
+    let name = path.rsplit('/').next().unwrap_or(path);
+    name.strip_suffix(".rs").unwrap_or(name)
+}

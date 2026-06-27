@@ -1,0 +1,36 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-scope-missing-ui-state-dimension",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "coverage_ui_state_missing_for_product_surface"
+  },
+  "base_fixture_path": "templates/.harness/coverage-manifest.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/required_measured_dimensions_per_root/4/dimensions",
+      "value": [
+        "artifact"
+      ]
+    }
+  ],
+  "notes": "Coverage scope authority must include UI-state coverage for product/control-surface templates.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/schema",
+      "expectation": "coverage_ui_state_missing_for_product_surface"
+    }
+  ]
+}

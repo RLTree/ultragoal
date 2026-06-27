@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-runtime-only-bare-app-feature-claim",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_applicability_contradicts_claim_text"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "App is ready"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:6afd5c505f64a2d5e75d3263256938080196a8f3bfc293806e85a50ada4d8ff5",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Adversarial fixture intentionally misclassifies generic app wording as runtime-only."
+      }
+    }
+  ],
+  "notes": "Bare app wording is product-surface language and cannot be downgraded to runtime-only proof.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "product_applicability_contradicts_claim_text"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "publication-extension-public-catalog",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "The extension is released in the public catalog."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:ee8dea3cefaca300f48be9299dd75d89f1d9bb6ea865f7706c1be7e2d8058611",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": true,
+        "distribution_claim": true,
+        "rationale": "Independent deterministic classification for this adversarial text-smuggling red packet."
+      }
+    }
+  ],
+  "notes": "Public catalog release requires external publication evidence.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

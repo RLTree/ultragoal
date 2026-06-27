@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "failure-remediation-quality-agent-actionable-output-missing-rerun-command-red",
+  "expected_failure": {
+    "check_id": "failure-remediation-quality-agent-actionable-output",
+    "error": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:missing_rerun_command"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_rerun_command",
+      "value": false
+    }
+  ],
+  "notes": "failure-remediation-quality-agent-actionable-output must fail when missing_rerun_command is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_rerun_command",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_rerun_command",
+      "expectation": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:missing_rerun_command"
+    }
+  ]
+}

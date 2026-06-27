@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+  "standards_row_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+  "source_obligation_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+  "foundational_trace_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+  "validator_check_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/issue-tracker-lifecycle-eligibility-terminal-state.json",
+  "red_fixture_ids": [
+    "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
+    "issue-tracker-lifecycle-eligibility-terminal-state-blocked-row-counted-as-supported-red",
+    "issue-tracker-lifecycle-eligibility-terminal-state-stale-review-issue-marked-fixed-without-candidate-digest-red",
+    "issue-tracker-lifecycle-eligibility-terminal-state-non-goal-without-rationale-red",
+    "issue-tracker-lifecycle-eligibility-terminal-state-state-case-collision-red",
+    "issue-tracker-lifecycle-eligibility-terminal-state-update-goal-allowed-while-accepted-issue-unverified-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "issue_goal_claims_withheld_without_typed_lifecycle_evidence",
+  "behavior_failure_modes": [
+    "issue_tracker_lifecycle_eligibility_terminal_state_done_accepted_as_verified",
+    "issue_tracker_lifecycle_eligibility_terminal_state_blocked_row_counted_as_supported",
+    "issue_tracker_lifecycle_eligibility_terminal_state_stale_review_issue_marked_fixed_without_candidate_digest",
+    "issue_tracker_lifecycle_eligibility_terminal_state_non_goal_without_rationale",
+    "issue_tracker_lifecycle_eligibility_terminal_state_state_case_collision",
+    "issue_tracker_lifecycle_eligibility_terminal_state_update_goal_allowed_while_accepted_issue_unverified"
+  ],
+  "law_specific": {
+    "done_accepted_as_verified": true,
+    "blocked_row_counted_as_supported": true,
+    "stale_review_issue_marked_fixed_without_candidate_digest": true,
+    "non_goal_without_rationale": true,
+    "state_case_collision": true,
+    "update_goal_allowed_while_accepted_issue_unverified": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

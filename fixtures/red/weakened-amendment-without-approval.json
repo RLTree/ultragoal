@@ -1,0 +1,72 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "weakened-amendment-without-approval",
+  "expected_failure": {
+    "check_id": "amendment-monotonicity",
+    "error": "weakening_without_explicit_approval"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/amendments/0",
+      "value": {
+        "schema": "harness-ultragoal.contract-amendment.v1",
+        "amendment_id": "AMEND-001",
+        "previous_contract_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "new_contract_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "previous_amendment_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "amendment_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "change_class": "weakens",
+        "monotonicity": "weakens_with_user_approval",
+        "affected_claim_ids": [
+          "CLAIM-001"
+        ],
+        "removed_or_weakened_claim_ids": [
+          "CLAIM-001"
+        ],
+        "before_claim_ceiling": [
+          "CLAIM-001"
+        ],
+        "after_claim_ceiling": [],
+        "derived_removed_or_weakened_claim_ids": [
+          "CLAIM-001"
+        ],
+        "derived_claim_delta_matches_declared": true,
+        "approval": {
+          "required": true,
+          "status": "approved",
+          "artifact": {
+            "path": "missing-approval.json",
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        },
+        "backlog_updates": [
+          {
+            "path": "missing-backlog-update.json",
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "created_at": "2026-06-16T00:00:00Z"
+      }
+    }
+  ],
+  "notes": "materializes target condition through JSON Patch before semantic validation",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/amendments/0",
+      "expectation": "weakening_without_explicit_approval"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "actor_disjoint": true,
+  "ambiguity": false,
+  "canonical_text_digest": "sha256:295159d5aff337f0206baed7de5b0b3dcde82b1e4c9bc368c69a88d6cdb3d8b6",
+  "claim_ceiling_recommendation": "validate_required_gates_before_inclusion",
+  "claim_id": "CLAIM-001",
+  "classifier_actor_id": "ultragoal-deterministic-backstop",
+  "classifier_contract_id": "ultragoal-semantic-classification",
+  "classifier_contract_version": "v1",
+  "classifier_implementation_kind": "deterministic_backstop",
+  "confidence": 0.82,
+  "detected_semantic_classes": [
+    "runtime_cli_backend_only_engine_only"
+  ],
+  "generated_at": "2026-06-25T22:13:11Z",
+  "producer_actor_id": "package-author",
+  "rationale": "Deterministic lexical backstop over enumerated semantic families.",
+  "receipt_digest": "sha256:f494a722123e2db07ce7d21a732921989e3793476ed782f124dfb7d5e1088bff",
+  "required_proof_gates": [
+    "runtime_execution",
+    "ready_for_merge_receipt"
+  ],
+  "schema": "harness-ultragoal.semantic-classification-receipt.v1"
+}

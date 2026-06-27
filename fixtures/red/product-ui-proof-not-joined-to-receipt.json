@@ -1,0 +1,170 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-ui-proof-not-joined-to-receipt",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_ui_journey_evidence_mismatch"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "product::cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "product::cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "product::cohesion",
+        "ui_browser",
+        "runtime_api"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/requires_product_cohesion",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/exit",
+      "value": 0
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/artifact_path",
+      "value": "validation_artifacts/product-cohesion/journey-receipt.json"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/artifact_digest",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence",
+      "value": [
+        {
+          "id": "EV-PRODUCT-001",
+          "claim_id": "CLAIM-001",
+          "kind": "product_cohesion_receipt",
+          "surface": "product::cohesion",
+          "path": "validation_artifacts/product-cohesion/journey-receipt.json",
+          "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          },
+          "product_cohesion_task": {
+            "primary_journey_id": "intent-to-proof",
+            "ui_evidence_paths": [
+              "validation_artifacts/product-cohesion/expected-ui.png"
+            ],
+            "expected_interruption_rate": "rare",
+            "exhausted_harness_evidence_paths": [
+              "validation_artifacts/product-cohesion/harness-paths.json"
+            ]
+          }
+        },
+        {
+          "id": "EV-UI-001",
+          "claim_id": "CLAIM-001",
+          "kind": "ui_interaction",
+          "surface": "ui_browser",
+          "path": "validation_artifacts/product-cohesion/other-ui.png",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        },
+        {
+          "id": "EV-HARNESS-001",
+          "claim_id": "CLAIM-001",
+          "kind": "runtime_execution",
+          "surface": "runtime_api",
+          "path": "validation_artifacts/product-cohesion/harness-paths.json",
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "product receipt names one UI path while the claim attaches a different UI proof artifact",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "expectation": "product_ui_journey_evidence_mismatch"
+    }
+  ]
+}

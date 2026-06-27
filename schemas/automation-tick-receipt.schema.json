@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/automation-tick-receipt.schema.json",
+  "title": "Harness Ultragoal Automation Tick Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "automation_id",
+    "source_artifact",
+    "schedule",
+    "enabled",
+    "last_tick_at",
+    "next_due_at",
+    "last_success_at",
+    "drift_verdict",
+    "checked_at",
+    "freshness_policy",
+    "validator_computed_drift_verdict",
+    "verdict_matches_timestamps"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.automation-tick-receipt.v1"
+    },
+    "automation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifact": {
+      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+    },
+    "schedule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "last_tick_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "next_due_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "last_success_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "drift_verdict": {
+      "enum": [
+        "fresh",
+        "stale",
+        "missing",
+        "disabled"
+      ]
+    },
+    "checked_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "claim_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      }
+    },
+    "freshness_policy": {
+      "type": "object",
+      "required": [
+        "max_tick_age_minutes",
+        "max_success_age_minutes",
+        "clock_at_validation"
+      ],
+      "properties": {
+        "max_tick_age_minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_success_age_minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "clock_at_validation": {
+          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "validator_computed_drift_verdict": {
+      "enum": [
+        "fresh",
+        "stale",
+        "missing",
+        "disabled"
+      ]
+    },
+    "verdict_matches_timestamps": {
+      "const": true
+    }
+  },
+  "additionalProperties": false
+}

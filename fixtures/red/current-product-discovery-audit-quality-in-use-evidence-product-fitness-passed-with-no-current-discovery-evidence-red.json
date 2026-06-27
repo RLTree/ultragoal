@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "current-product-discovery-audit-quality-in-use-evidence-product-fitness-passed-with-no-current-discovery-evidence-red",
+  "expected_failure": {
+    "check_id": "current-product-discovery-audit-quality-in-use-evidence",
+    "error": "mandatory_law_specific_guard_not_enforced:current-product-discovery-audit-quality-in-use-evidence:product_fitness_passed_with_no_current_discovery_evidence"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/product_fitness_passed_with_no_current_discovery_evidence",
+      "value": false
+    }
+  ],
+  "notes": "current-product-discovery-audit-quality-in-use-evidence must fail when product_fitness_passed_with_no_current_discovery_evidence is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/product_fitness_passed_with_no_current_discovery_evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/product_fitness_passed_with_no_current_discovery_evidence",
+      "expectation": "mandatory_law_specific_guard_not_enforced:current-product-discovery-audit-quality-in-use-evidence:product_fitness_passed_with_no_current_discovery_evidence"
+    }
+  ]
+}

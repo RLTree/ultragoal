@@ -1,0 +1,4 @@
+Title: AI is forcing us to write good code
+URL: https://bits.logic.inc/p/ai-is-forcing-us-to-write-good-code
+Retrieved at: 2026-06-16T00:00:00Z
+Used for: coverage as ambiguity removal, namespace legibility, fast isolated environments

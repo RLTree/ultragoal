@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "validator-theater-miswire-resistance",
+  "standards_row_id": "validator-theater-miswire-resistance",
+  "source_obligation_id": "validator-theater-miswire-resistance",
+  "foundational_trace_id": "validator-theater-miswire-resistance",
+  "validator_check_id": "validator-theater-miswire-resistance",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+  "red_fixture_ids": [
+    "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+    "validator-theater-miswire-resistance-fixture-name-only-pass-red",
+    "validator-theater-miswire-resistance-wrong-check-pass-red",
+    "validator-theater-miswire-resistance-adjacent-law-misattribution-red",
+    "validator-theater-miswire-resistance-validator-path-present-but-never-called-red",
+    "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
+    "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
+    "validator-theater-miswire-resistance-swallowed-validator-error-red",
+    "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance",
+  "behavior_failure_modes": [
+    "validator_theater_miswire_resistance_row_shape_only_mechanization",
+    "validator_theater_miswire_resistance_fixture_name_only_pass",
+    "validator_theater_miswire_resistance_wrong_check_pass",
+    "validator_theater_miswire_resistance_adjacent_law_misattribution",
+    "validator_theater_miswire_resistance_validator_path_present_but_never_called",
+    "validator_theater_miswire_resistance_stale_validator_receipt_accepted",
+    "validator_theater_miswire_resistance_red_fixture_fails_for_wrong_reason",
+    "validator_theater_miswire_resistance_swallowed_validator_error",
+    "validator_theater_miswire_resistance_completion_claim_with_only_validator_theater_evidence"
+  ],
+  "law_specific": {
+    "row_shape_only_mechanization": true,
+    "fixture_name_only_pass": true,
+    "wrong_check_pass": true,
+    "adjacent_law_misattribution": true,
+    "validator_path_present_but_never_called": true,
+    "stale_validator_receipt_accepted": true,
+    "red_fixture_fails_for_wrong_reason": true,
+    "swallowed_validator_error": true,
+    "completion_claim_with_only_validator_theater_evidence": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

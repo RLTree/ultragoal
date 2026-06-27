@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "human-audit-disposition-decomposition-judgment-claim-blocking-full-compliance-claim-with-judgment-only-residue-red",
+  "expected_failure": {
+    "check_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:full_compliance_claim_with_judgment_only_residue"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/full_compliance_claim_with_judgment_only_residue",
+      "value": false
+    }
+  ],
+  "notes": "human-audit-disposition-decomposition-judgment-claim-blocking must fail when full_compliance_claim_with_judgment_only_residue is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/full_compliance_claim_with_judgment_only_residue",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/full_compliance_claim_with_judgment_only_residue",
+      "expectation": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:full_compliance_claim_with_judgment_only_residue"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "business_or_user_outcome": "Operators can trust the product surface to expose engine power without forcing unnecessary manual triage.",
+  "change_intent": "Prove the optional target repo product cohesion gate can pass with real journey evidence references.",
+  "claim_ceiling": {
+    "rationale": "This target fixture proves optional audit semantics, not real product readiness.",
+    "supported": [
+      "product cohesion receipt shape is present for the target fixture"
+    ],
+    "withheld": [
+      "fixture does not claim live production UX quality"
+    ]
+  },
+  "generated_at": "2026-06-16T00:00:00Z",
+  "human_attention_policy": {
+    "allowed_reasons": [
+      "permission_required",
+      "ambiguity_blocker",
+      "external_blocker",
+      "safety_blocker"
+    ],
+    "automation_expectation": "The harness should route, retry, collect proof, and escalate internally before asking the user.",
+    "exhausted_harness_paths": [
+      {
+        "digest": "sha256:4300b1601f6ceee8f2b3bc7d2cfb0e2c62329f23000d3e3825d6f10ce7bb8b0a",
+        "path": "validation_artifacts/product-cohesion/exhausted-harness-paths.json"
+      }
+    ],
+    "expected_interruption_rate": "rare",
+    "overuse_risk": "If most issues land in Needs You, the product has failed the harness vision even if the engine remains correct."
+  },
+  "primary_journey": {
+    "end": "User sees route, run evidence, claim ceiling, and any justified human-attention request.",
+    "id": "issue-to-evidence",
+    "start": "User creates a product issue.",
+    "steps": [
+      {
+        "engine_truth": "The route is backed by the same workflow decision used at execution time.",
+        "evidence": {
+          "digest": "sha256:05e10404dd93867efc7660cb9b364ecf6c6b3b84efebc829de96532e3af191b7",
+          "path": "validation_artifacts/product-cohesion/ui-composer-evidence.txt"
+        },
+        "surface": "issue composer",
+        "system_response": "Shows route preview and whether human attention is expected.",
+        "user_action": "Enter a product issue."
+      },
+      {
+        "engine_truth": "Runtime evidence and UI state agree about route outcome and unresolved work.",
+        "evidence": {
+          "digest": "sha256:89da84902f33e85d88ed851f4f9b7ffeab9434f22ac3981ae11995d5156c81f8",
+          "path": "validation_artifacts/product-cohesion/ui-run-detail-evidence.txt"
+        },
+        "surface": "run detail",
+        "system_response": "Shows claim ceiling, proof owed, receipts, and no unearned Needs You escalation.",
+        "user_action": "Open the completed run."
+      }
+    ]
+  },
+  "product_promise": "The product presents one coherent journey from issue intake through evidence without overusing human escalation.",
+  "product_surface_id": "fixture-product-surface",
+  "proof": {
+    "accessibility_evidence": [
+      {
+        "digest": "sha256:f2891f415637d623d55d0cb273415c12883351af80c9adf221e8e774d3a66ea4",
+        "path": "validation_artifacts/product-cohesion/a11y-summary.json"
+      }
+    ],
+    "runtime_evidence": [
+      {
+        "digest": "sha256:de8d9eeebc7714d1b94fa0d31e1656bb7be6e7172da6c446fead95d2939153d9",
+        "path": "validation_artifacts/product-cohesion/runtime-route.json"
+      }
+    ],
+    "ui_evidence": [
+      {
+        "digest": "sha256:89da84902f33e85d88ed851f4f9b7ffeab9434f22ac3981ae11995d5156c81f8",
+        "path": "validation_artifacts/product-cohesion/ui-run-detail-evidence.txt"
+      }
+    ]
+  },
+  "review": {
+    "method": "static target repo fixture audit",
+    "reviewer_authority": {
+      "actor_disjoint": true,
+      "authority": "target_repo_gate",
+      "evidence": {
+        "digest": "sha256:6054ea5d2848d30534d06efd0da9311e50b5f101a6e902148c44390191363f28",
+        "path": "validation_artifacts/product-cohesion/review-signoff.json"
+      }
+    },
+    "reviewers": [
+      "ultragoal-target-repo"
+    ],
+    "signoff_status": "pass"
+  },
+  "schema": "harness-ultragoal.product-cohesion-receipt.v1",
+  "surface_map": [
+    {
+      "role": "Turns user intent into a visible route and expected automation path.",
+      "state_coverage": [
+        "empty",
+        "draft route",
+        "queued"
+      ],
+      "surface": "issue composer"
+    },
+    {
+      "role": "Connects engine evidence, claim ceiling, and human-attention status.",
+      "state_coverage": [
+        "running",
+        "done",
+        "blocked"
+      ],
+      "surface": "run detail"
+    }
+  ],
+  "user_job": "Understand what the product will do, why it chose that route, and when it truly needs human attention."
+}

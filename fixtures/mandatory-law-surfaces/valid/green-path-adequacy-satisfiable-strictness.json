@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "green-path-adequacy-satisfiable-strictness",
+  "standards_row_id": "green-path-adequacy-satisfiable-strictness",
+  "source_obligation_id": "green-path-adequacy-satisfiable-strictness",
+  "foundational_trace_id": "green-path-adequacy-satisfiable-strictness",
+  "validator_check_id": "green-path-adequacy-satisfiable-strictness",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/green-path-adequacy-satisfiable-strictness.json",
+  "red_fixture_ids": [
+    "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
+    "green-path-adequacy-satisfiable-strictness-law-with-only-toy-green-fixture-red",
+    "green-path-adequacy-satisfiable-strictness-green-fixture-missing-claim-ceiling-projection-red",
+    "green-path-adequacy-satisfiable-strictness-green-fixture-missing-package-inclusion-red",
+    "green-path-adequacy-satisfiable-strictness-green-fixture-accepted-despite-stale-digest-red",
+    "green-path-adequacy-satisfiable-strictness-full-compliance-claim-while-any-mandatory-law-lacks-realistic-green-path-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "compliance_claims_withheld_when_any_law_lacks_green_path",
+  "behavior_failure_modes": [
+    "green_path_adequacy_satisfiable_strictness_law_with_no_green_path",
+    "green_path_adequacy_satisfiable_strictness_law_with_only_toy_green_fixture",
+    "green_path_adequacy_satisfiable_strictness_green_fixture_missing_claim_ceiling_projection",
+    "green_path_adequacy_satisfiable_strictness_green_fixture_missing_package_inclusion",
+    "green_path_adequacy_satisfiable_strictness_green_fixture_accepted_despite_stale_digest",
+    "green_path_adequacy_satisfiable_strictness_full_compliance_claim_while_any_mandatory_law_lacks_realistic_green_path"
+  ],
+  "law_specific": {
+    "law_with_no_green_path": true,
+    "law_with_only_toy_green_fixture": true,
+    "green_fixture_missing_claim_ceiling_projection": true,
+    "green_fixture_missing_package_inclusion": true,
+    "green_fixture_accepted_despite_stale_digest": true,
+    "full_compliance_claim_while_any_mandatory_law_lacks_realistic_green_path": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

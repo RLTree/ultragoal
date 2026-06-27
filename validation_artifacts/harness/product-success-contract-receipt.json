@@ -1,0 +1,24 @@
+{
+  "schema": "harness-ultragoal.product-success-contract-receipt.v1",
+  "receipt_version": "1.0.0",
+  "product_success_contract_path": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
+  "product_success_contract_digest": "sha256:1556a19133d02f6655b576dc4ebc0c13feb637a2bd6e2a7f330041fc3a17f805",
+  "candidate_version": "0.0.11",
+  "claim_ids": [
+    "CLAIM-001"
+  ],
+  "proof_surface": "package_static_fixture",
+  "forbidden_substitutions_checked": [
+    "install success",
+    "package publication",
+    "smoke test",
+    "fixture pass",
+    "reviewer agreement",
+    "Product Cohesion alone",
+    "Product Fitness alone",
+    "happy path only"
+  ],
+  "claim_ceiling": "package_static_fixture_only_until_live_e2e",
+  "generated_at": "2026-06-25T00:00:00Z",
+  "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

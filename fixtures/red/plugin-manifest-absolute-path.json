@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-manifest-absolute-path",
+  "expected_failure": {
+    "check_id": "plugin-inventory-closure",
+    "error": "plugin_path_invalid"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plugin_manifest/resources/0",
+      "value": "/tmp/ultragoal-escape.txt"
+    }
+  ],
+  "notes": "package manifest paths must be package-relative and may not be absolute filesystem paths",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/plugin_manifest/resources/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/resources/0",
+      "expectation": "plugin_path_invalid"
+    }
+  ]
+}

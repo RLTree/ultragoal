@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "cli-self-law-compliance-update-goal-without-self-law-red",
+  "expected_failure": {
+    "check_id": "cli-self-law-compliance",
+    "error": "mandatory_law_specific_guard_not_enforced:cli-self-law-compliance:update_goal_without_self_law"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/update_goal_without_self_law",
+      "value": false
+    }
+  ],
+  "notes": "cli-self-law-compliance must fail when update_goal_without_self_law is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/update_goal_without_self_law",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/update_goal_without_self_law",
+      "expectation": "mandatory_law_specific_guard_not_enforced:cli-self-law-compliance:update_goal_without_self_law"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "clean-checkout-local-state-dependency",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "clean_checkout_local_state_dependency"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/commands/0/requires_local_author_memory",
+      "value": true
+    }
+  ],
+  "notes": "Command discovery fails when local author memory is required.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/commands/0/requires_local_author_memory",
+      "expectation": "clean_checkout_local_state_dependency"
+    }
+  ]
+}

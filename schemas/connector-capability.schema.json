@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/connector-capability.schema.json",
+  "title": "Harness Ultragoal Connector Capability Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "connector",
+    "source_tool_name",
+    "checked_tool_surface",
+    "discovery_receipt",
+    "capabilities_checked",
+    "available_capabilities",
+    "unavailable_capabilities",
+    "fallback_mode",
+    "required_for_claim_ids",
+    "checked_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.connector-capability.v1"
+    },
+    "connector": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_tool_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checked_tool_surface": {
+      "enum": [
+        "mcp_tool",
+        "plugin_skill",
+        "app_connector",
+        "cli",
+        "browser",
+        "computer_use"
+      ]
+    },
+    "discovery_receipt": {
+      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+    },
+    "capabilities_checked": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "available",
+              "unavailable",
+              "blocked"
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "fallback": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "available_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unavailable_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fallback_mode": {
+      "enum": [
+        "none_needed",
+        "fresh_top_level_lane",
+        "file_only_lane_packet",
+        "manual_handoff",
+        "withheld_connector_claim"
+      ]
+    },
+    "required_for_claim_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      }
+    },
+    "checked_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    }
+  },
+  "additionalProperties": false
+}

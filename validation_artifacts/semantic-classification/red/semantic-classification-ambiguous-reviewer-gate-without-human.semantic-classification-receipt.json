@@ -1,0 +1,26 @@
+{
+  "actor_disjoint": true,
+  "ambiguity": true,
+  "canonical_text_digest": "sha256:128d492c210bfbd977c04219c7845cc7dc1f6b199e060fb642342dc621467fca",
+  "claim_ceiling_recommendation": "requires_reviewer_classification",
+  "claim_id": "CLAIM-001",
+  "classifier_actor_id": "fixture-semantic-reviewer",
+  "classifier_contract_id": "ultragoal-semantic-classification",
+  "classifier_contract_version": "v1",
+  "classifier_implementation_kind": "deterministic_backstop",
+  "confidence": 0.2,
+  "detected_semantic_classes": [
+    "runtime_cli_backend_only_engine_only",
+    "ambiguous_needs_reviewer_classification"
+  ],
+  "generated_at": "2026-06-18T05:38:49Z",
+  "producer_actor_id": "fixture-producer",
+  "rationale": "Ambiguous deterministic output cannot satisfy reviewer classification by naming the ambiguous class.",
+  "receipt_digest": "sha256:7ca7ce98c6b700cfeedc160b196a5fc2b1d832661bfefb256c42930fbfeb4b66",
+  "required_proof_gates": [
+    "runtime_execution",
+    "ready_for_merge_receipt",
+    "reviewer_classification"
+  ],
+  "schema": "harness-ultragoal.semantic-classification-receipt.v1"
+}

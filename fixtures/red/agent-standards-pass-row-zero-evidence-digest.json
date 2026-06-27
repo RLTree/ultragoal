@@ -1,0 +1,34 @@
+{
+  "base_fixture_path": "fixtures/agent-standards/valid/audit-pass-row.json",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_audit_evidence_invalid"
+  },
+  "id": "agent-standards-pass-row-zero-evidence-digest",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/evidence_digest",
+      "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "A standards audit pass row must be backed by a real contained evidence artifact digest. Placeholder zero digests cannot support standards compliance claims.",
+  "postconditions": [
+    {
+      "expectation": "agent_standards_audit_evidence_invalid",
+      "path": "/evidence_digest"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/evidence_digest"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fixture-bundle-missing-description",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/description"
+    }
+  ],
+  "notes": "declared fixture-bundle JSON Schema required fields must be enforced by the Rust validator",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/description",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/description",
+      "expectation": "missing required field"
+    }
+  ]
+}

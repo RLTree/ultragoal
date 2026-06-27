@@ -1,0 +1,62 @@
+{
+  "schema": "harness-ultragoal.product-success-contract.v1",
+  "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-STATIC-001",
+  "contract_version": "1.0.0",
+  "goal_id": "harness-ultragoal-june-25-candidate",
+  "target_revision": {
+    "path": "plugin-manifest-draft.json",
+    "digest": "sha256:79c662ddb8c3091aa7fc13b1abf2d71e5e012fa705151b269def7a2a5879fc29"
+  },
+  "claim_ids": [
+    "CLAIM-001"
+  ],
+  "product_surface_classification": "developer_tool_plugin_package_static",
+  "target_user_or_operator": "Harness Ultragoal repo-fitting agent operator",
+  "job_to_be_done": "Fit a repository without letting unsupported proof become completion claims",
+  "context_of_use": "Codex local repo setup or retrofit session",
+  "desired_user_outcome": "The agent receives clear gates and cannot claim unsupported product success",
+  "business_or_mission_outcome": "Reduce false completion and product-proof theater in high-stakes repo work",
+  "critical_journey_id": "harness-ultragoal-fit-repo-static-journey",
+  "critical_journey_steps": [
+    "classify repo mode",
+    "install or verify law surfaces",
+    "run validator",
+    "emit claim ceiling"
+  ],
+  "first_value_event": "validator rejects a product success substitution red fixture",
+  "quality_in_use_dimensions": [
+    "effectiveness",
+    "efficiency",
+    "satisfaction",
+    "freedom_from_risk",
+    "context_coverage"
+  ],
+  "accessibility_gate": "product proof language and receipts are text-first and screen-reader inspectable",
+  "cognitive_load_gate": "entry routing starts from fit-repo and names exact missing evidence",
+  "recovery_burden_gate": "unsupported claims are withheld with repair class and evidence requirements",
+  "trust_burden_gate": "same-surface receipts and non-E2E ceiling prevent proof substitution",
+  "human_attention_policy": "ask for human judgment only after deterministic proof path is exhausted or judgment-only review is explicitly required",
+  "continuance_required": false,
+  "evidence_ladder_required_level": "Inferred",
+  "forbidden_substitutions": [
+    "install success",
+    "package publication",
+    "smoke test",
+    "fixture pass",
+    "reviewer agreement",
+    "Product Cohesion alone",
+    "Product Fitness alone",
+    "happy path only"
+  ],
+  "non_goal_product_claims": [
+    "daily-driver readiness",
+    "marketplace readiness",
+    "live reviewer exposure",
+    "external user success"
+  ],
+  "claim_ceiling": "package_static_fixture_only_until_live_e2e",
+  "producer_actor_id": "harness-ultragoal-validator",
+  "review_owner": "harness-product-simplicity-falsifier",
+  "generated_at": "2026-06-25T00:00:00Z",
+  "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

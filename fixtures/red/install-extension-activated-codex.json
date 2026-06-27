@@ -1,0 +1,44 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "install-extension-activated-codex",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Extension activated in Codex"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "The runtime evidence says the extension is activated in Codex."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_text_classification/text_digest",
+      "value": "sha256:4646464646464646464646464646464646464646464646464646464646464646"
+    }
+  ],
+  "notes": "Extension activation wording is install/app visibility, not runtime-only feature completion.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

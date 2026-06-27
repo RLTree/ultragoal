@@ -1,0 +1,64 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_contradicts_claim_text"
+  },
+  "id": "semantic-classification-receipt-contradicts-claim-text",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_static"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "withheld"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "static_contract"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "People inspect runs in the desktop client"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "The native client lets operators inspect and control runs."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-receipt-contradicts-claim-text.semantic-classification-receipt.json",
+          "digest": "sha256:361557f114d4d34aa5196e1a2147c700a84052174a0ec87b595c19ede4df9fc5"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "runtime-only receipt cannot contradict product claim text",
+  "postconditions": [
+    {
+      "expectation": "semantic_classification_contradicts_claim_text",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

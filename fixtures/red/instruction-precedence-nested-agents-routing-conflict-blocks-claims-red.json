@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "instruction-precedence-nested-agents-routing-conflict-blocks-claims-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:instruction-precedence-nested-agents-routing:conflict_blocks_claims"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/conflict_blocks_claims",
+      "value": false
+    }
+  ],
+  "notes": "instruction-precedence-nested-agents-routing must fail when conflict_blocks_claims is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/conflict_blocks_claims",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/conflict_blocks_claims",
+      "expectation": "mandatory_law_specific_guard_not_enforced:instruction-precedence-nested-agents-routing:conflict_blocks_claims"
+    }
+  ]
+}

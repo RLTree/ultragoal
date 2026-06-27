@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "instruction-precedence-nested-agents-routing",
+  "standards_row_id": "instruction-precedence-nested-agents-routing",
+  "source_obligation_id": "instruction-precedence-nested-agents-routing",
+  "foundational_trace_id": "instruction-precedence-nested-agents-routing",
+  "validator_check_id": "instruction-precedence-nested-agents-routing",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+  "red_fixture_ids": [
+    "instruction-precedence-nested-agents-routing-root-and-nested-agents-route-red",
+    "instruction-precedence-nested-agents-routing-strictest-law-wins-red",
+    "instruction-precedence-nested-agents-routing-conflict-blocks-claims-red",
+    "instruction-precedence-nested-agents-routing-duplicate-law-owner-red",
+    "instruction-precedence-nested-agents-routing-custom-agent-cannot-weaken-law-red",
+    "instruction-precedence-nested-agents-routing-stale-route-rejected-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "instruction_claims_withheld_without_strict_precedence_route",
+  "behavior_failure_modes": [
+    "instruction_precedence_nested_agents_routing_root_and_nested_agents_route",
+    "instruction_precedence_nested_agents_routing_strictest_law_wins",
+    "instruction_precedence_nested_agents_routing_conflict_blocks_claims",
+    "instruction_precedence_nested_agents_routing_duplicate_law_owner",
+    "instruction_precedence_nested_agents_routing_custom_agent_cannot_weaken_law",
+    "instruction_precedence_nested_agents_routing_stale_route_rejected"
+  ],
+  "law_specific": {
+    "root_and_nested_agents_route": true,
+    "strictest_law_wins": true,
+    "conflict_blocks_claims": true,
+    "duplicate_law_owner": true,
+    "custom_agent_cannot_weaken_law": true,
+    "stale_route_rejected": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

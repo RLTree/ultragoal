@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-manifest-symlink-path",
+  "expected_failure": {
+    "check_id": "plugin-inventory-closure",
+    "error": "plugin_path_invalid"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plugin_manifest/agents/0/path",
+      "value": "fixtures/package-symlink-agent.md"
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "symlink",
+      "path": "fixtures/package-symlink-agent.md",
+      "target": "../agents/contract-claim-falsifier.md"
+    }
+  ],
+  "notes": "package manifest paths must not route proof reads through in-package symlink aliases",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/plugin_manifest/agents/0/path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/agents/0/path",
+      "expectation": "plugin_path_invalid"
+    }
+  ]
+}

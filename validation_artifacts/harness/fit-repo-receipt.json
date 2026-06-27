@@ -1,0 +1,73 @@
+{
+  "app_registry_exposure": "not_checked",
+  "blockers": [],
+  "cache_package_path": "local-harness-plugins/harness-ultragoal/0.0.11",
+  "checks": [
+    {
+      "command": "cargo run --offline -- --root . audit",
+      "exit": 1,
+      "id": "fit-repo-static-fixture",
+      "stderr": {
+        "digest": "sha256:5abf7cd2de17ac5175df69d36cb774e7194422e9f0a02e4ce443c7b35de4a1b6",
+        "path": "validation_artifacts/harness/fit-repo-command.stderr.txt"
+      },
+      "stdout": {
+        "digest": "sha256:373cd2901821337deadabc307c8c6a746cf989d6a7887e899b3bd97fddfbe5fb",
+        "path": "validation_artifacts/harness/fit-repo-command.stdout.txt"
+      }
+    }
+  ],
+  "claim_ceiling": "withheld_or_blocked",
+  "coverage_surfaces": [
+    "templates/.harness/coverage-manifest.json",
+    "templates/.harness/coverage-command",
+    "templates/scripts/check-coverage-full"
+  ],
+  "entrypoint_contract": {
+    "id": "harness-ultragoal:fit-repo",
+    "version": "1"
+  },
+  "generated_at": "2026-06-27T00:43:18Z",
+  "installed_plugin_path": "codex-installed-plugin:harness-ultragoal",
+  "orchestrator_automation_surfaces": [
+    "templates/.codex/automations/ultragoal-orchestrator/automation.toml"
+  ],
+  "plugin_source_path": ".",
+  "plugin_version": "0.0.11",
+  "producer_actor_id": "harness-ultragoal-parent-session",
+  "product_surface_classification": "developer_tool",
+  "receipt_digest": "sha256:7a30d8912d1a97ce2e9cbac0f34e38e2e4692aec1ed5d58eaf34d9cc8252b0f4",
+  "repo_root": ".",
+  "runtime_surface_classification": "none",
+  "schema": "harness-ultragoal.fit-repo-receipt.v1",
+  "scripts": [
+    "templates/scripts/check",
+    "templates/scripts/check-agent-standards"
+  ],
+  "standards_rows": [
+    "coverage-proof-accountability",
+    "coverage-scope-authority",
+    "plugin-product-cohesion-authority",
+    "std-product-fitness-001"
+  ],
+  "target_classification": "fresh_repo",
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937"
+  },
+  "templates": [
+    "templates/AGENTS.md",
+    "templates/PLANS.md"
+  ],
+  "ultragoal_bundle_surfaces": [
+    "templates/GOAL_CONTRACT.md"
+  ],
+  "withheld_claims": [
+    "live_app_registry",
+    "marketplace_publication"
+  ],
+  "worktree_environment_surfaces": [
+    "templates/.codex/setup-worktree-env.sh",
+    "templates/.codex/environments/environment.toml"
+  ]
+}

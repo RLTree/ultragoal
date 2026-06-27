@@ -1,0 +1,36 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_has_blockers"
+  },
+  "id": "ready-nonempty-blockers",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/blocked_reasons",
+      "value": [
+        "operator still required"
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": false
+  },
+  "notes": "included ready-for-merge claim must be bound to one current clean lane with no blockers",
+  "postconditions": [
+    {
+      "expectation": "ready_receipt_has_blockers",
+      "path": "/ready_for_merge/blocked_reasons"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

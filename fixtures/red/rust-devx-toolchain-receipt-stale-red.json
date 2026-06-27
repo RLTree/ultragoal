@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-toolchain-receipt-stale-red",
+  "expected_failure": {
+    "check_id": "rust-toolchain-substrate-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_receipt_stale"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/toolchain_receipt_stale",
+      "value": false
+    }
+  ],
+  "notes": "changed toolchain or tool version invalidates Rust substrate proof",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/toolchain_receipt_stale",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/toolchain_receipt_stale",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_receipt_stale"
+    }
+  ]
+}

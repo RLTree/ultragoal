@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "transcript-quality-reuse-gates",
+  "standards_row_id": "transcript-quality-reuse-gates",
+  "source_obligation_id": "transcript-quality-reuse-gates",
+  "foundational_trace_id": "transcript-quality-reuse-gates",
+  "validator_check_id": "transcript-quality-reuse-gates",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/transcript-quality-reuse-gates.json",
+  "red_fixture_ids": [
+    "transcript-quality-reuse-gates-source-obligation-parity-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "transcript_reuse_replay_summary_word_trust_claims_withheld_without_final_quality_receipt",
+  "behavior_failure_modes": [
+    "transcript_quality_reuse_gates_source_obligation_parity"
+  ],
+  "law_specific": {
+    "source_obligation_parity": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

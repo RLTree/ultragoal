@@ -1,0 +1,459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/product-fitness-receipt.schema.json",
+  "title": "Harness Ultragoal Product Fitness Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "receipt_version",
+    "claim",
+    "target_revision",
+    "target_audience",
+    "job_to_be_done",
+    "context_of_use",
+    "desired_user_outcome",
+    "business_or_mission_outcome",
+    "critical_journey",
+    "first_value_event",
+    "continuance_signal",
+    "assumption_tests",
+    "user_evidence",
+    "quality_in_use_metrics",
+    "accessibility_gate",
+    "cognitive_load_gate",
+    "recovery_burden_gate",
+    "proof_surface",
+    "substitution_rejections",
+    "claim_ceiling",
+    "producer_actor_id",
+    "reviewer_actor_id",
+    "actor_disjoint",
+    "generated_at",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.product-fitness-receipt.v1"
+    },
+    "receipt_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "repeated_use_claimed"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repeated_use_claimed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "target_revision": {
+      "type": "object",
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "package_digest",
+            "git_commit",
+            "source_tree_digest"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "target_audience": {
+      "$ref": "#/$defs/namedEvidence"
+    },
+    "job_to_be_done": {
+      "type": "object",
+      "required": [
+        "job",
+        "evidence"
+      ],
+      "properties": {
+        "job": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "context_of_use": {
+      "type": "object",
+      "required": [
+        "context",
+        "evidence"
+      ],
+      "properties": {
+        "context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "desired_user_outcome": {
+      "type": "object",
+      "required": [
+        "outcome",
+        "evidence"
+      ],
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "business_or_mission_outcome": {
+      "type": "object",
+      "required": [
+        "outcome",
+        "evidence"
+      ],
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "critical_journey": {
+      "type": "object",
+      "required": [
+        "id",
+        "steps"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "first_value_event": {
+      "$ref": "#/$defs/eventEvidence"
+    },
+    "continuance_signal": {
+      "type": "object",
+      "required": [
+        "required",
+        "evidence"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "assumption_tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/assumptionTest"
+      }
+    },
+    "user_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/userEvidence"
+      }
+    },
+    "quality_in_use_metrics": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "$ref": "#/$defs/metric"
+      }
+    },
+    "accessibility_gate": {
+      "$ref": "#/$defs/gate"
+    },
+    "cognitive_load_gate": {
+      "$ref": "#/$defs/gate"
+    },
+    "recovery_burden_gate": {
+      "$ref": "#/$defs/gate"
+    },
+    "proof_surface": {
+      "type": "object",
+      "required": [
+        "kind",
+        "evidence"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "package_static_fixture",
+            "live_same_surface",
+            "withheld_or_blocked"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "substitution_rejections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/substitution"
+      }
+    },
+    "claim_ceiling": {
+      "enum": [
+        "package_static_fixture_only",
+        "withheld_or_blocked",
+        "live_same_surface_proven"
+      ]
+    },
+    "producer_actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer_actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor_disjoint": {
+      "const": true
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "receipt_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "namedEvidence": {
+      "type": "object",
+      "required": [
+        "name",
+        "evidence"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "eventEvidence": {
+      "type": "object",
+      "required": [
+        "event",
+        "evidence"
+      ],
+      "properties": {
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "assumptionTest": {
+      "type": "object",
+      "required": [
+        "id",
+        "hypothesis",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hypothesis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "userEvidence": {
+      "type": "object",
+      "required": [
+        "audience",
+        "job",
+        "context",
+        "outcome",
+        "evidence"
+      ],
+      "properties": {
+        "audience": {
+          "type": "string",
+          "minLength": 1
+        },
+        "job": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "required": [
+        "dimension",
+        "measure",
+        "evidence"
+      ],
+      "properties": {
+        "dimension": {
+          "enum": [
+            "effectiveness",
+            "efficiency",
+            "satisfaction",
+            "freedom_from_risk",
+            "context_coverage"
+          ]
+        },
+        "measure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "evidence"
+      ],
+      "properties": {
+        "journey_binding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "burden_assessment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recovery_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidenceRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "substitution": {
+      "type": "object",
+      "required": [
+        "rejected_substitute",
+        "reason"
+      ],
+      "properties": {
+        "rejected_substitute": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        }
+      }
+    }
+  }
+}

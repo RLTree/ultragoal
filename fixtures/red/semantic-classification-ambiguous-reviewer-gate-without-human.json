@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "semantic_classification_ambiguous_without_reviewer remains the first failing error"
+    }
+  ],
+  "id": "semantic-classification-ambiguous-reviewer-gate-without-human",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_ambiguous_without_reviewer"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-ambiguous-reviewer-gate-without-human.semantic-classification-receipt.json",
+          "digest": "sha256:2f9d87f2ddfa10efa45e6cda40a30bac647137611a0fdf104af1804e2b7acb67"
+        }
+      ]
+    }
+  ],
+  "notes": "ambiguous deterministic receipts must require real human reviewer classification evidence"
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/product-template-generation-receipt.schema.json",
+  "title": "product-template-generation-receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_version",
+    "template_creator_disposition",
+    "generated_outputs",
+    "operator",
+    "generated_at",
+    "claim_ceiling",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.product-template-generation-receipt.v1"
+    },
+    "receipt_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "template_creator_disposition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_id": {
+      "type": "string"
+    },
+    "generated_outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "retained_references": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "operator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manual_edits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claim_ceiling": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receipt_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

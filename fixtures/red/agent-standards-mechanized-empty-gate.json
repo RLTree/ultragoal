@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-standards-mechanized-empty-gate",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_mechanized_without_gate"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/0/gate_or_fixture_path",
+      "value": ""
+    }
+  ],
+  "notes": "A mechanized standards row without a contained gate or fixture path is not mechanized.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/0/gate_or_fixture_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/0/gate_or_fixture_path",
+      "expectation": "agent_standards_mechanized_without_gate"
+    }
+  ]
+}

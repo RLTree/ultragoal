@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-claim-not-owned",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_claim_not_proven"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/dependencies",
+      "value": [
+        {
+          "upstream_lane_id": "LANE-001",
+          "claim_id": "CLAIM-999",
+          "required_status": "proven_live",
+          "validated_status": "proven_live",
+          "upstream_ready_receipt": {
+            "path": "validation_artifacts/forged-ready.json",
+            "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+          },
+          "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+          "upstream_commit": "abcdef0",
+          "validated_after_upstream_ready": true,
+          "validated_at": "2026-06-16T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "notes": "dependency status matches required status, but the upstream lane does not own the claimed dependency claim",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/lanes/0/dependencies",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/dependencies/0/claim_id",
+      "expectation": "dependency_claim_not_proven"
+    }
+  ]
+}

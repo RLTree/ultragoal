@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+  "standards_row_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+  "source_obligation_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+  "foundational_trace_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+  "validator_check_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
+  "red_fixture_ids": [
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-implicit-spawn-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-missing-budget-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-missing-result-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-orphaned-agent-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-partial-synthesis-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-child-proof-substitution-red",
+    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis",
+  "behavior_failure_modes": [
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_implicit_spawn",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_missing_budget",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_missing_result",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_orphaned_agent",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_partial_synthesis",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_child_proof_substitution",
+    "subagent_orchestration_explicitness_token_model_cost_result_reconciliation_subagent_launch_without_explicit_requested_contracted_role"
+  ],
+  "law_specific": {
+    "implicit_spawn": true,
+    "missing_budget": true,
+    "missing_result": true,
+    "orphaned_agent": true,
+    "partial_synthesis": true,
+    "child_proof_substitution": true,
+    "subagent_launch_without_explicit_requested_contracted_role": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

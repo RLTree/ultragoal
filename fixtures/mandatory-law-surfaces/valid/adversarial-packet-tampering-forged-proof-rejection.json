@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "adversarial-packet-tampering-forged-proof-rejection",
+  "standards_row_id": "adversarial-packet-tampering-forged-proof-rejection",
+  "source_obligation_id": "adversarial-packet-tampering-forged-proof-rejection",
+  "foundational_trace_id": "adversarial-packet-tampering-forged-proof-rejection",
+  "validator_check_id": "adversarial-packet-tampering-forged-proof-rejection",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/adversarial-packet-tampering-forged-proof-rejection.json",
+  "red_fixture_ids": [
+    "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red",
+    "adversarial-packet-tampering-forged-proof-rejection-forged-validator-receipt-red",
+    "adversarial-packet-tampering-forged-proof-rejection-stale-active-registry-proof-red",
+    "adversarial-packet-tampering-forged-proof-rejection-wrong-installed-path-red",
+    "adversarial-packet-tampering-forged-proof-rejection-wrong-cache-path-red",
+    "adversarial-packet-tampering-forged-proof-rejection-altered-claim-ceiling-red",
+    "adversarial-packet-tampering-forged-proof-rejection-reviewer-disposition-flip-red",
+    "adversarial-packet-tampering-forged-proof-rejection-product-success-contract-removed-red",
+    "adversarial-packet-tampering-forged-proof-rejection-private-proof-path-inserted-red",
+    "adversarial-packet-tampering-forged-proof-rejection-final-packet-claim-injected-after-validation-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "packet_claims_withheld_without_tamper_and_forgery_rejection",
+  "behavior_failure_modes": [
+    "adversarial_packet_tampering_forged_proof_rejection_swapped_package_digest",
+    "adversarial_packet_tampering_forged_proof_rejection_forged_validator_receipt",
+    "adversarial_packet_tampering_forged_proof_rejection_stale_active_registry_proof",
+    "adversarial_packet_tampering_forged_proof_rejection_wrong_installed_path",
+    "adversarial_packet_tampering_forged_proof_rejection_wrong_cache_path",
+    "adversarial_packet_tampering_forged_proof_rejection_altered_claim_ceiling",
+    "adversarial_packet_tampering_forged_proof_rejection_reviewer_disposition_flip",
+    "adversarial_packet_tampering_forged_proof_rejection_product_success_contract_removed",
+    "adversarial_packet_tampering_forged_proof_rejection_private_proof_path_inserted",
+    "adversarial_packet_tampering_forged_proof_rejection_final_packet_claim_injected_after_validation"
+  ],
+  "law_specific": {
+    "swapped_package_digest": true,
+    "forged_validator_receipt": true,
+    "stale_active_registry_proof": true,
+    "wrong_installed_path": true,
+    "wrong_cache_path": true,
+    "altered_claim_ceiling": true,
+    "reviewer_disposition_flip": true,
+    "product_success_contract_removed": true,
+    "private_proof_path_inserted": true,
+    "final_packet_claim_injected_after_validation": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

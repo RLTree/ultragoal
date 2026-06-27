@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-live-registry-stale-captured-at",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_live_registry_stale"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/path",
+      "value": "fixtures/review-round/anchors/live-registry-exposure-stale-captured-at.json"
+    },
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/digest",
+      "value": "sha256:8f9a595146dfe2c7060695aea4a5f22e6d464f49f8acc6d0354ac351516932eb"
+    }
+  ],
+  "notes": "live registry exposure captured_at must match the review round generated_at",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/generated_at",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/live_registry_exposure",
+      "expectation": "review_round_live_registry_stale"
+    }
+  ]
+}

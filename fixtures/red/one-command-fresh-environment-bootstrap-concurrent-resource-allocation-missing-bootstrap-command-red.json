@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:one-command-fresh-environment-bootstrap-concurrent-resource-allocation:missing_bootstrap_command"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_bootstrap_command",
+      "value": false
+    }
+  ],
+  "notes": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation must fail when missing_bootstrap_command is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_bootstrap_command",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_bootstrap_command",
+      "expectation": "mandatory_law_specific_guard_not_enforced:one-command-fresh-environment-bootstrap-concurrent-resource-allocation:missing_bootstrap_command"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/plugin-scout-receipt.schema.json",
+  "title": "Harness Ultragoal Plugin Scout Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "actor_id",
+    "discovery_surface",
+    "observed_at",
+    "raw_or_redacted_output",
+    "decisions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.plugin-scout-receipt.v1"
+    },
+    "actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "discovery_surface": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "raw_or_redacted_output": {
+      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "decision",
+          "rationale",
+          "must_not_own"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision": {
+            "enum": [
+              "recommended",
+              "skipped"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "must_not_own": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

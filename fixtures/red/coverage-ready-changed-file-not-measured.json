@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-ready-changed-file-not-measured",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_changed_file_not_measured"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/changed_files",
+      "value": [
+        "docs/mandatory-law-surfaces.json"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/ready_receipt/digest",
+      "value": "sha256:2b45d5f7c4e1d1aae00178ae483357ed5825b4d4f9de01fd8333c9223d79bcff"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/lane_registry_digest",
+      "value": "sha256:242df5c7087e9073ab81a8a2851fd4343dac4753affdd010e8d445bcb2acf383"
+    }
+  ],
+  "notes": "Ready receipts cannot claim changed repo-owned files that are absent from coverage changed-file authority.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/ready_for_merge/changed_files",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/ready_for_merge/changed_files",
+      "expectation": "coverage_changed_file_not_measured"
+    }
+  ]
+}

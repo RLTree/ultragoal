@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
+  "expected_failure": {
+    "check_id": "failure-remediation-quality-agent-actionable-output",
+    "error": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:generic_validation_failed"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/generic_validation_failed",
+      "value": false
+    }
+  ],
+  "notes": "failure-remediation-quality-agent-actionable-output must fail when generic_validation_failed is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/generic_validation_failed",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/generic_validation_failed",
+      "expectation": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:generic_validation_failed"
+    }
+  ]
+}

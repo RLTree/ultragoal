@@ -1,0 +1,65 @@
+{
+  "schema": "harness-ultragoal.clean-checkout-command-discovery-receipt.v1",
+  "root_check_command": "scripts/check",
+  "installed_check_command": "scripts/check",
+  "source_install_cache_command_alignment": "same_candidate",
+  "commands": [
+    {
+      "id": "source-root-check",
+      "surface": "source",
+      "command": "scripts/check",
+      "runnable_from": "clean_checkout",
+      "requires_local_author_memory": false,
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "scripts/check",
+          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+        }
+      ]
+    },
+    {
+      "id": "source-coverage-fast",
+      "surface": "source",
+      "command": "scripts/check-coverage-fast",
+      "runnable_from": "clean_checkout",
+      "requires_local_author_memory": false,
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "scripts/check-coverage-fast",
+          "digest": "sha256:904329906020356583fd17892ff8915d88638fe59dbb3c7b3b7e36c46bd80677"
+        }
+      ]
+    },
+    {
+      "id": "installed-root-check",
+      "surface": "installed",
+      "command": "scripts/check",
+      "runnable_from": "installed_plugin",
+      "requires_local_author_memory": false,
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "scripts/check",
+          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+        }
+      ]
+    },
+    {
+      "id": "cache-root-check",
+      "surface": "cache",
+      "command": "scripts/check",
+      "runnable_from": "versioned_cache",
+      "requires_local_author_memory": false,
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "scripts/check",
+          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+        }
+      ]
+    }
+  ],
+  "claim_ceiling": "commands_discoverable_from_clean_checkout"
+}

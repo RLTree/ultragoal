@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "portable-non-prescriptive-adapter-implementation-choice",
+  "standards_row_id": "portable-non-prescriptive-adapter-implementation-choice",
+  "source_obligation_id": "portable-non-prescriptive-adapter-implementation-choice",
+  "foundational_trace_id": "portable-non-prescriptive-adapter-implementation-choice",
+  "validator_check_id": "portable-non-prescriptive-adapter-implementation-choice",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/portable-non-prescriptive-adapter-implementation-choice.json",
+  "red_fixture_ids": [
+    "portable-non-prescriptive-adapter-implementation-choice-exact-tracker-required-by-generic-claim-red",
+    "portable-non-prescriptive-adapter-implementation-choice-ui-tool-proof-required-for-non-ui-repo-red",
+    "portable-non-prescriptive-adapter-implementation-choice-language-specific-setup-forced-on-nonmatching-repo-red",
+    "portable-non-prescriptive-adapter-implementation-choice-workflow-engine-specific-lane-numbering-treated-as-law-red",
+    "portable-non-prescriptive-adapter-implementation-choice-optional-observability-backend-treated-as-mandatory-red",
+    "portable-non-prescriptive-adapter-implementation-choice-missing-adapter-fallback-red",
+    "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "generic_claims_withheld_without_portable_adapter_boundaries",
+  "behavior_failure_modes": [
+    "portable_non_prescriptive_adapter_implementation_choice_exact_tracker_required_by_generic_claim",
+    "portable_non_prescriptive_adapter_implementation_choice_ui_tool_proof_required_for_non_ui_repo",
+    "portable_non_prescriptive_adapter_implementation_choice_language_specific_setup_forced_on_nonmatching_repo",
+    "portable_non_prescriptive_adapter_implementation_choice_workflow_engine_specific_lane_numbering_treated_as_law",
+    "portable_non_prescriptive_adapter_implementation_choice_optional_observability_backend_treated_as_mandatory",
+    "portable_non_prescriptive_adapter_implementation_choice_missing_adapter_fallback",
+    "portable_non_prescriptive_adapter_implementation_choice_adapter_absence_still_allowing_dependent_claim"
+  ],
+  "law_specific": {
+    "exact_tracker_required_by_generic_claim": true,
+    "ui_tool_proof_required_for_non_ui_repo": true,
+    "language_specific_setup_forced_on_nonmatching_repo": true,
+    "workflow_engine_specific_lane_numbering_treated_as_law": true,
+    "optional_observability_backend_treated_as_mandatory": true,
+    "missing_adapter_fallback": true,
+    "adapter_absence_still_allowing_dependent_claim": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

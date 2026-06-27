@@ -1,0 +1,76 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-or-mismatched-goal-binding",
+  "expected_failure": {
+    "check_id": "goal-binding-receipt-match",
+    "error": "goal_binding_receipt_stale_or_mismatched"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/goal_binding/status",
+      "value": "bound"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/goal_id",
+      "value": "goal-1"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/goal_binding/objective",
+      "value": "Current objective"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/get_goal_receipt",
+      "value": {
+        "tool_name": "get_goal",
+        "thread_id": "thread-x",
+        "workspace": "/repo",
+        "observed_goal_id": "goal-1",
+        "observed_status": "active",
+        "observed_objective": "Different objective",
+        "observed_contract_path": "GOAL_CONTRACT.md",
+        "output_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "observed_at": "2026-06-16T00:00:00Z"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/tool_names",
+      "value": [
+        "get_goal"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/goal_binding/receipt_matches_binding",
+      "value": {
+        "goal_id": true,
+        "objective": true,
+        "contract_path": true,
+        "active_status": true
+      }
+    }
+  ],
+  "notes": "bound goal receipt must match objective and contract path fields directly",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/goal_binding/objective",
+      "expectation": "goal_binding_receipt_stale_or_mismatched"
+    }
+  ]
+}

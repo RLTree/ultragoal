@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/clean-checkout-command-discovery-receipt.schema.json",
+  "title": "Harness Ultragoal Clean Checkout Command Discovery Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "root_check_command",
+    "installed_check_command",
+    "source_install_cache_command_alignment",
+    "commands",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.clean-checkout-command-discovery-receipt.v1"
+    },
+    "root_check_command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "installed_check_command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_install_cache_command_alignment": {
+      "const": "same_candidate"
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "surface",
+          "command",
+          "runnable_from",
+          "requires_local_author_memory",
+          "status",
+          "artifacts"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "surface": {
+            "enum": [
+              "source",
+              "installed",
+              "cache"
+            ]
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runnable_from": {
+            "enum": [
+              "clean_checkout",
+              "installed_plugin",
+              "versioned_cache"
+            ]
+          },
+          "requires_local_author_memory": {
+            "const": false
+          },
+          "status": {
+            "const": "passed"
+          },
+          "artifacts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "common-defs.schema.json#/$defs/artifactRef"
+            }
+          }
+        }
+      }
+    },
+    "claim_ceiling": {
+      "enum": [
+        "commands_discoverable_from_clean_checkout",
+        "withheld_until_clean_checkout_command_receipt"
+      ]
+    }
+  }
+}

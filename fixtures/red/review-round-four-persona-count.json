@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-four-persona-count",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/reviewers/3"
+    }
+  ],
+  "notes": "three-persona receipts cannot satisfy the four-persona review team law",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers",
+      "expectation": "wrong persona count rejected"
+    }
+  ]
+}

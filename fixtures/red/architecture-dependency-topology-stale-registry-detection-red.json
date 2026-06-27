@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "architecture-dependency-topology-stale-registry-detection-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:architecture-dependency-topology:stale_registry_detection"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_registry_detection",
+      "value": false
+    }
+  ],
+  "notes": "architecture-dependency-topology must fail when stale_registry_detection is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_registry_detection",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_registry_detection",
+      "expectation": "mandatory_law_specific_guard_not_enforced:architecture-dependency-topology:stale_registry_detection"
+    }
+  ]
+}

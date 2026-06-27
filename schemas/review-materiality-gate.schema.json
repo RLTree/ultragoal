@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/review-materiality-gate.schema.json",
+  "title": "Harness Ultragoal Material Review Scope Gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "decision",
+    "confidence",
+    "reason",
+    "material_triggers",
+    "deterministic_gates_required",
+    "deterministic_gates_run",
+    "anchors_checked",
+    "reviewers_required",
+    "reviewer_registry_evidence",
+    "validator_repairs_recommended",
+    "claim_ceiling",
+    "output_may_be_used_for_material_signoff"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.review-materiality-gate.v1"
+    },
+    "decision": {
+      "enum": [
+        "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
+        "DELTA_REVIEW_ALLOWED",
+        "ADVISORY_REVIEW_ALLOWED",
+        "BLOCKED_BEFORE_REVIEW"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "material_triggers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "deterministic_gates_required": {
+      "$ref": "#/$defs/gateList"
+    },
+    "deterministic_gates_run": {
+      "$ref": "#/$defs/gateList"
+    },
+    "anchors_checked": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      },
+      "uniqueItems": true
+    },
+    "reviewers_required": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "contract_claim_falsifier",
+          "orchestration_recovery_falsifier",
+          "security_trust_boundary_falsifier",
+          "product_simplicity_falsifier"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "reviewer_registry_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      },
+      "uniqueItems": true
+    },
+    "validator_repairs_recommended": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supported",
+        "unsupported",
+        "blocked"
+      ],
+      "properties": {
+        "supported": {
+          "$ref": "#/$defs/claimList"
+        },
+        "unsupported": {
+          "$ref": "#/$defs/claimList"
+        },
+        "blocked": {
+          "$ref": "#/$defs/claimList"
+        }
+      }
+    },
+    "output_may_be_used_for_material_signoff": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "gateList": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "anchor_existence_and_digest",
+          "validator_receipt_status",
+          "reviewer_registry_model_persona_exposure",
+          "stale_receipt_check",
+          "package_private_artifact_hygiene",
+          "readiness_validator",
+          "claim_ceiling_check",
+          "proof_surface_substitution_check"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "claimList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  }
+}

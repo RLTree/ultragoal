@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-generated-class-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_class_generated_for_hand_authored_source"
+  },
+  "base_fixture_path": "docs/namespace-class-registry.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/classes/-",
+      "value": {
+        "id": "bad-validator-generated-source",
+        "kind": "fixture_catalog",
+        "surface_globs": [
+          "validator/src/internal_claim_tests.rs"
+        ],
+        "description": "fixture catalog classes cannot cover hand-authored validator source",
+        "authority": "red_fixture_catalog",
+        "authority_path": "templates/RED_FIXTURES.json",
+        "maximal_factoring_required": true,
+        "waiver_allowed": false,
+        "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+      }
+    }
+  ],
+  "notes": "Generated/catalog namespace classes cannot be used for hand-authored validator source.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "expectation": "namespace_class_generated_for_hand_authored_source"
+    }
+  ]
+}

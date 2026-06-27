@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+  "standards_row_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+  "source_obligation_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+  "foundational_trace_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+  "validator_check_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json",
+  "red_fixture_ids": [
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-manual-env-dependency-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-hardcoded-port-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-shared-cache-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-shared-job-queue-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-non-deterministic-install-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-slow-bootstrap-without-budget-red",
+    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-concurrent-environment-collision-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt",
+  "behavior_failure_modes": [
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_missing_bootstrap_command",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_manual_env_dependency",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_hardcoded_port",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_shared_cache",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_shared_job_queue",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_non_deterministic_install",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_slow_bootstrap_without_budget",
+    "one_command_fresh_environment_bootstrap_concurrent_resource_allocation_concurrent_environment_collision"
+  ],
+  "law_specific": {
+    "missing_bootstrap_command": true,
+    "manual_env_dependency": true,
+    "hardcoded_port": true,
+    "shared_cache": true,
+    "shared_job_queue": true,
+    "non_deterministic_install": true,
+    "slow_bootstrap_without_budget": true,
+    "concurrent_environment_collision": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

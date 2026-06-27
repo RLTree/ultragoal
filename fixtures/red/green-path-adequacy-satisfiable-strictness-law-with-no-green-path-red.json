@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
+  "expected_failure": {
+    "check_id": "green-path-adequacy-satisfiable-strictness",
+    "error": "mandatory_law_specific_guard_not_enforced:green-path-adequacy-satisfiable-strictness:law_with_no_green_path"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/green-path-adequacy-satisfiable-strictness.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/law_with_no_green_path",
+      "value": false
+    }
+  ],
+  "notes": "green-path-adequacy-satisfiable-strictness must fail when law_with_no_green_path is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/law_with_no_green_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/law_with_no_green_path",
+      "expectation": "mandatory_law_specific_guard_not_enforced:green-path-adequacy-satisfiable-strictness:law_with_no_green_path"
+    }
+  ]
+}

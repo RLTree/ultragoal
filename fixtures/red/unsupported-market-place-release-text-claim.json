@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "unsupported-market-place-release-text-claim",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Plugin market place release is live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "This runtime-only claim text uses split marketplace wording without external publication proof."
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:c22d7198a344344fe3da1aa9c959ba2af34f6daa0d76d689929c9ab02725c413",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": true,
+        "distribution_claim": true,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "split market place wording is still a marketplace publication claim",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

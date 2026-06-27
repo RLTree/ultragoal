@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
+  "expected_failure": {
+    "check_id": "capability-gap-extraction-harness-capability-promotion",
+    "error": "mandatory_law_specific_guard_not_enforced:capability-gap-extraction-harness-capability-promotion:missing_capability_with_no_record"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_capability_with_no_record",
+      "value": false
+    }
+  ],
+  "notes": "capability-gap-extraction-harness-capability-promotion must fail when missing_capability_with_no_record is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_capability_with_no_record",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_capability_with_no_record",
+      "expectation": "mandatory_law_specific_guard_not_enforced:capability-gap-extraction-harness-capability-promotion:missing_capability_with_no_record"
+    }
+  ]
+}

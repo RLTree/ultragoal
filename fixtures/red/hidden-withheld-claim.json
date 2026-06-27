@@ -1,0 +1,44 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "hidden-withheld-claim",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "withheld_claim_missing_backlog_row"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "withheld_claim"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "withheld"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/backlog_row_id",
+      "value": "BACKLOG-999"
+    }
+  ],
+  "notes": "set claim withheld without backlog row",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/backlog_row_id",
+      "expectation": "withheld_claim_missing_backlog_row"
+    }
+  ]
+}

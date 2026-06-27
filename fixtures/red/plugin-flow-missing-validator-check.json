@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-flow-missing-validator-check",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plugin_flow_validator_check_missing"
+  },
+  "base_fixture_path": "docs/plugin-cohesion-manifest.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/validator_checks/0"
+    }
+  ],
+  "notes": "Plugin flow authority must list the complete current validator check set, not a stale subset.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/validator_checks/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_checks",
+      "expectation": "plugin_flow_validator_check_missing"
+    }
+  ]
+}

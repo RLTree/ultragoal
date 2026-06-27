@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-malformed-receipt",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_receipt_malformed"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "100 percent coverage is complete"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-COV-015",
+        "claim_id": "CLAIM-001",
+        "kind": "coverage_receipt",
+        "surface": "static",
+        "path": "artifacts/static/coverage-malformed-receipt.json",
+        "digest": "sha256:0ded3de2b4d591fc68e972353d38670a1998d00bd8204bc8fe2022a046d96cd8",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "notes": "Coverage authority red fixture for coverage_receipt_malformed.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "coverage_receipt_malformed"
+    }
+  ]
+}

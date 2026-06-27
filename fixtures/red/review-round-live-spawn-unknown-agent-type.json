@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-live-spawn-unknown-agent-type",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_live_spawn_unknown_agent_type"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/live_spawn_receipt/status",
+      "value": "failed"
+    },
+    {
+      "op": "add",
+      "path": "/reviewers/0/live_spawn_receipt/error",
+      "value": "unknown_agent_type: harness_contract_adversary"
+    }
+  ],
+  "notes": "spawn receipt must prove the custom agent type was launchable",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

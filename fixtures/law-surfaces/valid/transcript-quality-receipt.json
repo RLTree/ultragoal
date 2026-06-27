@@ -1,0 +1,7 @@
+{
+  "schema": "harness-ultragoal.transcript-quality-receipt.v1",
+  "post_stop_batch_transcription": "complete",
+  "cleanup_complete": true,
+  "final_alignment_complete": true,
+  "claim_ceiling": "transcript_reuse_supported"
+}

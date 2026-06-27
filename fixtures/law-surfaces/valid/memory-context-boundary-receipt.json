@@ -1,0 +1,27 @@
+{
+  "schema": "harness-ultragoal.memory-context-boundary-receipt.v1",
+  "memory_context_only": true,
+  "memory_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    }
+  ],
+  "live_same_surface_evidence": [
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    },
+    {
+      "path": "validator/src/audit/law/surface/receipts.rs",
+      "digest": "sha256:22d24906aa61fb4d06489e7d2622e3d4b073bb90a57cfa8f5868da9f04db752a"
+    }
+  ],
+  "substitutions_rejected": [
+    "memory_only",
+    "summary_only",
+    "packet_only",
+    "session_summary_only"
+  ],
+  "claim_ceiling": "live_same_surface_evidence_required"
+}

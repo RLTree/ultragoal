@@ -1,0 +1,3 @@
+   Compiling ultragoal-validator v0.1.0 (/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.62s
+     Running `target/debug/ultragoal-validator --root . audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json`

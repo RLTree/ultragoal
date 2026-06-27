@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "skill-progressive-disclosure-metadata-local-references-valid-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:skill-progressive-disclosure-metadata:local_references_valid"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/local_references_valid",
+      "value": false
+    }
+  ],
+  "notes": "skill-progressive-disclosure-metadata must fail when local_references_valid is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/local_references_valid",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/local_references_valid",
+      "expectation": "mandatory_law_specific_guard_not_enforced:skill-progressive-disclosure-metadata:local_references_valid"
+    }
+  ]
+}

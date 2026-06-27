@@ -1,0 +1,1220 @@
+{
+  "schema": "harness-ultragoal.source-obligation-matrix.v1",
+  "obligations": [
+    {
+      "id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "obligation": "Active Setup To Idle Orchestration Thread Bound Heartbeat must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt active-setup-to-idle-orchestration-thread-bound-heartbeat; red fixtures multi_lane_setup_complete_without_transition_receipt, detached_reminder_substituted_for_heartbeat, missing_thread_id, missing_first_wave_launch_receipt, automation_tick_without_cursor_inspection, stale_lane_thread, wakeup_that_emits_prose_only_status; valid fixture active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+      "claim_ceiling_impact": "orchestration_claims_withheld_without_setup_to_idle_transition_and_thread_bound_heartbeat"
+    },
+    {
+      "id": "adversarial-packet-tampering-forged-proof-rejection",
+      "obligation": "Packets, targets, archives, receipts, red reports, coverage, Product Success/Fitness, source/install/cache, and active-registry evidence must reject tampered and forged variants.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt adversarial-packet-tampering-forged-proof-rejection; red fixtures swapped_package_digest, forged_validator_receipt, stale_active_registry_proof, wrong_installed_path, wrong_cache_path, altered_claim_ceiling, reviewer_disposition_flip, product_success_contract_removed, private_proof_path_inserted, final_packet_claim_injected_after_validation; valid fixture adversarial-packet-tampering-forged-proof-rejection.json",
+      "claim_ceiling_impact": "packet_claims_withheld_without_tamper_and_forgery_rejection"
+    },
+    {
+      "id": "agent-authored-source-tooling-docs-provenance",
+      "obligation": "Agent Authored Source Tooling Docs Provenance must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for agent-authored-source-tooling-docs-provenance",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt agent-authored-source-tooling-docs-provenance; red fixtures untracked_claim_source, hand_edited_validator_without_provenance, stale_changed_file_digest, generated_artifact_modified_after_validation, docs_only_compliance_claim_without_command_evidence, review_response_without_source_finding_binding; valid fixture agent-authored-source-tooling-docs-provenance.json",
+      "claim_ceiling_impact": "law_bearing_changes_withheld_without_agent_visible_provenance"
+    },
+    {
+      "id": "agent-queryable-observability",
+      "obligation": "Agent Queryable Observability",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "observability_claims_withheld_without_typed_queryable_correlated_receipt"
+    },
+    {
+      "id": "agent-remediating-validator-failures",
+      "obligation": "Agent Remediating Validator Failures",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "validator_claims_withheld_without_agent_remediating_failures"
+    },
+    {
+      "id": "agent-session-telemetry-token-rate-limit",
+      "obligation": "Agent Session Telemetry Token Rate Limit must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for agent-session-telemetry-token-rate-limit",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt agent-session-telemetry-token-rate-limit; red fixtures missing_token_totals, stale_live_session_timestamp, reviewer_output_without_session_id, rate_limit_hit_but_claim_remains_green, model_mismatch_between_toml_and_receipt, private_transcript_payload_embedded_in_public_packet; valid fixture agent-session-telemetry-token-rate-limit.json",
+      "claim_ceiling_impact": "agent_run_claims_withheld_without_redacted_session_telemetry"
+    },
+    {
+      "id": "architecture-dependency-topology",
+      "obligation": "Architecture Dependency Topology",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "architecture_dependency_topology_withheld_without_registry_receipt"
+    },
+    {
+      "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "obligation": "Authority statuses, ceilings, surfaces, modes, receipt kinds, dispositions, evidence levels, outcomes, and transition states must be closed typed enums with exhaustive handling.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt authority-exhaustiveness-closed-enums-impossible-state-elimination; red fixtures unknown_claim_ceiling, unknown_proof_surface, unknown_target_mode, nullable_law_status, missing_review_disposition_variant, catch_all_authority_map, unhandled_schema_enum_after_version_bump, final_packet_generated_from_freeform_authority_text; valid fixture authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+      "claim_ceiling_impact": "authority_claims_withheld_without_closed_enum_exhaustiveness"
+    },
+    {
+      "id": "authority-source-binding",
+      "obligation": "when a user names the full plugin or process authority, local or installed fallbacks are rejected or claim-limited and the receipt records the authority source and fallback boundary",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; skills/proof-gate/SKILL.md#Refusal Rules",
+      "package_surface": "proof gate; standards modules; authority-binding receipts for install, runtime, review, and product-proof workflows",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "authority-binding receipts are required when an operation can fall back from named authority to local, installed, cache, or reference authority",
+      "claim_ceiling_impact": "fallback_without_authority_receipt_claim_limits_or_withholds_named_authority_claims",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "authority-source-binding",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "autonomy-loop-proof",
+      "obligation": "Autonomy Loop Proof",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "behavior_change_claims_withheld_without_before_after_receipt"
+    },
+    {
+      "id": "batch-fanout-custom-agent-job-worker-result-discipline",
+      "obligation": "Batch Fanout Custom Agent Job Worker Result Discipline must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for batch-fanout-custom-agent-job-worker-result-discipline",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt batch-fanout-custom-agent-job-worker-result-discipline; red fixtures missing_id_column, placeholder_references_unknown_csv_column, missing_output_schema, worker_reports_twice, worker_exits_without_result, output_csv_missing_job_metadata, unbounded_concurrency, timeout_ignored, malformed_custom_agent_toml, built_in_custom_agent_name_collision_without_precedence; valid fixture batch-fanout-custom-agent-job-worker-result-discipline.json",
+      "claim_ceiling_impact": "batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results"
+    },
+    {
+      "id": "behavior-example-coverage-coverage-anti-gaming",
+      "obligation": "Behavior Example Coverage Coverage Anti Gaming",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt"
+    },
+    {
+      "id": "capability-gap-extraction-harness-capability-promotion",
+      "obligation": "Capability gaps discovered during agent work must become typed, owned, evidence-bound promotion records instead of prose blockers or handbacks.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt capability-gap-extraction-harness-capability-promotion; red fixtures missing_capability_with_no_record, repeated_tool_gap_with_no_promotion, missing_context_fixed_by_prose_only, missing_runtime_legibility_while_live_surface_claim_stays_green, missing_adapter_but_generic_support_claim_emitted, permission_app_capability_unavailable_but_reviewer_ready_claim_emitted, user_handback_treated_as_repair, stale_unowned_capability_gap, claim_supported_non_goal_capability_gap; valid fixture capability-gap-extraction-harness-capability-promotion.json",
+      "claim_ceiling_impact": "readiness_claims_withheld_without_capability_gap_promotion"
+    },
+    {
+      "id": "clean-checkout-command-discovery",
+      "obligation": "clean-checkout install/setup/runtime/check discoverability",
+      "source": "docs/source-article-synthesis.md#AI Is Forcing Us To Write Good Code; skills/harness-engineering/SKILL.md#Acceptance",
+      "package_surface": "schemas/clean-checkout-command-discovery-receipt.schema.json; fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "clean-checkout command-discovery receipt and red fixtures enforce root check, runnable command, local-state, installed command, and source/install/cache drift failures",
+      "claim_ceiling_impact": "install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt"
+    },
+    {
+      "id": "clean-room-rebuild-author-memory-independence",
+      "obligation": "Clean source, installed, and cache packages must regenerate law-bearing authority artifacts from documented commands without author memory or private local state.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt clean-room-rebuild-author-memory-independence; red fixtures command_missing_from_clean_checkout, private_path_dependency, hidden_cache_dependency, generated_artifact_not_reproducible, source_only_rebuild_used_for_installed_cache_proof, stale_artifact_surviving_rebuild, clean_room_receipt_omitted_from_final_packet; valid fixture clean-room-rebuild-author-memory-independence.json",
+      "claim_ceiling_impact": "reproducibility_claims_withheld_without_clean_room_rebuild_receipt"
+    },
+    {
+      "id": "cli-control-plane-authority",
+      "obligation": "CLI Control Plane Authority must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution",
+      "package_surface": "validator/src/cli/control/plane.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
+      "claim_ceiling_impact": "harness_claims_withheld_without_cli_control_plane_authority"
+    },
+    {
+      "id": "cli-performance-latency-speed-iteration-fitness",
+      "obligation": "CLI performance, latency, speed, and iteration fitness must fail closed for Harness Ultragoal claims without typed budgets, current performance receipts, cache/no-cache honesty, concurrency isolation, external-probe timeout and retry/backoff policy, regression baselines, and final packet evidence.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-22-cli-performance-latency-speed-and-iteration-fitness",
+      "package_surface": "validator/src/cli/performance.rs; validator/src/cli/performance/types.rs; validator/src/audit/cli/performance.rs; schemas/cli-performance-receipt.schema.json; validation_artifacts/cli/performance-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires typed budget classes, performance receipt schema, fail-closed receipt, red fixtures for performance theater, valid fixture, standards row, foundational trace, package inventory coverage, and claim guard",
+      "claim_ceiling_impact": "performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof"
+    },
+    {
+      "id": "cli-self-law-compliance",
+      "obligation": "CLI Self Law Compliance must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution",
+      "package_surface": "validator/src/cli/control/plane.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
+      "claim_ceiling_impact": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt"
+    },
+    {
+      "id": "compact-agents-routed-standards",
+      "obligation": "compact `AGENTS.md` / routed standards modules",
+      "source": "docs/source-article-synthesis.md#OpenAI Harness Engineering; docs/agent-first-repo-shape.md#Fresh Repo",
+      "package_surface": "templates/AGENTS.md; templates/AGENT_STANDARDS.md; templates/agent-standards/",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "source-obligation-coverage and agent-standards-enforcement validate required routed standards rows",
+      "claim_ceiling_impact": "package_static_only",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "compact-agents-routed-standards",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "conditional-observability-proof",
+      "obligation": "conditional observability proof",
+      "source": "docs/source-article-synthesis.md#Observability Stack; docs/agent-first-repo-shape.md#Optional Observability Setup",
+      "package_surface": "observability docs; target fixtures; optional skill",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "live observability receipt when claimed",
+      "claim_ceiling_impact": "no_default_observability_install_claim"
+    },
+    {
+      "id": "config-precedence-defaults-env-indirection",
+      "obligation": "Config Precedence Defaults Env Indirection must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for config-precedence-defaults-env-indirection",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt config-precedence-defaults-env-indirection; red fixtures default_overriding_repo_policy, env_var_typo_treated_as_empty_string, unknown_config_accepted, secret_leaked_in_receipt, cache_config_diverging_from_source, cli_arg_changing_candidate_id_without_receipt_binding, app_config_claim_inferred_from_repo_config; valid fixture config-precedence-defaults-env-indirection.json",
+      "claim_ceiling_impact": "config_claims_withheld_without_typed_precedence_and_redacted_env_receipt"
+    },
+    {
+      "id": "connector-capability-discovery",
+      "obligation": "Connector capability and same-surface capability claims must fail closed without current discovery receipts bound to candidate, claim, account/workspace, and exact authority surface.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "connector capability receipt, same-surface capability authority validator, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt connector-capability-discovery; red fixtures connector-capability-discovery-claim-without-discovery-red, connector-capability-discovery-stale-discovery-red, connector-capability-discovery-disabled-connector-red, connector-capability-discovery-wrong-account-workspace-red, connector-capability-discovery-local-docs-used-as-live-connector-proof-red, connector-capability-discovery-missing-auth-boundary-red, connector-capability-discovery-cache-source-substituted-for-app-connector-red, connector-capability-discovery-fallback-emitted-as-supported-red, connector-capability-discovery-claim-not-linked-to-current-candidate-claim-id-red; valid fixture connector-capability-discovery.json",
+      "claim_ceiling_impact": "capability_claims_withheld_without_same_surface_discovery_receipt"
+    },
+    {
+      "id": "cross-artifact-consistency-solver-authority-graph-closure",
+      "obligation": "Authority graph closure must join laws, sources, standards, schemas, fixtures, receipts, package inventory, surfaces, packet claims, product ids, and claim ceilings.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt cross-artifact-consistency-solver-authority-graph-closure; red fixtures orphan_claim, orphan_red_fixture, orphan_green_fixture, missing_receipt_edge, duplicate_law_authority, stale_graph_digest, private_local_graph_edge, packet_claim_outside_graph, source_install_cache_graph_mismatch, child_law_hidden_under_umbrella_parent; valid fixture cross-artifact-consistency-solver-authority-graph-closure.json",
+      "claim_ceiling_impact": "completion_claims_withheld_without_authority_graph_closure"
+    },
+    {
+      "id": "current-product-discovery-audit-quality-in-use-evidence",
+      "obligation": "Product-facing claims require current discovery, audit, research, quality-in-use, accessibility, cognitive-load, and claim-id mapped evidence.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt current-product-discovery-audit-quality-in-use-evidence; red fixtures stale_screenshot_accepted, memory_summary_used_as_current_product_proof, product_audit_without_flow_id, accessibility_compliance_from_screenshots_alone, research_brief_without_observed_inferred_split, recommendation_with_no_claim_id, old_packet_used_as_live_product_proof, product_fitness_passed_with_no_current_discovery_evidence; valid fixture current-product-discovery-audit-quality-in-use-evidence.json",
+      "claim_ceiling_impact": "product_facing_claims_withheld_without_current_discovery_and_quality_in_use_evidence"
+    },
+    {
+      "id": "derived-authority-recomputation",
+      "obligation": "proof-bearing generated artifacts with derived authority values are recomputed from canonical current inputs or bound to a digest derived from those inputs",
+      "source": "control-loop signal from codex-native-llm-wiki LANE-007 vector-scope reviews; templates/agent-standards/02-boundaries-validation-and-enforcement.md#Proof Freshness And Operation Identity",
+      "package_surface": "proof gate; standards modules; source-obligation matrix; recomputation validators for rankings, install, resolver, archive, package, source-card, moving-value, and runtime-authority artifacts",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "domain-specific recomputation fixtures are required when a target repo emits proof-bearing derived authority artifacts",
+      "claim_ceiling_impact": "content_digest_path_privacy_only_not_enough_for_behavior_authority"
+    },
+    {
+      "id": "derived-authority-recomputation-named-authority-fallback-refusal",
+      "obligation": "Derived Authority Recomputation Named Authority Fallback Refusal must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for derived-authority-recomputation-named-authority-fallback-refusal",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt derived-authority-recomputation-named-authority-fallback-refusal; red fixtures stale_derived_package_inventory, copied_archive_anchors, source_card_currentness_inferred_from_old_digest, installed_plugin_claim_backed_by_source_fallback, app_registry_claim_backed_by_cache_fallback, moving_value_digest_mismatch, fallback_boundary_missing_claim_withholding; valid fixture derived-authority-recomputation-named-authority-fallback-refusal.json",
+      "claim_ceiling_impact": "named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal"
+    },
+    {
+      "id": "distinct-proof-surfaces-claim-ceilings",
+      "obligation": "distinct proof surfaces and claim ceilings",
+      "source": "skills/proof-gate/SKILL.md#Proof Surfaces; docs/hypercritical-review-law.md#Binding Review Rules",
+      "package_surface": "completion manifest; proof gate; validator checks",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "none known",
+      "claim_ceiling_impact": "withholds_surface_substitution"
+    },
+    {
+      "id": "distribution-sharing-surface-claim-separation",
+      "obligation": "Distribution Sharing Surface Claim Separation",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof"
+    },
+    {
+      "id": "execplan-no-handback-prototype-promotion-discard",
+      "obligation": "Execplan No Handback Prototype Promotion Discard",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "execplan_claims_withheld_without_no_handback_and_prototype_gates"
+    },
+    {
+      "id": "execplan-plain-language-expected-output-interface-completeness",
+      "obligation": "Execplan Plain Language Expected Output Interface Completeness",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "execplan_claims_withheld_without_plain_language_interface_receipt"
+    },
+    {
+      "id": "failure-remediation-quality-agent-actionable-output",
+      "obligation": "Every failure must emit typed agent-actionable remediation with law id, artifact, invariant, observed/expected values, rerun command, severity, and claim impact.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt failure-remediation-quality-agent-actionable-output; red fixtures generic_validation_failed, missing_law_id, missing_artifact_path, missing_expected_observed_values, missing_rerun_command, missing_claim_impact, wrong_repair_class, swallowed_io_schema_error, failure_message_leaking_private_data; valid fixture failure-remediation-quality-agent-actionable-output.json",
+      "claim_ceiling_impact": "repair_claims_withheld_without_agent_actionable_failure_output"
+    },
+    {
+      "id": "feedback-to-rule-promotion",
+      "obligation": "Feedback To Rule Promotion",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "material_repeated_findings_withheld_without_promotion_receipt"
+    },
+    {
+      "id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+      "obligation": "Law-bearing states require append-only transition history and typed reopen or regression events before any terminal state can support claims again.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt forward-only-state-transition-integrity-silent-reopen-prevention; red fixtures terminal_row_edited_back_to_active, approval_reentering_needs_review_without_reopen, status_string_says_verified_but_transition_missing, final_packet_changes_claim_block_to_fixed_by_prose, reviewer_signoff_reused_after_reopen, automation_tick_resets_lane_state, package_install_receipt_advances_stale_state, transition_event_missing_previous_hash, transition_event_missing_actor_evidence, reopened_gate_still_green, update_goal_allowed_after_reopened_required_claim_unverified; valid fixture forward-only-state-transition-integrity-silent-reopen-prevention.json",
+      "claim_ceiling_impact": "claim_green_states_withheld_without_forward_only_transition_history"
+    },
+    {
+      "id": "fresh-init-retrofit-mode-separation",
+      "obligation": "Fresh Init Retrofit Mode Separation must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for fresh-init-retrofit-mode-separation",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt fresh-init-retrofit-mode-separation; red fixtures fresh_init_used_as_retrofit, retrofit_writes_outside_allowed_paths, mode_omitted_from_receipt, cache_audit_used_as_target_repo_setup_proof, idempotency_claim_without_second_run, rollback_claim_with_no_restored_digest; valid fixture fresh-init-retrofit-mode-separation.json",
+      "claim_ceiling_impact": "setup_claims_withheld_without_same_mode_receipt"
+    },
+    {
+      "id": "fresh-retrofit-repo-shape",
+      "obligation": "fresh/retrofit repo shape",
+      "source": "docs/source-article-synthesis.md#OpenAI Harness Engineering; docs/agent-first-repo-shape.md#Fresh Repo and Existing Repo",
+      "package_surface": "skills/agent-first-repo-init; skills/agent-first-repo-retrofit; target fixtures",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "none for package/static; live targets need receipts",
+      "claim_ceiling_impact": "target_fixture_only"
+    },
+    {
+      "id": "generated-proof-artifact-provenance-anti-fabrication",
+      "obligation": "Generated Proof Artifact Provenance Anti Fabrication",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "generated_proof_claims_withheld_without_reproducible_provenance"
+    },
+    {
+      "id": "generated-ready-completion-receipts",
+      "obligation": "generated ready/completion receipts",
+      "source": "docs/repo-patterns-extracted.md#Generated Ready Receipts and Validation Artifacts",
+      "package_surface": "examples/generated; schemas; validator provenance",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "live generated ready receipt for actual lanes",
+      "claim_ceiling_impact": "handwritten_ready_unsupported"
+    },
+    {
+      "id": "goal-contract-amendment-authority-required-claim-id-mapping",
+      "obligation": "Goal-contract amendments and required claim ids must be append-only, digest-bound, and authoritative for side-thread additions, checklist gates, and final claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt goal-contract-amendment-authority-required-claim-id-mapping; red fixtures side_thread_requirement_without_amendment, checklist_gate_absent_from_required_claim_ids, stale_contract_bundle_hash_after_law_addition, stale_required_claim_id_hash, markdown_prompt_treated_as_authority, final_packet_claim_absent_from_completion_manifest, weakening_amendment_without_approval, scope_changing_clarification, amendment_log_rewritten_instead_of_appended, duplicate_required_claim_id, broad_umbrella_claim_id_hiding_child_gates, requirement_removal_without_claim_blocking; valid fixture goal-contract-amendment-authority-required-claim-id-mapping.json",
+      "claim_ceiling_impact": "completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids"
+    },
+    {
+      "id": "green-path-adequacy-satisfiable-strictness",
+      "obligation": "Every mandatory law must prove satisfiable strictness with red and green paths, package/review/report projection, and current digests.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt green-path-adequacy-satisfiable-strictness; red fixtures law_with_no_green_path, law_with_only_toy_green_fixture, green_fixture_missing_claim_ceiling_projection, green_fixture_missing_package_inclusion, green_fixture_accepted_despite_stale_digest, full_compliance_claim_while_any_mandatory_law_lacks_realistic_green_path; valid fixture green-path-adequacy-satisfiable-strictness.json",
+      "claim_ceiling_impact": "compliance_claims_withheld_when_any_law_lacks_green_path"
+    },
+    {
+      "id": "guardrail-speed-isolation-cache-honesty",
+      "obligation": "Guardrail Speed Isolation Cache Honesty",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "guardrail_claims_withheld_without_speed_isolation_cache_receipt"
+    },
+    {
+      "id": "historical-regression-corpus-session-review-signals",
+      "obligation": "Session-log, Chronicle, reviewer, side-thread, and validation repeat signals must become frozen regression corpus rows or claim-blocking typed non-goals.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt historical-regression-corpus-session-review-signals; red fixtures session_log_finding_not_converted_to_regression, chronicle_finding_without_timestamp, reviewer_repeat_finding_closed_by_prose, side_thread_requirement_not_amended, historical_namespace_repeat_offender_without_fixture, stale_receipt_repeat_offender_without_fixture, final_packet_omitting_open_regression_claim_impact; valid fixture historical-regression-corpus-session-review-signals.json",
+      "claim_ceiling_impact": "completion_claims_withheld_without_historical_regression_corpus"
+    },
+    {
+      "id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+      "obligation": "Human-audit disposition decomposition and judgment-only claim blocking must split deterministic law enforcement from typed judgment-only review surfaces.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt human-audit-disposition-decomposition-judgment-claim-blocking; red fixtures hybrid_disposition_accepted, human_audit_closing_mandatory_law, judgment_review_without_deterministic_sibling, reviewer_signoff_used_as_validator_proof, semantic_review_raising_claim_ceiling_without_evidence, source_obligation_row_with_forbidden_hybrid_label, full_compliance_claim_with_judgment_only_residue; valid fixture human-audit-disposition-decomposition-judgment-claim-blocking.json",
+      "claim_ceiling_impact": "mandatory_law_claims_withheld_without_deterministic_split_and_judgment_only_blocker"
+    },
+    {
+      "id": "instruction-precedence-nested-agents-routing",
+      "obligation": "Instruction Precedence Nested Agents Routing",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "instruction_claims_withheld_without_strict_precedence_route"
+    },
+    {
+      "id": "issue-tracker-lifecycle-eligibility-terminal-state",
+      "obligation": "Issue Tracker Lifecycle Eligibility Terminal State must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for issue-tracker-lifecycle-eligibility-terminal-state",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt issue-tracker-lifecycle-eligibility-terminal-state; red fixtures terminal_state_accepted_without_verification, restricted_state_counted_as_supported, stale_review_issue_marked_fixed_without_candidate_digest, non_goal_without_rationale, state_case_collision, update_goal_allowed_while_accepted_issue_unverified; valid fixture issue-tracker-lifecycle-eligibility-terminal-state.json",
+      "claim_ceiling_impact": "issue_goal_claims_withheld_without_typed_lifecycle_evidence"
+    },
+    {
+      "id": "lane-worktree-isolation-cleanup",
+      "obligation": "lane/worktree isolation and cleanup",
+      "source": "docs/source-article-synthesis.md#Symphony; docs/repo-patterns-extracted.md#Worktree Hygiene",
+      "package_surface": "templates/LANE_REGISTRY.json; ready receipts; worktree env templates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "same-surface worktree cleanup receipt is required for live cleanup claims",
+      "claim_ceiling_impact": "fixture_only"
+    },
+    {
+      "id": "live-beneficial-e2e",
+      "obligation": "live beneficial end-to-end proof for feature claims",
+      "source": "docs/repo-patterns-extracted.md#Live Beneficial E2E; skills/proof-gate/SKILL.md#Refusal Rules",
+      "package_surface": "completion manifest evidence; ready receipts",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "live target receipt for real features",
+      "claim_ceiling_impact": "static_fixtures_not_live_benefit"
+    },
+    {
+      "id": "memory-wiki-context-only",
+      "obligation": "memory/wiki as context only, not current proof",
+      "source": "skills/harness-engineering/SKILL.md#Core Laws; docs/source-article-synthesis.md#Synthesis",
+      "package_surface": "schemas/memory-context-boundary-receipt.schema.json; fixtures/law-surfaces/valid/memory-context-boundary-receipt.json; skills; proof gate; review law; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "memory-context boundary receipt and red fixtures enforce memory-only and summary-only proof substitution failures",
+      "claim_ceiling_impact": "implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence"
+    },
+    {
+      "id": "namespace-progressive-disclosure",
+      "obligation": "namespace and progressive disclosure as an agent-facing filesystem interface",
+      "source": "docs/source-article-synthesis.md#AI Is Forcing Us To Write Good Code; templates/agent-standards/01-namespace-and-progressive-disclosure.md#Namespace And Progressive Disclosure",
+      "package_surface": "plugin-manifest-draft.json; docs/namespace-class-registry.json; validator/src/audit/namespace/law.rs; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "namespace-progressive-disclosure validator with red fixtures for junk drawer, vague common/shared/lib/services, repeated prefix, root clutter, excessive depth, mixed-domain folder, exception contract, exception generator, orphan file, and prose form only law",
+      "claim_ceiling_impact": "completion_review_package_readiness_release_claims_withheld_when_namespace_law_fails"
+    },
+    {
+      "id": "non-e2e-claim-ceiling-confidence-bounds",
+      "obligation": "Without live end-to-end validation, all surfaces must carry explicit non-E2E ceiling and confidence bounds that block product, live, marketplace, release, adoption, and reviewer-ready overclaims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt non-e2e-claim-ceiling-confidence-bounds; red fixtures 98_percent_confidence_without_e2e, product_success_claimed_from_static_proof, daily_driver_claim_without_repeated_use_proof, reviewer_ready_claim_without_current_reviewer_exposure, marketplace_ready_claim_without_marketplace_proof, final_response_omitting_non_e2e_ceiling; valid fixture non-e2e-claim-ceiling-confidence-bounds.json",
+      "claim_ceiling_impact": "product_live_claims_withheld_above_non_e2e_ceiling"
+    },
+    {
+      "id": "offline-schema-catalog-resolver-portability",
+      "obligation": "Offline Schema Catalog Resolver Portability must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for offline-schema-catalog-resolver-portability",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt offline-schema-catalog-resolver-portability; red fixtures remote_schema_fetch_attempt, absolute_local_schema_path, missing_catalog_entry, stale_schema_id, relative_ref_escaping_package_root, source_cache_catalog_drift, installed_package_missing_schema, valid_fixture_passing_only_with_network_resolver; valid fixture offline-schema-catalog-resolver-portability.json",
+      "claim_ceiling_impact": "schema_validation_claims_withheld_without_offline_catalog_resolution"
+    },
+    {
+      "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "obligation": "One Command Fresh Environment Bootstrap Concurrent Resource Allocation",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt"
+    },
+    {
+      "id": "orchestrator-state-machine",
+      "obligation": "Orchestrator State Machine",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "orchestration_claims_withheld_without_state_machine_receipt"
+    },
+    {
+      "id": "plugin-bundled-component-graph-hook-app-mcp-safety",
+      "obligation": "Plugin Bundled Component Graph Hook App Mcp Safety",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "installable_package_claims_withheld_without_closed_component_graph"
+    },
+    {
+      "id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "obligation": "Plugin Flow Graph Package Dependency Closure Plugin Product Journey must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt plugin-flow-graph-package-dependency-closure-plugin-product-journey; red fixtures missing_fit_repo_entrypoint, missing_flow_graph, missing_required_edge, script_references_unshipped_file, validator_references_unshipped_fixture, source_file_absent_from_shipped_package, product_journey_receipt_missing, unsupported_runtime_claim_emitted, plugin_flow_manifest_cache_mismatch; valid fixture plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+      "claim_ceiling_impact": "plugin_product_claims_withheld_without_closed_flow_graph_and_journey_receipt"
+    },
+    {
+      "id": "plugin-install-surface-metadata-cache-enable-state",
+      "obligation": "Plugin Install Surface Metadata Cache Enable State",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "install_marketplace_enable_claims_withheld_without_same_surface_receipt"
+    },
+    {
+      "id": "portable-non-prescriptive-adapter-implementation-choice",
+      "obligation": "Portable Non Prescriptive Adapter Implementation Choice must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for portable-non-prescriptive-adapter-implementation-choice",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt portable-non-prescriptive-adapter-implementation-choice; red fixtures exact_tracker_required_by_generic_claim, ui_tool_proof_required_for_non_ui_repo, language_specific_setup_forced_on_nonmatching_repo, workflow_engine_specific_lane_numbering_treated_as_law, optional_observability_backend_treated_as_mandatory, missing_adapter_fallback, adapter_absence_still_allowing_dependent_claim; valid fixture portable-non-prescriptive-adapter-implementation-choice.json",
+      "claim_ceiling_impact": "generic_claims_withheld_without_portable_adapter_boundaries"
+    },
+    {
+      "id": "privacy-raw-artifact-boundary",
+      "obligation": "validators and review prompts prevent opening or persisting raw private transcript, audio, prompt, message, or event payloads while allowing category-only status and leak summaries",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; templates/agent-standards/04-security-reliability-and-product-cohesion.md#Security And Privacy Law",
+      "package_surface": "security standards; proof gate; review prompts; privacy-boundary checks",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "privacy boundary validators and review prompts reject raw private artifact persistence in review or fixture material",
+      "claim_ceiling_impact": "raw_private_artifacts_are_not_review_or_fixture_material",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "privacy-raw-artifact-boundary",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "product-cohesion-product-claims",
+      "obligation": "product-cohesion proof for product/control-surface claims",
+      "source": "docs/source-article-synthesis.md#Product Cohesion Gate",
+      "package_surface": "product-cohesion schema; target fixtures; semantic receipts",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "live UI/runtime/accessibility receipt for product claims",
+      "claim_ceiling_impact": "engine_proof_not_product_proof",
+      "judgment_only_review_surface": {
+        "owner": "harness-product-simplicity-falsifier",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "product-cohesion-product-claims",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "product-live-surface-receipts",
+      "obligation": "CLI checks and fixtures do not prove live recording, live UI, replay, transcript alignment, video alignment, or parent-operation coordination",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; skills/proof-gate/SKILL.md#Proof Surfaces",
+      "package_surface": "schemas/product-live-surface-receipt.schema.json; fixtures/law-surfaces/valid/product-live-surface-receipt.json; proof gate; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "product live-surface receipt and red fixtures enforce same-surface live UI, recording, replay, transcript alignment, video alignment, and parent-operation proof boundaries",
+      "claim_ceiling_impact": "live_product_recording_replay_parent_operation_claims_withheld_without_same_surface_live_receipt"
+    },
+    {
+      "id": "product-proof-joins-substitution-blocking",
+      "obligation": "Product proof joins must bind Product Fitness and Cohesion to Product Success Contract fields and reject install, cache, smoke, reviewer, packet, quality, and dogfood substitutes.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-proof-joins-substitution-blocking; red fixtures install_success_used_as_product_success, package_publication_used_as_product_success, smoke_test_used_as_product_fitness, reviewer_approval_used_as_product_proof, product_cohesion_alone_used_as_product_success, product_fitness_alone_without_contract_lineage, happy_path_without_failure_recovery_proof, quality_score_as_product_outcome, app_registry_existence_without_reviewer_exposure_proof, dogfood_outside_declared_audience_context; valid fixture product-proof-joins-substitution-blocking.json",
+      "claim_ceiling_impact": "product_success_claims_withheld_without_same_surface_product_proof_join"
+    },
+    {
+      "id": "product-strategy-positioning-research-eval-before-lane-planning",
+      "obligation": "Product strategy, success brief, positioning, research, and eval artifacts must exist and validate before product-impacting lane planning begins.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-strategy-positioning-research-eval-before-lane-planning; red fixtures product_lane_plan_without_strategy_artifact, feature_list_accepted_as_strategy, generic_audience_accepted, vanity_metric_accepted, positioning_route_without_proof_needed, research_notes_without_source_map, eval_protocol_without_negative_paths, first_value_path_missing, continuance_signal_missing, deep_research_v2_precedent_cited_without_required_planning_artifacts; valid fixture product-strategy-positioning-research-eval-before-lane-planning.json",
+      "claim_ceiling_impact": "product_lane_planning_claims_withheld_without_strategy_research_eval_artifacts"
+    },
+    {
+      "id": "product-success-binding-goal-lane-execplan-authority",
+      "obligation": "Product success binding must be explicit in goal contracts, lane registries, ExecPlan authority, completion manifests, amendments, and product evidence plans.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-binding-goal-lane-execplan-authority; red fixtures product_goal_without_product_success_contract_binding, product_lane_without_contract_id, product_lane_ready_without_product_fitness_owed, product_lane_ready_without_product_cohesion_owed, explicit_non_product_waiver_contradicted_by_claim_text, product_claim_consumed_outside_declared_goal_claim_ids, lane_ready_receipt_omitting_product_success_obligations, product_evidence_split_across_lanes_without_closed_claim_ids; valid fixture product-success-binding-goal-lane-execplan-authority.json",
+      "claim_ceiling_impact": "product_lane_claims_withheld_without_product_success_binding"
+    },
+    {
+      "id": "product-success-contract-initiation-authority",
+      "obligation": "Product-impacting goals and lanes must be governed from initiation by a canonical Product Success Contract with typed fields, digest binding, and package surfaces.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-contract-initiation-authority; red fixtures product_goal_without_product_success_contract, product_lane_without_product_success_contract, stale_product_success_contract_digest, wrong_goal_id, wrong_claim_id, placeholder_target_user, missing_quality_dimension, missing_critical_journey, missing_first_value_event, missing_claim_ceiling, markdown_only_product_success_contract, package_inventory_missing_product_success_contract_surfaces; valid fixture product-success-contract-initiation-authority.json",
+      "claim_ceiling_impact": "product_claims_withheld_without_initiation_time_product_success_contract"
+    },
+    {
+      "id": "product-success-contract-review-packet-team-skill-routing",
+      "obligation": "Product Success Contract must be included in packet, target, archive, package inventory, review ownership, and initiation-time skill routing.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-contract-review-packet-team-skill-routing; red fixtures review_packet_missing_product_success_contract, missing_product_reviewer_disposition, packet_with_stale_product_lineage, review_target_omitting_product_contract, archive_omitting_product_contract_receipt, skill_routing_omission, fit_repo_product_ready_without_contract, review_team_lacking_typed_product_owner, package_inventory_missing_product_success_schema_template_fixtures; valid fixture product-success-contract-review-packet-team-skill-routing.json",
+      "claim_ceiling_impact": "review_packet_claims_withheld_without_product_success_contract_review_and_routing"
+    },
+    {
+      "id": "product-success-inspiration-source-provenance-disposition",
+      "obligation": "Product-success inspiration sources must be dispositioned in a typed map with source id, path or capability id, principle, adopted requirement ids, and claim impact.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-inspiration-source-provenance-disposition; red fixtures product_design_mentioned_but_not_dispositioned, template_creator_mentioned_but_treated_as_repo_dependency, deep_research_v2_cited_without_artifact_path, chronicle_cited_without_timestamp, sales_value_evidence_adopted_without_hierarchy, generic_inspiration_summary_accepted, inaccessible_source_ignored, adopted_principle_with_no_validator_gate; valid fixture product-success-inspiration-source-provenance-disposition.json",
+      "claim_ceiling_impact": "product_requirements_claims_withheld_without_inspiration_source_disposition"
+    },
+    {
+      "id": "product-success-lifecycle-transitions-no-late-afterthought",
+      "obligation": "Product success must be a lifecycle spine from initiation through validation, review, archive, install/cache/app proof, and post-use measurement.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-lifecycle-transitions-no-late-afterthought; red fixtures product_success_contract_after_lane_launch_with_no_reopen, product_obligation_not_decomposed_into_lane_task, product_critical_debt_left_in_docs_only, product_fitness_review_afterthought_accepted, product_cohesion_packet_repair_accepted_as_lifecycle_proof, stale_product_receipt_after_amendment, final_packet_product_claim_with_lifecycle_gap; valid fixture product-success-lifecycle-transitions-no-late-afterthought.json",
+      "claim_ceiling_impact": "product_success_claims_withheld_without_lifecycle_transition_receipts"
+    },
+    {
+      "id": "product-success-lineage-amendments-closed-product-claim-ids",
+      "obligation": "Every product claim and Product Fitness or Cohesion receipt must trace to current Product Success Contract claim ids or append-only amendments.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt product-success-lineage-amendments-closed-product-claim-ids; red fixtures late_product_readiness_claim, unknown_product_success_contract_id, stale_product_success_contract_id_in_receipt, product_fitness_orphan_receipt, product_cohesion_orphan_receipt, product_packet_claim_unmapped, product_claim_duplicated, broad_umbrella_product_claim_hiding_child_obligations, weakening_amendment_without_approval, side_thread_product_requirement_not_amended; valid fixture product-success-lineage-amendments-closed-product-claim-ids.json",
+      "claim_ceiling_impact": "product_claims_withheld_without_lineage_amendments_and_closed_product_claim_ids"
+    },
+    {
+      "id": "purpose-backed-active-files",
+      "obligation": "purpose-backed active files; remove archive-only or purposeless files",
+      "source": "templates/agent-standards/01-namespace-and-progressive-disclosure.md#Purpose Or Removal Law; docs/source-article-synthesis.md#OpenAI Harness Engineering",
+      "package_surface": "templates/agent-standards; skills/agent-first-repo-init; skills/agent-first-repo-retrofit; skills/standards-gardener",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "namespace-progressive-disclosure validator and plugin inventory closure enforce purpose-backed active files",
+      "claim_ceiling_impact": "archive_only_or_orphan_files_withhold_active_repo_claims"
+    },
+    {
+      "id": "quality-score-taste-gates",
+      "obligation": "Quality Score Taste Gates",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "quality_claims_withheld_without_current_evidence_bound_score"
+    },
+    {
+      "id": "raw-private-artifact-handling-category-only-evidence",
+      "obligation": "Raw Private Artifact Handling Category Only Evidence must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for raw-private-artifact-handling-category-only-evidence",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt raw-private-artifact-handling-category-only-evidence; red fixtures raw_transcript_in_packet, raw_message_payload_in_fixture, absolute_private_path_in_package_inventory, secret_like_value_in_child_prompt, private_session_log_copied_to_artifact_root, reviewer_evidence_requiring_raw_private_file, redaction_summary_without_claim_impact; valid fixture raw-private-artifact-handling-category-only-evidence.json",
+      "claim_ceiling_impact": "evidence_claims_withheld_without_redacted_category_only_outputs"
+    },
+    {
+      "id": "repo-knowledge-index-core-beliefs",
+      "obligation": "Repo Knowledge Index Core Beliefs",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "law_claims_withheld_without_fresh_knowledge_index"
+    },
+    {
+      "id": "restartable-execplans",
+      "obligation": "restartable ExecPlans",
+      "source": "docs/source-article-synthesis.md#Codex ExecPlans; docs/repo-patterns-extracted.md#ExecPlans As Contracts",
+      "package_surface": "templates/LANE_EXECPLAN.md; docs/exec-plans/active; schemas/restartable-execplan-receipt.schema.json; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "restartable ExecPlan receipt and red fixtures enforce purpose, user outcome, steps, progress, discoveries, decisions, validation commands, idempotence, recovery, and working behavior",
+      "claim_ceiling_impact": "plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt"
+    },
+    {
+      "id": "review-disagreement-override-judgment-boundary-governance",
+      "obligation": "Reviewer and human judgment may discover issues but cannot override deterministic failure, raise claim ceilings, or close mandatory law without typed disposition.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt review-disagreement-override-judgment-boundary-governance; red fixtures reviewer_signoff_overriding_failing_validator, human_approval_closing_mandatory_law, disagreement_marked_resolved_in_prose_only, non_goal_without_claim_removal, reviewer_raising_confidence_above_evidence, judgment_only_product_fitness_claim_counted_as_proof, final_packet_hiding_open_disagreement; valid fixture review-disagreement-override-judgment-boundary-governance.json",
+      "claim_ceiling_impact": "review_claims_withheld_without_override_boundary_governance"
+    },
+    {
+      "id": "review-feedback-disposition-same-round-satisfaction",
+      "obligation": "Review Feedback Disposition Same Round Satisfaction",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "review_signoff_withheld_without_same_round_feedback_disposition"
+    },
+    {
+      "id": "reviewer-to-gate-conversion",
+      "obligation": "recurring reviewer findings become scripts, tests, standards rows, fixtures, blockers, or claim ceilings instead of standing reviewer memory",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; skills/standards-gardener/SKILL.md#Promotion Ladder",
+      "package_surface": "standards-gardener skill; source-obligation matrix; review law; red fixtures",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "new repeated or severe misses must add a row, validator, fixture, claim blocker, or explicit non-goal exclusion that withholds related claims",
+      "claim_ceiling_impact": "human_review_agreement_alone_does_not_raise_claim_ceiling",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "reviewer-to-gate-conversion",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "runtime-feasibility-cost-strict-gate-usability",
+      "obligation": "Strict enforcement must remain runnable with documented commands, budgets, concurrency, cache invalidation, no-cache/full-proof modes, and failure behavior.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt runtime-feasibility-cost-strict-gate-usability; red fixtures hidden_cache_pass, no_cache_mismatch, unbounded_concurrency, runtime_over_budget_without_exception, stale_cache_accepted, focused_audit_substituted_for_full_audit, manual_sample_substituted_for_complete_proof, guardrail_too_slow_without_claim_impact; valid fixture runtime-feasibility-cost-strict-gate-usability.json",
+      "claim_ceiling_impact": "strict_gate_claims_withheld_without_runtime_feasibility_receipt"
+    },
+    {
+      "id": "runtime-tool-identity",
+      "obligation": "browser, UI, and runtime proof records exact runtime/tool identity, artifact digests, and claim ceiling",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; templates/agent-standards/02-boundaries-validation-and-enforcement.md#Proof Freshness And Operation Identity",
+      "package_surface": "schemas/runtime-tool-identity-receipt.schema.json; fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json; proof gate; product-cohesion receipts; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "runtime-tool identity receipt and red fixtures enforce tool identity, version, workspace, binary/path when relevant, artifact digest, and claim ceiling failures",
+      "claim_ceiling_impact": "ui_live_runtime_model_tool_app_claims_withheld_without_runtime_tool_identity_receipt"
+    },
+    {
+      "id": "scheduler-runner-tracker-boundaries",
+      "obligation": "Scheduler Runner Tracker Boundaries",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "tracker_mutation_claims_withheld_without_authority_receipt"
+    },
+    {
+      "id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "obligation": "Schema, receipt, template, fixture catalog, package inventory, manifest, and validator version changes must migrate, supersede, or invalidate older artifacts with claim blocking.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt schema-evolution-receipt-migration-stale-version-invalidation; red fixtures stale_schema_id, stale_receipt_version, fixture_catalog_mismatch, old_product_fitness_receipt_accepted_after_schema_change, installed_package_old_schema_accepted, cache_package_old_schema_accepted, migration_receipt_missing_affected_claim_ids; valid fixture schema-evolution-receipt-migration-stale-version-invalidation.json",
+      "claim_ceiling_impact": "current_claims_withheld_without_schema_evolution_and_migration_binding"
+    },
+    {
+      "id": "secret-token-boundaries",
+      "obligation": "Secret Token Boundaries",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "proof_claims_withheld_when_secret_boundaries_fail"
+    },
+    {
+      "id": "semantic-domain-type-naming",
+      "obligation": "Semantic Domain Type Naming",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "authority_surface_claims_withheld_without_semantic_domain_names"
+    },
+    {
+      "id": "skill-catalog-context-budget-omission-warning",
+      "obligation": "Skill Catalog Context Budget Omission Warning",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt"
+    },
+    {
+      "id": "skill-local-reference-closure",
+      "obligation": "skill-local package reference closure",
+      "source": "skills/harness-engineering/SKILL.md#Route; docs/plugin-resource-map.md#Plugin Resource Map",
+      "package_surface": "skills/*/SKILL.md; package-owned docs and schemas",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "package/static closure is enforced; installed plugin visibility requires same-surface proof before installed-app claims",
+      "claim_ceiling_impact": "package skill closure only; not live app install proof"
+    },
+    {
+      "id": "skill-progressive-disclosure-metadata",
+      "obligation": "Skill Progressive Disclosure Metadata",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "skill_claims_withheld_without_progressive_disclosure_receipt"
+    },
+    {
+      "id": "source-card-freshness-ceiling",
+      "obligation": "source-card freshness and current-source claim ceiling",
+      "source": "docs/source-cards.json; docs/source-article-synthesis.md#Source Cards",
+      "package_surface": "source cards and source snapshots",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "source-card-freshness validator and red fixtures withhold unrefreshed current-source, full-compliance, readiness, release, and law-completeness claims",
+      "claim_ceiling_impact": "current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards"
+    },
+    {
+      "id": "source-installed-cache-alignment",
+      "obligation": "plugin availability claims require separate source, installed-plugin, cache-package, package-sync, package-hygiene, and per-surface receipts",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765; docs/install-and-visibility.md#Claim Ceiling",
+      "package_surface": "install-and-visibility docs; proof gate; plugin package receipts; app registry/cache preflight receipts",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "live install, cache, and app registry receipts are required before plugin availability claims",
+      "claim_ceiling_impact": "source_repo_checks_do_not_close_installed_cache_or_app_visibility_claims",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "source-installed-cache-alignment",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "source-obligation-parity-anti-bundling",
+      "obligation": "Source-obligation parity and anti-bundling law must make every source-obligation law first-class or prove an independent typed child-law failure path.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#Gate 61",
+      "package_surface": "docs/source-obligation-matrix.json; docs/mandatory-law-surfaces.json; docs/foundational-law-traceability.json; templates/agent-standards/enforcement.json; templates/RED_FIXTURES.json; schemas/common-defs.schema.json; schemas/validator-receipt.schema.json; validator/src/audit/source_obligations.rs; validator/src/audit/mandatory/law/surface/ids.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt source-obligation-parity-anti-bundling; red fixtures source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red, source-obligation-parity-anti-bundling-deterministic-covered-without-mandatory-law-surface-red, source-obligation-parity-anti-bundling-foundational-trace-without-same-law-standards-row-red, source-obligation-parity-anti-bundling-umbrella-standards-row-passing-while-child-law-fails-red, source-obligation-parity-anti-bundling-minimum-goal-valid-fixture-used-for-unrelated-law-red, source-obligation-parity-anti-bundling-claim-ceiling-missing-for-source-obligation-red, source-obligation-parity-anti-bundling-source-obligation-list-drift-red, source-obligation-parity-anti-bundling-covered-row-without-independent-red-fixture-red; valid fixture source-obligation-parity-anti-bundling.json",
+      "claim_ceiling_impact": "compliance_claims_withheld_without_source_obligation_same_law_parity"
+    },
+    {
+      "id": "stable-identifier-normalization-collision",
+      "obligation": "Stable Identifier Normalization Collision must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for stable-identifier-normalization-collision",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt stable-identifier-normalization-collision; red fixtures unsanitized_workspace_key, duplicate_ids_after_normalization, stale_id_reused_for_new_candidate, display_title_treated_as_authority, receipt_id_with_mismatched_digest, mixed_case_state_accepted_as_distinct_lifecycle_state; valid fixture stable-identifier-normalization-collision.json",
+      "claim_ceiling_impact": "identifier_claims_withheld_without_typed_normalized_collision_checked_ids"
+    },
+    {
+      "id": "standards-gardener-promotion",
+      "obligation": "standards-gardener promotion for repeated review misses",
+      "source": "skills/standards-gardener/SKILL.md#Signal Threshold and Promotion Ladder",
+      "package_surface": "skill; resource map; standards modules",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "standards-gardener receipt validates package/static promotion paths; same-surface repeated-miss promotion receipt is required for live process claims",
+      "claim_ceiling_impact": "package_static_fixture_only",
+      "standards_gardening_receipt_path": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "standards-gardener-promotion",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "obligation": "Subagent Custom Agent Sandbox Approval Inheritance",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "reviewer_custom_agent_claims_withheld_without_launch_receipt"
+    },
+    {
+      "id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "obligation": "Subagent Orchestration Explicitness Token Model Cost Result Reconciliation",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis"
+    },
+    {
+      "id": "target-repo-audit-capability",
+      "obligation": "Target-repo support, setup, retrofit, audit, Product Fitness applicability, and package usability claims must fail closed without exact target-class, target-surface, target-mode capability proof.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "target-repo audit capability receipt, target-scope support validator, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt target-repo-audit-capability; red fixtures target-repo-audit-capability-unsupported-repo-marked-fit-red, target-repo-audit-capability-target-classification-missing-red, target-repo-audit-capability-target-command-missing-success-emitted-red, target-repo-audit-capability-fixture-used-as-live-target-red, target-repo-audit-capability-unknown-language-runtime-accepted-red, target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red, target-repo-audit-capability-mode-substitution-red, target-repo-audit-capability-generic-repo-support-overclaim-red; valid fixture target-repo-audit-capability.json",
+      "claim_ceiling_impact": "target_repo_claims_withheld_without_exact_target_capability_receipt"
+    },
+    {
+      "id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "obligation": "Targeted Refactor Debt Removal Standards Gardener Cadence must fail closed for completion, review, package, readiness, and release claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "mandatory law surface receipt, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard for targeted-refactor-debt-removal-standards-gardener-cadence",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt targeted-refactor-debt-removal-standards-gardener-cadence; red fixtures repeated_namespace_violation_not_promoted_to_check, stale_debt_row, quality_grade_not_updated_after_hardening, deferred_debt_supporting_claim, recurring_cleanup_receipt_with_wrong_candidate_digest, standards_gardener_cadence_omitted; valid fixture targeted-refactor-debt-removal-standards-gardener-cadence.json",
+      "claim_ceiling_impact": "compliance_claims_withheld_without_debt_remediation_cadence_receipt"
+    },
+    {
+      "id": "template-generation-governance-template-creator-boundary",
+      "obligation": "Repo-owned product templates must be schema-bound, parseable, package-included, and independent from Template Creator as a runtime dependency.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt template-generation-governance-template-creator-boundary; red fixtures missing_product_success_brief_template, template_creator_used_with_no_receipt, template_creator_personal_skill_treated_as_repo_artifact, product_template_with_tbd, template_field_not_in_schema, package_inventory_omits_template, installed_cache_template_drift, render_parse_mismatch, product_artifact_generated_from_untemplated_prose; valid fixture template-generation-governance-template-creator-boundary.json",
+      "claim_ceiling_impact": "product_template_claims_withheld_without_repo_owned_template_governance"
+    },
+    {
+      "id": "third-party-dependency-legibility-typed-adapters",
+      "obligation": "Third Party Dependency Legibility Typed Adapters",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "dependency_claims_withheld_without_typed_adapter_registry"
+    },
+    {
+      "id": "total-authority-types-impossible-state-elimination",
+      "obligation": "Total Authority Types Impossible State Elimination",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "authority_claims_withheld_without_total_typed_impossible_state_elimination"
+    },
+    {
+      "id": "transcript-quality-reuse-gates",
+      "obligation": "missing or disabled post-stop batch transcription, cleanup, or final alignment blocks reuse and emits recovery actions when downstream claims trust final words",
+      "source": "control-loop signal from Narrated R&R Ultragoal Skill Setup parent session 019ede5b-484c-7511-b665-ceab75f43765",
+      "package_surface": "schemas/transcript-quality-receipt.schema.json; fixtures/law-surfaces/valid/transcript-quality-receipt.json; proof gate; validator source-obligation and red fixture gates",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "transcript-quality receipt and red fixtures enforce final post-stop transcription, cleanup, alignment, stale-proof, and disabled-finalization failures",
+      "claim_ceiling_impact": "transcript_reuse_replay_summary_word_trust_claims_withheld_without_final_quality_receipt"
+    },
+    {
+      "id": "trust-boundary-abuse-path-failure-path-coverage",
+      "obligation": "Trust-boundary, security, permission, resolver, package, install/cache, registry/app, external input, destructive action, secret, and sensitive-data claims must fail closed without abuse-path and failure-path proof.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "package_surface": "trust-boundary abuse/failure-path receipt, trust-boundary validator, standards row, foundational trace, red fixtures, valid fixture, and claim ceiling guard",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt trust-boundary-abuse-path-failure-path-coverage; red fixtures trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red, trust-boundary-abuse-path-failure-path-coverage-resolver-bypass-missing-test-red, trust-boundary-abuse-path-failure-path-coverage-path-traversal-missing-negative-test-red, trust-boundary-abuse-path-failure-path-coverage-permission-denied-untested-red, trust-boundary-abuse-path-failure-path-coverage-forged-digest-accepted-red, trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red, trust-boundary-abuse-path-failure-path-coverage-secret-leak-untested-red, trust-boundary-abuse-path-failure-path-coverage-destructive-action-ambiguity-untested-red, trust-boundary-abuse-path-failure-path-coverage-review-signoff-without-failure-path-evidence-red; valid fixture trust-boundary-abuse-path-failure-path-coverage.json",
+      "claim_ceiling_impact": "trust_boundary_claims_withheld_without_abuse_and_failure_path_receipts"
+    },
+    {
+      "id": "typed-records-over-prose",
+      "obligation": "typed records as authority over prose",
+      "source": "docs/source-article-synthesis.md#Parse, Don't Validate; docs/review-loop-record.md#Current Authorities",
+      "package_surface": "schemas; validator receipts; review-round receipts",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "typed review-round and law-surface receipts are required for approval rounds and law-bearing claims",
+      "claim_ceiling_impact": "prose_is_not_proof"
+    },
+    {
+      "id": "validator-source-namespace-topology",
+      "obligation": "validator source namespace topology and semantic repo-law enforcement as a first-class child of namespace and semantic naming law",
+      "source": "docs/source-article-synthesis.md#AI Is Forcing Us To Write Good Code; templates/agent-standards/01-namespace-and-progressive-disclosure.md#Namespace And Progressive Disclosure; docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#90. Validator Source Namespace Topology And Semantic Repo-Law Enforcement",
+      "package_surface": "validator/src/audit/namespace/source/topology.rs; validator/src/audit/namespace/classes.rs; validator/src/audit/namespace/law.rs; docs/namespace-class-registry.json; schemas/namespace-class-registry.schema.json; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json; docs/mandatory-law-surfaces.json",
+      "enforcement_disposition": "deterministic validator source namespace topology red fixture typed exception receipt",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "validator source namespace topology red fixtures, semantic green unit test, tamper red fixture, mandatory-law valid fixture, and namespace-progressive-disclosure validator receipt",
+      "claim_ceiling_impact": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails"
+    },
+    {
+      "id": "validator-theater-miswire-resistance",
+      "obligation": "Validator checks, schemas, standards rows, receipts, and fixtures count only when real non-compliant behavior fails through the same authority path used for claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt validator-theater-miswire-resistance; red fixtures row_shape_only_mechanization, fixture_name_only_pass, wrong_check_pass, adjacent_law_misattribution, validator_path_present_but_never_called, stale_validator_receipt_accepted, red_fixture_fails_for_wrong_reason, swallowed_validator_error, completion_claim_with_only_validator_theater_evidence; valid fixture validator-theater-miswire-resistance.json",
+      "claim_ceiling_impact": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance"
+    },
+    {
+      "id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "obligation": "Value, adoption, continuance, business, mission, and confidence claims must preserve Known, Inferred, Assumed, and Missing evidence hierarchy.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gates 62-88; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+      "package_surface": "mandatory law registry; standards row; foundational trace; schemas; red fixtures; valid fixture; validator receipt; claim ceiling",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt value-adoption-continuance-business-mission-evidence-hierarchy; red fixtures unlabeled_value_claim, invented_baseline, public_research_used_as_product_value_proof, install_success_used_as_adoption, one_time_first_use_used_as_continuance, daily_driver_claim_without_repeat_use, value_bucket_outside_enum, missing_confidence_label, claim_ceiling_not_lowered_when_value_evidence_missing; valid fixture value-adoption-continuance-business-mission-evidence-hierarchy.json",
+      "claim_ceiling_impact": "value_claims_withheld_without_known_inferred_assumed_missing_hierarchy"
+    },
+    {
+      "id": "workflow-template-parsing-rendering-reload",
+      "obligation": "Workflow Template Parsing Rendering Reload",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "workflow_claims_withheld_without_strict_template_receipt"
+    },
+    {
+      "id": "workspace-command-confinement-lifecycle-cleanup",
+      "obligation": "Workspace Command Confinement Lifecycle Cleanup",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "enforcement_disposition": "deterministic",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
+      "claim_ceiling_impact": "workspace_claims_withheld_without_confinement_receipt"
+    },
+    {
+      "id": "worktree-lane-owner-cost-policy",
+      "obligation": "worktree lane-owner model/reasoning cost policy",
+      "source": "templates/agent-standards/03-execplans-worktrees-and-orchestration.md#Worktree And State Isolation; user operating preference",
+      "package_surface": "templates/PLANS.md; templates/LANE_EXECPLAN.md; skills/execplan-lane; skills/orchestrator-reconciler",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered",
+      "missing_validation_fixture_or_receipt": "launcher receipts must assert actual model and reasoning for created worktree threads before lane-owner cost claims",
+      "claim_ceiling_impact": "lane_owner_cost_policy_not_human_review_policy",
+      "judgment_only_review_surface": {
+        "owner": "material-review-team",
+        "scope": "judgment-only interpretation and risk review; not deterministic law closure",
+        "decision_rubric": "review may lower or block claims but cannot raise claim ceiling above deterministic evidence",
+        "disposition_enum": [
+          "judgment_blocks_claim",
+          "judgment_no_extra_block",
+          "converted_to_deterministic_gate"
+        ],
+        "same_candidate_binding_required": true,
+        "deterministic_sibling_law_id": "worktree-lane-owner-cost-policy",
+        "claim_ceiling_effect": "judgment_only_review_cannot_support_full_compliance"
+      }
+    },
+    {
+      "id": "rust-developer-experience-authority",
+      "obligation": "Rust developer experience is a governed product surface; raw Rust tools are observations only and cannot satisfy Harness claims until ultragoal converts them into typed, digest-bound receipts and claim ceilings.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/rust-devx-receipt.schema.json; validation_artifacts/rust/dependency-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/rust/dependency-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "rust_devx_claims_withheld_without_cli_bound_devx_receipts"
+    },
+    {
+      "id": "rust-toolchain-substrate-authority",
+      "obligation": "Rust substrate proof must bind rust-toolchain.toml, Cargo.lock, Cargo metadata, active toolchain, rustc/cargo versions, required components, and tool inventory; stale or missing substrate proof blocks claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/rust-devx-receipt.schema.json; validation_artifacts/rust/toolchain-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/rust/toolchain-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "rust_claims_withheld_without_current_toolchain_substrate_receipt"
+    },
+    {
+      "id": "rust-command-loop-authority",
+      "obligation": "ultragoal rust fast, standard, release, coverage prove, clean-proof, watch, memory prove, dependency audit, and workspace topology loops must be CLI-routed; raw cargo test, watcher/editor state, smoke tests, or focused checks cannot substitute for claim-specific receipts.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/rust-devx-receipt.schema.json; validation_artifacts/rust/standard-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/rust/standard-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "rust_command_loop_claims_withheld_without_cli_loop_receipts"
+    },
+    {
+      "id": "rust-cache-no-cache-honesty",
+      "obligation": "Rust acceleration, target dirs, Cargo homes, sccache, remote caches, global Cargo config, RUSTC_WRAPPER, warm cache timings, and clean-proof loops must be declared in receipts; warm or hidden cache proof cannot support no-cache claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/rust-devx-receipt.schema.json; validation_artifacts/rust/clean-proof-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/rust/clean-proof-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "rust_no_cache_claims_withheld_without_cache_honesty_receipt"
+    },
+    {
+      "id": "rust-memory-resource-discipline",
+      "obligation": "Rust memory/resource proof must enforce ownership/RAII, bounded caches/queues, managed child processes, shutdown proof, leak/tempdir/fd cleanup, and forbid tracing GC as the correctness-critical core memory model.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/rust-devx-receipt.schema.json; validation_artifacts/rust/memory-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/rust/memory-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "rust_runtime_claims_withheld_without_memory_resource_receipt"
+    },
+    {
+      "id": "workspace-artifact-cache-garbage-collection",
+      "obligation": "Workspace/artifact/cache cleanup must be plan, dry-run, apply, and verify with artifact classification, protected set, plan digest, deletion receipt, and post-delete verification; blind deletion or unclassified cleanup cannot support claims.",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-91-rust-developer-experience-runtime-resource-discipline-and-workspace-garbage-collection",
+      "package_surface": "validator/src/audit/rust/developer.rs; validator/src/cli/rust/mod.rs; validator/src/cli/garbage/collection/mod.rs; schemas/workspace-gc-receipt.schema.json; validation_artifacts/gc/verify-receipt.json",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "coverage_status": "covered_for_package_policy",
+      "missing_validation_fixture_or_receipt": "same-law mandatory surface requires schema, standards row, source-obligation row, foundational trace, current CLI receipt validation_artifacts/gc/verify-receipt.json, valid fixture, red/tamper fixtures, package inventory, and claim guard",
+      "claim_ceiling_impact": "workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts"
+    }
+  ]
+}

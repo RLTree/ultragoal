@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/transcript-quality-receipt.schema.json",
+  "title": "Harness Ultragoal Transcript Quality Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "post_stop_batch_transcription",
+    "cleanup_complete",
+    "final_alignment_complete",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.transcript-quality-receipt.v1"
+    },
+    "post_stop_batch_transcription": {
+      "const": "complete"
+    },
+    "cleanup_complete": {
+      "const": true
+    },
+    "final_alignment_complete": {
+      "const": true
+    },
+    "claim_ceiling": {
+      "enum": [
+        "transcript_reuse_supported",
+        "withheld_until_final_transcript_quality_receipt"
+      ]
+    }
+  }
+}

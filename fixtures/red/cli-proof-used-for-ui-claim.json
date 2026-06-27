@@ -1,0 +1,192 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "cli-proof-used-for-ui-claim",
+  "expected_failure": {
+    "check_id": "claim-evidence-coupling",
+    "error": "proof_surface_substitution"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "product_cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "product_cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "product_cohesion",
+        "ui_computer"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/requires_product_cohesion",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence",
+      "value": [
+        {
+          "id": "EV-STATIC-WRONG",
+          "claim_id": "CLAIM-001",
+          "kind": "static_check",
+          "surface": "static",
+          "path": "validation_artifacts/static/cli-output.txt",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        },
+        {
+          "id": "EV-PRODUCT-001",
+          "claim_id": "CLAIM-001",
+          "kind": "product_cohesion_receipt",
+          "surface": "product_cohesion",
+          "path": "validation_artifacts/product-cohesion/journey-receipt.json",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          },
+          "product_cohesion_task": {
+            "primary_journey_id": "primary-ui-route",
+            "ui_evidence_paths": [
+              "validation_artifacts/product-cohesion/ui-proof.png"
+            ],
+            "expected_interruption_rate": "rare",
+            "exhausted_harness_evidence_paths": [
+              "validation_artifacts/product-cohesion/harness-paths.json"
+            ]
+          }
+        },
+        {
+          "id": "EV-UI-001",
+          "claim_id": "CLAIM-001",
+          "kind": "ui_interaction",
+          "surface": "ui_computer",
+          "path": "validation_artifacts/product-cohesion/ui-proof.png",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        },
+        {
+          "id": "EV-HARNESS-001",
+          "claim_id": "CLAIM-001",
+          "kind": "static_check",
+          "surface": "product_cohesion",
+          "path": "validation_artifacts/product-cohesion/harness-paths.json",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        },
+        {
+          "id": "EV-PRODUCT-FITNESS-001",
+          "claim_id": "CLAIM-001",
+          "kind": "product_fitness_receipt",
+          "surface": "product_fitness",
+          "path": "validation_artifacts/harness/product-fitness-receipt.json",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "product claim has product and UI proof, but also attaches static CLI proof as if it proved the UI surface",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/0/surface",
+      "expectation": "proof_surface_substitution"
+    }
+  ]
+}

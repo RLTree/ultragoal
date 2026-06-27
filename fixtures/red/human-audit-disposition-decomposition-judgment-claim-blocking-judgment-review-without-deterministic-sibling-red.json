@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "human-audit-disposition-decomposition-judgment-claim-blocking-judgment-review-without-deterministic-sibling-red",
+  "expected_failure": {
+    "check_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:judgment_review_without_deterministic_sibling"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/judgment_review_without_deterministic_sibling",
+      "value": false
+    }
+  ],
+  "notes": "human-audit-disposition-decomposition-judgment-claim-blocking must fail when judgment_review_without_deterministic_sibling is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/judgment_review_without_deterministic_sibling",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/judgment_review_without_deterministic_sibling",
+      "expectation": "mandatory_law_specific_guard_not_enforced:human-audit-disposition-decomposition-judgment-claim-blocking:judgment_review_without_deterministic_sibling"
+    }
+  ]
+}

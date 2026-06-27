@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "material-review-blocked-stale-missing-anchors",
+  "expected_failure": {
+    "check_id": "material-review-scope-gate",
+    "error": "materiality_anchor_evidence_missing"
+  },
+  "base_fixture_path": "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/anchors_checked",
+      "value": []
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/anchors_checked",
+      "expectation": "materiality_anchor_evidence_missing"
+    }
+  ],
+  "notes": "Material review scope gate red fixture."
+}

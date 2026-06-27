@@ -1,0 +1,59 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-post-merge-artifact-substitution",
+  "expected_failure": {
+    "check_id": "root-verification-phase-coverage",
+    "error": "root_phase_pass_without_successful_receipt"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/artifact_path",
+      "value": "templates/PLANS.md"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/artifact_digest",
+      "value": "sha256:875f3766715707912dc584919a2781a65e1ce8d5ae66e24b97d1fe5903a4e8e7"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/path",
+      "value": "templates/PLANS.md"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/digest",
+      "value": "sha256:875f3766715707912dc584919a2781a65e1ce8d5ae66e24b97d1fe5903a4e8e7"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/1/dependency_release/post_merge_receipt/path",
+      "value": "templates/PLANS.md"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/1/dependency_release/post_merge_receipt/digest",
+      "value": "sha256:875f3766715707912dc584919a2781a65e1ce8d5ae66e24b97d1fe5903a4e8e7"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/path",
+      "expectation": "static artifact cannot substitute typed post-merge receipt"
+    }
+  ],
+  "notes": "Passing post-merge phase proof must point at a typed root-phase receipt, not any digest-matched static file."
+}

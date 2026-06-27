@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-proof-joins-substitution-blocking-product-fitness-alone-without-contract-lineage-red",
+  "expected_failure": {
+    "check_id": "product-proof-joins-substitution-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:product_fitness_alone_without_contract_lineage"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/product_fitness_alone_without_contract_lineage",
+      "value": false
+    }
+  ],
+  "notes": "product-proof-joins-substitution-blocking must fail when product_fitness_alone_without_contract_lineage is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/product_fitness_alone_without_contract_lineage",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/product_fitness_alone_without_contract_lineage",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:product_fitness_alone_without_contract_lineage"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-lineage-amendments-closed-product-claim-ids-product-claim-duplicated-red",
+  "expected_failure": {
+    "check_id": "product-success-lineage-amendments-closed-product-claim-ids",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-lineage-amendments-closed-product-claim-ids:product_claim_duplicated"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-lineage-amendments-closed-product-claim-ids.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/product_claim_duplicated",
+      "value": false
+    }
+  ],
+  "notes": "product-success-lineage-amendments-closed-product-claim-ids must fail when product_claim_duplicated is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/product_claim_duplicated",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/product_claim_duplicated",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-lineage-amendments-closed-product-claim-ids:product_claim_duplicated"
+    }
+  ]
+}

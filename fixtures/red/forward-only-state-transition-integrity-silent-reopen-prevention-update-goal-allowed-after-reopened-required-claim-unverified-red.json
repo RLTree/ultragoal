@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "forward-only-state-transition-integrity-silent-reopen-prevention-update-goal-allowed-after-reopened-required-claim-unverified-red",
+  "expected_failure": {
+    "check_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+    "error": "mandatory_law_specific_guard_not_enforced:forward-only-state-transition-integrity-silent-reopen-prevention:update_goal_allowed_after_reopened_required_claim_unverified"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/update_goal_allowed_after_reopened_required_claim_unverified",
+      "value": false
+    }
+  ],
+  "notes": "forward-only-state-transition-integrity-silent-reopen-prevention must fail when update_goal_allowed_after_reopened_required_claim_unverified is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/update_goal_allowed_after_reopened_required_claim_unverified",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/update_goal_allowed_after_reopened_required_claim_unverified",
+      "expectation": "mandatory_law_specific_guard_not_enforced:forward-only-state-transition-integrity-silent-reopen-prevention:update_goal_allowed_after_reopened_required_claim_unverified"
+    }
+  ]
+}

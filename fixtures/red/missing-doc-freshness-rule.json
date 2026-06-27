@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "missing-doc-freshness-rule",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_required_row_missing:documentation-freshness"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/rows/30"
+    }
+  ],
+  "notes": "Documentation freshness law must stay present in generated standards enforcement rows.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/30/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows",
+      "expectation": "agent_standards_required_row_missing:documentation-freshness"
+    }
+  ]
+}

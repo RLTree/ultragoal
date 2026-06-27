@@ -1,0 +1,48 @@
+{
+  "behavior_failure_modes": [
+    "rust-toolchain-substrate-authority:toolchain_substrate_missing",
+    "rust-toolchain-substrate-authority:toolchain_receipt_stale",
+    "rust-toolchain-substrate-authority:cargo_lock_digest_tamper"
+  ],
+  "claim_ceiling_guard": "rust_claims_withheld_without_current_toolchain_substrate_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
+      "path": "docs/source-obligation-matrix.json"
+    },
+    {
+      "digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
+      "path": "validator/src/audit/rust/developer.rs"
+    },
+    {
+      "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+      "path": "schemas/rust-devx-receipt.schema.json"
+    },
+    {
+      "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+      "path": "validator/src/cli/rust/mod.rs"
+    }
+  ],
+  "foundational_trace_id": "rust-toolchain-substrate-authority",
+  "law_id": "rust-toolchain-substrate-authority",
+  "law_specific": {
+    "cargo_lock_digest_tamper": true,
+    "toolchain_receipt_stale": true,
+    "toolchain_substrate_missing": true
+  },
+  "red_fixture_ids": [
+    "rust-devx-missing-toolchain-substrate-red",
+    "rust-devx-toolchain-receipt-stale-red",
+    "rust-devx-cargo-lock-digest-tamper-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "rust-toolchain-substrate-authority",
+  "standards_row_id": "rust-toolchain-substrate-authority",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
+  "validator_check_id": "rust-toolchain-substrate-authority"
+}

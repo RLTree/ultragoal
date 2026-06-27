@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+test -f AGENTS.md
+test -f AGENT_STANDARDS.md
+test -f ARCHITECTURE.md
+test -f PLANS.md
+test -f .harness/coverage-command
+test -f .harness/coverage-manifest.json
+test -f COVERAGE_RECEIPT.json
+test -f scripts/check-coverage-fast
+test -f scripts/check-coverage-full
+test -f validation_artifacts/harness/fit-repo-receipt.json
+echo "harness-check:coverage-enforcement pass"

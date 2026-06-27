@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "repo-knowledge-index-core-beliefs-claim-impact-recorded-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:repo-knowledge-index-core-beliefs:claim_impact_recorded"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/claim_impact_recorded",
+      "value": false
+    }
+  ],
+  "notes": "repo-knowledge-index-core-beliefs must fail when claim_impact_recorded is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/claim_impact_recorded",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/claim_impact_recorded",
+      "expectation": "mandatory_law_specific_guard_not_enforced:repo-knowledge-index-core-beliefs:claim_impact_recorded"
+    }
+  ]
+}

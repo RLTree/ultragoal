@@ -1,0 +1,2284 @@
+{
+  "$defs": {
+    "artifactRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "attempt": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "attempt_kind": {
+                "enum": [
+                  "command",
+                  "install",
+                  "provision",
+                  "escalation",
+                  "auth_request"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "command"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "attempt_kind": {
+                "enum": [
+                  "external_decision",
+                  "withheld_claim_decision"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "external_receipt"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "action": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "attempt_kind": {
+          "enum": [
+            "command",
+            "install",
+            "provision",
+            "escalation",
+            "auth_request",
+            "external_decision",
+            "withheld_claim_decision"
+          ]
+        },
+        "attempted_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "command": {
+          "$ref": "#/$defs/commandReceipt"
+        },
+        "evidence": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "external_receipt": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "result_summary": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "failed",
+            "blocked",
+            "withheld",
+            "superseded"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "attempt_kind",
+        "action",
+        "status",
+        "attempted_at",
+        "evidence"
+      ],
+      "type": "object"
+    },
+    "backlogClaimStatus": {
+      "enum": [
+        "contract_only",
+        "simulated_only",
+        "lane_owed",
+        "root_owed",
+        "externally_blocked",
+        "withheld_claim",
+        "unsupported"
+      ]
+    },
+    "claimCeilingEntry": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "$ref": "#/$defs/nonProvenClaimStatus"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "effect": {
+                "enum": [
+                  "degraded",
+                  "blocked",
+                  "withheld"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "effect": {
+                "const": "included"
+              }
+            },
+            "required": [
+              "effect"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "$ref": "#/$defs/positiveClaimStatus"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "effect": {
+                "const": "included"
+              }
+            },
+            "required": [
+              "effect"
+            ]
+          },
+          "then": {
+            "properties": {
+              "evidence_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "claim_id": {
+          "$ref": "#/$defs/claimId"
+        },
+        "claim_surface": {
+          "$ref": "#/$defs/claimSurface"
+        },
+        "effect": {
+          "enum": [
+            "included",
+            "degraded",
+            "blocked",
+            "withheld"
+          ]
+        },
+        "evidence_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_manifest_path": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/claimStatus"
+        }
+      },
+      "required": [
+        "claim_id",
+        "status",
+        "claim_surface",
+        "effect",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "claimId": {
+      "pattern": "^CLAIM-[0-9]{3,}$",
+      "type": "string"
+    },
+    "claimKind": {
+      "enum": [
+        "connector_capability",
+        "documentation",
+        "feature_completion",
+        "goal_binding",
+        "integration",
+        "package_release",
+        "performance",
+        "product::cohesion",
+        "product::fitness",
+        "product_cohesion",
+        "process_compliance",
+        "security",
+        "static_contract",
+        "ui_surface"
+      ]
+    },
+    "claimScope": {
+      "enum": [
+        "required",
+        "informational"
+      ]
+    },
+    "claimStatus": {
+      "enum": [
+        "proven_live",
+        "proven_static",
+        "contract_only",
+        "simulated_only",
+        "lane_owed",
+        "root_owed",
+        "externally_blocked",
+        "withheld_claim",
+        "unsupported"
+      ]
+    },
+    "claimSurface": {
+      "enum": [
+        "static",
+        "runtime_cli",
+        "runtime_api",
+        "ui_browser",
+        "ui_computer",
+        "package",
+        "installed_app",
+        "root_integration",
+        "observability",
+        "product::cohesion",
+        "product::fitness",
+        "product_cohesion",
+        "product_fitness",
+        "external"
+      ]
+    },
+    "cleanupReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "removed",
+            "archived",
+            "preserved_with_reason",
+            "verified_absent"
+          ]
+        },
+        "checked_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "post_clean_audit": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "receipt": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "target": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "target_kind": {
+          "enum": [
+            "worktree",
+            "branch",
+            "thread_session",
+            "automation",
+            "cache",
+            "scratch",
+            "state_root"
+          ]
+        }
+      },
+      "required": [
+        "target_kind",
+        "target",
+        "action",
+        "receipt",
+        "post_clean_audit",
+        "checked_at"
+      ],
+      "type": "object"
+    },
+    "commandReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_path": {
+          "type": "string"
+        },
+        "command": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "completed_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "cwd": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "exit": {
+          "type": "integer"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "started_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "stderr": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "stdout": {
+          "$ref": "#/$defs/artifactRef"
+        }
+      },
+      "required": [
+        "id",
+        "command",
+        "cwd",
+        "exit",
+        "started_at",
+        "completed_at"
+      ],
+      "type": "object"
+    },
+    "evidence": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "live_beneficial_e2e"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "live_beneficial_task"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "product_cohesion_receipt"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "product_cohesion_task"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "claim_id": {
+          "$ref": "#/$defs/claimId"
+        },
+        "commit": {
+          "minLength": 7,
+          "type": "string"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "freshness": {
+          "additionalProperties": false,
+          "properties": {
+            "checked_at": {
+              "$ref": "#/$defs/isoTimestamp"
+            },
+            "current_commit": {
+              "minLength": 7,
+              "type": "string"
+            },
+            "evidence_commit": {
+              "minLength": 7,
+              "type": "string"
+            },
+            "policy": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "stale_reason": {
+              "type": "string"
+            },
+            "verdict": {
+              "enum": [
+                "current",
+                "stale",
+                "invalidated"
+              ]
+            }
+          },
+          "required": [
+            "verdict",
+            "current_commit",
+            "evidence_commit",
+            "policy",
+            "checked_at"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/evidenceKind"
+        },
+        "live_beneficial_task": {
+          "additionalProperties": false,
+          "description": "Describes the live beneficial task. Non-fixture status is derived by the semantic validator from command receipts, real input path, output artifact, and inspection evidence; it is not author-attested.",
+          "properties": {
+            "acceptance_criteria": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "description": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "output_artifact_path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "quality_inspection_result": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "real_input_path": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "description",
+            "real_input_path",
+            "output_artifact_path",
+            "acceptance_criteria",
+            "quality_inspection_result"
+          ],
+          "type": "object"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "produced_by_command_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "product_cohesion_task": {
+          "additionalProperties": false,
+          "description": "Joins a product-facing claim to a canonical product-cohesion receipt, UI evidence, and harness-exhaustion evidence. Product promise and journey details belong in the receipt artifact.",
+          "properties": {
+            "exhausted_harness_evidence_paths": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "expected_interruption_rate": {
+              "enum": [
+                "rare",
+                "occasional",
+                "frequent",
+                "unknown"
+              ]
+            },
+            "human_review_queue_exception": {
+              "additionalProperties": false,
+              "properties": {
+                "evidence_path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reason",
+                "evidence_path"
+              ],
+              "type": "object"
+            },
+            "primary_journey_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "ui_evidence_paths": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "primary_journey_id",
+            "ui_evidence_paths",
+            "expected_interruption_rate",
+            "exhausted_harness_evidence_paths"
+          ],
+          "type": "object"
+        },
+        "surface": {
+          "$ref": "#/$defs/claimSurface"
+        },
+        "workspace": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "claim_id",
+        "kind",
+        "surface",
+        "path",
+        "digest",
+        "produced_by_command_id",
+        "commit",
+        "workspace",
+        "observed_at",
+        "freshness"
+      ],
+      "type": "object"
+    },
+    "evidenceKind": {
+      "enum": [
+        "static_check",
+        "runtime_execution",
+        "live_beneficial_e2e",
+        "ui_interaction",
+        "package_install",
+        "external_attestation",
+        "promotion_receipt",
+        "dogfood_receipt",
+        "negative_probe",
+        "red_fixture",
+        "observability_receipt",
+        "product_cohesion_receipt",
+        "product::fitness::receipt",
+        "product_fitness_receipt",
+        "coverage_receipt"
+      ]
+    },
+    "generatedArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_type": {
+          "enum": [
+            "automation_tick_receipt",
+            "cleanup_receipt",
+            "completion_manifest",
+            "lane_registry",
+            "package_zip",
+            "plugin_manifest",
+            "plugin_scout_inventory",
+            "ready_for_merge",
+            "red_fixture_report",
+            "report",
+            "source_cards",
+            "target_repo_receipt",
+            "validator_receipt",
+            "verification_backlog"
+          ]
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generated_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "input_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "validator_run_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_type",
+        "path",
+        "digest",
+        "validator_run_id",
+        "input_digest",
+        "generated_at"
+      ],
+      "type": "object"
+    },
+    "goalToolProbeReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "attempted_tools": {
+          "items": {
+            "enum": [
+              "get_goal",
+              "create_goal",
+              "update_goal",
+              "automation_update",
+              "create_thread"
+            ]
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "checked_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "output": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "tool_surface": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "available",
+            "unavailable",
+            "blocked"
+          ]
+        },
+        "workspace": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_surface",
+        "attempted_tools",
+        "verdict",
+        "actor_id",
+        "workspace",
+        "output",
+        "checked_at"
+      ],
+      "type": "object"
+    },
+    "goalToolReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "observed_contract_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_goal_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_objective": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_status": {
+          "enum": [
+            "active",
+            "bound",
+            "in_progress",
+            "complete",
+            "completed",
+            "cancelled",
+            "blocked"
+          ]
+        },
+        "output_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "thread_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "tool_name": {
+          "enum": [
+            "get_goal",
+            "create_goal",
+            "update_goal"
+          ]
+        },
+        "workspace": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_name",
+        "thread_id",
+        "workspace",
+        "observed_goal_id",
+        "observed_status",
+        "observed_objective",
+        "observed_contract_path",
+        "output_digest",
+        "observed_at"
+      ],
+      "type": "object"
+    },
+    "isoTimestamp": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "laneId": {
+      "pattern": "^LANE-[0-9]{3,}$",
+      "type": "string"
+    },
+    "nonProvenClaimStatus": {
+      "enum": [
+        "contract_only",
+        "simulated_only",
+        "lane_owed",
+        "root_owed",
+        "externally_blocked",
+        "withheld_claim",
+        "unsupported"
+      ]
+    },
+    "positiveClaimStatus": {
+      "enum": [
+        "proven_live",
+        "proven_static"
+      ]
+    },
+    "requiredRedFixtureId": {
+      "enum": [
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-detached-reminder-substituted-for-heartbeat-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-first-wave-launch-receipt-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-thread-id-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-multi-lane-setup-complete-without-transition-receipt-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-source-obligation-parity-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-stale-lane-thread-red",
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat-wakeup-that-emits-prose-only-status-red",
+        "actor-validation-older-than-heartbeat",
+        "adversarial-packet-tampering-forged-proof-rejection-altered-claim-ceiling-red",
+        "adversarial-packet-tampering-forged-proof-rejection-final-packet-claim-injected-after-validation-red",
+        "adversarial-packet-tampering-forged-proof-rejection-forged-validator-receipt-red",
+        "adversarial-packet-tampering-forged-proof-rejection-private-proof-path-inserted-red",
+        "adversarial-packet-tampering-forged-proof-rejection-product-success-contract-removed-red",
+        "adversarial-packet-tampering-forged-proof-rejection-reviewer-disposition-flip-red",
+        "adversarial-packet-tampering-forged-proof-rejection-stale-active-registry-proof-red",
+        "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red",
+        "adversarial-packet-tampering-forged-proof-rejection-wrong-cache-path-red",
+        "adversarial-packet-tampering-forged-proof-rejection-wrong-installed-path-red",
+        "agent-authored-source-tooling-docs-provenance-docs-only-compliance-claim-without-command-evidence-red",
+        "agent-authored-source-tooling-docs-provenance-generated-artifact-modified-after-validation-red",
+        "agent-authored-source-tooling-docs-provenance-hand-edited-validator-without-provenance-red",
+        "agent-authored-source-tooling-docs-provenance-review-response-without-source-finding-binding-red",
+        "agent-authored-source-tooling-docs-provenance-source-obligation-parity-red",
+        "agent-authored-source-tooling-docs-provenance-stale-changed-file-digest-red",
+        "agent-authored-source-tooling-docs-provenance-untracked-claim-source-red",
+        "agent-queryable-observability-metric-without-query-provenance-red",
+        "agent-queryable-observability-missing-correlation-id-red",
+        "agent-queryable-observability-raw-log-dump-red",
+        "agent-queryable-observability-screenshot-without-runtime-identity-red",
+        "agent-queryable-observability-source-obligation-parity-red",
+        "agent-queryable-observability-trace-without-claim-binding-red",
+        "agent-queryable-observability-unbounded-query-red",
+        "agent-queryable-observability-unredacted-sensitive-event-red",
+        "agent-remediating-validator-failures-affected-surface-present-red",
+        "agent-remediating-validator-failures-claim-impact-present-red",
+        "agent-remediating-validator-failures-expected-evidence-present-red",
+        "agent-remediating-validator-failures-failure-reason-typed-red",
+        "agent-remediating-validator-failures-law-id-present-red",
+        "agent-remediating-validator-failures-repair-class-present-red",
+        "agent-remediating-validator-failures-source-obligation-parity-red",
+        "agent-remediating-validator-failures-source-obligation-present-red",
+        "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
+        "agent-session-telemetry-token-rate-limit-model-mismatch-between-toml-and-receipt-red",
+        "agent-session-telemetry-token-rate-limit-private-transcript-payload-embedded-in-public-packet-red",
+        "agent-session-telemetry-token-rate-limit-rate-limit-hit-but-claim-remains-green-red",
+        "agent-session-telemetry-token-rate-limit-reviewer-output-without-session-id-red",
+        "agent-session-telemetry-token-rate-limit-source-obligation-parity-red",
+        "agent-session-telemetry-token-rate-limit-stale-live-session-timestamp-red",
+        "agent-standards-backlogged-row",
+        "agent-standards-blocked-row",
+        "agent-standards-mechanized-empty-gate",
+        "agent-standards-missing-namespace-row",
+        "agent-standards-pass-row-zero-evidence-digest",
+        "agent-standards-unclassified-row",
+        "architecture-dependency-topology-allowed-edges-red",
+        "architecture-dependency-topology-circular-dependency-detection-red",
+        "architecture-dependency-topology-deep-import-detection-red",
+        "architecture-dependency-topology-exception-contract-required-red",
+        "architecture-dependency-topology-forbidden-edges-red",
+        "architecture-dependency-topology-layer-map-red",
+        "architecture-dependency-topology-shared-common-escape-detection-red",
+        "architecture-dependency-topology-source-obligation-parity-red",
+        "architecture-dependency-topology-stale-registry-detection-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-catch-all-authority-map-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-final-packet-generated-from-freeform-authority-text-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-missing-review-disposition-variant-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-nullable-law-status-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-unhandled-schema-enum-after-version-bump-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-claim-ceiling-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-target-mode-red",
+        "authority-source-binding-source-obligation-parity-red",
+        "automation-active-unresolved-placeholders",
+        "automation-generic-keep-working-reminder",
+        "automation-missing-evidence-cursors",
+        "automation-missing-goal-id",
+        "automation-missing-lifecycle-transition",
+        "automation-missing-output-contract",
+        "automation-missing-repo-root",
+        "automation-missing-required-skills",
+        "automation-missing-required-tools",
+        "automation-missing-thread-id",
+        "automation-mutation-without-authority",
+        "autonomy-loop-proof-after-same-surface-validation-red",
+        "autonomy-loop-proof-before-artifact-red",
+        "autonomy-loop-proof-build-test-status-red",
+        "autonomy-loop-proof-current-state-validation-red",
+        "autonomy-loop-proof-implemented-repair-red",
+        "autonomy-loop-proof-reproduced-failure-red",
+        "autonomy-loop-proof-source-obligation-parity-red",
+        "backlog-row-claim-mismatch",
+        "batch-fanout-custom-agent-job-worker-result-discipline-built-in-custom-agent-name-collision-without-precedence-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-malformed-custom-agent-toml-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-missing-output-schema-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-output-csv-missing-job-metadata-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-placeholder-references-unknown-csv-column-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-source-obligation-parity-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-timeout-ignored-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-unbounded-concurrency-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-worker-exits-without-result-red",
+        "batch-fanout-custom-agent-job-worker-result-discipline-worker-reports-twice-red",
+        "behavior-example-coverage-coverage-anti-gaming-blanket-exclusion-red",
+        "behavior-example-coverage-coverage-anti-gaming-changed-line-without-behavior-example-red",
+        "behavior-example-coverage-coverage-anti-gaming-generated-code-false-label-red",
+        "behavior-example-coverage-coverage-anti-gaming-source-obligation-parity-red",
+        "behavior-example-coverage-coverage-anti-gaming-test-only-branch-red",
+        "behavior-example-coverage-coverage-anti-gaming-trivial-hit-only-test-red",
+        "behavior-example-coverage-coverage-anti-gaming-unasserted-coverage-red",
+        "behavior-example-coverage-coverage-anti-gaming-unreachable-code-retained-red",
+        "blocked-lane-artifact-root-overlap",
+        "blocked-lane-branch-overlap",
+        "blocked-lane-browser-profile-root-overlap",
+        "blocked-lane-port-overlap",
+        "blocked-lane-scratch-root-overlap",
+        "blocked-lane-state-root-overlap",
+        "blocked-lane-tool-cache-root-overlap",
+        "blocked-lane-workspace-overlap",
+        "blocker-without-attempt",
+        "capability-gap-extraction-harness-capability-promotion-claim-supported-non-goal-capability-gap-red",
+        "capability-gap-extraction-harness-capability-promotion-missing-adapter-but-generic-support-claim-emitted-red",
+        "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
+        "capability-gap-extraction-harness-capability-promotion-missing-context-fixed-by-prose-only-red",
+        "capability-gap-extraction-harness-capability-promotion-missing-runtime-legibility-while-live-surface-claim-stays-green-red",
+        "capability-gap-extraction-harness-capability-promotion-permission-app-capability-unavailable-but-reviewer-ready-claim-emitted-red",
+        "capability-gap-extraction-harness-capability-promotion-repeated-tool-gap-with-no-promotion-red",
+        "capability-gap-extraction-harness-capability-promotion-stale-unowned-capability-gap-red",
+        "capability-gap-extraction-harness-capability-promotion-user-handback-treated-as-repair-red",
+        "clean-checkout-command-discovery-source-obligation-parity-red",
+        "clean-checkout-local-state-dependency",
+        "clean-checkout-missing-installed-command",
+        "clean-checkout-missing-root-check",
+        "clean-checkout-non-runnable-command",
+        "clean-checkout-prose-only-command",
+        "clean-checkout-source-install-cache-drift",
+        "clean-room-rebuild-author-memory-independence-clean-room-receipt-omitted-from-final-packet-red",
+        "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
+        "clean-room-rebuild-author-memory-independence-generated-artifact-not-reproducible-red",
+        "clean-room-rebuild-author-memory-independence-hidden-cache-dependency-red",
+        "clean-room-rebuild-author-memory-independence-private-path-dependency-red",
+        "clean-room-rebuild-author-memory-independence-source-only-rebuild-used-for-installed-cache-proof-red",
+        "clean-room-rebuild-author-memory-independence-stale-artifact-surviving-rebuild-red",
+        "cli-control-plane-authority-checklist-completion-without-cli-red",
+        "cli-control-plane-authority-reviewer-agreement-bypass-red",
+        "cli-control-plane-authority-source-audit-substituted-for-update-goal-red",
+        "cli-performance-cached-proof-substituted-for-no-cache-red",
+        "cli-performance-final-packet-omits-status-red",
+        "cli-performance-focused-substituted-for-final-red",
+        "cli-performance-hidden-cache-pass-red",
+        "cli-performance-missing-budget-red",
+        "cli-performance-missing-cache-key-telemetry-red",
+        "cli-performance-missing-external-call-telemetry-red",
+        "cli-performance-missing-fixture-count-telemetry-red",
+        "cli-performance-missing-input-size-telemetry-red",
+        "cli-performance-missing-live-probe-backoff-red",
+        "cli-performance-missing-receipt-red",
+        "cli-performance-missing-regression-baseline-red",
+        "cli-performance-missing-timeout-red",
+        "cli-performance-network-call-in-local-only-red",
+        "cli-performance-over-budget-without-claim-blocking-red",
+        "cli-performance-prose-only-budget-red",
+        "cli-performance-serial-global-lock-red",
+        "cli-performance-stale-receipt-red",
+        "cli-performance-unbounded-concurrency-red",
+        "cli-performance-wrong-candidate-receipt-red",
+        "cli-performance-wrong-cli-binary-receipt-red",
+        "cli-performance-wrong-schema-law-fixture-digest-red",
+        "cli-proof-used-for-ui-claim",
+        "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
+        "cli-self-law-compliance-cli-source-excluded-from-coverage-red",
+        "cli-self-law-compliance-update-goal-without-self-law-red",
+        "compact-agents-routed-standards-source-obligation-parity-red",
+        "completion-ci-pass-without-coverage",
+        "completion-fixture-test-without-coverage",
+        "completion-generated-example-without-coverage",
+        "completion-mock-proof-without-coverage",
+        "completion-reviewer-signoff-without-coverage",
+        "completion-smoke-test-without-coverage",
+        "conditional-observability-proof-source-obligation-parity-red",
+        "config-precedence-defaults-env-indirection-app-config-claim-inferred-from-repo-config-red",
+        "config-precedence-defaults-env-indirection-cache-config-diverging-from-source-red",
+        "config-precedence-defaults-env-indirection-cli-arg-changing-candidate-id-without-receipt-binding-red",
+        "config-precedence-defaults-env-indirection-default-overriding-repo-policy-red",
+        "config-precedence-defaults-env-indirection-env-var-typo-treated-as-empty-string-red",
+        "config-precedence-defaults-env-indirection-secret-leaked-in-receipt-red",
+        "config-precedence-defaults-env-indirection-source-obligation-parity-red",
+        "config-precedence-defaults-env-indirection-unknown-config-accepted-red",
+        "connector-capability-discovery-cache-source-substituted-for-app-connector-red",
+        "connector-capability-discovery-claim-not-linked-to-current-candidate-claim-id-red",
+        "connector-capability-discovery-claim-without-discovery-red",
+        "connector-capability-discovery-disabled-connector-red",
+        "connector-capability-discovery-fallback-emitted-as-supported-red",
+        "connector-capability-discovery-local-docs-used-as-live-connector-proof-red",
+        "connector-capability-discovery-missing-auth-boundary-red",
+        "connector-capability-discovery-source-obligation-parity-red",
+        "connector-capability-discovery-stale-discovery-red",
+        "connector-capability-discovery-wrong-account-workspace-red",
+        "connector-claim-without-discovery-receipt",
+        "coverage-100-claim-with-uncovered-code",
+        "coverage-exclusion-counted-covered",
+        "coverage-exclusion-missing-rationale",
+        "coverage-exclusion-unreviewed",
+        "coverage-forged-changed-files-digest",
+        "coverage-forged-source-tree-digest",
+        "coverage-malformed-receipt",
+        "coverage-manifest-changed-file-nonexistent",
+        "coverage-manifest-changed-file-path-escape",
+        "coverage-manifest-missing-changed-files",
+        "coverage-missing-measured-dimensions",
+        "coverage-missing-target-paths",
+        "coverage-ratchet-missing-debt",
+        "coverage-ratchet-missing-owner",
+        "coverage-ready-changed-file-not-measured",
+        "coverage-repo-owned-external-exclusion",
+        "coverage-repo-owned-generated-exclusion",
+        "coverage-repo-owned-vendor-exclusion",
+        "coverage-required-dimension-omitted",
+        "coverage-scope-missing-template-target",
+        "coverage-scope-missing-ui-state-dimension",
+        "coverage-scope-repo-walk-disabled",
+        "coverage-stale-receipt",
+        "coverage-wrong-claim-id",
+        "cross-artifact-consistency-solver-authority-graph-closure-child-law-hidden-under-umbrella-parent-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-duplicate-law-authority-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-missing-receipt-edge-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-orphan-claim-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-orphan-green-fixture-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-orphan-red-fixture-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-packet-claim-outside-graph-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-private-local-graph-edge-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-source-install-cache-graph-mismatch-red",
+        "cross-artifact-consistency-solver-authority-graph-closure-stale-graph-digest-red",
+        "current-product-discovery-audit-quality-in-use-evidence-accessibility-compliance-from-screenshots-alone-red",
+        "current-product-discovery-audit-quality-in-use-evidence-memory-summary-used-as-current-product-proof-red",
+        "current-product-discovery-audit-quality-in-use-evidence-old-packet-used-as-live-product-proof-red",
+        "current-product-discovery-audit-quality-in-use-evidence-product-audit-without-flow-id-red",
+        "current-product-discovery-audit-quality-in-use-evidence-product-fitness-passed-with-no-current-discovery-evidence-red",
+        "current-product-discovery-audit-quality-in-use-evidence-recommendation-with-no-claim-id-red",
+        "current-product-discovery-audit-quality-in-use-evidence-research-brief-without-observed-inferred-split-red",
+        "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red",
+        "custom-agent-app-visible-name-missing",
+        "custom-agent-name-mismatch",
+        "derived-authority-recomputation-named-authority-fallback-refusal-app-registry-claim-backed-by-cache-fallback-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-copied-archive-anchors-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-fallback-boundary-missing-claim-withholding-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-installed-plugin-claim-backed-by-source-fallback-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-moving-value-digest-mismatch-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-source-card-currentness-inferred-from-old-digest-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-source-obligation-parity-red",
+        "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
+        "derived-authority-recomputation-source-obligation-parity-red",
+        "dirty-self-reported-clean",
+        "disguised-tiny-lane",
+        "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+        "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
+        "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
+        "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
+        "distribution-sharing-surface-claim-separation-personal-marketplace-used-as-public-directory-red",
+        "distribution-sharing-surface-claim-separation-source-obligation-parity-red",
+        "distribution-sharing-surface-claim-separation-stale-share-link-red",
+        "distribution-sharing-surface-claim-separation-teammate-access-claim-without-same-surface-receipt-red",
+        "dogfood-missing-root-closure-receipt",
+        "dogfood-one-lane-receipt",
+        "dogfood-shared-workspace-receipt",
+        "dogfood-stale-cleanup-receipt",
+        "downstream-dependency-abandoned-upstream-lane",
+        "downstream-dependency-claim-not-owned",
+        "downstream-dependency-mismatched-ready-receipt",
+        "downstream-dependency-missing-upstream-lane",
+        "downstream-dependency-post-merge-artifact-substitution",
+        "downstream-dependency-post-merge-gate-not-passed",
+        "downstream-dependency-post-merge-receipt-stale",
+        "downstream-dependency-ready-authority-digest-mismatch",
+        "downstream-dependency-ready-authority-missing",
+        "downstream-dependency-ready-authority-not-ready",
+        "downstream-dependency-ready-authority-stale-commit",
+        "downstream-dependency-ready-authority-wrong-lane",
+        "downstream-dependency-ready-only-before-root-verification",
+        "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch",
+        "downstream-dependency-ready-receipt-generated-artifact-missing",
+        "downstream-dependency-ready-receipt-validator-run-mismatch",
+        "downstream-dependency-reblock-without-proof",
+        "downstream-dependency-superseded-upstream-lane",
+        "downstream-dependency-unreleased-after-upstream-merge",
+        "downstream-dependency-validated-before-ready-receipt",
+        "downstream-dependency-zero-ready-receipt",
+        "downstream-launched-on-unverified-claim",
+        "duplicate-check-rows",
+        "duplicate-completion-claim-id",
+        "duplicate-or-missing-root-phase",
+        "duplicate-ready-for-merge-receipt-lane-id",
+        "duplicate-red-fixture-rows",
+        "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
+        "execplan-no-handback-prototype-promotion-discard-fresh-agent-restartable-red",
+        "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
+        "execplan-no-handback-prototype-promotion-discard-prototype-discard-criteria-red",
+        "execplan-no-handback-prototype-promotion-discard-prototype-promotion-criteria-red",
+        "execplan-no-handback-prototype-promotion-discard-source-obligation-parity-red",
+        "execplan-no-handback-prototype-promotion-discard-stopping-point-sections-current-red",
+        "execplan-plain-language-expected-output-interface-completeness-artifact-evidence-red",
+        "execplan-plain-language-expected-output-interface-completeness-commands-expected-outputs-red",
+        "execplan-plain-language-expected-output-interface-completeness-inputs-outputs-dependencies-red",
+        "execplan-plain-language-expected-output-interface-completeness-interfaces-recorded-red",
+        "execplan-plain-language-expected-output-interface-completeness-no-author-memory-dependency-red",
+        "execplan-plain-language-expected-output-interface-completeness-recovery-path-red",
+        "execplan-plain-language-expected-output-interface-completeness-source-obligation-parity-red",
+        "execplan-plain-language-expected-output-interface-completeness-terms-defined-red",
+        "fabricated-validator-receipt",
+        "failure-remediation-quality-agent-actionable-output-failure-message-leaking-private-data-red",
+        "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
+        "failure-remediation-quality-agent-actionable-output-missing-artifact-path-red",
+        "failure-remediation-quality-agent-actionable-output-missing-claim-impact-red",
+        "failure-remediation-quality-agent-actionable-output-missing-expected-observed-values-red",
+        "failure-remediation-quality-agent-actionable-output-missing-law-id-red",
+        "failure-remediation-quality-agent-actionable-output-missing-rerun-command-red",
+        "failure-remediation-quality-agent-actionable-output-swallowed-io-schema-error-red",
+        "failure-remediation-quality-agent-actionable-output-wrong-repair-class-red",
+        "fake-generic-blocker-attempt",
+        "fake-not-run-receipt",
+        "feedback-to-rule-promotion-failure-class-red",
+        "feedback-to-rule-promotion-implemented-enforcement-red",
+        "feedback-to-rule-promotion-no-backlog-terminal-disposition-red",
+        "feedback-to-rule-promotion-no-deferred-terminal-disposition-red",
+        "feedback-to-rule-promotion-red-fixture-binding-red",
+        "feedback-to-rule-promotion-source-obligation-parity-red",
+        "feedback-to-rule-promotion-source-session-id-red",
+        "final-gate-with-complete-unmerged-lane",
+        "final-gate-with-nonterminal-lane",
+        "final-without-post-merge-receipt",
+        "fit-repo-command-output-substituted-doc",
+        "fit-repo-fake-receipt-digest",
+        "fit-repo-installed-surface-missing",
+        "fit-repo-placeholder-package-digest",
+        "fit-repo-template-wrong-plugin-version",
+        "fit-repo-wrong-cache-package",
+        "fit-repo-wrong-plugin-version",
+        "fixture-bundle-missing-description",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-approval-reentering-needs-review-without-reopen-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-automation-tick-resets-lane-state-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-final-packet-changes-blocked-to-fixed-by-prose-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-package-install-receipt-advances-stale-state-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-reopened-gate-still-green-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-reviewer-signoff-reused-after-reopen-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-status-string-says-verified-but-transition-missing-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-actor-evidence-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-previous-hash-red",
+        "forward-only-state-transition-integrity-silent-reopen-prevention-update-goal-allowed-after-reopened-required-claim-unverified-red",
+        "foundational-law-trace-missing-red-fixture",
+        "foundational-law-trace-missing-row",
+        "fresh-init-retrofit-mode-separation-cache-audit-used-as-target-repo-setup-proof-red",
+        "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
+        "fresh-init-retrofit-mode-separation-idempotency-claim-without-second-run-red",
+        "fresh-init-retrofit-mode-separation-mode-omitted-from-receipt-red",
+        "fresh-init-retrofit-mode-separation-retrofit-writes-outside-allowed-paths-red",
+        "fresh-init-retrofit-mode-separation-rollback-claim-with-no-restored-digest-red",
+        "fresh-init-retrofit-mode-separation-source-obligation-parity-red",
+        "fresh-retrofit-repo-shape-source-obligation-parity-red",
+        "future-actor-validation",
+        "generated-proof-artifact-provenance-anti-fabrication-copied-package-proof-red",
+        "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
+        "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+        "generated-proof-artifact-provenance-anti-fabrication-missing-generator-command-red",
+        "generated-proof-artifact-provenance-anti-fabrication-missing-input-digest-red",
+        "generated-proof-artifact-provenance-anti-fabrication-source-obligation-parity-red",
+        "generated-proof-artifact-provenance-anti-fabrication-stale-output-digest-red",
+        "generated-proof-artifact-provenance-anti-fabrication-wrong-candidate-version-red",
+        "generated-proof-artifact-provenance-anti-fabrication-wrong-cwd-red",
+        "generated-ready-completion-receipts-source-obligation-parity-red",
+        "goal-bound-claim-with-unavailable-goal",
+        "goal-contract-amendment-authority-required-claim-id-mapping-amendment-log-rewritten-instead-of-appended-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-broad-umbrella-claim-id-hiding-child-gates-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-checklist-gate-absent-from-required-claim-ids-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-duplicate-required-claim-id-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-final-packet-claim-absent-from-completion-manifest-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-markdown-prompt-treated-as-authority-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-requirement-removal-without-claim-blocking-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-scope-changing-clarification-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-stale-contract-bundle-hash-after-law-addition-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-stale-required-claim-id-hash-red",
+        "goal-contract-amendment-authority-required-claim-id-mapping-weakening-amendment-without-approval-red",
+        "goal-tools-unavailable-without-probe",
+        "green-path-adequacy-satisfiable-strictness-full-compliance-claim-while-any-mandatory-law-lacks-realistic-green-path-red",
+        "green-path-adequacy-satisfiable-strictness-green-fixture-accepted-despite-stale-digest-red",
+        "green-path-adequacy-satisfiable-strictness-green-fixture-missing-claim-ceiling-projection-red",
+        "green-path-adequacy-satisfiable-strictness-green-fixture-missing-package-inclusion-red",
+        "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
+        "green-path-adequacy-satisfiable-strictness-law-with-only-toy-green-fixture-red",
+        "guardrail-speed-isolation-cache-honesty-bounded-input-scope-red",
+        "guardrail-speed-isolation-cache-honesty-cache-key-invalidation-red",
+        "guardrail-speed-isolation-cache-honesty-deterministic-sampling-red",
+        "guardrail-speed-isolation-cache-honesty-no-fast-check-substitution-red",
+        "guardrail-speed-isolation-cache-honesty-no-stale-cache-final-proof-red",
+        "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
+        "guardrail-speed-isolation-cache-honesty-source-obligation-parity-red",
+        "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
+        "hand-written-ready-receipt",
+        "hidden-withheld-claim",
+        "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
+        "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red",
+        "historical-regression-corpus-session-review-signals-historical-namespace-repeat-offender-without-fixture-red",
+        "historical-regression-corpus-session-review-signals-reviewer-repeat-finding-closed-by-prose-red",
+        "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red",
+        "historical-regression-corpus-session-review-signals-side-thread-requirement-not-amended-red",
+        "historical-regression-corpus-session-review-signals-stale-receipt-repeat-offender-without-fixture-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-full-compliance-claim-with-judgment-only-residue-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-human-audit-closing-mandatory-law-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-judgment-review-without-deterministic-sibling-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-reviewer-signoff-used-as-validator-proof-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-semantic-review-raising-claim-ceiling-without-evidence-red",
+        "human-audit-disposition-decomposition-judgment-claim-blocking-source-obligation-row-with-deterministic-with-human-audit-red",
+        "install-addon-active-bare",
+        "install-addon-selectable-tools-menu",
+        "install-app-installed-runtime-only",
+        "install-button-works-runtime-only",
+        "install-extension-activated-codex",
+        "install-extension-loaded-bare",
+        "install-extension-present-codex-reload",
+        "install-extension-registered-codex-chosen",
+        "install-harness-ultragoal-active-bare",
+        "install-harness-ultragoal-appears-codex",
+        "install-harness-ultragoal-enabled-codex",
+        "install-harness-ultragoal-loaded-bare",
+        "install-harness-ultragoal-running-codex",
+        "install-plugin-activated-codex",
+        "install-plugin-active-codex",
+        "install-plugin-enabled-codex",
+        "install-plugin-loaded-codex",
+        "install-plugin-running-codex",
+        "install-ultragoal-running-bare",
+        "install-visibility-package-install-substitution",
+        "install-visibility-ui-kind-runtime-surface-mismatch",
+        "instruction-precedence-nested-agents-routing-conflict-blocks-claims-red",
+        "instruction-precedence-nested-agents-routing-custom-agent-cannot-weaken-law-red",
+        "instruction-precedence-nested-agents-routing-duplicate-law-owner-red",
+        "instruction-precedence-nested-agents-routing-root-and-nested-agents-route-red",
+        "instruction-precedence-nested-agents-routing-source-obligation-parity-red",
+        "instruction-precedence-nested-agents-routing-stale-route-rejected-red",
+        "instruction-precedence-nested-agents-routing-strictest-law-wins-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-blocked-row-counted-as-supported-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-non-goal-without-rationale-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-source-obligation-parity-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-stale-review-issue-marked-fixed-without-candidate-digest-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-state-case-collision-red",
+        "issue-tracker-lifecycle-eligibility-terminal-state-update-goal-allowed-while-accepted-issue-unverified-red",
+        "lane-artifact-root-dot-segment",
+        "lane-browser-profile-root-dot-segment",
+        "lane-owned-path-dot-segment",
+        "lane-scratch-root-dot-segment",
+        "lane-state-root-dot-segment",
+        "lane-tool-cache-root-dot-segment",
+        "lane-workspace-dot-segment",
+        "lane-worktree-isolation-cleanup-source-obligation-parity-red",
+        "live-beneficial-e2e-source-obligation-parity-red",
+        "live-claim-zero-digest",
+        "lower-coverage-presented-complete",
+        "malformed-actor-validation-range-timestamp",
+        "malformed-actor-validation-timestamp",
+        "malformed-lane-heartbeat-range-timestamp",
+        "malformed-lane-heartbeat-timestamp",
+        "material-review-advisory-cannot-material-signoff",
+        "material-review-blocked-launches-no-reviewers",
+        "material-review-blocked-missing-reviewer-registry-model-evidence",
+        "material-review-blocked-private-artifact-package-hygiene",
+        "material-review-blocked-stale-missing-anchors",
+        "material-review-blocked-structural-only-readiness-proof",
+        "material-review-delta-cannot-material-signoff",
+        "material-review-full-scope-anchor-receipt-model-registry-persona-change",
+        "material-review-full-scope-code-runtime-change",
+        "material-review-full-scope-prior-revise-blocked-repair",
+        "material-review-full-scope-security-package-runtime-surface-change",
+        "memory-context-live-evidence-digest-mismatch",
+        "memory-context-memory-only-substitution",
+        "memory-context-not-context-only",
+        "memory-context-summary-only-substitution",
+        "memory-wiki-context-only-source-obligation-parity-red",
+        "merge-base-behind-target",
+        "missing-check-agent-standards-entrypoint",
+        "missing-doc-freshness-rule",
+        "missing-evidence-digest",
+        "missing-standards-enforcement-surfaces",
+        "moving-value-drift-stable-text",
+        "namespace-excessive-depth-path",
+        "namespace-external-compatibility-authority-missing",
+        "namespace-generated-class-authority-missing",
+        "namespace-generic-services-path",
+        "namespace-junk-drawer-path",
+        "namespace-law-present-only-as-prose",
+        "namespace-mixed-domain-folder",
+        "namespace-orphan-repo-file",
+        "namespace-progressive-disclosure-source-obligation-parity-red",
+        "namespace-repeated-prefix-without-subdirectory",
+        "namespace-root-clutter-without-route",
+        "namespace-vague-common-domain-path",
+        "namespace-vague-lib-domain-path",
+        "namespace-vague-shared-domain-path",
+        "namespace-validator-source-class-waiver-manifest-contract-red",
+        "namespace-validator-source-broad-glob-red",
+        "namespace-validator-source-coverage-wave-history-red",
+        "namespace-validator-source-error-not-hidden-by-other-proof-red",
+        "namespace-validator-source-generated-class-red",
+        "namespace-validator-source-iinternal-typo-red",
+        "namespace-validator-source-manifest-listing-cannot-bless-red",
+        "namespace-validator-source-top-level-internal-cluster-red",
+        "namespace-validator-source-top-level-internal-coverage-wave-red",
+        "namespace-validator-source-widened-class-tamper-red",
+        "nested-overlapping-active-lanes",
+        "nested-scratch-root-active-lanes",
+        "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
+        "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
+        "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red",
+        "non-e2e-claim-ceiling-confidence-bounds-marketplace-ready-claim-without-marketplace-proof-red",
+        "non-e2e-claim-ceiling-confidence-bounds-product-success-claimed-from-static-proof-red",
+        "non-e2e-claim-ceiling-confidence-bounds-reviewer-ready-claim-without-current-reviewer-exposure-red",
+        "observability-claim-without-receipt",
+        "observability-surface-without-receipt",
+        "observed-branch-mismatch",
+        "offline-schema-catalog-resolver-portability-absolute-local-schema-path-red",
+        "offline-schema-catalog-resolver-portability-installed-package-missing-schema-red",
+        "offline-schema-catalog-resolver-portability-missing-catalog-entry-red",
+        "offline-schema-catalog-resolver-portability-relative-ref-escaping-package-root-red",
+        "offline-schema-catalog-resolver-portability-remote-schema-fetch-attempt-red",
+        "offline-schema-catalog-resolver-portability-source-cache-catalog-drift-red",
+        "offline-schema-catalog-resolver-portability-source-obligation-parity-red",
+        "offline-schema-catalog-resolver-portability-stale-schema-id-red",
+        "offline-schema-catalog-resolver-portability-valid-fixture-passing-only-with-network-resolver-red",
+        "omitted-agent-path",
+        "omitted-custom-agent-toml",
+        "omitted-init-skill",
+        "omitted-observability-skill",
+        "omitted-required-claim",
+        "omitted-required-skill",
+        "omitted-retrofit-skill",
+        "omitted-runtime-legibility-skill",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-concurrent-environment-collision-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-hardcoded-port-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-manual-env-dependency-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-non-deterministic-install-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-shared-cache-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-shared-job-queue-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-slow-bootstrap-without-budget-red",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-source-obligation-parity-red",
+        "orchestrator-state-machine-bounded-concurrency-red",
+        "orchestrator-state-machine-deterministic-workspaces-red",
+        "orchestrator-state-machine-observability-events-red",
+        "orchestrator-state-machine-restart-recovery-red",
+        "orchestrator-state-machine-retry-backoff-red",
+        "orchestrator-state-machine-single-authoritative-state-red",
+        "orchestrator-state-machine-source-obligation-parity-red",
+        "orchestrator-state-machine-stop-on-state-change-red",
+        "overlapping-active-lanes",
+        "parent-implementation-without-lane",
+        "plans-active-project-state",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-component-graph-complete-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-load-install-surface-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-no-private-local-paths-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-package-relative-paths-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-purpose-owner-source-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-safety-boundary-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-source-obligation-parity-red",
+        "plugin-bundled-component-graph-hook-app-mcp-safety-stale-digest-rejected-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-flow-graph-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-required-edge-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-plugin-flow-manifest-cache-mismatch-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-product-journey-receipt-missing-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-script-references-unshipped-file-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-source-file-absent-from-shipped-package-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-source-obligation-parity-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-unsupported-runtime-claim-emitted-red",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey-validator-references-unshipped-fixture-red",
+        "plugin-flow-missing-completion-receipt",
+        "plugin-flow-missing-required-edge",
+        "plugin-flow-missing-skill-declaration",
+        "plugin-flow-missing-validator-check",
+        "plugin-install-surface-metadata-cache-enable-state-cache-path-versioned-red",
+        "plugin-install-surface-metadata-cache-enable-state-enable-state-recorded-red",
+        "plugin-install-surface-metadata-cache-enable-state-installed-load-proven-red",
+        "plugin-install-surface-metadata-cache-enable-state-interface-metadata-present-red",
+        "plugin-install-surface-metadata-cache-enable-state-manifest-identity-match-red",
+        "plugin-install-surface-metadata-cache-enable-state-publisher-metadata-present-red",
+        "plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red",
+        "plugin-journey-only-fit-repo-evidence",
+        "plugin-manifest-absolute-path",
+        "plugin-manifest-active-root-phase-proof-resource",
+        "plugin-manifest-parent-relative-path",
+        "plugin-manifest-stale-active-proof-resource",
+        "plugin-manifest-symlink-path",
+        "plugin-visible-entrypoint-omits-fit-repo",
+        "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red",
+        "portable-non-prescriptive-adapter-implementation-choice-exact-tracker-required-by-generic-claim-red",
+        "portable-non-prescriptive-adapter-implementation-choice-language-specific-setup-forced-on-nonmatching-repo-red",
+        "portable-non-prescriptive-adapter-implementation-choice-missing-adapter-fallback-red",
+        "portable-non-prescriptive-adapter-implementation-choice-optional-observability-backend-treated-as-mandatory-red",
+        "portable-non-prescriptive-adapter-implementation-choice-source-obligation-parity-red",
+        "portable-non-prescriptive-adapter-implementation-choice-ui-tool-proof-required-for-non-ui-repo-red",
+        "portable-non-prescriptive-adapter-implementation-choice-workflow-engine-specific-lane-numbering-treated-as-law-red",
+        "post-merge-before-pre-merge",
+        "privacy-raw-artifact-boundary-source-obligation-parity-red",
+        "private-tmp-path-in-proof-authority",
+        "product-applicability-flag-without-cohesion",
+        "product-claim-without-cohesion-receipt",
+        "product-claim-without-ui-journey-proof",
+        "product-cohesion-product-claims-source-obligation-parity-red",
+        "product-cohesion-receipt-uses-placeholder-proof",
+        "product-fitness-accessibility-unbound",
+        "product-fitness-actor-nondisjoint",
+        "product-fitness-daily-driver-overclaim",
+        "product-fitness-daily-driver-receipt-mismatch",
+        "product-fitness-entrypoint-confusion",
+        "product-fitness-evidence-digest-mismatch",
+        "product-fitness-evidence-missing",
+        "product-fitness-evidence-path-escape",
+        "product-fitness-fake-receipt-digest",
+        "product-fitness-first-use-substitution",
+        "product-fitness-fixture-substituted-real-use",
+        "product-fitness-happy-path-only",
+        "product-fitness-hidden-power",
+        "product-fitness-install-substituted-for-success",
+        "product-fitness-missing-accessibility",
+        "product-fitness-missing-assumption-test",
+        "product-fitness-missing-audience",
+        "product-fitness-missing-cognitive-load",
+        "product-fitness-missing-context",
+        "product-fitness-missing-continuance",
+        "product-fitness-missing-job",
+        "product-fitness-missing-outcome",
+        "product-fitness-missing-receipt",
+        "product-fitness-missing-recovery",
+        "product-fitness-missing-user-evidence",
+        "product-fitness-opinion-only",
+        "product-fitness-output-substituted-for-outcome",
+        "product-fitness-package-publication-substitution",
+        "product-fitness-reviewer-signoff-substitution",
+        "product-fitness-single-metric-theater",
+        "product-fitness-single-run-retention",
+        "product-fitness-smoke-substitution",
+        "product-fitness-stale-receipt",
+        "product-fitness-test-pass-substitution",
+        "product-fitness-wrong-claim-receipt",
+        "product-human-attention-exception-without-evidence",
+        "product-human-attention-overuse",
+        "product-human-attention-without-exhausted-paths",
+        "product-live-surface-claim-ceiling-substitution",
+        "product-live-surface-cli-substitution",
+        "product-live-surface-digest-mismatch",
+        "product-live-surface-install-substitution",
+        "product-live-surface-receipts-source-obligation-parity-red",
+        "product-proof-joins-substitution-blocking-app-registry-existence-without-reviewer-exposure-proof-red",
+        "product-proof-joins-substitution-blocking-dogfood-outside-declared-audience-context-red",
+        "product-proof-joins-substitution-blocking-happy-path-without-failure-recovery-proof-red",
+        "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red",
+        "product-proof-joins-substitution-blocking-package-publication-used-as-product-success-red",
+        "product-proof-joins-substitution-blocking-product-cohesion-alone-used-as-product-success-red",
+        "product-proof-joins-substitution-blocking-product-fitness-alone-without-contract-lineage-red",
+        "product-proof-joins-substitution-blocking-quality-score-as-product-outcome-red",
+        "product-proof-joins-substitution-blocking-reviewer-approval-used-as-product-proof-red",
+        "product-proof-joins-substitution-blocking-smoke-test-used-as-product-fitness-red",
+        "product-runtime-only-bare-app-available-feature-claim",
+        "product-runtime-only-bare-app-feature-claim",
+        "product-runtime-only-bare-app-visible-feature-claim",
+        "product-runtime-only-chat-interface-feature-claim",
+        "product-runtime-only-chatinterface-compact-feature-claim",
+        "product-runtime-only-clientfacing-compact-feature-claim",
+        "product-runtime-only-consumer-feature-claim",
+        "product-runtime-only-consumer-visible-camel-feature-claim",
+        "product-runtime-only-consumerfacing-compact-feature-claim",
+        "product-runtime-only-consumervisible-compact-feature-claim",
+        "product-runtime-only-control-panel-feature-claim",
+        "product-runtime-only-control-surface-camel-feature-claim",
+        "product-runtime-only-control-surface-hyphen-feature-claim",
+        "product-runtime-only-controlpanel-compact-feature-claim",
+        "product-runtime-only-controlsurface-compact-feature-claim",
+        "product-runtime-only-customer-facing-camel-feature-claim",
+        "product-runtime-only-customer-facing-feature-claim",
+        "product-runtime-only-customerfacing-compact-feature-claim",
+        "product-runtime-only-desktop-app-camel-feature-claim",
+        "product-runtime-only-desktop-app-feature-claim",
+        "product-runtime-only-desktop-application-feature-claim",
+        "product-runtime-only-desktop-client-inspect",
+        "product-runtime-only-desktopapp-compact-feature-claim",
+        "product-runtime-only-desktopapplication-compact-feature-claim",
+        "product-runtime-only-end-user-camel-feature-claim",
+        "product-runtime-only-end-user-feature-claim",
+        "product-runtime-only-enduser-compact-feature-claim",
+        "product-runtime-only-forms-feature-claim",
+        "product-runtime-only-front-end-feature-claim",
+        "product-runtime-only-graphical-shell-inspect",
+        "product-runtime-only-gui-control-executions",
+        "product-runtime-only-issueboard-compact-feature-claim",
+        "product-runtime-only-kanban-board-feature-claim",
+        "product-runtime-only-kanbanboard-compact-feature-claim",
+        "product-runtime-only-local-app-camel-feature-claim",
+        "product-runtime-only-local-app-feature-claim",
+        "product-runtime-only-local-app-hyphen-feature-claim",
+        "product-runtime-only-local-application-feature-claim",
+        "product-runtime-only-localapp-compact-feature-claim",
+        "product-runtime-only-localapplication-compact-feature-claim",
+        "product-runtime-only-mobile-app-camel-feature-claim",
+        "product-runtime-only-mobile-app-feature-claim",
+        "product-runtime-only-mobile-application-feature-claim",
+        "product-runtime-only-mobileapp-compact-feature-claim",
+        "product-runtime-only-mobileapplication-compact-feature-claim",
+        "product-runtime-only-native-client-inspect-control",
+        "product-runtime-only-operator-cockpit-feature-claim",
+        "product-runtime-only-operator-workspace-nl-feature-claim",
+        "product-runtime-only-operatorfacing-compact-feature-claim",
+        "product-runtime-only-project-board-feature-claim",
+        "product-runtime-only-projectboard-compact-feature-claim",
+        "product-runtime-only-run-console-camel-feature-claim",
+        "product-runtime-only-run-console-feature-claim",
+        "product-runtime-only-run-console-hyphen-feature-claim",
+        "product-runtime-only-runconsole-compact-feature-claim",
+        "product-runtime-only-settings-surface-camel-feature-claim",
+        "product-runtime-only-settings-surface-hyphen-feature-claim",
+        "product-runtime-only-settingssurface-compact-feature-claim",
+        "product-runtime-only-task-board-feature-claim",
+        "product-runtime-only-taskboard-compact-feature-claim",
+        "product-runtime-only-user-facing-camel-feature-claim",
+        "product-runtime-only-user-journey-feature-claim",
+        "product-runtime-only-userfacing-compact-feature-claim",
+        "product-runtime-only-userjourney-compact-feature-claim",
+        "product-runtime-only-web-app-camel-feature-claim",
+        "product-runtime-only-web-application-feature-claim",
+        "product-runtime-only-webapp-compact-feature-claim",
+        "product-runtime-only-webapplication-compact-feature-claim",
+        "product-runtime-only-workflow-launcher-camel-feature-claim",
+        "product-runtime-only-workflow-launcher-feature-claim",
+        "product-runtime-only-workflow-launcher-hyphen-feature-claim",
+        "product-runtime-only-workflowlauncher-compact-feature-claim",
+        "product-strategy-positioning-research-eval-before-lane-planning-continuance-signal-missing-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-deep-research-v2-precedent-cited-without-required-planning-artifacts-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-eval-protocol-without-negative-paths-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-feature-list-accepted-as-strategy-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-first-value-path-missing-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-generic-audience-accepted-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-positioning-route-without-proof-needed-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-research-notes-without-source-map-red",
+        "product-strategy-positioning-research-eval-before-lane-planning-vanity-metric-accepted-red",
+        "product-success-binding-goal-lane-execplan-authority-explicit-non-product-waiver-contradicted-by-claim-text-red",
+        "product-success-binding-goal-lane-execplan-authority-lane-ready-receipt-omitting-product-success-obligations-red",
+        "product-success-binding-goal-lane-execplan-authority-product-claim-consumed-outside-declared-goal-claim-ids-red",
+        "product-success-binding-goal-lane-execplan-authority-product-evidence-split-across-lanes-without-closed-claim-ids-red",
+        "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
+        "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-cohesion-owed-red",
+        "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-fitness-owed-red",
+        "product-success-binding-goal-lane-execplan-authority-product-lane-without-contract-id-red",
+        "product-success-contract-initiation-authority-markdown-only-product-success-contract-red",
+        "product-success-contract-initiation-authority-missing-claim-ceiling-red",
+        "product-success-contract-initiation-authority-missing-critical-journey-red",
+        "product-success-contract-initiation-authority-missing-first-value-event-red",
+        "product-success-contract-initiation-authority-missing-quality-dimension-red",
+        "product-success-contract-initiation-authority-package-inventory-missing-product-success-contract-surfaces-red",
+        "product-success-contract-initiation-authority-placeholder-target-user-red",
+        "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red",
+        "product-success-contract-initiation-authority-product-lane-without-product-success-contract-red",
+        "product-success-contract-initiation-authority-stale-product-success-contract-digest-red",
+        "product-success-contract-initiation-authority-wrong-claim-id-red",
+        "product-success-contract-initiation-authority-wrong-goal-id-red",
+        "product-success-contract-review-packet-team-skill-routing-archive-omitting-product-contract-receipt-red",
+        "product-success-contract-review-packet-team-skill-routing-fit-repo-product-ready-without-contract-red",
+        "product-success-contract-review-packet-team-skill-routing-missing-product-reviewer-disposition-red",
+        "product-success-contract-review-packet-team-skill-routing-package-inventory-missing-product-success-schema-template-fixtures-red",
+        "product-success-contract-review-packet-team-skill-routing-packet-with-stale-product-lineage-red",
+        "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red",
+        "product-success-contract-review-packet-team-skill-routing-review-target-omitting-product-contract-red",
+        "product-success-contract-review-packet-team-skill-routing-review-team-lacking-typed-product-owner-red",
+        "product-success-contract-review-packet-team-skill-routing-skill-routing-omission-red",
+        "product-success-inspiration-source-provenance-disposition-adopted-principle-with-no-validator-gate-red",
+        "product-success-inspiration-source-provenance-disposition-chronicle-cited-without-timestamp-red",
+        "product-success-inspiration-source-provenance-disposition-deep-research-v2-cited-without-artifact-path-red",
+        "product-success-inspiration-source-provenance-disposition-generic-inspiration-summary-accepted-red",
+        "product-success-inspiration-source-provenance-disposition-inaccessible-source-ignored-red",
+        "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red",
+        "product-success-inspiration-source-provenance-disposition-sales-value-evidence-adopted-without-hierarchy-red",
+        "product-success-inspiration-source-provenance-disposition-template-creator-mentioned-but-treated-as-repo-dependency-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-final-packet-product-claim-with-lifecycle-gap-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-product-cohesion-packet-repair-accepted-as-lifecycle-proof-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-product-critical-debt-left-in-docs-only-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-product-fitness-review-afterthought-accepted-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-product-obligation-not-decomposed-into-lane-task-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red",
+        "product-success-lifecycle-transitions-no-late-afterthought-stale-product-receipt-after-amendment-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-broad-umbrella-product-claim-hiding-child-obligations-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-product-claim-duplicated-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-product-cohesion-orphan-receipt-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-product-fitness-orphan-receipt-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-product-packet-claim-unmapped-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-side-thread-product-requirement-not-amended-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-stale-product-success-contract-id-in-receipt-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-unknown-product-success-contract-id-red",
+        "product-success-lineage-amendments-closed-product-claim-ids-weakening-amendment-without-approval-red",
+        "product-ui-proof-not-joined-to-receipt",
+        "product-waiver-local-control-surface-reason",
+        "product-waiver-on-consumer-ui-claim",
+        "product-waiver-on-dashboard-text-claim",
+        "product-waiver-on-ui-evidence-surface",
+        "promotion-candidate-archive-substitution",
+        "publication-addon-public-directory",
+        "publication-attestation-runtime-surface-mismatch",
+        "publication-extension-public-catalog",
+        "publication-extension-workspace-gallery",
+        "publication-package-install-substitution",
+        "publication-plugin-bare-published",
+        "publication-plugin-workspace-registry",
+        "purpose-backed-active-files-source-obligation-parity-red",
+        "quality-score-taste-gates-architecture-join-red",
+        "quality-score-taste-gates-changed-surface-rows-red",
+        "quality-score-taste-gates-current-evidence-digests-red",
+        "quality-score-taste-gates-no-looks-good-grade-red",
+        "quality-score-taste-gates-product-fitness-join-red",
+        "quality-score-taste-gates-source-obligation-parity-red",
+        "quality-score-taste-gates-underlying-law-join-red",
+        "raw-private-artifact-handling-category-only-evidence-absolute-private-path-in-package-inventory-red",
+        "raw-private-artifact-handling-category-only-evidence-private-session-log-copied-to-artifact-root-red",
+        "raw-private-artifact-handling-category-only-evidence-raw-message-payload-in-fixture-red",
+        "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
+        "raw-private-artifact-handling-category-only-evidence-redaction-summary-without-claim-impact-red",
+        "raw-private-artifact-handling-category-only-evidence-reviewer-evidence-requiring-raw-private-file-red",
+        "raw-private-artifact-handling-category-only-evidence-secret-like-value-in-child-prompt-red",
+        "raw-private-artifact-handling-category-only-evidence-source-obligation-parity-red",
+        "ready-changed-file-outside-lane",
+        "ready-command-failed",
+        "ready-dirty-worktree",
+        "ready-false-included-claim",
+        "ready-forged-self-consistent-validator-run",
+        "ready-nonempty-blockers",
+        "ready-teardown-not-ready",
+        "ready-unknown-lane-id",
+        "ready-wrong-base-commit",
+        "ready-wrong-branch",
+        "ready-wrong-claim-ids",
+        "ready-wrong-lane-registry-digest",
+        "ready-wrong-workspace",
+        "red-json-patch-add-out-of-range",
+        "red-json-patch-remove-out-of-range",
+        "red-missing-base-fixture",
+        "repo-knowledge-index-core-beliefs-claim-impact-recorded-red",
+        "repo-knowledge-index-core-beliefs-core-beliefs-indexed-red",
+        "repo-knowledge-index-core-beliefs-law-docs-indexed-red",
+        "repo-knowledge-index-core-beliefs-no-hidden-author-memory-red",
+        "repo-knowledge-index-core-beliefs-owner-freshness-source-red",
+        "repo-knowledge-index-core-beliefs-source-obligation-parity-red",
+        "repo-knowledge-index-core-beliefs-validator-receipt-path-red",
+        "restartable-execplan-missing-purpose",
+        "restartable-execplan-missing-validation-commands",
+        "restartable-execplan-prose-only",
+        "restartable-execplan-stale",
+        "restartable-execplans-source-obligation-parity-red",
+        "retired-reviewer-prompt-packet-packaged",
+        "review-disagreement-override-judgment-boundary-governance-disagreement-marked-resolved-in-prose-only-red",
+        "review-disagreement-override-judgment-boundary-governance-final-packet-hiding-open-disagreement-red",
+        "review-disagreement-override-judgment-boundary-governance-human-approval-closing-mandatory-law-red",
+        "review-disagreement-override-judgment-boundary-governance-judgment-only-product-fitness-claim-counted-as-proof-red",
+        "review-disagreement-override-judgment-boundary-governance-non-goal-without-claim-removal-red",
+        "review-disagreement-override-judgment-boundary-governance-reviewer-raising-confidence-above-evidence-red",
+        "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red",
+        "review-feedback-disposition-same-round-satisfaction-finding-closed-by-prose-only-red",
+        "review-feedback-disposition-same-round-satisfaction-missing-disposition-red",
+        "review-feedback-disposition-same-round-satisfaction-reviewer-silence-treated-as-pass-red",
+        "review-feedback-disposition-same-round-satisfaction-side-thread-correction-not-entered-into-feedback-promotion-red",
+        "review-feedback-disposition-same-round-satisfaction-source-obligation-parity-red",
+        "review-feedback-disposition-same-round-satisfaction-stale-satisfaction-red",
+        "review-feedback-disposition-same-round-satisfaction-unresolved-reviewer-finding-red",
+        "review-round-agent-type-mismatch",
+        "review-round-archive-package-mismatch",
+        "review-round-claim-ceiling-active-registry-overclaim",
+        "review-round-claim-ceiling-missing-install-button-unsupported",
+        "review-round-cross-round-reused-reviewer",
+        "review-round-disk-synced-active-registry-stale",
+        "review-round-downgraded-reviewer-effort",
+        "review-round-failed-archive-receipt",
+        "review-round-failed-review-target-receipt",
+        "review-round-four-persona-count",
+        "review-round-hollow-evidence-artifacts",
+        "review-round-incomplete-merged-responsibility",
+        "review-round-live-registry-stale-captured-at",
+        "review-round-live-spawn-session-replay",
+        "review-round-live-spawn-stale-captured-at",
+        "review-round-live-spawn-stale-round",
+        "review-round-live-spawn-unknown-agent-type",
+        "review-round-missing-live-registry-exposure",
+        "review-round-missing-persona",
+        "review-round-missing-prior-reviewer-ids",
+        "review-round-missing-review-report",
+        "review-round-non-gpt55-model-mismatch",
+        "review-round-non-signoff-verdict",
+        "review-round-product-fitness-claim-binding-missing",
+        "review-round-product-fitness-disposition-missing",
+        "review-round-product-fitness-disposition-stale",
+        "review-round-product-fitness-disposition-unowned",
+        "review-round-product-fitness-disposition-wrong-owner",
+        "review-round-product-fitness-fixture-substitution",
+        "review-round-product-fitness-four-person-no-disposition",
+        "review-round-product-fitness-generic-approval-substitution",
+        "review-round-product-fitness-happy-path-substitution",
+        "review-round-product-fitness-install-substitution",
+        "review-round-product-fitness-owner-missing",
+        "review-round-product-fitness-product-cohesion-substitution",
+        "review-round-product-fitness-receipt-digest-missing",
+        "review-round-product-fitness-receipt-only-substitution",
+        "review-round-product-fitness-required-flag-missing",
+        "review-round-product-fitness-reviewer-agreement-substitution",
+        "review-round-product-fitness-smoke-substitution",
+        "review-round-product-fitness-undeclared-fifth-reviewer",
+        "review-round-report-absolute-path",
+        "review-round-report-authority-prose",
+        "review-round-report-chooser-overclaim",
+        "review-round-report-duplicate-claim-ceiling",
+        "review-round-report-market-place-dog-food-overclaim",
+        "review-round-report-missing-claim-ceiling",
+        "review-round-report-missing-counterexamples",
+        "review-round-report-missing-review-target-digest",
+        "review-round-report-non-ceiling-overclaim",
+        "review-round-report-overclaims-claim-ceiling",
+        "review-round-report-parent-relative-path",
+        "review-round-report-parks-claim-ceiling-overclaim",
+        "review-round-report-path-bearing-overclaim",
+        "review-round-reused-reviewer",
+        "review-round-review-target-package-mismatch",
+        "review-round-review-target-validator-mismatch",
+        "review-round-reviewer-anchor-digests-omitted",
+        "review-round-shallow-review-report",
+        "review-round-signoff-missing-archive",
+        "review-round-signoff-validator-only-anchor-policy",
+        "review-round-stale-archive-semantic-digest",
+        "review-round-stale-live-registry-exposure",
+        "review-round-stale-review-target-anchor-path",
+        "review-round-stale-review-target-semantic-digest",
+        "review-round-stale-validator-digest",
+        "review-round-status-fail-not-approval-receipt",
+        "review-round-substituted-persona-prompt",
+        "reviewer-to-gate-conversion-source-obligation-parity-red",
+        "root-phase-pass-failed-command",
+        "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
+        "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
+        "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
+        "runtime-feasibility-cost-strict-gate-usability-manual-sample-substituted-for-complete-proof-red",
+        "runtime-feasibility-cost-strict-gate-usability-no-cache-mismatch-red",
+        "runtime-feasibility-cost-strict-gate-usability-runtime-over-budget-without-exception-red",
+        "runtime-feasibility-cost-strict-gate-usability-stale-cache-accepted-red",
+        "runtime-feasibility-cost-strict-gate-usability-unbounded-concurrency-red",
+        "runtime-tool-identity-digest-mismatch",
+        "runtime-tool-identity-missing-binary-path",
+        "runtime-tool-identity-missing-tool",
+        "runtime-tool-identity-source-obligation-parity-red",
+        "runtime-tool-identity-stale-version",
+        "runtime-tool-identity-wrong-workspace",
+        "scheduler-runner-tracker-boundaries-approval-proof-red",
+        "scheduler-runner-tracker-boundaries-external-mutation-provenance-red",
+        "scheduler-runner-tracker-boundaries-handoff-not-done-red",
+        "scheduler-runner-tracker-boundaries-no-direct-scheduler-writes-red",
+        "scheduler-runner-tracker-boundaries-source-obligation-parity-red",
+        "scheduler-runner-tracker-boundaries-typed-write-authority-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-cache-package-old-schema-accepted-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-fixture-catalog-mismatch-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-installed-package-old-schema-accepted-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-migration-receipt-missing-affected-claim-ids-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-old-product-fitness-receipt-accepted-after-schema-change-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-stale-receipt-version-red",
+        "schema-evolution-receipt-migration-stale-version-invalidation-stale-schema-id-red",
+        "schema-plugin-manifest-name-const",
+        "secret-token-boundaries-no-private-raw-payloads-red",
+        "secret-token-boundaries-no-raw-credentials-as-proof-red",
+        "secret-token-boundaries-redacted-tool-authority-red",
+        "secret-token-boundaries-secret-scan-fixtures-red",
+        "secret-token-boundaries-secret-scan-prompts-red",
+        "secret-token-boundaries-secret-scan-receipts-red",
+        "secret-token-boundaries-sensitive-paths-rejected-red",
+        "secret-token-boundaries-source-obligation-parity-red",
+        "semantic-classification-ambiguous-reviewer-gate-without-human",
+        "semantic-classification-human-publication-required-gate-omitted",
+        "semantic-classification-human-receipt-missing-attestation",
+        "semantic-classification-inline-human-receipt",
+        "semantic-classification-install-gate-without-ui-proof",
+        "semantic-classification-install-required-gate-omitted",
+        "semantic-classification-model-install-required-gate-omitted",
+        "semantic-classification-model-receipt-missing-prompt-digest",
+        "semantic-classification-product-required-gates-omitted",
+        "semantic-classification-publication-gate-without-external-proof",
+        "semantic-classification-publication-required-gate-omitted",
+        "semantic-classification-receipt-actor-self-classification",
+        "semantic-classification-receipt-contradicts-claim-text",
+        "semantic-classification-receipt-contradicts-structured-product",
+        "semantic-classification-receipt-low-confidence-ambiguous",
+        "semantic-classification-receipt-malformed-output",
+        "semantic-classification-receipt-missing",
+        "semantic-classification-receipt-stale-text-digest",
+        "semantic-classification-receipt-unknown-class",
+        "semantic-classification-receipt-unknown-proof-gate",
+        "semantic-classification-receipt-wrong-claim",
+        "semantic-classification-receipt-wrong-contract",
+        "semantic-classification-receipt-wrong-schema",
+        "semantic-domain-type-naming-broad-record-rejected-red",
+        "semantic-domain-type-naming-generic-authority-names-rejected-red",
+        "semantic-domain-type-naming-generic-evidence-field-rejected-red",
+        "semantic-domain-type-naming-source-obligation-parity-red",
+        "semantic-domain-type-naming-stringly-claim-state-rejected-red",
+        "semantic-domain-type-naming-typed-exception-contract-required-red",
+        "shared-artifact-root-active-lanes",
+        "shared-branch-active-lanes",
+        "shared-browser-profile-active-lanes",
+        "shared-port-active-lanes",
+        "shared-state-root-active-lanes",
+        "shared-tool-cache-root-active-lanes",
+        "shared-workspace-active-lanes",
+        "simulated-proof-for-live-claim",
+        "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
+        "skill-catalog-context-budget-omission-warning-context-heavy-description-red",
+        "skill-catalog-context-budget-omission-warning-discoverability-claim-without-catalog-proof-red",
+        "skill-catalog-context-budget-omission-warning-duplicate-skill-name-red",
+        "skill-catalog-context-budget-omission-warning-omitted-required-skill-without-warning-red",
+        "skill-catalog-context-budget-omission-warning-source-obligation-parity-red",
+        "skill-catalog-context-budget-omission-warning-vague-truncated-description-red",
+        "skill-local-reference-closure-source-obligation-parity-red",
+        "skill-local-reference-missing",
+        "skill-progressive-disclosure-metadata-bounded-always-loaded-content-red",
+        "skill-progressive-disclosure-metadata-local-references-valid-red",
+        "skill-progressive-disclosure-metadata-no-author-memory-dependency-red",
+        "skill-progressive-disclosure-metadata-no-hidden-dependencies-red",
+        "skill-progressive-disclosure-metadata-scripts-assets-declared-red",
+        "skill-progressive-disclosure-metadata-source-obligation-parity-red",
+        "skill-progressive-disclosure-metadata-specific-metadata-red",
+        "source-card-freshness-ceiling-source-obligation-parity-red",
+        "source-card-not-refreshed-current-claim",
+        "source-installed-cache-alignment-source-obligation-parity-red",
+        "source-obligation-missing-authority-binding",
+        "source-obligation-missing-derived-authority",
+        "source-obligation-missing-disposition",
+        "source-obligation-missing-install-cache-alignment",
+        "source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red",
+        "source-obligation-parity-anti-bundling-claim-ceiling-missing-for-source-obligation-red",
+        "source-obligation-parity-anti-bundling-covered-row-without-independent-red-fixture-red",
+        "source-obligation-parity-anti-bundling-deterministic-covered-without-mandatory-law-surface-red",
+        "source-obligation-parity-anti-bundling-foundational-trace-without-same-law-standards-row-red",
+        "source-obligation-parity-anti-bundling-minimum-goal-valid-fixture-used-for-unrelated-law-red",
+        "source-obligation-parity-anti-bundling-source-obligation-list-drift-red",
+        "source-obligation-parity-anti-bundling-umbrella-standards-row-passing-while-child-law-fails-red",
+        "source-obligation-weak-disposition",
+        "stable-identifier-normalization-collision-display-title-treated-as-authority-red",
+        "stable-identifier-normalization-collision-duplicate-ids-after-normalization-red",
+        "stable-identifier-normalization-collision-mixed-case-state-accepted-as-distinct-lifecycle-state-red",
+        "stable-identifier-normalization-collision-receipt-id-with-mismatched-digest-red",
+        "stable-identifier-normalization-collision-source-obligation-parity-red",
+        "stable-identifier-normalization-collision-stale-id-reused-for-new-candidate-red",
+        "stable-identifier-normalization-collision-unsanitized-workspace-key-red",
+        "stale-active-lane-heartbeat",
+        "stale-active-worktree-after-closeout",
+        "stale-actor-identity",
+        "stale-affected-doc-without-blocker",
+        "stale-automation-timestamps-claim-fresh",
+        "stale-or-mismatched-goal-binding",
+        "stale-or-missing-automation-tick",
+        "stale-proof-mismatched-commit",
+        "stale-review-cadence-current-surface",
+        "standards-gardener-changed-artifact-after-receipt",
+        "standards-gardener-missing-promotion-receipt",
+        "standards-gardener-promotion-source-obligation-parity-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-approval-policy-inherited-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-child-sandbox-not-broader-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-model-recorded-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-runtime-overrides-reapplied-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-source-obligation-parity-red",
+        "subagent-custom-agent-sandbox-approval-inheritance-workspace-recorded-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-child-proof-substitution-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-implicit-spawn-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-missing-budget-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-missing-result-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-orphaned-agent-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-partial-synthesis-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
+        "target-advanced-after-validation",
+        "target-repo-audit-capability-fixture-used-as-live-target-red",
+        "target-repo-audit-capability-generic-repo-support-overclaim-red",
+        "target-repo-audit-capability-mode-substitution-red",
+        "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
+        "target-repo-audit-capability-source-obligation-parity-red",
+        "target-repo-audit-capability-target-classification-missing-red",
+        "target-repo-audit-capability-target-command-missing-success-emitted-red",
+        "target-repo-audit-capability-unknown-language-runtime-accepted-red",
+        "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-source-obligation-parity-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-stale-debt-row-red",
+        "targeted-refactor-debt-removal-standards-gardener-cadence-standards-gardener-cadence-omitted-red",
+        "template-generation-governance-template-creator-boundary-installed-cache-template-drift-red",
+        "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red",
+        "template-generation-governance-template-creator-boundary-package-inventory-omits-template-red",
+        "template-generation-governance-template-creator-boundary-product-artifact-generated-from-untemplated-prose-red",
+        "template-generation-governance-template-creator-boundary-product-template-with-tbd-red",
+        "template-generation-governance-template-creator-boundary-render-parse-mismatch-red",
+        "template-generation-governance-template-creator-boundary-template-creator-personal-skill-treated-as-repo-artifact-red",
+        "template-generation-governance-template-creator-boundary-template-creator-used-with-no-receipt-red",
+        "template-generation-governance-template-creator-boundary-template-field-not-in-schema-red",
+        "terminal-cleanup-fake-nonmissing-receipt",
+        "terminal-cleanup-without-receipt",
+        "test-pass-only-without-coverage-artifact",
+        "third-party-dependency-legibility-typed-adapters-allowed-call-sites-red",
+        "third-party-dependency-legibility-typed-adapters-cache-invalidation-red",
+        "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
+        "third-party-dependency-legibility-typed-adapters-no-direct-api-bypass-red",
+        "third-party-dependency-legibility-typed-adapters-owner-purpose-upstream-docs-red",
+        "third-party-dependency-legibility-typed-adapters-source-obligation-parity-red",
+        "third-party-dependency-legibility-typed-adapters-timeout-retry-policy-red",
+        "third-party-dependency-legibility-typed-adapters-typed-request-response-red",
+        "tiny-or-overlapping-lane",
+        "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
+        "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
+        "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+        "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
+        "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
+        "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
+        "total-authority-types-impossible-state-elimination-source-obligation-parity-red",
+        "total-authority-types-impossible-state-elimination-unchecked-unwrap-on-receipt-field-red",
+        "transcript-quality-alignment-incomplete",
+        "transcript-quality-cleanup-incomplete",
+        "transcript-quality-finalization-disabled",
+        "transcript-quality-reuse-gates-source-obligation-parity-red",
+        "trust-boundary-abuse-path-failure-path-coverage-destructive-action-ambiguity-untested-red",
+        "trust-boundary-abuse-path-failure-path-coverage-forged-digest-accepted-red",
+        "trust-boundary-abuse-path-failure-path-coverage-path-traversal-missing-negative-test-red",
+        "trust-boundary-abuse-path-failure-path-coverage-permission-denied-untested-red",
+        "trust-boundary-abuse-path-failure-path-coverage-resolver-bypass-missing-test-red",
+        "trust-boundary-abuse-path-failure-path-coverage-review-signoff-without-failure-path-evidence-red",
+        "trust-boundary-abuse-path-failure-path-coverage-secret-leak-untested-red",
+        "trust-boundary-abuse-path-failure-path-coverage-source-obligation-parity-red",
+        "trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red",
+        "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
+        "typed-records-over-prose-source-obligation-parity-red",
+        "ui-claim-without-product-cohesion-waiver",
+        "unsupported-install-publication-text-claim",
+        "unsupported-market-place-release-text-claim",
+        "unsupported-market-place-search-text-claim",
+        "unsupported-marketplace-available-text-claim",
+        "unsupported-marketplace-listed-text-claim",
+        "unsupported-marketplace-search-text-claim",
+        "unsupported-plugin-chooser-discoverable-text-claim",
+        "unsupported-plugin-installed-visible-text-claim",
+        "unsupported-plugin-list-visible-text-claim",
+        "unsupported-plugin-picker-visible-text-claim",
+        "unsupported-team-shelf-publication-text-claim",
+        "unsupported-workspace-market-place-publication-text-claim",
+        "validator-commit-value-not-sha",
+        "validator-package-digest-value-not-sha",
+        "validator-theater-miswire-resistance-adjacent-law-misattribution-red",
+        "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
+        "validator-theater-miswire-resistance-fixture-name-only-pass-red",
+        "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
+        "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+        "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
+        "validator-theater-miswire-resistance-swallowed-validator-error-red",
+        "validator-theater-miswire-resistance-validator-path-present-but-never-called-red",
+        "validator-theater-miswire-resistance-wrong-check-pass-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-claim-ceiling-not-lowered-when-value-evidence-missing-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-daily-driver-claim-without-repeat-use-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-install-success-used-as-adoption-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-invented-baseline-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-missing-confidence-label-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-one-time-first-use-used-as-continuance-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-public-research-used-as-product-value-proof-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-unlabeled-value-claim-red",
+        "value-adoption-continuance-business-mission-evidence-hierarchy-value-bucket-outside-enum-red",
+        "weakened-amendment-without-approval",
+        "weakening-mislabeled-as-clarification",
+        "workflow-template-parsing-rendering-reload-path-safety-red",
+        "workflow-template-parsing-rendering-reload-reload-status-recorded-red",
+        "workflow-template-parsing-rendering-reload-source-digest-bound-red",
+        "workflow-template-parsing-rendering-reload-source-obligation-parity-red",
+        "workflow-template-parsing-rendering-reload-stale-render-rejected-red",
+        "workflow-template-parsing-rendering-reload-typed-template-parse-red",
+        "workflow-template-parsing-rendering-reload-unknown-filter-rejected-red",
+        "workflow-template-parsing-rendering-reload-unknown-variable-rejected-red",
+        "workspace-command-confinement-lifecycle-cleanup-allowed-writes-recorded-red",
+        "workspace-command-confinement-lifecycle-cleanup-artifact-workspace-binding-red",
+        "workspace-command-confinement-lifecycle-cleanup-command-cwd-recorded-red",
+        "workspace-command-confinement-lifecycle-cleanup-contamination-check-red",
+        "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
+        "workspace-command-confinement-lifecycle-cleanup-environment-identity-red",
+        "workspace-command-confinement-lifecycle-cleanup-source-obligation-parity-red",
+        "workspace-command-confinement-lifecycle-cleanup-teardown-recorded-red",
+        "worktree-lane-owner-cost-policy-source-obligation-parity-red",
+        "wrong-lane-worktree-root",
+        "wrong-worktree-or-root",
+        "rust-devx-raw-tool-output-substitution-red",
+        "rust-devx-makefile-authority-red",
+        "rust-devx-dependency-audit-missing-red",
+        "rust-devx-missing-toolchain-substrate-red",
+        "rust-devx-toolchain-receipt-stale-red",
+        "rust-devx-cargo-lock-digest-tamper-red",
+        "rust-devx-cargo-test-overclaim-red",
+        "rust-devx-missing-nextest-bootstrap-red",
+        "rust-devx-watch-observation-as-completion-red",
+        "rust-devx-hidden-cache-no-cache-substitution-red",
+        "rust-devx-warm-cache-as-cold-proof-red",
+        "rust-devx-hidden-rustc-wrapper-red",
+        "rust-devx-unbounded-resource-discipline-red",
+        "rust-devx-spawn-forget-child-process-red",
+        "rust-devx-tracing-gc-core-memory-model-red",
+        "rust-devx-blind-cleanup-without-gc-receipt-red",
+        "rust-devx-protected-artifact-delete-red",
+        "rust-devx-gc-plan-digest-tamper-red"
+      ]
+    },
+    "requiredValidatorCheckId": {
+      "enum": [
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+        "adversarial-packet-tampering-forged-proof-rejection",
+        "agent-authored-source-tooling-docs-provenance",
+        "agent-queryable-observability",
+        "agent-remediating-validator-failures",
+        "agent-session-telemetry-token-rate-limit",
+        "agent-standards-enforcement",
+        "amendment-monotonicity",
+        "architecture-dependency-topology",
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+        "authority-source-binding",
+        "automation-tick-freshness",
+        "autonomy-loop-proof",
+        "backlog-attempt-proof",
+        "backlog-row-coverage",
+        "batch-fanout-custom-agent-job-worker-result-discipline",
+        "behavior-example-coverage-coverage-anti-gaming",
+        "capability-gap-extraction-harness-capability-promotion",
+        "claim-evidence-coupling",
+        "claim-scope-closure",
+        "claim-status-ceiling",
+        "clean-checkout-command-discovery",
+        "clean-room-rebuild-author-memory-independence",
+        "cli-control-plane-authority",
+        "cli-performance-latency-speed-iteration-fitness",
+        "cli-self-law-compliance",
+        "command-evidence",
+        "compact-agents-routed-standards",
+        "conditional-observability-proof",
+        "config-precedence-defaults-env-indirection",
+        "connector-capability-discovery",
+        "contract-bundle-hash",
+        "coverage-proof-policy",
+        "cross-artifact-consistency-solver-authority-graph-closure",
+        "current-product-discovery-audit-quality-in-use-evidence",
+        "derived-authority-recomputation",
+        "derived-authority-recomputation-named-authority-fallback-refusal",
+        "distinct-proof-surfaces-claim-ceilings",
+        "distribution-sharing-surface-claim-separation",
+        "evidence-freshness",
+        "evidence-integrity",
+        "execplan-no-handback-prototype-promotion-discard",
+        "execplan-plain-language-expected-output-interface-completeness",
+        "failure-remediation-quality-agent-actionable-output",
+        "feedback-to-rule-promotion",
+        "forward-only-state-transition-integrity-silent-reopen-prevention",
+        "fresh-init-retrofit-mode-separation",
+        "fresh-retrofit-repo-shape",
+        "generated-proof-artifact-provenance-anti-fabrication",
+        "generated-ready-completion-receipts",
+        "goal-binding-receipt-match",
+        "goal-contract-amendment-authority-required-claim-id-mapping",
+        "goal-tool-discovery-probe",
+        "green-path-adequacy-satisfiable-strictness",
+        "guardrail-speed-isolation-cache-honesty",
+        "historical-regression-corpus-session-review-signals",
+        "human-audit-disposition-decomposition-judgment-claim-blocking",
+        "instruction-precedence-nested-agents-routing",
+        "issue-tracker-lifecycle-eligibility-terminal-state",
+        "lane-actor-binding",
+        "lane-dependency-gating",
+        "lane-scope-overlap",
+        "lane-target-freshness",
+        "lane-worktree-isolation-cleanup",
+        "live-beneficial-e2e",
+        "macro-lane-sizing",
+        "material-review-scope-gate",
+        "memory-wiki-context-only",
+        "namespace-progressive-disclosure",
+        "non-e2e-claim-ceiling-confidence-bounds",
+        "observability-claim-proof",
+        "offline-schema-catalog-resolver-portability",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+        "orchestrator-state-machine",
+        "parent-role-boundary",
+        "plugin-bundled-component-graph-hook-app-mcp-safety",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+        "plugin-install-surface-metadata-cache-enable-state",
+        "plugin-inventory-closure",
+        "plugin-inventory-exactly-once",
+        "portable-non-prescriptive-adapter-implementation-choice",
+        "privacy-raw-artifact-boundary",
+        "product-cohesion-product-claims",
+        "product-cohesion-proof",
+        "product-fitness-proof",
+        "product-live-surface-receipts",
+        "product-proof-joins-substitution-blocking",
+        "product-strategy-positioning-research-eval-before-lane-planning",
+        "product-success-binding-goal-lane-execplan-authority",
+        "product-success-contract-initiation-authority",
+        "product-success-contract-review-packet-team-skill-routing",
+        "product-success-inspiration-source-provenance-disposition",
+        "product-success-lifecycle-transitions-no-late-afterthought",
+        "product-success-lineage-amendments-closed-product-claim-ids",
+        "purpose-backed-active-files",
+        "quality-score-taste-gates",
+        "raw-private-artifact-handling-category-only-evidence",
+        "ready-receipt-provenance",
+        "red-fixture-coverage",
+        "repo-knowledge-index-core-beliefs",
+        "required-claim-closure",
+        "restartable-execplans",
+        "review-disagreement-override-judgment-boundary-governance",
+        "review-feedback-disposition-same-round-satisfaction",
+        "reviewer-to-gate-conversion",
+        "rust-cache-no-cache-honesty",
+        "rust-command-loop-authority",
+        "rust-developer-experience-authority",
+        "rust-memory-resource-discipline",
+        "rust-toolchain-substrate-authority",
+        "root-verification-phase-coverage",
+        "runtime-feasibility-cost-strict-gate-usability",
+        "runtime-tool-identity",
+        "scheduler-runner-tracker-boundaries",
+        "schema-evolution-receipt-migration-stale-version-invalidation",
+        "schema-valid",
+        "secret-token-boundaries",
+        "semantic-domain-type-naming",
+        "skill-catalog-context-budget-omission-warning",
+        "skill-inventory-closure",
+        "skill-local-reference-closure",
+        "skill-progressive-disclosure-metadata",
+        "source-card-freshness",
+        "source-card-freshness-ceiling",
+        "source-installed-cache-alignment",
+        "source-obligation-coverage",
+        "source-obligation-parity-anti-bundling",
+        "stable-identifier-normalization-collision",
+        "standards-gardener-promotion",
+        "subagent-custom-agent-sandbox-approval-inheritance",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+        "target-repo-audit-capability",
+        "targeted-refactor-debt-removal-standards-gardener-cadence",
+        "template-generation-governance-template-creator-boundary",
+        "third-party-dependency-legibility-typed-adapters",
+        "total-authority-types-impossible-state-elimination",
+        "transcript-quality-reuse-gates",
+        "trust-boundary-abuse-path-failure-path-coverage",
+        "typed-records-over-prose",
+        "validator-artifact-provenance",
+        "validator-execution-provenance",
+        "validator-theater-miswire-resistance",
+        "value-adoption-continuance-business-mission-evidence-hierarchy",
+        "workflow-template-parsing-rendering-reload",
+        "workspace-artifact-cache-garbage-collection",
+        "workspace-binding",
+        "workspace-command-confinement-lifecycle-cleanup",
+        "worktree-lane-owner-cost-policy",
+        "worktree-teardown"
+      ]
+    },
+    "rootVerificationPhase": {
+      "enum": [
+        "pre_merge_lane_gate",
+        "post_merge_integration_gate",
+        "final_all_lanes_gate"
+      ]
+    },
+    "sha256": {
+      "pattern": "^sha256:[a-fA-F0-9]{64}$",
+      "type": "string"
+    },
+    "validatorExecution": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_disjoint": {
+          "const": true
+        },
+        "command": {
+          "$ref": "#/$defs/commandReceipt"
+        },
+        "completed_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "executable_provenance": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "invocation_mode": {
+              "enum": [
+                "cargo_run",
+                "direct_executable"
+              ]
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "source_artifact_set_digest": {
+              "$ref": "#/$defs/sha256"
+            }
+          },
+          "required": [
+            "path",
+            "digest",
+            "source_artifact_set_digest",
+            "invocation_mode"
+          ],
+          "type": "object"
+        },
+        "input_digests": {
+          "items": {
+            "$ref": "#/$defs/artifactRef"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "producer_actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "started_at": {
+          "$ref": "#/$defs/isoTimestamp"
+        },
+        "stderr": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "stdout": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "validator_actor_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "validator_artifacts": {
+          "items": {
+            "$ref": "#/$defs/artifactRef"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "producer_actor_id",
+        "validator_actor_id",
+        "actor_disjoint",
+        "executable_provenance",
+        "command",
+        "validator_artifacts",
+        "input_digests",
+        "stdout",
+        "stderr",
+        "started_at",
+        "completed_at"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://harness-ultragoal.local/schemas/common-defs.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

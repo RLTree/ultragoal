@@ -1,0 +1,24 @@
+{
+  "schema": "harness-ultragoal.root-phase-receipt.v1",
+  "fixture_purpose": "Generated validation artifact for the two-lane dependency fixture. This is not live repository merge proof.",
+  "phase": "post_merge_integration_gate",
+  "upstream_lane_id": "LANE-001",
+  "upstream_commit": "abcdef0",
+  "target_branch": "main",
+  "merge_commit": "abcdef0",
+  "validated_at": "2026-06-16T00:00:02Z",
+  "integrated_claim_ids": [
+    "CLAIM-001"
+  ],
+  "merge_reachability": {
+    "upstream_commit_reachable": true,
+    "target_head_after_merge": "abcdef0"
+  },
+  "commands": [
+    {
+      "id": "cmd-post-merge-integration-gate",
+      "exit": 0,
+      "completed_at": "2026-06-16T00:00:02Z"
+    }
+  ]
+}

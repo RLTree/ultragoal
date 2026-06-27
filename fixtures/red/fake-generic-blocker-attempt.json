@@ -1,0 +1,47 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fake-generic-blocker-attempt",
+  "expected_failure": {
+    "check_id": "backlog-attempt-proof",
+    "error": "fake_generic_attempt_satisfies_blocker"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/verification_backlog/rows/0/attempts/0/attempt_kind",
+      "value": "external_decision"
+    },
+    {
+      "op": "add",
+      "path": "/verification_backlog/rows/0/attempts/0/external_receipt",
+      "value": {
+        "path": "generic-note.md",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/verification_backlog/rows/0/attempts/0/action",
+      "value": "Generic attempted something, no install/provision/escalation evidence tied to blocker."
+    }
+  ],
+  "notes": "replace typed blocker attempt with generic self-referential evidence",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/verification_backlog/rows/0/attempts/0/action",
+      "expectation": "fake_generic_attempt_satisfies_blocker"
+    }
+  ]
+}

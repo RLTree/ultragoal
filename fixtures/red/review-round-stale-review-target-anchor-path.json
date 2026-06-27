@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-stale-review-target-anchor-path",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_stale_anchor_path"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/review_target/path",
+      "value": "fixtures/review-round/anchors/review-target-stale-digest-receipt.json"
+    }
+  ],
+  "notes": "review round top-level anchor paths must match the current validator CLI anchor paths, not just carry matching digests",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/review_target/path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/review_target/path",
+      "expectation": "review-round validation rejects stale top-level anchor paths"
+    }
+  ]
+}

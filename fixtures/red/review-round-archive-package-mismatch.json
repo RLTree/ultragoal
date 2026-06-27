@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-archive-package-mismatch",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_anchor_source_mismatch"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/round_id",
+      "value": "fixture-four-persona-signoff-round"
+    }
+  ],
+  "notes": "archive source package digest must match current validator package digest",
+  "review_round_anchor_overrides": {
+    "archive_receipt": "fixtures/review-round/anchors/archive-package-mismatch-receipt.json"
+  },
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

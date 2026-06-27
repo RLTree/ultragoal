@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-standards-unclassified-row",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_row_unclassified"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/0/enforcement_status",
+      "value": "unclassified"
+    }
+  ],
+  "notes": "Standards rows must be classified as mechanized, backlogged, blocked, or informational. Reviewer agreement alone cannot classify or close a standards obligation.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/0/enforcement_status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/0/enforcement_status",
+      "expectation": "agent_standards_row_unclassified"
+    }
+  ]
+}

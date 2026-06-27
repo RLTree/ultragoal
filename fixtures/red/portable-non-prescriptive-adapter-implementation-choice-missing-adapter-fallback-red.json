@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "portable-non-prescriptive-adapter-implementation-choice-missing-adapter-fallback-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:portable-non-prescriptive-adapter-implementation-choice:missing_adapter_fallback"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/portable-non-prescriptive-adapter-implementation-choice.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_adapter_fallback",
+      "value": false
+    }
+  ],
+  "notes": "portable-non-prescriptive-adapter-implementation-choice must fail when missing_adapter_fallback is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_adapter_fallback",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_adapter_fallback",
+      "expectation": "mandatory_law_specific_guard_not_enforced:portable-non-prescriptive-adapter-implementation-choice:missing_adapter_fallback"
+    }
+  ]
+}

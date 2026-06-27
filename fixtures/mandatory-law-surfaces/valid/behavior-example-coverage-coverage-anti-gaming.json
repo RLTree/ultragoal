@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "behavior-example-coverage-coverage-anti-gaming",
+  "standards_row_id": "behavior-example-coverage-coverage-anti-gaming",
+  "source_obligation_id": "behavior-example-coverage-coverage-anti-gaming",
+  "foundational_trace_id": "behavior-example-coverage-coverage-anti-gaming",
+  "validator_check_id": "behavior-example-coverage-coverage-anti-gaming",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json",
+  "red_fixture_ids": [
+    "behavior-example-coverage-coverage-anti-gaming-trivial-hit-only-test-red",
+    "behavior-example-coverage-coverage-anti-gaming-unreachable-code-retained-red",
+    "behavior-example-coverage-coverage-anti-gaming-blanket-exclusion-red",
+    "behavior-example-coverage-coverage-anti-gaming-generated-code-false-label-red",
+    "behavior-example-coverage-coverage-anti-gaming-test-only-branch-red",
+    "behavior-example-coverage-coverage-anti-gaming-unasserted-coverage-red",
+    "behavior-example-coverage-coverage-anti-gaming-changed-line-without-behavior-example-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt",
+  "behavior_failure_modes": [
+    "behavior_example_coverage_coverage_anti_gaming_trivial_hit_only_test",
+    "behavior_example_coverage_coverage_anti_gaming_unreachable_code_retained",
+    "behavior_example_coverage_coverage_anti_gaming_blanket_exclusion",
+    "behavior_example_coverage_coverage_anti_gaming_generated_code_false_label",
+    "behavior_example_coverage_coverage_anti_gaming_test_only_branch",
+    "behavior_example_coverage_coverage_anti_gaming_unasserted_coverage",
+    "behavior_example_coverage_coverage_anti_gaming_changed_line_without_behavior_example"
+  ],
+  "law_specific": {
+    "trivial_hit_only_test": true,
+    "unreachable_code_retained": true,
+    "blanket_exclusion": true,
+    "generated_code_false_label": true,
+    "test_only_branch": true,
+    "unasserted_coverage": true,
+    "changed_line_without_behavior_example": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

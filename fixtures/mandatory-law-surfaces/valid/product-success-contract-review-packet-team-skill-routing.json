@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-success-contract-review-packet-team-skill-routing",
+  "standards_row_id": "product-success-contract-review-packet-team-skill-routing",
+  "source_obligation_id": "product-success-contract-review-packet-team-skill-routing",
+  "foundational_trace_id": "product-success-contract-review-packet-team-skill-routing",
+  "validator_check_id": "product-success-contract-review-packet-team-skill-routing",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-contract-review-packet-team-skill-routing.json",
+  "red_fixture_ids": [
+    "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red",
+    "product-success-contract-review-packet-team-skill-routing-missing-product-reviewer-disposition-red",
+    "product-success-contract-review-packet-team-skill-routing-packet-with-stale-product-lineage-red",
+    "product-success-contract-review-packet-team-skill-routing-review-target-omitting-product-contract-red",
+    "product-success-contract-review-packet-team-skill-routing-archive-omitting-product-contract-receipt-red",
+    "product-success-contract-review-packet-team-skill-routing-skill-routing-omission-red",
+    "product-success-contract-review-packet-team-skill-routing-fit-repo-product-ready-without-contract-red",
+    "product-success-contract-review-packet-team-skill-routing-review-team-lacking-typed-product-owner-red",
+    "product-success-contract-review-packet-team-skill-routing-package-inventory-missing-product-success-schema-template-fixtures-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "review_packet_claims_withheld_without_product_success_contract_review_and_routing",
+  "behavior_failure_modes": [
+    "product_success_contract_review_packet_team_skill_routing_review_packet_missing_product_success_contract",
+    "product_success_contract_review_packet_team_skill_routing_missing_product_reviewer_disposition",
+    "product_success_contract_review_packet_team_skill_routing_packet_with_stale_product_lineage",
+    "product_success_contract_review_packet_team_skill_routing_review_target_omitting_product_contract",
+    "product_success_contract_review_packet_team_skill_routing_archive_omitting_product_contract_receipt",
+    "product_success_contract_review_packet_team_skill_routing_skill_routing_omission",
+    "product_success_contract_review_packet_team_skill_routing_fit_repo_product_ready_without_contract",
+    "product_success_contract_review_packet_team_skill_routing_review_team_lacking_typed_product_owner",
+    "product_success_contract_review_packet_team_skill_routing_package_inventory_missing_product_success_schema_template_fixtures"
+  ],
+  "law_specific": {
+    "review_packet_missing_product_success_contract": true,
+    "missing_product_reviewer_disposition": true,
+    "packet_with_stale_product_lineage": true,
+    "review_target_omitting_product_contract": true,
+    "archive_omitting_product_contract_receipt": true,
+    "skill_routing_omission": true,
+    "fit_repo_product_ready_without_contract": true,
+    "review_team_lacking_typed_product_owner": true,
+    "package_inventory_missing_product_success_schema_template_fixtures": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

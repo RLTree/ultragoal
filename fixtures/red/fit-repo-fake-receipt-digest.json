@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fit-repo-fake-receipt-digest",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "fit_repo_receipt_digest_mismatch"
+  },
+  "base_fixture_path": "validation_artifacts/harness/fit-repo-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/receipt_digest",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "notes": "Fit-repo receipt authority red fixture.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "validation_artifacts/harness/fit-repo-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/receipt_digest",
+      "expectation": "fit_repo_receipt_digest_mismatch"
+    }
+  ]
+}

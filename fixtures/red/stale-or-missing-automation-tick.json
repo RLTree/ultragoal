@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-or-missing-automation-tick",
+  "expected_failure": {
+    "check_id": "automation-tick-freshness",
+    "error": "automation_timestamps_stale_but_claim_fresh"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/automation_tick_receipt/drift_verdict",
+      "value": "stale"
+    }
+  ],
+  "notes": "schema-valid semantic failure over fixture-owned surface",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/automation_tick_receipt/drift_verdict",
+      "expectation": "automation_tick_stale_or_missing"
+    }
+  ]
+}

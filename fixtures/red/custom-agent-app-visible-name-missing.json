@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "custom-agent-app-visible-name-missing",
+  "expected_failure": {
+    "check_id": "plugin-inventory-closure",
+    "error": "custom_agent_app_visible_name_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/plugin_manifest/agents/8/app_visible_name"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/agents/8/app_visible_name",
+      "expectation": "custom_agent_app_visible_name_missing"
+    }
+  ],
+  "notes": "custom-agent manifest entries need explicit app-visible TOML name"
+}

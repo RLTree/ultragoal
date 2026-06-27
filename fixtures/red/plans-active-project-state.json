@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plans-active-project-state",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plans_contains_project_state"
+  },
+  "base_fixture_path": "fixtures/template-integrity/valid/template-integrity.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plans_md",
+      "value": "# ExecPlans\n\n> PLANS.md is stable ExecPlan law, not the project plan ledger.\n> Adapt it only for repo terminology and path conventions. Do not put active project status, worker or thread ids, phase progress, backlog items, receipt state, or completion claims here.\n> Project-specific state belongs in docs/exec-plans/active/*, LANE_REGISTRY.json, VERIFICATION_BACKLOG.json, COMPLETION_MANIFEST.json, receipts, or AMENDMENTS.jsonl.\n\n## Non-Negotiable Requirements\n\n## Required Sections\n\n## Lane Extension\n\n## Orchestrator Responsibilities\n\n## Lane Ready Message\n\n## Active Project State\nWorker thread: 019ee7c2-907d-7143-a6c2-ea808f306b6b\nCurrent phase: implementation complete\nBacklog item: close all blockers\nReceipt status: pass\nCompletion claim: ready\n"
+    }
+  ],
+  "notes": "PLANS.md must not carry active PM state, worker/thread ids, backlog state, receipt state, or completion claims.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plans_md",
+      "expectation": "plans_contains_project_state"
+    }
+  ]
+}

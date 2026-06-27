@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:catch_all_claim_state"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/catch_all_claim_state",
+      "value": false
+    }
+  ],
+  "notes": "total-authority-types-impossible-state-elimination must fail when catch_all_claim_state is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/catch_all_claim_state",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/catch_all_claim_state",
+      "expectation": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:catch_all_claim_state"
+    }
+  ]
+}

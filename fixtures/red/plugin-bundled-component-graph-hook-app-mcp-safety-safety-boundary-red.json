@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-bundled-component-graph-hook-app-mcp-safety-safety-boundary-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:plugin-bundled-component-graph-hook-app-mcp-safety:safety_boundary"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/safety_boundary",
+      "value": false
+    }
+  ],
+  "notes": "plugin-bundled-component-graph-hook-app-mcp-safety must fail when safety_boundary is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/safety_boundary",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/safety_boundary",
+      "expectation": "mandatory_law_specific_guard_not_enforced:plugin-bundled-component-graph-hook-app-mcp-safety:safety_boundary"
+    }
+  ]
+}

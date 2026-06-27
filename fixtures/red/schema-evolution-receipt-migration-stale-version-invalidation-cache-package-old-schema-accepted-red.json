@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "schema-evolution-receipt-migration-stale-version-invalidation-cache-package-old-schema-accepted-red",
+  "expected_failure": {
+    "check_id": "schema-evolution-receipt-migration-stale-version-invalidation",
+    "error": "mandatory_law_specific_guard_not_enforced:schema-evolution-receipt-migration-stale-version-invalidation:cache_package_old_schema_accepted"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/schema-evolution-receipt-migration-stale-version-invalidation.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/cache_package_old_schema_accepted",
+      "value": false
+    }
+  ],
+  "notes": "schema-evolution-receipt-migration-stale-version-invalidation must fail when cache_package_old_schema_accepted is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/cache_package_old_schema_accepted",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/cache_package_old_schema_accepted",
+      "expectation": "mandatory_law_specific_guard_not_enforced:schema-evolution-receipt-migration-stale-version-invalidation:cache_package_old_schema_accepted"
+    }
+  ]
+}

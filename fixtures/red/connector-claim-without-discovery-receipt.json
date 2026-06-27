@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "connector-claim-without-discovery-receipt",
+  "expected_failure": {
+    "check_id": "connector-capability-discovery",
+    "error": "connector_capability_without_discovery"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "connector_capability"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_static"
+    }
+  ],
+  "notes": "add connector claim without discovery receipt",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "expectation": "connector_capability_without_discovery"
+    }
+  ]
+}

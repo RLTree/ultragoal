@@ -1,0 +1,90 @@
+{
+  "schema": "harness-ultragoal.review-packet-successor.v1",
+  "generated_at": "2026-06-25T19:35:34Z",
+  "source_root": "repo://harness-ultragoal-plugin-proposal",
+  "supersedes_partial_packet": "tmp-review-packet:20260625T1900Z/review-packet-current.json",
+  "purpose": "implemented_findings_and_remaining_blockers",
+  "candidate": {
+    "plugin": "harness-ultragoal",
+    "version": "0.0.10",
+    "package_digest_evidence": "validation_artifacts/ultragoal-audit/validator-receipt.json#/package_digest"
+  },
+  "hardening_receipt": {
+    "path": "validation_artifacts/harness/session-log-hardening-receipt.json",
+    "schema": "schemas/session-log-hardening-receipt.schema.json"
+  },
+  "implemented_findings": [
+    {
+      "finding_id": "session-hardening-inventory",
+      "implemented": [
+        "schemas/session-log-hardening-receipt.schema.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json",
+        "validator/src/audit/session_log_hardening.rs",
+        "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json"
+      ],
+      "effect": "A current packet cannot be treated as reviewer-ready unless the session-log hardening receipt exists, validates, names audited sources, and classifies the required issue classes."
+    },
+    {
+      "finding_id": "packet-registry-blocker",
+      "implemented": [
+        "validation_artifacts/harness/session-log-hardening-receipt.json",
+        "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json"
+      ],
+      "effect": "The packet states that current active registry proof was not produced and withholds live registry, Plugins UI, marketplace, install-button, launcher runtime, current reviewer exposure, and material review sign-off claims."
+    },
+    {
+      "finding_id": "installed-cache-drift",
+      "implemented": [
+        "codex-plugin-install:harness-ultragoal/validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "codex-plugin-cache:harness-ultragoal/0.0.10/validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "tmp-review-packet:20260625T1900Z/review-packet-current.json"
+      ],
+      "effect": "The earlier stale same-version installed root is replaced by refreshed source/install/cache same-digest receipts for this candidate."
+    },
+    {
+      "finding_id": "coverage-100-self-audit-blocker",
+      "implemented": [
+        "validation_artifacts/harness/session-log-hardening-receipt.json",
+        "validator/src/audit/session_log_hardening.rs"
+      ],
+      "effect": "The packet cannot imply complete, ready, release, production, phase advancement, material sign-off, or 100% coverage from test success; the live 100% coverage proof is blocked."
+    }
+  ],
+  "already_enforced_findings": [
+    "product-fitness-enforcement",
+    "validator-red-catalog-drift",
+    "registry-review-round-provenance",
+    "standards-enforcement-path",
+    "typed-boundary-self-audit",
+    "line-cap-self-audit"
+  ],
+  "remaining_blockers": [
+    {
+      "blocker_id": "live-active-registry-proof-not-produced",
+      "evidence": "The only located active registry exposure receipt remains validation_artifacts/ultragoal-audit/active-registry-exposure-current.json captured_at 2026-06-21T05:28:30Z. No fresh same-surface app registry receipt was produced in this run.",
+      "claim_impact": "No live app registry, Plugins UI, marketplace, install-button, launcher runtime, current reviewer exposure, or material review sign-off claim is supported."
+    },
+    {
+      "blocker_id": "real-product-fitness-not-proven",
+      "evidence": "Product Fitness is enforced as a package/static gate through validator receipts and substitution rejection. No real user outcome, daily-driver, or external product success receipt exists.",
+      "claim_impact": "No real Product Fitness, daily-driver, release, or production-readiness claim is supported."
+    },
+    {
+      "blocker_id": "coverage-100-not-proven",
+      "evidence": "cargo llvm-cov --workspace --all-features --summary-only --fail-under-lines 100 --offline exited non-zero after running 22 tests; TOTAL line coverage was 6.68%. The repo also has no root .harness/coverage-command, only template coverage commands.",
+      "claim_impact": "No 100% coverage, complete, ready, release-ready, production-ready, phase advancement, or material sign-off claim is supported."
+    }
+  ],
+  "verification_evidence": {
+    "source_audit_receipt": "repo://harness-ultragoal-plugin-proposal/validation_artifacts/ultragoal-audit/validator-receipt.json",
+    "installed_audit_receipt": "codex-plugin-install:harness-ultragoal/validation_artifacts/ultragoal-audit/validator-receipt.json",
+    "cache_audit_receipt": "codex-plugin-cache:harness-ultragoal/0.0.10/validation_artifacts/ultragoal-audit/validator-receipt.json",
+    "review_target_receipt": "tmp-review-packet:20260625T1900Z/review-target-receipt.json",
+    "candidate_archive_receipt": "tmp-review-packet:20260625T1900Z/candidate-archive-receipt.json",
+    "prior_packet_summary": "tmp-review-packet:20260625T1900Z/review-packet-current.json",
+    "typed_boundary_tests": "cargo test --offline",
+    "coverage_probe": "cargo llvm-cov --workspace --all-features --summary-only --fail-under-lines 100 --offline",
+    "line_cap_probe": "find validator/src -name '*.rs' -type f -print0 | xargs -0 awk 'FNR==1{if(file){print lines,file}; file=FILENAME; lines=0} {lines++} END{print lines,file}' | awk '$1 > 250' | sort -nr"
+  },
+  "claim_ceiling": "Supports package/static/fixture validator proof, detached review-target/archive identity, local installed/cache same-digest proof from regenerated source, installed, and cache audit receipts, session-log hardening inventory enforcement, typed-boundary validator tests/audit, validator/src line-cap adherence, and package/static Product Fitness enforcement. Does not support live app registry, Plugins UI, marketplace, install-button, launcher runtime, current reviewer exposure, material review sign-off, real user Product Fitness, daily-driver, 100% coverage, complete, ready, release, production, phase advancement, or material sign-off claims."
+}

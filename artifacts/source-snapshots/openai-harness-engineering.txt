@@ -1,0 +1,4 @@
+Title: Harness engineering for AI agents
+URL: https://openai.com/index/harness-engineering/
+Retrieved at: 2026-06-16T00:00:00Z
+Used for: repo-local system of record, agent legibility, mechanical invariant design

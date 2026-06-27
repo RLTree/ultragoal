@@ -1,0 +1,11 @@
+{
+  "template_kind": "harness-ultragoal.authoring-template.v1",
+  "target_schema": "harness-ultragoal.lane-registry.v1",
+  "canonical_output": "LANE_REGISTRY.json",
+  "authority": "authoring-template-only; not evidence until generated from actual lanes",
+  "required_generation": [
+    "Register every active lane exactly once with owned paths, target freshness, actor binding, and teardown rules.",
+    "Terminal lanes require merge/supersession/abandonment evidence and cleanup receipts.",
+    "Do not treat status complete as merged."
+  ]
+}

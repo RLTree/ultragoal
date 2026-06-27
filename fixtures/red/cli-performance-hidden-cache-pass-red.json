@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "cli-performance-hidden-cache-pass-red",
+  "expected_failure": {
+    "check_id": "cli-performance-latency-speed-iteration-fitness",
+    "error": "mandatory_law_specific_guard_not_enforced:cli-performance-latency-speed-iteration-fitness:hidden_stale_cache_pass"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/hidden_stale_cache_pass",
+      "value": false
+    }
+  ],
+  "notes": "cli-performance-latency-speed-iteration-fitness must fail when hidden_stale_cache_pass is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/hidden_stale_cache_pass",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/hidden_stale_cache_pass",
+      "expectation": "mandatory_law_specific_guard_not_enforced:cli-performance-latency-speed-iteration-fitness:hidden_stale_cache_pass"
+    }
+  ]
+}

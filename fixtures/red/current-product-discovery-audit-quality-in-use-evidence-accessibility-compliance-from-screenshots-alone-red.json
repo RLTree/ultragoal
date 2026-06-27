@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "current-product-discovery-audit-quality-in-use-evidence-accessibility-compliance-from-screenshots-alone-red",
+  "expected_failure": {
+    "check_id": "current-product-discovery-audit-quality-in-use-evidence",
+    "error": "mandatory_law_specific_guard_not_enforced:current-product-discovery-audit-quality-in-use-evidence:accessibility_compliance_from_screenshots_alone"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/accessibility_compliance_from_screenshots_alone",
+      "value": false
+    }
+  ],
+  "notes": "current-product-discovery-audit-quality-in-use-evidence must fail when accessibility_compliance_from_screenshots_alone is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/accessibility_compliance_from_screenshots_alone",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/accessibility_compliance_from_screenshots_alone",
+      "expectation": "mandatory_law_specific_guard_not_enforced:current-product-discovery-audit-quality-in-use-evidence:accessibility_compliance_from_screenshots_alone"
+    }
+  ]
+}

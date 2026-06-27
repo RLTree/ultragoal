@@ -1,0 +1,1663 @@
+{
+  "schema": "harness-ultragoal.agent-standards-enforcement.v1",
+  "rows": [
+    {
+      "id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "source_law": "mandatory law: Active Setup To Idle Orchestration Thread Bound Heartbeat",
+      "required_behavior": "Active Setup To Idle Orchestration Thread Bound Heartbeat must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; orchestration_claims_withheld_without_setup_to_idle_transition_and_thread_bound_heartbeat.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "adversarial-packet-tampering-forged-proof-rejection",
+      "source_law": "mandatory law: Adversarial Packet Tampering Forged Proof Rejection",
+      "required_behavior": "Adversarial Packet Tampering Forged Proof Rejection must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; packet_claims_withheld_without_tamper_and_forgery_rejection.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "agent-authored-source-tooling-docs-provenance",
+      "source_law": "mandatory law: Agent Authored Source Tooling Docs Provenance",
+      "required_behavior": "Agent Authored Source Tooling Docs Provenance must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; law_bearing_changes_withheld_without_agent_visible_provenance.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "agent-queryable-observability",
+      "source_law": "mandatory law: Agent Queryable Observability",
+      "required_behavior": "Agent Queryable Observability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; observability_claims_withheld_without_typed_queryable_correlated_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "agent-remediating-validator-failures",
+      "source_law": "mandatory law: Agent Remediating Validator Failures",
+      "required_behavior": "Agent Remediating Validator Failures must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; validator_claims_withheld_without_agent_remediating_failures.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "agent-session-telemetry-token-rate-limit",
+      "source_law": "mandatory law: Agent Session Telemetry Token Rate Limit",
+      "required_behavior": "Agent Session Telemetry Token Rate Limit must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; agent_run_claims_withheld_without_redacted_session_telemetry.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "architecture-dependency-topology",
+      "source_law": "mandatory law: Architecture Dependency Topology",
+      "required_behavior": "Architecture Dependency Topology must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; architecture_dependency_topology_withheld_without_registry_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "source_law": "mandatory law: Authority Exhaustiveness Closed Enums Impossible State Elimination",
+      "required_behavior": "Authority Exhaustiveness Closed Enums Impossible State Elimination must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; authority_claims_withheld_without_closed_enum_exhaustiveness.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "authority-source-binding",
+      "source_law": "proof-gate: authority source binding",
+      "required_behavior": "Named plugin, process, installed package, app registry, or runtime authority must not silently fall back to another authority source.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "install, runtime, product, review",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run standards enforcement before material claims; record fallback boundary in the relevant receipt.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md"
+      ]
+    },
+    {
+      "id": "autonomy-loop-proof",
+      "source_law": "mandatory law: Autonomy Loop Proof",
+      "required_behavior": "Autonomy Loop Proof must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; behavior_change_claims_withheld_without_before_after_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "batch-fanout-custom-agent-job-worker-result-discipline",
+      "source_law": "mandatory law: Batch Fanout Custom Agent Job Worker Result Discipline",
+      "required_behavior": "Batch Fanout Custom Agent Job Worker Result Discipline must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "behavior-example-coverage-coverage-anti-gaming",
+      "source_law": "mandatory law: Behavior Example Coverage Coverage Anti Gaming",
+      "required_behavior": "Behavior Example Coverage Coverage Anti Gaming must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "capability-gap-extraction-harness-capability-promotion",
+      "source_law": "mandatory law: Capability Gap Extraction Harness Capability Promotion",
+      "required_behavior": "Capability Gap Extraction Harness Capability Promotion must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; readiness_claims_withheld_without_capability_gap_promotion.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "clean-checkout-command-discovery",
+      "source_law": "source obligation: Clean Checkout Command Discovery",
+      "required_behavior": "Clean Checkout Command Discovery must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "clean-room-rebuild-author-memory-independence",
+      "source_law": "mandatory law: Clean Room Rebuild Author Memory Independence",
+      "required_behavior": "Clean Room Rebuild Author Memory Independence must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; reproducibility_claims_withheld_without_clean_room_rebuild_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "cli-control-plane-authority",
+      "source_law": "Gate 89 mandatory law: CLI Control Plane Authority",
+      "required_behavior": "Harness Ultragoal claims must be computed, minted, or verified by the installed CLI control plane from typed current inputs; prose, checklist, reviewer agreement, source-only proof, install proof, cache proof, packet existence, or claim-ceiling text cannot satisfy completion, package, review, readiness, release, app, registry, reviewer, or update_goal claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run CLI authority validation and mandatory-law red fixtures; harness_claims_withheld_without_cli_control_plane_authority.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "cli-performance-latency-speed-iteration-fitness",
+      "source_law": "Gate 89.22 mandatory law: CLI Performance, Latency, Speed, And Iteration Fitness",
+      "required_behavior": "Every evidence-affecting Ultragoal CLI command must have typed budget classes, current performance receipts, cache/no-cache honesty, bounded concurrency/isolation proof, live-probe timeout and retry/backoff policy, regression baselines, and claim blocking for missing, stale, over-budget, hidden-cache, focused-substituted, or unbounded proof paths.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/cli/performance.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, routine usability, product readiness, package, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run CLI performance validation and mandatory-law red fixtures; performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "cli-self-law-compliance",
+      "source_law": "Gate 89 mandatory law: CLI Self Law Compliance",
+      "required_behavior": "The CLI, validator source, schemas, receipts, fixtures, reports, package inventory, generated hooks, command wrappers, init or retrofit outputs, configuration, product surfaces, and documentation must obey every law the CLI enforces; bootstrap, transition-only, source-only, target-only, stale, copied, or non-current proof cannot support completion, package, review, release, registry, app, reviewer, product, or update_goal claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run CLI authority validation and mandatory-law red fixtures; completion_claims_withheld_without_same_candidate_cli_self_law_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "compact-agents-routed-standards",
+      "source_law": "source obligation: Compact Agents Routed Standards",
+      "required_behavior": "Compact Agents Routed Standards must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; package_static_only.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "conditional-observability-proof",
+      "source_law": "source obligation: Conditional Observability Proof",
+      "required_behavior": "Conditional Observability Proof must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; no_default_observability_install_claim.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "config-precedence-defaults-env-indirection",
+      "source_law": "mandatory law: Config Precedence Defaults Env Indirection",
+      "required_behavior": "Config Precedence Defaults Env Indirection must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; config_claims_withheld_without_typed_precedence_and_redacted_env_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "connector-capability-discovery",
+      "source_law": "mandatory law: Connector Capability Discovery",
+      "required_behavior": "Connector Capability Discovery must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; capability_claims_withheld_without_same_surface_discovery_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "coverage-proof-accountability",
+      "source_law": "agent standards: coverage and test law",
+      "required_behavior": "Coverage claims require coverage receipts; test pass counts, smoke tests, fixtures, mocks, and reviewer signoff do not prove coverage. Lower-than-100 floors are ratchet debt with owner, reason, artifact, blocker, and claim ceiling.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, coverage, release, production-readiness",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check and coverage-proof-policy before material completion claims; withhold claims when coverage is missing or below the declared policy.",
+      "required_execplan_refs": [
+        "mandatory-coverage-authority-and-enforcement.md",
+        "mandatory-coverage-scope-authority-and-anti-theater.md"
+      ]
+    },
+    {
+      "id": "coverage-scope-authority",
+      "source_law": "coverage scope authority law",
+      "required_behavior": "Coverage scope is owned by .harness/coverage-manifest.json, repo walk validation, changed-file coupling, receipt freshness, policy mutation checks, and fast/full coverage gate separation. Agents cannot narrow scope, copy proof, or use fast checks for completion claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-coverage-full",
+      "claim_ids_affected": "completion, readiness, release, material-signoff, coverage",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run coverage scope validators and full coverage gate before material claims; withhold claims when manifest, freshness, changed-file, or fast/full authority checks fail.",
+      "owner_lane": "root",
+      "required_execplan_refs": [
+        "mandatory-coverage-authority-and-enforcement.md",
+        "mandatory-coverage-scope-authority-and-anti-theater.md"
+      ]
+    },
+    {
+      "id": "cross-artifact-consistency-solver-authority-graph-closure",
+      "source_law": "mandatory law: Cross Artifact Consistency Solver Authority Graph Closure",
+      "required_behavior": "Cross Artifact Consistency Solver Authority Graph Closure must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; completion_claims_withheld_without_authority_graph_closure.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "current-product-discovery-audit-quality-in-use-evidence",
+      "source_law": "mandatory law: Current Product Discovery Audit Quality In Use Evidence",
+      "required_behavior": "Current Product Discovery Audit Quality In Use Evidence must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_facing_claims_withheld_without_current_discovery_and_quality_in_use_evidence.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "derived-authority-recomputation",
+      "source_law": "source obligation: Derived Authority Recomputation",
+      "required_behavior": "Derived Authority Recomputation must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; content_digest_path_privacy_only_not_enough_for_behavior_authority.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "derived-authority-recomputation-named-authority-fallback-refusal",
+      "source_law": "mandatory law: Derived Authority Recomputation Named Authority Fallback Refusal",
+      "required_behavior": "Derived Authority Recomputation Named Authority Fallback Refusal must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "distinct-proof-surfaces-claim-ceilings",
+      "source_law": "source obligation: Distinct Proof Surfaces Claim Ceilings",
+      "required_behavior": "Distinct Proof Surfaces Claim Ceilings must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; withholds_surface_substitution.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "distribution-sharing-surface-claim-separation",
+      "source_law": "mandatory law: Distribution Sharing Surface Claim Separation",
+      "required_behavior": "Distribution Sharing Surface Claim Separation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "documentation-freshness",
+      "source_law": "agent standards: namespace and progressive disclosure",
+      "required_behavior": "Work that changes architecture, commands, standards, runtime behavior, product behavior, proof surfaces, lane state, or operational procedure updates affected repo-owned docs before completion claims, or records the owed stale documentation update.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, documentation, orchestration",
+      "current_status": "active",
+      "blocker_or_repair_action": "Completion claims require docs-current evidence for changed proof, runtime, product, standards, lane, or command surfaces; stale docs keep related claims withheld.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "execplan-no-handback-prototype-promotion-discard",
+      "source_law": "mandatory law: Execplan No Handback Prototype Promotion Discard",
+      "required_behavior": "Execplan No Handback Prototype Promotion Discard must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; execplan_claims_withheld_without_no_handback_and_prototype_gates.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "execplan-plain-language-expected-output-interface-completeness",
+      "source_law": "mandatory law: Execplan Plain Language Expected Output Interface Completeness",
+      "required_behavior": "Execplan Plain Language Expected Output Interface Completeness must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; execplan_claims_withheld_without_plain_language_interface_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "failure-remediation-quality-agent-actionable-output",
+      "source_law": "mandatory law: Failure Remediation Quality Agent Actionable Output",
+      "required_behavior": "Failure Remediation Quality Agent Actionable Output must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; repair_claims_withheld_without_agent_actionable_failure_output.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "feedback-to-rule-promotion",
+      "source_law": "mandatory law: Feedback To Rule Promotion",
+      "required_behavior": "Feedback To Rule Promotion must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; material_repeated_findings_withheld_without_promotion_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+      "source_law": "mandatory law: Forward Only State Transition Integrity Silent Reopen Prevention",
+      "required_behavior": "Forward Only State Transition Integrity Silent Reopen Prevention must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; claim_green_states_withheld_without_forward_only_transition_history.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "fresh-init-retrofit-mode-separation",
+      "source_law": "mandatory law: Fresh Init Retrofit Mode Separation",
+      "required_behavior": "Fresh Init Retrofit Mode Separation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; setup_claims_withheld_without_same_mode_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "fresh-retrofit-repo-shape",
+      "source_law": "source obligation: Fresh Retrofit Repo Shape",
+      "required_behavior": "Fresh Retrofit Repo Shape must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; target_fixture_only.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "generated-proof-artifact-provenance-anti-fabrication",
+      "source_law": "mandatory law: Generated Proof Artifact Provenance Anti Fabrication",
+      "required_behavior": "Generated Proof Artifact Provenance Anti Fabrication must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; generated_proof_claims_withheld_without_reproducible_provenance.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "generated-ready-completion-receipts",
+      "source_law": "source obligation: Generated Ready Completion Receipts",
+      "required_behavior": "Generated Ready Completion Receipts must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; handwritten_ready_unsupported.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "goal-contract-amendment-authority-required-claim-id-mapping",
+      "source_law": "mandatory law: Goal Contract Amendment Authority Required Claim Id Mapping",
+      "required_behavior": "Goal Contract Amendment Authority Required Claim Id Mapping must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "green-path-adequacy-satisfiable-strictness",
+      "source_law": "mandatory law: Green Path Adequacy Satisfiable Strictness",
+      "required_behavior": "Green Path Adequacy Satisfiable Strictness must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; compliance_claims_withheld_when_any_law_lacks_green_path.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "guardrail-speed-isolation-cache-honesty",
+      "source_law": "mandatory law: Guardrail Speed Isolation Cache Honesty",
+      "required_behavior": "Guardrail Speed Isolation Cache Honesty must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; guardrail_claims_withheld_without_speed_isolation_cache_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "historical-regression-corpus-session-review-signals",
+      "source_law": "mandatory law: Historical Regression Corpus Session Review Signals",
+      "required_behavior": "Historical Regression Corpus Session Review Signals must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; completion_claims_withheld_without_historical_regression_corpus.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+      "source_law": "mandatory law: Human Audit Disposition Decomposition Judgment Claim Blocking",
+      "required_behavior": "Human Audit Disposition Decomposition Judgment Claim Blocking must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; mandatory_law_claims_withheld_without_deterministic_split_and_judgment_only_blocker.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "instruction-precedence-nested-agents-routing",
+      "source_law": "mandatory law: Instruction Precedence Nested Agents Routing",
+      "required_behavior": "Instruction Precedence Nested Agents Routing must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; instruction_claims_withheld_without_strict_precedence_route.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "issue-tracker-lifecycle-eligibility-terminal-state",
+      "source_law": "mandatory law: Issue Tracker Lifecycle Eligibility Terminal State",
+      "required_behavior": "Issue Tracker Lifecycle Eligibility Terminal State must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; issue_goal_claims_withheld_without_typed_lifecycle_evidence.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "lane-worktree-isolation-cleanup",
+      "source_law": "source obligation: Lane Worktree Isolation Cleanup",
+      "required_behavior": "Lane Worktree Isolation Cleanup must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; fixture_only.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "live-beneficial-e2e",
+      "source_law": "source obligation: Live Beneficial E2e",
+      "required_behavior": "Live Beneficial E2e must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; static_fixtures_not_live_benefit.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "memory-wiki-context-only",
+      "source_law": "source obligation: Memory Wiki Context Only",
+      "required_behavior": "Memory Wiki Context Only must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "namespace-progressive-disclosure",
+      "source_law": "agent standards: namespace and progressive disclosure",
+      "required_behavior": "Package-owned paths are an agent-facing interface. Junk drawers, vague common domain directories, repeated filename prefixes without a routed subdirectory or typed exception, root clutter without routing, orphan repo files, and prose-only namespace laws block completion, review, package, readiness, and release claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/namespace/law.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run namespace-progressive-disclosure validator; add routed paths or typed namespace exceptions with external contract or generator proof before material claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "non-e2e-claim-ceiling-confidence-bounds",
+      "source_law": "mandatory law: Non E2e Claim Ceiling Confidence Bounds",
+      "required_behavior": "Non E2e Claim Ceiling Confidence Bounds must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_live_claims_withheld_above_non_e2e_ceiling.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "offline-schema-catalog-resolver-portability",
+      "source_law": "mandatory law: Offline Schema Catalog Resolver Portability",
+      "required_behavior": "Offline Schema Catalog Resolver Portability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; schema_validation_claims_withheld_without_offline_catalog_resolution.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "source_law": "mandatory law: One Command Fresh Environment Bootstrap Concurrent Resource Allocation",
+      "required_behavior": "One Command Fresh Environment Bootstrap Concurrent Resource Allocation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "orchestrator-state-machine",
+      "source_law": "mandatory law: Orchestrator State Machine",
+      "required_behavior": "Orchestrator State Machine must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; orchestration_claims_withheld_without_state_machine_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "plugin-bundled-component-graph-hook-app-mcp-safety",
+      "source_law": "mandatory law: Plugin Bundled Component Graph Hook App Mcp Safety",
+      "required_behavior": "Plugin Bundled Component Graph Hook App Mcp Safety must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; installable_package_claims_withheld_without_closed_component_graph.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "source_law": "mandatory law: Plugin Flow Graph Package Dependency Closure Plugin Product Journey",
+      "required_behavior": "Plugin Flow Graph Package Dependency Closure Plugin Product Journey must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; plugin_product_claims_withheld_without_closed_flow_graph_and_journey_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "plugin-install-surface-metadata-cache-enable-state",
+      "source_law": "mandatory law: Plugin Install Surface Metadata Cache Enable State",
+      "required_behavior": "Plugin Install Surface Metadata Cache Enable State must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; install_marketplace_enable_claims_withheld_without_same_surface_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "plugin-product-cohesion-authority",
+      "source_law": "mandatory plugin product cohesion and fit-repo authority",
+      "required_behavior": "Harness Ultragoal repo fitting must enter through harness-ultragoal:fit-repo, emit fit-repo and plugin product journey receipts, validate plugin flow graph edges, keep source/install/cache/app-registry proof surfaces separate, and promote severe setup friction into standards-gardener rows.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "docs/plugin-cohesion-manifest.json",
+      "owner_lane": "root",
+      "claim_ids_affected": "fit-repo, init, retrofit, product-cohesion, install, cache, app-registry",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run plugin product cohesion validator before setup or material claims; withhold claims when fit-repo receipt, flow graph, package closure, or journey receipt is missing.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md"
+      ]
+    },
+    {
+      "id": "portable-non-prescriptive-adapter-implementation-choice",
+      "source_law": "mandatory law: Portable Non Prescriptive Adapter Implementation Choice",
+      "required_behavior": "Portable Non Prescriptive Adapter Implementation Choice must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; generic_claims_withheld_without_portable_adapter_boundaries.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "privacy-raw-artifact-boundary",
+      "source_law": "security and privacy law",
+      "required_behavior": "Validators and review prompts prevent opening or persisting raw private transcript, audio, prompt, message, or event payloads while allowing category-only status and leak summaries.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "security, review, fixtures",
+      "current_status": "active",
+      "blocker_or_repair_action": "Use redacted snippets, digests, counts, category status, and leak summaries instead of raw private payloads.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ]
+    },
+    {
+      "id": "product-cohesion-product-claims",
+      "source_law": "source obligation: Product Cohesion Product Claims",
+      "required_behavior": "Product Cohesion Product Claims must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; engine_proof_not_product_proof.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-live-surface-receipts",
+      "source_law": "proof-gate: proof surfaces are not interchangeable",
+      "required_behavior": "CLI checks and fixtures do not prove live recording, live UI, replay, transcript alignment, video alignment, or parent-operation coordination.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "recording, replay, transcript, product",
+      "current_status": "active",
+      "blocker_or_repair_action": "Live product, recording, replay, transcript-alignment, and parent-operation claims require same-surface live receipts; CLI/install/package proof cannot substitute.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ]
+    },
+    {
+      "id": "product-proof-joins-substitution-blocking",
+      "source_law": "mandatory law: Product Proof Joins Substitution Blocking",
+      "required_behavior": "Product Proof Joins Substitution Blocking must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_success_claims_withheld_without_same_surface_product_proof_join.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-strategy-positioning-research-eval-before-lane-planning",
+      "source_law": "mandatory law: Product Strategy Positioning Research Eval Before Lane Planning",
+      "required_behavior": "Product Strategy Positioning Research Eval Before Lane Planning must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_lane_planning_claims_withheld_without_strategy_research_eval_artifacts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-binding-goal-lane-execplan-authority",
+      "source_law": "mandatory law: Product Success Binding Goal Lane Execplan Authority",
+      "required_behavior": "Product Success Binding Goal Lane Execplan Authority must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_lane_claims_withheld_without_product_success_binding.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-contract-initiation-authority",
+      "source_law": "mandatory law: Product Success Contract Initiation Authority",
+      "required_behavior": "Product Success Contract Initiation Authority must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_claims_withheld_without_initiation_time_product_success_contract.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-contract-review-packet-team-skill-routing",
+      "source_law": "mandatory law: Product Success Contract Review Packet Team Skill Routing",
+      "required_behavior": "Product Success Contract Review Packet Team Skill Routing must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; review_packet_claims_withheld_without_product_success_contract_review_and_routing.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-inspiration-source-provenance-disposition",
+      "source_law": "mandatory law: Product Success Inspiration Source Provenance Disposition",
+      "required_behavior": "Product Success Inspiration Source Provenance Disposition must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_requirements_claims_withheld_without_inspiration_source_disposition.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-lifecycle-transitions-no-late-afterthought",
+      "source_law": "mandatory law: Product Success Lifecycle Transitions No Late Afterthought",
+      "required_behavior": "Product Success Lifecycle Transitions No Late Afterthought must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_success_claims_withheld_without_lifecycle_transition_receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "product-success-lineage-amendments-closed-product-claim-ids",
+      "source_law": "mandatory law: Product Success Lineage Amendments Closed Product Claim Ids",
+      "required_behavior": "Product Success Lineage Amendments Closed Product Claim Ids must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_claims_withheld_without_lineage_amendments_and_closed_product_claim_ids.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "purpose-backed-active-files",
+      "source_law": "source obligation: Purpose Backed Active Files",
+      "required_behavior": "Purpose Backed Active Files must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; archive_only_or_orphan_files_withhold_active_repo_claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "quality-score-taste-gates",
+      "source_law": "mandatory law: Quality Score Taste Gates",
+      "required_behavior": "Quality Score Taste Gates must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; quality_claims_withheld_without_current_evidence_bound_score.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "raw-private-artifact-handling-category-only-evidence",
+      "source_law": "mandatory law: Raw Private Artifact Handling Category Only Evidence",
+      "required_behavior": "Raw Private Artifact Handling Category Only Evidence must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; evidence_claims_withheld_without_redacted_category_only_outputs.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "repo-knowledge-index-core-beliefs",
+      "source_law": "mandatory law: Repo Knowledge Index Core Beliefs",
+      "required_behavior": "Repo Knowledge Index Core Beliefs must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; law_claims_withheld_without_fresh_knowledge_index.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "restartable-execplans",
+      "source_law": "source obligation: Restartable Execplans",
+      "required_behavior": "Restartable Execplans must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "review-disagreement-override-judgment-boundary-governance",
+      "source_law": "mandatory law: Review Disagreement Override Judgment Boundary Governance",
+      "required_behavior": "Review Disagreement Override Judgment Boundary Governance must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; review_claims_withheld_without_override_boundary_governance.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "review-feedback-disposition-same-round-satisfaction",
+      "source_law": "mandatory law: Review Feedback Disposition Same Round Satisfaction",
+      "required_behavior": "Review Feedback Disposition Same Round Satisfaction must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; review_signoff_withheld_without_same_round_feedback_disposition.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "reviewer-to-gate-conversion",
+      "source_law": "standards-gardener: promotion ladder",
+      "required_behavior": "Recurring or severe reviewer findings become scripts, tests, standards rows, fixtures, blockers, or claim ceilings.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "review, completion",
+      "current_status": "active",
+      "blocker_or_repair_action": "Reviewer agreement cannot close the finding until the row is mechanized, blocked, or backlogged.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "runtime-feasibility-cost-strict-gate-usability",
+      "source_law": "mandatory law: Runtime Feasibility Cost Strict Gate Usability",
+      "required_behavior": "Runtime Feasibility Cost Strict Gate Usability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; strict_gate_claims_withheld_without_runtime_feasibility_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "runtime-tool-identity",
+      "source_law": "agent standards: proof freshness and operation identity",
+      "required_behavior": "Browser, UI, and runtime proof records exact tool identity, version, binary path when relevant, artifact digests, workspace, and claim ceiling.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "runtime, UI, product",
+      "current_status": "active",
+      "blocker_or_repair_action": "Runtime/UI claims require exact tool identity evidence; unidentified runtime proof keeps live UI/runtime claims withheld.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ]
+    },
+    {
+      "id": "scheduler-runner-tracker-boundaries",
+      "source_law": "mandatory law: Scheduler Runner Tracker Boundaries",
+      "required_behavior": "Scheduler Runner Tracker Boundaries must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; tracker_mutation_claims_withheld_without_authority_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "source_law": "mandatory law: Schema Evolution Receipt Migration Stale Version Invalidation",
+      "required_behavior": "Schema Evolution Receipt Migration Stale Version Invalidation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; current_claims_withheld_without_schema_evolution_and_migration_binding.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "secret-token-boundaries",
+      "source_law": "mandatory law: Secret Token Boundaries",
+      "required_behavior": "Secret Token Boundaries must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; proof_claims_withheld_when_secret_boundaries_fail.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "semantic-domain-type-naming",
+      "source_law": "mandatory law: Semantic Domain Type Naming",
+      "required_behavior": "Semantic Domain Type Naming must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; authority_surface_claims_withheld_without_semantic_domain_names.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "skill-catalog-context-budget-omission-warning",
+      "source_law": "mandatory law: Skill Catalog Context Budget Omission Warning",
+      "required_behavior": "Skill Catalog Context Budget Omission Warning must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "skill-local-reference-closure",
+      "source_law": "source obligation: Skill Local Reference Closure",
+      "required_behavior": "Skill Local Reference Closure must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; package skill closure only; not live app install proof.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "skill-progressive-disclosure-metadata",
+      "source_law": "mandatory law: Skill Progressive Disclosure Metadata",
+      "required_behavior": "Skill Progressive Disclosure Metadata must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; skill_claims_withheld_without_progressive_disclosure_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "source-card-freshness-ceiling",
+      "source_law": "source obligation: Source Card Freshness Ceiling",
+      "required_behavior": "Source Card Freshness Ceiling must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "source-installed-cache-alignment",
+      "source_law": "proof-gate: same-surface plugin availability",
+      "required_behavior": "Plugin availability claims require separate source, installed-plugin, cache-package, package-sync, package-hygiene, and per-surface receipts.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "install, cache, app visibility",
+      "current_status": "active",
+      "blocker_or_repair_action": "Withhold install/cache/app visibility claims until same-surface receipts exist.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md"
+      ]
+    },
+    {
+      "id": "source-obligation-parity-anti-bundling",
+      "source_law": "source obligation: Source Obligation Parity Anti Bundling",
+      "required_behavior": "Source Obligation Parity Anti Bundling must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; compliance_claims_withheld_without_source_obligation_same_law_parity.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "stable-identifier-normalization-collision",
+      "source_law": "mandatory law: Stable Identifier Normalization Collision",
+      "required_behavior": "Stable Identifier Normalization Collision must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; identifier_claims_withheld_without_typed_normalized_collision_checked_ids.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "standards-gardener-promotion",
+      "source_law": "source obligation: Standards Gardener Promotion",
+      "required_behavior": "Standards Gardener Promotion must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; package_static_fixture_only.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "std-automation-001",
+      "source_law": "STD-AUTOMATION-001: Ultragoal orchestrator idle automation contract",
+      "required_behavior": "Ultragoal idle orchestration automation must be a self-contained heartbeat contract bound to thread, goal, repo, evidence cursors, tools, skills, output policy, action policy, and claim ceiling.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "orchestration, automation, lane monitoring, completion",
+      "current_status": "active",
+      "blocker_or_repair_action": "Use .codex/automations/ultragoal-orchestrator/automation.toml and prompt.md; unresolved template markers or generic reminders cannot support material claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "std-plans-001",
+      "source_law": "STD-PLANS-001: PLANS.md stable ExecPlan law",
+      "required_behavior": "PLANS.md is stable ExecPlan law and must not carry active project status, worker/thread ids, phase progress, backlog items, receipt state, or completion claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "planning, orchestration, completion",
+      "current_status": "active",
+      "blocker_or_repair_action": "Move project-specific state to active ExecPlans, LANE_REGISTRY.json, VERIFICATION_BACKLOG.json, COMPLETION_MANIFEST.json, receipts, or AMENDMENTS.jsonl.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "std-product-fitness-001",
+      "source_law": "STD-PRODUCT-FITNESS-001: mandatory Product Fitness and Quality-In-Use enforcement",
+      "required_behavior": "Product-impacting success, readiness, release, daily-driver, install-success-as-product-success, and material product sign-off claims require Product Fitness receipts bound to audience, job, context, outcome, quality-in-use, accessibility, cognitive-load, recovery, continuance when claimed, and claim ceiling. Substitutions are rejected.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "schemas/product-fitness-receipt.schema.json",
+      "owner_lane": "root",
+      "claim_ids_affected": "product-fitness, product-readiness, release, daily-driver, material-signoff",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run product-fitness-proof before product-impacting claims; withhold claims when Product Fitness receipt, schema, standards row, or substitution rejection proof is missing.",
+      "required_execplan_refs": [
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ]
+    },
+    {
+      "id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "source_law": "mandatory law: Subagent Custom Agent Sandbox Approval Inheritance",
+      "required_behavior": "Subagent Custom Agent Sandbox Approval Inheritance must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; reviewer_custom_agent_claims_withheld_without_launch_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "source_law": "mandatory law: Subagent Orchestration Explicitness Token Model Cost Result Reconciliation",
+      "required_behavior": "Subagent Orchestration Explicitness Token Model Cost Result Reconciliation must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "target-repo-audit-capability",
+      "source_law": "mandatory law: Target Repo Audit Capability",
+      "required_behavior": "Target Repo Audit Capability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; target_repo_claims_withheld_without_exact_target_capability_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "source_law": "mandatory law: Targeted Refactor Debt Removal Standards Gardener Cadence",
+      "required_behavior": "Targeted Refactor Debt Removal Standards Gardener Cadence must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; compliance_claims_withheld_without_debt_remediation_cadence_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "template-generation-governance-template-creator-boundary",
+      "source_law": "mandatory law: Template Generation Governance Template Creator Boundary",
+      "required_behavior": "Template Generation Governance Template Creator Boundary must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; product_template_claims_withheld_without_repo_owned_template_governance.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "third-party-dependency-legibility-typed-adapters",
+      "source_law": "mandatory law: Third Party Dependency Legibility Typed Adapters",
+      "required_behavior": "Third Party Dependency Legibility Typed Adapters must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; dependency_claims_withheld_without_typed_adapter_registry.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "total-authority-types-impossible-state-elimination",
+      "source_law": "mandatory law: Total Authority Types Impossible State Elimination",
+      "required_behavior": "Total Authority Types Impossible State Elimination must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; authority_claims_withheld_without_total_typed_impossible_state_elimination.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "transcript-quality-reuse-gates",
+      "source_law": "security and reliability standards: transcript finalization",
+      "required_behavior": "Missing or disabled post-stop batch transcription, cleanup, or final alignment blocks reuse when downstream claims trust final words.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "root",
+      "claim_ids_affected": "transcript, replay, product",
+      "current_status": "active",
+      "blocker_or_repair_action": "Transcript reuse claims require final post-stop transcription, cleanup, and alignment evidence; disabled or missing finalization withholds reuse claims.",
+      "required_execplan_refs": [
+        "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+        "mandatory-product-fitness-quality-in-use-enforcement.md"
+      ]
+    },
+    {
+      "id": "trust-boundary-abuse-path-failure-path-coverage",
+      "source_law": "mandatory law: Trust Boundary Abuse Path Failure Path Coverage",
+      "required_behavior": "Trust Boundary Abuse Path Failure Path Coverage must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; trust_boundary_claims_withheld_without_abuse_and_failure_path_receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "typed-records-over-prose",
+      "source_law": "source obligation: Typed Records Over Prose",
+      "required_behavior": "Typed Records Over Prose must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; prose_is_not_proof.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "validator-source-namespace-topology",
+      "source_law": "mandatory law: Validator Source Namespace Topology And Semantic Repo-Law Enforcement",
+      "required_behavior": "Repo-owned validator source and test files are agent-facing law surfaces. Top-level internal_/internal_coverage/iinternal clusters, coverage-wave history names, broad validator/src source exceptions, generated/catalog exceptions for hand-authored source, and package-manifest blessing of bad source topology block completion, review, package, readiness, release, CLI self-law, final-packet, and update_goal claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/namespace/source/topology.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release, cli-self-law, final-packet, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run namespace-progressive-disclosure validator and Gate 90 red/green/tamper fixtures; move validator source into semantic directories and delete broad source exceptions before material claims.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "validator-theater-miswire-resistance",
+      "source_law": "mandatory law: Validator Theater Miswire Resistance",
+      "required_behavior": "Validator Theater Miswire Resistance must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; validator_enforcement_claims_withheld_without_theater_and_miswire_resistance.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "source_law": "mandatory law: Value Adoption Continuance Business Mission Evidence Hierarchy",
+      "required_behavior": "Value Adoption Continuance Business Mission Evidence Hierarchy must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; value_claims_withheld_without_known_inferred_assumed_missing_hierarchy.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "workflow-template-parsing-rendering-reload",
+      "source_law": "mandatory law: Workflow Template Parsing Rendering Reload",
+      "required_behavior": "Workflow Template Parsing Rendering Reload must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; workflow_claims_withheld_without_strict_template_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "workspace-command-confinement-lifecycle-cleanup",
+      "source_law": "mandatory law: Workspace Command Confinement Lifecycle Cleanup",
+      "required_behavior": "Workspace Command Confinement Lifecycle Cleanup must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; workspace_claims_withheld_without_confinement_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "worktree-lane-owner-cost-policy",
+      "source_law": "source obligation: Worktree Lane Owner Cost Policy",
+      "required_behavior": "Worktree Lane Owner Cost Policy must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run mandatory-law surface validation; lane_owner_cost_policy_not_human_review_policy.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "rust-developer-experience-authority",
+      "source_law": "Gate 91 mandatory law: Rust Developer Experience Authority",
+      "required_behavior": "Rust developer experience is a governed product surface; raw Rust tools are observations only and cannot satisfy Harness claims until ultragoal converts them into typed, digest-bound receipts and claim ceilings.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, review, package, readiness, release, product, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_devx_claims_withheld_without_cli_bound_devx_receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "rust-toolchain-substrate-authority",
+      "source_law": "Gate 91 mandatory law: Rust Toolchain Substrate Authority",
+      "required_behavior": "Rust substrate proof must bind rust-toolchain.toml, Cargo.lock, Cargo metadata, active toolchain, rustc/cargo versions, required components, and tool inventory; stale or missing substrate proof blocks claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, source, package, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_claims_withheld_without_current_toolchain_substrate_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "rust-command-loop-authority",
+      "source_law": "Gate 91 mandatory law: Rust Command Loop Authority",
+      "required_behavior": "ultragoal rust fast, standard, release, coverage prove, clean-proof, watch, memory prove, dependency audit, and workspace topology loops must be CLI-routed; raw cargo test, watcher/editor state, smoke tests, or focused checks cannot substitute for claim-specific receipts.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, source, package, review, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_command_loop_claims_withheld_without_cli_loop_receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "rust-cache-no-cache-honesty",
+      "source_law": "Gate 91 mandatory law: Rust Cache No-Cache Honesty",
+      "required_behavior": "Rust acceleration, target dirs, Cargo homes, sccache, remote caches, global Cargo config, RUSTC_WRAPPER, warm cache timings, and clean-proof loops must be declared in receipts; warm or hidden cache proof cannot support no-cache claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "routine usability, clean checkout, source, package, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_no_cache_claims_withheld_without_cache_honesty_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "rust-memory-resource-discipline",
+      "source_law": "Gate 91 mandatory law: Rust Memory Resource Discipline",
+      "required_behavior": "Rust memory/resource proof must enforce ownership/RAII, bounded caches/queues, managed child processes, shutdown proof, leak/tempdir/fd cleanup, and forbid tracing GC as the correctness-critical core memory model.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "source, package, runtime, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; rust_runtime_claims_withheld_without_memory_resource_receipt.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    },
+    {
+      "id": "workspace-artifact-cache-garbage-collection",
+      "source_law": "Gate 91 mandatory law: Workspace Artifact Cache Garbage Collection",
+      "required_behavior": "Workspace/artifact/cache cleanup must be plan, dry-run, apply, and verify with artifact classification, protected set, plan digest, deletion receipt, and post-delete verification; blind deletion or unclassified cleanup cannot support claims.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "validator/src/audit/rust/developer.rs",
+      "owner_lane": "root",
+      "claim_ids_affected": "completion, package, readiness, release, update_goal",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run Gate 91 Rust/GC CLI receipt validation and mandatory-law red fixtures; workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts.",
+      "required_execplan_refs": [
+        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
+      ]
+    }
+  ]
+}

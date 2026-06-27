@@ -1,0 +1,8 @@
+{
+  "audit_status": "pass",
+  "audited_at": "2026-06-25T16:40:00Z",
+  "claim_ceiling_impact": "package_static_fixture_only",
+  "evidence_digest": "sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff",
+  "evidence_path": "scripts/check-agent-standards",
+  "standard_id": "authority-source-binding"
+}

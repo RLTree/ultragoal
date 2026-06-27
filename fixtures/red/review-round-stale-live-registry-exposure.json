@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-stale-live-registry-exposure",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_live_registry_stale"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/path",
+      "value": "fixtures/review-round/anchors/live-registry-exposure-stale.json"
+    },
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/digest",
+      "value": "sha256:1f80d68ae589f9c1573ee5fe0f188d6d1f27524f748d6da4ccd0a3d46d33db7e"
+    }
+  ],
+  "notes": "live registry exposure must bind to the same review round",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+[
+  {
+    "id": "openai-harness-engineering",
+    "title": "Harness engineering for AI agents",
+    "url": "https://openai.com/index/harness-engineering/",
+    "retrieved_at": "2026-06-16T00:00:00Z",
+    "used_for": [
+      "repo-local system of record",
+      "agent legibility",
+      "mechanical invariant design"
+    ],
+    "provenance": {
+      "source_kind": "live_url",
+      "access_method": "web.open in Codex side conversation",
+      "digest_basis": "URL, title, retrieved_at, and proposal usage notes"
+    },
+    "notes": "Used for harness principles, not as proof of this package implementation.",
+    "retrieval_receipt": {
+      "access_tool": "Codex web/open or user-provided URL list",
+      "actor_id": "side-conversation-package-builder",
+      "status": "retrieved",
+      "retrieved_at": "2026-06-16T00:00:00Z",
+      "output": {
+        "path": "artifacts/source-snapshots/openai-harness-engineering.txt",
+        "digest": "sha256:e66ac148052ff0100d3f09897a9e6a4a247b2fced388d4f9e090a7e24c30d7c5"
+      }
+    },
+    "snapshot": {
+      "path": "artifacts/source-snapshots/openai-harness-engineering.txt",
+      "digest": "sha256:e66ac148052ff0100d3f09897a9e6a4a247b2fced388d4f9e090a7e24c30d7c5",
+      "snapshot_basis": "privacy-safe source card snapshot, not full copyrighted page mirror"
+    },
+    "cited_claims": [
+      {
+        "proposal_claim": "repo-local system of record",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      },
+      {
+        "proposal_claim": "agent legibility",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      }
+    ]
+  },
+  {
+    "id": "openai-symphony",
+    "title": "Open-source Codex orchestration: Symphony",
+    "url": "https://openai.com/index/open-source-codex-orchestration-symphony/",
+    "retrieved_at": "2026-06-16T00:00:00Z",
+    "used_for": [
+      "one agent per workspace",
+      "task-centered orchestration",
+      "workflow contract framing"
+    ],
+    "provenance": {
+      "source_kind": "live_url",
+      "access_method": "web/open URL reference plus user-provided source list",
+      "digest_basis": "URL, title, retrieved_at, and proposal usage notes"
+    },
+    "notes": "Used as a foundation source for orchestration design.",
+    "retrieval_receipt": {
+      "access_tool": "Codex web/open or user-provided URL list",
+      "actor_id": "side-conversation-package-builder",
+      "status": "not_refreshed",
+      "retrieved_at": "2026-06-16T00:00:00Z",
+      "output": {
+        "path": "artifacts/source-snapshots/openai-symphony.txt",
+        "digest": "sha256:7cf9b80fc395eee3f385f3ead1bbb31b9b457b8a235d9d9ab5770aae150bea5f"
+      }
+    },
+    "snapshot": {
+      "path": "artifacts/source-snapshots/openai-symphony.txt",
+      "digest": "sha256:7cf9b80fc395eee3f385f3ead1bbb31b9b457b8a235d9d9ab5770aae150bea5f",
+      "snapshot_basis": "privacy-safe source card snapshot, not full copyrighted page mirror"
+    },
+    "cited_claims": [
+      {
+        "proposal_claim": "one agent per workspace",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      },
+      {
+        "proposal_claim": "task-centered orchestration",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      }
+    ]
+  },
+  {
+    "id": "openai-codex-exec-plans",
+    "title": "Codex Exec Plans",
+    "url": "https://developers.openai.com/cookbook/articles/codex_exec_plans",
+    "retrieved_at": "2026-06-16T00:00:00Z",
+    "used_for": [
+      "restartable plans",
+      "living implementation contracts",
+      "demonstrably working behavior"
+    ],
+    "provenance": {
+      "source_kind": "live_url",
+      "access_method": "web/open URL reference plus user-provided source list",
+      "digest_basis": "URL, title, retrieved_at, and proposal usage notes"
+    },
+    "notes": "Used for ExecPlan template obligations.",
+    "retrieval_receipt": {
+      "access_tool": "Codex web/open or user-provided URL list",
+      "actor_id": "side-conversation-package-builder",
+      "status": "not_refreshed",
+      "retrieved_at": "2026-06-16T00:00:00Z",
+      "output": {
+        "path": "artifacts/source-snapshots/openai-codex-exec-plans.txt",
+        "digest": "sha256:d577fbec95a540861bbb9e5a5943a5743f17b5759eaff0ab8724e4e825186eb5"
+      }
+    },
+    "snapshot": {
+      "path": "artifacts/source-snapshots/openai-codex-exec-plans.txt",
+      "digest": "sha256:d577fbec95a540861bbb9e5a5943a5743f17b5759eaff0ab8724e4e825186eb5",
+      "snapshot_basis": "privacy-safe source card snapshot, not full copyrighted page mirror"
+    },
+    "cited_claims": [
+      {
+        "proposal_claim": "restartable plans",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      },
+      {
+        "proposal_claim": "living implementation contracts",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      }
+    ]
+  },
+  {
+    "id": "parse-dont-validate",
+    "title": "Parse, don't validate",
+    "url": "https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/",
+    "retrieved_at": "2026-06-16T00:00:00Z",
+    "used_for": [
+      "typed boundary records",
+      "preserving validation knowledge in data structures"
+    ],
+    "provenance": {
+      "source_kind": "live_url",
+      "access_method": "web/open URL reference plus user-provided source list",
+      "digest_basis": "URL, title, retrieved_at, and proposal usage notes"
+    },
+    "notes": "Used for schema and semantic validator design.",
+    "retrieval_receipt": {
+      "access_tool": "Codex web/open or user-provided URL list",
+      "actor_id": "side-conversation-package-builder",
+      "status": "not_refreshed",
+      "retrieved_at": "2026-06-16T00:00:00Z",
+      "output": {
+        "path": "artifacts/source-snapshots/parse-dont-validate.txt",
+        "digest": "sha256:ba749886f6f5f5912480a3aa401e19e8ab5a2699be6410f5ff6860ee970b9ac4"
+      }
+    },
+    "snapshot": {
+      "path": "artifacts/source-snapshots/parse-dont-validate.txt",
+      "digest": "sha256:ba749886f6f5f5912480a3aa401e19e8ab5a2699be6410f5ff6860ee970b9ac4",
+      "snapshot_basis": "privacy-safe source card snapshot, not full copyrighted page mirror"
+    },
+    "cited_claims": [
+      {
+        "proposal_claim": "typed boundary records",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      },
+      {
+        "proposal_claim": "preserving validation knowledge in data structures",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      }
+    ]
+  },
+  {
+    "id": "ai-forcing-good-code",
+    "title": "AI is forcing us to write good code",
+    "url": "https://bits.logic.inc/p/ai-is-forcing-us-to-write-good-code",
+    "retrieved_at": "2026-06-16T00:00:00Z",
+    "used_for": [
+      "coverage as ambiguity removal",
+      "namespace legibility",
+      "fast isolated environments"
+    ],
+    "provenance": {
+      "source_kind": "live_url",
+      "access_method": "web.open in Codex side conversation",
+      "digest_basis": "URL, title, retrieved_at, and proposal usage notes"
+    },
+    "notes": "Used for portable repo standards.",
+    "retrieval_receipt": {
+      "access_tool": "Codex web/open or user-provided URL list",
+      "actor_id": "side-conversation-package-builder",
+      "status": "retrieved",
+      "retrieved_at": "2026-06-16T00:00:00Z",
+      "output": {
+        "path": "artifacts/source-snapshots/ai-forcing-good-code.txt",
+        "digest": "sha256:a2098a39bf2eda7f12514579f2ed060d638adc78222577823cda0c9b8112568f"
+      }
+    },
+    "snapshot": {
+      "path": "artifacts/source-snapshots/ai-forcing-good-code.txt",
+      "digest": "sha256:a2098a39bf2eda7f12514579f2ed060d638adc78222577823cda0c9b8112568f",
+      "snapshot_basis": "privacy-safe source card snapshot, not full copyrighted page mirror"
+    },
+    "cited_claims": [
+      {
+        "proposal_claim": "coverage as ambiguity removal",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      },
+      {
+        "proposal_claim": "namespace legibility",
+        "source_support": "Used as foundation-source rationale; verify exact article text during implementation review."
+      }
+    ]
+  }
+]

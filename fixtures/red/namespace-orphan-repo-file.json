@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-orphan-repo-file",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_orphan_repo_file"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/purpose",
+      "value": "Reusable high-tier goal-run harness for contract-bound, lane-based, proof-driven Codex work."
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "file",
+      "path": "docs/orphan-namespace-fixture.md",
+      "contents": "orphan namespace fixture"
+    }
+  ],
+  "notes": "Repo-owned files without manifest/catalog/routing purpose fail namespace law.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/orphan-namespace-fixture.md",
+      "expectation": "namespace_orphan_repo_file"
+    }
+  ]
+}

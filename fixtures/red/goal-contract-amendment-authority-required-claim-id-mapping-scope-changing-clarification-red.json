@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "goal-contract-amendment-authority-required-claim-id-mapping-scope-changing-clarification-red",
+  "expected_failure": {
+    "check_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+    "error": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:scope_changing_clarification"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/scope_changing_clarification",
+      "value": false
+    }
+  ],
+  "notes": "goal-contract-amendment-authority-required-claim-id-mapping must fail when scope_changing_clarification is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/scope_changing_clarification",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/scope_changing_clarification",
+      "expectation": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:scope_changing_clarification"
+    }
+  ]
+}

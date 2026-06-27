@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:issue-tracker-lifecycle-eligibility-terminal-state:done_accepted_as_verified"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/issue-tracker-lifecycle-eligibility-terminal-state.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/done_accepted_as_verified",
+      "value": false
+    }
+  ],
+  "notes": "issue-tracker-lifecycle-eligibility-terminal-state must fail when done_accepted_as_verified is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/done_accepted_as_verified",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/done_accepted_as_verified",
+      "expectation": "mandatory_law_specific_guard_not_enforced:issue-tracker-lifecycle-eligibility-terminal-state:done_accepted_as_verified"
+    }
+  ]
+}

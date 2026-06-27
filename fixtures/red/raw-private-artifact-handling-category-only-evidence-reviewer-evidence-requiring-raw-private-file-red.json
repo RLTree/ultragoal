@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "raw-private-artifact-handling-category-only-evidence-reviewer-evidence-requiring-raw-private-file-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:reviewer_evidence_requiring_raw_private_file"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/reviewer_evidence_requiring_raw_private_file",
+      "value": false
+    }
+  ],
+  "notes": "raw-private-artifact-handling-category-only-evidence must fail when reviewer_evidence_requiring_raw_private_file is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/reviewer_evidence_requiring_raw_private_file",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/reviewer_evidence_requiring_raw_private_file",
+      "expectation": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:reviewer_evidence_requiring_raw_private_file"
+    }
+  ]
+}

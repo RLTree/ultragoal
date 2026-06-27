@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:subagent-custom-agent-sandbox-approval-inheritance:parent_sandbox_recorded"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/parent_sandbox_recorded",
+      "value": false
+    }
+  ],
+  "notes": "subagent-custom-agent-sandbox-approval-inheritance must fail when parent_sandbox_recorded is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/parent_sandbox_recorded",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/parent_sandbox_recorded",
+      "expectation": "mandatory_law_specific_guard_not_enforced:subagent-custom-agent-sandbox-approval-inheritance:parent_sandbox_recorded"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-coverage-wave-history-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_validator_source_history_name"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/self_tests/coverage/coverage_wave99_tests.rs"
+    }
+  ],
+  "notes": "Moving a file into a semantic directory is not enough when the filename still records coverage-wave history instead of domain behavior.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "expectation": "namespace_validator_source_history_name"
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "file",
+      "path": "validator/src/self_tests/coverage/coverage_wave99_tests.rs",
+      "contents": "#[test]\nfn bad_history_name() {}\n"
+    }
+  ]
+}

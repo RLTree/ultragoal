@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fabricated-validator-receipt",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "validator_receipt_not_runtime_provenance"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/validator_receipt/validator_execution/validator_artifacts/0/digest",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "notes": "replace validator_execution.actor_disjoint with false",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/ready_for_merge/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/validator_execution/validator_artifacts/0/digest",
+      "expectation": "validator_receipt_not_runtime_provenance"
+    }
+  ]
+}

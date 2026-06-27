@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-missing-live-registry-exposure",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/live_registry_exposure"
+    }
+  ],
+  "notes": "disk custom-agent TOMLs cannot replace live multi_agent_v1 registry exposure proof",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/live_registry_exposure",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/live_registry_exposure",
+      "expectation": "missing live registry exposure is rejected"
+    }
+  ]
+}

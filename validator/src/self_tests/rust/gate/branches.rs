@@ -1,0 +1,220 @@
+use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::{
+    GarbageCommand, parse as parse_gc, receipt as gc_receipt, run as gc_run,
+    run_with_receipt_value as gc_run_receipt,
+};
+use crate::cli::rust::cache_with_env;
+use crate::cli::rust::observations::{self, Probe};
+use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::{
+    RustCommand, receipt as rust_receipt, receipt_from_observations, run as rust_run,
+    run_with_receipt_value as rust_run_receipt,
+};
+use serde_json::json;
+
+#[test]
+fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let out = root.join("target/self-tests/rust-run-receipt.json");
+    let code = rust_run(
+        &root,
+        &RustCommand {
+            operation: RustOperation::Fast,
+            receipt: Some(out.clone()),
+        },
+    )
+    .expect("rust run");
+    assert_eq!(code, 0);
+    assert!(out.is_file());
+    let parent_file = root.join("target/self-tests/rust-parent-file");
+    std::fs::write(&parent_file, "not a directory").expect("parent file");
+    let write_failure = rust_run_receipt(
+        &RustCommand {
+            operation: RustOperation::Fast,
+            receipt: Some(parent_file.join("receipt.json")),
+        },
+        &json!({"status":"pass"}),
+    );
+    assert!(write_failure.is_err());
+
+    let fail = receipt_from_observations(
+        &root,
+        &RustCommand {
+            operation: RustOperation::CleanProof,
+            receipt: None,
+        },
+        1,
+        observations::ObservationSet {
+            value: json!({"probes":[],"raw_output_is_authority":false}),
+            failures: vec!["rust_devx_clean_proof_hidden_rustc_wrapper".to_string()],
+        },
+    )
+    .expect("fail receipt");
+    assert_eq!(fail["status"], "fail");
+    assert_eq!(fail["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(
+        rust_run_receipt(
+            &RustCommand {
+                operation: RustOperation::CleanProof,
+                receipt: None,
+            },
+            &fail,
+        )
+        .expect("fail exit"),
+        1
+    );
+
+    for (operation, expected) in [
+        (RustOperation::DependencyAudit, "cargo-deny"),
+        (RustOperation::CoverageProve, "cargo-llvm-cov"),
+        (RustOperation::Standard, "cargo-nextest"),
+        (RustOperation::Watch, "watchexec-or-bacon"),
+    ] {
+        let receipt = rust_receipt(
+            &root,
+            &RustCommand {
+                operation,
+                receipt: None,
+            },
+            1,
+        )
+        .expect("receipt");
+        assert!(
+            receipt["observed_tools"]
+                .as_array()
+                .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(expected))),
+            "{operation:?} missing {expected}: {receipt}"
+        );
+    }
+}
+
+#[test]
+fn rust_observation_failures_are_not_claim_support() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let observed = observations::collect_from_probes(
+        &root,
+        RustOperation::Fast,
+        vec![Probe::new(
+            "missing-test-probe",
+            "__ultragoal_missing_probe__",
+            &["--version"],
+        )],
+    );
+    assert!(
+        observed
+            .failures
+            .contains(&"rust_devx_required_tool_probe_failed:missing-test-probe".to_string())
+    );
+
+    let missing_root = crate::self_tests::boundaries::support::temp_root("rust-missing-substrate");
+    std::fs::create_dir_all(&missing_root).expect("root");
+    let substrate = observations::collect_from_probes(&missing_root, RustOperation::Fast, vec![]);
+    assert!(
+        substrate.failures.iter().any(|failure| {
+            failure == "rust_devx_required_substrate_missing:rust-toolchain.toml"
+        })
+    );
+    std::fs::remove_dir_all(missing_root).expect("cleanup");
+}
+
+#[test]
+fn rust_and_gc_receipt_validators_reject_substitution_edges() {
+    let receipt = crate::cli::rust::receipt::surface_value_failures(
+        &json!({
+            "schema": crate::cli::rust::types::RUST_RECEIPT_SCHEMA,
+            "status": "pass",
+            "claim_ceiling": "rust_devx_observation_bound",
+            "law_ids": ["rust-command-loop-authority"],
+            "issuer": {"tool":"ultragoal"},
+            "command": {"name":"fast"},
+            "digests": {"candidate":"sha256:candidate","cargo_lock":"sha256:lock"},
+            "toolchain": {"rustc_version":{}},
+            "cache": {"cache_mode":"declared_local"},
+            "resource_discipline": {"bounded_resources":true},
+            "tool_observations": {"probes":[],"raw_output_is_authority":false},
+            "observation_failures": ["raw cargo output is not enough"],
+            "staleness_policy": {"invalidates_on":[]}
+        }),
+        "rust-command-loop-authority",
+    );
+    assert!(receipt.contains(&"rust_devx_pass_with_observation_failures".to_string()));
+
+    assert_eq!(GarbageOperation::DryRun.id(), "dry_run");
+    assert_eq!(GarbageOperation::Apply.id(), "apply");
+    assert!(
+        parse_gc(&[
+            "gc".to_string(),
+            "dry-run".to_string(),
+            "--plan-digest".to_string()
+        ])
+        .expect("parse")
+        .expect("command")
+        .plan_digest
+        .is_none()
+    );
+}
+
+#[test]
+fn gc_run_without_receipt_and_rust_audit_receipt_ok_path_are_covered() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let gc_code = gc_run(
+        &root,
+        &GarbageCommand {
+            operation: GarbageOperation::Verify,
+            receipt: None,
+            plan_digest: Some("sha256:test-plan".to_string()),
+        },
+    )
+    .expect("gc run");
+    assert_eq!(gc_code, 0);
+    let default_plan = gc_receipt(
+        &root,
+        &GarbageCommand {
+            operation: GarbageOperation::Plan,
+            receipt: None,
+            plan_digest: None,
+        },
+    )
+    .expect("default plan");
+    assert!(
+        default_plan["deletion_plan"]["plan_digest"]
+            .as_str()
+            .is_some_and(|value| value.starts_with("sha256:"))
+    );
+    let parent_file = root.join("target/self-tests/gc-parent-file");
+    std::fs::write(&parent_file, "not a directory").expect("gc parent file");
+    let write_failure = gc_run_receipt(
+        &GarbageCommand {
+            operation: GarbageOperation::Plan,
+            receipt: Some(parent_file.join("receipt.json")),
+            plan_digest: None,
+        },
+        &json!({"status":"pass"}),
+    );
+    assert!(write_failure.is_err());
+
+    let rust_law = crate::audit::rust::developer::LAWS
+        .iter()
+        .find(|law| law.id == "rust-command-loop-authority")
+        .expect("rust law");
+    let mut failures = Vec::new();
+    crate::audit::rust::developer::require_receipt(
+        &root,
+        rust_law,
+        "sha256:not-current",
+        &mut failures,
+    );
+    assert!(failures.contains(&"rust_devx_receipt_candidate_digest_mismatch".to_string()));
+    assert_eq!(
+        cache_with_env(
+            RustOperation::CleanProof,
+            Some("sccache".to_string()),
+            Some("target/isolated".to_string()),
+        )["rustc_wrapper"],
+        "sccache"
+    );
+    assert_eq!(
+        cache_with_env(RustOperation::Fast, None, None)["cargo_target_dir"],
+        "target"
+    );
+}

@@ -1,0 +1,98 @@
+{
+  "base_commit": "abcdef0",
+  "blocked_reasons": [],
+  "branch": "codex/fixture",
+  "changed_files": [
+    "fixtures/valid/minimal-goal-run.json"
+  ],
+  "claim_ceiling": [
+    {
+      "claim_id": "CLAIM-001",
+      "claim_surface": "static",
+      "effect": "blocked",
+      "evidence_ids": [
+        "EV-001"
+      ],
+      "source_manifest_path": "COMPLETION_MANIFEST.json",
+      "status": "contract_only"
+    }
+  ],
+  "claim_ids": [
+    "CLAIM-001"
+  ],
+  "commands": [
+    {
+      "artifact_digest": "sha256:0300e8416c82a2d204630e865bb200c645722f7cafe93ee232e3627e6c628c58",
+      "artifact_path": "artifacts/static/minimal-goal-run-proof.md",
+      "command": "jsonschema validate fixture bundle with offline schema catalog",
+      "completed_at": "2026-06-16T00:00:00Z",
+      "cwd": "/repo",
+      "exit": 0,
+      "id": "cmd-static-001",
+      "started_at": "2026-06-16T00:00:00Z",
+      "stderr": {
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "path": "artifacts/static-validator.stderr.txt"
+      },
+      "stdout": {
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "path": "artifacts/static-validator.stdout.txt"
+      }
+    }
+  ],
+  "commit": "abcdef0",
+  "contract_bundle_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "evidence": [
+    {
+      "claim_id": "CLAIM-001",
+      "commit": "abcdef0",
+      "digest": "sha256:0300e8416c82a2d204630e865bb200c645722f7cafe93ee232e3627e6c628c58",
+      "freshness": {
+        "checked_at": "2026-06-16T00:00:00Z",
+        "current_commit": "abcdef0",
+        "evidence_commit": "abcdef0",
+        "policy": "target head and evidence commit must match",
+        "verdict": "current"
+      },
+      "id": "EV-001",
+      "kind": "static_check",
+      "observed_at": "2026-06-16T00:00:00Z",
+      "path": "artifacts/static/minimal-goal-run-proof.md",
+      "produced_by_command_id": "cmd-static-001",
+      "surface": "static",
+      "workspace": "/repo"
+    }
+  ],
+  "execplan": "docs/exec-plans/active/fixture.md",
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by": "ultragoal-audit",
+  "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "lane_id": "LANE-001",
+  "lane_registry_digest": "sha256:242df5c7087e9073ab81a8a2851fd4343dac4753affdd010e8d445bcb2acf383",
+  "live_target_head_at_generation": "abcdef0",
+  "merge_base": "abcdef0",
+  "provenance": {
+    "generated_artifact_type": "ready_for_merge",
+    "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "validator_receipt": {
+      "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
+      "digest": "sha256:fd58b27aae11489d202e3852b1564a3ab5cd300422eeb6bd0cde02bb7ba20baa"
+    },
+    "validator_run_id": "ultragoal-audit-2026-06-27T00:19:11Z"
+  },
+  "ready": true,
+  "schema": "harness-ultragoal.ready-for-merge.v1",
+  "target_branch": "main",
+  "target_freshness": {
+    "checked_at": "2026-06-16T00:00:00Z",
+    "merge_base_includes_target_head": true,
+    "target_head_matches_live": true
+  },
+  "target_head_at_launch": "abcdef0",
+  "target_head_at_validation": "abcdef0",
+  "teardown_ready": true,
+  "validator_run_id": "ultragoal-audit-2026-06-27T00:19:11Z",
+  "validator_version": "fixture-current-runtime-provenance",
+  "workspace": "/repo",
+  "worktree_clean": true
+}

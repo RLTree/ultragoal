@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/standards-gardening-receipt.schema.json",
+  "title": "Harness Ultragoal Standards Gardening Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "generated_at",
+    "trigger_signal",
+    "decision",
+    "changed_artifacts",
+    "safeguards",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.standards-gardening-receipt.v1"
+    },
+    "status": {
+      "const": "pass"
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "trigger_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal_id",
+        "severity",
+        "signal_kind",
+        "summary",
+        "source"
+      ],
+      "properties": {
+        "signal_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "moderate",
+            "severe"
+          ]
+        },
+        "signal_kind": {
+          "enum": [
+            "false_completion",
+            "wrong_review_team_or_model",
+            "unsafe_orchestration",
+            "worktree_initialization_failure",
+            "product_cohesion_miss",
+            "security_trust_boundary_gap",
+            "plugin_flow_confusion",
+            "stale_proof_or_state",
+            "standards_entropy"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted",
+        "action",
+        "rationale"
+      ],
+      "properties": {
+        "accepted": {
+          "const": true
+        },
+        "action": {
+          "enum": [
+            "validator_check",
+            "red_fixture",
+            "schema",
+            "skill_update",
+            "persona_update",
+            "standards_module_update",
+            "resource_map_update",
+            "hook",
+            "backlog"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "changed_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      },
+      "uniqueItems": true
+    },
+    "safeguards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deterministic_first",
+        "no_hook_by_default"
+      ],
+      "properties": {
+        "deterministic_first": {
+          "const": true
+        },
+        "no_hook_by_default": {
+          "const": true
+        },
+        "hook_justification": {
+          "type": "string"
+        }
+      }
+    },
+    "claim_ceiling": {
+      "enum": [
+        "package_static_fixture_only",
+        "target_fixture_only",
+        "live_install_unsupported"
+      ]
+    }
+  }
+}

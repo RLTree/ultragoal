@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "batch-fanout-custom-agent-job-worker-result-discipline-unbounded-concurrency-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:batch-fanout-custom-agent-job-worker-result-discipline:unbounded_concurrency"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/unbounded_concurrency",
+      "value": false
+    }
+  ],
+  "notes": "batch-fanout-custom-agent-job-worker-result-discipline must fail when unbounded_concurrency is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/unbounded_concurrency",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/unbounded_concurrency",
+      "expectation": "mandatory_law_specific_guard_not_enforced:batch-fanout-custom-agent-job-worker-result-discipline:unbounded_concurrency"
+    }
+  ]
+}

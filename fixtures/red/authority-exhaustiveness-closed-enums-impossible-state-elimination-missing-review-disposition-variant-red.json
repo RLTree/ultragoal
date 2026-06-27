@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-missing-review-disposition-variant-red",
+  "expected_failure": {
+    "check_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+    "error": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:missing_review_disposition_variant"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_review_disposition_variant",
+      "value": false
+    }
+  ],
+  "notes": "authority-exhaustiveness-closed-enums-impossible-state-elimination must fail when missing_review_disposition_variant is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_review_disposition_variant",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_review_disposition_variant",
+      "expectation": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:missing_review_disposition_variant"
+    }
+  ]
+}

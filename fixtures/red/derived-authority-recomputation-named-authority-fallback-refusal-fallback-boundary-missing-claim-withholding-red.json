@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "derived-authority-recomputation-named-authority-fallback-refusal-fallback-boundary-missing-claim-withholding-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:derived-authority-recomputation-named-authority-fallback-refusal:fallback_boundary_missing_claim_withholding"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/fallback_boundary_missing_claim_withholding",
+      "value": false
+    }
+  ],
+  "notes": "derived-authority-recomputation-named-authority-fallback-refusal must fail when fallback_boundary_missing_claim_withholding is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/fallback_boundary_missing_claim_withholding",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/fallback_boundary_missing_claim_withholding",
+      "expectation": "mandatory_law_specific_guard_not_enforced:derived-authority-recomputation-named-authority-fallback-refusal:fallback_boundary_missing_claim_withholding"
+    }
+  ]
+}

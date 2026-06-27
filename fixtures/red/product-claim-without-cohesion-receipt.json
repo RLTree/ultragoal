@@ -1,0 +1,81 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-claim-without-cohesion-receipt",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_cohesion_receipt_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "product_cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "product_cohesion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "product_cohesion",
+        "ui_browser"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/requires_product_cohesion",
+      "value": true
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "product-facing claim is included without a product-cohesion receipt",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/0/kind",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/requires_product_cohesion",
+      "expectation": "product_cohesion_receipt_missing"
+    }
+  ]
+}

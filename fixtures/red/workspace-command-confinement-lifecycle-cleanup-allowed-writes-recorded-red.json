@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "workspace-command-confinement-lifecycle-cleanup-allowed-writes-recorded-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:workspace-command-confinement-lifecycle-cleanup:allowed_writes_recorded"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/allowed_writes_recorded",
+      "value": false
+    }
+  ],
+  "notes": "workspace-command-confinement-lifecycle-cleanup must fail when allowed_writes_recorded is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/allowed_writes_recorded",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/allowed_writes_recorded",
+      "expectation": "mandatory_law_specific_guard_not_enforced:workspace-command-confinement-lifecycle-cleanup:allowed_writes_recorded"
+    }
+  ]
+}

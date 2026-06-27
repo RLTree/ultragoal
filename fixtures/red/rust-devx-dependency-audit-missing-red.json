@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-dependency-audit-missing-red",
+  "expected_failure": {
+    "check_id": "rust-developer-experience-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:dependency_audit_missing"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/dependency_audit_missing",
+      "value": false
+    }
+  ],
+  "notes": "dependency/security/supply-chain proof is required for standard/release claim paths",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/dependency_audit_missing",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/dependency_audit_missing",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:dependency_audit_missing"
+    }
+  ]
+}

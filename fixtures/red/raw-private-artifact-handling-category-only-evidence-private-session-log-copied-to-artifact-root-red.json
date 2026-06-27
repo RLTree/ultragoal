@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "raw-private-artifact-handling-category-only-evidence-private-session-log-copied-to-artifact-root-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:private_session_log_copied_to_artifact_root"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/private_session_log_copied_to_artifact_root",
+      "value": false
+    }
+  ],
+  "notes": "raw-private-artifact-handling-category-only-evidence must fail when private_session_log_copied_to_artifact_root is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/private_session_log_copied_to_artifact_root",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/private_session_log_copied_to_artifact_root",
+      "expectation": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:private_session_log_copied_to_artifact_root"
+    }
+  ]
+}

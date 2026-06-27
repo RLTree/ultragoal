@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "current-product-discovery-audit-quality-in-use-evidence",
+  "standards_row_id": "current-product-discovery-audit-quality-in-use-evidence",
+  "source_obligation_id": "current-product-discovery-audit-quality-in-use-evidence",
+  "foundational_trace_id": "current-product-discovery-audit-quality-in-use-evidence",
+  "validator_check_id": "current-product-discovery-audit-quality-in-use-evidence",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+  "red_fixture_ids": [
+    "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red",
+    "current-product-discovery-audit-quality-in-use-evidence-memory-summary-used-as-current-product-proof-red",
+    "current-product-discovery-audit-quality-in-use-evidence-product-audit-without-flow-id-red",
+    "current-product-discovery-audit-quality-in-use-evidence-accessibility-compliance-from-screenshots-alone-red",
+    "current-product-discovery-audit-quality-in-use-evidence-research-brief-without-observed-inferred-split-red",
+    "current-product-discovery-audit-quality-in-use-evidence-recommendation-with-no-claim-id-red",
+    "current-product-discovery-audit-quality-in-use-evidence-old-packet-used-as-live-product-proof-red",
+    "current-product-discovery-audit-quality-in-use-evidence-product-fitness-passed-with-no-current-discovery-evidence-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_facing_claims_withheld_without_current_discovery_and_quality_in_use_evidence",
+  "behavior_failure_modes": [
+    "current_product_discovery_audit_quality_in_use_evidence_stale_screenshot_accepted",
+    "current_product_discovery_audit_quality_in_use_evidence_memory_summary_used_as_current_product_proof",
+    "current_product_discovery_audit_quality_in_use_evidence_product_audit_without_flow_id",
+    "current_product_discovery_audit_quality_in_use_evidence_accessibility_compliance_from_screenshots_alone",
+    "current_product_discovery_audit_quality_in_use_evidence_research_brief_without_observed_inferred_split",
+    "current_product_discovery_audit_quality_in_use_evidence_recommendation_with_no_claim_id",
+    "current_product_discovery_audit_quality_in_use_evidence_old_packet_used_as_live_product_proof",
+    "current_product_discovery_audit_quality_in_use_evidence_product_fitness_passed_with_no_current_discovery_evidence"
+  ],
+  "law_specific": {
+    "stale_screenshot_accepted": true,
+    "memory_summary_used_as_current_product_proof": true,
+    "product_audit_without_flow_id": true,
+    "accessibility_compliance_from_screenshots_alone": true,
+    "research_brief_without_observed_inferred_split": true,
+    "recommendation_with_no_claim_id": true,
+    "old_packet_used_as_live_product_proof": true,
+    "product_fitness_passed_with_no_current_discovery_evidence": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

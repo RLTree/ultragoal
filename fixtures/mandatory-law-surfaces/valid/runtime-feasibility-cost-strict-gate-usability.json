@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "runtime-feasibility-cost-strict-gate-usability",
+  "standards_row_id": "runtime-feasibility-cost-strict-gate-usability",
+  "source_obligation_id": "runtime-feasibility-cost-strict-gate-usability",
+  "foundational_trace_id": "runtime-feasibility-cost-strict-gate-usability",
+  "validator_check_id": "runtime-feasibility-cost-strict-gate-usability",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/runtime-feasibility-cost-strict-gate-usability.json",
+  "red_fixture_ids": [
+    "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
+    "runtime-feasibility-cost-strict-gate-usability-no-cache-mismatch-red",
+    "runtime-feasibility-cost-strict-gate-usability-unbounded-concurrency-red",
+    "runtime-feasibility-cost-strict-gate-usability-runtime-over-budget-without-exception-red",
+    "runtime-feasibility-cost-strict-gate-usability-stale-cache-accepted-red",
+    "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
+    "runtime-feasibility-cost-strict-gate-usability-manual-sample-substituted-for-complete-proof-red",
+    "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "strict_gate_claims_withheld_without_runtime_feasibility_receipt",
+  "behavior_failure_modes": [
+    "runtime_feasibility_cost_strict_gate_usability_hidden_cache_pass",
+    "runtime_feasibility_cost_strict_gate_usability_no_cache_mismatch",
+    "runtime_feasibility_cost_strict_gate_usability_unbounded_concurrency",
+    "runtime_feasibility_cost_strict_gate_usability_runtime_over_budget_without_exception",
+    "runtime_feasibility_cost_strict_gate_usability_stale_cache_accepted",
+    "runtime_feasibility_cost_strict_gate_usability_focused_audit_substituted_for_full_audit",
+    "runtime_feasibility_cost_strict_gate_usability_manual_sample_substituted_for_complete_proof",
+    "runtime_feasibility_cost_strict_gate_usability_guardrail_too_slow_without_claim_impact"
+  ],
+  "law_specific": {
+    "hidden_cache_pass": true,
+    "no_cache_mismatch": true,
+    "unbounded_concurrency": true,
+    "runtime_over_budget_without_exception": true,
+    "stale_cache_accepted": true,
+    "focused_audit_substituted_for_full_audit": true,
+    "manual_sample_substituted_for_complete_proof": true,
+    "guardrail_too_slow_without_claim_impact": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

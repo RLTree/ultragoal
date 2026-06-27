@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "restartable-execplan-missing-purpose",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "restartable_execplan_missing_section:purpose"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/required_sections/purpose",
+      "value": false
+    }
+  ],
+  "notes": "ExecPlan receipt fails when purpose is missing.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/required_sections/purpose",
+      "expectation": "restartable_execplan_missing_section:purpose"
+    }
+  ]
+}

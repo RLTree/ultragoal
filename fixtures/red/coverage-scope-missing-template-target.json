@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-scope-missing-template-target",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "coverage_manifest_target_gap"
+  },
+  "base_fixture_path": "templates/.harness/coverage-manifest.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/required_target_paths",
+      "value": [
+        "src",
+        "scripts",
+        "validator",
+        "schemas"
+      ]
+    }
+  ],
+  "notes": "Repo-owned template source cannot be dropped from the coverage target surface.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/schema",
+      "expectation": "coverage_manifest_target_gap"
+    }
+  ]
+}

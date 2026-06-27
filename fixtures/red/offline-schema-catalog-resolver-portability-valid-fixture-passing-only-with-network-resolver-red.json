@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "offline-schema-catalog-resolver-portability-valid-fixture-passing-only-with-network-resolver-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:offline-schema-catalog-resolver-portability:valid_fixture_passing_only_with_network_resolver"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/offline-schema-catalog-resolver-portability.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/valid_fixture_passing_only_with_network_resolver",
+      "value": false
+    }
+  ],
+  "notes": "offline-schema-catalog-resolver-portability must fail when valid_fixture_passing_only_with_network_resolver is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/valid_fixture_passing_only_with_network_resolver",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/valid_fixture_passing_only_with_network_resolver",
+      "expectation": "mandatory_law_specific_guard_not_enforced:offline-schema-catalog-resolver-portability:valid_fixture_passing_only_with_network_resolver"
+    }
+  ]
+}

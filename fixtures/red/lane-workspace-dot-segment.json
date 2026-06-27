@@ -1,0 +1,44 @@
+{
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "expected_failure": {
+    "check_id": "lane-scope-overlap",
+    "error": "invalid_lane_resource_path"
+  },
+  "id": "lane-workspace-dot-segment",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/workspace",
+      "value": "/repo/alt/.."
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/target_freshness/live_target_receipt/observed_workspace",
+      "value": "/repo/alt/.."
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/workspace_status/observed_workspace",
+      "value": "/repo/alt/.."
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "workspace roots must reject dot-segment aliases",
+  "postconditions": [
+    {
+      "expectation": "invalid_lane_resource_path",
+      "path": "/lane_registry/lanes/0"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/schema"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

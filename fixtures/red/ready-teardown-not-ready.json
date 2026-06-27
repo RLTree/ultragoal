@@ -1,0 +1,34 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "worktree-teardown",
+    "error": "stale_worktree_after_closeout"
+  },
+  "id": "ready-teardown-not-ready",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/teardown_ready",
+      "value": false
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": false
+  },
+  "notes": "included ready-for-merge claim must be bound to one current clean lane with no blockers",
+  "postconditions": [
+    {
+      "expectation": "stale_worktree_after_closeout",
+      "path": "/ready_for_merge/teardown_ready"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

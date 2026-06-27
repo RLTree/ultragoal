@@ -1,0 +1,16 @@
+{
+  "schema": "harness-ultragoal.distribution-archive-receipt.v1",
+  "status": "pass",
+  "archive": {
+    "path": "fixtures/review-round/anchors/package.zip",
+    "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "entry_count": 0,
+    "entry_list_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "root_names": [
+      "harness-ultragoal-plugin-proposal"
+    ]
+  },
+  "source": {
+    "package_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

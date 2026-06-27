@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-session-telemetry-token-rate-limit-reviewer-output-without-session-id-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:agent-session-telemetry-token-rate-limit:reviewer_output_without_session_id"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/reviewer_output_without_session_id",
+      "value": false
+    }
+  ],
+  "notes": "agent-session-telemetry-token-rate-limit must fail when reviewer_output_without_session_id is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/reviewer_output_without_session_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/reviewer_output_without_session_id",
+      "expectation": "mandatory_law_specific_guard_not_enforced:agent-session-telemetry-token-rate-limit:reviewer_output_without_session_id"
+    }
+  ]
+}

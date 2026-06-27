@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "merge-base-behind-target",
+  "expected_failure": {
+    "check_id": "lane-target-freshness",
+    "error": "merge_base_behind_target"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/merge_base_at_validation",
+      "value": "deadbee"
+    }
+  ],
+  "notes": "set merge_base_includes_target_head false",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/merge_base_at_validation",
+      "expectation": "merge_base_behind_target"
+    }
+  ]
+}

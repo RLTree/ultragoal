@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-session-telemetry-token-rate-limit-stale-live-session-timestamp-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:agent-session-telemetry-token-rate-limit:stale_live_session_timestamp"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_live_session_timestamp",
+      "value": false
+    }
+  ],
+  "notes": "agent-session-telemetry-token-rate-limit must fail when stale_live_session_timestamp is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_live_session_timestamp",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_live_session_timestamp",
+      "expectation": "mandatory_law_specific_guard_not_enforced:agent-session-telemetry-token-rate-limit:stale_live_session_timestamp"
+    }
+  ]
+}

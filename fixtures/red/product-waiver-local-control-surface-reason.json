@@ -1,0 +1,68 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-waiver-local-control-surface-reason",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "ui_surface"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "ui_browser"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "ui_browser"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "value": {
+        "reason": "local_control_surface_only",
+        "scope": "Local control surfaces are product surfaces when they affect user workflow."
+      }
+    }
+  ],
+  "notes": "local_control_surface_only is not an allowed waiver reason because local app and control-surface work trigger Product Cohesion",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "exists": false
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver/reason",
+      "expectation": "schema_validation_failed"
+    }
+  ]
+}

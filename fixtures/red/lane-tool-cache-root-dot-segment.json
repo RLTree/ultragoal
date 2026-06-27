@@ -1,0 +1,34 @@
+{
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "expected_failure": {
+    "check_id": "lane-scope-overlap",
+    "error": "invalid_lane_resource_path"
+  },
+  "id": "lane-tool-cache-root-dot-segment",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/lane_registry/lanes/0/tool_cache_roots/0",
+      "value": ".cache/alt/../fixture"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "tool_cache_roots must reject dot-segment aliases",
+  "postconditions": [
+    {
+      "expectation": "invalid_lane_resource_path",
+      "path": "/lane_registry/lanes/0"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/schema"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

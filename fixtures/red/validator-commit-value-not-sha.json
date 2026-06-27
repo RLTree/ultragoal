@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "validator-commit-value-not-sha",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "validator_commit_value_not_sha"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/validator_receipt/commit",
+      "value": "abcdef0"
+    }
+  ],
+  "notes": "validator_receipt.commit is emitted as a package digest by ultragoal-audit and must not accept git-like short hashes.",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/validator_receipt/commit",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/commit",
+      "expectation": "validator_commit_value_not_sha"
+    }
+  ]
+}

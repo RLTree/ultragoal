@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-proof-joins-substitution-blocking-quality-score-as-product-outcome-red",
+  "expected_failure": {
+    "check_id": "product-proof-joins-substitution-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:quality_score_as_product_outcome"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/quality_score_as_product_outcome",
+      "value": false
+    }
+  ],
+  "notes": "product-proof-joins-substitution-blocking must fail when quality_score_as_product_outcome is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/quality_score_as_product_outcome",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/quality_score_as_product_outcome",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:quality_score_as_product_outcome"
+    }
+  ]
+}

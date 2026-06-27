@@ -1,0 +1,60 @@
+{
+  "schema": "harness-ultragoal.review-materiality-gate.v1",
+  "confidence": "high",
+  "deterministic_gates_required": [
+    "anchor_existence_and_digest",
+    "validator_receipt_status",
+    "reviewer_registry_model_persona_exposure",
+    "stale_receipt_check",
+    "package_private_artifact_hygiene",
+    "readiness_validator",
+    "claim_ceiling_check",
+    "proof_surface_substitution_check"
+  ],
+  "deterministic_gates_run": [
+    "anchor_existence_and_digest",
+    "validator_receipt_status",
+    "reviewer_registry_model_persona_exposure",
+    "stale_receipt_check",
+    "package_private_artifact_hygiene",
+    "readiness_validator",
+    "claim_ceiling_check",
+    "proof_surface_substitution_check"
+  ],
+  "anchors_checked": [
+    {
+      "path": "fixtures/review-round/anchors/validator-receipt.json",
+      "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+    },
+    {
+      "path": "fixtures/review-round/anchors/review-target-receipt.json",
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "path": "fixtures/review-round/anchors/archive-receipt.json",
+      "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ],
+  "reviewer_registry_evidence": [
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+      "digest": "sha256:8913a6f99d943994abe5e14832c2d2ca07194f3eb4bdee49296cf0d17ec22f62"
+    }
+  ],
+  "validator_repairs_recommended": [],
+  "claim_ceiling": {
+    "supported": [],
+    "unsupported": [
+      "material_signoff",
+      "release",
+      "promotion",
+      "readiness"
+    ],
+    "blocked": []
+  },
+  "decision": "ADVISORY_REVIEW_ALLOWED",
+  "reason": "Exploratory non-signoff follow-up; output is advisory only.",
+  "material_triggers": [],
+  "reviewers_required": [],
+  "output_may_be_used_for_material_signoff": false
+}

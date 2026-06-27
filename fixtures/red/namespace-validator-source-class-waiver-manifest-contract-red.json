@@ -1,0 +1,52 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-class-waiver-manifest-contract-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_class_waiver_field_present"
+  },
+  "base_fixture_path": "docs/namespace-class-registry.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/classes/-",
+      "value": {
+        "id": "bad-validator-source-manifest-contract",
+        "kind": "repo_source",
+        "surface_globs": [
+          "validator/src/internal*"
+        ],
+        "description": "package manifest cannot bless hand-authored validator source topology",
+        "authority": "validator_source_topology",
+        "authority_path": "plugin-manifest-draft.json",
+        "maximal_factoring_required": true,
+        "waiver_allowed": false,
+        "exception_type": "repeated_prefix",
+        "directory": "validator/src",
+        "prefix": "internal",
+        "applies_to": [
+          "validator/src/internal*"
+        ],
+        "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+      }
+    }
+  ],
+  "notes": "A namespace class row fails if it carries legacy exception fields or tries to use the package manifest as a source-topology waiver.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "expectation": "namespace_class_waiver_field_present"
+    }
+  ]
+}

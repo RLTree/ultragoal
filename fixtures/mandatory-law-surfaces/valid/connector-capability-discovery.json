@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "connector-capability-discovery",
+  "standards_row_id": "connector-capability-discovery",
+  "source_obligation_id": "connector-capability-discovery",
+  "foundational_trace_id": "connector-capability-discovery",
+  "validator_check_id": "connector-capability-discovery",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/connector-capability-discovery.json",
+  "red_fixture_ids": [
+    "connector-capability-discovery-claim-without-discovery-red",
+    "connector-capability-discovery-stale-discovery-red",
+    "connector-capability-discovery-disabled-connector-red",
+    "connector-capability-discovery-wrong-account-workspace-red",
+    "connector-capability-discovery-local-docs-used-as-live-connector-proof-red",
+    "connector-capability-discovery-missing-auth-boundary-red",
+    "connector-capability-discovery-cache-source-substituted-for-app-connector-red",
+    "connector-capability-discovery-fallback-emitted-as-supported-red",
+    "connector-capability-discovery-claim-not-linked-to-current-candidate-claim-id-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "capability_claims_withheld_without_same_surface_discovery_receipt",
+  "behavior_failure_modes": [
+    "connector_capability_discovery_claim_without_discovery",
+    "connector_capability_discovery_stale_discovery",
+    "connector_capability_discovery_disabled_connector",
+    "connector_capability_discovery_wrong_account_workspace",
+    "connector_capability_discovery_local_docs_used_as_live_connector_proof",
+    "connector_capability_discovery_missing_auth_boundary",
+    "connector_capability_discovery_cache_source_substituted_for_app_connector",
+    "connector_capability_discovery_fallback_emitted_as_supported",
+    "connector_capability_discovery_claim_not_linked_to_current_candidate_claim_id"
+  ],
+  "law_specific": {
+    "claim_without_discovery": true,
+    "stale_discovery": true,
+    "disabled_connector": true,
+    "wrong_account_workspace": true,
+    "local_docs_used_as_live_connector_proof": true,
+    "missing_auth_boundary": true,
+    "cache_source_substituted_for_app_connector": true,
+    "fallback_emitted_as_supported": true,
+    "claim_not_linked_to_current_candidate_claim_id": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

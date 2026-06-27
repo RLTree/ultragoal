@@ -1,0 +1,63 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-success-contract-initiation-authority",
+  "standards_row_id": "product-success-contract-initiation-authority",
+  "source_obligation_id": "product-success-contract-initiation-authority",
+  "foundational_trace_id": "product-success-contract-initiation-authority",
+  "validator_check_id": "product-success-contract-initiation-authority",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-contract-initiation-authority.json",
+  "red_fixture_ids": [
+    "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red",
+    "product-success-contract-initiation-authority-product-lane-without-product-success-contract-red",
+    "product-success-contract-initiation-authority-stale-product-success-contract-digest-red",
+    "product-success-contract-initiation-authority-wrong-goal-id-red",
+    "product-success-contract-initiation-authority-wrong-claim-id-red",
+    "product-success-contract-initiation-authority-placeholder-target-user-red",
+    "product-success-contract-initiation-authority-missing-quality-dimension-red",
+    "product-success-contract-initiation-authority-missing-critical-journey-red",
+    "product-success-contract-initiation-authority-missing-first-value-event-red",
+    "product-success-contract-initiation-authority-missing-claim-ceiling-red",
+    "product-success-contract-initiation-authority-markdown-only-product-success-contract-red",
+    "product-success-contract-initiation-authority-package-inventory-missing-product-success-contract-surfaces-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_claims_withheld_without_initiation_time_product_success_contract",
+  "behavior_failure_modes": [
+    "product_success_contract_initiation_authority_product_goal_without_product_success_contract",
+    "product_success_contract_initiation_authority_product_lane_without_product_success_contract",
+    "product_success_contract_initiation_authority_stale_product_success_contract_digest",
+    "product_success_contract_initiation_authority_wrong_goal_id",
+    "product_success_contract_initiation_authority_wrong_claim_id",
+    "product_success_contract_initiation_authority_placeholder_target_user",
+    "product_success_contract_initiation_authority_missing_quality_dimension",
+    "product_success_contract_initiation_authority_missing_critical_journey",
+    "product_success_contract_initiation_authority_missing_first_value_event",
+    "product_success_contract_initiation_authority_missing_claim_ceiling",
+    "product_success_contract_initiation_authority_markdown_only_product_success_contract",
+    "product_success_contract_initiation_authority_package_inventory_missing_product_success_contract_surfaces"
+  ],
+  "law_specific": {
+    "product_goal_without_product_success_contract": true,
+    "product_lane_without_product_success_contract": true,
+    "stale_product_success_contract_digest": true,
+    "wrong_goal_id": true,
+    "wrong_claim_id": true,
+    "placeholder_target_user": true,
+    "missing_quality_dimension": true,
+    "missing_critical_journey": true,
+    "missing_first_value_event": true,
+    "missing_claim_ceiling": true,
+    "markdown_only_product_success_contract": true,
+    "package_inventory_missing_product_success_contract_surfaces": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

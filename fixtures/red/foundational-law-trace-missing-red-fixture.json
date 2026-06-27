@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "foundational-law-trace-missing-red-fixture",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "foundational_law_trace_unknown_red_fixture"
+  },
+  "base_fixture_path": "docs/foundational-law-traceability.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/entries/0/red_fixture_id",
+      "value": "missing-foundational-law-red-fixture"
+    }
+  ],
+  "notes": "Each foundational law trace row must bind to a cataloged red fixture.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/entries/0/red_fixture_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/entries/0/red_fixture_id",
+      "expectation": "foundational_law_trace_unknown_red_fixture"
+    }
+  ]
+}

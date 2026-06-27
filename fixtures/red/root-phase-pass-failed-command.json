@@ -1,0 +1,93 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "root-phase-pass-failed-command",
+  "expected_failure": {
+    "check_id": "root-verification-phase-coverage",
+    "error": "root_phase_pass_without_successful_receipt"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/command_receipt",
+      "value": {
+        "id": "cmd-pre-gate",
+        "command": "validate pre merge lane gate",
+        "cwd": "/repo",
+        "exit": 0,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z",
+        "artifact_path": "validation_artifacts/pre.json",
+        "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/artifact_receipt",
+      "value": {
+        "path": "validation_artifacts/pre.json",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt",
+      "value": {
+        "id": "cmd-root-phase-fail",
+        "command": "false",
+        "cwd": "/repo",
+        "exit": 1,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z",
+        "artifact_path": "validation_artifacts/root-phase.json",
+        "artifact_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt",
+      "value": {
+        "path": "validation_artifacts/root-phase.json",
+        "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/status",
+      "expectation": "root_phase_pass_without_successful_receipt"
+    }
+  ],
+  "notes": "root phase cannot pass with failed verification command"
+}

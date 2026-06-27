@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "clean-checkout-source-install-cache-drift",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "clean_checkout_source_install_cache_command_drift"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/source_install_cache_command_alignment",
+      "value": "drifted"
+    }
+  ],
+  "notes": "Command discovery fails when source/install/cache commands drift.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/source_install_cache_command_alignment",
+      "expectation": "clean_checkout_source_install_cache_command_drift"
+    }
+  ]
+}

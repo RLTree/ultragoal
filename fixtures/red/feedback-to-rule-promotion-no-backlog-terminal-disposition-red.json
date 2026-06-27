@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "feedback-to-rule-promotion-no-backlog-terminal-disposition-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:feedback-to-rule-promotion:no_backlog_terminal_disposition"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/no_backlog_terminal_disposition",
+      "value": false
+    }
+  ],
+  "notes": "feedback-to-rule-promotion fails when no_backlog_terminal_disposition is not enforced.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/no_backlog_terminal_disposition",
+      "expectation": "mandatory_law_specific_guard_not_enforced:feedback-to-rule-promotion:no_backlog_terminal_disposition"
+    }
+  ]
+}

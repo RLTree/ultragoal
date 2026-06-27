@@ -1,0 +1,62 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "dogfood-missing-root-closure-receipt",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "dogfood_receipt_invalid"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Real multi-lane dogfood completed"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces/-",
+      "value": "root_integration"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-DOGFOOD-MISSING-ROOT-CLOSURE",
+        "claim_id": "CLAIM-001",
+        "kind": "dogfood_receipt",
+        "surface": "root_integration",
+        "path": "validation_artifacts/dogfood/red/missing-root-closure-dogfood-receipt.json",
+        "digest": "sha256:a97eacce9f7b1400dd872e8e75943b7fd0ffa0da78b48ee9591e35ebe0afaf58",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "notes": "Dogfood proof requires root-owed follow-up closure and a clean final manifest.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/1/path",
+      "expectation": "dogfood_receipt_invalid"
+    }
+  ]
+}

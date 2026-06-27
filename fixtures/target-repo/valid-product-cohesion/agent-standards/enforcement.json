@@ -1,0 +1,1657 @@
+{
+  "schema": "harness-ultragoal.agent-standards.enforcement.v1",
+  "rows": [
+    {
+      "id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "source_law": "target-repo green fixture central law: active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "required_behavior": "The active-setup-to-idle-orchestration-thread-bound-heartbeat law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "adversarial-packet-tampering-forged-proof-rejection",
+      "source_law": "target-repo green fixture central law: adversarial-packet-tampering-forged-proof-rejection",
+      "required_behavior": "The adversarial-packet-tampering-forged-proof-rejection law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "agent-authored-source-tooling-docs-provenance",
+      "source_law": "target-repo green fixture central law: agent-authored-source-tooling-docs-provenance",
+      "required_behavior": "The agent-authored-source-tooling-docs-provenance law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "agent-queryable-observability",
+      "source_law": "target-repo green fixture central law: agent-queryable-observability",
+      "required_behavior": "The agent-queryable-observability law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "agent-remediating-validator-failures",
+      "source_law": "target-repo green fixture central law: agent-remediating-validator-failures",
+      "required_behavior": "The agent-remediating-validator-failures law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "agent-session-telemetry-token-rate-limit",
+      "source_law": "target-repo green fixture central law: agent-session-telemetry-token-rate-limit",
+      "required_behavior": "The agent-session-telemetry-token-rate-limit law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "architecture-dependency-topology",
+      "source_law": "target-repo green fixture central law: architecture-dependency-topology",
+      "required_behavior": "The architecture-dependency-topology law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "source_law": "target-repo green fixture central law: authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "required_behavior": "The authority-exhaustiveness-closed-enums-impossible-state-elimination law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "authority-source-binding",
+      "source_law": "target-repo green fixture central law: authority-source-binding",
+      "required_behavior": "The authority-source-binding law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "autonomy-loop-proof",
+      "source_law": "target-repo green fixture central law: autonomy-loop-proof",
+      "required_behavior": "The autonomy-loop-proof law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "batch-fanout-custom-agent-job-worker-result-discipline",
+      "source_law": "target-repo green fixture central law: batch-fanout-custom-agent-job-worker-result-discipline",
+      "required_behavior": "The batch-fanout-custom-agent-job-worker-result-discipline law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "behavior-example-coverage-coverage-anti-gaming",
+      "source_law": "target-repo green fixture central law: behavior-example-coverage-coverage-anti-gaming",
+      "required_behavior": "The behavior-example-coverage-coverage-anti-gaming law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "capability-gap-extraction-harness-capability-promotion",
+      "source_law": "target-repo green fixture central law: capability-gap-extraction-harness-capability-promotion",
+      "required_behavior": "The capability-gap-extraction-harness-capability-promotion law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "clean-checkout-command-discovery",
+      "source_law": "target-repo green fixture central law: clean-checkout-command-discovery",
+      "required_behavior": "The clean-checkout-command-discovery law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "clean-room-rebuild-author-memory-independence",
+      "source_law": "target-repo green fixture central law: clean-room-rebuild-author-memory-independence",
+      "required_behavior": "The clean-room-rebuild-author-memory-independence law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "cli-control-plane-authority",
+      "source_law": "target-repo green fixture central law: cli-control-plane-authority",
+      "required_behavior": "The cli-control-plane-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "cli-performance-latency-speed-iteration-fitness",
+      "source_law": "target-repo green fixture central law: cli-performance-latency-speed-iteration-fitness",
+      "required_behavior": "The cli-performance-latency-speed-iteration-fitness law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "cli-self-law-compliance",
+      "source_law": "target-repo green fixture central law: cli-self-law-compliance",
+      "required_behavior": "The cli-self-law-compliance law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "compact-agents-routed-standards",
+      "source_law": "target-repo green fixture central law: compact-agents-routed-standards",
+      "required_behavior": "The compact-agents-routed-standards law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "conditional-observability-proof",
+      "source_law": "target-repo green fixture central law: conditional-observability-proof",
+      "required_behavior": "The conditional-observability-proof law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "config-precedence-defaults-env-indirection",
+      "source_law": "target-repo green fixture central law: config-precedence-defaults-env-indirection",
+      "required_behavior": "The config-precedence-defaults-env-indirection law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "connector-capability-discovery",
+      "source_law": "target-repo green fixture central law: connector-capability-discovery",
+      "required_behavior": "The connector-capability-discovery law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "coverage-proof-accountability",
+      "source_law": "target-repo green fixture central law: coverage-proof-accountability",
+      "required_behavior": "The coverage-proof-accountability law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "coverage-scope-authority",
+      "source_law": "target-repo green fixture central law: coverage-scope-authority",
+      "required_behavior": "The coverage-scope-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "cross-artifact-consistency-solver-authority-graph-closure",
+      "source_law": "target-repo green fixture central law: cross-artifact-consistency-solver-authority-graph-closure",
+      "required_behavior": "The cross-artifact-consistency-solver-authority-graph-closure law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "current-product-discovery-audit-quality-in-use-evidence",
+      "source_law": "target-repo green fixture central law: current-product-discovery-audit-quality-in-use-evidence",
+      "required_behavior": "The current-product-discovery-audit-quality-in-use-evidence law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "derived-authority-recomputation",
+      "source_law": "target-repo green fixture central law: derived-authority-recomputation",
+      "required_behavior": "The derived-authority-recomputation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "derived-authority-recomputation-named-authority-fallback-refusal",
+      "source_law": "target-repo green fixture central law: derived-authority-recomputation-named-authority-fallback-refusal",
+      "required_behavior": "The derived-authority-recomputation-named-authority-fallback-refusal law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "distinct-proof-surfaces-claim-ceilings",
+      "source_law": "target-repo green fixture central law: distinct-proof-surfaces-claim-ceilings",
+      "required_behavior": "The distinct-proof-surfaces-claim-ceilings law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "distribution-sharing-surface-claim-separation",
+      "source_law": "target-repo green fixture central law: distribution-sharing-surface-claim-separation",
+      "required_behavior": "The distribution-sharing-surface-claim-separation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "documentation-freshness",
+      "source_law": "target-repo green fixture central law: documentation-freshness",
+      "required_behavior": "The documentation-freshness law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "execplan-no-handback-prototype-promotion-discard",
+      "source_law": "target-repo green fixture central law: execplan-no-handback-prototype-promotion-discard",
+      "required_behavior": "The execplan-no-handback-prototype-promotion-discard law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "execplan-plain-language-expected-output-interface-completeness",
+      "source_law": "target-repo green fixture central law: execplan-plain-language-expected-output-interface-completeness",
+      "required_behavior": "The execplan-plain-language-expected-output-interface-completeness law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "failure-remediation-quality-agent-actionable-output",
+      "source_law": "target-repo green fixture central law: failure-remediation-quality-agent-actionable-output",
+      "required_behavior": "The failure-remediation-quality-agent-actionable-output law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "feedback-to-rule-promotion",
+      "source_law": "target-repo green fixture central law: feedback-to-rule-promotion",
+      "required_behavior": "The feedback-to-rule-promotion law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+      "source_law": "target-repo green fixture central law: forward-only-state-transition-integrity-silent-reopen-prevention",
+      "required_behavior": "The forward-only-state-transition-integrity-silent-reopen-prevention law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "fresh-init-retrofit-mode-separation",
+      "source_law": "target-repo green fixture central law: fresh-init-retrofit-mode-separation",
+      "required_behavior": "The fresh-init-retrofit-mode-separation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "fresh-retrofit-repo-shape",
+      "source_law": "target-repo green fixture central law: fresh-retrofit-repo-shape",
+      "required_behavior": "The fresh-retrofit-repo-shape law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "generated-proof-artifact-provenance-anti-fabrication",
+      "source_law": "target-repo green fixture central law: generated-proof-artifact-provenance-anti-fabrication",
+      "required_behavior": "The generated-proof-artifact-provenance-anti-fabrication law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "generated-ready-completion-receipts",
+      "source_law": "target-repo green fixture central law: generated-ready-completion-receipts",
+      "required_behavior": "The generated-ready-completion-receipts law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "goal-contract-amendment-authority-required-claim-id-mapping",
+      "source_law": "target-repo green fixture central law: goal-contract-amendment-authority-required-claim-id-mapping",
+      "required_behavior": "The goal-contract-amendment-authority-required-claim-id-mapping law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "green-path-adequacy-satisfiable-strictness",
+      "source_law": "target-repo green fixture central law: green-path-adequacy-satisfiable-strictness",
+      "required_behavior": "The green-path-adequacy-satisfiable-strictness law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "guardrail-speed-isolation-cache-honesty",
+      "source_law": "target-repo green fixture central law: guardrail-speed-isolation-cache-honesty",
+      "required_behavior": "The guardrail-speed-isolation-cache-honesty law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "historical-regression-corpus-session-review-signals",
+      "source_law": "target-repo green fixture central law: historical-regression-corpus-session-review-signals",
+      "required_behavior": "The historical-regression-corpus-session-review-signals law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+      "source_law": "target-repo green fixture central law: human-audit-disposition-decomposition-judgment-claim-blocking",
+      "required_behavior": "The human-audit-disposition-decomposition-judgment-claim-blocking law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "instruction-precedence-nested-agents-routing",
+      "source_law": "target-repo green fixture central law: instruction-precedence-nested-agents-routing",
+      "required_behavior": "The instruction-precedence-nested-agents-routing law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "issue-tracker-lifecycle-eligibility-terminal-state",
+      "source_law": "target-repo green fixture central law: issue-tracker-lifecycle-eligibility-terminal-state",
+      "required_behavior": "The issue-tracker-lifecycle-eligibility-terminal-state law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "lane-worktree-isolation-cleanup",
+      "source_law": "target-repo green fixture central law: lane-worktree-isolation-cleanup",
+      "required_behavior": "The lane-worktree-isolation-cleanup law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "live-beneficial-e2e",
+      "source_law": "target-repo green fixture central law: live-beneficial-e2e",
+      "required_behavior": "The live-beneficial-e2e law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "memory-wiki-context-only",
+      "source_law": "target-repo green fixture central law: memory-wiki-context-only",
+      "required_behavior": "The memory-wiki-context-only law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "namespace-progressive-disclosure",
+      "source_law": "target-repo green fixture central law: namespace-progressive-disclosure",
+      "required_behavior": "The namespace-progressive-disclosure law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "non-e2e-claim-ceiling-confidence-bounds",
+      "source_law": "target-repo green fixture central law: non-e2e-claim-ceiling-confidence-bounds",
+      "required_behavior": "The non-e2e-claim-ceiling-confidence-bounds law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "offline-schema-catalog-resolver-portability",
+      "source_law": "target-repo green fixture central law: offline-schema-catalog-resolver-portability",
+      "required_behavior": "The offline-schema-catalog-resolver-portability law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "source_law": "target-repo green fixture central law: one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "required_behavior": "The one-command-fresh-environment-bootstrap-concurrent-resource-allocation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "orchestrator-state-machine",
+      "source_law": "target-repo green fixture central law: orchestrator-state-machine",
+      "required_behavior": "The orchestrator-state-machine law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "plugin-bundled-component-graph-hook-app-mcp-safety",
+      "source_law": "target-repo green fixture central law: plugin-bundled-component-graph-hook-app-mcp-safety",
+      "required_behavior": "The plugin-bundled-component-graph-hook-app-mcp-safety law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "source_law": "target-repo green fixture central law: plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "required_behavior": "The plugin-flow-graph-package-dependency-closure-plugin-product-journey law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "plugin-install-surface-metadata-cache-enable-state",
+      "source_law": "target-repo green fixture central law: plugin-install-surface-metadata-cache-enable-state",
+      "required_behavior": "The plugin-install-surface-metadata-cache-enable-state law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "plugin-product-cohesion-authority",
+      "source_law": "target-repo green fixture central law: plugin-product-cohesion-authority",
+      "required_behavior": "The plugin-product-cohesion-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "portable-non-prescriptive-adapter-implementation-choice",
+      "source_law": "target-repo green fixture central law: portable-non-prescriptive-adapter-implementation-choice",
+      "required_behavior": "The portable-non-prescriptive-adapter-implementation-choice law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "privacy-raw-artifact-boundary",
+      "source_law": "target-repo green fixture central law: privacy-raw-artifact-boundary",
+      "required_behavior": "The privacy-raw-artifact-boundary law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-cohesion-product-claims",
+      "source_law": "target-repo green fixture central law: product-cohesion-product-claims",
+      "required_behavior": "The product-cohesion-product-claims law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-live-surface-receipts",
+      "source_law": "target-repo green fixture central law: product-live-surface-receipts",
+      "required_behavior": "The product-live-surface-receipts law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-proof-joins-substitution-blocking",
+      "source_law": "target-repo green fixture central law: product-proof-joins-substitution-blocking",
+      "required_behavior": "The product-proof-joins-substitution-blocking law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-strategy-positioning-research-eval-before-lane-planning",
+      "source_law": "target-repo green fixture central law: product-strategy-positioning-research-eval-before-lane-planning",
+      "required_behavior": "The product-strategy-positioning-research-eval-before-lane-planning law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-binding-goal-lane-execplan-authority",
+      "source_law": "target-repo green fixture central law: product-success-binding-goal-lane-execplan-authority",
+      "required_behavior": "The product-success-binding-goal-lane-execplan-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-contract-initiation-authority",
+      "source_law": "target-repo green fixture central law: product-success-contract-initiation-authority",
+      "required_behavior": "The product-success-contract-initiation-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-contract-review-packet-team-skill-routing",
+      "source_law": "target-repo green fixture central law: product-success-contract-review-packet-team-skill-routing",
+      "required_behavior": "The product-success-contract-review-packet-team-skill-routing law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-inspiration-source-provenance-disposition",
+      "source_law": "target-repo green fixture central law: product-success-inspiration-source-provenance-disposition",
+      "required_behavior": "The product-success-inspiration-source-provenance-disposition law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-lifecycle-transitions-no-late-afterthought",
+      "source_law": "target-repo green fixture central law: product-success-lifecycle-transitions-no-late-afterthought",
+      "required_behavior": "The product-success-lifecycle-transitions-no-late-afterthought law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "product-success-lineage-amendments-closed-product-claim-ids",
+      "source_law": "target-repo green fixture central law: product-success-lineage-amendments-closed-product-claim-ids",
+      "required_behavior": "The product-success-lineage-amendments-closed-product-claim-ids law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "purpose-backed-active-files",
+      "source_law": "target-repo green fixture central law: purpose-backed-active-files",
+      "required_behavior": "The purpose-backed-active-files law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "quality-score-taste-gates",
+      "source_law": "target-repo green fixture central law: quality-score-taste-gates",
+      "required_behavior": "The quality-score-taste-gates law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "raw-private-artifact-handling-category-only-evidence",
+      "source_law": "target-repo green fixture central law: raw-private-artifact-handling-category-only-evidence",
+      "required_behavior": "The raw-private-artifact-handling-category-only-evidence law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "repo-knowledge-index-core-beliefs",
+      "source_law": "target-repo green fixture central law: repo-knowledge-index-core-beliefs",
+      "required_behavior": "The repo-knowledge-index-core-beliefs law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "restartable-execplans",
+      "source_law": "target-repo green fixture central law: restartable-execplans",
+      "required_behavior": "The restartable-execplans law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "review-disagreement-override-judgment-boundary-governance",
+      "source_law": "target-repo green fixture central law: review-disagreement-override-judgment-boundary-governance",
+      "required_behavior": "The review-disagreement-override-judgment-boundary-governance law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "review-feedback-disposition-same-round-satisfaction",
+      "source_law": "target-repo green fixture central law: review-feedback-disposition-same-round-satisfaction",
+      "required_behavior": "The review-feedback-disposition-same-round-satisfaction law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "reviewer-to-gate-conversion",
+      "source_law": "target-repo green fixture central law: reviewer-to-gate-conversion",
+      "required_behavior": "The reviewer-to-gate-conversion law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "runtime-feasibility-cost-strict-gate-usability",
+      "source_law": "target-repo green fixture central law: runtime-feasibility-cost-strict-gate-usability",
+      "required_behavior": "The runtime-feasibility-cost-strict-gate-usability law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "runtime-tool-identity",
+      "source_law": "target-repo green fixture central law: runtime-tool-identity",
+      "required_behavior": "The runtime-tool-identity law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "scheduler-runner-tracker-boundaries",
+      "source_law": "target-repo green fixture central law: scheduler-runner-tracker-boundaries",
+      "required_behavior": "The scheduler-runner-tracker-boundaries law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "source_law": "target-repo green fixture central law: schema-evolution-receipt-migration-stale-version-invalidation",
+      "required_behavior": "The schema-evolution-receipt-migration-stale-version-invalidation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "secret-token-boundaries",
+      "source_law": "target-repo green fixture central law: secret-token-boundaries",
+      "required_behavior": "The secret-token-boundaries law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "semantic-domain-type-naming",
+      "source_law": "target-repo green fixture central law: semantic-domain-type-naming",
+      "required_behavior": "The semantic-domain-type-naming law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "skill-catalog-context-budget-omission-warning",
+      "source_law": "target-repo green fixture central law: skill-catalog-context-budget-omission-warning",
+      "required_behavior": "The skill-catalog-context-budget-omission-warning law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "skill-local-reference-closure",
+      "source_law": "target-repo green fixture central law: skill-local-reference-closure",
+      "required_behavior": "The skill-local-reference-closure law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "skill-progressive-disclosure-metadata",
+      "source_law": "target-repo green fixture central law: skill-progressive-disclosure-metadata",
+      "required_behavior": "The skill-progressive-disclosure-metadata law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "source-card-freshness-ceiling",
+      "source_law": "target-repo green fixture central law: source-card-freshness-ceiling",
+      "required_behavior": "The source-card-freshness-ceiling law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "source-installed-cache-alignment",
+      "source_law": "target-repo green fixture central law: source-installed-cache-alignment",
+      "required_behavior": "The source-installed-cache-alignment law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "source-obligation-parity-anti-bundling",
+      "source_law": "target-repo green fixture central law: source-obligation-parity-anti-bundling",
+      "required_behavior": "The source-obligation-parity-anti-bundling law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "stable-identifier-normalization-collision",
+      "source_law": "target-repo green fixture central law: stable-identifier-normalization-collision",
+      "required_behavior": "The stable-identifier-normalization-collision law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "standards-gardener-promotion",
+      "source_law": "target-repo green fixture central law: standards-gardener-promotion",
+      "required_behavior": "The standards-gardener-promotion law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "std-automation-001",
+      "source_law": "target-repo green fixture central law: std-automation-001",
+      "required_behavior": "The std-automation-001 law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "std-plans-001",
+      "source_law": "target-repo green fixture central law: std-plans-001",
+      "required_behavior": "The std-plans-001 law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "std-product-fitness-001",
+      "source_law": "target-repo green fixture central law: std-product-fitness-001",
+      "required_behavior": "The std-product-fitness-001 law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "source_law": "target-repo green fixture central law: subagent-custom-agent-sandbox-approval-inheritance",
+      "required_behavior": "The subagent-custom-agent-sandbox-approval-inheritance law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "source_law": "target-repo green fixture central law: subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "required_behavior": "The subagent-orchestration-explicitness-token-model-cost-result-reconciliation law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "target-repo-audit-capability",
+      "source_law": "target-repo green fixture central law: target-repo-audit-capability",
+      "required_behavior": "The target-repo-audit-capability law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "source_law": "target-repo green fixture central law: targeted-refactor-debt-removal-standards-gardener-cadence",
+      "required_behavior": "The targeted-refactor-debt-removal-standards-gardener-cadence law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "template-generation-governance-template-creator-boundary",
+      "source_law": "target-repo green fixture central law: template-generation-governance-template-creator-boundary",
+      "required_behavior": "The template-generation-governance-template-creator-boundary law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "third-party-dependency-legibility-typed-adapters",
+      "source_law": "target-repo green fixture central law: third-party-dependency-legibility-typed-adapters",
+      "required_behavior": "The third-party-dependency-legibility-typed-adapters law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "total-authority-types-impossible-state-elimination",
+      "source_law": "target-repo green fixture central law: total-authority-types-impossible-state-elimination",
+      "required_behavior": "The total-authority-types-impossible-state-elimination law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "transcript-quality-reuse-gates",
+      "source_law": "target-repo green fixture central law: transcript-quality-reuse-gates",
+      "required_behavior": "The transcript-quality-reuse-gates law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "trust-boundary-abuse-path-failure-path-coverage",
+      "source_law": "target-repo green fixture central law: trust-boundary-abuse-path-failure-path-coverage",
+      "required_behavior": "The trust-boundary-abuse-path-failure-path-coverage law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "typed-records-over-prose",
+      "source_law": "target-repo green fixture central law: typed-records-over-prose",
+      "required_behavior": "The typed-records-over-prose law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "validator-source-namespace-topology",
+      "source_law": "target-repo green fixture central law: validator-source-namespace-topology",
+      "required_behavior": "The validator-source-namespace-topology law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "validator-theater-miswire-resistance",
+      "source_law": "target-repo green fixture central law: validator-theater-miswire-resistance",
+      "required_behavior": "The validator-theater-miswire-resistance law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "source_law": "target-repo green fixture central law: value-adoption-continuance-business-mission-evidence-hierarchy",
+      "required_behavior": "The value-adoption-continuance-business-mission-evidence-hierarchy law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "workflow-template-parsing-rendering-reload",
+      "source_law": "target-repo green fixture central law: workflow-template-parsing-rendering-reload",
+      "required_behavior": "The workflow-template-parsing-rendering-reload law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "workspace-command-confinement-lifecycle-cleanup",
+      "source_law": "target-repo green fixture central law: workspace-command-confinement-lifecycle-cleanup",
+      "required_behavior": "The workspace-command-confinement-lifecycle-cleanup law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "worktree-lane-owner-cost-policy",
+      "source_law": "target-repo green fixture central law: worktree-lane-owner-cost-policy",
+      "required_behavior": "The worktree-lane-owner-cost-policy law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "rust-developer-experience-authority",
+      "source_law": "target-repo green fixture central law: rust-developer-experience-authority",
+      "required_behavior": "The rust-developer-experience-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "rust-toolchain-substrate-authority",
+      "source_law": "target-repo green fixture central law: rust-toolchain-substrate-authority",
+      "required_behavior": "The rust-toolchain-substrate-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "rust-command-loop-authority",
+      "source_law": "target-repo green fixture central law: rust-command-loop-authority",
+      "required_behavior": "The rust-command-loop-authority law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "rust-cache-no-cache-honesty",
+      "source_law": "target-repo green fixture central law: rust-cache-no-cache-honesty",
+      "required_behavior": "The rust-cache-no-cache-honesty law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "rust-memory-resource-discipline",
+      "source_law": "target-repo green fixture central law: rust-memory-resource-discipline",
+      "required_behavior": "The rust-memory-resource-discipline law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "workspace-artifact-cache-garbage-collection",
+      "source_law": "target-repo green fixture central law: workspace-artifact-cache-garbage-collection",
+      "required_behavior": "The workspace-artifact-cache-garbage-collection law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    }
+  ]
+}

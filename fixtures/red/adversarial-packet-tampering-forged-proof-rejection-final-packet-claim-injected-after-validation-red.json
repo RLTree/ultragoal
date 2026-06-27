@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "adversarial-packet-tampering-forged-proof-rejection-final-packet-claim-injected-after-validation-red",
+  "expected_failure": {
+    "check_id": "adversarial-packet-tampering-forged-proof-rejection",
+    "error": "mandatory_law_specific_guard_not_enforced:adversarial-packet-tampering-forged-proof-rejection:final_packet_claim_injected_after_validation"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/adversarial-packet-tampering-forged-proof-rejection.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/final_packet_claim_injected_after_validation",
+      "value": false
+    }
+  ],
+  "notes": "adversarial-packet-tampering-forged-proof-rejection must fail when final_packet_claim_injected_after_validation is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/final_packet_claim_injected_after_validation",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/final_packet_claim_injected_after_validation",
+      "expectation": "mandatory_law_specific_guard_not_enforced:adversarial-packet-tampering-forged-proof-rejection:final_packet_claim_injected_after_validation"
+    }
+  ]
+}

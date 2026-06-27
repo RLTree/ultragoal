@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "execplan-plain-language-expected-output-interface-completeness-recovery-path-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:execplan-plain-language-expected-output-interface-completeness:recovery_path"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/recovery_path",
+      "value": false
+    }
+  ],
+  "notes": "execplan-plain-language-expected-output-interface-completeness must fail when recovery_path is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/recovery_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/recovery_path",
+      "expectation": "mandatory_law_specific_guard_not_enforced:execplan-plain-language-expected-output-interface-completeness:recovery_path"
+    }
+  ]
+}

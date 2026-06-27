@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "validator-package-digest-value-not-sha",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "package_digest_value_not_sha"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/validator_receipt/target_revision/value",
+      "value": "abcdef0"
+    }
+  ],
+  "notes": "package_digest target_revision authorities must use canonical sha256 digests, not git-like short hashes.",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/validator_receipt/target_revision/kind",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/target_revision/value",
+      "expectation": "package_digest_value_not_sha"
+    }
+  ]
+}

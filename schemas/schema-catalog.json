@@ -1,0 +1,242 @@
+{
+  "schema": "harness-ultragoal.schema-catalog.v1",
+  "resolver_contract": "Validators must preload this catalog and resolve all harness-ultragoal.local schema ids to package-relative files. Remote fetch is a validation failure.",
+  "schemas": [
+    {
+      "id": "https://harness-ultragoal.local/schemas/agent-standards-enforcement.schema.json",
+      "path": "schemas/agent-standards-enforcement.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/automation-tick-receipt.schema.json",
+      "path": "schemas/automation-tick-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/clean-checkout-command-discovery-receipt.schema.json",
+      "path": "schemas/clean-checkout-command-discovery-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/cli-control-plane-receipt.schema.json",
+      "path": "schemas/cli-control-plane-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/cli-performance-receipt.schema.json",
+      "path": "schemas/cli-performance-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/codex-registry-exposure.schema.json",
+      "path": "schemas/codex-registry-exposure.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/common-defs.schema.json",
+      "path": "schemas/common-defs.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/completion-manifest.schema.json",
+      "path": "schemas/completion-manifest.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/connector-capability.schema.json",
+      "path": "schemas/connector-capability.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/contract-amendment.schema.json",
+      "path": "schemas/contract-amendment.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/coverage-manifest.schema.json",
+      "path": "schemas/coverage-manifest.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/coverage-receipt.schema.json",
+      "path": "schemas/coverage-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/documentation-freshness-receipt.schema.json",
+      "path": "schemas/documentation-freshness-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/dogfood-receipt.schema.json",
+      "path": "schemas/dogfood-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/fit-repo-receipt.schema.json",
+      "path": "schemas/fit-repo-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/fixture-bundle.schema.json",
+      "path": "schemas/fixture-bundle.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/foundational-law-traceability.schema.json",
+      "path": "schemas/foundational-law-traceability.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/goal-binding.schema.json",
+      "path": "schemas/goal-binding.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/law-family-aliases.schema.json",
+      "path": "schemas/law-family-aliases.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",
+      "path": "schemas/lane-registry.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/mandatory-law-surface-receipt.schema.json",
+      "path": "schemas/mandatory-law-surface-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/mandatory-law-surfaces.schema.json",
+      "path": "schemas/mandatory-law-surfaces.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/memory-context-boundary-receipt.schema.json",
+      "path": "schemas/memory-context-boundary-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/namespace-class-registry.schema.json",
+      "path": "schemas/namespace-class-registry.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
+      "path": "schemas/plugin-cohesion-manifest.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/plugin-manifest.schema.json",
+      "path": "schemas/plugin-manifest.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/plugin-product-journey-receipt.schema.json",
+      "path": "schemas/plugin-product-journey-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/plugin-scout-receipt.schema.json",
+      "path": "schemas/plugin-scout-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-cohesion-receipt.schema.json",
+      "path": "schemas/product-cohesion-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-eval-protocol.schema.json",
+      "path": "schemas/product-eval-protocol.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-evidence-matrix.schema.json",
+      "path": "schemas/product-evidence-matrix.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-fitness-receipt.schema.json",
+      "path": "schemas/product-fitness-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-live-surface-receipt.schema.json",
+      "path": "schemas/product-live-surface-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-positioning.schema.json",
+      "path": "schemas/product-positioning.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-research-notes.schema.json",
+      "path": "schemas/product-research-notes.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-review-disposition.schema.json",
+      "path": "schemas/product-review-disposition.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-strategy.schema.json",
+      "path": "schemas/product-strategy.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-success-brief.schema.json",
+      "path": "schemas/product-success-brief.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-success-contract.schema.json",
+      "path": "schemas/product-success-contract.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/product-template-generation-receipt.schema.json",
+      "path": "schemas/product-template-generation-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/promotion-receipt.schema.json",
+      "path": "schemas/promotion-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/ready-for-merge.schema.json",
+      "path": "schemas/ready-for-merge.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/red-fixture.schema.json",
+      "path": "schemas/red-fixture.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/red-fixtures-catalog.schema.json",
+      "path": "schemas/red-fixtures-catalog.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/red-packet.schema.json",
+      "path": "schemas/red-packet.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/restartable-execplan-receipt.schema.json",
+      "path": "schemas/restartable-execplan-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/review-materiality-gate.schema.json",
+      "path": "schemas/review-materiality-gate.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/review-round-receipt.schema.json",
+      "path": "schemas/review-round-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/runtime-tool-identity-receipt.schema.json",
+      "path": "schemas/runtime-tool-identity-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/semantic-classification-receipt.schema.json",
+      "path": "schemas/semantic-classification-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/session-log-hardening-receipt.schema.json",
+      "path": "schemas/session-log-hardening-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/source-cards.schema.json",
+      "path": "schemas/source-cards.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/standards-gardening-receipt.schema.json",
+      "path": "schemas/standards-gardening-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/target-repo-receipt.schema.json",
+      "path": "schemas/target-repo-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/transcript-quality-receipt.schema.json",
+      "path": "schemas/transcript-quality-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/validator-receipt.schema.json",
+      "path": "schemas/validator-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/verification-backlog.schema.json",
+      "path": "schemas/verification-backlog.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/rust-devx-receipt.schema.json",
+      "path": "schemas/rust-devx-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/workspace-gc-receipt.schema.json",
+      "path": "schemas/workspace-gc-receipt.schema.json"
+    }
+  ]
+}

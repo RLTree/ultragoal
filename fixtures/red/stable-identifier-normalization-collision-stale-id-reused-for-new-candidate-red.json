@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stable-identifier-normalization-collision-stale-id-reused-for-new-candidate-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:stable-identifier-normalization-collision:stale_id_reused_for_new_candidate"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_id_reused_for_new_candidate",
+      "value": false
+    }
+  ],
+  "notes": "stable-identifier-normalization-collision must fail when stale_id_reused_for_new_candidate is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_id_reused_for_new_candidate",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_id_reused_for_new_candidate",
+      "expectation": "mandatory_law_specific_guard_not_enforced:stable-identifier-normalization-collision:stale_id_reused_for_new_candidate"
+    }
+  ]
+}

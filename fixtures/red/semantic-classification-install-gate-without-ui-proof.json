@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "semantic_classification_required_gate_unproven remains the first failing error"
+    }
+  ],
+  "id": "semantic-classification-install-gate-without-ui-proof",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_required_gate_unproven"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-install-gate-without-ui-proof.semantic-classification-receipt.json",
+          "digest": "sha256:a4242c903cfe8c4b4ffb901eef87c0d8c61f9795abc8f404d58ea4c30a667fc5"
+        }
+      ]
+    }
+  ],
+  "notes": "semantic install gate cannot be satisfied by runtime-only evidence"
+}

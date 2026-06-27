@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-live-surface-cli-substitution",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "product_live_surface_substitute_not_rejected:cli_fixture_success"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/substitutions_rejected/0"
+    }
+  ],
+  "notes": "Live-surface proof fails when CLI fixture success is not rejected as a substitute.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/substitutions_rejected/0",
+      "expectation": "product_live_surface_substitute_not_rejected:cli_fixture_success"
+    }
+  ]
+}

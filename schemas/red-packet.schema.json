@@ -1,0 +1,350 @@
+{
+  "$id": "https://harness-ultragoal.local/schemas/red-packet.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_fixture_path": {
+      "enum": [
+        ".codex-plugin/plugin.json",
+        "docs/foundational-law-traceability.json",
+        "docs/namespace-class-registry.json",
+        "docs/plugin-cohesion-manifest.json",
+        "docs/source-cards.json",
+        "docs/source-obligation-matrix.json",
+        "fixtures/agent-standards/valid/audit-pass-row.json",
+        "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+        "fixtures/law-surfaces/valid/memory-context-boundary-receipt.json",
+        "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+        "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+        "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+        "fixtures/law-surfaces/valid/transcript-quality-receipt.json",
+        "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+        "fixtures/mandatory-law-surfaces/valid/adversarial-packet-tampering-forged-proof-rejection.json",
+        "fixtures/mandatory-law-surfaces/valid/agent-authored-source-tooling-docs-provenance.json",
+        "fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json",
+        "fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json",
+        "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+        "fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json",
+        "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+        "fixtures/mandatory-law-surfaces/valid/authority-source-binding.json",
+        "fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json",
+        "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
+        "fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json",
+        "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+        "fixtures/mandatory-law-surfaces/valid/clean-checkout-command-discovery.json",
+        "fixtures/mandatory-law-surfaces/valid/clean-room-rebuild-author-memory-independence.json",
+        "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
+        "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+        "fixtures/mandatory-law-surfaces/valid/compact-agents-routed-standards.json",
+        "fixtures/mandatory-law-surfaces/valid/conditional-observability-proof.json",
+        "fixtures/mandatory-law-surfaces/valid/config-precedence-defaults-env-indirection.json",
+        "fixtures/mandatory-law-surfaces/valid/connector-capability-discovery.json",
+        "fixtures/mandatory-law-surfaces/valid/cross-artifact-consistency-solver-authority-graph-closure.json",
+        "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+        "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+        "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation.json",
+        "fixtures/mandatory-law-surfaces/valid/distinct-proof-surfaces-claim-ceilings.json",
+        "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
+        "fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json",
+        "fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json",
+        "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+        "fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json",
+        "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+        "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
+        "fixtures/mandatory-law-surfaces/valid/fresh-retrofit-repo-shape.json",
+        "fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json",
+        "fixtures/mandatory-law-surfaces/valid/generated-ready-completion-receipts.json",
+        "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+        "fixtures/mandatory-law-surfaces/valid/green-path-adequacy-satisfiable-strictness.json",
+        "fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json",
+        "fixtures/mandatory-law-surfaces/valid/historical-regression-corpus-session-review-signals.json",
+        "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+        "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+        "fixtures/mandatory-law-surfaces/valid/issue-tracker-lifecycle-eligibility-terminal-state.json",
+        "fixtures/mandatory-law-surfaces/valid/lane-worktree-isolation-cleanup.json",
+        "fixtures/mandatory-law-surfaces/valid/live-beneficial-e2e.json",
+        "fixtures/mandatory-law-surfaces/valid/memory-wiki-context-only.json",
+        "fixtures/mandatory-law-surfaces/valid/namespace-progressive-disclosure.json",
+        "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+        "fixtures/mandatory-law-surfaces/valid/offline-schema-catalog-resolver-portability.json",
+        "fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json",
+        "fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json",
+        "fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json",
+        "fixtures/mandatory-law-surfaces/valid/plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+        "fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json",
+        "fixtures/mandatory-law-surfaces/valid/portable-non-prescriptive-adapter-implementation-choice.json",
+        "fixtures/mandatory-law-surfaces/valid/privacy-raw-artifact-boundary.json",
+        "fixtures/mandatory-law-surfaces/valid/product-cohesion-product-claims.json",
+        "fixtures/mandatory-law-surfaces/valid/product-live-surface-receipts.json",
+        "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+        "fixtures/mandatory-law-surfaces/valid/product-strategy-positioning-research-eval-before-lane-planning.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-contract-initiation-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-contract-review-packet-team-skill-routing.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-inspiration-source-provenance-disposition.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-lifecycle-transitions-no-late-afterthought.json",
+        "fixtures/mandatory-law-surfaces/valid/product-success-lineage-amendments-closed-product-claim-ids.json",
+        "fixtures/mandatory-law-surfaces/valid/purpose-backed-active-files.json",
+        "fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json",
+        "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+        "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
+        "fixtures/mandatory-law-surfaces/valid/restartable-execplans.json",
+        "fixtures/mandatory-law-surfaces/valid/review-disagreement-override-judgment-boundary-governance.json",
+        "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+        "fixtures/mandatory-law-surfaces/valid/reviewer-to-gate-conversion.json",
+        "fixtures/mandatory-law-surfaces/valid/runtime-feasibility-cost-strict-gate-usability.json",
+        "fixtures/mandatory-law-surfaces/valid/runtime-tool-identity.json",
+        "fixtures/mandatory-law-surfaces/valid/rust-cache-no-cache-honesty.json",
+        "fixtures/mandatory-law-surfaces/valid/rust-command-loop-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/rust-memory-resource-discipline.json",
+        "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
+        "fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json",
+        "fixtures/mandatory-law-surfaces/valid/schema-evolution-receipt-migration-stale-version-invalidation.json",
+        "fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json",
+        "fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json",
+        "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
+        "fixtures/mandatory-law-surfaces/valid/skill-local-reference-closure.json",
+        "fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json",
+        "fixtures/mandatory-law-surfaces/valid/source-card-freshness-ceiling.json",
+        "fixtures/mandatory-law-surfaces/valid/source-installed-cache-alignment.json",
+        "fixtures/mandatory-law-surfaces/valid/source-obligation-parity-anti-bundling.json",
+        "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
+        "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
+        "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
+        "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
+        "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
+        "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
+        "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
+        "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
+        "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
+        "fixtures/mandatory-law-surfaces/valid/transcript-quality-reuse-gates.json",
+        "fixtures/mandatory-law-surfaces/valid/trust-boundary-abuse-path-failure-path-coverage.json",
+        "fixtures/mandatory-law-surfaces/valid/typed-records-over-prose.json",
+        "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+        "fixtures/mandatory-law-surfaces/valid/value-adoption-continuance-business-mission-evidence-hierarchy.json",
+        "fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json",
+        "fixtures/mandatory-law-surfaces/valid/workspace-artifact-cache-garbage-collection.json",
+        "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
+        "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
+        "fixtures/review-materiality/valid/blocked-before-review.json",
+        "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+        "fixtures/review-round/valid/review-round-receipt.json",
+        "fixtures/template-integrity/valid/template-integrity.json",
+        "fixtures/valid/minimal-goal-run.json",
+        "fixtures/valid/missing-red-base-fixture.json",
+        "fixtures/valid/non-product-feature-completion.json",
+        "fixtures/valid/two-lane-ready-dependency.json",
+        "plugin-manifest-draft.json",
+        "templates/.harness/coverage-manifest.json",
+        "templates/agent-standards/enforcement.json",
+        "templates/validation_artifacts/harness/fit-repo-receipt.json",
+        "validation_artifacts/harness/fit-repo-receipt.json",
+        "validation_artifacts/harness/plugin-product-journey-receipt.json",
+        "validation_artifacts/harness/product-fitness-receipt.json",
+        "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json"
+      ]
+    },
+    "expected_failure": {
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {
+          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+        },
+        "error": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "check_id",
+        "error"
+      ],
+      "type": "object"
+    },
+    "filesystem_fixtures": {
+      "items": {
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "symlink"
+              },
+              "path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "target": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "path",
+              "target"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "contents": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "kind": {
+                "const": "file"
+              },
+              "path": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "path",
+              "contents"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "id": {
+      "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+    },
+    "json_patch": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "op": {
+            "enum": [
+              "add",
+              "remove",
+              "replace"
+            ]
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "op",
+          "path"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "materialization": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_validation_layer": {
+          "enum": [
+            "schema",
+            "semantic",
+            "package"
+          ]
+        },
+        "first_failure_must_match_expected": {
+          "type": "boolean"
+        },
+        "post_patch_schema_valid": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "expected_validation_layer",
+        "post_patch_schema_valid",
+        "first_failure_must_match_expected"
+      ],
+      "type": "object"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "postconditions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "expectation": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "expectation"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "preconditions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "exists": {
+            "type": "boolean"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "exists"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "review_round_anchor_overrides": {
+      "additionalProperties": false,
+      "properties": {
+        "archive_receipt": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "review_target_receipt": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "validator_receipt": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "schema": {
+      "const": "harness-ultragoal.red-packet.v1"
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "expected_failure",
+    "base_fixture_path",
+    "json_patch",
+    "materialization",
+    "preconditions",
+    "postconditions"
+  ],
+  "title": "Harness Ultragoal Red Packet",
+  "type": "object"
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "unsupported-plugin-installed-visible-text-claim",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Plugin installed and visible"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "This runtime-only claim text asserts app install visibility without installed-app, package-install, or UI proof."
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:4431af5b860abf83de03322b5b80509676256c84d12c0b7171fa3f3827c91d6f",
+        "product_or_ui_claim": true,
+        "install_visibility_claim": true,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "install/visibility words in claim prose cannot be hidden inside runtime-only evidence",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

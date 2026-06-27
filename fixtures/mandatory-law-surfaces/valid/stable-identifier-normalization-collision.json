@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "stable-identifier-normalization-collision",
+  "standards_row_id": "stable-identifier-normalization-collision",
+  "source_obligation_id": "stable-identifier-normalization-collision",
+  "foundational_trace_id": "stable-identifier-normalization-collision",
+  "validator_check_id": "stable-identifier-normalization-collision",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
+  "red_fixture_ids": [
+    "stable-identifier-normalization-collision-unsanitized-workspace-key-red",
+    "stable-identifier-normalization-collision-duplicate-ids-after-normalization-red",
+    "stable-identifier-normalization-collision-stale-id-reused-for-new-candidate-red",
+    "stable-identifier-normalization-collision-display-title-treated-as-authority-red",
+    "stable-identifier-normalization-collision-receipt-id-with-mismatched-digest-red",
+    "stable-identifier-normalization-collision-mixed-case-state-accepted-as-distinct-lifecycle-state-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "identifier_claims_withheld_without_typed_normalized_collision_checked_ids",
+  "behavior_failure_modes": [
+    "stable_identifier_normalization_collision_unsanitized_workspace_key",
+    "stable_identifier_normalization_collision_duplicate_ids_after_normalization",
+    "stable_identifier_normalization_collision_stale_id_reused_for_new_candidate",
+    "stable_identifier_normalization_collision_display_title_treated_as_authority",
+    "stable_identifier_normalization_collision_receipt_id_with_mismatched_digest",
+    "stable_identifier_normalization_collision_mixed_case_state_accepted_as_distinct_lifecycle_state"
+  ],
+  "law_specific": {
+    "unsanitized_workspace_key": true,
+    "duplicate_ids_after_normalization": true,
+    "stale_id_reused_for_new_candidate": true,
+    "display_title_treated_as_authority": true,
+    "receipt_id_with_mismatched_digest": true,
+    "mixed_case_state_accepted_as_distinct_lifecycle_state": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

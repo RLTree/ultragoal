@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/rust-devx-receipt.schema.json",
+  "title": "Harness Ultragoal Rust Developer Experience Receipt",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "schema_version",
+    "issuer",
+    "generated_at",
+    "root",
+    "status",
+    "claim_ceiling",
+    "law_ids",
+    "command",
+    "digests",
+    "toolchain",
+    "cache",
+    "resource_discipline",
+    "observed_tools",
+    "tool_observations",
+    "observation_failures",
+    "claim_support",
+    "staleness_policy",
+    "telemetry",
+    "commands",
+    "policy_version"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.rust-devx-receipt.v1"
+    },
+    "schema_version": {
+      "const": "v1"
+    },
+    "issuer": {
+      "type": "object",
+      "required": [
+        "tool",
+        "authority"
+      ],
+      "properties": {
+        "tool": {
+          "const": "ultragoal"
+        },
+        "authority": {
+          "const": "cli_control_plane"
+        }
+      }
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "root": {
+      "const": "."
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "claim_ceiling": {
+      "enum": [
+        "rust_devx_observation_bound",
+        "withheld_or_blocked"
+      ]
+    },
+    "law_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "rust-cache-no-cache-honesty",
+          "rust-command-loop-authority",
+          "rust-developer-experience-authority",
+          "rust-memory-resource-discipline",
+          "rust-toolchain-substrate-authority"
+        ]
+      }
+    },
+    "command": {
+      "type": "object",
+      "required": [
+        "name",
+        "argv",
+        "proof_surface",
+        "raw_tools_are_observations_only"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "toolchain_verify",
+            "fast",
+            "standard",
+            "release",
+            "clean_proof",
+            "watch",
+            "memory_prove",
+            "dependency_audit",
+            "coverage_prove",
+            "workspace_topology"
+          ]
+        },
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "proof_surface": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_tools_are_observations_only": {
+          "const": true
+        }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "required": [
+        "candidate",
+        "source",
+        "rust_toolchain",
+        "cargo_lock",
+        "cargo_workspace",
+        "cargo_config",
+        "schema_catalog",
+        "law_graph",
+        "standards",
+        "source_obligation",
+        "fixture_catalog"
+      ]
+    },
+    "toolchain": {
+      "type": "object"
+    },
+    "cache": {
+      "type": "object",
+      "required": [
+        "cache_mode",
+        "warm_cache_supports_no_cache_claim"
+      ],
+      "properties": {
+        "warm_cache_supports_no_cache_claim": {
+          "const": false
+        }
+      }
+    },
+    "resource_discipline": {
+      "type": "object",
+      "required": [
+        "bounded_resources",
+        "spawn_and_forget_allowed",
+        "unbounded_channels_allowed",
+        "blind_cleanup_allowed",
+        "tracing_gc_core_allowed"
+      ],
+      "properties": {
+        "bounded_resources": {
+          "const": true
+        },
+        "spawn_and_forget_allowed": {
+          "const": false
+        },
+        "unbounded_channels_allowed": {
+          "const": false
+        },
+        "blind_cleanup_allowed": {
+          "const": false
+        },
+        "tracing_gc_core_allowed": {
+          "const": false
+        }
+      }
+    },
+    "tool_observations": {
+      "type": "object",
+      "required": [
+        "probes",
+        "raw_output_is_authority",
+        "missing_tool_is_claim_blocking",
+        "operation"
+      ],
+      "properties": {
+        "probes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "required",
+              "program",
+              "args",
+              "observation"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required": {
+                "const": true
+              },
+              "program": {
+                "type": "string",
+                "minLength": 1
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "observation": {
+                "type": "object",
+                "required": [
+                  "available",
+                  "success"
+                ],
+                "properties": {
+                  "available": {
+                    "type": "boolean"
+                  },
+                  "success": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "raw_output_is_authority": {
+          "const": false
+        },
+        "missing_tool_is_claim_blocking": {
+          "const": true
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "observation_failures": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

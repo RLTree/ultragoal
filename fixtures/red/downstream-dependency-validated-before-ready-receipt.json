@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "ready_receipt_not_lane_bound remains the first failing error"
+    }
+  ],
+  "id": "downstream-dependency-validated-before-ready-receipt",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_not_lane_bound"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/1/dependencies/0/validated_at",
+      "value": "2026-06-15T23:59:59Z"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/lane_registry_digest",
+      "value": "sha256:b0a5f8b89d18268e2a7380ae61dc006e37f884512ae867a88c582e77cf50ea6a"
+    }
+  ],
+  "notes": "downstream dependency validation before upstream readiness invalidates the lane-bound ready receipt before dependency gating can trust it"
+}

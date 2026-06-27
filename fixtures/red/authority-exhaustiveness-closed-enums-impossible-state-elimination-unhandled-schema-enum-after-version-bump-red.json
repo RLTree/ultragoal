@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unhandled-schema-enum-after-version-bump-red",
+  "expected_failure": {
+    "check_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+    "error": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:unhandled_schema_enum_after_version_bump"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/unhandled_schema_enum_after_version_bump",
+      "value": false
+    }
+  ],
+  "notes": "authority-exhaustiveness-closed-enums-impossible-state-elimination must fail when unhandled_schema_enum_after_version_bump is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/unhandled_schema_enum_after_version_bump",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/unhandled_schema_enum_after_version_bump",
+      "expectation": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:unhandled_schema_enum_after_version_bump"
+    }
+  ]
+}

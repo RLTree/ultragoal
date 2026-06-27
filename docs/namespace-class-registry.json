@@ -1,0 +1,154 @@
+{
+  "schema": "harness-ultragoal.namespace-class-registry.v1",
+  "classes": [
+    {
+      "id": "repo-owned-rust-source",
+      "kind": "repo_source",
+      "surface_globs": [
+        "validator/src/**/*.rs",
+        "validator/tests/**/*.rs"
+      ],
+      "description": "Repo-owned validator Rust source must be maximally factored into semantic module directories before package, review, readiness, release, CLI self-law, or update_goal claims can pass.",
+      "authority": "validator_source_topology",
+      "authority_path": "validator/src/audit/namespace/source/topology.rs",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "build-and-package-manifests",
+      "kind": "build_manifest",
+      "surface_globs": [
+        "Cargo.lock",
+        "Cargo.toml",
+        "validator/Cargo.toml",
+        ".gitignore"
+      ],
+      "description": "Build, workspace, and package manifests are governed root authority surfaces; root placement is explicit and does not waive any downstream package or source law.",
+      "authority": "package_manifest_inventory",
+      "authority_path": "plugin-manifest-draft.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "documentation-surfaces",
+      "kind": "documentation",
+      "surface_globs": [
+        "README.md",
+        "REPORT.md",
+        "docs/**"
+      ],
+      "description": "Documentation surfaces are governed routing and claim-context artifacts; documentation can explain law but cannot waive source topology, receipt, or same-surface proof.",
+      "authority": "repo_knowledge_index",
+      "authority_path": "docs/source-obligation-matrix.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "generated-proof-artifacts",
+      "kind": "generated_artifact",
+      "surface_globs": [
+        "artifacts/**",
+        "validation_artifacts/**"
+      ],
+      "description": "Generated proof artifacts are classified for routing only; generation status never waives namespace, provenance, freshness, or digest checks.",
+      "authority": "generated_artifact_provenance",
+      "authority_path": "validator/src/audit/artifacts.rs",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "fixture-catalogs",
+      "kind": "fixture_catalog",
+      "surface_globs": [
+        "fixtures/**"
+      ],
+      "description": "Fixture catalogs are routed proof surfaces; catalog membership cannot hide residual prefix encoding or substitute for red, green, and tamper proof.",
+      "authority": "red_fixture_catalog",
+      "authority_path": "templates/RED_FIXTURES.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "generated-examples",
+      "kind": "example",
+      "surface_globs": [
+        "examples/**"
+      ],
+      "description": "Generated examples are governed package examples with receipt provenance; example presence cannot raise the claim ceiling without matching validator output proof.",
+      "authority": "generated_ready_completion_receipts",
+      "authority_path": "validator/src/claim_semantics/ready/receipt.rs",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "schema-catalogs",
+      "kind": "external_compatibility",
+      "surface_globs": [
+        "schemas/**"
+      ],
+      "description": "Schema and offline catalog surfaces are compatibility interfaces; compatibility naming cannot waive source topology, package inventory, or claim-ceiling guards.",
+      "authority": "offline_schema_catalog",
+      "authority_path": "schemas/schema-catalog.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "public-distribution-surfaces",
+      "kind": "public_distribution",
+      "surface_globs": [
+        ".codex-plugin/plugin.json",
+        "plugin-manifest-draft.json",
+        "agents/**",
+        "custom-agents/**",
+        "skills/**",
+        "connectors/**"
+      ],
+      "description": "Public distribution files are governed package surfaces; distribution naming cannot authorize namespace bypasses in repo-owned source or generated proof artifacts.",
+      "authority": "plugin_manifest_inventory",
+      "authority_path": "plugin-manifest-draft.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "executable-and-local-config-surfaces",
+      "kind": "executable_script",
+      "surface_globs": [
+        ".codex/**",
+        ".harness/**",
+        "install/**",
+        "scripts/**",
+        "rust-toolchain.toml",
+        ".cargo/config.toml",
+        "deny.toml",
+        "audit.toml"
+      ],
+      "description": "Executable scripts and local configuration are governed command surfaces; runnable-path classification cannot substitute for clean-checkout command proof or lifecycle cleanup receipts.",
+      "authority": "clean_checkout_command_discovery",
+      "authority_path": "scripts/check-coverage-full",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "template-surfaces",
+      "kind": "template",
+      "surface_globs": [
+        "templates/**"
+      ],
+      "description": "Templates are governed authoring surfaces; template routing cannot waive schema, fixture, product, namespace, or receipt enforcement.",
+      "authority": "template_generation_governance",
+      "authority_path": "templates/RED_FIXTURES.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    }
+  ]
+}

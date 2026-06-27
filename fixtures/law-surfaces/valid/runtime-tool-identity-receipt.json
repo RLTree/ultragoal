@@ -1,0 +1,20 @@
+{
+  "schema": "harness-ultragoal.runtime-tool-identity-receipt.v1",
+  "tool_identity": {
+    "name": "cargo",
+    "version": "1.88.0",
+    "binary_path": "cargo"
+  },
+  "workspace": "harness-ultragoal-plugin-proposal",
+  "artifact_digests": [
+    {
+      "path": "Cargo.toml",
+      "digest": "sha256:b8d083a304e1ff96717b16610ef9a0dd1cf3bfaaebd4d06d9f4320b045849f41"
+    },
+    {
+      "path": "validator/src/audit/law/surface/receipts.rs",
+      "digest": "sha256:22d24906aa61fb4d06489e7d2622e3d4b073bb90a57cfa8f5868da9f04db752a"
+    }
+  ],
+  "claim_ceiling": "same_tool_runtime_surface_only"
+}

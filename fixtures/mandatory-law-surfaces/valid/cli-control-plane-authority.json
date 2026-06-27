@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "cli-control-plane-authority",
+  "standards_row_id": "cli-control-plane-authority",
+  "source_obligation_id": "cli-control-plane-authority",
+  "foundational_trace_id": "cli-control-plane-authority",
+  "validator_check_id": "cli-control-plane-authority",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+  "red_fixture_ids": [
+    "cli-control-plane-authority-checklist-completion-without-cli-red",
+    "cli-control-plane-authority-reviewer-agreement-bypass-red",
+    "cli-control-plane-authority-source-audit-substituted-for-update-goal-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    },
+    {
+      "path": "validator/src/audit/cli/control_plane/authority.rs",
+      "digest": "sha256:c270ce7c2bd64b6f05c4bd172c0bbc7978ceccc3ce255d469579e59fc8230f6c"
+    },
+    {
+      "path": "validator/src/cli/control/plane/types.rs",
+      "digest": "sha256:0525bcd24166eb53d14fc4c4769ae06ad9473c5eb651f204ffa591f24b61bd15"
+    },
+    {
+      "path": "validator/src/cli/control/plane.rs",
+      "digest": "sha256:bfff44706703a99166664cf254042d4371b61be78dc8926bd0c433a2b507f582"
+    }
+  ],
+  "claim_ceiling_guard": "harness_claims_withheld_without_cli_control_plane_authority",
+  "behavior_failure_modes": [
+    "cli_control_plane_authority_checklist_completion_without_cli",
+    "cli_control_plane_authority_reviewer_agreement_bypass",
+    "cli_control_plane_authority_source_audit_substituted_for_update_goal"
+  ],
+  "law_specific": {
+    "checklist_completion_without_cli": true,
+    "reviewer_agreement_bypass": true,
+    "source_audit_substituted_for_update_goal": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

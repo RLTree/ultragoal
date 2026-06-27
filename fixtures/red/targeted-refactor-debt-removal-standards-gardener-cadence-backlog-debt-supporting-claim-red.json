@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:targeted-refactor-debt-removal-standards-gardener-cadence:backlog_debt_supporting_claim"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/backlog_debt_supporting_claim",
+      "value": false
+    }
+  ],
+  "notes": "targeted-refactor-debt-removal-standards-gardener-cadence must fail when backlog_debt_supporting_claim is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/backlog_debt_supporting_claim",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/backlog_debt_supporting_claim",
+      "expectation": "mandatory_law_specific_guard_not_enforced:targeted-refactor-debt-removal-standards-gardener-cadence:backlog_debt_supporting_claim"
+    }
+  ]
+}

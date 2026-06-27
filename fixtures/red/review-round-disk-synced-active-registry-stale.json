@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-disk-synced-active-registry-stale",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_live_registry_agent_missing"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/path",
+      "value": "fixtures/review-round/anchors/live-registry-exposure-disk-synced-active-stale.json"
+    },
+    {
+      "op": "replace",
+      "path": "/live_registry_exposure/digest",
+      "value": "sha256:316c61d988db3ba18184d3caa6adae3ccafa8f28afa0d2afe353ed5d7eab4217"
+    }
+  ],
+  "notes": "disk cache and global TOMLs do not prove already-running Codex sessions expose current custom agent types",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/live_registry_exposure",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/live_registry_exposure",
+      "expectation": "active registry exposure required even when disk sync is true"
+    }
+  ]
+}

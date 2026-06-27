@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-missing-authority-binding",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "authority-source-binding: source_obligation_missing_row"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/8"
+    }
+  ],
+  "notes": "Named plugin/process authorities must not silently fall back to local, installed, cache, or reference authority without a receipt and claim ceiling.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/8/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations",
+      "expectation": "authority-source-binding source_obligation_missing_row"
+    }
+  ]
+}

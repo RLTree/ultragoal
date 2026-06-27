@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/product-cohesion-receipt.schema.json",
+  "title": "Harness Ultragoal Product Cohesion Receipt",
+  "type": "object",
+  "required": [
+    "schema",
+    "product_surface_id",
+    "change_intent",
+    "primary_user",
+    "user_job",
+    "product_promise",
+    "business_or_user_outcome",
+    "primary_journey",
+    "surface_map",
+    "human_attention_policy",
+    "proof",
+    "claim_ceiling",
+    "review",
+    "generated_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.product-cohesion-receipt.v1"
+    },
+    "product_surface_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "change_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "primary_user": {
+      "type": "string",
+      "minLength": 1
+    },
+    "user_job": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_promise": {
+      "type": "string",
+      "minLength": 1
+    },
+    "business_or_user_outcome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "primary_journey": {
+      "type": "object",
+      "required": [
+        "id",
+        "start",
+        "end",
+        "steps"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "string",
+          "minLength": 1
+        },
+        "end": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "surface",
+              "user_action",
+              "system_response",
+              "engine_truth",
+              "evidence"
+            ],
+            "properties": {
+              "surface": {
+                "type": "string",
+                "minLength": 1
+              },
+              "user_action": {
+                "type": "string",
+                "minLength": 1
+              },
+              "system_response": {
+                "type": "string",
+                "minLength": 1
+              },
+              "engine_truth": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "$ref": "common-defs.schema.json#/$defs/artifactRef"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "surface_map": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "surface",
+          "role",
+          "state_coverage"
+        ],
+        "properties": {
+          "surface": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state_coverage": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "human_attention_policy": {
+      "type": "object",
+      "required": [
+        "expected_interruption_rate",
+        "allowed_reasons",
+        "automation_expectation",
+        "overuse_risk",
+        "exhausted_harness_paths"
+      ],
+      "properties": {
+        "expected_interruption_rate": {
+          "enum": [
+            "rare",
+            "occasional",
+            "frequent",
+            "unknown"
+          ]
+        },
+        "allowed_reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "not_needed",
+              "permission_required",
+              "ambiguity_blocker",
+              "external_blocker",
+              "safety_blocker"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "automation_expectation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "overuse_risk": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exhausted_harness_paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          }
+        },
+        "human_review_queue_exception": {
+          "type": "object",
+          "required": [
+            "reason",
+            "evidence"
+          ],
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "$ref": "common-defs.schema.json#/$defs/artifactRef"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "proof": {
+      "type": "object",
+      "required": [
+        "ui_evidence",
+        "runtime_evidence",
+        "accessibility_evidence"
+      ],
+      "properties": {
+        "ui_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          }
+        },
+        "runtime_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          }
+        },
+        "accessibility_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "required": [
+        "supported",
+        "withheld",
+        "rationale"
+      ],
+      "properties": {
+        "supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "withheld": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "method",
+        "reviewers",
+        "reviewer_authority",
+        "signoff_status"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "reviewer_authority": {
+          "type": "object",
+          "required": [
+            "actor_disjoint",
+            "authority",
+            "evidence"
+          ],
+          "properties": {
+            "actor_disjoint": {
+              "const": true
+            },
+            "authority": {
+              "enum": [
+                "independent_product_reviewer",
+                "external_reviewer",
+                "target_repo_gate"
+              ]
+            },
+            "evidence": {
+              "$ref": "common-defs.schema.json#/$defs/artifactRef"
+            }
+          },
+          "additionalProperties": false
+        },
+        "signoff_status": {
+          "enum": [
+            "pass",
+            "revise",
+            "blocked"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    }
+  },
+  "additionalProperties": false
+}

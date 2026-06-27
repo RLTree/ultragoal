@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-reviewer-anchor-digests-omitted",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/reviewers/0/review_target_digest"
+    },
+    {
+      "op": "remove",
+      "path": "/reviewers/0/archive_digest"
+    }
+  ],
+  "notes": "each reviewer row must bind to the same review-target and archive digest as the round.",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/review_target_digest",
+      "exists": true
+    },
+    {
+      "path": "/reviewers/0/archive_digest",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0",
+      "expectation": "reviewer row without full anchor digests is schema-invalid"
+    }
+  ]
+}

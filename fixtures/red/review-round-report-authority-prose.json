@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-authority-prose",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_report_authority_prose"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/review_report/path",
+      "value": "fixtures/review-round/reports/contract_adversary_authority_prose.md"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/review_report/digest",
+      "value": "sha256:5a4087501c63f8e7f3fda5d86b368e8bf5cd9882ee23e2cdcc0997b7e1b7eb38"
+    }
+  ],
+  "notes": "Markdown review reports must not carry authority headings; typed receipt fields are authoritative.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/review_report/path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0/review_report/path",
+      "expectation": "review_round_report_authority_prose"
+    }
+  ]
+}

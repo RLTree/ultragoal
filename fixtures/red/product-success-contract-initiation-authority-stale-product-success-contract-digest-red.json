@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-contract-initiation-authority-stale-product-success-contract-digest-red",
+  "expected_failure": {
+    "check_id": "product-success-contract-initiation-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-contract-initiation-authority:stale_product_success_contract_digest"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-contract-initiation-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_product_success_contract_digest",
+      "value": false
+    }
+  ],
+  "notes": "product-success-contract-initiation-authority must fail when stale_product_success_contract_digest is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_product_success_contract_digest",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_product_success_contract_digest",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-contract-initiation-authority:stale_product_success_contract_digest"
+    }
+  ]
+}

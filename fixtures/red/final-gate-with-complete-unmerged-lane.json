@@ -1,0 +1,155 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "final-gate-with-complete-unmerged-lane",
+  "expected_failure": {
+    "check_id": "root-verification-phase-coverage",
+    "error": "final_gate_with_nonterminal_lanes"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/status",
+      "value": "complete"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/command_receipt",
+      "value": {
+        "id": "cmd-pre-gate",
+        "command": "validate pre merge lane gate",
+        "cwd": "/repo",
+        "exit": 0,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z",
+        "artifact_path": "validation_artifacts/pre.json",
+        "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/artifact_receipt",
+      "value": {
+        "path": "validation_artifacts/pre.json",
+        "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt",
+      "value": {
+        "id": "post",
+        "command": "post gate",
+        "cwd": "/repo",
+        "exit": 0,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z",
+        "artifact_path": "artifacts/post.json",
+        "artifact_digest": "sha256:40880a70874b734a310064b698cdca08c393711b5a98efb67e8bf675baa62016"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt",
+      "value": {
+        "path": "artifacts/post.json",
+        "digest": "sha256:40880a70874b734a310064b698cdca08c393711b5a98efb67e8bf675baa62016"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/command_receipt",
+      "value": {
+        "id": "final",
+        "command": "final gate",
+        "cwd": "/repo",
+        "exit": 0,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z",
+        "artifact_path": "artifacts/final.json",
+        "artifact_digest": "sha256:40880a70874b734a310064b698cdca08c393711b5a98efb67e8bf675baa62016"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/artifact_receipt",
+      "value": {
+        "path": "artifacts/final.json",
+        "digest": "sha256:40880a70874b734a310064b698cdca08c393711b5a98efb67e8bf675baa62016"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/teardown/status",
+      "value": "complete"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/lanes/0/teardown/cleanup_receipts",
+      "value": [
+        {
+          "target_kind": "worktree",
+          "target": "/repo/worktrees/lane-001",
+          "action": "removed",
+          "receipt": {
+            "path": "templates/AGENTS.md",
+            "digest": "sha256:faa4d6cc55c5d625249e2e4b31c60fd320fead82ffc17f325c37df554e6abbcb"
+          },
+          "post_clean_audit": {
+            "path": "templates/PLANS.md",
+            "digest": "sha256:875f3766715707912dc584919a2781a65e1ce8d5ae66e24b97d1fe5903a4e8e7"
+          },
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/lanes/0/status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/status",
+      "expectation": "complete is not terminal without merge"
+    }
+  ],
+  "notes": "semantic policy rejects final gate while lane is merely complete and unmerged"
+}

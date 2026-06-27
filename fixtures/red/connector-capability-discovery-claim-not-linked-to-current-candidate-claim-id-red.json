@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "connector-capability-discovery-claim-not-linked-to-current-candidate-claim-id-red",
+  "expected_failure": {
+    "check_id": "connector-capability-discovery",
+    "error": "mandatory_law_specific_guard_not_enforced:connector-capability-discovery:claim_not_linked_to_current_candidate_claim_id"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/connector-capability-discovery.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/claim_not_linked_to_current_candidate_claim_id",
+      "value": false
+    }
+  ],
+  "notes": "connector-capability-discovery must fail when claim_not_linked_to_current_candidate_claim_id is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/claim_not_linked_to_current_candidate_claim_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/claim_not_linked_to_current_candidate_claim_id",
+      "expectation": "mandatory_law_specific_guard_not_enforced:connector-capability-discovery:claim_not_linked_to_current_candidate_claim_id"
+    }
+  ]
+}

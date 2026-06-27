@@ -1,0 +1,24 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-flow-missing-skill-declaration",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plugin_flow_manifest_path_missing"
+  },
+  "base_fixture_path": "docs/plugin-cohesion-manifest.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/skills",
+      "value": ["skills/fit-repo/SKILL.md"]
+    }
+  ],
+  "notes": "Plugin flow graph must declare every shipped skill, not only the entrypoint.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [{ "path": "/skills", "exists": true }],
+  "postconditions": [{ "path": "/skills", "expectation": "plugin_flow_manifest_path_missing" }]
+}

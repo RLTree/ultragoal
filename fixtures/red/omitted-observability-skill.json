@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "omitted-observability-skill",
+  "expected_failure": {
+    "check_id": "skill-inventory-closure",
+    "error": "required_skill_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/plugin_manifest/skills/2"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/skills/5/name",
+      "expectation": "required_skill_missing"
+    }
+  ],
+  "notes": "schema rejects missing observability setup skill from plugin package inventory"
+}

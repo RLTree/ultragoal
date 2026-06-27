@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/red-fixture.schema.json",
+  "title": "Harness Ultragoal Red Fixture Result",
+  "type": "object",
+  "required": [
+    "id",
+    "packet_path",
+    "packet_digest",
+    "expected_failure"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+    },
+    "packet_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packet_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "expected_failure": {
+      "type": "object",
+      "required": [
+        "check_id",
+        "error"
+      ],
+      "properties": {
+        "check_id": {
+          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+        },
+        "error": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "restartable-execplan-prose-only",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "restartable_execplan_prose_only"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/prose_only",
+      "value": true
+    }
+  ],
+  "notes": "ExecPlan receipt fails when it is prose only.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/prose_only",
+      "expectation": "restartable_execplan_prose_only"
+    }
+  ]
+}

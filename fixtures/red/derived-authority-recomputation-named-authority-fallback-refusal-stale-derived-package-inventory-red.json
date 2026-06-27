@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:derived-authority-recomputation-named-authority-fallback-refusal:stale_derived_package_inventory"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_derived_package_inventory",
+      "value": false
+    }
+  ],
+  "notes": "derived-authority-recomputation-named-authority-fallback-refusal must fail when stale_derived_package_inventory is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_derived_package_inventory",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_derived_package_inventory",
+      "expectation": "mandatory_law_specific_guard_not_enforced:derived-authority-recomputation-named-authority-fallback-refusal:stale_derived_package_inventory"
+    }
+  ]
+}

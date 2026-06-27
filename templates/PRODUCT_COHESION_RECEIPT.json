@@ -1,0 +1,102 @@
+{
+  "schema": "harness-ultragoal.product-cohesion-receipt.v1",
+  "product_surface_id": "surface-example",
+  "change_intent": "Explain the consumer-facing change being claimed.",
+  "primary_user": "Local operator",
+  "user_job": "Start, monitor, and trust a workflow run.",
+  "product_promise": "The product makes engine power understandable without repo lore.",
+  "business_or_user_outcome": "The user can complete the critical journey with a truthful claim ceiling.",
+  "primary_journey": {
+    "id": "journey-example",
+    "start": "User states intent.",
+    "end": "User sees outcome, receipts, and withheld claims.",
+    "steps": [
+      {
+        "surface": "Issues",
+        "user_action": "Create work item.",
+        "system_response": "Shows route, risk, budget, and proof owed.",
+        "engine_truth": "Route decision is persisted.",
+        "evidence": {
+          "path": "validation_artifacts/product-cohesion/issues.png",
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      },
+      {
+        "surface": "Runs",
+        "user_action": "Inspect run proof.",
+        "system_response": "Shows receipts and claim ceiling.",
+        "engine_truth": "Run ledger is durable.",
+        "evidence": {
+          "path": "validation_artifacts/product-cohesion/run-detail.png",
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      }
+    ]
+  },
+  "surface_map": [
+    {
+      "surface": "Issues",
+      "role": "Intent capture and route explanation",
+      "state_coverage": [
+        "empty",
+        "success",
+        "blocked"
+      ]
+    }
+  ],
+  "human_attention_policy": {
+    "expected_interruption_rate": "rare",
+    "allowed_reasons": [
+      "permission_required",
+      "external_blocker"
+    ],
+    "automation_expectation": "The agent continues without the human unless approval, credentials, safety, or unavailable external state blocks progress.",
+    "overuse_risk": "If most issues land in human handoff, the product is leaking harness failure into the user's workflow.",
+    "exhausted_harness_paths": [
+      {
+        "path": "validation_artifacts/product-cohesion/exhausted-harness-paths.json",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "proof": {
+    "ui_evidence": [
+      {
+        "path": "validation_artifacts/product-cohesion/run-detail.png",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ],
+    "runtime_evidence": [
+      {
+        "path": "validation_artifacts/product-cohesion/runtime.json",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ],
+    "accessibility_evidence": []
+  },
+  "claim_ceiling": {
+    "supported": [
+      "Product journey is specified."
+    ],
+    "withheld": [
+      "Live product readiness is withheld until non-zero UI evidence is captured."
+    ],
+    "rationale": "Template only; generated receipts must replace zero digests."
+  },
+  "review": {
+    "method": "product-cohesion-gate",
+    "reviewers": [
+      "product-cohesion-reviewer"
+    ],
+    "signoff_status": "blocked",
+    "reviewer_authority": {
+      "actor_disjoint": true,
+      "authority": "independent_product_reviewer",
+      "evidence": {
+        "path": "validation_artifacts/product-cohesion/review-signoff.json",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  },
+  "generated_at": "2026-06-16T00:00:00Z"
+}

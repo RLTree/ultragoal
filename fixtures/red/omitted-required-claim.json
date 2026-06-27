@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "omitted-required-claim",
+  "expected_failure": {
+    "check_id": "required-claim-closure",
+    "error": "required_claim_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/completion_manifest/required_claim_ids/0"
+    }
+  ],
+  "notes": "remove required CLAIM-001 from completion_manifest.required_claim_ids",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/required_claim_ids/0",
+      "expectation": "required_claim_missing"
+    }
+  ]
+}

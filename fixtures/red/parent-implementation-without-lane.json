@@ -1,0 +1,43 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "parent-implementation-without-lane",
+  "expected_failure": {
+    "check_id": "parent-role-boundary",
+    "error": "parent_diff_without_registered_lane"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/changed_files",
+      "value": [
+        "parent-owned/unregistered-change.md"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/owned_paths",
+      "value": [
+        "fixtures/valid"
+      ]
+    }
+  ],
+  "notes": "changed file is outside every registered lane owned path",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/owned_paths",
+      "expectation": "parent_diff_without_registered_lane"
+    }
+  ]
+}

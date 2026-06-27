@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "goal-tools-unavailable-without-probe",
+  "expected_failure": {
+    "check_id": "goal-tool-discovery-probe",
+    "error": "goal_tools_unavailable_without_probe"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/goal_binding/discovery_probe_receipt/verdict",
+      "value": "available"
+    }
+  ],
+  "notes": "remove goal tool discovery probe for unavailable goal binding",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/goal_binding/discovery_probe_receipt/verdict",
+      "expectation": "goal_tools_unavailable_without_probe"
+    }
+  ]
+}

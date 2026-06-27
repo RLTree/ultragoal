@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "autonomy-loop-proof",
+  "standards_row_id": "autonomy-loop-proof",
+  "source_obligation_id": "autonomy-loop-proof",
+  "foundational_trace_id": "autonomy-loop-proof",
+  "validator_check_id": "autonomy-loop-proof",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json",
+  "red_fixture_ids": [
+    "autonomy-loop-proof-current-state-validation-red",
+    "autonomy-loop-proof-reproduced-failure-red",
+    "autonomy-loop-proof-before-artifact-red",
+    "autonomy-loop-proof-implemented-repair-red",
+    "autonomy-loop-proof-after-same-surface-validation-red",
+    "autonomy-loop-proof-build-test-status-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "behavior_change_claims_withheld_without_before_after_receipt",
+  "behavior_failure_modes": [
+    "autonomy_loop_proof_current_state_validation",
+    "autonomy_loop_proof_reproduced_failure",
+    "autonomy_loop_proof_before_artifact",
+    "autonomy_loop_proof_implemented_repair",
+    "autonomy_loop_proof_after_same_surface_validation",
+    "autonomy_loop_proof_build_test_status"
+  ],
+  "law_specific": {
+    "current_state_validation": true,
+    "reproduced_failure": true,
+    "before_artifact": true,
+    "implemented_repair": true,
+    "after_same_surface_validation": true,
+    "build_test_status": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

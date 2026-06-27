@@ -1,0 +1,79 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-non-gpt55-model-mismatch",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/round_phase",
+      "value": "sign_off"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/model",
+      "value": "gpt-5.4-mini"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/verdict",
+      "value": "SIGN_OFF"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/1/model",
+      "value": "gpt-5.4-mini"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/1/verdict",
+      "value": "SIGN_OFF"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/2/model",
+      "value": "gpt-5.4-mini"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/2/verdict",
+      "value": "SIGN_OFF"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/3/model",
+      "value": "gpt-5.4-mini"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/3/verdict",
+      "value": "SIGN_OFF"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/live_spawn_receipt/model",
+      "value": "gpt-5.4-mini"
+    }
+  ],
+  "notes": "material sign-off rounds require gpt-5.5 custom agents, not gpt-5.4-mini or generic gpt-5.4",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

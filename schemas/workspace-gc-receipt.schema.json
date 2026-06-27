@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/workspace-gc-receipt.schema.json",
+  "title": "Harness Ultragoal Workspace Garbage Collection Receipt",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "schema_version",
+    "issuer",
+    "generated_at",
+    "root",
+    "status",
+    "claim_ceiling",
+    "law_ids",
+    "command",
+    "digests",
+    "artifact_classification",
+    "protected_set",
+    "deletion_plan",
+    "post_verify",
+    "policy_version"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.workspace-gc-receipt.v1"
+    },
+    "schema_version": {
+      "const": "v1"
+    },
+    "issuer": {
+      "type": "object",
+      "required": [
+        "tool",
+        "authority"
+      ],
+      "properties": {
+        "tool": {
+          "const": "ultragoal"
+        },
+        "authority": {
+          "const": "cli_control_plane"
+        }
+      }
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "root": {
+      "const": "."
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "claim_ceiling": {
+      "enum": [
+        "gc_observation_bound",
+        "withheld_or_blocked"
+      ]
+    },
+    "law_ids": {
+      "type": "array",
+      "contains": {
+        "const": "workspace-artifact-cache-garbage-collection"
+      }
+    },
+    "artifact_classification": {
+      "type": "object",
+      "required": [
+        "classes",
+        "unclassified_delete_allowed"
+      ],
+      "properties": {
+        "classes": {
+          "type": "array",
+          "minItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        "unclassified_delete_allowed": {
+          "const": false
+        }
+      }
+    },
+    "protected_set": {
+      "type": "object",
+      "required": [
+        "protected_artifacts",
+        "protected_delete_allowed_without_replacement"
+      ],
+      "properties": {
+        "protected_delete_allowed_without_replacement": {
+          "const": false
+        }
+      }
+    },
+    "deletion_plan": {
+      "type": "object",
+      "required": [
+        "plan_digest",
+        "apply_requires_plan_digest",
+        "blind_rm_rf_allowed",
+        "deleted_artifacts"
+      ],
+      "properties": {
+        "apply_requires_plan_digest": {
+          "const": true
+        },
+        "blind_rm_rf_allowed": {
+          "const": false
+        }
+      }
+    },
+    "post_verify": {
+      "type": "object",
+      "required": [
+        "protected_artifacts_preserved",
+        "active_claim_receipts_preserved",
+        "locks_pids_ports_checked"
+      ]
+    }
+  }
+}
+

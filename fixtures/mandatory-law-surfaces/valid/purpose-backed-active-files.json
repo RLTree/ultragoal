@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "purpose-backed-active-files",
+  "standards_row_id": "purpose-backed-active-files",
+  "source_obligation_id": "purpose-backed-active-files",
+  "foundational_trace_id": "purpose-backed-active-files",
+  "validator_check_id": "purpose-backed-active-files",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/purpose-backed-active-files.json",
+  "red_fixture_ids": [
+    "purpose-backed-active-files-source-obligation-parity-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "archive_only_or_orphan_files_withhold_active_repo_claims",
+  "behavior_failure_modes": [
+    "purpose_backed_active_files_source_obligation_parity"
+  ],
+  "law_specific": {
+    "source_obligation_parity": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

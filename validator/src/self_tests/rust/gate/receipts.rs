@@ -1,0 +1,134 @@
+use crate::cli::garbage::collection::types::GarbageOperation;
+use crate::cli::garbage::collection::{GarbageCommand, receipt as gc_receipt};
+use crate::cli::rust::types::RustOperation;
+use crate::cli::rust::{RustCommand, parse, receipt as rust_receipt};
+use serde_json::json;
+
+#[test]
+fn rust_command_parser_routes_required_gate_91_operations() {
+    for (raw, expected) in [
+        (
+            vec!["rust", "toolchain", "verify"],
+            RustOperation::ToolchainVerify,
+        ),
+        (vec!["rust", "fast"], RustOperation::Fast),
+        (vec!["rust", "standard"], RustOperation::Standard),
+        (vec!["rust", "release"], RustOperation::Release),
+        (vec!["rust", "clean-proof"], RustOperation::CleanProof),
+        (vec!["rust", "watch"], RustOperation::Watch),
+        (vec!["rust", "memory", "prove"], RustOperation::MemoryProve),
+        (
+            vec!["rust", "dependency", "audit"],
+            RustOperation::DependencyAudit,
+        ),
+        (
+            vec!["rust", "coverage", "prove"],
+            RustOperation::CoverageProve,
+        ),
+        (
+            vec!["rust", "workspace", "topology", "check"],
+            RustOperation::WorkspaceTopology,
+        ),
+    ] {
+        let args = raw.into_iter().map(str::to_string).collect::<Vec<_>>();
+        let command = parse(&args).expect("parse").expect("rust command");
+        assert_eq!(command.operation, expected);
+    }
+}
+
+#[test]
+fn rust_command_usage_matches_canonical_gate_91_surface() {
+    let usage = crate::usage();
+    for fragment in [
+        "rust <toolchain verify",
+        "memory prove",
+        "dependency audit",
+        "coverage prove --exact",
+        "workspace topology check",
+    ] {
+        assert!(usage.contains(fragment), "{fragment}");
+    }
+    for invalid in ["rust <toolchain|", "memory|dependency", "workspace>"] {
+        assert!(!usage.contains(invalid), "{invalid}");
+    }
+}
+
+#[test]
+fn rust_devx_receipt_binds_cli_authority_and_rejects_wrong_law() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let command = RustCommand {
+        operation: RustOperation::ToolchainVerify,
+        receipt: None,
+    };
+    let receipt = rust_receipt(&root, &command, 7).expect("rust receipt");
+    assert_eq!(receipt["issuer"]["tool"], "ultragoal");
+    assert_eq!(receipt["command"]["raw_tools_are_observations_only"], true);
+    assert_eq!(
+        receipt["tool_observations"]["raw_output_is_authority"],
+        false
+    );
+    assert!(
+        receipt["tool_observations"]["probes"]
+            .as_array()
+            .is_some_and(|items| items.len() >= 4)
+    );
+    assert!(
+        crate::cli::rust::receipt::surface_value_failures(
+            &receipt,
+            "rust-toolchain-substrate-authority"
+        )
+        .is_empty()
+    );
+    let wrong = crate::cli::rust::receipt::surface_value_failures(
+        &receipt,
+        "rust-memory-resource-discipline",
+    );
+    assert!(
+        wrong.contains(
+            &"rust_devx_receipt_missing_law_id:rust-memory-resource-discipline".to_string()
+        )
+    );
+
+    let mut theater = receipt;
+    theater["tool_observations"]["raw_output_is_authority"] = json!(true);
+    let failures = crate::cli::rust::receipt::surface_value_failures(
+        &theater,
+        "rust-toolchain-substrate-authority",
+    );
+    assert!(failures.contains(&"rust_devx_raw_output_marked_authority".to_string()));
+}
+
+#[test]
+fn workspace_gc_receipt_binds_plan_and_rejects_missing_law() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let command = GarbageCommand {
+        operation: GarbageOperation::Verify,
+        receipt: None,
+        plan_digest: Some(crate::digest::bytes(b"plan")),
+    };
+    let receipt = gc_receipt(&root, &command).expect("gc receipt");
+    assert_eq!(receipt["issuer"]["authority"], "cli_control_plane");
+    assert_eq!(receipt["deletion_plan"]["blind_rm_rf_allowed"], false);
+    assert!(crate::cli::garbage::collection::receipt::surface_value_failures(&receipt).is_empty());
+
+    let mut missing = receipt;
+    missing["law_ids"] = json!([]);
+    let failures = crate::cli::garbage::collection::receipt::surface_value_failures(&missing);
+    assert!(failures.contains(&"workspace_gc_receipt_missing_law_id".to_string()));
+}
+
+#[test]
+fn rust_devx_audit_fails_closed_when_surfaces_are_absent() {
+    let root = crate::self_tests::boundaries::support::temp_root("rust-devx-audit");
+    std::fs::create_dir_all(&root).expect("root");
+    let failures = crate::audit::rust::developer::package_failures(&root);
+    assert!(failures.iter().any(|(law, failure)| {
+        law == "rust-toolchain-substrate-authority"
+            && failure.starts_with("rust_devx_missing_artifact")
+    }));
+    assert!(failures.iter().any(|(law, failure)| {
+        law == "workspace-artifact-cache-garbage-collection"
+            && failure.starts_with("rust_devx_missing_artifact")
+    }));
+    std::fs::remove_dir_all(root).expect("cleanup");
+}

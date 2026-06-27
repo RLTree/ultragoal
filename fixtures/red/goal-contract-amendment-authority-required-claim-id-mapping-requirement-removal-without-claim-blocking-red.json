@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "goal-contract-amendment-authority-required-claim-id-mapping-requirement-removal-without-claim-blocking-red",
+  "expected_failure": {
+    "check_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+    "error": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:requirement_removal_without_claim_blocking"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/requirement_removal_without_claim_blocking",
+      "value": false
+    }
+  ],
+  "notes": "goal-contract-amendment-authority-required-claim-id-mapping must fail when requirement_removal_without_claim_blocking is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/requirement_removal_without_claim_blocking",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/requirement_removal_without_claim_blocking",
+      "expectation": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:requirement_removal_without_claim_blocking"
+    }
+  ]
+}

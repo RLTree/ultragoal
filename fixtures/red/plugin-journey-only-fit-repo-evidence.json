@@ -1,0 +1,29 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-journey-only-fit-repo-evidence",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "plugin_product_journey_evidence_incomplete"
+  },
+  "base_fixture_path": "validation_artifacts/harness/plugin-product-journey-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/evidence",
+      "value": [
+        {
+          "path": "validation_artifacts/harness/fit-repo-receipt.json",
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  ],
+  "notes": "Plugin product journey needs per-step evidence, not only a nested fit-repo receipt.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [{ "path": "/evidence", "exists": true }],
+  "postconditions": [{ "path": "/evidence", "expectation": "plugin_product_journey_evidence_incomplete" }]
+}

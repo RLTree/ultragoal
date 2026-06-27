@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-missing-persona",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_missing_persona"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/3/persona",
+      "value": "contract_claim_falsifier"
+    }
+  ],
+  "notes": "four-persona review signoff must include every canonical merged persona",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3/persona",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/3/persona",
+      "expectation": "missing persona rejected"
+    }
+  ]
+}

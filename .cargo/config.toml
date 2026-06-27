@@ -1,0 +1,9 @@
+[build]
+target-dir = "target"
+
+[net]
+git-fetch-with-cli = true
+
+[env]
+CARGO_INCREMENTAL = "0"
+

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-bundled-component-graph-hook-app-mcp-safety-purpose-owner-source-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:plugin-bundled-component-graph-hook-app-mcp-safety:purpose_owner_source"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/purpose_owner_source",
+      "value": false
+    }
+  ],
+  "notes": "plugin-bundled-component-graph-hook-app-mcp-safety must fail when purpose_owner_source is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/purpose_owner_source",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/purpose_owner_source",
+      "expectation": "mandatory_law_specific_guard_not_enforced:plugin-bundled-component-graph-hook-app-mcp-safety:purpose_owner_source"
+    }
+  ]
+}

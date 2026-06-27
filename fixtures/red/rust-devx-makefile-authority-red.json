@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-makefile-authority-red",
+  "expected_failure": {
+    "check_id": "rust-developer-experience-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:makefile_or_alias_authority"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/makefile_or_alias_authority",
+      "value": false
+    }
+  ],
+  "notes": "Makefile, shell alias, or unwrapped script authority cannot satisfy Harness claims",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/makefile_or_alias_authority",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/makefile_or_alias_authority",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:makefile_or_alias_authority"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "cross-artifact-consistency-solver-authority-graph-closure-missing-receipt-edge-red",
+  "expected_failure": {
+    "check_id": "cross-artifact-consistency-solver-authority-graph-closure",
+    "error": "mandatory_law_specific_guard_not_enforced:cross-artifact-consistency-solver-authority-graph-closure:missing_receipt_edge"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/cross-artifact-consistency-solver-authority-graph-closure.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_receipt_edge",
+      "value": false
+    }
+  ],
+  "notes": "cross-artifact-consistency-solver-authority-graph-closure must fail when missing_receipt_edge is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_receipt_edge",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_receipt_edge",
+      "expectation": "mandatory_law_specific_guard_not_enforced:cross-artifact-consistency-solver-authority-graph-closure:missing_receipt_edge"
+    }
+  ]
+}

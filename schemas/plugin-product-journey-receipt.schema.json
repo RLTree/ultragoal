@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/plugin-product-journey-receipt.schema.json",
+  "title": "Harness Ultragoal Plugin Product Journey Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "journey", "evidence", "error_path_evidence", "claim_ceiling", "generated_at"],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.plugin-product-journey-receipt.v1" },
+    "journey": { "type": "array", "minItems": 10, "items": { "type": "string", "minLength": 1 } },
+    "evidence": { "type": "array", "minItems": 3, "items": { "$ref": "common-defs.schema.json#/$defs/artifactRef" } },
+    "error_path_evidence": { "$ref": "common-defs.schema.json#/$defs/artifactRef" },
+    "claim_ceiling": { "enum": ["package_static_fixture_only", "withheld_or_blocked"] },
+    "generated_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" }
+  }
+}

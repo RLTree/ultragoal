@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "ready-wrong-branch",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_not_lane_bound"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/branch",
+      "value": "codex/wrong"
+    }
+  ],
+  "notes": "included ready-for-merge claim must be bound to one current clean lane with no blockers",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/ready_for_merge/branch",
+      "expectation": "ready_receipt_not_lane_bound"
+    }
+  ]
+}

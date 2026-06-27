@@ -1,0 +1,48 @@
+{
+  "changed_files_digest": "sha256:e46eff4e0ed5d9c19d16025f490208f57dabf8eb5c71d08bcb9ce1ce8193dee1",
+  "claim_ceiling": "supports_complete_claim",
+  "claim_id": "CLAIM-001",
+  "command": "cargo llvm-cov --json",
+  "command_completed_at": "2026-06-24T00:00:01Z",
+  "command_exit": 0,
+  "command_started_at": "2026-06-24T00:00:00Z",
+  "coverage": {
+    "floor_percent": 100.0,
+    "percent": 100.0,
+    "policy": "100_percent_required"
+  },
+  "coverage_command_digest": "sha256:8e36d98bbabc6eda6e941f4e1a04e4a0d89922ef06cff6f43f5b12f94999d8d0",
+  "coverage_manifest_digest": "sha256:ff5b7e94725025596f5d65f44ebef9f9b282c680c67d0f61338cf42230e996da",
+  "exclusions": [
+    {
+      "counts_as_covered": false,
+      "kind": "external",
+      "path": "validator/src/audit.rs",
+      "rationale": "repo-owned validator code mislabeled external",
+      "reviewed": true
+    }
+  ],
+  "generated_at": "2026-06-24T00:00:00Z",
+  "generated_by": "coverage-command",
+  "machine_readable_report": {
+    "digest": "sha256:70ea55c257f66a458c43109ade8500b01fccc04c6d7d29c623fee3d2b15fbcb8",
+    "path": "artifacts/static/coverage-report.json"
+  },
+  "measured_dimensions": [
+    "line"
+  ],
+  "percent_source": "machine_readable_report",
+  "schema": "harness-ultragoal.coverage-receipt.v1",
+  "source_tree_digest": "sha256:5c5836551c42946edc302099fb39c149260a62bea5cc6acb692fc6f2a2734067",
+  "target_paths": [
+    "src"
+  ],
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "tool": "cargo-llvm-cov",
+  "tool_version": "fixture-1.0.0",
+  "uncovered_records": [],
+  "workspace_root": "/repo"
+}

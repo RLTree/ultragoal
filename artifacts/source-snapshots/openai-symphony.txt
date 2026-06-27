@@ -1,0 +1,4 @@
+Title: Open-source Codex orchestration: Symphony
+URL: https://openai.com/index/open-source-codex-orchestration-symphony/
+Retrieved at: 2026-06-16T00:00:00Z
+Used for: one agent per workspace, task-centered orchestration, workflow contract framing

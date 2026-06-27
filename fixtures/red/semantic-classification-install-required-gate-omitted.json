@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "semantic_classification_required_gate_unproven remains the first failing error"
+    }
+  ],
+  "id": "semantic-classification-install-required-gate-omitted",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_required_gate_unproven"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-install-required-gate-omitted.semantic-classification-receipt.json",
+          "digest": "sha256:947dd764f1ad64b8a0af0d0b84716d235bb3a7a4bbf2383e382cef164e0143b4"
+        }
+      ]
+    }
+  ],
+  "notes": "semantic install class cannot omit install_visibility_receipt"
+}

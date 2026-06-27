@@ -1,0 +1,108 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-waiver-on-consumer-ui-claim",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_cohesion_waiver_on_consumer_ui_claim"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "ui_surface"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "ui_browser"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "ui_browser"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence",
+      "value": [
+        {
+          "id": "EV-UI-001",
+          "claim_id": "CLAIM-001",
+          "kind": "ui_interaction",
+          "surface": "ui_browser",
+          "path": "validation_artifacts/product-cohesion/expected-ui.png",
+          "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "value": {
+        "reason": "non_product_internal_ui",
+        "scope": "Fraudulent waiver on an included consumer UI claim."
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "included consumer UI claim cannot use product_cohesion_waiver to avoid product journey proof",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "exists": false
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "expectation": "product_cohesion_waiver_on_consumer_ui_claim"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-runtime-only-projectboard-compact-feature-claim",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_receipt_stale"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "projectboard launch is complete"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:15d199074a687956908434848e02e098246a4dd8488bc113a142d8fafcce9f5f",
+        "product_or_ui_claim": true,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "joined lowercase projectboard product wording must not pass as engine-only runtime work First authoritative failure is stale detached semantic receipt because the claim title changes.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "expectation": "product_applicability_contradicts_claim_text"
+    },
+    {
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "expectation": "semantic_classification_receipt_stale"
+    }
+  ]
+}

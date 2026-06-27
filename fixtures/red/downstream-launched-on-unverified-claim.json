@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-launched-on-unverified-claim",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_claim_not_proven"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/dependencies",
+      "value": [
+        {
+          "upstream_lane_id": "LANE-999",
+          "claim_id": "CLAIM-999",
+          "required_status": "proven_live",
+          "validated_status": "proven_static",
+          "upstream_ready_receipt": {
+            "path": "missing-ready.json",
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "upstream_commit": "abcdef0",
+          "validated_after_upstream_ready": true,
+          "validated_at": "2026-06-16T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "notes": "schema-valid dependency row points at missing/mismatched upstream ready evidence",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/dependencies",
+      "expectation": "dependency_claim_not_proven"
+    }
+  ]
+}

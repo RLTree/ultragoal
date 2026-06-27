@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "skill-catalog-context-budget-omission-warning-omitted-required-skill-without-warning-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:skill-catalog-context-budget-omission-warning:omitted_required_skill_without_warning"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/omitted_required_skill_without_warning",
+      "value": false
+    }
+  ],
+  "notes": "skill-catalog-context-budget-omission-warning must fail when omitted_required_skill_without_warning is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/omitted_required_skill_without_warning",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/omitted_required_skill_without_warning",
+      "expectation": "mandatory_law_specific_guard_not_enforced:skill-catalog-context-budget-omission-warning:omitted_required_skill_without_warning"
+    }
+  ]
+}

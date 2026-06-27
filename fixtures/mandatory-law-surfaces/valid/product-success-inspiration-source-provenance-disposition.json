@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-success-inspiration-source-provenance-disposition",
+  "standards_row_id": "product-success-inspiration-source-provenance-disposition",
+  "source_obligation_id": "product-success-inspiration-source-provenance-disposition",
+  "foundational_trace_id": "product-success-inspiration-source-provenance-disposition",
+  "validator_check_id": "product-success-inspiration-source-provenance-disposition",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-inspiration-source-provenance-disposition.json",
+  "red_fixture_ids": [
+    "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red",
+    "product-success-inspiration-source-provenance-disposition-template-creator-mentioned-but-treated-as-repo-dependency-red",
+    "product-success-inspiration-source-provenance-disposition-deep-research-v2-cited-without-artifact-path-red",
+    "product-success-inspiration-source-provenance-disposition-chronicle-cited-without-timestamp-red",
+    "product-success-inspiration-source-provenance-disposition-sales-value-evidence-adopted-without-hierarchy-red",
+    "product-success-inspiration-source-provenance-disposition-generic-inspiration-summary-accepted-red",
+    "product-success-inspiration-source-provenance-disposition-inaccessible-source-ignored-red",
+    "product-success-inspiration-source-provenance-disposition-adopted-principle-with-no-validator-gate-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_requirements_claims_withheld_without_inspiration_source_disposition",
+  "behavior_failure_modes": [
+    "product_success_inspiration_source_provenance_disposition_product_design_mentioned_but_not_dispositioned",
+    "product_success_inspiration_source_provenance_disposition_template_creator_mentioned_but_treated_as_repo_dependency",
+    "product_success_inspiration_source_provenance_disposition_deep_research_v2_cited_without_artifact_path",
+    "product_success_inspiration_source_provenance_disposition_chronicle_cited_without_timestamp",
+    "product_success_inspiration_source_provenance_disposition_sales_value_evidence_adopted_without_hierarchy",
+    "product_success_inspiration_source_provenance_disposition_generic_inspiration_summary_accepted",
+    "product_success_inspiration_source_provenance_disposition_inaccessible_source_ignored",
+    "product_success_inspiration_source_provenance_disposition_adopted_principle_with_no_validator_gate"
+  ],
+  "law_specific": {
+    "product_design_mentioned_but_not_dispositioned": true,
+    "template_creator_mentioned_but_treated_as_repo_dependency": true,
+    "deep_research_v2_cited_without_artifact_path": true,
+    "chronicle_cited_without_timestamp": true,
+    "sales_value_evidence_adopted_without_hierarchy": true,
+    "generic_inspiration_summary_accepted": true,
+    "inaccessible_source_ignored": true,
+    "adopted_principle_with_no_validator_gate": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

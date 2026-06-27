@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-affected-doc-without-blocker",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_debt_without_action:documentation-freshness"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/30/blocker_or_repair_action",
+      "value": ""
+    }
+  ],
+  "notes": "A stale affected documentation obligation must name an owner/action/backlog or claim-ceiling blocker.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/30/blocker_or_repair_action",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/30/blocker_or_repair_action",
+      "expectation": "agent_standards_debt_without_action"
+    }
+  ]
+}

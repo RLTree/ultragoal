@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "missing-standards-enforcement-surfaces",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_gate_missing:coverage-proof-accountability:agent-standards/missing-enforcement-audit.tsv"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/22/gate_or_fixture_path",
+      "value": "agent-standards/missing-enforcement-audit.tsv"
+    }
+  ],
+  "notes": "Standards enforcement/audit surfaces must be concrete files, not reviewer memory.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/22/gate_or_fixture_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/22/gate_or_fixture_path",
+      "expectation": "agent_standards_gate_missing"
+    }
+  ]
+}

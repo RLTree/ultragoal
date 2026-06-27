@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
+  "title": "Harness Ultragoal Plugin Cohesion Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "entrypoints",
+    "required_surfaces",
+    "skills",
+    "templates",
+    "setup_scripts",
+    "schemas",
+    "fixture_groups",
+    "receipts",
+    "validator_checks",
+    "flows",
+    "standards_rows",
+    "custom_agents",
+    "package_cache_install_surfaces",
+    "edges",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.plugin-cohesion-manifest.v1" },
+    "entrypoints": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "required_surfaces": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "skills": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "templates": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "setup_scripts": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "schemas": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "fixture_groups": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "receipts": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "validator_checks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "flows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "owner_entrypoint",
+          "required_edges",
+          "completion_receipt",
+          "validator_checks",
+          "claim_ceiling"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "owner_entrypoint": { "type": "string", "minLength": 1 },
+          "required_edges": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "completion_receipt": { "type": "string", "minLength": 1 },
+          "validator_checks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "claim_ceiling": { "enum": ["package_static_fixture_only", "withheld_or_blocked"] }
+        }
+      }
+    },
+    "standards_rows": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "custom_agents": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "package_cache_install_surfaces": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to", "reason"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "claim_ceiling": { "enum": ["package_static_fixture_only", "withheld_or_blocked"] }
+  }
+}

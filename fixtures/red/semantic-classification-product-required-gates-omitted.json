@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "semantic_classification_required_gate_unproven remains the first failing error"
+    }
+  ],
+  "id": "semantic-classification-product-required-gates-omitted",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_required_gate_unproven"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-product-required-gates-omitted.semantic-classification-receipt.json",
+          "digest": "sha256:1a4142a6191609add81e9ebf135463c2dac479fcb3a66f79d00d437300baf845"
+        }
+      ]
+    }
+  ],
+  "notes": "semantic product class cannot omit Product Cohesion proof gates"
+}

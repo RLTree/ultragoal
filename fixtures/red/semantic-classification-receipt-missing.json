@@ -1,0 +1,33 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "semantic_classification_receipt_malformed"
+  },
+  "id": "semantic-classification-receipt-missing",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": false
+  },
+  "notes": "included claim must carry first-class semantic classification receipt",
+  "postconditions": [
+    {
+      "expectation": "schema_validation_failed",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

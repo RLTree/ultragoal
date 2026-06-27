@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "workspace-command-confinement-lifecycle-cleanup",
+  "standards_row_id": "workspace-command-confinement-lifecycle-cleanup",
+  "source_obligation_id": "workspace-command-confinement-lifecycle-cleanup",
+  "foundational_trace_id": "workspace-command-confinement-lifecycle-cleanup",
+  "validator_check_id": "workspace-command-confinement-lifecycle-cleanup",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
+  "red_fixture_ids": [
+    "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
+    "workspace-command-confinement-lifecycle-cleanup-command-cwd-recorded-red",
+    "workspace-command-confinement-lifecycle-cleanup-allowed-writes-recorded-red",
+    "workspace-command-confinement-lifecycle-cleanup-environment-identity-red",
+    "workspace-command-confinement-lifecycle-cleanup-teardown-recorded-red",
+    "workspace-command-confinement-lifecycle-cleanup-contamination-check-red",
+    "workspace-command-confinement-lifecycle-cleanup-artifact-workspace-binding-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "workspace_claims_withheld_without_confinement_receipt",
+  "behavior_failure_modes": [
+    "workspace_command_confinement_lifecycle_cleanup_declared_workspace_root",
+    "workspace_command_confinement_lifecycle_cleanup_command_cwd_recorded",
+    "workspace_command_confinement_lifecycle_cleanup_allowed_writes_recorded",
+    "workspace_command_confinement_lifecycle_cleanup_environment_identity",
+    "workspace_command_confinement_lifecycle_cleanup_teardown_recorded",
+    "workspace_command_confinement_lifecycle_cleanup_contamination_check",
+    "workspace_command_confinement_lifecycle_cleanup_artifact_workspace_binding"
+  ],
+  "law_specific": {
+    "declared_workspace_root": true,
+    "command_cwd_recorded": true,
+    "allowed_writes_recorded": true,
+    "environment_identity": true,
+    "teardown_recorded": true,
+    "contamination_check": true,
+    "artifact_workspace_binding": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

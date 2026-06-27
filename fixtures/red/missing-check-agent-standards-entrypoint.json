@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "missing-check-agent-standards-entrypoint",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_gate_missing:authority-source-binding:scripts/missing-check-agent-standards"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/8/gate_or_fixture_path",
+      "value": "scripts/missing-check-agent-standards"
+    }
+  ],
+  "notes": "Mechanized standards rows must point to an existing checker entrypoint.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/8/gate_or_fixture_path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/8/gate_or_fixture_path",
+      "expectation": "agent_standards_gate_missing"
+    }
+  ]
+}

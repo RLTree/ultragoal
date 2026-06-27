@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-missing-disposition",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "source_obligation_missing_disposition"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/0/enforcement_disposition"
+    }
+  ],
+  "notes": "Every foundation obligation row must name deterministic enforcement, reviewer ownership, explicit backlog, or non-goal disposition.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/0/enforcement_disposition",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations/0/enforcement_disposition",
+      "expectation": "source_obligation_missing_disposition"
+    }
+  ]
+}

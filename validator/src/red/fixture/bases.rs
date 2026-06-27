@@ -1,0 +1,37 @@
+pub(crate) const ALLOWED_BASES: &[&str] = &[
+    "fixtures/valid/minimal-goal-run.json",
+    "fixtures/valid/non-product-feature-completion.json",
+    "fixtures/valid/two-lane-ready-dependency.json",
+    "fixtures/valid/missing-red-base-fixture.json",
+    "fixtures/review-round/valid/review-round-receipt.json",
+    "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+    "fixtures/review-materiality/valid/delta-review-allowed.json",
+    "fixtures/review-materiality/valid/advisory-review-allowed.json",
+    "fixtures/review-materiality/valid/blocked-before-review.json",
+    "fixtures/template-integrity/valid/template-integrity.json",
+    "templates/.harness/coverage-manifest.json",
+    "validation_artifacts/harness/fit-repo-receipt.json",
+    "templates/validation_artifacts/harness/fit-repo-receipt.json",
+    "validation_artifacts/harness/plugin-product-journey-receipt.json",
+    "validation_artifacts/harness/product-fitness-receipt.json",
+    ".codex-plugin/plugin.json",
+    "plugin-manifest-draft.json",
+    "docs/namespace-class-registry.json",
+    "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+    "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+    "fixtures/law-surfaces/valid/transcript-quality-receipt.json",
+    "fixtures/law-surfaces/valid/clean-checkout-command-discovery-receipt.json",
+    "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+    "fixtures/law-surfaces/valid/memory-context-boundary-receipt.json",
+    "docs/plugin-cohesion-manifest.json",
+    "templates/agent-standards/enforcement.json",
+    "fixtures/agent-standards/valid/audit-pass-row.json",
+    "docs/source-cards.json",
+    "docs/foundational-law-traceability.json",
+    "docs/source-obligation-matrix.json",
+    "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+];
+
+pub(crate) fn is_allowed(rel: &str) -> bool {
+    ALLOWED_BASES.contains(&rel) || rel.starts_with("fixtures/mandatory-law-surfaces/valid/")
+}

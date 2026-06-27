@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-fitness-missing-receipt",
+  "expected_failure": {
+    "check_id": "product-fitness-proof",
+    "error": "product_fitness_quality_in_use_receipt_missing"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Product readiness for the run console is proven"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "This product success claim says the operator is ready without Product Fitness receipt."
+    }
+  ],
+  "notes": "Product Fitness mandatory enforcement red fixture.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/valid/non-product-feature-completion.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "product_fitness_quality_in_use_receipt_missing"
+    }
+  ]
+}

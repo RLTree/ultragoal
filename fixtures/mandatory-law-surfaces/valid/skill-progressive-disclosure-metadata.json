@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "skill-progressive-disclosure-metadata",
+  "standards_row_id": "skill-progressive-disclosure-metadata",
+  "source_obligation_id": "skill-progressive-disclosure-metadata",
+  "foundational_trace_id": "skill-progressive-disclosure-metadata",
+  "validator_check_id": "skill-progressive-disclosure-metadata",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json",
+  "red_fixture_ids": [
+    "skill-progressive-disclosure-metadata-specific-metadata-red",
+    "skill-progressive-disclosure-metadata-bounded-always-loaded-content-red",
+    "skill-progressive-disclosure-metadata-local-references-valid-red",
+    "skill-progressive-disclosure-metadata-scripts-assets-declared-red",
+    "skill-progressive-disclosure-metadata-no-hidden-dependencies-red",
+    "skill-progressive-disclosure-metadata-no-author-memory-dependency-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "skill_claims_withheld_without_progressive_disclosure_receipt",
+  "behavior_failure_modes": [
+    "skill_progressive_disclosure_metadata_specific_metadata",
+    "skill_progressive_disclosure_metadata_bounded_always_loaded_content",
+    "skill_progressive_disclosure_metadata_local_references_valid",
+    "skill_progressive_disclosure_metadata_scripts_assets_declared",
+    "skill_progressive_disclosure_metadata_no_hidden_dependencies",
+    "skill_progressive_disclosure_metadata_no_author_memory_dependency"
+  ],
+  "law_specific": {
+    "specific_metadata": true,
+    "bounded_always_loaded_content": true,
+    "local_references_valid": true,
+    "scripts_assets_declared": true,
+    "no_hidden_dependencies": true,
+    "no_author_memory_dependency": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

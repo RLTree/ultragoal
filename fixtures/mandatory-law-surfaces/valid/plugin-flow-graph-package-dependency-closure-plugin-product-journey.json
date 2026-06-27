@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+  "standards_row_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+  "source_obligation_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+  "foundational_trace_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+  "validator_check_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+  "red_fixture_ids": [
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-flow-graph-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-required-edge-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-script-references-unshipped-file-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-validator-references-unshipped-fixture-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-source-file-absent-from-shipped-package-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-product-journey-receipt-missing-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-unsupported-runtime-claim-emitted-red",
+    "plugin-flow-graph-package-dependency-closure-plugin-product-journey-plugin-flow-manifest-cache-mismatch-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "plugin_product_claims_withheld_without_closed_flow_graph_and_journey_receipt",
+  "behavior_failure_modes": [
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_missing_fit_repo_entrypoint",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_missing_flow_graph",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_missing_required_edge",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_script_references_unshipped_file",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_validator_references_unshipped_fixture",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_source_file_absent_from_shipped_package",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_product_journey_receipt_missing",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_unsupported_runtime_claim_emitted",
+    "plugin_flow_graph_package_dependency_closure_plugin_product_journey_plugin_flow_manifest_cache_mismatch"
+  ],
+  "law_specific": {
+    "missing_fit_repo_entrypoint": true,
+    "missing_flow_graph": true,
+    "missing_required_edge": true,
+    "script_references_unshipped_file": true,
+    "validator_references_unshipped_fixture": true,
+    "source_file_absent_from_shipped_package": true,
+    "product_journey_receipt_missing": true,
+    "unsupported_runtime_claim_emitted": true,
+    "plugin_flow_manifest_cache_mismatch": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

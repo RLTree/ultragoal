@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-contract-review-packet-team-skill-routing-missing-product-reviewer-disposition-red",
+  "expected_failure": {
+    "check_id": "product-success-contract-review-packet-team-skill-routing",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-contract-review-packet-team-skill-routing:missing_product_reviewer_disposition"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-contract-review-packet-team-skill-routing.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_product_reviewer_disposition",
+      "value": false
+    }
+  ],
+  "notes": "product-success-contract-review-packet-team-skill-routing must fail when missing_product_reviewer_disposition is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_product_reviewer_disposition",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_product_reviewer_disposition",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-contract-review-packet-team-skill-routing:missing_product_reviewer_disposition"
+    }
+  ]
+}

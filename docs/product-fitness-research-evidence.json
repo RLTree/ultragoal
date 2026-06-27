@@ -1,0 +1,10 @@
+{
+  "schema": "harness-ultragoal.product-fitness-research-evidence.v1",
+  "source": "redacted Deep Research V2 evidence export",
+  "claim_count": 25,
+  "verifier_proof_rows": 75,
+  "source_rows": 137,
+  "privacy_boundary": "No raw private paths, prompts, transcripts, or source payloads are shipped in this package artifact.",
+  "authority_ceiling": "Package-contained count and provenance summary only; narrative projections are context, not proof authority.",
+  "generated_at": "2026-06-25T07:20:00Z"
+}

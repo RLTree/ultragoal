@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "template-generation-governance-template-creator-boundary",
+  "standards_row_id": "template-generation-governance-template-creator-boundary",
+  "source_obligation_id": "template-generation-governance-template-creator-boundary",
+  "foundational_trace_id": "template-generation-governance-template-creator-boundary",
+  "validator_check_id": "template-generation-governance-template-creator-boundary",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
+  "red_fixture_ids": [
+    "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red",
+    "template-generation-governance-template-creator-boundary-template-creator-used-with-no-receipt-red",
+    "template-generation-governance-template-creator-boundary-template-creator-personal-skill-treated-as-repo-artifact-red",
+    "template-generation-governance-template-creator-boundary-product-template-with-tbd-red",
+    "template-generation-governance-template-creator-boundary-template-field-not-in-schema-red",
+    "template-generation-governance-template-creator-boundary-package-inventory-omits-template-red",
+    "template-generation-governance-template-creator-boundary-installed-cache-template-drift-red",
+    "template-generation-governance-template-creator-boundary-render-parse-mismatch-red",
+    "template-generation-governance-template-creator-boundary-product-artifact-generated-from-untemplated-prose-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_template_claims_withheld_without_repo_owned_template_governance",
+  "behavior_failure_modes": [
+    "template_generation_governance_template_creator_boundary_missing_product_success_brief_template",
+    "template_generation_governance_template_creator_boundary_template_creator_used_with_no_receipt",
+    "template_generation_governance_template_creator_boundary_template_creator_personal_skill_treated_as_repo_artifact",
+    "template_generation_governance_template_creator_boundary_product_template_with_tbd",
+    "template_generation_governance_template_creator_boundary_template_field_not_in_schema",
+    "template_generation_governance_template_creator_boundary_package_inventory_omits_template",
+    "template_generation_governance_template_creator_boundary_installed_cache_template_drift",
+    "template_generation_governance_template_creator_boundary_render_parse_mismatch",
+    "template_generation_governance_template_creator_boundary_product_artifact_generated_from_untemplated_prose"
+  ],
+  "law_specific": {
+    "missing_product_success_brief_template": true,
+    "template_creator_used_with_no_receipt": true,
+    "template_creator_personal_skill_treated_as_repo_artifact": true,
+    "product_template_with_tbd": true,
+    "template_field_not_in_schema": true,
+    "package_inventory_omits_template": true,
+    "installed_cache_template_drift": true,
+    "render_parse_mismatch": true,
+    "product_artifact_generated_from_untemplated_prose": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

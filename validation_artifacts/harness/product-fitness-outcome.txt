@@ -1,0 +1,2 @@
+Desired user outcome: unsupported product success claims are blocked, withheld, or lowered until Product Fitness evidence exists.
+Purpose: separates product success proof from install, smoke, test, or reviewer proof.

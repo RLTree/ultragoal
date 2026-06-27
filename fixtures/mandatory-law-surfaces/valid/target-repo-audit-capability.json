@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "target-repo-audit-capability",
+  "standards_row_id": "target-repo-audit-capability",
+  "source_obligation_id": "target-repo-audit-capability",
+  "foundational_trace_id": "target-repo-audit-capability",
+  "validator_check_id": "target-repo-audit-capability",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
+  "red_fixture_ids": [
+    "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+    "target-repo-audit-capability-target-classification-missing-red",
+    "target-repo-audit-capability-target-command-missing-success-emitted-red",
+    "target-repo-audit-capability-fixture-used-as-live-target-red",
+    "target-repo-audit-capability-unknown-language-runtime-accepted-red",
+    "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
+    "target-repo-audit-capability-mode-substitution-red",
+    "target-repo-audit-capability-generic-repo-support-overclaim-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "target_repo_claims_withheld_without_exact_target_capability_receipt",
+  "behavior_failure_modes": [
+    "target_repo_audit_capability_unsupported_repo_marked_fit",
+    "target_repo_audit_capability_target_classification_missing",
+    "target_repo_audit_capability_target_command_missing_success_emitted",
+    "target_repo_audit_capability_fixture_used_as_live_target",
+    "target_repo_audit_capability_unknown_language_runtime_accepted",
+    "target_repo_audit_capability_product_surface_not_detected_product_claim_emitted",
+    "target_repo_audit_capability_mode_substitution",
+    "target_repo_audit_capability_generic_repo_support_overclaim"
+  ],
+  "law_specific": {
+    "unsupported_repo_marked_fit": true,
+    "target_classification_missing": true,
+    "target_command_missing_success_emitted": true,
+    "fixture_used_as_live_target": true,
+    "unknown_language_runtime_accepted": true,
+    "product_surface_not_detected_product_claim_emitted": true,
+    "mode_substitution": true,
+    "generic_repo_support_overclaim": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

@@ -1,0 +1,1 @@
+Observed plugin families: Superpowers, Compound Engineering, Codex Security, Browser, Computer Use, Chrome, OpenAI Developers, GitHub, Linear. Domain plugins skipped by default.

@@ -1,0 +1,71 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-waiver-on-dashboard-text-claim",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_claim_text_requires_cohesion"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Dashboard completion is proven"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/description",
+      "value": "A customer dashboard product result is complete."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "static_contract"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/product_applicability"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "value": {
+        "reason": "non_product_internal_ui",
+        "scope": "Fraudulent waiver on a dashboard product claim expressed in claim text."
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:188e5961c5ceb0354c74ace2728579adfc93013d7027347d53df4a571e2fb301",
+        "product_or_ui_claim": true,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "included product-text claim cannot use a non-product waiver to avoid Product Cohesion proof just because it is not feature_completion",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_cohesion_waiver",
+      "expectation": "product_claim_text_requires_cohesion"
+    }
+  ]
+}

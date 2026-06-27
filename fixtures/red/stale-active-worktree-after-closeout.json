@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-active-worktree-after-closeout",
+  "expected_failure": {
+    "check_id": "worktree-teardown",
+    "error": "stale_worktree_after_closeout"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/teardown/status",
+      "value": "not_ready"
+    }
+  ],
+  "notes": "mark terminal lane with teardown not_ready",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/teardown/status",
+      "expectation": "stale_worktree_after_closeout"
+    }
+  ]
+}

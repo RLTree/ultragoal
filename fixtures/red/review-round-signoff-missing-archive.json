@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-signoff-missing-archive",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/archive"
+    }
+  ],
+  "notes": "sign-off review requires archive receipt anchoring",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/archive",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/archive",
+      "expectation": "missing sign-off archive rejected"
+    }
+  ]
+}

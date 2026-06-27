@@ -1,0 +1,73 @@
+{
+  "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+  "captured_at": "2026-06-18T00:00:00Z",
+  "source": "multi_agent_v1.tool_registry",
+  "session_id": "fixture-review-round-thread",
+  "round_id": "fixture-four-persona-signoff-round",
+  "agent_types": [
+    {
+      "agent_type": "harness_contract_claim_falsifier",
+      "persona": "contract_claim_falsifier",
+      "custom_agent_path": "custom-agents/harness-contract-claim-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": false
+    },
+    {
+      "agent_type": "harness_orchestration_recovery_falsifier",
+      "persona": "orchestration_recovery_falsifier",
+      "custom_agent_path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": false
+    },
+    {
+      "agent_type": "harness_security_trust_boundary_falsifier",
+      "persona": "security_trust_boundary_falsifier",
+      "custom_agent_path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": false
+    },
+    {
+      "agent_type": "harness_product_simplicity_falsifier",
+      "persona": "product_simplicity_falsifier",
+      "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": false
+    },
+    {
+      "agent_type": "harness_contract_adversary",
+      "persona": "legacy_contract_adversary",
+      "custom_agent_path": "custom-agents/harness-contract-adversary.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_orchestration_adversary",
+      "persona": "legacy_orchestration_adversary",
+      "custom_agent_path": "custom-agents/harness-orchestration-adversary.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_verification_gatekeeper",
+      "persona": "legacy_verification_gatekeeper",
+      "custom_agent_path": "custom-agents/harness-verification-gatekeeper.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_simplicity_auditor",
+      "persona": "legacy_simplicity_auditor",
+      "custom_agent_path": "custom-agents/harness-simplicity-auditor.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    }
+  ]
+}

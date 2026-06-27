@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-feedback-disposition-same-round-satisfaction-stale-satisfaction-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:stale_satisfaction"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_satisfaction",
+      "value": false
+    }
+  ],
+  "notes": "review-feedback-disposition-same-round-satisfaction must fail when stale_satisfaction is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_satisfaction",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_satisfaction",
+      "expectation": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:stale_satisfaction"
+    }
+  ]
+}

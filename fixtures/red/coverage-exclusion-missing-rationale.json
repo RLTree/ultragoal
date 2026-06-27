@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-exclusion-missing-rationale",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_exclusion_missing_rationale"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "100 percent coverage is complete"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-COV-018",
+        "claim_id": "CLAIM-001",
+        "kind": "coverage_receipt",
+        "surface": "static",
+        "path": "artifacts/static/coverage-exclusion-missing-rationale-receipt.json",
+        "digest": "sha256:ce04dc8233d6924025eaf825c1bfe49c9e91b0dcead11f0ae13945dddd0c13e4",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "notes": "Coverage authority red fixture for coverage_exclusion_missing_rationale.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "coverage_exclusion_missing_rationale"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "retired-reviewer-prompt-packet-packaged",
+  "expected_failure": {
+    "check_id": "plugin-inventory-closure",
+    "error": "retired_reviewer_prompt_packet_packaged"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/plugin_manifest/fixtures/-",
+      "value": "fixtures/review-round/prompt-packets/verification_gatekeeper.md"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/plugin_manifest/fixtures",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/fixtures/-",
+      "expectation": "retired_reviewer_prompt_packet_packaged"
+    }
+  ],
+  "notes": "retired six-persona prompt packets must not re-enter package inventory"
+}

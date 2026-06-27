@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "trust-boundary-abuse-path-failure-path-coverage-review-signoff-without-failure-path-evidence-red",
+  "expected_failure": {
+    "check_id": "trust-boundary-abuse-path-failure-path-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:trust-boundary-abuse-path-failure-path-coverage:review_signoff_without_failure_path_evidence"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/trust-boundary-abuse-path-failure-path-coverage.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/review_signoff_without_failure_path_evidence",
+      "value": false
+    }
+  ],
+  "notes": "trust-boundary-abuse-path-failure-path-coverage must fail when review_signoff_without_failure_path_evidence is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/review_signoff_without_failure_path_evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/review_signoff_without_failure_path_evidence",
+      "expectation": "mandatory_law_specific_guard_not_enforced:trust-boundary-abuse-path-failure-path-coverage:review_signoff_without_failure_path_evidence"
+    }
+  ]
+}

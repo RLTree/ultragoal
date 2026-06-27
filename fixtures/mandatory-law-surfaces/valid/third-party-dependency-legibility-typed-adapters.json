@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "third-party-dependency-legibility-typed-adapters",
+  "standards_row_id": "third-party-dependency-legibility-typed-adapters",
+  "source_obligation_id": "third-party-dependency-legibility-typed-adapters",
+  "foundational_trace_id": "third-party-dependency-legibility-typed-adapters",
+  "validator_check_id": "third-party-dependency-legibility-typed-adapters",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
+  "red_fixture_ids": [
+    "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
+    "third-party-dependency-legibility-typed-adapters-owner-purpose-upstream-docs-red",
+    "third-party-dependency-legibility-typed-adapters-allowed-call-sites-red",
+    "third-party-dependency-legibility-typed-adapters-typed-request-response-red",
+    "third-party-dependency-legibility-typed-adapters-timeout-retry-policy-red",
+    "third-party-dependency-legibility-typed-adapters-cache-invalidation-red",
+    "third-party-dependency-legibility-typed-adapters-no-direct-api-bypass-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "dependency_claims_withheld_without_typed_adapter_registry",
+  "behavior_failure_modes": [
+    "third_party_dependency_legibility_typed_adapters_dependency_registry_entry",
+    "third_party_dependency_legibility_typed_adapters_owner_purpose_upstream_docs",
+    "third_party_dependency_legibility_typed_adapters_allowed_call_sites",
+    "third_party_dependency_legibility_typed_adapters_typed_request_response",
+    "third_party_dependency_legibility_typed_adapters_timeout_retry_policy",
+    "third_party_dependency_legibility_typed_adapters_cache_invalidation",
+    "third_party_dependency_legibility_typed_adapters_no_direct_api_bypass"
+  ],
+  "law_specific": {
+    "dependency_registry_entry": true,
+    "owner_purpose_upstream_docs": true,
+    "allowed_call_sites": true,
+    "typed_request_response": true,
+    "timeout_retry_policy": true,
+    "cache_invalidation": true,
+    "no_direct_api_bypass": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-live-surface-claim-ceiling-substitution",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "product_live_surface_claim_ceiling_not_same_surface"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/claim_ceiling",
+      "value": "withheld_until_same_surface_receipt"
+    }
+  ],
+  "notes": "Live-surface proof fails when claim ceiling is not same-surface.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/product-live-surface-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/claim_ceiling",
+      "expectation": "product_live_surface_claim_ceiling_not_same_surface"
+    }
+  ]
+}

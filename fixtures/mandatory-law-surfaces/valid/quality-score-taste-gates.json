@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "quality-score-taste-gates",
+  "standards_row_id": "quality-score-taste-gates",
+  "source_obligation_id": "quality-score-taste-gates",
+  "foundational_trace_id": "quality-score-taste-gates",
+  "validator_check_id": "quality-score-taste-gates",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json",
+  "red_fixture_ids": [
+    "quality-score-taste-gates-changed-surface-rows-red",
+    "quality-score-taste-gates-current-evidence-digests-red",
+    "quality-score-taste-gates-no-looks-good-grade-red",
+    "quality-score-taste-gates-underlying-law-join-red",
+    "quality-score-taste-gates-product-fitness-join-red",
+    "quality-score-taste-gates-architecture-join-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "quality_claims_withheld_without_current_evidence_bound_score",
+  "behavior_failure_modes": [
+    "quality_score_taste_gates_changed_surface_rows",
+    "quality_score_taste_gates_current_evidence_digests",
+    "quality_score_taste_gates_no_looks_good_grade",
+    "quality_score_taste_gates_underlying_law_join",
+    "quality_score_taste_gates_product_fitness_join",
+    "quality_score_taste_gates_architecture_join"
+  ],
+  "law_specific": {
+    "changed_surface_rows": true,
+    "current_evidence_digests": true,
+    "no_looks_good_grade": true,
+    "underlying_law_join": true,
+    "product_fitness_join": true,
+    "architecture_join": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

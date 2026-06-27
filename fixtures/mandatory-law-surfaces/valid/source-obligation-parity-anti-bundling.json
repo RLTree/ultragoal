@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "source-obligation-parity-anti-bundling",
+  "standards_row_id": "source-obligation-parity-anti-bundling",
+  "source_obligation_id": "source-obligation-parity-anti-bundling",
+  "foundational_trace_id": "source-obligation-parity-anti-bundling",
+  "validator_check_id": "source-obligation-parity-anti-bundling",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/source-obligation-parity-anti-bundling.json",
+  "red_fixture_ids": [
+    "source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red",
+    "source-obligation-parity-anti-bundling-deterministic-covered-without-mandatory-law-surface-red",
+    "source-obligation-parity-anti-bundling-foundational-trace-without-same-law-standards-row-red",
+    "source-obligation-parity-anti-bundling-umbrella-standards-row-passing-while-child-law-fails-red",
+    "source-obligation-parity-anti-bundling-minimum-goal-valid-fixture-used-for-unrelated-law-red",
+    "source-obligation-parity-anti-bundling-claim-ceiling-missing-for-source-obligation-red",
+    "source-obligation-parity-anti-bundling-source-obligation-list-drift-red",
+    "source-obligation-parity-anti-bundling-covered-row-without-independent-red-fixture-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "compliance_claims_withheld_without_source_obligation_same_law_parity",
+  "behavior_failure_modes": [
+    "source_obligation_parity_anti_bundling_aliased_to_unrelated_row",
+    "source_obligation_parity_anti_bundling_deterministic_covered_without_mandatory_law_surface",
+    "source_obligation_parity_anti_bundling_foundational_trace_without_same_law_standards_row",
+    "source_obligation_parity_anti_bundling_umbrella_standards_row_passing_while_child_law_fails",
+    "source_obligation_parity_anti_bundling_minimum_goal_valid_fixture_used_for_unrelated_law",
+    "source_obligation_parity_anti_bundling_claim_ceiling_missing_for_source_obligation",
+    "source_obligation_parity_anti_bundling_source_obligation_list_drift",
+    "source_obligation_parity_anti_bundling_covered_row_without_independent_red_fixture"
+  ],
+  "law_specific": {
+    "aliased_to_unrelated_row": true,
+    "deterministic_covered_without_mandatory_law_surface": true,
+    "foundational_trace_without_same_law_standards_row": true,
+    "umbrella_standards_row_passing_while_child_law_fails": true,
+    "minimum_goal_valid_fixture_used_for_unrelated_law": true,
+    "claim_ceiling_missing_for_source_obligation": true,
+    "source_obligation_list_drift": true,
+    "covered_row_without_independent_red_fixture": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

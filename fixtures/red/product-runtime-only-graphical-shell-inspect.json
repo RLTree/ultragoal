@@ -1,0 +1,49 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-runtime-only-graphical-shell-inspect",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_applicability_contradicts_claim_text"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Operators inspect runs in a graphical shell."
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:357c4b1e7b74d36fec95d59997c4bf7045912ebd7d094a7be56b48a7883f1d0f",
+        "product_or_ui_claim": true,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification for this adversarial text-smuggling red packet."
+      }
+    }
+  ],
+  "notes": "Runtime-only evidence cannot prove a graphical product shell.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "product_applicability_contradicts_claim_text"
+    }
+  ]
+}

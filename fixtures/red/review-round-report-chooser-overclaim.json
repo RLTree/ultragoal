@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-chooser-overclaim",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_claim_ceiling_overclaim"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/claim_ceiling_assessment/supported",
+      "value": [
+        {
+          "claim_id": "package_static_fixture_proof",
+          "status": "supported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        },
+        {
+          "claim_id": "plugin chooser",
+          "status": "supported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        }
+      ]
+    }
+  ],
+  "notes": "typed review receipt must reject chooser/listed install visibility as supported claims",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the typed receipt mutation"
+    }
+  ]
+}

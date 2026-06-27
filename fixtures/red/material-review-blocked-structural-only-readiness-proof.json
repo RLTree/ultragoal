@@ -1,0 +1,42 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "material-review-blocked-structural-only-readiness-proof",
+  "expected_failure": {
+    "check_id": "material-review-scope-gate",
+    "error": "materiality_required_gate_not_run"
+  },
+  "base_fixture_path": "fixtures/review-materiality/valid/full-scope-material-review-required.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/deterministic_gates_run",
+      "value": [
+        "anchor_existence_and_digest",
+        "validator_receipt_status",
+        "reviewer_registry_model_persona_exposure",
+        "stale_receipt_check",
+        "package_private_artifact_hygiene",
+        "claim_ceiling_check",
+        "proof_surface_substitution_check"
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/deterministic_gates_run",
+      "expectation": "materiality_required_gate_not_run"
+    }
+  ],
+  "notes": "Material review scope gate red fixture."
+}

@@ -1,0 +1,39 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_receipt_malformed"
+  },
+  "id": "semantic-classification-model-receipt-missing-prompt-digest",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-model-receipt-missing-prompt-digest.semantic-classification-receipt.json",
+          "digest": "sha256:06e29560d8f827ab059fa656eb4c228b36ad293de24a5fde505d270bdccc8861"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "notes": "semantic classification implementation labels require matching provenance",
+  "postconditions": [
+    {
+      "expectation": "semantic_classification_receipt_malformed",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

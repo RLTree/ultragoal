@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "ready-forged-self-consistent-validator-run",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_not_validator_output"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/provenance/validator_run_id",
+      "value": "forged-run"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/validator_run_id",
+      "value": "forged-run"
+    }
+  ],
+  "notes": "READY_FOR_MERGE cannot be accepted just because its internal validator run ids agree; it must bind to the enclosing validator receipt run.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/validator_receipt/run_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/ready_for_merge/validator_run_id",
+      "expectation": "ready_receipt_not_validator_output"
+    }
+  ]
+}

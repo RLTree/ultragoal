@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red",
+  "expected_failure": {
+    "check_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+    "error": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:unknown_proof_surface"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/unknown_proof_surface",
+      "value": false
+    }
+  ],
+  "notes": "authority-exhaustiveness-closed-enums-impossible-state-elimination must fail when unknown_proof_surface is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/unknown_proof_surface",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/unknown_proof_surface",
+      "expectation": "mandatory_law_specific_guard_not_enforced:authority-exhaustiveness-closed-enums-impossible-state-elimination:unknown_proof_surface"
+    }
+  ]
+}

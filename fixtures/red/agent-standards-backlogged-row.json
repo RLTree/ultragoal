@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "agent-standards-backlogged-row",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "agent_standards_unmechanized_material_claim"
+  },
+  "base_fixture_path": "templates/agent-standards/enforcement.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/rows/0/enforcement_status",
+      "value": "backlogged"
+    }
+  ],
+  "notes": "Backlogged standards rows cannot support material, completion, or review claims. The package audit must fail closed instead of accepting prose debt.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/rows/0/enforcement_status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/rows/0/enforcement_status",
+      "expectation": "agent_standards_unmechanized_material_claim"
+    }
+  ]
+}

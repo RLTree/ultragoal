@@ -1,0 +1,948 @@
+{
+  "schema": "harness-ultragoal.review-round-receipt.v1",
+  "round_id": "fixture-four-persona-signoff-round",
+  "round_phase": "sign_off",
+  "anchor_policy": "validator_review_target_archive",
+  "status": "pass",
+  "generated_at": "2026-06-18T00:00:00Z",
+  "validator_receipt": {
+    "path": "fixtures/review-round/anchors/validator-receipt.json",
+    "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+    "run_id": "ultragoal-audit-fixture-review-round",
+    "package_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "live_registry_exposure": {
+    "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+    "digest": "sha256:8913a6f99d943994abe5e14832c2d2ca07194f3eb4bdee49296cf0d17ec22f62"
+  },
+  "review_target": {
+    "path": "fixtures/review-round/anchors/review-target-receipt.json",
+    "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "archive": {
+    "path": "fixtures/review-round/anchors/archive-receipt.json",
+    "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "claim_ceiling": {
+    "supported": [
+      {
+        "claim_id": "package_static_fixture_proof",
+        "status": "supported",
+        "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+      },
+      {
+        "claim_id": "detached_review_target_archive_identity",
+        "status": "supported",
+        "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+      }
+    ],
+    "unsupported": [
+      {
+        "claim_id": "plugins_ui_visibility",
+        "status": "unsupported",
+        "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+      },
+      {
+        "claim_id": "install_button_success",
+        "status": "unsupported",
+        "rationale": "No same-surface install-button success proof is present."
+      },
+      {
+        "claim_id": "workspace_public_marketplace_publication",
+        "status": "unsupported",
+        "rationale": "No public/workspace marketplace publication or listing proof is present."
+      },
+      {
+        "claim_id": "real_multilane_dogfood",
+        "status": "unsupported",
+        "rationale": "No fresh real multi-lane dogfood receipt is present."
+      },
+      {
+        "claim_id": "production_readiness",
+        "status": "unsupported",
+        "rationale": "Package/static/local registry proof does not establish production readiness."
+      },
+      {
+        "claim_id": "external_product_ux_improvement",
+        "status": "unsupported",
+        "rationale": "No same-surface external product UX improvement proof is present."
+      }
+    ]
+  },
+  "prior_round_reviewer_agent_ids": [],
+  "reviewers": [
+    {
+      "persona": "contract_claim_falsifier",
+      "agent_type": "harness_contract_claim_falsifier",
+      "persona_prompt_path": "agents/contract-claim-falsifier.md",
+      "persona_prompt_digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f",
+      "custom_agent_path": "custom-agents/harness-contract-claim-falsifier.toml",
+      "custom_agent_digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "sandbox_mode": "read-only",
+      "reviewer_agent_id": "agent-contract-claim-fixture",
+      "fresh_context": true,
+      "reused_reviewer": false,
+      "review_scope": "full_current_scope",
+      "verdict": "SIGN_OFF",
+      "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+      "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "completed_at": "2026-06-18T00:00:00Z",
+      "prompt_packet": {
+        "path": "fixtures/review-round/prompt-packets/contract_claim_falsifier.md",
+        "digest": "sha256:0c1eb63f7fa89092d4a601108bb630c6a2def471175801a15a12e86a7adb637d"
+      },
+      "review_report": {
+        "path": "fixtures/review-round/reports/contract_claim_falsifier.md",
+        "digest": "sha256:9b9f6541e74e7475d76ed0f945a576f9adf5edbcb5dda7eaca9ebf853cf35beb"
+      },
+      "evidence_paths_checked": [
+        "fixtures/review-round/anchors/validator-receipt.json",
+        "fixtures/review-round/anchors/review-target-receipt.json",
+        "fixtures/review-round/anchors/archive-receipt.json",
+        "agents/contract-claim-falsifier.md",
+        "custom-agents/harness-contract-claim-falsifier.toml",
+        "docs/hypercritical-review-law.md"
+      ],
+      "live_spawn_receipt": {
+        "tool": "multi_agent_v1.spawn_agent",
+        "source_thread_id": "fixture-review-round-thread",
+        "tool_invocation_id": "fixture-spawn-contract_claim_falsifier",
+        "round_id": "fixture-four-persona-signoff-round",
+        "captured_at": "2026-06-18T00:00:00Z",
+        "agent_type": "harness_contract_claim_falsifier",
+        "spawned_reviewer_agent_id": "agent-contract-claim-fixture",
+        "model": "gpt-5.5",
+        "reasoning_effort": "high",
+        "status": "spawned"
+      },
+      "evidence_artifacts_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/contract-claim-falsifier.md",
+          "digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f"
+        },
+        {
+          "path": "custom-agents/harness-contract-claim-falsifier.toml",
+          "digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d"
+        },
+        {
+          "path": "docs/hypercritical-review-law.md",
+          "digest": "sha256:a02dc6ef46170b83035cd02ffdb1ef1e46be964523bbe816c2aafb897f34bf5f"
+        }
+      ],
+      "material_blockers": [],
+      "counterexamples_attempted": [
+        {
+          "probe_id": "stale-validator-receipt",
+          "counterexample": "stale or substituted validator receipt",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "unsupported-surface-smuggling",
+          "counterexample": "unsupported install/publication/dogfood claim smuggling",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "reviewer-substitution",
+          "counterexample": "persona substitution or reused reviewer",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ],
+      "proof_anchors_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/contract-claim-falsifier.md",
+          "digest": "sha256:4a4f23123620793e816fc29aaddac076c07867c9055af53a28838399f614182f"
+        },
+        {
+          "path": "custom-agents/harness-contract-claim-falsifier.toml",
+          "digest": "sha256:637d4e212900a16933180c93646468aa878914dc36111050799e10043de25a6d"
+        },
+        {
+          "path": "docs/hypercritical-review-law.md",
+          "digest": "sha256:a02dc6ef46170b83035cd02ffdb1ef1e46be964523bbe816c2aafb897f34bf5f"
+        }
+      ],
+      "claim_ceiling_assessment": {
+        "supported": [
+          {
+            "claim_id": "package_static_fixture_proof",
+            "status": "supported",
+            "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+          },
+          {
+            "claim_id": "detached_review_target_archive_identity",
+            "status": "supported",
+            "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+          }
+        ],
+        "unsupported": [
+          {
+            "claim_id": "plugins_ui_visibility",
+            "status": "unsupported",
+            "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+          },
+          {
+            "claim_id": "install_button_success",
+            "status": "unsupported",
+            "rationale": "No same-surface install-button success proof is present."
+          },
+          {
+            "claim_id": "workspace_public_marketplace_publication",
+            "status": "unsupported",
+            "rationale": "No public/workspace marketplace publication or listing proof is present."
+          },
+          {
+            "claim_id": "real_multilane_dogfood",
+            "status": "unsupported",
+            "rationale": "No fresh real multi-lane dogfood receipt is present."
+          },
+          {
+            "claim_id": "production_readiness",
+            "status": "unsupported",
+            "rationale": "Package/static/local registry proof does not establish production readiness."
+          },
+          {
+            "claim_id": "external_product_ux_improvement",
+            "status": "unsupported",
+            "rationale": "No same-surface external product UX improvement proof is present."
+          }
+        ]
+      },
+      "required_next_repairs": [
+        {
+          "repair_id": "none-for-fixture",
+          "disposition": "none_required",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ]
+    },
+    {
+      "persona": "orchestration_recovery_falsifier",
+      "agent_type": "harness_orchestration_recovery_falsifier",
+      "persona_prompt_path": "agents/orchestration-recovery-falsifier.md",
+      "persona_prompt_digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593",
+      "custom_agent_path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
+      "custom_agent_digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "sandbox_mode": "read-only",
+      "reviewer_agent_id": "agent-orchestration-recovery-fixture",
+      "fresh_context": true,
+      "reused_reviewer": false,
+      "review_scope": "full_current_scope",
+      "verdict": "SIGN_OFF",
+      "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+      "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "completed_at": "2026-06-18T00:00:00Z",
+      "prompt_packet": {
+        "path": "fixtures/review-round/prompt-packets/orchestration_recovery_falsifier.md",
+        "digest": "sha256:b7f832dc68b0c14595f50147a0cc20736a0b791ba968d61ce2d17973ba87acc4"
+      },
+      "review_report": {
+        "path": "fixtures/review-round/reports/orchestration_recovery_falsifier.md",
+        "digest": "sha256:a8f9ae6ec0aec9f84bed48e457c7b6f65a3bc35b7ac70691bff70271545df66c"
+      },
+      "evidence_paths_checked": [
+        "fixtures/review-round/anchors/validator-receipt.json",
+        "fixtures/review-round/anchors/review-target-receipt.json",
+        "fixtures/review-round/anchors/archive-receipt.json",
+        "agents/orchestration-recovery-falsifier.md",
+        "custom-agents/harness-orchestration-recovery-falsifier.toml",
+        "validator/src/review/round/registry.rs"
+      ],
+      "live_spawn_receipt": {
+        "tool": "multi_agent_v1.spawn_agent",
+        "source_thread_id": "fixture-review-round-thread",
+        "tool_invocation_id": "fixture-spawn-orchestration_recovery_falsifier",
+        "round_id": "fixture-four-persona-signoff-round",
+        "captured_at": "2026-06-18T00:00:00Z",
+        "agent_type": "harness_orchestration_recovery_falsifier",
+        "spawned_reviewer_agent_id": "agent-orchestration-recovery-fixture",
+        "model": "gpt-5.5",
+        "reasoning_effort": "high",
+        "status": "spawned"
+      },
+      "evidence_artifacts_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/orchestration-recovery-falsifier.md",
+          "digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593"
+        },
+        {
+          "path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
+          "digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003"
+        },
+        {
+          "path": "validator/src/review/round/registry.rs",
+          "digest": "sha256:7a7e1bd90178b72f2e1776a2028fb15de6148e18f97e857099cd57df64f2fab2"
+        }
+      ],
+      "material_blockers": [],
+      "counterexamples_attempted": [
+        {
+          "probe_id": "stale-validator-receipt",
+          "counterexample": "stale or substituted validator receipt",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "unsupported-surface-smuggling",
+          "counterexample": "unsupported install/publication/dogfood claim smuggling",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "reviewer-substitution",
+          "counterexample": "persona substitution or reused reviewer",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ],
+      "proof_anchors_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/orchestration-recovery-falsifier.md",
+          "digest": "sha256:bcf785b28af425a4d7c43f8a18cd2919a905bf8b1b5a62543b8ae660f5618593"
+        },
+        {
+          "path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
+          "digest": "sha256:5666c376c73af8b5f83cfcd1d9afbb1976efe69bc36fc3ad26f4543b8fad3003"
+        },
+        {
+          "path": "validator/src/review/round/registry.rs",
+          "digest": "sha256:7a7e1bd90178b72f2e1776a2028fb15de6148e18f97e857099cd57df64f2fab2"
+        }
+      ],
+      "claim_ceiling_assessment": {
+        "supported": [
+          {
+            "claim_id": "package_static_fixture_proof",
+            "status": "supported",
+            "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+          },
+          {
+            "claim_id": "detached_review_target_archive_identity",
+            "status": "supported",
+            "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+          }
+        ],
+        "unsupported": [
+          {
+            "claim_id": "plugins_ui_visibility",
+            "status": "unsupported",
+            "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+          },
+          {
+            "claim_id": "install_button_success",
+            "status": "unsupported",
+            "rationale": "No same-surface install-button success proof is present."
+          },
+          {
+            "claim_id": "workspace_public_marketplace_publication",
+            "status": "unsupported",
+            "rationale": "No public/workspace marketplace publication or listing proof is present."
+          },
+          {
+            "claim_id": "real_multilane_dogfood",
+            "status": "unsupported",
+            "rationale": "No fresh real multi-lane dogfood receipt is present."
+          },
+          {
+            "claim_id": "production_readiness",
+            "status": "unsupported",
+            "rationale": "Package/static/local registry proof does not establish production readiness."
+          },
+          {
+            "claim_id": "external_product_ux_improvement",
+            "status": "unsupported",
+            "rationale": "No same-surface external product UX improvement proof is present."
+          }
+        ]
+      },
+      "required_next_repairs": [
+        {
+          "repair_id": "none-for-fixture",
+          "disposition": "none_required",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ]
+    },
+    {
+      "persona": "security_trust_boundary_falsifier",
+      "agent_type": "harness_security_trust_boundary_falsifier",
+      "persona_prompt_path": "agents/security-trust-boundary-falsifier.md",
+      "persona_prompt_digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1",
+      "custom_agent_path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
+      "custom_agent_digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "sandbox_mode": "read-only",
+      "reviewer_agent_id": "agent-security-trust-boundary-fixture",
+      "fresh_context": true,
+      "reused_reviewer": false,
+      "review_scope": "full_current_scope",
+      "verdict": "SIGN_OFF",
+      "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+      "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "completed_at": "2026-06-18T00:00:00Z",
+      "prompt_packet": {
+        "path": "fixtures/review-round/prompt-packets/security_trust_boundary_falsifier.md",
+        "digest": "sha256:0788354fcfd9f326c840c1b84a5e7642a129092a31ce56f6d35df2dd19459f2f"
+      },
+      "review_report": {
+        "path": "fixtures/review-round/reports/security_trust_boundary_falsifier.md",
+        "digest": "sha256:3f56b49952aeed9b5827df3414cb4595a42c00bf44c34ba5a063467a1a565232"
+      },
+      "evidence_paths_checked": [
+        "fixtures/review-round/anchors/validator-receipt.json",
+        "fixtures/review-round/anchors/review-target-receipt.json",
+        "fixtures/review-round/anchors/archive-receipt.json",
+        "agents/security-trust-boundary-falsifier.md",
+        "custom-agents/harness-security-trust-boundary-falsifier.toml",
+        "validator/src/schema_catalog/mod.rs"
+      ],
+      "live_spawn_receipt": {
+        "tool": "multi_agent_v1.spawn_agent",
+        "source_thread_id": "fixture-review-round-thread",
+        "tool_invocation_id": "fixture-spawn-security_trust_boundary_falsifier",
+        "round_id": "fixture-four-persona-signoff-round",
+        "captured_at": "2026-06-18T00:00:00Z",
+        "agent_type": "harness_security_trust_boundary_falsifier",
+        "spawned_reviewer_agent_id": "agent-security-trust-boundary-fixture",
+        "model": "gpt-5.5",
+        "reasoning_effort": "high",
+        "status": "spawned"
+      },
+      "evidence_artifacts_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/security-trust-boundary-falsifier.md",
+          "digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1"
+        },
+        {
+          "path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
+          "digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af"
+        },
+        {
+          "path": "validator/src/schema_catalog/mod.rs",
+          "digest": "sha256:a508884e4db19e64d80e7838e5777caf87eca293a355052affc78b65010f8240"
+        }
+      ],
+      "material_blockers": [],
+      "counterexamples_attempted": [
+        {
+          "probe_id": "stale-validator-receipt",
+          "counterexample": "stale or substituted validator receipt",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "unsupported-surface-smuggling",
+          "counterexample": "unsupported install/publication/dogfood claim smuggling",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "reviewer-substitution",
+          "counterexample": "persona substitution or reused reviewer",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ],
+      "proof_anchors_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/security-trust-boundary-falsifier.md",
+          "digest": "sha256:682d2435dcf3a049ae1551cba6feb87180c743bd9897c297a33411eadb90b9e1"
+        },
+        {
+          "path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
+          "digest": "sha256:13125d9551b085ef9fbc6b21434ef0ced7a1717df6b3a51ecc3f2ddfcca602af"
+        },
+        {
+          "path": "validator/src/schema_catalog/mod.rs",
+          "digest": "sha256:a508884e4db19e64d80e7838e5777caf87eca293a355052affc78b65010f8240"
+        }
+      ],
+      "claim_ceiling_assessment": {
+        "supported": [
+          {
+            "claim_id": "package_static_fixture_proof",
+            "status": "supported",
+            "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+          },
+          {
+            "claim_id": "detached_review_target_archive_identity",
+            "status": "supported",
+            "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+          }
+        ],
+        "unsupported": [
+          {
+            "claim_id": "plugins_ui_visibility",
+            "status": "unsupported",
+            "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+          },
+          {
+            "claim_id": "install_button_success",
+            "status": "unsupported",
+            "rationale": "No same-surface install-button success proof is present."
+          },
+          {
+            "claim_id": "workspace_public_marketplace_publication",
+            "status": "unsupported",
+            "rationale": "No public/workspace marketplace publication or listing proof is present."
+          },
+          {
+            "claim_id": "real_multilane_dogfood",
+            "status": "unsupported",
+            "rationale": "No fresh real multi-lane dogfood receipt is present."
+          },
+          {
+            "claim_id": "production_readiness",
+            "status": "unsupported",
+            "rationale": "Package/static/local registry proof does not establish production readiness."
+          },
+          {
+            "claim_id": "external_product_ux_improvement",
+            "status": "unsupported",
+            "rationale": "No same-surface external product UX improvement proof is present."
+          }
+        ]
+      },
+      "required_next_repairs": [
+        {
+          "repair_id": "none-for-fixture",
+          "disposition": "none_required",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ]
+    },
+    {
+      "persona": "product_simplicity_falsifier",
+      "agent_type": "harness_product_simplicity_falsifier",
+      "persona_prompt_path": "agents/product-simplicity-falsifier.md",
+      "persona_prompt_digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84",
+      "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
+      "custom_agent_digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "sandbox_mode": "read-only",
+      "reviewer_agent_id": "agent-product-simplicity-fixture",
+      "fresh_context": true,
+      "reused_reviewer": false,
+      "review_scope": "full_current_scope",
+      "verdict": "SIGN_OFF",
+      "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+      "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "completed_at": "2026-06-18T00:00:00Z",
+      "prompt_packet": {
+        "path": "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+        "digest": "sha256:1dc6e77d72409488c72213c46ed71569bc16da501ec6b43b1e373b49ee0d2568"
+      },
+      "review_report": {
+        "path": "fixtures/review-round/reports/product_simplicity_falsifier.md",
+        "digest": "sha256:abfed0b2e4455811785edfb0fce17a89a65b92b20d80e35b3818c933d592c41f"
+      },
+      "evidence_paths_checked": [
+        "fixtures/review-round/anchors/validator-receipt.json",
+        "fixtures/review-round/anchors/review-target-receipt.json",
+        "fixtures/review-round/anchors/archive-receipt.json",
+        "agents/product-simplicity-falsifier.md",
+        "custom-agents/harness-product-simplicity-falsifier.toml",
+        "docs/plugin-resource-map.md",
+        "fixtures/review-round/anchors/product-fitness-receipt.json"
+      ],
+      "live_spawn_receipt": {
+        "tool": "multi_agent_v1.spawn_agent",
+        "source_thread_id": "fixture-review-round-thread",
+        "tool_invocation_id": "fixture-spawn-product_simplicity_falsifier",
+        "round_id": "fixture-four-persona-signoff-round",
+        "captured_at": "2026-06-18T00:00:00Z",
+        "agent_type": "harness_product_simplicity_falsifier",
+        "spawned_reviewer_agent_id": "agent-product-simplicity-fixture",
+        "model": "gpt-5.5",
+        "reasoning_effort": "high",
+        "status": "spawned"
+      },
+      "evidence_artifacts_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/product-simplicity-falsifier.md",
+          "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+        },
+        {
+          "path": "custom-agents/harness-product-simplicity-falsifier.toml",
+          "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+        },
+        {
+          "path": "docs/plugin-resource-map.md",
+          "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
+        },
+        {
+          "path": "docs/source-obligation-matrix.md",
+          "digest": "sha256:7f7454bef039e23b6fb15f5146b1837508df4feb4c582d10f84c44f96aea8de0"
+        },
+        {
+          "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
+          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+        }
+      ],
+      "material_blockers": [],
+      "counterexamples_attempted": [
+        {
+          "probe_id": "stale-validator-receipt",
+          "counterexample": "stale or substituted validator receipt",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "unsupported-surface-smuggling",
+          "counterexample": "unsupported install/publication/dogfood claim smuggling",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        },
+        {
+          "probe_id": "reviewer-substitution",
+          "counterexample": "persona substitution or reused reviewer",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ],
+      "proof_anchors_checked": [
+        {
+          "path": "fixtures/review-round/anchors/validator-receipt.json",
+          "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+        },
+        {
+          "path": "fixtures/review-round/anchors/review-target-receipt.json",
+          "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+        },
+        {
+          "path": "fixtures/review-round/anchors/archive-receipt.json",
+          "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+        },
+        {
+          "path": "agents/product-simplicity-falsifier.md",
+          "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+        },
+        {
+          "path": "custom-agents/harness-product-simplicity-falsifier.toml",
+          "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+        },
+        {
+          "path": "docs/plugin-resource-map.md",
+          "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
+        },
+        {
+          "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
+          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+        }
+      ],
+      "claim_ceiling_assessment": {
+        "supported": [
+          {
+            "claim_id": "package_static_fixture_proof",
+            "status": "supported",
+            "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+          },
+          {
+            "claim_id": "detached_review_target_archive_identity",
+            "status": "supported",
+            "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+          }
+        ],
+        "unsupported": [
+          {
+            "claim_id": "plugins_ui_visibility",
+            "status": "unsupported",
+            "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+          },
+          {
+            "claim_id": "install_button_success",
+            "status": "unsupported",
+            "rationale": "No same-surface install-button success proof is present."
+          },
+          {
+            "claim_id": "workspace_public_marketplace_publication",
+            "status": "unsupported",
+            "rationale": "No public/workspace marketplace publication or listing proof is present."
+          },
+          {
+            "claim_id": "real_multilane_dogfood",
+            "status": "unsupported",
+            "rationale": "No fresh real multi-lane dogfood receipt is present."
+          },
+          {
+            "claim_id": "production_readiness",
+            "status": "unsupported",
+            "rationale": "Package/static/local registry proof does not establish production readiness."
+          },
+          {
+            "claim_id": "external_product_ux_improvement",
+            "status": "unsupported",
+            "rationale": "No same-surface external product UX improvement proof is present."
+          }
+        ]
+      },
+      "required_next_repairs": [
+        {
+          "repair_id": "none-for-fixture",
+          "disposition": "none_required",
+          "evidence": {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          }
+        }
+      ],
+      "product_fitness_disposition": {
+        "owner_persona": "product_simplicity_falsifier",
+        "owner_agent_type": "harness_product_simplicity_falsifier",
+        "applies_to_product_impacting_claims": true,
+        "status": "pass",
+        "receipt": {
+          "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
+          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+        },
+        "receipt_generated_at": "2026-06-18T00:00:00Z",
+        "claim_ids_reviewed": [
+          "plugins_ui_visibility",
+          "install_button_success",
+          "workspace_public_marketplace_publication",
+          "real_multilane_dogfood",
+          "production_readiness",
+          "external_product_ux_improvement"
+        ],
+        "dimensions_checked": [
+          "audience",
+          "job",
+          "context",
+          "outcome",
+          "accessibility",
+          "cognitive_load",
+          "recovery_burden",
+          "continuance",
+          "real_use_evidence",
+          "product_success_substitution_rejection"
+        ],
+        "substitution_rejection": true,
+        "generic_product_simplicity_approval_only": false
+      },
+      "product_fitness_required": true,
+      "product_fitness_owner": "product_simplicity_falsifier",
+      "product_fitness_receipt_digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51",
+      "product_fitness_claim_ids": [
+        "plugins_ui_visibility",
+        "install_button_success",
+        "workspace_public_marketplace_publication",
+        "real_multilane_dogfood",
+        "production_readiness",
+        "external_product_ux_improvement"
+      ],
+      "substitution_rejections_reviewed": [
+        "generic_product_simplicity_approval",
+        "product::cohesion",
+        "install_success",
+        "package_publication",
+        "first_use",
+        "smoke_test",
+        "fixture_pass",
+        "reviewer_agreement",
+        "happy_path",
+        "receipt_only"
+      ]
+    }
+  ],
+  "materiality_gate": {
+    "schema": "harness-ultragoal.review-materiality-gate.v1",
+    "confidence": "high",
+    "deterministic_gates_required": [
+      "anchor_existence_and_digest",
+      "validator_receipt_status",
+      "reviewer_registry_model_persona_exposure",
+      "stale_receipt_check",
+      "package_private_artifact_hygiene",
+      "readiness_validator",
+      "claim_ceiling_check",
+      "proof_surface_substitution_check"
+    ],
+    "deterministic_gates_run": [
+      "anchor_existence_and_digest",
+      "validator_receipt_status",
+      "reviewer_registry_model_persona_exposure",
+      "stale_receipt_check",
+      "package_private_artifact_hygiene",
+      "readiness_validator",
+      "claim_ceiling_check",
+      "proof_surface_substitution_check"
+    ],
+    "anchors_checked": [
+      {
+        "path": "fixtures/review-round/anchors/validator-receipt.json",
+        "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+      },
+      {
+        "path": "fixtures/review-round/anchors/review-target-receipt.json",
+        "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+      },
+      {
+        "path": "fixtures/review-round/anchors/archive-receipt.json",
+        "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+      }
+    ],
+    "reviewer_registry_evidence": [
+      {
+        "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+        "digest": "sha256:8913a6f99d943994abe5e14832c2d2ca07194f3eb4bdee49296cf0d17ec22f62"
+      }
+    ],
+    "validator_repairs_recommended": [],
+    "claim_ceiling": {
+      "supported": [
+        "package_static_fixture_proof"
+      ],
+      "unsupported": [
+        "plugins_ui_visibility",
+        "install_button_success",
+        "marketplace_publication",
+        "real_multilane_dogfood",
+        "production_readiness"
+      ],
+      "blocked": []
+    },
+    "decision": "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
+    "reason": "Material sign-off and phase advancement require full-scope review against current anchors.",
+    "material_triggers": [
+      "material_signoff",
+      "phase_advancement",
+      "proof_anchor_change"
+    ],
+    "reviewers_required": [
+      "contract_claim_falsifier",
+      "orchestration_recovery_falsifier",
+      "security_trust_boundary_falsifier",
+      "product_simplicity_falsifier"
+    ],
+    "output_may_be_used_for_material_signoff": true
+  }
+}

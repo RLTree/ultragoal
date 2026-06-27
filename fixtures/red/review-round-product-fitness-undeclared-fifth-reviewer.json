@@ -1,0 +1,285 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-product-fitness-undeclared-fifth-reviewer",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "schema_validation_failed"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/reviewers/4",
+      "value": {
+        "persona": "product_fitness_falsifier",
+        "agent_type": "harness_product_fitness_falsifier",
+        "persona_prompt_path": "agents/product-simplicity-falsifier.md",
+        "persona_prompt_digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84",
+        "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
+        "custom_agent_digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3",
+        "model": "gpt-5.5",
+        "reasoning_effort": "high",
+        "sandbox_mode": "read-only",
+        "reviewer_agent_id": "agent-product-fitness-fifth",
+        "fresh_context": true,
+        "reused_reviewer": false,
+        "review_scope": "full_current_scope",
+        "verdict": "SIGN_OFF",
+        "validator_receipt_digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa",
+        "review_target_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "archive_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "completed_at": "2026-06-18T00:00:00Z",
+        "prompt_packet": {
+          "path": "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+          "digest": "sha256:1dc6e77d72409488c72213c46ed71569bc16da501ec6b43b1e373b49ee0d2568"
+        },
+        "review_report": {
+          "path": "fixtures/review-round/reports/product_simplicity_falsifier.md",
+          "digest": "sha256:abfed0b2e4455811785edfb0fce17a89a65b92b20d80e35b3818c933d592c41f"
+        },
+        "evidence_paths_checked": [
+          "fixtures/review-round/anchors/validator-receipt.json",
+          "fixtures/review-round/anchors/review-target-receipt.json",
+          "fixtures/review-round/anchors/archive-receipt.json",
+          "agents/product-simplicity-falsifier.md",
+          "custom-agents/harness-product-simplicity-falsifier.toml",
+          "docs/plugin-resource-map.md",
+          "validation_artifacts/harness/product-fitness-receipt.json"
+        ],
+        "live_spawn_receipt": {
+          "tool": "multi_agent_v1.spawn_agent",
+          "source_thread_id": "fixture-review-round-thread",
+          "tool_invocation_id": "fixture-spawn-product_simplicity_falsifier",
+          "round_id": "fixture-four-persona-signoff-round",
+          "captured_at": "2026-06-18T00:00:00Z",
+          "agent_type": "harness_product_simplicity_falsifier",
+          "spawned_reviewer_agent_id": "agent-product-simplicity-fixture",
+          "model": "gpt-5.5",
+          "reasoning_effort": "high",
+          "status": "spawned"
+        },
+        "evidence_artifacts_checked": [
+          {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          },
+          {
+            "path": "fixtures/review-round/anchors/review-target-receipt.json",
+            "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+          },
+          {
+            "path": "fixtures/review-round/anchors/archive-receipt.json",
+            "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+          },
+          {
+            "path": "agents/product-simplicity-falsifier.md",
+            "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+          },
+          {
+            "path": "custom-agents/harness-product-simplicity-falsifier.toml",
+            "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+          },
+          {
+            "path": "docs/plugin-resource-map.md",
+            "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
+          },
+          {
+            "path": "docs/source-obligation-matrix.md",
+            "digest": "sha256:ad3d997e7a8f3f22f6fe617b7fb121547d52e4dac1049da2e44b7e50055e0f04"
+          },
+          {
+            "path": "validation_artifacts/harness/product-fitness-receipt.json",
+            "digest": "sha256:5ed42dcb02392a216dda46bb6a414ec90a5f4b791954dcc63aaf5ba04d77995a"
+          }
+        ],
+        "material_blockers": [],
+        "counterexamples_attempted": [
+          {
+            "probe_id": "stale-validator-receipt",
+            "counterexample": "stale or substituted validator receipt",
+            "evidence": {
+              "path": "fixtures/review-round/anchors/validator-receipt.json",
+              "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+            }
+          },
+          {
+            "probe_id": "unsupported-surface-smuggling",
+            "counterexample": "unsupported install/publication/dogfood claim smuggling",
+            "evidence": {
+              "path": "fixtures/review-round/anchors/validator-receipt.json",
+              "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+            }
+          },
+          {
+            "probe_id": "reviewer-substitution",
+            "counterexample": "persona substitution or reused reviewer",
+            "evidence": {
+              "path": "fixtures/review-round/anchors/validator-receipt.json",
+              "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+            }
+          }
+        ],
+        "proof_anchors_checked": [
+          {
+            "path": "fixtures/review-round/anchors/validator-receipt.json",
+            "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+          },
+          {
+            "path": "fixtures/review-round/anchors/review-target-receipt.json",
+            "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+          },
+          {
+            "path": "fixtures/review-round/anchors/archive-receipt.json",
+            "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+          },
+          {
+            "path": "agents/product-simplicity-falsifier.md",
+            "digest": "sha256:9232988103fcf7e99c42b610bed9210dc1d4f68d7690e9e3be5070cc04ac5d84"
+          },
+          {
+            "path": "custom-agents/harness-product-simplicity-falsifier.toml",
+            "digest": "sha256:cf27b760170ec93113c4fd6f648f3c04f9e4b0fa7e86715e888fbeb9a20897b3"
+          },
+          {
+            "path": "docs/plugin-resource-map.md",
+            "digest": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
+          },
+          {
+            "path": "validation_artifacts/harness/product-fitness-receipt.json",
+            "digest": "sha256:5ed42dcb02392a216dda46bb6a414ec90a5f4b791954dcc63aaf5ba04d77995a"
+          }
+        ],
+        "claim_ceiling_assessment": {
+          "supported": [
+            {
+              "claim_id": "package_static_fixture_proof",
+              "status": "supported",
+              "rationale": "Supported by package/static/fixture validator evidence for the bound package digest."
+            },
+            {
+              "claim_id": "detached_review_target_archive_identity",
+              "status": "supported",
+              "rationale": "Supported by deterministic review-target and candidate archive receipts only as review anchors."
+            }
+          ],
+          "unsupported": [
+            {
+              "claim_id": "plugins_ui_visibility",
+              "status": "unsupported",
+              "rationale": "No same-surface Codex Plugins UI visibility proof is present."
+            },
+            {
+              "claim_id": "install_button_success",
+              "status": "unsupported",
+              "rationale": "No same-surface install-button success proof is present."
+            },
+            {
+              "claim_id": "workspace_public_marketplace_publication",
+              "status": "unsupported",
+              "rationale": "No public/workspace marketplace publication or listing proof is present."
+            },
+            {
+              "claim_id": "real_multilane_dogfood",
+              "status": "unsupported",
+              "rationale": "No fresh real multi-lane dogfood receipt is present."
+            },
+            {
+              "claim_id": "production_readiness",
+              "status": "unsupported",
+              "rationale": "Package/static/local registry proof does not establish production readiness."
+            },
+            {
+              "claim_id": "external_product_ux_improvement",
+              "status": "unsupported",
+              "rationale": "No same-surface external product UX improvement proof is present."
+            }
+          ]
+        },
+        "required_next_repairs": [
+          {
+            "repair_id": "none-for-fixture",
+            "disposition": "none_required",
+            "evidence": {
+              "path": "fixtures/review-round/anchors/validator-receipt.json",
+              "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+            }
+          }
+        ],
+        "product_fitness_disposition": {
+          "owner_persona": "product_simplicity_falsifier",
+          "owner_agent_type": "harness_product_simplicity_falsifier",
+          "applies_to_product_impacting_claims": true,
+          "status": "pass",
+          "receipt": {
+            "path": "validation_artifacts/harness/product-fitness-receipt.json",
+            "digest": "sha256:5ed42dcb02392a216dda46bb6a414ec90a5f4b791954dcc63aaf5ba04d77995a"
+          },
+          "receipt_generated_at": "2026-06-25T22:22:43Z",
+          "claim_ids_reviewed": [
+            "plugins_ui_visibility",
+            "install_button_success",
+            "workspace_public_marketplace_publication",
+            "real_multilane_dogfood",
+            "production_readiness",
+            "external_product_ux_improvement"
+          ],
+          "dimensions_checked": [
+            "audience",
+            "job",
+            "context",
+            "outcome",
+            "accessibility",
+            "cognitive_load",
+            "recovery_burden",
+            "continuance",
+            "real_use_evidence",
+            "product_success_substitution_rejection"
+          ],
+          "substitution_rejection": true,
+          "generic_product_simplicity_approval_only": false
+        },
+        "product_fitness_required": true,
+        "product_fitness_owner": "product_fitness_falsifier",
+        "product_fitness_receipt_digest": "sha256:5ed42dcb02392a216dda46bb6a414ec90a5f4b791954dcc63aaf5ba04d77995a",
+        "product_fitness_claim_ids": [
+          "plugins_ui_visibility",
+          "install_button_success",
+          "workspace_public_marketplace_publication",
+          "real_multilane_dogfood",
+          "production_readiness",
+          "external_product_ux_improvement"
+        ],
+        "substitution_rejections_reviewed": [
+          "generic_product_simplicity_approval",
+          "product_cohesion",
+          "install_success",
+          "package_publication",
+          "first_use",
+          "smoke_test",
+          "fixture_pass",
+          "reviewer_agreement",
+          "happy_path",
+          "receipt_only"
+        ]
+      }
+    }
+  ],
+  "notes": "Undeclared fifth Product Fitness reviewer cannot bypass the four-person team contract.",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": false
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3/persona",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/3",
+      "expectation": "schema_validation_failed"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "raw-private-artifact-handling-category-only-evidence-absolute-private-path-in-package-inventory-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:absolute_private_path_in_package_inventory"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/absolute_private_path_in_package_inventory",
+      "value": false
+    }
+  ],
+  "notes": "raw-private-artifact-handling-category-only-evidence must fail when absolute_private_path_in_package_inventory is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/absolute_private_path_in_package_inventory",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/absolute_private_path_in_package_inventory",
+      "expectation": "mandatory_law_specific_guard_not_enforced:raw-private-artifact-handling-category-only-evidence:absolute_private_path_in_package_inventory"
+    }
+  ]
+}

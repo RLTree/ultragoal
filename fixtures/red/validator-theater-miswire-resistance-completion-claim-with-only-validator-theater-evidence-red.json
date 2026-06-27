@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
+  "expected_failure": {
+    "check_id": "validator-theater-miswire-resistance",
+    "error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:completion_claim_with_only_validator_theater_evidence"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/completion_claim_with_only_validator_theater_evidence",
+      "value": false
+    }
+  ],
+  "notes": "validator-theater-miswire-resistance must fail when completion_claim_with_only_validator_theater_evidence is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/completion_claim_with_only_validator_theater_evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/completion_claim_with_only_validator_theater_evidence",
+      "expectation": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:completion_claim_with_only_validator_theater_evidence"
+    }
+  ]
+}

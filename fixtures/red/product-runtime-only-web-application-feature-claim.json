@@ -1,0 +1,218 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-runtime-only-web-application-feature-claim",
+  "expected_failure": {
+    "check_id": "product-cohesion-proof",
+    "error": "product_applicability_contradicts_claim_text"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Web application feature completed through runtime CLI only"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "feature_completion"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_surface",
+      "value": "runtime_cli"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces",
+      "value": [
+        "runtime_cli"
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "value": {
+        "user_facing": false,
+        "product_surface": false,
+        "ui_or_control_surface": false,
+        "surface_classification": "engine_runtime_only",
+        "rationale": "This is engine-only CLI work with no user-facing product, UI, or control surface claim."
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence",
+      "value": [
+        {
+          "id": "EV-LIVE-RUNTIME-001",
+          "claim_id": "CLAIM-001",
+          "kind": "live_beneficial_e2e",
+          "surface": "runtime_cli",
+          "path": "validation_artifacts/runtime/engine-output.md",
+          "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          },
+          "live_beneficial_task": {
+            "description": "Run a real engine-only CLI transformation and inspect the produced artifact.",
+            "real_input_path": "validation_artifacts/runtime/engine-input.md",
+            "output_artifact_path": "validation_artifacts/runtime/engine-output.md",
+            "acceptance_criteria": [
+              "output artifact records the completed engine transformation"
+            ],
+            "quality_inspection_result": "artifact is suitable for validating engine-only runtime behavior"
+          }
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/ready",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/changed_files",
+      "value": [
+        "fixtures/valid/non-product-feature-completion.json"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/exit",
+      "value": 0
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/artifact_path",
+      "value": "validation_artifacts/runtime/engine-output.md"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/commands/0/artifact_digest",
+      "value": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/evidence",
+      "value": [
+        {
+          "id": "EV-LIVE-RUNTIME-001",
+          "claim_id": "CLAIM-001",
+          "kind": "live_beneficial_e2e",
+          "surface": "runtime_cli",
+          "path": "validation_artifacts/runtime/engine-output.md",
+          "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "produced_by_command_id": "cmd-static-001",
+          "commit": "abcdef0",
+          "workspace": "/repo",
+          "observed_at": "2026-06-16T00:00:00Z",
+          "freshness": {
+            "verdict": "current",
+            "current_commit": "abcdef0",
+            "evidence_commit": "abcdef0",
+            "policy": "target head and evidence commit must match",
+            "checked_at": "2026-06-16T00:00:00Z"
+          },
+          "live_beneficial_task": {
+            "description": "Run a real engine-only CLI transformation and inspect the produced artifact.",
+            "real_input_path": "validation_artifacts/runtime/engine-input.md",
+            "output_artifact_path": "validation_artifacts/runtime/engine-output.md",
+            "acceptance_criteria": [
+              "output artifact records the completed engine transformation"
+            ],
+            "quality_inspection_result": "artifact is suitable for validating engine-only runtime behavior"
+          }
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/claim_ceiling/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/claim_ceiling/0/claim_surface",
+      "value": "runtime_cli"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/claim_ceiling/0/effect",
+      "value": "included"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/claim_ceiling/0/evidence_ids",
+      "value": [
+        "EV-LIVE-RUNTIME-001"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/teardown_ready",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/blocked_reasons",
+      "value": []
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:d19beddaefc787d9897bd5a94db8db6d88fa61bbb1df4edcff55d3b363701526",
+        "product_or_ui_claim": true,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "included runtime-only feature claim must not hide product-qualified application wording without Product Cohesion proof",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "expectation": "product_applicability_contradicts_claim_text"
+    }
+  ]
+}

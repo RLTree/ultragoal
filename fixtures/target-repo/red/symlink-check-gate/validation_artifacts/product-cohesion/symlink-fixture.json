@@ -1,0 +1,5 @@
+{
+  "schema": "harness-ultragoal.target-fixture-symlink.v1",
+  "link_path": "scripts/check",
+  "target_path": "../../../valid-init/scripts/check"
+}

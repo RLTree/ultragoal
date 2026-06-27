@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stable-identifier-normalization-collision-display-title-treated-as-authority-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:stable-identifier-normalization-collision:display_title_treated_as_authority"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/display_title_treated_as_authority",
+      "value": false
+    }
+  ],
+  "notes": "stable-identifier-normalization-collision must fail when display_title_treated_as_authority is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/display_title_treated_as_authority",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/display_title_treated_as_authority",
+      "expectation": "mandatory_law_specific_guard_not_enforced:stable-identifier-normalization-collision:display_title_treated_as_authority"
+    }
+  ]
+}

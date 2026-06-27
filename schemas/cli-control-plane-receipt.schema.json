@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/cli-control-plane-receipt.schema.json",
+  "title": "Harness Ultragoal CLI Control Plane Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "issuer",
+    "generated_at",
+    "root",
+    "candidate_digest",
+    "operation",
+    "status",
+    "claim_ceiling",
+    "blocked_claim_classes",
+    "required_evidence",
+    "failure",
+    "command_surface",
+    "notes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.cli-control-plane-receipt.v1"
+    },
+    "schema_version": {
+      "const": "v1"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "authority",
+        "compatibility_binary",
+        "self_law_state"
+      ],
+      "properties": {
+        "tool": {
+          "const": "ultragoal"
+        },
+        "authority": {
+          "const": "cli_control_plane"
+        },
+        "compatibility_binary": {
+          "const": "ultragoal-validator"
+        },
+        "self_law_state": {
+          "enum": [
+            "transition_only",
+            "self_hosted"
+          ]
+        }
+      }
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "root": {
+      "const": "."
+    },
+    "candidate_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "operation": {
+      "enum": [
+        "app_surface_probe",
+        "cache_audit",
+        "capability_discover",
+        "capability_prove",
+        "claim_ceiling_compute",
+        "clean_room_rebuild",
+        "coverage_prove",
+        "failure_capture",
+        "failure_promote",
+        "fixtures_all",
+        "fixtures_green",
+        "fixtures_red",
+        "fixtures_tamper",
+        "foundational_trace_check_strict",
+        "install_audit",
+        "issue_check_lifecycle",
+        "law_check_all",
+        "law_check_gate",
+        "law_graph_strict",
+        "line_caps_check_strict",
+        "namespace_check_strict",
+        "package_inventory",
+        "package_verify",
+        "packet_build",
+        "packet_verify",
+        "product_check_claims",
+        "product_init",
+        "product_prove_cohesion",
+        "product_prove_fitness",
+        "product_prove_success",
+        "receipts_verify",
+        "registry_probe",
+        "self_audit_strict",
+        "self_fixtures_green",
+        "self_fixtures_red",
+        "self_fixtures_tamper",
+        "self_law_graph_strict",
+        "self_update_goal_eligibility",
+        "source_obligations_check_strict",
+        "standards_check_strict",
+        "target_repo_audit",
+        "typed_boundaries_check_strict",
+        "update_goal_eligibility"
+      ]
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "claim_ceiling": {
+      "enum": [
+        "complete",
+        "withheld_or_blocked"
+      ]
+    },
+    "blocked_claim_classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "app_registry_or_reviewer_exposure",
+          "completion",
+          "package_readiness",
+          "release_readiness",
+          "review_readiness",
+          "update_goal_eligibility"
+        ]
+      }
+    },
+    "required_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "all_89_gates_and_100_stop_conditions_pass",
+          "cli_self_law_receipt_pass",
+          "coverage_100_no_uncovered_records",
+          "current_red_fixture_report_pass",
+          "current_source_audit_pass"
+        ]
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "law_id",
+        "gate_id",
+        "check_id",
+        "failed_invariant",
+        "observed_value",
+        "expected_value",
+        "repair_class",
+        "rerun_command",
+        "claim_ceiling_impact",
+        "source_install_cache_impact",
+        "severity",
+        "determinism"
+      ],
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "law_id": {
+          "enum": [
+            "cli-control-plane-authority",
+            "cli-self-law-compliance"
+          ]
+        },
+        "gate_id": {
+          "const": "89"
+        },
+        "check_id": {
+          "enum": [
+            "cli-control-plane-authority",
+            "cli-self-law-compliance"
+          ]
+        },
+        "failed_invariant": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_value": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "expected_value": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "repair_class": {
+          "const": "deterministic_enforcement"
+        },
+        "rerun_command": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "claim_ceiling_impact": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_install_cache_impact": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "severity": {
+          "const": "hard_blocker"
+        },
+        "determinism": {
+          "const": "deterministic"
+        }
+      }
+    },
+    "command_surface": {
+      "type": "array",
+      "minItems": 40,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "notes": {
+      "minLength": 1,
+      "type": "string"
+    }
+  }
+}

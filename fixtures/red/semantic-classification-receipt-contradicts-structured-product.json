@@ -1,0 +1,65 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_contradicts_structured_claim"
+  },
+  "id": "semantic-classification-receipt-contradicts-structured-product",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_static"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "withheld"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "static_contract"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "value": {
+        "product_surface": true,
+        "rationale": "This is explicitly a user-facing product surface.",
+        "surface_classification": "consumer_product",
+        "ui_or_control_surface": true,
+        "user_facing": true
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-receipt-contradicts-structured-product.semantic-classification-receipt.json",
+          "digest": "sha256:9dec0a6b9163d59e5f5f874cd7421f369d018b22ab375e70c0553c9d2033afef"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "runtime-only receipt cannot contradict structured product applicability",
+  "postconditions": [
+    {
+      "expectation": "semantic_classification_contradicts_structured_claim",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

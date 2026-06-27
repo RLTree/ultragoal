@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:workspace-command-confinement-lifecycle-cleanup:declared_workspace_root"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/declared_workspace_root",
+      "value": false
+    }
+  ],
+  "notes": "workspace-command-confinement-lifecycle-cleanup must fail when declared_workspace_root is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/declared_workspace_root",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/declared_workspace_root",
+      "expectation": "mandatory_law_specific_guard_not_enforced:workspace-command-confinement-lifecycle-cleanup:declared_workspace_root"
+    }
+  ]
+}

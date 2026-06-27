@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "automation-missing-lifecycle-transition",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "automation_lifecycle_missing"
+  },
+  "base_fixture_path": "fixtures/template-integrity/valid/template-integrity.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/automation_prompt",
+      "value": "# Harness Ultragoal Orchestrator Heartbeat Prompt\n\nPurpose: idle Ultragoal orchestrator control-plane review and steering.\n\nLifecycle: keep checking occasionally.\n\nRequired tools: set_goal(), app automation tools, app thread tools, rg, git, repo check scripts, validator commands, package sync or hygiene checks, targeted filesystem reads, optional Chronicle memory wiki as context only.\n\nRequired skills: harness-ultragoal:ultragoal, harness-ultragoal:orchestrator-reconciler, harness-ultragoal:execplan-lane, harness-ultragoal:proof-gate, harness-ultragoal:standards-gardener, harness-ultragoal:harness-engineering, harness-ultragoal:agent-first-repo-init, harness-ultragoal:agent-first-repo-retrofit.\n\nEvidence cursors: goal/contract cursor, lane/session cursor, repo/artifact cursor, automation/thread cursor, changed artifacts or receipts.\n\nAction policy: DONT_NOTIFY default, STEER one exact corrective message, ESCALATE for scope changes, destructive actions, missing access, contradictory evidence, or unresolved user decisions. Mutation requires explicit contract authority.\n\nStatus: DONT_NOTIFY | STEER | ESCALATE\nMaterial delta: yes/no\nEvidence inspected:\n- goal/contract cursor:\n- lane/session cursor:\n- repo/artifact cursor:\n- automation/thread cursor:\n- changed artifacts or receipts:\nFinding:\nRequired next action:\nConfidence:\nToken-waste control:\nCadence recommendation:\n"
+    }
+  ],
+  "notes": "Automation prompt must encode active set_goal setup to idle heartbeat transition.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/automation_prompt",
+      "expectation": "automation_lifecycle_missing"
+    }
+  ]
+}

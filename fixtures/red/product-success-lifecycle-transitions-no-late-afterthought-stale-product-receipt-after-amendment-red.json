@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-lifecycle-transitions-no-late-afterthought-stale-product-receipt-after-amendment-red",
+  "expected_failure": {
+    "check_id": "product-success-lifecycle-transitions-no-late-afterthought",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-lifecycle-transitions-no-late-afterthought:stale_product_receipt_after_amendment"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-lifecycle-transitions-no-late-afterthought.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/stale_product_receipt_after_amendment",
+      "value": false
+    }
+  ],
+  "notes": "product-success-lifecycle-transitions-no-late-afterthought must fail when stale_product_receipt_after_amendment is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/stale_product_receipt_after_amendment",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/stale_product_receipt_after_amendment",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-lifecycle-transitions-no-late-afterthought:stale_product_receipt_after_amendment"
+    }
+  ]
+}

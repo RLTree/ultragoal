@@ -1,0 +1,47 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-claim-ceiling-active-registry-overclaim",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_claim_ceiling_overclaim"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/claim_ceiling/supported/2",
+      "value": {
+        "claim_id": "active_registry_exposure_current_reviewers",
+        "status": "supported",
+        "rationale": "Incorrectly treats active registry exposure as a supported completion claim instead of review provenance."
+      }
+    },
+    {
+      "op": "add",
+      "path": "/reviewers/0/claim_ceiling_assessment/supported/2",
+      "value": {
+        "claim_id": "active_registry_exposure_current_reviewers",
+        "status": "supported",
+        "rationale": "Incorrectly treats active registry exposure as a supported completion claim instead of review provenance."
+      }
+    }
+  ],
+  "notes": "Active registry exposure is review provenance/precondition only; it must not broaden the supported completion claim ceiling.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/claim_ceiling/supported",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/claim_ceiling/supported/2",
+      "expectation": "active registry exposure cannot be a supported completion claim"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "plugin-install-surface-metadata-cache-enable-state-cache-path-versioned-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:plugin-install-surface-metadata-cache-enable-state:cache_path_versioned"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/cache_path_versioned",
+      "value": false
+    }
+  ],
+  "notes": "plugin-install-surface-metadata-cache-enable-state must fail when cache_path_versioned is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/cache_path_versioned",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/cache_path_versioned",
+      "expectation": "mandatory_law_specific_guard_not_enforced:plugin-install-surface-metadata-cache-enable-state:cache_path_versioned"
+    }
+  ]
+}

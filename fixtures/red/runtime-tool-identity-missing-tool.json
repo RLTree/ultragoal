@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "runtime-tool-identity-missing-tool",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "runtime_tool_identity_missing_tool"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/tool_identity/name"
+    }
+  ],
+  "notes": "Runtime proof fails when typed tool identity is missing.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/tool_identity/name",
+      "expectation": "runtime_tool_identity_missing_tool"
+    }
+  ]
+}

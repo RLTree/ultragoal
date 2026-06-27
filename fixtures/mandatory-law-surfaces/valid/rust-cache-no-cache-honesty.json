@@ -1,0 +1,48 @@
+{
+  "behavior_failure_modes": [
+    "rust-cache-no-cache-honesty:hidden_cache_no_cache_substitution",
+    "rust-cache-no-cache-honesty:warm_cache_as_cold_proof",
+    "rust-cache-no-cache-honesty:hidden_rustc_wrapper"
+  ],
+  "claim_ceiling_guard": "rust_no_cache_claims_withheld_without_cache_honesty_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
+      "path": "docs/source-obligation-matrix.json"
+    },
+    {
+      "digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
+      "path": "validator/src/audit/rust/developer.rs"
+    },
+    {
+      "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+      "path": "schemas/rust-devx-receipt.schema.json"
+    },
+    {
+      "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+      "path": "validator/src/cli/rust/mod.rs"
+    }
+  ],
+  "foundational_trace_id": "rust-cache-no-cache-honesty",
+  "law_id": "rust-cache-no-cache-honesty",
+  "law_specific": {
+    "hidden_cache_no_cache_substitution": true,
+    "hidden_rustc_wrapper": true,
+    "warm_cache_as_cold_proof": true
+  },
+  "red_fixture_ids": [
+    "rust-devx-hidden-cache-no-cache-substitution-red",
+    "rust-devx-warm-cache-as-cold-proof-red",
+    "rust-devx-hidden-rustc-wrapper-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "rust-cache-no-cache-honesty",
+  "standards_row_id": "rust-cache-no-cache-honesty",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-cache-no-cache-honesty.json",
+  "validator_check_id": "rust-cache-no-cache-honesty"
+}

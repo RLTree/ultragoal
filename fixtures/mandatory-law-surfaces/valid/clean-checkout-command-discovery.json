@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "clean-checkout-command-discovery",
+  "standards_row_id": "clean-checkout-command-discovery",
+  "source_obligation_id": "clean-checkout-command-discovery",
+  "foundational_trace_id": "clean-checkout-command-discovery",
+  "validator_check_id": "clean-checkout-command-discovery",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/clean-checkout-command-discovery.json",
+  "red_fixture_ids": [
+    "clean-checkout-command-discovery-source-obligation-parity-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt",
+  "behavior_failure_modes": [
+    "clean_checkout_command_discovery_source_obligation_parity"
+  ],
+  "law_specific": {
+    "source_obligation_parity": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

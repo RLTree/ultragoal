@@ -1,0 +1,6 @@
+[database]
+fetch = false
+
+[output]
+format = "json"
+

@@ -1,0 +1,2 @@
+Job to be done: fit a repository with product proof rules without relying on chat memory or reviewer agreement.
+Purpose: binds Product Fitness enforcement to the setup and retrofit job.

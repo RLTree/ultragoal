@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-raw-tool-output-substitution-red",
+  "expected_failure": {
+    "check_id": "rust-developer-experience-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:raw_tool_output_substitution"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/raw_tool_output_substitution",
+      "value": false
+    }
+  ],
+  "notes": "raw Cargo/nextest/deny/audit output cannot satisfy claims without ultragoal receipt conversion",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/raw_tool_output_substitution",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/raw_tool_output_substitution",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:raw_tool_output_substitution"
+    }
+  ]
+}

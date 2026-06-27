@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fresh-init-retrofit-mode-separation-retrofit-writes-outside-allowed-paths-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:fresh-init-retrofit-mode-separation:retrofit_writes_outside_allowed_paths"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/retrofit_writes_outside_allowed_paths",
+      "value": false
+    }
+  ],
+  "notes": "fresh-init-retrofit-mode-separation must fail when retrofit_writes_outside_allowed_paths is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/retrofit_writes_outside_allowed_paths",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/retrofit_writes_outside_allowed_paths",
+      "expectation": "mandatory_law_specific_guard_not_enforced:fresh-init-retrofit-mode-separation:retrofit_writes_outside_allowed_paths"
+    }
+  ]
+}

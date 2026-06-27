@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "dirty-self-reported-clean",
+  "expected_failure": {
+    "check_id": "worktree-teardown",
+    "error": "dirty_self_reported_clean"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/workspace_status/observed_clean",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/workspace_status/dirty_paths",
+      "value": [
+        "src/dirty.rs"
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/workspace_status/observed_clean",
+      "expectation": "dirty observed worktree cannot satisfy clean self-report"
+    }
+  ],
+  "notes": "dirty observed worktree cannot satisfy clean self-report"
+}

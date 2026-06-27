@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-agent-type-mismatch",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_live_registry_agent_mismatch"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/agent_type",
+      "value": "harness_product_simplicity_falsifier"
+    }
+  ],
+  "notes": "a reviewer row must bind each persona to the exact installed custom-agent type",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/agent_type",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0/agent_type",
+      "expectation": "wrong custom-agent type rejected"
+    }
+  ]
+}

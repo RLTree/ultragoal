@@ -1,0 +1,59 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "terminal-cleanup-fake-nonmissing-receipt",
+  "expected_failure": {
+    "check_id": "worktree-teardown",
+    "error": "terminal_cleanup_without_receipt"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/status",
+      "value": "complete"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/teardown/status",
+      "value": "complete"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/lanes/0/teardown/cleanup_receipts",
+      "value": [
+        {
+          "target_kind": "worktree",
+          "target": "/repo-worktree",
+          "action": "removed",
+          "receipt": {
+            "path": "validation_artifacts/cleanup/closeout-receipt.json",
+            "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "post_clean_audit": {
+            "path": "validation_artifacts/cleanup/post-clean-audit.json",
+            "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "notes": "cleanup proof must be byte-checked; plausible non-missing paths and nonzero digests are not enough",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/teardown/cleanup_receipts",
+      "expectation": "fake cleanup artifacts rejected"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "coverage-missing-measured-dimensions",
+  "expected_failure": {
+    "check_id": "coverage-proof-policy",
+    "error": "coverage_claim_missing_dimensions"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "100 percent coverage is complete"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-COV-011",
+        "claim_id": "CLAIM-001",
+        "kind": "coverage_receipt",
+        "surface": "static",
+        "path": "artifacts/static/coverage-missing-dimensions-receipt.json",
+        "digest": "sha256:df0f951a14db4f9c32ff9023d04614d182552afc10ee2253e4d0278b09293b69",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    }
+  ],
+  "notes": "Coverage authority red fixture for coverage_claim_missing_dimensions.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/title",
+      "expectation": "coverage_claim_missing_dimensions"
+    }
+  ]
+}

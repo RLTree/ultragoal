@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-cargo-lock-digest-tamper-red",
+  "expected_failure": {
+    "check_id": "rust-toolchain-substrate-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:cargo_lock_digest_tamper"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/cargo_lock_digest_tamper",
+      "value": false
+    }
+  ],
+  "notes": "changed Cargo.lock digest invalidates Rust proof",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/cargo_lock_digest_tamper",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/cargo_lock_digest_tamper",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:cargo_lock_digest_tamper"
+    }
+  ]
+}

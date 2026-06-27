@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "omitted-custom-agent-toml",
+  "expected_failure": {
+    "check_id": "schema-valid",
+    "error": "plugin_agent_path_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/plugin_manifest/agents/7/path",
+      "value": "custom-agents/missing-contract-claim-falsifier.toml"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/agents/6/path",
+      "expectation": "plugin_agent_path_missing"
+    }
+  ],
+  "notes": "schema validation rejects missing app-visible TOML custom agent path before semantic inventory runs"
+}

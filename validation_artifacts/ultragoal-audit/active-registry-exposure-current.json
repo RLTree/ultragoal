@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+  "captured_at": "2026-06-25T22:19:57Z",
+  "source": "multi_agent_v1.tool_registry",
+  "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
+  "round_id": "source-compliance-hardening-2026-06-25-0.0.11",
+  "agent_types": [
+    {
+      "agent_type": "harness_contract_claim_falsifier",
+      "persona": "contract_claim_falsifier",
+      "custom_agent_path": "custom-agents/harness-contract-claim-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_orchestration_recovery_falsifier",
+      "persona": "orchestration_recovery_falsifier",
+      "custom_agent_path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_security_trust_boundary_falsifier",
+      "persona": "security_trust_boundary_falsifier",
+      "custom_agent_path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    },
+    {
+      "agent_type": "harness_product_simplicity_falsifier",
+      "persona": "product_simplicity_falsifier",
+      "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
+      "disk_cache_synced": true,
+      "global_toml_present": true,
+      "exposed": true
+    }
+  ]
+}

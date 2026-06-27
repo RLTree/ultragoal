@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "memory-wiki-context-only",
+  "standards_row_id": "memory-wiki-context-only",
+  "source_obligation_id": "memory-wiki-context-only",
+  "foundational_trace_id": "memory-wiki-context-only",
+  "validator_check_id": "memory-wiki-context-only",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/memory-wiki-context-only.json",
+  "red_fixture_ids": [
+    "memory-wiki-context-only-source-obligation-parity-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence",
+  "behavior_failure_modes": [
+    "memory_wiki_context_only_source_obligation_parity"
+  ],
+  "law_specific": {
+    "source_obligation_parity": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

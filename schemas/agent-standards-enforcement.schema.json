@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/agent-standards-enforcement.schema.json",
+  "title": "Harness Ultragoal Agent Standards Enforcement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "rows"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.agent-standards-enforcement.v1"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source_law",
+          "required_behavior",
+          "enforcement_status",
+          "gate_or_fixture_path",
+          "owner_lane",
+          "claim_ids_affected",
+          "required_execplan_refs",
+          "current_status",
+          "blocker_or_repair_action"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "source_law": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_behavior": {
+            "type": "string",
+            "minLength": 1
+          },
+          "enforcement_status": {
+            "enum": [
+              "mechanized",
+              "backlogged",
+              "blocked",
+              "informational",
+              "unclassified"
+            ]
+          },
+          "gate_or_fixture_path": {
+            "type": "string"
+          },
+          "owner_lane": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_ids_affected": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_execplan_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "harness-ultragoal-plans-and-orchestrator-automation-hardening.md",
+                "mandatory-coverage-authority-and-enforcement.md",
+                "mandatory-coverage-scope-authority-and-anti-theater.md",
+                "mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+                "mandatory-product-fitness-quality-in-use-enforcement.md"
+              ]
+            }
+          },
+          "current_status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blocker_or_repair_action": {
+            "type": "string"
+          }
+        }
+      },
+      "uniqueItems": true
+    }
+  }
+}

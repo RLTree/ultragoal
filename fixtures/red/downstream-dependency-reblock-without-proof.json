@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-reblock-without-proof",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_release_missing"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/1/dependency_release/action",
+      "value": "reblock"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/1/dependency_release/reason",
+      "value": "Generic reblock with no proof despite upstream merge and root verification."
+    }
+  ],
+  "notes": "A reblock action after dependency release must carry structured blocker proof tied to lane state.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/valid/two-lane-ready-dependency.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/1/dependency_release/action",
+      "expectation": "dependency_release_missing"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "semantic_classification_required_gate_unproven remains the first failing error"
+    }
+  ],
+  "id": "semantic-classification-human-publication-required-gate-omitted",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_required_gate_unproven"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-human-publication-required-gate-omitted.semantic-classification-receipt.json",
+          "digest": "sha256:6f316c606933e9c9a8d71b54d0a5316646cd127be690411945ec4b61e2e388ba"
+        }
+      ]
+    }
+  ],
+  "notes": "human publication receipt cannot omit publication_external_attestation"
+}

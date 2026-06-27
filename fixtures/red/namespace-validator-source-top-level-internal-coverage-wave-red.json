@@ -1,0 +1,41 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-top-level-internal-coverage-wave-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_validator_source_top_level_internal_cluster"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/internal_coverage_wave99_tests.rs"
+    }
+  ],
+  "notes": "Top-level validator internal coverage-wave files are repo-owned source topology failures, even when the package manifest lists them.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "expectation": "namespace_validator_source_top_level_internal_cluster"
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "file",
+      "path": "validator/src/internal_coverage_wave99_tests.rs",
+      "contents": "#[test]\nfn bad_history_cluster() {}\n"
+    }
+  ]
+}

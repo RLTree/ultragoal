@@ -1,0 +1,4 @@
+Title: Parse, don't validate
+URL: https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/
+Retrieved at: 2026-06-16T00:00:00Z
+Used for: typed boundary records, preserving validation knowledge in data structures

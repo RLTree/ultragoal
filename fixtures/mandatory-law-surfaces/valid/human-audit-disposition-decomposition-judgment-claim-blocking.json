@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+  "standards_row_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+  "source_obligation_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+  "foundational_trace_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+  "validator_check_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+  "red_fixture_ids": [
+    "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-human-audit-closing-mandatory-law-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-judgment-review-without-deterministic-sibling-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-reviewer-signoff-used-as-validator-proof-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-semantic-review-raising-claim-ceiling-without-evidence-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-source-obligation-row-with-deterministic-with-human-audit-red",
+    "human-audit-disposition-decomposition-judgment-claim-blocking-full-compliance-claim-with-judgment-only-residue-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "mandatory_law_claims_withheld_without_deterministic_split_and_judgment_only_blocker",
+  "behavior_failure_modes": [
+    "human_audit_disposition_decomposition_judgment_claim_blocking_hybrid_disposition_accepted",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_human_audit_closing_mandatory_law",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_judgment_review_without_deterministic_sibling",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_reviewer_signoff_used_as_validator_proof",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_semantic_review_raising_claim_ceiling_without_evidence",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_source_obligation_row_with_deterministic_with_human_audit",
+    "human_audit_disposition_decomposition_judgment_claim_blocking_full_compliance_claim_with_judgment_only_residue"
+  ],
+  "law_specific": {
+    "hybrid_disposition_accepted": true,
+    "human_audit_closing_mandatory_law": true,
+    "judgment_review_without_deterministic_sibling": true,
+    "reviewer_signoff_used_as_validator_proof": true,
+    "semantic_review_raising_claim_ceiling_without_evidence": true,
+    "source_obligation_row_with_deterministic_with_human_audit": true,
+    "full_compliance_claim_with_judgment_only_residue": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

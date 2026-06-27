@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-strategy-positioning-research-eval-before-lane-planning-continuance-signal-missing-red",
+  "expected_failure": {
+    "check_id": "product-strategy-positioning-research-eval-before-lane-planning",
+    "error": "mandatory_law_specific_guard_not_enforced:product-strategy-positioning-research-eval-before-lane-planning:continuance_signal_missing"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-strategy-positioning-research-eval-before-lane-planning.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/continuance_signal_missing",
+      "value": false
+    }
+  ],
+  "notes": "product-strategy-positioning-research-eval-before-lane-planning must fail when continuance_signal_missing is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/continuance_signal_missing",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/continuance_signal_missing",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-strategy-positioning-research-eval-before-lane-planning:continuance_signal_missing"
+    }
+  ]
+}

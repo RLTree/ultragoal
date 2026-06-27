@@ -1,0 +1,22 @@
+{
+  "schema": "harness-ultragoal.product-template-generation-receipt.v1",
+  "receipt_version": "1.0.0",
+  "template_creator_disposition": "not_used_repo_owned_templates_validated",
+  "tool_id": "not_used",
+  "generated_outputs": [
+    "templates/PRODUCT_SUCCESS_CONTRACT.md",
+    "templates/PRODUCT_SUCCESS_BRIEF.md",
+    "templates/PRODUCT_STRATEGY.md",
+    "templates/PRODUCT_POSITIONING.md",
+    "templates/PRODUCT_RESEARCH_NOTES.md",
+    "templates/PRODUCT_EVAL_PROTOCOL.md",
+    "templates/PRODUCT_EVIDENCE_MATRIX.md",
+    "templates/PRODUCT_REVIEW_DISPOSITION.md"
+  ],
+  "retained_references": [],
+  "operator": "harness-ultragoal-validator",
+  "generated_at": "2026-06-25T00:00:00Z",
+  "manual_edits": [],
+  "claim_ceiling": "package_static_fixture_only",
+  "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

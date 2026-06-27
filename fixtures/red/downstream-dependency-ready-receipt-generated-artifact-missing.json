@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-ready-receipt-generated-artifact-missing",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_not_validator_output"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/validator_receipt/generated_artifacts/4"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/validator_receipt/generated_artifacts/4/path",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/generated_artifacts",
+      "expectation": "per-lane ready receipt must be present as a generated validator artifact"
+    }
+  ],
+  "notes": "A per-lane ready receipt cannot authorize dependency launch unless the validator receipt generated-artifact ledger contains the exact byte-backed ready artifact."
+}

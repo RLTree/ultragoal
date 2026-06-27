@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/promotion-receipt.schema.json",
+  "title": "Harness Ultragoal Promotion Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "promotion_target",
+    "claim_id",
+    "validator_receipt",
+    "review_target",
+    "candidate_archive",
+    "sign_off_review",
+    "decision"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.promotion-receipt.v1"
+    },
+    "status": {
+      "const": "pass"
+    },
+    "promotion_target": {
+      "enum": [
+        "install_visibility",
+        "upload_distribution",
+        "publication"
+      ]
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validator_receipt": {
+      "$ref": "#/$defs/validatorReceiptAnchor"
+    },
+    "review_target": {
+      "$ref": "#/$defs/reviewTargetAnchor"
+    },
+    "candidate_archive": {
+      "$ref": "#/$defs/candidateArchiveAnchor"
+    },
+    "sign_off_review": {
+      "$ref": "#/$defs/signOffReviewAnchor"
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approved",
+        "promoted_at",
+        "approver_actor_id"
+      ],
+      "properties": {
+        "approved": {
+          "const": true
+        },
+        "promoted_at": {
+          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+        },
+        "approver_actor_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "$defs": {
+    "artifactAnchor": {
+      "type": "object",
+      "required": [
+        "path",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        }
+      }
+    },
+    "validatorReceiptAnchor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/artifactAnchor"
+        },
+        {
+          "type": "object",
+          "required": [
+            "run_id",
+            "package_digest"
+          ],
+          "properties": {
+            "run_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "package_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "reviewTargetAnchor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/artifactAnchor"
+        },
+        {
+          "type": "object",
+          "required": [
+            "review_target_digest",
+            "package_digest"
+          ],
+          "properties": {
+            "review_target_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            },
+            "package_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "candidateArchiveAnchor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/artifactAnchor"
+        },
+        {
+          "type": "object",
+          "required": [
+            "archive_purpose",
+            "package_digest"
+          ],
+          "properties": {
+            "archive_purpose": {
+              "const": "candidate_review_anchor"
+            },
+            "package_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "signOffReviewAnchor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/artifactAnchor"
+        },
+        {
+          "type": "object",
+          "required": [
+            "status",
+            "round_phase",
+            "validator_run_id",
+            "review_target_digest",
+            "archive_digest"
+          ],
+          "properties": {
+            "status": {
+              "const": "pass"
+            },
+            "round_phase": {
+              "const": "sign_off"
+            },
+            "validator_run_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "review_target_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            },
+            "archive_digest": {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

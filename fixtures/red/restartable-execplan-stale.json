@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "restartable-execplan-stale",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "restartable_execplan_stale"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/stale",
+      "value": true
+    }
+  ],
+  "notes": "ExecPlan receipt fails when stale.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/restartable-execplan-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/stale",
+      "expectation": "restartable_execplan_stale"
+    }
+  ]
+}

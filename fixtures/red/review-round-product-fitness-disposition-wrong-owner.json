@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-product-fitness-disposition-wrong-owner",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_product_fitness_disposition_unowned"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/3/product_fitness_disposition/owner_persona",
+      "value": "none"
+    }
+  ],
+  "notes": "Product Fitness disposition must be owned by Product/Simplicity, not by nobody or an unnamed reviewer.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": false,
+    "post_patch_schema_valid": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3/persona",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/3",
+      "expectation": "review_round_product_fitness_disposition_unowned"
+    }
+  ]
+}

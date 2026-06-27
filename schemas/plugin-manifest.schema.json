@@ -1,0 +1,642 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/plugin-manifest.schema.json",
+  "title": "Harness Ultragoal Plugin Manifest",
+  "type": "object",
+  "required": [
+    "name",
+    "version",
+    "status",
+    "purpose",
+    "skills",
+    "agents",
+    "authorable_templates",
+    "generated_examples",
+    "schemas",
+    "fixtures",
+    "optional_connectors",
+    "non_goals",
+    "schema_catalog",
+    "resources"
+  ],
+  "properties": {
+    "name": {
+      "const": "harness-ultragoal"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "proposal",
+        "implementation",
+        "released"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "path",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "ultragoal"
+              },
+              "path": {
+                "const": "skills/ultragoal/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-engineering"
+              },
+              "path": {
+                "const": "skills/harness-engineering/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "agent-first-repo-init"
+              },
+              "path": {
+                "const": "skills/agent-first-repo-init/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "agent-first-repo-retrofit"
+              },
+              "path": {
+                "const": "skills/agent-first-repo-retrofit/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "agent-runtime-legibility"
+              },
+              "path": {
+                "const": "skills/agent-runtime-legibility/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "agent-observability-stack"
+              },
+              "path": {
+                "const": "skills/agent-observability-stack/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "execplan-lane"
+              },
+              "path": {
+                "const": "skills/execplan-lane/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "orchestrator-reconciler"
+              },
+              "path": {
+                "const": "skills/orchestrator-reconciler/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "proof-gate"
+              },
+              "path": {
+                "const": "skills/proof-gate/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "standards-gardener"
+              },
+              "path": {
+                "const": "skills/standards-gardener/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "product-cohesion-gate"
+              },
+              "path": {
+                "const": "skills/product-cohesion-gate/SKILL.md"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        }
+      ]
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "path"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "app_visible_name": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "contract-claim-falsifier"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "orchestration-recovery-falsifier"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "security-trust-boundary-falsifier"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "product-simplicity-falsifier"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "plugin-scout"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "standards-extractor"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-contract-claim-falsifier"
+              },
+              "path": {
+                "const": "custom-agents/harness-contract-claim-falsifier.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-orchestration-recovery-falsifier"
+              },
+              "path": {
+                "const": "custom-agents/harness-orchestration-recovery-falsifier.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-security-trust-boundary-falsifier"
+              },
+              "path": {
+                "const": "custom-agents/harness-security-trust-boundary-falsifier.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-product-simplicity-falsifier"
+              },
+              "path": {
+                "const": "custom-agents/harness-product-simplicity-falsifier.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-repo-initializer"
+              },
+              "path": {
+                "const": "custom-agents/harness-repo-initializer.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "name": {
+                "const": "harness-retrofit-planner"
+              },
+              "path": {
+                "const": "custom-agents/harness-retrofit-planner.toml"
+              }
+            },
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        }
+      ],
+      "uniqueItems": true
+    },
+    "schemas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "optional_connectors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "non_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "schema_catalog": {
+      "type": "string"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "authorable_templates": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "not": {
+          "pattern": "(^examples/generated/|READY_FOR_MERGE|VALIDATOR_RECEIPT)"
+        }
+      },
+      "minItems": 10,
+      "allOf": [
+        {
+          "contains": {
+            "const": "templates/AGENTS.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/AGENT_STANDARDS.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/PLANS.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/GOAL_CONTRACT.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/LANE_REGISTRY.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/LANE_EXECPLAN.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/COMPLETION_MANIFEST.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/VERIFICATION_BACKLOG.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/AMENDMENTS.jsonl"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/RED_FIXTURES.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/ARCHITECTURE.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/DESIGN.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/FRONTEND.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/PRODUCT_SENSE.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/QUALITY_SCORE.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/RELIABILITY.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/SECURITY.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/design-docs/index.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/design-docs/core-beliefs.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/exec-plans/tech-debt-tracker.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/generated/index.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/product-specs/index.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "templates/docs/references/index.md"
+          }
+        }
+      ]
+    },
+    "generated_examples": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^examples/generated/"
+      },
+      "minItems": 1,
+      "allOf": [
+        {
+          "contains": {
+            "const": "examples/generated/READY_FOR_MERGE.example.json"
+          }
+        }
+      ]
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "custom_agents"
+        ]
+      },
+      {
+        "required": [
+          "templates"
+        ]
+      }
+    ]
+  },
+  "additionalProperties": false
+}

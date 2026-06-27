@@ -1,0 +1,77 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "promotion-candidate-archive-substitution",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "promotion_receipt_invalid"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Plugin uploaded for workspace distribution"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces/-",
+      "value": "external"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-PROMOTION-SUBSTITUTION-001",
+        "claim_id": "CLAIM-001",
+        "kind": "promotion_receipt",
+        "surface": "external",
+        "path": "fixtures/review-round/anchors/archive-receipt.json",
+        "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:c0a187f3e64399e11e319b63ec2cf57dc8cbeb8f17fffa513d3c32532853e499",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": true,
+        "distribution_claim": true,
+        "rationale": "Independent deterministic classification attached so this red packet tests promotion proof substitution."
+      }
+    }
+  ],
+  "notes": "A candidate_review_anchor archive receipt is review identity, not upload, release, distribution, publication, or install proof.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/1/path",
+      "expectation": "promotion_receipt_invalid"
+    }
+  ]
+}

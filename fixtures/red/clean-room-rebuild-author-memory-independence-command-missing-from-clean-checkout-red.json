@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
+  "expected_failure": {
+    "check_id": "clean-room-rebuild-author-memory-independence",
+    "error": "mandatory_law_specific_guard_not_enforced:clean-room-rebuild-author-memory-independence:command_missing_from_clean_checkout"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/clean-room-rebuild-author-memory-independence.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/command_missing_from_clean_checkout",
+      "value": false
+    }
+  ],
+  "notes": "clean-room-rebuild-author-memory-independence must fail when command_missing_from_clean_checkout is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/command_missing_from_clean_checkout",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/command_missing_from_clean_checkout",
+      "expectation": "mandatory_law_specific_guard_not_enforced:clean-room-rebuild-author-memory-independence:command_missing_from_clean_checkout"
+    }
+  ]
+}

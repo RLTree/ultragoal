@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "target-repo-audit-capability-generic-repo-support-overclaim-red",
+  "expected_failure": {
+    "check_id": "target-repo-audit-capability",
+    "error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/generic_repo_support_overclaim",
+      "value": false
+    }
+  ],
+  "notes": "target-repo-audit-capability must fail when generic_repo_support_overclaim is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/generic_repo_support_overclaim",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/generic_repo_support_overclaim",
+      "expectation": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim"
+    }
+  ]
+}

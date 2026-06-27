@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "automation-active-unresolved-placeholders",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "automation_unresolved_placeholder_active"
+  },
+  "base_fixture_path": "fixtures/template-integrity/valid/template-integrity.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/activation_candidate",
+      "value": true
+    }
+  ],
+  "notes": "An activation candidate cannot retain unresolved placeholders.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/activation_candidate",
+      "expectation": "automation_unresolved_placeholder_active"
+    }
+  ]
+}

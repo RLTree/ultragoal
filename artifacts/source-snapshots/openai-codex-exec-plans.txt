@@ -1,0 +1,4 @@
+Title: Codex Exec Plans
+URL: https://developers.openai.com/cookbook/articles/codex_exec_plans
+Retrieved at: 2026-06-16T00:00:00Z
+Used for: restartable plans, living implementation contracts, demonstrably working behavior

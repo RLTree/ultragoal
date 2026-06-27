@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-success-lineage-amendments-closed-product-claim-ids",
+  "standards_row_id": "product-success-lineage-amendments-closed-product-claim-ids",
+  "source_obligation_id": "product-success-lineage-amendments-closed-product-claim-ids",
+  "foundational_trace_id": "product-success-lineage-amendments-closed-product-claim-ids",
+  "validator_check_id": "product-success-lineage-amendments-closed-product-claim-ids",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-lineage-amendments-closed-product-claim-ids.json",
+  "red_fixture_ids": [
+    "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-unknown-product-success-contract-id-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-stale-product-success-contract-id-in-receipt-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-product-fitness-orphan-receipt-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-product-cohesion-orphan-receipt-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-product-packet-claim-unmapped-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-product-claim-duplicated-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-broad-umbrella-product-claim-hiding-child-obligations-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-weakening-amendment-without-approval-red",
+    "product-success-lineage-amendments-closed-product-claim-ids-side-thread-product-requirement-not-amended-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_claims_withheld_without_lineage_amendments_and_closed_product_claim_ids",
+  "behavior_failure_modes": [
+    "product_success_lineage_amendments_closed_product_claim_ids_late_product_readiness_claim",
+    "product_success_lineage_amendments_closed_product_claim_ids_unknown_product_success_contract_id",
+    "product_success_lineage_amendments_closed_product_claim_ids_stale_product_success_contract_id_in_receipt",
+    "product_success_lineage_amendments_closed_product_claim_ids_product_fitness_orphan_receipt",
+    "product_success_lineage_amendments_closed_product_claim_ids_product_cohesion_orphan_receipt",
+    "product_success_lineage_amendments_closed_product_claim_ids_product_packet_claim_unmapped",
+    "product_success_lineage_amendments_closed_product_claim_ids_product_claim_duplicated",
+    "product_success_lineage_amendments_closed_product_claim_ids_broad_umbrella_product_claim_hiding_child_obligations",
+    "product_success_lineage_amendments_closed_product_claim_ids_weakening_amendment_without_approval",
+    "product_success_lineage_amendments_closed_product_claim_ids_side_thread_product_requirement_not_amended"
+  ],
+  "law_specific": {
+    "late_product_readiness_claim": true,
+    "unknown_product_success_contract_id": true,
+    "stale_product_success_contract_id_in_receipt": true,
+    "product_fitness_orphan_receipt": true,
+    "product_cohesion_orphan_receipt": true,
+    "product_packet_claim_unmapped": true,
+    "product_claim_duplicated": true,
+    "broad_umbrella_product_claim_hiding_child_obligations": true,
+    "weakening_amendment_without_approval": true,
+    "side_thread_product_requirement_not_amended": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

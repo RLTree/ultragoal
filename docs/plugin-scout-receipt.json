@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.plugin-scout-receipt.v1",
+  "actor_id": "package-builder",
+  "discovery_surface": "Codex side conversation available plugin and skill metadata",
+  "observed_at": "2026-06-16T00:00:00Z",
+  "raw_or_redacted_output": {
+    "path": "artifacts/plugin-scout/available-plugin-summary.txt",
+    "digest": "sha256:84e221dd1f2721de12c31b83472b2d125c2f9210ea77b9707cc21878a3e0144c"
+  },
+  "decisions": [
+    {
+      "name": "Superpowers",
+      "decision": "recommended",
+      "rationale": "planning and disciplined workflow method references",
+      "must_not_own": "proof or completion authority"
+    },
+    {
+      "name": "Compound Engineering",
+      "decision": "recommended",
+      "rationale": "compound review, worktree, proof, and design-review patterns",
+      "must_not_own": "project-local contracts"
+    },
+    {
+      "name": "Domain-specific plugins",
+      "decision": "skipped",
+      "rationale": "not core to ultragoal correctness",
+      "must_not_own": "goal-run correctness"
+    }
+  ]
+}

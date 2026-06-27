@@ -1,0 +1,44 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "lane-actor-binding",
+    "error": "actor_identity_older_than_heartbeat"
+  },
+  "id": "actor-validation-older-than-heartbeat",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/last_heartbeat",
+      "value": "2026-06-16T00:00:01Z"
+    },
+    {
+      "op": "replace",
+      "path": "/ready_for_merge/lane_registry_digest",
+      "value": "sha256:d4e75574d9c35d69ab892871a93f3404a4b9ae5815fbdb3fab7b91a863c5a430"
+    },
+    {
+      "op": "replace",
+      "path": "/automation_tick_receipt/freshness_policy/clock_at_validation",
+      "value": "2026-06-16T00:00:02Z"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "included ready-for-merge claim must be bound to one current clean lane with no blockers",
+  "postconditions": [
+    {
+      "expectation": "actor_identity_older_than_heartbeat",
+      "path": "/lane_registry/lanes/0/last_heartbeat"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

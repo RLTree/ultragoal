@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "wrong-worktree-or-root",
+  "expected_failure": {
+    "check_id": "workspace-binding",
+    "error": "evidence_wrong_workspace"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence/0/workspace",
+      "value": "MUTATED"
+    }
+  ],
+  "notes": "replace evidence workspace with unrelated root",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/0/workspace",
+      "expectation": "evidence_wrong_workspace"
+    }
+  ]
+}

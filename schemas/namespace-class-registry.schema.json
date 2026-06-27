@@ -1,0 +1,95 @@
+{
+  "$id": "https://harness-ultragoal.local/schemas/namespace-class-registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.namespace-class-registry.v1"
+    },
+    "classes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "build_manifest",
+              "connector",
+              "documentation",
+              "example",
+              "executable_script",
+              "external_compatibility",
+              "fixture_catalog",
+              "generated_artifact",
+              "public_distribution",
+              "repo_source",
+              "template"
+            ]
+          },
+          "surface_globs": {
+            "items": {
+              "minLength": 1,
+              "not": {
+                "anyOf": [
+                  {
+                    "pattern": "^/"
+                  },
+                  {
+                    "pattern": "\\.\\."
+                  }
+                ]
+              },
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "authority": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "authority_path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maximal_factoring_required": {
+            "const": true
+          },
+          "waiver_allowed": {
+            "const": false
+          },
+          "claim_ceiling_impact": {
+            "const": "classifies_surface_without_raising_claim_ceiling"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "surface_globs",
+          "description",
+          "authority",
+          "authority_path",
+          "maximal_factoring_required",
+          "waiver_allowed",
+          "claim_ceiling_impact"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "classes"
+  ],
+  "title": "Harness Ultragoal Namespace Class Registry",
+  "type": "object"
+}

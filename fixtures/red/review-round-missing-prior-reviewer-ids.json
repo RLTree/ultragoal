@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-missing-prior-reviewer-ids",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_prior_reviewer_ids_missing"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/prior_round_reviewer_agent_ids"
+    }
+  ],
+  "notes": "fresh-context review rounds must bind the prior reviewer id universe instead of omitting it",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/prior_round_reviewer_agent_ids",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/prior_round_reviewer_agent_ids",
+      "expectation": "missing prior reviewer ids rejected"
+    }
+  ]
+}

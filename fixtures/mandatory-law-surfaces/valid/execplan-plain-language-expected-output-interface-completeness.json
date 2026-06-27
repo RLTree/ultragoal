@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "execplan-plain-language-expected-output-interface-completeness",
+  "standards_row_id": "execplan-plain-language-expected-output-interface-completeness",
+  "source_obligation_id": "execplan-plain-language-expected-output-interface-completeness",
+  "foundational_trace_id": "execplan-plain-language-expected-output-interface-completeness",
+  "validator_check_id": "execplan-plain-language-expected-output-interface-completeness",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json",
+  "red_fixture_ids": [
+    "execplan-plain-language-expected-output-interface-completeness-terms-defined-red",
+    "execplan-plain-language-expected-output-interface-completeness-inputs-outputs-dependencies-red",
+    "execplan-plain-language-expected-output-interface-completeness-interfaces-recorded-red",
+    "execplan-plain-language-expected-output-interface-completeness-commands-expected-outputs-red",
+    "execplan-plain-language-expected-output-interface-completeness-artifact-evidence-red",
+    "execplan-plain-language-expected-output-interface-completeness-recovery-path-red",
+    "execplan-plain-language-expected-output-interface-completeness-no-author-memory-dependency-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "execplan_claims_withheld_without_plain_language_interface_receipt",
+  "behavior_failure_modes": [
+    "execplan_plain_language_expected_output_interface_completeness_terms_defined",
+    "execplan_plain_language_expected_output_interface_completeness_inputs_outputs_dependencies",
+    "execplan_plain_language_expected_output_interface_completeness_interfaces_recorded",
+    "execplan_plain_language_expected_output_interface_completeness_commands_expected_outputs",
+    "execplan_plain_language_expected_output_interface_completeness_artifact_evidence",
+    "execplan_plain_language_expected_output_interface_completeness_recovery_path",
+    "execplan_plain_language_expected_output_interface_completeness_no_author_memory_dependency"
+  ],
+  "law_specific": {
+    "terms_defined": true,
+    "inputs_outputs_dependencies": true,
+    "interfaces_recorded": true,
+    "commands_expected_outputs": true,
+    "artifact_evidence": true,
+    "recovery_path": true,
+    "no_author_memory_dependency": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

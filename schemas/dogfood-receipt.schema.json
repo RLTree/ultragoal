@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/dogfood-receipt.schema.json",
+  "title": "Harness Ultragoal Dogfood Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "claim_id",
+    "lanes",
+    "root_owed_follow_up",
+    "external_review"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.dogfood-receipt.v1"
+    },
+    "status": {
+      "const": "pass"
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lanes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lane_id",
+          "workspace",
+          "macro_lane",
+          "lane_owed_repair",
+          "cleanup"
+        ],
+        "properties": {
+          "lane_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "workspace": {
+            "type": "string",
+            "minLength": 1
+          },
+          "macro_lane": {
+            "type": "boolean"
+          },
+          "lane_owed_repair": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "closed",
+                  "not_applicable",
+                  "open"
+                ]
+              }
+            }
+          },
+          "cleanup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "stale_worktree_present"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "cleaned",
+                  "stale",
+                  "not_run"
+                ]
+              },
+              "stale_worktree_present": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "root_owed_follow_up": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "final_manifest_clean"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "closed",
+            "open"
+          ]
+        },
+        "final_manifest_clean": {
+          "type": "boolean"
+        }
+      }
+    },
+    "external_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "missing",
+            "blocked"
+          ]
+        }
+      }
+    }
+  }
+}

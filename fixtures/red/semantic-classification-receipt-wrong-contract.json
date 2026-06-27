@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "semantic-classification-receipt-wrong-contract",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_receipt_contract_mismatch"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts/0",
+      "value": {
+        "path": "fixtures/semantic-classification/wrong-contract-receipt.json",
+        "digest": "sha256:79354aba430b0191de085d8351b84ad0011f0890662da117989e72716903411c"
+      }
+    }
+  ],
+  "notes": "semantic classification receipts must use the pinned classifier contract id and version",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts/0",
+      "expectation": "semantic_classification_receipt_contract_mismatch"
+    }
+  ]
+}

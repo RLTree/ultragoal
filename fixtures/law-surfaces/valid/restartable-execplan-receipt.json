@@ -1,0 +1,27 @@
+{
+  "schema": "harness-ultragoal.restartable-execplan-receipt.v1",
+  "active_execplan_paths": [
+    "docs/exec-plans/active/harness-ultragoal-plans-and-orchestrator-automation-hardening.md",
+    "docs/exec-plans/active/mandatory-coverage-authority-and-enforcement.md",
+    "docs/exec-plans/active/mandatory-coverage-scope-authority-and-anti-theater.md",
+    "docs/exec-plans/active/mandatory-plugin-product-cohesion-and-fit-repo-authority.md",
+    "docs/exec-plans/active/mandatory-product-fitness-quality-in-use-enforcement.md",
+    "docs/exec-plans/active/rust-validator-migration-ultragoal.md",
+    "docs/exec-plans/active/standards-orchestration-product-cohesion-ultragoal.md"
+  ],
+  "required_sections": {
+    "purpose": true,
+    "user_outcome": true,
+    "steps": true,
+    "progress": true,
+    "discoveries": true,
+    "decisions": true,
+    "validation_commands": true,
+    "idempotence": true,
+    "recovery": true,
+    "working_behavior": true
+  },
+  "stale": false,
+  "prose_only": false,
+  "claim_ceiling": "restartable_execplans_enforced"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "non-e2e-claim-ceiling-confidence-bounds-reviewer-ready-claim-without-current-reviewer-exposure-red",
+  "expected_failure": {
+    "check_id": "non-e2e-claim-ceiling-confidence-bounds",
+    "error": "mandatory_law_specific_guard_not_enforced:non-e2e-claim-ceiling-confidence-bounds:reviewer_ready_claim_without_current_reviewer_exposure"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/reviewer_ready_claim_without_current_reviewer_exposure",
+      "value": false
+    }
+  ],
+  "notes": "non-e2e-claim-ceiling-confidence-bounds must fail when reviewer_ready_claim_without_current_reviewer_exposure is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/reviewer_ready_claim_without_current_reviewer_exposure",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/reviewer_ready_claim_without_current_reviewer_exposure",
+      "expectation": "mandatory_law_specific_guard_not_enforced:non-e2e-claim-ceiling-confidence-bounds:reviewer_ready_claim_without_current_reviewer_exposure"
+    }
+  ]
+}

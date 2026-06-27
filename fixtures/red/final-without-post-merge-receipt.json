@@ -1,0 +1,59 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "final-without-post-merge-receipt",
+  "expected_failure": {
+    "check_id": "root-verification-phase-coverage",
+    "error": "final_gate_without_post_merge_receipt"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/status",
+      "value": "pass"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/command_receipt",
+      "value": {
+        "id": "cmd-final",
+        "command": "echo forged final",
+        "cwd": "/repo",
+        "exit": 0,
+        "started_at": "2026-06-16T00:00:00Z",
+        "completed_at": "2026-06-16T00:00:00Z"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/artifact_receipt",
+      "value": {
+        "path": "missing-post-merge.json",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/validated_at",
+      "value": "2026-06-16T00:00:00Z"
+    }
+  ],
+  "notes": "set final phase pass without post-merge artifact",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/validated_at",
+      "expectation": "final_gate_without_post_merge_receipt"
+    }
+  ]
+}

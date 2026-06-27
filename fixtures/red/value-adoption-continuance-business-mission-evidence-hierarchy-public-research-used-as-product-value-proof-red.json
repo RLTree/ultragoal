@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "value-adoption-continuance-business-mission-evidence-hierarchy-public-research-used-as-product-value-proof-red",
+  "expected_failure": {
+    "check_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+    "error": "mandatory_law_specific_guard_not_enforced:value-adoption-continuance-business-mission-evidence-hierarchy:public_research_used_as_product_value_proof"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/value-adoption-continuance-business-mission-evidence-hierarchy.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/public_research_used_as_product_value_proof",
+      "value": false
+    }
+  ],
+  "notes": "value-adoption-continuance-business-mission-evidence-hierarchy must fail when public_research_used_as_product_value_proof is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/public_research_used_as_product_value_proof",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/public_research_used_as_product_value_proof",
+      "expectation": "mandatory_law_specific_guard_not_enforced:value-adoption-continuance-business-mission-evidence-hierarchy:public_research_used_as_product_value_proof"
+    }
+  ]
+}

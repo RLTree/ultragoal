@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "forward-only-state-transition-integrity-silent-reopen-prevention-final-packet-changes-blocked-to-fixed-by-prose-red",
+  "expected_failure": {
+    "check_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+    "error": "mandatory_law_specific_guard_not_enforced:forward-only-state-transition-integrity-silent-reopen-prevention:final_packet_changes_blocked_to_fixed_by_prose"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/final_packet_changes_blocked_to_fixed_by_prose",
+      "value": false
+    }
+  ],
+  "notes": "forward-only-state-transition-integrity-silent-reopen-prevention must fail when final_packet_changes_blocked_to_fixed_by_prose is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/final_packet_changes_blocked_to_fixed_by_prose",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/final_packet_changes_blocked_to_fixed_by_prose",
+      "expectation": "mandatory_law_specific_guard_not_enforced:forward-only-state-transition-integrity-silent-reopen-prevention:final_packet_changes_blocked_to_fixed_by_prose"
+    }
+  ]
+}

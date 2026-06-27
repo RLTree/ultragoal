@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-ready-only-before-root-verification",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_claim_not_proven"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/status",
+      "value": "ready_for_review"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "value": "pending"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/lanes/1/dependencies/0/upstream_lane_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/1/dependencies/0/upstream_lane_id",
+      "expectation": "ready-only upstream dependency cannot unblock downstream implementation"
+    }
+  ],
+  "notes": "Downstream implementation cannot consume an upstream claim until upstream is landed and root post-merge verification passed."
+}

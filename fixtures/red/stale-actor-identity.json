@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-actor-identity",
+  "expected_failure": {
+    "check_id": "lane-actor-binding",
+    "error": "stale_actor_identity"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/actor_binding/actor_status",
+      "value": "stale"
+    }
+  ],
+  "notes": "set lane actor status stale while leaving heartbeat freshness untouched",
+  "materialization": {
+    "expected_validation_layer": "schema",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/actor_binding/actor_status",
+      "expectation": "stale_actor_identity"
+    }
+  ]
+}

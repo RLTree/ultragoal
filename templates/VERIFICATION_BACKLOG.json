@@ -1,0 +1,12 @@
+{
+  "template_kind": "harness-ultragoal.authoring-template.v1",
+  "target_schema": "harness-ultragoal.verification-backlog.v1",
+  "canonical_output": "VERIFICATION_BACKLOG.json",
+  "authority": "authoring-template-only; not evidence until generated from unmet claims",
+  "required_generation": [
+    "Every skipped or failed check is classified as lane_owed, root_owed, externally_blocked, or withheld_claim.",
+    "Each row names owner, required proof, attempts, next action, and claim ceiling impact.",
+    "Unmechanized or blocked standards rows from agent-standards/enforcement.* generate backlog rows or withheld claims.",
+    "Do not include zero-digest placeholder evidence."
+  ]
+}

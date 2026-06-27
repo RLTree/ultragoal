@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "stale-proof-mismatched-commit",
+  "expected_failure": {
+    "check_id": "evidence-freshness",
+    "error": "evidence_stale_or_invalidated"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/evidence/0/commit",
+      "value": "MUTATED"
+    }
+  ],
+  "notes": "replace evidence commit with stale commit",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/0/commit",
+      "expectation": "evidence_stale_or_invalidated"
+    }
+  ]
+}

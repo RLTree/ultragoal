@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-success-binding-goal-lane-execplan-authority-product-evidence-split-across-lanes-without-closed-claim-ids-red",
+  "expected_failure": {
+    "check_id": "product-success-binding-goal-lane-execplan-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:product-success-binding-goal-lane-execplan-authority:product_evidence_split_across_lanes_without_closed_claim_ids"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/product_evidence_split_across_lanes_without_closed_claim_ids",
+      "value": false
+    }
+  ],
+  "notes": "product-success-binding-goal-lane-execplan-authority must fail when product_evidence_split_across_lanes_without_closed_claim_ids is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/product_evidence_split_across_lanes_without_closed_claim_ids",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/product_evidence_split_across_lanes_without_closed_claim_ids",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-success-binding-goal-lane-execplan-authority:product_evidence_split_across_lanes_without_closed_claim_ids"
+    }
+  ]
+}

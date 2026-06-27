@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "downstream-dependency-post-merge-gate-not-passed",
+  "expected_failure": {
+    "check_id": "lane-dependency-gating",
+    "error": "dependency_claim_not_proven"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "value": "pending"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt"
+    },
+    {
+      "op": "remove",
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/lane_registry/lanes/0/status",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "expectation": "post-merge gate alone blocks downstream dependency consumption"
+    }
+  ],
+  "notes": "Downstream implementation cannot consume an upstream dependency when the upstream lane is merged but root post-merge integration is not proven."
+}

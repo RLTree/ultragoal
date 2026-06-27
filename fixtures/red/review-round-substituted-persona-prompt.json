@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-substituted-persona-prompt",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_substituted_persona_prompt"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/persona_prompt_digest",
+      "value": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "notes": "generic reviewer summaries cannot replace exact repo persona prompt contents",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0/persona_prompt_digest",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/0/persona_prompt_digest",
+      "expectation": "substituted prompt rejected"
+    }
+  ]
+}

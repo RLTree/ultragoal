@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-stale-validator-digest",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_stale_anchor_digest"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/validator_receipt/digest",
+      "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "notes": "review signoff must bind to the current validator receipt bytes",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/validator_receipt/digest",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/validator_receipt/digest",
+      "expectation": "stale validator digest rejected"
+    }
+  ]
+}

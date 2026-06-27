@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-broad-glob-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_class_broad_source_glob_requires_direct_topology_check"
+  },
+  "base_fixture_path": "docs/namespace-class-registry.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/classes/-",
+      "value": {
+        "id": "bad-validator-source-all",
+        "kind": "repo_source",
+        "surface_globs": [
+          "validator/src/*"
+        ],
+        "description": "broad source glob cannot replace direct source topology inspection",
+        "authority": "validator_source_topology",
+        "authority_path": "validator/src/audit/namespace/source/topology.rs",
+        "maximal_factoring_required": true,
+        "waiver_allowed": false,
+        "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+      }
+    }
+  ],
+  "notes": "Class rows with validator/src/* fail because source topology must be directly inspected, not broadly classified.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "expectation": "namespace_class_broad_source_glob_requires_direct_topology_check"
+    }
+  ]
+}

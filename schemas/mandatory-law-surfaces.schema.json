@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/mandatory-law-surfaces.schema.json",
+  "title": "Harness Ultragoal Mandatory Law Surfaces Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "laws"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.mandatory-law-surfaces.v1"
+    },
+    "laws": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "mandatory-law-surface-receipt.schema.json"
+      }
+    }
+  }
+}

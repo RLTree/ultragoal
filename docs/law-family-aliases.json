@@ -1,0 +1,431 @@
+{
+  "schema": "harness-ultragoal.law-family-aliases.v1",
+  "canonical_authority": "source_obligation_and_mandatory_law_ids",
+  "canonical_law_count": 111,
+  "canonical_id_replacement_allowed": false,
+  "aliases_claim_authority": false,
+  "doctrine_source": "attachment:d9c71d90-233f-4f47-bdf5-95ced6e4766c/pasted-text.txt",
+  "doctrine_vocabulary": [
+    "claim-governance system",
+    "no claim exists until CLI-bound typed same-surface evidence exists",
+    "maximally factored module tree",
+    "no residual prefix encoding",
+    "governed namespace class",
+    "validator theater",
+    "row-shape compliance",
+    "exception-shaped loophole",
+    "stale receipt",
+    "same-surface proof",
+    "lowering the claim ceiling is not compliance"
+  ],
+  "tightening": {
+    "governed_classes_are_not_waivers": true,
+    "namespace_law_has_zero_exceptions": true,
+    "every_path_resolves_to_exactly_one_governed_class": true,
+    "bootstrap_receipts_are_transition_only": true,
+    "coverage_requires_exact_100_percent_and_empty_uncovered_records": true,
+    "product_fitness_ownership_disposition_first_class": true,
+    "same_law_id_enforcement_required_across_all_surfaces": true
+  },
+  "aliases": [
+    {
+      "hu_id": "HU-001",
+      "family_name": "Typed Claim Authority Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+        "authority-source-binding",
+        "cross-artifact-consistency-solver-authority-graph-closure",
+        "derived-authority-recomputation",
+        "derived-authority-recomputation-named-authority-fallback-refusal",
+        "distinct-proof-surfaces-claim-ceilings",
+        "stable-identifier-normalization-collision",
+        "total-authority-types-impossible-state-elimination",
+        "typed-records-over-prose"
+      ]
+    },
+    {
+      "hu_id": "HU-002",
+      "family_name": "Non-Bypassable Control Plane Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "cli-control-plane-authority",
+        "cli-performance-latency-speed-iteration-fitness",
+        "cli-self-law-compliance",
+        "generated-ready-completion-receipts",
+        "goal-contract-amendment-authority-required-claim-id-mapping",
+        "issue-tracker-lifecycle-eligibility-terminal-state",
+        "rust-command-loop-authority",
+        "rust-developer-experience-authority",
+        "source-obligation-parity-anti-bundling"
+      ]
+    },
+    {
+      "hu_id": "HU-003",
+      "family_name": "Same-Surface Proof Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "agent-queryable-observability",
+        "conditional-observability-proof",
+        "connector-capability-discovery",
+        "distinct-proof-surfaces-claim-ceilings",
+        "distribution-sharing-surface-claim-separation",
+        "live-beneficial-e2e",
+        "product-live-surface-receipts",
+        "runtime-tool-identity",
+        "target-repo-audit-capability",
+        "transcript-quality-reuse-gates"
+      ]
+    },
+    {
+      "hu_id": "HU-004",
+      "family_name": "Surface Separation Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "config-precedence-defaults-env-indirection",
+        "distribution-sharing-surface-claim-separation",
+        "fresh-init-retrofit-mode-separation",
+        "fresh-retrofit-repo-shape",
+        "plugin-bundled-component-graph-hook-app-mcp-safety",
+        "plugin-install-surface-metadata-cache-enable-state",
+        "privacy-raw-artifact-boundary",
+        "raw-private-artifact-handling-category-only-evidence",
+        "rust-cache-no-cache-honesty",
+        "secret-token-boundaries",
+        "source-installed-cache-alignment"
+      ]
+    },
+    {
+      "hu_id": "HU-005",
+      "family_name": "Parse Boundary Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+        "config-precedence-defaults-env-indirection",
+        "offline-schema-catalog-resolver-portability",
+        "portable-non-prescriptive-adapter-implementation-choice",
+        "schema-evolution-receipt-migration-stale-version-invalidation",
+        "secret-token-boundaries",
+        "template-generation-governance-template-creator-boundary",
+        "third-party-dependency-legibility-typed-adapters",
+        "total-authority-types-impossible-state-elimination",
+        "workflow-template-parsing-rendering-reload"
+      ]
+    },
+    {
+      "hu_id": "HU-006",
+      "family_name": "Receipt Integrity Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "adversarial-packet-tampering-forged-proof-rejection",
+        "agent-authored-source-tooling-docs-provenance",
+        "clean-room-rebuild-author-memory-independence",
+        "generated-proof-artifact-provenance-anti-fabrication",
+        "generated-ready-completion-receipts",
+        "review-feedback-disposition-same-round-satisfaction",
+        "schema-evolution-receipt-migration-stale-version-invalidation",
+        "stable-identifier-normalization-collision"
+      ]
+    },
+    {
+      "hu_id": "HU-007",
+      "family_name": "Claim Ceiling Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "failure-remediation-quality-agent-actionable-output",
+        "human-audit-disposition-decomposition-judgment-claim-blocking",
+        "issue-tracker-lifecycle-eligibility-terminal-state",
+        "non-e2e-claim-ceiling-confidence-bounds",
+        "quality-score-taste-gates",
+        "review-disagreement-override-judgment-boundary-governance",
+        "runtime-feasibility-cost-strict-gate-usability"
+      ]
+    },
+    {
+      "hu_id": "HU-008",
+      "family_name": "Fixture Triad Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "behavior-example-coverage-coverage-anti-gaming",
+        "failure-remediation-quality-agent-actionable-output",
+        "green-path-adequacy-satisfiable-strictness",
+        "source-obligation-parity-anti-bundling",
+        "trust-boundary-abuse-path-failure-path-coverage",
+        "validator-theater-miswire-resistance"
+      ]
+    },
+    {
+      "hu_id": "HU-009",
+      "family_name": "Namespace Sovereignty Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "namespace-progressive-disclosure",
+        "purpose-backed-active-files",
+        "semantic-domain-type-naming",
+        "validator-source-namespace-topology"
+      ]
+    },
+    {
+      "hu_id": "HU-010",
+      "family_name": "Maximally Factored Module Tree Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "namespace-progressive-disclosure",
+        "semantic-domain-type-naming",
+        "validator-source-namespace-topology"
+      ]
+    },
+    {
+      "hu_id": "HU-011",
+      "family_name": "Semantic Path Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "compact-agents-routed-standards",
+        "purpose-backed-active-files",
+        "repo-knowledge-index-core-beliefs",
+        "semantic-domain-type-naming",
+        "skill-local-reference-closure"
+      ]
+    },
+    {
+      "hu_id": "HU-012",
+      "family_name": "Package Inventory Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "clean-checkout-command-discovery",
+        "distribution-sharing-surface-claim-separation",
+        "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+        "plugin-bundled-component-graph-hook-app-mcp-safety",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+        "plugin-install-surface-metadata-cache-enable-state",
+        "rust-toolchain-substrate-authority",
+        "source-installed-cache-alignment",
+        "workspace-artifact-cache-garbage-collection",
+        "workspace-command-confinement-lifecycle-cleanup"
+      ]
+    },
+    {
+      "hu_id": "HU-013",
+      "family_name": "Coverage Proof Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "behavior-example-coverage-coverage-anti-gaming",
+        "guardrail-speed-isolation-cache-honesty",
+        "quality-score-taste-gates",
+        "trust-boundary-abuse-path-failure-path-coverage"
+      ]
+    },
+    {
+      "hu_id": "HU-014",
+      "family_name": "Line-Cap Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "guardrail-speed-isolation-cache-honesty",
+        "namespace-progressive-disclosure",
+        "targeted-refactor-debt-removal-standards-gardener-cadence",
+        "validator-source-namespace-topology"
+      ]
+    },
+    {
+      "hu_id": "HU-015",
+      "family_name": "Restartable Contract Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+        "autonomy-loop-proof",
+        "batch-fanout-custom-agent-job-worker-result-discipline",
+        "clean-checkout-command-discovery",
+        "execplan-no-handback-prototype-promotion-discard",
+        "execplan-plain-language-expected-output-interface-completeness",
+        "forward-only-state-transition-integrity-silent-reopen-prevention",
+        "lane-worktree-isolation-cleanup",
+        "memory-wiki-context-only",
+        "orchestrator-state-machine",
+        "restartable-execplans",
+        "scheduler-runner-tracker-boundaries",
+        "subagent-custom-agent-sandbox-approval-inheritance",
+        "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+        "worktree-lane-owner-cost-policy"
+      ]
+    },
+    {
+      "hu_id": "HU-016",
+      "family_name": "Agent-Facing Filesystem Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "agent-queryable-observability",
+        "compact-agents-routed-standards",
+        "instruction-precedence-nested-agents-routing",
+        "namespace-progressive-disclosure",
+        "repo-knowledge-index-core-beliefs",
+        "skill-catalog-context-budget-omission-warning",
+        "skill-local-reference-closure",
+        "skill-progressive-disclosure-metadata",
+        "source-card-freshness-ceiling",
+        "validator-source-namespace-topology"
+      ]
+    },
+    {
+      "hu_id": "HU-017",
+      "family_name": "Product Fitness Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "current-product-discovery-audit-quality-in-use-evidence",
+        "product-proof-joins-substitution-blocking",
+        "product-strategy-positioning-research-eval-before-lane-planning",
+        "product-success-contract-initiation-authority",
+        "product-success-contract-review-packet-team-skill-routing",
+        "product-success-inspiration-source-provenance-disposition",
+        "value-adoption-continuance-business-mission-evidence-hierarchy"
+      ]
+    },
+    {
+      "hu_id": "HU-018",
+      "family_name": "Product Cohesion Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "architecture-dependency-topology",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+        "product-cohesion-product-claims",
+        "product-success-binding-goal-lane-execplan-authority",
+        "product-success-lifecycle-transitions-no-late-afterthought",
+        "product-success-lineage-amendments-closed-product-claim-ids",
+        "quality-score-taste-gates",
+        "semantic-domain-type-naming"
+      ]
+    },
+    {
+      "hu_id": "HU-019",
+      "family_name": "Product Success Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "live-beneficial-e2e",
+        "product-proof-joins-substitution-blocking",
+        "product-success-binding-goal-lane-execplan-authority",
+        "product-success-contract-initiation-authority",
+        "product-success-lifecycle-transitions-no-late-afterthought",
+        "product-success-lineage-amendments-closed-product-claim-ids",
+        "value-adoption-continuance-business-mission-evidence-hierarchy"
+      ]
+    },
+    {
+      "hu_id": "HU-020",
+      "family_name": "Self-Law Compliance Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "behavior-example-coverage-coverage-anti-gaming",
+        "cli-self-law-compliance",
+        "generated-proof-artifact-provenance-anti-fabrication",
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+        "rust-memory-resource-discipline",
+        "source-obligation-parity-anti-bundling",
+        "total-authority-types-impossible-state-elimination",
+        "validator-source-namespace-topology"
+      ]
+    },
+    {
+      "hu_id": "HU-021",
+      "family_name": "Final Packet Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "adversarial-packet-tampering-forged-proof-rejection",
+        "agent-session-telemetry-token-rate-limit",
+        "cross-artifact-consistency-solver-authority-graph-closure",
+        "generated-proof-artifact-provenance-anti-fabrication",
+        "non-e2e-claim-ceiling-confidence-bounds",
+        "review-disagreement-override-judgment-boundary-governance",
+        "review-feedback-disposition-same-round-satisfaction"
+      ]
+    },
+    {
+      "hu_id": "HU-022",
+      "family_name": "Failure Specificity Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "agent-remediating-validator-failures",
+        "capability-gap-extraction-harness-capability-promotion",
+        "failure-remediation-quality-agent-actionable-output",
+        "feedback-to-rule-promotion",
+        "historical-regression-corpus-session-review-signals",
+        "standards-gardener-promotion"
+      ]
+    },
+    {
+      "hu_id": "HU-023",
+      "family_name": "Anti-Theater Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "clean-room-rebuild-author-memory-independence",
+        "generated-proof-artifact-provenance-anti-fabrication",
+        "green-path-adequacy-satisfiable-strictness",
+        "human-audit-disposition-decomposition-judgment-claim-blocking",
+        "review-disagreement-override-judgment-boundary-governance",
+        "reviewer-to-gate-conversion",
+        "source-obligation-parity-anti-bundling",
+        "validator-theater-miswire-resistance"
+      ]
+    },
+    {
+      "hu_id": "HU-024",
+      "family_name": "Update Goal Eligibility Law",
+      "authority_role": "explanatory_family_alias_only",
+      "claim_authority": "none",
+      "replaces_canonical_law_ids": false,
+      "canonical_law_ids": [
+        "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+        "cli-control-plane-authority",
+        "cli-self-law-compliance",
+        "goal-contract-amendment-authority-required-claim-id-mapping",
+        "issue-tracker-lifecycle-eligibility-terminal-state",
+        "orchestrator-state-machine",
+        "review-feedback-disposition-same-round-satisfaction"
+      ]
+    }
+  ]
+}

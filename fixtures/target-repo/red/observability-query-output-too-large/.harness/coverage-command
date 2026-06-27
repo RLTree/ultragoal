@@ -1,0 +1,1 @@
+mkdir -p validation_artifacts/coverage && cp COVERAGE_RECEIPT.json validation_artifacts/coverage/coverage-receipt.json

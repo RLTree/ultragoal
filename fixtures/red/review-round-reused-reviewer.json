@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-reused-reviewer",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_reused_reviewer"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/1/reviewer_agent_id",
+      "value": "agent-contract-claim-fixture"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/1/live_spawn_receipt/spawned_reviewer_agent_id",
+      "value": "agent-contract-claim-fixture"
+    }
+  ],
+  "notes": "one reviewer agent cannot satisfy multiple four-persona roles",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/1/reviewer_agent_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/1/reviewer_agent_id",
+      "expectation": "reused reviewer rejected"
+    }
+  ]
+}

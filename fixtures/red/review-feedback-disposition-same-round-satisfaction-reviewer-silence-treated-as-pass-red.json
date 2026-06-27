@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-feedback-disposition-same-round-satisfaction-reviewer-silence-treated-as-pass-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:reviewer_silence_treated_as_pass"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/reviewer_silence_treated_as_pass",
+      "value": false
+    }
+  ],
+  "notes": "review-feedback-disposition-same-round-satisfaction must fail when reviewer_silence_treated_as_pass is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/reviewer_silence_treated_as_pass",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/reviewer_silence_treated_as_pass",
+      "expectation": "mandatory_law_specific_guard_not_enforced:review-feedback-disposition-same-round-satisfaction:reviewer_silence_treated_as_pass"
+    }
+  ]
+}

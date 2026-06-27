@@ -1,0 +1,9 @@
+{
+  "agent_owned_paths_checked": [
+    "route selection",
+    "retry path",
+    "runtime receipt lookup",
+    "claim ceiling synthesis"
+  ],
+  "human_attention_default": false
+}

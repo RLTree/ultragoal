@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "architecture-dependency-topology-forbidden-edges-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:architecture-dependency-topology:forbidden_edges"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/forbidden_edges",
+      "value": false
+    }
+  ],
+  "notes": "architecture-dependency-topology must fail when forbidden_edges is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/forbidden_edges",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/forbidden_edges",
+      "expectation": "mandatory_law_specific_guard_not_enforced:architecture-dependency-topology:forbidden_edges"
+    }
+  ]
+}

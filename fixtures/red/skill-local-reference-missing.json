@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "skill-local-reference-missing",
+  "expected_failure": {
+    "check_id": "skill-inventory-closure",
+    "error": "skill_local_reference_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/plugin_manifest/skills/-",
+      "value": {
+        "name": "broken-skill-link",
+        "path": "validation_artifacts/ultragoal-audit/red-skill-reference-broken-SKILL.md",
+        "role": "red fixture skill with a package-root-only reference"
+      }
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "file",
+      "path": "validation_artifacts/ultragoal-audit/red-skill-reference-broken-SKILL.md",
+      "contents": "---\nname: broken-skill-link\ndescription: Red fixture skill with a broken package-local reference.\n---\n\n# Broken Skill Link\n\nRead `docs/plugin-resource-map.md` before acting.\n"
+    }
+  ],
+  "notes": "Installed skill references to package-owned docs or schemas must resolve from the skill file location, not only from the repo root.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/plugin_manifest/skills",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/plugin_manifest/skills/-",
+      "expectation": "skill_local_reference_missing"
+    }
+  ]
+}

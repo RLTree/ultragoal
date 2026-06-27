@@ -1,0 +1,29 @@
+{
+  "actor_disjoint": true,
+  "ambiguity": false,
+  "canonical_text_digest": "sha256:128d492c210bfbd977c04219c7845cc7dc1f6b199e060fb642342dc621467fca",
+  "claim_ceiling_recommendation": "validate_required_gates_before_inclusion",
+  "claim_id": "CLAIM-001",
+  "classifier_actor_id": "fixture-human-reviewer",
+  "classifier_contract_id": "ultragoal-semantic-classification",
+  "classifier_contract_version": "v1",
+  "classifier_evidence": {
+    "digest": "sha256:fedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbafedc",
+    "evidence_type": "human_review_attestation",
+    "summary": "Fixture human reviewer attested that this claim is runtime-only engine work."
+  },
+  "classifier_implementation_kind": "human_reviewer",
+  "confidence": 0.86,
+  "detected_semantic_classes": [
+    "runtime_cli_backend_only_engine_only"
+  ],
+  "generated_at": "2026-06-19T18:10:00Z",
+  "producer_actor_id": "fixture-producer",
+  "rationale": "Externally attested classifier receipt confirms this claim is runtime-only engine work.",
+  "receipt_digest": "sha256:d7fdd470e0972245de076cdffcd1066a1783e74f2ca1ee6242bbbb63eb39fb79",
+  "required_proof_gates": [
+    "runtime_execution",
+    "ready_for_merge_receipt"
+  ],
+  "schema": "harness-ultragoal.semantic-classification-receipt.v1"
+}

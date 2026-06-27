@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-claim-ceiling-missing-install-button-unsupported",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_claim_ceiling_missing"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/claim_ceiling/unsupported/1"
+    },
+    {
+      "op": "remove",
+      "path": "/reviewers/0/claim_ceiling_assessment/unsupported/1"
+    }
+  ],
+  "notes": "typed review-round ceiling must explicitly keep install-button success unsupported until same-surface proof exists",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/claim_ceiling/unsupported/1",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the typed receipt mutation"
+    }
+  ]
+}

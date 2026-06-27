@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-parity-anti-bundling-minimum-goal-valid-fixture-used-for-unrelated-law-red",
+  "expected_failure": {
+    "check_id": "source-obligation-parity-anti-bundling",
+    "error": "mandatory_law_specific_guard_not_enforced:source-obligation-parity-anti-bundling:minimum_goal_valid_fixture_used_for_unrelated_law"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/source-obligation-parity-anti-bundling.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/minimum_goal_valid_fixture_used_for_unrelated_law",
+      "value": false
+    }
+  ],
+  "notes": "source-obligation-parity-anti-bundling must fail when minimum-goal valid fixture used for unrelated law is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/minimum_goal_valid_fixture_used_for_unrelated_law",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/minimum_goal_valid_fixture_used_for_unrelated_law",
+      "expectation": "mandatory_law_specific_guard_not_enforced:source-obligation-parity-anti-bundling:minimum_goal_valid_fixture_used_for_unrelated_law"
+    }
+  ]
+}

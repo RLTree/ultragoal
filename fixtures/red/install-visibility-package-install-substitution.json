@@ -1,0 +1,77 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "install-visibility-package-install-substitution",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "claim_text_requires_unproven_surface"
+  },
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/title",
+      "value": "Plugin installed and visible"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/allowed_evidence_surfaces/-",
+      "value": "installed_app"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/-",
+      "value": {
+        "id": "EV-PACKAGE-INSTALL-001",
+        "claim_id": "CLAIM-001",
+        "kind": "package_install",
+        "surface": "installed_app",
+        "path": "validation_artifacts/runtime/engine-output.md",
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:87e98917aa8c0d5ab1a0906e3dc24cda2220540a55da03f9f4d9297df8158a95",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": true,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "package install evidence cannot prove app-visible picker/list visibility without UI interaction evidence",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/1/kind",
+      "expectation": "claim_text_requires_unproven_surface"
+    }
+  ]
+}

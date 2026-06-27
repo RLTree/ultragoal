@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-disagreement-override-judgment-boundary-governance-non-goal-without-claim-removal-red",
+  "expected_failure": {
+    "check_id": "review-disagreement-override-judgment-boundary-governance",
+    "error": "mandatory_law_specific_guard_not_enforced:review-disagreement-override-judgment-boundary-governance:non_goal_without_claim_removal"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/review-disagreement-override-judgment-boundary-governance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/non_goal_without_claim_removal",
+      "value": false
+    }
+  ],
+  "notes": "review-disagreement-override-judgment-boundary-governance must fail when non_goal_without_claim_removal is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/non_goal_without_claim_removal",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/non_goal_without_claim_removal",
+      "expectation": "mandatory_law_specific_guard_not_enforced:review-disagreement-override-judgment-boundary-governance:non_goal_without_claim_removal"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "historical-regression-corpus-session-review-signals",
+  "standards_row_id": "historical-regression-corpus-session-review-signals",
+  "source_obligation_id": "historical-regression-corpus-session-review-signals",
+  "foundational_trace_id": "historical-regression-corpus-session-review-signals",
+  "validator_check_id": "historical-regression-corpus-session-review-signals",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/historical-regression-corpus-session-review-signals.json",
+  "red_fixture_ids": [
+    "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red",
+    "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
+    "historical-regression-corpus-session-review-signals-reviewer-repeat-finding-closed-by-prose-red",
+    "historical-regression-corpus-session-review-signals-side-thread-requirement-not-amended-red",
+    "historical-regression-corpus-session-review-signals-historical-namespace-repeat-offender-without-fixture-red",
+    "historical-regression-corpus-session-review-signals-stale-receipt-repeat-offender-without-fixture-red",
+    "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "completion_claims_withheld_without_historical_regression_corpus",
+  "behavior_failure_modes": [
+    "historical_regression_corpus_session_review_signals_session_log_finding_not_converted_to_regression",
+    "historical_regression_corpus_session_review_signals_chronicle_finding_without_timestamp",
+    "historical_regression_corpus_session_review_signals_reviewer_repeat_finding_closed_by_prose",
+    "historical_regression_corpus_session_review_signals_side_thread_requirement_not_amended",
+    "historical_regression_corpus_session_review_signals_historical_namespace_repeat_offender_without_fixture",
+    "historical_regression_corpus_session_review_signals_stale_receipt_repeat_offender_without_fixture",
+    "historical_regression_corpus_session_review_signals_final_packet_omitting_open_regression_claim_impact"
+  ],
+  "law_specific": {
+    "session_log_finding_not_converted_to_regression": true,
+    "chronicle_finding_without_timestamp": true,
+    "reviewer_repeat_finding_closed_by_prose": true,
+    "side_thread_requirement_not_amended": true,
+    "historical_namespace_repeat_offender_without_fixture": true,
+    "stale_receipt_repeat_offender_without_fixture": true,
+    "final_packet_omitting_open_regression_claim_impact": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

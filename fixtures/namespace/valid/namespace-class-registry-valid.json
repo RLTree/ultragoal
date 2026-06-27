@@ -1,0 +1,31 @@
+{
+  "schema": "harness-ultragoal.namespace-class-registry.v1",
+  "classes": [
+    {
+      "id": "valid-repo-source",
+      "kind": "repo_source",
+      "surface_globs": [
+        "validator/src/domain/**/*.rs"
+      ],
+      "description": "Valid registry rows classify source surfaces without granting exceptions.",
+      "authority": "validator_source_topology",
+      "authority_path": "validator/src/audit/namespace/source/topology.rs",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "valid-fixture-catalog",
+      "kind": "fixture_catalog",
+      "surface_globs": [
+        "fixtures/red/**/*.json"
+      ],
+      "description": "Valid fixture catalog classification still requires maximal factoring and does not waive failures.",
+      "authority": "red_fixture_catalog",
+      "authority_path": "templates/RED_FIXTURES.json",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    }
+  ]
+}

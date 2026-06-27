@@ -1,0 +1,106 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "simulated-proof-for-live-claim",
+  "expected_failure": {
+    "check_id": "claim-evidence-coupling",
+    "error": "simulated_evidence_used_for_live_claim"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/status",
+      "value": "proven_live"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_ceiling_effect",
+      "value": "included"
+    },
+    {
+      "op": "remove",
+      "path": "/completion_manifest/claims/0/backlog_row_id"
+    },
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/claim_kind",
+      "value": "feature_completion"
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/product_applicability",
+      "value": {
+        "user_facing": false,
+        "product_surface": false,
+        "ui_or_control_surface": false,
+        "surface_classification": "engine_runtime_only",
+        "rationale": "This red packet isolates simulated runtime proof for engine-only CLI work."
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/evidence/1",
+      "value": {
+        "id": "EV-LIVE-001",
+        "claim_id": "CLAIM-001",
+        "kind": "live_beneficial_e2e",
+        "surface": "runtime_cli",
+        "path": "fixtures/mock-output.md",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "produced_by_command_id": "cmd-static-001",
+        "commit": "abcdef0",
+        "workspace": "/repo",
+        "observed_at": "2026-06-16T00:00:00Z",
+        "freshness": {
+          "verdict": "current",
+          "current_commit": "abcdef0",
+          "evidence_commit": "abcdef0",
+          "policy": "target head and evidence commit must match",
+          "checked_at": "2026-06-16T00:00:00Z"
+        },
+        "live_beneficial_task": {
+          "description": "Mock fixture task pretending to be live.",
+          "real_input_path": "fixtures/mock-input.md",
+          "output_artifact_path": "fixtures/mock-output.md",
+          "acceptance_criteria": [
+            "not actually live"
+          ],
+          "quality_inspection_result": "fixture-only"
+        }
+      }
+    },
+    {
+      "op": "add",
+      "path": "/completion_manifest/claims/0/semantic_text_classification",
+      "value": {
+        "producer_actor_id": "fixture-producer",
+        "classifier_actor_id": "fixture-semantic-reviewer",
+        "actor_disjoint": true,
+        "text_digest": "sha256:f9440c589bf11ab89d1c0626f41ba8f97f1073a220131acd6614e6cbeaa8e9d1",
+        "product_or_ui_claim": false,
+        "install_visibility_claim": false,
+        "publication_claim": false,
+        "distribution_claim": false,
+        "rationale": "Independent deterministic classification attached so this red packet tests its intended semantic gate."
+      }
+    }
+  ],
+  "notes": "replace static claim kind/status with included feature claim without live evidence",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/completion_manifest/claims/0/evidence/1",
+      "expectation": "simulated_evidence_used_for_live_claim"
+    }
+  ]
+}

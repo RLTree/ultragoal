@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/expected_failure/error",
+      "expectation": "dependency_claim_not_proven remains the first failing error"
+    }
+  ],
+  "id": "downstream-dependency-ready-authority-wrong-lane",
+  "expected_failure": {
+    "check_id": "ready-receipt-provenance",
+    "error": "ready_receipt_not_lane_bound"
+  },
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/ready_for_merge_receipts/0/lane_id",
+      "value": "LANE-999"
+    }
+  ],
+  "notes": "upstream ready receipt object must be bound to the upstream lane id"
+}

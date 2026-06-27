@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-hidden-cache-no-cache-substitution-red",
+  "expected_failure": {
+    "check_id": "rust-cache-no-cache-honesty",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_cache_no_cache_substitution"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-cache-no-cache-honesty.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/hidden_cache_no_cache_substitution",
+      "value": false
+    }
+  ],
+  "notes": "hidden cache state cannot support no-cache or clean-proof claims",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/hidden_cache_no_cache_substitution",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/hidden_cache_no_cache_substitution",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_cache_no_cache_substitution"
+    }
+  ]
+}

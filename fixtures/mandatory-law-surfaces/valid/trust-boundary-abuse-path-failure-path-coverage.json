@@ -1,0 +1,54 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "trust-boundary-abuse-path-failure-path-coverage",
+  "standards_row_id": "trust-boundary-abuse-path-failure-path-coverage",
+  "source_obligation_id": "trust-boundary-abuse-path-failure-path-coverage",
+  "foundational_trace_id": "trust-boundary-abuse-path-failure-path-coverage",
+  "validator_check_id": "trust-boundary-abuse-path-failure-path-coverage",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/trust-boundary-abuse-path-failure-path-coverage.json",
+  "red_fixture_ids": [
+    "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
+    "trust-boundary-abuse-path-failure-path-coverage-resolver-bypass-missing-test-red",
+    "trust-boundary-abuse-path-failure-path-coverage-path-traversal-missing-negative-test-red",
+    "trust-boundary-abuse-path-failure-path-coverage-permission-denied-untested-red",
+    "trust-boundary-abuse-path-failure-path-coverage-forged-digest-accepted-red",
+    "trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red",
+    "trust-boundary-abuse-path-failure-path-coverage-secret-leak-untested-red",
+    "trust-boundary-abuse-path-failure-path-coverage-destructive-action-ambiguity-untested-red",
+    "trust-boundary-abuse-path-failure-path-coverage-review-signoff-without-failure-path-evidence-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "trust_boundary_claims_withheld_without_abuse_and_failure_path_receipts",
+  "behavior_failure_modes": [
+    "trust_boundary_abuse_path_failure_path_coverage_trust_boundary_change_without_abuse_path",
+    "trust_boundary_abuse_path_failure_path_coverage_resolver_bypass_missing_test",
+    "trust_boundary_abuse_path_failure_path_coverage_path_traversal_missing_negative_test",
+    "trust_boundary_abuse_path_failure_path_coverage_permission_denied_untested",
+    "trust_boundary_abuse_path_failure_path_coverage_forged_digest_accepted",
+    "trust_boundary_abuse_path_failure_path_coverage_stale_registry_proof_accepted",
+    "trust_boundary_abuse_path_failure_path_coverage_secret_leak_untested",
+    "trust_boundary_abuse_path_failure_path_coverage_destructive_action_ambiguity_untested",
+    "trust_boundary_abuse_path_failure_path_coverage_review_signoff_without_failure_path_evidence"
+  ],
+  "law_specific": {
+    "trust_boundary_change_without_abuse_path": true,
+    "resolver_bypass_missing_test": true,
+    "path_traversal_missing_negative_test": true,
+    "permission_denied_untested": true,
+    "forged_digest_accepted": true,
+    "stale_registry_proof_accepted": true,
+    "secret_leak_untested": true,
+    "destructive_action_ambiguity_untested": true,
+    "review_signoff_without_failure_path_evidence": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

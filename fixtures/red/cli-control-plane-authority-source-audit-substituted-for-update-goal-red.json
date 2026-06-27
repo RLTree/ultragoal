@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "cli-control-plane-authority-source-audit-substituted-for-update-goal-red",
+  "expected_failure": {
+    "check_id": "cli-control-plane-authority",
+    "error": "mandatory_law_specific_guard_not_enforced:cli-control-plane-authority:source_audit_substituted_for_update_goal"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/source_audit_substituted_for_update_goal",
+      "value": false
+    }
+  ],
+  "notes": "cli-control-plane-authority must fail when source_audit_substituted_for_update_goal is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/source_audit_substituted_for_update_goal",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/source_audit_substituted_for_update_goal",
+      "expectation": "mandatory_law_specific_guard_not_enforced:cli-control-plane-authority:source_audit_substituted_for_update_goal"
+    }
+  ]
+}

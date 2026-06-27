@@ -1,0 +1,46 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-widened-class-tamper-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_class_broad_source_glob_requires_direct_topology_check"
+  },
+  "base_fixture_path": "docs/namespace-class-registry.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/classes/-",
+      "value": {
+        "id": "tampered-narrow-source-layout",
+        "kind": "repo_source",
+        "surface_globs": [
+          "validator/src/*.rs"
+        ],
+        "description": "tamper widens source classification after receipt generation",
+        "authority": "validator_source_topology",
+        "authority_path": "validator/src/audit/namespace/source/topology.rs",
+        "maximal_factoring_required": true,
+        "waiver_allowed": false,
+        "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+      }
+    }
+  ],
+  "notes": "Widening a source class into a validator/src glob invalidates the namespace authority and blocks claims.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "docs/namespace-class-registry.json",
+      "expectation": "namespace_class_broad_source_glob_requires_direct_topology_check"
+    }
+  ]
+}

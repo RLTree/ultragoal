@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/completion-manifest.schema.json",
+  "title": "Harness Ultragoal Completion Manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "contract_bundle_hash",
+    "required_claim_ids",
+    "required_claim_ids_hash",
+    "goal_binding",
+    "commit",
+    "root",
+    "claims",
+    "verification_backlog_path",
+    "verification_backlog_digest",
+    "validator_receipts",
+    "generated_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.completion-manifest.v1"
+    },
+    "contract_bundle_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "required_claim_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/claimId"
+      }
+    },
+    "required_claim_ids_hash": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "goal_binding": {
+      "$ref": "goal-binding.schema.json"
+    },
+    "commit": {
+      "type": "string",
+      "minLength": 7
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "claim_scope",
+          "claim_kind",
+          "status",
+          "claim_surface",
+          "allowed_evidence_surfaces",
+          "evidence",
+          "claim_ceiling_effect"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "common-defs.schema.json#/$defs/claimId"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_scope": {
+            "$ref": "common-defs.schema.json#/$defs/claimScope"
+          },
+          "claim_kind": {
+            "$ref": "common-defs.schema.json#/$defs/claimKind"
+          },
+          "status": {
+            "$ref": "common-defs.schema.json#/$defs/claimStatus"
+          },
+          "claim_surface": {
+            "$ref": "common-defs.schema.json#/$defs/claimSurface"
+          },
+          "allowed_evidence_surfaces": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "common-defs.schema.json#/$defs/claimSurface"
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "common-defs.schema.json#/$defs/evidence"
+            }
+          },
+          "claim_ceiling_effect": {
+            "enum": [
+              "included",
+              "degraded",
+              "blocked",
+              "withheld"
+            ]
+          },
+          "backlog_row_id": {
+            "type": "string"
+          },
+          "requires_goal_binding": {
+            "type": "boolean",
+            "default": false
+          },
+          "requires_observability": {
+            "type": "boolean",
+            "default": false
+          },
+          "requires_product_cohesion": {
+            "type": "boolean",
+            "default": false
+          },
+          "product_cohesion_waiver": {
+            "type": "object",
+            "required": [
+              "reason",
+              "scope"
+            ],
+            "properties": {
+              "reason": {
+                "enum": [
+                  "non_product_internal_ui",
+                  "visual_regression_only",
+                  "proof_surface_negative_probe"
+                ]
+              },
+              "scope": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "product_applicability": {
+            "type": "object",
+            "required": [
+              "user_facing",
+              "product_surface",
+              "ui_or_control_surface",
+              "surface_classification",
+              "rationale"
+            ],
+            "properties": {
+              "user_facing": {
+                "type": "boolean"
+              },
+              "product_surface": {
+                "type": "boolean"
+              },
+              "ui_or_control_surface": {
+                "type": "boolean"
+              },
+              "surface_classification": {
+                "enum": [
+                  "consumer_product",
+                  "dashboard",
+                  "local_app",
+                  "workflow_launcher",
+                  "run_console",
+                  "control_surface",
+                  "engine_runtime_only",
+                  "internal_non_product",
+                  "proof_surface_negative_probe"
+                ]
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 20
+              }
+            },
+            "additionalProperties": false
+          },
+          "semantic_text_classification": {
+            "type": "object",
+            "required": [
+              "producer_actor_id",
+              "classifier_actor_id",
+              "actor_disjoint",
+              "text_digest",
+              "product_or_ui_claim",
+              "install_visibility_claim",
+              "publication_claim",
+              "distribution_claim",
+              "rationale"
+            ],
+            "properties": {
+              "producer_actor_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "classifier_actor_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actor_disjoint": {
+                "const": true
+              },
+              "text_digest": {
+                "$ref": "common-defs.schema.json#/$defs/sha256"
+              },
+              "product_or_ui_claim": {
+                "type": "boolean"
+              },
+              "install_visibility_claim": {
+                "type": "boolean"
+              },
+              "publication_claim": {
+                "type": "boolean"
+              },
+              "distribution_claim": {
+                "type": "boolean"
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 20
+              }
+            },
+            "additionalProperties": false
+          },
+          "semantic_classification_receipts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "digest"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "digest": {
+                  "$ref": "common-defs.schema.json#/$defs/sha256"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "claim_ceiling_effect": {
+                  "const": "included"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "semantic_text_classification",
+                "semantic_classification_receipts"
+              ],
+              "properties": {
+                "status": {
+                  "$ref": "common-defs.schema.json#/$defs/positiveClaimStatus"
+                },
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "claim_kind": {
+                  "const": "feature_completion"
+                },
+                "claim_ceiling_effect": {
+                  "const": "included"
+                }
+              },
+              "required": [
+                "claim_kind",
+                "claim_ceiling_effect"
+              ]
+            },
+            "then": {
+              "required": [
+                "product_applicability"
+              ],
+              "properties": {
+                "status": {
+                  "const": "proven_live"
+                },
+                "evidence": {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "kind"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "const": "live_beneficial_e2e"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "$ref": "common-defs.schema.json#/$defs/nonProvenClaimStatus"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "backlog_row_id"
+              ],
+              "properties": {
+                "claim_ceiling_effect": {
+                  "enum": [
+                    "degraded",
+                    "blocked",
+                    "withheld"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "requires_goal_binding": {
+                  "const": true
+                },
+                "claim_ceiling_effect": {
+                  "const": "included"
+                }
+              }
+            },
+            "then": {
+              "description": "Semantic validator must also require completion_manifest.goal_binding.status == bound for included claims requiring goal binding."
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "claim_kind": {
+                  "const": "goal_binding"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "requires_goal_binding"
+              ],
+              "properties": {
+                "requires_goal_binding": {
+                  "const": true
+                }
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "verification_backlog_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verification_backlog_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "validator_receipts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      }
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "claims": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "claim_ceiling_effect": {
+                  "const": "included"
+                },
+                "requires_goal_binding": {
+                  "const": true
+                }
+              },
+              "required": [
+                "claim_ceiling_effect",
+                "requires_goal_binding"
+              ]
+            }
+          }
+        },
+        "required": [
+          "claims"
+        ]
+      },
+      "then": {
+        "properties": {
+          "goal_binding": {
+            "properties": {
+              "status": {
+                "const": "bound"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "claims": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "claim_ceiling_effect": {
+                  "const": "included"
+                },
+                "claim_kind": {
+                  "const": "goal_binding"
+                }
+              },
+              "required": [
+                "claim_ceiling_effect",
+                "claim_kind"
+              ]
+            }
+          }
+        },
+        "required": [
+          "claims"
+        ]
+      },
+      "then": {
+        "properties": {
+          "goal_binding": {
+            "properties": {
+              "status": {
+                "const": "bound"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

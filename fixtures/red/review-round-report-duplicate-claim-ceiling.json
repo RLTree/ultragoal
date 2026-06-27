@@ -1,0 +1,60 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-report-duplicate-claim-ceiling",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_claim_ceiling_duplicate"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/claim_ceiling_assessment/unsupported",
+      "value": [
+        {
+          "claim_id": "local_codex_app_install_visibility",
+          "status": "unsupported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        },
+        {
+          "claim_id": "local codex app install visibility",
+          "status": "unsupported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        },
+        {
+          "claim_id": "marketplace_publication",
+          "status": "unsupported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        },
+        {
+          "claim_id": "real_multilane_dogfood",
+          "status": "unsupported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        },
+        {
+          "claim_id": "external_product_cohesion",
+          "status": "unsupported",
+          "rationale": "Red fixture mutation for typed review-round claim ceiling."
+        }
+      ]
+    }
+  ],
+  "notes": "typed review receipt must not carry duplicate claim ceiling families under aliases",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/0",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the typed receipt mutation"
+    }
+  ]
+}

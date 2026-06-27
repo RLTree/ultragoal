@@ -1,0 +1,39 @@
+{
+  "base_fixture_path": "fixtures/valid/non-product-feature-completion.json",
+  "expected_failure": {
+    "check_id": "claim-status-ceiling",
+    "error": "semantic_classification_not_actor_disjoint"
+  },
+  "id": "semantic-classification-receipt-actor-self-classification",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts",
+      "value": [
+        {
+          "path": "validation_artifacts/semantic-classification/red/semantic-classification-receipt-actor-self-classification.semantic-classification-receipt.json",
+          "digest": "sha256:d338499d90cd33ce1057e26c7cd11eaa9693a1f77ff490a051871df56837c6ad"
+        }
+      ]
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "producer cannot self-classify semantic receipt",
+  "postconditions": [
+    {
+      "expectation": "semantic_classification_not_actor_disjoint",
+      "path": "/completion_manifest/claims/0/semantic_classification_receipts"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/completion_manifest/claims/0/id"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

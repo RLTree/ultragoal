@@ -1,0 +1,38 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "standards-gardener-changed-artifact-after-receipt",
+  "expected_failure": {
+    "check_id": "standards-gardener-promotion",
+    "error": "standards_gardener_changed_artifact_after_receipt"
+  },
+  "base_fixture_path": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/generated_at",
+      "value": "2026-06-17T00:00:00Z"
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/generated_at",
+      "exists": true
+    },
+    {
+      "path": "/changed_artifacts",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/generated_at",
+      "expectation": "receipt timestamp predates one of its changed artifacts"
+    }
+  ],
+  "notes": "A standards-gardening receipt cannot claim a generated or captured artifact created after the receipt itself."
+}

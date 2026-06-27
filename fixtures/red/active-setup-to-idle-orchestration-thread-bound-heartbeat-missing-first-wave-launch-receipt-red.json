@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "active-setup-to-idle-orchestration-thread-bound-heartbeat-missing-first-wave-launch-receipt-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:missing_first_wave_launch_receipt"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/missing_first_wave_launch_receipt",
+      "value": false
+    }
+  ],
+  "notes": "active-setup-to-idle-orchestration-thread-bound-heartbeat must fail when missing_first_wave_launch_receipt is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_first_wave_launch_receipt",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_first_wave_launch_receipt",
+      "expectation": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:missing_first_wave_launch_receipt"
+    }
+  ]
+}

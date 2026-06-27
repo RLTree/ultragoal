@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-hollow-evidence-artifacts",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_hollow_evidence_artifacts"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/reviewers/0/evidence_artifacts_checked/0/path",
+      "value": "README.md"
+    },
+    {
+      "op": "replace",
+      "path": "/reviewers/0/evidence_artifacts_checked/0/digest",
+      "value": "sha256:560e5963cc46f4d7f2b69c819ba54e8f9579a2f3bda3a699a96d82b37e80e7d7"
+    }
+  ],
+  "notes": "review evidence must include digest-bound validator/review-target/archive/persona/source artifacts",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/round_id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/round_id",
+      "expectation": "review-round validation rejects the mutation"
+    }
+  ]
+}

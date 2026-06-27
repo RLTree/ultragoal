@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "source-obligation-missing-derived-authority",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "derived-authority-recomputation: source_obligation_missing_row"
+  },
+  "base_fixture_path": "docs/source-obligation-matrix.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/obligations/24"
+    }
+  ],
+  "notes": "Proof-bearing generated artifacts with behavior-affecting derived values must have deterministic recomputation or canonical-input digest binding as a package obligation.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/obligations/24/id",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/obligations",
+      "expectation": "derived-authority-recomputation source_obligation_missing_row"
+    }
+  ]
+}

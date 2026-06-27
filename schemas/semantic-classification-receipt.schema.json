@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/semantic-classification-receipt.schema.json",
+  "title": "Harness Ultragoal Semantic Classification Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "claim_id",
+    "canonical_text_digest",
+    "classifier_contract_id",
+    "classifier_contract_version",
+    "classifier_implementation_kind",
+    "generated_at",
+    "producer_actor_id",
+    "classifier_actor_id",
+    "actor_disjoint",
+    "detected_semantic_classes",
+    "rationale",
+    "confidence",
+    "ambiguity",
+    "required_proof_gates",
+    "claim_ceiling_recommendation",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.semantic-classification-receipt.v1" },
+    "claim_id": { "type": "string", "minLength": 1 },
+    "canonical_text_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "classifier_contract_id": { "type": "string", "minLength": 1 },
+    "classifier_contract_version": { "type": "string", "minLength": 1 },
+    "classifier_implementation_kind": {
+      "enum": ["model", "human_reviewer", "deterministic_backstop"]
+    },
+    "provider_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "version"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "prompt_contract_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "classifier_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_type", "digest", "summary"],
+      "properties": {
+        "evidence_type": {
+          "enum": ["human_review_attestation", "external_model_output"]
+        },
+        "digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+        "summary": { "type": "string", "minLength": 12 }
+      }
+    },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "producer_actor_id": { "type": "string", "minLength": 1 },
+    "classifier_actor_id": { "type": "string", "minLength": 1 },
+    "actor_disjoint": { "type": "boolean" },
+    "detected_semantic_classes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "product_user_facing_surface",
+          "ui_control_surface",
+          "local_app_desktop_browser",
+          "dashboard",
+          "run_console",
+          "workflow_launcher",
+          "install_visible_selectable_active_in_codex",
+          "publication_marketplace_catalog_workspace_registry",
+          "runtime_cli_backend_only_engine_only",
+          "ambiguous_needs_reviewer_classification"
+        ]
+      }
+    },
+    "rationale": { "type": "string", "minLength": 12 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "ambiguity": { "type": "boolean" },
+    "required_proof_gates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "product_cohesion_receipt",
+          "ui_journey_evidence",
+          "accessibility_evidence",
+          "runtime_execution",
+          "live_beneficial_e2e",
+          "install_visibility_receipt",
+          "publication_external_attestation",
+          "ready_for_merge_receipt",
+          "observability_receipt",
+          "reviewer_classification",
+          "withheld_or_backlog_claim"
+        ]
+      }
+    },
+    "claim_ceiling_recommendation": { "type": "string", "minLength": 1 },
+    "receipt_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "classifier_implementation_kind": { "const": "model" } }
+      },
+      "then": { "required": ["provider_model", "prompt_contract_digest"] }
+    },
+    {
+      "if": {
+        "properties": {
+          "classifier_implementation_kind": { "const": "human_reviewer" }
+        }
+      },
+      "then": { "required": ["classifier_evidence"] }
+    },
+    {
+      "if": {
+        "properties": {
+          "classifier_implementation_kind": { "const": "deterministic_backstop" }
+        }
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            { "required": ["provider_model"] },
+            { "required": ["classifier_evidence"] }
+          ]
+        }
+      }
+    }
+  ]
+}

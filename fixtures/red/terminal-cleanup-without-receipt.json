@@ -1,0 +1,59 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "terminal-cleanup-without-receipt",
+  "expected_failure": {
+    "check_id": "worktree-teardown",
+    "error": "terminal_cleanup_without_receipt"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/status",
+      "value": "complete"
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/teardown/status",
+      "value": "complete"
+    },
+    {
+      "op": "add",
+      "path": "/lane_registry/lanes/0/teardown/cleanup_receipts",
+      "value": [
+        {
+          "target_kind": "worktree",
+          "target": "/repo-worktree",
+          "action": "removed",
+          "receipt": {
+            "path": "missing-cleanup.json",
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "post_clean_audit": {
+            "path": "missing-post-clean.json",
+            "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "checked_at": "2026-06-16T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "notes": "materializes terminal cleanup state, then removes cleanup receipt",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/schema",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/lane_registry/lanes/0/teardown/cleanup_receipts",
+      "expectation": "terminal_cleanup_without_receipt"
+    }
+  ]
+}

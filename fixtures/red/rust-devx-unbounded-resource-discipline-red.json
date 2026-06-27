@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "rust-devx-unbounded-resource-discipline-red",
+  "expected_failure": {
+    "check_id": "rust-memory-resource-discipline",
+    "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:unbounded_resource_discipline"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/rust-memory-resource-discipline.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/unbounded_resource_discipline",
+      "value": false
+    }
+  ],
+  "notes": "unbounded caches, queues, whole-file loads, or loops fail memory/resource discipline",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/unbounded_resource_discipline",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/unbounded_resource_discipline",
+      "expectation": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:unbounded_resource_discipline"
+    }
+  ]
+}

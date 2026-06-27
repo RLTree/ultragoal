@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "product-proof-joins-substitution-blocking-dogfood-outside-declared-audience-context-red",
+  "expected_failure": {
+    "check_id": "product-proof-joins-substitution-blocking",
+    "error": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:dogfood_outside_declared_audience_context"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/dogfood_outside_declared_audience_context",
+      "value": false
+    }
+  ],
+  "notes": "product-proof-joins-substitution-blocking must fail when dogfood_outside_declared_audience_context is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/dogfood_outside_declared_audience_context",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/dogfood_outside_declared_audience_context",
+      "expectation": "mandatory_law_specific_guard_not_enforced:product-proof-joins-substitution-blocking:dogfood_outside_declared_audience_context"
+    }
+  ]
+}

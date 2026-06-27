@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "quality-score-taste-gates-underlying-law-join-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:quality-score-taste-gates:underlying_law_join"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/underlying_law_join",
+      "value": false
+    }
+  ],
+  "notes": "quality-score-taste-gates must fail when underlying_law_join is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/underlying_law_join",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/underlying_law_join",
+      "expectation": "mandatory_law_specific_guard_not_enforced:quality-score-taste-gates:underlying_law_join"
+    }
+  ]
+}

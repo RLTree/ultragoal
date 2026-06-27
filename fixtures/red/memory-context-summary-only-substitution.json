@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "memory-context-summary-only-substitution",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "memory_context_substitute_not_rejected:summary_only"
+  },
+  "base_fixture_path": "fixtures/law-surfaces/valid/memory-context-boundary-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/substitutions_rejected/1"
+    }
+  ],
+  "notes": "Memory evidence fails when summary-only proof is not rejected.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "fixtures/law-surfaces/valid/memory-context-boundary-receipt.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/substitutions_rejected/1",
+      "expectation": "memory_context_substitute_not_rejected:summary_only"
+    }
+  ]
+}

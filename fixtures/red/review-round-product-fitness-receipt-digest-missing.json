@@ -1,0 +1,33 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "review-round-product-fitness-receipt-digest-missing",
+  "expected_failure": {
+    "check_id": "validator-execution-provenance",
+    "error": "review_round_product_fitness_receipt_binding_missing"
+  },
+  "base_fixture_path": "fixtures/review-round/valid/review-round-receipt.json",
+  "json_patch": [
+    {
+      "op": "remove",
+      "path": "/reviewers/3/product_fitness_receipt_digest"
+    }
+  ],
+  "notes": "Product Fitness receipt digest binding is mandatory.",
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": false,
+    "post_patch_schema_valid": true
+  },
+  "preconditions": [
+    {
+      "path": "/reviewers/3/persona",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/reviewers/3",
+      "expectation": "review_round_product_fitness_receipt_binding_missing"
+    }
+  ]
+}

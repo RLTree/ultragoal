@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
+  "expected_failure": {
+    "check_id": "validator-theater-miswire-resistance",
+    "error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:red_fixture_fails_for_wrong_reason"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/red_fixture_fails_for_wrong_reason",
+      "value": false
+    }
+  ],
+  "notes": "validator-theater-miswire-resistance must fail when red_fixture_fails_for_wrong_reason is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/red_fixture_fails_for_wrong_reason",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/red_fixture_fails_for_wrong_reason",
+      "expectation": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:red_fixture_fails_for_wrong_reason"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "third-party-dependency-legibility-typed-adapters-typed-request-response-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:third-party-dependency-legibility-typed-adapters:typed_request_response"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/typed_request_response",
+      "value": false
+    }
+  ],
+  "notes": "third-party-dependency-legibility-typed-adapters must fail when typed_request_response is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/typed_request_response",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/typed_request_response",
+      "expectation": "mandatory_law_specific_guard_not_enforced:third-party-dependency-legibility-typed-adapters:typed_request_response"
+    }
+  ]
+}

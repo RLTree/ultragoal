@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
+  "expected_failure": {
+    "check_id": "non-e2e-claim-ceiling-confidence-bounds",
+    "error": "mandatory_law_specific_guard_not_enforced:non-e2e-claim-ceiling-confidence-bounds:daily_driver_claim_without_repeated_use_proof"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/daily_driver_claim_without_repeated_use_proof",
+      "value": false
+    }
+  ],
+  "notes": "non-e2e-claim-ceiling-confidence-bounds must fail when daily_driver_claim_without_repeated_use_proof is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/daily_driver_claim_without_repeated_use_proof",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/daily_driver_claim_without_repeated_use_proof",
+      "expectation": "mandatory_law_specific_guard_not_enforced:non-e2e-claim-ceiling-confidence-bounds:daily_driver_claim_without_repeated_use_proof"
+    }
+  ]
+}

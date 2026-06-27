@@ -1,0 +1,48 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-success-lifecycle-transitions-no-late-afterthought",
+  "standards_row_id": "product-success-lifecycle-transitions-no-late-afterthought",
+  "source_obligation_id": "product-success-lifecycle-transitions-no-late-afterthought",
+  "foundational_trace_id": "product-success-lifecycle-transitions-no-late-afterthought",
+  "validator_check_id": "product-success-lifecycle-transitions-no-late-afterthought",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-lifecycle-transitions-no-late-afterthought.json",
+  "red_fixture_ids": [
+    "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-product-obligation-not-decomposed-into-lane-task-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-product-critical-debt-left-in-docs-only-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-product-fitness-review-afterthought-accepted-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-product-cohesion-packet-repair-accepted-as-lifecycle-proof-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-stale-product-receipt-after-amendment-red",
+    "product-success-lifecycle-transitions-no-late-afterthought-final-packet-product-claim-with-lifecycle-gap-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_success_claims_withheld_without_lifecycle_transition_receipts",
+  "behavior_failure_modes": [
+    "product_success_lifecycle_transitions_no_late_afterthought_product_success_contract_after_lane_launch_with_no_reopen",
+    "product_success_lifecycle_transitions_no_late_afterthought_product_obligation_not_decomposed_into_lane_task",
+    "product_success_lifecycle_transitions_no_late_afterthought_product_critical_debt_left_in_docs_only",
+    "product_success_lifecycle_transitions_no_late_afterthought_product_fitness_review_afterthought_accepted",
+    "product_success_lifecycle_transitions_no_late_afterthought_product_cohesion_packet_repair_accepted_as_lifecycle_proof",
+    "product_success_lifecycle_transitions_no_late_afterthought_stale_product_receipt_after_amendment",
+    "product_success_lifecycle_transitions_no_late_afterthought_final_packet_product_claim_with_lifecycle_gap"
+  ],
+  "law_specific": {
+    "product_success_contract_after_lane_launch_with_no_reopen": true,
+    "product_obligation_not_decomposed_into_lane_task": true,
+    "product_critical_debt_left_in_docs_only": true,
+    "product_fitness_review_afterthought_accepted": true,
+    "product_cohesion_packet_repair_accepted_as_lifecycle_proof": true,
+    "stale_product_receipt_after_amendment": true,
+    "final_packet_product_claim_with_lifecycle_gap": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

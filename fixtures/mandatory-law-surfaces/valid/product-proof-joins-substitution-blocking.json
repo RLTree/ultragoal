@@ -1,0 +1,57 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "product-proof-joins-substitution-blocking",
+  "standards_row_id": "product-proof-joins-substitution-blocking",
+  "source_obligation_id": "product-proof-joins-substitution-blocking",
+  "foundational_trace_id": "product-proof-joins-substitution-blocking",
+  "validator_check_id": "product-proof-joins-substitution-blocking",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+  "red_fixture_ids": [
+    "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red",
+    "product-proof-joins-substitution-blocking-package-publication-used-as-product-success-red",
+    "product-proof-joins-substitution-blocking-smoke-test-used-as-product-fitness-red",
+    "product-proof-joins-substitution-blocking-reviewer-approval-used-as-product-proof-red",
+    "product-proof-joins-substitution-blocking-product-cohesion-alone-used-as-product-success-red",
+    "product-proof-joins-substitution-blocking-product-fitness-alone-without-contract-lineage-red",
+    "product-proof-joins-substitution-blocking-happy-path-without-failure-recovery-proof-red",
+    "product-proof-joins-substitution-blocking-quality-score-as-product-outcome-red",
+    "product-proof-joins-substitution-blocking-app-registry-existence-without-reviewer-exposure-proof-red",
+    "product-proof-joins-substitution-blocking-dogfood-outside-declared-audience-context-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+    }
+  ],
+  "claim_ceiling_guard": "product_success_claims_withheld_without_same_surface_product_proof_join",
+  "behavior_failure_modes": [
+    "product_proof_joins_substitution_blocking_install_success_used_as_product_success",
+    "product_proof_joins_substitution_blocking_package_publication_used_as_product_success",
+    "product_proof_joins_substitution_blocking_smoke_test_used_as_product_fitness",
+    "product_proof_joins_substitution_blocking_reviewer_approval_used_as_product_proof",
+    "product_proof_joins_substitution_blocking_product_cohesion_alone_used_as_product_success",
+    "product_proof_joins_substitution_blocking_product_fitness_alone_without_contract_lineage",
+    "product_proof_joins_substitution_blocking_happy_path_without_failure_recovery_proof",
+    "product_proof_joins_substitution_blocking_quality_score_as_product_outcome",
+    "product_proof_joins_substitution_blocking_app_registry_existence_without_reviewer_exposure_proof",
+    "product_proof_joins_substitution_blocking_dogfood_outside_declared_audience_context"
+  ],
+  "law_specific": {
+    "install_success_used_as_product_success": true,
+    "package_publication_used_as_product_success": true,
+    "smoke_test_used_as_product_fitness": true,
+    "reviewer_approval_used_as_product_proof": true,
+    "product_cohesion_alone_used_as_product_success": true,
+    "product_fitness_alone_without_contract_lineage": true,
+    "happy_path_without_failure_recovery_proof": true,
+    "quality_score_as_product_outcome": true,
+    "app_registry_existence_without_reviewer_exposure_proof": true,
+    "dogfood_outside_declared_audience_context": true
+  },
+  "enforcement_status": "deterministic_fail_closed"
+}

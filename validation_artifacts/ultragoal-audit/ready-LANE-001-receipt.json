@@ -1,0 +1,107 @@
+{
+  "base_commit": "abcdef0",
+  "blocked_reasons": [],
+  "branch": "codex/fixture",
+  "changed_files": [
+    "fixtures/valid/non-product-feature-completion.json"
+  ],
+  "claim_ceiling": [
+    {
+      "claim_id": "CLAIM-001",
+      "claim_surface": "runtime_cli",
+      "effect": "included",
+      "evidence_ids": [
+        "EV-LIVE-RUNTIME-001"
+      ],
+      "source_manifest_path": "COMPLETION_MANIFEST.json",
+      "status": "proven_live"
+    }
+  ],
+  "claim_ids": [
+    "CLAIM-001"
+  ],
+  "commands": [
+    {
+      "artifact_digest": "sha256:e00d2586902ecb434aee09f1782519d78111f676f97da82ea863b42923b2af42",
+      "artifact_path": "artifacts/runtime/engine-output.md",
+      "command": "jsonschema validate fixture bundle with offline schema catalog",
+      "completed_at": "2026-06-16T00:00:00Z",
+      "cwd": "/repo",
+      "exit": 0,
+      "id": "cmd-static-001",
+      "started_at": "2026-06-16T00:00:00Z",
+      "stderr": {
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "path": "artifacts/static-validator.stderr.txt"
+      },
+      "stdout": {
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "path": "artifacts/static-validator.stdout.txt"
+      }
+    }
+  ],
+  "commit": "abcdef0",
+  "contract_bundle_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "evidence": [
+    {
+      "claim_id": "CLAIM-001",
+      "commit": "abcdef0",
+      "digest": "sha256:e00d2586902ecb434aee09f1782519d78111f676f97da82ea863b42923b2af42",
+      "freshness": {
+        "checked_at": "2026-06-16T00:00:00Z",
+        "current_commit": "abcdef0",
+        "evidence_commit": "abcdef0",
+        "policy": "target head and evidence commit must match",
+        "verdict": "current"
+      },
+      "id": "EV-LIVE-RUNTIME-001",
+      "kind": "live_beneficial_e2e",
+      "live_beneficial_task": {
+        "acceptance_criteria": [
+          "output artifact records the completed engine transformation"
+        ],
+        "description": "Run a real engine-only CLI transformation and inspect the produced artifact.",
+        "output_artifact_path": "artifacts/runtime/engine-output.md",
+        "quality_inspection_result": "artifact is suitable for validating engine-only runtime behavior",
+        "real_input_path": "artifacts/runtime/engine-input.md"
+      },
+      "observed_at": "2026-06-16T00:00:00Z",
+      "path": "artifacts/runtime/engine-output.md",
+      "produced_by_command_id": "cmd-static-001",
+      "surface": "runtime_cli",
+      "workspace": "/repo"
+    }
+  ],
+  "execplan": "docs/exec-plans/active/fixture.md",
+  "generated_at": "2026-06-16T00:00:00Z",
+  "generated_by": "ultragoal-audit",
+  "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "lane_id": "LANE-001",
+  "lane_registry_digest": "sha256:fc06cd7612e5e800a17d84a3321a94a593414a28f703a499b2c41ca245babf9b",
+  "live_target_head_at_generation": "abcdef0",
+  "merge_base": "abcdef0",
+  "provenance": {
+    "generated_artifact_type": "ready_for_merge",
+    "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "validator_receipt": {
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "VALIDATOR_RECEIPT.json"
+    },
+    "validator_run_id": "ultragoal-audit-2026-06-20T22:12:06Z"
+  },
+  "ready": true,
+  "schema": "harness-ultragoal.ready-for-merge.v1",
+  "target_branch": "main",
+  "target_freshness": {
+    "checked_at": "2026-06-16T00:00:00Z",
+    "merge_base_includes_target_head": true,
+    "target_head_matches_live": true
+  },
+  "target_head_at_launch": "abcdef0",
+  "target_head_at_validation": "abcdef0",
+  "teardown_ready": true,
+  "validator_run_id": "ultragoal-audit-2026-06-20T22:12:06Z",
+  "validator_version": "0.1.0",
+  "workspace": "/repo",
+  "worktree_clean": true
+}

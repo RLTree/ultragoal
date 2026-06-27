@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "failure-remediation-quality-agent-actionable-output-swallowed-io-schema-error-red",
+  "expected_failure": {
+    "check_id": "failure-remediation-quality-agent-actionable-output",
+    "error": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:swallowed_io_schema_error"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/swallowed_io_schema_error",
+      "value": false
+    }
+  ],
+  "notes": "failure-remediation-quality-agent-actionable-output must fail when swallowed_io_schema_error is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/swallowed_io_schema_error",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/swallowed_io_schema_error",
+      "expectation": "mandatory_law_specific_guard_not_enforced:failure-remediation-quality-agent-actionable-output:swallowed_io_schema_error"
+    }
+  ]
+}

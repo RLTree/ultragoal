@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "goal-contract-amendment-authority-required-claim-id-mapping-amendment-log-rewritten-instead-of-appended-red",
+  "expected_failure": {
+    "check_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+    "error": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:amendment_log_rewritten_instead_of_appended"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/amendment_log_rewritten_instead_of_appended",
+      "value": false
+    }
+  ],
+  "notes": "goal-contract-amendment-authority-required-claim-id-mapping must fail when amendment_log_rewritten_instead_of_appended is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/amendment_log_rewritten_instead_of_appended",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/amendment_log_rewritten_instead_of_appended",
+      "expectation": "mandatory_law_specific_guard_not_enforced:goal-contract-amendment-authority-required-claim-id-mapping:amendment_log_rewritten_instead_of_appended"
+    }
+  ]
+}

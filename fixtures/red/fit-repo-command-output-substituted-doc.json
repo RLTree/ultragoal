@@ -1,0 +1,29 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "fit-repo-command-output-substituted-doc",
+  "expected_failure": {
+    "check_id": "agent-standards-enforcement",
+    "error": "fit_repo_receipt_command_output_not_command_artifact"
+  },
+  "base_fixture_path": "validation_artifacts/harness/fit-repo-receipt.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/checks/0/stdout/path",
+      "value": "docs/plugin-resource-map.md"
+    },
+    {
+      "op": "replace",
+      "path": "/checks/0/stdout/digest",
+      "value": "sha256:07ea0cfb06833e891209f5e27f8fbe6cc99a8a198ffa9be70694ac759bd82543"
+    }
+  ],
+  "notes": "Fit-repo command output cannot be substituted with unrelated packaged docs.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [{ "path": "/checks/0/stdout/path", "exists": true }],
+  "postconditions": [{ "path": "/checks/0/stdout/path", "expectation": "fit_repo_receipt_command_output_not_command_artifact" }]
+}

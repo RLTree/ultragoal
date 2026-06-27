@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-repeated-prefix-without-subdirectory",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_validator_source_residual_prefix_encoding"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/domain/schema_alpha.rs"
+    },
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/domain/schema_beta.rs"
+    }
+  ],
+  "notes": "Repo-owned validator source with shared underscore namespace segments must be promoted into semantic module directories; governed namespace classes are not waivers.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/resources/-",
+      "expectation": "namespace_validator_source_residual_prefix_encoding"
+    }
+  ]
+}
