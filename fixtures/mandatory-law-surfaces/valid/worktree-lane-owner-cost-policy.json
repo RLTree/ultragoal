@@ -1,30 +1,30 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "worktree-lane-owner-cost-policy",
-  "standards_row_id": "worktree-lane-owner-cost-policy",
-  "source_obligation_id": "worktree-lane-owner-cost-policy",
-  "foundational_trace_id": "worktree-lane-owner-cost-policy",
-  "validator_check_id": "worktree-lane-owner-cost-policy",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
-  "red_fixture_ids": [
-    "worktree-lane-owner-cost-policy-source-obligation-parity-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "lane_owner_cost_policy_not_human_review_policy",
   "behavior_failure_modes": [
     "worktree_lane_owner_cost_policy_source_obligation_parity"
   ],
+  "claim_ceiling_guard": "lane_owner_cost_policy_not_human_review_policy",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "worktree-lane-owner-cost-policy",
+  "law_id": "worktree-lane-owner-cost-policy",
   "law_specific": {
     "source_obligation_parity": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "worktree-lane-owner-cost-policy-source-obligation-parity-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "worktree-lane-owner-cost-policy",
+  "standards_row_id": "worktree-lane-owner-cost-policy",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
+  "validator_check_id": "worktree-lane-owner-cost-policy"
 }

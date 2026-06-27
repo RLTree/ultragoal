@@ -6,7 +6,7 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb",
+  "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -63,6 +63,140 @@
     "ultragoal self performance prove",
     "ultragoal self update-goal eligibility"
   ],
+  "evidence_graph": {
+    "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+    "evaluation_mode": "production_dereferenced",
+    "items": [
+      {
+        "candidate_digest": "sha256:778c592e816b040520e6717eeabbfe7671fc046db473e211d77cbaf2851d78a6",
+        "digest": "sha256:cb62ff8c9890bb3268e3d0cbfd0d21fa27af20fd21b2674082a3da8e86970ca5",
+        "exists": true,
+        "failures": [
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "red_fixture_report",
+        "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "same_candidate": false,
+        "schema": "harness-ultragoal.red-fixture-report.v1",
+        "status": "fail"
+      },
+      {
+        "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+        "digest": "sha256:65d04f6da9dc4ddce6e121a01eb1fa940e2c323c3080e87045f02721695a3872",
+        "exists": true,
+        "failures": [],
+        "label": "coverage",
+        "path": "validation_artifacts/coverage/coverage-receipt.json",
+        "same_candidate": true,
+        "schema": "harness-ultragoal.coverage-receipt.v1",
+        "status": "pass"
+      },
+      {
+        "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+        "digest": "sha256:767fcae043b5e19fa77aacb6a335c4793aa756d368a896fecbe3515817f5f8a3",
+        "exists": true,
+        "failures": [],
+        "label": "cli_performance",
+        "path": "validation_artifacts/cli/performance-receipt.json",
+        "same_candidate": true,
+        "schema": "harness-ultragoal.cli-performance-receipt.v1",
+        "status": "pass"
+      },
+      {
+        "candidate_digest": null,
+        "digest": null,
+        "exists": false,
+        "failures": [
+          "digest_unavailable:./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+          "json_unavailable:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "final_packet",
+        "path": "validation_artifacts/review/final-packet-proof.json",
+        "same_candidate": false,
+        "schema": null,
+        "status": null
+      },
+      {
+        "candidate_digest": null,
+        "digest": "sha256:9a54f8e585c806df12e025f07773aa00cf0eda2bfee6d8c8a408988b2d3fcca2",
+        "exists": true,
+        "failures": [
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "registry_exposure",
+        "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+        "same_candidate": false,
+        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+        "status": null
+      },
+      {
+        "candidate_digest": "sha256:778c592e816b040520e6717eeabbfe7671fc046db473e211d77cbaf2851d78a6",
+        "digest": "sha256:d74800a737e762dda93e8cc6c9b403864ed9104befcf58038da092b9d00b1043",
+        "exists": true,
+        "failures": [
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "source_audit",
+        "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "same_candidate": false,
+        "schema": "harness-ultragoal.validator-receipt.v1",
+        "status": "fail"
+      },
+      {
+        "candidate_digest": null,
+        "digest": null,
+        "exists": false,
+        "failures": [
+          "digest_unavailable:./validation_artifacts/cli/transactional-finalization-receipt.json: metadata failed: No such file or directory (os error 2)",
+          "json_unavailable:./validation_artifacts/cli/transactional-finalization-receipt.json: json read failed: ./validation_artifacts/cli/transactional-finalization-receipt.json: metadata failed: No such file or directory (os error 2)",
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "transactional_finalization",
+        "path": "validation_artifacts/cli/transactional-finalization-receipt.json",
+        "same_candidate": false,
+        "schema": null,
+        "status": null
+      }
+    ],
+    "operation": "update_goal_eligibility",
+    "operation_failures": [
+      "plugin_self_law:plugin_self_law_registry_schema:$.generated_at: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.status: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.issuer: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.tool_call: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.capture_method: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.boundary: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.target_revision: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.claim_ceiling: required",
+      "plugin_self_law:plugin_self_law_registry_schema:$.raw_observation: required",
+      "plugin_self_law:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+      "plugin_self_law:plugin_self_law_registry_status_not_pass",
+      "plugin_self_law:plugin_self_law_registry_claim_ceiling_not_live_surface",
+      "plugin_self_law:plugin_self_law_registry_generated_capture_mismatch",
+      "plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer",
+      "plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer",
+      "plugin_self_law:plugin_self_law_registry_missing_tool_call_identity",
+      "plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/call_id",
+      "plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest",
+      "plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/account_id",
+      "plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id",
+      "plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/session_id",
+      "plugin_self_law:plugin_self_law_registry_boundary_session_mismatch",
+      "plugin_self_law:plugin_self_law_registry_capture_method_not_live",
+      "plugin_self_law:plugin_self_law_registry_raw_observation_missing",
+      "final_packet:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+      "red_fixture_report_target_digest_mismatch:sha256:778c592e816b040520e6717eeabbfe7671fc046db473e211d77cbaf2851d78a6!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+      "red_fixture_report_status_not_pass",
+      "red_fixture_report_has_failing_rows:250",
+      "cli_control_plane_transactional_finalization_missing:validation_artifacts/cli/transactional-finalization-receipt.json:./validation_artifacts/cli/transactional-finalization-receipt.json: json read failed: ./validation_artifacts/cli/transactional-finalization-receipt.json: metadata failed: No such file or directory (os error 2)"
+    ]
+  },
   "failure": {
     "check_id": "cli-control-plane-authority",
     "claim_ceiling_impact": "completion_package_review_release_update_goal_withheld",
@@ -72,20 +206,20 @@
     "gate_id": "89",
     "id": "update_goal_eligibility_evidence_not_satisfied",
     "law_id": "cli-control-plane-authority",
-    "observed_value": "plugin_self_law:plugin_self_law_registry_schema:$.generated_at: required | plugin_self_law:plugin_self_law_registry_schema:$.status: required | plugin_self_law:plugin_self_law_registry_schema:$.issuer: required | plugin_self_law:plugin_self_law_registry_schema:$.tool_call: required | plugin_self_law:plugin_self_law_registry_schema:$.capture_method: required | plugin_self_law:plugin_self_law_registry_schema:$.boundary: required | plugin_self_law:plugin_self_law_registry_schema:$.target_revision: required | plugin_self_law:plugin_self_law_registry_schema:$.claim_ceiling: required | plugin_self_law:plugin_self_law_registry_schema:$.raw_observation: required | plugin_self_law:plugin_self_law_registry_target_digest_mismatch:!=sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb | plugin_self_law:plugin_self_law_registry_status_not_pass | plugin_self_law:plugin_self_law_registry_claim_ceiling_not_live_surface | plugin_self_law:plugin_self_law_registry_generated_capture_mismatch | plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer | plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer | plugin_self_law:plugin_self_law_registry_missing_tool_call_identity | plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/call_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/account_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/session_id | plugin_self_law:plugin_self_law_registry_boundary_session_mismatch | plugin_self_law:plugin_self_law_registry_capture_method_not_live | plugin_self_law:plugin_self_law_registry_raw_observation_missing | final_packet:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+    "observed_value": "plugin_self_law:plugin_self_law_registry_schema:$.generated_at: required | plugin_self_law:plugin_self_law_registry_schema:$.status: required | plugin_self_law:plugin_self_law_registry_schema:$.issuer: required | plugin_self_law:plugin_self_law_registry_schema:$.tool_call: required | plugin_self_law:plugin_self_law_registry_schema:$.capture_method: required | plugin_self_law:plugin_self_law_registry_schema:$.boundary: required | plugin_self_law:plugin_self_law_registry_schema:$.target_revision: required | plugin_self_law:plugin_self_law_registry_schema:$.claim_ceiling: required | plugin_self_law:plugin_self_law_registry_schema:$.raw_observation: required | plugin_self_law:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae | plugin_self_law:plugin_self_law_registry_status_not_pass | plugin_self_law:plugin_self_law_registry_claim_ceiling_not_live_surface | plugin_self_law:plugin_self_law_registry_generated_capture_mismatch | plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer | plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer | plugin_self_law:plugin_self_law_registry_missing_tool_call_identity | plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/call_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/account_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id | plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/session_id | plugin_self_law:plugin_self_law_registry_boundary_session_mismatch | plugin_self_law:plugin_self_law_registry_capture_method_not_live | plugin_self_law:plugin_self_law_registry_raw_observation_missing | final_packet:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2) | red_fixture_report_target_digest_mismatch:sha256:778c592e816b040520e6717eeabbfe7671fc046db473e211d77cbaf2851d78a6!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae | red_fixture_report_status_not_pass | red_fixture_report_has_failing_rows:250 | cli_control_plane_transactional_finalization_missing:validation_artifacts/cli/transactional-finalization-receipt.json:./validation_artifacts/cli/transactional-finalization-receipt.json: json read failed: ./validation_artifacts/cli/transactional-finalization-receipt.json: metadata failed: No such file or directory (os error 2) | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:red_fixture_report | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:red_fixture_report | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:red_fixture_report | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_missing:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization | evidence_graph:cli_control_plane_receipt_evidence_graph_item_missing:transactional_finalization | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:transactional_finalization",
     "repair_class": "deterministic_enforcement",
     "rerun_command": "ultragoal update-goal eligibility --receipt validation_artifacts/cli/update-goal-eligibility.json",
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-27T14:45:17Z",
+  "generated_at": "2026-06-27T17:39:35Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
     "self_law_state": "transition_only",
     "tool": "ultragoal"
   },
-  "notes": "Fail-closed CLI authority receipt. Evidence failures: plugin_self_law:plugin_self_law_registry_schema:$.generated_at: required; plugin_self_law:plugin_self_law_registry_schema:$.status: required; plugin_self_law:plugin_self_law_registry_schema:$.issuer: required; plugin_self_law:plugin_self_law_registry_schema:$.tool_call: required; plugin_self_law:plugin_self_law_registry_schema:$.capture_method: required; plugin_self_law:plugin_self_law_registry_schema:$.boundary: required; plugin_self_law:plugin_self_law_registry_schema:$.target_revision: required; plugin_self_law:plugin_self_law_registry_schema:$.claim_ceiling: required; plugin_self_law:plugin_self_law_registry_schema:$.raw_observation: required; plugin_self_law:plugin_self_law_registry_target_digest_mismatch:!=sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb; plugin_self_law:plugin_self_law_registry_status_not_pass; plugin_self_law:plugin_self_law_registry_claim_ceiling_not_live_surface; plugin_self_law:plugin_self_law_registry_generated_capture_mismatch; plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law:plugin_self_law_registry_missing_tool_call_identity; plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/account_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/session_id; plugin_self_law:plugin_self_law_registry_boundary_session_mismatch; plugin_self_law:plugin_self_law_registry_capture_method_not_live; plugin_self_law:plugin_self_law_registry_raw_observation_missing; final_packet:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+  "notes": "Fail-closed CLI authority receipt. Evidence failures: plugin_self_law:plugin_self_law_registry_schema:$.generated_at: required; plugin_self_law:plugin_self_law_registry_schema:$.status: required; plugin_self_law:plugin_self_law_registry_schema:$.issuer: required; plugin_self_law:plugin_self_law_registry_schema:$.tool_call: required; plugin_self_law:plugin_self_law_registry_schema:$.capture_method: required; plugin_self_law:plugin_self_law_registry_schema:$.boundary: required; plugin_self_law:plugin_self_law_registry_schema:$.target_revision: required; plugin_self_law:plugin_self_law_registry_schema:$.claim_ceiling: required; plugin_self_law:plugin_self_law_registry_schema:$.raw_observation: required; plugin_self_law:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae; plugin_self_law:plugin_self_law_registry_status_not_pass; plugin_self_law:plugin_self_law_registry_claim_ceiling_not_live_surface; plugin_self_law:plugin_self_law_registry_generated_capture_mismatch; plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law:plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law:plugin_self_law_registry_missing_tool_call_identity; plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/account_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; plugin_self_law:plugin_self_law_registry_missing_observation_field:/boundary/session_id; plugin_self_law:plugin_self_law_registry_boundary_session_mismatch; plugin_self_law:plugin_self_law_registry_capture_method_not_live; plugin_self_law:plugin_self_law_registry_raw_observation_missing; final_packet:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); red_fixture_report_target_digest_mismatch:sha256:778c592e816b040520e6717eeabbfe7671fc046db473e211d77cbaf2851d78a6!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae; red_fixture_report_status_not_pass; red_fixture_report_has_failing_rows:250; cli_control_plane_transactional_finalization_missing:validation_artifacts/cli/transactional-finalization-receipt.json:./validation_artifacts/cli/transactional-finalization-receipt.json: json read failed: ./validation_artifacts/cli/transactional-finalization-receipt.json: metadata failed: No such file or directory (os error 2); evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:red_fixture_report; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:red_fixture_report; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:red_fixture_report; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_missing:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; evidence_graph:cli_control_plane_receipt_evidence_graph_item_missing:transactional_finalization; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:transactional_finalization",
   "operation": "update_goal_eligibility",
   "required_evidence": [
     "current_red_fixture_report_status_pass",

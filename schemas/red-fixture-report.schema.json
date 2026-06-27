@@ -4,10 +4,19 @@
   "title": "Harness Ultragoal Red Fixture Report",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "status", "red_fixtures", "generated_at"],
+  "required": ["schema", "status", "target_revision", "red_fixtures", "generated_at"],
   "properties": {
     "schema": { "const": "harness-ultragoal.red-fixture-report.v1" },
     "status": { "enum": ["pass", "fail"] },
+    "target_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "const": "package_digest" },
+        "value": { "$ref": "common-defs.schema.json#/$defs/sha256" }
+      }
+    },
     "red_fixtures": {
       "type": "object",
       "minProperties": 1,

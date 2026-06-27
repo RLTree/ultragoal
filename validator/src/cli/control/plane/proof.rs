@@ -5,6 +5,7 @@ use std::path::Path;
 mod authority;
 mod diagnostic;
 mod red;
+pub(crate) mod transaction;
 
 pub(crate) fn failures(root: &Path, operation: ControlOperation) -> Vec<String> {
     if matches!(
@@ -13,7 +14,9 @@ pub(crate) fn failures(root: &Path, operation: ControlOperation) -> Vec<String> 
     ) {
         return authority::registry_surface(root);
     }
-    authority::all(root)
+    let mut out = authority::all(root);
+    out.extend(transaction::failures(root, operation));
+    out
 }
 
 pub(crate) fn failure_value(operation: ControlOperation, failures: &[String]) -> Value {

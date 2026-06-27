@@ -1,33 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "capability-gap-extraction-harness-capability-promotion",
-  "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
-  "source_obligation_id": "capability-gap-extraction-harness-capability-promotion",
-  "foundational_trace_id": "capability-gap-extraction-harness-capability-promotion",
-  "validator_check_id": "capability-gap-extraction-harness-capability-promotion",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
-  "red_fixture_ids": [
-    "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
-    "capability-gap-extraction-harness-capability-promotion-repeated-tool-gap-with-no-promotion-red",
-    "capability-gap-extraction-harness-capability-promotion-missing-context-fixed-by-prose-only-red",
-    "capability-gap-extraction-harness-capability-promotion-missing-runtime-legibility-while-live-surface-claim-stays-green-red",
-    "capability-gap-extraction-harness-capability-promotion-missing-adapter-but-generic-support-claim-emitted-red",
-    "capability-gap-extraction-harness-capability-promotion-permission-app-capability-unavailable-but-reviewer-ready-claim-emitted-red",
-    "capability-gap-extraction-harness-capability-promotion-user-handback-treated-as-repair-red",
-    "capability-gap-extraction-harness-capability-promotion-stale-unowned-capability-gap-red",
-    "capability-gap-extraction-harness-capability-promotion-claim-supported-non-goal-capability-gap-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "readiness_claims_withheld_without_capability_gap_promotion",
   "behavior_failure_modes": [
     "capability_gap_extraction_harness_capability_promotion_missing_capability_with_no_record",
     "capability_gap_extraction_harness_capability_promotion_repeated_tool_gap_with_no_promotion",
@@ -39,16 +10,45 @@
     "capability_gap_extraction_harness_capability_promotion_stale_unowned_capability_gap",
     "capability_gap_extraction_harness_capability_promotion_claim_supported_non_goal_capability_gap"
   ],
+  "claim_ceiling_guard": "readiness_claims_withheld_without_capability_gap_promotion",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "capability-gap-extraction-harness-capability-promotion",
+  "law_id": "capability-gap-extraction-harness-capability-promotion",
   "law_specific": {
+    "claim_supported_non_goal_capability_gap": true,
+    "missing_adapter_but_generic_support_claim_emitted": true,
     "missing_capability_with_no_record": true,
-    "repeated_tool_gap_with_no_promotion": true,
     "missing_context_fixed_by_prose_only": true,
     "missing_runtime_legibility_while_live_surface_claim_stays_green": true,
-    "missing_adapter_but_generic_support_claim_emitted": true,
     "permission_app_capability_unavailable_but_reviewer_ready_claim_emitted": true,
-    "user_handback_treated_as_repair": true,
+    "repeated_tool_gap_with_no_promotion": true,
     "stale_unowned_capability_gap": true,
-    "claim_supported_non_goal_capability_gap": true
+    "user_handback_treated_as_repair": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
+    "capability-gap-extraction-harness-capability-promotion-repeated-tool-gap-with-no-promotion-red",
+    "capability-gap-extraction-harness-capability-promotion-missing-context-fixed-by-prose-only-red",
+    "capability-gap-extraction-harness-capability-promotion-missing-runtime-legibility-while-live-surface-claim-stays-green-red",
+    "capability-gap-extraction-harness-capability-promotion-missing-adapter-but-generic-support-claim-emitted-red",
+    "capability-gap-extraction-harness-capability-promotion-permission-app-capability-unavailable-but-reviewer-ready-claim-emitted-red",
+    "capability-gap-extraction-harness-capability-promotion-user-handback-treated-as-repair-red",
+    "capability-gap-extraction-harness-capability-promotion-stale-unowned-capability-gap-red",
+    "capability-gap-extraction-harness-capability-promotion-claim-supported-non-goal-capability-gap-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "capability-gap-extraction-harness-capability-promotion",
+  "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+  "validator_check_id": "capability-gap-extraction-harness-capability-promotion"
 }

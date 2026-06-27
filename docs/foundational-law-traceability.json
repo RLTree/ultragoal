@@ -5,7 +5,7 @@
       "obligation_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
       "standards_row_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
@@ -19,7 +19,7 @@
       "obligation_id": "adversarial-packet-tampering-forged-proof-rejection",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "adversarial-packet-tampering-forged-proof-rejection",
       "standards_row_id": "adversarial-packet-tampering-forged-proof-rejection",
@@ -33,7 +33,7 @@
       "obligation_id": "agent-authored-source-tooling-docs-provenance",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "agent-authored-source-tooling-docs-provenance",
       "standards_row_id": "agent-authored-source-tooling-docs-provenance",
@@ -47,7 +47,7 @@
       "obligation_id": "agent-queryable-observability",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "agent-queryable-observability",
       "standards_row_id": "agent-queryable-observability",
@@ -61,7 +61,7 @@
       "obligation_id": "agent-remediating-validator-failures",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "agent-remediating-validator-failures",
       "standards_row_id": "agent-remediating-validator-failures",
@@ -75,7 +75,7 @@
       "obligation_id": "agent-session-telemetry-token-rate-limit",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "agent-session-telemetry-token-rate-limit",
       "standards_row_id": "agent-session-telemetry-token-rate-limit",
@@ -89,7 +89,7 @@
       "obligation_id": "architecture-dependency-topology",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "architecture-dependency-topology",
       "standards_row_id": "architecture-dependency-topology",
@@ -103,7 +103,7 @@
       "obligation_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
       "standards_row_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
@@ -117,7 +117,7 @@
       "obligation_id": "authority-source-binding",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "authority-source-binding",
       "standards_row_id": "authority-source-binding",
@@ -131,7 +131,7 @@
       "obligation_id": "autonomy-loop-proof",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "autonomy-loop-proof",
       "standards_row_id": "autonomy-loop-proof",
@@ -145,7 +145,7 @@
       "obligation_id": "batch-fanout-custom-agent-job-worker-result-discipline",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "batch-fanout-custom-agent-job-worker-result-discipline",
       "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
@@ -159,7 +159,7 @@
       "obligation_id": "behavior-example-coverage-coverage-anti-gaming",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "behavior-example-coverage-coverage-anti-gaming",
       "standards_row_id": "behavior-example-coverage-coverage-anti-gaming",
@@ -173,7 +173,7 @@
       "obligation_id": "capability-gap-extraction-harness-capability-promotion",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "capability-gap-extraction-harness-capability-promotion",
       "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
@@ -187,7 +187,7 @@
       "obligation_id": "clean-checkout-command-discovery",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "clean-checkout-command-discovery",
       "standards_row_id": "clean-checkout-command-discovery",
@@ -201,7 +201,7 @@
       "obligation_id": "clean-room-rebuild-author-memory-independence",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "clean-room-rebuild-author-memory-independence",
       "standards_row_id": "clean-room-rebuild-author-memory-independence",
@@ -215,21 +215,21 @@
       "obligation_id": "cli-control-plane-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "cli-control-plane-authority",
       "standards_row_id": "cli-control-plane-authority",
       "validator_check_id": "cli-control-plane-authority",
       "red_fixture_id": "cli-control-plane-authority-checklist-completion-without-cli-red",
       "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
-      "receipt_requirement": "CLI control-plane receipt plus mandatory-law receipt for cli-control-plane-authority",
+      "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-control-plane-authority; transaction self-test leaf package-listed for pass-shaped reference rejection",
       "claim_ceiling_impact": "harness_claims_withheld_without_cli_control_plane_authority"
     },
     {
       "obligation_id": "cli-performance-latency-speed-iteration-fitness",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "cli-performance-latency-speed-iteration-fitness",
       "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
@@ -243,21 +243,21 @@
       "obligation_id": "cli-self-law-compliance",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "cli-self-law-compliance",
       "standards_row_id": "cli-self-law-compliance",
       "validator_check_id": "cli-self-law-compliance",
       "red_fixture_id": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
       "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
-      "receipt_requirement": "CLI control-plane receipt plus mandatory-law receipt for cli-self-law-compliance",
+      "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-self-law-compliance; transaction self-test leaf package-listed for pass-shaped reference rejection",
       "claim_ceiling_impact": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt"
     },
     {
       "obligation_id": "compact-agents-routed-standards",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "compact-agents-routed-standards",
       "standards_row_id": "compact-agents-routed-standards",
@@ -271,7 +271,7 @@
       "obligation_id": "conditional-observability-proof",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "conditional-observability-proof",
       "standards_row_id": "conditional-observability-proof",
@@ -285,7 +285,7 @@
       "obligation_id": "config-precedence-defaults-env-indirection",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "config-precedence-defaults-env-indirection",
       "standards_row_id": "config-precedence-defaults-env-indirection",
@@ -299,7 +299,7 @@
       "obligation_id": "connector-capability-discovery",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "connector-capability-discovery",
       "standards_row_id": "connector-capability-discovery",
@@ -313,7 +313,7 @@
       "obligation_id": "cross-artifact-consistency-solver-authority-graph-closure",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "cross-artifact-consistency-solver-authority-graph-closure",
       "standards_row_id": "cross-artifact-consistency-solver-authority-graph-closure",
@@ -327,7 +327,7 @@
       "obligation_id": "current-product-discovery-audit-quality-in-use-evidence",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "current-product-discovery-audit-quality-in-use-evidence",
       "standards_row_id": "current-product-discovery-audit-quality-in-use-evidence",
@@ -341,7 +341,7 @@
       "obligation_id": "derived-authority-recomputation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "derived-authority-recomputation",
       "standards_row_id": "derived-authority-recomputation",
@@ -355,7 +355,7 @@
       "obligation_id": "derived-authority-recomputation-named-authority-fallback-refusal",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "derived-authority-recomputation-named-authority-fallback-refusal",
       "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
@@ -369,7 +369,7 @@
       "obligation_id": "distinct-proof-surfaces-claim-ceilings",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "distinct-proof-surfaces-claim-ceilings",
       "standards_row_id": "distinct-proof-surfaces-claim-ceilings",
@@ -383,7 +383,7 @@
       "obligation_id": "distribution-sharing-surface-claim-separation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "distribution-sharing-surface-claim-separation",
       "standards_row_id": "distribution-sharing-surface-claim-separation",
@@ -397,7 +397,7 @@
       "obligation_id": "execplan-no-handback-prototype-promotion-discard",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "execplan-no-handback-prototype-promotion-discard",
       "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
@@ -411,7 +411,7 @@
       "obligation_id": "execplan-plain-language-expected-output-interface-completeness",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "execplan-plain-language-expected-output-interface-completeness",
       "standards_row_id": "execplan-plain-language-expected-output-interface-completeness",
@@ -425,7 +425,7 @@
       "obligation_id": "failure-remediation-quality-agent-actionable-output",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "failure-remediation-quality-agent-actionable-output",
       "standards_row_id": "failure-remediation-quality-agent-actionable-output",
@@ -439,7 +439,7 @@
       "obligation_id": "feedback-to-rule-promotion",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "feedback-to-rule-promotion",
       "standards_row_id": "feedback-to-rule-promotion",
@@ -453,7 +453,7 @@
       "obligation_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
       "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
@@ -467,7 +467,7 @@
       "obligation_id": "fresh-init-retrofit-mode-separation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "fresh-init-retrofit-mode-separation",
       "standards_row_id": "fresh-init-retrofit-mode-separation",
@@ -481,7 +481,7 @@
       "obligation_id": "fresh-retrofit-repo-shape",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "fresh-retrofit-repo-shape",
       "standards_row_id": "fresh-retrofit-repo-shape",
@@ -495,7 +495,7 @@
       "obligation_id": "generated-proof-artifact-provenance-anti-fabrication",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "generated-proof-artifact-provenance-anti-fabrication",
       "standards_row_id": "generated-proof-artifact-provenance-anti-fabrication",
@@ -509,7 +509,7 @@
       "obligation_id": "generated-ready-completion-receipts",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "generated-ready-completion-receipts",
       "standards_row_id": "generated-ready-completion-receipts",
@@ -523,7 +523,7 @@
       "obligation_id": "goal-contract-amendment-authority-required-claim-id-mapping",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "goal-contract-amendment-authority-required-claim-id-mapping",
       "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
@@ -537,7 +537,7 @@
       "obligation_id": "green-path-adequacy-satisfiable-strictness",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "green-path-adequacy-satisfiable-strictness",
       "standards_row_id": "green-path-adequacy-satisfiable-strictness",
@@ -551,7 +551,7 @@
       "obligation_id": "guardrail-speed-isolation-cache-honesty",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "guardrail-speed-isolation-cache-honesty",
       "standards_row_id": "guardrail-speed-isolation-cache-honesty",
@@ -565,7 +565,7 @@
       "obligation_id": "historical-regression-corpus-session-review-signals",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "historical-regression-corpus-session-review-signals",
       "standards_row_id": "historical-regression-corpus-session-review-signals",
@@ -579,7 +579,7 @@
       "obligation_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
       "standards_row_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
@@ -593,7 +593,7 @@
       "obligation_id": "instruction-precedence-nested-agents-routing",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "instruction-precedence-nested-agents-routing",
       "standards_row_id": "instruction-precedence-nested-agents-routing",
@@ -607,7 +607,7 @@
       "obligation_id": "issue-tracker-lifecycle-eligibility-terminal-state",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "issue-tracker-lifecycle-eligibility-terminal-state",
       "standards_row_id": "issue-tracker-lifecycle-eligibility-terminal-state",
@@ -621,7 +621,7 @@
       "obligation_id": "lane-worktree-isolation-cleanup",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "lane-worktree-isolation-cleanup",
       "standards_row_id": "lane-worktree-isolation-cleanup",
@@ -635,7 +635,7 @@
       "obligation_id": "live-beneficial-e2e",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "live-beneficial-e2e",
       "standards_row_id": "live-beneficial-e2e",
@@ -649,7 +649,7 @@
       "obligation_id": "memory-wiki-context-only",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "memory-wiki-context-only",
       "standards_row_id": "memory-wiki-context-only",
@@ -663,7 +663,7 @@
       "obligation_id": "namespace-progressive-disclosure",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "namespace-progressive-disclosure",
       "standards_row_id": "namespace-progressive-disclosure",
@@ -677,7 +677,7 @@
       "obligation_id": "non-e2e-claim-ceiling-confidence-bounds",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "non-e2e-claim-ceiling-confidence-bounds",
       "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
@@ -691,7 +691,7 @@
       "obligation_id": "offline-schema-catalog-resolver-portability",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "offline-schema-catalog-resolver-portability",
       "standards_row_id": "offline-schema-catalog-resolver-portability",
@@ -705,7 +705,7 @@
       "obligation_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
       "standards_row_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
@@ -719,7 +719,7 @@
       "obligation_id": "orchestrator-state-machine",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "orchestrator-state-machine",
       "standards_row_id": "orchestrator-state-machine",
@@ -733,7 +733,7 @@
       "obligation_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
       "standards_row_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
@@ -747,7 +747,7 @@
       "obligation_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
       "standards_row_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
@@ -761,7 +761,7 @@
       "obligation_id": "plugin-install-surface-metadata-cache-enable-state",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "plugin-install-surface-metadata-cache-enable-state",
       "standards_row_id": "plugin-install-surface-metadata-cache-enable-state",
@@ -775,7 +775,7 @@
       "obligation_id": "portable-non-prescriptive-adapter-implementation-choice",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "portable-non-prescriptive-adapter-implementation-choice",
       "standards_row_id": "portable-non-prescriptive-adapter-implementation-choice",
@@ -789,7 +789,7 @@
       "obligation_id": "privacy-raw-artifact-boundary",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "privacy-raw-artifact-boundary",
       "standards_row_id": "privacy-raw-artifact-boundary",
@@ -803,7 +803,7 @@
       "obligation_id": "product-cohesion-product-claims",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-cohesion-product-claims",
       "standards_row_id": "product-cohesion-product-claims",
@@ -817,7 +817,7 @@
       "obligation_id": "product-live-surface-receipts",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-live-surface-receipts",
       "standards_row_id": "product-live-surface-receipts",
@@ -831,7 +831,7 @@
       "obligation_id": "product-proof-joins-substitution-blocking",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-proof-joins-substitution-blocking",
       "standards_row_id": "product-proof-joins-substitution-blocking",
@@ -845,7 +845,7 @@
       "obligation_id": "product-strategy-positioning-research-eval-before-lane-planning",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-strategy-positioning-research-eval-before-lane-planning",
       "standards_row_id": "product-strategy-positioning-research-eval-before-lane-planning",
@@ -859,7 +859,7 @@
       "obligation_id": "product-success-binding-goal-lane-execplan-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-binding-goal-lane-execplan-authority",
       "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
@@ -873,7 +873,7 @@
       "obligation_id": "product-success-contract-initiation-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-contract-initiation-authority",
       "standards_row_id": "product-success-contract-initiation-authority",
@@ -887,7 +887,7 @@
       "obligation_id": "product-success-contract-review-packet-team-skill-routing",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-contract-review-packet-team-skill-routing",
       "standards_row_id": "product-success-contract-review-packet-team-skill-routing",
@@ -901,7 +901,7 @@
       "obligation_id": "product-success-inspiration-source-provenance-disposition",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-inspiration-source-provenance-disposition",
       "standards_row_id": "product-success-inspiration-source-provenance-disposition",
@@ -915,7 +915,7 @@
       "obligation_id": "product-success-lifecycle-transitions-no-late-afterthought",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-lifecycle-transitions-no-late-afterthought",
       "standards_row_id": "product-success-lifecycle-transitions-no-late-afterthought",
@@ -929,7 +929,7 @@
       "obligation_id": "product-success-lineage-amendments-closed-product-claim-ids",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "product-success-lineage-amendments-closed-product-claim-ids",
       "standards_row_id": "product-success-lineage-amendments-closed-product-claim-ids",
@@ -943,7 +943,7 @@
       "obligation_id": "purpose-backed-active-files",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "purpose-backed-active-files",
       "standards_row_id": "purpose-backed-active-files",
@@ -957,7 +957,7 @@
       "obligation_id": "quality-score-taste-gates",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "quality-score-taste-gates",
       "standards_row_id": "quality-score-taste-gates",
@@ -971,7 +971,7 @@
       "obligation_id": "raw-private-artifact-handling-category-only-evidence",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "raw-private-artifact-handling-category-only-evidence",
       "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
@@ -985,7 +985,7 @@
       "obligation_id": "repo-knowledge-index-core-beliefs",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "repo-knowledge-index-core-beliefs",
       "standards_row_id": "repo-knowledge-index-core-beliefs",
@@ -999,7 +999,7 @@
       "obligation_id": "restartable-execplans",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "restartable-execplans",
       "standards_row_id": "restartable-execplans",
@@ -1013,7 +1013,7 @@
       "obligation_id": "review-disagreement-override-judgment-boundary-governance",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "review-disagreement-override-judgment-boundary-governance",
       "standards_row_id": "review-disagreement-override-judgment-boundary-governance",
@@ -1027,7 +1027,7 @@
       "obligation_id": "review-feedback-disposition-same-round-satisfaction",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "review-feedback-disposition-same-round-satisfaction",
       "standards_row_id": "review-feedback-disposition-same-round-satisfaction",
@@ -1041,7 +1041,7 @@
       "obligation_id": "reviewer-to-gate-conversion",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "reviewer-to-gate-conversion",
       "standards_row_id": "reviewer-to-gate-conversion",
@@ -1055,7 +1055,7 @@
       "obligation_id": "runtime-feasibility-cost-strict-gate-usability",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "runtime-feasibility-cost-strict-gate-usability",
       "standards_row_id": "runtime-feasibility-cost-strict-gate-usability",
@@ -1069,7 +1069,7 @@
       "obligation_id": "runtime-tool-identity",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "runtime-tool-identity",
       "standards_row_id": "runtime-tool-identity",
@@ -1083,7 +1083,7 @@
       "obligation_id": "scheduler-runner-tracker-boundaries",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "scheduler-runner-tracker-boundaries",
       "standards_row_id": "scheduler-runner-tracker-boundaries",
@@ -1097,7 +1097,7 @@
       "obligation_id": "schema-evolution-receipt-migration-stale-version-invalidation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "schema-evolution-receipt-migration-stale-version-invalidation",
       "standards_row_id": "schema-evolution-receipt-migration-stale-version-invalidation",
@@ -1111,7 +1111,7 @@
       "obligation_id": "secret-token-boundaries",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "secret-token-boundaries",
       "standards_row_id": "secret-token-boundaries",
@@ -1125,7 +1125,7 @@
       "obligation_id": "semantic-domain-type-naming",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "semantic-domain-type-naming",
       "standards_row_id": "semantic-domain-type-naming",
@@ -1139,7 +1139,7 @@
       "obligation_id": "skill-catalog-context-budget-omission-warning",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "skill-catalog-context-budget-omission-warning",
       "standards_row_id": "skill-catalog-context-budget-omission-warning",
@@ -1153,7 +1153,7 @@
       "obligation_id": "skill-local-reference-closure",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "skill-local-reference-closure",
       "standards_row_id": "skill-local-reference-closure",
@@ -1167,7 +1167,7 @@
       "obligation_id": "skill-progressive-disclosure-metadata",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "skill-progressive-disclosure-metadata",
       "standards_row_id": "skill-progressive-disclosure-metadata",
@@ -1181,7 +1181,7 @@
       "obligation_id": "source-card-freshness-ceiling",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "source-card-freshness-ceiling",
       "standards_row_id": "source-card-freshness-ceiling",
@@ -1195,7 +1195,7 @@
       "obligation_id": "source-installed-cache-alignment",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "source-installed-cache-alignment",
       "standards_row_id": "source-installed-cache-alignment",
@@ -1209,7 +1209,7 @@
       "obligation_id": "source-obligation-parity-anti-bundling",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "source-obligation-parity-anti-bundling",
       "standards_row_id": "source-obligation-parity-anti-bundling",
@@ -1223,7 +1223,7 @@
       "obligation_id": "stable-identifier-normalization-collision",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "stable-identifier-normalization-collision",
       "standards_row_id": "stable-identifier-normalization-collision",
@@ -1237,7 +1237,7 @@
       "obligation_id": "standards-gardener-promotion",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "standards-gardener-promotion",
       "standards_row_id": "standards-gardener-promotion",
@@ -1251,7 +1251,7 @@
       "obligation_id": "subagent-custom-agent-sandbox-approval-inheritance",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "subagent-custom-agent-sandbox-approval-inheritance",
       "standards_row_id": "subagent-custom-agent-sandbox-approval-inheritance",
@@ -1265,7 +1265,7 @@
       "obligation_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
       "standards_row_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
@@ -1279,7 +1279,7 @@
       "obligation_id": "target-repo-audit-capability",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "target-repo-audit-capability",
       "standards_row_id": "target-repo-audit-capability",
@@ -1293,7 +1293,7 @@
       "obligation_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
       "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
@@ -1307,7 +1307,7 @@
       "obligation_id": "template-generation-governance-template-creator-boundary",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "template-generation-governance-template-creator-boundary",
       "standards_row_id": "template-generation-governance-template-creator-boundary",
@@ -1321,7 +1321,7 @@
       "obligation_id": "third-party-dependency-legibility-typed-adapters",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "third-party-dependency-legibility-typed-adapters",
       "standards_row_id": "third-party-dependency-legibility-typed-adapters",
@@ -1335,7 +1335,7 @@
       "obligation_id": "total-authority-types-impossible-state-elimination",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "total-authority-types-impossible-state-elimination",
       "standards_row_id": "total-authority-types-impossible-state-elimination",
@@ -1349,7 +1349,7 @@
       "obligation_id": "transcript-quality-reuse-gates",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "transcript-quality-reuse-gates",
       "standards_row_id": "transcript-quality-reuse-gates",
@@ -1363,7 +1363,7 @@
       "obligation_id": "trust-boundary-abuse-path-failure-path-coverage",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "trust-boundary-abuse-path-failure-path-coverage",
       "standards_row_id": "trust-boundary-abuse-path-failure-path-coverage",
@@ -1377,7 +1377,7 @@
       "obligation_id": "typed-records-over-prose",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "typed-records-over-prose",
       "standards_row_id": "typed-records-over-prose",
@@ -1405,7 +1405,7 @@
       "obligation_id": "validator-theater-miswire-resistance",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "validator-theater-miswire-resistance",
       "standards_row_id": "validator-theater-miswire-resistance",
@@ -1419,7 +1419,7 @@
       "obligation_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
       "standards_row_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
@@ -1433,7 +1433,7 @@
       "obligation_id": "workflow-template-parsing-rendering-reload",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "workflow-template-parsing-rendering-reload",
       "standards_row_id": "workflow-template-parsing-rendering-reload",
@@ -1447,7 +1447,7 @@
       "obligation_id": "workspace-command-confinement-lifecycle-cleanup",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "workspace-command-confinement-lifecycle-cleanup",
       "standards_row_id": "workspace-command-confinement-lifecycle-cleanup",
@@ -1461,7 +1461,7 @@
       "obligation_id": "worktree-lane-owner-cost-policy",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "worktree-lane-owner-cost-policy",
       "standards_row_id": "worktree-lane-owner-cost-policy",
@@ -1475,7 +1475,7 @@
       "obligation_id": "rust-developer-experience-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "rust-developer-experience-authority",
       "standards_row_id": "rust-developer-experience-authority",
@@ -1489,7 +1489,7 @@
       "obligation_id": "rust-toolchain-substrate-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "rust-toolchain-substrate-authority",
       "standards_row_id": "rust-toolchain-substrate-authority",
@@ -1503,7 +1503,7 @@
       "obligation_id": "rust-command-loop-authority",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "rust-command-loop-authority",
       "standards_row_id": "rust-command-loop-authority",
@@ -1517,7 +1517,7 @@
       "obligation_id": "rust-cache-no-cache-honesty",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "rust-cache-no-cache-honesty",
       "standards_row_id": "rust-cache-no-cache-honesty",
@@ -1531,7 +1531,7 @@
       "obligation_id": "rust-memory-resource-discipline",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "rust-memory-resource-discipline",
       "standards_row_id": "rust-memory-resource-discipline",
@@ -1545,7 +1545,7 @@
       "obligation_id": "workspace-artifact-cache-garbage-collection",
       "source_artifact": {
         "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
+        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
       },
       "law_id": "workspace-artifact-cache-garbage-collection",
       "standards_row_id": "workspace-artifact-cache-garbage-collection",

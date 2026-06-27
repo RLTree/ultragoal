@@ -1,32 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "product-success-binding-goal-lane-execplan-authority",
-  "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
-  "source_obligation_id": "product-success-binding-goal-lane-execplan-authority",
-  "foundational_trace_id": "product-success-binding-goal-lane-execplan-authority",
-  "validator_check_id": "product-success-binding-goal-lane-execplan-authority",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
-  "red_fixture_ids": [
-    "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
-    "product-success-binding-goal-lane-execplan-authority-product-lane-without-contract-id-red",
-    "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-fitness-owed-red",
-    "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-cohesion-owed-red",
-    "product-success-binding-goal-lane-execplan-authority-explicit-non-product-waiver-contradicted-by-claim-text-red",
-    "product-success-binding-goal-lane-execplan-authority-product-claim-consumed-outside-declared-goal-claim-ids-red",
-    "product-success-binding-goal-lane-execplan-authority-lane-ready-receipt-omitting-product-success-obligations-red",
-    "product-success-binding-goal-lane-execplan-authority-product-evidence-split-across-lanes-without-closed-claim-ids-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "product_lane_claims_withheld_without_product_success_binding",
   "behavior_failure_modes": [
     "product_success_binding_goal_lane_execplan_authority_product_goal_without_product_success_contract_binding",
     "product_success_binding_goal_lane_execplan_authority_product_lane_without_contract_id",
@@ -37,15 +9,43 @@
     "product_success_binding_goal_lane_execplan_authority_lane_ready_receipt_omitting_product_success_obligations",
     "product_success_binding_goal_lane_execplan_authority_product_evidence_split_across_lanes_without_closed_claim_ids"
   ],
+  "claim_ceiling_guard": "product_lane_claims_withheld_without_product_success_binding",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "product-success-binding-goal-lane-execplan-authority",
+  "law_id": "product-success-binding-goal-lane-execplan-authority",
   "law_specific": {
-    "product_goal_without_product_success_contract_binding": true,
-    "product_lane_without_contract_id": true,
-    "product_lane_ready_without_product_fitness_owed": true,
-    "product_lane_ready_without_product_cohesion_owed": true,
     "explicit_non_product_waiver_contradicted_by_claim_text": true,
-    "product_claim_consumed_outside_declared_goal_claim_ids": true,
     "lane_ready_receipt_omitting_product_success_obligations": true,
-    "product_evidence_split_across_lanes_without_closed_claim_ids": true
+    "product_claim_consumed_outside_declared_goal_claim_ids": true,
+    "product_evidence_split_across_lanes_without_closed_claim_ids": true,
+    "product_goal_without_product_success_contract_binding": true,
+    "product_lane_ready_without_product_cohesion_owed": true,
+    "product_lane_ready_without_product_fitness_owed": true,
+    "product_lane_without_contract_id": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
+    "product-success-binding-goal-lane-execplan-authority-product-lane-without-contract-id-red",
+    "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-fitness-owed-red",
+    "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-cohesion-owed-red",
+    "product-success-binding-goal-lane-execplan-authority-explicit-non-product-waiver-contradicted-by-claim-text-red",
+    "product-success-binding-goal-lane-execplan-authority-product-claim-consumed-outside-declared-goal-claim-ids-red",
+    "product-success-binding-goal-lane-execplan-authority-lane-ready-receipt-omitting-product-success-obligations-red",
+    "product-success-binding-goal-lane-execplan-authority-product-evidence-split-across-lanes-without-closed-claim-ids-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "product-success-binding-goal-lane-execplan-authority",
+  "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+  "validator_check_id": "product-success-binding-goal-lane-execplan-authority"
 }

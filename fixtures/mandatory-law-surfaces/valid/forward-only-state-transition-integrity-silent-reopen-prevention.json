@@ -1,35 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-  "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-  "source_obligation_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-  "foundational_trace_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-  "validator_check_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
-  "red_fixture_ids": [
-    "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-approval-reentering-needs-review-without-reopen-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-status-string-says-verified-but-transition-missing-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-final-packet-changes-blocked-to-fixed-by-prose-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-reviewer-signoff-reused-after-reopen-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-automation-tick-resets-lane-state-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-package-install-receipt-advances-stale-state-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-previous-hash-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-actor-evidence-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-reopened-gate-still-green-red",
-    "forward-only-state-transition-integrity-silent-reopen-prevention-update-goal-allowed-after-reopened-required-claim-unverified-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "claim_green_states_withheld_without_forward_only_transition_history",
   "behavior_failure_modes": [
     "forward_only_state_transition_integrity_silent_reopen_prevention_terminal_row_edited_back_to_active",
     "forward_only_state_transition_integrity_silent_reopen_prevention_approval_reentering_needs_review_without_reopen",
@@ -43,18 +12,49 @@
     "forward_only_state_transition_integrity_silent_reopen_prevention_reopened_gate_still_green",
     "forward_only_state_transition_integrity_silent_reopen_prevention_update_goal_allowed_after_reopened_required_claim_unverified"
   ],
+  "claim_ceiling_guard": "claim_green_states_withheld_without_forward_only_transition_history",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+  "law_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
   "law_specific": {
-    "terminal_row_edited_back_to_active": true,
     "approval_reentering_needs_review_without_reopen": true,
-    "status_string_says_verified_but_transition_missing": true,
-    "final_packet_changes_blocked_to_fixed_by_prose": true,
-    "reviewer_signoff_reused_after_reopen": true,
     "automation_tick_resets_lane_state": true,
+    "final_packet_changes_blocked_to_fixed_by_prose": true,
     "package_install_receipt_advances_stale_state": true,
-    "transition_event_missing_previous_hash": true,
-    "transition_event_missing_actor_evidence": true,
     "reopened_gate_still_green": true,
+    "reviewer_signoff_reused_after_reopen": true,
+    "status_string_says_verified_but_transition_missing": true,
+    "terminal_row_edited_back_to_active": true,
+    "transition_event_missing_actor_evidence": true,
+    "transition_event_missing_previous_hash": true,
     "update_goal_allowed_after_reopened_required_claim_unverified": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-approval-reentering-needs-review-without-reopen-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-status-string-says-verified-but-transition-missing-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-final-packet-changes-blocked-to-fixed-by-prose-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-reviewer-signoff-reused-after-reopen-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-automation-tick-resets-lane-state-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-package-install-receipt-advances-stale-state-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-previous-hash-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-actor-evidence-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-reopened-gate-still-green-red",
+    "forward-only-state-transition-integrity-silent-reopen-prevention-update-goal-allowed-after-reopened-required-claim-unverified-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+  "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+  "validator_check_id": "forward-only-state-transition-integrity-silent-reopen-prevention"
 }

@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-  "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-  "source_obligation_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-  "foundational_trace_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-  "validator_check_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
-  "red_fixture_ids": [
-    "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
-    "targeted-refactor-debt-removal-standards-gardener-cadence-stale-debt-row-red",
-    "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
-    "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
-    "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
-    "targeted-refactor-debt-removal-standards-gardener-cadence-standards-gardener-cadence-omitted-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "compliance_claims_withheld_without_debt_remediation_cadence_receipt",
   "behavior_failure_modes": [
     "targeted_refactor_debt_removal_standards_gardener_cadence_repeated_namespace_violation_not_promoted_to_check",
     "targeted_refactor_debt_removal_standards_gardener_cadence_stale_debt_row",
@@ -33,13 +7,39 @@
     "targeted_refactor_debt_removal_standards_gardener_cadence_recurring_cleanup_receipt_with_wrong_candidate_digest",
     "targeted_refactor_debt_removal_standards_gardener_cadence_standards_gardener_cadence_omitted"
   ],
+  "claim_ceiling_guard": "compliance_claims_withheld_without_debt_remediation_cadence_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+  "law_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
   "law_specific": {
+    "backlog_debt_supporting_claim": true,
+    "quality_grade_not_updated_after_hardening": true,
+    "recurring_cleanup_receipt_with_wrong_candidate_digest": true,
     "repeated_namespace_violation_not_promoted_to_check": true,
     "stale_debt_row": true,
-    "quality_grade_not_updated_after_hardening": true,
-    "backlog_debt_supporting_claim": true,
-    "recurring_cleanup_receipt_with_wrong_candidate_digest": true,
     "standards_gardener_cadence_omitted": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
+    "targeted-refactor-debt-removal-standards-gardener-cadence-stale-debt-row-red",
+    "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
+    "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
+    "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
+    "targeted-refactor-debt-removal-standards-gardener-cadence-standards-gardener-cadence-omitted-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+  "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
+  "validator_check_id": "targeted-refactor-debt-removal-standards-gardener-cadence"
 }

@@ -1,34 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-  "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-  "source_obligation_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-  "foundational_trace_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-  "validator_check_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
-  "red_fixture_ids": [
-    "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-placeholder-references-unknown-csv-column-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-missing-output-schema-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-worker-reports-twice-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-worker-exits-without-result-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-output-csv-missing-job-metadata-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-unbounded-concurrency-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-timeout-ignored-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-malformed-custom-agent-toml-red",
-    "batch-fanout-custom-agent-job-worker-result-discipline-built-in-custom-agent-name-collision-without-precedence-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results",
   "behavior_failure_modes": [
     "batch_fanout_custom_agent_job_worker_result_discipline_missing_id_column",
     "batch_fanout_custom_agent_job_worker_result_discipline_placeholder_references_unknown_csv_column",
@@ -41,17 +11,47 @@
     "batch_fanout_custom_agent_job_worker_result_discipline_malformed_custom_agent_toml",
     "batch_fanout_custom_agent_job_worker_result_discipline_built_in_custom_agent_name_collision_without_precedence"
   ],
+  "claim_ceiling_guard": "batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "batch-fanout-custom-agent-job-worker-result-discipline",
+  "law_id": "batch-fanout-custom-agent-job-worker-result-discipline",
   "law_specific": {
-    "missing_id_column": true,
-    "placeholder_references_unknown_csv_column": true,
-    "missing_output_schema": true,
-    "worker_reports_twice": true,
-    "worker_exits_without_result": true,
-    "output_csv_missing_job_metadata": true,
-    "unbounded_concurrency": true,
-    "timeout_ignored": true,
+    "built_in_custom_agent_name_collision_without_precedence": true,
     "malformed_custom_agent_toml": true,
-    "built_in_custom_agent_name_collision_without_precedence": true
+    "missing_id_column": true,
+    "missing_output_schema": true,
+    "output_csv_missing_job_metadata": true,
+    "placeholder_references_unknown_csv_column": true,
+    "timeout_ignored": true,
+    "unbounded_concurrency": true,
+    "worker_exits_without_result": true,
+    "worker_reports_twice": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-placeholder-references-unknown-csv-column-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-missing-output-schema-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-worker-reports-twice-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-worker-exits-without-result-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-output-csv-missing-job-metadata-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-unbounded-concurrency-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-timeout-ignored-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-malformed-custom-agent-toml-red",
+    "batch-fanout-custom-agent-job-worker-result-discipline-built-in-custom-agent-name-collision-without-precedence-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "batch-fanout-custom-agent-job-worker-result-discipline",
+  "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
+  "validator_check_id": "batch-fanout-custom-agent-job-worker-result-discipline"
 }

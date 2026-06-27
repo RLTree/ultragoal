@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "orchestrator-state-machine",
-  "standards_row_id": "orchestrator-state-machine",
-  "source_obligation_id": "orchestrator-state-machine",
-  "foundational_trace_id": "orchestrator-state-machine",
-  "validator_check_id": "orchestrator-state-machine",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json",
-  "red_fixture_ids": [
-    "orchestrator-state-machine-bounded-concurrency-red",
-    "orchestrator-state-machine-single-authoritative-state-red",
-    "orchestrator-state-machine-deterministic-workspaces-red",
-    "orchestrator-state-machine-stop-on-state-change-red",
-    "orchestrator-state-machine-retry-backoff-red",
-    "orchestrator-state-machine-restart-recovery-red",
-    "orchestrator-state-machine-observability-events-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "orchestration_claims_withheld_without_state_machine_receipt",
   "behavior_failure_modes": [
     "orchestrator_state_machine_bounded_concurrency",
     "orchestrator_state_machine_single_authoritative_state",
@@ -35,14 +8,41 @@
     "orchestrator_state_machine_restart_recovery",
     "orchestrator_state_machine_observability_events"
   ],
+  "claim_ceiling_guard": "orchestration_claims_withheld_without_state_machine_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "orchestrator-state-machine",
+  "law_id": "orchestrator-state-machine",
   "law_specific": {
     "bounded_concurrency": true,
-    "single_authoritative_state": true,
     "deterministic_workspaces": true,
-    "stop_on_state_change": true,
-    "retry_backoff": true,
+    "observability_events": true,
     "restart_recovery": true,
-    "observability_events": true
+    "retry_backoff": true,
+    "single_authoritative_state": true,
+    "stop_on_state_change": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "orchestrator-state-machine-bounded-concurrency-red",
+    "orchestrator-state-machine-single-authoritative-state-red",
+    "orchestrator-state-machine-deterministic-workspaces-red",
+    "orchestrator-state-machine-stop-on-state-change-red",
+    "orchestrator-state-machine-retry-backoff-red",
+    "orchestrator-state-machine-restart-recovery-red",
+    "orchestrator-state-machine-observability-events-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "orchestrator-state-machine",
+  "standards_row_id": "orchestrator-state-machine",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json",
+  "validator_check_id": "orchestrator-state-machine"
 }

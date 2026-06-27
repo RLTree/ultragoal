@@ -1,7 +1,9 @@
 use crate::cli::control::plane::RECEIPT_SCHEMA;
+use crate::cli::control::plane::evidence;
 use crate::cli::control::plane::proof;
 use crate::cli::control::plane::types::{ControlOperation, REQUIRED_COMMANDS};
 use serde_json::{Value, json};
+use std::path::Path;
 
 #[cfg(test)]
 pub(crate) fn receipt_from_evidence(
@@ -14,22 +16,41 @@ pub(crate) fn receipt_from_evidence(
     if evidence_failures.is_empty() {
         evidence_failures.push("cli_control_plane_transactional_green_path_not_proven".to_string());
     }
-    fail_receipt(package_digest, operation, evidence_failures)
+    fail_receipt(
+        package_digest.clone(),
+        operation,
+        evidence_failures,
+        evidence::test_constructor(&package_digest, operation),
+    )
 }
 
 pub(crate) fn receipt_from_production_evidence(
+    root: &Path,
     package_digest: String,
     operation: ControlOperation,
-    evidence_failures: Vec<String>,
+    mut evidence_failures: Vec<String>,
 ) -> Value {
-    if evidence_failures.is_empty() {
-        pass_receipt(package_digest, operation)
+    let graph = evidence::production(root, operation, &package_digest, &evidence_failures);
+    let graph_wrapper = json!({
+        "candidate_digest": package_digest,
+        "operation": operation.id(),
+        "evidence_graph": graph.clone()
+    });
+    let graph_failures =
+        evidence::same_candidate_pass_failures(&graph_wrapper, &package_digest, operation.id());
+    if evidence_failures.is_empty() && graph_failures.is_empty() {
+        pass_receipt(package_digest, operation, graph)
     } else {
-        fail_receipt(package_digest, operation, evidence_failures)
+        evidence_failures.extend(
+            graph_failures
+                .into_iter()
+                .map(|failure| format!("evidence_graph:{failure}")),
+        );
+        fail_receipt(package_digest, operation, evidence_failures, graph)
     }
 }
 
-fn pass_receipt(package_digest: String, operation: ControlOperation) -> Value {
+fn pass_receipt(package_digest: String, operation: ControlOperation, graph: Value) -> Value {
     json!({
         "schema": RECEIPT_SCHEMA,
         "schema_version": "v1",
@@ -48,6 +69,7 @@ fn pass_receipt(package_digest: String, operation: ControlOperation) -> Value {
         "blocked_claim_classes": [],
         "required_evidence": required_evidence(operation),
         "failure": Value::Null,
+        "evidence_graph": graph,
         "command_surface": REQUIRED_COMMANDS,
         "notes": proof::notes(true, &[])
     })
@@ -57,6 +79,7 @@ fn fail_receipt(
     package_digest: String,
     operation: ControlOperation,
     evidence_failures: Vec<String>,
+    graph: Value,
 ) -> Value {
     json!({
         "schema": RECEIPT_SCHEMA,
@@ -76,6 +99,7 @@ fn fail_receipt(
         "blocked_claim_classes": blocked_claims(operation),
         "required_evidence": required_evidence(operation),
         "failure": proof::failure_value(operation, &evidence_failures),
+        "evidence_graph": graph,
         "command_surface": REQUIRED_COMMANDS,
         "notes": proof::notes(false, &evidence_failures)
     })

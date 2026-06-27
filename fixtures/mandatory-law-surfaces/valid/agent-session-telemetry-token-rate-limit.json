@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "agent-session-telemetry-token-rate-limit",
-  "standards_row_id": "agent-session-telemetry-token-rate-limit",
-  "source_obligation_id": "agent-session-telemetry-token-rate-limit",
-  "foundational_trace_id": "agent-session-telemetry-token-rate-limit",
-  "validator_check_id": "agent-session-telemetry-token-rate-limit",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
-  "red_fixture_ids": [
-    "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
-    "agent-session-telemetry-token-rate-limit-stale-live-session-timestamp-red",
-    "agent-session-telemetry-token-rate-limit-reviewer-output-without-session-id-red",
-    "agent-session-telemetry-token-rate-limit-rate-limit-hit-but-claim-remains-green-red",
-    "agent-session-telemetry-token-rate-limit-model-mismatch-between-toml-and-receipt-red",
-    "agent-session-telemetry-token-rate-limit-private-transcript-payload-embedded-in-public-packet-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "agent_run_claims_withheld_without_redacted_session_telemetry",
   "behavior_failure_modes": [
     "agent_session_telemetry_token_rate_limit_missing_token_totals",
     "agent_session_telemetry_token_rate_limit_stale_live_session_timestamp",
@@ -33,13 +7,39 @@
     "agent_session_telemetry_token_rate_limit_model_mismatch_between_toml_and_receipt",
     "agent_session_telemetry_token_rate_limit_private_transcript_payload_embedded_in_public_packet"
   ],
+  "claim_ceiling_guard": "agent_run_claims_withheld_without_redacted_session_telemetry",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "agent-session-telemetry-token-rate-limit",
+  "law_id": "agent-session-telemetry-token-rate-limit",
   "law_specific": {
     "missing_token_totals": true,
-    "stale_live_session_timestamp": true,
-    "reviewer_output_without_session_id": true,
-    "rate_limit_hit_but_claim_remains_green": true,
     "model_mismatch_between_toml_and_receipt": true,
-    "private_transcript_payload_embedded_in_public_packet": true
+    "private_transcript_payload_embedded_in_public_packet": true,
+    "rate_limit_hit_but_claim_remains_green": true,
+    "reviewer_output_without_session_id": true,
+    "stale_live_session_timestamp": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
+    "agent-session-telemetry-token-rate-limit-stale-live-session-timestamp-red",
+    "agent-session-telemetry-token-rate-limit-reviewer-output-without-session-id-red",
+    "agent-session-telemetry-token-rate-limit-rate-limit-hit-but-claim-remains-green-red",
+    "agent-session-telemetry-token-rate-limit-model-mismatch-between-toml-and-receipt-red",
+    "agent-session-telemetry-token-rate-limit-private-transcript-payload-embedded-in-public-packet-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "agent-session-telemetry-token-rate-limit",
+  "standards_row_id": "agent-session-telemetry-token-rate-limit",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+  "validator_check_id": "agent-session-telemetry-token-rate-limit"
 }

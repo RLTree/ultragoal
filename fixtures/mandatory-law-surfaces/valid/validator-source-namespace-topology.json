@@ -1,11 +1,50 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "validator-source-namespace-topology",
-  "standards_row_id": "validator-source-namespace-topology",
-  "source_obligation_id": "validator-source-namespace-topology",
+  "behavior_failure_modes": [
+    "top_level_validator_internal_cluster",
+    "coverage_wave_history_filename",
+    "iinternal_typo_prefix",
+    "broad_validator_source_exception",
+    "generated_exception_for_hand_authored_source",
+    "package_manifest_blesses_bad_source",
+    "widened_namespace_class_tamper"
+  ],
+  "claim_ceiling_guard": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3b2e69b5feef3eeae31b9d4513d280ebead8bffe0ed77329cf6801e63b394042",
+      "path": "validator/src/audit/namespace/source/topology.rs"
+    },
+    {
+      "digest": "sha256:7160c81964c5e79bd9ce5da7bdb90768b44dc8a56be39a7860466dab80c7f643",
+      "path": "validator/src/audit/namespace/classes.rs"
+    },
+    {
+      "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa",
+      "path": "validator/src/audit/namespace/law.rs"
+    },
+    {
+      "digest": "sha256:8b6eeffa12538adc45655f1dbc6c71eceb6d7b06f3e6f6ddb829c600f96ad3cc",
+      "path": "validator/src/self_tests/namespace/red_fixtures.rs"
+    },
+    {
+      "digest": "sha256:537c361ff0c724b09eab0d61dd09924662a20ce6be1961349f883c5f95bad4c6",
+      "path": "fixtures/red/namespace-validator-source-top-level-internal-cluster-red.json"
+    },
+    {
+      "digest": "sha256:c2fefea05a80ec9365d651abf2c74d6b28c3519d479efce1add3fa995a86b30e",
+      "path": "fixtures/red/namespace-validator-source-widened-class-tamper-red.json"
+    }
+  ],
   "foundational_trace_id": "validator-source-namespace-topology",
-  "validator_check_id": "namespace-progressive-disclosure",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-source-namespace-topology.json",
+  "law_id": "validator-source-namespace-topology",
+  "law_specific": {
+    "actual_repo_owned_source_inspected": true,
+    "broad_validator_source_exceptions_rejected": true,
+    "claim_ceiling_guard_blocks_material_claims": true,
+    "package_manifest_cannot_bless_source_topology": true,
+    "red_green_tamper_fixture_bound": true
+  },
   "red_fixture_ids": [
     "namespace-validator-source-class-waiver-manifest-contract-red",
     "namespace-validator-source-broad-glob-red",
@@ -18,48 +57,9 @@
     "namespace-validator-source-top-level-internal-coverage-wave-red",
     "namespace-validator-source-widened-class-tamper-red"
   ],
-  "evidence_artifacts": [
-    {
-      "path": "validator/src/audit/namespace/source/topology.rs",
-      "digest": "sha256:3b2e69b5feef3eeae31b9d4513d280ebead8bffe0ed77329cf6801e63b394042"
-    },
-    {
-      "path": "validator/src/audit/namespace/classes.rs",
-      "digest": "sha256:7160c81964c5e79bd9ce5da7bdb90768b44dc8a56be39a7860466dab80c7f643"
-    },
-    {
-      "path": "validator/src/audit/namespace/law.rs",
-      "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa"
-    },
-    {
-      "path": "validator/src/self_tests/namespace/red_fixtures.rs",
-      "digest": "sha256:8b6eeffa12538adc45655f1dbc6c71eceb6d7b06f3e6f6ddb829c600f96ad3cc"
-    },
-    {
-      "path": "fixtures/red/namespace-validator-source-top-level-internal-cluster-red.json",
-      "digest": "sha256:537c361ff0c724b09eab0d61dd09924662a20ce6be1961349f883c5f95bad4c6"
-    },
-    {
-      "path": "fixtures/red/namespace-validator-source-widened-class-tamper-red.json",
-      "digest": "sha256:c2fefea05a80ec9365d651abf2c74d6b28c3519d479efce1add3fa995a86b30e"
-    }
-  ],
-  "claim_ceiling_guard": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
-  "behavior_failure_modes": [
-    "top_level_validator_internal_cluster",
-    "coverage_wave_history_filename",
-    "iinternal_typo_prefix",
-    "broad_validator_source_exception",
-    "generated_exception_for_hand_authored_source",
-    "package_manifest_blesses_bad_source",
-    "widened_namespace_class_tamper"
-  ],
-  "law_specific": {
-    "actual_repo_owned_source_inspected": true,
-    "broad_validator_source_exceptions_rejected": true,
-    "package_manifest_cannot_bless_source_topology": true,
-    "red_green_tamper_fixture_bound": true,
-    "claim_ceiling_guard_blocks_material_claims": true
-  },
-  "enforcement_status": "deterministic_fail_closed"
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "validator-source-namespace-topology",
+  "standards_row_id": "validator-source-namespace-topology",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-source-namespace-topology.json",
+  "validator_check_id": "namespace-progressive-disclosure"
 }

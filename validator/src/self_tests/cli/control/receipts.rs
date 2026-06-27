@@ -21,13 +21,6 @@ fn write_json(path: &Path, value: &serde_json::Value) {
     std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
 }
 
-fn write_text(path: &Path, text: &str) {
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent).expect("parent");
-    }
-    std::fs::write(path, text).expect("write text");
-}
-
 #[test]
 fn receipt_blocks_claims_and_records_required_evidence() {
     let root = repo_root();
@@ -89,6 +82,31 @@ fn run_writes_and_prints_fail_closed_receipts() {
 }
 
 #[test]
+fn production_constructor_does_not_pass_from_empty_evidence_without_green_graph() {
+    let root = crate::self_tests::boundaries::support::temp_root("cli-production-no-green");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"version":"0.0.0-test","resources":[]}),
+    );
+    let candidate = crate::self_tests::boundaries::support::sha('c');
+    let value = crate::cli::control::plane::emit::receipt_from_production_evidence(
+        &root,
+        candidate.clone(),
+        ControlOperation::UpdateGoalEligibility,
+        Vec::new(),
+    );
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["candidate_digest"], candidate);
+    assert_eq!(value["issuer"]["self_law_state"], "transition_only");
+    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(
+        value["evidence_graph"]["evaluation_mode"],
+        "production_dereferenced"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup cli production root");
+}
+
+#[test]
 fn surface_validation_rejects_missing_authority_fields() {
     let mut value = json!({
         "schema": RECEIPT_SCHEMA,
@@ -96,7 +114,12 @@ fn surface_validation_rejects_missing_authority_fields() {
         "operation": "packet_verify",
         "candidate_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "blocked_claim_classes": ["completion"],
-        "failure": {"law_id": "cli-self-law-compliance"}
+        "failure": {"law_id": "cli-self-law-compliance"},
+        "evidence_graph": super::graph::control(
+            "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "packet_verify",
+            true
+        )
     });
     assert!(surface_value_failures(&value).is_empty());
 
@@ -111,6 +134,10 @@ fn surface_validation_rejects_missing_authority_fields() {
         .as_object_mut()
         .expect("object")
         .remove("blocked_claim_classes");
+    value
+        .as_object_mut()
+        .expect("object")
+        .remove("evidence_graph");
     value["failure"]["law_id"] = json!("other");
     let failures = surface_value_failures(&value);
     for expected in [
@@ -120,6 +147,7 @@ fn surface_validation_rejects_missing_authority_fields() {
         "cli_control_plane_receipt_missing_candidate_digest",
         "cli_control_plane_receipt_missing_blocked_claims",
         "cli_control_plane_receipt_missing_self_law_failure",
+        "cli_control_plane_receipt_missing_evidence_graph",
     ] {
         assert!(failures.iter().any(|failure| failure == expected));
     }
@@ -137,7 +165,8 @@ fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts
         "status": "fail",
         "claim_ceiling": "withheld_or_blocked",
         "blocked_claim_classes": ["completion", "update_goal_eligibility"],
-        "failure": {"law_id": "cli-self-law-compliance"}
+        "failure": {"law_id": "cli-self-law-compliance"},
+        "evidence_graph": super::graph::control(&stale_candidate, "update_goal_eligibility", true)
     });
     let failures =
         same_candidate_pass_failures(&transition, &current_candidate, "update_goal_eligibility");
@@ -161,72 +190,11 @@ fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts
         "status": "pass",
         "claim_ceiling": "supports_update_goal_eligibility",
         "blocked_claim_classes": [],
-        "failure": null
+        "failure": null,
+        "evidence_graph": super::graph::control(&current_candidate, "update_goal_eligibility", false)
     });
     assert!(
         same_candidate_pass_failures(&pass, &current_candidate, "update_goal_eligibility")
             .is_empty()
     );
-}
-
-#[test]
-fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-control-plane-audit");
-    write_text(
-        &root.join("validator/Cargo.toml"),
-        "[[bin]]\nname = \"ultragoal\"\n[[bin]]\nname = \"ultragoal-validator\"\n",
-    );
-    write_text(&root.join("validator/src/cli/control/plane.rs"), "source");
-    write_text(
-        &root.join("validator/src/cli/control/plane/types.rs"),
-        "types",
-    );
-    write_json(
-        &root.join("schemas/cli-control-plane-receipt.schema.json"),
-        &json!({}),
-    );
-    write_json(
-        &root.join("plugin-manifest-draft.json"),
-        &json!({"resources":[
-            {"path":"validator/src/cli/control/plane.rs"},
-            {"path":"validator/src/cli/control/plane/types.rs"},
-            {"path":"schemas/cli-control-plane-receipt.schema.json"}
-        ]}),
-    );
-    write_json(
-        &root.join("schemas/schema-catalog.json"),
-        &json!({"schemas":[]}),
-    );
-    write_json(
-        &root.join("templates/agent-standards/enforcement.json"),
-        &json!({"rows":[]}),
-    );
-    write_json(
-        &root.join("docs/source-obligation-matrix.json"),
-        &json!({"obligations":[]}),
-    );
-    write_json(
-        &root.join("docs/foundational-law-traceability.json"),
-        &json!({"entries":[]}),
-    );
-    write_json(&root.join("templates/RED_FIXTURES.json"), &json!([]));
-    write_json(
-        &root.join("validation_artifacts/cli/update-goal-eligibility.json"),
-        &json!({"schema":"wrong","issuer":{"tool":"manual"}}),
-    );
-    write_json(
-        &root.join("validation_artifacts/cli/self-law-receipt.json"),
-        &json!({"schema":"wrong","issuer":{"tool":"manual"}}),
-    );
-    let failures = crate::audit::cli::control_plane::authority::package_failures(&root);
-    assert!(
-        failures.contains(&"cli_control_plane_schema_catalog_missing_receipt_schema".to_string())
-    );
-    assert!(failures.iter().any(|failure| failure.contains(
-        "validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_wrong_schema"
-    )));
-    assert!(failures.iter().any(|failure| failure.contains(
-        "validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_wrong_issuer"
-    )));
-    std::fs::remove_dir_all(root).expect("cleanup cli control audit");
 }

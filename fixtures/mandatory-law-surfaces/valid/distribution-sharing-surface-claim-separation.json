@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "distribution-sharing-surface-claim-separation",
-  "standards_row_id": "distribution-sharing-surface-claim-separation",
-  "source_obligation_id": "distribution-sharing-surface-claim-separation",
-  "foundational_trace_id": "distribution-sharing-surface-claim-separation",
-  "validator_check_id": "distribution-sharing-surface-claim-separation",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
-  "red_fixture_ids": [
-    "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
-    "distribution-sharing-surface-claim-separation-personal-marketplace-used-as-public-directory-red",
-    "distribution-sharing-surface-claim-separation-stale-share-link-red",
-    "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
-    "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
-    "distribution-sharing-surface-claim-separation-teammate-access-claim-without-same-surface-receipt-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof",
   "behavior_failure_modes": [
     "distribution_sharing_surface_claim_separation_local_proof_used_as_workspace_sharing",
     "distribution_sharing_surface_claim_separation_personal_marketplace_used_as_public_directory",
@@ -33,13 +7,39 @@
     "distribution_sharing_surface_claim_separation_admin_disabled_sharing_overclaim",
     "distribution_sharing_surface_claim_separation_teammate_access_claim_without_same_surface_receipt"
   ],
+  "claim_ceiling_guard": "distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "distribution-sharing-surface-claim-separation",
+  "law_id": "distribution-sharing-surface-claim-separation",
   "law_specific": {
+    "admin_disabled_sharing_overclaim": true,
     "local_proof_used_as_workspace_sharing": true,
+    "missing_workspace_account_id": true,
     "personal_marketplace_used_as_public_directory": true,
     "stale_share_link": true,
-    "missing_workspace_account_id": true,
-    "admin_disabled_sharing_overclaim": true,
     "teammate_access_claim_without_same_surface_receipt": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
+    "distribution-sharing-surface-claim-separation-personal-marketplace-used-as-public-directory-red",
+    "distribution-sharing-surface-claim-separation-stale-share-link-red",
+    "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
+    "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
+    "distribution-sharing-surface-claim-separation-teammate-access-claim-without-same-surface-receipt-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "distribution-sharing-surface-claim-separation",
+  "standards_row_id": "distribution-sharing-surface-claim-separation",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
+  "validator_check_id": "distribution-sharing-surface-claim-separation"
 }

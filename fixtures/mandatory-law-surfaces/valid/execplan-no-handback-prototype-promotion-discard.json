@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "execplan-no-handback-prototype-promotion-discard",
-  "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
-  "source_obligation_id": "execplan-no-handback-prototype-promotion-discard",
-  "foundational_trace_id": "execplan-no-handback-prototype-promotion-discard",
-  "validator_check_id": "execplan-no-handback-prototype-promotion-discard",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json",
-  "red_fixture_ids": [
-    "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
-    "execplan-no-handback-prototype-promotion-discard-stopping-point-sections-current-red",
-    "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
-    "execplan-no-handback-prototype-promotion-discard-prototype-promotion-criteria-red",
-    "execplan-no-handback-prototype-promotion-discard-prototype-discard-criteria-red",
-    "execplan-no-handback-prototype-promotion-discard-fresh-agent-restartable-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "execplan_claims_withheld_without_no_handback_and_prototype_gates",
   "behavior_failure_modes": [
     "execplan_no_handback_prototype_promotion_discard_no_ask_user_next_steps",
     "execplan_no_handback_prototype_promotion_discard_stopping_point_sections_current",
@@ -33,13 +7,39 @@
     "execplan_no_handback_prototype_promotion_discard_prototype_discard_criteria",
     "execplan_no_handback_prototype_promotion_discard_fresh_agent_restartable"
   ],
+  "claim_ceiling_guard": "execplan_claims_withheld_without_no_handback_and_prototype_gates",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "execplan-no-handback-prototype-promotion-discard",
+  "law_id": "execplan-no-handback-prototype-promotion-discard",
   "law_specific": {
-    "no_ask_user_next_steps": true,
-    "stopping_point_sections_current": true,
     "decision_log_current": true,
-    "prototype_promotion_criteria": true,
+    "fresh_agent_restartable": true,
+    "no_ask_user_next_steps": true,
     "prototype_discard_criteria": true,
-    "fresh_agent_restartable": true
+    "prototype_promotion_criteria": true,
+    "stopping_point_sections_current": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
+    "execplan-no-handback-prototype-promotion-discard-stopping-point-sections-current-red",
+    "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
+    "execplan-no-handback-prototype-promotion-discard-prototype-promotion-criteria-red",
+    "execplan-no-handback-prototype-promotion-discard-prototype-discard-criteria-red",
+    "execplan-no-handback-prototype-promotion-discard-fresh-agent-restartable-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "execplan-no-handback-prototype-promotion-discard",
+  "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json",
+  "validator_check_id": "execplan-no-handback-prototype-promotion-discard"
 }

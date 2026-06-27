@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "non-e2e-claim-ceiling-confidence-bounds",
-  "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
-  "source_obligation_id": "non-e2e-claim-ceiling-confidence-bounds",
-  "foundational_trace_id": "non-e2e-claim-ceiling-confidence-bounds",
-  "validator_check_id": "non-e2e-claim-ceiling-confidence-bounds",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
-  "red_fixture_ids": [
-    "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
-    "non-e2e-claim-ceiling-confidence-bounds-product-success-claimed-from-static-proof-red",
-    "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
-    "non-e2e-claim-ceiling-confidence-bounds-reviewer-ready-claim-without-current-reviewer-exposure-red",
-    "non-e2e-claim-ceiling-confidence-bounds-marketplace-ready-claim-without-marketplace-proof-red",
-    "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "product_live_claims_withheld_above_non_e2e_ceiling",
   "behavior_failure_modes": [
     "non_e2e_claim_ceiling_confidence_bounds_98_percent_confidence_without_e2e",
     "non_e2e_claim_ceiling_confidence_bounds_product_success_claimed_from_static_proof",
@@ -33,13 +7,39 @@
     "non_e2e_claim_ceiling_confidence_bounds_marketplace_ready_claim_without_marketplace_proof",
     "non_e2e_claim_ceiling_confidence_bounds_final_response_omitting_non_e2e_ceiling"
   ],
+  "claim_ceiling_guard": "product_live_claims_withheld_above_non_e2e_ceiling",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "non-e2e-claim-ceiling-confidence-bounds",
+  "law_id": "non-e2e-claim-ceiling-confidence-bounds",
   "law_specific": {
     "98_percent_confidence_without_e2e": true,
-    "product_success_claimed_from_static_proof": true,
     "daily_driver_claim_without_repeated_use_proof": true,
-    "reviewer_ready_claim_without_current_reviewer_exposure": true,
+    "final_response_omitting_non_e2e_ceiling": true,
     "marketplace_ready_claim_without_marketplace_proof": true,
-    "final_response_omitting_non_e2e_ceiling": true
+    "product_success_claimed_from_static_proof": true,
+    "reviewer_ready_claim_without_current_reviewer_exposure": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
+    "non-e2e-claim-ceiling-confidence-bounds-product-success-claimed-from-static-proof-red",
+    "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
+    "non-e2e-claim-ceiling-confidence-bounds-reviewer-ready-claim-without-current-reviewer-exposure-red",
+    "non-e2e-claim-ceiling-confidence-bounds-marketplace-ready-claim-without-marketplace-proof-red",
+    "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "non-e2e-claim-ceiling-confidence-bounds",
+  "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+  "validator_check_id": "non-e2e-claim-ceiling-confidence-bounds"
 }

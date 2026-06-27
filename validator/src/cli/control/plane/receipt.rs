@@ -34,6 +34,7 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     {
         out.push("cli_control_plane_receipt_missing_self_law_failure".to_string());
     }
+    out.extend(super::evidence::receipt_surface_failures(value));
     out
 }
 
@@ -85,6 +86,11 @@ pub(crate) fn same_candidate_pass_failures(
     {
         out.push("cli_control_plane_receipt_pass_has_failure".to_string());
     }
+    out.extend(super::evidence::same_candidate_pass_failures(
+        value,
+        expected_candidate,
+        expected_operation,
+    ));
     out
 }
 
@@ -146,6 +152,11 @@ pub(crate) fn same_candidate_fail_closed_failures(
         }
         _ => out.push("cli_control_plane_receipt_missing_fail_closed_failure".to_string()),
     }
+    out.extend(super::evidence::same_candidate_fail_closed_failures(
+        value,
+        expected_candidate,
+        expected_operation,
+    ));
     out
 }
 

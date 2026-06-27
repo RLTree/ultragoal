@@ -1,62 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "cli-performance-latency-speed-iteration-fitness",
-  "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
-  "source_obligation_id": "cli-performance-latency-speed-iteration-fitness",
-  "foundational_trace_id": "cli-performance-latency-speed-iteration-fitness",
-  "validator_check_id": "cli-performance-latency-speed-iteration-fitness",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
-  "red_fixture_ids": [
-    "cli-performance-missing-budget-red",
-    "cli-performance-prose-only-budget-red",
-    "cli-performance-missing-receipt-red",
-    "cli-performance-stale-receipt-red",
-    "cli-performance-wrong-candidate-receipt-red",
-    "cli-performance-wrong-cli-binary-receipt-red",
-    "cli-performance-wrong-schema-law-fixture-digest-red",
-    "cli-performance-over-budget-without-claim-blocking-red",
-    "cli-performance-focused-substituted-for-final-red",
-    "cli-performance-cached-proof-substituted-for-no-cache-red",
-    "cli-performance-hidden-cache-pass-red",
-    "cli-performance-unbounded-concurrency-red",
-    "cli-performance-serial-global-lock-red",
-    "cli-performance-network-call-in-local-only-red",
-    "cli-performance-missing-timeout-red",
-    "cli-performance-missing-live-probe-backoff-red",
-    "cli-performance-missing-external-call-telemetry-red",
-    "cli-performance-missing-input-size-telemetry-red",
-    "cli-performance-missing-fixture-count-telemetry-red",
-    "cli-performance-missing-cache-key-telemetry-red",
-    "cli-performance-missing-regression-baseline-red",
-    "cli-performance-final-packet-omits-status-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    },
-    {
-      "path": "validator/src/audit/cli/performance.rs",
-      "digest": "sha256:b2584788e7a68663d4155265b97ad8ca50c29a23c686a714c2a0f1f75b893aa9"
-    },
-    {
-      "path": "validator/src/cli/performance.rs",
-      "digest": "sha256:3c8686ebb0d43cbf0082399e5d22b2134a93d660b6341726181012bc517a7750"
-    },
-    {
-      "path": "validator/src/cli/performance/types.rs",
-      "digest": "sha256:3e4dab4a613ed2a4b5e584b8995a044eb4259bb01d1b935e81fb0ac1e618d2c0"
-    },
-    {
-      "path": "schemas/cli-performance-receipt.schema.json",
-      "digest": "sha256:7d1ab176fdf98e43aad6c78635afc79dd6c1cefda96ed1ab66e8ecfaa8a07032"
-    }
-  ],
-  "claim_ceiling_guard": "performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof",
   "behavior_failure_modes": [
     "cli_performance_missing_budget",
     "cli_performance_prose_only_budget",
@@ -81,29 +23,87 @@
     "cli_performance_missing_regression_baseline",
     "cli_performance_final_packet_omits_performance_status"
   ],
+  "claim_ceiling_guard": "performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    },
+    {
+      "digest": "sha256:893e8fdb290f5222ca87601430048fb42aedda858295f928ad07f5dbf9a23a57",
+      "path": "validator/src/audit/cli/performance.rs"
+    },
+    {
+      "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
+      "path": "validator/src/cli/performance.rs"
+    },
+    {
+      "digest": "sha256:3e4dab4a613ed2a4b5e584b8995a044eb4259bb01d1b935e81fb0ac1e618d2c0",
+      "path": "validator/src/cli/performance/types.rs"
+    },
+    {
+      "digest": "sha256:e8c1908454bd2fbce600173b5262491d5fe0a9f6a5d4eefea63df1b6b1759204",
+      "path": "schemas/cli-performance-receipt.schema.json"
+    }
+  ],
+  "foundational_trace_id": "cli-performance-latency-speed-iteration-fitness",
+  "law_id": "cli-performance-latency-speed-iteration-fitness",
   "law_specific": {
+    "cached_proof_substituted_for_no_cache": true,
+    "final_packet_omits_performance_status": true,
+    "focused_substituted_for_final": true,
+    "hidden_stale_cache_pass": true,
     "missing_budget": true,
-    "prose_only_budget": true,
+    "missing_cache_key_telemetry": true,
+    "missing_external_call_telemetry": true,
+    "missing_fixture_count_telemetry": true,
+    "missing_input_size_telemetry": true,
+    "missing_regression_baseline": true,
+    "missing_retry_backoff": true,
+    "missing_timeout": true,
+    "network_call_in_local_only": true,
+    "over_budget_without_claim_blocking": true,
     "performance_receipt_missing": true,
+    "prose_only_budget": true,
+    "serial_global_lock": true,
     "stale_performance_receipt": true,
+    "unbounded_concurrency": true,
     "wrong_candidate_receipt": true,
     "wrong_cli_binary_receipt": true,
-    "wrong_schema_law_fixture_digest": true,
-    "over_budget_without_claim_blocking": true,
-    "focused_substituted_for_final": true,
-    "cached_proof_substituted_for_no_cache": true,
-    "hidden_stale_cache_pass": true,
-    "unbounded_concurrency": true,
-    "serial_global_lock": true,
-    "network_call_in_local_only": true,
-    "missing_timeout": true,
-    "missing_retry_backoff": true,
-    "missing_external_call_telemetry": true,
-    "missing_input_size_telemetry": true,
-    "missing_fixture_count_telemetry": true,
-    "missing_cache_key_telemetry": true,
-    "missing_regression_baseline": true,
-    "final_packet_omits_performance_status": true
+    "wrong_schema_law_fixture_digest": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "cli-performance-missing-budget-red",
+    "cli-performance-prose-only-budget-red",
+    "cli-performance-missing-receipt-red",
+    "cli-performance-stale-receipt-red",
+    "cli-performance-wrong-candidate-receipt-red",
+    "cli-performance-wrong-cli-binary-receipt-red",
+    "cli-performance-wrong-schema-law-fixture-digest-red",
+    "cli-performance-over-budget-without-claim-blocking-red",
+    "cli-performance-focused-substituted-for-final-red",
+    "cli-performance-cached-proof-substituted-for-no-cache-red",
+    "cli-performance-hidden-cache-pass-red",
+    "cli-performance-unbounded-concurrency-red",
+    "cli-performance-serial-global-lock-red",
+    "cli-performance-network-call-in-local-only-red",
+    "cli-performance-missing-timeout-red",
+    "cli-performance-missing-live-probe-backoff-red",
+    "cli-performance-missing-external-call-telemetry-red",
+    "cli-performance-missing-input-size-telemetry-red",
+    "cli-performance-missing-fixture-count-telemetry-red",
+    "cli-performance-missing-cache-key-telemetry-red",
+    "cli-performance-missing-regression-baseline-red",
+    "cli-performance-final-packet-omits-status-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "cli-performance-latency-speed-iteration-fitness",
+  "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
+  "validator_check_id": "cli-performance-latency-speed-iteration-fitness"
 }

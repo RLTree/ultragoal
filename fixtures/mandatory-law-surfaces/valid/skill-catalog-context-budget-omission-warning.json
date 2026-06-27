@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "skill-catalog-context-budget-omission-warning",
-  "standards_row_id": "skill-catalog-context-budget-omission-warning",
-  "source_obligation_id": "skill-catalog-context-budget-omission-warning",
-  "foundational_trace_id": "skill-catalog-context-budget-omission-warning",
-  "validator_check_id": "skill-catalog-context-budget-omission-warning",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
-  "red_fixture_ids": [
-    "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
-    "skill-catalog-context-budget-omission-warning-omitted-required-skill-without-warning-red",
-    "skill-catalog-context-budget-omission-warning-duplicate-skill-name-red",
-    "skill-catalog-context-budget-omission-warning-vague-truncated-description-red",
-    "skill-catalog-context-budget-omission-warning-context-heavy-description-red",
-    "skill-catalog-context-budget-omission-warning-discoverability-claim-without-catalog-proof-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt",
   "behavior_failure_modes": [
     "skill_catalog_context_budget_omission_warning_catalog_over_budget",
     "skill_catalog_context_budget_omission_warning_omitted_required_skill_without_warning",
@@ -33,13 +7,39 @@
     "skill_catalog_context_budget_omission_warning_context_heavy_description",
     "skill_catalog_context_budget_omission_warning_discoverability_claim_without_catalog_proof"
   ],
+  "claim_ceiling_guard": "skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "skill-catalog-context-budget-omission-warning",
+  "law_id": "skill-catalog-context-budget-omission-warning",
   "law_specific": {
     "catalog_over_budget": true,
-    "omitted_required_skill_without_warning": true,
-    "duplicate_skill_name": true,
-    "vague_truncated_description": true,
     "context_heavy_description": true,
-    "discoverability_claim_without_catalog_proof": true
+    "discoverability_claim_without_catalog_proof": true,
+    "duplicate_skill_name": true,
+    "omitted_required_skill_without_warning": true,
+    "vague_truncated_description": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
+    "skill-catalog-context-budget-omission-warning-omitted-required-skill-without-warning-red",
+    "skill-catalog-context-budget-omission-warning-duplicate-skill-name-red",
+    "skill-catalog-context-budget-omission-warning-vague-truncated-description-red",
+    "skill-catalog-context-budget-omission-warning-context-heavy-description-red",
+    "skill-catalog-context-budget-omission-warning-discoverability-claim-without-catalog-proof-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "skill-catalog-context-budget-omission-warning",
+  "standards_row_id": "skill-catalog-context-budget-omission-warning",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
+  "validator_check_id": "skill-catalog-context-budget-omission-warning"
 }

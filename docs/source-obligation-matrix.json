@@ -168,10 +168,10 @@
       "id": "cli-control-plane-authority",
       "obligation": "CLI Control Plane Authority must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution",
-      "package_surface": "validator/src/cli/control/plane.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+      "package_surface": "validator/src/cli/control/plane.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
       "enforcement_disposition": "deterministic_fail_closed",
       "coverage_status": "covered",
-      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "claim_ceiling_impact": "harness_claims_withheld_without_cli_control_plane_authority"
     },
     {
@@ -188,10 +188,10 @@
       "id": "cli-self-law-compliance",
       "obligation": "CLI Self Law Compliance must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution",
-      "package_surface": "validator/src/cli/control/plane.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+      "package_surface": "validator/src/cli/control/plane.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
       "enforcement_disposition": "deterministic_fail_closed",
       "coverage_status": "covered",
-      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
+      "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "claim_ceiling_impact": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt"
     },
     {

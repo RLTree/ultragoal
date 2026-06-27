@@ -1,30 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "fresh-init-retrofit-mode-separation",
-  "standards_row_id": "fresh-init-retrofit-mode-separation",
-  "source_obligation_id": "fresh-init-retrofit-mode-separation",
-  "foundational_trace_id": "fresh-init-retrofit-mode-separation",
-  "validator_check_id": "fresh-init-retrofit-mode-separation",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
-  "red_fixture_ids": [
-    "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
-    "fresh-init-retrofit-mode-separation-retrofit-writes-outside-allowed-paths-red",
-    "fresh-init-retrofit-mode-separation-mode-omitted-from-receipt-red",
-    "fresh-init-retrofit-mode-separation-cache-audit-used-as-target-repo-setup-proof-red",
-    "fresh-init-retrofit-mode-separation-idempotency-claim-without-second-run-red",
-    "fresh-init-retrofit-mode-separation-rollback-claim-with-no-restored-digest-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "setup_claims_withheld_without_same_mode_receipt",
   "behavior_failure_modes": [
     "fresh_init_retrofit_mode_separation_fresh_init_used_as_retrofit",
     "fresh_init_retrofit_mode_separation_retrofit_writes_outside_allowed_paths",
@@ -33,13 +7,39 @@
     "fresh_init_retrofit_mode_separation_idempotency_claim_without_second_run",
     "fresh_init_retrofit_mode_separation_rollback_claim_with_no_restored_digest"
   ],
+  "claim_ceiling_guard": "setup_claims_withheld_without_same_mode_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "fresh-init-retrofit-mode-separation",
+  "law_id": "fresh-init-retrofit-mode-separation",
   "law_specific": {
-    "fresh_init_used_as_retrofit": true,
-    "retrofit_writes_outside_allowed_paths": true,
-    "mode_omitted_from_receipt": true,
     "cache_audit_used_as_target_repo_setup_proof": true,
+    "fresh_init_used_as_retrofit": true,
     "idempotency_claim_without_second_run": true,
+    "mode_omitted_from_receipt": true,
+    "retrofit_writes_outside_allowed_paths": true,
     "rollback_claim_with_no_restored_digest": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
+    "fresh-init-retrofit-mode-separation-retrofit-writes-outside-allowed-paths-red",
+    "fresh-init-retrofit-mode-separation-mode-omitted-from-receipt-red",
+    "fresh-init-retrofit-mode-separation-cache-audit-used-as-target-repo-setup-proof-red",
+    "fresh-init-retrofit-mode-separation-idempotency-claim-without-second-run-red",
+    "fresh-init-retrofit-mode-separation-rollback-claim-with-no-restored-digest-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "fresh-init-retrofit-mode-separation",
+  "standards_row_id": "fresh-init-retrofit-mode-separation",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
+  "validator_check_id": "fresh-init-retrofit-mode-separation"
 }

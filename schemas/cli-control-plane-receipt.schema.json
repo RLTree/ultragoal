@@ -17,6 +17,7 @@
     "blocked_claim_classes",
     "required_evidence",
     "failure",
+    "evidence_graph",
     "command_surface",
     "notes"
   ],
@@ -229,6 +230,120 @@
           }
         }
       ]
+    },
+    "evidence_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_digest",
+        "evaluation_mode",
+        "operation",
+        "operation_failures",
+        "items"
+      ],
+      "properties": {
+        "candidate_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "evaluation_mode": {
+          "const": "production_dereferenced"
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation_failures": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "path",
+              "exists",
+              "digest",
+              "schema",
+              "status",
+              "candidate_digest",
+              "same_candidate",
+              "failures"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "exists": {
+                "type": "boolean"
+              },
+              "digest": {
+                "oneOf": [
+                  {
+                    "$ref": "common-defs.schema.json#/$defs/sha256"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "candidate_digest": {
+                "oneOf": [
+                  {
+                    "$ref": "common-defs.schema.json#/$defs/sha256"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "same_candidate": {
+                "type": "boolean"
+              },
+              "failures": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "command_surface": {
       "type": "array",

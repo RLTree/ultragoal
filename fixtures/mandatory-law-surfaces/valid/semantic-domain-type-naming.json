@@ -1,29 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "semantic-domain-type-naming",
-  "standards_row_id": "semantic-domain-type-naming",
-  "source_obligation_id": "semantic-domain-type-naming",
-  "foundational_trace_id": "semantic-domain-type-naming",
-  "validator_check_id": "semantic-domain-type-naming",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json",
-  "red_fixture_ids": [
-    "semantic-domain-type-naming-generic-authority-names-rejected-red",
-    "semantic-domain-type-naming-broad-record-rejected-red",
-    "semantic-domain-type-naming-stringly-claim-state-rejected-red",
-    "semantic-domain-type-naming-generic-evidence-field-rejected-red",
-    "semantic-domain-type-naming-typed-exception-contract-required-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "authority_surface_claims_withheld_without_semantic_domain_names",
   "behavior_failure_modes": [
     "semantic_domain_type_naming_generic_authority_names_rejected",
     "semantic_domain_type_naming_broad_record_rejected",
@@ -31,12 +6,37 @@
     "semantic_domain_type_naming_generic_evidence_field_rejected",
     "semantic_domain_type_naming_typed_exception_contract_required"
   ],
+  "claim_ceiling_guard": "authority_surface_claims_withheld_without_semantic_domain_names",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "semantic-domain-type-naming",
+  "law_id": "semantic-domain-type-naming",
   "law_specific": {
-    "generic_authority_names_rejected": true,
     "broad_record_rejected": true,
-    "stringly_claim_state_rejected": true,
+    "generic_authority_names_rejected": true,
     "generic_evidence_field_rejected": true,
+    "stringly_claim_state_rejected": true,
     "typed_exception_contract_required": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "semantic-domain-type-naming-generic-authority-names-rejected-red",
+    "semantic-domain-type-naming-broad-record-rejected-red",
+    "semantic-domain-type-naming-stringly-claim-state-rejected-red",
+    "semantic-domain-type-naming-generic-evidence-field-rejected-red",
+    "semantic-domain-type-naming-typed-exception-contract-required-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "semantic-domain-type-naming",
+  "standards_row_id": "semantic-domain-type-naming",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json",
+  "validator_check_id": "semantic-domain-type-naming"
 }

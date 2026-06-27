@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "guardrail-speed-isolation-cache-honesty",
-  "standards_row_id": "guardrail-speed-isolation-cache-honesty",
-  "source_obligation_id": "guardrail-speed-isolation-cache-honesty",
-  "foundational_trace_id": "guardrail-speed-isolation-cache-honesty",
-  "validator_check_id": "guardrail-speed-isolation-cache-honesty",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json",
-  "red_fixture_ids": [
-    "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
-    "guardrail-speed-isolation-cache-honesty-bounded-input-scope-red",
-    "guardrail-speed-isolation-cache-honesty-deterministic-sampling-red",
-    "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
-    "guardrail-speed-isolation-cache-honesty-cache-key-invalidation-red",
-    "guardrail-speed-isolation-cache-honesty-no-fast-check-substitution-red",
-    "guardrail-speed-isolation-cache-honesty-no-stale-cache-final-proof-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "guardrail_claims_withheld_without_speed_isolation_cache_receipt",
   "behavior_failure_modes": [
     "guardrail_speed_isolation_cache_honesty_runtime_budget",
     "guardrail_speed_isolation_cache_honesty_bounded_input_scope",
@@ -35,14 +8,41 @@
     "guardrail_speed_isolation_cache_honesty_no_fast_check_substitution",
     "guardrail_speed_isolation_cache_honesty_no_stale_cache_final_proof"
   ],
+  "claim_ceiling_guard": "guardrail_claims_withheld_without_speed_isolation_cache_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "guardrail-speed-isolation-cache-honesty",
+  "law_id": "guardrail-speed-isolation-cache-honesty",
   "law_specific": {
-    "runtime_budget": true,
     "bounded_input_scope": true,
-    "deterministic_sampling": true,
-    "workspace_isolation": true,
     "cache_key_invalidation": true,
+    "deterministic_sampling": true,
     "no_fast_check_substitution": true,
-    "no_stale_cache_final_proof": true
+    "no_stale_cache_final_proof": true,
+    "runtime_budget": true,
+    "workspace_isolation": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
+    "guardrail-speed-isolation-cache-honesty-bounded-input-scope-red",
+    "guardrail-speed-isolation-cache-honesty-deterministic-sampling-red",
+    "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
+    "guardrail-speed-isolation-cache-honesty-cache-key-invalidation-red",
+    "guardrail-speed-isolation-cache-honesty-no-fast-check-substitution-red",
+    "guardrail-speed-isolation-cache-honesty-no-stale-cache-final-proof-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "guardrail-speed-isolation-cache-honesty",
+  "standards_row_id": "guardrail-speed-isolation-cache-honesty",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json",
+  "validator_check_id": "guardrail-speed-isolation-cache-honesty"
 }

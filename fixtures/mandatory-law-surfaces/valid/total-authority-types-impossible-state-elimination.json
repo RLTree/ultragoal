@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "total-authority-types-impossible-state-elimination",
-  "standards_row_id": "total-authority-types-impossible-state-elimination",
-  "source_obligation_id": "total-authority-types-impossible-state-elimination",
-  "foundational_trace_id": "total-authority-types-impossible-state-elimination",
-  "validator_check_id": "total-authority-types-impossible-state-elimination",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
-  "red_fixture_ids": [
-    "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
-    "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
-    "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
-    "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
-    "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
-    "total-authority-types-impossible-state-elimination-unchecked-unwrap-on-receipt-field-red",
-    "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "authority_claims_withheld_without_total_typed_impossible_state_elimination",
   "behavior_failure_modes": [
     "total_authority_types_impossible_state_elimination_nullable_required_authority",
     "total_authority_types_impossible_state_elimination_empty_list_accepted_then_rechecked",
@@ -35,14 +8,41 @@
     "total_authority_types_impossible_state_elimination_unchecked_unwrap_on_receipt_field",
     "total_authority_types_impossible_state_elimination_impossible_state_represented_only_by_convention"
   ],
+  "claim_ceiling_guard": "authority_claims_withheld_without_total_typed_impossible_state_elimination",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "total-authority-types-impossible-state-elimination",
+  "law_id": "total-authority-types-impossible-state-elimination",
   "law_specific": {
-    "nullable_required_authority": true,
-    "empty_list_accepted_then_rechecked": true,
-    "optional_candidate_digest": true,
     "catch_all_claim_state": true,
+    "empty_list_accepted_then_rechecked": true,
+    "impossible_state_represented_only_by_convention": true,
+    "nullable_required_authority": true,
+    "optional_candidate_digest": true,
     "panic_on_malformed_authority_input": true,
-    "unchecked_unwrap_on_receipt_field": true,
-    "impossible_state_represented_only_by_convention": true
+    "unchecked_unwrap_on_receipt_field": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
+    "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
+    "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
+    "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
+    "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
+    "total-authority-types-impossible-state-elimination-unchecked-unwrap-on-receipt-field-red",
+    "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "total-authority-types-impossible-state-elimination",
+  "standards_row_id": "total-authority-types-impossible-state-elimination",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
+  "validator_check_id": "total-authority-types-impossible-state-elimination"
 }

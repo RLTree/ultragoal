@@ -1,36 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-  "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-  "source_obligation_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-  "foundational_trace_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-  "validator_check_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
-  "red_fixture_ids": [
-    "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-checklist-gate-absent-from-required-claim-ids-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-stale-contract-bundle-hash-after-law-addition-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-stale-required-claim-id-hash-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-markdown-prompt-treated-as-authority-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-final-packet-claim-absent-from-completion-manifest-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-weakening-amendment-without-approval-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-scope-changing-clarification-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-amendment-log-rewritten-instead-of-appended-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-duplicate-required-claim-id-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-broad-umbrella-claim-id-hiding-child-gates-red",
-    "goal-contract-amendment-authority-required-claim-id-mapping-requirement-removal-without-claim-blocking-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids",
   "behavior_failure_modes": [
     "goal_contract_amendment_authority_required_claim_id_mapping_side_thread_requirement_without_amendment",
     "goal_contract_amendment_authority_required_claim_id_mapping_checklist_gate_absent_from_required_claim_ids",
@@ -45,19 +13,51 @@
     "goal_contract_amendment_authority_required_claim_id_mapping_broad_umbrella_claim_id_hiding_child_gates",
     "goal_contract_amendment_authority_required_claim_id_mapping_requirement_removal_without_claim_blocking"
   ],
+  "claim_ceiling_guard": "completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+  "law_id": "goal-contract-amendment-authority-required-claim-id-mapping",
   "law_specific": {
-    "side_thread_requirement_without_amendment": true,
+    "amendment_log_rewritten_instead_of_appended": true,
+    "broad_umbrella_claim_id_hiding_child_gates": true,
     "checklist_gate_absent_from_required_claim_ids": true,
+    "duplicate_required_claim_id": true,
+    "final_packet_claim_absent_from_completion_manifest": true,
+    "markdown_prompt_treated_as_authority": true,
+    "requirement_removal_without_claim_blocking": true,
+    "scope_changing_clarification": true,
+    "side_thread_requirement_without_amendment": true,
     "stale_contract_bundle_hash_after_law_addition": true,
     "stale_required_claim_id_hash": true,
-    "markdown_prompt_treated_as_authority": true,
-    "final_packet_claim_absent_from_completion_manifest": true,
-    "weakening_amendment_without_approval": true,
-    "scope_changing_clarification": true,
-    "amendment_log_rewritten_instead_of_appended": true,
-    "duplicate_required_claim_id": true,
-    "broad_umbrella_claim_id_hiding_child_gates": true,
-    "requirement_removal_without_claim_blocking": true
+    "weakening_amendment_without_approval": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-checklist-gate-absent-from-required-claim-ids-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-stale-contract-bundle-hash-after-law-addition-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-stale-required-claim-id-hash-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-markdown-prompt-treated-as-authority-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-final-packet-claim-absent-from-completion-manifest-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-weakening-amendment-without-approval-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-scope-changing-clarification-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-amendment-log-rewritten-instead-of-appended-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-duplicate-required-claim-id-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-broad-umbrella-claim-id-hiding-child-gates-red",
+    "goal-contract-amendment-authority-required-claim-id-mapping-requirement-removal-without-claim-blocking-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+  "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+  "validator_check_id": "goal-contract-amendment-authority-required-claim-id-mapping"
 }

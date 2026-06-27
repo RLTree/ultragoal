@@ -7,7 +7,7 @@
     "update_goal_eligibility",
     "app_registry_or_reviewer_exposure"
   ],
-  "candidate_digest": "sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb",
+  "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -64,6 +64,53 @@
     "ultragoal self performance prove",
     "ultragoal self update-goal eligibility"
   ],
+  "evidence_graph": {
+    "candidate_digest": "sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+    "evaluation_mode": "production_dereferenced",
+    "items": [
+      {
+        "candidate_digest": null,
+        "digest": "sha256:9a54f8e585c806df12e025f07773aa00cf0eda2bfee6d8c8a408988b2d3fcca2",
+        "exists": true,
+        "failures": [
+          "status_not_pass",
+          "candidate_digest_mismatch"
+        ],
+        "label": "registry_exposure",
+        "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+        "same_candidate": false,
+        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+        "status": null
+      }
+    ],
+    "operation": "registry_probe",
+    "operation_failures": [
+      "registry_surface:plugin_self_law_registry_schema:$.generated_at: required",
+      "registry_surface:plugin_self_law_registry_schema:$.status: required",
+      "registry_surface:plugin_self_law_registry_schema:$.issuer: required",
+      "registry_surface:plugin_self_law_registry_schema:$.tool_call: required",
+      "registry_surface:plugin_self_law_registry_schema:$.capture_method: required",
+      "registry_surface:plugin_self_law_registry_schema:$.boundary: required",
+      "registry_surface:plugin_self_law_registry_schema:$.target_revision: required",
+      "registry_surface:plugin_self_law_registry_schema:$.claim_ceiling: required",
+      "registry_surface:plugin_self_law_registry_schema:$.raw_observation: required",
+      "registry_surface:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae",
+      "registry_surface:plugin_self_law_registry_status_not_pass",
+      "registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface",
+      "registry_surface:plugin_self_law_registry_generated_capture_mismatch",
+      "registry_surface:plugin_self_law_registry_missing_live_tool_issuer",
+      "registry_surface:plugin_self_law_registry_missing_live_tool_issuer",
+      "registry_surface:plugin_self_law_registry_missing_tool_call_identity",
+      "registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/call_id",
+      "registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest",
+      "registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/account_id",
+      "registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id",
+      "registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/session_id",
+      "registry_surface:plugin_self_law_registry_boundary_session_mismatch",
+      "registry_surface:plugin_self_law_registry_capture_method_not_live",
+      "registry_surface:plugin_self_law_registry_raw_observation_missing"
+    ]
+  },
   "failure": {
     "check_id": "cli-control-plane-authority",
     "claim_ceiling_impact": "completion_package_review_release_update_goal_withheld",
@@ -73,20 +120,20 @@
     "gate_id": "89",
     "id": "registry_probe_evidence_not_satisfied",
     "law_id": "cli-control-plane-authority",
-    "observed_value": "registry_surface:plugin_self_law_registry_schema:$.generated_at: required | registry_surface:plugin_self_law_registry_schema:$.status: required | registry_surface:plugin_self_law_registry_schema:$.issuer: required | registry_surface:plugin_self_law_registry_schema:$.tool_call: required | registry_surface:plugin_self_law_registry_schema:$.capture_method: required | registry_surface:plugin_self_law_registry_schema:$.boundary: required | registry_surface:plugin_self_law_registry_schema:$.target_revision: required | registry_surface:plugin_self_law_registry_schema:$.claim_ceiling: required | registry_surface:plugin_self_law_registry_schema:$.raw_observation: required | registry_surface:plugin_self_law_registry_target_digest_mismatch:!=sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb | registry_surface:plugin_self_law_registry_status_not_pass | registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface | registry_surface:plugin_self_law_registry_generated_capture_mismatch | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_tool_call_identity | registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/call_id | registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/account_id | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/session_id | registry_surface:plugin_self_law_registry_boundary_session_mismatch | registry_surface:plugin_self_law_registry_capture_method_not_live | registry_surface:plugin_self_law_registry_raw_observation_missing",
+    "observed_value": "registry_surface:plugin_self_law_registry_schema:$.generated_at: required | registry_surface:plugin_self_law_registry_schema:$.status: required | registry_surface:plugin_self_law_registry_schema:$.issuer: required | registry_surface:plugin_self_law_registry_schema:$.tool_call: required | registry_surface:plugin_self_law_registry_schema:$.capture_method: required | registry_surface:plugin_self_law_registry_schema:$.boundary: required | registry_surface:plugin_self_law_registry_schema:$.target_revision: required | registry_surface:plugin_self_law_registry_schema:$.claim_ceiling: required | registry_surface:plugin_self_law_registry_schema:$.raw_observation: required | registry_surface:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae | registry_surface:plugin_self_law_registry_status_not_pass | registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface | registry_surface:plugin_self_law_registry_generated_capture_mismatch | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_tool_call_identity | registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/call_id | registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/account_id | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id | registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/session_id | registry_surface:plugin_self_law_registry_boundary_session_mismatch | registry_surface:plugin_self_law_registry_capture_method_not_live | registry_surface:plugin_self_law_registry_raw_observation_missing | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:registry_exposure",
     "repair_class": "deterministic_enforcement",
     "rerun_command": "ultragoal registry probe --receipt validation_artifacts/cli/registry-probe-receipt.json",
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-27T14:45:30Z",
+  "generated_at": "2026-06-27T17:39:32Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
     "self_law_state": "transition_only",
     "tool": "ultragoal"
   },
-  "notes": "Fail-closed CLI authority receipt. Evidence failures: registry_surface:plugin_self_law_registry_schema:$.generated_at: required; registry_surface:plugin_self_law_registry_schema:$.status: required; registry_surface:plugin_self_law_registry_schema:$.issuer: required; registry_surface:plugin_self_law_registry_schema:$.tool_call: required; registry_surface:plugin_self_law_registry_schema:$.capture_method: required; registry_surface:plugin_self_law_registry_schema:$.boundary: required; registry_surface:plugin_self_law_registry_schema:$.target_revision: required; registry_surface:plugin_self_law_registry_schema:$.claim_ceiling: required; registry_surface:plugin_self_law_registry_schema:$.raw_observation: required; registry_surface:plugin_self_law_registry_target_digest_mismatch:!=sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb; registry_surface:plugin_self_law_registry_status_not_pass; registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface; registry_surface:plugin_self_law_registry_generated_capture_mismatch; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_tool_call_identity; registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/account_id; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/session_id; registry_surface:plugin_self_law_registry_boundary_session_mismatch; registry_surface:plugin_self_law_registry_capture_method_not_live; registry_surface:plugin_self_law_registry_raw_observation_missing",
+  "notes": "Fail-closed CLI authority receipt. Evidence failures: registry_surface:plugin_self_law_registry_schema:$.generated_at: required; registry_surface:plugin_self_law_registry_schema:$.status: required; registry_surface:plugin_self_law_registry_schema:$.issuer: required; registry_surface:plugin_self_law_registry_schema:$.tool_call: required; registry_surface:plugin_self_law_registry_schema:$.capture_method: required; registry_surface:plugin_self_law_registry_schema:$.boundary: required; registry_surface:plugin_self_law_registry_schema:$.target_revision: required; registry_surface:plugin_self_law_registry_schema:$.claim_ceiling: required; registry_surface:plugin_self_law_registry_schema:$.raw_observation: required; registry_surface:plugin_self_law_registry_target_digest_mismatch:!=sha256:5b5d428b5a4ba75d1620c4273defbef9120c72e26493a8f9f655d61c182ae0ae; registry_surface:plugin_self_law_registry_status_not_pass; registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface; registry_surface:plugin_self_law_registry_generated_capture_mismatch; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_tool_call_identity; registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; registry_surface:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/account_id; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; registry_surface:plugin_self_law_registry_missing_observation_field:/boundary/session_id; registry_surface:plugin_self_law_registry_boundary_session_mismatch; registry_surface:plugin_self_law_registry_capture_method_not_live; registry_surface:plugin_self_law_registry_raw_observation_missing; evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:registry_exposure",
   "operation": "registry_probe",
   "required_evidence": [
     "live_registry_or_reviewer_exposure_same_surface_pass"

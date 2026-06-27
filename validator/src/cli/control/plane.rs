@@ -136,6 +136,7 @@ pub(crate) fn receipt(root: &Path, command: &ControlCommand) -> Result<Value, St
     let package_digest = crate::package::inventory::package_digest(root)?;
     let evidence_failures = proof::failures(root, command.operation);
     Ok(emit::receipt_from_production_evidence(
+        root,
         package_digest,
         command.operation,
         evidence_failures,
@@ -154,6 +155,7 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
 }
 
 pub(crate) mod emit;
+pub(crate) mod evidence;
 pub(crate) mod path;
 pub(crate) mod proof;
 pub(crate) mod receipt;

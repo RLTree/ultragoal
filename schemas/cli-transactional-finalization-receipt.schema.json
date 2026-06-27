@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/cli-transactional-finalization-receipt.schema.json",
+  "title": "Harness Ultragoal CLI Transactional Finalization Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generated_at",
+    "candidate_digest",
+    "status",
+    "claim_ceiling",
+    "transaction_mode",
+    "blocked_claim_classes",
+    "final_packet",
+    "source_audit",
+    "registry_exposure",
+    "cli_performance",
+    "coverage"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.cli-transactional-finalization-receipt.v1"
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "candidate_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "status": {
+      "const": "pass"
+    },
+    "claim_ceiling": {
+      "const": "supports_update_goal_eligibility"
+    },
+    "transaction_mode": {
+      "const": "same_candidate_atomic_finalization"
+    },
+    "blocked_claim_classes": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "final_packet": {
+      "$ref": "#/$defs/finalPacketReference"
+    },
+    "source_audit": {
+      "$ref": "#/$defs/sourceAuditReference"
+    },
+    "registry_exposure": {
+      "$ref": "#/$defs/registryExposureReference"
+    },
+    "cli_performance": {
+      "$ref": "#/$defs/cliPerformanceReference"
+    },
+    "coverage": {
+      "$ref": "#/$defs/coverageReference"
+    }
+  },
+  "$defs": {
+    "referenceBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest",
+        "status"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "status": {
+          "const": "pass"
+        }
+      }
+    },
+    "finalPacketReference": {
+      "allOf": [
+        { "$ref": "#/$defs/referenceBase" },
+        { "properties": { "path": { "const": "validation_artifacts/review/final-packet-proof.json" } } }
+      ]
+    },
+    "sourceAuditReference": {
+      "allOf": [
+        { "$ref": "#/$defs/referenceBase" },
+        { "properties": { "path": { "const": "validation_artifacts/ultragoal-audit/validator-receipt.json" } } }
+      ]
+    },
+    "registryExposureReference": {
+      "allOf": [
+        { "$ref": "#/$defs/referenceBase" },
+        { "properties": { "path": { "const": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json" } } }
+      ]
+    },
+    "cliPerformanceReference": {
+      "allOf": [
+        { "$ref": "#/$defs/referenceBase" },
+        { "properties": { "path": { "const": "validation_artifacts/cli/performance-receipt.json" } } }
+      ]
+    },
+    "coverageReference": {
+      "allOf": [
+        { "$ref": "#/$defs/referenceBase" },
+        { "properties": { "path": { "const": "validation_artifacts/coverage/coverage-receipt.json" } } }
+      ]
+    }
+  }
+}

@@ -19,6 +19,10 @@
       "path": "schemas/cli-control-plane-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/cli-transactional-finalization-receipt.schema.json",
+      "path": "schemas/cli-transactional-finalization-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/cli-performance-receipt.schema.json",
       "path": "schemas/cli-performance-receipt.schema.json"
     },

@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-  "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-  "source_obligation_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-  "foundational_trace_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-  "validator_check_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
-  "red_fixture_ids": [
-    "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-copied-archive-anchors-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-source-card-currentness-inferred-from-old-digest-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-installed-plugin-claim-backed-by-source-fallback-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-app-registry-claim-backed-by-cache-fallback-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-moving-value-digest-mismatch-red",
-    "derived-authority-recomputation-named-authority-fallback-refusal-fallback-boundary-missing-claim-withholding-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal",
   "behavior_failure_modes": [
     "derived_authority_recomputation_named_authority_fallback_refusal_stale_derived_package_inventory",
     "derived_authority_recomputation_named_authority_fallback_refusal_copied_archive_anchors",
@@ -35,14 +8,41 @@
     "derived_authority_recomputation_named_authority_fallback_refusal_moving_value_digest_mismatch",
     "derived_authority_recomputation_named_authority_fallback_refusal_fallback_boundary_missing_claim_withholding"
   ],
+  "claim_ceiling_guard": "named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "derived-authority-recomputation-named-authority-fallback-refusal",
+  "law_id": "derived-authority-recomputation-named-authority-fallback-refusal",
   "law_specific": {
-    "stale_derived_package_inventory": true,
-    "copied_archive_anchors": true,
-    "source_card_currentness_inferred_from_old_digest": true,
-    "installed_plugin_claim_backed_by_source_fallback": true,
     "app_registry_claim_backed_by_cache_fallback": true,
+    "copied_archive_anchors": true,
+    "fallback_boundary_missing_claim_withholding": true,
+    "installed_plugin_claim_backed_by_source_fallback": true,
     "moving_value_digest_mismatch": true,
-    "fallback_boundary_missing_claim_withholding": true
+    "source_card_currentness_inferred_from_old_digest": true,
+    "stale_derived_package_inventory": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-copied-archive-anchors-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-source-card-currentness-inferred-from-old-digest-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-installed-plugin-claim-backed-by-source-fallback-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-app-registry-claim-backed-by-cache-fallback-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-moving-value-digest-mismatch-red",
+    "derived-authority-recomputation-named-authority-fallback-refusal-fallback-boundary-missing-claim-withholding-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "derived-authority-recomputation-named-authority-fallback-refusal",
+  "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+  "validator_check_id": "derived-authority-recomputation-named-authority-fallback-refusal"
 }

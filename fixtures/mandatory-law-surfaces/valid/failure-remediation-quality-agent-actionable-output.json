@@ -1,33 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "failure-remediation-quality-agent-actionable-output",
-  "standards_row_id": "failure-remediation-quality-agent-actionable-output",
-  "source_obligation_id": "failure-remediation-quality-agent-actionable-output",
-  "foundational_trace_id": "failure-remediation-quality-agent-actionable-output",
-  "validator_check_id": "failure-remediation-quality-agent-actionable-output",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
-  "red_fixture_ids": [
-    "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
-    "failure-remediation-quality-agent-actionable-output-missing-law-id-red",
-    "failure-remediation-quality-agent-actionable-output-missing-artifact-path-red",
-    "failure-remediation-quality-agent-actionable-output-missing-expected-observed-values-red",
-    "failure-remediation-quality-agent-actionable-output-missing-rerun-command-red",
-    "failure-remediation-quality-agent-actionable-output-missing-claim-impact-red",
-    "failure-remediation-quality-agent-actionable-output-wrong-repair-class-red",
-    "failure-remediation-quality-agent-actionable-output-swallowed-io-schema-error-red",
-    "failure-remediation-quality-agent-actionable-output-failure-message-leaking-private-data-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "repair_claims_withheld_without_agent_actionable_failure_output",
   "behavior_failure_modes": [
     "failure_remediation_quality_agent_actionable_output_generic_validation_failed",
     "failure_remediation_quality_agent_actionable_output_missing_law_id",
@@ -39,16 +10,45 @@
     "failure_remediation_quality_agent_actionable_output_swallowed_io_schema_error",
     "failure_remediation_quality_agent_actionable_output_failure_message_leaking_private_data"
   ],
+  "claim_ceiling_guard": "repair_claims_withheld_without_agent_actionable_failure_output",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "failure-remediation-quality-agent-actionable-output",
+  "law_id": "failure-remediation-quality-agent-actionable-output",
   "law_specific": {
+    "failure_message_leaking_private_data": true,
     "generic_validation_failed": true,
-    "missing_law_id": true,
     "missing_artifact_path": true,
-    "missing_expected_observed_values": true,
-    "missing_rerun_command": true,
     "missing_claim_impact": true,
-    "wrong_repair_class": true,
+    "missing_expected_observed_values": true,
+    "missing_law_id": true,
+    "missing_rerun_command": true,
     "swallowed_io_schema_error": true,
-    "failure_message_leaking_private_data": true
+    "wrong_repair_class": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
+    "failure-remediation-quality-agent-actionable-output-missing-law-id-red",
+    "failure-remediation-quality-agent-actionable-output-missing-artifact-path-red",
+    "failure-remediation-quality-agent-actionable-output-missing-expected-observed-values-red",
+    "failure-remediation-quality-agent-actionable-output-missing-rerun-command-red",
+    "failure-remediation-quality-agent-actionable-output-missing-claim-impact-red",
+    "failure-remediation-quality-agent-actionable-output-wrong-repair-class-red",
+    "failure-remediation-quality-agent-actionable-output-swallowed-io-schema-error-red",
+    "failure-remediation-quality-agent-actionable-output-failure-message-leaking-private-data-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "failure-remediation-quality-agent-actionable-output",
+  "standards_row_id": "failure-remediation-quality-agent-actionable-output",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+  "validator_check_id": "failure-remediation-quality-agent-actionable-output"
 }

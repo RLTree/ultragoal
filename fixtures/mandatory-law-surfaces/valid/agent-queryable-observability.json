@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "agent-queryable-observability",
-  "standards_row_id": "agent-queryable-observability",
-  "source_obligation_id": "agent-queryable-observability",
-  "foundational_trace_id": "agent-queryable-observability",
-  "validator_check_id": "agent-queryable-observability",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json",
-  "red_fixture_ids": [
-    "agent-queryable-observability-raw-log-dump-red",
-    "agent-queryable-observability-missing-correlation-id-red",
-    "agent-queryable-observability-unbounded-query-red",
-    "agent-queryable-observability-screenshot-without-runtime-identity-red",
-    "agent-queryable-observability-trace-without-claim-binding-red",
-    "agent-queryable-observability-metric-without-query-provenance-red",
-    "agent-queryable-observability-unredacted-sensitive-event-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "observability_claims_withheld_without_typed_queryable_correlated_receipt",
   "behavior_failure_modes": [
     "agent_queryable_observability_raw_log_dump",
     "agent_queryable_observability_missing_correlation_id",
@@ -35,14 +8,41 @@
     "agent_queryable_observability_metric_without_query_provenance",
     "agent_queryable_observability_unredacted_sensitive_event"
   ],
+  "claim_ceiling_guard": "observability_claims_withheld_without_typed_queryable_correlated_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "agent-queryable-observability",
+  "law_id": "agent-queryable-observability",
   "law_specific": {
-    "raw_log_dump": true,
+    "metric_without_query_provenance": true,
     "missing_correlation_id": true,
-    "unbounded_query": true,
+    "raw_log_dump": true,
     "screenshot_without_runtime_identity": true,
     "trace_without_claim_binding": true,
-    "metric_without_query_provenance": true,
+    "unbounded_query": true,
     "unredacted_sensitive_event": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "agent-queryable-observability-raw-log-dump-red",
+    "agent-queryable-observability-missing-correlation-id-red",
+    "agent-queryable-observability-unbounded-query-red",
+    "agent-queryable-observability-screenshot-without-runtime-identity-red",
+    "agent-queryable-observability-trace-without-claim-binding-red",
+    "agent-queryable-observability-metric-without-query-provenance-red",
+    "agent-queryable-observability-unredacted-sensitive-event-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "agent-queryable-observability",
+  "standards_row_id": "agent-queryable-observability",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json",
+  "validator_check_id": "agent-queryable-observability"
 }

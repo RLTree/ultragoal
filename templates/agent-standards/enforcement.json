@@ -216,11 +216,11 @@
       "source_law": "Gate 89 mandatory law: CLI Control Plane Authority",
       "required_behavior": "Harness Ultragoal claims must be computed, minted, or verified by the installed CLI control plane from typed current inputs; prose, checklist, reviewer agreement, source-only proof, install proof, cache proof, packet existence, or claim-ceiling text cannot satisfy completion, package, review, readiness, release, app, registry, reviewer, or update_goal claims.",
       "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority.rs",
+      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
       "current_status": "active",
-      "blocker_or_repair_action": "Run CLI authority validation and mandatory-law red fixtures; harness_claims_withheld_without_cli_control_plane_authority.",
+      "blocker_or_repair_action": "Run CLI authority validation, transactional finalization validation, and mandatory-law red fixtures; harness_claims_withheld_without_cli_control_plane_authority.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]
@@ -244,11 +244,11 @@
       "source_law": "Gate 89 mandatory law: CLI Self Law Compliance",
       "required_behavior": "The CLI, validator source, schemas, receipts, fixtures, reports, package inventory, generated hooks, command wrappers, init or retrofit outputs, configuration, product surfaces, and documentation must obey every law the CLI enforces; bootstrap, transition-only, source-only, target-only, stale, copied, or non-current proof cannot support completion, package, review, release, registry, app, reviewer, product, or update_goal claims.",
       "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority.rs",
+      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
       "current_status": "active",
-      "blocker_or_repair_action": "Run CLI authority validation and mandatory-law red fixtures; completion_claims_withheld_without_same_candidate_cli_self_law_receipt.",
+      "blocker_or_repair_action": "Run CLI authority validation, transactional finalization validation, and mandatory-law red fixtures; completion_claims_withheld_without_same_candidate_cli_self_law_receipt.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]

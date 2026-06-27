@@ -86,12 +86,41 @@ fn write_control_green_root(root: &Path) -> String {
             "schema":"harness-ultragoal.red-fixture-report.v1",
             "status":"pass",
             "generated_at":"2026-06-27T00:00:00Z",
+            "target_revision":{"kind":"package_digest","value":current},
             "red_fixtures":{
                 "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
             }
         }),
     );
     current
+}
+
+fn write_transaction(root: &Path, current: &str) {
+    write_json(
+        &root.join("validation_artifacts/cli/transactional-finalization-receipt.json"),
+        &json!({
+            "schema":"harness-ultragoal.cli-transactional-finalization-receipt.v1",
+            "generated_at":"2026-06-27T00:00:00Z",
+            "status":"pass",
+            "candidate_digest":current,
+            "claim_ceiling":"supports_update_goal_eligibility",
+            "transaction_mode":"same_candidate_atomic_finalization",
+            "blocked_claim_classes":[],
+            "final_packet":ref_row(root, "validation_artifacts/review/final-packet-proof.json"),
+            "source_audit":ref_row(root, "validation_artifacts/ultragoal-audit/validator-receipt.json"),
+            "registry_exposure":ref_row(root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+            "cli_performance":ref_row(root, "validation_artifacts/cli/performance-receipt.json"),
+            "coverage":ref_row(root, "validation_artifacts/coverage/coverage-receipt.json")
+        }),
+    );
+}
+
+fn ref_row(root: &Path, rel: &str) -> serde_json::Value {
+    json!({
+        "path": rel,
+        "digest": crate::digest::file(&root.join(rel)).expect("digest"),
+        "status": "pass"
+    })
 }
 
 fn write_registry_probe_root(root: &Path) {
@@ -113,7 +142,7 @@ fn write_registry_probe_root(root: &Path) {
 }
 
 #[test]
-fn production_control_plane_can_pass_only_from_dereferenced_green_evidence() {
+fn production_control_plane_stays_transition_only_without_transactional_finalization() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-production-green");
     let current = write_control_green_root(&root);
     let command = ControlCommand {
@@ -121,12 +150,26 @@ fn production_control_plane_can_pass_only_from_dereferenced_green_evidence() {
         receipt: None,
     };
     let value = receipt(&root, &command).expect("receipt");
-    assert_eq!(value["status"], "pass");
+    assert_eq!(value["status"], "fail");
     assert_eq!(value["candidate_digest"], current);
-    assert_eq!(value["issuer"]["self_law_state"], "self_hosted");
-    assert_eq!(value["claim_ceiling"], "supports_update_goal_eligibility");
-    assert_eq!(value["blocked_claim_classes"], json!([]));
-    assert_eq!(value["failure"], serde_json::Value::Null);
+    assert_eq!(value["issuer"]["self_law_state"], "transition_only");
+    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    let observed = value["failure"]["observed_value"]
+        .as_str()
+        .expect("observed");
+    assert!(
+        observed.contains("cli_control_plane_transactional_finalization_missing"),
+        "{observed}"
+    );
+    write_transaction(&root, &current);
+    let green = receipt(&root, &command).expect("green receipt");
+    assert_eq!(green["status"], "pass", "{green}");
+    assert_eq!(green["issuer"]["self_law_state"], "self_hosted");
+    assert_eq!(green["claim_ceiling"], "supports_update_goal_eligibility");
+    assert_eq!(
+        green["evidence_graph"]["evaluation_mode"],
+        "production_dereferenced"
+    );
 
     std::fs::write(
         root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json"),

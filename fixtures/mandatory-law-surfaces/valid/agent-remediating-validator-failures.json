@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "agent-remediating-validator-failures",
-  "standards_row_id": "agent-remediating-validator-failures",
-  "source_obligation_id": "agent-remediating-validator-failures",
-  "foundational_trace_id": "agent-remediating-validator-failures",
-  "validator_check_id": "agent-remediating-validator-failures",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json",
-  "red_fixture_ids": [
-    "agent-remediating-validator-failures-law-id-present-red",
-    "agent-remediating-validator-failures-source-obligation-present-red",
-    "agent-remediating-validator-failures-affected-surface-present-red",
-    "agent-remediating-validator-failures-expected-evidence-present-red",
-    "agent-remediating-validator-failures-repair-class-present-red",
-    "agent-remediating-validator-failures-claim-impact-present-red",
-    "agent-remediating-validator-failures-failure-reason-typed-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "validator_claims_withheld_without_agent_remediating_failures",
   "behavior_failure_modes": [
     "agent_remediating_validator_failures_law_id_present",
     "agent_remediating_validator_failures_source_obligation_present",
@@ -35,14 +8,41 @@
     "agent_remediating_validator_failures_claim_impact_present",
     "agent_remediating_validator_failures_failure_reason_typed"
   ],
+  "claim_ceiling_guard": "validator_claims_withheld_without_agent_remediating_failures",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "agent-remediating-validator-failures",
+  "law_id": "agent-remediating-validator-failures",
   "law_specific": {
-    "law_id_present": true,
-    "source_obligation_present": true,
     "affected_surface_present": true,
-    "expected_evidence_present": true,
-    "repair_class_present": true,
     "claim_impact_present": true,
-    "failure_reason_typed": true
+    "expected_evidence_present": true,
+    "failure_reason_typed": true,
+    "law_id_present": true,
+    "repair_class_present": true,
+    "source_obligation_present": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "agent-remediating-validator-failures-law-id-present-red",
+    "agent-remediating-validator-failures-source-obligation-present-red",
+    "agent-remediating-validator-failures-affected-surface-present-red",
+    "agent-remediating-validator-failures-expected-evidence-present-red",
+    "agent-remediating-validator-failures-repair-class-present-red",
+    "agent-remediating-validator-failures-claim-impact-present-red",
+    "agent-remediating-validator-failures-failure-reason-typed-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "agent-remediating-validator-failures",
+  "standards_row_id": "agent-remediating-validator-failures",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json",
+  "validator_check_id": "agent-remediating-validator-failures"
 }

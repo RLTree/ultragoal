@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "third-party-dependency-legibility-typed-adapters",
-  "standards_row_id": "third-party-dependency-legibility-typed-adapters",
-  "source_obligation_id": "third-party-dependency-legibility-typed-adapters",
-  "foundational_trace_id": "third-party-dependency-legibility-typed-adapters",
-  "validator_check_id": "third-party-dependency-legibility-typed-adapters",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
-  "red_fixture_ids": [
-    "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
-    "third-party-dependency-legibility-typed-adapters-owner-purpose-upstream-docs-red",
-    "third-party-dependency-legibility-typed-adapters-allowed-call-sites-red",
-    "third-party-dependency-legibility-typed-adapters-typed-request-response-red",
-    "third-party-dependency-legibility-typed-adapters-timeout-retry-policy-red",
-    "third-party-dependency-legibility-typed-adapters-cache-invalidation-red",
-    "third-party-dependency-legibility-typed-adapters-no-direct-api-bypass-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "dependency_claims_withheld_without_typed_adapter_registry",
   "behavior_failure_modes": [
     "third_party_dependency_legibility_typed_adapters_dependency_registry_entry",
     "third_party_dependency_legibility_typed_adapters_owner_purpose_upstream_docs",
@@ -35,14 +8,41 @@
     "third_party_dependency_legibility_typed_adapters_cache_invalidation",
     "third_party_dependency_legibility_typed_adapters_no_direct_api_bypass"
   ],
+  "claim_ceiling_guard": "dependency_claims_withheld_without_typed_adapter_registry",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "third-party-dependency-legibility-typed-adapters",
+  "law_id": "third-party-dependency-legibility-typed-adapters",
   "law_specific": {
-    "dependency_registry_entry": true,
-    "owner_purpose_upstream_docs": true,
     "allowed_call_sites": true,
-    "typed_request_response": true,
-    "timeout_retry_policy": true,
     "cache_invalidation": true,
-    "no_direct_api_bypass": true
+    "dependency_registry_entry": true,
+    "no_direct_api_bypass": true,
+    "owner_purpose_upstream_docs": true,
+    "timeout_retry_policy": true,
+    "typed_request_response": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
+    "third-party-dependency-legibility-typed-adapters-owner-purpose-upstream-docs-red",
+    "third-party-dependency-legibility-typed-adapters-allowed-call-sites-red",
+    "third-party-dependency-legibility-typed-adapters-typed-request-response-red",
+    "third-party-dependency-legibility-typed-adapters-timeout-retry-policy-red",
+    "third-party-dependency-legibility-typed-adapters-cache-invalidation-red",
+    "third-party-dependency-legibility-typed-adapters-no-direct-api-bypass-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "third-party-dependency-legibility-typed-adapters",
+  "standards_row_id": "third-party-dependency-legibility-typed-adapters",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
+  "validator_check_id": "third-party-dependency-legibility-typed-adapters"
 }

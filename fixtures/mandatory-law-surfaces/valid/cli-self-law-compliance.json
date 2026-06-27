@@ -1,52 +1,112 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "cli-self-law-compliance",
-  "standards_row_id": "cli-self-law-compliance",
-  "source_obligation_id": "cli-self-law-compliance",
-  "foundational_trace_id": "cli-self-law-compliance",
-  "validator_check_id": "cli-self-law-compliance",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
-  "red_fixture_ids": [
-    "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
-    "cli-self-law-compliance-cli-source-excluded-from-coverage-red",
-    "cli-self-law-compliance-update-goal-without-self-law-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    },
-    {
-      "path": "validator/src/audit/cli/control_plane/authority.rs",
-      "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0"
-    },
-    {
-      "path": "validator/src/cli/control/plane/types.rs",
-      "digest": "sha256:0525bcd24166eb53d14fc4c4769ae06ad9473c5eb651f204ffa591f24b61bd15"
-    },
-    {
-      "path": "validator/src/cli/control/plane.rs",
-      "digest": "sha256:abcde5d79c71b3175302da949ba193f7b046f0767635b910f9af386e550fcd87"
-    },
-    {
-      "path": "validator/src/cli/control/plane/emit.rs",
-      "digest": "sha256:dbefbb3db16ce9620094deca32cef172c9d5337a1895c83d305705ca7b94d2c9"
-    }
-  ],
-  "claim_ceiling_guard": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt",
   "behavior_failure_modes": [
     "cli_self_law_compliance_bootstrap_receipt_used_for_completion",
     "cli_self_law_compliance_cli_source_excluded_from_coverage",
     "cli_self_law_compliance_update_goal_without_self_law"
   ],
+  "claim_ceiling_guard": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    },
+    {
+      "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0",
+      "path": "validator/src/audit/cli/control_plane/authority.rs"
+    },
+    {
+      "digest": "sha256:0525bcd24166eb53d14fc4c4769ae06ad9473c5eb651f204ffa591f24b61bd15",
+      "path": "validator/src/cli/control/plane/types.rs"
+    },
+    {
+      "digest": "sha256:86d2f6a2678e6b3ec1411125d55c8b431cbc4b6e60a8315a9c49d98517a4eef8",
+      "path": "validator/src/cli/control/plane.rs"
+    },
+    {
+      "digest": "sha256:e3ba6d4db16a2436930862cd1fb6c28a0aaff0623da16f3d21143ec0171357d2",
+      "path": "validator/src/cli/control/plane/emit.rs"
+    },
+    {
+      "digest": "sha256:2cd2a1fcd6ee5c57a15a79d22cc90fd430d5fa41eaf13916e505863f11f18d79",
+      "path": "validator/src/cli/control/plane/evidence.rs"
+    },
+    {
+      "digest": "sha256:7ad1393a3666977149293b65bdc017911c1f8a2aa1342600386c0331e021280e",
+      "path": "validator/src/cli/control/plane/evidence/item.rs"
+    },
+    {
+      "digest": "sha256:3ab98e4668453308643309ee07ac92ef7ef97c8e75c66c6876afd1b4529d856f",
+      "path": "validator/src/cli/control/plane/evidence/validate.rs"
+    },
+    {
+      "digest": "sha256:8c96172f8c4b63c858e4a3ca2e184b1465070c5308768f515b0ca8a2b538a1b4",
+      "path": "validator/src/cli/control/plane/receipt.rs"
+    },
+    {
+      "digest": "sha256:0bfca4493ddccbeb8b1126c25274be1e61de66c59b2537c87b371a6c09a8bd0b",
+      "path": "validator/src/cli/control/plane/proof.rs"
+    },
+    {
+      "digest": "sha256:eeb969b39b45127fbf30e70545857133891124f375b2987e00b88e783a1c0350",
+      "path": "validator/src/cli/control/plane/proof/transaction.rs"
+    },
+    {
+      "digest": "sha256:5660acca48808ede397c048c9c268a54130a6c44da975133963ee37f4d5c0884",
+      "path": "validator/src/self_tests/cli/control/audit.rs"
+    },
+    {
+      "digest": "sha256:1236b4e657bac6fe01aa870281fe839f51bd0c73402fde4b4cde9154e8665133",
+      "path": "validator/src/self_tests/cli/control/graph.rs"
+    },
+    {
+      "digest": "sha256:f41281aa65fe075cf2ccbaf5cfe26c0d7c4b5a0262b99dfeb7e77fc9d8e4f5a3",
+      "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
+    },
+    {
+      "digest": "sha256:d0f1ec1a251b986c144050aebd33bd566ed210013eba186908181037704ab487",
+      "path": "validator/src/self_tests/cli/control/receipts.rs"
+    },
+    {
+      "digest": "sha256:ac6c43aa79aa2b0a83073da65b81f215941d657e7fd9647308bac0372a92097d",
+      "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
+    },
+    {
+      "digest": "sha256:fb139ce104c909e96181e49f4e8b0729114a2b8db56f40a537d99981f603885b",
+      "path": "validator/src/self_tests/cli/control/transaction/required.rs"
+    },
+    {
+      "digest": "sha256:60907e5b6e7b08886457133fafa6350289fd6a2b28827ef2e4e5e78761ade746",
+      "path": "validator/src/self_tests/cli/control/transaction/reference.rs"
+    },
+    {
+      "digest": "sha256:3ddda928d57fbd504f4df24dfeb0402e267eb76f010fe9edfe14d3f06fadaf60",
+      "path": "schemas/cli-control-plane-receipt.schema.json"
+    },
+    {
+      "digest": "sha256:6286958af1eaf45888805d05a6f92ea298d3c8720be0e0ed75e22e4f56eddaaa",
+      "path": "schemas/cli-transactional-finalization-receipt.schema.json"
+    }
+  ],
+  "foundational_trace_id": "cli-self-law-compliance",
+  "law_id": "cli-self-law-compliance",
   "law_specific": {
     "bootstrap_receipt_used_for_completion": true,
     "cli_source_excluded_from_coverage": true,
     "update_goal_without_self_law": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
+    "cli-self-law-compliance-cli-source-excluded-from-coverage-red",
+    "cli-self-law-compliance-update-goal-without-self-law-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "cli-self-law-compliance",
+  "standards_row_id": "cli-self-law-compliance",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+  "validator_check_id": "cli-self-law-compliance"
 }

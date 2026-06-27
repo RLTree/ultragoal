@@ -40,15 +40,18 @@ pub(crate) fn red_report_status(red: &BTreeMap<String, Value>) -> &'static str {
 }
 
 pub fn write_red_report(
+    root: &Path,
     path: &Path,
     status: &str,
     red: &BTreeMap<String, Value>,
 ) -> Result<(), String> {
+    let target_digest = crate::package::inventory::package_digest(root)?;
     json_boundary::write_json(
         path,
         &json!({
             "schema": "harness-ultragoal.red-fixture-report.v1",
             "status": status,
+            "target_revision": {"kind": "package_digest", "value": target_digest},
             "red_fixtures": red,
             "generated_at": crate::audit::clock::now_iso()
         }),

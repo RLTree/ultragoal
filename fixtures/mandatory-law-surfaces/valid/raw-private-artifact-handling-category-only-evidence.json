@@ -1,31 +1,4 @@
 {
-  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
-  "law_id": "raw-private-artifact-handling-category-only-evidence",
-  "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
-  "source_obligation_id": "raw-private-artifact-handling-category-only-evidence",
-  "foundational_trace_id": "raw-private-artifact-handling-category-only-evidence",
-  "validator_check_id": "raw-private-artifact-handling-category-only-evidence",
-  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
-  "red_fixture_ids": [
-    "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
-    "raw-private-artifact-handling-category-only-evidence-raw-message-payload-in-fixture-red",
-    "raw-private-artifact-handling-category-only-evidence-absolute-private-path-in-package-inventory-red",
-    "raw-private-artifact-handling-category-only-evidence-secret-like-value-in-child-prompt-red",
-    "raw-private-artifact-handling-category-only-evidence-private-session-log-copied-to-artifact-root-red",
-    "raw-private-artifact-handling-category-only-evidence-reviewer-evidence-requiring-raw-private-file-red",
-    "raw-private-artifact-handling-category-only-evidence-redaction-summary-without-claim-impact-red"
-  ],
-  "evidence_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc"
-    },
-    {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6"
-    }
-  ],
-  "claim_ceiling_guard": "evidence_claims_withheld_without_redacted_category_only_outputs",
   "behavior_failure_modes": [
     "raw_private_artifact_handling_category_only_evidence_raw_transcript_in_packet",
     "raw_private_artifact_handling_category_only_evidence_raw_message_payload_in_fixture",
@@ -35,14 +8,41 @@
     "raw_private_artifact_handling_category_only_evidence_reviewer_evidence_requiring_raw_private_file",
     "raw_private_artifact_handling_category_only_evidence_redaction_summary_without_claim_impact"
   ],
+  "claim_ceiling_guard": "evidence_claims_withheld_without_redacted_category_only_outputs",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "raw-private-artifact-handling-category-only-evidence",
+  "law_id": "raw-private-artifact-handling-category-only-evidence",
   "law_specific": {
-    "raw_transcript_in_packet": true,
-    "raw_message_payload_in_fixture": true,
     "absolute_private_path_in_package_inventory": true,
-    "secret_like_value_in_child_prompt": true,
     "private_session_log_copied_to_artifact_root": true,
+    "raw_message_payload_in_fixture": true,
+    "raw_transcript_in_packet": true,
+    "redaction_summary_without_claim_impact": true,
     "reviewer_evidence_requiring_raw_private_file": true,
-    "redaction_summary_without_claim_impact": true
+    "secret_like_value_in_child_prompt": true
   },
-  "enforcement_status": "deterministic_fail_closed"
+  "red_fixture_ids": [
+    "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
+    "raw-private-artifact-handling-category-only-evidence-raw-message-payload-in-fixture-red",
+    "raw-private-artifact-handling-category-only-evidence-absolute-private-path-in-package-inventory-red",
+    "raw-private-artifact-handling-category-only-evidence-secret-like-value-in-child-prompt-red",
+    "raw-private-artifact-handling-category-only-evidence-private-session-log-copied-to-artifact-root-red",
+    "raw-private-artifact-handling-category-only-evidence-reviewer-evidence-requiring-raw-private-file-red",
+    "raw-private-artifact-handling-category-only-evidence-redaction-summary-without-claim-impact-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "raw-private-artifact-handling-category-only-evidence",
+  "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+  "validator_check_id": "raw-private-artifact-handling-category-only-evidence"
 }

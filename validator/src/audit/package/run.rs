@@ -22,7 +22,7 @@ pub fn run(options: AuditOptions, red_report: PathBuf) -> Result<i32, String> {
     checks::final_hygiene_check(&options.root, &mut failures);
     let status = outputs::package_status(&failures);
     let red_status = outputs::red_report_status(&red);
-    outputs::write_red_report(&red_report, red_status, &red)?;
+    outputs::write_red_report(&options.root, &red_report, red_status, &red)?;
     let (stdout, stderr) = outputs::write_stdio_receipts(&options.receipt, status, red.len())?;
     outputs::write_validator_receipt(outputs::ReceiptParts {
         options,

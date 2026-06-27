@@ -16,6 +16,23 @@ pub(super) fn report_failures(
             .into_iter()
             .map(|failure| format!("red_fixture_report_schema:{failure}")),
     );
+    match crate::package::inventory::package_digest(root) {
+        Ok(expected)
+            if receipt
+                .pointer("/target_revision/value")
+                .and_then(Value::as_str)
+                == Some(expected.as_str()) => {}
+        Ok(expected) => out.push(format!(
+            "red_fixture_report_target_digest_mismatch:{actual}!={expected}",
+            actual = receipt
+                .pointer("/target_revision/value")
+                .and_then(Value::as_str)
+                .unwrap_or("missing")
+        )),
+        Err(err) => out.push(format!(
+            "red_fixture_report_target_digest_unavailable:{err}"
+        )),
+    }
     if receipt.get("status").and_then(Value::as_str) != Some("pass") {
         out.push("red_fixture_report_status_not_pass".to_string());
     }
@@ -73,14 +90,24 @@ mod tests {
         std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
     }
 
+    fn write_manifest(root: &Path) -> String {
+        write_json(
+            &root.join("plugin-manifest-draft.json"),
+            &json!({"version":"0.0.0-test","resources":[]}),
+        );
+        crate::package::inventory::package_digest(root).expect("digest")
+    }
+
     #[test]
     fn red_report_failures_report_nonpassing_rows_without_schema_theater() {
         let root = temp_root("cli-red-report-failures");
+        let current = write_manifest(&root);
         write_json(
             &root.join(RED_REPORT),
             &json!({
                 "schema":"harness-ultragoal.red-fixture-report.v1",
                 "status":"fail",
+                "target_revision":{"kind":"package_digest","value":current},
                 "generated_at":"2026-06-27T00:00:00Z",
                 "red_fixtures":{
                     "row":{"status":"fail","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
@@ -113,11 +140,13 @@ mod tests {
     #[test]
     fn red_report_failures_reject_top_level_fail_even_when_rows_pass() {
         let root = temp_root("cli-red-report-status-fail");
+        let current = write_manifest(&root);
         write_json(
             &root.join(RED_REPORT),
             &json!({
                 "schema":"harness-ultragoal.red-fixture-report.v1",
                 "status":"fail",
+                "target_revision":{"kind":"package_digest","value":current},
                 "generated_at":"2026-06-27T00:00:00Z",
                 "red_fixtures":{
                     "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
@@ -133,11 +162,13 @@ mod tests {
     #[test]
     fn red_report_failures_bind_schema_errors_to_control_plane() {
         let root = temp_root("cli-red-report-schema-fail");
+        let current = write_manifest(&root);
         write_json(
             &root.join(RED_REPORT),
             &json!({
                 "schema":"harness-ultragoal.red-fixture-report.v1",
                 "status":"pass",
+                "target_revision":{"kind":"package_digest","value":current},
                 "generated_at":"2026-06-27T00:00:00Z",
                 "red_fixtures":{
                     "row":{"status":"pass","packet_path":"../escape.json","packet_digest":crate::digest::ZERO}
@@ -154,5 +185,57 @@ mod tests {
         );
         assert!(!failures.contains(&"red_fixture_report_status_not_pass".to_string()));
         std::fs::remove_dir_all(root).expect("cleanup red report schema");
+    }
+
+    #[test]
+    fn red_report_failures_reject_stale_target_digest() {
+        let root = temp_root("cli-red-report-stale-target");
+        write_manifest(&root);
+        write_json(
+            &root.join(RED_REPORT),
+            &json!({
+                "schema":"harness-ultragoal.red-fixture-report.v1",
+                "status":"pass",
+                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('a')},
+                "generated_at":"2026-06-27T00:00:00Z",
+                "red_fixtures":{
+                    "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
+                }
+            }),
+        );
+        let store = crate::schema_catalog::load(&repo_root());
+        let failures = report_failures(&root, &store);
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.starts_with("red_fixture_report_target_digest_mismatch:")),
+            "{failures:?}"
+        );
+        std::fs::remove_dir_all(root).expect("cleanup red report stale target");
+    }
+
+    #[test]
+    fn red_report_failures_report_unavailable_target_digest() {
+        let root = temp_root("cli-red-report-no-manifest");
+        write_json(
+            &root.join(RED_REPORT),
+            &json!({
+                "schema":"harness-ultragoal.red-fixture-report.v1",
+                "status":"pass",
+                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('a')},
+                "generated_at":"2026-06-27T00:00:00Z",
+                "red_fixtures":{
+                    "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
+                }
+            }),
+        );
+        let store = crate::schema_catalog::load(&repo_root());
+        let failures = report_failures(&root, &store);
+        assert!(
+            failures.iter().any(|failure| failure
+                .starts_with("red_fixture_report_target_digest_unavailable:")),
+            "{failures:?}"
+        );
+        std::fs::remove_dir_all(root).expect("cleanup red report no manifest");
     }
 }

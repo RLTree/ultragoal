@@ -17,13 +17,51 @@ pub(crate) fn write_proof(root: &Path, value: &Value) {
 pub(crate) fn control_receipt(candidate: &str, operation: &str) -> Value {
     json!({
         "schema":"harness-ultragoal.cli-control-plane-receipt.v1",
-        "issuer":{"tool":"ultragoal","authority":"cli_control_plane","self_law_state":"self_hosted"},
+        "schema_version":"v1",
+        "issuer":{"tool":"ultragoal","authority":"cli_control_plane","compatibility_binary":"ultragoal-validator","self_law_state":"self_hosted"},
+        "generated_at":"2026-06-27T00:00:00Z",
+        "root":".",
         "operation":operation,
         "candidate_digest":candidate,
         "status":"pass",
         "claim_ceiling":"supports_update_goal_eligibility",
         "blocked_claim_classes":[],
-        "failure":null
+        "required_evidence":[
+            "current_red_fixture_report_status_pass",
+            "coverage_100_no_uncovered_records",
+            "current_cli_performance_pass",
+            "current_final_packet_proof_pass",
+            "live_registry_or_reviewer_exposure_same_surface_pass",
+            "all_89_gates_and_100_stop_conditions_pass"
+        ],
+        "failure":null,
+        "evidence_graph": control_graph(candidate, operation),
+        "command_surface": command_surface(),
+        "notes":"test self-hosted control proof"
+    })
+}
+
+fn command_surface() -> Vec<String> {
+    (0..40)
+        .map(|index| format!("ultragoal test command {index}"))
+        .collect()
+}
+
+fn control_graph(candidate: &str, operation: &str) -> Value {
+    json!({
+        "candidate_digest": candidate,
+        "evaluation_mode": "production_dereferenced",
+        "operation": operation,
+        "operation_failures": [],
+        "items": [
+            {"label":"red_fixture_report","path":"validation_artifacts/ultragoal-audit/red-fixture-report.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.red-fixture-report.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"coverage","path":"validation_artifacts/coverage/coverage-receipt.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.coverage-receipt.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"cli_performance","path":"validation_artifacts/cli/performance-receipt.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.cli-performance-receipt.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"final_packet","path":"validation_artifacts/review/final-packet-proof.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.final-packet-proof.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"registry_exposure","path":"validation_artifacts/ultragoal-audit/active-registry-exposure-current.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.codex-registry-exposure.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"source_audit","path":"validation_artifacts/ultragoal-audit/validator-receipt.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.validator-receipt.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]},
+            {"label":"transactional_finalization","path":"validation_artifacts/cli/transactional-finalization-receipt.json","exists":true,"digest":candidate,"schema":"harness-ultragoal.cli-transactional-finalization-receipt.v1","status":"pass","candidate_digest":candidate,"same_candidate":true,"failures":[]}
+        ]
     })
 }
 
@@ -48,7 +86,7 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
         "cli_self_law": control_ref(root, current, "self-law-receipt", "self_update_goal_eligibility"),
         "cli_performance": performance_ref(root, current),
         "registry_exposure": registry_ref(root, current, &raw),
-        "source_audit": source_audit_ref(root, current),
+        "source_audit": super::source_audit::ref_for(root, current),
         "coverage": coverage_ref(root, current),
         "package_receipts": [package_ref(root, current)],
         "claim_ceiling": "final_packet_claims_cli_verified"
@@ -149,14 +187,6 @@ fn agent_types() -> Vec<Value> {
             "disk_cache_synced":true,"global_toml_present":true,"exposed":true})
     })
     .collect()
-}
-
-fn source_audit_ref(root: &Path, current: &str) -> Value {
-    ref_for(
-        root,
-        "validation_artifacts/ultragoal-audit/validator-receipt.json",
-        &json!({"status":"pass","target_revision":{"kind":"package_digest","value":current}}),
-    )
 }
 
 fn coverage_ref(root: &Path, current: &str) -> Value {
