@@ -3,22 +3,22 @@
   "claim_id": "CLAIM-001",
   "command": "bash .harness/run-coverage.sh",
   "tool": "cargo-llvm-cov",
-  "source_tree_digest": "sha256:c0f6dffb3e203ab21c4cea726e9a1bae372dce98387564f6ec421d0996b693a6",
-  "coverage_manifest_digest": "sha256:4528bd85d9c2dffc7255159a54bf9fe3dda706079eeb66f20dd35be805fdc29c",
+  "source_tree_digest": "sha256:c8b48e55528b14e8b1a9cec5228194415e117a80bfdf59362a75daec02438de3",
+  "coverage_manifest_digest": "sha256:332e5dae868a3e1de284ac832cc37488e55c8b42c16b9cc2d01c017a2c664929",
   "coverage_command_digest": "sha256:eb90478bbc7bf93351fc454d6796a42eb75a6c4cd1353ef6ee18f90976c6f944",
-  "changed_files_digest": "sha256:79141ec5fd8539c9145320ede08950f6aa55be71e7fb9cb4d799af89b538bf72",
+  "changed_files_digest": "sha256:765480faf8c0dc2a259d49364373da431825859691cab1dfa7528d6aaebe62bf",
   "tool_version": "cargo-llvm-cov 0.8.7",
   "workspace_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:9f29d825514416b0d656785b1f8edb2197692d76b7a307bcda934e1e76e9c6ef"
+    "value": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5"
   },
-  "command_started_at": "2026-06-27T02:01:36Z",
-  "command_completed_at": "2026-06-27T02:02:05Z",
+  "command_started_at": "2026-06-27T06:56:21Z",
+  "command_completed_at": "2026-06-27T06:56:47Z",
   "command_exit": 0,
   "machine_readable_report": {
     "path": "validation_artifacts/coverage/llvm-cov-summary.json",
-    "digest": "sha256:6488a4fbeb8c781da4c3f24da85193761267501f5d6d68fd695c8c77c4588f1f"
+    "digest": "sha256:a72a564f8eedef9641aac19d25e1e99cfdc9ddd252faba930bec59aa187c42ed"
   },
   "generated_by": "coverage-command",
   "percent_source": "machine_readable_report",
@@ -42,22 +42,15 @@
     "ui_state"
   ],
   "coverage": {
-    "percent": 99.99099477697064,
+    "percent": 100,
     "floor_percent": 100,
     "policy": "100_percent_required",
     "owner": "repo-owner",
     "reason": "Harness Ultragoal plugin self-law requires exact 100% coverage.",
     "blocker_or_debt_id": "coverage-100-plugin-self-law"
   },
-  "uncovered_records": [
-    {
-      "path": "validator/src/cli/performance/receipt.rs",
-      "reason": "line coverage 93.18%",
-      "owner": "repo-owner",
-      "blocker_or_debt_id": "coverage-100-plugin-self-law"
-    }
-  ],
+  "uncovered_records": [],
   "exclusions": [],
-  "generated_at": "2026-06-27T02:02:05Z",
-  "claim_ceiling": "withheld_or_blocked"
+  "generated_at": "2026-06-27T06:56:47Z",
+  "claim_ceiling": "supports_complete_claim"
 }

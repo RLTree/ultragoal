@@ -4,6 +4,7 @@ pub(crate) mod cli;
 pub(crate) mod clock;
 pub(crate) mod contract;
 pub(crate) mod coverage;
+pub(crate) mod final_packet;
 pub(crate) mod fit_repo_receipt;
 pub(crate) mod foundational_law_trace;
 pub(crate) mod law;

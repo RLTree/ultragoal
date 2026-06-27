@@ -1,6 +1,10 @@
 use serde_json::Value;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
+
+mod dependencies;
+mod production;
+mod registry;
 
 const REGISTRY: &str = "docs/mandatory-law-surfaces.json";
 const REQUIRED_LAWS: &[&str] = crate::audit::mandatory::law::surface::ids::REQUIRED_LAWS;
@@ -24,6 +28,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
         Err(err) => return vec![format!("{REGISTRY}: {err}")],
     };
     let mut out = value_failures(root, &registry);
+    let store = crate::schema_catalog::load(root);
     for receipt in registry
         .get("laws")
         .and_then(Value::as_array)
@@ -31,8 +36,57 @@ pub fn package_failures(root: &Path) -> Vec<String> {
         .flatten()
     {
         out.extend(receipt_value_failures(root, receipt));
+        if let Some(law) = receipt.get("law_id").and_then(Value::as_str) {
+            out.extend(dependencies::anti_theater_failures(root, &store, law));
+        }
     }
     out
+}
+
+pub fn package_failures_with_current(
+    root: &Path,
+    current_failures: &BTreeMap<String, Vec<String>>,
+) -> Vec<String> {
+    let registry = match crate::json_boundary::read_json(&root.join(REGISTRY)) {
+        Ok(value) => value,
+        Err(err) => return vec![format!("{REGISTRY}: {err}")],
+    };
+    let mut out = package_failures(root);
+    for receipt in registry
+        .get("laws")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+    {
+        let law = receipt
+            .get("law_id")
+            .and_then(Value::as_str)
+            .unwrap_or("unknown");
+        out.extend(production::current_check_failures(
+            receipt,
+            law,
+            current_failures,
+        ));
+    }
+    out
+}
+
+#[cfg(test)]
+pub(crate) fn current_check_failures_for_test(
+    value: &Value,
+    law: &str,
+    failures: &BTreeMap<String, Vec<String>>,
+) -> Vec<String> {
+    production::current_check_failures(value, law, failures)
+}
+
+#[cfg(test)]
+pub(crate) fn anti_theater_dependency_failures_for_test(
+    root: &Path,
+    store: &crate::schema_catalog::SchemaStore,
+    law: &str,
+) -> Vec<String> {
+    dependencies::anti_theater_failures(root, store, law)
 }
 
 pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
@@ -49,7 +103,7 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
             out.push(format!("mandatory_law_missing:{law}"));
         }
     }
-    let red_ids = red_fixture_ids(root);
+    let red_ids = registry::red_fixture_ids(root);
     for row in rows {
         let law = row
             .get("law_id")
@@ -58,13 +112,13 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         if contains_weak_term(row) {
             out.push(format!("mandatory_law_weak_disposition:{law}"));
         }
-        if !standards_row_exists(root, law) {
+        if !registry::standards_row_exists(root, law) {
             out.push(format!("mandatory_law_missing_standards_row:{law}"));
         }
-        if !source_obligation_exists(root, law) {
+        if !registry::source_obligation_exists(root, law) {
             out.push(format!("mandatory_law_missing_source_obligation:{law}"));
         }
-        if !trace_entry_exists(root, law) {
+        if !registry::trace_entry_exists(root, law) {
             out.push(format!("mandatory_law_missing_foundational_trace:{law}"));
         }
         if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str) {
@@ -162,6 +216,7 @@ pub fn receipt_value_failures(root: &Path, value: &Value) -> Vec<String> {
             _ => out.push(format!("mandatory_law_evidence_digest_mismatch:{law}")),
         }
     }
+    out.extend(production::binding_failures(value, law));
     out
 }
 
@@ -179,39 +234,4 @@ fn contains_weak_term(value: &Value) -> bool {
     .join(" ")
     .to_ascii_lowercase();
     WEAK_TERMS.iter().any(|term| text.contains(term))
-}
-
-fn red_fixture_ids(root: &Path) -> BTreeSet<String> {
-    crate::json_boundary::read_json(&root.join("templates/RED_FIXTURES.json"))
-        .ok()
-        .and_then(|value| value.as_array().cloned())
-        .unwrap_or_default()
-        .into_iter()
-        .filter_map(|row| row.get("id").and_then(Value::as_str).map(str::to_string))
-        .collect()
-}
-
-fn standards_row_exists(root: &Path, id: &str) -> bool {
-    json_rows(root, "templates/agent-standards/enforcement.json", "rows")
-        .iter()
-        .any(|row| row.get("id").and_then(Value::as_str) == Some(id))
-}
-
-fn source_obligation_exists(root: &Path, id: &str) -> bool {
-    json_rows(root, "docs/source-obligation-matrix.json", "obligations")
-        .iter()
-        .any(|row| row.get("id").and_then(Value::as_str) == Some(id))
-}
-
-fn trace_entry_exists(root: &Path, id: &str) -> bool {
-    json_rows(root, "docs/foundational-law-traceability.json", "entries")
-        .iter()
-        .any(|row| row.get("obligation_id").and_then(Value::as_str) == Some(id))
-}
-
-fn json_rows(root: &Path, path: &str, key: &str) -> Vec<Value> {
-    crate::json_boundary::read_json(&root.join(path))
-        .ok()
-        .and_then(|value| value.get(key).and_then(Value::as_array).cloned())
-        .unwrap_or_default()
 }

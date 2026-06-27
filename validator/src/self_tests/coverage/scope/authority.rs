@@ -2,11 +2,15 @@ use serde_json::{Value, json};
 
 fn valid_manifest(root: &std::path::Path) -> Value {
     for rel in [
-        "src/lib.rs",
+        ".harness/coverage-command",
         "scripts/check",
         "validator/src/main.rs",
         "schemas/example.schema.json",
         "templates/example.md",
+        "skills/ultragoal/SKILL.md",
+        "agents/product.md",
+        "custom-agents/product.toml",
+        "docs/example.md",
     ] {
         let path = root.join(rel);
         if let Some(parent) = path.parent() {
@@ -18,15 +22,15 @@ fn valid_manifest(root: &std::path::Path) -> Value {
         "schema": "harness-ultragoal.coverage-manifest.v1",
         "coverage_command_path": ".harness/coverage-command",
         "repo_root_digest": crate::digest::ZERO,
-        "required_target_paths": ["src", "scripts", "validator", "schemas", "templates"],
-        "repo_owned_source_roots": ["src", "scripts", "validator", "schemas", "templates"],
+        "required_target_paths": [".harness", "scripts", "validator", "schemas", "templates", "skills", "agents", "custom-agents", "docs"],
+        "repo_owned_source_roots": [".harness", "scripts", "validator", "schemas", "templates", "skills", "agents", "custom-agents", "docs"],
         "changed_file_coupling_policy": {
             "required": true,
-            "changed_files": ["src/lib.rs"],
+            "changed_files": ["validator/src/main.rs"],
             "changed_files_digest": crate::digest::ZERO
         },
         "required_measured_dimensions_per_root": [{
-            "root": "src",
+            "root": "validator",
             "dimensions": ["line", "branch", "function", "artifact", "ui_state"]
         }],
         "repo_walk_policy": {
@@ -113,6 +117,17 @@ fn coverage_scope_subchecks_reject_missing_changed_files_and_weak_scripts() {
             "coverage_changed_file_missing_from_manifest",
             "coverage_changed_file_missing_from_manifest"
         ]
+    );
+    let generated = root.join("validation_artifacts/coverage/coverage-receipt.json");
+    std::fs::create_dir_all(generated.parent().expect("generated parent")).expect("generated dir");
+    std::fs::write(&generated, "{}").expect("generated receipt");
+    let generated_failures = crate::audit::coverage::scope::changed_files::failures(
+        Some(&root),
+        &json!({"changed_files":["validation_artifacts/coverage/coverage-receipt.json"]}),
+    );
+    assert_eq!(
+        generated_failures,
+        vec!["coverage_changed_file_generated_artifact"]
     );
     let missing_script =
         crate::audit::coverage::scope::scripts::failures(&root, "scripts/missing", "completion");

@@ -91,7 +91,7 @@ fn materialized_result(
         .get("base_fixture_path")
         .and_then(Value::as_str)
         .unwrap_or("");
-    let observation = crate::red::fixture::observation::observe_materialized(
+    let observation = crate::red::fixture::observation::observe_materialized_with_candidate(
         root,
         store,
         validator_digests,

@@ -61,8 +61,18 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
     write_json(
         &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
         &json!({
+            "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+            "generated_at": "2026-06-27T00:00:00Z",
             "captured_at": "2026-06-25T12:00:00Z",
+            "status": "fail",
             "source": "multi_agent_v1.tool_registry",
+            "target_revision": {
+                "kind": "package_digest",
+                "value": crate::self_tests::boundaries::support::sha('b')
+            },
+            "claim_ceiling": "withheld_or_blocked",
+            "session_id": "session",
+            "round_id": "round",
             "agent_types": [{
                 "agent_type": "harness_contract_claim_falsifier",
                 "persona": "wrong_persona",
@@ -78,6 +88,50 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
         failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_agent_mismatch"))
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_target_digest_mismatch"))
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_status_not_pass"))
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_claim_ceiling_not_live_surface"))
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_generated_capture_mismatch"))
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_missing_live_tool_issuer")),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| { item.contains("plugin_self_law_registry_missing_tool_call_identity") }),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_capture_method_not_live")),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_raw_observation_missing")),
+        "{failures:?}"
     );
     assert!(
         failures

@@ -9560,7 +9560,7 @@
   {
     "id": "standards-gardener-changed-artifact-after-receipt",
     "packet_path": "fixtures/red/standards-gardener-changed-artifact-after-receipt.json",
-    "packet_digest": "sha256:a5aebf5152544eed362759dc4524c4fb8910c564b4f908e1ff2119bce7946b91",
+    "packet_digest": "sha256:5459c01a4189deb2bff44ff01bcd11e7dd3992499f6e7dc6b82a7893e18b22ac",
     "expected_failure": {
       "check_id": "standards-gardener-promotion",
       "error": "standards_gardener_changed_artifact_after_receipt"

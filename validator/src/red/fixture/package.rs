@@ -3,7 +3,17 @@ use crate::red::fixtures::Observation;
 use serde_json::Value;
 use std::path::Path;
 
+#[cfg(test)]
 pub(crate) fn observation(
+    root: &Path,
+    expected: &Value,
+    bad: &Value,
+    base_path: &str,
+) -> Option<Observation> {
+    observation_with_candidate(root, expected, bad, base_path)
+}
+
+pub(crate) fn observation_with_candidate(
     root: &Path,
     expected: &Value,
     bad: &Value,

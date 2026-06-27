@@ -39,7 +39,7 @@ pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) 
         value["claim_ceiling"] = json!("performance_proven");
         value["performance_regression"] = regression_value("pass");
         value["exit_code"] = json!(0);
-        value["supported_claim_classes"] = json!(["routine_usability", "update_goal_eligibility"]);
+        value["supported_claim_classes"] = json!(["routine_usability"]);
         value["blocked_claim_classes"] = json!([]);
         value["failure"] = Value::Null;
     } else {

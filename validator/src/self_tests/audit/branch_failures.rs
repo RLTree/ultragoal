@@ -143,7 +143,18 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
     );
     write_json(
         &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
-        &json!({"captured_at":"2026-06-24T00:00:00Z","source":"disk","agent_types":[]}),
+        &json!({
+            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
+            "generated_at":"2026-06-24T00:00:00Z",
+            "captured_at":"2026-06-24T00:00:00Z",
+            "status":"fail",
+            "source":"disk",
+            "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('b')},
+            "claim_ceiling":"withheld_or_blocked",
+            "session_id":"session",
+            "round_id":"round",
+            "agent_types":[]
+        }),
     );
     write_text(&root.join("validator/src/too_long.rs"), &"x\n".repeat(251));
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
@@ -155,7 +166,9 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
         "plugin_self_law_coverage_has_uncovered_records",
         "plugin_self_law_coverage_claim_ceiling_not_complete",
         "plugin_self_law_coverage_target_revision_unavailable",
-        "plugin_self_law_registry_stale",
+        "plugin_self_law_registry_target_digest_mismatch",
+        "plugin_self_law_registry_status_not_pass",
+        "plugin_self_law_registry_claim_ceiling_not_live_surface",
         "plugin_self_law_registry_wrong_source",
         "plugin_self_law_registry_agent_missing",
         "plugin_self_law_line_cap_exceeded:validator/src/too_long.rs:251",

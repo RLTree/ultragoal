@@ -30,7 +30,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:091d1f885ba1eb8e82a3a10d663278a3b9e4aab8868d421c0f828465c641323e",
+  "repo_root_digest": "sha256:c8b48e55528b14e8b1a9cec5228194415e117a80bfdf59362a75daec02438de3",
   "source_discovery_rules": {
     "include": [
       ".harness/**",
@@ -236,8 +236,6 @@
       "templates/agent-standards/enforcement-audit.tsv",
       "templates/agent-standards/enforcement.json",
       "templates/agent-standards/enforcement.tsv",
-      "validation_artifacts/harness/plugin-product-journey-receipt.json",
-      "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
       "validator/src/audit/agent/standards/enforcement.rs",
       "validator/src/audit/agent/standards/tsv/checks.rs",
       "validator/src/audit/foundational_law_trace.rs",
@@ -302,7 +300,7 @@
       "validator/src/self_tests/source_obligations/fallthrough_edges.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:16ce6b7febad0e18081f0353f699189ef6cddfe14eb9d1cf408403fd71f6cbe4"
+    "changed_files_digest": "sha256:765480faf8c0dc2a259d49364373da431825859691cab1dfa7528d6aaebe62bf"
   },
   "exclusions": [],
   "generated_roots": [],

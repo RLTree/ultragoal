@@ -6,7 +6,28 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
+#[cfg(test)]
 pub(crate) fn observe_materialized(
+    root: &Path,
+    store: &SchemaStore,
+    validator_digests: &BTreeMap<String, String>,
+    packet: &Value,
+    expected: &Value,
+    bad: &Value,
+    base_path: &str,
+) -> Observation {
+    observe_materialized_with_candidate(
+        root,
+        store,
+        validator_digests,
+        packet,
+        expected,
+        bad,
+        base_path,
+    )
+}
+
+pub(crate) fn observe_materialized_with_candidate(
     root: &Path,
     store: &SchemaStore,
     validator_digests: &BTreeMap<String, String>,
@@ -19,7 +40,7 @@ pub(crate) fn observe_materialized(
         return crate::red::fixture::review::round::observation(root, store, packet, expected, bad);
     }
     if let Some(observation) =
-        crate::red::fixture::package::observation(root, expected, bad, base_path)
+        crate::red::fixture::package::observation_with_candidate(root, expected, bad, base_path)
     {
         return observation;
     }

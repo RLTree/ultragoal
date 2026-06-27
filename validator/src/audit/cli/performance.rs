@@ -115,10 +115,22 @@ fn require_reds(root: &Path, out: &mut Vec<String>) {
 }
 
 fn require_receipt(root: &Path, out: &mut Vec<String>) {
+    let expected_candidate = match crate::package::inventory::package_digest(root) {
+        Ok(digest) => digest,
+        Err(err) => {
+            out.push(format!(
+                "cli_performance_candidate_digest_unavailable:{err}"
+            ));
+            return;
+        }
+    };
     match crate::json_boundary::read_json(&root.join(RECEIPT)) {
-        Ok(value) => out.extend(crate::cli::performance::receipt::surface_value_failures(
-            &value,
-        )),
+        Ok(value) => out.extend(
+            crate::cli::performance::receipt::same_candidate_pass_failures(
+                &value,
+                &expected_candidate,
+            ),
+        ),
         Err(_) => out.push(format!(
             "cli_performance_missing_fail_closed_receipt:{RECEIPT}"
         )),

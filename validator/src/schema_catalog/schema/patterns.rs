@@ -17,6 +17,21 @@ pub(super) fn matches(pattern: &str, text: &str) -> bool {
         }
         "^examples/generated/" => text.starts_with("examples/generated/"),
         "^custom-agents/harness-[a-z-]+\\.toml$" => harness_agent_toml(text),
+        "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/review/", text)
+        }
+        "^validation_artifacts/cli/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/cli/", text)
+        }
+        "^validation_artifacts/coverage/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/coverage/", text)
+        }
+        "^validation_artifacts/harness/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/harness/", text)
+        }
+        "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/ultragoal-audit/", text)
+        }
         other if other.starts_with("(^|/)") && other.ends_with('$') => {
             file_suffix_pattern(other, text)
         }
@@ -62,6 +77,20 @@ fn strict_kebab_token(text: &str) -> bool {
 
 fn harness_agent_toml(text: &str) -> bool {
     text.starts_with("custom-agents/harness-") && text.ends_with(".toml")
+}
+
+fn artifact_json_under(prefix: &str, text: &str) -> bool {
+    let Some(tail) = text.strip_prefix(prefix) else {
+        return false;
+    };
+    !tail.is_empty()
+        && tail.ends_with(".json")
+        && tail
+            .split('/')
+            .all(|part| !part.is_empty() && part != "." && part != "..")
+        && tail
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '_' | '-' | '/'))
 }
 
 fn file_suffix_pattern(pattern: &str, text: &str) -> bool {
@@ -123,6 +152,34 @@ mod tests {
         assert!(super::matches(
             "^custom-agents/harness-[a-z-]+\\.toml$",
             "custom-agents/harness-reviewer.toml"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/review/final-packet.json"
+        ));
+        assert!(!super::matches(
+            "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/other/final-packet.json"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/cli/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/cli/update-goal-eligibility.json"
+        ));
+        assert!(!super::matches(
+            "^validation_artifacts/cli/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/cli/../escape.json"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/coverage/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/coverage/coverage-receipt.json"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/harness/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/harness/fit-repo-receipt.json"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/ultragoal-audit/validator-receipt.json"
         ));
         assert!(super::matches(
             "(^|/)review\\-round\\.json$",

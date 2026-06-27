@@ -3,7 +3,10 @@ use std::path::Path;
 
 const CLI_SCHEMA: &str = "schemas/cli-control-plane-receipt.schema.json";
 const CONTROL_SOURCE: &str = "validator/src/cli/control/plane.rs";
+const CONTROL_RECEIPT: &str = "validator/src/cli/control/plane/receipt.rs";
 const CONTROL_TYPES: &str = "validator/src/cli/control/plane/types.rs";
+const UPDATE_GOAL_RECEIPT: &str = "validation_artifacts/cli/update-goal-eligibility.json";
+const SELF_LAW_RECEIPT: &str = "validation_artifacts/cli/self-law-receipt.json";
 const REQUIRED_LAWS: &[&str] = &["cli-control-plane-authority", "cli-self-law-compliance"];
 const REQUIRED_REDS: &[&str] = &[
     "cli-control-plane-authority-checklist-completion-without-cli-red",
@@ -27,7 +30,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
 }
 
 fn require_files(root: &Path, out: &mut Vec<String>) {
-    for rel in [CONTROL_SOURCE, CONTROL_TYPES, CLI_SCHEMA] {
+    for rel in [CONTROL_SOURCE, CONTROL_RECEIPT, CONTROL_TYPES, CLI_SCHEMA] {
         if !root.join(rel).is_file() {
             out.push(format!("cli_control_plane_missing_artifact:{rel}"));
         }
@@ -47,7 +50,14 @@ fn require_cargo_bins(root: &Path, out: &mut Vec<String>) {
 fn require_manifest_resources(root: &Path, out: &mut Vec<String>) {
     let manifest = read_json(root, "plugin-manifest-draft.json");
     let inventory = crate::package::inventory::inventory_paths(&manifest);
-    for rel in [CONTROL_SOURCE, CONTROL_TYPES, CLI_SCHEMA] {
+    for rel in [
+        CONTROL_SOURCE,
+        CONTROL_RECEIPT,
+        CONTROL_TYPES,
+        CLI_SCHEMA,
+        UPDATE_GOAL_RECEIPT,
+        SELF_LAW_RECEIPT,
+    ] {
         if !inventory.iter().any(|path| path == rel) {
             out.push(format!("cli_control_plane_package_inventory_missing:{rel}"));
         }
@@ -108,13 +118,26 @@ fn require_red_catalog(root: &Path, out: &mut Vec<String>) {
 }
 
 fn require_receipts(root: &Path, out: &mut Vec<String>) {
-    for rel in [
-        "validation_artifacts/cli/update-goal-eligibility.json",
-        "validation_artifacts/cli/self-law-receipt.json",
+    let expected_candidate = match crate::package::inventory::package_digest(root) {
+        Ok(digest) => digest,
+        Err(err) => {
+            out.push(format!(
+                "cli_control_plane_candidate_digest_unavailable:{err}"
+            ));
+            return;
+        }
+    };
+    for (rel, operation) in [
+        (UPDATE_GOAL_RECEIPT, "update_goal_eligibility"),
+        (SELF_LAW_RECEIPT, "self_update_goal_eligibility"),
     ] {
         match crate::json_boundary::read_json(&root.join(rel)) {
             Ok(value) => {
-                for failure in crate::cli::control::plane::surface_value_failures(&value) {
+                for failure in crate::cli::control::plane::receipt::same_candidate_pass_failures(
+                    &value,
+                    &expected_candidate,
+                    operation,
+                ) {
                     out.push(format!("{rel}: {failure}"));
                 }
             }

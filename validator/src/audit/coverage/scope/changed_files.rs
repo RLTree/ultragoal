@@ -18,6 +18,10 @@ pub(crate) fn failures(root: Option<&Path>, policy: &Value) -> Vec<String> {
             out.push("coverage_changed_file_missing_from_manifest".to_string());
             continue;
         }
+        if rel == "validation_artifacts" || rel.starts_with("validation_artifacts/") {
+            out.push("coverage_changed_file_generated_artifact".to_string());
+            continue;
+        }
         let path = root.join(rel);
         if !path.is_file() {
             out.push("coverage_changed_file_missing_from_manifest".to_string());

@@ -149,7 +149,7 @@ fn receipt_is_fail_closed_and_surface_bound() {
             .iter()
             .filter_map(|claim| claim.as_str())
             .collect::<Vec<_>>(),
-        vec!["routine_usability", "update_goal_eligibility"]
+        vec!["routine_usability"]
     );
     for ptr in [
         "/digests/candidate",

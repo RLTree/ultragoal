@@ -1,5 +1,6 @@
 pub(crate) mod changed_files;
 pub(crate) mod exclusions;
+pub(crate) mod roots;
 pub(crate) mod scripts;
 use serde_json::Value;
 use std::path::Path;
@@ -8,7 +9,6 @@ const MANIFEST: &str = "templates/.harness/coverage-manifest.json";
 const COMMAND: &str = "templates/.harness/coverage-command";
 const FAST: &str = "templates/scripts/check-coverage-fast";
 const FULL: &str = "templates/scripts/check-coverage-full";
-const OWNED_ROOTS: &[&str] = &["src", "scripts", "validator", "schemas", "templates"];
 const REQUIRED_DIMENSIONS: &[&str] = &["line", "branch", "function", "artifact", "ui_state"];
 
 pub fn package_failures(root: &Path) -> Vec<String> {
@@ -162,13 +162,13 @@ fn scope_authority_failures(value: &Value, root: Option<&Path>) -> Vec<String> {
         out.push("coverage_receipt_source_digest_mismatch".to_string());
     }
     let targets = strings(value, "required_target_paths");
-    for root in OWNED_ROOTS {
+    for root in roots::OWNED_ROOTS {
         if !targets.iter().any(|target| target == root) {
             out.push("coverage_manifest_target_gap".to_string());
         }
     }
     let owned = strings(value, "repo_owned_source_roots");
-    for root in OWNED_ROOTS {
+    for root in roots::OWNED_ROOTS {
         if !owned.iter().any(|item| item == root) {
             out.push("coverage_source_missing_from_manifest".to_string());
         }

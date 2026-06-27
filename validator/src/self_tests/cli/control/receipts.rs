@@ -1,6 +1,8 @@
 use crate::cli::control::plane::types::ControlOperation;
 use crate::cli::control::plane::{
-    ControlCommand, RECEIPT_SCHEMA, receipt, run, surface_value_failures,
+    ControlCommand, RECEIPT_SCHEMA, receipt,
+    receipt::{same_candidate_pass_failures, surface_value_failures},
+    run,
 };
 use serde_json::json;
 use std::path::{Path, PathBuf};
@@ -126,6 +128,50 @@ fn surface_validation_rejects_missing_authority_fields() {
     ] {
         assert!(failures.iter().any(|failure| failure == expected));
     }
+}
+
+#[test]
+fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts() {
+    let stale_candidate = crate::self_tests::boundaries::support::sha('a');
+    let current_candidate = crate::self_tests::boundaries::support::sha('b');
+    let transition = json!({
+        "schema": RECEIPT_SCHEMA,
+        "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},
+        "operation": "update_goal_eligibility",
+        "candidate_digest": stale_candidate,
+        "status": "fail",
+        "claim_ceiling": "withheld_or_blocked",
+        "blocked_claim_classes": ["completion", "update_goal_eligibility"],
+        "failure": {"law_id": "cli-self-law-compliance"}
+    });
+    let failures =
+        same_candidate_pass_failures(&transition, &current_candidate, "update_goal_eligibility");
+    for expected in [
+        "cli_control_plane_receipt_candidate_digest_mismatch",
+        "cli_control_plane_receipt_not_pass",
+        "cli_control_plane_receipt_not_self_hosted",
+        "cli_control_plane_receipt_blocks_claims",
+    ] {
+        assert!(
+            failures.iter().any(|failure| failure.contains(expected)),
+            "{expected}: {failures:?}"
+        );
+    }
+
+    let pass = json!({
+        "schema": RECEIPT_SCHEMA,
+        "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
+        "operation": "update_goal_eligibility",
+        "candidate_digest": current_candidate,
+        "status": "pass",
+        "claim_ceiling": "supports_update_goal_eligibility",
+        "blocked_claim_classes": [],
+        "failure": null
+    });
+    assert!(
+        same_candidate_pass_failures(&pass, &current_candidate, "update_goal_eligibility")
+            .is_empty()
+    );
 }
 
 #[test]

@@ -213,34 +213,5 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
-pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
-    let mut out = Vec::new();
-    if value.get("schema").and_then(Value::as_str) != Some(RECEIPT_SCHEMA) {
-        out.push("cli_control_plane_receipt_wrong_schema".to_string());
-    }
-    if value.pointer("/issuer/tool").and_then(Value::as_str) != Some("ultragoal") {
-        out.push("cli_control_plane_receipt_wrong_issuer".to_string());
-    }
-    if value.get("operation").and_then(Value::as_str).is_none() {
-        out.push("cli_control_plane_receipt_missing_operation".to_string());
-    }
-    if value
-        .get("candidate_digest")
-        .and_then(Value::as_str)
-        .is_none()
-    {
-        out.push("cli_control_plane_receipt_missing_candidate_digest".to_string());
-    }
-    if value
-        .get("blocked_claim_classes")
-        .and_then(Value::as_array)
-        .is_none()
-    {
-        out.push("cli_control_plane_receipt_missing_blocked_claims".to_string());
-    }
-    if value.pointer("/failure/law_id").and_then(Value::as_str) != Some("cli-self-law-compliance") {
-        out.push("cli_control_plane_receipt_missing_self_law_failure".to_string());
-    }
-    out
-}
+pub(crate) mod receipt;
 pub(crate) mod types;

@@ -151,6 +151,10 @@ fn artifact_audit_and_receipt_edges() {
             .any(|item| item.contains("cli_control_plane_missing_red_fixture"))
     );
 
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
     let perf_failures = crate::audit::cli::performance::package_failures(&root);
     assert!(
         perf_failures

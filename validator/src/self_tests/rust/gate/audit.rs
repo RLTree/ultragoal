@@ -136,11 +136,8 @@ fn rust_devx_audit_law_id_lookup_fails_closed_for_missing_rows() {
     let temp = crate::self_tests::boundaries::support::temp_root("rust-law-id-missing");
     std::fs::create_dir_all(temp.join("docs")).expect("docs");
     std::fs::write(temp.join("docs/empty.json"), br#"{"rows":[]}"#).expect("empty rows");
-    std::fs::write(
-        temp.join("docs/wrong.json"),
-        br#"{"rows":[{"id":"other-law"},{"obligation_id":"other-obligation"}]}"#,
-    )
-    .expect("wrong rows");
+    let wrong_rows = br#"{"rows":[{"id":"other-law"},{"obligation_id":"other-obligation"}]}"#;
+    std::fs::write(temp.join("docs/wrong.json"), wrong_rows).expect("wrong rows");
     assert!(!crate::audit::rust::developer::has_law_id(
         &temp,
         "docs/missing.json",

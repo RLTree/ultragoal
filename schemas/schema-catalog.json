@@ -67,6 +67,10 @@
       "path": "schemas/fixture-bundle.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/final-packet-proof.schema.json",
+      "path": "schemas/final-packet-proof.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/foundational-law-traceability.schema.json",
       "path": "schemas/foundational-law-traceability.schema.json"
     },

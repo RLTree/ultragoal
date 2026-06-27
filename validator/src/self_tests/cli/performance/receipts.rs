@@ -1,4 +1,4 @@
-use crate::cli::performance::receipt::surface_value_failures;
+use crate::cli::performance::receipt::{same_candidate_pass_failures, surface_value_failures};
 use crate::cli::performance::types::PERFORMANCE_RECEIPT_SCHEMA;
 use serde_json::{Value, json};
 
@@ -26,6 +26,24 @@ fn valid_pass() -> Value {
     value["blocked_claim_classes"] = json!([]);
     value["supported_claim_classes"] = json!(["routine_usability"]);
     value
+}
+
+fn strict_pass(candidate: &str) -> Value {
+    json!({
+        "schema": PERFORMANCE_RECEIPT_SCHEMA,
+        "status": "pass",
+        "claim_ceiling": "performance_proven",
+        "command": {"argv": ["ultragoal", "performance", "prove"]},
+        "budget": {"class": "strict_local"},
+        "digests": {"candidate": candidate},
+        "cache": {"mode": "disabled", "no_cache_mode_result": "executed_without_cache"},
+        "concurrency": {"worker_count": 1},
+        "telemetry": {"wall_clock_ms": 1},
+        "performance_regression": {"status": "pass"},
+        "failure": null,
+        "blocked_claim_classes": [],
+        "supported_claim_classes": ["routine_usability"]
+    })
 }
 
 #[test]
@@ -61,10 +79,55 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
             .contains(&"cli_performance_pass_without_positive_claim_ceiling".to_string())
     );
 
+    let mut blocked_pass = valid_pass();
+    blocked_pass["blocked_claim_classes"] = json!(["completion"]);
+    assert!(
+        surface_value_failures(&blocked_pass)
+            .contains(&"cli_performance_pass_with_blocked_claims".to_string())
+    );
+
+    let mut missing_failure_check = valid_fail();
+    missing_failure_check["failure"]
+        .as_object_mut()
+        .expect("failure object")
+        .remove("check_id");
+    assert!(
+        surface_value_failures(&missing_failure_check)
+            .contains(&"cli_performance_receipt_missing:/failure/check_id".to_string())
+    );
+
     let mut unsupported_fail = valid_fail();
     unsupported_fail["blocked_claim_classes"] = json!([]);
     assert!(
         surface_value_failures(&unsupported_fail)
             .contains(&"cli_performance_fail_without_blocked_claims".to_string())
     );
+}
+
+#[test]
+fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
+    let stale = crate::self_tests::boundaries::support::sha('a');
+    let current = crate::self_tests::boundaries::support::sha('b');
+    let mut receipt = strict_pass(&stale);
+    receipt["telemetry"]["wall_clock_ms"] = json!(0);
+    receipt["performance_regression"]["status"] = json!("missing_baseline");
+    receipt["cache"]["mode"] = json!("hidden");
+    receipt["failure"] = json!({"check_id": "still-blocked"});
+    receipt["supported_claim_classes"] = json!(["routine_usability", "update_goal_eligibility"]);
+    let failures = same_candidate_pass_failures(&receipt, &current);
+    for expected in [
+        "cli_performance_receipt_candidate_digest_mismatch",
+        "cli_performance_pass_has_failure",
+        "cli_performance_receipt_placeholder_wall_clock",
+        "cli_performance_receipt_regression_not_pass",
+        "cli_performance_receipt_cache_honesty_missing",
+        "cli_performance_receipt_update_goal_overclaim",
+    ] {
+        assert!(
+            failures.iter().any(|failure| failure.contains(expected)),
+            "{expected}: {failures:?}"
+        );
+    }
+    let green_failures = same_candidate_pass_failures(&strict_pass(&current), &current);
+    assert!(green_failures.is_empty(), "{green_failures:?}");
 }

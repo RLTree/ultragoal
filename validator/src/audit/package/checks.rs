@@ -51,12 +51,6 @@ fn text_guard_checks(
     for failure in crate::audit::law::surface::receipts::package_failures(root) {
         push(failures, "source-obligation-coverage", failure);
     }
-    for failure in crate::audit::mandatory::law::surfaces::package_failures(root) {
-        if let Some(check_id) = mandatory_law_check_id(&failure, check_ids) {
-            push(failures, &check_id, failure.clone());
-        }
-        push(failures, "source-obligation-coverage", failure);
-    }
     for failure in crate::audit::standards_gardening::failures(root, store) {
         push(failures, "standards-gardener-promotion", failure);
     }
@@ -82,6 +76,9 @@ fn text_guard_checks(
         push(failures, "validator-execution-provenance", failure);
     }
     for failure in crate::audit::session_log_hardening::package_failures(root, store) {
+        push(failures, "validator-execution-provenance", failure);
+    }
+    for failure in crate::audit::final_packet::package_failures(root, store) {
         push(failures, "validator-execution-provenance", failure);
     }
     for failure in crate::audit::plugin::laws::package_failures(root, store) {
@@ -110,6 +107,16 @@ fn text_guard_checks(
     }
     for failure in crate::audit::text_guards::private_home_path_failures(root) {
         push(failures, "plugin-inventory-closure", failure);
+    }
+    let current_failures = failures.clone();
+    for failure in crate::audit::mandatory::law::surfaces::package_failures_with_current(
+        root,
+        &current_failures,
+    ) {
+        if let Some(check_id) = mandatory_law_check_id(&failure, check_ids) {
+            push(failures, &check_id, failure.clone());
+        }
+        push(failures, "source-obligation-coverage", failure);
     }
 }
 

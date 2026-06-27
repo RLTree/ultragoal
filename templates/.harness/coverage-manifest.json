@@ -1,156 +1,344 @@
 {
-  "behavior_dimension_mapping": {
-    "branching_error_behavior": [
-      "branch"
-    ],
-    "cli_tooling": [
-      "function"
-    ],
-    "generated_authority": [
-      "artifact"
-    ],
-    "install_cache_package": [
-      "artifact"
-    ],
-    "library_api": [
-      "function"
-    ],
-    "product_ui_control_surface": [
-      "ui_state"
-    ],
-    "security_trust_boundary": [
-      "branch",
-      "function"
-    ],
-    "workflow_orchestration": [
-      "branch",
-      "artifact"
-    ]
-  },
-  "changed_file_coupling_policy": {
-    "blocker_path": "VERIFICATION_BACKLOG.json",
-    "changed_files": [
-      "fixtures/valid/minimal-goal-run.json",
-      "fixtures/valid/non-product-feature-completion.json"
-    ],
-    "changed_files_digest": "sha256:7d05b161d42f84d805a1589d2e309f33aca5d0b04b33215fcf371d0be756deba",
-    "required": true
-  },
-  "claim_ceiling_when_incomplete": "withheld_or_blocked",
-  "coverage_command_id": "repo-authoritative-coverage",
-  "coverage_command_path": ".harness/coverage-command",
-  "coverage_receipt_output_path": "validation_artifacts/coverage/coverage-receipt.json",
-  "exclusions": [],
-  "external_roots": [],
-  "fast_full_gate_split": {
-    "fast_gate": "scripts/check-coverage-fast",
-    "fast_supports_completion": false,
-    "full_gate": "scripts/check-coverage-full",
-    "full_required_for_completion": true,
-    "missing_claim_context_fails": true
-  },
-  "generated_at": "2026-06-24T00:00:00Z",
-  "generated_roots": [],
+  "schema": "harness-ultragoal.coverage-manifest.v1",
   "manifest_version": 1,
+  "generated_at": "2026-06-25T22:32:34Z",
   "owner": "repo-owner",
   "policy": "100_percent_required",
-  "policy_mutation_gate": {
-    "block_claim_ceiling_raise_without_proof": true,
-    "block_dimension_removal": true,
-    "block_floor_lowering": true,
-    "block_repo_owned_reclassification": true,
-    "block_target_narrowing": true,
-    "material_review_required": true
-  },
-  "receipt_freshness_binding": {
-    "changed_files_digest_required": true,
-    "command_digest_required": true,
-    "machine_report_digest_required": true,
-    "manifest_digest_required": true,
-    "source_tree_digest_required": true,
-    "workspace_binding_required": true
-  },
-  "repo_owned_source_roots": [
-    "src",
-    "scripts",
-    "validator",
-    "schemas",
-    "templates"
-  ],
-  "repo_root_digest": "sha256:6ae236259db7ff42aa96f3bb0b26e65b80ae5076ec5557b6e9199f5d0f74d0c9",
-  "repo_walk_policy": {
-    "classify_all_nonignored_files": true,
-    "ignored_local_state_cannot_be_target": true,
-    "required": true,
-    "unclassified_source_blocks": true
-  },
-  "required_measured_dimensions_per_root": [
-    {
-      "dimensions": [
-        "line",
-        "branch",
-        "function"
-      ],
-      "root": "src"
-    },
-    {
-      "dimensions": [
-        "line",
-        "function"
-      ],
-      "root": "scripts"
-    },
-    {
-      "dimensions": [
-        "line",
-        "branch",
-        "function"
-      ],
-      "root": "validator"
-    },
-    {
-      "dimensions": [
-        "artifact"
-      ],
-      "root": "schemas"
-    },
-    {
-      "dimensions": [
-        "artifact",
-        "ui_state"
-      ],
-      "root": "templates"
-    }
-  ],
+  "coverage_command_id": "plugin-self-authoritative-coverage",
+  "coverage_command_path": ".harness/coverage-command",
+  "coverage_receipt_output_path": "validation_artifacts/coverage/coverage-receipt.json",
+  "claim_ceiling_when_incomplete": "withheld_or_blocked",
   "required_target_paths": [
-    "src",
+    ".harness",
     "scripts",
     "validator",
     "schemas",
-    "templates"
+    "templates",
+    "skills",
+    "agents",
+    "custom-agents",
+    "docs"
   ],
-  "schema": "harness-ultragoal.coverage-manifest.v1",
+  "repo_owned_source_roots": [
+    ".harness",
+    "scripts",
+    "validator",
+    "schemas",
+    "templates",
+    "skills",
+    "agents",
+    "custom-agents",
+    "docs"
+  ],
+  "repo_root_digest": "sha256:c8b48e55528b14e8b1a9cec5228194415e117a80bfdf59362a75daec02438de3",
   "source_discovery_rules": {
+    "include": [
+      ".harness/**",
+      "scripts/**",
+      "validator/**",
+      "schemas/**",
+      "templates/**",
+      "skills/**",
+      "agents/**",
+      "custom-agents/**",
+      "docs/**"
+    ],
     "ignore": [
       ".git/**",
       ".codex-worktree/**",
       "target/**",
       "node_modules/**",
-      "__pycache__/**"
-    ],
-    "include": [
-      "src/**",
-      "scripts/**",
-      "validator/**",
-      "schemas/**",
-      "templates/**"
+      "__pycache__/**",
+      "validation_artifacts/**",
+      "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"
     ]
   },
+  "required_measured_dimensions_per_root": [
+    {
+      "root": ".harness",
+      "dimensions": [
+        "line",
+        "function",
+        "artifact"
+      ]
+    },
+    {
+      "root": "scripts",
+      "dimensions": [
+        "line",
+        "function"
+      ]
+    },
+    {
+      "root": "validator",
+      "dimensions": [
+        "line",
+        "branch",
+        "function",
+        "region"
+      ]
+    },
+    {
+      "root": "schemas",
+      "dimensions": [
+        "artifact"
+      ]
+    },
+    {
+      "root": "templates",
+      "dimensions": [
+        "artifact",
+        "ui_state"
+      ]
+    },
+    {
+      "root": "skills",
+      "dimensions": [
+        "artifact"
+      ]
+    },
+    {
+      "root": "agents",
+      "dimensions": [
+        "artifact"
+      ]
+    },
+    {
+      "root": "custom-agents",
+      "dimensions": [
+        "artifact"
+      ]
+    },
+    {
+      "root": "docs",
+      "dimensions": [
+        "artifact"
+      ]
+    }
+  ],
+  "behavior_dimension_mapping": {
+    "cli_tooling": [
+      "function"
+    ],
+    "library_api": [
+      "function"
+    ],
+    "branching_error_behavior": [
+      "branch"
+    ],
+    "product_ui_control_surface": [
+      "ui_state"
+    ],
+    "generated_authority": [
+      "artifact"
+    ],
+    "workflow_orchestration": [
+      "branch",
+      "artifact"
+    ],
+    "security_trust_boundary": [
+      "branch",
+      "function"
+    ],
+    "install_cache_package": [
+      "artifact"
+    ]
+  },
+  "changed_file_coupling_policy": {
+    "required": true,
+    "blocker_path": "VERIFICATION_BACKLOG.json",
+    "changed_files": [
+      ".codex-plugin/plugin.json",
+      ".harness/coverage-command",
+      ".harness/run-coverage.sh",
+      "agents/orchestration-recovery-falsifier.md",
+      "agents/product-simplicity-falsifier.md",
+      "agents/security-trust-boundary-falsifier.md",
+      "custom-agents/harness-orchestration-recovery-falsifier.toml",
+      "custom-agents/harness-product-simplicity-falsifier.toml",
+      "custom-agents/harness-security-trust-boundary-falsifier.toml",
+      "docs/foundational-law-traceability.json",
+      "docs/law-family-aliases.json",
+      "docs/namespace-class-registry.json",
+      "docs/plugin-cohesion-manifest.json",
+      "docs/source-obligation-matrix.json",
+      "docs/source-obligation-matrix.md",
+      "fixtures/namespace/valid/namespace-class-registry-valid.json",
+      "fixtures/red/namespace-external-compatibility-authority-missing.json",
+      "fixtures/red/namespace-generated-class-authority-missing.json",
+      "fixtures/red/namespace-junk-drawer-path.json",
+      "fixtures/red/namespace-law-present-only-as-prose.json",
+      "fixtures/red/namespace-orphan-repo-file.json",
+      "fixtures/red/namespace-repeated-prefix-without-subdirectory.json",
+      "fixtures/red/namespace-root-clutter-without-route.json",
+      "fixtures/red/namespace-vague-common-domain-path.json",
+      "fixtures/red/namespace-validator-source-broad-glob-red.json",
+      "fixtures/red/namespace-validator-source-class-waiver-manifest-contract-red.json",
+      "fixtures/red/namespace-validator-source-coverage-wave-history-red.json",
+      "fixtures/red/namespace-validator-source-error-not-hidden-by-other-proof-red.json",
+      "fixtures/red/namespace-validator-source-generated-class-red.json",
+      "fixtures/red/namespace-validator-source-iinternal-typo-red.json",
+      "fixtures/red/namespace-validator-source-manifest-listing-cannot-bless-red.json",
+      "fixtures/red/namespace-validator-source-top-level-internal-cluster-red.json",
+      "fixtures/red/namespace-validator-source-top-level-internal-coverage-wave-red.json",
+      "fixtures/red/namespace-validator-source-widened-class-tamper-red.json",
+      "fixtures/red/review-round-product-fitness-claim-binding-missing.json",
+      "fixtures/red/review-round-product-fitness-disposition-missing.json",
+      "fixtures/red/review-round-product-fitness-disposition-stale.json",
+      "fixtures/red/review-round-product-fitness-disposition-unowned.json",
+      "fixtures/red/review-round-product-fitness-disposition-wrong-owner.json",
+      "fixtures/red/review-round-product-fitness-fixture-substitution.json",
+      "fixtures/red/review-round-product-fitness-four-person-no-disposition.json",
+      "fixtures/red/review-round-product-fitness-generic-approval-substitution.json",
+      "fixtures/red/review-round-product-fitness-happy-path-substitution.json",
+      "fixtures/red/review-round-product-fitness-install-substitution.json",
+      "fixtures/red/review-round-product-fitness-owner-missing.json",
+      "fixtures/red/review-round-product-fitness-product-cohesion-substitution.json",
+      "fixtures/red/review-round-product-fitness-receipt-digest-missing.json",
+      "fixtures/red/review-round-product-fitness-receipt-only-substitution.json",
+      "fixtures/red/review-round-product-fitness-required-flag-missing.json",
+      "fixtures/red/review-round-product-fitness-reviewer-agreement-substitution.json",
+      "fixtures/red/review-round-product-fitness-smoke-substitution.json",
+      "fixtures/red/review-round-product-fitness-undeclared-fifth-reviewer.json",
+      "fixtures/review-round/prompt-packets/product_simplicity_falsifier.md",
+      "fixtures/review-round/reports/orchestration_recovery_falsifier.md",
+      "fixtures/review-round/reports/product_simplicity_falsifier.md",
+      "fixtures/review-round/reports/security_trust_boundary_falsifier.md",
+      "fixtures/review-round/valid/review-round-receipt.json",
+      "fixtures/target-repo/valid-init/agent-standards/enforcement-audit.tsv",
+      "fixtures/target-repo/valid-observability/agent-standards/enforcement-audit.tsv",
+      "fixtures/target-repo/valid-product-cohesion/agent-standards/enforcement-audit.tsv",
+      "fixtures/valid/minimal-goal-run.json",
+      "fixtures/valid/non-product-engineering-language.json",
+      "fixtures/valid/non-product-feature-completion.json",
+      "fixtures/valid/proof-surface-negative-probe.json",
+      "fixtures/valid/two-lane-ready-dependency.json",
+      "plugin-manifest-draft.json",
+      "schemas/common-defs.schema.json",
+      "schemas/documentation-freshness-receipt.schema.json",
+      "schemas/foundational-law-traceability.schema.json",
+      "schemas/law-family-aliases.schema.json",
+      "schemas/namespace-class-registry.schema.json",
+      "schemas/product-live-surface-receipt.schema.json",
+      "schemas/red-fixtures-catalog.schema.json",
+      "schemas/red-packet.schema.json",
+      "schemas/review-round-receipt.schema.json",
+      "schemas/runtime-tool-identity-receipt.schema.json",
+      "schemas/schema-catalog.json",
+      "schemas/session-log-hardening-receipt.schema.json",
+      "schemas/transcript-quality-receipt.schema.json",
+      "schemas/validator-receipt.schema.json",
+      "scripts/check",
+      "scripts/check-agent-standards",
+      "scripts/check-coverage-fast",
+      "scripts/check-coverage-full",
+      "templates/RED_FIXTURES.json",
+      "templates/agent-standards/enforcement-audit.tsv",
+      "templates/agent-standards/enforcement.json",
+      "templates/agent-standards/enforcement.tsv",
+      "validator/src/audit/agent/standards/enforcement.rs",
+      "validator/src/audit/agent/standards/tsv/checks.rs",
+      "validator/src/audit/foundational_law_trace.rs",
+      "validator/src/audit/law/family/aliases.rs",
+      "validator/src/audit/law/family/mod.rs",
+      "validator/src/audit/law/mod.rs",
+      "validator/src/audit/law/surface/receipt/requirements.rs",
+      "validator/src/audit/mod.rs",
+      "validator/src/audit/namespace/classes.rs",
+      "validator/src/audit/namespace/law.rs",
+      "validator/src/audit/namespace/mod.rs",
+      "validator/src/audit/namespace/source/mod.rs",
+      "validator/src/audit/namespace/source/topology.rs",
+      "validator/src/audit/package/schema/map.rs",
+      "validator/src/audit/plugin/laws.rs",
+      "validator/src/audit/plugin/product/journey.rs",
+      "validator/src/audit/session_log_hardening.rs",
+      "validator/src/audit/source_obligations.rs",
+      "validator/src/bin/ultragoal-validator.rs",
+      "validator/src/bin/ultragoal.rs",
+      "validator/src/claim_semantics/coverage/digests.rs",
+      "validator/src/command_run.rs",
+      "validator/src/lib.rs",
+      "validator/src/package/inventory.rs",
+      "validator/src/package/inventory/closure.rs",
+      "validator/src/package/resource/purpose.rs",
+      "validator/src/red/fixture/bases.rs",
+      "validator/src/red/fixture/package.rs",
+      "validator/src/review/round/product/fitness.rs",
+      "validator/src/review/round/product/fitness/criteria.rs",
+      "validator/src/schema_catalog/fixture_schema_rules.rs",
+      "validator/src/schema_catalog/receipt_schema_rules.rs",
+      "validator/src/self_tests/audit/branch_failures.rs",
+      "validator/src/self_tests/audit/edge_cases.rs",
+      "validator/src/self_tests/audit/run_guards.rs",
+      "validator/src/self_tests/audit/source_audit.rs",
+      "validator/src/self_tests/boundaries/filesystem.rs",
+      "validator/src/self_tests/boundaries/typed_authority_edges.rs",
+      "validator/src/self_tests/claim/mod.rs",
+      "validator/src/self_tests/claim/root.rs",
+      "validator/src/self_tests/command/review_round.rs",
+      "validator/src/self_tests/command/round_receipts.rs",
+      "validator/src/self_tests/coverage/scope/authority.rs",
+      "validator/src/self_tests/coverage/scope/boundaries.rs",
+      "validator/src/self_tests/law/family_aliases.rs",
+      "validator/src/self_tests/law/mod.rs",
+      "validator/src/self_tests/namespace/binding.rs",
+      "validator/src/self_tests/namespace/mod.rs",
+      "validator/src/self_tests/namespace/red_fixtures.rs",
+      "validator/src/self_tests/package/checks.rs",
+      "validator/src/self_tests/package/run_boundaries.rs",
+      "validator/src/self_tests/receipts/validator_boundaries.rs",
+      "validator/src/self_tests/red/fixture_boundaries.rs",
+      "validator/src/self_tests/review/product/fitness.rs",
+      "validator/src/self_tests/review/root.rs",
+      "validator/src/self_tests/review/round_core.rs",
+      "validator/src/self_tests/schema/keywords.rs",
+      "validator/src/self_tests/schema/rules.rs",
+      "validator/src/self_tests/semantic/gates.rs",
+      "validator/src/self_tests/session/audit_success_edges.rs",
+      "validator/src/self_tests/session/hardening.rs",
+      "validator/src/self_tests/source_obligations/fallthrough_edges.rs",
+      "validator/tests/cli_surface.rs"
+    ],
+    "changed_files_digest": "sha256:765480faf8c0dc2a259d49364373da431825859691cab1dfa7528d6aaebe62bf"
+  },
+  "exclusions": [],
+  "generated_roots": [],
+  "vendor_roots": [],
+  "external_roots": [],
+  "repo_walk_policy": {
+    "required": true,
+    "classify_all_nonignored_files": true,
+    "unclassified_source_blocks": true,
+    "ignored_local_state_cannot_be_target": true
+  },
+  "receipt_freshness_binding": {
+    "source_tree_digest_required": true,
+    "manifest_digest_required": true,
+    "command_digest_required": true,
+    "changed_files_digest_required": true,
+    "machine_report_digest_required": true,
+    "workspace_binding_required": true
+  },
   "tool_generated_proof_policy": {
-    "command_exit_zero_required": true,
     "hand_written_receipts_rejected": true,
     "machine_readable_report_required": true,
-    "prose_percent_rejected": true
+    "prose_percent_rejected": true,
+    "command_exit_zero_required": true
   },
-  "vendor_roots": []
+  "fast_full_gate_split": {
+    "fast_gate": "scripts/check-coverage-fast",
+    "full_gate": "scripts/check-coverage-full",
+    "fast_supports_completion": false,
+    "full_required_for_completion": true,
+    "missing_claim_context_fails": true
+  },
+  "policy_mutation_gate": {
+    "material_review_required": true,
+    "block_target_narrowing": true,
+    "block_dimension_removal": true,
+    "block_floor_lowering": true,
+    "block_repo_owned_reclassification": true,
+    "block_claim_ceiling_raise_without_proof": true
+  }
 }

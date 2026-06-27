@@ -6,10 +6,19 @@
   "additionalProperties": false,
   "required": [
     "schema",
+    "generated_at",
     "captured_at",
+    "status",
+    "issuer",
+    "tool_call",
+    "capture_method",
+    "boundary",
     "source",
+    "target_revision",
+    "claim_ceiling",
     "session_id",
     "round_id",
+    "raw_observation",
     "agent_types"
   ],
   "properties": {
@@ -20,8 +29,99 @@
       "type": "string",
       "minLength": 20
     },
+    "generated_at": {
+      "type": "string",
+      "minLength": 20
+    },
+    "status": {
+      "const": "pass"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "authority"
+      ],
+      "properties": {
+        "tool": {
+          "const": "multi_agent_v1"
+        },
+        "authority": {
+          "const": "tool_registry"
+        }
+      }
+    },
+    "tool_call": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "call_id",
+        "arguments_digest"
+      ],
+      "properties": {
+        "name": {
+          "const": "multi_agent_v1.tool_registry"
+        },
+        "call_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arguments_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "capture_method": {
+      "const": "live_tool_registry_query"
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "account_id",
+        "workspace_id",
+        "session_id"
+      ],
+      "properties": {
+        "account_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "source": {
       "const": "multi_agent_v1.tool_registry"
+    },
+    "target_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "const": "package_digest"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "claim_ceiling": {
+      "const": "live_registry_reviewer_exposure_proven"
     },
     "session_id": {
       "type": "string",
@@ -30,6 +130,24 @@
     "round_id": {
       "type": "string",
       "minLength": 1
+    },
+    "raw_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
     },
     "agent_types": {
       "type": "array",

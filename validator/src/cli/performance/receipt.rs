@@ -44,3 +44,66 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     }
     out
 }
+
+pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &str) -> Vec<String> {
+    let mut out = surface_value_failures(value);
+    let candidate = value
+        .pointer("/digests/candidate")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    if candidate != expected_candidate {
+        out.push(format!(
+            "cli_performance_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
+        ));
+    }
+    if value.get("status").and_then(Value::as_str) != Some("pass") {
+        out.push("cli_performance_receipt_not_pass".to_string());
+    }
+    if value
+        .get("failure")
+        .is_some_and(|failure| failure != &Value::Null)
+    {
+        out.push("cli_performance_pass_has_failure".to_string());
+    }
+    let wall_ms = value
+        .pointer("/telemetry/wall_clock_ms")
+        .and_then(Value::as_u64)
+        .unwrap_or(0);
+    if wall_ms == 0 {
+        out.push("cli_performance_receipt_placeholder_wall_clock".to_string());
+    }
+    if value
+        .pointer("/performance_regression/status")
+        .and_then(Value::as_str)
+        != Some("pass")
+    {
+        out.push("cli_performance_receipt_regression_not_pass".to_string());
+    }
+    if value.pointer("/cache/mode").and_then(Value::as_str) != Some("disabled")
+        || value
+            .pointer("/cache/no_cache_mode_result")
+            .and_then(Value::as_str)
+            != Some("executed_without_cache")
+    {
+        out.push("cli_performance_receipt_cache_honesty_missing".to_string());
+    }
+    if value
+        .pointer("/concurrency/worker_count")
+        .and_then(Value::as_u64)
+        .unwrap_or(0)
+        == 0
+    {
+        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
+    }
+    if value
+        .get("supported_claim_classes")
+        .and_then(Value::as_array)
+        .is_some_and(|rows| {
+            rows.iter()
+                .any(|row| row.as_str() == Some("update_goal_eligibility"))
+        })
+    {
+        out.push("cli_performance_receipt_update_goal_overclaim".to_string());
+    }
+    out
+}

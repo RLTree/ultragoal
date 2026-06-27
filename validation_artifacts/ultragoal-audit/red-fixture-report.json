@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T01:29:08Z",
+  "generated_at": "2026-06-27T07:01:27Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -10806,7 +10806,7 @@
       "expected_failing_check": "standards-gardener-promotion",
       "observed_error": "standards_gardener_changed_artifact_after_receipt",
       "observed_failing_check": "standards-gardener-promotion",
-      "packet_digest": "sha256:a5aebf5152544eed362759dc4524c4fb8910c564b4f908e1ff2119bce7946b91",
+      "packet_digest": "sha256:5459c01a4189deb2bff44ff01bcd11e7dd3992499f6e7dc6b82a7893e18b22ac",
       "packet_path": "fixtures/red/standards-gardener-changed-artifact-after-receipt.json",
       "status": "pass",
       "validator_exit": 1
@@ -12133,5 +12133,5 @@
     }
   },
   "schema": "harness-ultragoal.red-fixture-report.v1",
-  "status": "pass"
+  "status": "fail"
 }

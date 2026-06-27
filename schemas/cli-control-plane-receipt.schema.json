@@ -119,12 +119,12 @@
     "claim_ceiling": {
       "enum": [
         "complete",
+        "supports_update_goal_eligibility",
         "withheld_or_blocked"
       ]
     },
     "blocked_claim_classes": {
       "type": "array",
-      "minItems": 1,
       "items": {
         "enum": [
           "app_registry_or_reviewer_exposure",
@@ -150,77 +150,84 @@
       }
     },
     "failure": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "law_id",
-        "gate_id",
-        "check_id",
-        "failed_invariant",
-        "observed_value",
-        "expected_value",
-        "repair_class",
-        "rerun_command",
-        "claim_ceiling_impact",
-        "source_install_cache_impact",
-        "severity",
-        "determinism"
-      ],
-      "properties": {
-        "id": {
-          "minLength": 1,
-          "type": "string"
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "law_id": {
-          "enum": [
-            "cli-control-plane-authority",
-            "cli-self-law-compliance"
-          ]
-        },
-        "gate_id": {
-          "const": "89"
-        },
-        "check_id": {
-          "enum": [
-            "cli-control-plane-authority",
-            "cli-self-law-compliance"
-          ]
-        },
-        "failed_invariant": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "observed_value": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "expected_value": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "repair_class": {
-          "const": "deterministic_enforcement"
-        },
-        "rerun_command": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "claim_ceiling_impact": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "source_install_cache_impact": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "severity": {
-          "const": "hard_blocker"
-        },
-        "determinism": {
-          "const": "deterministic"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "law_id",
+            "gate_id",
+            "check_id",
+            "failed_invariant",
+            "observed_value",
+            "expected_value",
+            "repair_class",
+            "rerun_command",
+            "claim_ceiling_impact",
+            "source_install_cache_impact",
+            "severity",
+            "determinism"
+          ],
+          "properties": {
+            "id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "law_id": {
+              "enum": [
+                "cli-control-plane-authority",
+                "cli-self-law-compliance"
+              ]
+            },
+            "gate_id": {
+              "const": "89"
+            },
+            "check_id": {
+              "enum": [
+                "cli-control-plane-authority",
+                "cli-self-law-compliance"
+              ]
+            },
+            "failed_invariant": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "observed_value": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "expected_value": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "repair_class": {
+              "const": "deterministic_enforcement"
+            },
+            "rerun_command": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "claim_ceiling_impact": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "source_install_cache_impact": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "severity": {
+              "const": "hard_blocker"
+            },
+            "determinism": {
+              "const": "deterministic"
+            }
+          }
         }
-      }
+      ]
     },
     "command_surface": {
       "type": "array",

@@ -3,39 +3,13 @@ use serde_json::Value;
 use std::path::Path;
 
 const COVERAGE_RECEIPT: &str = "validation_artifacts/coverage/coverage-receipt.json";
-const REGISTRY_RECEIPT: &str =
-    "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
-const TODAY_UTC_PREFIX: &str = "2026-06-25T";
 const MAX_SOURCE_LINES: usize = 250;
-
-const REQUIRED_REVIEWERS: &[(&str, &str, &str)] = &[
-    (
-        "harness_contract_claim_falsifier",
-        "contract_claim_falsifier",
-        "custom-agents/harness-contract-claim-falsifier.toml",
-    ),
-    (
-        "harness_orchestration_recovery_falsifier",
-        "orchestration_recovery_falsifier",
-        "custom-agents/harness-orchestration-recovery-falsifier.toml",
-    ),
-    (
-        "harness_security_trust_boundary_falsifier",
-        "security_trust_boundary_falsifier",
-        "custom-agents/harness-security-trust-boundary-falsifier.toml",
-    ),
-    (
-        "harness_product_simplicity_falsifier",
-        "product_simplicity_falsifier",
-        "custom-agents/harness-product-simplicity-falsifier.toml",
-    ),
-];
 
 pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
     let mut out = Vec::new();
     out.extend(version_failures(root));
     out.extend(coverage_failures(root, store));
-    out.extend(registry_failures(root, store));
+    out.extend(crate::audit::plugin::registry::failures(root, store));
     out.extend(line_cap_failures(root));
     out
 }
@@ -86,52 +60,6 @@ fn coverage_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<St
         == Some("unavailable")
     {
         out.push("plugin_self_law_coverage_target_revision_unavailable".to_string());
-    }
-    out
-}
-
-fn registry_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
-    let mut out = Vec::new();
-    let Some(receipt) = read(root, REGISTRY_RECEIPT, &mut out) else {
-        return out;
-    };
-    out.extend(
-        schema_catalog::schema_errors(store, "codex-registry-exposure.schema.json", &receipt)
-            .into_iter()
-            .map(|err| format!("plugin_self_law_registry_schema:{err}")),
-    );
-    let captured = string(&receipt, "captured_at");
-    if !captured.starts_with(TODAY_UTC_PREFIX) {
-        out.push(format!("plugin_self_law_registry_stale:{captured}"));
-    }
-    if string(&receipt, "source") != "multi_agent_v1.tool_registry" {
-        out.push("plugin_self_law_registry_wrong_source".to_string());
-    }
-    let rows = array(&receipt, "agent_types");
-    for (agent_type, persona, path) in REQUIRED_REVIEWERS {
-        let matches = rows
-            .iter()
-            .filter(|row| string(row, "agent_type") == *agent_type)
-            .collect::<Vec<_>>();
-        if matches.len() != 1 {
-            out.push(format!(
-                "plugin_self_law_registry_agent_missing:{agent_type}"
-            ));
-            continue;
-        }
-        let row = matches[0];
-        if string(row, "persona") != *persona || string(row, "custom_agent_path") != *path {
-            out.push(format!(
-                "plugin_self_law_registry_agent_mismatch:{agent_type}"
-            ));
-        }
-        for key in ["disk_cache_synced", "global_toml_present", "exposed"] {
-            if row.get(key).and_then(Value::as_bool) != Some(true) {
-                out.push(format!(
-                    "plugin_self_law_registry_agent_not_current:{agent_type}:{key}"
-                ));
-            }
-        }
     }
     out
 }

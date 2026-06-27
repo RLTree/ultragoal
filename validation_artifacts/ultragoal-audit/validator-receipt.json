@@ -6,8 +6,8 @@
       "status": "pass"
     },
     "adversarial-packet-tampering-forged-proof-rejection": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure",
+      "status": "fail"
     },
     "agent-authored-source-tooling-docs-provenance": {
       "details": "pass",
@@ -94,16 +94,16 @@
       "status": "pass"
     },
     "cli-control-plane-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_not_pass; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_not_self_hosted; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_claim_ceiling_not_update_goal; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_blocks_claims; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_pass_has_failure; mandatory_law_current_check_not_pass:cli-control-plane-authority:cli-control-plane-authority",
+      "status": "fail"
     },
     "cli-performance-latency-speed-iteration-fitness": {
       "details": "pass",
       "status": "pass"
     },
     "cli-self-law-compliance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_not_pass; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_not_self_hosted; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_claim_ceiling_not_update_goal; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_blocks_claims; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_pass_has_failure; mandatory_law_current_check_not_pass:cli-self-law-compliance:cli-self-law-compliance",
+      "status": "fail"
     },
     "command-evidence": {
       "details": "pass",
@@ -194,8 +194,8 @@
       "status": "pass"
     },
     "generated-proof-artifact-provenance-anti-fabrication": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure",
+      "status": "fail"
     },
     "generated-ready-completion-receipts": {
       "details": "pass",
@@ -502,8 +502,8 @@
       "status": "pass"
     },
     "source-obligation-coverage": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_current_check_not_pass:cli-control-plane-authority:cli-control-plane-authority; mandatory_law_current_check_not_pass:cli-self-law-compliance:cli-self-law-compliance",
+      "status": "fail"
     },
     "source-obligation-parity-anti-bundling": {
       "details": "pass",
@@ -562,8 +562,8 @@
       "status": "pass"
     },
     "validator-execution-provenance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); plugin_self_law_registry_schema:$.generated_at: required; plugin_self_law_registry_schema:$.status: required; plugin_self_law_registry_schema:$.issuer: required; plugin_self_law_registry_schema:$.tool_call: required; plugin_self_law_registry_schema:$.capture_method: required; plugin_self_law_registry_schema:$.boundary: required; plugin_self_law_registry_schema:$.target_revision: required; plugin_self_law_registry_schema:$.claim_ceiling: required; plugin_self_law_registry_schema:$.raw_observation: required; plugin_self_law_registry_target_digest_mismatch:!=sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5; plugin_self_law_registry_status_not_pass; plugin_self_law_registry_claim_ceiling_not_live_surface; plugin_self_law_registry_generated_capture_mismatch; plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law_registry_missing_tool_call_identity; plugin_self_law_registry_missing_observation_field:/tool_call/call_id; plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; plugin_self_law_registry_missing_observation_field:/boundary/account_id; plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; plugin_self_law_registry_missing_observation_field:/boundary/session_id; plugin_self_law_registry_boundary_session_mismatch; plugin_self_law_registry_capture_method_not_live; plugin_self_law_registry_raw_observation_missing",
+      "status": "fail"
     },
     "validator-theater-miswire-resistance": {
       "details": "pass",
@@ -598,453 +598,453 @@
       "status": "pass"
     }
   },
-  "commit": "sha256:5f138e789fb934f7203c00a52d20ba9b429e711ee8cde5533ec17f0735bbd225",
+  "commit": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5",
   "generated_artifacts": [
     {
       "artifact_type": "red_fixture_report",
-      "digest": "sha256:14aa30c749032c119c2db300b2d0421934702e9285baf6b588365a120f585126",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
+      "digest": "sha256:c6d18137668be7df316447787d1524842f5c6f5560415badbc66a74c126b6ace",
+      "generated_at": "2026-06-27T07:01:28Z",
+      "input_digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
       "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:32f17ff8a9bb35828bd883acf188d44a7c1f8c4fc04c5ec2994f582e495acdbd",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:fe902708245f3cb81a89dd379eb407b4cd3a875aa2cea96836379bcfd9d08c6b",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ce09fa6090043fa138d4c1eb77284ddd96299308d4fc74ec6080868d80c19c8e",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:5135b7a4b7426b8200efdaa10483a76c3ec5add0e83342509bf27e3fa3777294",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:2ccb09166cc17bf116041b7c164588a9260874855af0d07bba758dd1974447bb",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:e2fa4b89a5e88f805c201831f9bd301916a48348297a7d185d4e406279c471ed",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3311d8abdbd599587eb43c591e054a6e433661de5c111f8dc849136ce6169a99",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:86a950cf9ddf301fe11ea6ce1d3b9cfde832628c5413b1b8714f7f38a84fecd8",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:760b906d6cd590d6de2b4e6d970704196a12cbd3a04ea445e93afc96d8f1055b",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:3e89f7ae3333ca8a00fe17fdfe5a8024a6c2f5420f4b99a562d525734ccdb445",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-retrofit-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:29c15836a62d35cb88ee59e88f24a99c80c7129316ddc4dbabcd7b7672adf3ac",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:269fa60df5bb8704a6517bf2f11213229c16ec776dc2c458a99041aa996b9072",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:d35d092f42ec8d76f7fd2f60407475c27b6445421f11b3aa3ef3937b3dc1fe0e",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:996b69686669099a0b647dc5dd30a1ef17eef388fe5515c80860e89f99f9ef0a",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:361b82d98cadf8633559aca1202004af25cc82f2bc525da1b43a7c061e0f3586",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:938385523c5e7c17b3cfd31bc5ee7f48ebdf753b9a241755003bbddecc724917",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e622a0f9df4f18d05a13a238b3766577b44a532ee502028e3b14f539b9afd517",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:c98827d75822fb38fa848f625bfa3593d7e0680db642705eae98ef3a13697e81",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:7afb32ec61bcf32244143b26f102d11ef94e96e1e45adb092e417ffecc819b3e",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:bd2a717c58fda754af697013021812c9308e691f090b422064d284806d4755ba",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:df453ff4e0da105a8dae792c805ad3276a38b539c2aae085bfdf0fcb332c4445",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:b2162de687f9c299619c2161a528be7228cfa815338e0b047985eb270df85bda",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-trivial-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ef0ba0f4a50f8c5f806d641230d90e8fa7b3473840fd4a8bc98325343e3ff537",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:d0fd35408f317b83babca0474922d615627aadaa9db2368415a3a61ad7a88e3d",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-readme-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:d55aebea6623131af1b0c5edc2f239a930e5b8ec76420819efbdabe1aa8527d7",
-      "generated_at": "2026-06-27T01:29:05Z",
+      "digest": "sha256:0074ee38569f12cae4f052690c4d9bd44677e589fa232821ae816cfbab294447",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-marker-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:5633f804b0f2f7c5a9355898c0d218297a714544be7b700f5c5b559f213d6a3e",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:761b981cf13c55acaaab8483c00cb97aa53d093097a0c30d89ec9102b660e00c",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-marker-only-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ea4efd726c5a8f5e74767f0e557795ff6d543feacc43f0c2a4236d04c7a3d5bb",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:bb1cb222de711ced0b4781f790f9613c121fd4ce7e94f40663236526524f57bf",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-unsafe-gate-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:2de876ba015d7fa1cc053f675e02824a96d9091052ceae73cb8cbc2e4b08ce7e",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:f199c7e4c03a4f4526d44184afca0c056fbf3670c57d43273f08ecb7b155cc66",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-forged-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:27474ad37e56dda81b7eb339bf727fabc6f06e403818022b46ab7f0272b2f865",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:3727fa58dd070d1c2a36b742df74c8a9756bf4d2f651a931cb90067174899e31",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e77d0288daf2a9e2672654d80395d538eaa8e4490c3ac4a2d29b4cec3aa12a09",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:cdb6136a45406a8c5de3947911a45d7a6caba0f76771cbfa746bc7807382a935",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-symlink-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ce848ef8f9945b05be9c44f117cf65917729eddfa42c86d3485cf20f7e0526fd",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:6e15078438e4489c3a468deb133ef4b665160469f8863677835754a332d30681",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-stale-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9f17ce12841fb1fc7fb9d6c2d57af10e896507a6d7f9e7c9231dee14dd7a176a",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:6e57574cf40e307257b5f3a4758caddbe80cf441cdc9d08e046aa35bb677ea7d",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:5df1b47e15cf55b39968a7ca91255cbaecc8bfaa413ba6ccc3e2c4e288991029",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:89557d235a1bc680ac1ebe1fb85a3c6e88811869a01c2620b63e65eab5e15c0f",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:818cc989c8f8f8eaa60c48f23638c8ad5409a5aeba1977260daa6d62f4860aa3",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:a429f06ef6c2bb7fdd75f0816f9ab30c0807f7e2f23b83d1b7fdc6866df8bb9d",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a1ab5499b8a35cda0edc3bf3d7480b6f203498f6bec28591d814cd7c8ae978df",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:03358b04ea74db11792e58a4998795cffd7d91a810c0d01d8e685f83b9269c2c",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-incomplete-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c4e065f8809c254b65da94604ff3dfe806eb7463e08d713ad06a3fb086863fda",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:32b4fcbc31868bc3ee69168abc8557212628ee6c5f147936aab0520de9056a66",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-invented-observability-artifact-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:13dcefe342131579c4c01f18f71e4e3de367100cdbeffa80f68bdc8766b5733c",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:cf2889db392094d08c3ee5ac39567f6535f890cdb0fd37ae1cfb744aa2f3e996",
+      "generated_at": "2026-06-27T07:01:25Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-ledger-without-query-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e5e6bcbd271d8c7ee4340233ec603a70f62008d113fbdaf160e237adde91c67a",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:c4d5b04b4b11eed1d4957cb649b62bf8400a170b32562a041a42f7cd602f6b2e",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-timeout-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:639857a9acbaa79eaf06bfcee9ac38336334dc263677891a6d12f229183f3456",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:c502d0618a557ec2bf4f4cebcd4d318ee2610b3f2814ccfb781867ca27333e0b",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-output-too-large-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:332d70e8077eee27911a98ecf13312651846e58d8c2ed3e5b399305f0a56ce4b",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:9d9c5295adf84b93ef3fd59f0836cabb631ad3cf312d9bf6a160bc718dcb9eff",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-side-effect-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9b9c0e74dc848cf545da091a87fa5f393e2c65ac4524bcc63815d9ca7d0b1414",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:554b3cd8f991bee4a23288c918148724dc2a7de954d18d5f93a39b1ea4f6a01d",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-shell-wrapper-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c538436a70bc2357721a494d9e15074d102f531ad14dcd1e29be9f9b563d4d59",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:142f57269e0e5ca156ac8e90df159b06e7e10194bf8e8817491b68c22273e97a",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-row-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:d965c755877d0f4abd2787924d313eee4d2ce81728b1136eb06cc7a81ba11c62",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:c537f27de4786935a3eb1bcb9d5348ef7d9b213bb32d1139d69962363ce687da",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9b1206c584c397a2a36b030563b552e97bd02fe4d83e5d4c6b0728811e9fca72",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:becbe92112ccd34c53892f30066614fbf1c232352c30d11ee745cea193bbb3be",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ccdf76ceccb0ad92db7e658b7491080e38f7a75feb74058ad1af3b019bb76916",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:837b1c870e0243ad6d835172ce8d41075eaa61098a9b28a85595b2c87c09ad41",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:74ca0a773c0aa9fbf333b670b2ec243b8208fba9ca070df4b398ef81764263cc",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:c460777c4dcf88669249b172b7e0f0933bcaa5bb8a72e95450359852fda25f6a",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-mismatched-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3dc208e0e5306e0cbeeff2a16f174bcfb87e7cd932408d0bae524d9f7ec234fd",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:5afd1910fffe6a03a7313d025e21daccabc8d259368db09c9164bf0a8da60952",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-exception-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a1958fc77dffdcfbc093fe348d702377bfa583cd63dd462be5adef004b3be73a",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:f911705c7e7d0e18243dfd92a80092fd300e6b09ebb0fd9230ae3f9ff2602075",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-reviewers-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:90241c316c9d711b7e516dacebc0955b92663cfcf9f27f03ff04e06f6590baa3",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:a8319a60bf2dc3e479f6240c8f80176621e7dd6b8dcd4055c545e3a8f364f36a",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-self-review-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:6120ee6dbb9d66efe0957d99485683eefb4829759346f09efed794dc26cc2820",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:8770cc5e466d909543700049e4730c10eb80693a5b32493e6240936c7c5ded9b",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-reviewer-authority-content-mismatch-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c974c09fcbf680f5d15ff83312e7ba8119977b196d75388332d29005c7ac1b04",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:29b5bcf9143a63357f33d5bba5590f0c20c71b1e8bf58abaedcf91a1d1c20a06",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-reviewer-authority-alias-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:84d01a3627e40469268de935fa913f60eab4b646bc9470607c37cb38e6361f49",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:56123ed380db683f437c759123226c265a5d0035835524a118999e0e95760c22",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-absolute-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:1ec9c94cbb44934ce6b14e1dc7afcc2af691976c6ce63e09a3acf779f703e8d2",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:8d5d3300acc08d8d8fa97100e2a5221f4b6e98c54e801fa1be8fa57ca7ae8c97",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-parent-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:36f439842e6250a9af63c1f330a161566cc6bc3069fb09937353db044f212308",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:7e697156353708200476b7e9b2642e7aca0914c235fc6a5e5ffd2611d2c9c337",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-symlink-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:4f5148c08a2644aa05662a0baea509c78ba8708cd50122e353b1e831d52066de",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:55cb637ab03f95eb3ed49838009e817b5f800589105d34493b2bb97022a1c29f",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-special-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:84edf8028a642539b9d65d9596a728c9bd16e44f9ae2a9154c84cb2bf7d0653d",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:7fd787864bcaa5bc656ec163e7b68c8796baa1bf59904630b1a6ea2846ef6eba",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-product-cohesion-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:61ffa9cfff69b0d92a73b070a5994bf1a62d993ce7c3072d6f68c2a9b0fe1269",
-      "generated_at": "2026-06-27T01:29:06Z",
+      "digest": "sha256:2e12ca13be8ad7b1a9ca52cb834140be9c4b34839797b47b61281f2cc0f4440b",
+      "generated_at": "2026-06-27T07:01:26Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-primary-user-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:29Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-LANE-001.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:29Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:70b766735cae8232d71beaf07a838920ebe5bf3caa88930d627ed914c9e57a66",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:28Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:e2015639911f4474232af3f927775593208ac812e199468d9ac2bdf6fb10c17a",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:29Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:dcdae284c020550e4787da605bc7ba4888a4cd2c60c4702c1fecf3da21a2ad68",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:28Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:2e5644bd710e354f9bf642bd83df695d8a0d94f12812a60e37f05098b736bce7",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:28Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-27T01:29:09Z",
-      "input_digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "generated_at": "2026-06-27T07:01:29Z",
+      "input_digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "examples/generated/READY_FOR_MERGE.example.json",
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:26:20Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T06:58:34Z"
     }
   ],
-  "generated_at": "2026-06-27T01:29:09Z",
+  "generated_at": "2026-06-27T07:01:29Z",
   "input_digests": [
     {
-      "digest": "sha256:17c9ad9aa1b300212bb8d5a6b36601a748c9d51425024236809067523d329b15",
+      "digest": "sha256:3796f6bb2d7c2d59367ccc0669c88d9f171dacfb651ff8ecf66a79e8162062c3",
       "path": "plugin-manifest-draft.json"
     },
     {
-      "digest": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+      "digest": "sha256:64b71e2f2efe5845e1822e53d3e098c2de5dd85ba8bc8cc19116f4def230a083",
       "path": "schemas/schema-catalog.json"
     },
     {
-      "digest": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
+      "digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
       "path": "templates/RED_FIXTURES.json"
     },
     {
-      "digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+      "digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
       "path": "fixtures/valid/minimal-goal-run.json"
     }
   ],
-  "red_fixture_catalog_digest": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
+  "red_fixture_catalog_digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -11851,7 +11851,7 @@
       "expected_failing_check": "standards-gardener-promotion",
       "observed_error": "standards_gardener_changed_artifact_after_receipt",
       "observed_failing_check": "standards-gardener-promotion",
-      "packet_digest": "sha256:a5aebf5152544eed362759dc4524c4fb8910c564b4f908e1ff2119bce7946b91",
+      "packet_digest": "sha256:5459c01a4189deb2bff44ff01bcd11e7dd3992499f6e7dc6b82a7893e18b22ac",
       "packet_path": "fixtures/red/standards-gardener-changed-artifact-after-receipt.json",
       "status": "pass",
       "validator_exit": 1
@@ -14551,59 +14551,59 @@
     "rust-devx-gc-plan-digest-tamper-red"
   ],
   "root": "source-workspace:harness-ultragoal-plugin-proposal",
-  "run_id": "ultragoal-audit-2026-06-27T01:26:20Z",
+  "run_id": "ultragoal-audit-2026-06-27T06:58:34Z",
   "schema": "harness-ultragoal.validator-receipt.v1",
-  "status": "pass",
+  "status": "fail",
   "target": "source-workspace:harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:5f138e789fb934f7203c00a52d20ba9b429e711ee8cde5533ec17f0735bbd225"
+    "value": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5"
   },
   "validator": "ultragoal-audit",
   "validator_execution": {
     "actor_disjoint": true,
     "command": {
       "command": "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "completed_at": "2026-06-27T01:29:09Z",
+      "completed_at": "2026-06-27T07:01:29Z",
       "cwd": "source-workspace:harness-ultragoal-plugin-proposal",
-      "exit": 0,
+      "exit": 1,
       "id": "ultragoal-audit",
-      "started_at": "2026-06-27T01:26:20Z"
+      "started_at": "2026-06-27T06:58:34Z"
     },
-    "completed_at": "2026-06-27T01:29:09Z",
+    "completed_at": "2026-06-27T07:01:29Z",
     "environment": "local Rust package audit; semantic_validation_clock=automation_tick_receipt.freshness_policy.clock_at_validation",
     "executable_provenance": {
-      "digest": "sha256:977391c62518c9de22d69abee657a5878c6c9a817d15fcf6a7d8663e29cc48be",
+      "digest": "sha256:5a4c0ae3aeacb91b553aaaceebaa775fd744440a776ae452abacf5ab5a9f82d2",
       "invocation_mode": "direct_executable",
       "path": "target/debug/ultragoal",
-      "source_artifact_set_digest": "sha256:92da6e0b9b4c0142a6545aaedcc0954a47a7093f27f05b5d55aced2ddcc45679"
+      "source_artifact_set_digest": "sha256:7443a25fe1e82712e993152e9f1ca6668ac40edd27e4b7d41258060441ce66a6"
     },
     "input_digests": [
       {
-        "digest": "sha256:17c9ad9aa1b300212bb8d5a6b36601a748c9d51425024236809067523d329b15",
+        "digest": "sha256:3796f6bb2d7c2d59367ccc0669c88d9f171dacfb651ff8ecf66a79e8162062c3",
         "path": "plugin-manifest-draft.json"
       },
       {
-        "digest": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+        "digest": "sha256:64b71e2f2efe5845e1822e53d3e098c2de5dd85ba8bc8cc19116f4def230a083",
         "path": "schemas/schema-catalog.json"
       },
       {
-        "digest": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
+        "digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
         "path": "templates/RED_FIXTURES.json"
       },
       {
-        "digest": "sha256:d93003cf9442fd66df3611f6a79a61a5a63afc86b5ccfd0e58613ab9c486b785",
+        "digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40",
         "path": "fixtures/valid/minimal-goal-run.json"
       }
     ],
     "producer_actor_id": "package-author",
-    "started_at": "2026-06-27T01:26:20Z",
+    "started_at": "2026-06-27T06:58:34Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.stderr.txt"
     },
     "stdout": {
-      "digest": "sha256:149d1a4ae2c1adefafef4657ea78c3c85b35745688ed1070d74f22027e4498f1",
+      "digest": "sha256:865b2eaf2b8ad2319f92285b80e5f2087e533e923bc8ed6d53df6815a0a79fe1",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.stdout.txt"
     },
     "validator_actor_id": "ultragoal-rust-validator",
@@ -14661,7 +14661,7 @@
         "path": "validator/src/audit/artifacts.rs"
       },
       {
-        "digest": "sha256:c270ce7c2bd64b6f05c4bd172c0bbc7978ceccc3ce255d469579e59fc8230f6c",
+        "digest": "sha256:819f8707f676388cb927d8ecca0bee36e63eaab8a01ef82f318ebad5548117f5",
         "path": "validator/src/audit/cli/control_plane/authority.rs"
       },
       {
@@ -14673,7 +14673,7 @@
         "path": "validator/src/audit/cli/mod.rs"
       },
       {
-        "digest": "sha256:b2584788e7a68663d4155265b97ad8ca50c29a23c686a714c2a0f1f75b893aa9",
+        "digest": "sha256:893e8fdb290f5222ca87601430048fb42aedda858295f928ad07f5dbf9a23a57",
         "path": "validator/src/audit/cli/performance.rs"
       },
       {
@@ -14689,11 +14689,11 @@
         "path": "validator/src/audit/coverage/mod.rs"
       },
       {
-        "digest": "sha256:13608bc81fd0c09cb079e818efe31f22a9e43735f17738d452171ce5a3300094",
+        "digest": "sha256:f2b99b5e2f0075f1b0bdda0d4bcc9b616ee4f84a568d0085f97d74223fcc882b",
         "path": "validator/src/audit/coverage/scope.rs"
       },
       {
-        "digest": "sha256:7ef713143855a168f33dc06dadf32bae7e26446e295818c4bf4fbfb52c2c73e4",
+        "digest": "sha256:4fc8596cab129c7e4e8696cae1606b2e0429ad896243fcf5cde065e48752cc65",
         "path": "validator/src/audit/coverage/scope/changed_files.rs"
       },
       {
@@ -14701,8 +14701,20 @@
         "path": "validator/src/audit/coverage/scope/exclusions.rs"
       },
       {
+        "digest": "sha256:41b2a4558cf13b5864a108c1670f41d4b4be451045b91fce777f952ff32ad03a",
+        "path": "validator/src/audit/coverage/scope/roots.rs"
+      },
+      {
         "digest": "sha256:b37a76f6fd7fd6725f0e546b23a9eb7e1a1073d561a69d730b353d8bb2827a72",
         "path": "validator/src/audit/coverage/scope/scripts.rs"
+      },
+      {
+        "digest": "sha256:17dea921eb79ae0716da078d9642884b52e34f55266d6c00913cce4e3c715aad",
+        "path": "validator/src/audit/final_packet.rs"
+      },
+      {
+        "digest": "sha256:251e847d45712326995b88eeace62783514852a5d9d3e687f2d724fd812e6065",
+        "path": "validator/src/audit/final_packet/references.rs"
       },
       {
         "digest": "sha256:0fb532f5cc37827240828a95df946cd55935236e617534e6ecdc3da1aa8d6a3c",
@@ -14761,15 +14773,27 @@
         "path": "validator/src/audit/mandatory/law/surface/mod.rs"
       },
       {
-        "digest": "sha256:f13bcb650378b58a215781f6e5880004d34d705edcd4cad9e0158dfbcd5c4cc3",
+        "digest": "sha256:d15624d154c45b6da45b0e8aedca1f90df270e21c9fa513ecf96bfe7f7798744",
         "path": "validator/src/audit/mandatory/law/surfaces.rs"
+      },
+      {
+        "digest": "sha256:bb75d7d451c5aa0d3faaeddcffe317f3ff4f666380898b840efb6249aa05c997",
+        "path": "validator/src/audit/mandatory/law/surfaces/dependencies.rs"
+      },
+      {
+        "digest": "sha256:a20c37f7277307253bf9becbcd2289d45df4dcf03888ea7a14d59d1f131e2449",
+        "path": "validator/src/audit/mandatory/law/surfaces/production.rs"
+      },
+      {
+        "digest": "sha256:0ebb3ab9774dd9aac433fbd3788022a60ef20c6707307488615825f428fca582",
+        "path": "validator/src/audit/mandatory/law/surfaces/registry.rs"
       },
       {
         "digest": "sha256:cdca3fc14d1c1c0b1ba74fe693b111cf4530e769a5b375f2a62da4255b1b26d1",
         "path": "validator/src/audit/mandatory/mod.rs"
       },
       {
-        "digest": "sha256:512ca969042153c8e3c8884ebf11e4d89431e9a1b6645a5cc8f57dd544daae3c",
+        "digest": "sha256:15f8a5d36f309922f1318309f65ba2431286ecbe6e79891c30b60925fa88ebc5",
         "path": "validator/src/audit/mod.rs"
       },
       {
@@ -14797,7 +14821,7 @@
         "path": "validator/src/audit/namespace/source/topology.rs"
       },
       {
-        "digest": "sha256:371fb64f4873d61f5b75100b0389b9a0322d2085ab8978f59fe12198d4ace31c",
+        "digest": "sha256:9ed48d4976178d53f1357be2f2832678796f096a8b776ca6bf86d5b0189538de",
         "path": "validator/src/audit/package/checks.rs"
       },
       {
@@ -14833,11 +14857,11 @@
         "path": "validator/src/audit/plugin/flow/mod.rs"
       },
       {
-        "digest": "sha256:eaad18495f73a27e844443da7efeddc00397ff127a18f135dffcaea89f08acb6",
+        "digest": "sha256:ef627c93c123b69d9f133997b272433b853df0b7e72fdd6004d1dd2d9458a4c6",
         "path": "validator/src/audit/plugin/laws.rs"
       },
       {
-        "digest": "sha256:0a5297a7ec777792fa3723421ce5838848e2f5ee20f710ecc342f7a59eac58ba",
+        "digest": "sha256:3b3510187fb6755804939d23d6142765b372df035627b02f54f126533fb8d5df",
         "path": "validator/src/audit/plugin/mod.rs"
       },
       {
@@ -14851,6 +14875,10 @@
       {
         "digest": "sha256:c1dc416efb38f6bf7056b1f488d5e569381c662ae54e20db5362c60e39e0c1fe",
         "path": "validator/src/audit/plugin/product/mod.rs"
+      },
+      {
+        "digest": "sha256:377b06a76b37ea059185a3cce52075f9b7e4bccc637fad8b45ca969b3b5ff298",
+        "path": "validator/src/audit/plugin/registry.rs"
       },
       {
         "digest": "sha256:2f7751c7eb087cdfadfd8cadae02473b4e642753182f6900a4091a630cee541c",
@@ -15161,8 +15189,12 @@
         "path": "validator/src/cli/control/mod.rs"
       },
       {
-        "digest": "sha256:bfff44706703a99166664cf254042d4371b61be78dc8926bd0c433a2b507f582",
+        "digest": "sha256:763c3697fddb6b75683398cfb0ba4789a46b959517debd3e26aaa87cdde7f06e",
         "path": "validator/src/cli/control/plane.rs"
+      },
+      {
+        "digest": "sha256:a81237ba5b1913ef1a89ee8cada957b69ace7f8801cc45ba65d7e41e7229e569",
+        "path": "validator/src/cli/control/plane/receipt.rs"
       },
       {
         "digest": "sha256:0525bcd24166eb53d14fc4c4769ae06ad9473c5eb651f204ffa591f24b61bd15",
@@ -15189,11 +15221,15 @@
         "path": "validator/src/cli/mod.rs"
       },
       {
-        "digest": "sha256:3c8686ebb0d43cbf0082399e5d22b2134a93d660b6341726181012bc517a7750",
+        "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
         "path": "validator/src/cli/performance.rs"
       },
       {
-        "digest": "sha256:29da57bae545f3f6eddf05bd1026a58e559eb911b4340a5478de3545affaa18c",
+        "digest": "sha256:149d16e013c769b26910edd360866785378a6ed2e5ee4f421717b5f567f1c9ab",
+        "path": "validator/src/cli/performance/proof.rs"
+      },
+      {
+        "digest": "sha256:8eb3601b791be4ed8c4294cedc717cb27893109297ff8a16968a9ee91be1a942",
         "path": "validator/src/cli/performance/receipt.rs"
       },
       {
@@ -15285,11 +15321,11 @@
         "path": "validator/src/red/fixture/mod.rs"
       },
       {
-        "digest": "sha256:c6e01bbc1413f099d4381910817f559a4e35bbe02eb29bfcccab09ce9f2add53",
+        "digest": "sha256:e026b41108d7a139f6949b2b947f96b5bc71a325c72f02ab7e99fd18ef76d65e",
         "path": "validator/src/red/fixture/observation.rs"
       },
       {
-        "digest": "sha256:81222736065d1ed2e363719fb8e4f6e62c6426a9c1a6ac5624f07cf98c032d58",
+        "digest": "sha256:92e192e02691f021b4d302496626d5a42fade0a292f6236f9a0aaf630c9d24b3",
         "path": "validator/src/red/fixture/package.rs"
       },
       {
@@ -15309,7 +15345,7 @@
         "path": "validator/src/red/fixture/schema.rs"
       },
       {
-        "digest": "sha256:164335a0813283512d746944efa10aa200b86e419c5062238fd89a04938e1788",
+        "digest": "sha256:82cc6eb120c3e6827331fe0155e3f66c2c83a9b05db345a7b2496d5945b964fd",
         "path": "validator/src/red/fixtures.rs"
       },
       {
@@ -15457,7 +15493,7 @@
         "path": "validator/src/schema_catalog/schema/object/mod.rs"
       },
       {
-        "digest": "sha256:c9274ef724d0a276d400d08a896dfa0fba934433369301963f3c42d49afbf90e",
+        "digest": "sha256:2f1e879639ccf18e225ab3f0b45cf9438d167f259ccabb41b98758653b1410d9",
         "path": "validator/src/schema_catalog/schema/patterns.rs"
       },
       {
@@ -15477,7 +15513,7 @@
         "path": "validator/src/schema_catalog/schema/supported/mod.rs"
       },
       {
-        "digest": "sha256:f88a76149694b0137759c8ca41a03c49383ab9062fb9fa24e3f5beb62e211b8a",
+        "digest": "sha256:669e67f473af4b2bb8656ad747e24241b1ad5da8428ae03857d7b8786cae7313",
         "path": "validator/src/self_tests/audit/branch_failures.rs"
       },
       {
@@ -15485,7 +15521,19 @@
         "path": "validator/src/self_tests/audit/edge_cases.rs"
       },
       {
-        "digest": "sha256:b852d09c044d626300a827fde89b6f0bcd3ff5b716be7ca3199bb18b9fa7ef24",
+        "digest": "sha256:ca55d9b32504d0fa91ef4f5855afbeca68b040dbd83cf275331840b3c39351dd",
+        "path": "validator/src/self_tests/audit/final_packet.rs"
+      },
+      {
+        "digest": "sha256:e8052ac05db5556605055b06926c20f544bf12ccca287cd12fd908f22cf16f50",
+        "path": "validator/src/self_tests/audit/final_packet/references.rs"
+      },
+      {
+        "digest": "sha256:2aea461eebf4b481c2822c9e2859289ab0ad42b4c591bb68f8e2d82b7490f756",
+        "path": "validator/src/self_tests/audit/final_packet/support.rs"
+      },
+      {
+        "digest": "sha256:7084f2f082a8c1212eda40b43507cdd9c4ff9fe75457305c426f36302ba4866b",
         "path": "validator/src/self_tests/audit/mod.rs"
       },
       {
@@ -15513,7 +15561,7 @@
         "path": "validator/src/self_tests/boundaries/filesystem.rs"
       },
       {
-        "digest": "sha256:6b431cf5cfb62ff574be081192b39c589a1f130ca8c0a223e503eae5982c62e6",
+        "digest": "sha256:aecc229d56bff37e5ee265c04e42b5fd2c69efb7b73e343dbdf1d5901cdf8d55",
         "path": "validator/src/self_tests/boundaries/filesystem_inventory_law_edges.rs"
       },
       {
@@ -15673,7 +15721,7 @@
         "path": "validator/src/self_tests/cli/control/parse.rs"
       },
       {
-        "digest": "sha256:e2dcc340dc8f121acf1f594191d56f50ad0bca2f1eb6a981f28f923aace03071",
+        "digest": "sha256:f684ff91ff806a20b0d80f00cc30bf1a139a1c61a3d09a0d7123458e4a2ca819",
         "path": "validator/src/self_tests/cli/control/receipts.rs"
       },
       {
@@ -15693,7 +15741,7 @@
         "path": "validator/src/self_tests/cli/performance/audit.rs"
       },
       {
-        "digest": "sha256:39246e011fd979b5620f817f1af897a8a00b5c074ff54efa29912c317937f543",
+        "digest": "sha256:2797975beb9c9e2a580343094ccfc8d3ecfc3387c10ac02dcc957bdf197c6e25",
         "path": "validator/src/self_tests/cli/performance/budgets.rs"
       },
       {
@@ -15701,11 +15749,11 @@
         "path": "validator/src/self_tests/cli/performance/mod.rs"
       },
       {
-        "digest": "sha256:f66ca8bf891cebedd68828a91dc07e252fe2044978e8dad444b6ee7024779db2",
+        "digest": "sha256:02e4ee47910b18b6a1bf865a3a5d60ff30dbd24c70dc17bcf507589594cf4249",
         "path": "validator/src/self_tests/cli/performance/observability_edges.rs"
       },
       {
-        "digest": "sha256:f27fbd6707d0762a3ec4787cb1a53218e8a2e4e57c7724d60904cf5d7756c5f3",
+        "digest": "sha256:16180d70913ab8482f9713b31c1312e2bc809ae522370914ba86ed20e883be86",
         "path": "validator/src/self_tests/cli/performance/receipts.rs"
       },
       {
@@ -15713,7 +15761,7 @@
         "path": "validator/src/self_tests/cli/root.rs"
       },
       {
-        "digest": "sha256:70ca7ace24a1a3b48e55a7db3fcccc06ae27b7b7c10dd9a5a305d8108d3e08e9",
+        "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
         "path": "validator/src/self_tests/command/dispatch.rs"
       },
       {
@@ -15741,7 +15789,7 @@
         "path": "validator/src/self_tests/coverage/rootless_digest_guards.rs"
       },
       {
-        "digest": "sha256:1610e8c695e745f255611418e027a3d15bb5195377ecdf60af01201c68d1df44",
+        "digest": "sha256:3ba063fa609e76bba5e2133f3d22d07491c2dcf5909c2fef51adf832b0164665",
         "path": "validator/src/self_tests/coverage/scope/authority.rs"
       },
       {
@@ -15757,15 +15805,31 @@
         "path": "validator/src/self_tests/coverage/template_trace_package_edges.rs"
       },
       {
+        "digest": "sha256:c18e1679d1f68f395ba9f9c367e903a498ca2ba84a01910b7528b977a58d34a4",
+        "path": "validator/src/self_tests/law/anti_theater_dependencies.rs"
+      },
+      {
         "digest": "sha256:a1af36d342045b2ef6a2819dcd5dd84682cee3d3a548e73f27a3076d09520012",
         "path": "validator/src/self_tests/law/family_aliases.rs"
       },
       {
-        "digest": "sha256:8a971f841e546993d21edb8627d3114238617d2e15c624b898edf2da8e7a6126",
+        "digest": "sha256:0782c5b8a115b5e19b78b366d86252c83c47ddfd67496fa4e698effe89bfbaa1",
+        "path": "validator/src/self_tests/law/mandatory/mod.rs"
+      },
+      {
+        "digest": "sha256:2fe7d9178726a3eed2757713b21fceafea014623741172fd6b18f77b8f0230be",
+        "path": "validator/src/self_tests/law/mandatory/surfaces/mod.rs"
+      },
+      {
+        "digest": "sha256:62a26b77ef5ea5a5c386d659ab4d27c84dda1d39ebae7754b05d8feb1c9c771c",
+        "path": "validator/src/self_tests/law/mandatory/surfaces/production.rs"
+      },
+      {
+        "digest": "sha256:d338b426e79cf33b9af74160a117834642b4a7d8239c1183d5dc09e718c5e2c6",
         "path": "validator/src/self_tests/law/mandatory_surfaces.rs"
       },
       {
-        "digest": "sha256:8f9562ec0f4b43ebb95873dfccf98b0e86fa342da1ad206a0262e5ec68a7c77b",
+        "digest": "sha256:4c4d602fd505285c53482ef2e2eb9ea60f76453d78bc528b121d8d50fadf6b97",
         "path": "validator/src/self_tests/law/mod.rs"
       },
       {
@@ -15837,11 +15901,11 @@
         "path": "validator/src/self_tests/package/run_boundaries.rs"
       },
       {
-        "digest": "sha256:0bee1e79b953f12e8f36c6ccc78aa357458f252221289c720f8266cb4b4050f3",
+        "digest": "sha256:eaee67bcd3dac87ff0a5b9e22f1345b8e2bf863fcda725a0a15341eeb59af6b7",
         "path": "validator/src/self_tests/plugin/laws.rs"
       },
       {
-        "digest": "sha256:a2b5bdf9282ea0458bc32db06defc8e3299903f6371583b91f5715fab8aac5de",
+        "digest": "sha256:4f2e74c93d81e1c7ea6631001f266a30d41c6099f2db546308585c18740e00b7",
         "path": "validator/src/self_tests/plugin/mod.rs"
       },
       {
@@ -15855,6 +15919,10 @@
       {
         "digest": "sha256:599fd10a0f80e616777f04210c2a73dff52c217d6589323fb244be26a8f346a7",
         "path": "validator/src/self_tests/plugin/product/package.rs"
+      },
+      {
+        "digest": "sha256:214f90b83f118f38764de607ad9c9581c50ed17a916ed248bda7955068ad7bd0",
+        "path": "validator/src/self_tests/plugin/registry.rs"
       },
       {
         "digest": "sha256:d60c1c97507063947fdec9630d125b6e2a21060e96d413f8668f4daf3ad7be8a",
@@ -15961,7 +16029,7 @@
         "path": "validator/src/self_tests/review/spawn.rs"
       },
       {
-        "digest": "sha256:f04c16cbbc5c456e366de9f0f0dbe56cd2b580efcc9cb5e748da502aba1dd5c2",
+        "digest": "sha256:08184de581666f7f04261760781ea6a98b0a9cfe6e72c3cc0c75b7342e0b4ac9",
         "path": "validator/src/self_tests/rust/gate/audit.rs"
       },
       {
@@ -16093,7 +16161,7 @@
         "path": "validator/src/self_tests/target_repo/observability.rs"
       },
       {
-        "digest": "sha256:b51ffa657da243d29800c964ad794bf7d9c68ff1f01ba1623f0eb81286109f57",
+        "digest": "sha256:d12dfa72017fe78eb823a02b9a9cf6fe8d4c3c82044eaf5fdb9ca151a1e0eef1",
         "path": "validator/src/self_tests/target_repo/product/cohesion.rs"
       },
       {

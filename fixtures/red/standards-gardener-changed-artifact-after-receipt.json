@@ -9,6 +9,16 @@
   "json_patch": [
     {
       "op": "replace",
+      "path": "/changed_artifacts",
+      "value": [
+        {
+          "path": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+          "digest": "sha256:185ec25c2394c164847b34ca4f1f4bb1f7fc69535e50e71816dd6aa9d0ad715f"
+        }
+      ]
+    },
+    {
+      "op": "replace",
       "path": "/generated_at",
       "value": "2026-06-17T00:00:00Z"
     }
@@ -30,9 +40,13 @@
   ],
   "postconditions": [
     {
+      "path": "/changed_artifacts/0/path",
+      "expectation": "current standards-gardener receipt is bound as the timestamp-bearing changed artifact"
+    },
+    {
       "path": "/generated_at",
       "expectation": "receipt timestamp predates one of its changed artifacts"
     }
   ],
-  "notes": "A standards-gardening receipt cannot claim a generated or captured artifact created after the receipt itself."
+  "notes": "A standards-gardening receipt cannot claim a generated or captured artifact created after the receipt itself; the red packet binds the current timestamp-bearing standards-gardener receipt so the first failure is the timestamp invariant, not stale artifact digest drift."
 }
