@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:01:25Z",
+    "completed_at": "2026-06-27T07:13:54Z",
     "cwd": "fixtures/target-repo/red/fake-fresh-init",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:01:25Z",
+    "started_at": "2026-06-27T07:13:54Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T07:01:25Z",
+  "generated_at": "2026-06-27T07:13:54Z",
   "invocation": "fixture init fixtures/target-repo/red/fake-fresh-init",
   "mode": "init",
-  "repo_fingerprint": "sha256:c94a0b450081bcca4f3c04d0ce4d7bec55e92edb8e2862a411becdedda5b98ab",
+  "repo_fingerprint": "sha256:007d89f274bb395907bf56d4c42aeab0fa12d98c735730b93c7c2e3f8e00f7b3",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

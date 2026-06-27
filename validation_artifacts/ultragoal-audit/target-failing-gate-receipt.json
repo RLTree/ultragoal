@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:01:25Z",
+    "completed_at": "2026-06-27T07:13:54Z",
     "cwd": "fixtures/target-repo/red/failing-gate",
     "exit": 1,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:01:25Z",
+    "started_at": "2026-06-27T07:13:54Z",
     "stderr": {
       "digest": "sha256:be13a05e122e30b0cfbe804b8af8e340914734ca6436071ca71171a7cc190493",
       "path": "<inline:stderr>"
@@ -380,10 +380,10 @@
   "gate_markers": [
     "coverage-enforcement"
   ],
-  "generated_at": "2026-06-27T07:01:25Z",
+  "generated_at": "2026-06-27T07:13:54Z",
   "invocation": "fixture init fixtures/target-repo/red/failing-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:bb0b4b22c1e9e8ec4f782d2fa6979bdbe89bbed7c9a285f2970f5eff7968e221",
+  "repo_fingerprint": "sha256:b1dc4a1f6afe9b8f7cf9283e15a08a5be708bfc092a2f7df9def3b782a16e1b3",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

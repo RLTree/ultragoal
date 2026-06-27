@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:01:25Z",
+    "completed_at": "2026-06-27T07:13:54Z",
     "cwd": "fixtures/target-repo/red/duplicate-check-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:01:25Z",
+    "started_at": "2026-06-27T07:13:54Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "execplan-dirs",
     "proof-root"
   ],
-  "generated_at": "2026-06-27T07:01:25Z",
+  "generated_at": "2026-06-27T07:13:54Z",
   "invocation": "fixture init fixtures/target-repo/red/duplicate-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:e02f88acc1c309038b25c987e4a06459ea7e1812f6c532c4b3e39a321a813ad9",
+  "repo_fingerprint": "sha256:a86a24529f71b89a1e104beacb0f982159e449a2e890b95c8567ffe355519a22",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

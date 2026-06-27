@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:01:25Z",
+    "completed_at": "2026-06-27T07:13:54Z",
     "cwd": "fixtures/target-repo/red/readme-existing-as-init",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:01:25Z",
+    "started_at": "2026-06-27T07:13:54Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T07:01:25Z",
+  "generated_at": "2026-06-27T07:13:54Z",
   "invocation": "fixture init fixtures/target-repo/red/readme-existing-as-init",
   "mode": "init",
-  "repo_fingerprint": "sha256:eeab02bdbc87294aa0b957eeb229a1c56ee36408c3cc99b41098638839d17697",
+  "repo_fingerprint": "sha256:2ed0ca8573d151c531965b3135eccb218643e514ee32a4d43539ffc1140e7110",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

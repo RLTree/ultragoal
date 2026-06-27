@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:01:26Z",
+    "completed_at": "2026-06-27T07:13:55Z",
     "cwd": "fixtures/target-repo/red/exception-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:01:26Z",
+    "started_at": "2026-06-27T07:13:55Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T07:01:26Z",
+  "generated_at": "2026-06-27T07:13:55Z",
   "invocation": "fixture init fixtures/target-repo/red/exception-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:a67ebc86e38a89dbb8e10f0f26eda255ed1424a526e5f33a5bde0c09041e0444",
+  "repo_fingerprint": "sha256:9dea14abcc474c54b867649ef5305095b194a8d76050c858aaabe445b06ff226",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
