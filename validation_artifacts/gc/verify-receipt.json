@@ -42,15 +42,15 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:06b8bf0efedd8e16208581dd7b12588127534e0dea0a0be695a21aec04d8fad8"
+    "plan_digest": "sha256:d89826bedf72cda577eaec9106d96301e911df0a924bb4a71433b458df3eb831"
   },
   "digests": {
-    "candidate": "sha256:bbdac2c2e804cea5f3709cd129510190f79ddb45874538bf5df16b5a9939f462",
+    "candidate": "sha256:6269a6e57785e6eb369c5a438f570c256e7a98c1f73aa9e4be46b8a12e6086eb",
     "fixture_catalog": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
-    "law_graph": "sha256:7d3fc8ae3694625310154f892ec6eaa16cddfc07122f72d30c2b982ecee9d02c",
+    "law_graph": "sha256:e5d7bdf35f519a6dffc9a05c55d8f22b0f44e480365fcd56b3511c264af86e1c",
     "schema_catalog": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40"
   },
-  "generated_at": "2026-06-27T13:03:55Z",
+  "generated_at": "2026-06-27T14:39:47Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

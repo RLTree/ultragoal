@@ -99,6 +99,12 @@ fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
 }
 
 fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
+    if matches!(
+        operation,
+        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
+    ) {
+        return vec!["live_registry_or_reviewer_exposure_same_surface_pass"];
+    }
     let mut out = vec![
         "current_red_fixture_report_status_pass",
         "coverage_100_no_uncovered_records",

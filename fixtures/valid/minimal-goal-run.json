@@ -182,7 +182,7 @@
         "owner": "fixture-agent",
         "port_allocations": [],
         "ready_receipt": {
-          "digest": "sha256:57c0d6f50c322abdaa087ed2567cd61cddaf320a0a041adc41ba0e415ff69cff",
+          "digest": "sha256:5784f9b9bb3a9a178eec2991fcc3c9af2745b63071ebdac2795b1f7463dcd896",
           "path": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json"
         },
         "scratch_roots": [
@@ -4637,7 +4637,7 @@
         "digest": "sha256:4abd751ead1105c0aad40ea9ccd17488bb11831dd273ae5a7fa855ec5e3e014c",
         "path": "validation_artifacts/ultragoal-audit/validator-receipt.json"
       },
-      "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+      "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
     },
     "ready": true,
     "schema": "harness-ultragoal.ready-for-merge.v1",
@@ -4650,7 +4650,7 @@
     "target_head_at_launch": "abcdef0",
     "target_head_at_validation": "abcdef0",
     "teardown_ready": true,
-    "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z",
+    "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z",
     "validator_version": "fixture-current-runtime-provenance",
     "workspace": "/repo",
     "worktree_clean": true
@@ -4664,8 +4664,8 @@
         "status": "pass"
       },
       "adversarial-packet-tampering-forged-proof-rejection": {
-        "details": "pass",
-        "status": "pass"
+        "details": "mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:!=sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure",
+        "status": "fail"
       },
       "agent-authored-source-tooling-docs-provenance": {
         "details": "pass",
@@ -4684,7 +4684,7 @@
         "status": "pass"
       },
       "agent-standards-enforcement": {
-        "details": "agent_standards_audit_evidence_invalid:plugin-product-cohesion-authority; fit_repo_receipt_target_digest_mismatch",
+        "details": "agent_standards_audit_evidence_invalid:plugin-product-cohesion-authority; coverage_receipt_source_digest_mismatch; coverage_receipt_changed_files_digest_mismatch",
         "status": "fail"
       },
       "amendment-monotonicity": {
@@ -4752,16 +4752,16 @@
         "status": "pass"
       },
       "cli-control-plane-authority": {
-        "details": "pass",
-        "status": "pass"
+        "details": "mandatory_law_evidence_digest_mismatch:cli-control-plane-authority",
+        "status": "fail"
       },
       "cli-performance-latency-speed-iteration-fitness": {
         "details": "pass",
         "status": "pass"
       },
       "cli-self-law-compliance": {
-        "details": "pass",
-        "status": "pass"
+        "details": "mandatory_law_evidence_digest_mismatch:cli-self-law-compliance",
+        "status": "fail"
       },
       "command-evidence": {
         "details": "pass",
@@ -4852,8 +4852,8 @@
         "status": "pass"
       },
       "generated-proof-artifact-provenance-anti-fabrication": {
-        "details": "pass",
-        "status": "pass"
+        "details": "mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:!=sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure",
+        "status": "fail"
       },
       "generated-ready-completion-receipts": {
         "details": "pass",
@@ -4972,12 +4972,12 @@
         "status": "pass"
       },
       "plugin-inventory-closure": {
-        "details": "pass",
-        "status": "pass"
+        "details": "missing=[\"validation_artifacts/cli/registry-probe-receipt.json\"] nonexistent=[]",
+        "status": "fail"
       },
       "plugin-inventory-exactly-once": {
-        "details": "pass",
-        "status": "pass"
+        "details": "duplicates={} actual=4206 listed=4205",
+        "status": "fail"
       },
       "portable-non-prescriptive-adapter-implementation-choice": {
         "details": "pass",
@@ -4996,8 +4996,8 @@
         "status": "pass"
       },
       "product-fitness-proof": {
-        "details": "product_fitness_receipt_stale",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "product-live-surface-receipts": {
         "details": "pass",
@@ -5048,8 +5048,8 @@
         "status": "pass"
       },
       "ready-receipt-provenance": {
-        "details": "fixtures/valid/non-product-engineering-language.json: ready_receipt_not_lane_bound: LANE-001:ready_receipt.digest; fixtures/valid/non-product-feature-completion.json: ready_receipt_not_lane_bound: LANE-001:ready_receipt.digest; fixtures/valid/two-lane-ready-dependency.json: ready_receipt_not_lane_bound: CLAIM-001; fixtures/valid/two-lane-ready-dependency.json: ready_receipt_not_lane_bound: LANE-001:ready_receipt.digest; fixtures/valid/minimal-goal-run.json: ready_receipt_not_lane_bound: LANE-001:ready_receipt.digest; fixtures/valid/proof-surface-negative-probe.json: ready_receipt_not_lane_bound: LANE-001:ready_receipt.digest",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "red-fixture-coverage": {
         "details": "one or more red fixtures did not fail as expected",
@@ -5092,24 +5092,24 @@
         "status": "pass"
       },
       "rust-cache-no-cache-honesty": {
-        "details": "rust_devx_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "rust-command-loop-authority": {
-        "details": "rust_devx_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "rust-developer-experience-authority": {
-        "details": "rust_devx_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "rust-memory-resource-discipline": {
-        "details": "rust_devx_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "rust-toolchain-substrate-authority": {
-        "details": "rust_devx_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "scheduler-runner-tracker-boundaries": {
         "details": "pass",
@@ -5160,8 +5160,8 @@
         "status": "pass"
       },
       "source-obligation-coverage": {
-        "details": "pass",
-        "status": "pass"
+        "details": "mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:!=sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_evidence_digest_mismatch:cli-control-plane-authority; mandatory_law_evidence_digest_mismatch:cli-self-law-compliance; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.generated_at: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.status: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.issuer: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.tool_call: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.capture_method: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.boundary: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.target_revision: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.claim_ceiling: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_schema:$.raw_observation: required; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:!=sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_status_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_claim_ceiling_not_live_surface; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_generated_capture_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_live_tool_issuer; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_tool_call_identity; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/call_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/account_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_missing_observation_field:/boundary/session_id; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_boundary_session_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_capture_method_not_live; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_raw_observation_missing; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure",
+        "status": "fail"
       },
       "source-obligation-parity-anti-bundling": {
         "details": "pass",
@@ -5220,7 +5220,7 @@
         "status": "pass"
       },
       "validator-execution-provenance": {
-        "details": "fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/self_tests/rust/gate/parser/guards.rs,validator/src/self_tests/rust/gate/parser/mod.rs,validator/src/self_tests/audit/source_audit.rs,validator/src/self_tests/rust/gate/mod.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/self_tests/rust/gate/parser/guards.rs,validator/src/self_tests/rust/gate/parser/mod.rs,validator/src/self_tests/audit/source_audit.rs,validator/src/self_tests/rust/gate/mod.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/self_tests/rust/gate/parser/guards.rs,validator/src/self_tests/rust/gate/parser/mod.rs,validator/src/self_tests/audit/source_audit.rs,validator/src/self_tests/rust/gate/mod.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/self_tests/rust/gate/parser/guards.rs,validator/src/self_tests/rust/gate/parser/mod.rs,validator/src/self_tests/audit/source_audit.rs,validator/src/self_tests/rust/gate/mod.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/self_tests/rust/gate/parser/guards.rs,validator/src/self_tests/rust/gate/parser/mod.rs,validator/src/self_tests/audit/source_audit.rs,validator/src/self_tests/rust/gate/mod.rs",
+        "details": "final_packet_proof_missing:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2); plugin_self_law_registry_schema:$.generated_at: required; plugin_self_law_registry_schema:$.status: required; plugin_self_law_registry_schema:$.issuer: required; plugin_self_law_registry_schema:$.tool_call: required; plugin_self_law_registry_schema:$.capture_method: required; plugin_self_law_registry_schema:$.boundary: required; plugin_self_law_registry_schema:$.target_revision: required; plugin_self_law_registry_schema:$.claim_ceiling: required; plugin_self_law_registry_schema:$.raw_observation: required; plugin_self_law_registry_target_digest_mismatch:!=sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca; plugin_self_law_registry_status_not_pass; plugin_self_law_registry_claim_ceiling_not_live_surface; plugin_self_law_registry_generated_capture_mismatch; plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law_registry_missing_live_tool_issuer; plugin_self_law_registry_missing_tool_call_identity; plugin_self_law_registry_missing_observation_field:/tool_call/call_id; plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest; plugin_self_law_registry_missing_observation_field:/boundary/account_id; plugin_self_law_registry_missing_observation_field:/boundary/workspace_id; plugin_self_law_registry_missing_observation_field:/boundary/session_id; plugin_self_law_registry_boundary_session_mismatch; plugin_self_law_registry_capture_method_not_live; plugin_self_law_registry_raw_observation_missing; fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/proof/authority.rs,validator/src/cli/control/plane/proof/diagnostic.rs,validator/src/cli/control/plane/proof/red.rs,validator/src/cli/control/plane/emit.rs,validator/src/cli/control/plane/proof.rs,validator/src/self_tests/cli/control/production.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/proof/authority.rs,validator/src/cli/control/plane/proof/diagnostic.rs,validator/src/cli/control/plane/proof/red.rs,validator/src/cli/control/plane/emit.rs,validator/src/cli/control/plane/proof.rs,validator/src/self_tests/cli/control/production.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/proof/authority.rs,validator/src/cli/control/plane/proof/diagnostic.rs,validator/src/cli/control/plane/proof/red.rs,validator/src/cli/control/plane/emit.rs,validator/src/cli/control/plane/proof.rs,validator/src/self_tests/cli/control/production.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/proof/authority.rs,validator/src/cli/control/plane/proof/diagnostic.rs,validator/src/cli/control/plane/proof/red.rs,validator/src/cli/control/plane/emit.rs,validator/src/cli/control/plane/proof.rs,validator/src/self_tests/cli/control/production.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/proof/authority.rs,validator/src/cli/control/plane/proof/diagnostic.rs,validator/src/cli/control/plane/proof/red.rs,validator/src/cli/control/plane/emit.rs,validator/src/cli/control/plane/proof.rs,validator/src/self_tests/cli/control/production.rs",
         "status": "fail"
       },
       "validator-theater-miswire-resistance": {
@@ -5236,8 +5236,8 @@
         "status": "pass"
       },
       "workspace-artifact-cache-garbage-collection": {
-        "details": "workspace_gc_receipt_candidate_digest_mismatch",
-        "status": "fail"
+        "details": "pass",
+        "status": "pass"
       },
       "workspace-binding": {
         "details": "pass",
@@ -5256,453 +5256,453 @@
         "status": "pass"
       }
     },
-    "commit": "sha256:93d1e1e95fa50c048f565eb035b04d5355c2b459ec82d9d591396110c5b477a9",
+    "commit": "sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca",
     "generated_artifacts": [
       {
         "artifact_type": "red_fixture_report",
-        "digest": "sha256:2f354f84bb6eb02e7f124d1198c3061ebd0bad3c5148131df28d8df8466dda12",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+        "digest": "sha256:504e6e8298c982770e8c89bf703c76f22f3ba1361d0de724ec76c409d6fb11d8",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
         "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:0bc824f68895399dd20896679bcfad0e2f7953325406391c9ce6a266ba4dcf91",
-        "generated_at": "2026-06-27T01:07:27Z",
+        "digest": "sha256:71141565201526a1030d525865acdc29222f2cc2c0ce6ddfc1115f8a65fb630c",
+        "generated_at": "2026-06-27T13:39:40Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-valid-init-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:63b3110a7a0111e8625b3dfa24e55db69352879fe70e94cc2cd74ea58a7bf3f5",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:b5ba3ff6ff88014b393a2eba2679350ed76ac95002aa514a62a2e53f506a6b27",
+        "generated_at": "2026-06-27T13:39:40Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-valid-observability-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:d561b55b188b4a0d663141bf3eb10f409a1124f3a2f1c7376daf8ad9e5d4cdf0",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:1df67bbc604d41f30908be541d9313cf2c7decb7ab33a9621ddeb4ab4833e435",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-valid-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:4ee08f780578b02f4b7d27bb2376fdea7dbe4addc5e270260b4fb08232ed8716",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:9200c1cffc4a541e9a49d564dbb70f65591d1952cd1c9ff2971938010b3083f4",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-fake-init-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:67ba6c5c3530fa53d6687091cde6499499a734a0d82a4dd8546cebffc993934d",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:d79b95b079547c8e383eec1154e533cf9b1fafa586d76a3bfcab3070e572669d",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-fake-retrofit-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:8b6a5933330b708c17864451c8c8c2e58b2f80db39aa6e6eab2c6fe0f283a0d8",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:6a9911f4e3d84794b4a8a79a793836316473cf8e4a40da378380b57d95d0f999",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-failing-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:dffbb735b2e2f2e10e0245945283e9a34486d759f69e4f1a18ab819de9b45795",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:91e793208ee3ed2b26ecd259ff05d6b53e18b39e78dd83ffeaacd05042643c59",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-existing-as-init-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:0a008d2b7b1a7b3b9d5499e44ea5a7028fc3fee363358309fd9c506ccfca026f",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:df7be0090dec144d436bdc3bf2b4c38bfbcf67d298d2b0fc803f2edd28be9040",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-missing-coverage-command-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:21dae4bc9defaa72f17da6ada0c96746e64462ab9ff5028d373a304786eb24d1",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:963251a0bafeb4a20638b7a3b7d09a1a439959c0715524818775a630e9b3d1d1",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:bd582766ae8c8ba9b80aa1c67461e767b9a7ac80e75fd6b3b3408ea993918fb9",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:37c144372ac946aa8e712b891089321945de03cff940500d4971938b6ede99d1",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-failing-coverage-command-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:69c5632d242ba168f49df7cd92fc3df03f00def8ec0250147e7ad11cc8203d7d",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:681b9be91dae6b36b832d3b2b73d2a9655e8639727d22d347adbd43a6e1f367b",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-trivial-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:821c43b7a74eec72d12a300aa8ee9ef003c62c621a0e63bf9206251fd988b19c",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:78604cd61aa8416daf64550e8c7624c01080581dc3fb4febca5c676150b0ccba",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-readme-existing-as-init-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:73dd617bfe9e0f11482172f36fd09786a68afdc51fbd9a696b8e4d5200cecfb8",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:999a7759f9c2cf488d5193037bfeee3596d462343781ccdff2e3f71bef73a0b5",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-fake-marker-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:9d0f3d86be2a284fbea229193e937027edf7b792dbef33009fc5e9e01586819d",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:b2a764a4f6e4f34d37b516b968905a385f4810e53eb4263b737426cf054b9015",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-marker-only-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:1a43ac43f9fac00f9d8663d6c43684eda82b7d1a7d64c9f6067860a9ff6b6e77",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:4170da5b5490b2525fe5acf3438597ae125ab2960611df4273f379f6d0374183",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-unsafe-gate-command-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:32fcb99e62536297497b426345f3794640a64c1ce6002ec34646c4ba8bb60985",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:e93e4c2757bf9c11d3c84072c12872e775f41212c7ddb320bffdbd3a9709bc19",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-forged-check-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:6333110f7a092cf23c13a4d12d3f28449791f8a045503f251e3acae41283e9dd",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:c4a15600e56517bd64fd1e25fb8551e4adbe4400b85b646dee06e6f27efe419b",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:ba4125c2080f2f47e67eafefe536034da654d9e0623de7ff7ff92a30f313cb6b",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:48215b963ce6db1fd4638b342f1bd62082e737f2fa2115b4ec3041a9c664a643",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-symlink-check-gate-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:ff0459c2833255aaaa8cb6df67b9d4e3350bf9aced7a5b2ee2c0bebb1f60f81f",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:27a387520db64b1543322a3e040e6c1bc44a531db70293be25c276ed146b18b1",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-stale-worktree-env-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:9bd89e7c6bbe14f642a072140c0bbe47e18484059b821f019fb6c82820e0f7ac",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:e2a8c458c0daba1fb59f6f91d646723ce7e7dee59d0d149502bcf6ee9f74c480",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:56b1022b80733c96baff696cef7642fb1f02c22269c8617d44cc40a5553ec4e4",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:baab63dac6a6ee4aa664f67bee4d65e3b74d1e2b57c9e68f3cfbde812d7f5ff1",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-missing-observability-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:da43d570a6cb6327a61ba26ef105823679371c485d78ebb935bd023a455876e7",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:80ff4159c3a3948c269a63945d9a059d36492a7b1db66956de384537a23c40a9",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-partial-observability-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:2e4dd4987692d8d326b771bb00471374f08c9ab7cbdcdfa46b18ff147a9b8790",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:0eab72f3d77037270012dcb2f84975a96ec031bf0d521489c2ebe6fc4212614b",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-incomplete-observability-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:30ea14fbe20da3a1d86bc38cc4d84a052fc9e1be191d5b1596daa6c0763b98ec",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:4be05def978275efa96c1d1944695cc19632a37500a1e2604cf22a62010e6666",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-invented-observability-artifact-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:f75cc21cb5d26938c40b6b800acb88ad0e19aa11dc80686a2312de1fd42a1ca8",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:ade04869be57026f80743cd858ff746ce5037a737cb13a64b9074d1fae039acf",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-observability-ledger-without-query-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:2830833a3816df4958d240528d7386eeec9fa2985d6645288cbc6c41e4938009",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:f6976ced8430dc5bda418df10c1217e68529e91a1457e8c56a77aa7cfa1dec86",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-observability-query-timeout-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:85366ad2b1bd47d09ea7a99f3e7355a891ad7fedee067fa1e376a1eab1275f44",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:62d941def5ccbb52fa76f771cce384c36c10b852eb1821e1bb5011e9bdc3296e",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-observability-query-output-too-large-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:b5bc1e3e71b53bf9adcf7683095eda4125ba90914adb0ea6a085e8938c56b1bd",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:75f5bee9dcb62230a5da72f8b1bfd19111df68b606a8b33335d0589abf1c494e",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-observability-query-side-effect-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:e5bf9802a6c751a39ccc9a654dfd763ff0c9ee2d1b03354c19f02c9fec5fade8",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:051cbd99d37076fd693b2d49b57019c3d010708cd69cdefb87c9c821452cf37f",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-observability-shell-wrapper-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:ca45766e07bcfb4e3851f31c5cedf47f0fdbdb8eae543bb0a53a78c5c1466a66",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:ec41bef49d7d101a424ca433ad95def1d65925303c1fbf17b0c871a8d8086600",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-row-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:eb424cb8e4569ea023a7e3afb4437877b210b445f2c4d03a75b27b994af202e7",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:8f79a4ca05499b156ce380d7a0b3bb59f105c39e0670a32ff0130cf4e1600639",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-json-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:ce186627b947dc4cc846fc6161b7a2400fa34bad7e9e31e40f205b96be905f6a",
-        "generated_at": "2026-06-27T01:07:28Z",
+        "digest": "sha256:71cc08161ffddd44429e30dae88202da06621ec08484b0c3d9d52b897f4663e0",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-missing-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:753064afbe20a82003fa30aa07f5cb6f674dc538007b6540710a7b23dd9fd264",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:fca607ba198b6fd523aef78c439061c4efa814c0fd432cdda7e71369151b0418",
+        "generated_at": "2026-06-27T13:39:41Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-partial-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:9c6838e0082d03e0d7c6349e1952a1e7abf991dc441c7064711f3229d86a10c0",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:568e156bfed75ac5120fb7bb3ed0b10809374dee4becbbc0aa5e3c7984330e5d",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-mismatched-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:102f20e2a7308a8f1a6cc9a72f3f160652dfa62b0a7963cc9b15ef4117e76a27",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:a9b517a400a53926d46f42d3635ab9deeb143ff392ba3d3311a5f715aab09066",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-exception-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:37037e16964b9e02c007188a348a5a450d87b9b7079141afd3599952e31095dc",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:56a0ff6f3362cda95d44daec09a0af91472941305d48380d6f2cdb5a66c46c52",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-empty-reviewers-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:370e8c07a2d595ad176e7184d125dd6c407dad460ebb2ab90821e09adc014514",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:1171150c330599388b2513a5a206d726e4c51fa3349d70ecf6ea603e8ca463f5",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-self-review-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:28d026c9ff1495d748c474963333b2efa07ad0658558cf87f0eb6c4bd09a65e4",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:6750e366dac289b3abdc235ca069cd11ff0b53e674cbf82e194aacf5ec492aa8",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-reviewer-authority-content-mismatch-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:1c72322cda7927c5c77cc13d2cdd7bc8b394c1ce706762907a9b21e3f4e4b340",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:db2136b67c04dc8c783fc74a4f85434fd3f850fcdf080c799ab42ef624618287",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-product-reviewer-authority-alias-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:68da2de69068e859fa1484ddcda793bffb8a9184e7bd8425b5150f6590aafd50",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:f83aba24a2168581ecbb59b2bf19bbcea08f403e9ee0d2f953e7103bd9bd2c34",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-absolute-path-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:3f5d1c785302c0a999ebd77174eec871c41a8b56f2d9652a4f36ea5d68cecb40",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:a730f4d65cc1e9672e065191b81d0c1fd5012d6e3a6b3a27ad7a0fee36453d42",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-parent-path-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:cd2775fef4f42de8501a730b0ac3129048b69ddf9da630d7a7fb4df05e2aa43e",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:9bd6fd8f8fd31209fbd9f0c423492223e251ad465eead0f44c494944f83aea23",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-symlink-path-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:3f004a42a037b76677a84741a09c23c7f4af746f79262acd4bb0b13011fd64be",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:ec58c313438112cab82466becd6bb6ec877c6d0707250c1b9febab72d414c382",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-special-path-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:5d064fe26e1549b3df9e61b3d3305c97fecb83caaa215383117c4fe7552c537c",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:1402f0dcea108b468a7e25e6668b05a26393eed1371823d69691133c55688c6a",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-malformed-product-cohesion-json-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "target_repo_receipt",
-        "digest": "sha256:92ab16c43ba9612d16e56a5a500c9d42369085cbbecf86438a4c15e64381066c",
-        "generated_at": "2026-06-27T01:07:29Z",
+        "digest": "sha256:2a857da52271c4a93f7579c4626353370503d564263bc0fa05c4a7fb06f2ea2f",
+        "generated_at": "2026-06-27T13:39:42Z",
         "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
         "path": "validation_artifacts/ultragoal-audit/target-missing-primary-user-product-cohesion-receipt.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
         "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-LANE-001.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
-        "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:c9dc6164695454db18fe0f26efd163bd1453f383e0b457848189429353e680bb",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
-        "digest": "sha256:70b766735cae8232d71beaf07a838920ebe5bf3caa88930d627ed914c9e57a66",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:a21b0fab195238c9aa05880362537e8b9cf55e3a3a291dbe72fd6c18e8a78738",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
-        "digest": "sha256:e2015639911f4474232af3f927775593208ac812e199468d9ac2bdf6fb10c17a",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:7eb1d06a70ddc2b08ebc160f96b97ca7ac20ada8b68c20308c9921019e5caa6b",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
-        "digest": "sha256:dcdae284c020550e4787da605bc7ba4888a4cd2c60c4702c1fecf3da21a2ad68",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:d418e666dbde2f0fdea8706abce196b119b0966ef2b6fe68df1ff8f8ac0666cc",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
-        "digest": "sha256:2e5644bd710e354f9bf642bd83df695d8a0d94f12812a60e37f05098b736bce7",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:447e906e01f53e7fbf5d5cf770bfc9eaad2e704faef40def292fbab2538a3159",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       },
       {
         "artifact_type": "ready_for_merge",
         "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-        "generated_at": "2026-06-27T01:07:31Z",
-        "input_digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "generated_at": "2026-06-27T13:39:44Z",
+        "input_digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "examples/generated/READY_FOR_MERGE.example.json",
-        "validator_run_id": "ultragoal-audit-2026-06-27T01:04:48Z"
+        "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
       }
     ],
-    "generated_at": "2026-06-27T01:07:32Z",
+    "generated_at": "2026-06-27T13:39:45Z",
     "input_digests": [
       {
-        "digest": "sha256:17c9ad9aa1b300212bb8d5a6b36601a748c9d51425024236809067523d329b15",
+        "digest": "sha256:5bf21a84aab179d352a2b91e73f281a833320846e6dcf79a0c585adb6bd2b69d",
         "path": "plugin-manifest-draft.json"
       },
       {
-        "digest": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+        "digest": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40",
         "path": "schemas/schema-catalog.json"
       },
       {
-        "digest": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+        "digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
         "path": "templates/RED_FIXTURES.json"
       },
       {
-        "digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+        "digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
         "path": "fixtures/valid/minimal-goal-run.json"
       }
     ],
-    "red_fixture_catalog_digest": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+    "red_fixture_catalog_digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
     "red_fixtures": {
       "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -8497,21 +8497,21 @@
       "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch": {
         "expected_error": "ready_receipt_not_validator_output",
         "expected_failing_check": "ready-receipt-provenance",
-        "observed_error": "validator_receipt_not_runtime_provenance",
-        "observed_failing_check": "validator-execution-provenance",
-        "packet_digest": "sha256:0a5e4941c996afb909715bf84e707a80622357d61e8d156f101b798b194e904b",
+        "observed_error": "ready_receipt_not_validator_output",
+        "observed_failing_check": "ready-receipt-provenance",
+        "packet_digest": "sha256:e3ce22c36b137cdc140731d626e01e9a2b2e02c9f05f2d3d145531038d2ae988",
         "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-digest-mismatch.json",
-        "status": "fail",
+        "status": "pass",
         "validator_exit": 1
       },
       "downstream-dependency-ready-receipt-generated-artifact-missing": {
         "expected_error": "ready_receipt_not_validator_output",
         "expected_failing_check": "ready-receipt-provenance",
-        "observed_error": "validator_receipt_not_runtime_provenance",
-        "observed_failing_check": "validator-execution-provenance",
-        "packet_digest": "sha256:2ae0bab0e4a87a9d6afae0df8d8c75f921dd330d0372d1d03fbc234dc902aeec",
+        "observed_error": "ready_receipt_not_validator_output",
+        "observed_failing_check": "ready-receipt-provenance",
+        "packet_digest": "sha256:803abd507b584baed19ad1ff03cad3ed3d968d619f87c7fef4476932aea62593",
         "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-missing.json",
-        "status": "fail",
+        "status": "pass",
         "validator_exit": 1
       },
       "downstream-dependency-ready-receipt-validator-run-mismatch": {
@@ -8527,11 +8527,11 @@
       "downstream-dependency-reblock-without-proof": {
         "expected_error": "dependency_release_missing",
         "expected_failing_check": "lane-dependency-gating",
-        "observed_error": "validator_receipt_not_runtime_provenance",
-        "observed_failing_check": "validator-execution-provenance",
+        "observed_error": "dependency_release_missing",
+        "observed_failing_check": "lane-dependency-gating",
         "packet_digest": "sha256:76b9bf49702c3d4150d3605a7cd4c0e3deb0f04290067c2a85db177da31e1ef6",
         "packet_path": "fixtures/red/downstream-dependency-reblock-without-proof.json",
-        "status": "fail",
+        "status": "pass",
         "validator_exit": 1
       },
       "downstream-dependency-superseded-upstream-lane": {
@@ -16509,7 +16509,7 @@
         "expected_failing_check": "standards-gardener-promotion",
         "observed_error": "standards_gardener_changed_artifact_after_receipt",
         "observed_failing_check": "standards-gardener-promotion",
-        "packet_digest": "sha256:a5aebf5152544eed362759dc4524c4fb8910c564b4f908e1ff2119bce7946b91",
+        "packet_digest": "sha256:5459c01a4189deb2bff44ff01bcd11e7dd3992499f6e7dc6b82a7893e18b22ac",
         "packet_path": "fixtures/red/standards-gardener-changed-artifact-after-receipt.json",
         "status": "pass",
         "validator_exit": 1
@@ -19209,53 +19209,53 @@
       "rust-devx-gc-plan-digest-tamper-red"
     ],
     "root": "source-workspace:harness-ultragoal-plugin-proposal",
-    "run_id": "ultragoal-audit-2026-06-27T01:04:48Z",
+    "run_id": "ultragoal-audit-2026-06-27T13:36:55Z",
     "schema": "harness-ultragoal.validator-receipt.v1",
     "status": "fail",
     "target": "source-workspace:harness-ultragoal-plugin-proposal",
     "target_revision": {
       "kind": "package_digest",
-      "value": "sha256:93d1e1e95fa50c048f565eb035b04d5355c2b459ec82d9d591396110c5b477a9"
+      "value": "sha256:a5a0d0e2c0bc37333ffc5dbbc5f405a074860367ae46cabb0f9f03434220f4ca"
     },
     "validator": "ultragoal-audit",
     "validator_execution": {
       "actor_disjoint": true,
       "command": {
         "command": "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json",
-        "completed_at": "2026-06-27T01:07:32Z",
+        "completed_at": "2026-06-27T13:39:45Z",
         "cwd": "source-workspace:harness-ultragoal-plugin-proposal",
         "exit": 1,
         "id": "ultragoal-audit",
-        "started_at": "2026-06-27T01:04:48Z"
+        "started_at": "2026-06-27T13:36:55Z"
       },
-      "completed_at": "2026-06-27T01:07:32Z",
+      "completed_at": "2026-06-27T13:39:45Z",
       "environment": "local Rust package audit; semantic_validation_clock=automation_tick_receipt.freshness_policy.clock_at_validation",
       "executable_provenance": {
-        "digest": "sha256:bd5848c2156e3d4b359fe23bc3360f7e182f03bf4b54014ab8d6f8e16219d3ec",
+        "digest": "sha256:ba2d349a9a2aaf67dc3bc1cae4c37f0513064a6c969fd248425b27d347ed6664",
         "invocation_mode": "direct_executable",
         "path": "target/debug/ultragoal",
-        "source_artifact_set_digest": "sha256:fcd15148ccd45114659242d1b3dbab7fcd7a0e4ed663f34f3f05c16076a7d76a"
+        "source_artifact_set_digest": "sha256:5bd21b391d2ad0390cd42897d2ebd92b1a7bfa3bed857afa38e9fda3e807eb1b"
       },
       "input_digests": [
         {
-          "digest": "sha256:17c9ad9aa1b300212bb8d5a6b36601a748c9d51425024236809067523d329b15",
+          "digest": "sha256:5bf21a84aab179d352a2b91e73f281a833320846e6dcf79a0c585adb6bd2b69d",
           "path": "plugin-manifest-draft.json"
         },
         {
-          "digest": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+          "digest": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40",
           "path": "schemas/schema-catalog.json"
         },
         {
-          "digest": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+          "digest": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
           "path": "templates/RED_FIXTURES.json"
         },
         {
-          "digest": "sha256:79075c92f91414a10fb64f596d9762c3f232a48b7425a5dec9cbf7df98dc93c4",
+          "digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba",
           "path": "fixtures/valid/minimal-goal-run.json"
         }
       ],
       "producer_actor_id": "package-author",
-      "started_at": "2026-06-27T01:04:48Z",
+      "started_at": "2026-06-27T13:36:55Z",
       "stderr": {
         "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "path": "validation_artifacts/ultragoal-audit/validator-receipt.stderr.txt"
@@ -19851,7 +19851,7 @@
           "path": "validator/src/cli/control/plane.rs"
         },
         {
-          "digest": "sha256:b216d44e726457ce7a7d28e5a553b522dd4f8d95e378f93993978db9936db428",
+          "digest": "sha256:dbefbb3db16ce9620094deca32cef172c9d5337a1895c83d305705ca7b94d2c9",
           "path": "validator/src/cli/control/plane/emit.rs"
         },
         {
@@ -19859,8 +19859,20 @@
           "path": "validator/src/cli/control/plane/path.rs"
         },
         {
-          "digest": "sha256:2330d4c0f480c3fd92aba430843b1126a62fb1550dabb3a87fb94046b191568d",
+          "digest": "sha256:1e331af843af586777ea38903735c0654d520e910f1ba5d432b44397c76ffb05",
           "path": "validator/src/cli/control/plane/proof.rs"
+        },
+        {
+          "digest": "sha256:ea0705131e0aeb7dfcb84fa558e0b329713dbca5cefbd625f4d1abe7035111ec",
+          "path": "validator/src/cli/control/plane/proof/authority.rs"
+        },
+        {
+          "digest": "sha256:2c851d996985274dfa045f3bf9f1c79f97c406ac494ccd2226c0b37bf9a3eb5f",
+          "path": "validator/src/cli/control/plane/proof/diagnostic.rs"
+        },
+        {
+          "digest": "sha256:6a379aec9c0f6556aff9886f1d4511e7bc2f2f025fb1afa7e732af17f80fde23",
+          "path": "validator/src/cli/control/plane/proof/red.rs"
         },
         {
           "digest": "sha256:cb251a0fc55719377b8efd4c201a270eff295ed1919d8c01656689de9b940a48",
@@ -20399,7 +20411,7 @@
           "path": "validator/src/self_tests/cli/control/parse.rs"
         },
         {
-          "digest": "sha256:29b879eefaf9121ae33ae5cbe84feef092ddd407d9ea72744140a67805b38eff",
+          "digest": "sha256:c6b4166f14887370d20ee087c604b85abec45313250cb9048e2f313c02928e41",
           "path": "validator/src/self_tests/cli/control/production.rs"
         },
         {

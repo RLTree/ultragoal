@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T13:12:10Z",
+  "generated_at": "2026-06-27T14:49:52Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",

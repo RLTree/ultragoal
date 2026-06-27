@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T13:12:09Z",
+    "completed_at": "2026-06-27T14:49:50Z",
     "cwd": "fixtures/target-repo/red/product-reviewer-authority-alias",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T13:12:09Z",
+    "started_at": "2026-06-27T14:49:50Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T13:12:09Z",
+  "generated_at": "2026-06-27T14:49:50Z",
   "invocation": "fixture init fixtures/target-repo/red/product-reviewer-authority-alias",
   "mode": "init",
-  "repo_fingerprint": "sha256:9232f8c101f18d760ff34dad0935ae7552a1d320da273992308d8362b2f9ddb5",
+  "repo_fingerprint": "sha256:431ee8899ef6c00da45beb2f5bf47dc9d3b362ce29577618bc8571ae35dab4a7",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -984,7 +984,7 @@
       "path": "validator/src/cli/control/plane.rs"
     },
     {
-      "digest": "sha256:b216d44e726457ce7a7d28e5a553b522dd4f8d95e378f93993978db9936db428",
+      "digest": "sha256:dbefbb3db16ce9620094deca32cef172c9d5337a1895c83d305705ca7b94d2c9",
       "path": "validator/src/cli/control/plane/emit.rs"
     },
     {
@@ -992,8 +992,20 @@
       "path": "validator/src/cli/control/plane/path.rs"
     },
     {
-      "digest": "sha256:2330d4c0f480c3fd92aba430843b1126a62fb1550dabb3a87fb94046b191568d",
+      "digest": "sha256:1e331af843af586777ea38903735c0654d520e910f1ba5d432b44397c76ffb05",
       "path": "validator/src/cli/control/plane/proof.rs"
+    },
+    {
+      "digest": "sha256:ea0705131e0aeb7dfcb84fa558e0b329713dbca5cefbd625f4d1abe7035111ec",
+      "path": "validator/src/cli/control/plane/proof/authority.rs"
+    },
+    {
+      "digest": "sha256:2c851d996985274dfa045f3bf9f1c79f97c406ac494ccd2226c0b37bf9a3eb5f",
+      "path": "validator/src/cli/control/plane/proof/diagnostic.rs"
+    },
+    {
+      "digest": "sha256:6a379aec9c0f6556aff9886f1d4511e7bc2f2f025fb1afa7e732af17f80fde23",
+      "path": "validator/src/cli/control/plane/proof/red.rs"
     },
     {
       "digest": "sha256:cb251a0fc55719377b8efd4c201a270eff295ed1919d8c01656689de9b940a48",
@@ -1532,7 +1544,7 @@
       "path": "validator/src/self_tests/cli/control/parse.rs"
     },
     {
-      "digest": "sha256:29b879eefaf9121ae33ae5cbe84feef092ddd407d9ea72744140a67805b38eff",
+      "digest": "sha256:c6b4166f14887370d20ee087c604b85abec45313250cb9048e2f313c02928e41",
       "path": "validator/src/self_tests/cli/control/production.rs"
     },
     {

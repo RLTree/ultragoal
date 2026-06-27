@@ -94,6 +94,24 @@ fn write_control_green_root(root: &Path) -> String {
     current
 }
 
+fn write_registry_probe_root(root: &Path) {
+    let repo = crate::self_tests::boundaries::support::repo_root();
+    copy_flat_dir(root, &repo, "schemas");
+    write_json(
+        &root.join(".codex-plugin/plugin.json"),
+        &json!({"version":"0.0.0-test"}),
+    );
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({
+            "version":"0.0.0-test",
+            "schema_catalog":"schemas/schema-catalog.json",
+            "schemas":["schemas/codex-registry-exposure.schema.json"],
+            "resources":["schemas/codex-registry-exposure.schema.json"]
+        }),
+    );
+}
+
 #[test]
 fn production_control_plane_can_pass_only_from_dereferenced_green_evidence() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-production-green");
@@ -132,4 +150,33 @@ fn production_control_plane_can_pass_only_from_dereferenced_green_evidence() {
             .contains("red_fixture_report_status_not_pass")
     );
     std::fs::remove_dir_all(root).expect("cleanup cli production green");
+}
+
+#[test]
+fn registry_probe_reports_registry_surface_without_packet_circularity() {
+    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-probe-specific");
+    write_registry_probe_root(&root);
+    let command = ControlCommand {
+        operation: ControlOperation::RegistryProbe,
+        receipt: None,
+    };
+    let value = receipt(&root, &command).expect("receipt");
+    assert_eq!(value["status"], "fail");
+    assert_eq!(
+        value["required_evidence"],
+        json!(["live_registry_or_reviewer_exposure_same_surface_pass"])
+    );
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("app_registry_or_reviewer_exposure"))
+    );
+    let observed = value["failure"]["observed_value"]
+        .as_str()
+        .expect("observed");
+    assert!(observed.contains("registry_surface:plugin_self_law_json_missing_or_malformed"));
+    assert!(!observed.contains("final_packet"), "{observed}");
+    std::fs::remove_dir_all(root).expect("cleanup registry probe");
 }

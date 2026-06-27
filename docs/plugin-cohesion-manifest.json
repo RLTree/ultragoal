@@ -1382,6 +1382,10 @@
     "validator/src/cli/control/plane.rs",
     "validator/src/cli/control/plane/emit.rs",
     "validator/src/cli/control/plane/path.rs",
+    "validator/src/cli/control/plane/proof.rs",
+    "validator/src/cli/control/plane/proof/authority.rs",
+    "validator/src/cli/control/plane/proof/diagnostic.rs",
+    "validator/src/cli/control/plane/proof/red.rs",
     "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
     "validator/src/cli/garbage/collection/receipt.rs",
@@ -1484,6 +1488,26 @@
       "from": "validator/src/cli/control/plane.rs",
       "to": "validator/src/cli/control/plane/path.rs",
       "reason": "CLI control operations must write only operation-owned CLI receipt paths"
+    },
+    {
+      "from": "validator/src/cli/control/plane.rs",
+      "to": "validator/src/cli/control/plane/proof.rs",
+      "reason": "CLI control operations dereference production evidence through the typed proof module"
+    },
+    {
+      "from": "validator/src/cli/control/plane/proof.rs",
+      "to": "validator/src/cli/control/plane/proof/authority.rs",
+      "reason": "CLI proof routes authority evidence separately from receipt diagnostics"
+    },
+    {
+      "from": "validator/src/cli/control/plane/proof.rs",
+      "to": "validator/src/cli/control/plane/proof/diagnostic.rs",
+      "reason": "CLI proof formats claim-ceiling failures separately from evidence lookup"
+    },
+    {
+      "from": "validator/src/cli/control/plane/proof.rs",
+      "to": "validator/src/cli/control/plane/proof/red.rs",
+      "reason": "CLI proof binds red-fixture report semantics without ignoring top-level status"
     },
     {
       "from": "validator/src/cli/control/plane.rs",
@@ -2742,6 +2766,7 @@
     "artifacts/static/coverage-wrong-claim-id-receipt.json",
     "docs/plugin-scout-receipt.json",
     "validation_artifacts/cli/performance-receipt.json",
+    "validation_artifacts/cli/registry-probe-receipt.json",
     "validation_artifacts/cli/self-law-receipt.json",
     "validation_artifacts/cli/update-goal-eligibility.json",
     "validation_artifacts/dogfood/red/missing-root-closure-dogfood-receipt.json",
