@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "remove",
-      "path": "/validator_receipt/generated_artifacts/4"
+      "path": "/validator_receipt/generated_artifacts/51"
     }
   ],
   "materialization": {
@@ -19,7 +19,7 @@
   },
   "preconditions": [
     {
-      "path": "/validator_receipt/generated_artifacts/4/path",
+      "path": "/validator_receipt/generated_artifacts/51/path",
       "exists": true
     }
   ],

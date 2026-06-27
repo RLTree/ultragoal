@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T00:22:12Z",
+    "completed_at": "2026-06-27T01:29:05Z",
     "cwd": "fixtures/target-repo/red/fake-retrofit",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T00:22:12Z",
+    "started_at": "2026-06-27T01:29:05Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T00:22:12Z",
+  "generated_at": "2026-06-27T01:29:05Z",
   "invocation": "fixture retrofit fixtures/target-repo/red/fake-retrofit",
   "mode": "retrofit",
-  "repo_fingerprint": "sha256:f326b2549e4fdc87b09e76251007fd6f3db074acc8359737bd204eff5485d406",
+  "repo_fingerprint": "sha256:773b43d515474d51e80cea254950c6000ec3f6e5a63d1463d0f651208d40e1ef",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1291,7 +1291,7 @@
       "path": "validator/src/self_tests/audit/run_guards.rs"
     },
     {
-      "digest": "sha256:87d9a4d60f72ca81a382f1f30ea1da51dc925bc1afd7ca5ea980c292eaefa219",
+      "digest": "sha256:013b5ad5285c5b951c6c6daf4028d836802f909d7cda1d21d77462446b5b6c1c",
       "path": "validator/src/self_tests/audit/source_audit.rs"
     },
     {
@@ -1763,8 +1763,16 @@
       "path": "validator/src/self_tests/rust/gate/commands.rs"
     },
     {
-      "digest": "sha256:d462dfd93e1dc1a84de53e898d7a63f02b5fb604913e3433dccc6172f8d14273",
+      "digest": "sha256:28c24103d154f8785d4d61d4ae2809e8456c44bc972f3e3cf8387664c2b95f45",
       "path": "validator/src/self_tests/rust/gate/mod.rs"
+    },
+    {
+      "digest": "sha256:0f694605189edf1ba70faa8e0688edc7fc0870dc51c35e14dd38149e38660396",
+      "path": "validator/src/self_tests/rust/gate/parser/guards.rs"
+    },
+    {
+      "digest": "sha256:94d5480d3982ff075a0a71c93c1eb9410e59539606689d98aa7b8de779e30dd5",
+      "path": "validator/src/self_tests/rust/gate/parser/mod.rs"
     },
     {
       "digest": "sha256:26311e0d076a67e3e4d2bd1644467d1dd57221d89c539c3abe962980002951f2",

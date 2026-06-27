@@ -90,15 +90,15 @@ fn branch_arms_close_last_gaps() {
         .expect_err("run propagates receipt build errors");
     assert!(err.contains("plugin-manifest-draft"), "{err}");
     assert_eq!(
-        crate::cli::performance::cli_binary_digest_for_path(None),
+        crate::cli::performance::proof::cli_binary_digest_for_path(None),
         crate::digest::ZERO
     );
     assert_eq!(
-        crate::cli::performance::cli_binary_digest_for_path(Some(perf.join("missing-bin"))),
+        crate::cli::performance::proof::cli_binary_digest_for_path(Some(perf.join("missing-bin"))),
         crate::digest::ZERO
     );
     assert_eq!(
-        crate::cli::performance::digest_or_zero(&perf, "missing-config.json"),
+        crate::cli::performance::proof::digest_or_zero(&perf, "missing-config.json"),
         crate::digest::ZERO
     );
     let err = crate::cli::performance::receipt(&perf, &command, 1)

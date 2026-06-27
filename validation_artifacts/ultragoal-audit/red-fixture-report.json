@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T00:22:14Z",
+  "generated_at": "2026-06-27T01:29:08Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -2704,11 +2704,11 @@
     "downstream-dependency-post-merge-artifact-substitution": {
       "expected_error": "root_phase_pass_without_successful_receipt",
       "expected_failing_check": "root-verification-phase-coverage",
-      "observed_error": "ready_receipt_not_validator_output",
-      "observed_failing_check": "ready-receipt-provenance",
+      "observed_error": "root_phase_pass_without_successful_receipt",
+      "observed_failing_check": "root-verification-phase-coverage",
       "packet_digest": "sha256:52ae82fbbfec8508606b471e981600ae7335b20abc70641a3f9a31b729711f24",
       "packet_path": "fixtures/red/downstream-dependency-post-merge-artifact-substitution.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-post-merge-gate-not-passed": {
@@ -2724,11 +2724,11 @@
     "downstream-dependency-post-merge-receipt-stale": {
       "expected_error": "ready_receipt_not_lane_bound",
       "expected_failing_check": "ready-receipt-provenance",
-      "observed_error": "ready_receipt_not_validator_output",
+      "observed_error": "ready_receipt_not_lane_bound",
       "observed_failing_check": "ready-receipt-provenance",
       "packet_digest": "sha256:fbf3e6371e4b60b06701baadc404c0b927d96faa4f24303c1c8e2ae94bb7dff7",
       "packet_path": "fixtures/red/downstream-dependency-post-merge-receipt-stale.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-ready-authority-digest-mismatch": {
@@ -2796,9 +2796,9 @@
       "expected_failing_check": "ready-receipt-provenance",
       "observed_error": "ready_receipt_not_validator_output",
       "observed_failing_check": "ready-receipt-provenance",
-      "packet_digest": "sha256:0a5e4941c996afb909715bf84e707a80622357d61e8d156f101b798b194e904b",
+      "packet_digest": "sha256:e3ce22c36b137cdc140731d626e01e9a2b2e02c9f05f2d3d145531038d2ae988",
       "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-digest-mismatch.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-ready-receipt-generated-artifact-missing": {
@@ -2806,9 +2806,9 @@
       "expected_failing_check": "ready-receipt-provenance",
       "observed_error": "ready_receipt_not_validator_output",
       "observed_failing_check": "ready-receipt-provenance",
-      "packet_digest": "sha256:2ae0bab0e4a87a9d6afae0df8d8c75f921dd330d0372d1d03fbc234dc902aeec",
+      "packet_digest": "sha256:803abd507b584baed19ad1ff03cad3ed3d968d619f87c7fef4476932aea62593",
       "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-missing.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-ready-receipt-validator-run-mismatch": {
@@ -2824,11 +2824,11 @@
     "downstream-dependency-reblock-without-proof": {
       "expected_error": "dependency_release_missing",
       "expected_failing_check": "lane-dependency-gating",
-      "observed_error": "ready_receipt_not_validator_output",
-      "observed_failing_check": "ready-receipt-provenance",
+      "observed_error": "dependency_release_missing",
+      "observed_failing_check": "lane-dependency-gating",
       "packet_digest": "sha256:76b9bf49702c3d4150d3605a7cd4c0e3deb0f04290067c2a85db177da31e1ef6",
       "packet_path": "fixtures/red/downstream-dependency-reblock-without-proof.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-superseded-upstream-lane": {
@@ -2844,21 +2844,21 @@
     "downstream-dependency-unreleased-after-upstream-merge": {
       "expected_error": "dependency_release_missing",
       "expected_failing_check": "lane-dependency-gating",
-      "observed_error": "ready_receipt_not_validator_output",
-      "observed_failing_check": "ready-receipt-provenance",
+      "observed_error": "dependency_release_missing",
+      "observed_failing_check": "lane-dependency-gating",
       "packet_digest": "sha256:ba0192a194530768f5e1db1090bb87eab022e7a821815ce9860fcd2968d2a8ab",
       "packet_path": "fixtures/red/downstream-dependency-unreleased-after-upstream-merge.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-validated-before-ready-receipt": {
       "expected_error": "ready_receipt_not_lane_bound",
       "expected_failing_check": "ready-receipt-provenance",
-      "observed_error": "ready_receipt_not_validator_output",
+      "observed_error": "ready_receipt_not_lane_bound",
       "observed_failing_check": "ready-receipt-provenance",
       "packet_digest": "sha256:034746692a3d0e776521fbc6f7dd1de345d384b8db306eecddf80a3a059b608f",
       "packet_path": "fixtures/red/downstream-dependency-validated-before-ready-receipt.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "downstream-dependency-zero-ready-receipt": {
@@ -3088,7 +3088,7 @@
       "observed_failing_check": "validator-execution-provenance",
       "packet_digest": "sha256:ae24396a5dff6724c6304333fe22ed940efd81f5989255a752c36853ccb2c8c1",
       "packet_path": "fixtures/red/fabricated-validator-receipt.json",
-      "status": "fail",
+      "status": "pass",
       "validator_exit": 1
     },
     "failure-remediation-quality-agent-actionable-output-failure-message-leaking-private-data-red": {
@@ -12133,5 +12133,5 @@
     }
   },
   "schema": "harness-ultragoal.red-fixture-report.v1",
-  "status": "fail"
+  "status": "pass"
 }

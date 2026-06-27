@@ -18,9 +18,20 @@ fn valid_fail() -> Value {
     })
 }
 
+fn valid_pass() -> Value {
+    let mut value = valid_fail();
+    value["status"] = json!("pass");
+    value["claim_ceiling"] = json!("performance_proven");
+    value["failure"] = Value::Null;
+    value["blocked_claim_classes"] = json!([]);
+    value["supported_claim_classes"] = json!(["routine_usability"]);
+    value
+}
+
 #[test]
 fn accepts_fail_closed_receipt_surface() {
     assert!(surface_value_failures(&valid_fail()).is_empty());
+    assert!(surface_value_failures(&valid_pass()).is_empty());
 }
 
 #[test]
@@ -43,8 +54,7 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
             .any(|failure| failure == "cli_performance_receipt_missing:/telemetry/wall_clock_ms")
     );
 
-    let mut fake_pass = valid_fail();
-    fake_pass["status"] = json!("pass");
+    let mut fake_pass = valid_pass();
     fake_pass["claim_ceiling"] = json!("withheld_or_blocked");
     assert!(
         surface_value_failures(&fake_pass)

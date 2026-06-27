@@ -1,12 +1,5 @@
 {
-  "blocked_claim_classes": [
-    "completion",
-    "routine_usability",
-    "product_readiness",
-    "package_readiness",
-    "release_readiness",
-    "update_goal_eligibility"
-  ],
+  "blocked_claim_classes": [],
   "budget": {
     "class": "strict_local",
     "cold_p95_ms": 60000,
@@ -16,12 +9,12 @@
   },
   "cache": {
     "hits": 0,
-    "key": "no-cache:sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6:performance_prove",
+    "key": "no-cache:sha256:9f29d825514416b0d656785b1f8edb2197692d76b7a307bcda934e1e76e9c6ef:performance_prove",
     "misses": 0,
     "mode": "disabled",
     "no_cache_mode_result": "executed_without_cache"
   },
-  "claim_ceiling": "withheld_or_blocked",
+  "claim_ceiling": "performance_proven",
   "command": {
     "argv": [
       "target/debug/ultragoal",
@@ -49,39 +42,28 @@
     "worker_count": 1
   },
   "digests": {
-    "candidate": "sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6",
-    "cli_binary": "sha256:8f85792cb95ad5b1345326d1291337b35f685970b0001e6960bca884a332b48a",
-    "config": "sha256:fac48f298d3f72e6ead77acf39845e7fd4469ab94da39e5d7cd7835bed16b35c",
-    "fixture_catalog": "sha256:5d1267b144eff7b38168c0ad78d78e31031a511f068d662cf4cf2bfc3c7fd9e5",
-    "law_graph": "sha256:1e83a43831da814ba5e58a3c60f4ea6dad34c25222737453c200227555532da1",
-    "schema_catalog": "sha256:bf80adafb7659680b321fb238f95c50f319e4fb8b86523aa6d30da0160467386",
-    "source": "sha256:d7468bb1c2a50a39523223e7245cfca4e73219e677d6dbda5cdeeb25d05809f6",
-    "source_obligation": "sha256:596f0a1b88f8851211faaa722b9f70860ad36f59b222b71cf6e8d7eae3b4a955",
-    "standards": "sha256:86deccc353eed356712168b643ebbf49a97f81c6d090bf89140581ab77cf3dd7"
+    "candidate": "sha256:9f29d825514416b0d656785b1f8edb2197692d76b7a307bcda934e1e76e9c6ef",
+    "cli_binary": "sha256:dfdf189e034f95202a06d3c394204da41c8bbf52e7287ecfa59d4465615dbbde",
+    "config": "sha256:2a65adfb889ad32d6425fe4ce65e37ded039ff7be61b69ab07d2285700ecfdbd",
+    "fixture_catalog": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
+    "law_graph": "sha256:350c6fde8886926396d11f4cc0624c29da2e7f167d32ee323526ad78a6db97f0",
+    "schema_catalog": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
+    "source": "sha256:9f29d825514416b0d656785b1f8edb2197692d76b7a307bcda934e1e76e9c6ef",
+    "source_obligation": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
+    "standards": "sha256:f8539cca3efc6d1e701066429a4ada106807123d84362baf42d4017e29c60a3e"
   },
-  "exit_code": 1,
+  "exit_code": 0,
   "external_probe_policy": {
     "live_probe_class": false,
     "offline_fallback_claim_behavior": "dependent_live_surface_claims_blocked",
     "retry_backoff": "not_applicable_no_external_calls",
     "timeout_ms": 0
   },
-  "failure": {
-    "check_id": "cli-performance-latency-speed-iteration-fitness",
-    "claim_ceiling_impact": "routine_usability_product_readiness_release_update_goal_withheld",
-    "expected_value": "same_candidate_performance_receipt_pass_with_no_cache_and_regression_proof",
-    "failed_invariant": "current same-candidate performance proof must pass before performance-dependent claims can emit",
-    "gate_id": "89.22",
-    "id": "cli_performance_not_self_hosted_final_proof",
-    "law_id": "cli-performance-latency-speed-iteration-fitness",
-    "observed_value": "transition_only_performance_receipt",
-    "repair_class": "deterministic_enforcement",
-    "severity": "hard_blocker"
-  },
-  "generated_at": "2026-06-26T05:29:19Z",
+  "failure": null,
+  "generated_at": "2026-06-27T02:00:54Z",
   "input_size_metrics": {
-    "file_count_scanned": 3901,
-    "fixture_count_executed": 1185,
+    "file_count_scanned": 4177,
+    "fixture_count_executed": 1213,
     "receipt_count_read": 0,
     "repository_size_class": "single_plugin_proposal"
   },
@@ -95,24 +77,27 @@
   "performance_regression": {
     "baseline_machine_class": "local_macos_codex_desktop",
     "baseline_version": "2026-06-26.gate-89-22.v1",
-    "status": "fail_closed_until_current_baseline_receipt_passes",
+    "status": "pass",
     "tolerance_percent": 0
   },
   "root": ".",
   "schema": "harness-ultragoal.cli-performance-receipt.v1",
   "schema_version": "v1",
-  "status": "fail",
-  "supported_claim_classes": [],
+  "status": "pass",
+  "supported_claim_classes": [
+    "routine_usability",
+    "update_goal_eligibility"
+  ],
   "telemetry": {
     "cpu_ms": null,
-    "end_timestamp": "2026-06-26T05:29:19Z",
+    "end_timestamp": "2026-06-27T02:00:54Z",
     "external_call_count": 0,
     "external_wait_ms": 0,
     "io_bytes": null,
     "peak_memory_bytes": null,
     "retry_count": 0,
-    "start_timestamp": "2026-06-26T05:29:19Z",
+    "start_timestamp": "2026-06-27T02:00:54Z",
     "timeout_count": 0,
-    "wall_clock_ms": 0
+    "wall_clock_ms": 1473
   }
 }

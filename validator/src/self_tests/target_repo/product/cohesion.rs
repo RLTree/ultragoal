@@ -216,10 +216,10 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
         ],
     ))
     .expect("performance command");
-    assert_eq!(performance_code, 1);
+    assert_eq!(performance_code, 0);
     assert_eq!(
         crate::json_boundary::read_json(&performance_receipt).expect("performance receipt")["status"],
-        "fail"
+        "pass"
     );
 
     let review_code = crate::command_run::run_with_exit_code(args(

@@ -27,7 +27,7 @@
     "id": "harness-ultragoal:fit-repo",
     "version": "1"
   },
-  "generated_at": "2026-06-27T00:43:18Z",
+  "generated_at": "2026-06-27T02:00:54Z",
   "installed_plugin_path": "codex-installed-plugin:harness-ultragoal",
   "orchestrator_automation_surfaces": [
     "templates/.codex/automations/ultragoal-orchestrator/automation.toml"
@@ -36,7 +36,7 @@
   "plugin_version": "0.0.11",
   "producer_actor_id": "harness-ultragoal-parent-session",
   "product_surface_classification": "developer_tool",
-  "receipt_digest": "sha256:7a30d8912d1a97ce2e9cbac0f34e38e2e4692aec1ed5d58eaf34d9cc8252b0f4",
+  "receipt_digest": "sha256:1bceebd045b37abd5c52e754cbd7b00be5022321d1b3060fb029ab73caf85309",
   "repo_root": ".",
   "runtime_surface_classification": "none",
   "schema": "harness-ultragoal.fit-repo-receipt.v1",
@@ -53,7 +53,7 @@
   "target_classification": "fresh_repo",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937"
+    "value": "sha256:9f29d825514416b0d656785b1f8edb2197692d76b7a307bcda934e1e76e9c6ef"
   },
   "templates": [
     "templates/AGENTS.md",

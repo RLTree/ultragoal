@@ -3929,6 +3929,7 @@
     "validator/src/cli/garbage/mod.rs",
     "validator/src/cli/mod.rs",
     "validator/src/cli/performance.rs",
+    "validator/src/cli/performance/proof.rs",
     "validator/src/cli/performance/receipt.rs",
     "validator/src/cli/performance/types.rs",
     "validator/src/cli/rust/mod.rs",

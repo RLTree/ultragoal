@@ -131,8 +131,8 @@ fn receipt_is_fail_closed_and_surface_bound() {
     };
     let value = receipt(&root, &command, 123).expect("receipt builds");
     assert_eq!(value["schema"], PERFORMANCE_RECEIPT_SCHEMA);
-    assert_eq!(value["status"], "fail");
-    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(value["status"], "pass");
+    assert_eq!(value["claim_ceiling"], "performance_proven");
     assert_eq!(value["command"]["name"], "self_performance_prove");
     assert_eq!(value["budget"]["class"], "external_live");
     assert_eq!(value["budget"]["threshold_ms"], 30_000);
@@ -141,16 +141,15 @@ fn receipt_is_fail_closed_and_surface_bound() {
     assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
     assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
     assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);
+    assert_eq!(value["failure"], serde_json::Value::Null);
     assert_eq!(
-        value["failure"]["law_id"],
-        "cli-performance-latency-speed-iteration-fitness"
-    );
-    assert!(
-        value["blocked_claim_classes"]
+        value["supported_claim_classes"]
             .as_array()
-            .expect("blocked claims")
+            .expect("supported claims")
             .iter()
-            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+            .filter_map(|claim| claim.as_str())
+            .collect::<Vec<_>>(),
+        vec!["routine_usability", "update_goal_eligibility"]
     );
     for ptr in [
         "/digests/candidate",
@@ -167,10 +166,26 @@ fn receipt_is_fail_closed_and_surface_bound() {
     ] {
         assert!(value.pointer(ptr).is_some(), "missing {ptr}");
     }
+
+    let over_budget =
+        receipt(&root, &command, BudgetClass::ExternalLive.cold_p95_ms() + 1).expect("receipt");
+    assert_eq!(over_budget["status"], "fail");
+    assert_eq!(over_budget["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(
+        over_budget["failure"]["id"],
+        "cli_performance_budget_exceeded"
+    );
+    assert!(
+        over_budget["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+    );
 }
 
 #[test]
-fn run_writes_receipt_and_preserves_fail_closed_exit_code() {
+fn run_writes_receipt_and_returns_typed_exit_code() {
     let root = repo_root();
     let path = temp_receipt(&root);
     let command = PerformanceCommand {
@@ -178,16 +193,17 @@ fn run_writes_receipt_and_preserves_fail_closed_exit_code() {
         receipt: Some(path.clone()),
         class: BudgetClass::Focused,
     };
-    assert_eq!(run(&root, &command).expect("run succeeds"), 1);
+    assert_eq!(run(&root, &command).expect("run succeeds"), 0);
     let value = crate::json_boundary::read_json(&path).expect("read written receipt");
     assert_eq!(value["command"]["name"], "performance_prove");
     assert_eq!(value["budget"]["class"], "focused");
     assert_eq!(value["output_size_metrics"]["receipt_count_written"], 1);
+    assert_eq!(value["status"], "pass");
 
     let no_write = PerformanceCommand {
         operation: PerformanceOperation::Budgets,
         receipt: None,
-        class: BudgetClass::Instant,
+        class: BudgetClass::StrictLocal,
     };
-    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
+    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 0);
 }

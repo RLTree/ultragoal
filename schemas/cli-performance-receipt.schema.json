@@ -394,63 +394,69 @@
     },
     "blocked_claim_classes": {
       "type": "array",
-      "minItems": 1,
       "items": {
         "$ref": "#/$defs/claimClass"
       }
     },
     "failure": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "law_id",
-        "gate_id",
-        "check_id",
-        "failed_invariant",
-        "observed_value",
-        "expected_value",
-        "claim_ceiling_impact",
-        "repair_class",
-        "severity"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "minLength": 1
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "law_id": {
-          "const": "cli-performance-latency-speed-iteration-fitness"
-        },
-        "gate_id": {
-          "const": "89.22"
-        },
-        "check_id": {
-          "const": "cli-performance-latency-speed-iteration-fitness"
-        },
-        "failed_invariant": {
-          "type": "string",
-          "minLength": 1
-        },
-        "observed_value": {
-          "type": "string",
-          "minLength": 1
-        },
-        "expected_value": {
-          "type": "string",
-          "minLength": 1
-        },
-        "claim_ceiling_impact": {
-          "type": "string",
-          "minLength": 1
-        },
-        "repair_class": {
-          "const": "deterministic_enforcement"
-        },
-        "severity": {
-          "const": "hard_blocker"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "law_id",
+            "gate_id",
+            "check_id",
+            "failed_invariant",
+            "observed_value",
+            "expected_value",
+            "claim_ceiling_impact",
+            "repair_class",
+            "severity"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "law_id": {
+              "const": "cli-performance-latency-speed-iteration-fitness"
+            },
+            "gate_id": {
+              "const": "89.22"
+            },
+            "check_id": {
+              "const": "cli-performance-latency-speed-iteration-fitness"
+            },
+            "failed_invariant": {
+              "type": "string",
+              "minLength": 1
+            },
+            "observed_value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expected_value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "claim_ceiling_impact": {
+              "type": "string",
+              "minLength": 1
+            },
+            "repair_class": {
+              "const": "deterministic_enforcement"
+            },
+            "severity": {
+              "const": "hard_blocker"
+            }
+          }
         }
-      }
+      ]
     },
     "commands": {
       "type": "array",

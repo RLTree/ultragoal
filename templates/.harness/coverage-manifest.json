@@ -33,7 +33,7 @@
       "fixtures/valid/minimal-goal-run.json",
       "fixtures/valid/non-product-feature-completion.json"
     ],
-    "changed_files_digest": "sha256:1eba2fa86c7172c904b1fc9b05ba739e4097a295621399994e90eb1a32fb0960",
+    "changed_files_digest": "sha256:7d05b161d42f84d805a1589d2e309f33aca5d0b04b33215fcf371d0be756deba",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -77,7 +77,7 @@
     "schemas",
     "templates"
   ],
-  "repo_root_digest": "sha256:35ce71a27d11339dcdd520321e4e0f5d0d1b7a66ce7e6820e3be1d2a657034d0",
+  "repo_root_digest": "sha256:6ae236259db7ff42aa96f3bb0b26e65b80ae5076ec5557b6e9199f5d0f74d0c9",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

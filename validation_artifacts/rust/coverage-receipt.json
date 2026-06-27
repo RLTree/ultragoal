@@ -49,19 +49,19 @@
     "ultragoal rust workspace topology check"
   ],
   "digests": {
-    "candidate": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937",
+    "candidate": "sha256:5f138e789fb934f7203c00a52d20ba9b429e711ee8cde5533ec17f0735bbd225",
     "cargo_config": "sha256:6a60d9d70c9ad7f839042e7dfe5e2c993e8db8f27a83acb71e36a3b723d1fa91",
     "cargo_lock": "sha256:ee05ce5f44fb7ce1e1544f585ac36d155367c58109be2c7b29f90b6fcbf6a1c8",
     "cargo_workspace": "sha256:b8d083a304e1ff96717b16610ef9a0dd1cf3bfaaebd4d06d9f4320b045849f41",
-    "fixture_catalog": "sha256:399370dbe0ec2bf1885337fa3275e1ea1887fda0e5620348d6f4d797abf60830",
+    "fixture_catalog": "sha256:2fea58d3ce61913b7ae5be7f1eacac0b479965435c0bfbf9045578adc0e0cc7f",
     "law_graph": "sha256:350c6fde8886926396d11f4cc0624c29da2e7f167d32ee323526ad78a6db97f0",
     "rust_toolchain": "sha256:2d157d0deed991e8b3cd711051cd4c1aace1c7ecbfc94df49bf3eaaf8f573d56",
     "schema_catalog": "sha256:06f7d9ef48667287eccfdb428e4a93b41195ed55cbe0ec0e4f76b08d64080b8a",
-    "source": "sha256:8cc0de5c62abc5efbae2c4e8c0cca9cb1200a0e0a78049f4a68fe4979943a937",
+    "source": "sha256:5f138e789fb934f7203c00a52d20ba9b429e711ee8cde5533ec17f0735bbd225",
     "source_obligation": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
     "standards": "sha256:f8539cca3efc6d1e701066429a4ada106807123d84362baf42d4017e29c60a3e"
   },
-  "generated_at": "2026-06-27T00:47:39Z",
+  "generated_at": "2026-06-27T01:22:08Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

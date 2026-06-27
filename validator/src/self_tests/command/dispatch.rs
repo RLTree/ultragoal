@@ -63,7 +63,7 @@ fn command_run_routes_audit_and_performance_variants() {
         ],
     ))
     .expect("performance command");
-    assert_eq!(code, 1);
+    assert_eq!(code, 0);
     assert!(performance_receipt.is_file());
     std::fs::remove_dir_all(root).expect("cleanup command dispatch routes");
 }

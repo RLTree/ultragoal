@@ -30,7 +30,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:ca922b27b15c635bb5f225664666ed00a77cb9d6bd98b58b351c91d0bf7f0ff9",
+  "repo_root_digest": "sha256:091d1f885ba1eb8e82a3a10d663278a3b9e4aab8868d421c0f828465c641323e",
   "source_discovery_rules": {
     "include": [
       ".harness/**",
@@ -302,7 +302,7 @@
       "validator/src/self_tests/source_obligations/fallthrough_edges.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:16b9c558b7609a50b88c36035a85aa0bdebb1d95eda59ea4906b175a50bced80"
+    "changed_files_digest": "sha256:16ce6b7febad0e18081f0353f699189ef6cddfe14eb9d1cf408403fd71f6cbe4"
   },
   "exclusions": [],
   "generated_roots": [],

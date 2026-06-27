@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "replace",
-      "path": "/validator_receipt/generated_artifacts/4/digest",
+      "path": "/validator_receipt/generated_artifacts/51/digest",
       "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
     }
   ],
@@ -20,13 +20,13 @@
   },
   "preconditions": [
     {
-      "path": "/validator_receipt/generated_artifacts/4/artifact_type",
+      "path": "/validator_receipt/generated_artifacts/51/artifact_type",
       "exists": true
     }
   ],
   "postconditions": [
     {
-      "path": "/validator_receipt/generated_artifacts/4/digest",
+      "path": "/validator_receipt/generated_artifacts/51/digest",
       "expectation": "digest mismatch blocks per-lane ready artifact authority"
     }
   ],

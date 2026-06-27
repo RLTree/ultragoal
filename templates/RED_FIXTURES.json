@@ -2513,7 +2513,7 @@
   {
     "id": "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch",
     "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-digest-mismatch.json",
-    "packet_digest": "sha256:0a5e4941c996afb909715bf84e707a80622357d61e8d156f101b798b194e904b",
+    "packet_digest": "sha256:e3ce22c36b137cdc140731d626e01e9a2b2e02c9f05f2d3d145531038d2ae988",
     "expected_failure": {
       "check_id": "ready-receipt-provenance",
       "error": "ready_receipt_not_validator_output"
@@ -2522,7 +2522,7 @@
   {
     "id": "downstream-dependency-ready-receipt-generated-artifact-missing",
     "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-missing.json",
-    "packet_digest": "sha256:2ae0bab0e4a87a9d6afae0df8d8c75f921dd330d0372d1d03fbc234dc902aeec",
+    "packet_digest": "sha256:803abd507b584baed19ad1ff03cad3ed3d968d619f87c7fef4476932aea62593",
     "expected_failure": {
       "check_id": "ready-receipt-provenance",
       "error": "ready_receipt_not_validator_output"
