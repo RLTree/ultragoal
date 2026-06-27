@@ -142,10 +142,11 @@
       "items": {
         "enum": [
           "all_89_gates_and_100_stop_conditions_pass",
-          "cli_self_law_receipt_pass",
           "coverage_100_no_uncovered_records",
-          "current_red_fixture_report_pass",
-          "current_source_audit_pass"
+          "current_cli_performance_pass",
+          "current_final_packet_proof_pass",
+          "current_red_fixture_report_status_pass",
+          "live_registry_or_reviewer_exposure_same_surface_pass"
         ]
       }
     },

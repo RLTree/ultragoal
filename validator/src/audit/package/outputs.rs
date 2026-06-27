@@ -27,6 +27,18 @@ pub fn package_status(failures: &BTreeMap<String, Vec<String>>) -> &'static str 
     }
 }
 
+pub(crate) fn red_report_status(red: &BTreeMap<String, Value>) -> &'static str {
+    if red.is_empty()
+        || red
+            .values()
+            .any(|row| row.get("status").and_then(Value::as_str) != Some("pass"))
+    {
+        "fail"
+    } else {
+        "pass"
+    }
+}
+
 pub fn write_red_report(
     path: &Path,
     status: &str,

@@ -179,6 +179,10 @@
       "path": "schemas/red-fixture.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/red-fixture-report.schema.json",
+      "path": "schemas/red-fixture-report.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/red-fixtures-catalog.schema.json",
       "path": "schemas/red-fixtures-catalog.schema.json"
     },

@@ -3,22 +3,22 @@
   "claim_id": "CLAIM-001",
   "command": "bash .harness/run-coverage.sh",
   "tool": "cargo-llvm-cov",
-  "source_tree_digest": "sha256:c8b48e55528b14e8b1a9cec5228194415e117a80bfdf59362a75daec02438de3",
-  "coverage_manifest_digest": "sha256:332e5dae868a3e1de284ac832cc37488e55c8b42c16b9cc2d01c017a2c664929",
+  "source_tree_digest": "sha256:ce2e7e829bde697ef20a3d2fe63ed8952c19b69943be36562549db8f0fa0ad14",
+  "coverage_manifest_digest": "sha256:0d60b04d2b068ad59973dca885b88b2f5a5403b7e3939037b7b63b5e32b1e597",
   "coverage_command_digest": "sha256:eb90478bbc7bf93351fc454d6796a42eb75a6c4cd1353ef6ee18f90976c6f944",
-  "changed_files_digest": "sha256:765480faf8c0dc2a259d49364373da431825859691cab1dfa7528d6aaebe62bf",
+  "changed_files_digest": "sha256:4a5961cf01e44df070ad602c0af24b8f03e7f71628fb1692c2a523b551ed17a6",
   "tool_version": "cargo-llvm-cov 0.8.7",
   "workspace_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5"
+    "value": "sha256:a3846b70e6955c3f6144d7fb835af7226e9be7080fea435eefcc37fd674eb25d"
   },
-  "command_started_at": "2026-06-27T06:56:21Z",
-  "command_completed_at": "2026-06-27T06:56:47Z",
+  "command_started_at": "2026-06-27T11:42:16Z",
+  "command_completed_at": "2026-06-27T11:42:39Z",
   "command_exit": 0,
   "machine_readable_report": {
-    "path": "validation_artifacts/coverage/llvm-cov-summary.json",
-    "digest": "sha256:a72a564f8eedef9641aac19d25e1e99cfdc9ddd252faba930bec59aa187c42ed"
+    "path": "validation_artifacts/coverage/llvm-cov-full.json",
+    "digest": "sha256:4fca6eab3a219119aeb591d5d3b502513c727f99ec84007b61bcc23fa9653e36"
   },
   "generated_by": "coverage-command",
   "percent_source": "machine_readable_report",
@@ -51,6 +51,6 @@
   },
   "uncovered_records": [],
   "exclusions": [],
-  "generated_at": "2026-06-27T06:56:47Z",
+  "generated_at": "2026-06-27T11:42:39Z",
   "claim_ceiling": "supports_complete_claim"
 }

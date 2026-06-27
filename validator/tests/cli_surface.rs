@@ -78,12 +78,17 @@ fn cli_surface_commands_execute() {
         "canonical package digest failed: {canonical_digest:?}"
     );
 
-    let update_goal_receipt = temp.join("update-goal-eligibility.json");
+    std::fs::write(
+        temp.join("plugin-manifest-draft.json"),
+        r#"{"version":"0.0.0-test","resources":[]}"#,
+    )
+    .expect("write temp manifest");
+    let update_goal_receipt = temp.join("validation_artifacts/cli/update-goal-eligibility.json");
     let update_goal = run_ultragoal(
         &root,
         &[
             "--root".into(),
-            ".".into(),
+            temp.display().to_string(),
             "update-goal".into(),
             "eligibility".into(),
             "--receipt".into(),
@@ -93,12 +98,12 @@ fn cli_surface_commands_execute() {
     assert_eq!(update_goal.status.code(), Some(1));
     assert_fail_closed_cli_receipt(&update_goal_receipt, "update_goal_eligibility");
 
-    let self_receipt = temp.join("self-law-receipt.json");
+    let self_receipt = temp.join("validation_artifacts/cli/self-law-receipt.json");
     let self_law = run_ultragoal(
         &root,
         &[
             "--root".into(),
-            ".".into(),
+            temp.display().to_string(),
             "self".into(),
             "update-goal".into(),
             "eligibility".into(),
@@ -209,5 +214,10 @@ fn assert_fail_closed_cli_receipt(path: &Path, operation: &str) {
     assert_eq!(value["status"], "fail");
     assert_eq!(value["operation"], operation);
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-    assert_eq!(value["failure"]["law_id"], "cli-self-law-compliance");
+    let expected_law = if operation == "self_update_goal_eligibility" {
+        "cli-self-law-compliance"
+    } else {
+        "cli-control-plane-authority"
+    };
+    assert_eq!(value["failure"]["law_id"], expected_law);
 }

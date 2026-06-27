@@ -115,6 +115,31 @@ fn package_run_entrypoint_writes_fail_closed_receipts_for_incomplete_package() {
 }
 
 #[test]
+fn red_report_status_is_independent_from_package_audit_status() {
+    let mut red = BTreeMap::new();
+    red.insert(
+        "intended-failure".to_string(),
+        json!({"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}),
+    );
+    assert_eq!(
+        crate::audit::package::outputs::red_report_status(&red),
+        "pass"
+    );
+    red.insert(
+        "unexpected-pass".to_string(),
+        json!({"status":"fail","packet_path":"fixtures/red/bad.json","packet_digest":crate::digest::ZERO}),
+    );
+    assert_eq!(
+        crate::audit::package::outputs::red_report_status(&red),
+        "fail"
+    );
+    assert_eq!(
+        crate::audit::package::outputs::red_report_status(&BTreeMap::new()),
+        "fail"
+    );
+}
+
+#[test]
 fn package_run_semantic_fixture_reports_absolute_outside_paths() {
     let root = crate::self_tests::boundaries::support::temp_root("package-run-outside");
     let outside = root.with_file_name("package-run-outside-valid.json");

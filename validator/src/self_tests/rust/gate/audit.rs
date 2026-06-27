@@ -17,10 +17,8 @@ fn rust_devx_audit_receipt_edges_are_typed() {
     );
     assert!(rust_failures.contains(&"rust_devx_receipt_candidate_digest_mismatch".to_string()));
 
-    let gc_law = crate::audit::rust::developer::LAWS
-        .iter()
-        .find(|law| law.id == "workspace-artifact-cache-garbage-collection")
-        .expect("gc law");
+    let gc_law = &crate::audit::rust::developer::LAWS[5];
+    assert_eq!(gc_law.id, "workspace-artifact-cache-garbage-collection");
     let gc_failures = crate::audit::rust::developer::receipt_failures(
         &json!({
             "status":"pass",
@@ -123,12 +121,20 @@ fn rust_devx_audit_live_root_covers_current_surface_presence() {
         "rust_devx_missing_receipt:",
     ] {
         assert!(
-            !failures
-                .iter()
-                .any(|(_, failure)| failure.starts_with(missing_prefix)),
+            !has_failure_prefix(&failures, missing_prefix),
             "{missing_prefix}: {failures:?}"
         );
     }
+}
+
+#[test]
+fn rust_devx_missing_prefix_helper_covers_present_and_absent_rows() {
+    let failures = vec![(
+        "rust-developer-experience-authority".to_string(),
+        "rust_devx_missing_artifact:validator/src/cli/rust/mod.rs".to_string(),
+    )];
+    assert!(has_failure_prefix(&failures, "rust_devx_missing_artifact:"));
+    assert!(!has_failure_prefix(&failures, "rust_devx_missing_receipt:"));
 }
 
 #[test]
@@ -157,4 +163,13 @@ fn rust_devx_audit_law_id_lookup_fails_closed_for_missing_rows() {
         "rust-command-loop-authority"
     ));
     std::fs::remove_dir_all(temp).expect("cleanup missing law id");
+}
+
+fn has_failure_prefix(failures: &[(String, String)], prefix: &str) -> bool {
+    for (_, failure) in failures {
+        if failure.starts_with(prefix) {
+            return true;
+        }
+    }
+    false
 }

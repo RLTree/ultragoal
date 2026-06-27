@@ -6,22 +6,12 @@ use crate::cli::control::plane::{
 };
 use serde_json::json;
 use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 fn repo_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("validator has repo parent")
         .to_path_buf()
-}
-
-fn temp_receipt(root: &Path) -> PathBuf {
-    let stamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("clock")
-        .as_nanos();
-    root.join("target")
-        .join(format!("cli-control-test-{stamp}.json"))
 }
 
 fn write_json(path: &Path, value: &serde_json::Value) {
@@ -49,7 +39,7 @@ fn receipt_blocks_claims_and_records_required_evidence() {
     assert_eq!(value["schema"], RECEIPT_SCHEMA);
     assert_eq!(value["status"], "fail");
     assert_eq!(value["operation"], "registry_probe");
-    assert_eq!(value["failure"]["law_id"], "cli-self-law-compliance");
+    assert_eq!(value["failure"]["law_id"], "cli-control-plane-authority");
     assert!(
         value["blocked_claim_classes"]
             .as_array()
@@ -75,8 +65,12 @@ fn receipt_blocks_claims_and_records_required_evidence() {
 
 #[test]
 fn run_writes_and_prints_fail_closed_receipts() {
-    let root = repo_root();
-    let path = temp_receipt(&root);
+    let root = crate::self_tests::boundaries::support::temp_root("cli-control-receipt-run");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"version":"0.0.0-test","resources":[]}),
+    );
+    let path = root.join("validation_artifacts/cli/packet-verify-receipt.json");
     let command = ControlCommand {
         operation: ControlOperation::PacketVerify,
         receipt: Some(path.clone()),
@@ -91,6 +85,7 @@ fn run_writes_and_prints_fail_closed_receipts() {
         receipt: None,
     };
     assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
+    std::fs::remove_dir_all(root).expect("cleanup cli control run");
 }
 
 #[test]

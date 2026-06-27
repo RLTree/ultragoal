@@ -179,18 +179,18 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
 #[test]
 fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     let root = crate::self_tests::boundaries::support::repo_root();
-    let digest_code = crate::command_run::run_with_exit_code(crate::Args {
-        root: root.clone(),
-        command: crate::Command::PackageDigest,
-    })
-    .expect("package digest command");
-    assert_eq!(digest_code, 0);
-
-    let control_dir = crate::self_tests::boundaries::support::temp_root("control-dispatch");
-    std::fs::create_dir_all(&control_dir).expect("control dir");
-    let control_receipt = control_dir.join("eligibility.json");
+    let control_root = crate::self_tests::boundaries::support::temp_root("control-dispatch");
+    std::fs::create_dir_all(&control_root).expect("control dir");
+    std::fs::write(
+        control_root.join("plugin-manifest-draft.json"),
+        serde_json::to_vec(&json!({"version":"0.0.0-test","resources":[]}))
+            .expect("control manifest"),
+    )
+    .expect("write control manifest");
+    let control_receipt =
+        control_root.join("validation_artifacts/cli/update-goal-eligibility.json");
     let control_code = crate::command_run::run_with_exit_code(args(
-        root.clone(),
+        control_root.clone(),
         &[
             "update-goal",
             "eligibility",
@@ -205,6 +205,8 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
         "fail"
     );
 
+    let control_dir = crate::self_tests::boundaries::support::temp_root("performance-dispatch");
+    std::fs::create_dir_all(&control_dir).expect("performance dir");
     let performance_receipt = control_dir.join("performance.json");
     let performance_code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -239,5 +241,6 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     ))
     .expect("review command");
     assert_eq!(review_code, 1);
+    std::fs::remove_dir_all(control_root).expect("cleanup control dispatch root");
     std::fs::remove_dir_all(control_dir).expect("cleanup command receipts");
 }

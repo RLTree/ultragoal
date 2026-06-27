@@ -74,7 +74,7 @@
       "path": "fixtures/red/product-fitness-install-substituted-for-success.json"
     }
   },
-  "generated_at": "2026-06-27T06:55:40Z",
+  "generated_at": "2026-06-27T11:41:29Z",
   "job_to_be_done": {
     "evidence": {
       "digest": "sha256:37fed1fbe4da7e91d27a24774560c367c427f7a87bfb84e30ae569017d52b59b",
@@ -132,7 +132,7 @@
       "measure": "init, retrofit, proof-gate, standards, and product-cohesion routing name Product Fitness"
     }
   ],
-  "receipt_digest": "sha256:cfcd8dd20332219cf44a1f961e7add970a73a59e39692ca0e7b240fdf5154507",
+  "receipt_digest": "sha256:aa361fe2e30b8e4dbdc71d1ef4891c5881772f4754fa9778b9827fadd3fb721a",
   "receipt_version": "1.0.0",
   "recovery_burden_gate": {
     "evidence": {
@@ -210,7 +210,7 @@
   },
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5"
+    "value": "sha256:a3846b70e6955c3f6144d7fb835af7226e9be7080fea435eefcc37fd674eb25d"
   },
   "user_evidence": [
     {

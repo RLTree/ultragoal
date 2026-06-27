@@ -723,7 +723,7 @@
           "path": "docs/source-obligation-matrix.json"
         },
         {
-          "digest": "sha256:819f8707f676388cb927d8ecca0bee36e63eaab8a01ef82f318ebad5548117f5",
+          "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0",
           "path": "validator/src/audit/cli/control_plane/authority.rs"
         },
         {
@@ -731,7 +731,7 @@
           "path": "validator/src/cli/control/plane/types.rs"
         },
         {
-          "digest": "sha256:763c3697fddb6b75683398cfb0ba4789a46b959517debd3e26aaa87cdde7f06e",
+          "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211",
           "path": "validator/src/cli/control/plane.rs"
         }
       ],
@@ -880,7 +880,7 @@
           "path": "docs/source-obligation-matrix.json"
         },
         {
-          "digest": "sha256:819f8707f676388cb927d8ecca0bee36e63eaab8a01ef82f318ebad5548117f5",
+          "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0",
           "path": "validator/src/audit/cli/control_plane/authority.rs"
         },
         {
@@ -888,7 +888,7 @@
           "path": "validator/src/cli/control/plane/types.rs"
         },
         {
-          "digest": "sha256:763c3697fddb6b75683398cfb0ba4789a46b959517debd3e26aaa87cdde7f06e",
+          "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211",
           "path": "validator/src/cli/control/plane.rs"
         }
       ],

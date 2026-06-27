@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T07:13:54Z",
+    "completed_at": "2026-06-27T11:57:17Z",
     "cwd": "fixtures/target-repo/red/comment-only-worktree-env",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T07:13:54Z",
+    "started_at": "2026-06-27T11:57:17Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T07:13:54Z",
+  "generated_at": "2026-06-27T11:57:17Z",
   "invocation": "fixture init fixtures/target-repo/red/comment-only-worktree-env",
   "mode": "init",
-  "repo_fingerprint": "sha256:b91abf3c6e23cf209e1083d67653ab3d436c07dc7c06394a314394e49b375ae3",
+  "repo_fingerprint": "sha256:9b5f573199a66853c66b44b713b2b500631c9011eca0358db35a48a6255245d8",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -451,7 +451,7 @@
       "path": "validator/src/audit/artifacts.rs"
     },
     {
-      "digest": "sha256:819f8707f676388cb927d8ecca0bee36e63eaab8a01ef82f318ebad5548117f5",
+      "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0",
       "path": "validator/src/audit/cli/control_plane/authority.rs"
     },
     {
@@ -619,11 +619,11 @@
       "path": "validator/src/audit/package/mod.rs"
     },
     {
-      "digest": "sha256:cc6eda395e0056f8cf32994630b55771a1dd08c50e192c28deb3eb52b7112f73",
+      "digest": "sha256:67a75289c5e3bb918086985a8914db13ca815fd30641c356cf8f9aa03490ed5c",
       "path": "validator/src/audit/package/outputs.rs"
     },
     {
-      "digest": "sha256:cc8bb8d7832b0b0af9f85321f75c2ef7fdf63b0ac1699750aab8e0ccbe208b71",
+      "digest": "sha256:45114de65a8667dd1a89f0943efe857365c0084f99f3704c860b88d317bca646",
       "path": "validator/src/audit/package/run.rs"
     },
     {
@@ -979,11 +979,19 @@
       "path": "validator/src/cli/control/mod.rs"
     },
     {
-      "digest": "sha256:763c3697fddb6b75683398cfb0ba4789a46b959517debd3e26aaa87cdde7f06e",
+      "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211",
       "path": "validator/src/cli/control/plane.rs"
     },
     {
-      "digest": "sha256:a81237ba5b1913ef1a89ee8cada957b69ace7f8801cc45ba65d7e41e7229e569",
+      "digest": "sha256:cc8606af5710e710610b6561a153ad6e79845db9940fe19a8e8ebd5bdd4bb109",
+      "path": "validator/src/cli/control/plane/path.rs"
+    },
+    {
+      "digest": "sha256:2330d4c0f480c3fd92aba430843b1126a62fb1550dabb3a87fb94046b191568d",
+      "path": "validator/src/cli/control/plane/proof.rs"
+    },
+    {
+      "digest": "sha256:cb251a0fc55719377b8efd4c201a270eff295ed1919d8c01656689de9b940a48",
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
@@ -1283,7 +1291,7 @@
       "path": "validator/src/schema_catalog/schema/object/mod.rs"
     },
     {
-      "digest": "sha256:2f1e879639ccf18e225ab3f0b45cf9438d167f259ccabb41b98758653b1410d9",
+      "digest": "sha256:15d12e4378e5089ef56d2771bbb9136ffc0ec08ce027569633c45cbd455aebdf",
       "path": "validator/src/schema_catalog/schema/patterns.rs"
     },
     {
@@ -1503,15 +1511,27 @@
       "path": "validator/src/self_tests/claim/workflow.rs"
     },
     {
-      "digest": "sha256:3e98f219e35ae92f1d48b673815156ac082993614ee970b988ef22f16d66a118",
+      "digest": "sha256:734f6a37dbdc834654c3e2293c5fea542da5c4f5ae83f8e46503b23a25a4e6ac",
+      "path": "validator/src/self_tests/cli/control/authority.rs"
+    },
+    {
+      "digest": "sha256:d7ad92f7c88ae6a36829213e81f3602bc52d6ec190f4f1947a4ee6dbe4dd020c",
       "path": "validator/src/self_tests/cli/control/mod.rs"
+    },
+    {
+      "digest": "sha256:c07dcf10a04de573905be9b4d3e5cc56d0c8eff9c2ba065e16ca1d015a4cc7d6",
+      "path": "validator/src/self_tests/cli/control/output_paths.rs"
     },
     {
       "digest": "sha256:deeb26ffd048473030bf8e5d488eebff1467111503396440c584c1ac9b41e579",
       "path": "validator/src/self_tests/cli/control/parse.rs"
     },
     {
-      "digest": "sha256:f684ff91ff806a20b0d80f00cc30bf1a139a1c61a3d09a0d7123458e4a2ca819",
+      "digest": "sha256:09a3cb1d1aac21853e12e3734e91df8548a2a7d35c8354d2ddd5a85651720066",
+      "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
+    },
+    {
+      "digest": "sha256:2778aad3655ac0b07e38e3d8e091ccff0df9333f4c033c50231fc8c97ec280d8",
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
@@ -1683,7 +1703,7 @@
       "path": "validator/src/self_tests/package/review_target.rs"
     },
     {
-      "digest": "sha256:bace5e11b03f6e5aa4afaa62beded018145225c64f81af3b7471d6b962b2ecd5",
+      "digest": "sha256:71f07db0bbddc03d7da708c504be2b9fd490ab584d276c923511a4dcd86e2e06",
       "path": "validator/src/self_tests/package/run.rs"
     },
     {
@@ -1819,7 +1839,7 @@
       "path": "validator/src/self_tests/review/spawn.rs"
     },
     {
-      "digest": "sha256:08184de581666f7f04261760781ea6a98b0a9cfe6e72c3cc0c75b7342e0b4ac9",
+      "digest": "sha256:37620e11e22079e15e9ab9430b00ad5137076735b7db51ef5b8d14c4b013ce47",
       "path": "validator/src/self_tests/rust/gate/audit.rs"
     },
     {
@@ -1951,7 +1971,7 @@
       "path": "validator/src/self_tests/target_repo/observability.rs"
     },
     {
-      "digest": "sha256:d12dfa72017fe78eb823a02b9a9cf6fe8d4c3c82044eaf5fdb9ca151a1e0eef1",
+      "digest": "sha256:22b87e36d2bd35198dcbffaab182851ada49aecc08a42b496dbaa544f52e941b",
       "path": "validator/src/self_tests/target_repo/product/cohesion.rs"
     },
     {

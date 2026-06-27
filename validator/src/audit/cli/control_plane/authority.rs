@@ -133,11 +133,13 @@ fn require_receipts(root: &Path, out: &mut Vec<String>) {
     ] {
         match crate::json_boundary::read_json(&root.join(rel)) {
             Ok(value) => {
-                for failure in crate::cli::control::plane::receipt::same_candidate_pass_failures(
-                    &value,
-                    &expected_candidate,
-                    operation,
-                ) {
+                for failure in
+                    crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(
+                        &value,
+                        &expected_candidate,
+                        operation,
+                    )
+                {
                     out.push(format!("{rel}: {failure}"));
                 }
             }

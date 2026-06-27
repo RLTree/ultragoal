@@ -1339,6 +1339,7 @@
     "schemas/product-success-brief.schema.json",
     "schemas/product-success-contract.schema.json",
     "schemas/product-template-generation-receipt.schema.json",
+    "schemas/red-fixture-report.schema.json",
     "schemas/restartable-execplan-receipt.schema.json",
     "schemas/rust-devx-receipt.schema.json",
     "schemas/workspace-gc-receipt.schema.json",
@@ -1379,6 +1380,7 @@
     "validator/src/audit/rust/developer.rs",
     "validator/src/audit/rust/mod.rs",
     "validator/src/cli/control/plane.rs",
+    "validator/src/cli/control/plane/path.rs",
     "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
     "validator/src/cli/garbage/collection/receipt.rs",
@@ -1388,6 +1390,7 @@
     "validator/src/cli/rust/observations.rs",
     "validator/src/cli/rust/receipt.rs",
     "validator/src/cli/rust/types.rs",
+    "validator/src/self_tests/cli/control/output_paths.rs",
     "validator/src/self_tests/namespace/mod.rs",
     "validator/src/self_tests/namespace/red_fixtures.rs",
     "validator/src/self_tests/rust/gate/audit.rs",
@@ -1469,6 +1472,11 @@
       "from": "validator/src/cli/control/plane.rs",
       "to": "schemas/cli-control-plane-receipt.schema.json",
       "reason": "CLI control operations emit schema-bound authority receipts"
+    },
+    {
+      "from": "validator/src/cli/control/plane.rs",
+      "to": "validator/src/cli/control/plane/path.rs",
+      "reason": "CLI control operations must write only operation-owned CLI receipt paths"
     },
     {
       "from": "validator/src/cli/control/plane.rs",
@@ -2662,6 +2670,7 @@
     "schemas/promotion-receipt.schema.json",
     "schemas/ready-for-merge.schema.json",
     "schemas/red-fixture.schema.json",
+    "schemas/red-fixture-report.schema.json",
     "schemas/red-fixtures-catalog.schema.json",
     "schemas/red-packet.schema.json",
     "schemas/restartable-execplan-receipt.schema.json",

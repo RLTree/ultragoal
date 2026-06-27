@@ -6,12 +6,16 @@ cd "$root"
 
 mkdir -p validation_artifacts/coverage
 
-report="validation_artifacts/coverage/llvm-cov-summary.json"
+report="validation_artifacts/coverage/llvm-cov-full.json"
+missing_report="validation_artifacts/coverage/missing-lines.txt"
 receipt="validation_artifacts/coverage/coverage-receipt.json"
 started_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-cargo llvm-cov --workspace --all-features --json --summary-only \
+cargo llvm-cov clean --workspace
+cargo llvm-cov --workspace --all-features --json \
   --output-path "$report" --offline
+cargo llvm-cov report --text --show-missing-lines \
+  --output-path "$missing_report" --offline
 
 completed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 

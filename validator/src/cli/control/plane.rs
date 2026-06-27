@@ -113,7 +113,11 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ControlCommand>, String> {
 }
 
 pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> {
+    if let Some(path) = &command.receipt {
+        path::validate_receipt_path(root, path, command.operation)?;
+    }
     let receipt = receipt(root, command)?;
+    let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
     if let Some(path) = &command.receipt {
         crate::json_boundary::write_json(path, &receipt)?;
         println!(
@@ -125,13 +129,31 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
     } else {
         println!("{receipt}");
     }
-    Ok(1)
+    Ok(exit)
 }
 
 pub(crate) fn receipt(root: &Path, command: &ControlCommand) -> Result<Value, String> {
     let package_digest = crate::package::inventory::package_digest(root)?;
-    let blocked_claims = blocked_claims(command.operation);
-    Ok(json!({
+    let evidence_failures = proof::failures(root, command.operation);
+    Ok(receipt_from_evidence(
+        package_digest,
+        command.operation,
+        evidence_failures,
+    ))
+}
+
+pub(crate) fn receipt_from_evidence(
+    package_digest: String,
+    operation: ControlOperation,
+    mut evidence_failures: Vec<String>,
+) -> Value {
+    // No caller may turn an empty vector into update_goal authority until the CLI
+    // can prove CLI, packet, and registry evidence as one transaction.
+    if evidence_failures.is_empty() {
+        evidence_failures.push("cli_control_plane_transactional_green_path_not_proven".to_string());
+    }
+    let blocked_claims = blocked_claims(operation);
+    json!({
         "schema": RECEIPT_SCHEMA,
         "schema_version": "v1",
         "issuer": {
@@ -143,29 +165,15 @@ pub(crate) fn receipt(root: &Path, command: &ControlCommand) -> Result<Value, St
         "generated_at": crate::audit::clock::now_iso(),
         "root": ".",
         "candidate_digest": package_digest,
-        "operation": command.operation.id(),
+        "operation": operation.id(),
         "status": "fail",
         "claim_ceiling": "withheld_or_blocked",
         "blocked_claim_classes": blocked_claims,
-        "required_evidence": required_evidence(command.operation),
-        "failure": {
-            "id": format!("{}_not_self_hosted", command.operation.id()),
-            "law_id": "cli-self-law-compliance",
-            "gate_id": "89",
-            "check_id": "cli-self-law-compliance",
-            "failed_invariant": "same-candidate CLI self-law receipt must pass before this operation can support completion claims",
-            "observed_value": "transition_only_or_incomplete_self_law",
-            "expected_value": "self_hosted_cli_self_law_pass",
-            "repair_class": "deterministic_enforcement",
-            "rerun_command": "ultragoal self update-goal eligibility --receipt validation_artifacts/cli/update-goal-eligibility.json",
-            "claim_ceiling_impact": "completion_package_review_release_update_goal_withheld",
-            "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims",
-            "severity": "hard_blocker",
-            "determinism": "deterministic"
-        },
+        "required_evidence": required_evidence(operation),
+        "failure": proof::failure_value(operation, &evidence_failures),
         "command_surface": REQUIRED_COMMANDS,
-        "notes": "This transitional receipt is intentionally fail-closed. It proves CLI routing exists but cannot support completion, package readiness, review readiness, release readiness, or update_goal eligibility."
-    }))
+        "notes": proof::notes(false, &evidence_failures)
+    })
 }
 
 fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
@@ -188,10 +196,11 @@ fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
 
 fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
     let mut out = vec![
-        "current_source_audit_pass",
-        "current_red_fixture_report_pass",
+        "current_red_fixture_report_status_pass",
         "coverage_100_no_uncovered_records",
-        "cli_self_law_receipt_pass",
+        "current_cli_performance_pass",
+        "current_final_packet_proof_pass",
+        "live_registry_or_reviewer_exposure_same_surface_pass",
     ];
     if matches!(
         operation,
@@ -213,5 +222,7 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+pub(crate) mod path;
+pub(crate) mod proof;
 pub(crate) mod receipt;
 pub(crate) mod types;

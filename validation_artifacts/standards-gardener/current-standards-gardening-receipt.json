@@ -2,7 +2,7 @@
   "changed_artifacts": [
     {
       "path": "schemas/cli-control-plane-receipt.schema.json",
-      "digest": "sha256:7439f3cb613ebc462b17da15b81f35793809e47523e9714da4845e8ed7124598"
+      "digest": "sha256:4a073bb20d8e4ac3cb0bea547b298fca8776bdf0dc9dfc1ae3934df9d073f5e3"
     },
     {
       "path": "schemas/codex-registry-exposure.schema.json",
@@ -14,11 +14,11 @@
     },
     {
       "path": "schemas/schema-catalog.json",
-      "digest": "sha256:64b71e2f2efe5845e1822e53d3e098c2de5dd85ba8bc8cc19116f4def230a083"
+      "digest": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40"
     },
     {
       "path": "validator/src/audit/cli/control_plane/authority.rs",
-      "digest": "sha256:819f8707f676388cb927d8ecca0bee36e63eaab8a01ef82f318ebad5548117f5"
+      "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0"
     },
     {
       "path": "validator/src/audit/cli/performance.rs",
@@ -70,11 +70,11 @@
     },
     {
       "path": "validator/src/cli/control/plane.rs",
-      "digest": "sha256:763c3697fddb6b75683398cfb0ba4789a46b959517debd3e26aaa87cdde7f06e"
+      "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211"
     },
     {
       "path": "validator/src/cli/control/plane/receipt.rs",
-      "digest": "sha256:a81237ba5b1913ef1a89ee8cada957b69ace7f8801cc45ba65d7e41e7229e569"
+      "digest": "sha256:cb251a0fc55719377b8efd4c201a270eff295ed1919d8c01656689de9b940a48"
     },
     {
       "path": "validator/src/cli/performance/proof.rs",
@@ -98,7 +98,7 @@
     },
     {
       "path": "validator/src/schema_catalog/schema/patterns.rs",
-      "digest": "sha256:2f1e879639ccf18e225ab3f0b45cf9438d167f259ccabb41b98758653b1410d9"
+      "digest": "sha256:15d12e4378e5089ef56d2771bbb9136ffc0ec08ce027569633c45cbd455aebdf"
     },
     {
       "path": "validator/src/self_tests/audit/branch_failures.rs",
@@ -126,7 +126,7 @@
     },
     {
       "path": "validator/src/self_tests/cli/control/receipts.rs",
-      "digest": "sha256:f684ff91ff806a20b0d80f00cc30bf1a139a1c61a3d09a0d7123458e4a2ca819"
+      "digest": "sha256:2778aad3655ac0b07e38e3d8e091ccff0df9333f4c033c50231fc8c97ec280d8"
     },
     {
       "path": "validator/src/self_tests/cli/performance/budgets.rs",
@@ -174,51 +174,87 @@
     },
     {
       "path": "plugin-manifest-draft.json",
-      "digest": "sha256:3796f6bb2d7c2d59367ccc0669c88d9f171dacfb651ff8ecf66a79e8162062c3"
+      "digest": "sha256:052d93255c9054f52012941645298b227acafc58c42d534df48fe244ed35b5a8"
     },
     {
       "path": "docs/plugin-cohesion-manifest.json",
-      "digest": "sha256:9b3b60d8b4f00116991a321611b094f880090a4f045b1da78a1bef751232f98f"
+      "digest": "sha256:7b55ed2759e6af29ed986103bf70e55bc4fd2362012a999d1389bb30ae7825a9"
     },
     {
       "path": "fixtures/valid/minimal-goal-run.json",
-      "digest": "sha256:a07c16cbfa397345f1272ee17dd8a1d92c14a3f88514dc03d3d1642896b3ce40"
+      "digest": "sha256:20c44b00be468134bcb42aed64f89412ba4344ac3dc588dece6f3a6656423a0e"
     },
     {
       "path": "fixtures/valid/non-product-engineering-language.json",
-      "digest": "sha256:0b45cefa44ae48c5f90fc61e9111db5025e89221bd1256465b4ebd1d487b46e8"
+      "digest": "sha256:3f433f1c628c039497a340703697f9c0136a88cd43e8eb8c7e3c4345aaa38c53"
     },
     {
       "path": "fixtures/valid/non-product-feature-completion.json",
-      "digest": "sha256:7b7c8e78bbd7229c6d186c018a0970ac552519203fdd1e913ef690928276b649"
+      "digest": "sha256:c815db1dc4ee854b72ce5a723f0cb5f407b8881a2811e688a8c04fb7d1652503"
     },
     {
       "path": "fixtures/valid/proof-surface-negative-probe.json",
-      "digest": "sha256:aef29723a4d692ecc08b10b67b35653cd35695ce61cab2783cfa4e656b155123"
+      "digest": "sha256:5d9fc49c455100f3724c1c487195e6360bc766e2fcea0a7e3df6c829942d1094"
     },
     {
       "path": "fixtures/valid/two-lane-ready-dependency.json",
-      "digest": "sha256:c4210a71b8512089aa27988f52fb9b8f6b584b1e8e4930c782ccad91f2d904b4"
+      "digest": "sha256:94a151f2722430076c711505639a4ef01a34cfe0de88d9cdbf9b894a0c346287"
     },
     {
       "path": "docs/mandatory-law-surfaces.json",
-      "digest": "sha256:ec806cca10b4633c21b3f84c2e0738a7167dec3ef5f2487d9bc52f1f1d73fcea"
+      "digest": "sha256:c4dda0438017c5f5f09a276fb3ab55330352f2581fd657712d3ee43e2f77f406"
     },
     {
       "path": "validation_artifacts/cli/performance-receipt.json",
-      "digest": "sha256:a1570cc18b2821757b98e43a7dcaf747ce839c60832b59e7193e75329d5ed5e5"
+      "digest": "sha256:b87f3519477bfafcb3946a96f247c45d6a22d755c21091168f84430362a0b490"
     },
     {
       "path": "validation_artifacts/harness/fit-repo-receipt.json",
-      "digest": "sha256:f47a840c7f0b977ce6b4f44a60f9e6c82479f67da45b9c36a98ac6894d5b0be3"
+      "digest": "sha256:6c81f2ad40302d0aa4420eab4201fd0fbfc3529b6b5cadf6e3286ce82c1e230f"
     },
     {
       "path": "validation_artifacts/harness/product-fitness-receipt.json",
-      "digest": "sha256:83f98f5b14d99720597f1476b46881a77204f0e96e3eeac11e8a7d00c7be668d"
+      "digest": "sha256:e9909ae625f7a5dacbed596947ad2d346e16fcda22d2bb68a2357a2398f04aca"
     },
     {
       "path": "validation_artifacts/harness/plugin-product-journey-receipt.json",
-      "digest": "sha256:e9583bf67c5d3b3853200ba9cc6eadc82ad581cce3a4f3d193aa4d56fec16e02"
+      "digest": "sha256:235153a00c0a4c46f1a29103d413c57ca4e2f34bd84ffd53282de1b5c00f863d"
+    },
+    {
+      "path": "validator/src/cli/control/plane/path.rs",
+      "digest": "sha256:cc8606af5710e710610b6561a153ad6e79845db9940fe19a8e8ebd5bdd4bb109"
+    },
+    {
+      "path": "validator/src/cli/control/plane/proof.rs",
+      "digest": "sha256:2330d4c0f480c3fd92aba430843b1126a62fb1550dabb3a87fb94046b191568d"
+    },
+    {
+      "path": "validator/src/self_tests/cli/control/output_paths.rs",
+      "digest": "sha256:c07dcf10a04de573905be9b4d3e5cc56d0c8eff9c2ba065e16ca1d015a4cc7d6"
+    },
+    {
+      "path": "validator/src/self_tests/cli/control/receipt_modes.rs",
+      "digest": "sha256:09a3cb1d1aac21853e12e3734e91df8548a2a7d35c8354d2ddd5a85651720066"
+    },
+    {
+      "path": "validation_artifacts/coverage/coverage-receipt.json",
+      "digest": "sha256:27f5f1796b86d58ea8ac8188fe99786ca45b81545a7be148e71e80763ecbed36"
+    },
+    {
+      "path": "validation_artifacts/cli/update-goal-eligibility.json",
+      "digest": "sha256:d6f0bfe42ea22280c14e8a3664b0c0b9ed170fdfbcb8013712925bee67b506f3"
+    },
+    {
+      "path": "validation_artifacts/cli/self-law-receipt.json",
+      "digest": "sha256:194a0cab1aa2617da8d6acc6a8999270a69706d60ea9d7a08ac7516b3f7138ab"
+    },
+    {
+      "path": "validation_artifacts/gc/verify-receipt.json",
+      "digest": "sha256:44eec588c9f23bc14ca02247a4597da62acc66ffed19bc9aa7b44ec9f256277a"
+    },
+    {
+      "path": "validation_artifacts/rust/coverage-receipt.json",
+      "digest": "sha256:d14d36baad4c93835b687ebe53868a4944dbe5d3bbbac98a9ef25ddef59c4dd6"
     }
   ],
   "claim_ceiling": "package_static_fixture_only",
@@ -227,7 +263,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-27T06:57:38Z",
+  "generated_at": "2026-06-27T11:54:09Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

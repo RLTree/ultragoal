@@ -32,6 +32,7 @@ pub(super) fn matches(pattern: &str, text: &str) -> bool {
         "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$" => {
             artifact_json_under("validation_artifacts/ultragoal-audit/", text)
         }
+        "^fixtures/red/[-A-Za-z0-9._/]+[.]json$" => artifact_json_under("fixtures/red/", text),
         other if other.starts_with("(^|/)") && other.ends_with('$') => {
             file_suffix_pattern(other, text)
         }
@@ -180,6 +181,14 @@ mod tests {
         assert!(super::matches(
             "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$",
             "validation_artifacts/ultragoal-audit/validator-receipt.json"
+        ));
+        assert!(super::matches(
+            "^fixtures/red/[-A-Za-z0-9._/]+[.]json$",
+            "fixtures/red/cli-control-plane-authority-reviewer-agreement-bypass-red.json"
+        ));
+        assert!(!super::matches(
+            "^fixtures/red/[-A-Za-z0-9._/]+[.]json$",
+            "fixtures/red/../forged.json"
         ));
         assert!(super::matches(
             "(^|/)review\\-round\\.json$",

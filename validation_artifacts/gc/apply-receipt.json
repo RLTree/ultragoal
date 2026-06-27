@@ -42,15 +42,15 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:bf89354a9b9c993c5dbe8eb109de307526aed42d46f17ad9d010670df9a8d1ce"
+    "plan_digest": "sha256:693f135c2218e079e3b84e8f356737f47acfcd3b900a4e8d61f0ea3f26424d21"
   },
   "digests": {
-    "candidate": "sha256:2d35cfef4e0e5130cf2834fc23e6645f3cdca4a88d94625752cee92e16a1c1f5",
+    "candidate": "sha256:a3846b70e6955c3f6144d7fb835af7226e9be7080fea435eefcc37fd674eb25d",
     "fixture_catalog": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
-    "law_graph": "sha256:ec806cca10b4633c21b3f84c2e0738a7167dec3ef5f2487d9bc52f1f1d73fcea",
-    "schema_catalog": "sha256:64b71e2f2efe5845e1822e53d3e098c2de5dd85ba8bc8cc19116f4def230a083"
+    "law_graph": "sha256:c4dda0438017c5f5f09a276fb3ab55330352f2581fd657712d3ee43e2f77f406",
+    "schema_catalog": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40"
   },
-  "generated_at": "2026-06-27T06:57:29Z",
+  "generated_at": "2026-06-27T11:44:32Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

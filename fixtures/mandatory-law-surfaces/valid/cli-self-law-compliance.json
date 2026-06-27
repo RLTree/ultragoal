@@ -22,7 +22,7 @@
     },
     {
       "path": "validator/src/audit/cli/control_plane/authority.rs",
-      "digest": "sha256:c270ce7c2bd64b6f05c4bd172c0bbc7978ceccc3ce255d469579e59fc8230f6c"
+      "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0"
     },
     {
       "path": "validator/src/cli/control/plane/types.rs",
@@ -30,7 +30,7 @@
     },
     {
       "path": "validator/src/cli/control/plane.rs",
-      "digest": "sha256:bfff44706703a99166664cf254042d4371b61be78dc8926bd0c433a2b507f582"
+      "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211"
     }
   ],
   "claim_ceiling_guard": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt",
