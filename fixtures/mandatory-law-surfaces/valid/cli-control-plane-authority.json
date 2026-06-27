@@ -30,7 +30,11 @@
     },
     {
       "path": "validator/src/cli/control/plane.rs",
-      "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211"
+      "digest": "sha256:abcde5d79c71b3175302da949ba193f7b046f0767635b910f9af386e550fcd87"
+    },
+    {
+      "path": "validator/src/cli/control/plane/emit.rs",
+      "digest": "sha256:b216d44e726457ce7a7d28e5a553b522dd4f8d95e378f93993978db9936db428"
     }
   ],
   "claim_ceiling_guard": "harness_claims_withheld_without_cli_control_plane_authority",

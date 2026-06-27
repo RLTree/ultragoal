@@ -163,8 +163,32 @@ fn coverage_ref(root: &Path, current: &str) -> Value {
     ref_for(
         root,
         "validation_artifacts/coverage/coverage-receipt.json",
-        &json!({"target_revision":{"kind":"package_digest","value":current},
-            "coverage":{"percent":100.0},"uncovered_records":[],"claim_ceiling":"supports_complete_claim"}),
+        &json!({
+            "schema":"harness-ultragoal.coverage-receipt.v1",
+            "claim_id":"CLAIM-100",
+            "command":"ultragoal coverage prove",
+            "tool":"cargo-llvm-cov",
+            "source_tree_digest":crate::self_tests::boundaries::support::sha('2'),
+            "coverage_manifest_digest":crate::self_tests::boundaries::support::sha('3'),
+            "coverage_command_digest":crate::self_tests::boundaries::support::sha('4'),
+            "changed_files_digest":crate::self_tests::boundaries::support::sha('5'),
+            "tool_version":"test",
+            "workspace_root":".",
+            "target_revision":{"kind":"package_digest","value":current},
+            "command_started_at":"2026-06-27T00:00:00Z",
+            "command_completed_at":"2026-06-27T00:00:01Z",
+            "command_exit":0,
+            "machine_readable_report":{"path":"validation_artifacts/coverage/report.json","digest":crate::self_tests::boundaries::support::sha('6')},
+            "generated_by":"coverage-command",
+            "percent_source":"machine_readable_report",
+            "target_paths":["validator/src"],
+            "measured_dimensions":["line"],
+            "coverage":{"percent":100.0,"floor_percent":100.0,"policy":"100_percent_required"},
+            "uncovered_records":[],
+            "exclusions":[],
+            "generated_at":"2026-06-27T00:00:01Z",
+            "claim_ceiling":"supports_complete_claim"
+        }),
     )
 }
 

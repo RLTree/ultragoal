@@ -19268,10 +19268,10 @@
       "completed_at": "2026-06-27T01:07:32Z",
       "environment": "local Rust package audit; semantic_validation_clock=automation_tick_receipt.freshness_policy.clock_at_validation",
       "executable_provenance": {
-        "digest": "sha256:977391c62518c9de22d69abee657a5878c6c9a817d15fcf6a7d8663e29cc48be",
+        "digest": "sha256:bd5848c2156e3d4b359fe23bc3360f7e182f03bf4b54014ab8d6f8e16219d3ec",
         "invocation_mode": "direct_executable",
         "path": "target/debug/ultragoal",
-        "source_artifact_set_digest": "sha256:92da6e0b9b4c0142a6545aaedcc0954a47a7093f27f05b5d55aced2ddcc45679"
+        "source_artifact_set_digest": "sha256:fcd15148ccd45114659242d1b3dbab7fcd7a0e4ed663f34f3f05c16076a7d76a"
       },
       "input_digests": [
         {
@@ -19884,8 +19884,12 @@
           "path": "validator/src/cli/control/mod.rs"
         },
         {
-          "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211",
+          "digest": "sha256:abcde5d79c71b3175302da949ba193f7b046f0767635b910f9af386e550fcd87",
           "path": "validator/src/cli/control/plane.rs"
+        },
+        {
+          "digest": "sha256:b216d44e726457ce7a7d28e5a553b522dd4f8d95e378f93993978db9936db428",
+          "path": "validator/src/cli/control/plane/emit.rs"
         },
         {
           "digest": "sha256:cc8606af5710e710610b6561a153ad6e79845db9940fe19a8e8ebd5bdd4bb109",
@@ -20232,7 +20236,7 @@
           "path": "validator/src/self_tests/audit/final_packet/references.rs"
         },
         {
-          "digest": "sha256:2aea461eebf4b481c2822c9e2859289ab0ad42b4c591bb68f8e2d82b7490f756",
+          "digest": "sha256:a5ff0edf16e36451881a3058962deb2c1a91558180e9f5013347723461f2ccfe",
           "path": "validator/src/self_tests/audit/final_packet/support.rs"
         },
         {
@@ -20420,7 +20424,7 @@
           "path": "validator/src/self_tests/cli/control/authority.rs"
         },
         {
-          "digest": "sha256:d7ad92f7c88ae6a36829213e81f3602bc52d6ec190f4f1947a4ee6dbe4dd020c",
+          "digest": "sha256:73691999bc30f4d2a1c932b841bc86a8afdda917befd04911cfc06f7d4ada3df",
           "path": "validator/src/self_tests/cli/control/mod.rs"
         },
         {
@@ -20430,6 +20434,10 @@
         {
           "digest": "sha256:deeb26ffd048473030bf8e5d488eebff1467111503396440c584c1ac9b41e579",
           "path": "validator/src/self_tests/cli/control/parse.rs"
+        },
+        {
+          "digest": "sha256:29b879eefaf9121ae33ae5cbe84feef092ddd407d9ea72744140a67805b38eff",
+          "path": "validator/src/self_tests/cli/control/production.rs"
         },
         {
           "digest": "sha256:09a3cb1d1aac21853e12e3734e91df8548a2a7d35c8354d2ddd5a85651720066",

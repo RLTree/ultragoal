@@ -3,22 +3,22 @@
   "claim_id": "CLAIM-001",
   "command": "bash .harness/run-coverage.sh",
   "tool": "cargo-llvm-cov",
-  "source_tree_digest": "sha256:ce2e7e829bde697ef20a3d2fe63ed8952c19b69943be36562549db8f0fa0ad14",
-  "coverage_manifest_digest": "sha256:0d60b04d2b068ad59973dca885b88b2f5a5403b7e3939037b7b63b5e32b1e597",
+  "source_tree_digest": "sha256:375c83a544e8d9b1dd8642fcdf4406a40d07e0de44b6ee88e413ca2b91c2d60d",
+  "coverage_manifest_digest": "sha256:4cc547afeda11295b7749bb46db3f8fff8e786f36e0b609b41349e8ad2dda907",
   "coverage_command_digest": "sha256:eb90478bbc7bf93351fc454d6796a42eb75a6c4cd1353ef6ee18f90976c6f944",
-  "changed_files_digest": "sha256:4a5961cf01e44df070ad602c0af24b8f03e7f71628fb1692c2a523b551ed17a6",
+  "changed_files_digest": "sha256:a816e77a22bbd95dfb456d04da43aba35d49bdad43a280406a98e150a77c7ce1",
   "tool_version": "cargo-llvm-cov 0.8.7",
   "workspace_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:a3846b70e6955c3f6144d7fb835af7226e9be7080fea435eefcc37fd674eb25d"
+    "value": "sha256:bbdac2c2e804cea5f3709cd129510190f79ddb45874538bf5df16b5a9939f462"
   },
-  "command_started_at": "2026-06-27T11:42:16Z",
-  "command_completed_at": "2026-06-27T11:42:39Z",
+  "command_started_at": "2026-06-27T13:01:46Z",
+  "command_completed_at": "2026-06-27T13:02:09Z",
   "command_exit": 0,
   "machine_readable_report": {
     "path": "validation_artifacts/coverage/llvm-cov-full.json",
-    "digest": "sha256:4fca6eab3a219119aeb591d5d3b502513c727f99ec84007b61bcc23fa9653e36"
+    "digest": "sha256:ff5b05f2da1524d3a55a8612ba583a55f93f605254691c9fe1dbeae272f69686"
   },
   "generated_by": "coverage-command",
   "percent_source": "machine_readable_report",
@@ -51,6 +51,6 @@
   },
   "uncovered_records": [],
   "exclusions": [],
-  "generated_at": "2026-06-27T11:42:39Z",
+  "generated_at": "2026-06-27T13:02:09Z",
   "claim_ceiling": "supports_complete_claim"
 }

@@ -70,7 +70,7 @@
     },
     {
       "path": "validator/src/cli/control/plane.rs",
-      "digest": "sha256:baac50b7c5cd4ea7ff8bb6ee73d0d990eb58b273a2842338e54b1b417c9fa211"
+      "digest": "sha256:abcde5d79c71b3175302da949ba193f7b046f0767635b910f9af386e550fcd87"
     },
     {
       "path": "validator/src/cli/control/plane/receipt.rs",
@@ -114,7 +114,7 @@
     },
     {
       "path": "validator/src/self_tests/audit/final_packet/support.rs",
-      "digest": "sha256:2aea461eebf4b481c2822c9e2859289ab0ad42b4c591bb68f8e2d82b7490f756"
+      "digest": "sha256:a5ff0edf16e36451881a3058962deb2c1a91558180e9f5013347723461f2ccfe"
     },
     {
       "path": "validator/src/self_tests/audit/mod.rs",
@@ -174,51 +174,51 @@
     },
     {
       "path": "plugin-manifest-draft.json",
-      "digest": "sha256:052d93255c9054f52012941645298b227acafc58c42d534df48fe244ed35b5a8"
+      "digest": "sha256:29b09569a55c6271c9f7ef60a6b75a383838cb87b0152f7789d7788ed5de61ab"
     },
     {
       "path": "docs/plugin-cohesion-manifest.json",
-      "digest": "sha256:7b55ed2759e6af29ed986103bf70e55bc4fd2362012a999d1389bb30ae7825a9"
+      "digest": "sha256:2374d865086291d95c772213b7f3467b37f2212a7e83f2ace99f3c4af416b2eb"
     },
     {
       "path": "fixtures/valid/minimal-goal-run.json",
-      "digest": "sha256:20c44b00be468134bcb42aed64f89412ba4344ac3dc588dece6f3a6656423a0e"
+      "digest": "sha256:e7c93e64c99ebf9954e54b4ebc3402ab7c5d3c8c3f4223f0f0663e62e668b3ba"
     },
     {
       "path": "fixtures/valid/non-product-engineering-language.json",
-      "digest": "sha256:3f433f1c628c039497a340703697f9c0136a88cd43e8eb8c7e3c4345aaa38c53"
+      "digest": "sha256:60bcae3e28d1ed53a147785206144f5bd50dfd4ed85348bcc43f37b059aca5a3"
     },
     {
       "path": "fixtures/valid/non-product-feature-completion.json",
-      "digest": "sha256:c815db1dc4ee854b72ce5a723f0cb5f407b8881a2811e688a8c04fb7d1652503"
+      "digest": "sha256:1b909714e5a9c56b2586b50c7f2dead369ec9d7da33e842ad15e9c6dfd6240d2"
     },
     {
       "path": "fixtures/valid/proof-surface-negative-probe.json",
-      "digest": "sha256:5d9fc49c455100f3724c1c487195e6360bc766e2fcea0a7e3df6c829942d1094"
+      "digest": "sha256:45d77ba623d87334eb8098b9bab039755099c7a2d408b6c0f71814a151136861"
     },
     {
       "path": "fixtures/valid/two-lane-ready-dependency.json",
-      "digest": "sha256:94a151f2722430076c711505639a4ef01a34cfe0de88d9cdbf9b894a0c346287"
+      "digest": "sha256:dee25cb71217c97a63fcd0a7231d4d6a58ded4cf2e6e743e839041db6cbe83e8"
     },
     {
       "path": "docs/mandatory-law-surfaces.json",
-      "digest": "sha256:c4dda0438017c5f5f09a276fb3ab55330352f2581fd657712d3ee43e2f77f406"
+      "digest": "sha256:7d3fc8ae3694625310154f892ec6eaa16cddfc07122f72d30c2b982ecee9d02c"
     },
     {
       "path": "validation_artifacts/cli/performance-receipt.json",
-      "digest": "sha256:b87f3519477bfafcb3946a96f247c45d6a22d755c21091168f84430362a0b490"
+      "digest": "sha256:d4e25a87aecc22af243c3f76677759f15a5277ab7573328810df6421316a948c"
     },
     {
       "path": "validation_artifacts/harness/fit-repo-receipt.json",
-      "digest": "sha256:6c81f2ad40302d0aa4420eab4201fd0fbfc3529b6b5cadf6e3286ce82c1e230f"
+      "digest": "sha256:ea54a9f604aa54fd74a00a4d3b05cc50808adf5cd29c8d25510d100fbd399876"
     },
     {
       "path": "validation_artifacts/harness/product-fitness-receipt.json",
-      "digest": "sha256:e9909ae625f7a5dacbed596947ad2d346e16fcda22d2bb68a2357a2398f04aca"
+      "digest": "sha256:c451f0b9f2fbbf5359d5b35621f66452f9b4a78b4c7679b36d65f287719896c5"
     },
     {
       "path": "validation_artifacts/harness/plugin-product-journey-receipt.json",
-      "digest": "sha256:235153a00c0a4c46f1a29103d413c57ca4e2f34bd84ffd53282de1b5c00f863d"
+      "digest": "sha256:27effe9712e083e92aaaf4e79a539d90b715fd49bff1011a23ca1508a06c809b"
     },
     {
       "path": "validator/src/cli/control/plane/path.rs",
@@ -238,23 +238,23 @@
     },
     {
       "path": "validation_artifacts/coverage/coverage-receipt.json",
-      "digest": "sha256:27f5f1796b86d58ea8ac8188fe99786ca45b81545a7be148e71e80763ecbed36"
+      "digest": "sha256:97febc11332d7b80720b46f38d701ce1ab47df367c742d52ba3832836e062b3a"
     },
     {
       "path": "validation_artifacts/cli/update-goal-eligibility.json",
-      "digest": "sha256:d6f0bfe42ea22280c14e8a3664b0c0b9ed170fdfbcb8013712925bee67b506f3"
+      "digest": "sha256:6f0e0d0f9c2bcf26c0ea8c614a7c6ede0c546a0263eab4509a6be8b5f10608a5"
     },
     {
       "path": "validation_artifacts/cli/self-law-receipt.json",
-      "digest": "sha256:194a0cab1aa2617da8d6acc6a8999270a69706d60ea9d7a08ac7516b3f7138ab"
+      "digest": "sha256:99dea5d936d51785228a59699f6b7682f543737a6b03c6beeb6304c19224fce8"
     },
     {
       "path": "validation_artifacts/gc/verify-receipt.json",
-      "digest": "sha256:44eec588c9f23bc14ca02247a4597da62acc66ffed19bc9aa7b44ec9f256277a"
+      "digest": "sha256:bc9c7cf34ac43533fb39736237dbb126000f7b42b2c43b556bdb76a5aee776b0"
     },
     {
       "path": "validation_artifacts/rust/coverage-receipt.json",
-      "digest": "sha256:d14d36baad4c93835b687ebe53868a4944dbe5d3bbbac98a9ef25ddef59c4dd6"
+      "digest": "sha256:c8d75fed3a2c5b917c8ea3e9fb5aedeed76b6c197225d61fb971e4d536b72e7c"
     }
   ],
   "claim_ceiling": "package_static_fixture_only",
@@ -263,7 +263,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-27T11:54:09Z",
+  "generated_at": "2026-06-27T13:08:30Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true
