@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod package_receipts;
+
 pub(crate) fn write_json(path: &Path, value: &Value) {
     let parent = path.parent().expect("test JSON path has a parent");
     std::fs::create_dir_all(parent).expect("parent");
@@ -35,19 +37,59 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
         "registry_exposure": registry_ref(root, current, &raw),
         "source_audit": super::source_audit::ref_for(root, current),
         "coverage": coverage_ref(root, current),
-        "package_receipts": [package_ref(root, current)],
-        "claim_ceiling": "final_packet_evidence_dereferenced"
+        "package_receipts": package_receipts::refs(root, current),
+        "claim_ceiling": "final_packet_evidence_dereferenced",
+        "blocked_claim_classes": [],
+        "failure": Value::Null
+    });
+    write_proof(root, &receipt);
+    receipt
+}
+
+pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
+    let packet_path = "validation_artifacts/review/final-packet.json";
+    write_json(
+        &root.join(packet_path),
+        &json!({"schema":"harness-ultragoal.review-packet-successor.v1"}),
+    );
+    let receipt = json!({
+        "schema": "harness-ultragoal.final-packet-proof.v1",
+        "generated_at": "2026-06-27T00:00:00Z",
+        "status": "fail",
+        "target_revision": {"kind": "package_digest", "value": current},
+        "packet": {"path": packet_path, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
+        "cli_performance": performance_ref(root, current),
+        "registry_exposure": fail_closed_registry_ref(root, current),
+        "source_audit": super::source_audit::ref_for(root, current),
+        "coverage": coverage_ref(root, current),
+        "package_receipts": package_receipts::refs(root, current),
+        "claim_ceiling": "withheld_or_blocked",
+        "blocked_claim_classes": [
+            "completion",
+            "package_readiness",
+            "review_readiness",
+            "release_readiness",
+            "update_goal_eligibility"
+        ],
+        "failure": {
+            "reason": "final_packet_proof_not_proven",
+            "observed_failures": ["live_registry_reviewer_exposure_not_proven"]
+        }
     });
     write_proof(root, &receipt);
     receipt
 }
 
 fn ref_for(root: &Path, rel: &str, value: &Value) -> Value {
+    ref_for_with_status(root, rel, value, "pass")
+}
+
+fn ref_for_with_status(root: &Path, rel: &str, value: &Value, status: &str) -> Value {
     write_json(&root.join(rel), value);
     json!({
         "path": rel,
         "digest": crate::digest::file(&root.join(rel)).expect("ref digest"),
-        "status": "pass"
+        "status": status
     })
 }
 
@@ -94,6 +136,47 @@ fn registry_ref(root: &Path, current: &str, raw: &Value) -> Value {
             "raw_observation":{"path":"validation_artifacts/ultragoal-audit/live-registry-raw.json","digest":raw["digest"]},
             "agent_types":agent_types()
         }),
+    )
+}
+
+fn fail_closed_registry_ref(root: &Path, current: &str) -> Value {
+    ref_for_with_status(
+        root,
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+        &json!({
+            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
+            "generated_at":"2026-06-27T00:00:00Z",
+            "captured_at":"2026-06-27T00:00:00Z",
+            "status":"fail",
+            "issuer":{"tool":"ultragoal","authority":"cli_control_plane"},
+            "tool_call":{"name":"ultragoal registry probe","call_id":"fail-closed","arguments_digest":crate::digest::ZERO},
+            "capture_method":"fail_closed_no_capability",
+            "boundary":{"account_id":"unavailable","workspace_id":"unavailable","session_id":"session"},
+            "source":"ultragoal.registry_probe",
+            "target_revision":{"kind":"package_digest","value":current},
+            "claim_ceiling":"withheld_or_blocked",
+            "session_id":"session",
+            "round_id":"round",
+            "raw_observation":{"path":"validation_artifacts/ultragoal-audit/active-registry-observation-current.json","digest":crate::digest::ZERO},
+            "agent_types":agent_types().into_iter().map(|mut row| {
+                row["disk_cache_synced"] = json!(false);
+                row["global_toml_present"] = json!(false);
+                row["exposed"] = json!(false);
+                row
+            }).collect::<Vec<_>>(),
+            "failure":{
+                "reason":"live_registry_reviewer_exposure_not_proven",
+                "observed":"same-surface registry proof unavailable",
+                "blocked_claim_classes":[
+                    "app_registry_or_reviewer_exposure",
+                    "review_readiness",
+                    "release_readiness",
+                    "completion",
+                    "update_goal_eligibility"
+                ]
+            }
+        }),
+        "fail",
     )
 }
 
@@ -158,13 +241,5 @@ fn coverage_ref(root: &Path, current: &str) -> Value {
             "generated_at":"2026-06-27T00:00:01Z",
             "claim_ceiling":"supports_complete_claim"
         }),
-    )
-}
-
-fn package_ref(root: &Path, current: &str) -> Value {
-    ref_for(
-        root,
-        "validation_artifacts/harness/package-receipt.json",
-        &json!({"status":"pass","target_revision":{"kind":"package_digest","value":current}}),
     )
 }

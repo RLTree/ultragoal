@@ -17,6 +17,7 @@ fn gardener_receipt(action: &str) -> Value {
         "schema":"harness-ultragoal.standards-gardening-receipt.v1",
         "status":"pass",
         "generated_at":"2026-06-26T00:00:00Z",
+        "candidate_digest":crate::self_tests::boundaries::support::sha('c'),
         "trigger_signal":{
             "signal_id":"sig",
             "severity":"moderate",
@@ -137,6 +138,13 @@ fn standards_gardener_receipts_cover_semantic_and_root_edges() {
     assert!(has(
         &root_failures,
         "standards_gardener_changed_artifact_missing"
+    ));
+    receipt["changed_artifacts"][0]["path"] =
+        json!("validation_artifacts/cli/update-goal-eligibility.json");
+    let root_failures = crate::audit::standards_gardening::receipt_root_failures(&root, &receipt);
+    assert!(has(
+        &root_failures,
+        "standards_gardener_runtime_receipt_artifact"
     ));
     std::fs::remove_dir_all(root).expect("cleanup standards gardener edges");
 }

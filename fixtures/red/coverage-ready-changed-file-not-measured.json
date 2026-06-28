@@ -11,21 +11,29 @@
       "op": "replace",
       "path": "/ready_for_merge/changed_files",
       "value": [
-        "docs/mandatory-law-surfaces.json"
+        "docs/review-loop-record.md"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/lane_registry/lanes/0/owned_paths",
+      "value": [
+        "fixtures/valid",
+        "docs"
       ]
     },
     {
       "op": "replace",
       "path": "/lane_registry/lanes/0/ready_receipt/digest",
-      "value": "sha256:2b45d5f7c4e1d1aae00178ae483357ed5825b4d4f9de01fd8333c9223d79bcff"
+      "value": "sha256:8f59b14f79d2f6f170218c5dd52b72ea4efa09501536672aa245cb6e07571bb9"
     },
     {
       "op": "replace",
       "path": "/ready_for_merge/lane_registry_digest",
-      "value": "sha256:242df5c7087e9073ab81a8a2851fd4343dac4753affdd010e8d445bcb2acf383"
+      "value": "sha256:0753b37b45e4ab9f9e754194168684cc6668bc7b69e0d1a0ac2b8460074c729e"
     }
   ],
-  "notes": "Ready receipts cannot claim changed repo-owned files that are absent from coverage changed-file authority.",
+  "notes": "Ready receipts cannot claim changed repo-owned files that are absent from coverage changed-file authority. The mutation keeps the docs path registered to the lane so parent-role-boundary cannot mask the coverage failure, and uses a real docs file absent from the coverage changed-file list.",
   "materialization": {
     "expected_validation_layer": "semantic",
     "post_patch_schema_valid": true,
@@ -40,7 +48,7 @@
   "postconditions": [
     {
       "path": "/ready_for_merge/changed_files",
-      "expectation": "coverage_changed_file_not_measured"
+      "expectation": "docs/review-loop-record.md is lane-owned but absent from coverage changed-file authority, so coverage_changed_file_not_measured must be the first semantic failure"
     }
   ]
 }

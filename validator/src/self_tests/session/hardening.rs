@@ -20,35 +20,14 @@ fn session_log_hardening_reports_missing_and_unresolved_inventory() {
     let missing = crate::audit::session_log_hardening::package_failures(&temp, &store);
     assert!(missing[0].starts_with("session_log_hardening_receipt_missing"));
 
-    let receipt = json!({
-        "schema": "harness-ultragoal.session-log-hardening-receipt.v1",
-        "status": "pass",
-        "generated_at": "2026-06-25T00:00:00Z",
-        "candidate_version": "0.0.10",
-        "source_root": "repo://test",
-        "package_digest": crate::self_tests::boundaries::support::sha('c'),
-        "audit_sources": [
-            {"source_id":"s1","artifact":"a","source_kind":"session_log","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s2","artifact":"a","source_kind":"session_log","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s3","artifact":"a","source_kind":"packet_summary","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s4","artifact":"a","source_kind":"validator_receipt","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"}
-        ],
-        "required_issue_classes": issue_classes(),
-        "findings": [{
-            "finding_id":"f1",
-            "source_refs":["s1"],
-            "timestamp_or_session_id":"s",
-            "observed_gap":"gap",
-            "affected_surface":"surface",
-            "enforcement_status":"fixed",
-            "required_repair":"repair",
-            "claim_ceiling_impact":"impact",
-            "artifact_types":["doc"]
-        }],
-        "packet_successor": {"path":"missing.json","purpose":"implemented_findings_and_remaining_blockers"},
-        "active_registry_current_proof": "not_produced",
-        "current_claim_ceiling": "does not support live app registry"
-    });
+    let mut receipt = complete_receipt();
+    receipt["candidate_version"] = json!("0.0.10");
+    for source in receipt["audit_sources"].as_array_mut().expect("sources") {
+        source["source_kind"] = json!("session_log");
+    }
+    receipt["findings"][0]["artifact_types"] = json!(["doc"]);
+    receipt["packet_successor"]["path"] = json!("missing.json");
+    receipt["current_claim_ceiling"] = json!("does not support live app registry");
     std::fs::write(
         temp.join("validation_artifacts/harness/session-log-hardening-receipt.json"),
         serde_json::to_vec(&receipt).expect("receipt json"),
@@ -59,6 +38,11 @@ fn session_log_hardening_reports_missing_and_unresolved_inventory() {
         failures
             .iter()
             .any(|item| item == "session_log_hardening_candidate_version_mismatch")
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "session_log_hardening_package_digest_mismatch")
     );
     assert!(
         failures
@@ -156,36 +140,68 @@ fn session_log_hardening_covers_schema_version_and_fixed_validator_paths() {
     std::fs::remove_dir_all(temp).expect("cleanup");
 }
 
+pub(crate) fn complete_receipt_for_root(root: &std::path::Path) -> serde_json::Value {
+    let digest = crate::package::inventory::package_digest(root).expect("package digest");
+    complete_receipt_for_digest(&digest)
+}
+
 pub(crate) fn complete_receipt() -> serde_json::Value {
+    complete_receipt_for_digest(&crate::self_tests::boundaries::support::sha('c'))
+}
+
+fn complete_receipt_for_digest(package_digest: &str) -> serde_json::Value {
     json!({
         "schema": "harness-ultragoal.session-log-hardening-receipt.v1",
         "status": "pass",
         "generated_at": "2026-06-25T00:00:00Z",
         "candidate_version": "0.0.11",
         "source_root": "repo://test",
-        "package_digest": crate::self_tests::boundaries::support::sha('c'),
-        "audit_sources": [
-            {"source_id":"s1","artifact":"a","source_kind":"session_log","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s2","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s3","artifact":"a","source_kind":"packet_summary","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"},
-            {"source_id":"s4","artifact":"a","source_kind":"validator_receipt","timestamp_utc":"2026-06-25T00:00:00Z","summary":"x"}
-        ],
+        "package_digest": package_digest,
+        "audit_sources": audit_sources(),
         "required_issue_classes": issue_classes(),
         "findings": [{
             "finding_id":"f1",
-            "source_refs":["s1"],
+            "source_refs":["chronicle-packet-gap-1847"],
             "timestamp_or_session_id":"s",
+            "signal":"session-log-regression-corpus",
+            "affected_law_ids":["session-log-hardening"],
+            "affected_package_surfaces":["review-packet"],
+            "observed_bad_behavior":"bad path",
             "observed_gap":"gap",
             "affected_surface":"surface",
             "enforcement_status":"fixed",
             "required_repair":"repair",
+            "fixture_ids":["session-log-hardening-valid-fixture"],
+            "validator_ids":["session-log-hardening"],
+            "receipt_ids":["validation_artifacts/harness/session-log-hardening-receipt.json"],
+            "claim_ids":["review_readiness"],
             "claim_ceiling_impact":"impact",
-            "artifact_types":["validator"]
+            "artifact_types":["validator"],
+            "implementation_status":"fixed",
+            "evidence_digest": crate::self_tests::boundaries::support::sha('d')
         }],
         "packet_successor": {"path":"validation_artifacts/harness/session-packet.json","purpose":"implemented_findings_and_remaining_blockers"},
         "active_registry_current_proof": "not_produced",
         "current_claim_ceiling": "does not support live app registry; plugins ui unsupported; marketplace unsupported; current reviewer exposure unsupported; material review sign-off unsupported; real user product fitness unsupported; does not support 100% coverage"
     })
+}
+
+fn audit_sources() -> serde_json::Value {
+    let ts = "2026-06-25T00:00:00Z";
+    json!([
+        {"source_id":"chronicle-product-fitness-0449","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-source-install-cache-0650","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-registry-proof-1706","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-packet-gap-1847","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-packet-completion-1906","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-product-fitness-ownership-2231","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-product-fitness-ownership-2232","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"chronicle-namespace-progressive-disclosure-2236","artifact":"a","source_kind":"chronicle_summary","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"session-installed-drift-0907","artifact":"a","source_kind":"session_log","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"session-packet-run-1857","artifact":"a","source_kind":"session_log","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"session-self-audit-1935","artifact":"a","source_kind":"session_log","timestamp_utc":ts,"summary":"x"},
+        {"source_id":"packet-summary-1900","artifact":"a","source_kind":"packet_summary","timestamp_utc":ts,"summary":"x"}
+    ])
 }
 
 fn issue_classes() -> serde_json::Value {
@@ -195,6 +211,7 @@ fn issue_classes() -> serde_json::Value {
         {"class_id":"disk_installed_cache_substituted_for_app_registry","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"reviewer_ready_without_current_exposure","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"product_fitness_docs_only","disposition":"fixed","finding_ids":["f1"]},
+        {"class_id":"product_fitness_substitutions","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"product::fitness::substitutions","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"source_install_cache_drift","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"stale_validator_receipts_or_red_fixtures","disposition":"fixed","finding_ids":["f1"]},
@@ -204,6 +221,8 @@ fn issue_classes() -> serde_json::Value {
         {"class_id":"previous_followup_blocker_stale_missing_overclaim_terms","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"typed_boundary_self_audit","disposition":"fixed","finding_ids":["f1"]},
         {"class_id":"coverage_100_self_audit","disposition":"fixed","finding_ids":["f1"]},
-        {"class_id":"line_cap_self_audit","disposition":"fixed","finding_ids":["f1"]}
+        {"class_id":"line_cap_self_audit","disposition":"fixed","finding_ids":["f1"]},
+        {"class_id":"product_fitness_review_ownership","disposition":"fixed","finding_ids":["f1"]},
+        {"class_id":"namespace_progressive_disclosure_under_enforced","disposition":"fixed","finding_ids":["f1"]}
     ])
 }

@@ -19,7 +19,8 @@
       "implemented": [
         "schemas/session-log-hardening-receipt.schema.json",
         "validation_artifacts/harness/session-log-hardening-receipt.json",
-        "validator/src/audit/session_log_hardening.rs",
+        "validator/src/audit/session/log/hardening.rs",
+        "validator/src/audit/session/log/hardening/requirements.rs",
         "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json"
       ],
       "effect": "A current packet cannot be treated as reviewer-ready unless the session-log hardening receipt exists, validates, names audited sources, and classifies the required issue classes."
@@ -45,7 +46,8 @@
       "finding_id": "coverage-100-self-audit-blocker",
       "implemented": [
         "validation_artifacts/harness/session-log-hardening-receipt.json",
-        "validator/src/audit/session_log_hardening.rs"
+        "validator/src/audit/session/log/hardening.rs",
+        "validator/src/audit/session/log/hardening/requirements.rs"
       ],
       "effect": "The packet cannot imply complete, ready, release, production, phase advancement, material sign-off, or 100% coverage from test success; the live 100% coverage proof is blocked."
     }

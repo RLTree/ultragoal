@@ -4,9 +4,28 @@
   "title": "Harness Ultragoal Plugin Product Journey Receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "journey", "evidence", "error_path_evidence", "claim_ceiling", "generated_at"],
+  "required": [
+    "schema",
+    "status",
+    "target_revision",
+    "journey",
+    "evidence",
+    "error_path_evidence",
+    "claim_ceiling",
+    "generated_at"
+  ],
   "properties": {
     "schema": { "const": "harness-ultragoal.plugin-product-journey-receipt.v1" },
+    "status": { "const": "pass" },
+    "target_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "const": "package_digest" },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    },
     "journey": { "type": "array", "minItems": 10, "items": { "type": "string", "minLength": 1 } },
     "evidence": { "type": "array", "minItems": 3, "items": { "$ref": "common-defs.schema.json#/$defs/artifactRef" } },
     "error_path_evidence": { "$ref": "common-defs.schema.json#/$defs/artifactRef" },

@@ -9,12 +9,12 @@ pub(super) fn anti_theater_failures(
         return Vec::new();
     }
     let mut out = Vec::new();
-    for failure in crate::audit::final_packet::package_failures(root, store) {
+    for failure in crate::audit::final_packet::claim_guard_failures(root, store) {
         out.push(format!(
             "mandatory_law_anti_theater_dependency:{law}:{failure}"
         ));
     }
-    for failure in crate::audit::plugin::registry::failures(root, store) {
+    for failure in crate::audit::plugin::registry::claim_guard_failures(root, store) {
         out.push(format!(
             "mandatory_law_anti_theater_dependency:{law}:{failure}"
         ));
@@ -49,7 +49,20 @@ fn receipt_file_failures(root: &Path, path: &str, operation: &str) -> Vec<String
         Err(_) => return vec![format!("cli_control_plane_receipt_missing:{path}")],
     };
     let expected = crate::package::inventory::package_digest(root).unwrap_or_default();
-    crate::cli::control::plane::receipt::same_candidate_pass_failures(&value, &expected, operation)
+    let pass_failures = crate::cli::control::plane::receipt::same_candidate_pass_failures(
+        &value, &expected, operation,
+    );
+    if pass_failures.is_empty() {
+        return Vec::new();
+    }
+    let fail_closed_failures =
+        crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(
+            &value, &expected, operation,
+        );
+    if fail_closed_failures.is_empty() {
+        return Vec::new();
+    }
+    pass_failures
 }
 
 fn is_anti_theater_law(law: &str) -> bool {

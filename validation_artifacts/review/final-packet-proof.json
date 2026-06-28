@@ -1,0 +1,83 @@
+{
+  "blocked_claim_classes": [
+    "completion",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "update_goal_eligibility"
+  ],
+  "claim_ceiling": "withheld_or_blocked",
+  "cli_performance": {
+    "digest": "sha256:4f82434378d55d639a80bb9f6106be668b91a1af75f30cc9302d262c46a07421",
+    "path": "validation_artifacts/cli/performance-receipt.json",
+    "status": "pass"
+  },
+  "coverage": {
+    "digest": "sha256:5114578fe1cb3e065a9f8ab04ee4b61d39571d80ed12615fba7b8a10cb526b9c",
+    "path": "validation_artifacts/coverage/coverage-receipt.json",
+    "status": "pass"
+  },
+  "failure": {
+    "observed_failures": [
+      "final_packet_proof_ref_embedded_status_not_pass:registry",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:disk_cache_synced",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:global_toml_present",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:disk_cache_synced",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:global_toml_present",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:disk_cache_synced",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:global_toml_present",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:disk_cache_synced",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:global_toml_present",
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed"
+    ],
+    "reason": "final_packet_proof_not_proven"
+  },
+  "generated_at": "2026-06-28T12:05:32Z",
+  "package_receipts": [
+    {
+      "digest": "sha256:61e70b123a9d7b37e127e31357ac180abaff01f872eccffff07d4bd247bb0bbb",
+      "path": "validation_artifacts/harness/fit-repo-receipt.json",
+      "status": "pass"
+    },
+    {
+      "digest": "sha256:fce1e82a650def74b21f4292c3816c382e59d864a4932f8ca0b6d23571dd43b6",
+      "path": "validation_artifacts/harness/product-fitness-receipt.json",
+      "status": "pass"
+    },
+    {
+      "digest": "sha256:a27e65766742bb1bdb7aa9576d5f5fa1652b1c6b1956aed2fb076a232e0e297b",
+      "path": "validation_artifacts/harness/plugin-product-journey-receipt.json",
+      "status": "pass"
+    }
+  ],
+  "packet": {
+    "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "path": "validation_artifacts/review/final-packet.json"
+  },
+  "registry_exposure": {
+    "digest": "sha256:bab440ee33e72e70bc692197bc4a3cea7f5cc7a45be5db310b4cd1a512fccc5c",
+    "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+    "status": "fail"
+  },
+  "schema": "harness-ultragoal.final-packet-proof.v1",
+  "source_audit": {
+    "digest": "sha256:5decef0cb36684fdc10028a72d15b053a849a3375472133bdd279ef7b34e88d1",
+    "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
+    "status": "pass"
+  },
+  "status": "fail",
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139"
+  }
+}

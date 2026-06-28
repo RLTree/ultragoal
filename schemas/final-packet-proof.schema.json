@@ -15,7 +15,9 @@
     "source_audit",
     "coverage",
     "package_receipts",
-    "claim_ceiling"
+    "claim_ceiling",
+    "blocked_claim_classes",
+    "failure"
   ],
   "properties": {
     "schema": {
@@ -26,7 +28,10 @@
       "minLength": 20
     },
     "status": {
-      "const": "pass"
+      "enum": [
+        "pass",
+        "fail"
+      ]
     },
     "target_revision": {
       "type": "object",
@@ -67,7 +72,7 @@
       "$ref": "#/$defs/passReceiptRef"
     },
     "registry_exposure": {
-      "$ref": "#/$defs/passReceiptRef"
+      "$ref": "#/$defs/receiptRef"
     },
     "source_audit": {
       "$ref": "#/$defs/receiptRef"
@@ -83,7 +88,51 @@
       }
     },
     "claim_ceiling": {
-      "const": "final_packet_evidence_dereferenced"
+      "enum": [
+        "final_packet_evidence_dereferenced",
+        "withheld_or_blocked"
+      ]
+    },
+    "blocked_claim_classes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "completion",
+          "package_readiness",
+          "review_readiness",
+          "release_readiness",
+          "update_goal_eligibility"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "failure": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason",
+            "observed_failures"
+          ],
+          "properties": {
+            "reason": {
+              "const": "final_packet_proof_not_proven"
+            },
+            "observed_failures": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "$defs": {

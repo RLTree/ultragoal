@@ -3,26 +3,13 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+mod requirements;
+use requirements::{
+    REQUIRED_CLASSES, REQUIRED_FINDING_ARRAYS, REQUIRED_FINDING_STRINGS, REQUIRED_SOURCE_IDS,
+};
+
 const RECEIPT: &str = "validation_artifacts/harness/session-log-hardening-receipt.json";
 const SCHEMA: &str = "session-log-hardening-receipt.schema.json";
-
-const REQUIRED_CLASSES: &[&str] = &[
-    "stale_review_round_assumptions",
-    "active_registry_proof_overclaim",
-    "disk_installed_cache_substituted_for_app_registry",
-    "reviewer_ready_without_current_exposure",
-    "product_fitness_docs_only",
-    "product::fitness::substitutions",
-    "source_install_cache_drift",
-    "stale_validator_receipts_or_red_fixtures",
-    "package_inventory_holes",
-    "packet_without_actionable_findings",
-    "standards_rows_prose_only",
-    "previous_followup_blocker_stale_missing_overclaim_terms",
-    "typed_boundary_self_audit",
-    "coverage_100_self_audit",
-    "line_cap_self_audit",
-];
 
 pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
     let mut out = Vec::new();
@@ -39,15 +26,20 @@ pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec
             .into_iter()
             .map(|err| format!("session_log_hardening_schema:{err}")),
     );
-    if !out.is_empty() {
-        return out;
-    }
-
     match current_manifest_version(root) {
         Ok(version) if string(&receipt, "candidate_version") != version => {
             out.push("session_log_hardening_candidate_version_mismatch".to_string());
         }
         Err(err) => out.push(format!("session_log_hardening_version_unreadable:{err}")),
+        _ => {}
+    }
+    match crate::package::inventory::package_digest(root) {
+        Ok(digest) if string(&receipt, "package_digest") != digest => {
+            out.push("session_log_hardening_package_digest_mismatch".to_string());
+        }
+        Err(err) => out.push(format!(
+            "session_log_hardening_package_digest_unreadable:{err}"
+        )),
         _ => {}
     }
     out.extend(source_failures(&receipt));
@@ -68,6 +60,17 @@ fn source_failures(receipt: &Value) -> Vec<String> {
         if !kinds.contains(required) {
             out.push(format!(
                 "session_log_hardening_source_kind_missing:{required}"
+            ));
+        }
+    }
+    let ids = sources
+        .iter()
+        .filter_map(|row| row.get("source_id").and_then(Value::as_str))
+        .collect::<BTreeSet<_>>();
+    for required in REQUIRED_SOURCE_IDS {
+        if !ids.contains(required) {
+            out.push(format!(
+                "session_log_hardening_source_id_missing:{required}"
             ));
         }
     }
@@ -94,12 +97,50 @@ fn issue_class_failures(receipt: &Value) -> Vec<String> {
 fn finding_failures(receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let findings = array(receipt, "findings");
+    let source_ids = array(receipt, "audit_sources")
+        .iter()
+        .filter_map(|row| row.get("source_id").and_then(Value::as_str))
+        .collect::<BTreeSet<_>>();
+    let mut finding_ids = BTreeSet::new();
     let mut has_fixed_with_validator = false;
     for finding in findings {
+        let id = string(finding, "finding_id");
+        if !finding_ids.insert(id) {
+            out.push(format!("session_log_hardening_duplicate_finding_id:{id}"));
+        }
         let status = finding
             .get("enforcement_status")
             .and_then(Value::as_str)
             .unwrap_or("");
+        if status != string(finding, "implementation_status") {
+            out.push(format!(
+                "session_log_hardening_implementation_status_mismatch:{id}"
+            ));
+        }
+        for field in REQUIRED_FINDING_STRINGS {
+            if string(finding, field).is_empty() {
+                out.push(format!(
+                    "session_log_hardening_finding_field_missing:{id}:{field}"
+                ));
+            }
+        }
+        for field in REQUIRED_FINDING_ARRAYS {
+            if array(finding, field).is_empty() {
+                out.push(format!(
+                    "session_log_hardening_finding_array_missing:{id}:{field}"
+                ));
+            }
+        }
+        for source_ref in array(finding, "source_refs")
+            .iter()
+            .filter_map(|row| row.as_str())
+        {
+            if !source_ids.contains(source_ref) {
+                out.push(format!(
+                    "session_log_hardening_source_ref_unknown:{id}:{source_ref}"
+                ));
+            }
+        }
         let artifact_types = array(finding, "artifact_types")
             .into_iter()
             .filter_map(Value::as_str)
@@ -114,6 +155,25 @@ fn finding_failures(receipt: &Value) -> Vec<String> {
     }
     if !has_fixed_with_validator {
         out.push("session_log_hardening_no_deterministic_fix".to_string());
+    }
+    out.extend(issue_finding_link_failures(receipt, &finding_ids));
+    out
+}
+
+fn issue_finding_link_failures(receipt: &Value, finding_ids: &BTreeSet<&str>) -> Vec<String> {
+    let mut out = Vec::new();
+    for issue in array(receipt, "required_issue_classes") {
+        let class_id = string(issue, "class_id");
+        for finding_id in array(issue, "finding_ids")
+            .iter()
+            .filter_map(|row| row.as_str())
+        {
+            if !finding_ids.contains(finding_id) {
+                out.push(format!(
+                    "session_log_hardening_issue_finding_unknown:{class_id}:{finding_id}"
+                ));
+            }
+        }
     }
     out
 }

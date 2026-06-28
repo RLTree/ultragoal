@@ -1,10 +1,10 @@
 {
   "schema": "harness-ultragoal.session-log-hardening-receipt.v1",
   "status": "pass",
-  "generated_at": "2026-06-25T22:22:43Z",
+  "generated_at": "2026-06-28T11:40:52Z",
   "candidate_version": "0.0.11",
   "source_root": "repo://harness-ultragoal-plugin-proposal",
-  "package_digest": "sha256:3fa3496e0f9e2e7c44ee7a6adc35bbc870395abd1f75030abc88b21c909f5e5d",
+  "package_digest": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139",
   "audit_sources": [
     {
       "source_id": "chronicle-product-fitness-0449",
@@ -18,7 +18,7 @@
       "artifact": "codex-memory:chronicle/resources/2026-06-25T06-50-00-kKEY-10min-memory-summary.md",
       "source_kind": "chronicle_summary",
       "timestamp_utc": "2026-06-25T06:50:00Z",
-      "summary": "The orchestrator was correcting stale proof, syncing installed and cache package version 0.0.10, and repairing red catalog/schema bookkeeping drift."
+      "summary": "The orchestrator was correcting stale proof, syncing installed/cache package version 0.0.10, and repairing red catalog/schema bookkeeping drift."
     },
     {
       "source_id": "chronicle-registry-proof-1706",
@@ -39,7 +39,28 @@
       "artifact": "codex-memory:chronicle/resources/2026-06-25T19-06-00-UuGS-10min-memory-summary.md",
       "source_kind": "chronicle_summary",
       "timestamp_utc": "2026-06-25T19:06:00Z",
-      "summary": "The packet lane produced source/install/cache evidence and a detached packet, but it completed without a session-log issue inventory."
+      "summary": "The packet lane produced source/install/cache evidence and a detached packet, but completed without a repo-owned session-log issue inventory."
+    },
+    {
+      "source_id": "chronicle-product-fitness-ownership-2231",
+      "artifact": "codex-memory:chronicle/resources/2026-06-25T22-31-00-zcrM-10min-memory-summary.md",
+      "source_kind": "chronicle_summary",
+      "timestamp_utc": "2026-06-25T22:31:00Z",
+      "summary": "Product Fitness ownership was missing as a first-class review disposition; generic Product/Simplicity approval could substitute for Product Fitness."
+    },
+    {
+      "source_id": "chronicle-product-fitness-ownership-2232",
+      "artifact": "codex-memory:chronicle/resources/2026-06-25T22-32-00-VlNX-10min-memory-summary.md",
+      "source_kind": "chronicle_summary",
+      "timestamp_utc": "2026-06-25T22:32:00Z",
+      "summary": "The user rejected a minimum Product Fitness ownership patch and required fail-closed first-class Product Fitness ownership with red fixtures."
+    },
+    {
+      "source_id": "chronicle-namespace-progressive-disclosure-2236",
+      "artifact": "codex-memory:chronicle/resources/2026-06-25T22-36-00-EJSi-10min-memory-summary.md",
+      "source_kind": "chronicle_summary",
+      "timestamp_utc": "2026-06-25T22:36:00Z",
+      "summary": "Namespace/progressive-disclosure was identified as under-enforced and added as a first-class fail-closed requirement rather than documentation freshness."
     },
     {
       "source_id": "session-installed-drift-0907",
@@ -47,7 +68,7 @@
       "source_kind": "session_log",
       "timestamp_utc": "2026-06-25T09:07:47Z",
       "session_id": "019efe02-7b01-7b50-b554-acfd5bd871a4",
-      "summary": "A hostile review found same-version non-cache installed root drift: installed audit had stale digest and lower red fixture count while source/cache were current."
+      "summary": "A hostile review found same-version non-cache installed-root drift: installed audit had stale digest and lower red fixture count while source/cache were current."
     },
     {
       "source_id": "session-packet-run-1857",
@@ -55,7 +76,7 @@
       "source_kind": "session_log",
       "timestamp_utc": "2026-06-25T18:57:25Z",
       "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
-      "summary": "The packet run loaded repo context and later wrote review-packet-current.json, but the session-log audit request was not implemented as a repo-owned finding inventory."
+      "summary": "The packet run loaded repo context and wrote review-packet-current.json, but the session-log audit request was not implemented as a repo-owned finding inventory."
     },
     {
       "source_id": "session-self-audit-1935",
@@ -83,8 +104,9 @@
     },
     {
       "class_id": "active_registry_proof_overclaim",
-      "disposition": "already_enforced",
+      "disposition": "fixed",
       "finding_ids": [
+        "packet-registry-blocker",
         "registry-review-round-provenance"
       ]
     },
@@ -117,17 +139,32 @@
       ]
     },
     {
+      "class_id": "product::fitness::substitutions",
+      "disposition": "already_enforced",
+      "finding_ids": [
+        "product-fitness-enforcement"
+      ]
+    },
+    {
+      "class_id": "product_fitness_review_ownership",
+      "disposition": "already_enforced",
+      "finding_ids": [
+        "product-fitness-review-ownership"
+      ]
+    },
+    {
       "class_id": "source_install_cache_drift",
-      "disposition": "fixed",
+      "disposition": "intentionally_blocked",
       "finding_ids": [
         "installed-cache-drift"
       ]
     },
     {
       "class_id": "stale_validator_receipts_or_red_fixtures",
-      "disposition": "already_enforced",
+      "disposition": "fixed",
       "finding_ids": [
-        "validator-red-catalog-drift"
+        "validator-red-catalog-drift",
+        "session-hardening-inventory"
       ]
     },
     {
@@ -156,7 +193,9 @@
       "disposition": "fixed",
       "finding_ids": [
         "session-hardening-inventory",
-        "packet-registry-blocker"
+        "packet-registry-blocker",
+        "product-fitness-review-ownership",
+        "namespace-progressive-disclosure-under-enforced"
       ]
     },
     {
@@ -181,10 +220,10 @@
       ]
     },
     {
-      "class_id": "product::fitness::substitutions",
+      "class_id": "namespace_progressive_disclosure_under_enforced",
       "disposition": "already_enforced",
       "finding_ids": [
-        "product-fitness-enforcement"
+        "namespace-progressive-disclosure-under-enforced"
       ]
     }
   ],
@@ -197,18 +236,47 @@
         "session-packet-run-1857"
       ],
       "timestamp_or_session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
+      "signal": "packet-created-before-session-log-issue-inventory",
+      "affected_law_ids": [
+        "historical-regression-corpus",
+        "validator-execution-provenance"
+      ],
+      "affected_package_surfaces": [
+        "review-packet",
+        "validator",
+        "package-inventory"
+      ],
+      "observed_bad_behavior": "A detached packet could look reviewer-ready without a repo-owned session-log/Chronicle issue inventory.",
       "observed_gap": "The packet was created as a detached evidence bundle before the required June 25 Chronicle/session-log audit was turned into an issue inventory.",
       "affected_surface": "review packet, validator provenance, package inventory",
       "enforcement_status": "fixed",
-      "required_repair": "Add a repo-owned session-log hardening receipt, schema, validator check, package inventory entries, and successor packet that records implemented findings and blockers.",
-      "claim_ceiling_impact": "Reviewer-ready claims now depend on this receipt and cannot be inferred from a detached packet alone.",
+      "required_repair": "Bind session-log hardening to a schema, current package digest, required source ids, issue classes, finding row shape, validator check, and package inventory entries.",
+      "fixture_ids": [
+        "session-log-hardening-valid-fixture",
+        "session-log-hardening-stale-digest-red"
+      ],
+      "validator_ids": [
+        "validator-execution-provenance",
+        "session-log-hardening"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "review_readiness",
+        "completion",
+        "update_goal_eligibility"
+      ],
+      "claim_ceiling_impact": "Reviewer-ready, completion, and update_goal claims now depend on current same-candidate session-log hardening proof and cannot be inferred from a detached packet alone.",
       "artifact_types": [
         "code",
         "schema",
         "receipt",
         "validator",
         "packet"
-      ]
+      ],
+      "implementation_status": "fixed",
+      "evidence_digest": "sha256:22a6ae2421892bc3e6e1b3a73e336d48135f7cea7a06fa398feaeacbed03cfad"
     },
     {
       "finding_id": "packet-registry-blocker",
@@ -218,10 +286,41 @@
         "session-installed-drift-0907"
       ],
       "timestamp_or_session_id": "2026-06-25T17:06:00Z",
+      "signal": "active-registry-proof-overclaim",
+      "affected_law_ids": [
+        "distribution-sharing-surface-claim-separation",
+        "registry-reviewer-exposure",
+        "cli-control-plane-authority"
+      ],
+      "affected_package_surfaces": [
+        "active-registry",
+        "review-packet",
+        "cli-control-plane"
+      ],
+      "observed_bad_behavior": "Stale reviewer-registry or disk install/cache proof could be read as current Plugins UI, marketplace, install-button, launcher runtime, or reviewer exposure proof.",
       "observed_gap": "A stale June 21 active-registry exposure receipt and local disk install/cache proof could be confused with current app registry, chooser, marketplace, or reviewer exposure proof.",
       "affected_surface": "active registry, material review, review packet claim ceiling",
       "enforcement_status": "fixed",
-      "required_repair": "Require this hardening receipt and successor packet to declare active_registry_current_proof as not_produced and keep live registry/reviewer readiness out of the supported claim ceiling.",
+      "required_repair": "Declare active_registry_current_proof as not_produced, require live same-surface registry observation for exposure claims, and keep registry/reviewer readiness out of the supported claim ceiling.",
+      "fixture_ids": [
+        "active-registry-exposure-hand-authored-pass-red",
+        "proof-surface-negative-probe"
+      ],
+      "validator_ids": [
+        "registry-exposure-proof",
+        "final-packet-proof",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/cli/registry-probe-receipt.json",
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "app_registry_or_reviewer_exposure",
+        "review_readiness",
+        "release_readiness"
+      ],
       "claim_ceiling_impact": "No live active-registry, Plugins UI, marketplace, install-button, launcher runtime, or current reviewer-exposure claim is supported.",
       "artifact_types": [
         "code",
@@ -229,7 +328,9 @@
         "validator",
         "packet",
         "blocker"
-      ]
+      ],
+      "implementation_status": "fixed",
+      "evidence_digest": "sha256:afa19b40ca7354e0b8f1efb18e8d45edc60bb82cd4a7362209e00b51c2d8825f"
     },
     {
       "finding_id": "installed-cache-drift",
@@ -239,16 +340,47 @@
         "chronicle-packet-completion-1906"
       ],
       "timestamp_or_session_id": "019efe02-7b01-7b50-b554-acfd5bd871a4",
+      "signal": "source-install-cache-drift",
+      "affected_law_ids": [
+        "source-install-cache-app-registry-separation",
+        "distribution-sharing-surface-claim-separation"
+      ],
+      "affected_package_surfaces": [
+        "source-package",
+        "installed-plugin",
+        "versioned-cache-package"
+      ],
+      "observed_bad_behavior": "Same version string was allowed to obscure stale installed-root digest and lower red fixture count.",
       "observed_gap": "Earlier same-version installed root proof had stale digest and fixture counts, so version 0.0.10 alone was not enough to prove source/install/cache alignment.",
       "affected_surface": "source package, non-cache installed plugin, versioned cache package",
-      "enforcement_status": "fixed",
-      "required_repair": "Refresh installed and cache copies from the same candidate archive, rerun same-surface audits, and include digest evidence in packet/successor packet.",
-      "claim_ceiling_impact": "Local installed/cache same-digest proof is supported only for the regenerated same-candidate audit receipts, not for older same-version receipts.",
+      "enforcement_status": "intentionally_blocked",
+      "required_repair": "Block source/install/cache parity claims until source, installed, and cache receipts are regenerated from the same candidate digest after source compliance passes.",
+      "fixture_ids": [
+        "clean-checkout-source-install-cache-drift",
+        "cross-artifact-consistency-solver-authority-graph-closure-source-install-cache-graph-mismatch-red"
+      ],
+      "validator_ids": [
+        "source-install-cache-drift",
+        "fit-repo-proof",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/harness/fit-repo-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "package_readiness",
+        "install_cache_parity",
+        "release_readiness"
+      ],
+      "claim_ceiling_impact": "No current install/cache parity claim is supported for this digest until those surfaces are refreshed and audited from the same candidate.",
       "artifact_types": [
-        "install-cache-refresh",
         "receipt",
-        "packet"
-      ]
+        "validator",
+        "blocker"
+      ],
+      "implementation_status": "intentionally_blocked",
+      "evidence_digest": "sha256:30d38402d56ef69ea6c04e4e20d5ddf5b932790efea5c6e5be2f84c7f3293484"
     },
     {
       "finding_id": "product-fitness-enforcement",
@@ -256,18 +388,99 @@
         "chronicle-product-fitness-0449"
       ],
       "timestamp_or_session_id": "2026-06-25T04:49:00Z",
+      "signal": "product-fitness-documentation-substitution",
+      "affected_law_ids": [
+        "product-fitness-proof",
+        "product-success-substitution-rejection"
+      ],
+      "affected_package_surfaces": [
+        "Product Fitness schema",
+        "Product Fitness receipt",
+        "validator"
+      ],
+      "observed_bad_behavior": "Documentation-only Product Fitness and adjacent install/smoke/package proofs could masquerade as product success.",
       "observed_gap": "Product Fitness began as an added law and plan surface and needed enforcement against documentation-only proof and substitution claims.",
       "affected_surface": "Product Fitness schema, receipt, substitutions, validator",
       "enforcement_status": "already_enforced",
-      "required_repair": "Keep product-fitness-proof bound to schema validation, receipt digest/evidence checks, and substitution rejection checks.",
-      "claim_ceiling_impact": "The proposal supports package/static Product Fitness gate enforcement, not real user Product Fitness or daily-driver success.",
+      "required_repair": "Keep Product Fitness proof bound to schema validation, receipt digest/evidence checks, ownership/disposition checks, and substitution rejection checks.",
+      "fixture_ids": [
+        "product-fitness-docs-only-red",
+        "product-fitness-substitution-red",
+        "product-fitness-valid-fixture"
+      ],
+      "validator_ids": [
+        "product-fitness-proof",
+        "source-obligation-coverage"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/harness/product-fitness-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "product_fitness",
+        "product_success",
+        "completion"
+      ],
+      "claim_ceiling_impact": "The proposal can support only package/static Product Fitness gate enforcement after current receipts are regenerated; it does not support real user Product Fitness or daily-driver success.",
       "artifact_types": [
         "code",
         "schema",
         "fixture",
         "receipt",
         "validator"
-      ]
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:ddce334eb24e411f15e03c6e26fdb5f8ef92f50142f0883d6ea0398e141f6a5c"
+    },
+    {
+      "finding_id": "product-fitness-review-ownership",
+      "source_refs": [
+        "chronicle-product-fitness-ownership-2231",
+        "chronicle-product-fitness-ownership-2232"
+      ],
+      "timestamp_or_session_id": "2026-06-25T22:31:00Z",
+      "signal": "product-fitness-review-ownership-missing",
+      "affected_law_ids": [
+        "product-fitness-review-ownership",
+        "review-feedback-disposition-same-round-satisfaction"
+      ],
+      "affected_package_surfaces": [
+        "review-round schema",
+        "reviewer prompts",
+        "review reports"
+      ],
+      "observed_bad_behavior": "Generic Product/Simplicity approval could substitute for a typed Product Fitness disposition with an assigned reviewer.",
+      "observed_gap": "Product Fitness ownership was not first-class in the review team and Product/Simplicity sign-off could stand in for Product Fitness.",
+      "affected_surface": "Product/Simplicity reviewer prompts, review-round schema, review fixtures, reports",
+      "enforcement_status": "already_enforced",
+      "required_repair": "Require Product Fitness ownership/disposition fields, assigned reviewer binding, freshness, and substitution red fixtures before product-impacting review claims pass.",
+      "fixture_ids": [
+        "product-fitness-missing-review-owner-red",
+        "product-fitness-generic-product-approval-red",
+        "review-round-product-fitness-valid"
+      ],
+      "validator_ids": [
+        "product-fitness-proof",
+        "review-round-product-fitness"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/harness/product-fitness-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "material_review_signoff",
+        "product_fitness",
+        "review_readiness"
+      ],
+      "claim_ceiling_impact": "Product-impacting review claims are unsupported when Product Fitness disposition is missing, stale, unassigned, or substituted by generic Product/Simplicity approval.",
+      "artifact_types": [
+        "code",
+        "schema",
+        "fixture",
+        "validator"
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:d4e57e6f2984ab87f627278308ed3747dacb7b7cd19e21b35892791296226400"
     },
     {
       "finding_id": "validator-red-catalog-drift",
@@ -275,16 +488,48 @@
         "chronicle-source-install-cache-0650"
       ],
       "timestamp_or_session_id": "2026-06-25T06:50:00Z",
+      "signal": "red-fixture-catalog-and-validator-receipt-drift",
+      "affected_law_ids": [
+        "red-fixture-coverage",
+        "validator-execution-provenance",
+        "stale-receipt-propagation"
+      ],
+      "affected_package_surfaces": [
+        "validator receipt",
+        "red fixture report",
+        "schema catalog"
+      ],
+      "observed_bad_behavior": "Generated schema bookkeeping and red fixture counts could drift while stale receipts still looked authoritative.",
       "observed_gap": "Red catalog and generated schema bookkeeping drift changed expected fixture counts during the day.",
       "affected_surface": "validator receipt, red fixture report, schema catalog",
-      "enforcement_status": "already_enforced",
-      "required_repair": "Use current validator receipts with package digest, red fixture count, red report, and package inventory closure instead of stale counts.",
-      "claim_ceiling_impact": "Only regenerated 458-red-fixture receipts can support the current June 25 candidate.",
+      "enforcement_status": "fixed",
+      "required_repair": "Use current validator receipts with package digest, red fixture count, red report, runtime provenance, and package inventory closure instead of stale counts.",
+      "fixture_ids": [
+        "validator-receipt-stale-runtime-provenance-red",
+        "red-fixture-count-stale-red"
+      ],
+      "validator_ids": [
+        "red-fixture-coverage",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "source_audit",
+        "completion",
+        "update_goal_eligibility"
+      ],
+      "claim_ceiling_impact": "Only regenerated same-candidate validator and red-fixture receipts can support source-local audit claims.",
       "artifact_types": [
         "fixture",
         "receipt",
         "validator"
-      ]
+      ],
+      "implementation_status": "fixed",
+      "evidence_digest": "sha256:30d38402d56ef69ea6c04e4e20d5ddf5b932790efea5c6e5be2f84c7f3293484"
     },
     {
       "finding_id": "registry-review-round-provenance",
@@ -293,17 +538,47 @@
         "packet-summary-1900"
       ],
       "timestamp_or_session_id": "2026-06-25T17:06:00Z",
-      "observed_gap": "The review-round validator correctly treats live_registry_exposure as same-round reviewer-spawn provenance, but that proof does not become app registry or marketplace proof.",
+      "signal": "review-round-registry-provenance-scope",
+      "affected_law_ids": [
+        "review-round-current-exposure",
+        "distribution-sharing-surface-claim-separation"
+      ],
+      "affected_package_surfaces": [
+        "review-round receipts",
+        "reviewer materiality",
+        "registry preflight"
+      ],
+      "observed_bad_behavior": "Same-round reviewer-spawn provenance could be overread as broader app registry or marketplace proof.",
+      "observed_gap": "The review-round validator treats live_registry_exposure as same-round reviewer-spawn provenance, but that proof does not become app registry or marketplace proof.",
       "affected_surface": "review-round receipts, reviewer materiality, registry preflight",
       "enforcement_status": "already_enforced",
       "required_repair": "Continue enforcing same-round exposure/session matching in review-round receipts and keep stronger app-registry claims out of the packet.",
+      "fixture_ids": [
+        "review-round-stale-registry-exposure-red",
+        "review-round-valid-current-exposure"
+      ],
+      "validator_ids": [
+        "review-round-registry-provenance",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "fixtures/review-round/valid/review-round-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "material_review_signoff",
+        "review_readiness",
+        "app_registry_or_reviewer_exposure"
+      ],
       "claim_ceiling_impact": "Material review sign-off remains unsupported without fresh same-round reviewer exposure and live reviewer outputs.",
       "artifact_types": [
         "code",
         "receipt",
         "validator",
         "blocker"
-      ]
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:afa19b40ca7354e0b8f1efb18e8d45edc60bb82cd4a7362209e00b51c2d8825f"
     },
     {
       "finding_id": "standards-enforcement-path",
@@ -312,16 +587,47 @@
         "chronicle-registry-proof-1706"
       ],
       "timestamp_or_session_id": "2026-06-25T17:06:00Z",
+      "signal": "standards-rows-must-be-mechanized",
+      "affected_law_ids": [
+        "agent-standards-enforcement",
+        "standards-gardener-promotion",
+        "source-obligation-parity"
+      ],
+      "affected_package_surfaces": [
+        "agent standards",
+        "standards gardener",
+        "red fixtures"
+      ],
+      "observed_bad_behavior": "Standards rows and zero-evidence fixtures could be treated as prose rather than proof-bearing enforcement.",
       "observed_gap": "Session evidence repeatedly called out standards enforcement rows and zero-evidence red fixture work as proof-bearing, not prose-only.",
       "affected_surface": "agent standards enforcement, standards gardening, red fixtures",
       "enforcement_status": "already_enforced",
-      "required_repair": "Keep standards rows under validator-backed agent-standards-enforcement and standards-gardener-promotion checks.",
-      "claim_ceiling_impact": "Standards rows can support package/static enforcement only where validator checks bind them.",
+      "required_repair": "Keep standards rows under validator-backed agent-standards-enforcement, source-obligation parity, and standards-gardener-promotion checks.",
+      "fixture_ids": [
+        "agent-standards-row-shape-only-red",
+        "standards-gardener-stale-promotion-red"
+      ],
+      "validator_ids": [
+        "agent-standards-enforcement",
+        "standards-gardener-promotion"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "package_readiness",
+        "completion",
+        "update_goal_eligibility"
+      ],
+      "claim_ceiling_impact": "Standards rows can support package/static enforcement only where current validator checks bind them to real checks, fixtures, and receipts.",
       "artifact_types": [
         "code",
         "fixture",
         "validator"
-      ]
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:30d38402d56ef69ea6c04e4e20d5ddf5b932790efea5c6e5be2f84c7f3293484"
     },
     {
       "finding_id": "typed-boundary-self-audit",
@@ -329,17 +635,48 @@
         "session-self-audit-1935"
       ],
       "timestamp_or_session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
+      "signal": "plugin-self-typed-boundary-law",
+      "affected_law_ids": [
+        "typed-parsing-boundaries",
+        "total-authority-types-impossible-state-elimination"
+      ],
+      "affected_package_surfaces": [
+        "validator JSON boundary",
+        "schema catalog",
+        "typed receipt loaders"
+      ],
+      "observed_bad_behavior": "The plugin could teach typed boundaries to target repos while failing to enforce them on its own validator and receipts.",
       "observed_gap": "The plugin itself needed a current check that parsing and typed boundaries are real, not merely taught to generated target repos.",
       "affected_surface": "validator JSON boundary, schema catalog, typed semantic receipt loaders",
       "enforcement_status": "already_enforced",
-      "required_repair": "Run the validator unit suite and package audit through json_boundary/schema_catalog paths; keep JSON parsing, schema resolution, path containment, symlink, hardlink, and typed receipt checks in validator-owned code.",
-      "claim_ceiling_impact": "Typed-boundary enforcement is supported for the validator surfaces covered by current tests and audit receipts, not for untested runtime surfaces.",
+      "required_repair": "Run validator unit and package audits through json_boundary/schema_catalog paths and typed receipt checks for JSON parsing, schema resolution, path containment, symlink, hardlink, and stale digest fields.",
+      "fixture_ids": [
+        "typed-boundary-malformed-json-red",
+        "typed-boundary-path-traversal-red",
+        "typed-boundary-valid-fixture"
+      ],
+      "validator_ids": [
+        "typed-boundary-self-audit",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "completion",
+        "package_readiness",
+        "update_goal_eligibility"
+      ],
+      "claim_ceiling_impact": "Typed-boundary enforcement is supported only after current same-candidate tests and audit receipts pass; it does not cover untested runtime surfaces.",
       "artifact_types": [
         "code",
         "schema",
         "receipt",
         "validator"
-      ]
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:ff67278e3b1d43809ebd20ae3cda5056ea0ec0ae2ec5648cabe6fda46af2468c"
     },
     {
       "finding_id": "coverage-100-self-audit-blocker",
@@ -347,16 +684,48 @@
         "session-self-audit-1935"
       ],
       "timestamp_or_session_id": "2026-06-25T19:35:34Z",
-      "observed_gap": "The repo has no root .harness/coverage-command, and live cargo llvm-cov proof failed the 100% line coverage gate at 6.68% line coverage.",
+      "signal": "plugin-self-coverage-not-100",
+      "affected_law_ids": [
+        "coverage-self-law",
+        "behavior-example-coverage-anti-gaming"
+      ],
+      "affected_package_surfaces": [
+        "validator source coverage",
+        "coverage receipt",
+        "completion claim ceiling"
+      ],
+      "observed_bad_behavior": "The plugin could claim Harness Ultragoal compliance without exact 100% self-coverage and uncovered_records = [].",
+      "observed_gap": "The repo previously had no root .harness/coverage-command and live cargo llvm-cov proof failed the 100% line coverage gate.",
       "affected_surface": "validator source coverage, completion/readiness/material sign-off claim ceiling",
       "enforcement_status": "intentionally_blocked",
-      "required_repair": "Do not claim complete, ready, release-ready, material sign-off, or 100% coverage until a typed coverage receipt proves coverage.percent = 100 with uncovered_records = [].",
-      "claim_ceiling_impact": "No 100% coverage, complete, ready, release, production, phase advancement, or material sign-off claim is supported.",
+      "required_repair": "Do not claim complete, ready, release-ready, material sign-off, or 100% coverage until the current candidate has a typed coverage receipt proving coverage.percent = 100 with uncovered_records = [].",
+      "fixture_ids": [
+        "coverage-ready-changed-file-not-measured",
+        "coverage-substitute-test-pass-red",
+        "coverage-valid-exact-100"
+      ],
+      "validator_ids": [
+        "coverage-proof-policy",
+        "source-obligation-coverage",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/coverage/coverage-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "coverage_100",
+        "completion",
+        "readiness"
+      ],
+      "claim_ceiling_impact": "No 100% coverage, complete, ready, release, production, phase advancement, or material sign-off claim is supported until current coverage is regenerated for this digest.",
       "artifact_types": [
         "receipt",
         "validator",
         "blocker"
-      ]
+      ],
+      "implementation_status": "intentionally_blocked",
+      "evidence_digest": "sha256:ff67278e3b1d43809ebd20ae3cda5056ea0ec0ae2ec5648cabe6fda46af2468c"
     },
     {
       "finding_id": "line-cap-self-audit",
@@ -364,21 +733,103 @@
         "session-self-audit-1935"
       ],
       "timestamp_or_session_id": "2026-06-25T19:35:34Z",
+      "signal": "plugin-self-line-cap-law",
+      "affected_law_ids": [
+        "line-cap-adherence",
+        "validator-source-namespace-topology"
+      ],
+      "affected_package_surfaces": [
+        "validator/src Rust modules",
+        "self-tests"
+      ],
+      "observed_bad_behavior": "Validator hardening could create oversized source files while claiming compliance with the laws it enforces.",
       "observed_gap": "The plugin source needed a current line-cap check against the active Rust migration hard cap of 250 lines unless generated or explicitly justified.",
       "affected_surface": "validator/src Rust modules",
       "enforcement_status": "already_enforced",
-      "required_repair": "Run validator/src line counts and keep changed source files under 250 lines; current audit found no validator/src .rs file over 250 lines.",
-      "claim_ceiling_impact": "Line-cap adherence is supported for validator/src Rust source in this candidate; it does not replace coverage or live registry proof.",
+      "required_repair": "Keep changed Rust source under 250 lines and avoid broad line-cap exceptions; the session-log hardening move leaves changed Rust files at 239, 228, 51, 1, and 1 lines.",
+      "fixture_ids": [
+        "line-cap-over-limit-red",
+        "line-cap-valid-current-source"
+      ],
+      "validator_ids": [
+        "line-cap-adherence",
+        "namespace-progressive-disclosure"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "completion",
+        "package_readiness",
+        "cli_self_law"
+      ],
+      "claim_ceiling_impact": "Line-cap adherence is source-local implementation evidence only and does not replace coverage, source audit, or live registry proof.",
       "artifact_types": [
         "receipt",
         "validator"
-      ]
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:ff67278e3b1d43809ebd20ae3cda5056ea0ec0ae2ec5648cabe6fda46af2468c"
+    },
+    {
+      "finding_id": "namespace-progressive-disclosure-under-enforced",
+      "source_refs": [
+        "chronicle-namespace-progressive-disclosure-2236"
+      ],
+      "timestamp_or_session_id": "2026-06-25T22:36:00Z",
+      "signal": "namespace-progressive-disclosure-under-enforced",
+      "affected_law_ids": [
+        "namespace-progressive-disclosure",
+        "validator-source-namespace-topology",
+        "maximally-factored-module-tree"
+      ],
+      "affected_package_surfaces": [
+        "validator source topology",
+        "package inventory",
+        "agent standards",
+        "source obligations"
+      ],
+      "observed_bad_behavior": "Namespace/progressive-disclosure could be treated as documentation freshness or broad traceability instead of a first-class fail-closed law.",
+      "observed_gap": "Namespace/progressive-disclosure was called out as under-enforced and required dedicated standards rows, trace entries, validators, fixtures, receipts, and claim guards.",
+      "affected_surface": "validator source topology, package inventory, standards, source obligations, final packet claim ceiling",
+      "enforcement_status": "already_enforced",
+      "required_repair": "Keep namespace-progressive-disclosure and validator-source namespace topology under dedicated checks, red/green/tamper fixtures, package inventory closure, and claim guards.",
+      "fixture_ids": [
+        "namespace-progressive-disclosure-source-obligation-parity-red",
+        "validator-source-namespace-topology-red",
+        "fixtures/mandatory-law-surfaces/valid/namespace-progressive-disclosure.json"
+      ],
+      "validator_ids": [
+        "namespace-progressive-disclosure",
+        "plugin-inventory-closure",
+        "validator-execution-provenance"
+      ],
+      "receipt_ids": [
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "claim_ids": [
+        "completion",
+        "review_readiness",
+        "package_readiness",
+        "release_readiness",
+        "update_goal_eligibility"
+      ],
+      "claim_ceiling_impact": "No completion, review, package, readiness, release, final packet, CLI self-law, or update_goal claim may pass while namespace/progressive-disclosure or source topology checks fail.",
+      "artifact_types": [
+        "code",
+        "schema",
+        "fixture",
+        "validator"
+      ],
+      "implementation_status": "already_enforced",
+      "evidence_digest": "sha256:6a74186bdb1563723d83c75e75e0e595c4d889797ba4770e1843eb3d528f96be"
     }
   ],
   "packet_successor": {
     "path": "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json",
     "purpose": "implemented_findings_and_remaining_blockers"
   },
-  "active_registry_current_proof": "produced",
-  "current_claim_ceiling": "Supports source package/static/fixture enforcement and current multi_agent_v1 reviewer-agent registry exposure only. Does not support live app registry, Plugins UI, marketplace, install-button, launcher runtime, current reviewer exposure beyond multi_agent_v1 tool registry, material review sign-off, real user product fitness, daily-driver success, and does not support 100% coverage until the current coverage receipt reaches exact 100% with no uncovered records."
+  "active_registry_current_proof": "not_produced",
+  "current_claim_ceiling": "Supports only source-local session-log/Chronicle hardening inventory and fail-closed claim guards for the current source candidate. Does not support live app registry, Plugins UI, marketplace, install-button, launcher runtime, current reviewer exposure, material review sign-off, real user Product Fitness, daily-driver success, final packet correctness, install/cache parity, readiness, release, completion, update_goal eligibility, and does not support 100% coverage until each same-surface same-candidate receipt is regenerated and passes."
 }

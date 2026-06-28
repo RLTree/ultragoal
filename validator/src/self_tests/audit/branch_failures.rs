@@ -167,10 +167,10 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
         "plugin_self_law_coverage_claim_ceiling_not_complete",
         "plugin_self_law_coverage_target_revision_unavailable",
         "plugin_self_law_registry_target_digest_mismatch",
-        "plugin_self_law_registry_status_not_pass",
-        "plugin_self_law_registry_claim_ceiling_not_live_surface",
-        "plugin_self_law_registry_wrong_source",
-        "plugin_self_law_registry_agent_missing",
+        "plugin_self_law_registry_guard_wrong_source",
+        "plugin_self_law_registry_guard_capture_method_not_fail_closed",
+        "plugin_self_law_registry_guard_failure_reason_missing",
+        "plugin_self_law_registry_guard_missing_blocked_claim:app_registry_or_reviewer_exposure",
         "plugin_self_law_line_cap_exceeded:validator/src/too_long.rs:251",
     ] {
         assert!(contains(&failures, expected), "{expected}: {failures:?}");

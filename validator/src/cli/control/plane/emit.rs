@@ -130,16 +130,24 @@ fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
         return vec!["live_registry_or_reviewer_exposure_same_surface_pass"];
     }
     let mut out = vec![
+        "current_source_audit_pass",
         "current_red_fixture_report_status_pass",
         "coverage_100_no_uncovered_records",
         "current_cli_performance_pass",
         "current_final_packet_proof_pass",
         "live_registry_or_reviewer_exposure_same_surface_pass",
+        "current_fit_repo_pass",
+        "current_product_fitness_pass",
+        "current_product_journey_pass",
+        "current_standards_gardener_pass",
+        "current_rust_devx_pass",
+        "current_gc_pass",
     ];
     if matches!(
         operation,
         ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility
     ) {
+        out.push("current_transactional_finalization_pass");
         out.push("all_89_gates_and_100_stop_conditions_pass");
     }
     out

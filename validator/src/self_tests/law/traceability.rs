@@ -24,6 +24,7 @@ fn gardener_receipt(action: &str, severity: &str, artifact: Value) -> Value {
         "schema": "harness-ultragoal.standards-gardening-receipt.v1",
         "status": "pass",
         "generated_at": "2026-06-25T00:00:00Z",
+        "candidate_digest": crate::self_tests::boundaries::support::sha('c'),
         "trigger_signal": {
             "signal_id": "sig",
             "severity": severity,
@@ -134,6 +135,11 @@ fn foundational_law_trace_rejects_missing_entries_and_untyped_sources() {
 fn standards_gardener_receipts_reject_missing_artifacts_semantics_and_stale_changes() {
     let root = crate::self_tests::boundaries::support::temp_root("standards-gardener");
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
     assert!(
         crate::audit::standards_gardening::value_failures(&json!({"obligations":[]})).is_empty()
     );
@@ -194,6 +200,7 @@ fn standards_gardener_receipts_reject_missing_artifacts_semantics_and_stale_chan
         "schema": "harness-ultragoal.standards-gardening-receipt.v1",
         "status": "pass",
         "generated_at": "not-a-timestamp",
+        "candidate_digest": current,
         "trigger_signal": {"signal_id": "sig", "severity": "severe", "signal_kind": "standards_entropy", "summary": "summary", "source": "test"},
         "decision": {"accepted": true, "action": "validator_check", "rationale": "because"},
         "changed_artifacts": [],

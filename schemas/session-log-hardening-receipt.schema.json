@@ -41,14 +41,14 @@
     },
     "audit_sources": {
       "type": "array",
-      "minItems": 4,
+      "minItems": 12,
       "items": {
         "$ref": "#/$defs/auditSource"
       }
     },
     "required_issue_classes": {
       "type": "array",
-      "minItems": 15,
+      "minItems": 18,
       "items": {
         "$ref": "#/$defs/issueClass"
       }
@@ -161,12 +161,22 @@
         "finding_id",
         "source_refs",
         "timestamp_or_session_id",
+        "signal",
+        "affected_law_ids",
+        "affected_package_surfaces",
+        "observed_bad_behavior",
         "observed_gap",
         "affected_surface",
         "enforcement_status",
         "required_repair",
+        "fixture_ids",
+        "validator_ids",
+        "receipt_ids",
+        "claim_ids",
         "claim_ceiling_impact",
-        "artifact_types"
+        "artifact_types",
+        "implementation_status",
+        "evidence_digest"
       ],
       "properties": {
         "finding_id": {
@@ -185,6 +195,32 @@
           "type": "string",
           "minLength": 1
         },
+        "signal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affected_law_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "affected_package_surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "observed_bad_behavior": {
+          "type": "string",
+          "minLength": 1
+        },
         "observed_gap": {
           "type": "string",
           "minLength": 1
@@ -199,6 +235,42 @@
         "required_repair": {
           "type": "string",
           "minLength": 1
+        },
+        "fixture_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "validator_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "receipt_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
         },
         "claim_ceiling_impact": {
           "type": "string",
@@ -221,6 +293,12 @@
             ]
           },
           "uniqueItems": true
+        },
+        "implementation_status": {
+          "$ref": "#/$defs/disposition"
+        },
+        "evidence_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
         }
       }
     },

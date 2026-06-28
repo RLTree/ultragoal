@@ -6,7 +6,7 @@
   },
   "evidence": [
     {
-      "digest": "sha256:ed431f8adf765a5a0d02f77a224b5b44fafc53958176a733acc007af1d46d19a",
+      "digest": "sha256:61e70b123a9d7b37e127e31357ac180abaff01f872eccffff07d4bd247bb0bbb",
       "path": "validation_artifacts/harness/fit-repo-receipt.json"
     },
     {
@@ -18,11 +18,11 @@
       "path": "docs/plugin-resource-map.md"
     },
     {
-      "digest": "sha256:381a047a6602a66fa16b7c2ddf60c69c07f59eaf48c80bf513fe396614a3559b",
+      "digest": "sha256:fa65933fec3b88d7d3d3ab8275401de6b1f433a0acc99b4cce41d9ec3c5c2773",
       "path": "docs/plugin-cohesion-manifest.json"
     }
   ],
-  "generated_at": "2026-06-28T00:18:57Z",
+  "generated_at": "2026-06-28T11:41:15Z",
   "journey": [
     "invoke fit-repo entrypoint",
     "classify target",
@@ -35,5 +35,10 @@
     "produce claim ceiling",
     "refuse unsupported live/install/marketplace/runtime claims"
   ],
-  "schema": "harness-ultragoal.plugin-product-journey-receipt.v1"
+  "schema": "harness-ultragoal.plugin-product-journey-receipt.v1",
+  "status": "pass",
+  "target_revision": {
+    "kind": "package_digest",
+    "value": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139"
+  }
 }

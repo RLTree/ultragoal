@@ -190,7 +190,12 @@ fn standards_trace_and_audit_receipt_edges_cover_current_artifacts() {
         &root.join("docs/law.json"),
         &json!({"generated_at":"2026-06-25T00:00:00Z"}),
     );
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
     let artifact_digest = crate::digest::file(&root.join("docs/law.json")).expect("law digest");
+    let candidate_digest = crate::package::inventory::package_digest(&root).expect("digest");
     write_json(
         &root.join("receipts/gardener.json"),
         &json!({
@@ -200,6 +205,7 @@ fn standards_trace_and_audit_receipt_edges_cover_current_artifacts() {
             "trigger_signal":{"signal_id":"sig","severity":"moderate","signal_kind":"standards_entropy","summary":"summary","source":"test"},
             "decision":{"accepted":true,"action":"validator_check","rationale":"because"},
             "changed_artifacts":[{"path":"docs/law.json","digest":artifact_digest}],
+            "candidate_digest":candidate_digest,
             "safeguards":{"deterministic_first":true,"no_hook_by_default":true},
             "claim_ceiling":"package_static_fixture_only"
         }),

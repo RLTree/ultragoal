@@ -2,6 +2,8 @@ use super::support;
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod package;
+
 #[test]
 fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
     let root = crate::self_tests::boundaries::support::temp_root("final-packet-proof-refs");
@@ -172,51 +174,10 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
         expect_failure(&root, &store, &bad_coverage, expected);
     }
 
-    let mut missing_packages = support::write_green_proof(&root, &current);
-    missing_packages
-        .as_object_mut()
-        .expect("proof object")
-        .remove("package_receipts");
-    expect_failure(
-        &root,
-        &store,
-        &missing_packages,
-        "final_packet_proof_package_receipts_missing",
-    );
-
-    let mut bad_package = support::write_green_proof(&root, &current);
-    rewrite_ref(
-        &root,
-        &mut bad_package,
-        "package_receipts/0",
-        "validation_artifacts/harness/package-receipt.json",
-        &json!({"status":"pass","target_revision":{"value":crate::self_tests::boundaries::support::sha('5')}}),
-    );
-    expect_failure(
-        &root,
-        &store,
-        &bad_package,
-        "final_packet_proof_package_target_digest_mismatch",
-    );
-
-    let mut bad_fit_repo = support::write_green_proof(&root, &current);
-    rewrite_ref(
-        &root,
-        &mut bad_fit_repo,
-        "package_receipts/0",
-        "validation_artifacts/harness/fit-repo-receipt.json",
-        &json!({"status":"pass","target_revision":{"value":current}}),
-    );
-    expect_failure(
-        &root,
-        &store,
-        &bad_fit_repo,
-        "final_packet_proof_fit_repo_ref",
-    );
     std::fs::remove_dir_all(root).expect("cleanup final packet proof references");
 }
 
-fn rewrite_ref(root: &Path, proof: &mut Value, key: &str, path: &str, value: &Value) {
+pub(super) fn rewrite_ref(root: &Path, proof: &mut Value, key: &str, path: &str, value: &Value) {
     support::write_json(&root.join(path), value);
     let item = proof
         .pointer_mut(&format!("/{key}"))
@@ -225,7 +186,7 @@ fn rewrite_ref(root: &Path, proof: &mut Value, key: &str, path: &str, value: &Va
     item["digest"] = json!(crate::digest::file(&root.join(path)).expect("reference digest"));
 }
 
-fn expect_failure(
+pub(super) fn expect_failure(
     root: &Path,
     store: &crate::schema_catalog::SchemaStore,
     proof: &Value,

@@ -34,7 +34,7 @@ fn audit_paths_cover_matching_session_and_namespace_success() {
     );
     write_json(
         &root.join("validation_artifacts/harness/session-log-hardening-receipt.json"),
-        &crate::self_tests::session::hardening::complete_receipt(),
+        &crate::self_tests::session::hardening::complete_receipt_for_root(&root),
     );
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
     let session = crate::audit::session_log_hardening::package_failures(&root, &store);

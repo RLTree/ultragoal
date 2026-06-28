@@ -116,6 +116,8 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
     if let Some(path) = &command.receipt {
         path::validate_receipt_path(root, path, command.operation)?;
     }
+    let package_digest = crate::package::inventory::package_digest(root)?;
+    registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
     let receipt = receipt(root, command)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
     if let Some(path) = &command.receipt {
@@ -159,6 +161,7 @@ pub(crate) mod evidence;
 pub(crate) mod path;
 pub(crate) mod proof;
 pub(crate) mod receipt;
+pub(crate) mod registry;
 pub(crate) mod transactional;
 pub(crate) mod types;
 #[cfg(test)]

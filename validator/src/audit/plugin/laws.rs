@@ -9,7 +9,9 @@ pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec
     let mut out = Vec::new();
     out.extend(version_failures(root));
     out.extend(coverage_failures(root, store));
-    out.extend(crate::audit::plugin::registry::failures(root, store));
+    out.extend(crate::audit::plugin::registry::claim_guard_failures(
+        root, store,
+    ));
     out.extend(line_cap_failures(root));
     out
 }

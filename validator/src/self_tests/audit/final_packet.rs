@@ -1,5 +1,6 @@
 use serde_json::json;
 
+mod claim_guard;
 mod references;
 mod source_audit;
 pub(crate) mod support;

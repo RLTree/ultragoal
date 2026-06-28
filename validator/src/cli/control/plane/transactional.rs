@@ -67,6 +67,83 @@ fn pass_shaped(root: &Path, candidate: &str) -> Value {
 fn reference(root: &Path, rel: &str) -> Value {
     let path = root.join(rel);
     let digest = crate::digest::file(&path).unwrap_or_else(|_| crate::digest::ZERO.to_string());
-    let status = if path.is_file() { "pass" } else { "fail" };
+    let status = typed_status(root, rel).unwrap_or("fail");
     json!({"path": rel, "digest": digest, "status": status})
+}
+
+fn typed_status(root: &Path, rel: &str) -> Option<&'static str> {
+    let value = crate::json_boundary::read_json(&root.join(rel)).ok()?;
+    if value.get("status").and_then(Value::as_str) == Some("pass") {
+        return Some("pass");
+    }
+    if value.get("status").and_then(Value::as_str) == Some("fail") {
+        return Some("fail");
+    }
+    if rel == "validation_artifacts/coverage/coverage-receipt.json"
+        && value.get("schema").and_then(Value::as_str)
+            == Some("harness-ultragoal.coverage-receipt.v1")
+        && value.get("command_exit").and_then(Value::as_i64) == Some(0)
+        && value.pointer("/coverage/percent").and_then(Value::as_f64) == Some(100.0)
+        && value
+            .get("uncovered_records")
+            .and_then(Value::as_array)
+            .is_some_and(Vec::is_empty)
+        && value.get("claim_ceiling").and_then(Value::as_str) == Some("supports_complete_claim")
+    {
+        return Some("pass");
+    }
+    None
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn transactional_status_accepts_exact_coverage_receipt_without_status_field() {
+        let root =
+            crate::self_tests::boundaries::support::temp_root("transactional-coverage-status");
+        let rel = "validation_artifacts/coverage/coverage-receipt.json";
+        crate::json_boundary::write_json(
+            &root.join(rel),
+            &json!({
+                "schema":"harness-ultragoal.coverage-receipt.v1",
+                "command_exit":0,
+                "coverage":{"percent":100.0},
+                "uncovered_records":[],
+                "claim_ceiling":"supports_complete_claim"
+            }),
+        )
+        .expect("coverage receipt");
+        assert_eq!(super::typed_status(&root, rel), Some("pass"));
+        std::fs::remove_dir_all(root).expect("cleanup transactional coverage");
+    }
+
+    #[test]
+    fn transactional_status_rejects_below_floor_coverage_receipt() {
+        let root = crate::self_tests::boundaries::support::temp_root("transactional-coverage-low");
+        let rel = "validation_artifacts/coverage/coverage-receipt.json";
+        crate::json_boundary::write_json(
+            &root.join(rel),
+            &json!({
+                "schema":"harness-ultragoal.coverage-receipt.v1",
+                "command_exit":0,
+                "coverage":{"percent":99.0},
+                "uncovered_records":[],
+                "claim_ceiling":"withheld_or_blocked"
+            }),
+        )
+        .expect("coverage receipt");
+        assert_eq!(super::typed_status(&root, rel), None);
+        assert_eq!(super::typed_status(&root, "missing.json"), None);
+        std::fs::remove_dir_all(root).expect("cleanup transactional coverage low");
+    }
+
+    #[test]
+    fn transactional_receipt_requires_package_digest_authority() {
+        let root = crate::self_tests::boundaries::support::temp_root("transactional-no-manifest");
+        let error = super::receipt(&root).expect_err("missing package digest");
+        assert!(error.contains("plugin-manifest-draft.json"), "{error}");
+        let _ = std::fs::remove_dir_all(root);
+    }
 }

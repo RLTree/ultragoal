@@ -1375,7 +1375,9 @@
     "validation_artifacts/harness/plugin-product-journey-receipt.json",
     "validation_artifacts/harness/product-fitness-receipt.json",
     "validation_artifacts/harness/product-success-contract-receipt.json",
+    "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
     "validator/src/audit/cli/control_plane/authority.rs",
+    "validator/src/audit/final_packet/references/package.rs",
     "validator/src/audit/mandatory/law/surface/ids.rs",
     "validator/src/audit/namespace/classes.rs",
     "validator/src/audit/namespace/source/topology.rs",
@@ -1385,6 +1387,7 @@
     "validator/src/cli/control/plane/emit.rs",
     "validator/src/cli/control/plane/evidence.rs",
     "validator/src/cli/control/plane/evidence/item.rs",
+    "validator/src/cli/control/plane/evidence/status.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/path.rs",
     "validator/src/cli/control/plane/proof.rs",
@@ -1392,23 +1395,38 @@
     "validator/src/cli/control/plane/proof/diagnostic.rs",
     "validator/src/cli/control/plane/proof/red.rs",
     "validator/src/cli/control/plane/proof/transaction.rs",
+    "validator/src/cli/control/plane/registry.rs",
     "validator/src/cli/control/plane/transactional.rs",
     "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
     "validator/src/cli/garbage/collection/receipt.rs",
     "validator/src/cli/garbage/collection/types.rs",
     "validator/src/cli/garbage/mod.rs",
+    "validator/src/cli/product.rs",
+    "validator/src/cli/product/receipts.rs",
+    "validator/src/cli/product/receipts/tests.rs",
     "validator/src/cli/rust/mod.rs",
     "validator/src/cli/rust/observations.rs",
     "validator/src/cli/rust/receipt.rs",
     "validator/src/cli/rust/types.rs",
+    "validator/src/cli/standards/gardener.rs",
+    "validator/src/cli/standards/mod.rs",
     "validator/src/self_tests/cli/control/audit.rs",
     "validator/src/self_tests/cli/control/graph.rs",
     "validator/src/self_tests/cli/control/output_paths.rs",
+    "validator/src/self_tests/cli/control/production/receipts.rs",
     "validator/src/self_tests/cli/control/production.rs",
+    "validator/src/self_tests/cli/control/registry.rs",
     "validator/src/self_tests/cli/control/transaction/mod.rs",
     "validator/src/self_tests/cli/control/transaction/reference.rs",
     "validator/src/self_tests/cli/control/transaction/required.rs",
+    "validator/src/self_tests/audit/final_packet/references/package.rs",
+    "validator/src/self_tests/audit/final_packet/support/package_receipts.rs",
+    "validator/src/self_tests/cli/final_packet.rs",
+    "validator/src/self_tests/cli/product.rs",
+    "validator/src/self_tests/cli/standards.rs",
+    "validator/src/self_tests/command/product.rs",
+    "validator/src/self_tests/command/standards.rs",
     "validator/src/self_tests/namespace/mod.rs",
     "validator/src/self_tests/namespace/red_fixtures.rs",
     "validator/src/self_tests/rust/gate/audit.rs",
@@ -1507,6 +1525,11 @@
       "reason": "Evidence graph construction dereferences each artifact path, digest, status, and candidate binding separately"
     },
     {
+      "from": "validator/src/cli/control/plane/evidence/item.rs",
+      "to": "validator/src/cli/control/plane/evidence/status.rs",
+      "reason": "Evidence graph items use label-specific typed validators instead of pass-shaped receipt rows"
+    },
+    {
       "from": "validator/src/cli/control/plane/evidence.rs",
       "to": "validator/src/cli/control/plane/evidence/validate.rs",
       "reason": "Receipt validators reject missing, synthetic, stale, or non-production evidence graphs"
@@ -1552,9 +1575,109 @@
       "reason": "CLI transaction tests prove pass-shaped references fail without dereferenced current same-candidate proof artifacts"
     },
     {
+      "from": "validator/src/self_tests/cli/control/production.rs",
+      "to": "validator/src/self_tests/cli/control/production/receipts.rs",
+      "reason": "CLI control production green-path tests mint Standards, Rust, and GC receipts through routed helpers instead of over-cap inline fixture setup"
+    },
+    {
+      "from": "validator/src/self_tests/audit/final_packet/support.rs",
+      "to": "validator/src/self_tests/audit/final_packet/support/package_receipts.rs",
+      "reason": "Final-packet proof fixtures must dereference typed Fit Repo, Product Fitness, and Product Journey package receipts"
+    },
+    {
+      "from": "validator/src/audit/final_packet/references.rs",
+      "to": "validator/src/audit/final_packet/references/coverage.rs",
+      "reason": "Final-packet production validation routes coverage receipt dereferencing through a semantic child module instead of keeping the parent over the line cap"
+    },
+    {
+      "from": "validator/src/audit/final_packet/references.rs",
+      "to": "validator/src/audit/final_packet/references/package.rs",
+      "reason": "Final-packet production validation routes package receipt dereferencing through concrete Fit Repo, Product Fitness, and Product Journey validators"
+    },
+    {
+      "from": "validator/src/audit/plugin/registry.rs",
+      "to": "validator/src/audit/plugin/registry/live.rs",
+      "reason": "Registry proof validation separates live same-surface reviewer exposure authority from fail-closed unsupported-claim blockers"
+    },
+    {
+      "from": "validator/src/audit/plugin/registry.rs",
+      "to": "validator/src/audit/plugin/registry/guard.rs",
+      "reason": "Registry proof validation routes fail-closed claim guards through a semantic module so disk proof cannot imply app-registry or reviewer exposure"
+    },
+    {
+      "from": "validator/src/self_tests/audit/final_packet/references.rs",
+      "to": "validator/src/self_tests/audit/final_packet/references/package.rs",
+      "reason": "Final-packet package-reference red and green tests are split into a semantic child module under the same law surface"
+    },
+    {
+      "from": "validator/src/self_tests/audit/final_packet.rs",
+      "to": "validator/src/self_tests/audit/final_packet/claim_guard.rs",
+      "reason": "Final-packet claim-guard tests prove fail-closed packet blockers cannot become completion or readiness proof"
+    },
+    {
+      "from": "validator/src/self_tests/plugin/registry.rs",
+      "to": "validator/src/self_tests/plugin/registry/guard.rs",
+      "reason": "Registry guard tests prove CLI-minted unsupported live-surface blockers are schema-bound and cannot be pass-shaped JSON"
+    },
+    {
+      "from": "validator/src/self_tests/law/anti_theater_dependencies.rs",
+      "to": "validator/src/self_tests/law/anti_theater_dependencies/cli_receipts.rs",
+      "reason": "Anti-theater dependency tests isolate malformed CLI receipts that are neither production green proof nor valid fail-closed blockers"
+    },
+    {
       "from": "validator/src/cli/control/plane.rs",
       "to": "validator/src/cli/control/plane/types.rs",
       "reason": "CLI parser and receipt issuer consume closed authority operation types"
+    },
+    {
+      "from": "validator/src/lib.rs",
+      "to": "validator/src/cli/product.rs",
+      "reason": "Top-level CLI routes product receipt minting before generic control-plane fallback"
+    },
+    {
+      "from": "validator/src/cli/product.rs",
+      "to": "validator/src/cli/product/receipts.rs",
+      "reason": "Product proof command delegates typed Product/Fit/Journey receipt construction to a semantic receipt leaf"
+    },
+    {
+      "from": "validator/src/cli/product/receipts.rs",
+      "to": "validator/src/cli/product/receipts/tests.rs",
+      "reason": "Private product receipt branch tests live under the receipt leaf to exercise fail-closed package digest, artifact digest, and row-status boundaries without widening production APIs"
+    },
+    {
+      "from": "validator/src/self_tests/command/product.rs",
+      "to": "validator/src/cli/product.rs",
+      "reason": "Command dispatch tests prove the top-level CLI parser reaches typed Product/Fit/Journey receipt minting"
+    },
+    {
+      "from": "validator/src/cli/product/receipts.rs",
+      "to": "validation_artifacts/harness/product-fitness-receipt.json",
+      "reason": "Product receipt minting writes current package-bound Product Fitness receipt evidence"
+    },
+    {
+      "from": "validator/src/self_tests/cli/product.rs",
+      "to": "validator/src/cli/product/receipts.rs",
+      "reason": "Focused tests prove product receipt minting rebases canonical digest-bound receipts"
+    },
+    {
+      "from": "validator/src/cli/standards/mod.rs",
+      "to": "validator/src/cli/standards/gardener.rs",
+      "reason": "Standards-gardener CLI command routes to the typed receipt rebind writer"
+    },
+    {
+      "from": "validator/src/cli/standards/gardener.rs",
+      "to": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
+      "reason": "Standards-gardener rebind command mints the current package-static receipt from live artifact digests"
+    },
+    {
+      "from": "validator/src/self_tests/cli/standards.rs",
+      "to": "validator/src/cli/standards/gardener.rs",
+      "reason": "Standards-gardener CLI tests cover candidate digest and artifact digest rebinding"
+    },
+    {
+      "from": "validator/src/self_tests/command/standards.rs",
+      "to": "validator/src/cli/standards/mod.rs",
+      "reason": "Command dispatch tests prove the top-level CLI reaches the standards-gardener authority path"
     },
     {
       "from": "validator/src/audit/cli/performance.rs",
@@ -1585,6 +1708,26 @@
       "from": "validator/src/self_tests/cli/control/transaction/required.rs",
       "to": "validator/src/cli/control/plane/proof/transaction.rs",
       "reason": "Required transaction tests prove missing and digest-unavailable finalization cannot claim authority"
+    },
+    {
+      "from": "validator/src/cli/control/plane.rs",
+      "to": "validator/src/cli/control/plane/registry.rs",
+      "reason": "Registry probe operation delegates live same-surface registry proof preservation and fail-closed observation minting to the registry module"
+    },
+    {
+      "from": "validator/src/cli/control/plane/registry.rs",
+      "to": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+      "reason": "Registry probe writes the typed active registry exposure receipt while blocking unsupported reviewer exposure claims"
+    },
+    {
+      "from": "validator/src/cli/control/plane/registry.rs",
+      "to": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
+      "reason": "Registry probe writes the raw observation digest that supports the fail-closed registry exposure receipt"
+    },
+    {
+      "from": "validator/src/self_tests/cli/control/registry.rs",
+      "to": "validator/src/cli/control/plane/registry.rs",
+      "reason": "Focused self-tests cover registry proof preservation and fail-closed observation behavior"
     }
   ],
   "claim_ceiling": "package_static_fixture_only",
@@ -2834,6 +2977,7 @@
     "validation_artifacts/harness/product-success-contract-receipt.json",
     "validation_artifacts/harness/session-log-hardening-receipt.json",
     "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json",
+    "validation_artifacts/review/final-packet-proof.json",
     "validation_artifacts/semantic-classification/minimal-goal-run/CLAIM-001.semantic-classification-receipt.json",
     "validation_artifacts/semantic-classification/non-product-engineering-language/CLAIM-001.semantic-classification-receipt.json",
     "validation_artifacts/semantic-classification/non-product-feature-completion/CLAIM-001.human-semantic-classification-receipt.json",
@@ -2862,6 +3006,7 @@
     "validation_artifacts/semantic-classification/red/semantic-classification-receipt-wrong-claim.semantic-classification-receipt.json",
     "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+    "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
     "validation_artifacts/ultragoal-audit/ready-LANE-001-receipt.json",
     "validation_artifacts/ultragoal-audit/red-fixture-report.json",
     "validation_artifacts/ultragoal-audit/root-phase-post-merge-integration-LANE-001-receipt.json",

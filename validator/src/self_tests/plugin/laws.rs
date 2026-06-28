@@ -84,8 +84,14 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
         }),
     );
     let failures = failures_for(&root);
+    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let registry = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+    )
+    .expect("registry receipt");
+    let strict_failures = crate::audit::plugin::registry::value_failures(&root, &store, &registry);
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_agent_mismatch"))
     );
@@ -95,55 +101,66 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
             .any(|item| item.contains("plugin_self_law_registry_target_digest_mismatch"))
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_status_not_pass"))
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_claim_ceiling_not_live_surface"))
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_generated_capture_mismatch"))
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_missing_live_tool_issuer")),
-        "{failures:?}"
+        "{strict_failures:?}"
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| { item.contains("plugin_self_law_registry_missing_tool_call_identity") }),
-        "{failures:?}"
+        "{strict_failures:?}"
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_capture_method_not_live")),
-        "{failures:?}"
+        "{strict_failures:?}"
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_raw_observation_missing")),
-        "{failures:?}"
+        "{strict_failures:?}"
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("disk_cache_synced"))
     );
     assert!(
-        failures
+        strict_failures
             .iter()
             .any(|item| item.contains("global_toml_present"))
     );
-    assert!(failures.iter().any(|item| item.contains("exposed")));
+    assert!(strict_failures.iter().any(|item| item.contains("exposed")));
+    for expected in [
+        "plugin_self_law_registry_guard_capture_method_not_fail_closed",
+        "plugin_self_law_registry_guard_wrong_issuer_tool",
+        "plugin_self_law_registry_guard_failure_reason_missing",
+        "plugin_self_law_registry_guard_missing_blocked_claim:app_registry_or_reviewer_exposure",
+    ] {
+        assert!(
+            failures.iter().any(|item| item.contains(expected)),
+            "{expected}: {failures:?}"
+        );
+    }
     std::fs::remove_dir_all(root).expect("cleanup registry self laws");
 }
 

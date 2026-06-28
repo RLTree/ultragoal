@@ -202,15 +202,28 @@ fn artifact_audit_and_receipt_edges() {
         }),
     );
     let self_law = crate::audit::plugin::laws::package_failures(&root, &store);
+    let registry_value = crate::json_boundary::read_json(&registry).expect("registry json");
+    let strict_registry =
+        crate::audit::plugin::registry::value_failures(&root, &store, &registry_value);
     assert!(
-        self_law
+        strict_registry
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_agent_mismatch"))
     );
     assert!(
-        self_law
+        strict_registry
             .iter()
             .any(|item| item.contains("plugin_self_law_registry_agent_not_current"))
+    );
+    assert!(
+        self_law
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_guard_wrong_source"))
+    );
+    assert!(
+        self_law
+            .iter()
+            .any(|item| item.contains("plugin_self_law_registry_guard_failure_reason_missing"))
     );
 
     let _ = std::fs::remove_dir_all(root);

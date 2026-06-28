@@ -34,7 +34,10 @@
       "minLength": 20
     },
     "status": {
-      "const": "pass"
+      "enum": [
+        "pass",
+        "fail"
+      ]
     },
     "issuer": {
       "type": "object",
@@ -45,10 +48,20 @@
       ],
       "properties": {
         "tool": {
-          "const": "multi_agent_v1"
+          "enum": [
+            "multi_agent_v1",
+            "ultragoal",
+            "codex_desktop",
+            "computer_use"
+          ]
         },
         "authority": {
-          "const": "tool_registry"
+          "enum": [
+            "tool_registry",
+            "cli_control_plane",
+            "tool_discovery",
+            "app_surface_probe"
+          ]
         }
       }
     },
@@ -62,7 +75,12 @@
       ],
       "properties": {
         "name": {
-          "const": "multi_agent_v1.tool_registry"
+          "enum": [
+            "multi_agent_v1.tool_registry",
+            "ultragoal registry probe",
+            "tool_search_tool",
+            "computer_use.list_apps"
+          ]
         },
         "call_id": {
           "type": "string",
@@ -75,7 +93,12 @@
       }
     },
     "capture_method": {
-      "const": "live_tool_registry_query"
+      "enum": [
+        "live_tool_registry_query",
+        "fail_closed_no_capability",
+        "tool_discovery_probe",
+        "computer_use_probe_timeout"
+      ]
     },
     "boundary": {
       "type": "object",
@@ -101,7 +124,12 @@
       }
     },
     "source": {
-      "const": "multi_agent_v1.tool_registry"
+      "enum": [
+        "multi_agent_v1.tool_registry",
+        "ultragoal.registry_probe",
+        "codex_desktop.tool_search",
+        "computer_use.list_apps"
+      ]
     },
     "target_revision": {
       "type": "object",
@@ -121,7 +149,10 @@
       }
     },
     "claim_ceiling": {
-      "const": "live_registry_reviewer_exposure_proven"
+      "enum": [
+        "live_registry_reviewer_exposure_proven",
+        "withheld_or_blocked"
+      ]
     },
     "session_id": {
       "type": "string",
@@ -155,8 +186,107 @@
       "items": {
         "$ref": "#/$defs/agentTypeExposure"
       }
+    },
+    "failure": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "observed",
+        "blocked_claim_classes"
+      ],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blocked_claim_classes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "pass"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "issuer": {
+            "properties": {
+              "tool": {
+                "const": "multi_agent_v1"
+              },
+              "authority": {
+                "const": "tool_registry"
+              }
+            }
+          },
+          "tool_call": {
+            "properties": {
+              "name": {
+                "const": "multi_agent_v1.tool_registry"
+              }
+            }
+          },
+          "capture_method": {
+            "const": "live_tool_registry_query"
+          },
+          "source": {
+            "const": "multi_agent_v1.tool_registry"
+          },
+          "claim_ceiling": {
+            "const": "live_registry_reviewer_exposure_proven"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "fail"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "failure"
+        ],
+        "properties": {
+          "claim_ceiling": {
+            "const": "withheld_or_blocked"
+          },
+          "failure": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "agentTypeExposure": {
       "type": "object",

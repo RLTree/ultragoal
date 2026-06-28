@@ -63,6 +63,9 @@ pub(crate) enum Command {
         producer_actor_id: String,
         classifier_actor_id: String,
     },
+    FinalPacket(cli::final_packet::FinalPacketCommand),
+    Product(cli::product::ProductCommand),
+    Standards(cli::standards::StandardsCommand),
     TransactionalFinalization {
         receipt: PathBuf,
     },
@@ -159,6 +162,24 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
             classifier_actor_id: opt_string(&raw[1..], "--classifier-actor-id")
                 .unwrap_or_else(|| "ultragoal-deterministic-backstop".to_string()),
         },
+        "final-packet" | "packet" => {
+            let Some(command) = cli::final_packet::parse(raw)? else {
+                return Err(usage());
+            };
+            Command::FinalPacket(command)
+        }
+        "product" => {
+            let Some(command) = cli::product::parse(raw)? else {
+                return Err(usage());
+            };
+            Command::Product(command)
+        }
+        "standards-gardener" => {
+            let Some(command) = cli::standards::parse(raw)? else {
+                return Err(usage());
+            };
+            Command::Standards(command)
+        }
         "package" if raw.get(1).map(String::as_str) == Some("digest") => Command::PackageDigest,
         "package-digest" => Command::PackageDigest,
         "transaction" if raw.get(1).map(String::as_str) == Some("finalize") => {
@@ -214,5 +235,5 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 }
 
 fn usage() -> String {
-    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
+    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
 }

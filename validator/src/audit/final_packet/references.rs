@@ -2,6 +2,9 @@ use crate::{json_boundary, schema_catalog};
 use serde_json::Value;
 use std::path::Path;
 
+mod coverage;
+mod package;
+
 pub(super) fn failures(
     root: &Path,
     store: &schema_catalog::SchemaStore,
@@ -13,7 +16,22 @@ pub(super) fn failures(
     check_registry_ref(root, store, receipt, &mut out);
     check_source_audit_ref(root, receipt, &expected, &mut out);
     check_coverage_ref(root, receipt, &expected, &mut out);
-    package_ref_failures(root, receipt, &expected, &mut out);
+    package::failures(root, receipt, &expected, &mut out);
+    out
+}
+
+pub(super) fn claim_guard_failures(
+    root: &Path,
+    store: &schema_catalog::SchemaStore,
+    receipt: &Value,
+) -> Vec<String> {
+    let expected = crate::package::inventory::package_digest(root).unwrap_or_default();
+    let mut out = Vec::new();
+    check_performance_ref(root, receipt, &expected, &mut out);
+    check_registry_guard_ref(root, store, receipt, &mut out);
+    check_source_audit_guard_ref(root, receipt, &expected, &mut out);
+    check_coverage_ref(root, receipt, &expected, &mut out);
+    package::failures(root, receipt, &expected, &mut out);
     out
 }
 
@@ -42,6 +60,27 @@ fn check_registry_ref(
     }
 }
 
+fn check_registry_guard_ref(
+    root: &Path,
+    store: &schema_catalog::SchemaStore,
+    receipt: &Value,
+    out: &mut Vec<String>,
+) {
+    let Some(value) = load_ref(
+        root,
+        receipt,
+        "/registry_exposure",
+        "registry",
+        RefStatusPolicy::PassOrFail,
+        out,
+    ) else {
+        return;
+    };
+    for failure in crate::audit::plugin::registry::value_claim_guard_failures(root, store, &value) {
+        out.push(format!("final_packet_proof_registry_ref:{failure}"));
+    }
+}
+
 fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
     if let Some(value) = load_ref(
         root,
@@ -55,9 +94,45 @@ fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mu
     }
 }
 
+fn check_source_audit_guard_ref(
+    root: &Path,
+    receipt: &Value,
+    expected: &str,
+    out: &mut Vec<String>,
+) {
+    let Some(item) = receipt.pointer("/source_audit") else {
+        out.push("final_packet_proof_ref_missing:source_audit".to_string());
+        return;
+    };
+    let rel = item.get("path").and_then(Value::as_str).unwrap_or("");
+    if crate::package::inventory::package_path_error(root, rel).is_some() {
+        out.push(format!(
+            "final_packet_proof_ref_path_invalid:source_audit:{rel}"
+        ));
+        return;
+    }
+    let value = match json_boundary::read_json(&root.join(rel)) {
+        Ok(value) => value,
+        Err(err) => {
+            out.push(format!(
+                "final_packet_proof_ref_malformed:source_audit:{err}"
+            ));
+            return;
+        }
+    };
+    embedded_status_failures(
+        item,
+        &value,
+        "source_audit",
+        RefStatusPolicy::PassOrFail,
+        out,
+    );
+    audit_receipt_failures(&value, expected, out);
+}
+
 fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
     if let Some(value) = load_pass_ref(root, receipt, "/coverage", "coverage", out) {
-        coverage_receipt_failures(&value, expected, out);
+        out.extend(coverage::failures(&value, expected));
     }
 }
 
@@ -161,65 +236,5 @@ fn audit_receipt_failures(value: &Value, expected: &str, out: &mut Vec<String>) 
         != Some(expected)
     {
         out.push("final_packet_proof_source_audit_target_digest_mismatch".to_string());
-    }
-}
-
-fn coverage_receipt_failures(value: &Value, expected: &str, out: &mut Vec<String>) {
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
-    }
-    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-        || !value
-            .get("uncovered_records")
-            .and_then(Value::as_array)
-            .is_some_and(Vec::is_empty)
-    {
-        out.push("final_packet_proof_coverage_not_exact_100".to_string());
-    }
-    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
-        out.push("final_packet_proof_coverage_claim_ceiling_not_complete".to_string());
-    }
-}
-
-fn package_ref_failures(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    let Some(rows) = receipt.get("package_receipts").and_then(Value::as_array) else {
-        out.push("final_packet_proof_package_receipts_missing".to_string());
-        return;
-    };
-    for (idx, _) in rows.iter().enumerate() {
-        let ptr = format!("/package_receipts/{idx}");
-        if let Some(value) = load_pass_ref(root, receipt, &ptr, "package", out) {
-            package_ref_value_failures(root, receipt, &ptr, &value, expected, out);
-        }
-    }
-}
-
-fn package_ref_value_failures(
-    root: &Path,
-    receipt: &Value,
-    ptr: &str,
-    value: &Value,
-    expected: &str,
-    out: &mut Vec<String>,
-) {
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("final_packet_proof_package_target_digest_mismatch".to_string());
-    }
-    if receipt
-        .pointer(&format!("{ptr}/path"))
-        .and_then(Value::as_str)
-        == Some("validation_artifacts/harness/fit-repo-receipt.json")
-    {
-        for failure in crate::audit::fit_repo_receipt::failures(root, value) {
-            out.push(format!("final_packet_proof_fit_repo_ref:{failure}"));
-        }
     }
 }

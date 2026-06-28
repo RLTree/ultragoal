@@ -16,7 +16,8 @@ pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &[
     "validation_artifacts/rust/",
     "validation_artifacts/gc/",
 ];
-pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
+pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] =
+    &["validation_artifacts/review/final-packet-proof.json"];
 
 pub fn inventory_paths(manifest: &Value) -> Vec<String> {
     let mut out = Vec::new();
@@ -196,5 +197,15 @@ mod tests {
                 .contains("package digest path invalid")
         );
         std::fs::remove_dir_all(root).expect("cleanup package inventory");
+    }
+
+    #[test]
+    fn package_digest_excludes_mutable_final_packet_proof_receipt() {
+        assert!(super::package_digest_excluded(
+            "validation_artifacts/review/final-packet-proof.json"
+        ));
+        assert!(!super::package_digest_excluded(
+            "validation_artifacts/review/2026-06-25-session-log-hardening-packet.json"
+        ));
     }
 }

@@ -6,5 +6,6 @@ pub(crate) mod parse;
 pub(crate) mod production;
 pub(crate) mod receipt_modes;
 pub(crate) mod receipts;
+pub(crate) mod registry;
 pub(crate) mod transaction;
 pub(crate) mod types;

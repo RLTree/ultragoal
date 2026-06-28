@@ -33,6 +33,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "ultragoal target-repo audit",
     "ultragoal package inventory",
     "ultragoal package verify",
+    "ultragoal final-packet prove",
     "ultragoal packet build",
     "ultragoal packet verify",
     "ultragoal receipts verify",

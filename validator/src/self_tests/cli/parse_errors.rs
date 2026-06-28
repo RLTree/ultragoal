@@ -9,6 +9,13 @@ fn transactional_receipt(command: crate::Command) -> Option<std::path::PathBuf> 
     }
 }
 
+fn final_packet_receipt(command: crate::Command) -> Option<std::path::PathBuf> {
+    match command {
+        crate::Command::FinalPacket(command) => Some(command.receipt),
+        _ => None,
+    }
+}
+
 #[test]
 fn process_entrypoint_fails_closed_for_test_harness_arguments() {
     assert_eq!(crate::main_entry(), 2);
@@ -39,6 +46,37 @@ fn transaction_finalize_parse_constructs_typed_receipt_command() {
         Some(std::path::PathBuf::from("tx.json"))
     );
     assert_eq!(transactional_receipt(crate::Command::PackageDigest), None);
+}
+
+#[test]
+fn final_packet_parse_constructs_typed_receipt_command() {
+    let command = crate::parse_command(&args(&[
+        "final-packet",
+        "prove",
+        "--receipt",
+        "packet-proof.json",
+    ]))
+    .expect("final packet command");
+    assert_eq!(
+        final_packet_receipt(command),
+        Some(std::path::PathBuf::from("packet-proof.json"))
+    );
+    let alias = crate::parse_command(&args(&["packet", "prove", "--receipt", "alias.json"]))
+        .expect("packet alias command");
+    assert_eq!(
+        final_packet_receipt(alias),
+        Some(std::path::PathBuf::from("alias.json"))
+    );
+    assert_eq!(final_packet_receipt(crate::Command::PackageDigest), None);
+    assert!(
+        crate::cli::final_packet::parse(&args(&["source", "audit"]))
+            .expect("unrelated command parses")
+            .is_none()
+    );
+    let err = crate::parse_command(&args(&["final-packet", "prove"])).expect_err("missing receipt");
+    assert!(err.contains("missing required argument --receipt"));
+    let usage = crate::parse_command(&args(&["packet", "unknown"])).expect_err("usage error");
+    assert!(usage.contains("usage: ultragoal"));
 }
 
 #[test]

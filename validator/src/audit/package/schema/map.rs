@@ -89,6 +89,10 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "fit-repo-receipt.schema.json",
         ),
         (
+            "validation_artifacts/harness/plugin-product-journey-receipt.json",
+            "plugin-product-journey-receipt.schema.json",
+        ),
+        (
             "validation_artifacts/cli/update-goal-eligibility.json",
             "cli-control-plane-receipt.schema.json",
         ),

@@ -21,13 +21,32 @@ pub(crate) fn control(candidate: &str, operation: &str, fail_closed: bool) -> Va
     })
 }
 
-fn labels() -> [&'static str; 6] {
+fn labels() -> [&'static str; 25] {
     [
+        "source_audit",
         "red_fixture_report",
         "coverage",
         "cli_performance",
         "final_packet",
         "registry_exposure",
+        "fit_repo",
+        "product_fitness",
+        "product_journey",
+        "standards_gardener",
+        "rust_toolchain",
+        "rust_fast",
+        "rust_standard",
+        "rust_release",
+        "rust_clean_proof",
+        "rust_watch",
+        "rust_memory",
+        "rust_dependency",
+        "rust_coverage",
+        "rust_workspace_topology",
+        "gc_plan",
+        "gc_dry_run",
+        "gc_apply",
+        "gc_verify",
         "transactional_finalization",
     ]
 }

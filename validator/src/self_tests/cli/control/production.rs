@@ -1,7 +1,9 @@
 use crate::cli::control::plane::types::ControlOperation;
-use crate::cli::control::plane::{ControlCommand, receipt};
+use crate::cli::control::plane::{ControlCommand, receipt, run};
 use serde_json::json;
 use std::path::Path;
+
+mod receipts;
 
 fn write_json(path: &Path, value: &serde_json::Value) {
     if let Some(parent) = path.parent() {
@@ -80,6 +82,7 @@ fn write_control_green_root(root: &Path) -> String {
     );
     let current = crate::package::inventory::package_digest(root).expect("digest");
     crate::self_tests::audit::final_packet::support::write_green_proof(root, &current);
+    receipts::write_standards_rust_gc(root, &current);
     write_json(
         &root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json"),
         &json!({
@@ -199,5 +202,45 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
         .expect("observed");
     assert!(observed.contains("registry_surface:plugin_self_law_json_missing_or_malformed"));
     assert!(!observed.contains("final_packet"), "{observed}");
+
+    let receipt_path = root.join("validation_artifacts/cli/registry-probe-receipt.json");
+    let exit = run(
+        &root,
+        &ControlCommand {
+            operation: ControlOperation::RegistryProbe,
+            receipt: Some(receipt_path.clone()),
+        },
+    )
+    .expect("registry probe command");
+    assert_eq!(exit, 1);
+    let active_path =
+        root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json");
+    let active = crate::json_boundary::read_json(&active_path).expect("active registry receipt");
+    assert_eq!(active["status"], "fail");
+    assert_eq!(active["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(active["source"], "ultragoal.registry_probe");
+    assert_eq!(
+        active["target_revision"]["value"],
+        crate::package::inventory::package_digest(&root).expect("digest")
+    );
+    let store = crate::schema_catalog::load(&root);
+    assert!(
+        crate::schema_catalog::schema_errors(
+            &store,
+            "codex-registry-exposure.schema.json",
+            &active
+        )
+        .is_empty(),
+        "{active}"
+    );
+    let command_receipt =
+        crate::json_boundary::read_json(&receipt_path).expect("registry command receipt");
+    assert_eq!(command_receipt["status"], "fail");
+    assert!(
+        command_receipt["failure"]["observed_value"]
+            .as_str()
+            .expect("observed after mint")
+            .contains("plugin_self_law_registry_status_not_pass")
+    );
     std::fs::remove_dir_all(root).expect("cleanup registry probe");
 }

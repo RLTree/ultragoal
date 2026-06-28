@@ -1922,7 +1922,7 @@
       "error": "coverage_changed_file_not_measured"
     },
     "id": "coverage-ready-changed-file-not-measured",
-    "packet_digest": "sha256:a92d2f6dc6c00d549b8731434bad6db8a58a91ff43b32cce894fded8b4bad5a8",
+    "packet_digest": "sha256:e75f1c0b3c1ffa8c8f29cd47622f7815e1811f5272058a4fa49dc76648d66843",
     "packet_path": "fixtures/red/coverage-ready-changed-file-not-measured.json"
   },
   {

@@ -66,6 +66,9 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             producer_actor_id,
             classifier_actor_id,
         }),
+        Command::FinalPacket(command) => crate::cli::final_packet::run(&root, &command),
+        Command::Product(command) => crate::cli::product::run(&root, &command),
+        Command::Standards(command) => crate::cli::standards::run(&root, &command),
         Command::TransactionalFinalization { receipt } => {
             run_transactional_finalization(root, receipt)
         }

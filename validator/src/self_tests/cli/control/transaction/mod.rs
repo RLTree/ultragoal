@@ -145,3 +145,62 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     );
     std::fs::remove_dir_all(root).expect("cleanup transaction command fail");
 }
+
+#[test]
+fn transaction_references_use_typed_receipt_status_not_file_existence() {
+    let root = crate::self_tests::boundaries::support::temp_root("transaction-typed-refs");
+    write_manifest(&root);
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    write_json(
+        &root.join("validation_artifacts/review/final-packet-proof.json"),
+        &json!({
+            "schema":"harness-ultragoal.final-packet-proof.v1",
+            "status":"fail",
+            "target_revision":{"kind":"package_digest","value":current},
+            "claim_ceiling":"withheld_or_blocked"
+        }),
+    );
+    write_json(
+        &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+        &json!({
+            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
+            "status":"fail",
+            "target_revision":{"kind":"package_digest","value":current},
+            "claim_ceiling":"withheld_or_blocked"
+        }),
+    );
+    write_json(
+        &root.join("validation_artifacts/cli/performance-receipt.json"),
+        &performance_overclaim(&current),
+    );
+    write_json(
+        &root.join("validation_artifacts/coverage/coverage-receipt.json"),
+        &json!({
+            "schema":"harness-ultragoal.coverage-receipt.v1",
+            "command_exit":0,
+            "coverage":{"percent":100.0},
+            "uncovered_records":[],
+            "claim_ceiling":"supports_complete_claim",
+            "target_revision":{"kind":"package_digest","value":current}
+        }),
+    );
+    let value = crate::cli::control::plane::transactional::receipt(&root).expect("receipt");
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["final_packet"]["status"], "fail");
+    assert_eq!(value["registry_exposure"]["status"], "fail");
+    assert_eq!(value["coverage"]["status"], "pass");
+    let failures = value["failure"]["observed_failures"]
+        .as_array()
+        .expect("observed failures");
+    assert!(failures.iter().any(|failure| {
+        failure
+            .as_str()
+            .is_some_and(|text| text.contains("ref_status_not_pass:final_packet"))
+    }));
+    assert!(failures.iter().any(|failure| {
+        failure
+            .as_str()
+            .is_some_and(|text| text.contains("ref_status_not_pass:registry_exposure"))
+    }));
+    std::fs::remove_dir_all(root).expect("cleanup transaction typed refs");
+}

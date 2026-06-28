@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod guard;
+
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent).expect("parent");
@@ -55,6 +57,34 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
         failures
             .iter()
             .any(|failure| failure.contains("raw_observation_path_invalid")),
+        "{failures:?}"
+    );
+
+    let fail_raw_path =
+        root.join("validation_artifacts/ultragoal-audit/active-registry-observation-current.json");
+    write_json(
+        &fail_raw_path,
+        &json!({"status":"fail","candidate_digest":current,"observed":"no live registry"}),
+    );
+    let fail_raw_digest = crate::digest::file(&fail_raw_path).expect("fail raw digest");
+    let fail_closed = fail_closed_registry_receipt(&current, &fail_raw_digest);
+    let schema_errors = crate::schema_catalog::schema_errors(
+        &store,
+        "codex-registry-exposure.schema.json",
+        &fail_closed,
+    );
+    assert!(schema_errors.is_empty(), "{schema_errors:?}");
+    let failures = crate::audit::plugin::registry::value_failures(&root, &store, &fail_closed);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure == "plugin_self_law_registry_status_not_pass"),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure == "plugin_self_law_registry_claim_ceiling_not_live_surface"),
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup live registry proof");
@@ -122,4 +152,50 @@ fn agent_types() -> Vec<Value> {
         })
     })
     .collect()
+}
+
+fn fail_closed_registry_receipt(current: &str, raw_digest: &str) -> Value {
+    json!({
+        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+        "generated_at": "2026-06-27T00:00:00Z",
+        "captured_at": "2026-06-27T00:00:00Z",
+        "status": "fail",
+        "issuer": {"tool":"ultragoal","authority":"cli_control_plane"},
+        "tool_call": {
+            "name": "ultragoal registry probe",
+            "call_id": "local-fail-closed",
+            "arguments_digest": crate::digest::ZERO
+        },
+        "capture_method": "fail_closed_no_capability",
+        "boundary": {"account_id": "unavailable", "workspace_id": "unavailable", "session_id": "session"},
+        "source": "ultragoal.registry_probe",
+        "target_revision": {"kind":"package_digest","value":current},
+        "claim_ceiling": "withheld_or_blocked",
+        "session_id": "session",
+        "round_id": "round",
+        "raw_observation": {
+            "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
+            "digest": raw_digest
+        },
+        "agent_types": agent_types()
+            .into_iter()
+            .map(|mut row| {
+                row["disk_cache_synced"] = json!(false);
+                row["global_toml_present"] = json!(false);
+                row["exposed"] = json!(false);
+                row
+            })
+            .collect::<Vec<_>>(),
+        "failure": {
+            "reason": "live_registry_reviewer_exposure_not_proven",
+            "observed": "same-surface registry proof unavailable",
+            "blocked_claim_classes": [
+                "app_registry_or_reviewer_exposure",
+                "review_readiness",
+                "release_readiness",
+                "completion",
+                "update_goal_eligibility"
+            ]
+        }
+    })
 }

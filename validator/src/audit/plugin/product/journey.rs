@@ -12,6 +12,7 @@ pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
         return vec!["plugin_product_journey_incomplete".to_string()];
     }
     let mut out = evidence_count_failures(value);
+    out.extend(authority_failures(root, value));
     if str_field(value, "claim_ceiling") != "package_static_fixture_only" {
         out.push("plugin_product_journey_claim_ceiling_missing".to_string());
     }
@@ -39,6 +40,32 @@ fn evidence_count_failures(value: &Value) -> Vec<String> {
     } else {
         Vec::new()
     }
+}
+
+fn authority_failures(root: &Path, value: &Value) -> Vec<String> {
+    let mut out = Vec::new();
+    if str_field(value, "status") != "pass" {
+        out.push("plugin_product_journey_status_not_pass".to_string());
+    }
+    if value
+        .pointer("/target_revision/kind")
+        .and_then(Value::as_str)
+        != Some("package_digest")
+    {
+        out.push("plugin_product_journey_target_revision_not_package_digest".to_string());
+    }
+    match crate::package::inventory::package_digest(root) {
+        Ok(current)
+            if value
+                .pointer("/target_revision/value")
+                .and_then(Value::as_str)
+                == Some(current.as_str()) => {}
+        Ok(_) => out.push("plugin_product_journey_target_digest_mismatch".to_string()),
+        Err(err) => out.push(format!(
+            "plugin_product_journey_target_digest_unavailable:{err}"
+        )),
+    }
+    out
 }
 
 fn evidence_ref_failures(root: &Path, value: &Value) -> Vec<String> {

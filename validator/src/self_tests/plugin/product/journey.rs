@@ -94,6 +94,44 @@ fn plugin_product_journey_rejects_empty_and_malformed_fields() {
 }
 
 #[test]
+fn plugin_product_journey_requires_same_candidate_typed_authority() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let current = crate::package::inventory::package_digest(&root).expect("package digest");
+    let mut journey = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
+    )
+    .expect("journey receipt");
+
+    let mut missing_authority = journey.clone();
+    missing_authority.as_object_mut().unwrap().remove("status");
+    missing_authority
+        .as_object_mut()
+        .unwrap()
+        .remove("target_revision");
+    let failures =
+        crate::audit::plugin::product::cohesion::journey_value_failures(&root, &missing_authority);
+    assert!(failures.contains(&"plugin_product_journey_status_not_pass".to_string()));
+    assert!(
+        failures.contains(&"plugin_product_journey_target_revision_not_package_digest".to_string())
+    );
+    assert!(failures.contains(&"plugin_product_journey_target_digest_mismatch".to_string()));
+
+    journey["status"] = json!("fail");
+    journey["target_revision"] = json!({"kind":"source_tree_digest","value":current});
+    let failures = crate::audit::plugin::product::cohesion::journey_value_failures(&root, &journey);
+    assert!(failures.contains(&"plugin_product_journey_status_not_pass".to_string()));
+    assert!(
+        failures.contains(&"plugin_product_journey_target_revision_not_package_digest".to_string())
+    );
+
+    journey["status"] = json!("pass");
+    journey["target_revision"] =
+        json!({"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('9')});
+    let failures = crate::audit::plugin::product::cohesion::journey_value_failures(&root, &journey);
+    assert!(failures.contains(&"plugin_product_journey_target_digest_mismatch".to_string()));
+}
+
+#[test]
 fn plugin_flow_authority_requires_checks_edges_and_completion_receipts() {
     let flow = json!({
         "validator_checks":["source-package-inventory"],

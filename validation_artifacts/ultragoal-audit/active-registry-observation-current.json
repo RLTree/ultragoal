@@ -1,0 +1,23 @@
+{
+  "candidate_digest": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139",
+  "generated_at": "2026-06-28T11:52:02Z",
+  "observed": "no live same-surface Codex plugin registry or reviewer-exposure proof channel was available to this CLI run",
+  "probe": {
+    "capture_method": "fail_closed_no_capability",
+    "command": "ultragoal registry probe",
+    "source": "ultragoal.registry_probe"
+  },
+  "schema": "harness-ultragoal.registry-observation.v1",
+  "status": "fail",
+  "unsupported_claims": [
+    "plugins_ui_visibility",
+    "marketplace_publication",
+    "install_button_success",
+    "launcher_runtime_exposure",
+    "active_registry_exposure",
+    "reviewer_exposure",
+    "review_readiness",
+    "release_readiness",
+    "update_goal_eligibility"
+  ]
+}

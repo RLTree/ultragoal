@@ -5,6 +5,7 @@ use std::path::Path;
 
 const ROW_ID: &str = "standards-gardener-promotion";
 const RECEIPT_KEY: &str = "standards_gardening_receipt_path";
+const RUNTIME_ARTIFACT_PREFIX: &str = "validation_artifacts/";
 
 pub fn failures(root: &Path, store: &SchemaStore) -> Vec<String> {
     let matrix = match json_boundary::read_json(&root.join("docs/source-obligation-matrix.json")) {
@@ -80,14 +81,38 @@ fn changed_artifact_failures(root: &Path, receipt: &Value) -> Vec<String> {
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
-        .filter_map(|artifact| artifact_mismatch(root, artifact))
+        .flat_map(|artifact| {
+            [
+                runtime_artifact_failure(artifact),
+                artifact_mismatch(root, artifact),
+            ]
+            .into_iter()
+            .flatten()
+        })
         .collect()
 }
 
 pub fn receipt_root_failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = changed_artifact_failures(root, receipt);
+    out.extend(candidate_digest_failures(root, receipt));
     out.extend(changed_artifact_time_failures(root, receipt));
     out
+}
+
+fn candidate_digest_failures(root: &Path, receipt: &Value) -> Vec<String> {
+    let expected = match crate::package::inventory::package_digest(root) {
+        Ok(value) => value,
+        Err(err) => {
+            return vec![format!(
+                "standards_gardener_candidate_digest_unavailable:{err}"
+            )];
+        }
+    };
+    if receipt.get("candidate_digest").and_then(Value::as_str) == Some(expected.as_str()) {
+        Vec::new()
+    } else {
+        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
+    }
 }
 
 fn artifact_mismatch(root: &Path, artifact: &Value) -> Option<String> {
@@ -100,6 +125,15 @@ fn artifact_mismatch(root: &Path, artifact: &Value) -> Option<String> {
     match digest::file(&resolved) {
         Ok(actual) if actual == got => None,
         _ => Some("standards_gardener_changed_artifact_digest_mismatch".to_string()),
+    }
+}
+
+fn runtime_artifact_failure(artifact: &Value) -> Option<String> {
+    let path = artifact.get("path").and_then(Value::as_str).unwrap_or("");
+    if path.starts_with(RUNTIME_ARTIFACT_PREFIX) {
+        Some("standards_gardener_runtime_receipt_artifact".to_string())
+    } else {
+        None
     }
 }
 

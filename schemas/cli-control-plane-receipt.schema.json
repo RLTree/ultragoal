@@ -146,7 +146,15 @@
           "coverage_100_no_uncovered_records",
           "current_cli_performance_pass",
           "current_final_packet_proof_pass",
+          "current_fit_repo_pass",
+          "current_gc_pass",
+          "current_product_fitness_pass",
+          "current_product_journey_pass",
           "current_red_fixture_report_status_pass",
+          "current_rust_devx_pass",
+          "current_source_audit_pass",
+          "current_standards_gardener_pass",
+          "current_transactional_finalization_pass",
           "live_registry_or_reviewer_exposure_same_surface_pass"
         ]
       }

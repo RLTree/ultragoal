@@ -78,7 +78,7 @@ fn text_guard_checks(
     for failure in crate::audit::session_log_hardening::package_failures(root, store) {
         push(failures, "validator-execution-provenance", failure);
     }
-    for failure in crate::audit::final_packet::package_failures(root, store) {
+    for failure in crate::audit::final_packet::claim_guard_failures(root, store) {
         push(failures, "validator-execution-provenance", failure);
     }
     for failure in crate::audit::plugin::laws::package_failures(root, store) {

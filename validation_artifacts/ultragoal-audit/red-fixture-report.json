@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T00:28:46Z",
+  "generated_at": "2026-06-28T12:04:40Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -2136,7 +2136,7 @@
       "expected_failing_check": "coverage-proof-policy",
       "observed_error": "coverage_changed_file_not_measured",
       "observed_failing_check": "coverage-proof-policy",
-      "packet_digest": "sha256:a92d2f6dc6c00d549b8731434bad6db8a58a91ff43b32cce894fded8b4bad5a8",
+      "packet_digest": "sha256:e75f1c0b3c1ffa8c8f29cd47622f7815e1811f5272058a4fa49dc76648d66843",
       "packet_path": "fixtures/red/coverage-ready-changed-file-not-measured.json",
       "status": "pass",
       "validator_exit": 1
@@ -12136,6 +12136,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:73998ad51d2d79f8f97ac248d9c99e216eb52191790382822980e3072dad725a"
+    "value": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139"
   }
 }

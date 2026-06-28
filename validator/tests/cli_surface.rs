@@ -156,6 +156,61 @@ fn cli_surface_commands_execute() {
         "canonical package digest failed: {canonical_digest:?}"
     );
 
+    let product_receipt_dir = temp
+        .strip_prefix(&root)
+        .expect("temp under root")
+        .join("product-receipts");
+    let product = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            ".".into(),
+            "product".into(),
+            "prove-fitness".into(),
+            "--receipt-dir".into(),
+            product_receipt_dir.display().to_string(),
+        ],
+    );
+    assert!(
+        product.status.success(),
+        "product prove-fitness failed: {product:?}"
+    );
+    assert!(
+        root.join(&product_receipt_dir)
+            .join("product-fitness-receipt.json")
+            .is_file()
+    );
+    assert_eq!(
+        run_ultragoal(
+            &root,
+            &[
+                "--root".into(),
+                ".".into(),
+                "product".into(),
+                "prove-fitness".into(),
+                "--receipt".into(),
+                temp.join("product-control.json").display().to_string(),
+            ],
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+    assert_eq!(
+        run_ultragoal(
+            &root,
+            &[
+                "--root".into(),
+                ".".into(),
+                "product".into(),
+                "unknown".into(),
+            ],
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+
     std::fs::write(
         temp.join("plugin-manifest-draft.json"),
         r#"{"version":"0.0.0-test","resources":[]}"#,

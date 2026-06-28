@@ -21,14 +21,21 @@ pub(super) fn value(root: &Path, label: &str, rel: &str, expected: &str) -> Valu
             None
         }
     };
-    let status = parsed.as_ref().and_then(typed_status);
-    if status.as_deref() != Some("pass") {
+    let label_failures = parsed
+        .as_ref()
+        .map(|value| super::status::label_failures(root, label, value, expected))
+        .unwrap_or_default();
+    let status = parsed
+        .as_ref()
+        .and_then(|value| super::status::typed_status(label, value, &label_failures));
+    if status != Some("pass") {
         failures.push("status_not_pass".to_string());
     }
     let candidate = parsed.as_ref().and_then(candidate_digest);
     if candidate.as_deref() != Some(expected) {
         failures.push("candidate_digest_mismatch".to_string());
     }
+    failures.extend(label_failures);
     json!({
         "label": label,
         "path": rel,
@@ -40,24 +47,6 @@ pub(super) fn value(root: &Path, label: &str, rel: &str, expected: &str) -> Valu
         "same_candidate": candidate.as_deref() == Some(expected),
         "failures": failures
     })
-}
-
-fn typed_status(value: &Value) -> Option<String> {
-    if let Some(status) = value.get("status").and_then(Value::as_str) {
-        return Some(status.to_string());
-    }
-    if value.get("schema").and_then(Value::as_str) == Some("harness-ultragoal.coverage-receipt.v1")
-        && value.get("command_exit").and_then(Value::as_i64) == Some(0)
-        && value.pointer("/coverage/percent").and_then(Value::as_f64) == Some(100.0)
-        && value
-            .get("uncovered_records")
-            .and_then(Value::as_array)
-            .is_some_and(Vec::is_empty)
-        && value.get("claim_ceiling").and_then(Value::as_str) == Some("supports_complete_claim")
-    {
-        return Some("pass".to_string());
-    }
-    None
 }
 
 fn candidate_digest(value: &Value) -> Option<String> {
@@ -97,5 +86,59 @@ mod tests {
         if root.exists() {
             std::fs::remove_dir_all(root).expect("cleanup cli evidence item");
         }
+    }
+
+    #[test]
+    fn evidence_item_infers_exact_coverage_receipt_status() {
+        let root = crate::self_tests::boundaries::support::temp_root("cli-evidence-item-coverage");
+        std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("coverage dir");
+        let candidate = crate::self_tests::boundaries::support::sha('c');
+        let rel = "validation_artifacts/coverage/coverage-receipt.json";
+        crate::json_boundary::write_json(
+            &root.join(rel),
+            &serde_json::json!({
+                "schema": "harness-ultragoal.coverage-receipt.v1",
+                "command_exit": 0,
+                "coverage": {"percent": 100.0},
+                "uncovered_records": [],
+                "claim_ceiling": "supports_complete_claim",
+                "target_revision": {"kind": "package_digest", "value": candidate}
+            }),
+        )
+        .expect("coverage receipt");
+        let value = super::value(&root, "coverage", rel, &candidate);
+        assert_eq!(value["status"], "pass");
+        assert!(value["failures"].as_array().expect("failures").is_empty());
+        std::fs::remove_dir_all(root).expect("cleanup cli evidence coverage");
+    }
+
+    #[test]
+    fn evidence_item_refuses_status_inference_for_nonpassing_typed_receipts() {
+        let root = crate::self_tests::boundaries::support::temp_root("cli-evidence-item-no-status");
+        std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("coverage dir");
+        let candidate = crate::self_tests::boundaries::support::sha('d');
+        let rel = "validation_artifacts/coverage/coverage-receipt.json";
+        crate::json_boundary::write_json(
+            &root.join(rel),
+            &serde_json::json!({
+                "schema": "harness-ultragoal.coverage-receipt.v1",
+                "command_exit": 0,
+                "coverage": {"percent": 99.0},
+                "uncovered_records": [{"path": "src/lib.rs"}],
+                "claim_ceiling": "withheld_or_blocked",
+                "target_revision": {"kind": "package_digest", "value": candidate}
+            }),
+        )
+        .expect("coverage receipt");
+        let value = super::value(&root, "coverage", rel, &candidate);
+        assert_eq!(value["status"], serde_json::Value::Null);
+        assert!(
+            value["failures"]
+                .as_array()
+                .expect("failures")
+                .iter()
+                .any(|failure| failure.as_str() == Some("status_not_pass"))
+        );
+        std::fs::remove_dir_all(root).expect("cleanup cli evidence no status");
     }
 }
