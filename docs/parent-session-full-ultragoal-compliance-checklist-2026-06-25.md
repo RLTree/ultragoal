@@ -10564,6 +10564,14 @@ This section supersedes older same-digest progress notes as the latest mutable p
 - [ ] CT-008 remains unchecked because there is still no real same-surface registry/reviewer green proof. CT-006 through CT-011 remain unchecked overall.
 - Claim ceiling unchanged: source-local proof plus fail-closed unsupported live-surface blockers only. No active registry/reviewer exposure, final packet correctness, install/cache parity refresh, readiness, release, completion, or `update_goal()` eligibility is supported.
 
+### Live Progress Evidence - 2026-06-28T16:18Z Codex app-storage filename probe
+
+- [x] App-support routing probe found Codex storage roots under `/Users/terrynoblin/Library/Application Support/Codex`, `/Users/terrynoblin/Library/Application Support/OpenAI/Codex`, and `/Users/terrynoblin/Library/Application Support/com.openai.codex`. Broad enumeration showed Chromium-style cache/storage files and is not used as registry proof.
+- [x] Targeted filename-only probes for `*plugin*`, `*harness*`, `*ultragoal*`, and `*registry*` under those Codex app-support roots returned no paths. This is negative routing evidence only.
+- [ ] No app-owned registry database, IPC endpoint, or governed same-surface registry source was identified from filename discovery. Browser cache, local storage, installed plugin directories, and package cache remain invalid substitutes for Plugins UI, marketplace, install-button, launcher runtime, active registry, or reviewer exposure proof.
+- [ ] CT-008 remains unchecked because there is still no real same-surface registry/reviewer green proof. CT-006 through CT-011 remain unchecked overall.
+- Claim ceiling unchanged: source-local proof plus fail-closed unsupported live-surface blockers only. No active registry/reviewer exposure, final packet correctness, install/cache parity refresh, readiness, release, completion, or `update_goal()` eligibility is supported.
+
 ### Live Progress Evidence - 2026-06-28T16:13Z high-level fail-closed receipts refreshed after current source audit
 
 - [x] Final-packet proof now consumes the current source-audit receipt: `target/debug/ultragoal --root . final-packet prove --receipt validation_artifacts/review/final-packet-proof.json` exited `1`; `validation_artifacts/review/final-packet-proof.json` has `status = fail`, `target_revision.value = sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863`, `claim_ceiling = withheld_or_blocked`, `failure.reason = final_packet_proof_not_proven`, `generated_at = 2026-06-28T16:12:00Z`, `source_audit.digest = sha256:ebf8894a1b788d49d84e608e964c9567a8f4ede8bc1634c1c860ef889a364435`, `registry_exposure.status = fail`, and file digest `sha256:5fdf35861c7e94256011c25c2f1e0a9f4e1dc65711cb25b89ad8804afd051f24`.
