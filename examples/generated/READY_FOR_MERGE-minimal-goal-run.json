@@ -75,10 +75,10 @@
     "generated_artifact_type": "ready_for_merge",
     "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
     "validator_receipt": {
-      "digest": "sha256:4abd751ead1105c0aad40ea9ccd17488bb11831dd273ae5a7fa855ec5e3e014c",
+      "digest": "sha256:c679bcd88d4f6a499c652b0826f99728774cb3724c19afe96c045e4b9f74a75d",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.json"
     },
-    "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z"
+    "validator_run_id": "ultragoal-audit-2026-06-28T14:43:55Z"
   },
   "ready": true,
   "schema": "harness-ultragoal.ready-for-merge.v1",
@@ -91,7 +91,7 @@
   "target_head_at_launch": "abcdef0",
   "target_head_at_validation": "abcdef0",
   "teardown_ready": true,
-  "validator_run_id": "ultragoal-audit-2026-06-27T13:36:55Z",
+  "validator_run_id": "ultragoal-audit-2026-06-28T14:43:55Z",
   "validator_version": "fixture-current-runtime-provenance",
   "workspace": "/repo",
   "worktree_clean": true

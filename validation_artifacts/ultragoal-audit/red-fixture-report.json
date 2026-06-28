@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T13:03:50Z",
+  "generated_at": "2026-06-28T16:02:50Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -2796,7 +2796,7 @@
       "expected_failing_check": "ready-receipt-provenance",
       "observed_error": "ready_receipt_not_validator_output",
       "observed_failing_check": "ready-receipt-provenance",
-      "packet_digest": "sha256:8819a01704d43c2b442fa854668fdb05bb4ae6287298083e910c4cef7383341c",
+      "packet_digest": "sha256:468e50d350e0dd62219fd9790915b102a2b37c98cf107254b84ffda47c55141f",
       "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-digest-mismatch.json",
       "status": "pass",
       "validator_exit": 1
@@ -2806,7 +2806,7 @@
       "expected_failing_check": "ready-receipt-provenance",
       "observed_error": "ready_receipt_not_validator_output",
       "observed_failing_check": "ready-receipt-provenance",
-      "packet_digest": "sha256:057c8b7f908d6cc7df2138677b46f7f8364caf14b2717b238804d9888b494070",
+      "packet_digest": "sha256:179e624be2c53bbd305572e65be1daad982ae025cee36a63c6ea6dfa4f504f7b",
       "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-missing.json",
       "status": "pass",
       "validator_exit": 1
@@ -12136,6 +12136,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:72d6058e5c239916653c2a2548dae9ac5c9cc118c61c6eb61352bee11211451a"
+    "value": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863"
   }
 }

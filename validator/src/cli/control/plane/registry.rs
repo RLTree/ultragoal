@@ -2,6 +2,8 @@ use crate::cli::control::plane::types::ControlOperation;
 use serde_json::json;
 use std::path::Path;
 
+mod capability;
+
 const ACTIVE_RECEIPT: &str =
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
 const RAW_OBSERVATION: &str =
@@ -75,6 +77,7 @@ pub(crate) fn mint_fail_closed_if_needed(
         "session_id": session_id,
         "round_id": fail_closed_round_id(operation, candidate),
         "raw_observation": {"path": RAW_OBSERVATION, "digest": raw_digest},
+        "capability_gap": capability::gap::record(candidate, &now, &session_id, &raw_digest),
         "agent_types": fail_closed_agent_types(),
         "failure": {
             "reason": "live_registry_reviewer_exposure_not_proven",

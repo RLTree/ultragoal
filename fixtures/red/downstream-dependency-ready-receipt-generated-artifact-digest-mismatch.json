@@ -8,7 +8,7 @@
   "json_patch": [
     {
       "op": "replace",
-      "path": "/validator_receipt/generated_artifacts/5/digest",
+      "path": "/validator_receipt/generated_artifacts/51/digest",
       "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
     }
   ],
@@ -27,7 +27,7 @@
   "preconditions": [
     {
       "exists": true,
-      "path": "/validator_receipt/generated_artifacts/5/artifact_type"
+      "path": "/validator_receipt/generated_artifacts/51/artifact_type"
     }
   ],
   "schema": "harness-ultragoal.red-packet.v1"

@@ -1,10 +1,10 @@
 {
   "schema": "harness-ultragoal.session-log-hardening-receipt.v1",
   "status": "pass",
-  "generated_at": "2026-06-28T12:44:48Z",
+  "generated_at": "2026-06-28T15:38:59Z",
   "candidate_version": "0.0.11",
   "source_root": "repo://harness-ultragoal-plugin-proposal",
-  "package_digest": "sha256:72d6058e5c239916653c2a2548dae9ac5c9cc118c61c6eb61352bee11211451a",
+  "package_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
   "audit_sources": [
     {
       "source_id": "chronicle-product-fitness-0449",

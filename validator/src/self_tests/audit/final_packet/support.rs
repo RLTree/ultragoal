@@ -158,6 +158,7 @@ fn fail_closed_registry_ref(root: &Path, current: &str) -> Value {
             "session_id":"session",
             "round_id":"round",
             "raw_observation":{"path":"validation_artifacts/ultragoal-audit/active-registry-observation-current.json","digest":crate::digest::ZERO},
+            "capability_gap": super::registry::capability::gap::record(crate::digest::ZERO),
             "agent_types":agent_types().into_iter().map(|mut row| {
                 row["disk_cache_synced"] = json!(false);
                 row["global_toml_present"] = json!(false);

@@ -180,6 +180,9 @@
         }
       }
     },
+    "capability_gap": {
+      "$ref": "#/$defs/capabilityGap"
+    },
     "agent_types": {
       "type": "array",
       "minItems": 4,
@@ -274,7 +277,8 @@
       },
       "then": {
         "required": [
-          "failure"
+          "failure",
+          "capability_gap"
         ],
         "properties": {
           "claim_ceiling": {
@@ -288,6 +292,129 @@
     }
   ],
   "$defs": {
+    "artifactAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "capabilityGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "id",
+        "source_artifact",
+        "source_session_id",
+        "observed_at",
+        "affected_workflow",
+        "affected_law_ids",
+        "affected_claim_ids",
+        "missing_capability_class",
+        "owner_surface",
+        "blocked_package_surfaces",
+        "deterministic_repair_target",
+        "chosen_promotion_artifact",
+        "current_claim_ceiling",
+        "required_evidence",
+        "disposition"
+      ],
+      "properties": {
+        "schema": {
+          "const": "harness-ultragoal.capability-gap.v1"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_artifact": {
+          "$ref": "#/$defs/artifactAnchor"
+        },
+        "source_session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "minLength": 20
+        },
+        "affected_workflow": {
+          "const": "registry_probe"
+        },
+        "affected_law_ids": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "enum": [
+              "capability-gap-extraction-harness-capability-promotion",
+              "connector-capability-discovery",
+              "distribution-sharing-surface-claim-separation"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "affected_claim_ids": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "enum": [
+              "app_registry_or_reviewer_exposure",
+              "review_readiness",
+              "release_readiness",
+              "completion",
+              "update_goal_eligibility"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "missing_capability_class": {
+          "const": "live_same_surface_plugin_registry_or_reviewer_exposure"
+        },
+        "owner_surface": {
+          "const": "codex_desktop_plugin_registry"
+        },
+        "blocked_package_surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "deterministic_repair_target": {
+          "const": "provide_live_tool_registry_query_or_keep_claims_blocked"
+        },
+        "chosen_promotion_artifact": {
+          "const": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
+        },
+        "current_claim_ceiling": {
+          "const": "withheld_or_blocked"
+        },
+        "required_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "disposition": {
+          "const": "open_claim_blocked"
+        }
+      }
+    },
     "agentTypeExposure": {
       "type": "object",
       "additionalProperties": false,

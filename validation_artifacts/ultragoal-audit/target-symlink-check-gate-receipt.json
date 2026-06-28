@@ -363,17 +363,17 @@
   },
   "command": {
     "command": "scripts/check",
-    "completed_at": "2026-06-28T13:03:47Z",
+    "completed_at": "2026-06-28T16:02:45Z",
     "cwd": "fixtures/target-repo/red/symlink-check-gate",
     "exit": 127,
     "id": "target-repo-check",
-    "started_at": "2026-06-28T13:03:47Z"
+    "started_at": "2026-06-28T16:02:45Z"
   },
   "gate_markers": [],
-  "generated_at": "2026-06-28T13:03:47Z",
+  "generated_at": "2026-06-28T16:02:45Z",
   "invocation": "fixture init fixtures/target-repo/red/symlink-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:a90c78fd28b3198bfcbdd1af9df175c5084f7df56d07e8f141b005e8368d85fe",
+  "repo_fingerprint": "sha256:c1e3f736906ea3c4108b6b9138fad7a55fca2674bc3d31bd2dd13e9028bc4cf2",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -665,7 +665,7 @@
       "path": "validator/src/audit/plugin/registry.rs"
     },
     {
-      "digest": "sha256:4d8527ca9fc0afd0f6ff61b652a411f55bdcdca3a4f869cbf6abbd6184070449",
+      "digest": "sha256:4462c33710de2cd5c7627f195d5bb3fdd1d864f2a4e7fec618aa93ac4f7ef7c7",
       "path": "validator/src/audit/plugin/registry/guard.rs"
     },
     {
@@ -1045,8 +1045,16 @@
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
-      "digest": "sha256:14d3bf2aa40c3b67cfe3008c1133210205d7045306a77a91b8a279e4738e2499",
+      "digest": "sha256:e5a3016916c65f3cdfa55fc7ab9ef060c504933a36e50bfafc9a847f5a3e9388",
       "path": "validator/src/cli/control/plane/registry.rs"
+    },
+    {
+      "digest": "sha256:94f49d64f1532ac4979147b9bdd3ffe54e0279ba47ab9fa3378f1d2c4e2a9a7e",
+      "path": "validator/src/cli/control/plane/registry/capability/gap.rs"
+    },
+    {
+      "digest": "sha256:cf0e8dac59e5f17dfef310daf118eab8ed881602313c732767cfeb4789eb27c2",
+      "path": "validator/src/cli/control/plane/registry/capability/mod.rs"
     },
     {
       "digest": "sha256:d5d4b3e64df55d76b012a9cd4474678675d4b864f6312d252eb23537d4e344bc",
@@ -1401,7 +1409,7 @@
       "path": "validator/src/self_tests/audit/edge_cases.rs"
     },
     {
-      "digest": "sha256:2b435cca1fcf38b0f298ba7cfe17ec26342f26a07f2c6b978d9d23280f50c9f8",
+      "digest": "sha256:088602738ae0c6511c70e7c86ed0a52dd15540bb65de72fcf8e17727e5eaf355",
       "path": "validator/src/self_tests/audit/final_packet.rs"
     },
     {
@@ -1417,11 +1425,23 @@
       "path": "validator/src/self_tests/audit/final_packet/references/package.rs"
     },
     {
+      "digest": "sha256:027bbf1627c7920e762bb9e282ace26aada2df9ab2a65938753bdf00f9871cd1",
+      "path": "validator/src/self_tests/audit/final_packet/registry/capability/gap.rs"
+    },
+    {
+      "digest": "sha256:cf0e8dac59e5f17dfef310daf118eab8ed881602313c732767cfeb4789eb27c2",
+      "path": "validator/src/self_tests/audit/final_packet/registry/capability/mod.rs"
+    },
+    {
+      "digest": "sha256:cf716ff4a7a1d612a0378a418a5eff04e2da165c2e11a94860bba59c312e06ab",
+      "path": "validator/src/self_tests/audit/final_packet/registry/mod.rs"
+    },
+    {
       "digest": "sha256:a9dbf9c8cc052a6735079da87a05c6d20972a1618786b06a012ab94caed6fad0",
       "path": "validator/src/self_tests/audit/final_packet/source_audit.rs"
     },
     {
-      "digest": "sha256:792f32976d90bb914964ebaadb717319de97e03ba6b865bdd187ec1f6313fc07",
+      "digest": "sha256:a8d46e4650830479bd4e8cbfdf8b91291154eb95cb873cfd945252a19a05ad02",
       "path": "validator/src/self_tests/audit/final_packet/support.rs"
     },
     {
@@ -1885,11 +1905,11 @@
       "path": "validator/src/self_tests/plugin/product/package.rs"
     },
     {
-      "digest": "sha256:3731c1c2370c45823962112e8df2f72a9ecfdfbb794d1e14d244c813cef94863",
+      "digest": "sha256:e46e668d3ba4056d57a96bee92e3ed82a95b3a81a5244c7c4a2b3805abfb1bde",
       "path": "validator/src/self_tests/plugin/registry.rs"
     },
     {
-      "digest": "sha256:eceb8995ada4407116d1c509f7aafb487890a3f08bba45ed6ab1f6a609bca18e",
+      "digest": "sha256:fe2120f286be66de1612e2cc39d1db3f267a26a66e02fc43a5242f9e7e58bb4f",
       "path": "validator/src/self_tests/plugin/registry/guard.rs"
     },
     {
