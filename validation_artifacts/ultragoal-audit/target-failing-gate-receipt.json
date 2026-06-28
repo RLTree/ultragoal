@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-28T12:04:36Z",
+    "completed_at": "2026-06-28T13:03:47Z",
     "cwd": "fixtures/target-repo/red/failing-gate",
     "exit": 1,
     "id": "target-repo-check",
-    "started_at": "2026-06-28T12:04:36Z",
+    "started_at": "2026-06-28T13:03:47Z",
     "stderr": {
       "digest": "sha256:be13a05e122e30b0cfbe804b8af8e340914734ca6436071ca71171a7cc190493",
       "path": "<inline:stderr>"
@@ -380,10 +380,10 @@
   "gate_markers": [
     "coverage-enforcement"
   ],
-  "generated_at": "2026-06-28T12:04:36Z",
+  "generated_at": "2026-06-28T13:03:47Z",
   "invocation": "fixture init fixtures/target-repo/red/failing-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:1ed9981d1e675cc85162be44c35ffb3c1bb070bc3ec86df854bc451e84c17446",
+  "repo_fingerprint": "sha256:da81a79bfccdc6e5b8e2bcc1a1c780a40fc0bbd9a071c3875d7d32b75ddfc779",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1055,7 +1055,7 @@
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
-      "digest": "sha256:7b876c6bd85ee1edc9ab42e6e8ecec9ce8098b7c57faa3fe3be75cf7da763e24",
+      "digest": "sha256:14d3bf2aa40c3b67cfe3008c1133210205d7045306a77a91b8a279e4738e2499",
       "path": "validator/src/cli/control/plane/registry.rs"
     },
     {
@@ -1659,7 +1659,7 @@
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
-      "digest": "sha256:ab665f5440eba99024167f45fc229d7f1bba65eb640abdd76b1c3e661779fc5a",
+      "digest": "sha256:7265277ca6d11f52ff75f2755d0ba400589898b0a847e74c67cc1574564c9b6b",
       "path": "validator/src/self_tests/cli/control/registry.rs"
     },
     {

@@ -39,7 +39,7 @@
     "workspace_id": "unavailable"
   },
   "capture_method": "fail_closed_no_capability",
-  "captured_at": "2026-06-28T11:52:02Z",
+  "captured_at": "2026-06-28T12:50:08Z",
   "claim_ceiling": "withheld_or_blocked",
   "failure": {
     "blocked_claim_classes": [
@@ -52,27 +52,27 @@
     "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
     "reason": "live_registry_reviewer_exposure_not_proven"
   },
-  "generated_at": "2026-06-28T11:52:02Z",
+  "generated_at": "2026-06-28T12:50:08Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
   },
   "raw_observation": {
-    "digest": "sha256:d97a03e0aee303e9fd0572218cfb90ea08cacc5ca75493e34266aa64fd87fd72",
+    "digest": "sha256:94c058664f009db444c04cac7ca92c8bb2246727b49ee856c2e16628a01e2e17",
     "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
   },
-  "round_id": "source-compliance-hardening-2026-06-28-fail-closed",
+  "round_id": "registry_probe-unsupported-live-surface-72d6058e5c23",
   "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
   "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
   "source": "ultragoal.registry_probe",
   "status": "fail",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:457b9e2657d0eeb033aaa422ec9456d87bdd6f01b1b0683a70a52e2fffbca139"
+    "value": "sha256:72d6058e5c239916653c2a2548dae9ac5c9cc118c61c6eb61352bee11211451a"
   },
   "tool_call": {
     "arguments_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "call_id": "local-fail-closed",
+    "call_id": "registry_probe-fail-closed-72d6058e5c23",
     "name": "ultragoal registry probe"
   }
 }

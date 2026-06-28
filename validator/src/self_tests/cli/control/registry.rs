@@ -60,6 +60,74 @@ fn registry_probe_preserves_existing_live_same_surface_pass() {
     std::fs::remove_dir_all(root).expect("cleanup cli registry preserve");
 }
 
+#[test]
+fn registry_fail_closed_boundary_normalizes_runtime_values() {
+    let boundary = crate::cli::control::plane::registry::boundary_from_values(
+        Some("acct-1"),
+        Some("workspace.alpha"),
+        Some("thread:019f"),
+    );
+    assert_eq!(boundary.account_id, "acct-1");
+    assert_eq!(boundary.workspace_id, "workspace.alpha");
+    assert_eq!(boundary.session_id, "thread:019f");
+
+    let unsafe_boundary = crate::cli::control::plane::registry::boundary_from_values(
+        Some("acct one"),
+        Some(""),
+        None,
+    );
+    assert_eq!(unsafe_boundary.account_id, "unavailable");
+    assert_eq!(unsafe_boundary.workspace_id, "unavailable");
+    assert_eq!(unsafe_boundary.session_id, "unavailable");
+}
+
+#[test]
+fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
+    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-runtime-boundary");
+    copy_schema_catalog(&root);
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"version":"0.0.0-test","resources":[]}),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    crate::cli::control::plane::registry::mint_fail_closed_if_needed(
+        &root,
+        ControlOperation::RegistryProbe,
+        &current,
+    )
+    .expect("registry mint");
+
+    let active_rel = "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
+    let active = crate::json_boundary::read_json(&root.join(active_rel)).expect("active receipt");
+    let env_thread = std::env::var("CODEX_THREAD_ID").ok();
+    let expected = crate::cli::control::plane::registry::boundary_from_values(
+        None,
+        None,
+        env_thread.as_deref(),
+    );
+    assert_eq!(active["boundary"]["session_id"], expected.session_id);
+    assert_eq!(active["session_id"], expected.session_id);
+    assert_ne!(
+        active["round_id"],
+        json!("source-compliance-hardening-2026-06-28-fail-closed")
+    );
+    assert_ne!(active["tool_call"]["call_id"], json!("local-fail-closed"));
+    assert!(
+        active["tool_call"]["call_id"]
+            .as_str()
+            .expect("call id")
+            .starts_with("registry_probe-fail-closed-")
+    );
+    assert!(
+        active["round_id"]
+            .as_str()
+            .expect("round id")
+            .starts_with("registry_probe-unsupported-live-surface-")
+    );
+
+    std::fs::remove_dir_all(root).expect("cleanup cli registry runtime boundary");
+}
+
 fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Value {
     json!({
         "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",

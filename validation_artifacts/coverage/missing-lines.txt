@@ -1520,13 +1520,13 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/clock.rs:
     1|       |use std::time::{SystemTime, UNIX_EPOCH};
     2|       |
-    3|    641|pub fn now_iso() -> String {
-    4|    641|    let seconds = SystemTime::now()
-    5|    641|        .duration_since(UNIX_EPOCH)
-    6|    641|        .map(|d| d.as_secs() as i64)
-    7|    641|        .unwrap_or(0);
-    8|    641|    unix_to_iso(seconds)
-    9|    641|}
+    3|    642|pub fn now_iso() -> String {
+    4|    642|    let seconds = SystemTime::now()
+    5|    642|        .duration_since(UNIX_EPOCH)
+    6|    642|        .map(|d| d.as_secs() as i64)
+    7|    642|        .unwrap_or(0);
+    8|    642|    unix_to_iso(seconds)
+    9|    642|}
    10|       |
    11|    258|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
    12|    258|    let trimmed = value.strip_suffix('Z')?;
@@ -1553,15 +1553,15 @@
    25|    210|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
    26|    258|}
    27|       |
-   28|    643|pub fn unix_to_iso(seconds: i64) -> String {
-   29|    643|    let days = seconds.div_euclid(86_400);
-   30|    643|    let rem = seconds.rem_euclid(86_400);
-   31|    643|    let (year, month, day) = civil_from_days(days);
-   32|    643|    let hour = rem / 3_600;
-   33|    643|    let minute = (rem % 3_600) / 60;
-   34|    643|    let second = rem % 60;
-   35|    643|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
-   36|    643|}
+   28|    644|pub fn unix_to_iso(seconds: i64) -> String {
+   29|    644|    let days = seconds.div_euclid(86_400);
+   30|    644|    let rem = seconds.rem_euclid(86_400);
+   31|    644|    let (year, month, day) = civil_from_days(days);
+   32|    644|    let hour = rem / 3_600;
+   33|    644|    let minute = (rem % 3_600) / 60;
+   34|    644|    let second = rem % 60;
+   35|    644|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
+   36|    644|}
    37|       |
    38|    210|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
    39|    210|    let y = year - (month <= 2) as i64;
@@ -1600,20 +1600,20 @@
                                     ^1                  ^1
    69|      2|}
    70|       |
-   71|    643|fn civil_from_days(days: i64) -> (i64, i64, i64) {
-   72|    643|    let z = days + 719_468;
-   73|    643|    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
+   71|    644|fn civil_from_days(days: i64) -> (i64, i64, i64) {
+   72|    644|    let z = days + 719_468;
+   73|    644|    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
                                                    ^0
-   74|    643|    let doe = z - era * 146_097;
-   75|    643|    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
-   76|    643|    let y = yoe + era * 400;
-   77|    643|    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-   78|    643|    let mp = (5 * doy + 2) / 153;
-   79|    643|    let day = doy - (153 * mp + 2) / 5 + 1;
-   80|    643|    let month = mp + if mp < 10 { 3 } else { -9 };
-                                                ^642       ^1
-   81|    643|    (y + (month <= 2) as i64, month, day)
-   82|    643|}
+   74|    644|    let doe = z - era * 146_097;
+   75|    644|    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+   76|    644|    let y = yoe + era * 400;
+   77|    644|    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+   78|    644|    let mp = (5 * doy + 2) / 153;
+   79|    644|    let day = doy - (153 * mp + 2) / 5 + 1;
+   80|    644|    let month = mp + if mp < 10 { 3 } else { -9 };
+                                                ^643       ^1
+   81|    644|    (y + (month <= 2) as i64, month, day)
+   82|    644|}
    83|       |
    84|       |#[cfg(test)]
    85|       |mod tests {
@@ -16629,134 +16629,206 @@
     7|       |const RAW_OBSERVATION: &str =
     8|       |    "validation_artifacts/ultragoal-audit/active-registry-observation-current.json";
     9|       |
-   10|      8|pub(crate) fn mint_fail_closed_if_needed(
-   11|      8|    root: &Path,
-   12|      8|    operation: ControlOperation,
-   13|      8|    candidate: &str,
-   14|      8|) -> Result<(), String> {
+   10|      9|pub(crate) fn mint_fail_closed_if_needed(
+   11|      9|    root: &Path,
+   12|      9|    operation: ControlOperation,
+   13|      9|    candidate: &str,
+   14|      9|) -> Result<(), String> {
    15|      6|    if !matches!(
-   16|      8|        operation,
+   16|      9|        operation,
    17|       |        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
    18|       |    ) {
    19|      6|        return Ok(());
-   20|      2|    }
-   21|      2|    if existing_live_pass(root)? {
+   20|      3|    }
+   21|      3|    if existing_live_pass(root)? {
                                              ^0
    22|      1|        return Ok(());
-   23|      1|    }
-   24|      1|    let now = crate::audit::clock::now_iso();
-   25|      1|    let raw = json!({
-   26|      1|        "schema": "harness-ultragoal.registry-observation.v1",
-   27|      1|        "generated_at": now,
-   28|      1|        "status": "fail",
-   29|      1|        "candidate_digest": candidate,
-   30|      1|        "probe": {
-   31|      1|            "command": "ultragoal registry probe",
-   32|      1|            "capture_method": "fail_closed_no_capability",
-   33|      1|            "source": "ultragoal.registry_probe"
-   34|       |        },
-   35|      1|        "observed": "no live same-surface Codex plugin registry or reviewer-exposure proof channel was available to this CLI run",
-   36|      1|        "unsupported_claims": [
-   37|       |            "plugins_ui_visibility",
-   38|       |            "marketplace_publication",
-   39|       |            "install_button_success",
-   40|       |            "launcher_runtime_exposure",
-   41|       |            "active_registry_exposure",
-   42|       |            "reviewer_exposure",
-   43|       |            "review_readiness",
-   44|       |            "release_readiness",
-   45|       |            "update_goal_eligibility"
-   46|       |        ]
-   47|       |    });
-   48|      1|    crate::json_boundary::write_json(&root.join(RAW_OBSERVATION), &raw)?;
+   23|      2|    }
+   24|      2|    let now = crate::audit::clock::now_iso();
+   25|      2|    let boundary = runtime_boundary();
+   26|      2|    let account_id = boundary.account_id;
+   27|      2|    let workspace_id = boundary.workspace_id;
+   28|      2|    let session_id = boundary.session_id;
+   29|      2|    let call_id = fail_closed_call_id(operation, candidate);
+   30|      2|    let raw = json!({
+   31|      2|        "schema": "harness-ultragoal.registry-observation.v1",
+   32|      2|        "generated_at": now,
+   33|      2|        "status": "fail",
+   34|      2|        "candidate_digest": candidate,
+   35|      2|        "probe": {
+   36|      2|            "command": "ultragoal registry probe",
+   37|      2|            "capture_method": "fail_closed_no_capability",
+   38|      2|            "source": "ultragoal.registry_probe"
+   39|       |        },
+   40|      2|        "observed": "no live same-surface Codex plugin registry or reviewer-exposure proof channel was available to this CLI run",
+   41|      2|        "unsupported_claims": [
+   42|       |            "plugins_ui_visibility",
+   43|       |            "marketplace_publication",
+   44|       |            "install_button_success",
+   45|       |            "launcher_runtime_exposure",
+   46|       |            "active_registry_exposure",
+   47|       |            "reviewer_exposure",
+   48|       |            "review_readiness",
+   49|       |            "release_readiness",
+   50|       |            "update_goal_eligibility"
+   51|       |        ]
+   52|       |    });
+   53|      2|    crate::json_boundary::write_json(&root.join(RAW_OBSERVATION), &raw)?;
                                                                                      ^0
-   49|      1|    let raw_digest = crate::digest::file(&root.join(RAW_OBSERVATION))?;
+   54|      2|    let raw_digest = crate::digest::file(&root.join(RAW_OBSERVATION))?;
                                                                                    ^0
-   50|      1|    let receipt = json!({
-   51|      1|        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
-   52|      1|        "generated_at": now,
-   53|      1|        "captured_at": now,
-   54|      1|        "status": "fail",
-   55|      1|        "issuer": {"tool": "ultragoal", "authority": "cli_control_plane"},
-   56|      1|        "tool_call": {
-   57|      1|            "name": "ultragoal registry probe",
-   58|      1|            "call_id": "local-fail-closed",
-   59|      1|            "arguments_digest": crate::digest::ZERO
-   60|       |        },
-   61|      1|        "capture_method": "fail_closed_no_capability",
-   62|      1|        "boundary": {
-   63|      1|            "account_id": "unavailable",
-   64|      1|            "workspace_id": "unavailable",
-   65|      1|            "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1"
-   66|       |        },
-   67|      1|        "source": "ultragoal.registry_probe",
-   68|      1|        "target_revision": {"kind": "package_digest", "value": candidate},
-   69|      1|        "claim_ceiling": "withheld_or_blocked",
-   70|      1|        "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
-   71|      1|        "round_id": "source-compliance-hardening-2026-06-28-fail-closed",
-   72|      1|        "raw_observation": {"path": RAW_OBSERVATION, "digest": raw_digest},
-   73|      1|        "agent_types": fail_closed_agent_types(),
-   74|      1|        "failure": {
-   75|      1|            "reason": "live_registry_reviewer_exposure_not_proven",
-   76|      1|            "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
-   77|      1|            "blocked_claim_classes": [
-   78|       |                "app_registry_or_reviewer_exposure",
-   79|       |                "review_readiness",
-   80|       |                "release_readiness",
-   81|       |                "completion",
-   82|       |                "update_goal_eligibility"
-   83|       |            ]
-   84|       |        }
-   85|       |    });
-   86|      1|    crate::json_boundary::write_json(&root.join(ACTIVE_RECEIPT), &receipt)
-   87|      8|}
-   88|       |
-   89|      2|fn existing_live_pass(root: &Path) -> Result<bool, String> {
-   90|      2|    let Ok(receipt) = crate::json_boundary::read_json(&root.join(ACTIVE_RECEIPT)) else {
+   55|      2|    let receipt = json!({
+   56|      2|        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+   57|      2|        "generated_at": now,
+   58|      2|        "captured_at": now,
+   59|      2|        "status": "fail",
+   60|      2|        "issuer": {"tool": "ultragoal", "authority": "cli_control_plane"},
+   61|      2|        "tool_call": {
+   62|      2|            "name": "ultragoal registry probe",
+   63|      2|            "call_id": call_id,
+   64|      2|            "arguments_digest": crate::digest::ZERO
+   65|       |        },
+   66|      2|        "capture_method": "fail_closed_no_capability",
+   67|      2|        "boundary": {
+   68|      2|            "account_id": account_id,
+   69|      2|            "workspace_id": workspace_id,
+   70|      2|            "session_id": session_id.clone()
+   71|       |        },
+   72|      2|        "source": "ultragoal.registry_probe",
+   73|      2|        "target_revision": {"kind": "package_digest", "value": candidate},
+   74|      2|        "claim_ceiling": "withheld_or_blocked",
+   75|      2|        "session_id": session_id,
+   76|      2|        "round_id": fail_closed_round_id(operation, candidate),
+   77|      2|        "raw_observation": {"path": RAW_OBSERVATION, "digest": raw_digest},
+   78|      2|        "agent_types": fail_closed_agent_types(),
+   79|      2|        "failure": {
+   80|      2|            "reason": "live_registry_reviewer_exposure_not_proven",
+   81|      2|            "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
+   82|      2|            "blocked_claim_classes": [
+   83|       |                "app_registry_or_reviewer_exposure",
+   84|       |                "review_readiness",
+   85|       |                "release_readiness",
+   86|       |                "completion",
+   87|       |                "update_goal_eligibility"
+   88|       |            ]
+   89|       |        }
+   90|       |    });
+   91|      2|    crate::json_boundary::write_json(&root.join(ACTIVE_RECEIPT), &receipt)
+   92|      9|}
+   93|       |
+   94|       |#[derive(Clone)]
+   95|       |pub(crate) struct RegistryBoundary {
+   96|       |    pub(crate) account_id: String,
+   97|       |    pub(crate) workspace_id: String,
+   98|       |    pub(crate) session_id: String,
+   99|       |}
+  100|       |
+  101|      5|pub(crate) fn boundary_from_values(
+  102|      5|    account_id: Option<&str>,
+  103|      5|    workspace_id: Option<&str>,
+  104|      5|    session_id: Option<&str>,
+  105|      5|) -> RegistryBoundary {
+  106|      5|    RegistryBoundary {
+  107|      5|        account_id: normalized_or_unavailable(account_id),
+  108|      5|        workspace_id: normalized_or_unavailable(workspace_id),
+  109|      5|        session_id: normalized_or_unavailable(session_id),
+  110|      5|    }
+  111|      5|}
+  112|       |
+  113|      2|fn runtime_boundary() -> RegistryBoundary {
+  114|      2|    boundary_from_values(
+  115|      2|        std::env::var("CODEX_ACCOUNT_ID").ok().as_deref(),
+  116|      2|        std::env::var("CODEX_WORKSPACE_ID").ok().as_deref(),
+  117|      2|        std::env::var("CODEX_THREAD_ID").ok().as_deref(),
+  118|       |    )
+  119|      2|}
+  120|       |
+  121|     15|fn normalized_or_unavailable(value: Option<&str>) -> String {
+  122|     15|    let Some(value) = value.map(str::trim).filter(|value| !value.is_empty()) else {
+                           ^7                                            ^8    ^8
+  123|      8|        return "unavailable".to_string();
+  124|       |    };
+  125|      7|    if value
+  126|      7|        .chars()
+  127|    145|        .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '-' | '_' | '.' | ':' | '/'))
+                       ^7                                     ^1       ^16
+  128|       |    {
+  129|      6|        value.to_string()
+  130|       |    } else {
+  131|      1|        "unavailable".to_string()
+  132|       |    }
+  133|     15|}
+  134|       |
+  135|      2|fn fail_closed_call_id(operation: ControlOperation, candidate: &str) -> String {
+  136|      2|    format!(
+  137|       |        "{}-fail-closed-{}",
+  138|      2|        operation.id(),
+  139|      2|        candidate_suffix(candidate)
+  140|       |    )
+  141|      2|}
+  142|       |
+  143|      2|fn fail_closed_round_id(operation: ControlOperation, candidate: &str) -> String {
+  144|      2|    format!(
+  145|       |        "{}-unsupported-live-surface-{}",
+  146|      2|        operation.id(),
+  147|      2|        candidate_suffix(candidate)
+  148|       |    )
+  149|      2|}
+  150|       |
+  151|      4|fn candidate_suffix(candidate: &str) -> &str {
+  152|      4|    candidate
+  153|      4|        .strip_prefix("sha256:")
+  154|      4|        .unwrap_or(candidate)
+  155|      4|        .get(..12)
+  156|      4|        .unwrap_or(candidate)
+  157|      4|}
+  158|       |
+  159|      3|fn existing_live_pass(root: &Path) -> Result<bool, String> {
+  160|      3|    let Ok(receipt) = crate::json_boundary::read_json(&root.join(ACTIVE_RECEIPT)) else {
                          ^1
-   91|      1|        return Ok(false);
-   92|       |    };
-   93|      1|    let store = crate::schema_catalog::load(root);
-   94|      1|    Ok(crate::audit::plugin::registry::value_failures(root, &store, &receipt).is_empty())
-   95|      2|}
-   96|       |
-   97|      1|fn fail_closed_agent_types() -> Vec<serde_json::Value> {
-   98|      1|    [
-   99|      1|        (
-  100|      1|            "harness_contract_claim_falsifier",
-  101|      1|            "contract_claim_falsifier",
-  102|      1|            "custom-agents/harness-contract-claim-falsifier.toml",
-  103|      1|        ),
-  104|      1|        (
-  105|      1|            "harness_orchestration_recovery_falsifier",
-  106|      1|            "orchestration_recovery_falsifier",
-  107|      1|            "custom-agents/harness-orchestration-recovery-falsifier.toml",
-  108|      1|        ),
-  109|      1|        (
-  110|      1|            "harness_security_trust_boundary_falsifier",
-  111|      1|            "security_trust_boundary_falsifier",
-  112|      1|            "custom-agents/harness-security-trust-boundary-falsifier.toml",
-  113|      1|        ),
-  114|      1|        (
-  115|      1|            "harness_product_simplicity_falsifier",
-  116|      1|            "product_simplicity_falsifier",
-  117|      1|            "custom-agents/harness-product-simplicity-falsifier.toml",
-  118|      1|        ),
-  119|      1|    ]
-  120|      1|    .into_iter()
-  121|      4|    .map(|(agent_type, persona, custom_agent_path)| {
-                   ^1
-  122|      4|        json!({
-  123|      4|            "agent_type": agent_type,
-  124|      4|            "persona": persona,
-  125|      4|            "custom_agent_path": custom_agent_path,
-  126|      4|            "disk_cache_synced": false,
-  127|      4|            "global_toml_present": false,
-  128|      4|            "exposed": false
-  129|       |        })
-  130|      4|    })
-  131|      1|    .collect()
-  132|      1|}
+  161|      2|        return Ok(false);
+  162|       |    };
+  163|      1|    let store = crate::schema_catalog::load(root);
+  164|      1|    Ok(crate::audit::plugin::registry::value_failures(root, &store, &receipt).is_empty())
+  165|      3|}
+  166|       |
+  167|      2|fn fail_closed_agent_types() -> Vec<serde_json::Value> {
+  168|      2|    [
+  169|      2|        (
+  170|      2|            "harness_contract_claim_falsifier",
+  171|      2|            "contract_claim_falsifier",
+  172|      2|            "custom-agents/harness-contract-claim-falsifier.toml",
+  173|      2|        ),
+  174|      2|        (
+  175|      2|            "harness_orchestration_recovery_falsifier",
+  176|      2|            "orchestration_recovery_falsifier",
+  177|      2|            "custom-agents/harness-orchestration-recovery-falsifier.toml",
+  178|      2|        ),
+  179|      2|        (
+  180|      2|            "harness_security_trust_boundary_falsifier",
+  181|      2|            "security_trust_boundary_falsifier",
+  182|      2|            "custom-agents/harness-security-trust-boundary-falsifier.toml",
+  183|      2|        ),
+  184|      2|        (
+  185|      2|            "harness_product_simplicity_falsifier",
+  186|      2|            "product_simplicity_falsifier",
+  187|      2|            "custom-agents/harness-product-simplicity-falsifier.toml",
+  188|      2|        ),
+  189|      2|    ]
+  190|      2|    .into_iter()
+  191|      8|    .map(|(agent_type, persona, custom_agent_path)| {
+                   ^2
+  192|      8|        json!({
+  193|      8|            "agent_type": agent_type,
+  194|      8|            "persona": persona,
+  195|      8|            "custom_agent_path": custom_agent_path,
+  196|      8|            "disk_cache_synced": false,
+  197|      8|            "global_toml_present": false,
+  198|      8|            "exposed": false
+  199|       |        })
+  200|      8|    })
+  201|      2|    .collect()
+  202|      2|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/transactional.rs:
     1|       |use serde_json::{Value, json};
@@ -17023,8 +17095,8 @@
   108|       |}
   109|       |
   110|       |impl ControlOperation {
-  111|    137|    pub(crate) fn id(self) -> &'static str {
-  112|    137|        match self {
+  111|    141|    pub(crate) fn id(self) -> &'static str {
+  112|    141|        match self {
   113|      1|            Self::LawGraphStrict => "law_graph_strict",
   114|      1|            Self::LawCheckGate => "law_check_gate",
   115|      1|            Self::LawCheckAll => "law_check_all",
@@ -17044,7 +17116,7 @@
   129|      1|            Self::CapabilityProve => "capability_prove",
   130|      1|            Self::InstallAudit => "install_audit",
   131|      1|            Self::CacheAudit => "cache_audit",
-  132|     20|            Self::RegistryProbe => "registry_probe",
+  132|     24|            Self::RegistryProbe => "registry_probe",
   133|      1|            Self::AppSurfaceProbe => "app_surface_probe",
   134|      1|            Self::TargetRepoAudit => "target_repo_audit",
   135|      1|            Self::PackageInventory => "package_inventory",
@@ -17070,7 +17142,7 @@
   155|      1|            Self::SelfFixturesTamper => "self_fixtures_tamper",
   156|     12|            Self::SelfUpdateGoalEligibility => "self_update_goal_eligibility",
   157|       |        }
-  158|    137|    }
+  158|    141|    }
   159|       |}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/final_packet.rs:
@@ -19435,13 +19507,13 @@
                                      ^62                                  ^62  ^62
    10|  10.2k|}
    11|       |
-   12|    164|pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
-   13|    164|    let text = serde_json::to_string_pretty(value)
-                      ^163
-   14|    164|        .map_err(|err| format!("{}: json encode failed: {err}", path.display()))?;
+   12|    166|pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
+   13|    166|    let text = serde_json::to_string_pretty(value)
+                      ^165
+   14|    166|        .map_err(|err| format!("{}: json encode failed: {err}", path.display()))?;
                                      ^1                                       ^1   ^1         ^1
-   15|    163|    crate::output_path::write(path, format!("{text}\n"), "json")
-   16|    164|}
+   15|    165|    crate::output_path::write(path, format!("{text}\n"), "json")
+   16|    166|}
    17|       |
    18|  6.19k|pub fn object_get<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
    19|  6.19k|    value.as_object().and_then(|obj| obj.get(key))
@@ -19791,172 +19863,172 @@
    11|       |#[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
    12|       |const O_NOFOLLOW: i32 = 0;
    13|       |
-   14|    362|pub fn prepare_parent(path: &Path) -> Result<(), String> {
-   15|    362|    if path.as_os_str().is_empty() {
+   14|    366|pub fn prepare_parent(path: &Path) -> Result<(), String> {
+   15|    366|    if path.as_os_str().is_empty() {
    16|      1|        return Err("output path is empty".to_string());
-   17|    361|    }
-   18|    361|    if path
-   19|    361|        .components()
-   20|  3.23k|        .any(|part| matches!(part, Component::ParentDir))
-                       ^361
+   17|    365|    }
+   18|    365|    if path
+   19|    365|        .components()
+   20|  3.27k|        .any(|part| matches!(part, Component::ParentDir))
+                       ^365
    21|       |    {
    22|      1|        return Err(format!(
    23|      1|            "{}: output path uses parent segment",
    24|      1|            path.display()
    25|      1|        ));
-   26|    360|    }
-   27|    360|    if let Some(parent) = path.parent()
-                              ^359
-   28|    359|        && !parent.as_os_str().is_empty()
+   26|    364|    }
+   27|    364|    if let Some(parent) = path.parent()
+                              ^363
+   28|    363|        && !parent.as_os_str().is_empty()
    29|       |    {
-   30|    359|        reject_existing_symlink_components(parent)?;
+   30|    363|        reject_existing_symlink_components(parent)?;
                                                                 ^2
-   31|    357|        fs::create_dir_all(parent)
-   32|    357|            .map_err(|err| format!("{}: create parent failed: {err}", parent.display()))?;
+   31|    361|        fs::create_dir_all(parent)
+   32|    361|            .map_err(|err| format!("{}: create parent failed: {err}", parent.display()))?;
                                          ^6                                         ^6     ^6         ^6
-   33|    351|        reject_symlink_components(parent)?;
+   33|    355|        reject_symlink_components(parent)?;
                                                        ^0
    34|      1|    }
-   35|    352|    reject_symlink_components(path)?;
+   35|    356|    reject_symlink_components(path)?;
                                                  ^2
-   36|    350|    Ok(())
-   37|    362|}
+   36|    354|    Ok(())
+   37|    366|}
    38|       |
-   39|    176|pub fn create_file(path: &Path, label: &str) -> Result<File, String> {
-   40|    176|    prepare_parent(path)?;
+   39|    178|pub fn create_file(path: &Path, label: &str) -> Result<File, String> {
+   40|    178|    prepare_parent(path)?;
                                       ^1
-   41|    175|    let mut options = OpenOptions::new();
-   42|    175|    options.create_new(true).write(true);
+   41|    177|    let mut options = OpenOptions::new();
+   42|    177|    options.create_new(true).write(true);
    43|       |    #[cfg(unix)]
-   44|    175|    options.custom_flags(O_NOFOLLOW);
-   45|    175|    let file = options
-                      ^174
-   46|    175|        .open(path)
-   47|    175|        .map_err(|err| format!("{}: {label} create failed: {err}", path.display()))?;
+   44|    177|    options.custom_flags(O_NOFOLLOW);
+   45|    177|    let file = options
+                      ^176
+   46|    177|        .open(path)
+   47|    177|        .map_err(|err| format!("{}: {label} create failed: {err}", path.display()))?;
                                      ^1                                          ^1   ^1         ^1
-   48|    174|    reject_symlink_components(path)?;
+   48|    176|    reject_symlink_components(path)?;
                                                  ^0
-   49|    174|    Ok(file)
-   50|    176|}
+   49|    176|    Ok(file)
+   50|    178|}
    51|       |
-   52|    174|pub fn write(path: &Path, bytes: impl AsRef<[u8]>, label: &str) -> Result<(), String> {
-   53|    174|    let (tmp, mut file) = create_temp_file(path, label)?;
-                       ^166 ^166                                     ^8
-   54|    166|    write_result(path, label, file.write_all(bytes.as_ref()))?;
+   52|    176|pub fn write(path: &Path, bytes: impl AsRef<[u8]>, label: &str) -> Result<(), String> {
+   53|    176|    let (tmp, mut file) = create_temp_file(path, label)?;
+                       ^168 ^168                                     ^8
+   54|    168|    write_result(path, label, file.write_all(bytes.as_ref()))?;
                                                                            ^0
-   55|    166|    sync_result(&tmp, label, file.sync_all())?;
+   55|    168|    sync_result(&tmp, label, file.sync_all())?;
                                                            ^0
-   56|    166|    drop(file);
-   57|    166|    finish_temp_file(&tmp, path, label)
-   58|    174|}
+   56|    168|    drop(file);
+   57|    168|    finish_temp_file(&tmp, path, label)
+   58|    176|}
    59|       |
-   60|    167|pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
-   61|    167|    result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
+   60|    169|pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
+   61|    169|    result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
                                        ^1                                         ^1   ^1
-   62|    167|}
+   62|    169|}
    63|       |
-   64|    167|pub(crate) fn sync_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
-   65|    167|    result.map_err(|err| format!("{}: {label} sync failed: {err}", path.display()))
+   64|    169|pub(crate) fn sync_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
+   65|    169|    result.map_err(|err| format!("{}: {label} sync failed: {err}", path.display()))
                                        ^1                                        ^1   ^1
-   66|    167|}
+   66|    169|}
    67|       |
-   68|    183|pub fn create_temp_file(path: &Path, label: &str) -> Result<(std::path::PathBuf, File), String> {
-   69|    183|    prepare_parent(path)?;
+   68|    185|pub fn create_temp_file(path: &Path, label: &str) -> Result<(std::path::PathBuf, File), String> {
+   69|    185|    prepare_parent(path)?;
                                       ^8
-   70|    175|    let tmp = temp_path(path)?;
-                      ^174                 ^1
-   71|    174|    let _ = fs::remove_file(&tmp);
-   72|    174|    let file = create_file(&tmp, label)?;
+   70|    177|    let tmp = temp_path(path)?;
+                      ^176                 ^1
+   71|    176|    let _ = fs::remove_file(&tmp);
+   72|    176|    let file = create_file(&tmp, label)?;
                                                      ^0
-   73|    174|    Ok((tmp, file))
-   74|    183|}
+   73|    176|    Ok((tmp, file))
+   74|    185|}
    75|       |
-   76|    175|pub fn finish_temp_file(tmp: &Path, path: &Path, label: &str) -> Result<(), String> {
-   77|    175|    reject_symlink_components(tmp)?;
+   76|    177|pub fn finish_temp_file(tmp: &Path, path: &Path, label: &str) -> Result<(), String> {
+   77|    177|    reject_symlink_components(tmp)?;
                                                 ^0
-   78|    175|    if let Ok(meta) = fs::symlink_metadata(path)
+   78|    177|    if let Ok(meta) = fs::symlink_metadata(path)
                             ^9
    79|      9|        && meta.file_type().is_symlink()
    80|       |    {
    81|      1|        let _ = fs::remove_file(tmp);
    82|      1|        return Err(format!("{}: output path uses symlink", path.display()));
-   83|    174|    }
-   84|    174|    fs::rename(tmp, path).map_err(|err| format!("{}: {label} rename failed: {err}", path.display()))
+   83|    176|    }
+   84|    176|    fs::rename(tmp, path).map_err(|err| format!("{}: {label} rename failed: {err}", path.display()))
                                                       ^3                                          ^3   ^3
-   85|    175|}
+   85|    177|}
    86|       |
-   87|    175|fn temp_path(path: &Path) -> Result<std::path::PathBuf, String> {
-   88|    175|    let name = path
-                      ^174
-   89|    175|        .file_name()
-   90|    175|        .ok_or_else(|| format!("{}: output path lacks file name", path.display()))?
+   87|    177|fn temp_path(path: &Path) -> Result<std::path::PathBuf, String> {
+   88|    177|    let name = path
+                      ^176
+   89|    177|        .file_name()
+   90|    177|        .ok_or_else(|| format!("{}: output path lacks file name", path.display()))?
                                      ^1                                         ^1   ^1         ^1
-   91|    174|        .to_string_lossy();
-   92|    174|    let parent = path.parent().unwrap_or(Path::new(""));
-   93|    174|    Ok(parent.join(format!(".{name}.tmp-{}", std::process::id())))
-   94|    175|}
+   91|    176|        .to_string_lossy();
+   92|    176|    let parent = path.parent().unwrap_or(Path::new(""));
+   93|    176|    Ok(parent.join(format!(".{name}.tmp-{}", std::process::id())))
+   94|    177|}
    95|       |
-   96|    360|pub(crate) fn reject_existing_symlink_components(path: &Path) -> Result<(), String> {
-   97|    360|    let mut cursor = start_cursor(path)?;
+   96|    364|pub(crate) fn reject_existing_symlink_components(path: &Path) -> Result<(), String> {
+   97|    364|    let mut cursor = start_cursor(path)?;
                                                      ^0
-   98|  2.86k|    for part in path.components() {
-                              ^360 ^360
-   99|  2.86k|        match part {
-  100|    359|            Component::RootDir | Component::CurDir => continue,
+   98|  2.90k|    for part in path.components() {
+                              ^364 ^364
+   99|  2.90k|        match part {
+  100|    363|            Component::RootDir | Component::CurDir => continue,
   101|       |            Component::ParentDir | Component::Prefix(_) => {
   102|      1|                return Err(format!("{}: unsafe output path", path.display()));
   103|       |            }
-  104|  2.50k|            Component::Normal(name) => cursor.push(name),
+  104|  2.53k|            Component::Normal(name) => cursor.push(name),
   105|       |        }
-  106|  2.50k|        let Ok(meta) = fs::symlink_metadata(&cursor) else {
-                             ^2.48k
-  107|     20|            break;
+  106|  2.53k|        let Ok(meta) = fs::symlink_metadata(&cursor) else {
+                             ^2.51k
+  107|     21|            break;
   108|       |        };
-  109|  2.48k|        if meta.file_type().is_symlink() {
+  109|  2.51k|        if meta.file_type().is_symlink() {
   110|      2|            return Err(format!("{}: output path uses symlink", path.display()));
-  111|  2.48k|        }
+  111|  2.51k|        }
   112|       |    }
-  113|    357|    Ok(())
-  114|    360|}
+  113|    361|    Ok(())
+  114|    364|}
   115|       |
-  116|  1.05k|pub(crate) fn reject_symlink_components(path: &Path) -> Result<(), String> {
-  117|  1.05k|    let mut cursor = start_cursor(path)?;
+  116|  1.06k|pub(crate) fn reject_symlink_components(path: &Path) -> Result<(), String> {
+  117|  1.06k|    let mut cursor = start_cursor(path)?;
                                                      ^0
-  118|  9.12k|    for part in path.components() {
-                              ^1.05k^1.05k
-  119|  9.12k|        match part {
-  120|  1.05k|            Component::RootDir | Component::CurDir => continue,
+  118|  9.24k|    for part in path.components() {
+                              ^1.06k^1.06k
+  119|  9.24k|        match part {
+  120|  1.06k|            Component::RootDir | Component::CurDir => continue,
   121|       |            Component::ParentDir | Component::Prefix(_) => {
   122|      1|                return Err(format!("{}: unsafe output path", path.display()));
   123|       |            }
-  124|  8.07k|            Component::Normal(name) => cursor.push(name),
+  124|  8.18k|            Component::Normal(name) => cursor.push(name),
   125|       |        }
-  126|  8.07k|        if fs::symlink_metadata(&cursor)
-  127|  8.07k|            .map(|meta| meta.file_type().is_symlink())
-                                      ^7.73k           ^7.73k
-  128|  8.07k|            .unwrap_or(false)
+  126|  8.18k|        if fs::symlink_metadata(&cursor)
+  127|  8.18k|            .map(|meta| meta.file_type().is_symlink())
+                                      ^7.83k           ^7.83k
+  128|  8.18k|            .unwrap_or(false)
   129|       |        {
   130|      2|            return Err(format!("{}: output path uses symlink", path.display()));
-  131|  8.07k|        }
+  131|  8.17k|        }
   132|       |    }
-  133|  1.05k|    Ok(())
-  134|  1.05k|}
+  133|  1.06k|    Ok(())
+  134|  1.06k|}
   135|       |
-  136|  1.41k|fn start_cursor(path: &Path) -> Result<std::path::PathBuf, String> {
-  137|  1.41k|    start_cursor_with(path, std::env::current_dir)
-  138|  1.41k|}
+  136|  1.42k|fn start_cursor(path: &Path) -> Result<std::path::PathBuf, String> {
+  137|  1.42k|    start_cursor_with(path, std::env::current_dir)
+  138|  1.42k|}
   139|       |
-  140|  1.41k|pub(crate) fn start_cursor_with(
-  141|  1.41k|    path: &Path,
-  142|  1.41k|    current_dir: impl FnOnce() -> std::io::Result<std::path::PathBuf>,
-  143|  1.41k|) -> Result<std::path::PathBuf, String> {
-  144|  1.41k|    if path.is_absolute() {
-  145|  1.38k|        Ok(Path::new("/").to_path_buf())
+  140|  1.43k|pub(crate) fn start_cursor_with(
+  141|  1.43k|    path: &Path,
+  142|  1.43k|    current_dir: impl FnOnce() -> std::io::Result<std::path::PathBuf>,
+  143|  1.43k|) -> Result<std::path::PathBuf, String> {
+  144|  1.43k|    if path.is_absolute() {
+  145|  1.40k|        Ok(Path::new("/").to_path_buf())
   146|       |    } else {
   147|     27|        current_dir().map_err(|err| format!("cwd unavailable: {err}"))
                                                   ^1
   148|       |    }
-  149|  1.41k|}
+  149|  1.43k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/package.rs:
     1|       |use crate::digest;
@@ -20310,10 +20382,10 @@
    19|       |pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] =
    20|       |    &["validation_artifacts/review/final-packet-proof.json"];
    21|       |
-   22|    906|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
-   23|    906|    let mut out = Vec::new();
+   22|    907|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
+   23|    907|    let mut out = Vec::new();
    24|  1.81k|    for key in ["skills", "agents"] {
-                             ^906
+                             ^907
    25|  1.81k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
                                   ^296
    26|  2.92k|            for row in rows {
@@ -20325,17 +20397,17 @@
    30|       |            }
    31|  1.51k|        }
    32|       |    }
-   33|    906|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
+   33|    907|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
                               ^221
    34|    221|        out.push(path.to_string());
-   35|    685|    }
+   35|    686|    }
    36|  4.53k|    for key in [
-   37|    906|        "schemas",
-   38|    906|        "fixtures",
-   39|    906|        "authorable_templates",
-   40|    906|        "generated_examples",
-   41|    906|        "resources",
-   42|    906|    ] {
+   37|    907|        "schemas",
+   38|    907|        "fixtures",
+   39|    907|        "authorable_templates",
+   40|    907|        "generated_examples",
+   41|    907|        "resources",
+   42|    907|    ] {
    43|  4.53k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
                                   ^1.49k
    44|   451k|            for row in rows {
@@ -20346,10 +20418,10 @@
    47|   451k|                }
                               ^6
    48|       |            }
-   49|  3.03k|        }
+   49|  3.04k|        }
    50|       |    }
-   51|    906|    out
-   52|    906|}
+   51|    907|    out
+   52|    907|}
    53|       |
    54|   420k|pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
    55|   420k|    if rel.is_empty() {
@@ -20429,18 +20501,18 @@
                            ^357k
   124|   357k|}
   125|       |
-  126|    714|pub fn package_digest(root: &Path) -> Result<String, String> {
-  127|    714|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
-                      ^676                                                                         ^38
-  128|    676|    let mut paths = inventory_paths(&manifest)
-  129|    676|        .into_iter()
+  126|    715|pub fn package_digest(root: &Path) -> Result<String, String> {
+  127|    715|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
+                      ^677                                                                         ^38
+  128|    677|    let mut paths = inventory_paths(&manifest)
+  129|    677|        .into_iter()
   130|   357k|        .filter(|rel| !package_digest_excluded(rel))
-                       ^676
-  131|    676|        .collect::<Vec<_>>();
-  132|    676|    paths.sort();
-  133|    676|    let mut payload = Vec::new();
+                       ^677
+  131|    677|        .collect::<Vec<_>>();
+  132|    677|    paths.sort();
+  133|    677|    let mut payload = Vec::new();
   134|   351k|    for rel in paths {
-                             ^676
+                             ^677
   135|   351k|        payload.extend_from_slice(rel.as_bytes());
   136|   351k|        payload.push(0);
   137|   351k|        let bytes = match resolve(root, &rel) {
@@ -20460,8 +20532,8 @@
   148|   351k|        payload.extend_from_slice(&bytes);
   149|   351k|        payload.push(0);
   150|       |    }
-  151|    666|    Ok(digest::bytes(&payload))
-  152|    714|}
+  151|    667|    Ok(digest::bytes(&payload))
+  152|    715|}
   153|       |
   154|       |#[cfg(test)]
   155|       |mod tests {
@@ -20563,32 +20635,32 @@
    35|  1.00M|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
                           ^1.00M                      ^1                            ^1
    36|  1.00M|        if include(&entry) {
-   37|   996k|            let rel = rel_path(root, entry.path())?;
+   37|   999k|            let rel = rel_path(root, entry.path())?;
                                                                 ^0
-   38|   996k|            if !local_only(&rel) {
+   38|   999k|            if !local_only(&rel) {
    39|  13.1k|                paths.push(rel);
-   40|   983k|            }
-   41|  7.15k|        }
+   40|   986k|            }
+   41|  7.16k|        }
    42|       |    }
    43|     68|    paths.sort();
    44|     68|    Ok(paths)
    45|     69|}
    46|       |
-   47|   996k|fn local_only(rel: &str) -> bool {
-   48|   996k|    LOCAL_PROOF_PATHS.contains(&rel)
-   49|   996k|        || LOCAL_BUILD_OUTPUT_PREFIXES
-   50|   996k|            .iter()
+   47|   999k|fn local_only(rel: &str) -> bool {
+   48|   999k|    LOCAL_PROOF_PATHS.contains(&rel)
+   49|   999k|        || LOCAL_BUILD_OUTPUT_PREFIXES
+   50|   999k|            .iter()
    51|  1.33M|            .any(|prefix| rel.starts_with(prefix))
-                           ^996k
-   52|   996k|}
+                           ^999k
+   52|   999k|}
    53|       |
-   54|   996k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-   55|   996k|    path.strip_prefix(root)
-   56|   996k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-                                 ^996k                 ^996k         ^996k
-   57|   996k|        .map_err(|err| format!("walk root strip failed: {err}"))
+   54|   999k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
+   55|   999k|    path.strip_prefix(root)
+   56|   999k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
+                                 ^999k                 ^999k         ^999k
+   57|   999k|        .map_err(|err| format!("walk root strip failed: {err}"))
                                      ^1
-   58|   996k|}
+   58|   999k|}
    59|       |
    60|     10|pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
    61|     10|    let listed = crate::package::inventory::inventory_paths(manifest);
@@ -25347,7 +25419,7 @@
    73|  18.9k|    }
    74|  20.2k|    if let Some(items) = schema.get("enum").and_then(Value::as_array)
                               ^2.52k
-   75|  9.07k|        && !items.iter().any(|item| item == instance)
+   75|  9.06k|        && !items.iter().any(|item| item == instance)
                           ^2.52k       ^2.52k
    76|     17|    {
    77|     17|        errors.push(format!("{path}: enum mismatch"));
@@ -28994,24 +29066,24 @@
     4|       |use std::sync::atomic::{AtomicU64, Ordering};
     5|       |use std::time::{SystemTime, UNIX_EPOCH};
     6|       |
-    7|    492|pub(crate) fn repo_root() -> PathBuf {
-    8|    492|    Path::new(env!("CARGO_MANIFEST_DIR"))
-    9|    492|        .parent()
-   10|    492|        .expect("validator has repo parent")
-   11|    492|        .to_path_buf()
-   12|    492|}
+    7|    494|pub(crate) fn repo_root() -> PathBuf {
+    8|    494|    Path::new(env!("CARGO_MANIFEST_DIR"))
+    9|    494|        .parent()
+   10|    494|        .expect("validator has repo parent")
+   11|    494|        .to_path_buf()
+   12|    494|}
    13|       |
-   14|    305|pub(crate) fn temp_root(label: &str) -> PathBuf {
+   14|    306|pub(crate) fn temp_root(label: &str) -> PathBuf {
    15|       |    static COUNTER: AtomicU64 = AtomicU64::new(0);
-   16|    305|    let stamp = SystemTime::now()
-   17|    305|        .duration_since(UNIX_EPOCH)
-   18|    305|        .expect("clock")
-   19|    305|        .as_nanos();
-   20|    305|    let index = COUNTER.fetch_add(1, Ordering::Relaxed);
-   21|    305|    repo_root()
-   22|    305|        .join("target")
-   23|    305|        .join(format!("ultragoal-boundary-{label}-{stamp}-{index}"))
-   24|    305|}
+   16|    306|    let stamp = SystemTime::now()
+   17|    306|        .duration_since(UNIX_EPOCH)
+   18|    306|        .expect("clock")
+   19|    306|        .as_nanos();
+   20|    306|    let index = COUNTER.fetch_add(1, Ordering::Relaxed);
+   21|    306|    repo_root()
+   22|    306|        .join("target")
+   23|    306|        .join(format!("ultragoal-boundary-{label}-{stamp}-{index}"))
+   24|    306|}
    25|       |
    26|    441|pub(crate) fn sha(ch: char) -> String {
    27|    441|    format!("sha256:{}", ch.to_string().repeat(64))
@@ -34767,27 +34839,27 @@
     2|       |use serde_json::{Value, json};
     3|       |use std::path::Path;
     4|       |
-    5|      3|fn write_json(path: &Path, value: &Value) {
-    6|      3|    if let Some(parent) = path.parent() {
-    7|      3|        std::fs::create_dir_all(parent).expect("parent");
-    8|      3|    }
+    5|      4|fn write_json(path: &Path, value: &Value) {
+    6|      4|    if let Some(parent) = path.parent() {
+    7|      4|        std::fs::create_dir_all(parent).expect("parent");
+    8|      4|    }
                   ^0
-    9|      3|    std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
-   10|      3|}
+    9|      4|    std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
+   10|      4|}
    11|       |
-   12|      1|fn copy_schema_catalog(root: &Path) {
-   13|      1|    let repo = crate::self_tests::boundaries::support::repo_root();
-   14|      1|    let dst = root.join("schemas");
-   15|      1|    std::fs::create_dir_all(&dst).expect("schema dst");
-   16|     63|    for entry in std::fs::read_dir(repo.join("schemas")).expect("schemas") {
-                               ^1                ^1                    ^1     ^1
-   17|     63|        let entry = entry.expect("schema entry");
-   18|     63|        if entry.path().is_file() {
-   19|     63|            std::fs::copy(entry.path(), dst.join(entry.file_name())).expect("copy schema");
-   20|     63|        }
+   12|      2|fn copy_schema_catalog(root: &Path) {
+   13|      2|    let repo = crate::self_tests::boundaries::support::repo_root();
+   14|      2|    let dst = root.join("schemas");
+   15|      2|    std::fs::create_dir_all(&dst).expect("schema dst");
+   16|    126|    for entry in std::fs::read_dir(repo.join("schemas")).expect("schemas") {
+                               ^2                ^2                    ^2     ^2
+   17|    126|        let entry = entry.expect("schema entry");
+   18|    126|        if entry.path().is_file() {
+   19|    126|            std::fs::copy(entry.path(), dst.join(entry.file_name())).expect("copy schema");
+   20|    126|        }
                       ^0
    21|       |    }
-   22|      1|}
+   22|      2|}
    23|       |
    24|       |#[test]
    25|      1|fn registry_probe_preserves_existing_live_same_surface_pass() {
@@ -34828,67 +34900,135 @@
    60|      1|    std::fs::remove_dir_all(root).expect("cleanup cli registry preserve");
    61|      1|}
    62|       |
-   63|      1|fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Value {
-   64|      1|    json!({
-   65|      1|        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
-   66|      1|        "generated_at": "2026-06-28T00:00:00Z",
-   67|      1|        "captured_at": "2026-06-28T00:00:00Z",
-   68|      1|        "status": "pass",
-   69|      1|        "issuer": {"tool":"multi_agent_v1","authority":"tool_registry"},
-   70|      1|        "tool_call": {
-   71|      1|            "name": "multi_agent_v1.tool_registry",
-   72|      1|            "call_id": "call-1",
-   73|      1|            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
-   74|       |        },
-   75|      1|        "capture_method": "live_tool_registry_query",
-   76|      1|        "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
-   77|      1|        "source": "multi_agent_v1.tool_registry",
-   78|      1|        "target_revision": {"kind":"package_digest","value":current},
-   79|      1|        "claim_ceiling": "live_registry_reviewer_exposure_proven",
-   80|      1|        "session_id": "session",
-   81|      1|        "round_id": "round",
-   82|      1|        "raw_observation": {"path": raw_rel, "digest": raw_digest},
-   83|      1|        "agent_types": agent_types()
-   84|       |    })
-   85|      1|}
-   86|       |
-   87|      1|fn agent_types() -> Vec<Value> {
-   88|      1|    [
-   89|      1|        (
-   90|      1|            "harness_contract_claim_falsifier",
-   91|      1|            "contract_claim_falsifier",
-   92|      1|            "custom-agents/harness-contract-claim-falsifier.toml",
-   93|      1|        ),
-   94|      1|        (
-   95|      1|            "harness_orchestration_recovery_falsifier",
-   96|      1|            "orchestration_recovery_falsifier",
-   97|      1|            "custom-agents/harness-orchestration-recovery-falsifier.toml",
-   98|      1|        ),
-   99|      1|        (
-  100|      1|            "harness_security_trust_boundary_falsifier",
-  101|      1|            "security_trust_boundary_falsifier",
-  102|      1|            "custom-agents/harness-security-trust-boundary-falsifier.toml",
-  103|      1|        ),
-  104|      1|        (
-  105|      1|            "harness_product_simplicity_falsifier",
-  106|      1|            "product_simplicity_falsifier",
-  107|      1|            "custom-agents/harness-product-simplicity-falsifier.toml",
-  108|      1|        ),
-  109|      1|    ]
-  110|      1|    .into_iter()
-  111|      4|    .map(|(agent_type, persona, custom_agent_path)| {
+   63|       |#[test]
+   64|      1|fn registry_fail_closed_boundary_normalizes_runtime_values() {
+   65|      1|    let boundary = crate::cli::control::plane::registry::boundary_from_values(
+   66|      1|        Some("acct-1"),
+   67|      1|        Some("workspace.alpha"),
+   68|      1|        Some("thread:019f"),
+   69|       |    );
+   70|      1|    assert_eq!(boundary.account_id, "acct-1");
+   71|      1|    assert_eq!(boundary.workspace_id, "workspace.alpha");
+   72|      1|    assert_eq!(boundary.session_id, "thread:019f");
+   73|       |
+   74|      1|    let unsafe_boundary = crate::cli::control::plane::registry::boundary_from_values(
+   75|      1|        Some("acct one"),
+   76|      1|        Some(""),
+   77|      1|        None,
+   78|       |    );
+   79|      1|    assert_eq!(unsafe_boundary.account_id, "unavailable");
+   80|      1|    assert_eq!(unsafe_boundary.workspace_id, "unavailable");
+   81|      1|    assert_eq!(unsafe_boundary.session_id, "unavailable");
+   82|      1|}
+   83|       |
+   84|       |#[test]
+   85|      1|fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
+   86|      1|    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-runtime-boundary");
+   87|      1|    copy_schema_catalog(&root);
+   88|      1|    write_json(
+   89|      1|        &root.join("plugin-manifest-draft.json"),
+   90|      1|        &json!({"version":"0.0.0-test","resources":[]}),
+   91|       |    );
+   92|      1|    let current = crate::package::inventory::package_digest(&root).expect("digest");
+   93|      1|    crate::cli::control::plane::registry::mint_fail_closed_if_needed(
+   94|      1|        &root,
+   95|      1|        ControlOperation::RegistryProbe,
+   96|      1|        &current,
+   97|       |    )
+   98|      1|    .expect("registry mint");
+   99|       |
+  100|      1|    let active_rel = "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
+  101|      1|    let active = crate::json_boundary::read_json(&root.join(active_rel)).expect("active receipt");
+  102|      1|    let env_thread = std::env::var("CODEX_THREAD_ID").ok();
+  103|      1|    let expected = crate::cli::control::plane::registry::boundary_from_values(
+  104|      1|        None,
+  105|      1|        None,
+  106|      1|        env_thread.as_deref(),
+  107|       |    );
+  108|      1|    assert_eq!(active["boundary"]["session_id"], expected.session_id);
+  109|      1|    assert_eq!(active["session_id"], expected.session_id);
+  110|      1|    assert_ne!(
+  111|      1|        active["round_id"],
+  112|      1|        json!("source-compliance-hardening-2026-06-28-fail-closed")
+  113|       |    );
+  114|      1|    assert_ne!(active["tool_call"]["call_id"], json!("local-fail-closed"));
+  115|      1|    assert!(
+  116|      1|        active["tool_call"]["call_id"]
+  117|      1|            .as_str()
+  118|      1|            .expect("call id")
+  119|      1|            .starts_with("registry_probe-fail-closed-")
+  120|       |    );
+  121|      1|    assert!(
+  122|      1|        active["round_id"]
+  123|      1|            .as_str()
+  124|      1|            .expect("round id")
+  125|      1|            .starts_with("registry_probe-unsupported-live-surface-")
+  126|       |    );
+  127|       |
+  128|      1|    std::fs::remove_dir_all(root).expect("cleanup cli registry runtime boundary");
+  129|      1|}
+  130|       |
+  131|      1|fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Value {
+  132|      1|    json!({
+  133|      1|        "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
+  134|      1|        "generated_at": "2026-06-28T00:00:00Z",
+  135|      1|        "captured_at": "2026-06-28T00:00:00Z",
+  136|      1|        "status": "pass",
+  137|      1|        "issuer": {"tool":"multi_agent_v1","authority":"tool_registry"},
+  138|      1|        "tool_call": {
+  139|      1|            "name": "multi_agent_v1.tool_registry",
+  140|      1|            "call_id": "call-1",
+  141|      1|            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+  142|       |        },
+  143|      1|        "capture_method": "live_tool_registry_query",
+  144|      1|        "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
+  145|      1|        "source": "multi_agent_v1.tool_registry",
+  146|      1|        "target_revision": {"kind":"package_digest","value":current},
+  147|      1|        "claim_ceiling": "live_registry_reviewer_exposure_proven",
+  148|      1|        "session_id": "session",
+  149|      1|        "round_id": "round",
+  150|      1|        "raw_observation": {"path": raw_rel, "digest": raw_digest},
+  151|      1|        "agent_types": agent_types()
+  152|       |    })
+  153|      1|}
+  154|       |
+  155|      1|fn agent_types() -> Vec<Value> {
+  156|      1|    [
+  157|      1|        (
+  158|      1|            "harness_contract_claim_falsifier",
+  159|      1|            "contract_claim_falsifier",
+  160|      1|            "custom-agents/harness-contract-claim-falsifier.toml",
+  161|      1|        ),
+  162|      1|        (
+  163|      1|            "harness_orchestration_recovery_falsifier",
+  164|      1|            "orchestration_recovery_falsifier",
+  165|      1|            "custom-agents/harness-orchestration-recovery-falsifier.toml",
+  166|      1|        ),
+  167|      1|        (
+  168|      1|            "harness_security_trust_boundary_falsifier",
+  169|      1|            "security_trust_boundary_falsifier",
+  170|      1|            "custom-agents/harness-security-trust-boundary-falsifier.toml",
+  171|      1|        ),
+  172|      1|        (
+  173|      1|            "harness_product_simplicity_falsifier",
+  174|      1|            "product_simplicity_falsifier",
+  175|      1|            "custom-agents/harness-product-simplicity-falsifier.toml",
+  176|      1|        ),
+  177|      1|    ]
+  178|      1|    .into_iter()
+  179|      4|    .map(|(agent_type, persona, custom_agent_path)| {
                    ^1
-  112|      4|        json!({
-  113|      4|            "agent_type": agent_type,
-  114|      4|            "persona": persona,
-  115|      4|            "custom_agent_path": custom_agent_path,
-  116|      4|            "disk_cache_synced": true,
-  117|      4|            "global_toml_present": true,
-  118|      4|            "exposed": true
-  119|       |        })
-  120|      4|    })
-  121|      1|    .collect()
-  122|      1|}
+  180|      4|        json!({
+  181|      4|            "agent_type": agent_type,
+  182|      4|            "persona": persona,
+  183|      4|            "custom_agent_path": custom_agent_path,
+  184|      4|            "disk_cache_synced": true,
+  185|      4|            "global_toml_present": true,
+  186|      4|            "exposed": true
+  187|       |        })
+  188|      4|    })
+  189|      1|    .collect()
+  190|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/cli/control/transaction/mod.rs:
     1|       |use serde_json::{Value, json};

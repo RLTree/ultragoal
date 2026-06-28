@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-28T12:04:36Z",
+    "completed_at": "2026-06-28T13:03:47Z",
     "cwd": "fixtures/target-repo/red/empty-coverage-command",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-28T12:04:36Z",
+    "started_at": "2026-06-28T13:03:47Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-28T12:04:36Z",
+  "generated_at": "2026-06-28T13:03:47Z",
   "invocation": "fixture init fixtures/target-repo/red/empty-coverage-command",
   "mode": "init",
-  "repo_fingerprint": "sha256:143ac4c0e94b71e5f25e03ab78b3c1db4a77a006503c957fe9bc601103b2d512",
+  "repo_fingerprint": "sha256:c65cac1eb45e8ec94b77f3a20cc09761e55cf5f31dd069d2b1491e201b064b0d",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1059,7 +1059,7 @@
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
-      "digest": "sha256:7b876c6bd85ee1edc9ab42e6e8ecec9ce8098b7c57faa3fe3be75cf7da763e24",
+      "digest": "sha256:14d3bf2aa40c3b67cfe3008c1133210205d7045306a77a91b8a279e4738e2499",
       "path": "validator/src/cli/control/plane/registry.rs"
     },
     {
@@ -1663,7 +1663,7 @@
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
-      "digest": "sha256:ab665f5440eba99024167f45fc229d7f1bba65eb640abdd76b1c3e661779fc5a",
+      "digest": "sha256:7265277ca6d11f52ff75f2755d0ba400589898b0a847e74c67cc1574564c9b6b",
       "path": "validator/src/self_tests/cli/control/registry.rs"
     },
     {
