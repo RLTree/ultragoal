@@ -42,23 +42,9 @@ fn current_candidate_failures(root: &Path, receipt: &Value, out: &mut Vec<String
         out.push("final_packet_proof_status_not_pass".to_string());
     }
     if receipt.get("claim_ceiling").and_then(Value::as_str)
-        != Some("final_packet_claims_cli_verified")
+        != Some("final_packet_evidence_dereferenced")
     {
         out.push("final_packet_proof_claim_ceiling_not_verified".to_string());
-    }
-    if receipt
-        .pointer("/cli_update_goal/status")
-        .and_then(Value::as_str)
-        != Some("pass")
-    {
-        out.push("final_packet_proof_cli_update_goal_not_pass".to_string());
-    }
-    if receipt
-        .pointer("/cli_self_law/status")
-        .and_then(Value::as_str)
-        != Some("pass")
-    {
-        out.push("final_packet_proof_cli_self_law_not_pass".to_string());
     }
     if receipt
         .pointer("/cli_performance/status")

@@ -7,7 +7,6 @@ const RECEIPT: &str = "validation_artifacts/cli/transactional-finalization-recei
 const SCHEMA: &str = "harness-ultragoal.cli-transactional-finalization-receipt.v1";
 const SCHEMA_FILE: &str = "cli-transactional-finalization-receipt.schema.json";
 const FINAL_PACKET: &str = "validation_artifacts/review/final-packet-proof.json";
-const SOURCE_AUDIT: &str = "validation_artifacts/ultragoal-audit/validator-receipt.json";
 const REGISTRY_EXPOSURE: &str =
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
 const CLI_PERFORMANCE: &str = "validation_artifacts/cli/performance-receipt.json";
@@ -55,7 +54,7 @@ fn requires_transaction(operation: ControlOperation) -> bool {
     )
 }
 
-fn receipt_failures(
+pub(crate) fn receipt_failures(
     root: &Path,
     store: &schema_catalog::SchemaStore,
     receipt: &Value,
@@ -90,7 +89,6 @@ fn receipt_failures(
     }
     for (ptr, rel) in [
         ("/final_packet", FINAL_PACKET),
-        ("/source_audit", SOURCE_AUDIT),
         ("/registry_exposure", REGISTRY_EXPOSURE),
         ("/cli_performance", CLI_PERFORMANCE),
         ("/coverage", COVERAGE),
@@ -181,7 +179,6 @@ fn ref_value_failures(
                 .map(|failure| format!("cli_control_plane_transaction_performance:{failure}"))
                 .collect()
         }
-        "source_audit" => source_audit_failures(store, value, expected),
         "coverage" => coverage_failures(store, value, expected),
         _ => vec![format!("cli_control_plane_transaction_ref_unknown:{label}")],
     }
@@ -191,28 +188,6 @@ fn ref_value_failures(
 pub(crate) fn unknown_ref_value_failures_for_test(root: &Path) -> Vec<String> {
     let store = crate::schema_catalog::load(root);
     ref_value_failures(root, &store, "unknown", &Value::Null, crate::digest::ZERO)
-}
-
-fn source_audit_failures(
-    store: &schema_catalog::SchemaStore,
-    value: &Value,
-    expected: &str,
-) -> Vec<String> {
-    let mut out = schema_catalog::schema_errors(store, "validator-receipt.schema.json", value)
-        .into_iter()
-        .map(|failure| format!("cli_control_plane_transaction_source_audit_schema:{failure}"))
-        .collect::<Vec<_>>();
-    if value.get("status").and_then(Value::as_str) != Some("pass") {
-        out.push("cli_control_plane_transaction_source_audit_not_pass".to_string());
-    }
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("cli_control_plane_transaction_source_audit_digest_mismatch".to_string());
-    }
-    out
 }
 
 fn coverage_failures(

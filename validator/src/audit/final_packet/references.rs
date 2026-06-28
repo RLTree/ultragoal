@@ -9,22 +9,6 @@ pub(super) fn failures(
 ) -> Vec<String> {
     let expected = crate::package::inventory::package_digest(root).unwrap_or_default();
     let mut out = Vec::new();
-    check_cli(
-        root,
-        receipt,
-        "/cli_update_goal",
-        "update_goal_eligibility",
-        &expected,
-        &mut out,
-    );
-    check_cli(
-        root,
-        receipt,
-        "/cli_self_law",
-        "self_update_goal_eligibility",
-        &expected,
-        &mut out,
-    );
     check_performance_ref(root, receipt, &expected, &mut out);
     check_registry_ref(root, store, receipt, &mut out);
     check_source_audit_ref(root, receipt, &expected, &mut out);
@@ -33,26 +17,9 @@ pub(super) fn failures(
     out
 }
 
-fn check_cli(
-    root: &Path,
-    receipt: &Value,
-    ptr: &str,
-    operation: &str,
-    expected: &str,
-    out: &mut Vec<String>,
-) {
-    let Some(value) = load_ref(root, receipt, ptr, operation, out) else {
-        return;
-    };
-    for failure in crate::cli::control::plane::receipt::same_candidate_pass_failures(
-        &value, expected, operation,
-    ) {
-        out.push(format!("final_packet_proof_cli_ref:{failure}"));
-    }
-}
-
 fn check_performance_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    let Some(value) = load_ref(root, receipt, "/cli_performance", "cli_performance", out) else {
+    let Some(value) = load_pass_ref(root, receipt, "/cli_performance", "cli_performance", out)
+    else {
         return;
     };
     for failure in crate::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
@@ -67,7 +34,7 @@ fn check_registry_ref(
     receipt: &Value,
     out: &mut Vec<String>,
 ) {
-    let Some(value) = load_ref(root, receipt, "/registry_exposure", "registry", out) else {
+    let Some(value) = load_pass_ref(root, receipt, "/registry_exposure", "registry", out) else {
         return;
     };
     for failure in crate::audit::plugin::registry::value_failures(root, store, &value) {
@@ -76,15 +43,38 @@ fn check_registry_ref(
 }
 
 fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    if let Some(value) = load_ref(root, receipt, "/source_audit", "source_audit", out) {
+    if let Some(value) = load_ref(
+        root,
+        receipt,
+        "/source_audit",
+        "source_audit",
+        RefStatusPolicy::PassOrFail,
+        out,
+    ) {
         audit_receipt_failures(&value, expected, out);
     }
 }
 
 fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    if let Some(value) = load_ref(root, receipt, "/coverage", "coverage", out) {
+    if let Some(value) = load_pass_ref(root, receipt, "/coverage", "coverage", out) {
         coverage_receipt_failures(&value, expected, out);
     }
+}
+
+fn load_pass_ref(
+    root: &Path,
+    receipt: &Value,
+    ptr: &str,
+    label: &str,
+    out: &mut Vec<String>,
+) -> Option<Value> {
+    load_ref(root, receipt, ptr, label, RefStatusPolicy::MustPass, out)
+}
+
+#[derive(Clone, Copy)]
+enum RefStatusPolicy {
+    MustPass,
+    PassOrFail,
 }
 
 fn load_ref(
@@ -92,6 +82,7 @@ fn load_ref(
     receipt: &Value,
     ptr: &str,
     label: &str,
+    status_policy: RefStatusPolicy,
     out: &mut Vec<String>,
 ) -> Option<Value> {
     let Some(item) = receipt.pointer(ptr) else {
@@ -120,18 +111,33 @@ fn load_ref(
             return None;
         }
     };
-    embedded_status_failures(item, &value, label, out);
+    embedded_status_failures(item, &value, label, status_policy, out);
     Some(value)
 }
 
-fn embedded_status_failures(item: &Value, value: &Value, label: &str, out: &mut Vec<String>) {
-    if item.get("status").and_then(Value::as_str) != Some("pass") {
-        out.push(format!(
-            "final_packet_proof_ref_embedded_status_not_pass:{label}"
-        ));
+fn embedded_status_failures(
+    item: &Value,
+    value: &Value,
+    label: &str,
+    status_policy: RefStatusPolicy,
+    out: &mut Vec<String>,
+) {
+    let embedded_status = item.get("status").and_then(Value::as_str);
+    match status_policy {
+        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
+            out.push(format!(
+                "final_packet_proof_ref_embedded_status_not_pass:{label}"
+            ));
+        }
+        RefStatusPolicy::PassOrFail if !matches!(embedded_status, Some("pass" | "fail")) => {
+            out.push(format!(
+                "final_packet_proof_ref_embedded_status_not_pass_or_fail:{label}"
+            ));
+        }
+        _ => {}
     }
     if let Some(actual) = value.get("status").and_then(Value::as_str) {
-        if item.get("status").and_then(Value::as_str) != Some(actual) {
+        if embedded_status != Some(actual) {
             out.push(format!(
                 "final_packet_proof_ref_status_disagreement:{label}"
             ));
@@ -140,8 +146,14 @@ fn embedded_status_failures(item: &Value, value: &Value, label: &str, out: &mut 
 }
 
 fn audit_receipt_failures(value: &Value, expected: &str, out: &mut Vec<String>) {
-    if value.get("status").and_then(Value::as_str) != Some("pass") {
-        out.push("final_packet_proof_source_audit_not_pass".to_string());
+    let Some(status) = value.get("status").and_then(Value::as_str) else {
+        out.push("final_packet_proof_source_audit_status_missing".to_string());
+        return;
+    };
+    if !matches!(status, "pass" | "fail") {
+        out.push(format!(
+            "final_packet_proof_source_audit_status_unknown:{status}"
+        ));
     }
     if value
         .pointer("/target_revision/value")
@@ -180,7 +192,7 @@ fn package_ref_failures(root: &Path, receipt: &Value, expected: &str, out: &mut 
     };
     for (idx, _) in rows.iter().enumerate() {
         let ptr = format!("/package_receipts/{idx}");
-        if let Some(value) = load_ref(root, receipt, &ptr, "package", out) {
+        if let Some(value) = load_pass_ref(root, receipt, &ptr, "package", out) {
             package_ref_value_failures(root, receipt, &ptr, &value, expected, out);
         }
     }

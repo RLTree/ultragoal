@@ -22,7 +22,7 @@
   },
   "command": {
     "argv": [
-      "target/debug/ultragoal",
+      "target/debug/ultragoal-validator",
       "--root",
       ".",
       "rust",
@@ -49,19 +49,19 @@
     "ultragoal rust workspace topology check"
   ],
   "digests": {
-    "candidate": "sha256:2b36b149440d14c7ca8fc36ac54b46fab12c5621a37ecabe9a95aaf72be6e9c0",
+    "candidate": "sha256:73998ad51d2d79f8f97ac248d9c99e216eb52191790382822980e3072dad725a",
     "cargo_config": "sha256:6a60d9d70c9ad7f839042e7dfe5e2c993e8db8f27a83acb71e36a3b723d1fa91",
     "cargo_lock": "sha256:ee05ce5f44fb7ce1e1544f585ac36d155367c58109be2c7b29f90b6fcbf6a1c8",
     "cargo_workspace": "sha256:b8d083a304e1ff96717b16610ef9a0dd1cf3bfaaebd4d06d9f4320b045849f41",
-    "fixture_catalog": "sha256:6e1de86b921895d2a0ae0c8687a526a6ef7bbadc1297632f0e8425d3d69862bb",
-    "law_graph": "sha256:a27cb83310c68b8c8115af26fb7891160f492869c98f72edb20e1f2ed9bb93b3",
+    "fixture_catalog": "sha256:281e2a682971579814fa71c64b41e7f47895a4fd4666a15758b298158ba27c1e",
+    "law_graph": "sha256:bb54d910ee7e33d070873c438c6ab49c546175b8007112b50cdfecd8be48f11c",
     "rust_toolchain": "sha256:2d157d0deed991e8b3cd711051cd4c1aace1c7ecbfc94df49bf3eaaf8f573d56",
-    "schema_catalog": "sha256:6a1d0b220c5577f8961588a82c001cd5d4cf89b1404d5d416cccf394a8b84b40",
-    "source": "sha256:2b36b149440d14c7ca8fc36ac54b46fab12c5621a37ecabe9a95aaf72be6e9c0",
-    "source_obligation": "sha256:175877b7b121b771fd68c83435968911e0c393119006956555c86d953c4e02e6",
-    "standards": "sha256:f8539cca3efc6d1e701066429a4ada106807123d84362baf42d4017e29c60a3e"
+    "schema_catalog": "sha256:a0225c3faa19b3bad977596ccac723e34de004a7ca3c5f4e99677f79b07a33c4",
+    "source": "sha256:73998ad51d2d79f8f97ac248d9c99e216eb52191790382822980e3072dad725a",
+    "source_obligation": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+    "standards": "sha256:aaafc7eb6da126c8f5057e44a5576ec6ef3abe77bd7eec2b330131d743d943dc"
   },
-  "generated_at": "2026-06-27T10:06:36Z",
+  "generated_at": "2026-06-28T00:23:47Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

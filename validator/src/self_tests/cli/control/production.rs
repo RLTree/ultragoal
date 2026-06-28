@@ -95,34 +95,6 @@ fn write_control_green_root(root: &Path) -> String {
     current
 }
 
-fn write_transaction(root: &Path, current: &str) {
-    write_json(
-        &root.join("validation_artifacts/cli/transactional-finalization-receipt.json"),
-        &json!({
-            "schema":"harness-ultragoal.cli-transactional-finalization-receipt.v1",
-            "generated_at":"2026-06-27T00:00:00Z",
-            "status":"pass",
-            "candidate_digest":current,
-            "claim_ceiling":"supports_update_goal_eligibility",
-            "transaction_mode":"same_candidate_atomic_finalization",
-            "blocked_claim_classes":[],
-            "final_packet":ref_row(root, "validation_artifacts/review/final-packet-proof.json"),
-            "source_audit":ref_row(root, "validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            "registry_exposure":ref_row(root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
-            "cli_performance":ref_row(root, "validation_artifacts/cli/performance-receipt.json"),
-            "coverage":ref_row(root, "validation_artifacts/coverage/coverage-receipt.json")
-        }),
-    );
-}
-
-fn ref_row(root: &Path, rel: &str) -> serde_json::Value {
-    json!({
-        "path": rel,
-        "digest": crate::digest::file(&root.join(rel)).expect("digest"),
-        "status": "pass"
-    })
-}
-
 fn write_registry_probe_root(root: &Path) {
     let repo = crate::self_tests::boundaries::support::repo_root();
     copy_flat_dir(root, &repo, "schemas");
@@ -161,7 +133,13 @@ fn production_control_plane_stays_transition_only_without_transactional_finaliza
         observed.contains("cli_control_plane_transactional_finalization_missing"),
         "{observed}"
     );
-    write_transaction(&root, &current);
+    let transaction =
+        crate::cli::control::plane::transactional::receipt(&root).expect("transaction receipt");
+    assert_eq!(transaction["status"], "pass", "{transaction}");
+    write_json(
+        &root.join("validation_artifacts/cli/transactional-finalization-receipt.json"),
+        &transaction,
+    );
     let green = receipt(&root, &command).expect("green receipt");
     assert_eq!(green["status"], "pass", "{green}");
     assert_eq!(green["issuer"]["self_law_state"], "self_hosted");

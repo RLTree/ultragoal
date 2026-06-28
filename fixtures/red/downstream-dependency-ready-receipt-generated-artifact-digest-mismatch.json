@@ -1,34 +1,34 @@
 {
-  "schema": "harness-ultragoal.red-packet.v1",
-  "id": "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch",
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
   "expected_failure": {
     "check_id": "ready-receipt-provenance",
     "error": "ready_receipt_not_validator_output"
   },
-  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "id": "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch",
   "json_patch": [
     {
       "op": "replace",
-      "path": "/validator_receipt/generated_artifacts/51/digest",
+      "path": "/validator_receipt/generated_artifacts/5/digest",
       "value": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
     }
   ],
   "materialization": {
     "expected_validation_layer": "semantic",
-    "post_patch_schema_valid": true,
-    "first_failure_must_match_expected": false
+    "first_failure_must_match_expected": false,
+    "post_patch_schema_valid": true
   },
-  "preconditions": [
-    {
-      "path": "/validator_receipt/generated_artifacts/51/artifact_type",
-      "exists": true
-    }
-  ],
+  "notes": "A generated ready artifact path without byte-matching digest is not validator output authority.",
   "postconditions": [
     {
-      "path": "/validator_receipt/generated_artifacts/51/digest",
-      "expectation": "digest mismatch blocks per-lane ready artifact authority"
+      "expectation": "digest mismatch blocks per-lane ready artifact authority",
+      "path": "/validator_receipt/generated_artifacts/51/digest"
     }
   ],
-  "notes": "A generated ready artifact path without byte-matching digest is not validator output authority."
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/validator_receipt/generated_artifacts/5/artifact_type"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
 }

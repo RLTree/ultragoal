@@ -324,7 +324,7 @@
         },
         {
           "path": "validator/src/review/round/registry.rs",
-          "digest": "sha256:7a7e1bd90178b72f2e1776a2028fb15de6148e18f97e857099cd57df64f2fab2"
+          "digest": "sha256:6ca2e3bb3b5cab0e17be0fd134d5ffb186a6a66b12c8d10e4ea3a8e232fbac1a"
         }
       ],
       "material_blockers": [],
@@ -377,7 +377,7 @@
         },
         {
           "path": "validator/src/review/round/registry.rs",
-          "digest": "sha256:7a7e1bd90178b72f2e1776a2028fb15de6148e18f97e857099cd57df64f2fab2"
+          "digest": "sha256:6ca2e3bb3b5cab0e17be0fd134d5ffb186a6a66b12c8d10e4ea3a8e232fbac1a"
         }
       ],
       "claim_ceiling_assessment": {

@@ -57,6 +57,84 @@ fn cli_surface_commands_execute() {
         Some(2)
     );
     assert_eq!(run(&root, &["review-target".into()]).status.code(), Some(2));
+    assert_eq!(
+        run_ultragoal(
+            &root,
+            &["--root".into(), ".".into(), "source".into(), "audit".into(),],
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+    for args in [
+        vec![
+            "--root".into(),
+            ".".into(),
+            "archive".into(),
+            "build".into(),
+            "--receipt".into(),
+            temp.join("archive-missing-zip.json").display().to_string(),
+        ],
+        vec![
+            "--root".into(),
+            ".".into(),
+            "archive".into(),
+            "build".into(),
+            "--zip".into(),
+            temp.join("archive-missing-receipt.zip")
+                .display()
+                .to_string(),
+        ],
+        vec![
+            "--root".into(),
+            ".".into(),
+            "review-round".into(),
+            "verify".into(),
+            "--receipt".into(),
+            temp.join("review-round-missing-anchor.json")
+                .display()
+                .to_string(),
+        ],
+        vec![
+            "--root".into(),
+            ".".into(),
+            "semantic-receipts".into(),
+            "--out-dir".into(),
+            temp.join("semantic-missing-input").display().to_string(),
+        ],
+        vec![
+            "--root".into(),
+            ".".into(),
+            "semantic-receipts".into(),
+            "--input".into(),
+            "fixtures/valid/minimal-goal-run.json".into(),
+        ],
+    ] {
+        assert_eq!(run_ultragoal(&root, &args).status.code(), Some(2));
+    }
+
+    let review_round_parse_success = vec![
+        "--root".into(),
+        ".".into(),
+        "review-round".into(),
+        "verify".into(),
+        "--receipt".into(),
+        temp.join("review-round-missing-input.json")
+            .display()
+            .to_string(),
+        "--validator-receipt".into(),
+        "fixtures/review-round/anchors/validator-receipt.json".into(),
+        "--review-target-receipt".into(),
+        "fixtures/review-round/anchors/review-target-receipt.json".into(),
+        "--archive-receipt".into(),
+        "fixtures/review-round/anchors/archive-receipt.json".into(),
+    ];
+    assert_eq!(
+        run_ultragoal(&root, &review_round_parse_success)
+            .status
+            .code(),
+        Some(1)
+    );
 
     let digest = run(
         &root,
@@ -83,6 +161,55 @@ fn cli_surface_commands_execute() {
         r#"{"version":"0.0.0-test","resources":[]}"#,
     )
     .expect("write temp manifest");
+
+    let performance_receipt = temp.join("validation_artifacts/cli/performance-receipt.json");
+    let performance = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            ".".into(),
+            "performance".into(),
+            "prove".into(),
+            "--receipt".into(),
+            performance_receipt.display().to_string(),
+        ],
+    );
+    assert!(
+        performance.status.success(),
+        "performance command failed: {performance:?}"
+    );
+
+    let rust_fast_receipt = temp.join("validation_artifacts/rust/fast-receipt.json");
+    let rust_fast = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            ".".into(),
+            "rust".into(),
+            "fast".into(),
+            "--receipt".into(),
+            rust_fast_receipt.display().to_string(),
+        ],
+    );
+    assert!(
+        rust_fast.status.success(),
+        "rust fast failed: {rust_fast:?}"
+    );
+
+    let gc_plan_receipt = temp.join("validation_artifacts/gc/plan-receipt.json");
+    let gc_plan = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            ".".into(),
+            "gc".into(),
+            "plan".into(),
+            "--receipt".into(),
+            gc_plan_receipt.display().to_string(),
+        ],
+    );
+    assert!(gc_plan.status.success(), "gc plan failed: {gc_plan:?}");
+
     let update_goal_receipt = temp.join("validation_artifacts/cli/update-goal-eligibility.json");
     let update_goal = run_ultragoal(
         &root,
@@ -113,6 +240,36 @@ fn cli_surface_commands_execute() {
     );
     assert_eq!(self_law.status.code(), Some(1));
     assert_fail_closed_cli_receipt(&self_receipt, "self_update_goal_eligibility");
+
+    assert_eq!(
+        run_ultragoal(
+            &root,
+            &[
+                "--root".into(),
+                temp.display().to_string(),
+                "transaction".into(),
+                "finalize".into(),
+            ],
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+
+    let transaction_receipt = temp.join("validation_artifacts/cli/transactional-finalization.json");
+    let transaction = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            temp.display().to_string(),
+            "transaction".into(),
+            "finalize".into(),
+            "--receipt".into(),
+            transaction_receipt.display().to_string(),
+        ],
+    );
+    assert_eq!(transaction.status.code(), Some(1));
+    assert_fail_closed_transaction_receipt(&transaction_receipt);
 
     let review_target = temp.join("review-target.json");
     let review_target_args = vec![
@@ -220,4 +377,21 @@ fn assert_fail_closed_cli_receipt(path: &Path, operation: &str) {
         "cli-control-plane-authority"
     };
     assert_eq!(value["failure"]["law_id"], expected_law);
+}
+
+fn assert_fail_closed_transaction_receipt(path: &Path) {
+    let value: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(path).expect("read transaction receipt"))
+            .expect("parse transaction receipt");
+    assert_eq!(
+        value["schema"],
+        "harness-ultragoal.cli-transactional-finalization-receipt.v1"
+    );
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert!(
+        value["failure"]["observed_failures"]
+            .as_array()
+            .is_some_and(|items| !items.is_empty())
+    );
 }

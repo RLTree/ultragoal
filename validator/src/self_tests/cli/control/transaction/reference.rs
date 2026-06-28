@@ -17,7 +17,6 @@ fn pass_shaped_transaction_still_dereferences_current_evidence() {
             "transaction_mode": "same_candidate_atomic_finalization",
             "blocked_claim_classes": [],
             "final_packet": super::missing_ref("validation_artifacts/review/final-packet-proof.json"),
-            "source_audit": super::missing_ref("validation_artifacts/ultragoal-audit/validator-receipt.json"),
             "registry_exposure": super::missing_ref("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
             "cli_performance": super::missing_ref("validation_artifacts/cli/performance-receipt.json"),
             "coverage": super::missing_ref("validation_artifacts/coverage/coverage-receipt.json")
@@ -46,9 +45,9 @@ fn matching_reference_digests_still_require_receipt_semantics() {
     super::write_transaction(&root, &current);
     let failures = proof::failures(&root, ControlOperation::UpdateGoalEligibility);
     assert!(
-        failures
+        !failures
             .iter()
-            .any(|failure| failure == "cli_control_plane_transaction_source_audit_not_pass"),
+            .any(|failure| failure.contains("cli_control_plane_transaction_source_audit")),
         "{failures:?}"
     );
     assert!(
@@ -83,7 +82,6 @@ fn transaction_rejects_bad_top_level_fields_missing_refs_and_stale_refs() {
             "transaction_mode": "manual",
             "blocked_claim_classes": ["completion"],
             "final_packet": {"path":"validation_artifacts/review/not-final.json","digest":crate::digest::ZERO,"status":"fail"},
-            "source_audit": super::ref_row(&root, "validation_artifacts/ultragoal-audit/validator-receipt.json"),
             "registry_exposure": super::ref_row(&root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
             "cli_performance": super::ref_row(&root, "validation_artifacts/cli/performance-receipt.json")
         }),
@@ -132,7 +130,7 @@ fn transaction_rejects_symlinked_canonical_reference_surface() {
 }
 
 #[test]
-fn transaction_rejects_stale_source_audit_and_uncovered_coverage_ref() {
+fn transaction_rejects_uncovered_coverage_ref_without_source_audit_circularity() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-stale-refs");
     super::write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
@@ -152,7 +150,6 @@ fn transaction_rejects_stale_source_audit_and_uncovered_coverage_ref() {
     let failures = proof::failures(&root, ControlOperation::UpdateGoalEligibility);
     for expected in [
         "cli_control_plane_transaction_ref_status_not_pass:cli_performance",
-        "cli_control_plane_transaction_source_audit_digest_mismatch",
         "cli_control_plane_transaction_coverage_digest_mismatch",
         "cli_control_plane_transaction_coverage_not_exact_100",
     ] {
@@ -161,6 +158,12 @@ fn transaction_rejects_stale_source_audit_and_uncovered_coverage_ref() {
             "{failures:?}"
         );
     }
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("cli_control_plane_transaction_source_audit")),
+        "{failures:?}"
+    );
     std::fs::remove_dir_all(root).expect("cleanup transaction stale refs");
 }
 

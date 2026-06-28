@@ -10,8 +10,6 @@
     "status",
     "target_revision",
     "packet",
-    "cli_update_goal",
-    "cli_self_law",
     "cli_performance",
     "registry_exposure",
     "source_audit",
@@ -65,17 +63,11 @@
         }
       }
     },
-    "cli_update_goal": {
-      "$ref": "#/$defs/cliPass"
-    },
-    "cli_self_law": {
-      "$ref": "#/$defs/cliPass"
-    },
     "cli_performance": {
-      "$ref": "#/$defs/cliPass"
+      "$ref": "#/$defs/passReceiptRef"
     },
     "registry_exposure": {
-      "$ref": "#/$defs/receiptRef"
+      "$ref": "#/$defs/passReceiptRef"
     },
     "source_audit": {
       "$ref": "#/$defs/receiptRef"
@@ -91,7 +83,7 @@
       }
     },
     "claim_ceiling": {
-      "const": "final_packet_claims_cli_verified"
+      "const": "final_packet_evidence_dereferenced"
     }
   },
   "$defs": {
@@ -126,11 +118,14 @@
           "pattern": "^sha256:[0-9a-f]{64}$"
         },
         "status": {
-          "const": "pass"
+          "enum": [
+            "pass",
+            "fail"
+          ]
         }
       }
     },
-    "cliPass": {
+    "passReceiptRef": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -141,7 +136,20 @@
       "properties": {
         "path": {
           "type": "string",
-          "pattern": "^validation_artifacts/cli/[-A-Za-z0-9._/]+[.]json$"
+          "anyOf": [
+            {
+              "pattern": "^validation_artifacts/cli/[-A-Za-z0-9._/]+[.]json$"
+            },
+            {
+              "pattern": "^validation_artifacts/coverage/[-A-Za-z0-9._/]+[.]json$"
+            },
+            {
+              "pattern": "^validation_artifacts/harness/[-A-Za-z0-9._/]+[.]json$"
+            },
+            {
+              "pattern": "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$"
+            }
+          ]
         },
         "digest": {
           "type": "string",

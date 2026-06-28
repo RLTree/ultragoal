@@ -81,8 +81,8 @@ fn write_transaction(root: &Path, current: &str) {
             "claim_ceiling": "supports_update_goal_eligibility",
             "transaction_mode": "same_candidate_atomic_finalization",
             "blocked_claim_classes": [],
+            "failure": null,
             "final_packet": ref_row(root, "validation_artifacts/review/final-packet-proof.json"),
-            "source_audit": ref_row(root, "validation_artifacts/ultragoal-audit/validator-receipt.json"),
             "registry_exposure": ref_row(root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
             "cli_performance": ref_row(root, "validation_artifacts/cli/performance-receipt.json"),
             "coverage": ref_row(root, "validation_artifacts/coverage/coverage-receipt.json")
@@ -96,4 +96,52 @@ fn ref_row(root: &Path, rel: &str) -> Value {
         "digest": crate::digest::file(&root.join(rel)).expect("digest"),
         "status": "pass"
     })
+}
+
+#[test]
+fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
+    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-fail");
+    write_manifest(&root);
+    let receipt = root.join(RECEIPT);
+    let code = crate::command_run::run_with_exit_code(crate::Args {
+        root: root.clone(),
+        command: crate::Command::TransactionalFinalization {
+            receipt: receipt.clone(),
+        },
+    })
+    .expect("transaction command");
+    assert_eq!(code, 1);
+    let value = crate::json_boundary::read_json(&receipt).expect("receipt json");
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    assert_eq!(value["schema"], SCHEMA);
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["candidate_digest"], current);
+    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert!(
+        value["failure"]["observed_failures"]
+            .as_array()
+            .expect("failures")
+            .iter()
+            .any(|failure| failure
+                .as_str()
+                .is_some_and(|text| text.contains("final_packet"))),
+        "{value}"
+    );
+    let failures = crate::cli::control::plane::proof::failures(
+        &root,
+        crate::cli::control::plane::types::ControlOperation::UpdateGoalEligibility,
+    );
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("transactional_finalization_missing")),
+        "{failures:?}"
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure == "cli_control_plane_transaction_status_not_pass"),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup transaction command fail");
 }

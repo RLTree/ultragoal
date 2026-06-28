@@ -1,0 +1,67 @@
+{
+  "blocked_claim_classes": [
+    "completion",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "update_goal_eligibility"
+  ],
+  "candidate_digest": "sha256:73998ad51d2d79f8f97ac248d9c99e216eb52191790382822980e3072dad725a",
+  "claim_ceiling": "withheld_or_blocked",
+  "cli_performance": {
+    "digest": "sha256:dc5ba4b560367f0fda3613818955eb723dfd5e0e252e3a9a1ae9eda29685a299",
+    "path": "validation_artifacts/cli/performance-receipt.json",
+    "status": "pass"
+  },
+  "coverage": {
+    "digest": "sha256:2b79c69d1ddf4d11276dbbe8cd71d5120d7595d7fa4e5e016156c416999371ab",
+    "path": "validation_artifacts/coverage/coverage-receipt.json",
+    "status": "pass"
+  },
+  "failure": {
+    "observed_failures": [
+      "cli_control_plane_transaction_ref_digest_mismatch:final_packet:validation_artifacts/review/final-packet-proof.json",
+      "cli_control_plane_transaction_ref_status_not_pass:final_packet",
+      "cli_control_plane_transaction_ref_malformed:final_packet:./validation_artifacts/review/final-packet-proof.json: json read failed: ./validation_artifacts/review/final-packet-proof.json: metadata failed: No such file or directory (os error 2)",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.generated_at: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.status: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.issuer: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.tool_call: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.capture_method: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.boundary: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.target_revision: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.claim_ceiling: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_schema:$.raw_observation: required",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_target_digest_mismatch:!=sha256:73998ad51d2d79f8f97ac248d9c99e216eb52191790382822980e3072dad725a",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_generated_capture_mismatch",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_tool_call_identity",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_observation_field:/tool_call/call_id",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_observation_field:/tool_call/arguments_digest",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_observation_field:/boundary/account_id",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_observation_field:/boundary/workspace_id",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_missing_observation_field:/boundary/session_id",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_boundary_session_mismatch",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_capture_method_not_live",
+      "cli_control_plane_transaction_registry:plugin_self_law_registry_raw_observation_missing"
+    ],
+    "reason": "transactional_finalization_not_proven"
+  },
+  "final_packet": {
+    "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "path": "validation_artifacts/review/final-packet-proof.json",
+    "status": "fail"
+  },
+  "generated_at": "2026-06-28T00:21:31Z",
+  "registry_exposure": {
+    "digest": "sha256:9a54f8e585c806df12e025f07773aa00cf0eda2bfee6d8c8a408988b2d3fcca2",
+    "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+    "status": "pass"
+  },
+  "schema": "harness-ultragoal.cli-transactional-finalization-receipt.v1",
+  "status": "fail",
+  "transaction_mode": "same_candidate_atomic_finalization"
+}

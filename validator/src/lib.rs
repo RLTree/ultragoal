@@ -63,6 +63,9 @@ pub(crate) enum Command {
         producer_actor_id: String,
         classifier_actor_id: String,
     },
+    TransactionalFinalization {
+        receipt: PathBuf,
+    },
     Control(cli::control::plane::ControlCommand),
     Performance(cli::performance::PerformanceCommand),
     Rust(cli::rust::RustCommand),
@@ -90,11 +93,12 @@ fn parse_args() -> Result<Args, String> {
     while i < raw.len() {
         match raw[i].as_str() {
             "--root" => {
-                root = PathBuf::from(
-                    raw.get(i + 1)
-                        .cloned()
-                        .ok_or_else(|| "missing value for --root".to_string())?,
-                );
+                let value_index = i + 1;
+                if value_index >= raw.len() {
+                    return Err("missing value for --root".to_string());
+                }
+                let value = raw[value_index].clone();
+                root = PathBuf::from(value);
                 raw.drain(i..=i + 1);
             }
             _ => i += 1,
@@ -103,7 +107,11 @@ fn parse_args() -> Result<Args, String> {
     if raw.is_empty() {
         return Err(usage());
     }
-    let command = parse_command(&raw)?;
+    let parsed_command = parse_command(&raw);
+    if parsed_command.is_err() {
+        return Err(parsed_command.err().expect("checked parser error"));
+    }
+    let command = parsed_command.ok().expect("checked parsed command");
     Ok(Args { root, command })
 }
 
@@ -153,6 +161,11 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
         },
         "package" if raw.get(1).map(String::as_str) == Some("digest") => Command::PackageDigest,
         "package-digest" => Command::PackageDigest,
+        "transaction" if raw.get(1).map(String::as_str) == Some("finalize") => {
+            Command::TransactionalFinalization {
+                receipt: opt_path(&raw[2..], "--receipt")?,
+            }
+        }
         _ => {
             if let Some(command) = cli::performance::parse(raw)? {
                 Command::Performance(command)
@@ -160,7 +173,7 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Rust(command)
             } else if let Some(command) = cli::garbage::collection::parse(raw)? {
                 Command::Garbage(command)
-            } else if let Some(command) = cli::control::plane::parse(raw)? {
+            } else if let Some(command) = cli::control::plane::parse(raw) {
                 Command::Control(command)
             } else {
                 return Err(usage());
@@ -201,5 +214,5 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 }
 
 fn usage() -> String {
-    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
+    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
 }

@@ -150,15 +150,9 @@ fn parses_all_control_command_families() {
         ),
     ];
     for (raw, operation) in cases {
-        let parsed = parse(&args(raw))
-            .expect("parse succeeds")
-            .expect("control command");
+        let parsed = parse(&args(raw)).expect("control command");
         assert_eq!(parsed.operation, operation, "raw={raw:?}");
     }
-    assert!(
-        parse(&args(&["law", "graph"]))
-            .expect("parse without strict")
-            .is_none()
-    );
-    assert!(parse(&args(&["unknown"])).expect("parse unknown").is_none());
+    assert!(parse(&args(&["law", "graph"])).is_none());
+    assert!(parse(&args(&["unknown"])).is_none());
 }

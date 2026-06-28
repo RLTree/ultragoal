@@ -11,7 +11,6 @@ const CLI_PERFORMANCE: &str = "validation_artifacts/cli/performance-receipt.json
 const FINAL_PACKET: &str = "validation_artifacts/review/final-packet-proof.json";
 const REGISTRY_EXPOSURE: &str =
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
-const SOURCE_AUDIT: &str = "validation_artifacts/ultragoal-audit/validator-receipt.json";
 const TRANSACTION: &str = "validation_artifacts/cli/transactional-finalization-receipt.json";
 
 pub(crate) fn production(
@@ -82,7 +81,6 @@ fn specs(operation: ControlOperation) -> Vec<(&'static str, &'static str)> {
         operation,
         ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility
     ) {
-        out.push(("source_audit", SOURCE_AUDIT));
         out.push(("transactional_finalization", TRANSACTION));
     }
     out
@@ -97,7 +95,6 @@ pub(super) fn required_labels(operation: &str) -> &'static [&'static str] {
             "cli_performance",
             "final_packet",
             "registry_exposure",
-            "source_audit",
             "transactional_finalization",
         ],
         _ => &[

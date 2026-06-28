@@ -46,6 +46,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "ultragoal failure capture",
     "ultragoal failure promote",
     "ultragoal issue check-lifecycle",
+    "ultragoal transaction finalize",
     "ultragoal update-goal eligibility",
     "ultragoal self audit --strict",
     "ultragoal self law-graph --strict",

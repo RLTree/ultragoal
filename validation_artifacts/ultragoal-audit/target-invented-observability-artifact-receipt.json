@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-27T17:23:33Z",
+    "completed_at": "2026-06-28T00:28:43Z",
     "cwd": "fixtures/target-repo/red/invented-observability-artifact",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-27T17:23:33Z",
+    "started_at": "2026-06-28T00:28:43Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-27T17:23:33Z",
+  "generated_at": "2026-06-28T00:28:43Z",
   "invocation": "fixture init fixtures/target-repo/red/invented-observability-artifact",
   "mode": "init",
-  "repo_fingerprint": "sha256:1c137a07d8c539348d0f960eeb1663b7b7d8fa4f7f44e263e3e404de3c3ab284",
+  "repo_fingerprint": "sha256:8da5d8bb01f9493d63e2a2540670a9c6e996c1b2179ad7300b35dbb424d8b305",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,
@@ -500,11 +500,11 @@
       "path": "validator/src/audit/coverage/scope/scripts.rs"
     },
     {
-      "digest": "sha256:17dea921eb79ae0716da078d9642884b52e34f55266d6c00913cce4e3c715aad",
+      "digest": "sha256:9f3b0d058a28cbba93c5d21d550ee68c308b5a365d58c934c2ad51365858ecaf",
       "path": "validator/src/audit/final_packet.rs"
     },
     {
-      "digest": "sha256:251e847d45712326995b88eeace62783514852a5d9d3e687f2d724fd812e6065",
+      "digest": "sha256:814a703c29034b193d09a15bc45c2b68f395b5c7f43a99107c1651d7e767d7d5",
       "path": "validator/src/audit/final_packet/references.rs"
     },
     {
@@ -980,7 +980,7 @@
       "path": "validator/src/cli/control/mod.rs"
     },
     {
-      "digest": "sha256:86d2f6a2678e6b3ec1411125d55c8b431cbc4b6e60a8315a9c49d98517a4eef8",
+      "digest": "sha256:26867958909b6abe17480162771b28d9beac211a59063f1ff700da8f9cdb5fa7",
       "path": "validator/src/cli/control/plane.rs"
     },
     {
@@ -988,7 +988,7 @@
       "path": "validator/src/cli/control/plane/emit.rs"
     },
     {
-      "digest": "sha256:2cd2a1fcd6ee5c57a15a79d22cc90fd430d5fa41eaf13916e505863f11f18d79",
+      "digest": "sha256:4629bf3059720d0084707ac53ec1eeeb651e723b85091115fda1a115591d5ad2",
       "path": "validator/src/cli/control/plane/evidence.rs"
     },
     {
@@ -1020,7 +1020,7 @@
       "path": "validator/src/cli/control/plane/proof/red.rs"
     },
     {
-      "digest": "sha256:eeb969b39b45127fbf30e70545857133891124f375b2987e00b88e783a1c0350",
+      "digest": "sha256:c3063bd637d5ae244c66a673dff2c536f6f18270cdc830e6614375fc80819f79",
       "path": "validator/src/cli/control/plane/proof/transaction.rs"
     },
     {
@@ -1028,7 +1028,11 @@
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
-      "digest": "sha256:0525bcd24166eb53d14fc4c4769ae06ad9473c5eb651f204ffa591f24b61bd15",
+      "digest": "sha256:b9dc26f54091405390ff4ff29faf5756d740a32a856475ab3be816ee3bcdcf52",
+      "path": "validator/src/cli/control/plane/transactional.rs"
+    },
+    {
+      "digest": "sha256:733aa46203a8db74b3185658895574ef9aadd5d5b64aa6d33f32449512edc93f",
       "path": "validator/src/cli/control/plane/types.rs"
     },
     {
@@ -1084,7 +1088,7 @@
       "path": "validator/src/cli/rust/types.rs"
     },
     {
-      "digest": "sha256:3f181621b3583a658fa96f617da25fd41b4d800c919bdb4cd537f89aba74f87e",
+      "digest": "sha256:e3732df2ca0a389ad143a47622403faf6717cf2b91594b6b1080c6aea76f7759",
       "path": "validator/src/command_run.rs"
     },
     {
@@ -1100,7 +1104,7 @@
       "path": "validator/src/json_boundary.rs"
     },
     {
-      "digest": "sha256:ca88b272ee249ef883df67b48e44c2d38129d0ca90aa7829795ec9840214abdb",
+      "digest": "sha256:d8af6bee40cbe3b15cd6f9a0781da7eb2a5d71a370138172508fe7ab48086b13",
       "path": "validator/src/lib.rs"
     },
     {
@@ -1240,7 +1244,7 @@
       "path": "validator/src/review/round/product/mod.rs"
     },
     {
-      "digest": "sha256:7a7e1bd90178b72f2e1776a2028fb15de6148e18f97e857099cd57df64f2fab2",
+      "digest": "sha256:6ca2e3bb3b5cab0e17be0fd134d5ffb186a6a66b12c8d10e4ea3a8e232fbac1a",
       "path": "validator/src/review/round/registry.rs"
     },
     {
@@ -1352,19 +1356,19 @@
       "path": "validator/src/self_tests/audit/edge_cases.rs"
     },
     {
-      "digest": "sha256:473188dd92bb2960b61d1c66eaa8d135eef67ff0aa4d81cf52247d283ea9a32c",
+      "digest": "sha256:f17fc42d0f618e3dfdf0883f8cd34fb5d427d51ef160d64069bc7b4a6025d6aa",
       "path": "validator/src/self_tests/audit/final_packet.rs"
     },
     {
-      "digest": "sha256:e8052ac05db5556605055b06926c20f544bf12ccca287cd12fd908f22cf16f50",
+      "digest": "sha256:00bee684a571d228a1906342beb278f3ae1d012b54fa8e55229ff853aac5bbd7",
       "path": "validator/src/self_tests/audit/final_packet/references.rs"
     },
     {
-      "digest": "sha256:106bee8a750589993dbb3196b6a4860735885bf2b68f6a51cdece812578c79c1",
+      "digest": "sha256:a9dbf9c8cc052a6735079da87a05c6d20972a1618786b06a012ab94caed6fad0",
       "path": "validator/src/self_tests/audit/final_packet/source_audit.rs"
     },
     {
-      "digest": "sha256:58e99f3d07ff3130cb30adbfff33f9bfa188626fa8d992d7069e968115db68c4",
+      "digest": "sha256:da16ec71853422f105f4d36f79d4b1c65b461071afd9415bf18d48a57c338221",
       "path": "validator/src/self_tests/audit/final_packet/support.rs"
     },
     {
@@ -1556,7 +1560,7 @@
       "path": "validator/src/self_tests/cli/control/authority.rs"
     },
     {
-      "digest": "sha256:1236b4e657bac6fe01aa870281fe839f51bd0c73402fde4b4cde9154e8665133",
+      "digest": "sha256:b495e692862b709fd6645cdaa4a7b2d7d9639225f7cbbdecf09f31ef1bfb5622",
       "path": "validator/src/self_tests/cli/control/graph.rs"
     },
     {
@@ -1568,11 +1572,11 @@
       "path": "validator/src/self_tests/cli/control/output_paths.rs"
     },
     {
-      "digest": "sha256:deeb26ffd048473030bf8e5d488eebff1467111503396440c584c1ac9b41e579",
+      "digest": "sha256:5cd401e346126352bd34ec3c20835c0d3f4da34a85a016c92aa9d268176bd99f",
       "path": "validator/src/self_tests/cli/control/parse.rs"
     },
     {
-      "digest": "sha256:b468260856292d088cfcec1233f2d7cc17494876e7e275abd3bbe4ac5dd25dbd",
+      "digest": "sha256:d75dcc340d04e181b29d4fd660f67d0cca2179d564fae76569db57ac468a8afc",
       "path": "validator/src/self_tests/cli/control/production.rs"
     },
     {
@@ -1584,11 +1588,11 @@
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
-      "digest": "sha256:ac6c43aa79aa2b0a83073da65b81f215941d657e7fd9647308bac0372a92097d",
+      "digest": "sha256:d9406fc7d373bd2238931eb6e4de735b89390282759ea4d0d2334c7e9e8dcded",
       "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
     },
     {
-      "digest": "sha256:60907e5b6e7b08886457133fafa6350289fd6a2b28827ef2e4e5e78761ade746",
+      "digest": "sha256:36b58cf448c5e395c4554aa907c9916c097b2b1deae9879e75187f44caf0f30b",
       "path": "validator/src/self_tests/cli/control/transaction/reference.rs"
     },
     {
@@ -1604,7 +1608,7 @@
       "path": "validator/src/self_tests/cli/mod.rs"
     },
     {
-      "digest": "sha256:4f99a43ecfef81e16918c35fd18898295cd61cddb0cfb4489980647de252dac7",
+      "digest": "sha256:3a84cb3054cb0c455173772200c67aec2eede98b797760b64e110eef2bccd4b0",
       "path": "validator/src/self_tests/cli/parse_errors.rs"
     },
     {
@@ -1676,7 +1680,7 @@
       "path": "validator/src/self_tests/coverage/template_trace_package_edges.rs"
     },
     {
-      "digest": "sha256:c18e1679d1f68f395ba9f9c367e903a498ca2ba84a01910b7528b977a58d34a4",
+      "digest": "sha256:e1c5e9e0d58d7de604e91dd3a62483ff53b092449039ecca36ff17df114f44c5",
       "path": "validator/src/self_tests/law/anti_theater_dependencies.rs"
     },
     {
@@ -1872,7 +1876,7 @@
       "path": "validator/src/self_tests/review/red_fixture.rs"
     },
     {
-      "digest": "sha256:4b82f36d00897a0864a366ad9c859060611ad263e3d265dfd20ac9ff2f6b9dfc",
+      "digest": "sha256:ad0e9faec26eccbaa815ec6c05ebb5c6e6d6e9e35d127d01e6e1e1934e4d776a",
       "path": "validator/src/self_tests/review/registry.rs"
     },
     {

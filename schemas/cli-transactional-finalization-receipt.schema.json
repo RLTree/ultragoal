@@ -13,10 +13,10 @@
     "transaction_mode",
     "blocked_claim_classes",
     "final_packet",
-    "source_audit",
     "registry_exposure",
     "cli_performance",
-    "coverage"
+    "coverage",
+    "failure"
   ],
   "properties": {
     "schema": {
@@ -29,23 +29,30 @@
       "$ref": "common-defs.schema.json#/$defs/sha256"
     },
     "status": {
-      "const": "pass"
+      "enum": [
+        "pass",
+        "fail"
+      ]
     },
     "claim_ceiling": {
-      "const": "supports_update_goal_eligibility"
+      "enum": [
+        "supports_update_goal_eligibility",
+        "withheld_or_blocked"
+      ]
     },
     "transaction_mode": {
       "const": "same_candidate_atomic_finalization"
     },
     "blocked_claim_classes": {
       "type": "array",
-      "maxItems": 0
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
     },
     "final_packet": {
       "$ref": "#/$defs/finalPacketReference"
-    },
-    "source_audit": {
-      "$ref": "#/$defs/sourceAuditReference"
     },
     "registry_exposure": {
       "$ref": "#/$defs/registryExposureReference"
@@ -55,6 +62,35 @@
     },
     "coverage": {
       "$ref": "#/$defs/coverageReference"
+    },
+    "failure": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason",
+            "observed_failures"
+          ],
+          "properties": {
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "observed_failures": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            }
+          }
+        }
+      ]
     }
   },
   "$defs": {
@@ -75,7 +111,10 @@
           "$ref": "common-defs.schema.json#/$defs/sha256"
         },
         "status": {
-          "const": "pass"
+          "enum": [
+            "pass",
+            "fail"
+          ]
         }
       }
     },
@@ -83,12 +122,6 @@
       "allOf": [
         { "$ref": "#/$defs/referenceBase" },
         { "properties": { "path": { "const": "validation_artifacts/review/final-packet-proof.json" } } }
-      ]
-    },
-    "sourceAuditReference": {
-      "allOf": [
-        { "$ref": "#/$defs/referenceBase" },
-        { "properties": { "path": { "const": "validation_artifacts/ultragoal-audit/validator-receipt.json" } } }
       ]
     },
     "registryExposureReference": {

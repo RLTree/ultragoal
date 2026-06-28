@@ -10,7 +10,7 @@ pub(crate) struct ControlCommand {
     pub(crate) receipt: Option<PathBuf>,
 }
 
-pub(crate) fn parse(raw: &[String]) -> Result<Option<ControlCommand>, String> {
+pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
     let operation = match raw {
         [a, b, rest @ ..] if a == "law" && b == "graph" && has_flag(rest, "--strict") => {
             ControlOperation::LawGraphStrict
@@ -104,12 +104,12 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ControlCommand>, String> {
         [a, b, c, ..] if a == "self" && b == "update-goal" && c == "eligibility" => {
             ControlOperation::SelfUpdateGoalEligibility
         }
-        _ => return Ok(None),
+        _ => return None,
     };
-    Ok(Some(ControlCommand {
+    Some(ControlCommand {
         operation,
         receipt: opt_path(raw, "--receipt"),
-    }))
+    })
 }
 
 pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> {
@@ -159,6 +159,7 @@ pub(crate) mod evidence;
 pub(crate) mod path;
 pub(crate) mod proof;
 pub(crate) mod receipt;
+pub(crate) mod transactional;
 pub(crate) mod types;
 #[cfg(test)]
 pub(crate) use emit::receipt_from_evidence;

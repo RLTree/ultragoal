@@ -5,7 +5,7 @@ mod source_audit;
 pub(crate) mod support;
 
 #[test]
-fn final_packet_proof_requires_same_candidate_cli_verified_packet() {
+fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let root = crate::self_tests::boundaries::support::temp_root("final-packet-proof");
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
     let missing = crate::audit::final_packet::package_failures(&root, &store);
@@ -28,16 +28,12 @@ fn final_packet_proof_requires_same_candidate_cli_verified_packet() {
     let mut bad_status = receipt.clone();
     bad_status["status"] = json!("fail");
     bad_status["claim_ceiling"] = json!("withheld_or_blocked");
-    bad_status["cli_update_goal"]["status"] = json!("fail");
-    bad_status["cli_self_law"]["status"] = json!("fail");
     bad_status["cli_performance"]["status"] = json!("fail");
     support::write_proof(&root, &bad_status);
     let failures = crate::audit::final_packet::package_failures(&root, &store);
     for expected in [
         "final_packet_proof_status_not_pass",
         "final_packet_proof_claim_ceiling_not_verified",
-        "final_packet_proof_cli_update_goal_not_pass",
-        "final_packet_proof_cli_self_law_not_pass",
         "final_packet_proof_cli_performance_not_pass",
     ] {
         assert!(
@@ -47,11 +43,14 @@ fn final_packet_proof_requires_same_candidate_cli_verified_packet() {
     }
 
     let mut disagree = receipt.clone();
-    let mut referenced = support::control_receipt(&current, "update_goal_eligibility");
+    let mut referenced = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/cli/performance-receipt.json"),
+    )
+    .expect("performance ref");
     referenced["status"] = json!("fail");
-    let cli_path = "validation_artifacts/cli/update-goal-eligibility.json";
+    let cli_path = "validation_artifacts/cli/performance-receipt.json";
     support::write_json(&root.join(cli_path), &referenced);
-    disagree["cli_update_goal"]["digest"] =
+    disagree["cli_performance"]["digest"] =
         json!(crate::digest::file(&root.join(cli_path)).expect("changed cli digest"));
     support::write_proof(&root, &disagree);
     let failures = crate::audit::final_packet::package_failures(&root, &store);

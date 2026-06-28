@@ -3,6 +3,8 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+const MAX_REGISTRY_CAPTURE_AGE_SECONDS: i64 = 5 * 60;
+
 pub(crate) fn exposure_errors(root: &Path, receipt: &Value, out: &mut Vec<ReviewFailure>) {
     let Some(artifact) = receipt.get("live_registry_exposure") else {
         out.push(failure(
@@ -29,19 +31,43 @@ pub(crate) fn exposure_errors(root: &Path, receipt: &Value, out: &mut Vec<Review
 }
 
 fn exposure_identity_errors(receipt: &Value, exposure: &Value, out: &mut Vec<ReviewFailure>) {
-    if exposure.get("source").and_then(Value::as_str) != Some("multi_agent_v1.tool_registry")
-        || exposure.get("captured_at").and_then(Value::as_str)
-            != receipt.get("generated_at").and_then(Value::as_str)
-        || exposure
-            .get("session_id")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .is_empty()
-        || exposure.get("round_id").and_then(Value::as_str)
-            != receipt.get("round_id").and_then(Value::as_str)
+    if exposure.get("source").and_then(Value::as_str) != Some("multi_agent_v1.tool_registry") {
+        out.push(failure("review_round_live_registry_stale", "registry"));
+    }
+    if exposure
+        .get("session_id")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .is_empty()
     {
         out.push(failure("review_round_live_registry_stale", "registry"));
     }
+    if exposure.get("round_id").and_then(Value::as_str)
+        != receipt.get("round_id").and_then(Value::as_str)
+    {
+        out.push(failure("review_round_live_registry_stale", "registry"));
+    }
+    if !registry_capture_is_current(receipt, exposure) {
+        out.push(failure("review_round_live_registry_stale", "registry"));
+    }
+}
+
+fn registry_capture_is_current(receipt: &Value, exposure: &Value) -> bool {
+    let Some(round_generated) = receipt
+        .get("generated_at")
+        .and_then(Value::as_str)
+        .and_then(crate::audit::clock::parse_iso_seconds)
+    else {
+        return false;
+    };
+    let Some(captured) = exposure
+        .get("captured_at")
+        .and_then(Value::as_str)
+        .and_then(crate::audit::clock::parse_iso_seconds)
+    else {
+        return false;
+    };
+    captured <= round_generated && round_generated - captured <= MAX_REGISTRY_CAPTURE_AGE_SECONDS
 }
 
 fn spawn_session_errors(receipt: &Value, exposure: &Value, out: &mut Vec<ReviewFailure>) {

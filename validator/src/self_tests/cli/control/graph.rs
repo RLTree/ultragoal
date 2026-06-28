@@ -21,14 +21,13 @@ pub(crate) fn control(candidate: &str, operation: &str, fail_closed: bool) -> Va
     })
 }
 
-fn labels() -> [&'static str; 7] {
+fn labels() -> [&'static str; 6] {
     [
         "red_fixture_report",
         "coverage",
         "cli_performance",
         "final_packet",
         "registry_exposure",
-        "source_audit",
         "transactional_finalization",
     ]
 }

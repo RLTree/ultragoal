@@ -67,24 +67,24 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
     );
 
     let mut invalid_ref_path = support::write_green_proof(&root, &current);
-    invalid_ref_path["cli_update_goal"]["path"] = json!("../update-goal-eligibility.json");
+    invalid_ref_path["cli_performance"]["path"] = json!("../performance-receipt.json");
     expect_failure(
         &root,
         &store,
         &invalid_ref_path,
-        "final_packet_proof_ref_path_invalid:update_goal_eligibility",
+        "final_packet_proof_ref_path_invalid:cli_performance",
     );
 
     let mut malformed_ref = support::write_green_proof(&root, &current);
-    let malformed_path = "validation_artifacts/cli/update-goal-eligibility.json";
+    let malformed_path = "validation_artifacts/cli/performance-receipt.json";
     std::fs::write(root.join(malformed_path), "{").expect("write malformed reference");
-    malformed_ref["cli_update_goal"]["digest"] =
+    malformed_ref["cli_performance"]["digest"] =
         json!(crate::digest::file(&root.join(malformed_path)).expect("malformed digest"));
     expect_failure(
         &root,
         &store,
         &malformed_ref,
-        "final_packet_proof_ref_malformed:update_goal_eligibility",
+        "final_packet_proof_ref_malformed:cli_performance",
     );
 
     let mut bad_source_audit = support::write_green_proof(&root, &current);
@@ -99,13 +99,59 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
         &root,
         &store,
         &bad_source_audit,
-        "final_packet_proof_source_audit_not_pass",
+        "final_packet_proof_source_audit_target_digest_mismatch",
+    );
+
+    let mut honest_failed_source_audit = support::write_green_proof(&root, &current);
+    rewrite_ref(
+        &root,
+        &mut honest_failed_source_audit,
+        "source_audit",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        &json!({"status":"fail","target_revision":{"value":current}}),
+    );
+    honest_failed_source_audit["source_audit"]["status"] = json!("fail");
+    support::write_proof(&root, &honest_failed_source_audit);
+    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    assert!(failures.is_empty(), "{failures:?}");
+
+    let mut bad_embedded_source_status = support::write_green_proof(&root, &current);
+    bad_embedded_source_status["source_audit"]["status"] = json!("pending");
+    expect_failure(
+        &root,
+        &store,
+        &bad_embedded_source_status,
+        "final_packet_proof_ref_embedded_status_not_pass_or_fail:source_audit",
+    );
+
+    let mut missing_source_status = support::write_green_proof(&root, &current);
+    rewrite_ref(
+        &root,
+        &mut missing_source_status,
+        "source_audit",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        &json!({"target_revision":{"value":current}}),
     );
     expect_failure(
         &root,
         &store,
-        &bad_source_audit,
-        "final_packet_proof_source_audit_target_digest_mismatch",
+        &missing_source_status,
+        "final_packet_proof_source_audit_status_missing",
+    );
+
+    let mut unknown_source_status = support::write_green_proof(&root, &current);
+    rewrite_ref(
+        &root,
+        &mut unknown_source_status,
+        "source_audit",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        &json!({"status":"pending","target_revision":{"value":current}}),
+    );
+    expect_failure(
+        &root,
+        &store,
+        &unknown_source_status,
+        "final_packet_proof_source_audit_status_unknown:pending",
     );
 
     let mut bad_coverage = support::write_green_proof(&root, &current);

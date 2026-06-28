@@ -66,6 +66,9 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             producer_actor_id,
             classifier_actor_id,
         }),
+        Command::TransactionalFinalization { receipt } => {
+            run_transactional_finalization(root, receipt)
+        }
         Command::Control(command) => crate::cli::control::plane::run(&root, &command),
         Command::Performance(command) => crate::cli::performance::run(&root, &command),
         Command::Rust(command) => crate::cli::rust::run(&root, &command),
@@ -75,6 +78,22 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             Ok(0)
         }
     }
+}
+
+fn run_transactional_finalization(
+    root: std::path::PathBuf,
+    receipt: std::path::PathBuf,
+) -> Result<i32, String> {
+    let value = crate::cli::control::plane::transactional::receipt(&root)?;
+    crate::json_boundary::write_json(&receipt, &value)?;
+    println!(
+        "ultragoal-transaction {} receipt={}",
+        value["status"],
+        receipt.display()
+    );
+    Ok(i32::from(
+        value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
+    ))
 }
 
 fn run_audit(

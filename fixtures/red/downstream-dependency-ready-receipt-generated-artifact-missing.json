@@ -1,33 +1,33 @@
 {
-  "schema": "harness-ultragoal.red-packet.v1",
-  "id": "downstream-dependency-ready-receipt-generated-artifact-missing",
+  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
   "expected_failure": {
     "check_id": "ready-receipt-provenance",
     "error": "ready_receipt_not_validator_output"
   },
-  "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
+  "id": "downstream-dependency-ready-receipt-generated-artifact-missing",
   "json_patch": [
     {
       "op": "remove",
-      "path": "/validator_receipt/generated_artifacts/51"
+      "path": "/validator_receipt/generated_artifacts/5"
     }
   ],
   "materialization": {
     "expected_validation_layer": "semantic",
-    "post_patch_schema_valid": true,
-    "first_failure_must_match_expected": false
+    "first_failure_must_match_expected": false,
+    "post_patch_schema_valid": true
   },
-  "preconditions": [
-    {
-      "path": "/validator_receipt/generated_artifacts/51/path",
-      "exists": true
-    }
-  ],
+  "notes": "A per-lane ready receipt cannot authorize dependency launch unless the validator receipt generated-artifact ledger contains the exact byte-backed ready artifact.",
   "postconditions": [
     {
-      "path": "/validator_receipt/generated_artifacts",
-      "expectation": "per-lane ready receipt must be present as a generated validator artifact"
+      "expectation": "per-lane ready receipt must be present as a generated validator artifact",
+      "path": "/validator_receipt/generated_artifacts"
     }
   ],
-  "notes": "A per-lane ready receipt cannot authorize dependency launch unless the validator receipt generated-artifact ledger contains the exact byte-backed ready artifact."
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/validator_receipt/generated_artifacts/5/path"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
 }
