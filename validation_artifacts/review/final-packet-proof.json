@@ -42,7 +42,7 @@
     ],
     "reason": "final_packet_proof_not_proven"
   },
-  "generated_at": "2026-06-28T15:54:00Z",
+  "generated_at": "2026-06-28T16:12:00Z",
   "package_receipts": [
     {
       "digest": "sha256:d171ec8bc515dfa6ab9dce102a5d752836f702e644f8dfd6eb4bcdd4e974f886",
@@ -71,7 +71,7 @@
   },
   "schema": "harness-ultragoal.final-packet-proof.v1",
   "source_audit": {
-    "digest": "sha256:cfd084c5304686a6db9c859d01663b564f92fbbd3fc42bf9cd2b6448b489e48f",
+    "digest": "sha256:ebf8894a1b788d49d84e608e964c9567a8f4ede8bc1634c1c860ef889a364435",
     "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
     "status": "pass"
   },

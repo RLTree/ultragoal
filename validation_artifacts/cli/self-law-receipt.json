@@ -71,7 +71,7 @@
     "items": [
       {
         "candidate_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
-        "digest": "sha256:cfd084c5304686a6db9c859d01663b564f92fbbd3fc42bf9cd2b6448b489e48f",
+        "digest": "sha256:ebf8894a1b788d49d84e608e964c9567a8f4ede8bc1634c1c860ef889a364435",
         "exists": true,
         "failures": [],
         "label": "source_audit",
@@ -82,7 +82,7 @@
       },
       {
         "candidate_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
-        "digest": "sha256:1b86a3d40b2692150b4046a44cb213c473bc069f17ea8172f6832cd3c192d817",
+        "digest": "sha256:7d801742eea9b4720abb6291e7e6d2252365e0bc0797e036d55584bd8bf097bb",
         "exists": true,
         "failures": [],
         "label": "red_fixture_report",
@@ -115,7 +115,7 @@
       },
       {
         "candidate_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
-        "digest": "sha256:162714c07e08505cfd73d6b48813d5b45e3f2ded90a5ecde209f7baab98dd8d8",
+        "digest": "sha256:5fdf35861c7e94256011c25c2f1e0a9f4e1dc65711cb25b89ad8804afd051f24",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -380,7 +380,7 @@
       },
       {
         "candidate_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
-        "digest": "sha256:736a869113138eb8f26c13443e8c2890b93e49ec15b29eef7d0508217992ca41",
+        "digest": "sha256:8d9799c04039d8065b8f6ce6ce389dbc10aed28215e6267deac816370473becf",
         "exists": true,
         "failures": [
           "status_not_pass"
@@ -479,7 +479,7 @@
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-28T15:54:58Z",
+  "generated_at": "2026-06-28T16:12:59Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
