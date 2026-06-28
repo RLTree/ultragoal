@@ -10555,6 +10555,14 @@ This section supersedes older same-digest progress notes as the latest mutable p
 - [ ] Current registry state must remain fail-closed through `validation_artifacts/cli/registry-probe-receipt.json`, `validation_artifacts/ultragoal-audit/active-registry-exposure-current.json`, and `validation_artifacts/ultragoal-audit/active-registry-observation-current.json`; disk source/install/cache proof is still not a substitute.
 - [ ] CT-008 remains unchecked because no real same-surface registry/reviewer green proof exists. CT-006 through CT-011 remain unchecked overall.
 - Claim ceiling unchanged: source-local proof plus fail-closed unsupported live-surface blockers only. No active registry/reviewer exposure, final packet correctness, install/cache parity refresh, readiness, release, completion, or `update_goal()` eligibility is supported.
+
+### Live Progress Evidence - 2026-06-28T16:12Z Codex app-surface probe denied
+
+- [x] Computer-use app inventory confirmed Codex is running as `/Applications/Codex.app/` with bundle id `com.openai.codex`; this is observation routing only, not registry proof.
+- [x] Attempted read-only Codex app-state capture through Computer Use: `mcp__computer_use.get_app_state({"app":"Codex"})` returned `Computer Use is not allowed to use the app 'com.openai.codex' for safety reasons.`
+- [ ] Live active-registry/reviewer exposure remains unsupported because the only discovered visual route to the Codex app surface is denied and no plugin-registry/Plugins UI inspection API is exposed in this thread.
+- [ ] CT-008 remains unchecked because there is still no real same-surface registry/reviewer green proof. CT-006 through CT-011 remain unchecked overall.
+- Claim ceiling unchanged: source-local proof plus fail-closed unsupported live-surface blockers only. No active registry/reviewer exposure, final packet correctness, install/cache parity refresh, readiness, release, completion, or `update_goal()` eligibility is supported.
 - Claim ceiling unchanged: source-local Product/Fit/Journey, exact coverage, Rust DevX, GC, performance-only, registry fail-closed, final-packet fail-closed, transaction fail-closed, and CLI authority fail-closed evidence only. No active registry/reviewer exposure, final packet correctness, install/cache refresh, readiness, release, completion, or `update_goal()` eligibility is supported.
 
 ### Live Progress Evidence - 2026-06-28T13:42Z standards-gardener rebind with capability-gap files
