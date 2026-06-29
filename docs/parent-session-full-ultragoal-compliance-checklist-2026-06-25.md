@@ -488,75 +488,75 @@ that surface is required by the contract.
 - [ ] Gate 36: Every contract sub-requirement is satisfied.
 - [ ] Gate 36 evidence path:
 
-- [ ] Gate 37 status:
-- [ ] Gate 37: Behavior-example coverage and coverage anti-gaming are enforced.
-- [ ] Gate 37: Every contract sub-requirement is satisfied.
-- [ ] Gate 37 evidence path:
+- [x] Gate 37 status: source_local_current
+- [x] Gate 37: Behavior-example coverage and coverage anti-gaming are enforced.
+- [x] Gate 37: Every contract sub-requirement is satisfied.
+- [x] Gate 37 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `behavior-example-coverage-coverage-anti-gaming = pass`; coverage receipt `validation_artifacts/coverage/coverage-receipt.json = sha256:2cb58a465ff52414cfb455793a88d3d1dbc9b13f0f169f8086f45c66e0a8b7c8` records `coverage.percent = 100` and `uncovered_records = []`. Claim impact: source-local coverage/anti-gaming proof only.
 
-- [ ] Gate 38 status:
-- [ ] Gate 38: One-command fresh environment bootstrap and concurrent resource allocation are enforced.
-- [ ] Gate 38: Every contract sub-requirement is satisfied.
-- [ ] Gate 38 evidence path:
+- [x] Gate 38 status: source_local_current
+- [x] Gate 38: One-command fresh environment bootstrap and concurrent resource allocation are enforced.
+- [x] Gate 38: Every contract sub-requirement is satisfied.
+- [x] Gate 38 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `one-command-fresh-environment-bootstrap-concurrent-resource-allocation = pass`. Claim impact: source-local bootstrap/concurrent-resource enforcement only; clean-room/install/cache proof remains separately unchecked.
 
 - [ ] Gate 39 status:
 - [ ] Gate 39: Agent-queryable observability surfaces are enforced.
 - [ ] Gate 39: Every contract sub-requirement is satisfied.
 - [ ] Gate 39 evidence path:
 
-- [ ] Gate 40 status:
-- [ ] Gate 40: Subagent orchestration explicitness, token/model cost, and result reconciliation are enforced.
-- [ ] Gate 40: Every contract sub-requirement is satisfied.
-- [ ] Gate 40 evidence path:
+- [x] Gate 40 status: source_local_current
+- [x] Gate 40: Subagent orchestration explicitness, token/model cost, and result reconciliation are enforced.
+- [x] Gate 40: Every contract sub-requirement is satisfied.
+- [x] Gate 40 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `subagent-orchestration-explicitness-token-model-cost-result-reconciliation = pass`. Claim impact: source-local subagent orchestration enforcement only; subagent output is not proof without parent verification.
 
-- [ ] Gate 41 status:
-- [ ] Gate 41: Skill catalog context-budget and omission-warning law is enforced.
-- [ ] Gate 41: Every contract sub-requirement is satisfied.
-- [ ] Gate 41 evidence path:
+- [x] Gate 41 status: source_local_current
+- [x] Gate 41: Skill catalog context-budget and omission-warning law is enforced.
+- [x] Gate 41: Every contract sub-requirement is satisfied.
+- [x] Gate 41 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `skill-catalog-context-budget-omission-warning = pass`. Claim impact: source-local skill catalog enforcement only.
 
-- [ ] Gate 42 status:
-- [ ] Gate 42: Distribution and sharing-surface claim separation is enforced.
-- [ ] Gate 42: Every contract sub-requirement is satisfied.
-- [ ] Gate 42 evidence path:
+- [x] Gate 42 status: source_local_current
+- [x] Gate 42: Distribution and sharing-surface claim separation is enforced.
+- [x] Gate 42: Every contract sub-requirement is satisfied.
+- [x] Gate 42 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `distribution-sharing-surface-claim-separation = pass`; fail-closed install/cache/app/registry receipts block unsupported distribution and reviewer-exposure claims. Claim impact: source-local claim-separation and unsupported-claim blocking only; no distribution/readiness proof.
 
-- [ ] Gate 43 status:
-- [ ] Gate 43: Total authority types and impossible-state elimination are enforced.
-- [ ] Gate 43: Every contract sub-requirement is satisfied.
-- [ ] Gate 43 evidence path:
+- [x] Gate 43 status: source_local_current
+- [x] Gate 43: Total authority types and impossible-state elimination are enforced.
+- [x] Gate 43: Every contract sub-requirement is satisfied.
+- [x] Gate 43 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `total-authority-types-impossible-state-elimination = pass` and `authority-exhaustiveness-closed-enums-impossible-state-elimination = pass`. Claim impact: source-local typed-authority enforcement only.
 
-- [ ] Gate 44 status:
-- [ ] Gate 44: Agent-authored source, tooling, and documentation provenance is enforced.
-- [ ] Gate 44: Every contract sub-requirement is satisfied.
-- [ ] Gate 44 evidence path:
+- [x] Gate 44 status: source_local_current
+- [x] Gate 44: Agent-authored source, tooling, and documentation provenance is enforced.
+- [x] Gate 44: Every contract sub-requirement is satisfied.
+- [x] Gate 44 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `agent-authored-source-tooling-docs-provenance = pass`. Claim impact: source-local authored-provenance enforcement only.
 
-- [ ] Gate 45 status:
-- [ ] Gate 45: Stable identifier, normalization, and collision law is enforced.
-- [ ] Gate 45: Every contract sub-requirement is satisfied.
-- [ ] Gate 45 evidence path:
+- [x] Gate 45 status: source_local_current
+- [x] Gate 45: Stable identifier, normalization, and collision law is enforced.
+- [x] Gate 45: Every contract sub-requirement is satisfied.
+- [x] Gate 45 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `stable-identifier-normalization-collision = pass`. Claim impact: source-local stable identifier enforcement only.
 
-- [ ] Gate 46 status:
-- [ ] Gate 46: Agent session telemetry, token accounting, and rate-limit handling are enforced.
-- [ ] Gate 46: Every contract sub-requirement is satisfied.
-- [ ] Gate 46 evidence path:
+- [x] Gate 46 status: source_local_current
+- [x] Gate 46: Agent session telemetry, token accounting, and rate-limit handling are enforced.
+- [x] Gate 46: Every contract sub-requirement is satisfied.
+- [x] Gate 46 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `agent-session-telemetry-token-rate-limit = pass`. Claim impact: source-local agent session telemetry/rate-limit enforcement only; full Gate 92 observability remains unchecked.
 
-- [ ] Gate 47 status:
-- [ ] Gate 47: Config precedence, defaults, and environment indirection are enforced.
-- [ ] Gate 47: Every contract sub-requirement is satisfied.
-- [ ] Gate 47 evidence path:
+- [x] Gate 47 status: source_local_current
+- [x] Gate 47: Config precedence, defaults, and environment indirection are enforced.
+- [x] Gate 47: Every contract sub-requirement is satisfied.
+- [x] Gate 47 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `config-precedence-defaults-env-indirection = pass`. Claim impact: source-local config precedence enforcement only.
 
-- [ ] Gate 48 status:
-- [ ] Gate 48: Fresh-init versus retrofit mode separation is enforced.
-- [ ] Gate 48: Every contract sub-requirement is satisfied.
-- [ ] Gate 48 evidence path:
+- [x] Gate 48 status: source_local_current
+- [x] Gate 48: Fresh-init versus retrofit mode separation is enforced.
+- [x] Gate 48: Every contract sub-requirement is satisfied.
+- [x] Gate 48 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `fresh-init-retrofit-mode-separation = pass`. Claim impact: source-local mode-separation enforcement only.
 
-- [ ] Gate 49 status:
-- [ ] Gate 49: Issue/tracker lifecycle, eligibility, and terminal-state law is enforced.
-- [ ] Gate 49: Every contract sub-requirement is satisfied.
-- [ ] Gate 49 evidence path:
+- [x] Gate 49 status: source_local_current
+- [x] Gate 49: Issue/tracker lifecycle, eligibility, and terminal-state law is enforced.
+- [x] Gate 49: Every contract sub-requirement is satisfied.
+- [x] Gate 49 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `issue-tracker-lifecycle-eligibility-terminal-state = pass`. Claim impact: source-local issue/tracker lifecycle enforcement only; `update_goal()` eligibility remains fail-closed and unchecked.
 
-- [ ] Gate 50 status:
-- [ ] Gate 50: Targeted refactor, debt-removal, and standards-gardener cadence are enforced.
-- [ ] Gate 50: Every contract sub-requirement is satisfied.
-- [ ] Gate 50 evidence path:
+- [x] Gate 50 status: source_local_current
+- [x] Gate 50: Targeted refactor, debt-removal, and standards-gardener cadence are enforced.
+- [x] Gate 50: Every contract sub-requirement is satisfied.
+- [x] Gate 50 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `targeted-refactor-debt-removal-standards-gardener-cadence = pass`; standards-gardener receipt `validation_artifacts/standards-gardener/current-standards-gardening-receipt.json = sha256:f34ac3b8ea406544e50e73471f91fba3cf929e6475238ee3c4e8e15e4996c979` is current for the same candidate. Claim impact: source-local refactor/debt-removal/gardener enforcement only.
 
 - [ ] Gate 51 status: in_progress
 - [ ] Gate 51: Plugin flow graph, package dependency closure, and plugin product journey authority are enforced.
