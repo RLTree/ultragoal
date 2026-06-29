@@ -4002,6 +4002,7 @@
     "validator/src/cli/control/plane/evidence/item.rs",
     "validator/src/cli/control/plane/evidence/status.rs",
     "validator/src/cli/control/plane/evidence/status/label_failures.rs",
+    "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/path.rs",
     "validator/src/cli/control/plane/proof.rs",

@@ -182,3 +182,5 @@ fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
 
 #[cfg(test)]
 mod label_failures;
+#[cfg(test)]
+mod typed_and_surfaces;

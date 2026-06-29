@@ -42,15 +42,15 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:61113554cf96a08cfe9cba5a7a4ac44900d319ae15d569d86480848dfd6dc468"
+    "plan_digest": "sha256:dcba349967de99980f0d9087f1764913b8dc7203ef0ae1cfe1aec595c202e8b9"
   },
   "digests": {
-    "candidate": "sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5",
+    "candidate": "sha256:73ff40a280dda0a5029471c3fd90bcbf3e97f4dfb39983cc69461025d9c75f9b",
     "fixture_catalog": "sha256:5a845206eeac807ddc8c8e514113bbf84ebd359131f91b13bebaf300dae06e80",
     "law_graph": "sha256:ff045119f82be290fa719e6f7395b4d900e33f1f4cc1a2c648d90795ab73ce42",
     "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68"
   },
-  "generated_at": "2026-06-29T08:29:45Z",
+  "generated_at": "2026-06-29T09:36:56Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

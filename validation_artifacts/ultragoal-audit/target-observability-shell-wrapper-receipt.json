@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T08:33:59Z",
+    "completed_at": "2026-06-29T09:40:51Z",
     "cwd": "fixtures/target-repo/red/observability-shell-wrapper",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T08:33:59Z",
+    "started_at": "2026-06-29T09:40:51Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T08:33:59Z",
+  "generated_at": "2026-06-29T09:40:51Z",
   "invocation": "fixture init fixtures/target-repo/red/observability-shell-wrapper",
   "mode": "init",
-  "repo_fingerprint": "sha256:7d93662e3ab3f292aa0c360886e87b7c6434e8923c2d7e7f4e63970bf379f2c7",
+  "repo_fingerprint": "sha256:7f5e1fcf0fce34088935a4c568ea516c89a6404a5efb16b9f4825af8fed02a8b",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,
@@ -1064,12 +1064,16 @@
       "path": "validator/src/cli/control/plane/evidence/item.rs"
     },
     {
-      "digest": "sha256:6fc30bdf262a1ac2dfaa9a74e9592ef33dddfc35b17fb18fa3dc9df30d22cba6",
+      "digest": "sha256:99fb924ef62bea93f36d82cb250abf8a64cbf2852680e4e3446dacd5824fd67a",
       "path": "validator/src/cli/control/plane/evidence/status.rs"
     },
     {
-      "digest": "sha256:a60384d245016b1ab5f0450a0988b56055592258b017a8a9f0777983fa89a560",
+      "digest": "sha256:7561b7cad6b55e6e94f6e2604b91a095b43a5ecd1a95646adce01c72a6c5ecd7",
       "path": "validator/src/cli/control/plane/evidence/status/label_failures.rs"
+    },
+    {
+      "digest": "sha256:b69a50bd29bc3adc3c2573f4545fe61259d63ee674e5f26df7b786dd13b73bb3",
+      "path": "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs"
     },
     {
       "digest": "sha256:3ab98e4668453308643309ee07ac92ef7ef97c8e75c66c6876afd1b4529d856f",
@@ -1156,7 +1160,7 @@
       "path": "validator/src/cli/mod.rs"
     },
     {
-      "digest": "sha256:b609599f35497de64f89c65a4cabd66b79688ade41c46f5c143fb74929a90203",
+      "digest": "sha256:471d52b1440b4a51ba9243a033c0da5c4f175e9d5f40c28ffab45325023ce1a8",
       "path": "validator/src/cli/observe/explain/mod.rs"
     },
     {

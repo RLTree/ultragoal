@@ -106,8 +106,8 @@
                                   ^2
    93|      2|            invalid.push(format!("{rel}: {error}"));
    94|      2|            continue;
-   95|  4.36k|        }
-   96|  4.36k|        if let Some(error) = path_hygiene_error(rel) {
+   95|  4.37k|        }
+   96|  4.37k|        if let Some(error) = path_hygiene_error(rel) {
                                   ^3
    97|      3|            invalid.push(error);
    98|      3|            continue;
@@ -144,10 +144,10 @@
   126|  4.36k|    text.contains(concat!("/", "Users/"))
   127|  4.36k|}
   128|       |
-  129|  4.36k|fn path_hygiene_error(rel: &str) -> Option<String> {
-  130|  4.36k|    let parts = rel.split('/').collect::<Vec<_>>();
+  129|  4.37k|fn path_hygiene_error(rel: &str) -> Option<String> {
+  130|  4.37k|    let parts = rel.split('/').collect::<Vec<_>>();
   131|  20.5k|    if parts.iter().any(|part| JUNK_DIRS.contains(part)) {
-                     ^4.36k       ^4.36k
+                     ^4.37k       ^4.37k
   132|      1|        return Some(format!("junk directory is not archiveable: {rel}"));
   133|  4.36k|    }
   134|  4.36k|    if parts.last().is_some_and(|name| JUNK_FILES.contains(name)) {
@@ -158,7 +158,7 @@
   138|      1|        return Some(format!("bytecode/cache file is not archiveable: {rel}"));
   139|  4.36k|    }
   140|  4.36k|    None
-  141|  4.36k|}
+  141|  4.37k|}
   142|       |
   143|      7|fn read_entries(
   144|      7|    root: &Path,
@@ -207,9 +207,9 @@
    17|      4|        return Err(format!(
    18|      4|            "archive zip root must be one directory name: {value}"
    19|      4|        ));
-   20|  4.38k|    }
+   20|  4.39k|    }
    21|   144k|    if value.chars().any(|ch| ch.is_control()) {
-                     ^4.38k        ^4.38k
+                     ^4.39k        ^4.39k
    22|      1|        return Err("archive zip root contains a control character".to_string());
    23|  4.38k|    }
    24|  4.38k|    Ok(value.to_string())
@@ -228,7 +228,7 @@
    35|      1|        return Err("archive entry path is empty".to_string());
    36|  4.37k|    }
    37|  4.37k|    if rel.starts_with('/') || rel.ends_with('/') {
-                                             ^4.36k^4.36k
+                                             ^4.37k^4.37k
    38|      2|        return Err(format!("archive entry path has ambiguous slash: {rel}"));
    39|  4.36k|    }
    40|  4.36k|    if rel.contains('\\') || rel.contains("//") {
@@ -1106,13 +1106,13 @@
                                      ^1
    88|  1.56k|}
    89|       |
-   90|  1.64k|pub(crate) fn artifact_ref(root: &Path, rel: &str) -> Result<Value, String> {
-   91|  1.64k|    let path = crate::package::inventory::resolve(root, rel)?;
-                      ^1.64k                                              ^1
-   92|  1.64k|    let digest = artifact_digest_or_zero(&path)?;
-                      ^1.64k                                 ^1
-   93|  1.64k|    Ok(json!({"path": rel, "digest": digest}))
-   94|  1.64k|}
+   90|  1.65k|pub(crate) fn artifact_ref(root: &Path, rel: &str) -> Result<Value, String> {
+   91|  1.65k|    let path = crate::package::inventory::resolve(root, rel)?;
+                      ^1.65k                                              ^1
+   92|  1.65k|    let digest = artifact_digest_or_zero(&path)?;
+                      ^1.65k                                 ^1
+   93|  1.65k|    Ok(json!({"path": rel, "digest": digest}))
+   94|  1.65k|}
    95|       |
    96|  1.81k|pub(crate) fn artifact_digest_or_zero(path: &Path) -> Result<String, String> {
    97|  1.81k|    if path.is_file() {
@@ -1616,13 +1616,13 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/clock.rs:
     1|       |use std::time::{SystemTime, UNIX_EPOCH};
     2|       |
-    3|    791|pub fn now_iso() -> String {
-    4|    791|    let seconds = SystemTime::now()
-    5|    791|        .duration_since(UNIX_EPOCH)
-    6|    791|        .map(|d| d.as_secs() as i64)
-    7|    791|        .unwrap_or(0);
-    8|    791|    unix_to_iso(seconds)
-    9|    791|}
+    3|    795|pub fn now_iso() -> String {
+    4|    795|    let seconds = SystemTime::now()
+    5|    795|        .duration_since(UNIX_EPOCH)
+    6|    795|        .map(|d| d.as_secs() as i64)
+    7|    795|        .unwrap_or(0);
+    8|    795|    unix_to_iso(seconds)
+    9|    795|}
    10|       |
    11|    285|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
    12|    285|    let trimmed = value.strip_suffix('Z')?;
@@ -1649,15 +1649,15 @@
    25|    237|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
    26|    285|}
    27|       |
-   28|    793|pub fn unix_to_iso(seconds: i64) -> String {
-   29|    793|    let days = seconds.div_euclid(86_400);
-   30|    793|    let rem = seconds.rem_euclid(86_400);
-   31|    793|    let (year, month, day) = civil_from_days(days);
-   32|    793|    let hour = rem / 3_600;
-   33|    793|    let minute = (rem % 3_600) / 60;
-   34|    793|    let second = rem % 60;
-   35|    793|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
-   36|    793|}
+   28|    797|pub fn unix_to_iso(seconds: i64) -> String {
+   29|    797|    let days = seconds.div_euclid(86_400);
+   30|    797|    let rem = seconds.rem_euclid(86_400);
+   31|    797|    let (year, month, day) = civil_from_days(days);
+   32|    797|    let hour = rem / 3_600;
+   33|    797|    let minute = (rem % 3_600) / 60;
+   34|    797|    let second = rem % 60;
+   35|    797|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
+   36|    797|}
    37|       |
    38|    237|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
    39|    237|    let y = year - (month <= 2) as i64;
@@ -1696,20 +1696,20 @@
                                     ^1                  ^1
    69|      2|}
    70|       |
-   71|    793|fn civil_from_days(days: i64) -> (i64, i64, i64) {
-   72|    793|    let z = days + 719_468;
-   73|    793|    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
+   71|    797|fn civil_from_days(days: i64) -> (i64, i64, i64) {
+   72|    797|    let z = days + 719_468;
+   73|    797|    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
                                                    ^0
-   74|    793|    let doe = z - era * 146_097;
-   75|    793|    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
-   76|    793|    let y = yoe + era * 400;
-   77|    793|    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-   78|    793|    let mp = (5 * doy + 2) / 153;
-   79|    793|    let day = doy - (153 * mp + 2) / 5 + 1;
-   80|    793|    let month = mp + if mp < 10 { 3 } else { -9 };
-                                                ^792       ^1
-   81|    793|    (y + (month <= 2) as i64, month, day)
-   82|    793|}
+   74|    797|    let doe = z - era * 146_097;
+   75|    797|    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+   76|    797|    let y = yoe + era * 400;
+   77|    797|    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+   78|    797|    let mp = (5 * doy + 2) / 153;
+   79|    797|    let day = doy - (153 * mp + 2) / 5 + 1;
+   80|    797|    let month = mp + if mp < 10 { 3 } else { -9 };
+                                                ^796       ^1
+   81|    797|    (y + (month <= 2) as i64, month, day)
+   82|    797|}
    83|       |
    84|       |#[cfg(test)]
    85|       |mod tests {
@@ -2562,10 +2562,10 @@
    95|       |
    96|     65|fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
    97|     65|    if let Some(value) = load_pass_ref(root, receipt, "/coverage", "coverage", out) {
-                              ^53
-   98|     53|        out.extend(coverage::failures(&value, expected));
-   99|     53|    }
-                  ^12
+                              ^56
+   98|     56|        out.extend(coverage::failures(&value, expected));
+   99|     56|    }
+                  ^9
   100|     65|}
   101|       |
   102|    351|fn load_pass_ref(
@@ -2605,36 +2605,36 @@
   135|    385|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   136|    385|    match crate::digest::file(&root.join(rel)) {
   137|    372|        Ok(actual) if actual == expected_digest => {}
-                         ^350                               ^350 ^350
+                         ^353                               ^353 ^353
   138|       |        _ => {
-  139|     35|            out.push(format!(
+  139|     32|            out.push(format!(
   140|       |                "final_packet_proof_ref_digest_mismatch:{label}:{rel}"
   141|       |            ));
-  142|     35|            return None;
+  142|     32|            return None;
   143|       |        }
   144|       |    }
-  145|    350|    let value = match json_boundary::read_json(&root.join(rel)) {
-                      ^349
-  146|    349|        Ok(value) => value,
+  145|    353|    let value = match json_boundary::read_json(&root.join(rel)) {
+                      ^352
+  146|    352|        Ok(value) => value,
   147|      1|        Err(err) => {
   148|      1|            out.push(format!("final_packet_proof_ref_malformed:{label}:{err}"));
   149|      1|            return None;
   150|       |        }
   151|       |    };
-  152|    349|    embedded_status_failures(item, &value, label, status_policy, out);
-  153|    349|    Some(value)
+  152|    352|    embedded_status_failures(item, &value, label, status_policy, out);
+  153|    352|    Some(value)
   154|    416|}
   155|       |
-  156|    349|fn embedded_status_failures(
-  157|    349|    item: &Value,
-  158|    349|    value: &Value,
-  159|    349|    label: &str,
-  160|    349|    status_policy: RefStatusPolicy,
-  161|    349|    out: &mut Vec<String>,
-  162|    349|) {
-  163|    349|    let embedded_status = item.get("status").and_then(Value::as_str);
-  164|    338|    match status_policy {
-  165|    338|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
+  156|    352|fn embedded_status_failures(
+  157|    352|    item: &Value,
+  158|    352|    value: &Value,
+  159|    352|    label: &str,
+  160|    352|    status_policy: RefStatusPolicy,
+  161|    352|    out: &mut Vec<String>,
+  162|    352|) {
+  163|    352|    let embedded_status = item.get("status").and_then(Value::as_str);
+  164|    341|    match status_policy {
+  165|    341|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
                                                                                  ^7
   166|      7|            out.push(format!(
   167|      7|                "final_packet_proof_ref_embedded_status_not_pass:{label}"
@@ -2646,17 +2646,17 @@
   172|      1|                "final_packet_proof_ref_embedded_status_not_pass_or_fail:{label}"
   173|      1|            ));
   174|      1|        }
-  175|    341|        _ => {}
+  175|    344|        _ => {}
   176|       |    }
-  177|    349|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
+  177|    352|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
                               ^194
   178|    194|        if embedded_status != Some(actual) {
   179|      9|            out.push(format!(
   180|      9|                "final_packet_proof_ref_status_disagreement:{label}"
   181|      9|            ));
   182|    185|        }
-  183|    155|    }
-  184|    349|}
+  183|    158|    }
+  184|    352|}
   185|       |
   186|     40|fn audit_receipt_failures(
   187|     40|    value: &Value,
@@ -2690,28 +2690,28 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/coverage.rs:
     1|       |use serde_json::Value;
     2|       |
-    3|     53|pub(super) fn failures(value: &Value, expected: &str) -> Vec<String> {
-    4|     53|    let mut out = Vec::new();
-    5|     53|    if value
-    6|     53|        .pointer("/target_revision/value")
-    7|     53|        .and_then(Value::as_str)
-    8|     53|        != Some(expected)
-    9|      3|    {
-   10|      3|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
+    3|     56|pub(super) fn failures(value: &Value, expected: &str) -> Vec<String> {
+    4|     56|    let mut out = Vec::new();
+    5|     56|    if value
+    6|     56|        .pointer("/target_revision/value")
+    7|     56|        .and_then(Value::as_str)
+    8|     56|        != Some(expected)
+    9|      6|    {
+   10|      6|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
    11|     50|    }
-   12|     53|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-   13|     50|        || !value
-   14|     50|            .get("uncovered_records")
-   15|     50|            .and_then(Value::as_array)
-   16|     50|            .is_some_and(Vec::is_empty)
+   12|     56|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
+   13|     53|        || !value
+   14|     53|            .get("uncovered_records")
+   15|     53|            .and_then(Value::as_array)
+   16|     53|            .is_some_and(Vec::is_empty)
    17|      3|    {
    18|      3|        out.push("final_packet_proof_coverage_not_exact_100".to_string());
-   19|     50|    }
-   20|     53|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
+   19|     53|    }
+   20|     56|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
    21|      3|        out.push("final_packet_proof_coverage_claim_ceiling_not_complete".to_string());
-   22|     50|    }
-   23|     53|    out
-   24|     53|}
+   22|     53|    }
+   23|     56|    out
+   24|     56|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/package.rs:
     1|       |use serde_json::Value;
@@ -4988,7 +4988,7 @@
    28|     21|pub(crate) fn repo_source_paths_from_actual_files(actual_files: &[String]) -> Vec<String> {
    29|     21|    actual_files
    30|     21|        .iter()
-   31|  4.48k|        .filter(|path| is_validator_rust_source(path))
+   31|  8.84k|        .filter(|path| is_validator_rust_source(path))
                        ^21
    32|     21|        .cloned()
    33|     21|        .collect()
@@ -5004,20 +5004,20 @@
    43|     22|fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {
    44|     22|    let top_level = paths
    45|     22|        .iter()
-   46|    543|        .filter_map(|path| path.strip_prefix("validator/src/"))
+   46|  1.06k|        .filter_map(|path| path.strip_prefix("validator/src/"))
                        ^22
-   47|    541|        .filter(|tail| !tail.contains('/'))
+   47|  1.06k|        .filter(|tail| !tail.contains('/'))
                        ^22
    48|     22|        .collect::<Vec<_>>();
    49|     22|    let internal = top_level
    50|     22|        .iter()
-   51|     22|        .filter(|file| {
-                                     ^18
-   52|     18|            file.starts_with("internal_")
-   53|     11|                || file.starts_with("internal-")
-   54|     11|                || file.starts_with("internal.")
-   55|     11|                || file.starts_with("iinternal_")
-   56|     18|        })
+   51|     27|        .filter(|file| {
+                       ^22
+   52|     27|            file.starts_with("internal_")
+   53|     20|                || file.starts_with("internal-")
+   54|     20|                || file.starts_with("internal.")
+   55|     20|                || file.starts_with("iinternal_")
+   56|     27|        })
    57|     22|        .map(|file| format!("validator/src/{file}"))
                                   ^8
    58|     22|        .collect::<Vec<_>>();
@@ -5036,25 +5036,25 @@
    71|       |
    72|     22|fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
    73|     22|    let mut by_dir_prefix: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
-   74|    543|    for path in paths {
+   74|  1.06k|    for path in paths {
                               ^22
-   75|    543|        let stem = source_stem(path);
-   76|    543|        if route_file(stem) || !stem.contains('_') {
-                                             ^413
-   77|    433|            continue;
-   78|    110|        }
-   79|    110|        let prefix = stem.split('_').next().unwrap_or("");
-   80|    110|        if prefix.len() < 2 {
+   75|  1.06k|        let stem = source_stem(path);
+   76|  1.06k|        if route_file(stem) || !stem.contains('_') {
+                                             ^807
+   77|    861|            continue;
+   78|    206|        }
+   79|    206|        let prefix = stem.split('_').next().unwrap_or("");
+   80|    206|        if prefix.len() < 2 {
    81|      1|            continue;
-   82|    109|        }
-   83|    109|        by_dir_prefix
-   84|    109|            .entry((parent_dir(path).to_string(), prefix.to_string()))
-   85|    109|            .or_default()
-   86|    109|            .push(path.to_string());
+   82|    205|        }
+   83|    205|        by_dir_prefix
+   84|    205|            .entry((parent_dir(path).to_string(), prefix.to_string()))
+   85|    205|            .or_default()
+   86|    205|            .push(path.to_string());
    87|       |    }
    88|     22|    by_dir_prefix
    89|     22|        .into_iter()
-   90|    105|        .filter(|(_, examples)| examples.len() > 1)
+   90|    201|        .filter(|(_, examples)| examples.len() > 1)
                        ^22
    91|     22|        .map(|((dir, prefix), examples)| {
                                                        ^3
@@ -5073,15 +5073,15 @@
   104|     22|fn generic_leaf_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
   105|     22|    paths
   106|     22|        .iter()
-  107|    543|        .filter(|path| {
+  107|  1.06k|        .filter(|path| {
                        ^22
-  108|    543|            let stem = source_stem(path);
+  108|  1.06k|            let stem = source_stem(path);
   109|      1|            matches!(
-  110|    543|                stem,
-  111|    543|                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
-                                                     ^542      ^542       ^542       ^542
+  110|  1.06k|                stem,
+  111|  1.06k|                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
+                                                     ^1.06k    ^1.06k     ^1.06k     ^1.06k
   112|       |            )
-  113|    543|        })
+  113|  1.06k|        })
   114|     22|        .map(|path| {
                                   ^1
   115|      1|            remediating_failure(
@@ -5099,15 +5099,15 @@
   127|     22|fn history_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
   128|     22|    paths
   129|     22|        .iter()
-  130|    543|        .filter(|path| {
+  130|  1.06k|        .filter(|path| {
                        ^22
-  131|    543|            let stem = source_stem(path);
-  132|    543|            stem.starts_with("coverage_wave")
-  133|    541|                || stem.contains("_coverage_wave")
-  134|    540|                || stem.contains("_wave")
-  135|    540|                || stem.starts_with("wave_")
-  136|    540|                || stem.starts_with("iinternal_")
-  137|    543|        })
+  131|  1.06k|            let stem = source_stem(path);
+  132|  1.06k|            stem.starts_with("coverage_wave")
+  133|  1.06k|                || stem.contains("_coverage_wave")
+  134|  1.06k|                || stem.contains("_wave")
+  135|  1.06k|                || stem.starts_with("wave_")
+  136|  1.06k|                || stem.starts_with("iinternal_")
+  137|  1.06k|        })
   138|     22|        .map(|path| {
                                   ^4
   139|      4|            remediating_failure(
@@ -5142,30 +5142,30 @@
   168|       |    )
   169|     14|}
   170|       |
-  171|  4.51k|fn is_validator_rust_source(path: &str) -> bool {
-  172|  4.51k|    (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
-                                                         ^3.96k^3.96k
-  173|    552|        && path.ends_with(".rs")
-  174|  4.51k|}
+  171|  8.87k|fn is_validator_rust_source(path: &str) -> bool {
+  172|  8.87k|    (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
+                                                         ^7.80k^7.80k
+  173|  1.07k|        && path.ends_with(".rs")
+  174|  8.87k|}
   175|       |
-  176|    543|fn route_file(stem: &str) -> bool {
-  177|    543|    matches!(stem, "mod" | "lib" | "main")
-                  ^130                   ^414    ^413
-  178|    543|}
+  176|  1.06k|fn route_file(stem: &str) -> bool {
+  177|  1.06k|    matches!(stem, "mod" | "lib" | "main")
+                  ^260                   ^809    ^807
+  178|  1.06k|}
   179|       |
-  180|    114|fn parent_dir(path: &str) -> &str {
-  181|    114|    path.rsplit_once('/').map(|(dir, _)| dir).unwrap_or("")
-  182|    114|}
+  180|    210|fn parent_dir(path: &str) -> &str {
+  181|    210|    path.rsplit_once('/').map(|(dir, _)| dir).unwrap_or("")
+  182|    210|}
   183|       |
   184|      4|fn first_token(path: &str) -> &str {
   185|      4|    let name = path.rsplit('/').next().unwrap_or(path);
   186|      4|    name.split(['_', '-', '.']).next().unwrap_or("")
   187|      4|}
   188|       |
-  189|  1.63k|fn source_stem(path: &str) -> &str {
-  190|  1.63k|    let name = path.rsplit('/').next().unwrap_or(path);
-  191|  1.63k|    name.strip_suffix(".rs").unwrap_or(name)
-  192|  1.63k|}
+  189|  3.20k|fn source_stem(path: &str) -> &str {
+  190|  3.20k|    let name = path.rsplit('/').next().unwrap_or(path);
+  191|  3.20k|    name.strip_suffix(".rs").unwrap_or(name)
+  192|  3.20k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/observability/compose.rs:
     1|       |use std::path::Path;
@@ -6609,17 +6609,17 @@
    68|       |
    69|     35|fn line_cap_failures(root: &Path) -> Vec<String> {
    70|     35|    let mut out = Vec::new();
-   71|    540|    for rel in source_paths(root) {
+   71|    541|    for rel in source_paths(root) {
                              ^35          ^35
-   72|    540|        let Ok(text) = std::fs::read_to_string(root.join(&rel)) else {
-                             ^539
+   72|    541|        let Ok(text) = std::fs::read_to_string(root.join(&rel)) else {
+                             ^540
    73|      1|            out.push(format!("plugin_self_law_line_cap_unreadable:{rel}"));
    74|      1|            continue;
    75|       |        };
-   76|    539|        let lines = text.lines().count();
-   77|    539|        if lines > MAX_SOURCE_LINES {
+   76|    540|        let lines = text.lines().count();
+   77|    540|        if lines > MAX_SOURCE_LINES {
    78|      2|            out.push(format!("plugin_self_law_line_cap_exceeded:{rel}:{lines}"));
-   79|    537|        }
+   79|    538|        }
    80|       |    }
    81|     35|    out
    82|     35|}
@@ -6648,10 +6648,10 @@
                          ^197
   105|     58|        return;
   106|       |    };
-  107|    721|    for entry in entries.flatten() {
+  107|    722|    for entry in entries.flatten() {
                                ^197    ^197
-  108|    721|        let path = entry.path();
-  109|    721|        if path.is_dir() {
+  108|    722|        let path = entry.path();
+  109|    722|        if path.is_dir() {
   110|    185|            if let Ok(child) = path.strip_prefix(root) {
   111|    185|                collect(
   112|    185|                    root,
@@ -6661,11 +6661,11 @@
   116|    185|                );
   117|    185|            }
                           ^0
-  118|    536|        } else if path.to_string_lossy().ends_with(suffix)
-  119|    533|            && let Ok(child) = path.strip_prefix(root)
-  120|    533|        {
-  121|    533|            out.push(child.to_string_lossy().replace('\\', "/"));
-  122|    533|        }
+  118|    537|        } else if path.to_string_lossy().ends_with(suffix)
+  119|    534|            && let Ok(child) = path.strip_prefix(root)
+  120|    534|        {
+  121|    534|            out.push(child.to_string_lossy().replace('\\', "/"));
+  122|    534|        }
                       ^3
   123|       |    }
   124|    255|}
@@ -9353,9 +9353,9 @@
   109|       |        }
   110|       |    };
   111|     13|    if receipt.get("candidate_digest").and_then(Value::as_str) == Some(expected.as_str()) {
-  112|      9|        Vec::new()
+  112|     10|        Vec::new()
   113|       |    } else {
-  114|      4|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
+  114|      3|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
   115|       |    }
   116|     17|}
   117|       |
@@ -16293,9 +16293,9 @@
    30|    355|        .and_then(|value| super::status::typed_status(label, value, &label_failures));
                                         ^117                        ^117   ^117   ^117
    31|    355|    if status != Some("pass") {
-   32|    248|        failures.push("status_not_pass".to_string());
-   33|    248|    }
-                  ^107
+   32|    249|        failures.push("status_not_pass".to_string());
+   33|    249|    }
+                  ^106
    34|    355|    let candidate = parsed.as_ref().and_then(candidate_digest);
    35|    355|    if candidate.as_deref() != Some(expected) {
    36|    269|        failures.push("candidate_digest_mismatch".to_string());
@@ -16416,135 +16416,135 @@
     1|       |use serde_json::Value;
     2|       |use std::path::Path;
     3|       |
-    4|    129|pub(super) fn typed_status(
-    5|    129|    label: &str,
-    6|    129|    value: &Value,
-    7|    129|    failures: &[String],
-    8|    129|) -> Option<&'static str> {
-    9|    129|    if value.get("status").and_then(Value::as_str) == Some("pass") {
+    4|    130|pub(super) fn typed_status(
+    5|    130|    label: &str,
+    6|    130|    value: &Value,
+    7|    130|    failures: &[String],
+    8|    130|) -> Option<&'static str> {
+    9|    130|    if value.get("status").and_then(Value::as_str) == Some("pass") {
    10|     95|        return Some("pass");
-   11|     34|    }
-   12|     34|    if value.get("status").and_then(Value::as_str) == Some("fail") {
+   11|     35|    }
+   12|     35|    if value.get("status").and_then(Value::as_str) == Some("fail") {
    13|     10|        return Some("fail");
-   14|     24|    }
-   15|     24|    if inferred_status_label(label) && failures.is_empty() {
+   14|     25|    }
+   15|     25|    if inferred_status_label(label) && failures.is_empty() {
                                                      ^23      ^23
-   16|     18|        return Some("pass");
-   17|      6|    }
-   18|      6|    None
-   19|    129|}
+   16|     17|        return Some("pass");
+   17|      8|    }
+   18|      8|    None
+   19|    130|}
    20|       |
-   21|    136|pub(super) fn label_failures(
-   22|    136|    root: &Path,
-   23|    136|    label: &str,
-   24|    136|    value: &Value,
-   25|    136|    expected: &str,
-   26|    136|) -> Vec<String> {
-   27|     24|    match label {
-   28|    136|        "source_audit" => source_audit_failures(value, expected),
-                                        ^5                    ^5     ^5
-   29|    131|        "red_fixture_report" => target_status_failures(value, expected, "red_fixture_report"),
+   21|    142|pub(super) fn label_failures(
+   22|    142|    root: &Path,
+   23|    142|    label: &str,
+   24|    142|    value: &Value,
+   25|    142|    expected: &str,
+   26|    142|) -> Vec<String> {
+   27|     25|    match label {
+   28|    142|        "source_audit" => source_audit_failures(value, expected),
+                                        ^7                    ^7     ^7
+   29|    135|        "red_fixture_report" => target_status_failures(value, expected, "red_fixture_report"),
                                               ^5                     ^5     ^5        ^5
-   30|    126|        "coverage" => coverage_failures(value, expected),
-                                    ^10               ^10    ^10
-   31|    116|        "cli_performance" => {
+   30|    130|        "coverage" => coverage_failures(value, expected),
+                                    ^12               ^12    ^12
+   31|    118|        "cli_performance" => {
    32|      6|            crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
    33|       |        }
-   34|    110|        "final_packet" => {
+   34|    112|        "final_packet" => {
    35|      4|            let store = crate::schema_catalog::load(root);
    36|      4|            crate::audit::final_packet::value_failures(root, &store, value)
    37|       |        }
-   38|    106|        "registry_exposure" => {
+   38|    108|        "registry_exposure" => {
    39|      6|            let store = crate::schema_catalog::load(root);
    40|      6|            crate::audit::plugin::registry::value_failures(root, &store, value)
    41|       |        }
-   42|    100|        "fit_repo" => crate::audit::fit_repo_receipt::failures(root, value),
+   42|    102|        "fit_repo" => crate::audit::fit_repo_receipt::failures(root, value),
                                     ^4                                       ^4    ^4
-   43|     96|        "product_fitness" => {
+   43|     98|        "product_fitness" => {
    44|      4|            crate::audit::product::fitness::canonical_package_receipt_value_failures(root, value)
    45|       |        }
-   46|     92|        "product_journey" => {
+   46|     94|        "product_journey" => {
    47|      4|            crate::audit::plugin::product::cohesion::journey_value_failures(root, value)
    48|       |        }
-   49|     88|        "standards_gardener" => standards_gardener_failures(root, value),
+   49|     90|        "standards_gardener" => standards_gardener_failures(root, value),
                                               ^4                          ^4    ^4
-   50|     84|        "install_audit" => package_surface_failures(
+   50|     86|        "install_audit" => package_surface_failures(
                                          ^7
    51|      7|            root,
    52|      7|            value,
    53|      7|            expected,
    54|      7|            crate::cli::control::plane::types::ControlOperation::InstallAudit,
    55|       |        ),
-   56|     77|        "cache_audit" => package_surface_failures(
+   56|     79|        "cache_audit" => package_surface_failures(
                                        ^5
    57|      5|            root,
    58|      5|            value,
    59|      5|            expected,
    60|      5|            crate::cli::control::plane::types::ControlOperation::CacheAudit,
    61|       |        ),
-   62|     72|        label if label.starts_with("rust_") => rust_failures(label, value, expected),
-                      ^48                               ^48  ^48           ^48    ^48    ^48
-   63|     24|        label if label.starts_with("gc_") => gc_failures(value, expected),
-                      ^19                             ^19  ^19         ^19    ^19
+   62|     74|        label if label.starts_with("rust_") => rust_failures(label, value, expected),
+                      ^49                               ^49  ^49           ^49    ^49    ^49
+   63|     25|        label if label.starts_with("gc_") => gc_failures(value, expected),
+                      ^20                             ^20  ^20         ^20    ^20
    64|      5|        "transactional_finalization" => Vec::new(),
                                                       ^4
    65|      1|        _ => vec![format!("unknown_evidence_label:{label}")],
    66|       |    }
-   67|    136|}
+   67|    142|}
    68|       |
-   69|     24|fn inferred_status_label(label: &str) -> bool {
+   69|     25|fn inferred_status_label(label: &str) -> bool {
    70|     23|    matches!(
-   71|     24|        label,
-   72|     24|        "coverage" | "fit_repo" | "product_fitness" | "standards_gardener"
-                                   ^16          ^10                 ^3
+   71|     25|        label,
+   72|     25|        "coverage" | "fit_repo" | "product_fitness" | "standards_gardener"
+                                   ^17          ^11                 ^4
    73|       |    )
-   74|     24|}
+   74|     25|}
    75|       |
-   76|      5|fn source_audit_failures(value: &Value, expected: &str) -> Vec<String> {
-   77|      5|    let mut out = target_status_failures(value, expected, "source_audit");
-   78|      5|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+   76|      7|fn source_audit_failures(value: &Value, expected: &str) -> Vec<String> {
+   77|      7|    let mut out = target_status_failures(value, expected, "source_audit");
+   78|      7|    if value.get("status").and_then(Value::as_str) != Some("pass") {
    79|      2|        out.push("source_audit_status_not_pass".to_string());
-   80|      3|    }
-   81|      5|    out
-   82|      5|}
+   80|      5|    }
+   81|      7|    out
+   82|      7|}
    83|       |
-   84|     10|fn target_status_failures(value: &Value, expected: &str, label: &str) -> Vec<String> {
-   85|     10|    let mut out = Vec::new();
-   86|     10|    if value
-   87|     10|        .pointer("/target_revision/value")
-   88|     10|        .and_then(Value::as_str)
-   89|     10|        != Some(expected)
-   90|      3|    {
-   91|      3|        out.push(format!("{label}_target_digest_mismatch"));
-   92|      7|    }
-   93|     10|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+   84|     12|fn target_status_failures(value: &Value, expected: &str, label: &str) -> Vec<String> {
+   85|     12|    let mut out = Vec::new();
+   86|     12|    if value
+   87|     12|        .pointer("/target_revision/value")
+   88|     12|        .and_then(Value::as_str)
+   89|     12|        != Some(expected)
+   90|      4|    {
+   91|      4|        out.push(format!("{label}_target_digest_mismatch"));
+   92|      8|    }
+   93|     12|    if value.get("status").and_then(Value::as_str) != Some("pass") {
    94|      3|        out.push(format!("{label}_status_not_pass"));
-   95|      7|    }
-   96|     10|    out
-   97|     10|}
+   95|      9|    }
+   96|     12|    out
+   97|     12|}
    98|       |
-   99|     10|fn coverage_failures(value: &Value, expected: &str) -> Vec<String> {
-  100|     10|    let mut out = Vec::new();
-  101|     10|    if value
-  102|     10|        .pointer("/target_revision/value")
-  103|     10|        .and_then(Value::as_str)
-  104|     10|        != Some(expected)
-  105|      1|    {
-  106|      1|        out.push("coverage_target_digest_mismatch".to_string());
-  107|      9|    }
-  108|     10|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-  109|      8|        || !value
-  110|      8|            .get("uncovered_records")
-  111|      8|            .and_then(Value::as_array)
-  112|      8|            .is_some_and(Vec::is_empty)
-  113|      3|    {
-  114|      3|        out.push("coverage_not_exact_100".to_string());
-  115|      7|    }
-  116|     10|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
-  117|      1|        out.push("coverage_claim_ceiling_not_complete".to_string());
-  118|      9|    }
-  119|     10|    out
-  120|     10|}
+   99|     12|fn coverage_failures(value: &Value, expected: &str) -> Vec<String> {
+  100|     12|    let mut out = Vec::new();
+  101|     12|    if value
+  102|     12|        .pointer("/target_revision/value")
+  103|     12|        .and_then(Value::as_str)
+  104|     12|        != Some(expected)
+  105|      2|    {
+  106|      2|        out.push("coverage_target_digest_mismatch".to_string());
+  107|     10|    }
+  108|     12|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
+  109|     10|        || !value
+  110|     10|            .get("uncovered_records")
+  111|     10|            .and_then(Value::as_array)
+  112|     10|            .is_some_and(Vec::is_empty)
+  113|      4|    {
+  114|      4|        out.push("coverage_not_exact_100".to_string());
+  115|      8|    }
+  116|     12|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
+  117|      2|        out.push("coverage_claim_ceiling_not_complete".to_string());
+  118|     10|    }
+  119|     12|    out
+  120|     12|}
   121|       |
   122|      4|fn standards_gardener_failures(root: &Path, value: &Value) -> Vec<String> {
   123|      4|    let store = crate::schema_catalog::load(root);
@@ -16579,43 +16579,248 @@
   151|     12|    out
   152|     12|}
   153|       |
-  154|     48|fn rust_failures(label: &str, value: &Value, expected: &str) -> Vec<String> {
-  155|     48|    let expected_law = match label {
-  156|     48|        "rust_dependency" | "rust_workspace_topology" => "rust-developer-experience-authority",
-                                          ^43                          ^10
-  157|     38|        "rust_toolchain" => "rust-toolchain-substrate-authority",
+  154|     49|fn rust_failures(label: &str, value: &Value, expected: &str) -> Vec<String> {
+  155|     49|    let expected_law = match label {
+  156|     49|        "rust_dependency" | "rust_workspace_topology" => "rust-developer-experience-authority",
+                                          ^44                          ^10
+  157|     39|        "rust_toolchain" => "rust-toolchain-substrate-authority",
                                           ^5
-  158|     33|        "rust_clean_proof" => "rust-cache-no-cache-honesty",
+  158|     34|        "rust_clean_proof" => "rust-cache-no-cache-honesty",
                                             ^5
-  159|     28|        "rust_memory" => "rust-memory-resource-discipline",
+  159|     29|        "rust_memory" => "rust-memory-resource-discipline",
                                        ^5
-  160|     23|        _ => "rust-command-loop-authority",
+  160|     24|        _ => "rust-command-loop-authority",
   161|       |    };
-  162|     48|    let mut out = crate::cli::rust::receipt::surface_value_failures(value, expected_law);
-  163|     48|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
-  164|     12|        out.push("rust_receipt_candidate_digest_mismatch".to_string());
+  162|     49|    let mut out = crate::cli::rust::receipt::surface_value_failures(value, expected_law);
+  163|     49|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
+  164|     13|        out.push("rust_receipt_candidate_digest_mismatch".to_string());
   165|     36|    }
-  166|     48|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+  166|     49|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   167|      6|        out.push("rust_receipt_status_not_pass".to_string());
-  168|     42|    }
-  169|     48|    out
-  170|     48|}
+  168|     43|    }
+  169|     49|    out
+  170|     49|}
   171|       |
-  172|     19|fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
-  173|     19|    let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
-  174|     19|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
-  175|      6|        out.push("gc_receipt_candidate_digest_mismatch".to_string());
+  172|     20|fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
+  173|     20|    let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
+  174|     20|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
+  175|      7|        out.push("gc_receipt_candidate_digest_mismatch".to_string());
   176|     13|    }
-  177|     19|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+  177|     20|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   178|      1|        out.push("gc_receipt_status_not_pass".to_string());
-  179|     18|    }
-  180|     19|    out
-  181|     19|}
+  179|     19|    }
+  180|     20|    out
+  181|     20|}
   182|       |
   183|       |#[cfg(test)]
   184|       |mod label_failures;
+  185|       |#[cfg(test)]
+  186|       |mod typed_and_surfaces;
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/evidence/status/label_failures.rs:
+    1|       |use serde_json::json;
+    2|       |
+    3|       |#[test]
+    4|      1|fn label_failures_cover_unknown_rust_and_gc_status_edges() {
+    5|      1|    let root = crate::self_tests::boundaries::support::repo_root();
+    6|      1|    let candidate = crate::self_tests::boundaries::support::sha('d');
+    7|      1|    assert_eq!(
+    8|      1|        super::label_failures(&root, "unknown", &json!({}), &candidate),
+    9|      1|        vec!["unknown_evidence_label:unknown"]
+   10|       |    );
+   11|      1|    let rust = json!({
+   12|      1|        "schema":"harness-ultragoal.rust-devx-receipt.v1",
+   13|      1|        "law_id":"rust-command-loop-authority",
+   14|      1|        "status":"fail",
+   15|      1|        "digests":{"candidate":candidate},
+   16|      1|        "observations":[],
+   17|      1|        "observation_failures":[],
+   18|      1|        "claim_ceiling":"rust_devx_observation_bound"
+   19|       |    });
+   20|      1|    assert!(
+   21|      1|        super::label_failures(&root, "rust_fast", &rust, &candidate)
+   22|      1|            .iter()
+   23|     12|            .any(|failure| failure == "rust_receipt_status_not_pass")
+                           ^1
+   24|       |    );
+   25|      5|    for (label, law_id) in [
+   26|      1|        ("rust_dependency", "rust-developer-experience-authority"),
+   27|      1|        (
+   28|      1|            "rust_workspace_topology",
+   29|      1|            "rust-developer-experience-authority",
+   30|      1|        ),
+   31|      1|        ("rust_toolchain", "rust-toolchain-substrate-authority"),
+   32|      1|        ("rust_clean_proof", "rust-cache-no-cache-honesty"),
+   33|      1|        ("rust_memory", "rust-memory-resource-discipline"),
+   34|      1|    ] {
+   35|      5|        let receipt = json!({
+   36|      5|            "schema":"harness-ultragoal.rust-devx-receipt.v1",
+   37|      5|            "law_id":law_id,
+   38|      5|            "status":"fail",
+   39|      5|            "digests":{"candidate":candidate},
+   40|      5|            "observations":[],
+   41|      5|            "observation_failures":[],
+   42|      5|            "claim_ceiling":"rust_devx_observation_bound"
+   43|       |        });
+   44|      5|        assert!(
+   45|      5|            super::label_failures(&root, label, &receipt, &candidate)
+   46|      5|                .iter()
+   47|     60|                .any(|failure| failure == "rust_receipt_status_not_pass"),
+                               ^5
+   48|       |            "{label}"
+   49|       |        );
+   50|       |    }
+   51|      1|    let source_audit = json!({
+   52|      1|        "status":"fail",
+   53|      1|        "target_revision":{"kind":"package_digest","value":candidate}
+   54|       |    });
+   55|      1|    assert!(
+   56|      1|        super::label_failures(&root, "source_audit", &source_audit, &candidate)
+   57|      1|            .iter()
+   58|      1|            .any(|failure| failure == "source_audit_status_not_pass")
+   59|       |    );
+   60|      1|    let source_audit_pass = json!({
+   61|      1|        "status":"pass",
+   62|      1|        "target_revision":{"kind":"package_digest","value":candidate}
+   63|       |    });
+   64|      1|    assert!(
+   65|      1|        super::label_failures(&root, "source_audit", &source_audit_pass, &candidate).is_empty()
+   66|       |    );
+   67|      1|    let source_audit_wrong_target = json!({
+   68|      1|        "status":"pass",
+   69|      1|        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('c')}
+   70|       |    });
+   71|      1|    assert!(
+   72|      1|        super::label_failures(
+   73|      1|            &root,
+   74|      1|            "source_audit",
+   75|      1|            &source_audit_wrong_target,
+   76|      1|            &candidate
+   77|      1|        )
+   78|      1|        .iter()
+   79|      1|        .any(|failure| failure == "source_audit_target_digest_mismatch")
+   80|       |    );
+   81|      1|    let coverage_wrong_target = json!({
+   82|      1|        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('e')},
+   83|      1|        "coverage":{"percent":100.0},
+   84|      1|        "uncovered_records":[],
+   85|      1|        "claim_ceiling":"supports_complete_claim"
+   86|       |    });
+   87|      1|    assert!(
+   88|      1|        super::label_failures(&root, "coverage", &coverage_wrong_target, &candidate)
+   89|      1|            .iter()
+   90|      1|            .any(|failure| failure == "coverage_target_digest_mismatch")
+   91|       |    );
+   92|      1|    let coverage_pass = json!({
+   93|      1|        "target_revision":{"kind":"package_digest","value":candidate},
+   94|      1|        "coverage":{"percent":100.0},
+   95|      1|        "uncovered_records":[],
+   96|      1|        "claim_ceiling":"supports_complete_claim"
+   97|       |    });
+   98|      1|    assert!(super::label_failures(&root, "coverage", &coverage_pass, &candidate).is_empty());
+   99|      1|    let coverage_not_exact = json!({
+  100|      1|        "target_revision":{"kind":"package_digest","value":candidate},
+  101|      1|        "coverage":{"percent":99.0},
+  102|      1|        "uncovered_records":["validator/src/main.rs:1"],
+  103|      1|        "claim_ceiling":"supports_complete_claim"
+  104|       |    });
+  105|      1|    assert!(
+  106|      1|        super::label_failures(&root, "coverage", &coverage_not_exact, &candidate)
+  107|      1|            .iter()
+  108|      1|            .any(|failure| failure == "coverage_not_exact_100")
+  109|       |    );
+  110|      1|    let coverage_without_uncovered_records = json!({
+  111|      1|        "target_revision":{"kind":"package_digest","value":candidate},
+  112|      1|        "coverage":{"percent":100.0},
+  113|      1|        "claim_ceiling":"supports_complete_claim"
+  114|       |    });
+  115|      1|    assert!(
+  116|      1|        super::label_failures(
+  117|      1|            &root,
+  118|      1|            "coverage",
+  119|      1|            &coverage_without_uncovered_records,
+  120|      1|            &candidate
+  121|      1|        )
+  122|      1|        .iter()
+  123|      1|        .any(|failure| failure == "coverage_not_exact_100")
+  124|       |    );
+  125|      1|    let coverage_with_uncovered_records = json!({
+  126|      1|        "target_revision":{"kind":"package_digest","value":candidate},
+  127|      1|        "coverage":{"percent":100.0},
+  128|      1|        "uncovered_records":["validator/src/main.rs:1"],
+  129|      1|        "claim_ceiling":"supports_complete_claim"
+  130|       |    });
+  131|      1|    assert!(
+  132|      1|        super::label_failures(
+  133|      1|            &root,
+  134|      1|            "coverage",
+  135|      1|            &coverage_with_uncovered_records,
+  136|      1|            &candidate
+  137|      1|        )
+  138|      1|        .iter()
+  139|      1|        .any(|failure| failure == "coverage_not_exact_100")
+  140|       |    );
+  141|      1|    let coverage_wrong_claim_ceiling = json!({
+  142|      1|        "target_revision":{"kind":"package_digest","value":candidate},
+  143|      1|        "coverage":{"percent":100.0},
+  144|      1|        "uncovered_records":[],
+  145|      1|        "claim_ceiling":"withheld_or_blocked"
+  146|       |    });
+  147|      1|    assert!(
+  148|      1|        super::label_failures(&root, "coverage", &coverage_wrong_claim_ceiling, &candidate)
+  149|      1|            .iter()
+  150|      1|            .any(|failure| failure == "coverage_claim_ceiling_not_complete")
+  151|       |    );
+  152|      1|    let gc = json!({
+  153|      1|        "schema":"harness-ultragoal.workspace-gc-receipt.v1",
+  154|      1|        "law_id":"workspace-artifact-cache-garbage-collection",
+  155|      1|        "status":"fail",
+  156|      1|        "digests":{"candidate":candidate},
+  157|      1|        "plan":{"id":"plan"},
+  158|      1|        "observations":[],
+  159|      1|        "observation_failures":[],
+  160|      1|        "claim_ceiling":"gc_observation_bound"
+  161|       |    });
+  162|      1|    assert!(
+  163|      1|        super::label_failures(&root, "gc_plan", &gc, &candidate)
+  164|      1|            .iter()
+  165|      9|            .any(|failure| failure == "gc_receipt_status_not_pass")
+                           ^1
+  166|       |    );
+  167|      1|    let rust_wrong_candidate = json!({
+  168|      1|        "schema":"harness-ultragoal.rust-devx-receipt.v1",
+  169|      1|        "law_id":"rust-command-loop-authority",
+  170|      1|        "status":"pass",
+  171|      1|        "digests":{"candidate":crate::self_tests::boundaries::support::sha('e')},
+  172|      1|        "observations":[],
+  173|      1|        "observation_failures":[],
+  174|      1|        "claim_ceiling":"rust_devx_observation_bound"
+  175|       |    });
+  176|      1|    assert!(
+  177|      1|        super::label_failures(&root, "rust_fast", &rust_wrong_candidate, &candidate)
+  178|      1|            .iter()
+  179|     12|            .any(|failure| failure == "rust_receipt_candidate_digest_mismatch")
+                           ^1
+  180|       |    );
+  181|      1|    let gc_wrong_candidate = json!({
+  182|      1|        "schema":"harness-ultragoal.workspace-gc-receipt.v1",
+  183|      1|        "law_id":"workspace-artifact-cache-garbage-collection",
+  184|      1|        "status":"pass",
+  185|      1|        "digests":{"candidate":crate::self_tests::boundaries::support::sha('e')},
+  186|      1|        "plan":{"id":"plan"},
+  187|      1|        "observations":[],
+  188|      1|        "observation_failures":[],
+  189|      1|        "claim_ceiling":"gc_observation_bound"
+  190|       |    });
+  191|      1|    assert!(
+  192|      1|        super::label_failures(&root, "gc_plan", &gc_wrong_candidate, &candidate)
+  193|      1|            .iter()
+  194|      9|            .any(|failure| failure == "gc_receipt_candidate_digest_mismatch")
+                           ^1
+  195|       |    );
+  196|      1|}
+
+/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs:
     1|       |use serde_json::{Value, json};
     2|       |
     3|      2|fn fail_closed_surface_receipt(candidate: &str, operation: &str, surface: &str) -> Value {
@@ -16677,190 +16882,78 @@
    59|      2|}
    60|       |
    61|       |#[test]
-   62|      1|fn label_failures_cover_unknown_rust_and_gc_status_edges() {
+   62|      1|fn typed_status_and_package_surface_edges_are_explicit() {
    63|      1|    let root = crate::self_tests::boundaries::support::repo_root();
    64|      1|    let candidate = crate::self_tests::boundaries::support::sha('d');
-   65|      1|    assert_eq!(
-   66|      1|        super::label_failures(&root, "unknown", &json!({}), &candidate),
-   67|      1|        vec!["unknown_evidence_label:unknown"]
-   68|       |    );
-   69|      1|    let rust = json!({
-   70|      1|        "schema":"harness-ultragoal.rust-devx-receipt.v1",
-   71|      1|        "law_id":"rust-command-loop-authority",
-   72|      1|        "status":"fail",
-   73|      1|        "digests":{"candidate":candidate},
-   74|      1|        "observations":[],
-   75|      1|        "observation_failures":[],
-   76|      1|        "claim_ceiling":"rust_devx_observation_bound"
-   77|       |    });
-   78|      1|    assert!(
-   79|      1|        super::label_failures(&root, "rust_fast", &rust, &candidate)
-   80|      1|            .iter()
-   81|     12|            .any(|failure| failure == "rust_receipt_status_not_pass")
-                           ^1
+   65|      1|    let red_fixture_report = json!({
+   66|      1|        "status":"pass",
+   67|      1|        "target_revision":{"kind":"package_digest","value":candidate}
+   68|       |    });
+   69|      1|    assert!(
+   70|      1|        super::label_failures(&root, "red_fixture_report", &red_fixture_report, &candidate)
+   71|      1|            .is_empty()
+   72|       |    );
+   73|      1|    assert!(
+   74|      1|        super::label_failures(
+   75|      1|            &root,
+   76|      1|            "install_audit",
+   77|      1|            &json!({"schema":"wrong"}),
+   78|      1|            &candidate
+   79|      1|        )
+   80|      1|        .iter()
+   81|      1|        .any(|failure| failure.starts_with("package_surface_audit_schema:"))
    82|       |    );
-   83|      5|    for (label, law_id) in [
-   84|      1|        ("rust_dependency", "rust-developer-experience-authority"),
-   85|      1|        (
-   86|      1|            "rust_workspace_topology",
-   87|      1|            "rust-developer-experience-authority",
-   88|      1|        ),
-   89|      1|        ("rust_toolchain", "rust-toolchain-substrate-authority"),
-   90|      1|        ("rust_clean_proof", "rust-cache-no-cache-honesty"),
-   91|      1|        ("rust_memory", "rust-memory-resource-discipline"),
-   92|      1|    ] {
-   93|      5|        let receipt = json!({
-   94|      5|            "schema":"harness-ultragoal.rust-devx-receipt.v1",
-   95|      5|            "law_id":law_id,
-   96|      5|            "status":"fail",
-   97|      5|            "digests":{"candidate":candidate},
-   98|      5|            "observations":[],
-   99|      5|            "observation_failures":[],
-  100|      5|            "claim_ceiling":"rust_devx_observation_bound"
-  101|       |        });
-  102|      5|        assert!(
-  103|      5|            super::label_failures(&root, label, &receipt, &candidate)
-  104|      5|                .iter()
-  105|     60|                .any(|failure| failure == "rust_receipt_status_not_pass"),
-                               ^5
-  106|       |            "{label}"
-  107|       |        );
-  108|       |    }
-  109|      1|    let source_audit = json!({
-  110|      1|        "status":"fail",
-  111|      1|        "target_revision":{"kind":"package_digest","value":candidate}
-  112|       |    });
-  113|      1|    assert!(
-  114|      1|        super::label_failures(&root, "source_audit", &source_audit, &candidate)
-  115|      1|            .iter()
-  116|      1|            .any(|failure| failure == "source_audit_status_not_pass")
-  117|       |    );
-  118|      1|    let coverage_wrong_target = json!({
-  119|      1|        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('e')},
-  120|      1|        "coverage":{"percent":100.0},
-  121|      1|        "uncovered_records":[],
-  122|      1|        "claim_ceiling":"supports_complete_claim"
-  123|       |    });
-  124|      1|    assert!(
-  125|      1|        super::label_failures(&root, "coverage", &coverage_wrong_target, &candidate)
-  126|      1|            .iter()
-  127|      1|            .any(|failure| failure == "coverage_target_digest_mismatch")
-  128|       |    );
-  129|      1|    let coverage_pass = json!({
-  130|      1|        "target_revision":{"kind":"package_digest","value":candidate},
-  131|      1|        "coverage":{"percent":100.0},
-  132|      1|        "uncovered_records":[],
-  133|      1|        "claim_ceiling":"supports_complete_claim"
-  134|       |    });
-  135|      1|    assert!(super::label_failures(&root, "coverage", &coverage_pass, &candidate).is_empty());
-  136|      1|    let coverage_not_exact = json!({
-  137|      1|        "target_revision":{"kind":"package_digest","value":candidate},
-  138|      1|        "coverage":{"percent":99.0},
-  139|      1|        "uncovered_records":["validator/src/main.rs:1"],
-  140|      1|        "claim_ceiling":"supports_complete_claim"
-  141|       |    });
-  142|      1|    assert!(
-  143|      1|        super::label_failures(&root, "coverage", &coverage_not_exact, &candidate)
-  144|      1|            .iter()
-  145|      1|            .any(|failure| failure == "coverage_not_exact_100")
-  146|       |    );
-  147|      1|    let coverage_with_uncovered_records = json!({
-  148|      1|        "target_revision":{"kind":"package_digest","value":candidate},
-  149|      1|        "coverage":{"percent":100.0},
-  150|      1|        "uncovered_records":["validator/src/main.rs:1"],
-  151|      1|        "claim_ceiling":"supports_complete_claim"
-  152|       |    });
-  153|      1|    assert!(
-  154|      1|        super::label_failures(
-  155|      1|            &root,
-  156|      1|            "coverage",
-  157|      1|            &coverage_with_uncovered_records,
-  158|      1|            &candidate
-  159|      1|        )
-  160|      1|        .iter()
-  161|      1|        .any(|failure| failure == "coverage_not_exact_100")
-  162|       |    );
-  163|      1|    let red_fixture_report = json!({
-  164|      1|        "status":"pass",
-  165|      1|        "target_revision":{"kind":"package_digest","value":candidate}
-  166|       |    });
-  167|      1|    assert!(
-  168|      1|        super::label_failures(&root, "red_fixture_report", &red_fixture_report, &candidate)
-  169|      1|            .is_empty()
-  170|       |    );
-  171|      1|    assert!(
-  172|      1|        super::label_failures(
-  173|      1|            &root,
-  174|      1|            "install_audit",
-  175|      1|            &json!({"schema":"wrong"}),
-  176|      1|            &candidate
-  177|      1|        )
-  178|      1|        .iter()
-  179|      1|        .any(|failure| failure.starts_with("package_surface_audit_schema:"))
-  180|       |    );
-  181|      1|    let fail_closed_install =
-  182|      1|        fail_closed_surface_receipt(&candidate, "install_audit", "installed_plugin");
-  183|      1|    assert!(
-  184|      1|        super::label_failures(&root, "install_audit", &fail_closed_install, &candidate).is_empty()
-  185|       |    );
-  186|      1|    assert!(
-  187|      1|        super::label_failures(&root, "install_audit", &json!({}), &candidate)
-  188|      1|            .iter()
-  189|      1|            .any(|failure| failure.starts_with("package_surface_audit_schema:"))
-  190|       |    );
-  191|      1|    let fail_closed_cache =
-  192|      1|        fail_closed_surface_receipt(&candidate, "cache_audit", "versioned_cache_package");
-  193|      1|    assert!(super::label_failures(&root, "cache_audit", &fail_closed_cache, &candidate).is_empty());
-  194|      1|    assert_eq!(
-  195|      1|        super::typed_status("product_fitness", &json!({}), &[]),
-  196|       |        Some("pass")
-  197|       |    );
-  198|      1|    assert_eq!(
-  199|      1|        super::typed_status(
-  200|      1|            "unknown",
-  201|      1|            &json!({"status":"pass"}),
-  202|      1|            &["ignored".to_string()]
-  203|       |        ),
-  204|       |        Some("pass")
-  205|       |    );
-  206|      1|    assert_eq!(
-  207|      1|        super::typed_status("unknown", &json!({"status":"fail"}), &[]),
-  208|       |        Some("fail")
-  209|       |    );
-  210|      1|    assert_eq!(super::typed_status("unknown", &json!({}), &[]), None);
-  211|      1|    assert!(
-  212|      1|        super::label_failures(&root, "transactional_finalization", &json!({}), &candidate)
-  213|      1|            .is_empty()
-  214|       |    );
-  215|      4|    for label in [
-  216|      1|        "coverage",
-  217|      1|        "fit_repo",
-  218|      1|        "product_fitness",
-  219|      1|        "standards_gardener",
-  220|      1|    ] {
-  221|      4|        assert_eq!(super::typed_status(label, &json!({}), &[]), Some("pass"));
-  222|      4|        assert_eq!(
-  223|      4|            super::typed_status(label, &json!({}), &["not_current".to_string()]),
-  224|       |            None
-  225|       |        );
-  226|       |    }
-  227|      1|    let gc = json!({
-  228|      1|        "schema":"harness-ultragoal.workspace-gc-receipt.v1",
-  229|      1|        "law_id":"workspace-artifact-cache-garbage-collection",
-  230|      1|        "status":"fail",
-  231|      1|        "digests":{"candidate":candidate},
-  232|      1|        "plan":{"id":"plan"},
-  233|      1|        "observations":[],
-  234|      1|        "observation_failures":[],
-  235|      1|        "claim_ceiling":"gc_observation_bound"
-  236|       |    });
-  237|      1|    assert!(
-  238|      1|        super::label_failures(&root, "gc_plan", &gc, &candidate)
-  239|      1|            .iter()
-  240|      9|            .any(|failure| failure == "gc_receipt_status_not_pass")
-                           ^1
-  241|       |    );
-  242|      1|}
+   83|      1|    let fail_closed_install =
+   84|      1|        fail_closed_surface_receipt(&candidate, "install_audit", "installed_plugin");
+   85|      1|    assert!(
+   86|      1|        super::label_failures(&root, "install_audit", &fail_closed_install, &candidate).is_empty()
+   87|       |    );
+   88|      1|    assert!(
+   89|      1|        super::label_failures(&root, "install_audit", &json!({}), &candidate)
+   90|      1|            .iter()
+   91|      1|            .any(|failure| failure.starts_with("package_surface_audit_schema:"))
+   92|       |    );
+   93|      1|    let fail_closed_cache =
+   94|      1|        fail_closed_surface_receipt(&candidate, "cache_audit", "versioned_cache_package");
+   95|      1|    assert!(super::label_failures(&root, "cache_audit", &fail_closed_cache, &candidate).is_empty());
+   96|      1|    assert_eq!(
+   97|      1|        super::typed_status("product_fitness", &json!({}), &[]),
+   98|       |        Some("pass")
+   99|       |    );
+  100|      1|    assert_eq!(
+  101|      1|        super::typed_status(
+  102|      1|            "unknown",
+  103|      1|            &json!({"status":"pass"}),
+  104|      1|            &["ignored".to_string()]
+  105|       |        ),
+  106|       |        Some("pass")
+  107|       |    );
+  108|      1|    assert_eq!(
+  109|      1|        super::typed_status("unknown", &json!({"status":"fail"}), &[]),
+  110|       |        Some("fail")
+  111|       |    );
+  112|      1|    assert_eq!(super::typed_status("unknown", &json!({}), &[]), None);
+  113|      1|    assert_eq!(
+  114|      1|        super::typed_status("unknown", &json!({}), &["failure".to_string()]),
+  115|       |        None
+  116|       |    );
+  117|      1|    assert!(
+  118|      1|        super::label_failures(&root, "transactional_finalization", &json!({}), &candidate)
+  119|      1|            .is_empty()
+  120|       |    );
+  121|      4|    for label in [
+  122|      1|        "coverage",
+  123|      1|        "fit_repo",
+  124|      1|        "product_fitness",
+  125|      1|        "standards_gardener",
+  126|      1|    ] {
+  127|      4|        assert_eq!(super::typed_status(label, &json!({}), &[]), Some("pass"));
+  128|      4|        assert_eq!(
+  129|      4|            super::typed_status(label, &json!({}), &["not_current".to_string()]),
+  130|       |            None
+  131|       |        );
+  132|       |    }
+  133|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/evidence/validate.rs:
     1|       |use serde_json::Value;
@@ -16917,11 +17010,11 @@
    49|    237|            ));
    50|    384|        }
    51|    621|        if item.get("status").and_then(Value::as_str) != Some("pass") {
-   52|    273|            out.push(format!(
-   53|    273|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
-   54|    273|                label(item)
-   55|    273|            ));
-   56|    348|        }
+   52|    274|            out.push(format!(
+   53|    274|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
+   54|    274|                label(item)
+   55|    274|            ));
+   56|    347|        }
    57|    621|        if item.get("same_candidate").and_then(Value::as_bool) != Some(true) {
    58|    268|            out.push(format!(
    59|    268|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
@@ -17653,10 +17746,9 @@
   128|     49|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   129|     49|    match crate::digest::file(&root.join(rel)) {
   130|     34|        Ok(actual) if actual == expected_digest => {}
-                         ^33                                ^33  ^33
-  131|     16|        _ => out.push(format!(
+  131|     15|        _ => out.push(format!(
   132|       |            "cli_control_plane_transaction_ref_digest_mismatch:{}:{rel}",
-  133|     16|            ptr.trim_start_matches('/')
+  133|     15|            ptr.trim_start_matches('/')
   134|       |        )),
   135|       |    }
   136|     49|    if item.get("status").and_then(Value::as_str) != Some("pass") {
@@ -17738,9 +17830,9 @@
   203|      8|        .pointer("/target_revision/value")
   204|      8|        .and_then(Value::as_str)
   205|      8|        != Some(expected)
-  206|      1|    {
-  207|      1|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
-  208|      7|    }
+  206|      2|    {
+  207|      2|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
+  208|      6|    }
   209|      8|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
   210|      6|        || !value
   211|      6|            .get("uncovered_records")
@@ -19220,40 +19312,40 @@
     1|       |use crate::cli::garbage::collection::types::GC_RECEIPT_SCHEMA;
     2|       |use serde_json::Value;
     3|       |
-    4|     24|pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
-    5|     24|    let mut out = Vec::new();
-    6|     24|    if value.get("schema").and_then(Value::as_str) != Some(GC_RECEIPT_SCHEMA) {
+    4|     25|pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
+    5|     25|    let mut out = Vec::new();
+    6|     25|    if value.get("schema").and_then(Value::as_str) != Some(GC_RECEIPT_SCHEMA) {
     7|      1|        out.push("workspace_gc_receipt_wrong_schema".to_string());
-    8|     23|    }
-    9|    216|    for ptr in [
-   10|     24|        "/issuer/tool",
-   11|     24|        "/command/name",
-   12|     24|        "/law_ids",
-   13|     24|        "/digests/candidate",
-   14|     24|        "/artifact_classification/classes",
-   15|     24|        "/protected_set/protected_artifacts",
-   16|     24|        "/deletion_plan/plan_digest",
-   17|     24|        "/post_verify/protected_artifacts_preserved",
-   18|     24|        "/claim_ceiling",
-   19|     24|    ] {
-   20|    216|        if value.pointer(ptr).is_none() {
-   21|     19|            out.push(format!("workspace_gc_receipt_missing:{ptr}"));
-   22|    197|        }
+    8|     24|    }
+    9|    225|    for ptr in [
+   10|     25|        "/issuer/tool",
+   11|     25|        "/command/name",
+   12|     25|        "/law_ids",
+   13|     25|        "/digests/candidate",
+   14|     25|        "/artifact_classification/classes",
+   15|     25|        "/protected_set/protected_artifacts",
+   16|     25|        "/deletion_plan/plan_digest",
+   17|     25|        "/post_verify/protected_artifacts_preserved",
+   18|     25|        "/claim_ceiling",
+   19|     25|    ] {
+   20|    225|        if value.pointer(ptr).is_none() {
+   21|     26|            out.push(format!("workspace_gc_receipt_missing:{ptr}"));
+   22|    199|        }
    23|       |    }
-   24|     24|    let law_found = value
-   25|     24|        .get("law_ids")
-   26|     24|        .and_then(Value::as_array)
-   27|     24|        .is_some_and(|rows| {
+   24|     25|    let law_found = value
+   25|     25|        .get("law_ids")
+   26|     25|        .and_then(Value::as_array)
+   27|     25|        .is_some_and(|rows| {
                                           ^23
    28|     23|            rows.iter()
    29|     23|                .any(|row| row.as_str() == Some("workspace-artifact-cache-garbage-collection"))
                                          ^22             ^22
    30|     23|        });
-   31|     24|    if !law_found {
-   32|      2|        out.push("workspace_gc_receipt_missing_law_id".to_string());
+   31|     25|    if !law_found {
+   32|      3|        out.push("workspace_gc_receipt_missing_law_id".to_string());
    33|     22|    }
-   34|     24|    out
-   35|     24|}
+   34|     25|    out
+   35|     25|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/garbage/collection/types.rs:
     1|       |pub(crate) const GC_RECEIPT_SCHEMA: &str = "harness-ultragoal.workspace-gc-receipt.v1";
@@ -19284,79 +19376,165 @@
     3|       |use serde_json::{Value, json};
     4|       |use std::path::Path;
     5|       |
-    6|      7|pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
-    7|      7|    let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
-    8|      7|    let mut receipt = telemetry::base_receipt(root, command, "pass", None)?;
-                      ^5                                                                ^2
-    9|      5|    receipt["explanation"] = json!({
-   10|      5|        "requested_run_id": command.run_id,
-   11|      5|        "requested_claim_id": command.claim_id,
-   12|      5|        "requested_check_id": command.check_id,
-   13|      5|        "requested_law_id": command.law_id,
-   14|      5|        "current_source_audit_receipt": "validation_artifacts/ultragoal-audit/validator-receipt.json",
-   15|      5|        "current_source_audit_digest": crate::digest::file(&audit).unwrap_or_else(|_| crate::digest::ZERO.to_string()),
-                                                                                                    ^4                  ^4
-   16|      5|        "known_current_failure": current_failure(root),
-   17|      5|        "repair_guidance": "Inspect final-packet proof/source-audit digest dereference, regenerate same-candidate lower-level receipts, and rerun source audit once after implementation changes."
+    6|     11|pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
+    7|     11|    let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
+    8|     11|    let mut receipt = telemetry::base_receipt(root, command, "pass", None)?;
+                      ^9                                                                ^2
+    9|      9|    receipt["explanation"] = json!({
+   10|      9|        "requested_run_id": command.run_id,
+   11|      9|        "requested_claim_id": command.claim_id,
+   12|      9|        "requested_check_id": command.check_id,
+   13|      9|        "requested_law_id": command.law_id,
+   14|      9|        "current_source_audit_receipt": "validation_artifacts/ultragoal-audit/validator-receipt.json",
+   15|      9|        "current_source_audit_digest": crate::digest::file(&audit).unwrap_or_else(|_| crate::digest::ZERO.to_string()),
+                                                                                                    ^5                  ^5
+   16|      9|        "known_current_failure": current_failure(root),
+   17|      9|        "repair_guidance": "Inspect final-packet proof/source-audit digest dereference, regenerate same-candidate lower-level receipts, and rerun source audit once after implementation changes."
    18|       |    });
-   19|      5|    Ok(receipt)
-   20|      7|}
+   19|      9|    Ok(receipt)
+   20|     11|}
    21|       |
-   22|      5|fn current_failure(root: &Path) -> Value {
-   23|      5|    let path = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
-   24|      5|    crate::json_boundary::read_json(&path)
-   25|      5|        .ok()
-   26|      5|        .and_then(|value| value.get("failures").cloned())
-                                        ^1    ^1              ^1
-   27|      5|        .unwrap_or_else(|| json!(["source audit receipt unavailable"]))
-                                         ^4
-   28|      5|}
-   29|       |
-   30|       |#[cfg(test)]
-   31|       |mod tests {
-   32|       |    use super::*;
-   33|       |    use std::fs;
-   34|       |
-   35|       |    #[test]
-   36|      1|    fn explain_reports_current_failure_and_bad_root_errors() {
-   37|      1|        let root = crate::self_tests::boundaries::support::temp_root("observe-explain");
-   38|      1|        fs::create_dir_all(&root).expect("root");
-   39|      1|        fs::write(root.join("owned.txt"), "owned").expect("owned");
-   40|      1|        crate::json_boundary::write_json(
-   41|      1|            &root.join("plugin-manifest-draft.json"),
-   42|      1|            &json!({"resources":["owned.txt"]}),
-   43|       |        )
-   44|      1|        .expect("manifest");
-   45|      1|        fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit")).expect("audit dir");
-   46|      1|        crate::json_boundary::write_json(
-   47|      1|            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-   48|      1|            &json!({"failures":["final_packet_proof_source_audit_target_digest_mismatch"]}),
-   49|       |        )
-   50|      1|        .expect("audit receipt");
-   51|      1|        let command = crate::cli::observe::parse(&[
-   52|      1|            "observe".to_string(),
-   53|      1|            "explain-failure".to_string(),
-   54|      1|            "--run-id".to_string(),
-   55|      1|            "run-1".to_string(),
-   56|      1|        ])
-   57|      1|        .expect("parse")
-   58|      1|        .expect("observe");
-   59|      1|        let receipt = run(&root, &command).expect("explain");
-   60|      1|        assert_eq!(
-   61|      1|            receipt["explanation"]["known_current_failure"][0],
-   62|       |            "final_packet_proof_source_audit_target_digest_mismatch"
-   63|       |        );
-   64|      1|        let bad_root = crate::self_tests::boundaries::support::temp_root("observe-explain-bad");
-   65|      1|        fs::create_dir_all(&bad_root).expect("bad root");
-   66|      1|        assert!(
-   67|      1|            run(&bad_root, &command)
-   68|      1|                .unwrap_err()
-   69|      1|                .contains("plugin-manifest-draft.json")
-   70|       |        );
-   71|      1|        fs::remove_dir_all(root).expect("cleanup explain");
-   72|      1|        fs::remove_dir_all(bad_root).expect("cleanup explain bad");
-   73|      1|    }
-   74|       |}
+   22|      9|fn current_failure(root: &Path) -> Value {
+   23|      9|    let packet = root.join("validation_artifacts/review/final-packet-proof.json");
+   24|      9|    if let Some(failures) = crate::json_boundary::read_json(&packet)
+                              ^1
+   25|      9|        .ok()
+   26|      9|        .and_then(|value| value.pointer("/failure/observed_failures").cloned())
+                                        ^1    ^1      ^1                            ^1
+   27|      9|        .filter(|value| value.as_array().is_some_and(|items| !items.is_empty()))
+                                      ^1    ^1         ^1                   ^1    ^1
+   28|       |    {
+   29|      1|        return failures;
+   30|      8|    }
+   31|      8|    let path = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
+   32|      8|    let Some(value) = crate::json_boundary::read_json(&path).ok() else {
+                           ^3
+   33|      5|        return json!(["source audit receipt unavailable"]);
+   34|       |    };
+   35|      3|    if let Some(failures) = value
+                              ^1
+   36|      3|        .get("failures")
+   37|      3|        .cloned()
+   38|      3|        .filter(|value| value.as_array().is_some_and(|items| !items.is_empty()))
+   39|       |    {
+   40|      1|        return failures;
+   41|      2|    }
+   42|      2|    let check_failures: Vec<Value> = value
+   43|      2|        .get("checks")
+   44|      2|        .and_then(Value::as_array)
+   45|      2|        .into_iter()
+   46|      2|        .flatten()
+   47|      3|        .filter(|check| check.get("status").and_then(Value::as_str) != Some("pass"))
+                       ^2
+   48|      2|        .filter_map(|check| {
+                                          ^1
+   49|      1|            check
+   50|      1|                .get("id")
+   51|      1|                .and_then(Value::as_str)
+   52|      1|                .map(|id| Value::String(id.to_string()))
+   53|      1|        })
+   54|      2|        .collect();
+   55|      2|    if check_failures.is_empty() {
+   56|      1|        json!(["no current source-audit failure; inspect final-packet/control receipts"])
+   57|       |    } else {
+   58|      1|        Value::Array(check_failures)
+   59|       |    }
+   60|      9|}
+   61|       |
+   62|       |#[cfg(test)]
+   63|       |mod tests {
+   64|       |    use super::*;
+   65|       |    use std::fs;
+   66|       |
+   67|       |    #[test]
+   68|      1|    fn explain_reports_current_failure_and_bad_root_errors() {
+   69|      1|        let root = crate::self_tests::boundaries::support::temp_root("observe-explain");
+   70|      1|        fs::create_dir_all(&root).expect("root");
+   71|      1|        fs::write(root.join("owned.txt"), "owned").expect("owned");
+   72|      1|        crate::json_boundary::write_json(
+   73|      1|            &root.join("plugin-manifest-draft.json"),
+   74|      1|            &json!({"resources":["owned.txt"]}),
+   75|       |        )
+   76|      1|        .expect("manifest");
+   77|      1|        fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit")).expect("audit dir");
+   78|      1|        crate::json_boundary::write_json(
+   79|      1|            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
+   80|      1|            &json!({"failures":["final_packet_proof_source_audit_target_digest_mismatch"]}),
+   81|       |        )
+   82|      1|        .expect("audit receipt");
+   83|      1|        let command = crate::cli::observe::parse(&[
+   84|      1|            "observe".to_string(),
+   85|      1|            "explain-failure".to_string(),
+   86|      1|            "--run-id".to_string(),
+   87|      1|            "run-1".to_string(),
+   88|      1|        ])
+   89|      1|        .expect("parse")
+   90|      1|        .expect("observe");
+   91|      1|        let receipt = run(&root, &command).expect("explain");
+   92|      1|        assert_eq!(
+   93|      1|            receipt["explanation"]["known_current_failure"][0],
+   94|       |            "final_packet_proof_source_audit_target_digest_mismatch"
+   95|       |        );
+   96|      1|        fs::create_dir_all(root.join("validation_artifacts/review")).expect("review dir");
+   97|      1|        crate::json_boundary::write_json(
+   98|      1|            &root.join("validation_artifacts/review/final-packet-proof.json"),
+   99|      1|            &json!({
+  100|      1|                "status":"fail",
+  101|      1|                "failure":{"observed_failures":["final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass"]}
+  102|      1|            }),
+  103|       |        )
+  104|      1|        .expect("packet receipt");
+  105|      1|        let packet_receipt = run(&root, &command).expect("explain packet");
+  106|      1|        assert_eq!(
+  107|      1|            packet_receipt["explanation"]["known_current_failure"][0],
+  108|       |            "final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass"
+  109|       |        );
+  110|      1|        fs::remove_file(root.join("validation_artifacts/review/final-packet-proof.json"))
+  111|      1|            .expect("remove packet receipt");
+  112|      1|        crate::json_boundary::write_json(
+  113|      1|            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
+  114|      1|            &json!({
+  115|      1|                "failures":[],
+  116|      1|                "checks":[
+  117|      1|                    {"id":"source-audit-pass","status":"pass"},
+  118|      1|                    {"id":"validator-execution-provenance","status":"fail"}
+  119|      1|                ]
+  120|      1|            }),
+  121|       |        )
+  122|      1|        .expect("audit checks receipt");
+  123|      1|        let check_receipt = run(&root, &command).expect("explain checks");
+  124|      1|        assert_eq!(
+  125|      1|            check_receipt["explanation"]["known_current_failure"][0],
+  126|       |            "validator-execution-provenance"
+  127|       |        );
+  128|      1|        crate::json_boundary::write_json(
+  129|      1|            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
+  130|      1|            &json!({"failures":[],"checks":[{"id":"source-audit-pass","status":"pass"}]}),
+  131|       |        )
+  132|      1|        .expect("audit pass receipt");
+  133|      1|        let no_failure_receipt = run(&root, &command).expect("explain no failure");
+  134|      1|        assert_eq!(
+  135|      1|            no_failure_receipt["explanation"]["known_current_failure"][0],
+  136|       |            "no current source-audit failure; inspect final-packet/control receipts"
+  137|       |        );
+  138|      1|        fs::remove_file(root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"))
+  139|      1|            .expect("remove audit receipt");
+  140|      1|        let missing_receipt = run(&root, &command).expect("explain missing audit");
+  141|      1|        assert_eq!(
+  142|      1|            missing_receipt["explanation"]["known_current_failure"][0],
+  143|       |            "source audit receipt unavailable"
+  144|       |        );
+  145|      1|        let bad_root = crate::self_tests::boundaries::support::temp_root("observe-explain-bad");
+  146|      1|        fs::create_dir_all(&bad_root).expect("bad root");
+  147|      1|        assert!(
+  148|      1|            run(&bad_root, &command)
+  149|      1|                .unwrap_err()
+  150|      1|                .contains("plugin-manifest-draft.json")
+  151|       |        );
+  152|      1|        fs::remove_dir_all(root).expect("cleanup explain");
+  153|      1|        fs::remove_dir_all(bad_root).expect("cleanup explain bad");
+  154|      1|    }
+  155|       |}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/mod.rs:
     1|       |use serde_json::Value;
@@ -20281,21 +20459,21 @@
     1|       |use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
     2|       |use serde_json::{Value, json};
     3|       |
-    4|     27|pub(super) fn claim_ceiling(operation: ObserveOperation, status: &str) -> &'static str {
-    5|     27|    if status == "pass" && matches!(operation, ObserveOperation::Prove) {
-                                         ^13      ^15
+    4|     31|pub(super) fn claim_ceiling(operation: ObserveOperation, status: &str) -> &'static str {
+    5|     31|    if status == "pass" && matches!(operation, ObserveOperation::Prove) {
+                                         ^17      ^19
     6|      2|        "observability_stack_proven_only"
-    7|     25|    } else if status == "pass" {
-    8|     13|        "observability_observation_only"
+    7|     29|    } else if status == "pass" {
+    8|     17|        "observability_observation_only"
     9|       |    } else {
    10|     12|        "observability_gate_failed_completion_readiness_release_update_goal_blocked"
    11|       |    }
-   12|     27|}
+   12|     31|}
    13|       |
-   14|     27|pub(super) fn blocked(operation: ObserveOperation, status: &str) -> Value {
-   15|     27|    if status == "pass" && !matches!(operation, ObserveOperation::Prove) {
-                                          ^13      ^15
-   16|     13|        json!([
+   14|     31|pub(super) fn blocked(operation: ObserveOperation, status: &str) -> Value {
+   15|     31|    if status == "pass" && !matches!(operation, ObserveOperation::Prove) {
+                                          ^17      ^19
+   16|     17|        json!([
    17|       |            "completion",
    18|       |            "readiness",
    19|       |            "release",
@@ -20322,22 +20500,22 @@
    40|       |            "update_goal_eligibility"
    41|       |        ])
    42|       |    }
-   43|     27|}
+   43|     31|}
    44|       |
-   45|     27|pub(super) fn supported(operation: ObserveOperation, status: &str) -> Value {
-   46|     27|    if status == "pass" && matches!(operation, ObserveOperation::Prove) {
-                                         ^13      ^15
+   45|     31|pub(super) fn supported(operation: ObserveOperation, status: &str) -> Value {
+   46|     31|    if status == "pass" && matches!(operation, ObserveOperation::Prove) {
+                                         ^17      ^19
    47|      2|        json!(["source_local_observability_stack"])
-   48|     25|    } else if status == "pass" {
-   49|     13|        json!(["observability_command_observation"])
+   48|     29|    } else if status == "pass" {
+   49|     17|        json!(["observability_command_observation"])
    50|       |    } else {
    51|     12|        json!([])
    52|       |    }
-   53|     27|}
+   53|     31|}
    54|       |
-   55|     54|pub(super) fn next_repair(operation: ObserveOperation, status: &str) -> &'static str {
-   56|     54|    if status == "pass" {
-   57|     30|        "keep receipt same-candidate and rerun source audit before any readiness claim"
+   55|     62|pub(super) fn next_repair(operation: ObserveOperation, status: &str) -> &'static str {
+   56|     62|    if status == "pass" {
+   57|     38|        "keep receipt same-candidate and rerun source audit before any readiness claim"
    58|       |    } else {
    59|     24|        match operation {
    60|      6|            ObserveOperation::StackHealth => "run ultragoal observe stack up, then stack health",
@@ -20352,190 +20530,190 @@
    69|     12|            _ => "run observe stack health and observe stack smoke",
    70|       |        }
    71|       |    }
-   72|     54|}
+   72|     62|}
    73|       |
-   74|     54|pub(super) fn bounds_status(command: &ObserveCommand) -> &'static str {
-   75|     54|    if command.row_limit <= 1000 && command.byte_limit <= 1_048_576 && command.timeout_ms <= 30_000
-                                                                                     ^52
+   74|     62|pub(super) fn bounds_status(command: &ObserveCommand) -> &'static str {
+   75|     62|    if command.row_limit <= 1000 && command.byte_limit <= 1_048_576 && command.timeout_ms <= 30_000
+                                                                                     ^60
    76|       |    {
-   77|     52|        "pass"
+   77|     60|        "pass"
    78|       |    } else {
    79|      2|        "fail"
    80|       |    }
-   81|     54|}
+   81|     62|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/exporter.rs:
     1|       |use serde_json::{Value, json};
     2|       |use std::process::Command;
     3|       |use std::time::{SystemTime, UNIX_EPOCH};
     4|       |
-    5|     27|pub(super) fn emit(event: &Value, metric: &Value, trace: &Value) {
-    6|     27|    let _ = post_json(
-    7|     27|        "http://127.0.0.1:9428/insert/jsonline?_stream_fields=stream,command,law_id,check_id,claim_id,candidate_digest&_msg_field=message&_time_field=timestamp",
-    8|     27|        event,
-    9|     27|    );
-   10|     27|    let _ = post_text(
-   11|     27|        "http://127.0.0.1:8428/api/v1/import/prometheus",
-   12|     27|        &metric_line(metric),
-   13|     27|    );
-   14|     27|    let _ = post_json(
-   15|     27|        "http://127.0.0.1:10428/insert/opentelemetry/v1/traces",
-   16|     27|        &trace_payload(trace),
-   17|     27|    );
-   18|     27|}
+    5|     31|pub(super) fn emit(event: &Value, metric: &Value, trace: &Value) {
+    6|     31|    let _ = post_json(
+    7|     31|        "http://127.0.0.1:9428/insert/jsonline?_stream_fields=stream,command,law_id,check_id,claim_id,candidate_digest&_msg_field=message&_time_field=timestamp",
+    8|     31|        event,
+    9|     31|    );
+   10|     31|    let _ = post_text(
+   11|     31|        "http://127.0.0.1:8428/api/v1/import/prometheus",
+   12|     31|        &metric_line(metric),
+   13|     31|    );
+   14|     31|    let _ = post_json(
+   15|     31|        "http://127.0.0.1:10428/insert/opentelemetry/v1/traces",
+   16|     31|        &trace_payload(trace),
+   17|     31|    );
+   18|     31|}
    19|       |
-   20|     54|fn post_json(url: &str, value: &Value) -> Result<(), String> {
-   21|     54|    let body = serde_json::to_string(value).expect("serde_json::Value serialization is infallible");
-   22|     54|    post(url, &body, "application/json")
-   23|     54|}
+   20|     62|fn post_json(url: &str, value: &Value) -> Result<(), String> {
+   21|     62|    let body = serde_json::to_string(value).expect("serde_json::Value serialization is infallible");
+   22|     62|    post(url, &body, "application/json")
+   23|     62|}
    24|       |
-   25|     27|fn post_text(url: &str, body: &str) -> Result<(), String> {
-   26|     27|    post(url, body, "text/plain")
-   27|     27|}
+   25|     31|fn post_text(url: &str, body: &str) -> Result<(), String> {
+   26|     31|    post(url, body, "text/plain")
+   27|     31|}
    28|       |
-   29|     82|fn post(url: &str, body: &str, content_type: &str) -> Result<(), String> {
-   30|     82|    let output = Command::new("curl")
-   31|     82|        .args([
-   32|     82|            "--fail",
-   33|     82|            "--silent",
-   34|     82|            "--show-error",
-   35|     82|            "--max-time",
-   36|     82|            "5",
-   37|     82|            "-H",
-   38|     82|            &format!("Content-Type: {content_type}"),
-   39|     82|            "-X",
-   40|     82|            "POST",
-   41|     82|            url,
-   42|     82|            "--data-binary",
-   43|     82|            body,
-   44|     82|        ])
-   45|     82|        .output();
-   46|     82|    post_output_result(output)?;
+   29|     94|fn post(url: &str, body: &str, content_type: &str) -> Result<(), String> {
+   30|     94|    let output = Command::new("curl")
+   31|     94|        .args([
+   32|     94|            "--fail",
+   33|     94|            "--silent",
+   34|     94|            "--show-error",
+   35|     94|            "--max-time",
+   36|     94|            "5",
+   37|     94|            "-H",
+   38|     94|            &format!("Content-Type: {content_type}"),
+   39|     94|            "-X",
+   40|     94|            "POST",
+   41|     94|            url,
+   42|     94|            "--data-binary",
+   43|     94|            body,
+   44|     94|        ])
+   45|     94|        .output();
+   46|     94|    post_output_result(output)?;
                                             ^1
-   47|     81|    Ok(())
-   48|     82|}
+   47|     93|    Ok(())
+   48|     94|}
    49|       |
-   50|     83|fn post_output_result(output: Result<std::process::Output, std::io::Error>) -> Result<(), String> {
-   51|     83|    let output = output.map_err(|err| format!("curl launch failed: {err}"))?;
-                      ^82                           ^1                                   ^1
-   52|     82|    if output.status.success() {
-   53|     81|        Ok(())
+   50|     95|fn post_output_result(output: Result<std::process::Output, std::io::Error>) -> Result<(), String> {
+   51|     95|    let output = output.map_err(|err| format!("curl launch failed: {err}"))?;
+                      ^94                           ^1                                   ^1
+   52|     94|    if output.status.success() {
+   53|     93|        Ok(())
    54|       |    } else {
    55|      1|        Err(format!(
    56|      1|            "curl export failed: {}",
    57|      1|            String::from_utf8_lossy(&output.stderr)
    58|      1|        ))
    59|       |    }
-   60|     83|}
+   60|     95|}
    61|       |
-   62|     29|fn metric_line(metric: &Value) -> String {
-   63|     29|    let name = metric
-   64|     29|        .get("metric_name")
-   65|     29|        .and_then(Value::as_str)
-   66|     29|        .unwrap_or("ultragoal_command_total");
-   67|     29|    let mut labels = metric
-   68|     29|        .get("labels")
-   69|     29|        .and_then(Value::as_object)
-   70|     29|        .map(|items| {
-   71|     29|            items
-   72|     29|                .iter()
-   73|    272|                .filter_map(|(key, value)| value.as_str().map(|raw| (key.as_str(), raw)))
-                               ^29
-   74|     29|                .collect::<Vec<_>>()
-   75|     29|        })
-   76|     29|        .unwrap_or_default();
-   77|    116|    for key in ["run_id", "correlation_id", "trace_id", "span_id"] {
-                             ^29        ^29
-   78|    116|        if let Some(raw) = metric.get(key).and_then(Value::as_str) {
-                                  ^110
-   79|    110|            labels.push((key, raw));
-   80|    110|        }
+   62|     33|fn metric_line(metric: &Value) -> String {
+   63|     33|    let name = metric
+   64|     33|        .get("metric_name")
+   65|     33|        .and_then(Value::as_str)
+   66|     33|        .unwrap_or("ultragoal_command_total");
+   67|     33|    let mut labels = metric
+   68|     33|        .get("labels")
+   69|     33|        .and_then(Value::as_object)
+   70|     33|        .map(|items| {
+   71|     33|            items
+   72|     33|                .iter()
+   73|    312|                .filter_map(|(key, value)| value.as_str().map(|raw| (key.as_str(), raw)))
+                               ^33
+   74|     33|                .collect::<Vec<_>>()
+   75|     33|        })
+   76|     33|        .unwrap_or_default();
+   77|    132|    for key in ["run_id", "correlation_id", "trace_id", "span_id"] {
+                             ^33        ^33
+   78|    132|        if let Some(raw) = metric.get(key).and_then(Value::as_str) {
+                                  ^126
+   79|    126|            labels.push((key, raw));
+   80|    126|        }
                       ^6
    81|       |    }
-   82|     29|    let labels = labels
-   83|     29|        .into_iter()
-   84|    382|        .map(|(key, raw)| format!("{key}=\"{}\"", label_value(raw)))
-                       ^29
-   85|     29|        .collect::<Vec<_>>()
-   86|     29|        .join(",");
-   87|     29|    let value = metric
-   88|     29|        .get("metric_value")
-   89|     29|        .and_then(Value::as_f64)
-   90|     29|        .unwrap_or(0.0);
-   91|     29|    format!("{name}{{{labels}}} {value}\n")
-   92|     29|}
+   82|     33|    let labels = labels
+   83|     33|        .into_iter()
+   84|    438|        .map(|(key, raw)| format!("{key}=\"{}\"", label_value(raw)))
+                       ^33
+   85|     33|        .collect::<Vec<_>>()
+   86|     33|        .join(",");
+   87|     33|    let value = metric
+   88|     33|        .get("metric_value")
+   89|     33|        .and_then(Value::as_f64)
+   90|     33|        .unwrap_or(0.0);
+   91|     33|    format!("{name}{{{labels}}} {value}\n")
+   92|     33|}
    93|       |
-   94|     27|fn trace_payload(trace: &Value) -> Value {
-   95|     27|    let trace_id = hex_id(trace, "trace_id", 32);
-   96|     27|    let span_id = hex_id(trace, "span_id", 16);
-   97|     27|    let now = now_nanos();
-   98|     27|    json!({
-   99|     27|        "resourceSpans": [{
-  100|     27|            "resource": {"attributes": [
-  101|     27|                attr("service.name", "ultragoal"),
-  102|     27|                attr("run_id", str_field(trace, "run_id")),
-  103|     27|                attr("candidate_digest", str_field(trace, "candidate_digest"))
+   94|     31|fn trace_payload(trace: &Value) -> Value {
+   95|     31|    let trace_id = hex_id(trace, "trace_id", 32);
+   96|     31|    let span_id = hex_id(trace, "span_id", 16);
+   97|     31|    let now = now_nanos();
+   98|     31|    json!({
+   99|     31|        "resourceSpans": [{
+  100|     31|            "resource": {"attributes": [
+  101|     31|                attr("service.name", "ultragoal"),
+  102|     31|                attr("run_id", str_field(trace, "run_id")),
+  103|     31|                attr("candidate_digest", str_field(trace, "candidate_digest"))
   104|       |            ]},
-  105|     27|            "scopeSpans": [{
-  106|     27|                "scope": {"name": "ultragoal"},
-  107|     27|                "spans": [{
-  108|     27|                    "traceId": trace_id,
-  109|     27|                    "spanId": span_id,
-  110|     27|                    "name": str_field(trace, "operation"),
-  111|     27|                    "kind": 1,
-  112|     27|                    "startTimeUnixNano": now.to_string(),
-  113|     27|                    "endTimeUnixNano": (now + 1_000_000).to_string(),
-  114|     27|                    "attributes": [
-  115|     27|                        attr("run_id", str_field(trace, "run_id")),
-  116|     27|                        attr("correlation_id", str_field(trace, "correlation_id")),
-  117|     27|                        attr("operation", str_field(trace, "operation")),
-  118|     27|                        attr("status", str_field(trace, "status")),
-  119|     27|                        attr("law_id", str_field(trace, "law_id")),
-  120|     27|                        attr("check_id", str_field(trace, "check_id")),
-  121|     27|                        attr("claim_id", str_field(trace, "claim_id")),
-  122|     27|                        attr("failure_class", str_field(trace, "failure_class")),
-  123|     27|                        attr("why_failed", str_field(trace, "why_failed")),
-  124|     27|                        attr("next_repair", str_field(trace, "next_repair")),
-  125|     27|                        attr("claim_impact", str_field(trace, "claim_impact"))
+  105|     31|            "scopeSpans": [{
+  106|     31|                "scope": {"name": "ultragoal"},
+  107|     31|                "spans": [{
+  108|     31|                    "traceId": trace_id,
+  109|     31|                    "spanId": span_id,
+  110|     31|                    "name": str_field(trace, "operation"),
+  111|     31|                    "kind": 1,
+  112|     31|                    "startTimeUnixNano": now.to_string(),
+  113|     31|                    "endTimeUnixNano": (now + 1_000_000).to_string(),
+  114|     31|                    "attributes": [
+  115|     31|                        attr("run_id", str_field(trace, "run_id")),
+  116|     31|                        attr("correlation_id", str_field(trace, "correlation_id")),
+  117|     31|                        attr("operation", str_field(trace, "operation")),
+  118|     31|                        attr("status", str_field(trace, "status")),
+  119|     31|                        attr("law_id", str_field(trace, "law_id")),
+  120|     31|                        attr("check_id", str_field(trace, "check_id")),
+  121|     31|                        attr("claim_id", str_field(trace, "claim_id")),
+  122|     31|                        attr("failure_class", str_field(trace, "failure_class")),
+  123|     31|                        attr("why_failed", str_field(trace, "why_failed")),
+  124|     31|                        attr("next_repair", str_field(trace, "next_repair")),
+  125|     31|                        attr("claim_impact", str_field(trace, "claim_impact"))
   126|       |                    ]
   127|       |                }]
   128|       |            }]
   129|       |        }]
   130|       |    })
-  131|     27|}
+  131|     31|}
   132|       |
-  133|    378|fn attr(key: &str, value: &str) -> Value {
-  134|    378|    json!({"key": key, "value": {"stringValue": value}})
-  135|    378|}
+  133|    434|fn attr(key: &str, value: &str) -> Value {
+  134|    434|    json!({"key": key, "value": {"stringValue": value}})
+  135|    434|}
   136|       |
-  137|    432|fn str_field<'a>(value: &'a Value, field: &str) -> &'a str {
-  138|    432|    value.get(field).and_then(Value::as_str).unwrap_or("")
-  139|    432|}
+  137|    496|fn str_field<'a>(value: &'a Value, field: &str) -> &'a str {
+  138|    496|    value.get(field).and_then(Value::as_str).unwrap_or("")
+  139|    496|}
   140|       |
-  141|     54|fn hex_id(value: &Value, field: &str, len: usize) -> String {
-  142|     54|    let raw = str_field(value, field);
-  143|     54|    let digest = crate::digest::bytes(raw.as_bytes());
-  144|     54|    digest
-  145|     54|        .trim_start_matches("sha256:")
-  146|     54|        .chars()
-  147|     54|        .take(len)
-  148|     54|        .collect()
-  149|     54|}
+  141|     62|fn hex_id(value: &Value, field: &str, len: usize) -> String {
+  142|     62|    let raw = str_field(value, field);
+  143|     62|    let digest = crate::digest::bytes(raw.as_bytes());
+  144|     62|    digest
+  145|     62|        .trim_start_matches("sha256:")
+  146|     62|        .chars()
+  147|     62|        .take(len)
+  148|     62|        .collect()
+  149|     62|}
   150|       |
-  151|     27|fn now_nanos() -> u128 {
-  152|     27|    SystemTime::now()
-  153|     27|        .duration_since(UNIX_EPOCH)
-  154|     27|        .map(|duration| duration.as_nanos())
-  155|     27|        .unwrap_or(0)
-  156|     27|}
+  151|     31|fn now_nanos() -> u128 {
+  152|     31|    SystemTime::now()
+  153|     31|        .duration_since(UNIX_EPOCH)
+  154|     31|        .map(|duration| duration.as_nanos())
+  155|     31|        .unwrap_or(0)
+  156|     31|}
   157|       |
-  158|    382|fn label_value(raw: &str) -> String {
-  159|    382|    raw.chars()
-  160|  15.1k|        .filter(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '_' | '-' | ':' | '.'))
-                       ^382                                      ^4       ^753
-  161|    382|        .take(128)
-  162|    382|        .collect()
-  163|    382|}
+  158|    438|fn label_value(raw: &str) -> String {
+  159|    438|    raw.chars()
+  160|  17.1k|        .filter(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '_' | '-' | ':' | '.'))
+                       ^438                                      ^4       ^861
+  161|    438|        .take(128)
+  162|    438|        .collect()
+  163|    438|}
   164|       |
   165|       |#[cfg(test)]
   166|      1|pub(crate) fn failed_post_message_for_test() -> String {
@@ -20561,15 +20739,15 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/identity.rs:
     1|       |use std::time::{SystemTime, UNIX_EPOCH};
     2|       |
-    3|    145|pub(super) fn id(prefix: &str, operation: &str, candidate: &str) -> String {
-    4|    145|    let nanos = SystemTime::now()
-    5|    145|        .duration_since(UNIX_EPOCH)
-    6|    145|        .map(|duration| duration.as_nanos())
-    7|    145|        .unwrap_or(0);
-    8|    145|    let digest =
-    9|    145|        crate::digest::bytes(format!("{prefix}:{operation}:{candidate}:{nanos}").as_bytes());
-   10|    145|    format!("{prefix}-{}", digest.trim_start_matches("sha256:"))
-   11|    145|}
+    3|    161|pub(super) fn id(prefix: &str, operation: &str, candidate: &str) -> String {
+    4|    161|    let nanos = SystemTime::now()
+    5|    161|        .duration_since(UNIX_EPOCH)
+    6|    161|        .map(|duration| duration.as_nanos())
+    7|    161|        .unwrap_or(0);
+    8|    161|    let digest =
+    9|    161|        crate::digest::bytes(format!("{prefix}:{operation}:{candidate}:{nanos}").as_bytes());
+   10|    161|    format!("{prefix}-{}", digest.trim_start_matches("sha256:"))
+   11|    161|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/mod.rs:
     1|       |use crate::cli::observe::types::ObserveCommand;
@@ -20584,14 +20762,14 @@
    10|       |mod record;
    11|       |mod spool;
    12|       |
-   13|     32|pub(crate) fn base_receipt(
-   14|     32|    root: &Path,
-   15|     32|    command: &ObserveCommand,
-   16|     32|    status: &str,
-   17|     32|    failure: Option<&str>,
-   18|     32|) -> Result<Value, String> {
-   19|     32|    receipt::base(root, command, status, failure)
-   20|     32|}
+   13|     36|pub(crate) fn base_receipt(
+   14|     36|    root: &Path,
+   15|     36|    command: &ObserveCommand,
+   16|     36|    status: &str,
+   17|     36|    failure: Option<&str>,
+   18|     36|) -> Result<Value, String> {
+   19|     36|    receipt::base(root, command, status, failure)
+   20|     36|}
    21|       |
    22|      5|pub(crate) fn prove(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
    23|      5|    let candidate = crate::package::inventory::package_digest(root)?;
@@ -20620,17 +20798,17 @@
    45|      9|    query::result(root, command, query_kind, query_text, rows, status, failure)
    46|      9|}
    47|       |
-   48|     31|pub(crate) fn live_stack_receipts_current(root: &Path, candidate: &str) -> bool {
-   49|     31|    live_receipt_current(
-   50|     31|        root,
-   51|     31|        crate::cli::observe::types::ObserveOperation::StackHealth,
-   52|     31|        candidate,
+   48|     35|pub(crate) fn live_stack_receipts_current(root: &Path, candidate: &str) -> bool {
+   49|     35|    live_receipt_current(
+   50|     35|        root,
+   51|     35|        crate::cli::observe::types::ObserveOperation::StackHealth,
+   52|     35|        candidate,
    53|      5|    ) && live_receipt_current(
    54|      5|        root,
    55|      5|        crate::cli::observe::types::ObserveOperation::StackSmoke,
    56|      5|        candidate,
    57|       |    )
-   58|     31|}
+   58|     35|}
    59|       |
    60|      2|pub(crate) fn ensure_spool_dir(root: &Path) -> Result<(), String> {
    61|      2|    spool::ensure_dir(root).map(|_| ())
@@ -20661,15 +20839,15 @@
    86|      2|    exporter::metric_line_for_test(metric)
    87|      2|}
    88|       |
-   89|     36|fn live_receipt_current(
-   90|     36|    root: &Path,
-   91|     36|    operation: crate::cli::observe::types::ObserveOperation,
-   92|     36|    candidate: &str,
-   93|     36|) -> bool {
-   94|     36|    let path = root.join(operation.receipt_rel());
-   95|     36|    let Ok(value) = crate::json_boundary::read_json(&path) else {
+   89|     40|fn live_receipt_current(
+   90|     40|    root: &Path,
+   91|     40|    operation: crate::cli::observe::types::ObserveOperation,
+   92|     40|    candidate: &str,
+   93|     40|) -> bool {
+   94|     40|    let path = root.join(operation.receipt_rel());
+   95|     40|    let Ok(value) = crate::json_boundary::read_json(&path) else {
                          ^14
-   96|     22|        return false;
+   96|     26|        return false;
    97|       |    };
    98|     14|    if value.get("schema").and_then(Value::as_str)
    99|     14|        != Some(crate::cli::observe::types::RECEIPT_SCHEMA)
@@ -20700,7 +20878,7 @@
   121|     10|            == Some(crate::digest::canonical_json(metric).as_str())
   122|     10|        && value.get("trace_bundle_digest").and_then(Value::as_str)
   123|     10|            == Some(crate::digest::canonical_json(trace).as_str())
-  124|     36|}
+  124|     40|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/query.rs:
     1|       |use crate::cli::observe::telemetry::identity;
@@ -20754,74 +20932,74 @@
     3|       |use serde_json::{Value, json};
     4|       |use std::path::Path;
     5|       |
-    6|     32|pub(super) fn base(
-    7|     32|    root: &Path,
-    8|     32|    command: &ObserveCommand,
-    9|     32|    status: &str,
-   10|     32|    failure: Option<&str>,
-   11|     32|) -> Result<Value, String> {
-   12|     32|    let candidate = crate::package::inventory::package_digest(root)?;
-                      ^27                                                        ^5
-   13|     27|    let run_id = command
-   14|     27|        .run_id
-   15|     27|        .clone()
-   16|     27|        .unwrap_or_else(|| identity::id("run", command.operation.id(), &candidate));
+    6|     36|pub(super) fn base(
+    7|     36|    root: &Path,
+    8|     36|    command: &ObserveCommand,
+    9|     36|    status: &str,
+   10|     36|    failure: Option<&str>,
+   11|     36|) -> Result<Value, String> {
+   12|     36|    let candidate = crate::package::inventory::package_digest(root)?;
+                      ^31                                                        ^5
+   13|     31|    let run_id = command
+   14|     31|        .run_id
+   15|     31|        .clone()
+   16|     31|        .unwrap_or_else(|| identity::id("run", command.operation.id(), &candidate));
                                          ^21          ^21    ^21                     ^21
-   17|     27|    let correlation_id = identity::id("corr", command.operation.id(), &candidate);
-   18|     27|    let event = record::event(
-   19|     27|        root,
-   20|     27|        command,
-   21|     27|        &candidate,
-   22|     27|        &run_id,
-   23|     27|        &correlation_id,
-   24|     27|        status,
-   25|     27|        failure,
+   17|     31|    let correlation_id = identity::id("corr", command.operation.id(), &candidate);
+   18|     31|    let event = record::event(
+   19|     31|        root,
+   20|     31|        command,
+   21|     31|        &candidate,
+   22|     31|        &run_id,
+   23|     31|        &correlation_id,
+   24|     31|        status,
+   25|     31|        failure,
    26|       |    );
-   27|     27|    let metric = record::metric(&event, command.operation, status);
-   28|     27|    let trace = record::trace(&event, command.operation);
-   29|     27|    spool::write(root, &event)?;
+   27|     31|    let metric = record::metric(&event, command.operation, status);
+   28|     31|    let trace = record::trace(&event, command.operation);
+   29|     31|    spool::write(root, &event)?;
                                             ^0
-   30|     27|    exporter::emit(&event, &metric, &trace);
-   31|     27|    Ok(json!({
-   32|     27|        "schema": types::RECEIPT_SCHEMA,
-   33|     27|        "status": status,
-   34|     27|        "candidate_digest": candidate,
-   35|     27|        "run_id": run_id,
-   36|     27|        "correlation_id": correlation_id,
-   37|     27|        "surface": "live_stack",
-   38|     27|        "operation": command.operation.id(),
-   39|     27|        "log_stream_digest": crate::digest::canonical_json(&event),
-   40|     27|        "metric_snapshot_digest": crate::digest::canonical_json(&metric),
-   41|     27|        "trace_bundle_digest": crate::digest::canonical_json(&trace),
-   42|     27|        "query_examples": query_examples(command),
-   43|     27|        "redaction_proof": record::redaction_status(&event),
-   44|     27|        "retention_bounds_proof": "pass",
-   45|     27|        "bounded_output_proof": claims::bounds_status(command),
-   46|     27|        "receipt_path": command.receipt_rel().to_string_lossy(),
-   47|     27|        "claim_ceiling": claims::claim_ceiling(command.operation, status),
-   48|     27|        "blocked_claims": claims::blocked(command.operation, status),
-   49|     27|        "supported_claims": claims::supported(command.operation, status),
-   50|     27|        "law_id": types::LAW_ID,
-   51|     27|        "check_id": types::CHECK_ID,
-   52|     27|        "claim_id": types::CLAIM_ID,
-   53|     27|        "why_failed": failure.unwrap_or(""),
-   54|     27|        "where_failed": if failure.is_some() { command.operation.id() } else { "" },
-                                                             ^12               ^12           ^15
-   55|     27|        "next_repair": claims::next_repair(command.operation, status),
-   56|     27|        "event": event,
-   57|     27|        "metric": metric,
-   58|     27|        "trace": trace
+   30|     31|    exporter::emit(&event, &metric, &trace);
+   31|     31|    Ok(json!({
+   32|     31|        "schema": types::RECEIPT_SCHEMA,
+   33|     31|        "status": status,
+   34|     31|        "candidate_digest": candidate,
+   35|     31|        "run_id": run_id,
+   36|     31|        "correlation_id": correlation_id,
+   37|     31|        "surface": "live_stack",
+   38|     31|        "operation": command.operation.id(),
+   39|     31|        "log_stream_digest": crate::digest::canonical_json(&event),
+   40|     31|        "metric_snapshot_digest": crate::digest::canonical_json(&metric),
+   41|     31|        "trace_bundle_digest": crate::digest::canonical_json(&trace),
+   42|     31|        "query_examples": query_examples(command),
+   43|     31|        "redaction_proof": record::redaction_status(&event),
+   44|     31|        "retention_bounds_proof": "pass",
+   45|     31|        "bounded_output_proof": claims::bounds_status(command),
+   46|     31|        "receipt_path": command.receipt_rel().to_string_lossy(),
+   47|     31|        "claim_ceiling": claims::claim_ceiling(command.operation, status),
+   48|     31|        "blocked_claims": claims::blocked(command.operation, status),
+   49|     31|        "supported_claims": claims::supported(command.operation, status),
+   50|     31|        "law_id": types::LAW_ID,
+   51|     31|        "check_id": types::CHECK_ID,
+   52|     31|        "claim_id": types::CLAIM_ID,
+   53|     31|        "why_failed": failure.unwrap_or(""),
+   54|     31|        "where_failed": if failure.is_some() { command.operation.id() } else { "" },
+                                                             ^12               ^12           ^19
+   55|     31|        "next_repair": claims::next_repair(command.operation, status),
+   56|     31|        "event": event,
+   57|     31|        "metric": metric,
+   58|     31|        "trace": trace
    59|       |    }))
-   60|     32|}
+   60|     36|}
    61|       |
-   62|     27|fn query_examples(command: &ObserveCommand) -> Value {
-   63|     27|    let run = command.run_id.as_deref().unwrap_or("<run-id>");
-   64|     27|    json!([
-   65|     27|        format!("ultragoal observe logs query --run-id {run} --limit 100"),
-   66|     27|        format!("ultragoal observe metrics query --run-id {run} --limit 100"),
-   67|     27|        format!("ultragoal observe traces query --run-id {run} --limit 100")
+   62|     31|fn query_examples(command: &ObserveCommand) -> Value {
+   63|     31|    let run = command.run_id.as_deref().unwrap_or("<run-id>");
+   64|     31|    json!([
+   65|     31|        format!("ultragoal observe logs query --run-id {run} --limit 100"),
+   66|     31|        format!("ultragoal observe metrics query --run-id {run} --limit 100"),
+   67|     31|        format!("ultragoal observe traces query --run-id {run} --limit 100")
    68|       |    ])
-   69|     27|}
+   69|     31|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/record.rs:
     1|       |use crate::cli::observe::telemetry::{claims, identity};
@@ -20829,161 +21007,161 @@
     3|       |use serde_json::{Value, json};
     4|       |use std::path::Path;
     5|       |
-    6|     27|pub(super) fn event(
-    7|     27|    root: &Path,
-    8|     27|    command: &ObserveCommand,
-    9|     27|    candidate: &str,
-   10|     27|    run_id: &str,
-   11|     27|    correlation_id: &str,
-   12|     27|    status: &str,
-   13|     27|    failure: Option<&str>,
-   14|     27|) -> Value {
-   15|     27|    json!({
-   16|     27|        "schema": types::EVENT_SCHEMA,
-   17|     27|        "run_id": run_id,
-   18|     27|        "correlation_id": correlation_id,
-   19|     27|        "trace_id": identity::id("trace", command.operation.id(), candidate),
-   20|     27|        "span_id": identity::id("span", command.operation.id(), candidate),
-   21|     27|        "parent_span_id": "",
-   22|     27|        "command": "ultragoal observe",
-   23|     27|        "subcommand": command.operation.subcommand(),
-   24|     27|        "operation": command.operation.id(),
-   25|     27|        "surface": "live_stack",
-   26|     27|        "law_id": types::LAW_ID,
-   27|     27|        "check_id": command.check_id.as_deref().unwrap_or(types::CHECK_ID),
-   28|     27|        "claim_id": command.claim_id.as_deref().unwrap_or(types::CLAIM_ID),
-   29|     27|        "candidate_digest": candidate,
-   30|     27|        "target_revision": candidate,
-   31|     27|        "artifact_path": "dev/observability",
-   32|     27|        "receipt_path": command.receipt_rel().to_string_lossy(),
-   33|     27|        "status": status,
-   34|     27|        "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
-                                                              ^12                                   ^15
-   35|     27|        "why_failed": failure.unwrap_or("none"),
-   36|     27|        "where_failed": if failure.is_some() { command.operation.id() } else { "none" },
-                                                             ^12               ^12           ^15
-   37|     27|        "next_repair": claims::next_repair(command.operation, status),
-   38|     27|        "claim_impact": if status == "pass" { "observability_evidence_only" } else { "readiness_release_completion_update_goal_blocked" },
-                                                            ^15                                    ^12
-   39|     27|        "timestamp": crate::audit::clock::now_iso(),
-   40|     27|        "duration_ms": 0,
-   41|     27|        "exporter": exporter(root, command.operation, candidate, status),
-   42|     27|        "redaction_status": "pass",
-   43|     27|        "bounded_output_status": claims::bounds_status(command),
-   44|     27|        "query_hint_logql": format!("_time:5m operation:{}", command.operation.id()),
-   45|     27|        "query_hint_promql": format!("ultragoal_command_total{{operation=\"{}\"}}", command.operation.id()),
-   46|     27|        "query_hint_traceql": format!("{{operation=\"{}\"}}", command.operation.id())
+    6|     31|pub(super) fn event(
+    7|     31|    root: &Path,
+    8|     31|    command: &ObserveCommand,
+    9|     31|    candidate: &str,
+   10|     31|    run_id: &str,
+   11|     31|    correlation_id: &str,
+   12|     31|    status: &str,
+   13|     31|    failure: Option<&str>,
+   14|     31|) -> Value {
+   15|     31|    json!({
+   16|     31|        "schema": types::EVENT_SCHEMA,
+   17|     31|        "run_id": run_id,
+   18|     31|        "correlation_id": correlation_id,
+   19|     31|        "trace_id": identity::id("trace", command.operation.id(), candidate),
+   20|     31|        "span_id": identity::id("span", command.operation.id(), candidate),
+   21|     31|        "parent_span_id": "",
+   22|     31|        "command": "ultragoal observe",
+   23|     31|        "subcommand": command.operation.subcommand(),
+   24|     31|        "operation": command.operation.id(),
+   25|     31|        "surface": "live_stack",
+   26|     31|        "law_id": types::LAW_ID,
+   27|     31|        "check_id": command.check_id.as_deref().unwrap_or(types::CHECK_ID),
+   28|     31|        "claim_id": command.claim_id.as_deref().unwrap_or(types::CLAIM_ID),
+   29|     31|        "candidate_digest": candidate,
+   30|     31|        "target_revision": candidate,
+   31|     31|        "artifact_path": "dev/observability",
+   32|     31|        "receipt_path": command.receipt_rel().to_string_lossy(),
+   33|     31|        "status": status,
+   34|     31|        "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
+                                                              ^12                                   ^19
+   35|     31|        "why_failed": failure.unwrap_or("none"),
+   36|     31|        "where_failed": if failure.is_some() { command.operation.id() } else { "none" },
+                                                             ^12               ^12           ^19
+   37|     31|        "next_repair": claims::next_repair(command.operation, status),
+   38|     31|        "claim_impact": if status == "pass" { "observability_evidence_only" } else { "readiness_release_completion_update_goal_blocked" },
+                                                            ^19                                    ^12
+   39|     31|        "timestamp": crate::audit::clock::now_iso(),
+   40|     31|        "duration_ms": 0,
+   41|     31|        "exporter": exporter(root, command.operation, candidate, status),
+   42|     31|        "redaction_status": "pass",
+   43|     31|        "bounded_output_status": claims::bounds_status(command),
+   44|     31|        "query_hint_logql": format!("_time:5m operation:{}", command.operation.id()),
+   45|     31|        "query_hint_promql": format!("ultragoal_command_total{{operation=\"{}\"}}", command.operation.id()),
+   46|     31|        "query_hint_traceql": format!("{{operation=\"{}\"}}", command.operation.id())
    47|       |    })
-   48|     27|}
+   48|     31|}
    49|       |
-   50|     27|fn exporter(
-   51|     27|    root: &Path,
-   52|     27|    operation: ObserveOperation,
-   53|     27|    candidate: &str,
-   54|     27|    status: &str,
-   55|     27|) -> &'static str {
-   56|     27|    if status == "pass"
-   57|     11|        && matches!(
-   58|     15|            operation,
+   50|     31|fn exporter(
+   51|     31|    root: &Path,
+   52|     31|    operation: ObserveOperation,
+   53|     31|    candidate: &str,
+   54|     31|    status: &str,
+   55|     31|) -> &'static str {
+   56|     31|    if status == "pass"
+   57|     15|        && matches!(
+   58|     19|            operation,
    59|       |            ObserveOperation::StackHealth | ObserveOperation::StackSmoke
    60|       |        )
    61|       |    {
    62|      4|        "victorialogs"
-   63|     23|    } else if super::live_stack_receipts_current(root, candidate) {
+   63|     27|    } else if super::live_stack_receipts_current(root, candidate) {
    64|      3|        "victorialogs"
    65|       |    } else {
-   66|     20|        "local_spool"
+   66|     24|        "local_spool"
    67|       |    }
-   68|     27|}
+   68|     31|}
    69|       |
-   70|     27|pub(super) fn metric(event: &Value, operation: ObserveOperation, status: &str) -> Value {
-   71|     27|    let metric_name = if matches!(operation, ObserveOperation::StackHealth) {
-                                       ^22
+   70|     31|pub(super) fn metric(event: &Value, operation: ObserveOperation, status: &str) -> Value {
+   71|     31|    let metric_name = if matches!(operation, ObserveOperation::StackHealth) {
+                                       ^26
    72|      5|        "ultragoal_stack_health_status"
    73|       |    } else {
-   74|     22|        "ultragoal_command_total"
+   74|     26|        "ultragoal_command_total"
    75|       |    };
-   76|     27|    json!({
-   77|     27|        "schema": "harness-ultragoal.observability-metric.v1",
-   78|     27|        "metric_name": metric_name,
-   79|     27|        "metric_value": if status == "pass" { 1 } else { 0 },
-                                                            ^15        ^12
-   80|     27|        "labels": labels(event, operation, status),
-   81|     27|        "run_id": event["run_id"],
-   82|     27|        "correlation_id": event["correlation_id"],
-   83|     27|        "trace_id": event["trace_id"],
-   84|     27|        "span_id": identity::id("metric", operation.id(), event["candidate_digest"].as_str().unwrap_or("")),
-   85|     27|        "parent_span_id": event["span_id"],
-   86|     27|        "command": "ultragoal observe",
-   87|     27|        "subcommand": operation.subcommand(),
-   88|     27|        "operation": operation.id(),
-   89|     27|        "surface": "live_stack",
-   90|     27|        "law_id": types::LAW_ID,
-   91|     27|        "check_id": types::CHECK_ID,
-   92|     27|        "claim_id": types::CLAIM_ID,
-   93|     27|        "candidate_digest": event["candidate_digest"],
-   94|     27|        "target_revision": event["target_revision"],
-   95|     27|        "artifact_path": event["artifact_path"],
-   96|     27|        "receipt_path": event["receipt_path"],
-   97|     27|        "status": status,
-   98|     27|        "failure_class": event["failure_class"],
-   99|     27|        "why_failed": event["why_failed"],
-  100|     27|        "where_failed": event["where_failed"],
-  101|     27|        "next_repair": event["next_repair"],
-  102|     27|        "claim_impact": event["claim_impact"],
-  103|     27|        "timestamp": event["timestamp"],
-  104|     27|        "duration_ms": 0,
-  105|     27|        "exporter": "victoriametrics",
-  106|     27|        "redaction_status": event["redaction_status"],
-  107|     27|        "bounded_output_status": event["bounded_output_status"],
-  108|     27|        "query_hint_logql": event["query_hint_logql"],
-  109|     27|        "query_hint_promql": event["query_hint_promql"],
-  110|     27|        "query_hint_traceql": event["query_hint_traceql"]
+   76|     31|    json!({
+   77|     31|        "schema": "harness-ultragoal.observability-metric.v1",
+   78|     31|        "metric_name": metric_name,
+   79|     31|        "metric_value": if status == "pass" { 1 } else { 0 },
+                                                            ^19        ^12
+   80|     31|        "labels": labels(event, operation, status),
+   81|     31|        "run_id": event["run_id"],
+   82|     31|        "correlation_id": event["correlation_id"],
+   83|     31|        "trace_id": event["trace_id"],
+   84|     31|        "span_id": identity::id("metric", operation.id(), event["candidate_digest"].as_str().unwrap_or("")),
+   85|     31|        "parent_span_id": event["span_id"],
+   86|     31|        "command": "ultragoal observe",
+   87|     31|        "subcommand": operation.subcommand(),
+   88|     31|        "operation": operation.id(),
+   89|     31|        "surface": "live_stack",
+   90|     31|        "law_id": types::LAW_ID,
+   91|     31|        "check_id": types::CHECK_ID,
+   92|     31|        "claim_id": types::CLAIM_ID,
+   93|     31|        "candidate_digest": event["candidate_digest"],
+   94|     31|        "target_revision": event["target_revision"],
+   95|     31|        "artifact_path": event["artifact_path"],
+   96|     31|        "receipt_path": event["receipt_path"],
+   97|     31|        "status": status,
+   98|     31|        "failure_class": event["failure_class"],
+   99|     31|        "why_failed": event["why_failed"],
+  100|     31|        "where_failed": event["where_failed"],
+  101|     31|        "next_repair": event["next_repair"],
+  102|     31|        "claim_impact": event["claim_impact"],
+  103|     31|        "timestamp": event["timestamp"],
+  104|     31|        "duration_ms": 0,
+  105|     31|        "exporter": "victoriametrics",
+  106|     31|        "redaction_status": event["redaction_status"],
+  107|     31|        "bounded_output_status": event["bounded_output_status"],
+  108|     31|        "query_hint_logql": event["query_hint_logql"],
+  109|     31|        "query_hint_promql": event["query_hint_promql"],
+  110|     31|        "query_hint_traceql": event["query_hint_traceql"]
   111|       |    })
-  112|     27|}
+  112|     31|}
   113|       |
-  114|     27|pub(super) fn trace(event: &Value, operation: ObserveOperation) -> Value {
-  115|     27|    let mut span = event.clone();
-  116|     27|    span["schema"] = json!("harness-ultragoal.observability-trace.v1");
-  117|     27|    span["exporter"] = json!("victoriatraces");
-  118|     27|    span["span_kind"] = json!("root");
-  119|     27|    span["span_name"] = json!(operation.id());
-  120|     27|    span
-  121|     27|}
+  114|     31|pub(super) fn trace(event: &Value, operation: ObserveOperation) -> Value {
+  115|     31|    let mut span = event.clone();
+  116|     31|    span["schema"] = json!("harness-ultragoal.observability-trace.v1");
+  117|     31|    span["exporter"] = json!("victoriatraces");
+  118|     31|    span["span_kind"] = json!("root");
+  119|     31|    span["span_name"] = json!(operation.id());
+  120|     31|    span
+  121|     31|}
   122|       |
-  123|     27|pub(super) fn redaction_status(event: &Value) -> &'static str {
-  124|     27|    let lower = event.to_string().to_ascii_lowercase();
-  125|     27|    if [
-  126|     27|        "authorization",
-  127|     27|        "api_key",
-  128|     27|        "token=",
-  129|     27|        "cookie",
-  130|     27|        "database_url",
-  131|     27|    ]
-  132|     27|    .iter()
-  133|    133|    .any(|needle| lower.contains(needle))
-                   ^27
+  123|     31|pub(super) fn redaction_status(event: &Value) -> &'static str {
+  124|     31|    let lower = event.to_string().to_ascii_lowercase();
+  125|     31|    if [
+  126|     31|        "authorization",
+  127|     31|        "api_key",
+  128|     31|        "token=",
+  129|     31|        "cookie",
+  130|     31|        "database_url",
+  131|     31|    ]
+  132|     31|    .iter()
+  133|    153|    .any(|needle| lower.contains(needle))
+                   ^31
   134|       |    {
   135|      1|        "fail"
   136|       |    } else {
-  137|     26|        "pass"
+  137|     30|        "pass"
   138|       |    }
-  139|     27|}
+  139|     31|}
   140|       |
-  141|     27|fn labels(event: &Value, operation: ObserveOperation, status: &str) -> Value {
-  142|     27|    json!({
-  143|     27|        "command": "observe",
-  144|     27|        "operation": operation.id(),
-  145|     27|        "status": status,
-  146|     27|        "law_id": types::LAW_ID,
-  147|     27|        "check_id": types::CHECK_ID,
-  148|     27|        "claim_id": types::CLAIM_ID,
-  149|     27|        "surface": "live_stack",
-  150|     27|        "failure_class": event["failure_class"].as_str().unwrap_or("none"),
-  151|     27|        "candidate_digest": event["candidate_digest"].as_str().unwrap_or(""),
-  152|     27|        "exporter": event["exporter"].as_str().unwrap_or("")
+  141|     31|fn labels(event: &Value, operation: ObserveOperation, status: &str) -> Value {
+  142|     31|    json!({
+  143|     31|        "command": "observe",
+  144|     31|        "operation": operation.id(),
+  145|     31|        "status": status,
+  146|     31|        "law_id": types::LAW_ID,
+  147|     31|        "check_id": types::CHECK_ID,
+  148|     31|        "claim_id": types::CLAIM_ID,
+  149|     31|        "surface": "live_stack",
+  150|     31|        "failure_class": event["failure_class"].as_str().unwrap_or("none"),
+  151|     31|        "candidate_digest": event["candidate_digest"].as_str().unwrap_or(""),
+  152|     31|        "exporter": event["exporter"].as_str().unwrap_or("")
   153|       |    })
-  154|     27|}
+  154|     31|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/observe/telemetry/spool.rs:
     1|       |use serde_json::Value;
@@ -20991,32 +21169,32 @@
     3|       |use std::io::{self, Write};
     4|       |use std::path::Path;
     5|       |
-    6|     30|pub(super) fn write(root: &Path, event: &Value) -> Result<(), String> {
-    7|     30|    let dir = ensure_dir(root)?;
-                      ^29                   ^1
-    8|     29|    let path = dir.join("events.jsonl");
-    9|     29|    let line = serde_json::to_string(event).expect("serde_json::Value serialization is infallible");
-   10|     29|    let mut file = OpenOptions::new()
-                      ^28
-   11|     29|        .create(true)
-   12|     29|        .append(true)
-   13|     29|        .open(&path)
-   14|     29|        .map_err(|err| spool_io_error(&path, err))?;
+    6|     34|pub(super) fn write(root: &Path, event: &Value) -> Result<(), String> {
+    7|     34|    let dir = ensure_dir(root)?;
+                      ^33                   ^1
+    8|     33|    let path = dir.join("events.jsonl");
+    9|     33|    let line = serde_json::to_string(event).expect("serde_json::Value serialization is infallible");
+   10|     33|    let mut file = OpenOptions::new()
+                      ^32
+   11|     33|        .create(true)
+   12|     33|        .append(true)
+   13|     33|        .open(&path)
+   14|     33|        .map_err(|err| spool_io_error(&path, err))?;
                                      ^1             ^1     ^1   ^1
-   15|     28|    write_line(&mut file, &line, &path)
-   16|     30|}
+   15|     32|    write_line(&mut file, &line, &path)
+   16|     34|}
    17|       |
-   18|     32|pub(super) fn ensure_dir(root: &Path) -> Result<std::path::PathBuf, String> {
-   19|     32|    let dir = root.join("validation_artifacts/observability/spool");
-   20|     32|    fs::create_dir_all(&dir).map_err(|err| spool_io_error(&dir, err))?;
+   18|     36|pub(super) fn ensure_dir(root: &Path) -> Result<std::path::PathBuf, String> {
+   19|     36|    let dir = root.join("validation_artifacts/observability/spool");
+   20|     36|    fs::create_dir_all(&dir).map_err(|err| spool_io_error(&dir, err))?;
                                                          ^1             ^1    ^1   ^1
-   21|     31|    Ok(dir)
-   22|     32|}
+   21|     35|    Ok(dir)
+   22|     36|}
    23|       |
-   24|     29|fn write_line<W: Write>(writer: &mut W, line: &str, path: &Path) -> Result<(), String> {
-   25|     29|    writeln!(writer, "{line}").map_err(|err| spool_io_error(path, err))
+   24|     33|fn write_line<W: Write>(writer: &mut W, line: &str, path: &Path) -> Result<(), String> {
+   25|     33|    writeln!(writer, "{line}").map_err(|err| spool_io_error(path, err))
                                                            ^1             ^1    ^1
-   26|     29|}
+   26|     33|}
    27|       |
    28|      3|fn spool_io_error(path: &Path, err: io::Error) -> String {
    29|      3|    format!("{}: {err}", path.display())
@@ -21062,10 +21240,10 @@
    28|       |}
    29|       |
    30|       |impl ObserveOperation {
-   31|    491|    pub(crate) fn id(self) -> &'static str {
-   32|    491|        match self {
+   31|    551|    pub(crate) fn id(self) -> &'static str {
+   32|    551|        match self {
    33|     16|            Self::StackUp => "observe.stack.up",
-   34|    124|            Self::StackHealth => "observe.stack.health",
+   34|    128|            Self::StackHealth => "observe.stack.health",
    35|     73|            Self::StackSmoke => "observe.stack.smoke",
    36|     16|            Self::StackDown => "observe.stack.down",
    37|     29|            Self::StackGcPlan => "observe.stack.gc.plan",
@@ -21076,15 +21254,15 @@
    42|      3|            Self::TracesQuery => "observe.traces.query",
    43|      1|            Self::Snapshot => "observe.snapshot",
    44|     99|            Self::Prove => "observe.prove",
-   45|     27|            Self::ExplainFailure => "observe.explain-failure",
+   45|     83|            Self::ExplainFailure => "observe.explain-failure",
    46|     14|            Self::ExplainClaim => "observe.explain-claim",
    47|     14|            Self::ExplainCheck => "observe.explain-check",
    48|     14|            Self::ExplainLaw => "observe.explain-law",
    49|       |        }
-   50|    491|    }
+   50|    551|    }
    51|       |
-   52|     59|    pub(crate) fn subcommand(self) -> &'static str {
-   53|     59|        match self {
+   52|     67|    pub(crate) fn subcommand(self) -> &'static str {
+   53|     67|        match self {
    54|     22|            Self::StackUp | Self::StackHealth | Self::StackSmoke | Self::StackDown => "stack",
    55|      8|            Self::StackGcPlan | Self::StackGcDryRun | Self::StackGcApply => "stack.gc",
    56|      3|            Self::LogsQuery => "logs",
@@ -21092,17 +21270,17 @@
    58|      1|            Self::TracesQuery => "traces",
    59|      1|            Self::Snapshot => "snapshot",
    60|     13|            Self::Prove => "prove",
-   61|      4|            Self::ExplainFailure => "explain-failure",
+   61|     12|            Self::ExplainFailure => "explain-failure",
    62|      2|            Self::ExplainClaim => "explain-claim",
    63|      2|            Self::ExplainCheck => "explain-check",
    64|      2|            Self::ExplainLaw => "explain-law",
    65|       |        }
-   66|     59|    }
+   66|     67|    }
    67|       |
-   68|     71|    pub(crate) fn receipt_rel(self) -> PathBuf {
-   69|     71|        let name = self.id().replace('.', "-");
-   70|     71|        PathBuf::from(format!("validation_artifacts/observability/{name}.json"))
-   71|     71|    }
+   68|     83|    pub(crate) fn receipt_rel(self) -> PathBuf {
+   69|     83|        let name = self.id().replace('.', "-");
+   70|     83|        PathBuf::from(format!("validation_artifacts/observability/{name}.json"))
+   71|     83|    }
    72|       |}
    73|       |
    74|       |#[derive(Debug)]
@@ -21120,12 +21298,12 @@
    86|       |}
    87|       |
    88|       |impl ObserveCommand {
-   89|     72|    pub(crate) fn receipt_rel(&self) -> PathBuf {
-   90|     72|        self.receipt
-   91|     72|            .clone()
-   92|     72|            .unwrap_or_else(|| self.operation.receipt_rel())
-                                             ^27            ^27
-   93|     72|    }
+   89|     80|    pub(crate) fn receipt_rel(&self) -> PathBuf {
+   90|     80|        self.receipt
+   91|     80|            .clone()
+   92|     80|            .unwrap_or_else(|| self.operation.receipt_rel())
+                                             ^35            ^35
+   93|     80|    }
    94|       |}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/performance.rs:
@@ -22382,59 +22560,59 @@
     1|       |use crate::cli::rust::types::RUST_RECEIPT_SCHEMA;
     2|       |use serde_json::Value;
     3|       |
-    4|     60|pub(crate) fn surface_value_failures(value: &Value, expected_law: &str) -> Vec<String> {
-    5|     60|    let mut out = Vec::new();
-    6|     60|    if value.get("schema").and_then(Value::as_str) != Some(RUST_RECEIPT_SCHEMA) {
+    4|     61|pub(crate) fn surface_value_failures(value: &Value, expected_law: &str) -> Vec<String> {
+    5|     61|    let mut out = Vec::new();
+    6|     61|    if value.get("schema").and_then(Value::as_str) != Some(RUST_RECEIPT_SCHEMA) {
     7|      1|        out.push("rust_devx_receipt_wrong_schema".to_string());
-    8|     59|    }
-    9|    720|    for ptr in [
-   10|     60|        "/issuer/tool",
-   11|     60|        "/command/name",
-   12|     60|        "/law_ids",
-   13|     60|        "/digests/candidate",
-   14|     60|        "/digests/cargo_lock",
-   15|     60|        "/toolchain/rustc_version",
-   16|     60|        "/cache/cache_mode",
-   17|     60|        "/resource_discipline/bounded_resources",
-   18|     60|        "/tool_observations/probes",
-   19|     60|        "/observation_failures",
-   20|     60|        "/staleness_policy/invalidates_on",
-   21|     60|        "/claim_ceiling",
-   22|     60|    ] {
-   23|    720|        if value.pointer(ptr).is_none() {
-   24|     62|            out.push(format!("rust_devx_receipt_missing:{ptr}"));
-   25|    658|        }
+    8|     60|    }
+    9|    732|    for ptr in [
+   10|     61|        "/issuer/tool",
+   11|     61|        "/command/name",
+   12|     61|        "/law_ids",
+   13|     61|        "/digests/candidate",
+   14|     61|        "/digests/cargo_lock",
+   15|     61|        "/toolchain/rustc_version",
+   16|     61|        "/cache/cache_mode",
+   17|     61|        "/resource_discipline/bounded_resources",
+   18|     61|        "/tool_observations/probes",
+   19|     61|        "/observation_failures",
+   20|     61|        "/staleness_policy/invalidates_on",
+   21|     61|        "/claim_ceiling",
+   22|     61|    ] {
+   23|    732|        if value.pointer(ptr).is_none() {
+   24|     71|            out.push(format!("rust_devx_receipt_missing:{ptr}"));
+   25|    661|        }
    26|       |    }
-   27|     60|    let law_found = value
-   28|     60|        .get("law_ids")
-   29|     60|        .and_then(Value::as_array)
-   30|     60|        .is_some_and(|rows| rows.iter().any(|row| row.as_str() == Some(expected_law)));
+   27|     61|    let law_found = value
+   28|     61|        .get("law_ids")
+   29|     61|        .and_then(Value::as_array)
+   30|     61|        .is_some_and(|rows| rows.iter().any(|row| row.as_str() == Some(expected_law)));
                                           ^54         ^54       ^54             ^54
-   31|     60|    if !law_found {
-   32|      7|        out.push(format!("rust_devx_receipt_missing_law_id:{expected_law}"));
+   31|     61|    if !law_found {
+   32|      8|        out.push(format!("rust_devx_receipt_missing_law_id:{expected_law}"));
    33|     53|    }
-   34|     60|    if value.get("status").and_then(Value::as_str) == Some("pass")
-   35|     53|        && value.get("claim_ceiling").and_then(Value::as_str) != Some("rust_devx_observation_bound")
+   34|     61|    if value.get("status").and_then(Value::as_str) == Some("pass")
+   35|     54|        && value.get("claim_ceiling").and_then(Value::as_str) != Some("rust_devx_observation_bound")
    36|      1|    {
    37|      1|        out.push("rust_devx_pass_without_observation_bound_ceiling".to_string());
-   38|     59|    }
-   39|     60|    if value.get("status").and_then(Value::as_str) == Some("pass")
-   40|     53|        && value
-   41|     53|            .get("observation_failures")
-   42|     53|            .and_then(Value::as_array)
-   43|     53|            .is_some_and(|failures| !failures.is_empty())
+   38|     60|    }
+   39|     61|    if value.get("status").and_then(Value::as_str) == Some("pass")
+   40|     54|        && value
+   41|     54|            .get("observation_failures")
+   42|     54|            .and_then(Value::as_array)
+   43|     54|            .is_some_and(|failures| !failures.is_empty())
    44|      1|    {
    45|      1|        out.push("rust_devx_pass_with_observation_failures".to_string());
-   46|     59|    }
-   47|     60|    if value
-   48|     60|        .pointer("/tool_observations/raw_output_is_authority")
-   49|     60|        .and_then(Value::as_bool)
-   50|     60|        != Some(false)
-   51|      8|    {
-   52|      8|        out.push("rust_devx_raw_output_marked_authority".to_string());
+   46|     60|    }
+   47|     61|    if value
+   48|     61|        .pointer("/tool_observations/raw_output_is_authority")
+   49|     61|        .and_then(Value::as_bool)
+   50|     61|        != Some(false)
+   51|      9|    {
+   52|      9|        out.push("rust_devx_raw_output_marked_authority".to_string());
    53|     52|    }
-   54|     60|    out
-   55|     60|}
+   54|     61|    out
+   55|     61|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/rust/types.rs:
     1|       |use serde::Serialize;
@@ -23023,33 +23201,33 @@
    21|       |
    22|  10.2k|pub fn file(path: &Path) -> Result<String, String> {
    23|  10.2k|    read_file_bytes(path).map(|payload| bytes(&payload))
-                                                      ^9.83k^9.83k
+                                                      ^9.84k^9.84k
    24|  10.2k|}
    25|       |
    26|   541k|pub fn read_file_bytes(path: &Path) -> Result<Vec<u8>, String> {
    27|   541k|    let before = metadata_result(path, fs::symlink_metadata(path), "metadata failed")?;
-                      ^538k                                                                        ^2.19k
-   28|   538k|    if before.file_type().is_symlink() || !before.file_type().is_file() {
-                                                        ^538k
+                      ^539k                                                                        ^2.21k
+   28|   539k|    if before.file_type().is_symlink() || !before.file_type().is_file() {
+                                                        ^539k
    29|      4|        return Err(format!("{}: not a regular file", path.display()));
-   30|   538k|    }
-   31|   538k|    if is_hard_linked(&before) {
+   30|   539k|    }
+   31|   539k|    if is_hard_linked(&before) {
    32|     14|        return Err(format!("{}: hard-linked file rejected", path.display()));
-   33|   538k|    }
-   34|   538k|    let mut options = OpenOptions::new();
-   35|   538k|    options.read(true);
+   33|   539k|    }
+   34|   539k|    let mut options = OpenOptions::new();
+   35|   539k|    options.read(true);
    36|       |    #[cfg(unix)]
-   37|   538k|    options.custom_flags(O_NOFOLLOW);
-   38|   538k|    let mut file = open_result(path, options.open(path))?;
+   37|   539k|    options.custom_flags(O_NOFOLLOW);
+   38|   539k|    let mut file = open_result(path, options.open(path))?;
                                                                       ^0
-   39|   538k|    let opened = metadata_result(path, file.metadata(), "opened metadata failed")?;
+   39|   539k|    let opened = metadata_result(path, file.metadata(), "opened metadata failed")?;
                                                                                                ^0
-   40|   538k|    reject_changed_or_linked(path, &before, &opened)?;
+   40|   539k|    reject_changed_or_linked(path, &before, &opened)?;
                                                                   ^0
-   41|   538k|    let mut payload = Vec::new();
-   42|   538k|    read_result(path, file.read_to_end(&mut payload))?;
+   41|   539k|    let mut payload = Vec::new();
+   42|   539k|    read_result(path, file.read_to_end(&mut payload))?;
                                                                    ^0
-   43|   538k|    Ok(payload)
+   43|   539k|    Ok(payload)
    44|   541k|}
    45|       |
    46|  1.08M|fn metadata_result(
@@ -23058,48 +23236,48 @@
    49|  1.08M|    label: &str,
    50|  1.08M|) -> Result<fs::Metadata, String> {
    51|  1.08M|    result.map_err(|err| format!("{}: {label}: {err}", path.display()))
-                                       ^2.19k                        ^2.19k^2.19k
+                                       ^2.21k                        ^2.21k^2.21k
    52|  1.08M|}
    53|       |
-   54|   538k|fn open_result(path: &Path, result: io::Result<fs::File>) -> Result<fs::File, String> {
-   55|   538k|    result.map_err(|err| format!("{}: open failed: {err}", path.display()))
+   54|   539k|fn open_result(path: &Path, result: io::Result<fs::File>) -> Result<fs::File, String> {
+   55|   539k|    result.map_err(|err| format!("{}: open failed: {err}", path.display()))
                                        ^1                                ^1   ^1
-   56|   538k|}
+   56|   539k|}
    57|       |
-   58|   538k|fn read_result(path: &Path, result: io::Result<usize>) -> Result<(), String> {
-   59|   538k|    result
-   60|   538k|        .map(|_| ())
-   61|   538k|        .map_err(|err| format!("{}: read failed: {err}", path.display()))
+   58|   539k|fn read_result(path: &Path, result: io::Result<usize>) -> Result<(), String> {
+   59|   539k|    result
+   60|   539k|        .map(|_| ())
+   61|   539k|        .map_err(|err| format!("{}: read failed: {err}", path.display()))
                                      ^1                                ^1   ^1
-   62|   538k|}
+   62|   539k|}
    63|       |
    64|  13.9k|pub fn canonical_json(value: &serde_json::Value) -> String {
    65|  13.9k|    let sorted = sorted_value(value);
    66|  13.9k|    self::bytes(&sorted.to_string().into_bytes())
    67|  13.9k|}
    68|       |
-   69|   140k|fn sorted_value(value: &Value) -> Value {
-   70|   140k|    match value {
+   69|   141k|fn sorted_value(value: &Value) -> Value {
+   70|   141k|    match value {
    71|  1.46k|        Value::Array(items) => Value::Array(items.iter().map(sorted_value).collect()),
-   72|  27.1k|        Value::Object(items) => {
-   73|  27.1k|            let mut keys = items.keys().collect::<Vec<_>>();
-   74|  27.1k|            keys.sort();
-   75|  27.1k|            let mut sorted = Map::new();
-   76|  98.7k|            for key in keys {
-                                     ^27.1k
-   77|  98.7k|                let item = items.get(key).expect("sorted key collected from object");
-   78|  98.7k|                sorted.insert(key.clone(), sorted_value(item));
-   79|  98.7k|            }
-   80|  27.1k|            Value::Object(sorted)
+   72|  27.2k|        Value::Object(items) => {
+   73|  27.2k|            let mut keys = items.keys().collect::<Vec<_>>();
+   74|  27.2k|            keys.sort();
+   75|  27.2k|            let mut sorted = Map::new();
+   76|  99.1k|            for key in keys {
+                                     ^27.2k
+   77|  99.1k|                let item = items.get(key).expect("sorted key collected from object");
+   78|  99.1k|                sorted.insert(key.clone(), sorted_value(item));
+   79|  99.1k|            }
+   80|  27.2k|            Value::Object(sorted)
    81|       |        }
    82|   112k|        other => other.clone(),
    83|       |    }
-   84|   140k|}
+   84|   141k|}
    85|       |
    86|       |#[cfg(unix)]
-   87|   538k|fn metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
-   88|   538k|    before.dev() != opened.dev() || before.ino() != opened.ino()
-   89|   538k|}
+   87|   539k|fn metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
+   88|   539k|    before.dev() != opened.dev() || before.ino() != opened.ino()
+   89|   539k|}
    90|       |
    91|       |#[cfg(unix)]
    92|  1.07M|fn is_hard_linked(meta: &fs::Metadata) -> bool {
@@ -23116,19 +23294,19 @@
   103|       |    false
   104|       |}
   105|       |
-  106|   538k|fn reject_changed_or_linked(
-  107|   538k|    path: &Path,
-  108|   538k|    before: &fs::Metadata,
-  109|   538k|    opened: &fs::Metadata,
-  110|   538k|) -> Result<(), String> {
-  111|   538k|    if metadata_changed(before, opened) {
+  106|   539k|fn reject_changed_or_linked(
+  107|   539k|    path: &Path,
+  108|   539k|    before: &fs::Metadata,
+  109|   539k|    opened: &fs::Metadata,
+  110|   539k|) -> Result<(), String> {
+  111|   539k|    if metadata_changed(before, opened) {
   112|      1|        return Err(format!("{}: file changed during open", path.display()));
-  113|   538k|    }
-  114|   538k|    if is_hard_linked(opened) {
+  113|   539k|    }
+  114|   539k|    if is_hard_linked(opened) {
   115|      1|        return Err(format!("{}: hard-linked file rejected", path.display()));
-  116|   538k|    }
-  117|   538k|    Ok(())
-  118|   538k|}
+  116|   539k|    }
+  117|   539k|    Ok(())
+  118|   539k|}
   119|       |
   120|       |#[cfg(all(test, unix))]
   121|       |mod tests {
@@ -23240,21 +23418,21 @@
     4|       |
     5|  12.5k|pub fn read_json(path: &Path) -> Result<Value, String> {
     6|  12.5k|    let bytes = crate::digest::read_file_bytes(path)
-                      ^10.6k
+                      ^10.7k
     7|  12.5k|        .map_err(|err| format!("{}: json read failed: {err}", path.display()))?;
-                                     ^1.81k                                 ^1.81k^1.81k     ^1.81k
-    8|  10.6k|    serde_json::from_slice(&bytes)
-    9|  10.6k|        .map_err(|err| format!("{}: malformed json: {err}", path.display()))
+                                     ^1.82k                                 ^1.82k^1.82k     ^1.82k
+    8|  10.7k|    serde_json::from_slice(&bytes)
+    9|  10.7k|        .map_err(|err| format!("{}: malformed json: {err}", path.display()))
                                      ^69                                  ^69  ^69
    10|  12.5k|}
    11|       |
-   12|    213|pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
-   13|    213|    let text = serde_json::to_string_pretty(value)
-                      ^212
-   14|    213|        .map_err(|err| format!("{}: json encode failed: {err}", path.display()))?;
+   12|    216|pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
+   13|    216|    let text = serde_json::to_string_pretty(value)
+                      ^215
+   14|    216|        .map_err(|err| format!("{}: json encode failed: {err}", path.display()))?;
                                      ^1                                       ^1   ^1         ^1
-   15|    212|    crate::output_path::write(path, format!("{text}\n"), "json")
-   16|    213|}
+   15|    215|    crate::output_path::write(path, format!("{text}\n"), "json")
+   16|    216|}
    17|       |
    18|  6.71k|pub fn object_get<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
    19|  6.71k|    value.as_object().and_then(|obj| obj.get(key))
@@ -23612,172 +23790,172 @@
    11|       |#[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
    12|       |const O_NOFOLLOW: i32 = 0;
    13|       |
-   14|    459|pub fn prepare_parent(path: &Path) -> Result<(), String> {
-   15|    459|    if path.as_os_str().is_empty() {
+   14|    465|pub fn prepare_parent(path: &Path) -> Result<(), String> {
+   15|    465|    if path.as_os_str().is_empty() {
    16|      1|        return Err("output path is empty".to_string());
-   17|    458|    }
-   18|    458|    if path
-   19|    458|        .components()
-   20|  4.13k|        .any(|part| matches!(part, Component::ParentDir))
-                       ^458
+   17|    464|    }
+   18|    464|    if path
+   19|    464|        .components()
+   20|  4.19k|        .any(|part| matches!(part, Component::ParentDir))
+                       ^464
    21|       |    {
    22|      1|        return Err(format!(
    23|      1|            "{}: output path uses parent segment",
    24|      1|            path.display()
    25|      1|        ));
-   26|    457|    }
-   27|    457|    if let Some(parent) = path.parent()
-                              ^456
-   28|    456|        && !parent.as_os_str().is_empty()
+   26|    463|    }
+   27|    463|    if let Some(parent) = path.parent()
+                              ^462
+   28|    462|        && !parent.as_os_str().is_empty()
    29|       |    {
-   30|    456|        reject_existing_symlink_components(parent)?;
+   30|    462|        reject_existing_symlink_components(parent)?;
                                                                 ^2
-   31|    454|        fs::create_dir_all(parent)
-   32|    454|            .map_err(|err| format!("{}: create parent failed: {err}", parent.display()))?;
+   31|    460|        fs::create_dir_all(parent)
+   32|    460|            .map_err(|err| format!("{}: create parent failed: {err}", parent.display()))?;
                                          ^7                                         ^7     ^7         ^7
-   33|    447|        reject_symlink_components(parent)?;
+   33|    453|        reject_symlink_components(parent)?;
                                                        ^0
    34|      1|    }
-   35|    448|    reject_symlink_components(path)?;
+   35|    454|    reject_symlink_components(path)?;
                                                  ^2
-   36|    446|    Ok(())
-   37|    459|}
+   36|    452|    Ok(())
+   37|    465|}
    38|       |
-   39|    224|pub fn create_file(path: &Path, label: &str) -> Result<File, String> {
-   40|    224|    prepare_parent(path)?;
+   39|    227|pub fn create_file(path: &Path, label: &str) -> Result<File, String> {
+   40|    227|    prepare_parent(path)?;
                                       ^1
-   41|    223|    let mut options = OpenOptions::new();
-   42|    223|    options.create_new(true).write(true);
+   41|    226|    let mut options = OpenOptions::new();
+   42|    226|    options.create_new(true).write(true);
    43|       |    #[cfg(unix)]
-   44|    223|    options.custom_flags(O_NOFOLLOW);
-   45|    223|    let file = options
-                      ^222
-   46|    223|        .open(path)
-   47|    223|        .map_err(|err| format!("{}: {label} create failed: {err}", path.display()))?;
+   44|    226|    options.custom_flags(O_NOFOLLOW);
+   45|    226|    let file = options
+                      ^225
+   46|    226|        .open(path)
+   47|    226|        .map_err(|err| format!("{}: {label} create failed: {err}", path.display()))?;
                                      ^1                                          ^1   ^1         ^1
-   48|    222|    reject_symlink_components(path)?;
+   48|    225|    reject_symlink_components(path)?;
                                                  ^0
-   49|    222|    Ok(file)
-   50|    224|}
+   49|    225|    Ok(file)
+   50|    227|}
    51|       |
-   52|    223|pub fn write(path: &Path, bytes: impl AsRef<[u8]>, label: &str) -> Result<(), String> {
-   53|    223|    let (tmp, mut file) = create_temp_file(path, label)?;
-                       ^214 ^214                                     ^9
-   54|    214|    write_result(path, label, file.write_all(bytes.as_ref()))?;
+   52|    226|pub fn write(path: &Path, bytes: impl AsRef<[u8]>, label: &str) -> Result<(), String> {
+   53|    226|    let (tmp, mut file) = create_temp_file(path, label)?;
+                       ^217 ^217                                     ^9
+   54|    217|    write_result(path, label, file.write_all(bytes.as_ref()))?;
                                                                            ^0
-   55|    214|    sync_result(&tmp, label, file.sync_all())?;
+   55|    217|    sync_result(&tmp, label, file.sync_all())?;
                                                            ^0
-   56|    214|    drop(file);
-   57|    214|    finish_temp_file(&tmp, path, label)
-   58|    223|}
+   56|    217|    drop(file);
+   57|    217|    finish_temp_file(&tmp, path, label)
+   58|    226|}
    59|       |
-   60|    215|pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
-   61|    215|    result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
+   60|    218|pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
+   61|    218|    result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
                                        ^1                                         ^1   ^1
-   62|    215|}
+   62|    218|}
    63|       |
-   64|    215|pub(crate) fn sync_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
-   65|    215|    result.map_err(|err| format!("{}: {label} sync failed: {err}", path.display()))
+   64|    218|pub(crate) fn sync_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
+   65|    218|    result.map_err(|err| format!("{}: {label} sync failed: {err}", path.display()))
                                        ^1                                        ^1   ^1
-   66|    215|}
+   66|    218|}
    67|       |
-   68|    232|pub fn create_temp_file(path: &Path, label: &str) -> Result<(std::path::PathBuf, File), String> {
-   69|    232|    prepare_parent(path)?;
+   68|    235|pub fn create_temp_file(path: &Path, label: &str) -> Result<(std::path::PathBuf, File), String> {
+   69|    235|    prepare_parent(path)?;
                                       ^9
-   70|    223|    let tmp = temp_path(path)?;
-                      ^222                 ^1
-   71|    222|    let _ = fs::remove_file(&tmp);
-   72|    222|    let file = create_file(&tmp, label)?;
+   70|    226|    let tmp = temp_path(path)?;
+                      ^225                 ^1
+   71|    225|    let _ = fs::remove_file(&tmp);
+   72|    225|    let file = create_file(&tmp, label)?;
                                                      ^0
-   73|    222|    Ok((tmp, file))
-   74|    232|}
+   73|    225|    Ok((tmp, file))
+   74|    235|}
    75|       |
-   76|    223|pub fn finish_temp_file(tmp: &Path, path: &Path, label: &str) -> Result<(), String> {
-   77|    223|    reject_symlink_components(tmp)?;
+   76|    226|pub fn finish_temp_file(tmp: &Path, path: &Path, label: &str) -> Result<(), String> {
+   77|    226|    reject_symlink_components(tmp)?;
                                                 ^0
-   78|    223|    if let Ok(meta) = fs::symlink_metadata(path)
-                            ^16
-   79|     16|        && meta.file_type().is_symlink()
+   78|    226|    if let Ok(meta) = fs::symlink_metadata(path)
+                            ^18
+   79|     18|        && meta.file_type().is_symlink()
    80|       |    {
    81|      1|        let _ = fs::remove_file(tmp);
    82|      1|        return Err(format!("{}: output path uses symlink", path.display()));
-   83|    222|    }
-   84|    222|    fs::rename(tmp, path).map_err(|err| format!("{}: {label} rename failed: {err}", path.display()))
+   83|    225|    }
+   84|    225|    fs::rename(tmp, path).map_err(|err| format!("{}: {label} rename failed: {err}", path.display()))
                                                       ^4                                          ^4   ^4
-   85|    223|}
+   85|    226|}
    86|       |
-   87|    223|fn temp_path(path: &Path) -> Result<std::path::PathBuf, String> {
-   88|    223|    let name = path
-                      ^222
-   89|    223|        .file_name()
-   90|    223|        .ok_or_else(|| format!("{}: output path lacks file name", path.display()))?
+   87|    226|fn temp_path(path: &Path) -> Result<std::path::PathBuf, String> {
+   88|    226|    let name = path
+                      ^225
+   89|    226|        .file_name()
+   90|    226|        .ok_or_else(|| format!("{}: output path lacks file name", path.display()))?
                                      ^1                                         ^1   ^1         ^1
-   91|    222|        .to_string_lossy();
-   92|    222|    let parent = path.parent().unwrap_or(Path::new(""));
-   93|    222|    Ok(parent.join(format!(".{name}.tmp-{}", std::process::id())))
-   94|    223|}
+   91|    225|        .to_string_lossy();
+   92|    225|    let parent = path.parent().unwrap_or(Path::new(""));
+   93|    225|    Ok(parent.join(format!(".{name}.tmp-{}", std::process::id())))
+   94|    226|}
    95|       |
-   96|    457|pub(crate) fn reject_existing_symlink_components(path: &Path) -> Result<(), String> {
-   97|    457|    let mut cursor = start_cursor(path)?;
+   96|    463|pub(crate) fn reject_existing_symlink_components(path: &Path) -> Result<(), String> {
+   97|    463|    let mut cursor = start_cursor(path)?;
                                                      ^0
-   98|  3.65k|    for part in path.components() {
-                              ^457 ^457
-   99|  3.65k|        match part {
-  100|    456|            Component::RootDir | Component::CurDir => continue,
+   98|  3.71k|    for part in path.components() {
+                              ^463 ^463
+   99|  3.71k|        match part {
+  100|    462|            Component::RootDir | Component::CurDir => continue,
   101|       |            Component::ParentDir | Component::Prefix(_) => {
   102|      1|                return Err(format!("{}: unsafe output path", path.display()));
   103|       |            }
-  104|  3.20k|            Component::Normal(name) => cursor.push(name),
+  104|  3.25k|            Component::Normal(name) => cursor.push(name),
   105|       |        }
-  106|  3.20k|        let Ok(meta) = fs::symlink_metadata(&cursor) else {
-                             ^3.17k
+  106|  3.25k|        let Ok(meta) = fs::symlink_metadata(&cursor) else {
+                             ^3.22k
   107|     23|            break;
   108|       |        };
-  109|  3.17k|        if meta.file_type().is_symlink() {
+  109|  3.22k|        if meta.file_type().is_symlink() {
   110|      2|            return Err(format!("{}: output path uses symlink", path.display()));
-  111|  3.17k|        }
+  111|  3.22k|        }
   112|       |    }
-  113|    454|    Ok(())
-  114|    457|}
+  113|    460|    Ok(())
+  114|    463|}
   115|       |
-  116|  1.34k|pub(crate) fn reject_symlink_components(path: &Path) -> Result<(), String> {
-  117|  1.34k|    let mut cursor = start_cursor(path)?;
+  116|  1.35k|pub(crate) fn reject_symlink_components(path: &Path) -> Result<(), String> {
+  117|  1.35k|    let mut cursor = start_cursor(path)?;
                                                      ^0
-  118|  11.6k|    for part in path.components() {
-                              ^1.34k^1.34k
-  119|  11.6k|        match part {
-  120|  1.34k|            Component::RootDir | Component::CurDir => continue,
+  118|  11.8k|    for part in path.components() {
+                              ^1.35k^1.35k
+  119|  11.8k|        match part {
+  120|  1.35k|            Component::RootDir | Component::CurDir => continue,
   121|       |            Component::ParentDir | Component::Prefix(_) => {
   122|      1|                return Err(format!("{}: unsafe output path", path.display()));
   123|       |            }
-  124|  10.3k|            Component::Normal(name) => cursor.push(name),
+  124|  10.5k|            Component::Normal(name) => cursor.push(name),
   125|       |        }
-  126|  10.3k|        if fs::symlink_metadata(&cursor)
-  127|  10.3k|            .map(|meta| meta.file_type().is_symlink())
-                                      ^9.91k           ^9.91k
-  128|  10.3k|            .unwrap_or(false)
+  126|  10.5k|        if fs::symlink_metadata(&cursor)
+  127|  10.5k|            .map(|meta| meta.file_type().is_symlink())
+                                      ^10.0k           ^10.0k
+  128|  10.5k|            .unwrap_or(false)
   129|       |        {
   130|      2|            return Err(format!("{}: output path uses symlink", path.display()));
-  131|  10.3k|        }
+  131|  10.4k|        }
   132|       |    }
-  133|  1.33k|    Ok(())
-  134|  1.34k|}
+  133|  1.35k|    Ok(())
+  134|  1.35k|}
   135|       |
-  136|  1.79k|fn start_cursor(path: &Path) -> Result<std::path::PathBuf, String> {
-  137|  1.79k|    start_cursor_with(path, std::env::current_dir)
-  138|  1.79k|}
+  136|  1.82k|fn start_cursor(path: &Path) -> Result<std::path::PathBuf, String> {
+  137|  1.82k|    start_cursor_with(path, std::env::current_dir)
+  138|  1.82k|}
   139|       |
-  140|  1.79k|pub(crate) fn start_cursor_with(
-  141|  1.79k|    path: &Path,
-  142|  1.79k|    current_dir: impl FnOnce() -> std::io::Result<std::path::PathBuf>,
-  143|  1.79k|) -> Result<std::path::PathBuf, String> {
-  144|  1.79k|    if path.is_absolute() {
-  145|  1.77k|        Ok(Path::new("/").to_path_buf())
+  140|  1.82k|pub(crate) fn start_cursor_with(
+  141|  1.82k|    path: &Path,
+  142|  1.82k|    current_dir: impl FnOnce() -> std::io::Result<std::path::PathBuf>,
+  143|  1.82k|) -> Result<std::path::PathBuf, String> {
+  144|  1.82k|    if path.is_absolute() {
+  145|  1.79k|        Ok(Path::new("/").to_path_buf())
   146|       |    } else {
   147|     27|        current_dir().map_err(|err| format!("cwd unavailable: {err}"))
                                                   ^1
   148|       |    }
-  149|  1.79k|}
+  149|  1.82k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/package.rs:
     1|       |use crate::digest;
@@ -24127,11 +24305,11 @@
    12|       |pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
    13|       |pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
    14|       |
-   15|  1.06k|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
-   16|  1.06k|    let mut out = Vec::new();
-   17|  2.13k|    for key in ["skills", "agents"] {
-                             ^1.06k
-   18|  2.13k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
+   15|  1.07k|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
+   16|  1.07k|    let mut out = Vec::new();
+   17|  2.14k|    for key in ["skills", "agents"] {
+                             ^1.07k
+   18|  2.14k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
                                   ^384
    19|  3.95k|            for row in rows {
                                      ^384
@@ -24143,70 +24321,70 @@
    23|       |            }
    24|  1.75k|        }
    25|       |    }
-   26|  1.06k|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
+   26|  1.07k|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
                               ^266
    27|    266|        out.push(path.to_string());
-   28|    801|    }
-   29|  5.33k|    for key in [
-   30|  1.06k|        "schemas",
-   31|  1.06k|        "fixtures",
-   32|  1.06k|        "authorable_templates",
-   33|  1.06k|        "generated_examples",
-   34|  1.06k|        "resources",
-   35|  1.06k|    ] {
-   36|  5.33k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
-                                  ^1.82k
+   28|    805|    }
+   29|  5.35k|    for key in [
+   30|  1.07k|        "schemas",
+   31|  1.07k|        "fixtures",
+   32|  1.07k|        "authorable_templates",
+   33|  1.07k|        "generated_examples",
+   34|  1.07k|        "resources",
+   35|  1.07k|    ] {
+   36|  5.35k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
+                                  ^1.83k
    37|   627k|            for row in rows {
-                                     ^1.82k
+                                     ^1.83k
    38|   627k|                if let Some(path) = row.as_str() {
                                           ^627k
    39|   627k|                    out.push(path.to_string());
    40|   627k|                }
                               ^7
    41|       |            }
-   42|  3.50k|        }
+   42|  3.52k|        }
    43|       |    }
-   44|  1.06k|    out
-   45|  1.06k|}
+   44|  1.07k|    out
+   45|  1.07k|}
    46|       |
-   47|   589k|pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
-   48|   589k|    if rel.is_empty() {
+   47|   590k|pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
+   48|   590k|    if rel.is_empty() {
    49|     14|        return Some("package path is not a non-empty string".to_string());
-   50|   589k|    }
-   51|   589k|    if Path::new(rel).is_absolute() {
+   50|   590k|    }
+   51|   590k|    if Path::new(rel).is_absolute() {
    52|      1|        return Some(format!("package path is absolute: {rel}"));
-   53|   589k|    }
-   54|   589k|    if Path::new(rel)
-   55|   589k|        .components()
-   56|  2.74M|        .any(|part| !matches!(part, Component::Normal(_)))
-                       ^589k       ^49
+   53|   590k|    }
+   54|   590k|    if Path::new(rel)
+   55|   590k|        .components()
+   56|  2.75M|        .any(|part| !matches!(part, Component::Normal(_)))
+                       ^590k       ^49
    57|       |    {
    58|     49|        return Some(format!("package path escapes package root: {rel}"));
-   59|   589k|    }
-   60|   589k|    let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
+   59|   590k|    }
+   60|   590k|    let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
                                                                         ^6   ^6
-   61|   589k|    if symlink_component_error(&root_abs, rel).is_some() {
+   61|   590k|    if symlink_component_error(&root_abs, rel).is_some() {
    62|      7|        return Some(format!("package path uses symlink: {rel}"));
-   63|   589k|    }
-   64|   589k|    let full = root_abs.join(rel);
-   65|   589k|    let full = full.canonicalize().unwrap_or(full);
-   66|   589k|    canonical_escape_error(&root_abs, &full, rel)
-   67|   589k|}
+   63|   590k|    }
+   64|   590k|    let full = root_abs.join(rel);
+   65|   590k|    let full = full.canonicalize().unwrap_or(full);
+   66|   590k|    canonical_escape_error(&root_abs, &full, rel)
+   67|   590k|}
    68|       |
-   69|   541k|pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {
-   70|   541k|    if let Some(error) = package_path_error(root, rel) {
+   69|   542k|pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {
+   70|   542k|    if let Some(error) = package_path_error(root, rel) {
                               ^27
    71|     27|        return Err(error);
-   72|   541k|    }
-   73|   541k|    Ok(root.join(Path::new(rel)))
-   74|   541k|}
+   72|   542k|    }
+   73|   542k|    Ok(root.join(Path::new(rel)))
+   74|   542k|}
    75|       |
-   76|   589k|fn symlink_component_error(root: &Path, rel: &str) -> Option<()> {
-   77|   589k|    let mut cursor = root.to_path_buf();
-   78|  2.74M|    for name in Path::new(rel).iter() {
-                              ^589k          ^589k
-   79|  2.74M|        cursor.push(name);
-   80|  2.74M|        let Ok(meta) = std::fs::symlink_metadata(&cursor) else {
+   76|   590k|fn symlink_component_error(root: &Path, rel: &str) -> Option<()> {
+   77|   590k|    let mut cursor = root.to_path_buf();
+   78|  2.75M|    for name in Path::new(rel).iter() {
+                              ^590k          ^590k
+   79|  2.75M|        cursor.push(name);
+   80|  2.75M|        let Ok(meta) = std::fs::symlink_metadata(&cursor) else {
                              ^2.70M
    81|  41.3k|            continue;
    82|       |        };
@@ -24214,15 +24392,15 @@
    84|      7|            return Some(());
    85|  2.70M|        }
    86|       |    }
-   87|   589k|    None
-   88|   589k|}
+   87|   590k|    None
+   88|   590k|}
    89|       |
-   90|   589k|fn canonical_escape_error(root: &Path, full: &Path, rel: &str) -> Option<String> {
-   91|   589k|    if full.strip_prefix(root).is_err() {
+   90|   590k|fn canonical_escape_error(root: &Path, full: &Path, rel: &str) -> Option<String> {
+   91|   590k|    if full.strip_prefix(root).is_err() {
    92|      1|        return Some(format!("package path escapes package root: {rel}"));
-   93|   589k|    }
-   94|   589k|    None
-   95|   589k|}
+   93|   590k|    }
+   94|   590k|    None
+   95|   590k|}
    96|       |
    97|       |#[cfg(test)]
    98|       |mod canonical_tests {
@@ -24239,25 +24417,25 @@
   109|      1|    }
   110|       |}
   111|       |
-  112|   514k|pub fn package_digest_excluded(rel: &str) -> bool {
-  113|   514k|    PACKAGE_DIGEST_EXCLUDED_PATHS.contains(&rel)
-  114|   514k|        || PACKAGE_DIGEST_EXCLUDED_PREFIXES
-  115|   514k|            .iter()
-  116|   514k|            .any(|prefix| rel.starts_with(prefix))
-  117|   514k|}
+  112|   515k|pub fn package_digest_excluded(rel: &str) -> bool {
+  113|   515k|    PACKAGE_DIGEST_EXCLUDED_PATHS.contains(&rel)
+  114|   515k|        || PACKAGE_DIGEST_EXCLUDED_PREFIXES
+  115|   515k|            .iter()
+  116|   515k|            .any(|prefix| rel.starts_with(prefix))
+  117|   515k|}
   118|       |
-  119|    882|pub fn package_digest(root: &Path) -> Result<String, String> {
-  120|    882|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
-                      ^818                                                                         ^64
-  121|    818|    let mut paths = inventory_paths(&manifest)
-  122|    818|        .into_iter()
-  123|   514k|        .filter(|rel| !package_digest_excluded(rel))
-                       ^818
-  124|    818|        .collect::<Vec<_>>();
-  125|    818|    paths.sort();
-  126|    818|    let mut payload = Vec::new();
+  119|    886|pub fn package_digest(root: &Path) -> Result<String, String> {
+  120|    886|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
+                      ^822                                                                         ^64
+  121|    822|    let mut paths = inventory_paths(&manifest)
+  122|    822|        .into_iter()
+  123|   515k|        .filter(|rel| !package_digest_excluded(rel))
+                       ^822
+  124|    822|        .collect::<Vec<_>>();
+  125|    822|    paths.sort();
+  126|    822|    let mut payload = Vec::new();
   127|   500k|    for rel in paths {
-                             ^818
+                             ^822
   128|   500k|        payload.extend_from_slice(rel.as_bytes());
   129|   500k|        payload.push(0);
   130|   500k|        let bytes = match resolve(root, &rel) {
@@ -24278,8 +24456,8 @@
                               ^500k                                                           ^1
   142|   500k|        payload.push(0);
   143|       |    }
-  144|    806|    Ok(digest::bytes(&payload))
-  145|    882|}
+  144|    810|    Ok(digest::bytes(&payload))
+  145|    886|}
   146|       |
   147|       |#[cfg(test)]
   148|       |mod tests {
@@ -24367,7 +24545,7 @@
    21|       |];
    22|       |
    23|     41|pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
-   24|   757k|    walk_package_entries(root, |entry| entry.file_type().is_file())
+   24|   826k|    walk_package_entries(root, |entry| entry.file_type().is_file())
                   ^41                  ^41
    25|     41|}
    26|       |
@@ -24381,37 +24559,37 @@
    33|     51|    include: impl Fn(&walkdir::DirEntry) -> bool,
    34|     51|) -> Result<Vec<String>, String> {
    35|     51|    let mut paths = Vec::new();
-   36|   757k|    for entry in WalkDir::new(root).follow_links(false) {
+   36|   826k|    for entry in WalkDir::new(root).follow_links(false) {
                                ^51          ^51   ^51
-   37|   757k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
-                          ^757k                       ^2                            ^2
-   38|   757k|        if include(&entry) {
-   39|   753k|            let rel = rel_path(root, entry.path())?;
+   37|   826k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
+                          ^826k                       ^1                            ^1
+   38|   826k|        if include(&entry) {
+   39|   821k|            let rel = rel_path(root, entry.path())?;
                                                                 ^0
-   40|   753k|            if !local_only(&rel) {
-   41|  5.16k|                paths.push(rel);
-   42|   748k|            }
-   43|  3.83k|        }
+   40|   821k|            if !local_only(&rel) {
+   41|  8.96k|                paths.push(rel);
+   42|   812k|            }
+   43|  5.10k|        }
    44|       |    }
-   45|     49|    paths.sort();
-   46|     49|    Ok(paths)
+   45|     50|    paths.sort();
+   46|     50|    Ok(paths)
    47|     51|}
    48|       |
-   49|   753k|fn local_only(rel: &str) -> bool {
-   50|   753k|    LOCAL_PROOF_PATHS.contains(&rel)
-   51|   753k|        || LOCAL_BUILD_OUTPUT_PREFIXES
-   52|   753k|            .iter()
-   53|   903k|            .any(|prefix| rel.starts_with(prefix))
-                           ^753k
-   54|   753k|}
+   49|   821k|fn local_only(rel: &str) -> bool {
+   50|   821k|    LOCAL_PROOF_PATHS.contains(&rel)
+   51|   821k|        || LOCAL_BUILD_OUTPUT_PREFIXES
+   52|   821k|            .iter()
+   53|  1.11M|            .any(|prefix| rel.starts_with(prefix))
+                           ^821k
+   54|   821k|}
    55|       |
-   56|   753k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-   57|   753k|    path.strip_prefix(root)
-   58|   753k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-                                 ^753k                 ^753k         ^753k
-   59|   753k|        .map_err(|err| format!("walk root strip failed: {err}"))
+   56|   821k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
+   57|   821k|    path.strip_prefix(root)
+   58|   821k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
+                                 ^821k                 ^821k         ^821k
+   59|   821k|        .map_err(|err| format!("walk root strip failed: {err}"))
                                      ^1
-   60|   753k|}
+   60|   821k|}
    61|       |
    62|     10|pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
    63|     10|    let listed = crate::package::inventory::inventory_paths(manifest);
@@ -24623,8 +24801,8 @@
     7|       |    "templates/.harness/coverage-manifest.json",
     8|       |];
     9|       |
-   10|   504k|pub(crate) fn stable_package_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
-   11|   504k|    if rel.starts_with("fixtures/valid/") && rel.ends_with(".json") {
+   10|   505k|pub(crate) fn stable_package_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
+   11|   505k|    if rel.starts_with("fixtures/valid/") && rel.ends_with(".json") {
                                                            ^599^599
    12|    599|        return stable_valid_fixture_payload(rel, bytes);
    13|   504k|    }
@@ -24632,7 +24810,7 @@
    15|    242|        return stable_coverage_manifest_payload(rel, bytes);
    16|   504k|    }
    17|   504k|    Ok(bytes.to_vec())
-   18|   504k|}
+   18|   505k|}
    19|       |
    20|    599|fn stable_valid_fixture_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
    21|    599|    let mut value: Value = serde_json::from_slice(bytes)
@@ -33685,12 +33863,12 @@
     4|       |use std::sync::atomic::{AtomicU64, Ordering};
     5|       |use std::time::{SystemTime, UNIX_EPOCH};
     6|       |
-    7|    539|pub(crate) fn repo_root() -> PathBuf {
-    8|    539|    Path::new(env!("CARGO_MANIFEST_DIR"))
-    9|    539|        .parent()
-   10|    539|        .expect("validator has repo parent")
-   11|    539|        .to_path_buf()
-   12|    539|}
+    7|    540|pub(crate) fn repo_root() -> PathBuf {
+    8|    540|    Path::new(env!("CARGO_MANIFEST_DIR"))
+    9|    540|        .parent()
+   10|    540|        .expect("validator has repo parent")
+   11|    540|        .to_path_buf()
+   12|    540|}
    13|       |
    14|    341|pub(crate) fn temp_root(label: &str) -> PathBuf {
    15|       |    static COUNTER: AtomicU64 = AtomicU64::new(0);
@@ -33704,9 +33882,9 @@
    23|    341|        .join(format!("ultragoal-boundary-{label}-{stamp}-{index}"))
    24|    341|}
    25|       |
-   26|    459|pub(crate) fn sha(ch: char) -> String {
-   27|    459|    format!("sha256:{}", ch.to_string().repeat(64))
-   28|    459|}
+   26|    463|pub(crate) fn sha(ch: char) -> String {
+   27|    463|    format!("sha256:{}", ch.to_string().repeat(64))
+   28|    463|}
    29|       |
    30|       |#[test]
    31|      1|fn schema_receipt_rules_cover_required_and_kind_boundaries() {

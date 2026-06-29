@@ -1402,6 +1402,7 @@
     "validator/src/cli/control/plane/evidence/item.rs",
     "validator/src/cli/control/plane/evidence/status.rs",
     "validator/src/cli/control/plane/evidence/status/label_failures.rs",
+    "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/path.rs",
     "validator/src/cli/control/plane/proof.rs",
@@ -1552,6 +1553,11 @@
       "from": "validator/src/cli/control/plane/evidence/status.rs",
       "to": "validator/src/cli/control/plane/evidence/status/label_failures.rs",
       "reason": "Status-label tests prove typed package-surface schema errors and stale proof labels fail without row-shape authority"
+    },
+    {
+      "from": "validator/src/cli/control/plane/evidence/status.rs",
+      "to": "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
+      "reason": "Status-label typed status and package-surface tests are routed into semantic leaves instead of an over-cap catch-all test file"
     },
     {
       "from": "validator/src/cli/control/plane/evidence.rs",

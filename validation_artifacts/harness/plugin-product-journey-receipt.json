@@ -6,7 +6,7 @@
   },
   "evidence": [
     {
-      "digest": "sha256:ff587d5d5048c6ea66ee9710b9fe3e5894aeb02571e8d3a25e668d154bbf7f76",
+      "digest": "sha256:5f753d106b4ec83e859d2b72235166a63f7c14faf3f6f77e4e12a91430d8e498",
       "path": "validation_artifacts/harness/fit-repo-receipt.json"
     },
     {
@@ -18,11 +18,11 @@
       "path": "docs/plugin-resource-map.md"
     },
     {
-      "digest": "sha256:87234a5e8eb230af620bd46a626512ae527aedaac68f88a736caf2b0a06b383a",
+      "digest": "sha256:ca204533b5e5acd5b0c1eddb925ae385e26269c36b521d44535a523339f2471b",
       "path": "docs/plugin-cohesion-manifest.json"
     }
   ],
-  "generated_at": "2026-06-29T08:25:47Z",
+  "generated_at": "2026-06-29T09:34:08Z",
   "journey": [
     "invoke fit-repo entrypoint",
     "classify target",
@@ -39,6 +39,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5"
+    "value": "sha256:73ff40a280dda0a5029471c3fd90bcbf3e97f4dfb39983cc69461025d9c75f9b"
   }
 }
