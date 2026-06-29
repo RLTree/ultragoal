@@ -39,6 +39,7 @@ pub fn build(input: ReceiptInput) -> Result<Value, String> {
         "claim_ceiling": claim_ceiling(&input.status),
         "supported_claim_classes": supported_claim_classes(&input.status),
         "blocked_claim_classes": blocked_claim_classes(),
+        "blocked_claim_diagnostics": blocked_claim_diagnostics(&input.root),
         "root": root_identity,
         "validator_execution": execution(&input)?,
         "required_execplan_refs": required_execplan_refs(),
@@ -80,6 +81,21 @@ fn blocked_claim_classes() -> Vec<&'static str> {
         "update_goal_eligibility",
         "app_registry_or_reviewer_exposure",
     ]
+}
+
+fn blocked_claim_diagnostics(root: &Path) -> Value {
+    let store = crate::schema_catalog::load(root);
+    let failures = crate::audit::final_packet::claim_guard_failures(root, &store);
+    let path = root.join("validation_artifacts/review/final-packet-proof.json");
+    json!([{
+        "surface": "final_packet_proof",
+        "path": "validation_artifacts/review/final-packet-proof.json",
+        "digest": digest::file(&path).unwrap_or_else(|_| crate::digest::ZERO.to_string()),
+        "status": if failures.is_empty() { "clear" } else { "blocked" },
+        "observed_failures": failures,
+        "blocked_claim_classes": blocked_claim_classes(),
+        "claim_impact": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
+    }])
 }
 
 fn required_execplan_refs() -> Vec<&'static str> {

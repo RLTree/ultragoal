@@ -6,7 +6,7 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+  "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -66,12 +66,12 @@
     "ultragoal self update-goal eligibility"
   ],
   "evidence_graph": {
-    "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+    "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
     "evaluation_mode": "production_dereferenced",
     "items": [
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:a457ee9eaf9385b508394c304dec09bd10962dec0b6c40177e54ad6105cc7ceb",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:39a77a3a3fe63d9e82269c80b5430c821b5dc55d442009b9927078cf502d2c21",
         "exists": true,
         "failures": [],
         "label": "source_audit",
@@ -81,8 +81,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:776d4cbbdd098e4c569f98c15350e4095e4863fe6892e7f9dca5bc69f7dab44a",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:1fc763450cf5d408c26d05253ba93193238a2d7c4c2ca546c9d07cba42b86e7e",
         "exists": true,
         "failures": [],
         "label": "red_fixture_report",
@@ -92,8 +92,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:71fd8f21808450c75282fe2130d0a5afcaadbff3d3f0efd6940661d2c5039374",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:7f2da2c88b90dd585620009f8290895a483780ce73c996694211178f0104dbc4",
         "exists": true,
         "failures": [],
         "label": "coverage",
@@ -103,8 +103,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:5001b49dc89e0de8fcf3c4be2038a676a18daf681518477879273d8c018cfe7f",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:955a9dc6e3678d48e6b663d2c328b866f322e47b94d57407dbe0a1155a77a2aa",
         "exists": true,
         "failures": [],
         "label": "cli_performance",
@@ -114,8 +114,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:7ce8e6d17513d51ca7a6e43c53e28d68ef2dcfc0aaccbb21c8bce51ffd1536eb",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:1f8f1db10f36a7acc79b644f212ad0fdcbec1337e72d18f5294ec50615c0cfe4",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -142,8 +142,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:0a6e1bad421e7237a7b4d3e27392fc2186f516eba4c890e557dd0a2645c9b45e",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:1b3ccc59a30c2ba45e102a60442a7b06cbc7c994761ad4bbb90206b053cd0f11",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -166,8 +166,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:36a246c11d44a35bdb4144b4851819a958bc00263d48d92c7588e2eeac711766",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:6864ffb2c95fb888162cfb1db116f0d23f9af574521002eb69490ae6b4189ee2",
         "exists": true,
         "failures": [],
         "label": "fit_repo",
@@ -177,8 +177,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:7328ff515f88f4c0cb5ec67b0e848d6cb2274746b49bfd449c68a3af95b115c4",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:320e9b9effc6a5236adc8014f192c46ddc4e542f258400df9894cd705fe56573",
         "exists": true,
         "failures": [],
         "label": "product_fitness",
@@ -188,8 +188,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:bed47e33d4aa05add4a706b09cffdd64c059e2745a6542aac357f9bd5a94e882",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:bd3ffcdec0420db64c7908871a20e576878d80cf9b069fb45e62a2b22c2d81bb",
         "exists": true,
         "failures": [],
         "label": "product_journey",
@@ -199,8 +199,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:9bb1c0aafbc06afc8b0da599dce4566356f69c660694c1e7a75a1b0709e9769a",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:ffd9a303c62216beb346ae59e0279441ed29698d4b69ce7b325312632218dfb0",
         "exists": true,
         "failures": [],
         "label": "standards_gardener",
@@ -210,8 +210,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:7a495d3e43fa0cdaf6b4d67de7282efb2c73d8f3fd4652ec892f391f740c8a8b",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:fab5b8d258b477de7dafdb6209078db0953ad7b96cb78ea57f2df26ed944ba22",
         "exists": true,
         "failures": [
           "status_not_pass"
@@ -223,8 +223,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:677a3244cf4313383e7b6dadbf2d347153580992784136239d385fb0bad612b6",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:ca560717db547da70a6b5dd85b4cd1fb5bdcfbc2205df1d72c0f5781640b654e",
         "exists": true,
         "failures": [
           "status_not_pass"
@@ -236,8 +236,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:8890304f687de24cf318f384b991cf8fc2396b77ea9e131eb497626ce2471d19",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:4c3c4f28f22e9ea24fded447ccc96d35c1f721f91d97e7783350cae2d51bae9c",
         "exists": true,
         "failures": [],
         "label": "rust_toolchain",
@@ -247,8 +247,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:42548ea484711e89fca6be93a1bd62b8553c268cf80cdf3490c933f6623a154a",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:d7e119387a602ce969cf32ea919891c40bff947a4b1866f6bdb15d8a8b63470b",
         "exists": true,
         "failures": [],
         "label": "rust_fast",
@@ -258,8 +258,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:f40f23c89db011fa79bce1bb5be626146e49a09ffd080b36db5102e28807ead4",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:5258f6d865aacb3c5ebddc0f373ab750e45526e0fabebc2a70ed0cc7ed12d39b",
         "exists": true,
         "failures": [],
         "label": "rust_standard",
@@ -269,8 +269,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:30281a0968d7a9583e2d1fffb77fb9ba88e16411b0d9950dc1920050175270ae",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:d4dee4887d8c0f20fe56a9c735bcae817ec724fe096e44e07a7fb28782434dd3",
         "exists": true,
         "failures": [],
         "label": "rust_release",
@@ -280,8 +280,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:18606892902374294b3069ca494ae6252cb229059f0f5254d27d401e55f9880d",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:eea11af8aba479545d123cc5de5394b25e69f21ea4efe4b9f46e2b09c6294341",
         "exists": true,
         "failures": [],
         "label": "rust_clean_proof",
@@ -291,8 +291,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:f73205c620e1815d29e30c8d58f4649a6477b1e7e2e06974d567c0985005c33f",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:5e6f347eddfc2da5e80658cd1b117de24d4b490b639153a9ee14f4759b0295b6",
         "exists": true,
         "failures": [],
         "label": "rust_watch",
@@ -302,8 +302,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:d93538c86520178226c533836c29490ed0cba38bb4310c581f3b2c63886e7036",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:a8567a22a072cbb1362e3035e63beff28b50e55ef16aa77df05442c4d5a8b7c4",
         "exists": true,
         "failures": [],
         "label": "rust_memory",
@@ -313,8 +313,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:16e96ab1e3a7ad0471c46736cfbf2b57a135e6640d929725c3f80f299d7144bb",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:39216790547f82b535fda769d54efddafc4af1ce18772623806693af452049aa",
         "exists": true,
         "failures": [],
         "label": "rust_dependency",
@@ -324,8 +324,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:0e94847174dc989e4a614d339ccb4fb5365ee727833bc06c088988bd0452e3a0",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:34f8b37d4b6901e3b8e1344f5a8b934c00a93d47bd65731c753a8be50e8cf1bc",
         "exists": true,
         "failures": [],
         "label": "rust_coverage",
@@ -335,8 +335,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:61c59b4ed610417ddecc1991e3437d0d9f6be501a08ec8d4c74ae1d7ee3a11f9",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:021b6293aa40f789247a7dd7985c68de1072f9d39dc48119ded8e4b90cf9bd64",
         "exists": true,
         "failures": [],
         "label": "rust_workspace_topology",
@@ -346,8 +346,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:e949ddad5a4b509a981a412fc09312c23919cd8a408cd5696270cf0c1367f52a",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:6b8544f20b5fbf06c26c7ddab643a82ff2392ae3ceaf9fdb16680c3a7acf7de1",
         "exists": true,
         "failures": [],
         "label": "gc_plan",
@@ -357,8 +357,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:31dfb50360f7b4f04388e499d21bf21f20926d259b3d96819e90fa9e29e37639",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:606efe47fb95e15032f0044bf82f6ef316a587304f32285719d005899f06648c",
         "exists": true,
         "failures": [],
         "label": "gc_dry_run",
@@ -368,8 +368,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:8d6b903c4515b65d4dd1c82431629f9c50d5b9240060f3ca9d930c2b510a1f03",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:b39c4d68d52c95e42407fff1a5a2ac1b35b0262bd154dc8fedaae25101d279a8",
         "exists": true,
         "failures": [],
         "label": "gc_apply",
@@ -379,8 +379,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:a8967c977f26ac53a4d474f7538eb6e149c78cb147edc4bfaee976d3033ef768",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:ba7ea631c6d7cb145e61185d5411cca298019a6dd07b3753fb23c5c6bdb0b4bb",
         "exists": true,
         "failures": [],
         "label": "gc_verify",
@@ -390,8 +390,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:963cf83a4bf7c61220657e00f5c8daf57be49be7274f3702526cf70fea2297d8",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:0dd5b502e28727c232b00008548d7ff49c41b164893987803333aad53317adf2",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -499,7 +499,7 @@
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-29T15:22:11Z",
+  "generated_at": "2026-06-29T15:58:56Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",

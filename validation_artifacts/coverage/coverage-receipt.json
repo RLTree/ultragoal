@@ -3,22 +3,22 @@
   "claim_id": "CLAIM-001",
   "command": "bash .harness/run-coverage.sh",
   "tool": "cargo-llvm-cov",
-  "source_tree_digest": "sha256:ca0f84fdee4d9311cb0b8db2c05748c13bf2c7e01652a40d73292a6b2ef47e56",
-  "coverage_manifest_digest": "sha256:31f08f9e023f6a2bf25db629434acdcdc8fd2942be32bfc5efbfa6756f27b876",
+  "source_tree_digest": "sha256:92b7fdd595808e33d4d01ec5d6638f119545560f16eec1950f7cd213730d2ccd",
+  "coverage_manifest_digest": "sha256:bc9fc70bdd73d6feae8facd95ca0466cf9c9de07d60110d75d84f30a416c8c57",
   "coverage_command_digest": "sha256:eb90478bbc7bf93351fc454d6796a42eb75a6c4cd1353ef6ee18f90976c6f944",
-  "changed_files_digest": "sha256:487dcd1cc6966ad535e5ca15dad8116916cdb4b82feab884d137555e805e028a",
+  "changed_files_digest": "sha256:facb646444ba6f9062dbb6ee1964e243b6bde13cf8d99843e5b633190814d7d0",
   "tool_version": "cargo-llvm-cov 0.8.7",
   "workspace_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c"
+    "value": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e"
   },
-  "command_started_at": "2026-06-29T15:02:42Z",
-  "command_completed_at": "2026-06-29T15:03:44Z",
+  "command_started_at": "2026-06-29T15:48:23Z",
+  "command_completed_at": "2026-06-29T15:49:24Z",
   "command_exit": 0,
   "machine_readable_report": {
     "path": "validation_artifacts/coverage/llvm-cov-full.json",
-    "digest": "sha256:a585dc518d15259459aae4fa70518e435cc8646967961c92dc2581cc9285f38f"
+    "digest": "sha256:352c2fb65256c4e44ecd01f4a55f3c129a108720f850b255569ae7b4abaf437c"
   },
   "generated_by": "coverage-command",
   "percent_source": "machine_readable_report",
@@ -51,7 +51,7 @@
   },
   "uncovered_records": [],
   "exclusions": [],
-  "generated_at": "2026-06-29T15:03:44Z",
+  "generated_at": "2026-06-29T15:49:24Z",
   "claim_ceiling": "supports_complete_coverage_claim",
   "supported_claim_classes": [
     "complete_coverage"

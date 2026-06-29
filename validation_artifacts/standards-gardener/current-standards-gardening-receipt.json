@@ -1,5 +1,5 @@
 {
-  "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+  "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
   "changed_artifacts": [
     {
       "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
@@ -214,23 +214,23 @@
       "path": "docs/plugin-cohesion-manifest.json"
     },
     {
-      "digest": "sha256:61d57049657e209941dd6f7174b6666d7cc8797e221bcbebed623f016318a5b0",
+      "digest": "sha256:e3684f6b9adf6e5d7d11621f3f742585633fd7b4d551f453fe9db70049445f14",
       "path": "fixtures/valid/minimal-goal-run.json"
     },
     {
-      "digest": "sha256:48a4ad756da8ca8015de9295b5d2c86949207ec333839fc1c14070a7eadfd036",
+      "digest": "sha256:456f360ec9a0287a93a558a7d0ad4aab222aa160d933b04988f7d670f96f529e",
       "path": "fixtures/valid/non-product-engineering-language.json"
     },
     {
-      "digest": "sha256:43379c7ca498358d6070b032c7f5bc5b9d15119b8531cab2852c6593f33e751c",
+      "digest": "sha256:27c045fdaa793e32e5d6cf97854f419c67a2dd3f84d5b56ce2e7242cbb112767",
       "path": "fixtures/valid/non-product-feature-completion.json"
     },
     {
-      "digest": "sha256:cf7959f1e168ae3a46cc9406e0c9d7cdb1e0146d5c66ab32a817787d75a23f1b",
+      "digest": "sha256:7e418f0347f129ddb80d5de186d5506d5d76e6741588693e917827e08e24198c",
       "path": "fixtures/valid/proof-surface-negative-probe.json"
     },
     {
-      "digest": "sha256:2b52962a7c5c64ad56fb91978b32c99542c32a4819378286a09798bbd646ed0d",
+      "digest": "sha256:fb3ff9754fa8cedaa3c9f33a1e043dfd203b85bc88d27bf65047127831d61468",
       "path": "fixtures/valid/two-lane-ready-dependency.json"
     },
     {
@@ -260,7 +260,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-29T15:09:56Z",
+  "generated_at": "2026-06-29T15:53:14Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

@@ -7,12 +7,12 @@
     "completion",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+  "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
   "claim_ceiling": "withheld_or_blocked",
   "failures": [
     "package_surface_digest_mismatch"
   ],
-  "generated_at": "2026-06-29T15:05:38Z",
+  "generated_at": "2026-06-29T15:43:38Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
@@ -24,7 +24,7 @@
   "schema": "harness-ultragoal.package-surface-audit-receipt.v1",
   "schema_version": "v1",
   "source": {
-    "package_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+    "package_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
     "plugin_manifest_digest": "sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
     "plugin_name": "harness-ultragoal",
     "plugin_version": "0.0.11"
@@ -32,7 +32,7 @@
   "status": "fail",
   "target": {
     "exists": true,
-    "expected_package_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+    "expected_package_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
     "logical_path": "codex-plugin-install-harness-ultragoal",
     "package_digest": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
     "package_error": null,

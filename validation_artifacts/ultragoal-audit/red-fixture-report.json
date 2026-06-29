@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T15:12:01Z",
+  "generated_at": "2026-06-29T16:00:59Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -12386,6 +12386,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c"
+    "value": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e"
   }
 }

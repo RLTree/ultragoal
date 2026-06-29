@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T15:11:58Z",
+    "completed_at": "2026-06-29T16:00:56Z",
     "cwd": "fixtures/target-repo/red/product-review-evidence-special-path",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T15:11:58Z",
+    "started_at": "2026-06-29T16:00:56Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T15:11:58Z",
+  "generated_at": "2026-06-29T16:00:56Z",
   "invocation": "fixture init fixtures/target-repo/red/product-review-evidence-special-path",
   "mode": "init",
-  "repo_fingerprint": "sha256:5b473762814b70482efe9252fc31236dc8349db5a19c23d65b28e1872006c5e2",
+  "repo_fingerprint": "sha256:82de93c53a10e6f3847c948693e472df4cd543c19b9149720c9b157f17117668",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -752,7 +752,7 @@
       "path": "validator/src/audit/product/mod.rs"
     },
     {
-      "digest": "sha256:430e38ab8fddccb0c3694be5c3c541dc42cebd5d169d2164334c258c8bb58ac5",
+      "digest": "sha256:1b38cbe1cb16cdc8a049f7b59b89963e281660691d0d76bade1b25f1b337f4da",
       "path": "validator/src/audit/receipt.rs"
     },
     {
@@ -1396,7 +1396,7 @@
       "path": "validator/src/red/fixture/runtime/mod.rs"
     },
     {
-      "digest": "sha256:c1848bb0b5e3667a0a5dc0bb3d3423ab56547656c41fc1018f737432d0e3c14d",
+      "digest": "sha256:f45427a2ccdc1a8cd5f24ddf1e205cabedd508bf98972e9657066b0ff19ecaaf",
       "path": "validator/src/red/fixture/runtime/receipt.rs"
     },
     {
@@ -2172,7 +2172,7 @@
       "path": "validator/src/self_tests/receipts/mod.rs"
     },
     {
-      "digest": "sha256:c3035b5327484f977be1179ad39dced910b233d9e0db8a325d7061680ba09aba",
+      "digest": "sha256:b093f0af97261d995e3aa40dab60116a62b1232847b96b34c0d8b5008b4b6f4e",
       "path": "validator/src/self_tests/receipts/validator.rs"
     },
     {

@@ -9945,6 +9945,67 @@
         ]
       }
     },
+    "blocked_claim_diagnostics": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "surface": {
+            "enum": [
+              "final_packet_proof"
+            ]
+          },
+          "path": {
+            "const": "validation_artifacts/review/final-packet-proof.json"
+          },
+          "digest": {
+            "$ref": "common-defs.schema.json#/$defs/sha256"
+          },
+          "status": {
+            "enum": [
+              "blocked",
+              "clear"
+            ]
+          },
+          "observed_failures": {
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "blocked_claim_classes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "final_packet_correctness",
+                "update_goal_eligibility",
+                "app_registry_or_reviewer_exposure"
+              ]
+            }
+          },
+          "claim_impact": {
+            "const": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
+          }
+        },
+        "required": [
+          "surface",
+          "path",
+          "digest",
+          "status",
+          "observed_failures",
+          "blocked_claim_classes",
+          "claim_impact"
+        ],
+        "type": "object"
+      }
+    },
     "target": {
       "type": "string"
     },
@@ -10032,6 +10093,7 @@
     "claim_ceiling",
     "supported_claim_classes",
     "blocked_claim_classes",
+    "blocked_claim_diagnostics",
     "root",
     "validator_execution",
     "input_digests",

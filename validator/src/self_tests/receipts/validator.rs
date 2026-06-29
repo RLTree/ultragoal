@@ -104,6 +104,21 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
     assert_eq!(receipt["status"], "pass");
     assert_eq!(receipt["checks"]["schema-valid"]["status"], "pass");
     assert_eq!(
+        receipt["blocked_claim_diagnostics"][0]["surface"],
+        "final_packet_proof"
+    );
+    assert_eq!(receipt["blocked_claim_diagnostics"][0]["status"], "blocked");
+    assert!(
+        receipt["blocked_claim_diagnostics"][0]["observed_failures"]
+            .as_array()
+            .expect("diagnostic failures")
+            .iter()
+            .any(|failure| failure
+                .as_str()
+                .unwrap_or("")
+                .starts_with("final_packet_proof_missing"))
+    );
+    assert_eq!(
         receipt["validator_execution"]["executable_provenance"]["invocation_mode"],
         "cargo_run"
     );

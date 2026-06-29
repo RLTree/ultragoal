@@ -7,7 +7,7 @@
     "update_goal_eligibility",
     "app_registry_or_reviewer_exposure"
   ],
-  "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+  "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -67,12 +67,12 @@
     "ultragoal self update-goal eligibility"
   ],
   "evidence_graph": {
-    "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
+    "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
     "evaluation_mode": "production_dereferenced",
     "items": [
       {
-        "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
-        "digest": "sha256:0a6e1bad421e7237a7b4d3e27392fc2186f516eba4c890e557dd0a2645c9b45e",
+        "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+        "digest": "sha256:1b3ccc59a30c2ba45e102a60442a7b06cbc7c994761ad4bbb90206b053cd0f11",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -125,7 +125,7 @@
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-29T15:05:36Z",
+  "generated_at": "2026-06-29T15:35:23Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",

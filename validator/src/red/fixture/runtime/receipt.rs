@@ -88,6 +88,23 @@ pub(crate) fn bind_with_candidate_and_cache(
             "update_goal_eligibility",
             "app_registry_or_reviewer_exposure"
         ],
+        "blocked_claim_diagnostics": [{
+            "surface": "final_packet_proof",
+            "path": "validation_artifacts/review/final-packet-proof.json",
+            "digest": digest::ZERO,
+            "status": "clear",
+            "observed_failures": [],
+            "blocked_claim_classes": [
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "final_packet_correctness",
+                "update_goal_eligibility",
+                "app_registry_or_reviewer_exposure"
+            ],
+            "claim_impact": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
+        }],
         "root": root_identity,
         "validator_execution": validator_execution,
         "input_digests": input_digest_rows,
