@@ -418,70 +418,70 @@ that surface is required by the contract.
 - [ ] Gate 22: Every contract sub-requirement is satisfied.
 - [ ] Gate 22 evidence path:
 
-- [ ] Gate 23 status:
-- [ ] Gate 23: ExecPlan no-handback and prototype promotion/discard laws are enforced.
-- [ ] Gate 23: Every contract sub-requirement is satisfied.
-- [ ] Gate 23 evidence path:
+- [x] Gate 23 status: source_local_current
+- [x] Gate 23: ExecPlan no-handback and prototype promotion/discard laws are enforced.
+- [x] Gate 23: Every contract sub-requirement is satisfied.
+- [x] Gate 23 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `execplan-no-handback-prototype-promotion-discard = pass`. Claim impact: source-local ExecPlan no-handback/prototype law enforcement only.
 
-- [ ] Gate 24 status:
-- [ ] Gate 24: Semantic domain-type naming is enforced on law-bearing authority surfaces.
-- [ ] Gate 24: Every contract sub-requirement is satisfied.
-- [ ] Gate 24 evidence path:
+- [x] Gate 24 status: source_local_current
+- [x] Gate 24: Semantic domain-type naming is enforced on law-bearing authority surfaces.
+- [x] Gate 24: Every contract sub-requirement is satisfied.
+- [x] Gate 24 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `semantic-domain-type-naming = pass`. Claim impact: source-local semantic naming enforcement only.
 
-- [ ] Gate 25 status:
-- [ ] Gate 25: Validator failures are agent-remediating and law-bound.
-- [ ] Gate 25: Every contract sub-requirement is satisfied.
-- [ ] Gate 25 evidence path:
+- [x] Gate 25 status: source_local_current
+- [x] Gate 25: Validator failures are agent-remediating and law-bound.
+- [x] Gate 25: Every contract sub-requirement is satisfied.
+- [x] Gate 25 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `agent-remediating-validator-failures = pass` and `failure-remediation-quality-agent-actionable-output = pass`. Claim impact: source-local validator remediation enforcement only.
 
-- [ ] Gate 26 status:
-- [ ] Gate 26: Third-party dependency legibility and typed adapter boundaries are enforced.
-- [ ] Gate 26: Every contract sub-requirement is satisfied.
-- [ ] Gate 26 evidence path:
+- [x] Gate 26 status: source_local_current
+- [x] Gate 26: Third-party dependency legibility and typed adapter boundaries are enforced.
+- [x] Gate 26: Every contract sub-requirement is satisfied.
+- [x] Gate 26 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `third-party-dependency-legibility-typed-adapters = pass`. Claim impact: source-local dependency/adaptor enforcement only.
 
-- [ ] Gate 27 status:
-- [ ] Gate 27: Repo knowledge index and core-beliefs verification is enforced.
-- [ ] Gate 27: Every contract sub-requirement is satisfied.
-- [ ] Gate 27 evidence path:
+- [x] Gate 27 status: source_local_current
+- [x] Gate 27: Repo knowledge index and core-beliefs verification is enforced.
+- [x] Gate 27: Every contract sub-requirement is satisfied.
+- [x] Gate 27 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `repo-knowledge-index-core-beliefs = pass`. Claim impact: source-local repo knowledge/core-beliefs enforcement only.
 
-- [ ] Gate 28 status:
-- [ ] Gate 28: Workflow template parsing, strict rendering, and dynamic reload are enforced.
-- [ ] Gate 28: Every contract sub-requirement is satisfied.
-- [ ] Gate 28 evidence path:
+- [x] Gate 28 status: source_local_current
+- [x] Gate 28: Workflow template parsing, strict rendering, and dynamic reload are enforced.
+- [x] Gate 28: Every contract sub-requirement is satisfied.
+- [x] Gate 28 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `workflow-template-parsing-rendering-reload = pass`. Claim impact: source-local workflow-template enforcement only.
 
-- [ ] Gate 29 status:
-- [ ] Gate 29: Workspace command confinement and lifecycle cleanup is enforced.
-- [ ] Gate 29: Every contract sub-requirement is satisfied.
-- [ ] Gate 29 evidence path:
+- [x] Gate 29 status: source_local_current
+- [x] Gate 29: Workspace command confinement and lifecycle cleanup is enforced.
+- [x] Gate 29: Every contract sub-requirement is satisfied.
+- [x] Gate 29 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `workspace-command-confinement-lifecycle-cleanup = pass`. Claim impact: source-local workspace command/lifecycle cleanup enforcement only.
 
-- [ ] Gate 30 status:
-- [ ] Gate 30: Plugin bundled component graph and hook/app/MCP safety is enforced.
-- [ ] Gate 30: Every contract sub-requirement is satisfied.
-- [ ] Gate 30 evidence path:
+- [x] Gate 30 status: source_local_current
+- [x] Gate 30: Plugin bundled component graph and hook/app/MCP safety is enforced.
+- [x] Gate 30: Every contract sub-requirement is satisfied.
+- [x] Gate 30 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `plugin-bundled-component-graph-hook-app-mcp-safety = pass`. Claim impact: source-local bundled-component graph enforcement only; no installed/app-registry exposure claim.
 
-- [ ] Gate 31 status:
-- [ ] Gate 31: Instruction precedence and nested `AGENTS.md` routing are enforced.
-- [ ] Gate 31: Every contract sub-requirement is satisfied.
-- [ ] Gate 31 evidence path:
+- [x] Gate 31 status: source_local_current
+- [x] Gate 31: Instruction precedence and nested `AGENTS.md` routing are enforced.
+- [x] Gate 31: Every contract sub-requirement is satisfied.
+- [x] Gate 31 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `instruction-precedence-nested-agents-routing = pass`. Claim impact: source-local instruction precedence/routing enforcement only.
 
-- [ ] Gate 32 status:
-- [ ] Gate 32: ExecPlan plain-language, expected-output, and interface completeness is enforced.
-- [ ] Gate 32: Every contract sub-requirement is satisfied.
-- [ ] Gate 32 evidence path:
+- [x] Gate 32 status: source_local_current
+- [x] Gate 32: ExecPlan plain-language, expected-output, and interface completeness is enforced.
+- [x] Gate 32: Every contract sub-requirement is satisfied.
+- [x] Gate 32 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `execplan-plain-language-expected-output-interface-completeness = pass`. Claim impact: source-local ExecPlan completeness enforcement only.
 
-- [ ] Gate 33 status:
-- [ ] Gate 33: Guardrail speed, isolation, and cache honesty are enforced.
-- [ ] Gate 33: Every contract sub-requirement is satisfied.
-- [ ] Gate 33 evidence path:
+- [x] Gate 33 status: source_local_current
+- [x] Gate 33: Guardrail speed, isolation, and cache honesty are enforced.
+- [x] Gate 33: Every contract sub-requirement is satisfied.
+- [x] Gate 33 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `guardrail-speed-isolation-cache-honesty = pass`. Claim impact: source-local guardrail law enforcement only; final strict/no-cache and install/cache parity remain separately unchecked.
 
-- [ ] Gate 34 status:
-- [ ] Gate 34: Secret/token boundaries for subagents, dynamic tools, hooks, and receipts are enforced.
-- [ ] Gate 34: Every contract sub-requirement is satisfied.
-- [ ] Gate 34 evidence path:
+- [x] Gate 34 status: source_local_current
+- [x] Gate 34: Secret/token boundaries for subagents, dynamic tools, hooks, and receipts are enforced.
+- [x] Gate 34: Every contract sub-requirement is satisfied.
+- [x] Gate 34 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `secret-token-boundaries = pass`. Claim impact: source-local secret/token boundary enforcement only.
 
-- [ ] Gate 35 status:
-- [ ] Gate 35: Generated/proof artifact provenance and anti-fabrication are enforced.
-- [ ] Gate 35: Every contract sub-requirement is satisfied.
-- [ ] Gate 35 evidence path:
+- [x] Gate 35 status: source_local_current
+- [x] Gate 35: Generated/proof artifact provenance and anti-fabrication are enforced.
+- [x] Gate 35: Every contract sub-requirement is satisfied.
+- [x] Gate 35 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `generated-proof-artifact-provenance-anti-fabrication = pass`, `adversarial-packet-tampering-forged-proof-rejection = pass`, and `validator-execution-provenance = pass`; red report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:13e8e7af7a05b38b763e461c1fb691e82ccb3e31cbe490190d0b694562a75c48` records `1239/1239`. Claim impact: source-local generated-proof and anti-fabrication enforcement only; no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 
 - [ ] Gate 36 status:
 - [ ] Gate 36: Review feedback disposition and same-round satisfaction are enforced.
