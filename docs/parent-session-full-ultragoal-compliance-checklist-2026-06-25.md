@@ -2636,8 +2636,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [x] Run Product Fitness proof. Evidence: `target/debug/ultragoal --root . product prove-fitness --receipt-dir validation_artifacts/harness` exited `0` for `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; receipt digests are `validation_artifacts/harness/fit-repo-receipt.json = sha256:f6d2400b0b7055eb158bac8bad49d2fe30031891a319b8cc87b44c4a155b22f4`, `validation_artifacts/harness/product-fitness-receipt.json = sha256:8a8ec5cf62c75ecc3cd02322e1ba16393d11a177bf9a94b87b7acf3fdac151fa`, and `validation_artifacts/harness/plugin-product-journey-receipt.json = sha256:2770e6edf2cab21f290bbc4f4e38a683ba161777241721d3753c011afa39ed11`; claim impact: source-local Product/Fit/Journey only, no readiness/release/completion/reviewer exposure/update_goal claim.
 - [ ] Run Product Fitness review-team ownership proof.
 - [ ] Run Product Fitness review-round red fixtures.
-- [ ] Run standards enforcement proof.
-- [ ] Run foundational-law trace proof.
+- [x] Run standards enforcement proof. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` targets package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6` and records check `agent-standards-enforcement = pass`; standards-gardener receipt `validation_artifacts/standards-gardener/current-standards-gardening-receipt.json = sha256:e2baad1cefa378243f113a72d20262d3620f5d93b7d74f9d40844b5084c31324` records `status = pass` for the same candidate. Claim impact: source-local standards proof only; no install/cache parity, final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
+- [x] Run foundational-law trace proof. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` targets package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6` and records `source-obligation-coverage = pass` and `source-obligation-parity-anti-bundling = pass`; validator module `validator/src/audit/foundational_law_trace.rs` is invoked by `source_obligations.rs` for trace coverage. Claim impact: source-local foundational/source-obligation trace proof only; no install/cache parity, final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Run architecture dependency topology proof and red fixtures.
 - [ ] Run Quality Score/taste gate proof and red fixtures.
 - [ ] Run feedback-to-rule promotion receipt and red fixtures.
@@ -2659,7 +2659,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run ExecPlan plain-language/expected-output/interface-completeness proof and red fixtures.
 - [ ] Run guardrail speed/isolation/cache-honesty proof and red fixtures.
 - [ ] Run secret/token boundary proof and red fixtures.
-- [ ] Run generated/proof artifact provenance and anti-fabrication proof and red fixtures.
+- [x] Run generated/proof artifact provenance and anti-fabrication proof and red fixtures. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` records check `generated-proof-artifact-provenance-anti-fabrication = pass` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:21cda526dc23a0c89482303557764ac012b3a819e8379f2a6940a7328dc3bf67` records `status = pass`, `1238/1238`. Claim impact: source-local generated-proof provenance proof only; no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Run review feedback disposition and same-round satisfaction proof and red fixtures.
 - [ ] Run behavior-example coverage and coverage anti-gaming proof and red fixtures.
 - [ ] Run one-command fresh environment bootstrap/concurrency proof and red fixtures.
@@ -2687,7 +2687,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run connector capability discovery/same-surface capability proof and red fixtures.
 - [ ] Run target-repo audit capability/target-scope support proof and red fixtures.
 - [ ] Run trust-boundary abuse-path/failure-path coverage proof and red fixtures.
-- [ ] Run source-obligation parity/anti-bundling proof and red fixtures.
+- [x] Run source-obligation parity/anti-bundling proof and red fixtures. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` records check `source-obligation-parity-anti-bundling = pass` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:21cda526dc23a0c89482303557764ac012b3a819e8379f2a6940a7328dc3bf67` records `status = pass`, `1238/1238`. Claim impact: source-local source-obligation parity proof only; no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Run human-audit disposition decomposition/judgment-only claim-blocking proof and red fixtures.
 - [ ] Run capability-gap extraction/harness-capability promotion proof and red fixtures.
 - [ ] Run goal-contract amendment authority/closed-required-claim-id proof and red fixtures.
@@ -2703,7 +2703,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run value/adoption/continuance evidence hierarchy proof and red fixtures.
 - [ ] Run current product discovery/audit/quality-in-use evidence proof and red fixtures.
 - [ ] Run product-success lifecycle transition/no-afterthought proof and red fixtures.
-- [ ] Run validator-theater/miswire resistance proof and red/green/stale/wrong-surface fixtures.
+- [x] Run validator-theater/miswire resistance proof and red/green/stale/wrong-surface fixtures. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` records check `validator-theater-miswire-resistance = pass` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:21cda526dc23a0c89482303557764ac012b3a819e8379f2a6940a7328dc3bf67` records `status = pass`, `1238/1238`; focused full test suite `cargo test --offline` passed. Claim impact: source-local validator-theater resistance proof only; CT-006 through CT-011 remain unchecked until production green proof plus bad-path failure proof exists for each.
 - [ ] Run green-path adequacy and satisfiable strictness proof.
 - [ ] Run clean-room rebuild/author-memory independence proof.
 - [ ] Run historical regression corpus proof from session logs, Chronicle, reviewers, and side-thread signals.
