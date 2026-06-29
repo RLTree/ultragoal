@@ -20,6 +20,7 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
 
     let receipt = support::write_fail_closed_proof(&root, &current);
     let failed_source = assert_fail_closed_source_audit_ref(&root, &store, &receipt, &current);
+    assert_source_audit_pass_self_write_is_not_circular_failure(&root, &store, &receipt, &current);
     assert_source_audit_self_rewrite_is_not_circular_failure(
         &root,
         &store,
@@ -30,7 +31,13 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
     assert_weak_source_audit_failures(&root, &store, &receipt, &current);
     registry::assert_missing_registry_failure(&root, &store, &receipt);
     assert_source_audit_status_failures(&root, &store, &receipt, &current);
-    assert_stale_and_malformed_source_failures(&root, &store, receipt, failed_source);
+    cases::assert_stale_and_malformed_source_failures(
+        &root,
+        &store,
+        receipt,
+        failed_source,
+        &current,
+    );
 
     std::fs::remove_dir_all(root).expect("cleanup final packet claim guard refs");
 }
@@ -59,6 +66,28 @@ fn assert_fail_closed_source_audit_ref(
     let source_failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(source_failures.is_empty(), "{source_failures:?}");
     failed_source
+}
+
+fn assert_source_audit_pass_self_write_is_not_circular_failure(
+    root: &Path,
+    store: &crate::schema_catalog::SchemaStore,
+    proof: &Value,
+    current: &str,
+) {
+    support::write_json(
+        &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
+        &json!({
+            "status":"pass",
+            "generated_at":"2026-06-29T00:00:02Z",
+            "target_revision":{"kind":"package_digest","value":current},
+            "claim_ceiling":"source_audit_pass_source_local_only",
+            "supported_claim_classes":["source_local_audit_checks", "red_fixture_report"],
+            "blocked_claim_classes":cases::blocked_claims()
+        }),
+    );
+    support::write_proof(root, proof);
+    let failures = crate::audit::final_packet::claim_guard_failures(root, store);
+    assert!(failures.is_empty(), "{failures:?}");
 }
 
 fn assert_source_audit_self_rewrite_is_not_circular_failure(
@@ -161,35 +190,6 @@ fn assert_source_audit_status_failures(
         );
         assert_guard_failure(root, store, proof, expected);
     }
-}
-
-fn assert_stale_and_malformed_source_failures(
-    root: &Path,
-    store: &crate::schema_catalog::SchemaStore,
-    receipt: Value,
-    failed_source: Value,
-) {
-    let mut stale_source = failed_source;
-    stale_source["source_audit"]["digest"] = json!(crate::digest::ZERO);
-    assert_guard_failure(
-        root,
-        store,
-        stale_source,
-        "final_packet_proof_ref_digest_mismatch:source_audit",
-    );
-
-    let mut malformed_source = receipt;
-    let source_path = "validation_artifacts/ultragoal-audit/validator-receipt.json";
-    std::fs::write(root.join(source_path), "{").expect("malformed source audit");
-    malformed_source["source_audit"]["digest"] =
-        json!(crate::digest::file(&root.join(source_path)).expect("malformed source digest"));
-    malformed_source["source_audit"]["path"] = json!(source_path);
-    assert_guard_failure(
-        root,
-        store,
-        malformed_source,
-        "final_packet_proof_ref_malformed:source_audit",
-    );
 }
 
 pub(super) fn mutate(value: &Value, edit: impl FnOnce(&mut Value)) -> Value {

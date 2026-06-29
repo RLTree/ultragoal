@@ -134,11 +134,8 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     );
     let value = receipt(&fail_closed).expect("fail-closed receipt");
     assert_eq!(value["status"], "fail");
-    assert_eq!(value["source_audit"]["status"], "fail");
-    assert_eq!(
-        value["source_audit"]["self_rewriting_authority"],
-        "source_audit_command_writes_validator_receipt"
-    );
+    assert_eq!(value["source_audit"]["status"], "pass");
+    assert!(value["source_audit"]["self_rewriting_authority"].is_null());
     assert_eq!(
         crate::json_boundary::read_json(
             &fail_closed.join("validation_artifacts/ultragoal-audit/validator-receipt.json")

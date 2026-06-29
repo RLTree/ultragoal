@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T20:28:13Z",
+    "completed_at": "2026-06-29T22:11:41Z",
     "cwd": "fixtures/target-repo/red/empty-reviewers-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T20:28:13Z",
+    "started_at": "2026-06-29T22:11:41Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T20:28:13Z",
+  "generated_at": "2026-06-29T22:11:41Z",
   "invocation": "fixture init fixtures/target-repo/red/empty-reviewers-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:84c172a196969d103e535da9ddce277c72315a469e27eb4a72cbc3e0eea640ab",
+  "repo_fingerprint": "sha256:47381b55d8867952d4c2b7b086fffc3451d3b0ed86ba4c845f0e2943923bd1c5",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -520,7 +520,7 @@
       "path": "validator/src/audit/final_packet/references/package.rs"
     },
     {
-      "digest": "sha256:b8ef253b2eba0dc8d732de3b911dfeccd7e4432d53acddd124d62204e22f477f",
+      "digest": "sha256:0601fad955489f01bdaa9507f71e0aeb2af169532c25a1eafc688fd7c0bec219",
       "path": "validator/src/audit/final_packet/references/source_audit.rs"
     },
     {
@@ -1152,7 +1152,7 @@
       "path": "validator/src/cli/control/plane/types.rs"
     },
     {
-      "digest": "sha256:38972aefc74ae48ea5ce494b5b2954f4f1f277295e8aa2c925f50e5ed746bb7e",
+      "digest": "sha256:8f91e51c98b96c9fd539d722460ef43754a80483f36621eacec91cf02c907f85",
       "path": "validator/src/cli/final_packet.rs"
     },
     {
@@ -1592,11 +1592,11 @@
       "path": "validator/src/self_tests/audit/final_packet/claim_guard/mod.rs"
     },
     {
-      "digest": "sha256:023eca83a20b0c961078917f5c6ad0ff088936cb0258db658da9d3f3999d438f",
+      "digest": "sha256:612f29d25580596af5aac2617e1569eadbb5b437ef1dabe1a8fa39e9784f3e15",
       "path": "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/cases.rs"
     },
     {
-      "digest": "sha256:003f23ba7b10b962f6a386ebc7e49bbad2d58bd2554e863af75b18c755ebf273",
+      "digest": "sha256:4a92db447b335e35ab1f32775c8722280d0a34fefeac848f89e46cfaac5b6779",
       "path": "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/mod.rs"
     },
     {
@@ -1896,7 +1896,7 @@
       "path": "validator/src/self_tests/cli/control/types.rs"
     },
     {
-      "digest": "sha256:f017d98d562333f9ef8788aacbeba3e0e3e1c2354bdff9685b7ce0384a9ad86f",
+      "digest": "sha256:94a54bd15fb2c2ed81123d911d5bb5ca4cccf968028d07a6371acba0c909a853",
       "path": "validator/src/self_tests/cli/final_packet.rs"
     },
     {

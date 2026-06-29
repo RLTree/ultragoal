@@ -1,5 +1,5 @@
 {
-  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
   "changed_artifacts": [
     {
       "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
@@ -206,11 +206,11 @@
       "path": "validator/src/self_tests/plugin/registry/guard.rs"
     },
     {
-      "digest": "sha256:02ac58a288f41b08aa80ca010a3a5653c4b1b496fa17d2531ee0869752fdedd1",
+      "digest": "sha256:87a11927fe8a32bc6cc662d239c8993cbf0c99d2da25ea98e0c71e984fd76983",
       "path": "plugin-manifest-draft.json"
     },
     {
-      "digest": "sha256:2416ef8a41048f41ce8bc76c2fa58c7aa9d498bc858c470f8dac6861081e6f23",
+      "digest": "sha256:efec2ed27a3c6e6b87178fd26ab1ed7a9f9f914b3f6e4e910bbd88a8507e21b3",
       "path": "docs/plugin-cohesion-manifest.json"
     },
     {
@@ -260,7 +260,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-29T20:23:09Z",
+  "generated_at": "2026-06-29T22:09:34Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

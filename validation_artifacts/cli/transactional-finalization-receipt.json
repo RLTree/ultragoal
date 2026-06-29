@@ -6,15 +6,15 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
   "claim_ceiling": "withheld_or_blocked",
   "cli_performance": {
-    "digest": "sha256:98d016b9f997f64e543c4f80df0b392497a40cefa87938fe877519f84a45dec8",
+    "digest": "sha256:233acce9d6af7d2ce39a8258b449c63375b6c784066662e9e69a822bcf79c023",
     "path": "validation_artifacts/cli/performance-receipt.json",
     "status": "pass"
   },
   "coverage": {
-    "digest": "sha256:562b13aea46caf6b21217678fa872478f75a9a15adf853ad9919e2160bb19a08",
+    "digest": "sha256:2cb58a465ff52414cfb455793a88d3d1dbc9b13f0f169f8086f45c66e0a8b7c8",
     "path": "validation_artifacts/coverage/coverage-receipt.json",
     "status": "pass"
   },
@@ -38,7 +38,6 @@
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_target_digest_mismatch",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
@@ -58,13 +57,13 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:9c07919da7ff38f736485cd4a93a44ede622c0e016638f3e90a8263ca4e287ae",
+    "digest": "sha256:075c5197fbbe8cf8beadb3e5acd34097fcefee6bdc26dab0b33586320d94e0b9",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-29T20:22:22Z",
+  "generated_at": "2026-06-29T22:08:08Z",
   "registry_exposure": {
-    "digest": "sha256:d7f5da89b9806731b5685b416cf4eaac69bf967659cfa6e68852ddd701f7bdb9",
+    "digest": "sha256:a8bc2a7cfec71b8e8ed03fdc9afa7767f06a490224aac93b107e70c08b5587e5",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },

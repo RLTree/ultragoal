@@ -42,9 +42,6 @@ fn load_guard_ref(
         return None;
     }
     let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
-    if self_rewrite_claim_guard_allowed(root, item, rel, expected_digest) {
-        return Some(self_rewrite_fail_closed_source_audit(expected));
-    }
     let actual = crate::digest::file(&root.join(rel));
     if actual.as_deref() == Ok(expected_digest) {
         return load_ref(
@@ -56,25 +53,58 @@ fn load_guard_ref(
             out,
         );
     }
+    if let Some(value) =
+        self_rewrite_claim_guard_value(root, receipt, item, rel, expected_digest, expected)
+    {
+        return Some(value);
+    }
     out.push(format!(
         "final_packet_proof_ref_digest_mismatch:source_audit:{rel}"
     ));
     None
 }
 
-fn self_rewrite_claim_guard_allowed(
+fn self_rewrite_claim_guard_value(
     root: &Path,
+    receipt: &Value,
     item: &Value,
     rel: &str,
     expected_digest: &str,
-) -> bool {
-    rel == SELF_REWRITING_SOURCE_AUDIT
-        && crate::package::inventory::package_path_error(root, rel).is_none()
-        && expected_digest.starts_with("sha256:")
-        && expected_digest != crate::digest::ZERO
-        && item.get("status").and_then(Value::as_str) == Some("fail")
+    expected: &str,
+) -> Option<Value> {
+    if rel != SELF_REWRITING_SOURCE_AUDIT
+        || crate::package::inventory::package_path_error(root, rel).is_some()
+        || !expected_digest.starts_with("sha256:")
+        || expected_digest == crate::digest::ZERO
+        || receipt.get("status").and_then(Value::as_str) != Some("fail")
+        || receipt.get("claim_ceiling").and_then(Value::as_str) != Some("withheld_or_blocked")
+    {
+        return None;
+    }
+    if item.get("status").and_then(Value::as_str) == Some("fail")
         && item.get("self_rewriting_authority").and_then(Value::as_str)
             == Some("source_audit_command_writes_validator_receipt")
+    {
+        return Some(self_rewrite_fail_closed_source_audit(expected));
+    }
+    if item.get("status").and_then(Value::as_str) != Some("pass") {
+        return None;
+    }
+    let value = crate::json_boundary::read_json(&root.join(rel)).ok()?;
+    if !matches!(
+        value.get("status").and_then(Value::as_str),
+        Some("pass" | "fail")
+    ) {
+        return None;
+    }
+    if value
+        .pointer("/target_revision/value")
+        .and_then(Value::as_str)
+        != Some(expected)
+    {
+        return None;
+    }
+    Some(value)
 }
 
 fn self_rewrite_fail_closed_source_audit(expected: &str) -> Value {

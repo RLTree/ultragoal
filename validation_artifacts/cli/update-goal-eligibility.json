@@ -6,7 +6,7 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -66,17 +66,15 @@
     "ultragoal self update-goal eligibility"
   ],
   "evidence_graph": {
-    "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+    "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
     "evaluation_mode": "production_dereferenced",
     "items": [
       {
-        "candidate_digest": "sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454",
-        "digest": "sha256:6a3cbcea196fa2f8a9606ad62638a9d1deb9bbdc357f0319d75ba098b0668282",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:ed6b06d4fd83ade70d5405915b24645af0c188b6f8c9ead8696cf11cc8e954e4",
         "exists": true,
         "failures": [
           "status_not_pass",
-          "candidate_digest_mismatch",
-          "source_audit_target_digest_mismatch",
           "source_audit_status_not_pass",
           "source_audit_status_not_pass",
           "source_audit_claim_ceiling_not_source_local",
@@ -85,27 +83,24 @@
         ],
         "label": "source_audit",
         "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
-        "same_candidate": false,
+        "same_candidate": true,
         "schema": "harness-ultragoal.validator-receipt.v1",
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454",
-        "digest": "sha256:5e8372ff69cb16217d4043463077e7022184f9d0f6dcde406cecbcbb2adfdfe8",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:48d68abe2d2c79f2511929ed446cdf7bad307d84ee7185dff63b2e1d57d05d7e",
         "exists": true,
-        "failures": [
-          "candidate_digest_mismatch",
-          "red_fixture_report_target_digest_mismatch"
-        ],
+        "failures": [],
         "label": "red_fixture_report",
         "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-        "same_candidate": false,
+        "same_candidate": true,
         "schema": "harness-ultragoal.red-fixture-report.v1",
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:562b13aea46caf6b21217678fa872478f75a9a15adf853ad9919e2160bb19a08",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:2cb58a465ff52414cfb455793a88d3d1dbc9b13f0f169f8086f45c66e0a8b7c8",
         "exists": true,
         "failures": [],
         "label": "coverage",
@@ -115,8 +110,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:98d016b9f997f64e543c4f80df0b392497a40cefa87938fe877519f84a45dec8",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:233acce9d6af7d2ce39a8258b449c63375b6c784066662e9e69a822bcf79c023",
         "exists": true,
         "failures": [],
         "label": "cli_performance",
@@ -126,8 +121,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:9c07919da7ff38f736485cd4a93a44ede622c0e016638f3e90a8263ca4e287ae",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:075c5197fbbe8cf8beadb3e5acd34097fcefee6bdc26dab0b33586320d94e0b9",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -148,7 +143,6 @@
           "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
           "final_packet_proof_ref_embedded_status_not_pass:source_audit",
           "final_packet_proof_source_audit_status_not_pass",
-          "final_packet_proof_source_audit_target_digest_mismatch",
           "final_packet_proof_source_audit_claim_ceiling_not_source_local",
           "final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
           "final_packet_proof_source_audit_supported_claim_missing:red_fixture_report"
@@ -160,8 +154,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:d7f5da89b9806731b5685b416cf4eaac69bf967659cfa6e68852ddd701f7bdb9",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:a8bc2a7cfec71b8e8ed03fdc9afa7767f06a490224aac93b107e70c08b5587e5",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -184,8 +178,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:eb50f94bd81cf19b31c9e48bcb027bdad4d44fb31e6dcfc7ceb9338b5b812359",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:fe84302c67b26409e5809792a54f1d37491564f0cf08f8df01707785b8d05a10",
         "exists": true,
         "failures": [],
         "label": "fit_repo",
@@ -195,8 +189,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:a517d45fb5baaccffefd823b56ea8c3f3cf7fe4a7b2a62d5cb37f6ad43b794c6",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:42baa9c0372e04c4a566220293cb8236f616eeccfb966c822907e3d2ce6c5043",
         "exists": true,
         "failures": [],
         "label": "product_fitness",
@@ -206,8 +200,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:522a7f5a76c826f08899e90400e792b00c5907f0b6c18364262d67b4e49a8f0e",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:76e9a21c6934de4b4026a2b8de8ce33128e2d9c34c94219f4b08f7531edb6571",
         "exists": true,
         "failures": [],
         "label": "product_journey",
@@ -217,23 +211,19 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454",
-        "digest": "sha256:f77d4c9145837b24dee98018084e7c3fa7dcf71e5a7c5f5564b628dbc7e45e7f",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:e0f06eec73c1df9ab67258225b6e20eebea2f455231b749d01525f3774a521b4",
         "exists": true,
-        "failures": [
-          "candidate_digest_mismatch",
-          "standards_gardener_changed_artifact_digest_mismatch",
-          "standards_gardener_candidate_digest_mismatch"
-        ],
+        "failures": [],
         "label": "standards_gardener",
         "path": "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json",
-        "same_candidate": false,
+        "same_candidate": true,
         "schema": "harness-ultragoal.standards-gardening-receipt.v1",
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:6034602cc11256154799cdea4bb301405d7fdaecf260d3a7f93eb6218e4b6728",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:9d66fa3b2b17140c494cab1e0b1feb55d3c4638d879d7f203d096376a0b159cd",
         "exists": true,
         "failures": [
           "status_not_pass"
@@ -245,8 +235,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:420fa95d7256b9de59464fa589f1e4be41b71eb6c61929abd817d83fb0675068",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:1742239341c2700a2dfb497b877064411afc2f3c6c2c6d5aa5e5d623a9c99f3b",
         "exists": true,
         "failures": [
           "status_not_pass"
@@ -258,8 +248,8 @@
         "status": "fail"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:61ff0d7fd2bffbd7d21de8af2a886c6f7b23e27d26a423100c8b55f5fccd1df1",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:ab0fc29a976e9de4f0ddf733b9bd08b4a42ac7357119d24f4c97d22b411357bc",
         "exists": true,
         "failures": [],
         "label": "rust_toolchain",
@@ -269,8 +259,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:e8be1236996669b37f156346bdb7b4da1e85a95638faeb9e56713d4f811765d4",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:a39891a70207bc3dbc32e553cf59f58394729fa587063a12b8b6b0b1fdc73bc8",
         "exists": true,
         "failures": [],
         "label": "rust_fast",
@@ -280,8 +270,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:820d4e6783a47b751b970ee16693c4b3702286ea9dcbcb4c3399e565fedb3da7",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:af75d046a7c1b95b448796ce6a6d39e5d084eaf73fdcdaa67643a0c631892e9b",
         "exists": true,
         "failures": [],
         "label": "rust_standard",
@@ -291,8 +281,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:fd4d2e32c94a945eccb9bff82d9fe04313da98621865880f61199e769719415e",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:0eef4790395253284a4bd85045977a8a00eb92f32c535c6dd20539261db1cb3c",
         "exists": true,
         "failures": [],
         "label": "rust_release",
@@ -302,8 +292,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:cdbdbd6f17aa25e3f6fe4a6fb6dbe16083924741015539e7af9ae2455b3e5fa8",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:32c0644c1c93597b029513ba564d6a131504ced19b87c7395baa5da37c19cd8f",
         "exists": true,
         "failures": [],
         "label": "rust_clean_proof",
@@ -313,8 +303,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:45e937cc75fbc83a328ca141000b582378ef8649f9bd074c0f417a9c62a5309b",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:96fa649716ef77e1c8888c7e148c880ae5436460f77e1ab51e54dfcc3d7a4057",
         "exists": true,
         "failures": [],
         "label": "rust_watch",
@@ -324,8 +314,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:c567ca6005ee6e66b27637189bfe747bb061c747136a3b9273cfff788b04fca7",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:e8505ca3c22667d6b979fa310dd88e7a51959e170443ea016354e9993f45bc02",
         "exists": true,
         "failures": [],
         "label": "rust_memory",
@@ -335,8 +325,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:16df28b78e96fdcd13196ecf95c42950730bb9ef96913015cd33e144ce9b17cc",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:922c91486f384bc8ebea85303459398a5bea25096bfdeedc11595de9f95b80a0",
         "exists": true,
         "failures": [],
         "label": "rust_dependency",
@@ -346,8 +336,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:e086d6d610960ce5fae08eea2bc9e9703d1f82eec9c4986811b2219441744f61",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:d685a9da879b4b74fa9c0d7534bffdb09707f76148a1ce2fdb740ac91415b554",
         "exists": true,
         "failures": [],
         "label": "rust_coverage",
@@ -357,8 +347,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:89f86bfcc21e29d83883d09cafa6e853119eef3dab7e7d4c1a6901d2f45da371",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:0b79cc17cb73ed0387827d08638d17c501c32ec715c93c92656b16d1fe9e07c1",
         "exists": true,
         "failures": [],
         "label": "rust_workspace_topology",
@@ -368,8 +358,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:2609d548ab187aaeacd1bcfcb94635deefde4aca22c30c2edb4f5e374f4f9565",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:0fc3bd68ef781eb75b2567ed14e4ed2b1cdaeb3fa0361118a66d38bd99f34a7a",
         "exists": true,
         "failures": [],
         "label": "gc_plan",
@@ -379,8 +369,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:c03c579edbcf339c16e8c74f3e8254cb79625b68ea34b811744e6caae22158cd",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:6f03e87b0c68b574a71273097b68a0cb3d0ae7af0e520431a09f3e074fc7da7a",
         "exists": true,
         "failures": [],
         "label": "gc_dry_run",
@@ -390,8 +380,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:80c0c742c049010733e1d1e433344f60cf22df59f2ca72b9d521113c1539a2b7",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:ba73e18ceafce886e03f596d1ce32a1929822f19140c8b05e97869d61ff61679",
         "exists": true,
         "failures": [],
         "label": "gc_apply",
@@ -401,8 +391,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:65a0d136b1bcf9c0d046c1b0c663111e60600c6535344242d4c7f9abdfaca691",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:030e8f9207d5df09a644afa66bf6a6e190e29d55cf1ae7e0786517e3ba082b73",
         "exists": true,
         "failures": [],
         "label": "gc_verify",
@@ -412,8 +402,8 @@
         "status": "pass"
       },
       {
-        "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
-        "digest": "sha256:54b3139541398f7390482291dd711c2583c98e2b634302c13c158221ccdd1290",
+        "candidate_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+        "digest": "sha256:99241ef9a092a42c6352fc70acddc17facc0cf266424edad3bdfae0c55ef582c",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -438,7 +428,6 @@
           "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
           "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
           "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass",
-          "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_target_digest_mismatch",
           "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
           "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
           "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
@@ -481,11 +470,9 @@
       "final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
       "final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
       "final_packet:final_packet_proof_source_audit_status_not_pass",
-      "final_packet:final_packet_proof_source_audit_target_digest_mismatch",
       "final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
       "final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
       "final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
-      "red_fixture_report_target_digest_mismatch:sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454!=sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
       "cli_control_plane_transaction_status_not_pass",
       "cli_control_plane_transaction_claim_ceiling_not_update_goal",
       "cli_control_plane_transaction_blocks_claims",
@@ -507,7 +494,6 @@
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_target_digest_mismatch",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
       "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
@@ -534,20 +520,20 @@
     "gate_id": "89",
     "id": "update_goal_eligibility_evidence_not_satisfied",
     "law_id": "cli-control-plane-authority",
-    "observed_value": "final_packet:final_packet_proof_status_not_pass | final_packet:final_packet_proof_claim_ceiling_not_verified | final_packet:final_packet_proof_packet_absent | final_packet:final_packet_proof_ref_embedded_status_not_pass:registry | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit | final_packet:final_packet_proof_source_audit_status_not_pass | final_packet:final_packet_proof_source_audit_target_digest_mismatch | final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local | final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks | final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report | red_fixture_report_target_digest_mismatch:sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454!=sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b | cli_control_plane_transaction_status_not_pass | cli_control_plane_transaction_claim_ceiling_not_update_goal | cli_control_plane_transaction_blocks_claims | cli_control_plane_transaction_ref_status_not_pass:final_packet | cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified | cli_control_plane_transaction_final_packet:final_packet_proof_packet_absent | cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_target_digest_mismatch | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report | cli_control_plane_transaction_ref_status_not_pass:registry_exposure | cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass | cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface | cli_control_plane_transaction_registry:plugin_self_law_registry_wrong_source | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_tool_call_identity | cli_control_plane_transaction_registry:plugin_self_law_registry_capture_method_not_live | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:red_fixture_report | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:red_fixture_report | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:standards_gardener | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:standards_gardener | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
+    "observed_value": "final_packet:final_packet_proof_status_not_pass | final_packet:final_packet_proof_claim_ceiling_not_verified | final_packet:final_packet_proof_packet_absent | final_packet:final_packet_proof_ref_embedded_status_not_pass:registry | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit | final_packet:final_packet_proof_source_audit_status_not_pass | final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local | final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks | final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report | cli_control_plane_transaction_status_not_pass | cli_control_plane_transaction_claim_ceiling_not_update_goal | cli_control_plane_transaction_blocks_claims | cli_control_plane_transaction_ref_status_not_pass:final_packet | cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified | cli_control_plane_transaction_final_packet:final_packet_proof_packet_absent | cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks | cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report | cli_control_plane_transaction_ref_status_not_pass:registry_exposure | cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass | cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface | cli_control_plane_transaction_registry:plugin_self_law_registry_wrong_source | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer | cli_control_plane_transaction_registry:plugin_self_law_registry_missing_tool_call_identity | cli_control_plane_transaction_registry:plugin_self_law_registry_capture_method_not_live | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
     "repair_class": "deterministic_enforcement",
     "rerun_command": "ultragoal update-goal eligibility --receipt validation_artifacts/cli/update-goal-eligibility.json",
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-29T20:22:58Z",
+  "generated_at": "2026-06-29T22:09:29Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
     "self_law_state": "transition_only",
     "tool": "ultragoal"
   },
-  "notes": "Fail-closed CLI authority receipt. Evidence failures: final_packet:final_packet_proof_status_not_pass; final_packet:final_packet_proof_claim_ceiling_not_verified; final_packet:final_packet_proof_packet_absent; final_packet:final_packet_proof_ref_embedded_status_not_pass:registry; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet:final_packet_proof_source_audit_status_not_pass; final_packet:final_packet_proof_source_audit_target_digest_mismatch; final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local; final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks; final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report; red_fixture_report_target_digest_mismatch:sha256:e4c548c4d20c1b09c1ccad84d5120ca2b0262648c2e238d472330eadca5a4454!=sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b; cli_control_plane_transaction_status_not_pass; cli_control_plane_transaction_claim_ceiling_not_update_goal; cli_control_plane_transaction_blocks_claims; cli_control_plane_transaction_ref_status_not_pass:final_packet; cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified; cli_control_plane_transaction_final_packet:final_packet_proof_packet_absent; cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_target_digest_mismatch; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report; cli_control_plane_transaction_ref_status_not_pass:registry_exposure; cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass; cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface; cli_control_plane_transaction_registry:plugin_self_law_registry_wrong_source; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_tool_call_identity; cli_control_plane_transaction_registry:plugin_self_law_registry_capture_method_not_live; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:red_fixture_report; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:red_fixture_report; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:standards_gardener; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_same_candidate:standards_gardener; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
+  "notes": "Fail-closed CLI authority receipt. Evidence failures: final_packet:final_packet_proof_status_not_pass; final_packet:final_packet_proof_claim_ceiling_not_verified; final_packet:final_packet_proof_packet_absent; final_packet:final_packet_proof_ref_embedded_status_not_pass:registry; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet:final_packet_proof_source_audit_status_not_pass; final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local; final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks; final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report; cli_control_plane_transaction_status_not_pass; cli_control_plane_transaction_claim_ceiling_not_update_goal; cli_control_plane_transaction_blocks_claims; cli_control_plane_transaction_ref_status_not_pass:final_packet; cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified; cli_control_plane_transaction_final_packet:final_packet_proof_packet_absent; cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks; cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report; cli_control_plane_transaction_ref_status_not_pass:registry_exposure; cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass; cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface; cli_control_plane_transaction_registry:plugin_self_law_registry_wrong_source; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_live_tool_issuer; cli_control_plane_transaction_registry:plugin_self_law_registry_missing_tool_call_identity; cli_control_plane_transaction_registry:plugin_self_law_registry_capture_method_not_live; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; cli_control_plane_transaction_registry:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
   "operation": "update_goal_eligibility",
   "required_evidence": [
     "current_source_audit_pass",
