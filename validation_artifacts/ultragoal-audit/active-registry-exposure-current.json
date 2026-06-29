@@ -64,9 +64,9 @@
     "current_claim_ceiling": "withheld_or_blocked",
     "deterministic_repair_target": "provide_live_tool_registry_query_or_keep_claims_blocked",
     "disposition": "open_claim_blocked",
-    "id": "registry-reviewer-exposure-73ff40a280dd",
+    "id": "registry-reviewer-exposure-5f99a89c8d67",
     "missing_capability_class": "live_same_surface_plugin_registry_or_reviewer_exposure",
-    "observed_at": "2026-06-29T09:36:37Z",
+    "observed_at": "2026-06-29T10:53:06Z",
     "owner_surface": "codex_desktop_plugin_registry",
     "required_evidence": [
       "live same-surface tool registry query",
@@ -76,13 +76,13 @@
     ],
     "schema": "harness-ultragoal.capability-gap.v1",
     "source_artifact": {
-      "digest": "sha256:a7a88faf3323dc399e6df4f8ce6ecd87e1fe63e7004f7d828dd1694747d32c59",
+      "digest": "sha256:17f6bcd8597764a71c78e47cd66f9b8235e97ed8a2f516018eb732ebdcc92e24",
       "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
     },
     "source_session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1"
   },
   "capture_method": "fail_closed_no_capability",
-  "captured_at": "2026-06-29T09:36:37Z",
+  "captured_at": "2026-06-29T10:53:06Z",
   "claim_ceiling": "withheld_or_blocked",
   "failure": {
     "blocked_claim_classes": [
@@ -95,27 +95,27 @@
     "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
     "reason": "live_registry_reviewer_exposure_not_proven"
   },
-  "generated_at": "2026-06-29T09:36:37Z",
+  "generated_at": "2026-06-29T10:53:06Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
   },
   "raw_observation": {
-    "digest": "sha256:a7a88faf3323dc399e6df4f8ce6ecd87e1fe63e7004f7d828dd1694747d32c59",
+    "digest": "sha256:17f6bcd8597764a71c78e47cd66f9b8235e97ed8a2f516018eb732ebdcc92e24",
     "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
   },
-  "round_id": "registry_probe-unsupported-live-surface-73ff40a280dd",
+  "round_id": "registry_probe-unsupported-live-surface-5f99a89c8d67",
   "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
   "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
   "source": "ultragoal.registry_probe",
   "status": "fail",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:73ff40a280dda0a5029471c3fd90bcbf3e97f4dfb39983cc69461025d9c75f9b"
+    "value": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6"
   },
   "tool_call": {
     "arguments_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "call_id": "registry_probe-fail-closed-73ff40a280dd",
+    "call_id": "registry_probe-fail-closed-5f99a89c8d67",
     "name": "ultragoal registry probe"
   }
 }

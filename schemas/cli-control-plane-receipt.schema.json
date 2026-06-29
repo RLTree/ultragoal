@@ -142,7 +142,7 @@
       "minItems": 1,
       "items": {
         "enum": [
-          "all_89_gates_and_100_stop_conditions_pass",
+          "all_92_gates_and_104_stop_conditions_pass",
           "coverage_100_no_uncovered_records",
           "current_cache_audit_same_candidate_pass",
           "current_cli_performance_pass",

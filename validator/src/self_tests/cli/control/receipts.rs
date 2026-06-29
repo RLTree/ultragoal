@@ -54,7 +54,8 @@ fn receipt_blocks_claims_and_records_required_evidence() {
             .as_array()
             .expect("required evidence")
             .iter()
-            .any(|item| item.as_str() == Some("all_89_gates_and_100_stop_conditions_pass"))
+            .any(|item| item.as_str()
+                == Some(crate::cli::control::plane::emit::FULL_CONTRACT_EVIDENCE))
     );
 }
 

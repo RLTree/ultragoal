@@ -5,23 +5,23 @@
     "release",
     "update_goal_eligibility"
   ],
-  "byte_limit": 262144,
-  "candidate_digest": "sha256:73ff40a280dda0a5029471c3fd90bcbf3e97f4dfb39983cc69461025d9c75f9b",
+  "byte_limit": 65536,
+  "candidate_digest": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-200861eec54847c229fe0839b62aeb246f2d6a28107c6eb1546052a48c905fbe",
+  "correlation_id": "corr-59c51e7bd92a8f27beb64833713a1a2486b4e8baee48243c8c4bdc30dc5286b7",
   "failure": "",
   "query": "ultragoal_stack_smoke_status",
   "query_kind": "metrics",
-  "result_digest": "sha256:639cbb1f3b9e3b9456539b6d24bdc5d93e0c6dd6019dfc61d49edf3450f9bb70",
+  "result_digest": "sha256:2a0d546a364e8059df4c365d578bf783970c5412d44a8162fd3f404536414127",
   "retention_bound": "2d",
-  "row_limit": 100,
+  "row_limit": 20,
   "rows": [
     {
-      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_stack_smoke_status\",\"candidate_digest\":\"sha256:3923e1dd030a7eb392ec3f1e6f4d74266048217e246a2eb7bf5bdb0576a3a517\"},\"value\":[1782725854,\"1\"]}]},\"stats\":{\"seriesFetched\": \"2\",\"executionTimeMsec\":1}}"
+      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_stack_smoke_status\",\"candidate_digest\":\"sha256:3923e1dd030a7eb392ec3f1e6f4d74266048217e246a2eb7bf5bdb0576a3a517\"},\"value\":[1782730319,\"1\"]}]},\"stats\":{\"seriesFetched\": \"2\",\"executionTimeMsec\":0}}"
     }
   ],
-  "run_id": "query-9146935d1c3096c5d142fca8bcf9c537cca8f3221b1026db6e928cf6bf43652e",
+  "run_id": "query-19da059e76f8d57d6f1436c6ec2b9bc7ca096571d59ef3aef08ea557ce771331",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [

@@ -351,14 +351,14 @@
    43|       |
    44|  4.36k|pub fn crc32(bytes: &[u8]) -> u32 {
    45|  4.36k|    let mut crc = 0xffff_ffffu32;
-   46|  27.8M|    for byte in bytes {
+   46|  27.6M|    for byte in bytes {
                               ^4.36k
-   47|  27.8M|        crc ^= u32::from(*byte);
-   48|  27.8M|        for _ in 0..8 {
-   49|   222M|            crc = if crc & 1 != 0 {
-   50|   111M|                (crc >> 1) ^ 0xedb8_8320
+   47|  27.6M|        crc ^= u32::from(*byte);
+   48|  27.6M|        for _ in 0..8 {
+   49|   220M|            crc = if crc & 1 != 0 {
+   50|   110M|                (crc >> 1) ^ 0xedb8_8320
    51|       |            } else {
-   52|   111M|                crc >> 1
+   52|   110M|                crc >> 1
    53|       |            };
    54|       |        }
    55|       |    }
@@ -2562,10 +2562,10 @@
    95|       |
    96|     65|fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
    97|     65|    if let Some(value) = load_pass_ref(root, receipt, "/coverage", "coverage", out) {
-                              ^56
-   98|     56|        out.extend(coverage::failures(&value, expected));
-   99|     56|    }
-                  ^9
+                              ^53
+   98|     53|        out.extend(coverage::failures(&value, expected));
+   99|     53|    }
+                  ^12
   100|     65|}
   101|       |
   102|    351|fn load_pass_ref(
@@ -2605,36 +2605,36 @@
   135|    385|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   136|    385|    match crate::digest::file(&root.join(rel)) {
   137|    372|        Ok(actual) if actual == expected_digest => {}
-                         ^353                               ^353 ^353
+                         ^350                               ^350 ^350
   138|       |        _ => {
-  139|     32|            out.push(format!(
+  139|     35|            out.push(format!(
   140|       |                "final_packet_proof_ref_digest_mismatch:{label}:{rel}"
   141|       |            ));
-  142|     32|            return None;
+  142|     35|            return None;
   143|       |        }
   144|       |    }
-  145|    353|    let value = match json_boundary::read_json(&root.join(rel)) {
-                      ^352
-  146|    352|        Ok(value) => value,
+  145|    350|    let value = match json_boundary::read_json(&root.join(rel)) {
+                      ^349
+  146|    349|        Ok(value) => value,
   147|      1|        Err(err) => {
   148|      1|            out.push(format!("final_packet_proof_ref_malformed:{label}:{err}"));
   149|      1|            return None;
   150|       |        }
   151|       |    };
-  152|    352|    embedded_status_failures(item, &value, label, status_policy, out);
-  153|    352|    Some(value)
+  152|    349|    embedded_status_failures(item, &value, label, status_policy, out);
+  153|    349|    Some(value)
   154|    416|}
   155|       |
-  156|    352|fn embedded_status_failures(
-  157|    352|    item: &Value,
-  158|    352|    value: &Value,
-  159|    352|    label: &str,
-  160|    352|    status_policy: RefStatusPolicy,
-  161|    352|    out: &mut Vec<String>,
-  162|    352|) {
-  163|    352|    let embedded_status = item.get("status").and_then(Value::as_str);
-  164|    341|    match status_policy {
-  165|    341|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
+  156|    349|fn embedded_status_failures(
+  157|    349|    item: &Value,
+  158|    349|    value: &Value,
+  159|    349|    label: &str,
+  160|    349|    status_policy: RefStatusPolicy,
+  161|    349|    out: &mut Vec<String>,
+  162|    349|) {
+  163|    349|    let embedded_status = item.get("status").and_then(Value::as_str);
+  164|    338|    match status_policy {
+  165|    338|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
                                                                                  ^7
   166|      7|            out.push(format!(
   167|      7|                "final_packet_proof_ref_embedded_status_not_pass:{label}"
@@ -2646,17 +2646,17 @@
   172|      1|                "final_packet_proof_ref_embedded_status_not_pass_or_fail:{label}"
   173|      1|            ));
   174|      1|        }
-  175|    344|        _ => {}
+  175|    341|        _ => {}
   176|       |    }
-  177|    352|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
+  177|    349|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
                               ^194
   178|    194|        if embedded_status != Some(actual) {
   179|      9|            out.push(format!(
   180|      9|                "final_packet_proof_ref_status_disagreement:{label}"
   181|      9|            ));
   182|    185|        }
-  183|    158|    }
-  184|    352|}
+  183|    155|    }
+  184|    349|}
   185|       |
   186|     40|fn audit_receipt_failures(
   187|     40|    value: &Value,
@@ -2690,28 +2690,28 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/coverage.rs:
     1|       |use serde_json::Value;
     2|       |
-    3|     56|pub(super) fn failures(value: &Value, expected: &str) -> Vec<String> {
-    4|     56|    let mut out = Vec::new();
-    5|     56|    if value
-    6|     56|        .pointer("/target_revision/value")
-    7|     56|        .and_then(Value::as_str)
-    8|     56|        != Some(expected)
-    9|      6|    {
-   10|      6|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
+    3|     53|pub(super) fn failures(value: &Value, expected: &str) -> Vec<String> {
+    4|     53|    let mut out = Vec::new();
+    5|     53|    if value
+    6|     53|        .pointer("/target_revision/value")
+    7|     53|        .and_then(Value::as_str)
+    8|     53|        != Some(expected)
+    9|      3|    {
+   10|      3|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
    11|     50|    }
-   12|     56|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-   13|     53|        || !value
-   14|     53|            .get("uncovered_records")
-   15|     53|            .and_then(Value::as_array)
-   16|     53|            .is_some_and(Vec::is_empty)
+   12|     53|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
+   13|     50|        || !value
+   14|     50|            .get("uncovered_records")
+   15|     50|            .and_then(Value::as_array)
+   16|     50|            .is_some_and(Vec::is_empty)
    17|      3|    {
    18|      3|        out.push("final_packet_proof_coverage_not_exact_100".to_string());
-   19|     53|    }
-   20|     56|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
+   19|     50|    }
+   20|     53|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
    21|      3|        out.push("final_packet_proof_coverage_claim_ceiling_not_complete".to_string());
-   22|     53|    }
-   23|     56|    out
-   24|     56|}
+   22|     50|    }
+   23|     53|    out
+   24|     53|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/package.rs:
     1|       |use serde_json::Value;
@@ -9353,9 +9353,9 @@
   109|       |        }
   110|       |    };
   111|     13|    if receipt.get("candidate_digest").and_then(Value::as_str) == Some(expected.as_str()) {
-  112|     10|        Vec::new()
+  112|      9|        Vec::new()
   113|       |    } else {
-  114|      3|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
+  114|      4|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
   115|       |    }
   116|     17|}
   117|       |
@@ -9369,8 +9369,8 @@
   124|     83|    }
   125|     83|    match digest::file(&resolved) {
   126|     83|        Ok(actual) if actual == got => None,
-                         ^81                    ^81  ^81
-  127|      2|        _ => Some("standards_gardener_changed_artifact_digest_mismatch".to_string()),
+                         ^80                    ^80  ^80
+  127|      3|        _ => Some("standards_gardener_changed_artifact_digest_mismatch".to_string()),
   128|       |    }
   129|     86|}
   130|       |
@@ -15895,159 +15895,161 @@
     5|       |use serde_json::{Value, json};
     6|       |use std::path::Path;
     7|       |
-    8|       |#[cfg(test)]
-    9|      1|pub(crate) fn receipt_from_evidence(
-   10|      1|    package_digest: String,
-   11|      1|    operation: ControlOperation,
-   12|      1|    mut evidence_failures: Vec<String>,
-   13|      1|) -> Value {
-   14|       |    // Raw constructor calls are never update_goal authority. Only the
-   15|       |    // production path can pass after dereferencing current same-candidate proof.
-   16|      1|    if evidence_failures.is_empty() {
-   17|      1|        evidence_failures.push("cli_control_plane_transactional_green_path_not_proven".to_string());
-   18|      1|    }
+    8|       |pub(crate) const FULL_CONTRACT_EVIDENCE: &str = "all_92_gates_and_104_stop_conditions_pass";
+    9|       |
+   10|       |#[cfg(test)]
+   11|      1|pub(crate) fn receipt_from_evidence(
+   12|      1|    package_digest: String,
+   13|      1|    operation: ControlOperation,
+   14|      1|    mut evidence_failures: Vec<String>,
+   15|      1|) -> Value {
+   16|       |    // Raw constructor calls are never update_goal authority. Only the
+   17|       |    // production path can pass after dereferencing current same-candidate proof.
+   18|      1|    if evidence_failures.is_empty() {
+   19|      1|        evidence_failures.push("cli_control_plane_transactional_green_path_not_proven".to_string());
+   20|      1|    }
                   ^0
-   19|      1|    fail_receipt(
-   20|      1|        package_digest.clone(),
-   21|      1|        operation,
-   22|      1|        evidence_failures,
-   23|      1|        evidence::test_constructor(&package_digest, operation),
-   24|       |    )
-   25|      1|}
-   26|       |
-   27|     16|pub(crate) fn receipt_from_production_evidence(
-   28|     16|    root: &Path,
-   29|     16|    package_digest: String,
-   30|     16|    operation: ControlOperation,
-   31|     16|    mut evidence_failures: Vec<String>,
-   32|     16|) -> Value {
-   33|     16|    let graph = evidence::production(root, operation, &package_digest, &evidence_failures);
-   34|     16|    let graph_wrapper = json!({
-   35|     16|        "candidate_digest": package_digest,
-   36|     16|        "operation": operation.id(),
-   37|     16|        "evidence_graph": graph.clone()
-   38|       |    });
-   39|     16|    let graph_failures =
-   40|     16|        evidence::same_candidate_pass_failures(&graph_wrapper, &package_digest, operation.id());
-   41|     16|    if evidence_failures.is_empty() && graph_failures.is_empty() {
+   21|      1|    fail_receipt(
+   22|      1|        package_digest.clone(),
+   23|      1|        operation,
+   24|      1|        evidence_failures,
+   25|      1|        evidence::test_constructor(&package_digest, operation),
+   26|       |    )
+   27|      1|}
+   28|       |
+   29|     16|pub(crate) fn receipt_from_production_evidence(
+   30|     16|    root: &Path,
+   31|     16|    package_digest: String,
+   32|     16|    operation: ControlOperation,
+   33|     16|    mut evidence_failures: Vec<String>,
+   34|     16|) -> Value {
+   35|     16|    let graph = evidence::production(root, operation, &package_digest, &evidence_failures);
+   36|     16|    let graph_wrapper = json!({
+   37|     16|        "candidate_digest": package_digest,
+   38|     16|        "operation": operation.id(),
+   39|     16|        "evidence_graph": graph.clone()
+   40|       |    });
+   41|     16|    let graph_failures =
+   42|     16|        evidence::same_candidate_pass_failures(&graph_wrapper, &package_digest, operation.id());
+   43|     16|    if evidence_failures.is_empty() && graph_failures.is_empty() {
                                                      ^2             ^2
-   42|      1|        pass_receipt(package_digest, operation, graph)
-   43|       |    } else {
-   44|     15|        evidence_failures.extend(
-   45|     15|            graph_failures
-   46|     15|                .into_iter()
-   47|  1.03k|                .map(|failure| format!("evidence_graph:{failure}")),
+   44|      1|        pass_receipt(package_digest, operation, graph)
+   45|       |    } else {
+   46|     15|        evidence_failures.extend(
+   47|     15|            graph_failures
+   48|     15|                .into_iter()
+   49|  1.03k|                .map(|failure| format!("evidence_graph:{failure}")),
                                ^15
-   48|       |        );
-   49|     15|        fail_receipt(package_digest, operation, evidence_failures, graph)
-   50|       |    }
-   51|     16|}
-   52|       |
-   53|      1|fn pass_receipt(package_digest: String, operation: ControlOperation, graph: Value) -> Value {
-   54|      1|    json!({
-   55|      1|        "schema": RECEIPT_SCHEMA,
-   56|      1|        "schema_version": "v1",
-   57|      1|        "issuer": {
-   58|      1|            "tool": "ultragoal",
-   59|      1|            "authority": "cli_control_plane",
-   60|      1|            "compatibility_binary": "ultragoal-validator",
-   61|      1|            "self_law_state": "self_hosted"
-   62|       |        },
-   63|      1|        "generated_at": crate::audit::clock::now_iso(),
-   64|      1|        "root": ".",
-   65|      1|        "candidate_digest": package_digest,
-   66|      1|        "operation": operation.id(),
-   67|      1|        "status": "pass",
-   68|      1|        "claim_ceiling": "supports_update_goal_eligibility",
-   69|      1|        "blocked_claim_classes": [],
-   70|      1|        "required_evidence": required_evidence(operation),
-   71|      1|        "failure": Value::Null,
-   72|      1|        "evidence_graph": graph,
-   73|      1|        "command_surface": REQUIRED_COMMANDS,
-   74|      1|        "notes": proof::notes(true, &[])
-   75|       |    })
-   76|      1|}
-   77|       |
-   78|     16|fn fail_receipt(
-   79|     16|    package_digest: String,
-   80|     16|    operation: ControlOperation,
-   81|     16|    evidence_failures: Vec<String>,
-   82|     16|    graph: Value,
-   83|     16|) -> Value {
-   84|     16|    json!({
-   85|     16|        "schema": RECEIPT_SCHEMA,
-   86|     16|        "schema_version": "v1",
-   87|     16|        "issuer": {
-   88|     16|            "tool": "ultragoal",
-   89|     16|            "authority": "cli_control_plane",
-   90|     16|            "compatibility_binary": "ultragoal-validator",
-   91|     16|            "self_law_state": "transition_only"
-   92|       |        },
-   93|     16|        "generated_at": crate::audit::clock::now_iso(),
-   94|     16|        "root": ".",
-   95|     16|        "candidate_digest": package_digest,
-   96|     16|        "operation": operation.id(),
-   97|     16|        "status": "fail",
-   98|     16|        "claim_ceiling": "withheld_or_blocked",
-   99|     16|        "blocked_claim_classes": blocked_claims(operation),
-  100|     16|        "required_evidence": required_evidence(operation),
-  101|     16|        "failure": proof::failure_value(operation, &evidence_failures),
-  102|     16|        "evidence_graph": graph,
-  103|     16|        "command_surface": REQUIRED_COMMANDS,
-  104|     16|        "notes": proof::notes(false, &evidence_failures)
-  105|       |    })
-  106|     16|}
-  107|       |
-  108|     16|fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
-  109|     16|    let mut claims = vec![
-  110|       |        "completion",
-  111|     16|        "package_readiness",
-  112|     16|        "review_readiness",
-  113|     16|        "release_readiness",
-  114|     16|        "update_goal_eligibility",
-  115|       |    ];
-  116|     13|    if matches!(
-  117|     16|        operation,
-  118|       |        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
-  119|      3|    ) {
-  120|      3|        claims.push("app_registry_or_reviewer_exposure");
-  121|     13|    }
-  122|     16|    claims
-  123|     16|}
-  124|       |
-  125|     17|fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
-  126|     14|    if matches!(
-  127|     17|        operation,
-  128|       |        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
-  129|       |    ) {
-  130|      3|        return vec!["live_registry_or_reviewer_exposure_same_surface_pass"];
-  131|     14|    }
-  132|     14|    let mut out = vec![
-  133|       |        "current_source_audit_pass",
-  134|     14|        "current_red_fixture_report_status_pass",
-  135|     14|        "coverage_100_no_uncovered_records",
-  136|     14|        "current_cli_performance_pass",
-  137|     14|        "current_final_packet_proof_pass",
-  138|     14|        "live_registry_or_reviewer_exposure_same_surface_pass",
-  139|     14|        "current_fit_repo_pass",
-  140|     14|        "current_product_fitness_pass",
-  141|     14|        "current_product_journey_pass",
-  142|     14|        "current_standards_gardener_pass",
-  143|     14|        "current_install_audit_same_candidate_pass",
-  144|     14|        "current_cache_audit_same_candidate_pass",
-  145|     14|        "current_rust_devx_pass",
-  146|     14|        "current_gc_pass",
-  147|       |    ];
-  148|      2|    if matches!(
-  149|     14|        operation,
-  150|       |        ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility
-  151|     12|    ) {
-  152|     12|        out.push("current_transactional_finalization_pass");
-  153|     12|        out.push("all_89_gates_and_100_stop_conditions_pass");
-  154|     12|    }
+   50|       |        );
+   51|     15|        fail_receipt(package_digest, operation, evidence_failures, graph)
+   52|       |    }
+   53|     16|}
+   54|       |
+   55|      1|fn pass_receipt(package_digest: String, operation: ControlOperation, graph: Value) -> Value {
+   56|      1|    json!({
+   57|      1|        "schema": RECEIPT_SCHEMA,
+   58|      1|        "schema_version": "v1",
+   59|      1|        "issuer": {
+   60|      1|            "tool": "ultragoal",
+   61|      1|            "authority": "cli_control_plane",
+   62|      1|            "compatibility_binary": "ultragoal-validator",
+   63|      1|            "self_law_state": "self_hosted"
+   64|       |        },
+   65|      1|        "generated_at": crate::audit::clock::now_iso(),
+   66|      1|        "root": ".",
+   67|      1|        "candidate_digest": package_digest,
+   68|      1|        "operation": operation.id(),
+   69|      1|        "status": "pass",
+   70|      1|        "claim_ceiling": "supports_update_goal_eligibility",
+   71|      1|        "blocked_claim_classes": [],
+   72|      1|        "required_evidence": required_evidence(operation),
+   73|      1|        "failure": Value::Null,
+   74|      1|        "evidence_graph": graph,
+   75|      1|        "command_surface": REQUIRED_COMMANDS,
+   76|      1|        "notes": proof::notes(true, &[])
+   77|       |    })
+   78|      1|}
+   79|       |
+   80|     16|fn fail_receipt(
+   81|     16|    package_digest: String,
+   82|     16|    operation: ControlOperation,
+   83|     16|    evidence_failures: Vec<String>,
+   84|     16|    graph: Value,
+   85|     16|) -> Value {
+   86|     16|    json!({
+   87|     16|        "schema": RECEIPT_SCHEMA,
+   88|     16|        "schema_version": "v1",
+   89|     16|        "issuer": {
+   90|     16|            "tool": "ultragoal",
+   91|     16|            "authority": "cli_control_plane",
+   92|     16|            "compatibility_binary": "ultragoal-validator",
+   93|     16|            "self_law_state": "transition_only"
+   94|       |        },
+   95|     16|        "generated_at": crate::audit::clock::now_iso(),
+   96|     16|        "root": ".",
+   97|     16|        "candidate_digest": package_digest,
+   98|     16|        "operation": operation.id(),
+   99|     16|        "status": "fail",
+  100|     16|        "claim_ceiling": "withheld_or_blocked",
+  101|     16|        "blocked_claim_classes": blocked_claims(operation),
+  102|     16|        "required_evidence": required_evidence(operation),
+  103|     16|        "failure": proof::failure_value(operation, &evidence_failures),
+  104|     16|        "evidence_graph": graph,
+  105|     16|        "command_surface": REQUIRED_COMMANDS,
+  106|     16|        "notes": proof::notes(false, &evidence_failures)
+  107|       |    })
+  108|     16|}
+  109|       |
+  110|     16|fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
+  111|     16|    let mut claims = vec![
+  112|       |        "completion",
+  113|     16|        "package_readiness",
+  114|     16|        "review_readiness",
+  115|     16|        "release_readiness",
+  116|     16|        "update_goal_eligibility",
+  117|       |    ];
+  118|     13|    if matches!(
+  119|     16|        operation,
+  120|       |        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
+  121|      3|    ) {
+  122|      3|        claims.push("app_registry_or_reviewer_exposure");
+  123|     13|    }
+  124|     16|    claims
+  125|     16|}
+  126|       |
+  127|     17|fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
+  128|     14|    if matches!(
+  129|     17|        operation,
+  130|       |        ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe
+  131|       |    ) {
+  132|      3|        return vec!["live_registry_or_reviewer_exposure_same_surface_pass"];
+  133|     14|    }
+  134|     14|    let mut out = vec![
+  135|       |        "current_source_audit_pass",
+  136|     14|        "current_red_fixture_report_status_pass",
+  137|     14|        "coverage_100_no_uncovered_records",
+  138|     14|        "current_cli_performance_pass",
+  139|     14|        "current_final_packet_proof_pass",
+  140|     14|        "live_registry_or_reviewer_exposure_same_surface_pass",
+  141|     14|        "current_fit_repo_pass",
+  142|     14|        "current_product_fitness_pass",
+  143|     14|        "current_product_journey_pass",
+  144|     14|        "current_standards_gardener_pass",
+  145|     14|        "current_install_audit_same_candidate_pass",
+  146|     14|        "current_cache_audit_same_candidate_pass",
+  147|     14|        "current_rust_devx_pass",
+  148|     14|        "current_gc_pass",
+  149|       |    ];
+  150|      2|    if matches!(
+  151|     14|        operation,
+  152|       |        ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility
+  153|     12|    ) {
+  154|     12|        out.push("current_transactional_finalization_pass");
+  155|     12|        out.push(FULL_CONTRACT_EVIDENCE);
+  156|     12|    }
                   ^2
-  155|     14|    out
-  156|     17|}
+  157|     14|    out
+  158|     17|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/evidence.rs:
     1|       |use crate::cli::control::plane::types::ControlOperation;
@@ -16293,9 +16295,9 @@
    30|    355|        .and_then(|value| super::status::typed_status(label, value, &label_failures));
                                         ^117                        ^117   ^117   ^117
    31|    355|    if status != Some("pass") {
-   32|    249|        failures.push("status_not_pass".to_string());
-   33|    249|    }
-                  ^106
+   32|    248|        failures.push("status_not_pass".to_string());
+   33|    248|    }
+                  ^107
    34|    355|    let candidate = parsed.as_ref().and_then(candidate_digest);
    35|    355|    if candidate.as_deref() != Some(expected) {
    36|    269|        failures.push("candidate_digest_mismatch".to_string());
@@ -16429,9 +16431,9 @@
    14|     25|    }
    15|     25|    if inferred_status_label(label) && failures.is_empty() {
                                                      ^23      ^23
-   16|     17|        return Some("pass");
-   17|      8|    }
-   18|      8|    None
+   16|     18|        return Some("pass");
+   17|      7|    }
+   18|      7|    None
    19|    130|}
    20|       |
    21|    142|pub(super) fn label_failures(
@@ -16529,9 +16531,9 @@
   102|     12|        .pointer("/target_revision/value")
   103|     12|        .and_then(Value::as_str)
   104|     12|        != Some(expected)
-  105|      2|    {
-  106|      2|        out.push("coverage_target_digest_mismatch".to_string());
-  107|     10|    }
+  105|      1|    {
+  106|      1|        out.push("coverage_target_digest_mismatch".to_string());
+  107|     11|    }
   108|     12|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
   109|     10|        || !value
   110|     10|            .get("uncovered_records")
@@ -17010,11 +17012,11 @@
    49|    237|            ));
    50|    384|        }
    51|    621|        if item.get("status").and_then(Value::as_str) != Some("pass") {
-   52|    274|            out.push(format!(
-   53|    274|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
-   54|    274|                label(item)
-   55|    274|            ));
-   56|    347|        }
+   52|    273|            out.push(format!(
+   53|    273|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
+   54|    273|                label(item)
+   55|    273|            ));
+   56|    348|        }
    57|    621|        if item.get("same_candidate").and_then(Value::as_bool) != Some(true) {
    58|    268|            out.push(format!(
    59|    268|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
@@ -17746,9 +17748,10 @@
   128|     49|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   129|     49|    match crate::digest::file(&root.join(rel)) {
   130|     34|        Ok(actual) if actual == expected_digest => {}
-  131|     15|        _ => out.push(format!(
+                         ^32                                ^32  ^32
+  131|     17|        _ => out.push(format!(
   132|       |            "cli_control_plane_transaction_ref_digest_mismatch:{}:{rel}",
-  133|     15|            ptr.trim_start_matches('/')
+  133|     17|            ptr.trim_start_matches('/')
   134|       |        )),
   135|       |    }
   136|     49|    if item.get("status").and_then(Value::as_str) != Some("pass") {
@@ -17830,9 +17833,9 @@
   203|      8|        .pointer("/target_revision/value")
   204|      8|        .and_then(Value::as_str)
   205|      8|        != Some(expected)
-  206|      2|    {
-  207|      2|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
-  208|      6|    }
+  206|      1|    {
+  207|      1|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
+  208|      7|    }
   209|      8|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
   210|      6|        || !value
   211|      6|            .get("uncovered_records")
@@ -24545,7 +24548,7 @@
    21|       |];
    22|       |
    23|     41|pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
-   24|   826k|    walk_package_entries(root, |entry| entry.file_type().is_file())
+   24|   829k|    walk_package_entries(root, |entry| entry.file_type().is_file())
                   ^41                  ^41
    25|     41|}
    26|       |
@@ -24559,37 +24562,37 @@
    33|     51|    include: impl Fn(&walkdir::DirEntry) -> bool,
    34|     51|) -> Result<Vec<String>, String> {
    35|     51|    let mut paths = Vec::new();
-   36|   826k|    for entry in WalkDir::new(root).follow_links(false) {
+   36|   829k|    for entry in WalkDir::new(root).follow_links(false) {
                                ^51          ^51   ^51
-   37|   826k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
-                          ^826k                       ^1                            ^1
-   38|   826k|        if include(&entry) {
-   39|   821k|            let rel = rel_path(root, entry.path())?;
+   37|   829k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
+                          ^829k                       ^1                            ^1
+   38|   829k|        if include(&entry) {
+   39|   824k|            let rel = rel_path(root, entry.path())?;
                                                                 ^0
-   40|   821k|            if !local_only(&rel) {
+   40|   824k|            if !local_only(&rel) {
    41|  8.96k|                paths.push(rel);
-   42|   812k|            }
+   42|   815k|            }
    43|  5.10k|        }
    44|       |    }
    45|     50|    paths.sort();
    46|     50|    Ok(paths)
    47|     51|}
    48|       |
-   49|   821k|fn local_only(rel: &str) -> bool {
-   50|   821k|    LOCAL_PROOF_PATHS.contains(&rel)
-   51|   821k|        || LOCAL_BUILD_OUTPUT_PREFIXES
-   52|   821k|            .iter()
-   53|  1.11M|            .any(|prefix| rel.starts_with(prefix))
-                           ^821k
-   54|   821k|}
+   49|   824k|fn local_only(rel: &str) -> bool {
+   50|   824k|    LOCAL_PROOF_PATHS.contains(&rel)
+   51|   824k|        || LOCAL_BUILD_OUTPUT_PREFIXES
+   52|   824k|            .iter()
+   53|  1.12M|            .any(|prefix| rel.starts_with(prefix))
+                           ^824k
+   54|   824k|}
    55|       |
-   56|   821k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-   57|   821k|    path.strip_prefix(root)
-   58|   821k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-                                 ^821k                 ^821k         ^821k
-   59|   821k|        .map_err(|err| format!("walk root strip failed: {err}"))
+   56|   824k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
+   57|   824k|    path.strip_prefix(root)
+   58|   824k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
+                                 ^824k                 ^824k         ^824k
+   59|   824k|        .map_err(|err| format!("walk root strip failed: {err}"))
                                      ^1
-   60|   821k|}
+   60|   824k|}
    61|       |
    62|     10|pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
    63|     10|    let listed = crate::package::inventory::inventory_paths(manifest);
@@ -29930,18 +29933,18 @@
    45|  4.07k|) {
    46|  4.07k|    if let Some(item_schema) = schema.get("items") {
                               ^755
-   47|  3.67k|        for (index, value) in items.iter().enumerate() {
+   47|  3.66k|        for (index, value) in items.iter().enumerate() {
                                             ^755  ^755   ^755
-   48|  3.67k|            crate::schema_catalog::schema::keywords::validate_at(
-   49|  3.67k|                store,
-   50|  3.67k|                root,
-   51|  3.67k|                item_schema,
-   52|  3.67k|                value,
-   53|  3.67k|                &format!("{path}[{index}]"),
-   54|  3.67k|                errors,
-   55|  3.67k|                depth + 1,
-   56|  3.67k|            );
-   57|  3.67k|        }
+   48|  3.66k|            crate::schema_catalog::schema::keywords::validate_at(
+   49|  3.66k|                store,
+   50|  3.66k|                root,
+   51|  3.66k|                item_schema,
+   52|  3.66k|                value,
+   53|  3.66k|                &format!("{path}[{index}]"),
+   54|  3.66k|                errors,
+   55|  3.66k|                depth + 1,
+   56|  3.66k|            );
+   57|  3.66k|        }
    58|  3.31k|    }
    59|  4.07k|}
    60|       |
@@ -30334,7 +30337,7 @@
                                   ^4.35k   ^4.35k
   236|  8.47k|        "array" => instance.is_array(),
                                  ^762     ^762
-  237|  7.71k|        "string" => instance.is_string(),
+  237|  7.70k|        "string" => instance.is_string(),
                                   ^7.07k   ^7.07k
   238|    636|        "boolean" => instance.is_boolean(),
                                    ^506     ^506
@@ -39584,157 +39587,158 @@
    54|      1|            .as_array()
    55|      1|            .expect("required evidence")
    56|      1|            .iter()
-   57|     16|            .any(|item| item.as_str() == Some("all_89_gates_and_100_stop_conditions_pass"))
+   57|     16|            .any(|item| item.as_str()
                            ^1
-   58|       |    );
-   59|      1|}
-   60|       |
-   61|       |#[test]
-   62|      1|fn run_writes_and_prints_fail_closed_receipts() {
-   63|      1|    let root = crate::self_tests::boundaries::support::temp_root("cli-control-receipt-run");
-   64|      1|    write_json(
-   65|      1|        &root.join("plugin-manifest-draft.json"),
-   66|      1|        &json!({"version":"0.0.0-test","resources":[]}),
-   67|       |    );
-   68|      1|    let path = root.join("validation_artifacts/cli/packet-verify-receipt.json");
-   69|      1|    let command = ControlCommand {
-   70|      1|        operation: ControlOperation::PacketVerify,
-   71|      1|        receipt: Some(path.clone()),
-   72|      1|        surface_root: None,
-   73|      1|    };
-   74|      1|    assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
-   75|      1|    let value = crate::json_boundary::read_json(&path).expect("read receipt");
-   76|      1|    assert_eq!(value["operation"], "packet_verify");
-   77|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-   78|       |
-   79|      1|    let no_write = ControlCommand {
-   80|      1|        operation: ControlOperation::FixturesAll,
-   81|      1|        receipt: None,
-   82|      1|        surface_root: None,
-   83|      1|    };
-   84|      1|    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
-   85|      1|    std::fs::remove_dir_all(root).expect("cleanup cli control run");
-   86|      1|}
-   87|       |
-   88|       |#[test]
-   89|      1|fn production_constructor_does_not_pass_from_empty_evidence_without_green_graph() {
-   90|      1|    let root = crate::self_tests::boundaries::support::temp_root("cli-production-no-green");
-   91|      1|    write_json(
-   92|      1|        &root.join("plugin-manifest-draft.json"),
-   93|      1|        &json!({"version":"0.0.0-test","resources":[]}),
-   94|       |    );
-   95|      1|    let candidate = crate::self_tests::boundaries::support::sha('c');
-   96|      1|    let value = crate::cli::control::plane::emit::receipt_from_production_evidence(
-   97|      1|        &root,
-   98|      1|        candidate.clone(),
-   99|      1|        ControlOperation::UpdateGoalEligibility,
-  100|      1|        Vec::new(),
-  101|       |    );
-  102|      1|    assert_eq!(value["status"], "fail");
-  103|      1|    assert_eq!(value["candidate_digest"], candidate);
-  104|      1|    assert_eq!(value["issuer"]["self_law_state"], "transition_only");
-  105|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-  106|      1|    assert_eq!(
-  107|      1|        value["evidence_graph"]["evaluation_mode"],
-  108|       |        "production_dereferenced"
-  109|       |    );
-  110|      1|    std::fs::remove_dir_all(root).expect("cleanup cli production root");
-  111|      1|}
-  112|       |
-  113|       |#[test]
-  114|      1|fn surface_validation_rejects_missing_authority_fields() {
-  115|      1|    let mut value = json!({
-  116|      1|        "schema": RECEIPT_SCHEMA,
-  117|      1|        "issuer": {"tool": "ultragoal"},
-  118|      1|        "operation": "packet_verify",
-  119|      1|        "candidate_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  120|      1|        "blocked_claim_classes": ["completion"],
-  121|      1|        "failure": {"law_id": "cli-self-law-compliance"},
-  122|      1|        "evidence_graph": super::graph::control(
-  123|      1|            "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  124|      1|            "packet_verify",
-  125|       |            true
-  126|       |        )
-  127|       |    });
-  128|      1|    assert!(surface_value_failures(&value).is_empty());
-  129|       |
-  130|      1|    value["schema"] = json!("wrong");
-  131|      1|    value["issuer"]["tool"] = json!("manual");
-  132|      1|    value.as_object_mut().expect("object").remove("operation");
-  133|      1|    value
-  134|      1|        .as_object_mut()
-  135|      1|        .expect("object")
-  136|      1|        .remove("candidate_digest");
-  137|      1|    value
-  138|      1|        .as_object_mut()
-  139|      1|        .expect("object")
-  140|      1|        .remove("blocked_claim_classes");
-  141|      1|    value
-  142|      1|        .as_object_mut()
-  143|      1|        .expect("object")
-  144|      1|        .remove("evidence_graph");
-  145|      1|    value["failure"]["law_id"] = json!("other");
-  146|      1|    let failures = surface_value_failures(&value);
-  147|      7|    for expected in [
-  148|      1|        "cli_control_plane_receipt_wrong_schema",
-  149|      1|        "cli_control_plane_receipt_wrong_issuer",
-  150|      1|        "cli_control_plane_receipt_missing_operation",
-  151|      1|        "cli_control_plane_receipt_missing_candidate_digest",
-  152|      1|        "cli_control_plane_receipt_missing_blocked_claims",
-  153|      1|        "cli_control_plane_receipt_missing_self_law_failure",
-  154|      1|        "cli_control_plane_receipt_missing_evidence_graph",
-  155|      1|    ] {
-  156|     28|        assert!(failures.iter().any(|failure| failure == expected));
+   58|     16|                == Some(crate::cli::control::plane::emit::FULL_CONTRACT_EVIDENCE))
+   59|       |    );
+   60|      1|}
+   61|       |
+   62|       |#[test]
+   63|      1|fn run_writes_and_prints_fail_closed_receipts() {
+   64|      1|    let root = crate::self_tests::boundaries::support::temp_root("cli-control-receipt-run");
+   65|      1|    write_json(
+   66|      1|        &root.join("plugin-manifest-draft.json"),
+   67|      1|        &json!({"version":"0.0.0-test","resources":[]}),
+   68|       |    );
+   69|      1|    let path = root.join("validation_artifacts/cli/packet-verify-receipt.json");
+   70|      1|    let command = ControlCommand {
+   71|      1|        operation: ControlOperation::PacketVerify,
+   72|      1|        receipt: Some(path.clone()),
+   73|      1|        surface_root: None,
+   74|      1|    };
+   75|      1|    assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
+   76|      1|    let value = crate::json_boundary::read_json(&path).expect("read receipt");
+   77|      1|    assert_eq!(value["operation"], "packet_verify");
+   78|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+   79|       |
+   80|      1|    let no_write = ControlCommand {
+   81|      1|        operation: ControlOperation::FixturesAll,
+   82|      1|        receipt: None,
+   83|      1|        surface_root: None,
+   84|      1|    };
+   85|      1|    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
+   86|      1|    std::fs::remove_dir_all(root).expect("cleanup cli control run");
+   87|      1|}
+   88|       |
+   89|       |#[test]
+   90|      1|fn production_constructor_does_not_pass_from_empty_evidence_without_green_graph() {
+   91|      1|    let root = crate::self_tests::boundaries::support::temp_root("cli-production-no-green");
+   92|      1|    write_json(
+   93|      1|        &root.join("plugin-manifest-draft.json"),
+   94|      1|        &json!({"version":"0.0.0-test","resources":[]}),
+   95|       |    );
+   96|      1|    let candidate = crate::self_tests::boundaries::support::sha('c');
+   97|      1|    let value = crate::cli::control::plane::emit::receipt_from_production_evidence(
+   98|      1|        &root,
+   99|      1|        candidate.clone(),
+  100|      1|        ControlOperation::UpdateGoalEligibility,
+  101|      1|        Vec::new(),
+  102|       |    );
+  103|      1|    assert_eq!(value["status"], "fail");
+  104|      1|    assert_eq!(value["candidate_digest"], candidate);
+  105|      1|    assert_eq!(value["issuer"]["self_law_state"], "transition_only");
+  106|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+  107|      1|    assert_eq!(
+  108|      1|        value["evidence_graph"]["evaluation_mode"],
+  109|       |        "production_dereferenced"
+  110|       |    );
+  111|      1|    std::fs::remove_dir_all(root).expect("cleanup cli production root");
+  112|      1|}
+  113|       |
+  114|       |#[test]
+  115|      1|fn surface_validation_rejects_missing_authority_fields() {
+  116|      1|    let mut value = json!({
+  117|      1|        "schema": RECEIPT_SCHEMA,
+  118|      1|        "issuer": {"tool": "ultragoal"},
+  119|      1|        "operation": "packet_verify",
+  120|      1|        "candidate_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  121|      1|        "blocked_claim_classes": ["completion"],
+  122|      1|        "failure": {"law_id": "cli-self-law-compliance"},
+  123|      1|        "evidence_graph": super::graph::control(
+  124|      1|            "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  125|      1|            "packet_verify",
+  126|       |            true
+  127|       |        )
+  128|       |    });
+  129|      1|    assert!(surface_value_failures(&value).is_empty());
+  130|       |
+  131|      1|    value["schema"] = json!("wrong");
+  132|      1|    value["issuer"]["tool"] = json!("manual");
+  133|      1|    value.as_object_mut().expect("object").remove("operation");
+  134|      1|    value
+  135|      1|        .as_object_mut()
+  136|      1|        .expect("object")
+  137|      1|        .remove("candidate_digest");
+  138|      1|    value
+  139|      1|        .as_object_mut()
+  140|      1|        .expect("object")
+  141|      1|        .remove("blocked_claim_classes");
+  142|      1|    value
+  143|      1|        .as_object_mut()
+  144|      1|        .expect("object")
+  145|      1|        .remove("evidence_graph");
+  146|      1|    value["failure"]["law_id"] = json!("other");
+  147|      1|    let failures = surface_value_failures(&value);
+  148|      7|    for expected in [
+  149|      1|        "cli_control_plane_receipt_wrong_schema",
+  150|      1|        "cli_control_plane_receipt_wrong_issuer",
+  151|      1|        "cli_control_plane_receipt_missing_operation",
+  152|      1|        "cli_control_plane_receipt_missing_candidate_digest",
+  153|      1|        "cli_control_plane_receipt_missing_blocked_claims",
+  154|      1|        "cli_control_plane_receipt_missing_self_law_failure",
+  155|      1|        "cli_control_plane_receipt_missing_evidence_graph",
+  156|      1|    ] {
+  157|     28|        assert!(failures.iter().any(|failure| failure == expected));
                       ^7      ^7              ^7
-  157|       |    }
-  158|      1|}
-  159|       |
-  160|       |#[test]
-  161|      1|fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts() {
-  162|      1|    let stale_candidate = crate::self_tests::boundaries::support::sha('a');
-  163|      1|    let current_candidate = crate::self_tests::boundaries::support::sha('b');
-  164|      1|    let transition = json!({
-  165|      1|        "schema": RECEIPT_SCHEMA,
-  166|      1|        "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},
-  167|      1|        "operation": "update_goal_eligibility",
-  168|      1|        "candidate_digest": stale_candidate,
-  169|      1|        "status": "fail",
-  170|      1|        "claim_ceiling": "withheld_or_blocked",
-  171|      1|        "blocked_claim_classes": ["completion", "update_goal_eligibility"],
-  172|      1|        "failure": {"law_id": "cli-self-law-compliance"},
-  173|      1|        "evidence_graph": super::graph::control(&stale_candidate, "update_goal_eligibility", true)
-  174|       |    });
-  175|      1|    let failures =
-  176|      1|        same_candidate_pass_failures(&transition, &current_candidate, "update_goal_eligibility");
-  177|      4|    for expected in [
-  178|      1|        "cli_control_plane_receipt_candidate_digest_mismatch",
-  179|      1|        "cli_control_plane_receipt_not_pass",
-  180|      1|        "cli_control_plane_receipt_not_self_hosted",
-  181|      1|        "cli_control_plane_receipt_blocks_claims",
-  182|      1|    ] {
-  183|      4|        assert!(
-  184|     11|            failures.iter().any(|failure| failure.contains(expected)),
+  158|       |    }
+  159|      1|}
+  160|       |
+  161|       |#[test]
+  162|      1|fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts() {
+  163|      1|    let stale_candidate = crate::self_tests::boundaries::support::sha('a');
+  164|      1|    let current_candidate = crate::self_tests::boundaries::support::sha('b');
+  165|      1|    let transition = json!({
+  166|      1|        "schema": RECEIPT_SCHEMA,
+  167|      1|        "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},
+  168|      1|        "operation": "update_goal_eligibility",
+  169|      1|        "candidate_digest": stale_candidate,
+  170|      1|        "status": "fail",
+  171|      1|        "claim_ceiling": "withheld_or_blocked",
+  172|      1|        "blocked_claim_classes": ["completion", "update_goal_eligibility"],
+  173|      1|        "failure": {"law_id": "cli-self-law-compliance"},
+  174|      1|        "evidence_graph": super::graph::control(&stale_candidate, "update_goal_eligibility", true)
+  175|       |    });
+  176|      1|    let failures =
+  177|      1|        same_candidate_pass_failures(&transition, &current_candidate, "update_goal_eligibility");
+  178|      4|    for expected in [
+  179|      1|        "cli_control_plane_receipt_candidate_digest_mismatch",
+  180|      1|        "cli_control_plane_receipt_not_pass",
+  181|      1|        "cli_control_plane_receipt_not_self_hosted",
+  182|      1|        "cli_control_plane_receipt_blocks_claims",
+  183|      1|    ] {
+  184|      4|        assert!(
+  185|     11|            failures.iter().any(|failure| failure.contains(expected)),
                           ^4              ^4
-  185|       |            "{expected}: {failures:?}"
-  186|       |        );
-  187|       |    }
-  188|       |
-  189|      1|    let pass = json!({
-  190|      1|        "schema": RECEIPT_SCHEMA,
-  191|      1|        "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
-  192|      1|        "operation": "update_goal_eligibility",
-  193|      1|        "candidate_digest": current_candidate,
-  194|      1|        "status": "pass",
-  195|      1|        "claim_ceiling": "supports_update_goal_eligibility",
-  196|      1|        "blocked_claim_classes": [],
-  197|      1|        "failure": null,
-  198|      1|        "evidence_graph": super::graph::control(&current_candidate, "update_goal_eligibility", false)
-  199|       |    });
-  200|      1|    assert!(
-  201|      1|        same_candidate_pass_failures(&pass, &current_candidate, "update_goal_eligibility")
-  202|      1|            .is_empty()
-  203|       |    );
-  204|      1|}
+  186|       |            "{expected}: {failures:?}"
+  187|       |        );
+  188|       |    }
+  189|       |
+  190|      1|    let pass = json!({
+  191|      1|        "schema": RECEIPT_SCHEMA,
+  192|      1|        "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
+  193|      1|        "operation": "update_goal_eligibility",
+  194|      1|        "candidate_digest": current_candidate,
+  195|      1|        "status": "pass",
+  196|      1|        "claim_ceiling": "supports_update_goal_eligibility",
+  197|      1|        "blocked_claim_classes": [],
+  198|      1|        "failure": null,
+  199|      1|        "evidence_graph": super::graph::control(&current_candidate, "update_goal_eligibility", false)
+  200|       |    });
+  201|      1|    assert!(
+  202|      1|        same_candidate_pass_failures(&pass, &current_candidate, "update_goal_eligibility")
+  203|      1|            .is_empty()
+  204|       |    );
+  205|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/cli/control/registry.rs:
     1|       |use crate::cli::control::plane::types::ControlOperation;
@@ -44697,7 +44701,7 @@
    90|      2|                "current_cli_performance_pass",
    91|      2|                "current_final_packet_proof_pass",
    92|      2|                "live_registry_or_reviewer_exposure_same_surface_pass",
-   93|      2|                "all_89_gates_and_100_stop_conditions_pass"
+   93|      2|                crate::cli::control::plane::emit::FULL_CONTRACT_EVIDENCE
    94|      2|            ],
    95|      2|            "failure":null,
    96|      2|            "evidence_graph":{

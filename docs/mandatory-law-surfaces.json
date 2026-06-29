@@ -735,7 +735,7 @@
           "path": "validator/src/cli/control/plane.rs"
         },
         {
-          "digest": "sha256:f87a2ea81ca4b9da93ecbc7d355cf7a579ca8b396cb7d929e46025d85265ce7a",
+          "digest": "sha256:bb86fd94e30c7f28a9e1d39565bf7910d12f18d835520f9c96d6795ad3dc00f5",
           "path": "validator/src/cli/control/plane/emit.rs"
         },
         {
@@ -787,7 +787,7 @@
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
         },
         {
-          "digest": "sha256:b3f0f0915ca4d1d0d3fedf99810342ce09ab6cae1d73d7afa967de208f853201",
+          "digest": "sha256:598a6ded58d36851e9e9bcd1b22bc460a6386e51c96f98a1bb43b6dd5c688fea",
           "path": "validator/src/self_tests/cli/control/receipts.rs"
         },
         {
@@ -807,7 +807,7 @@
           "path": "validator/src/self_tests/cli/parse_errors.rs"
         },
         {
-          "digest": "sha256:5af10b250bd6e67b8c7a2038433fecb49c0c573c3984e59e76113f8bb4324c54",
+          "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
           "path": "schemas/cli-control-plane-receipt.schema.json"
         },
         {
@@ -972,7 +972,7 @@
           "path": "validator/src/cli/control/plane.rs"
         },
         {
-          "digest": "sha256:f87a2ea81ca4b9da93ecbc7d355cf7a579ca8b396cb7d929e46025d85265ce7a",
+          "digest": "sha256:bb86fd94e30c7f28a9e1d39565bf7910d12f18d835520f9c96d6795ad3dc00f5",
           "path": "validator/src/cli/control/plane/emit.rs"
         },
         {
@@ -1024,7 +1024,7 @@
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
         },
         {
-          "digest": "sha256:b3f0f0915ca4d1d0d3fedf99810342ce09ab6cae1d73d7afa967de208f853201",
+          "digest": "sha256:598a6ded58d36851e9e9bcd1b22bc460a6386e51c96f98a1bb43b6dd5c688fea",
           "path": "validator/src/self_tests/cli/control/receipts.rs"
         },
         {
@@ -1044,7 +1044,7 @@
           "path": "validator/src/self_tests/cli/parse_errors.rs"
         },
         {
-          "digest": "sha256:5af10b250bd6e67b8c7a2038433fecb49c0c573c3984e59e76113f8bb4324c54",
+          "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
           "path": "schemas/cli-control-plane-receipt.schema.json"
         },
         {

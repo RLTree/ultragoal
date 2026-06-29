@@ -1,6 +1,6 @@
 {
-  "candidate_digest": "sha256:73ff40a280dda0a5029471c3fd90bcbf3e97f4dfb39983cc69461025d9c75f9b",
-  "generated_at": "2026-06-29T09:36:37Z",
+  "candidate_digest": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6",
+  "generated_at": "2026-06-29T10:53:06Z",
   "observed": "no live same-surface Codex plugin registry or reviewer-exposure proof channel was available to this CLI run",
   "probe": {
     "capture_method": "fail_closed_no_capability",

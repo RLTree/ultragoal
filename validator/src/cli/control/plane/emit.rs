@@ -5,6 +5,8 @@ use crate::cli::control::plane::types::{ControlOperation, REQUIRED_COMMANDS};
 use serde_json::{Value, json};
 use std::path::Path;
 
+pub(crate) const FULL_CONTRACT_EVIDENCE: &str = "all_92_gates_and_104_stop_conditions_pass";
+
 #[cfg(test)]
 pub(crate) fn receipt_from_evidence(
     package_digest: String,
@@ -150,7 +152,7 @@ fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
         ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility
     ) {
         out.push("current_transactional_finalization_pass");
-        out.push("all_89_gates_and_100_stop_conditions_pass");
+        out.push(FULL_CONTRACT_EVIDENCE);
     }
     out
 }

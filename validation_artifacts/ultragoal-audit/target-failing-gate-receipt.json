@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T09:56:59Z",
+    "completed_at": "2026-06-29T10:56:06Z",
     "cwd": "fixtures/target-repo/red/failing-gate",
     "exit": 1,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T09:56:59Z",
+    "started_at": "2026-06-29T10:56:06Z",
     "stderr": {
       "digest": "sha256:be13a05e122e30b0cfbe804b8af8e340914734ca6436071ca71171a7cc190493",
       "path": "<inline:stderr>"
@@ -380,10 +380,10 @@
   "gate_markers": [
     "coverage-enforcement"
   ],
-  "generated_at": "2026-06-29T09:56:59Z",
+  "generated_at": "2026-06-29T10:56:06Z",
   "invocation": "fixture init fixtures/target-repo/red/failing-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:63394a6f1dd78efa8120b566b32b4df27e4ad96d4dcec5b42752981997e149a0",
+  "repo_fingerprint": "sha256:fc89545693330503bed7456d359026aa31a9b20659a52d6464b35e2b0ecb9bac",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1047,7 +1047,7 @@
       "path": "validator/src/cli/control/plane.rs"
     },
     {
-      "digest": "sha256:f87a2ea81ca4b9da93ecbc7d355cf7a579ca8b396cb7d929e46025d85265ce7a",
+      "digest": "sha256:bb86fd94e30c7f28a9e1d39565bf7910d12f18d835520f9c96d6795ad3dc00f5",
       "path": "validator/src/cli/control/plane/emit.rs"
     },
     {
@@ -1819,7 +1819,7 @@
       "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
     },
     {
-      "digest": "sha256:b3f0f0915ca4d1d0d3fedf99810342ce09ab6cae1d73d7afa967de208f853201",
+      "digest": "sha256:598a6ded58d36851e9e9bcd1b22bc460a6386e51c96f98a1bb43b6dd5c688fea",
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
@@ -1979,7 +1979,7 @@
       "path": "validator/src/self_tests/coverage/template_trace_package_edges.rs"
     },
     {
-      "digest": "sha256:6c7fa4593611ff377b484704c8a487af289f261690be28e2684e5ea191b0cfbb",
+      "digest": "sha256:4b2a5b235150d232d343667b1cf798f0eb01409e6542880285e0c96c47254bec",
       "path": "validator/src/self_tests/law/anti_theater_dependencies.rs"
     },
     {

@@ -90,7 +90,7 @@ fn write_cli_pass(root: &std::path::Path, current: &str, name: &str, operation: 
                 "current_cli_performance_pass",
                 "current_final_packet_proof_pass",
                 "live_registry_or_reviewer_exposure_same_surface_pass",
-                "all_89_gates_and_100_stop_conditions_pass"
+                crate::cli::control::plane::emit::FULL_CONTRACT_EVIDENCE
             ],
             "failure":null,
             "evidence_graph":{
