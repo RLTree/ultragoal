@@ -289,15 +289,15 @@ completion substitute and does not check any gate by itself.
 
 ## Session And Chronicle Audit
 
-- [ ] Status: not_started
-- [ ] Audit June 25 `harness-ultragoal` / `0.0.10` Chronicle and raw session logs.
-- [ ] Include Product Fitness work around `2026-06-25T04:49Z`.
-- [ ] Include source/install/cache drift around `2026-06-25T06:50Z`.
-- [ ] Include registry/review-round proof blocker around `2026-06-25T17:06Z`.
-- [ ] Include packet/session-log gap around `2026-06-25T18:47Z` and `2026-06-25T19:06Z`.
-- [ ] Search raw session logs for `harness-ultragoal`, `0.0.10`, `Product Fitness`, `coverage`, `line-cap`, `typed`, `parse`, `stale`, `overclaim`, `not enforced`, `weak`, `missing`, and `blocker`.
-- [ ] Record every signal with source artifact, timestamp/session id, affected surface, enforcement state, repair, claim impact, and evidence requirement.
-- [ ] Evidence path: Not yet completed in this resumed work slice. Completion remains blocked until June 25 Chronicle/session-log sources are audited and converted into the historical regression corpus and hardening evidence required by Gates 16, 36, 44, 46, 56, 63, 80, and related stop conditions.
+- [x] Status: source-local_session_chronicle_audit_current
+- [x] Audit June 25 `harness-ultragoal` / `0.0.10` Chronicle and raw session logs.
+- [x] Include Product Fitness work around `2026-06-25T04:49Z`.
+- [x] Include source/install/cache drift around `2026-06-25T06:50Z`.
+- [x] Include registry/review-round proof blocker around `2026-06-25T17:06Z`.
+- [x] Include packet/session-log gap around `2026-06-25T18:47Z` and `2026-06-25T19:06Z`.
+- [x] Search raw session logs for `harness-ultragoal`, `0.0.10`, `Product Fitness`, `coverage`, `line-cap`, `typed`, `parse`, `stale`, `overclaim`, `not enforced`, `weak`, `missing`, and `blocker`.
+- [x] Record every signal with source artifact, timestamp/session id, affected surface, enforcement state, repair, claim impact, and evidence requirement.
+- [x] Evidence path: Current same-candidate session-log hardening receipt `validation_artifacts/harness/session-log-hardening-receipt.json` targets package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, generated at `2026-06-29T10:54:03Z`, and source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:14b226ecb9ead6b5a0600ad9031593ccba9673ac1e90364403c2e0a83485ed91` records `session-log-hardening = pass`. The receipt names 12 audit sources, including Chronicle summaries for `2026-06-25T04:49Z`, `06:50Z`, `17:06Z`, `18:47Z`, `19:06Z`, `22:31Z`, `22:32Z`, and `22:36Z`, raw session logs `019efe02-7b01-7b50-b554-acfd5bd871a4` and `019f0024-e3a1-7ed0-949a-4c52bd825fb1`, and packet summary `/private/tmp/harness-ultragoal-review-20260625T1900Z/review-packet-current.json`. It records 18 required issue classes and 12 findings with source refs, timestamps/session ids, affected law ids, affected package surfaces, enforcement/implementation status, required repair, fixture ids, validator ids, receipt ids, claim ids, claim-ceiling impact, artifact types, and evidence digests. Claim impact: source-local historical/session hardening inventory only; active registry/reviewer exposure, final packet correctness, install/cache parity, readiness, release, completion, and `update_goal()` remain unsupported.
 
 ## Mandatory Repair Gates
 
@@ -760,12 +760,12 @@ that surface is required by the contract.
 - [ ] Gate 79: Validator fails author-memory dependency, private path dependency, undocumented command, untracked generated artifact, stale cache, non-reproducible authority artifact, manual post-processing, and source/install/cache divergence.
 - [ ] Gate 79 evidence path:
 
-- [ ] Gate 80 status: not_started
+- [ ] Gate 80 status: partial_source_local_session_chronicle_hardening_current
 - [ ] Gate 80: Historical regression corpus from session logs, Chronicle, reviewers, and side-thread signals is enforced.
 - [ ] Gate 80: Every repeated failure, weak enforcement, stale proof, overclaim, miswire, namespace violation, Product Fitness substitution, source/install/cache drift, or missing law signal becomes a frozen regression corpus row or typed non-goal that blocks related claims.
 - [ ] Gate 80: Regression rows include source artifact, timestamp/session id, signal, affected law id, affected package surface, observed bad behavior, repair, fixture ids, validator ids, receipt ids, claim ids, claim ceiling impact, implementation status, and evidence digest.
 - [ ] Gate 80: Validator fails known historical signal without corpus row, fixture, validator, receipt, claim impact, timestamp, or claim-ceiling projection.
-- [ ] Gate 80 evidence path: Not yet implemented in this resumed slice. Session/Chronicle audit is still recorded as `not_started`, so this gate remains unchecked and blocks completion.
+- [ ] Gate 80 evidence path: Partial source-local evidence is current for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`: session-log hardening receipt `validation_artifacts/harness/session-log-hardening-receipt.json` is `status = pass`, and source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:14b226ecb9ead6b5a0600ad9031593ccba9673ac1e90364403c2e0a83485ed91` records `session-log-hardening = pass`. Gate 80 remains unchecked because current live reviewer findings from the spawned read-only review team are not yet dispositioned into deterministic enforcement or typed claim-blocking non-goals, and final packet/update_goal/release/readiness claims remain unsupported.
 
 - [ ] Gate 81 status:
 - [ ] Gate 81: Cross-artifact consistency solver and authority graph closure are enforced.
@@ -2706,7 +2706,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [x] Run validator-theater/miswire resistance proof and red/green/stale/wrong-surface fixtures. Evidence: current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:14b226ecb9ead6b5a0600ad9031593ccba9673ac1e90364403c2e0a83485ed91` records check `validator-theater-miswire-resistance = pass` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:15b4f72c9302531741b81e97a6e35c6e5f108a57a52fd4995cfe26d0e3fc53b1` records `status = pass`, `1238/1238`; focused full test suite `cargo test --offline` passed. Claim impact: source-local validator-theater resistance proof only; CT-006 through CT-011 remain unchecked until production green proof plus bad-path failure proof exists for each.
 - [ ] Run green-path adequacy and satisfiable strictness proof.
 - [ ] Run clean-room rebuild/author-memory independence proof.
-- [ ] Run historical regression corpus proof from session logs, Chronicle, reviewers, and side-thread signals.
+- [ ] Run historical regression corpus proof from session logs, Chronicle, reviewers, and side-thread signals. Evidence: session/Chronicle hardening receipt is current and source-audit-enforced for digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, but this remains unchecked until current reviewer findings are incorporated or explicitly dispositioned.
 - [ ] Run cross-artifact consistency solver/authority graph closure proof.
 - [ ] Run authority exhaustiveness/closed-enum/impossible-state elimination proof.
 - [ ] Run non-E2E claim ceiling and confidence-bound proof.
@@ -2809,7 +2809,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Validator-theater and miswire resistance proves every law-bearing validator check rejects real non-compliant behavior through the same authority path used for completion/review/package/readiness/release claims, with minimal valid, realistic valid, red mutant, stale/digest mutant, wrong-surface mutant, and miswire mutant coverage.
 - [ ] Green-path adequacy proves every mandatory law has satisfiable strictness, with minimal and realistic compliant fixtures/receipts where applicable, claim-ceiling projection, package/review/report projection, and no red-only or impossible compliance law.
 - [ ] Clean-room rebuild and author-memory independence prove source, installed plugin, cache package, review target, candidate archive, schema catalog, package inventory, Product Success surfaces, validator receipt, red fixture report, coverage receipt, and final packet can be regenerated from documented commands without private paths, hidden caches, stale local state, or author memory.
-- [ ] Historical regression corpus proves every session-log, Chronicle, reviewer, side-thread, and validation repeat signal is frozen into deterministic enforcement or claim-blocking typed non-goal with source artifact, timestamp/session id, fixture ids, validator ids, receipt ids, claim ids, and claim impact.
+- [ ] Historical regression corpus proves every session-log, Chronicle, reviewer, side-thread, and validation repeat signal is frozen into deterministic enforcement or claim-blocking typed non-goal with source artifact, timestamp/session id, fixture ids, validator ids, receipt ids, claim ids, and claim impact. Evidence: June 25 session/Chronicle hardening is current for digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; this stop condition remains unchecked pending current reviewer-finding disposition.
 - [ ] Cross-artifact consistency solver and authority graph closure prove laws, sources, standards rows, source obligations, schemas, templates, validators, fixtures, receipts, package inventory, source/install/cache artifacts, review target, archive, packet claims, required claim ids, Product Success Contract ids, and claim ceilings have no orphan, stale, duplicate, hidden, private, or umbrella-only authority.
 - [ ] Authority exhaustiveness, closed enums, and impossible-state elimination prove law-bearing statuses, claim ceilings, proof surfaces, target modes, receipt kinds, review dispositions, product evidence levels, package surfaces, validator outcomes, fixture outcomes, and transition states reject freeform, nullable, unknown, partial, or catch-all authority.
 - [ ] Non-E2E claim ceiling and confidence bounds prove no product-success, daily-driver, marketplace, release, adoption, sustained-value, live reviewer readiness, or external-user-success claim exceeds the explicit pre-E2E ceiling, no matter how many non-E2E gates pass.
