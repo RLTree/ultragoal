@@ -6,7 +6,7 @@
   },
   "evidence": [
     {
-      "digest": "sha256:9f1451694c87e1fda356cbab5acb8301523a6235d5ced4d4f29756041bad7a5b",
+      "digest": "sha256:eb50f94bd81cf19b31c9e48bcb027bdad4d44fb31e6dcfc7ceb9338b5b812359",
       "path": "validation_artifacts/harness/fit-repo-receipt.json"
     },
     {
@@ -22,7 +22,7 @@
       "path": "docs/plugin-cohesion-manifest.json"
     }
   ],
-  "generated_at": "2026-06-29T18:30:05Z",
+  "generated_at": "2026-06-29T20:17:55Z",
   "journey": [
     "invoke fit-repo entrypoint",
     "classify target",
@@ -39,6 +39,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724"
+    "value": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b"
   }
 }

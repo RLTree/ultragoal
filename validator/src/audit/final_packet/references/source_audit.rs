@@ -1,5 +1,5 @@
 use super::{RefStatusPolicy, load_ref};
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::path::Path;
 
 const SELF_REWRITING_SOURCE_AUDIT: &str =
@@ -19,12 +19,17 @@ pub(super) fn check_ref(root: &Path, receipt: &Value, expected: &str, out: &mut 
 }
 
 pub(super) fn check_guard_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    if let Some(value) = load_guard_ref(root, receipt, out) {
+    if let Some(value) = load_guard_ref(root, receipt, expected, out) {
         audit_receipt_guard_failures(&value, expected, out);
     }
 }
 
-fn load_guard_ref(root: &Path, receipt: &Value, out: &mut Vec<String>) -> Option<Value> {
+fn load_guard_ref(
+    root: &Path,
+    receipt: &Value,
+    expected: &str,
+    out: &mut Vec<String>,
+) -> Option<Value> {
     let Some(item) = receipt.pointer("/source_audit") else {
         out.push("final_packet_proof_ref_missing:source_audit".to_string());
         return None;
@@ -37,6 +42,9 @@ fn load_guard_ref(root: &Path, receipt: &Value, out: &mut Vec<String>) -> Option
         return None;
     }
     let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
+    if self_rewrite_claim_guard_allowed(root, item, rel, expected_digest) {
+        return Some(self_rewrite_fail_closed_source_audit(expected));
+    }
     let actual = crate::digest::file(&root.join(rel));
     if actual.as_deref() == Ok(expected_digest) {
         return load_ref(
@@ -48,21 +56,10 @@ fn load_guard_ref(root: &Path, receipt: &Value, out: &mut Vec<String>) -> Option
             out,
         );
     }
-    if !self_rewrite_claim_guard_allowed(root, item, rel, expected_digest) {
-        out.push(format!(
-            "final_packet_proof_ref_digest_mismatch:source_audit:{rel}"
-        ));
-        return None;
-    }
-    match crate::json_boundary::read_json(&root.join(rel)) {
-        Ok(value) => Some(value),
-        Err(err) => {
-            out.push(format!(
-                "final_packet_proof_ref_malformed:source_audit:{err}"
-            ));
-            None
-        }
-    }
+    out.push(format!(
+        "final_packet_proof_ref_digest_mismatch:source_audit:{rel}"
+    ));
+    None
 }
 
 fn self_rewrite_claim_guard_allowed(
@@ -76,6 +73,29 @@ fn self_rewrite_claim_guard_allowed(
         && expected_digest.starts_with("sha256:")
         && expected_digest != crate::digest::ZERO
         && item.get("status").and_then(Value::as_str) == Some("fail")
+        && item.get("self_rewriting_authority").and_then(Value::as_str)
+            == Some("source_audit_command_writes_validator_receipt")
+}
+
+fn self_rewrite_fail_closed_source_audit(expected: &str) -> Value {
+    json!({
+        "status": "fail",
+        "target_revision": {
+            "kind": "package_digest",
+            "value": expected
+        },
+        "claim_ceiling": "withheld_or_blocked",
+        "supported_claim_classes": [],
+        "blocked_claim_classes": [
+            "completion",
+            "package_readiness",
+            "review_readiness",
+            "release_readiness",
+            "final_packet_correctness",
+            "update_goal_eligibility",
+            "app_registry_or_reviewer_exposure"
+        ]
+    })
 }
 
 fn audit_receipt_failures(

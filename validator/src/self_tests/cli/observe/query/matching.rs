@@ -7,13 +7,13 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
         observe::query::query_text(&super::command(&[
             "observe", "logs", "query", "--run-id", "r1"
         ])),
-        "_msg:r1"
+        "run_id:r1"
     );
     assert_eq!(
         observe::query::query_text(&super::command(&[
             "observe", "logs", "query", "--law-id", "law-1"
         ])),
-        "_msg:law-1"
+        "law_id:law-1"
     );
     assert_eq!(
         observe::query::query_text(&super::command(&[
@@ -23,7 +23,7 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
             "--check-id",
             "check-1"
         ])),
-        "_msg:check-1"
+        "check_id:check-1"
     );
     assert_eq!(
         observe::query::query_text(&super::command(&[
@@ -33,7 +33,17 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
             "--claim-id",
             "claim-1"
         ])),
-        "_msg:claim-1"
+        "claim_id:claim-1"
+    );
+    assert_eq!(
+        observe::query::query_text(&super::command(&[
+            "observe",
+            "logs",
+            "query",
+            "--run-id",
+            "run\"x\ny"
+        ])),
+        "run_id:runxy"
     );
     assert_eq!(
         observe::query::query_text(&super::command(&["observe", "logs", "query"])),

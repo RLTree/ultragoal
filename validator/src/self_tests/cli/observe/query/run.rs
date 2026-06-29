@@ -49,6 +49,42 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     )
     .expect("pass output");
     assert_eq!(pass["status"], "pass");
+    let current_candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    let same_candidate = observe::query::result_from_output(
+        &root,
+        &command,
+        "*".to_string(),
+        Ok(format!(
+            "{{\"candidate_digest\":\"{current_candidate}\",\"echo\":\"{current_candidate}\",\"row\":1}}"
+        )),
+    )
+    .expect("same candidate output");
+    assert_eq!(same_candidate["status"], "pass");
+    let truncated_candidate = observe::query::result_from_output(
+        &root,
+        &command,
+        "*".to_string(),
+        Ok("{\"candidate_digest\":\"sha256:short\",\"row\":1}".to_string()),
+    )
+    .expect("truncated candidate output");
+    assert_eq!(truncated_candidate["status"], "pass");
+    let stale_candidate = observe::query::result_from_output(
+        &root,
+        &command,
+        "*".to_string(),
+        Ok(format!(
+            "{{\"candidate_digest\":\"{}\",\"row\":1}}",
+            crate::self_tests::boundaries::support::sha('f')
+        )),
+    )
+    .expect("stale candidate output");
+    assert_eq!(stale_candidate["status"], "fail");
+    assert!(
+        stale_candidate["failure"]
+            .as_str()
+            .unwrap()
+            .contains("observability_query_candidate_digest_mismatch")
+    );
     let fail = observe::query::result_from_output(
         &root,
         &command,

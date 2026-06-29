@@ -1,9 +1,18 @@
 {
-  "blocked_claim_classes": [],
-  "candidate_digest": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
-  "claim_ceiling": "surface_package_digest_aligned",
-  "failures": [],
-  "generated_at": "2026-06-29T19:07:13Z",
+  "blocked_claim_classes": [
+    "install_cache_parity",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "completion",
+    "update_goal_eligibility"
+  ],
+  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "claim_ceiling": "withheld_or_blocked",
+  "failures": [
+    "package_surface_digest_mismatch"
+  ],
+  "generated_at": "2026-06-29T20:19:51Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
@@ -11,19 +20,19 @@
   },
   "operation": "cache_audit",
   "root": ".",
-  "same_candidate": true,
+  "same_candidate": false,
   "schema": "harness-ultragoal.package-surface-audit-receipt.v1",
   "schema_version": "v1",
   "source": {
-    "package_digest": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+    "package_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
     "plugin_manifest_digest": "sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
     "plugin_name": "harness-ultragoal",
     "plugin_version": "0.0.11"
   },
-  "status": "pass",
+  "status": "fail",
   "target": {
     "exists": true,
-    "expected_package_digest": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+    "expected_package_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
     "logical_path": "codex-plugin-cache-harness-ultragoal-0-0-11",
     "package_digest": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
     "package_error": null,

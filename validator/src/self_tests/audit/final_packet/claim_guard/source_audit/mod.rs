@@ -78,7 +78,10 @@ fn assert_source_audit_self_rewrite_is_not_circular_failure(
             "blocked_claim_classes":cases::blocked_claims()
         }),
     );
-    support::write_proof(root, proof);
+    let mut proof = proof.clone();
+    proof["source_audit"]["self_rewriting_authority"] =
+        json!("source_audit_command_writes_validator_receipt");
+    support::write_proof(root, &proof);
     let failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(failures.is_empty(), "{failures:?}");
 }
@@ -115,7 +118,7 @@ fn assert_source_audit_guard_ref_boundary_failures(
         root,
         store,
         proof.clone(),
-        "final_packet_proof_ref_malformed:source_audit",
+        "final_packet_proof_ref_digest_mismatch:source_audit",
     );
 }
 

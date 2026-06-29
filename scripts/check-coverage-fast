@@ -87,6 +87,8 @@ def ignored(path):
             prefix = pattern[:-3]
             if path == prefix or path.startswith(prefix + "/"):
                 return True
+        elif path == pattern:
+            return True
     return False
 
 def source_tree_digest():

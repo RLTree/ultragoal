@@ -116,6 +116,12 @@ pub(super) fn load_ref(
         out.push(format!("final_packet_proof_ref_missing:{label}"));
         return None;
     };
+    if label != "source_audit" && item.get("self_rewriting_authority").is_some() {
+        out.push(format!(
+            "final_packet_proof_ref_unexpected_self_rewrite_authority:{label}"
+        ));
+        return None;
+    }
     let rel = item.get("path").and_then(Value::as_str).unwrap_or("");
     if crate::package::inventory::package_path_error(root, rel).is_some() {
         out.push(format!("final_packet_proof_ref_path_invalid:{label}:{rel}"));

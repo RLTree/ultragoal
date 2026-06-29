@@ -210,6 +210,11 @@
             "pass",
             "fail"
           ]
+        },
+        "self_rewriting_authority": {
+          "enum": [
+            "source_audit_command_writes_validator_receipt"
+          ]
         }
       }
     },

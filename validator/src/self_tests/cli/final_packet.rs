@@ -120,6 +120,34 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     assert!(missing_arg.contains("missing required argument --receipt"));
     std::fs::remove_dir_all(blocked).expect("cleanup blocked final packet root");
 
+    let fail_closed =
+        crate::self_tests::boundaries::support::temp_root("final-packet-cli-fail-closed-source");
+    let current = write_final_packet_green_inputs(&fail_closed);
+    write_json(
+        &fail_closed
+            .join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+        &json!({
+            "status": "fail",
+            "target_revision": {"kind": "package_digest", "value": current},
+            "claim_ceiling": "withheld_or_blocked"
+        }),
+    );
+    let value = receipt(&fail_closed).expect("fail-closed receipt");
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["source_audit"]["status"], "fail");
+    assert_eq!(
+        value["source_audit"]["self_rewriting_authority"],
+        "source_audit_command_writes_validator_receipt"
+    );
+    assert_eq!(
+        crate::json_boundary::read_json(
+            &fail_closed.join("validation_artifacts/ultragoal-audit/validator-receipt.json")
+        )
+        .expect("source audit")["status"],
+        "pass"
+    );
+    std::fs::remove_dir_all(fail_closed).expect("cleanup fail-closed final packet root");
+
     let green = crate::self_tests::boundaries::support::temp_root("final-packet-cli-green");
     let current = write_final_packet_green_inputs(&green);
     let value = receipt(&green).expect("green receipt");

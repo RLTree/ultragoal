@@ -69,7 +69,7 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     let metrics_run = command(&["observe", "metrics", "query", "--run-id", "run-abc"]);
     assert_eq!(
         observe::query::query_text(&metrics_run),
-        "count_over_time(ultragoal_command_total{run_id=\"run-abc\"}[2h])"
+        "ultragoal_command_total{run_id=\"run-abc\"}"
     );
     let escaped_metrics = command(&["observe", "metrics", "query", "--run-id", "run\\\"x\ny"]);
     let escaped_query = observe::query::query_text(&escaped_metrics);

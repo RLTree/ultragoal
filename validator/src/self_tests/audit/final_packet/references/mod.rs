@@ -77,6 +77,16 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
         "final_packet_proof_ref_path_invalid:cli_performance",
     );
 
+    let mut misplaced_self_rewrite = support::write_green_proof(&root, &current);
+    misplaced_self_rewrite["cli_performance"]["self_rewriting_authority"] =
+        json!("source_audit_command_writes_validator_receipt");
+    expect_failure(
+        &root,
+        &store,
+        &misplaced_self_rewrite,
+        "final_packet_proof_ref_unexpected_self_rewrite_authority:cli_performance",
+    );
+
     let mut malformed_ref = support::write_green_proof(&root, &current);
     let malformed_path = "validation_artifacts/cli/performance-receipt.json";
     std::fs::write(root.join(malformed_path), "{").expect("write malformed reference");

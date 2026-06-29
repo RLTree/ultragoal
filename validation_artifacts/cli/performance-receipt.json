@@ -9,7 +9,7 @@
   },
   "cache": {
     "hits": 0,
-    "key": "no-cache:sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724:performance_prove",
+    "key": "no-cache:sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b:performance_prove",
     "misses": 0,
     "mode": "disabled",
     "no_cache_mode_result": "executed_without_cache"
@@ -42,13 +42,13 @@
     "worker_count": 1
   },
   "digests": {
-    "candidate": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
-    "cli_binary": "sha256:a6a14c4180997e8a6f55d0f6f1af7ae586b810369e20d978e39a7432d2931f88",
-    "config": "sha256:5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
+    "candidate": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+    "cli_binary": "sha256:d61eabe29a4631fb9f032116b5ced63f33da0df8131b600ccfc1a60607432273",
+    "config": "sha256:02ac58a288f41b08aa80ca010a3a5653c4b1b496fa17d2531ee0869752fdedd1",
     "fixture_catalog": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
     "law_graph": "sha256:f2c9e7a5dccc637f51d8f03f276fb9e63a59e36ec86ca9cd105eacfe83017397",
     "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68",
-    "source": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+    "source": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
     "source_obligation": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
     "standards": "sha256:6367299d760018cdc6735ed07295150ae51e3e37e1e25c7b16c177f33eddc731"
   },
@@ -60,9 +60,9 @@
     "timeout_ms": 0
   },
   "failure": null,
-  "generated_at": "2026-06-29T18:35:05Z",
+  "generated_at": "2026-06-29T20:19:49Z",
   "input_size_metrics": {
-    "file_count_scanned": 4378,
+    "file_count_scanned": 4379,
     "fixture_count_executed": 1239,
     "receipt_count_read": 0,
     "repository_size_class": "single_plugin_proposal"
@@ -89,14 +89,14 @@
   ],
   "telemetry": {
     "cpu_ms": null,
-    "end_timestamp": "2026-06-29T18:35:05Z",
+    "end_timestamp": "2026-06-29T20:19:50Z",
     "external_call_count": 0,
     "external_wait_ms": 0,
     "io_bytes": null,
     "peak_memory_bytes": null,
     "retry_count": 0,
-    "start_timestamp": "2026-06-29T18:35:05Z",
+    "start_timestamp": "2026-06-29T20:19:50Z",
     "timeout_count": 0,
-    "wall_clock_ms": 1266
+    "wall_clock_ms": 1422
   }
 }

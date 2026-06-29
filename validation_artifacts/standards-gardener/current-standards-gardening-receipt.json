@@ -1,5 +1,5 @@
 {
-  "candidate_digest": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
+  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
   "changed_artifacts": [
     {
       "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
@@ -10,7 +10,7 @@
       "path": "schemas/codex-registry-exposure.schema.json"
     },
     {
-      "digest": "sha256:c5f11a03ac7e16f7965f022e8bfce4498159dca45edfd33eb6dabd60403b6612",
+      "digest": "sha256:5dc7426185adc4c1c80dd46514673b95bc6f1ed0690478fc66b5cac510925584",
       "path": "schemas/final-packet-proof.schema.json"
     },
     {
@@ -30,7 +30,7 @@
       "path": "validator/src/audit/final_packet/mod.rs"
     },
     {
-      "digest": "sha256:9dd1a113fc047dfd8113ed70133cc7fcc19ecf7573ab374adbfbd4f3ecb906bc",
+      "digest": "sha256:c8a23f52623de8513de9624c9327954bca33c8e1bc6d88d5336e0a71f7383827",
       "path": "validator/src/audit/final_packet/references/mod.rs"
     },
     {
@@ -126,7 +126,7 @@
       "path": "validator/src/self_tests/audit/final_packet/mod.rs"
     },
     {
-      "digest": "sha256:423b5acbc4d615d535fa53528be3565ee4177ffb2c83d8bead0f34d1184470ed",
+      "digest": "sha256:003c07f0b51422813ba7b44fcc1d5eec334d2458a110e7013a73dc2f7903b35e",
       "path": "validator/src/self_tests/audit/final_packet/references/mod.rs"
     },
     {
@@ -206,7 +206,7 @@
       "path": "validator/src/self_tests/plugin/registry/guard.rs"
     },
     {
-      "digest": "sha256:5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
+      "digest": "sha256:02ac58a288f41b08aa80ca010a3a5653c4b1b496fa17d2531ee0869752fdedd1",
       "path": "plugin-manifest-draft.json"
     },
     {
@@ -260,7 +260,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-29T18:44:46Z",
+  "generated_at": "2026-06-29T20:23:09Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

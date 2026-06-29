@@ -4039,6 +4039,7 @@
     "validator/src/cli/mod.rs",
     "validator/src/cli/observe/explain/mod.rs",
     "validator/src/cli/observe/mod.rs",
+    "validator/src/cli/observe/query/body.rs",
     "validator/src/cli/observe/query/mod.rs",
     "validator/src/cli/observe/query/text.rs",
     "validator/src/cli/observe/stack/health.rs",

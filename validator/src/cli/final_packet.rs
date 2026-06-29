@@ -51,6 +51,9 @@ pub(crate) fn receipt(root: &Path) -> Result<Value, String> {
         return Ok(value);
     }
     value["status"] = json!("fail");
+    value["source_audit"]["status"] = json!("fail");
+    value["source_audit"]["self_rewriting_authority"] =
+        json!("source_audit_command_writes_validator_receipt");
     value["claim_ceiling"] = json!("withheld_or_blocked");
     value["blocked_claim_classes"] = json!([
         "completion",

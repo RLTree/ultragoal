@@ -14,10 +14,25 @@ fn log_query_text(command: &ObserveCommand) -> String {
         command
             .run_id
             .as_ref()
-            .map(log_contains)
-            .or_else(|| command.law_id.as_ref().map(log_contains))
-            .or_else(|| command.check_id.as_ref().map(log_contains))
-            .or_else(|| command.claim_id.as_ref().map(log_contains))
+            .map(|value| log_field("run_id", value))
+            .or_else(|| {
+                command
+                    .law_id
+                    .as_ref()
+                    .map(|value| log_field("law_id", value))
+            })
+            .or_else(|| {
+                command
+                    .check_id
+                    .as_ref()
+                    .map(|value| log_field("check_id", value))
+            })
+            .or_else(|| {
+                command
+                    .claim_id
+                    .as_ref()
+                    .map(|value| log_field("claim_id", value))
+            })
             .unwrap_or_else(|| "*".to_string())
     })
 }
@@ -25,7 +40,7 @@ fn log_query_text(command: &ObserveCommand) -> String {
 fn metric_query_text(command: &ObserveCommand) -> String {
     command.query.clone().unwrap_or_else(|| {
         metric_filter(command)
-            .map(|filter| format!("count_over_time(ultragoal_command_total{{{filter}}}[2h])"))
+            .map(|filter| format!("ultragoal_command_total{{{filter}}}"))
             .unwrap_or_else(|| "ultragoal_command_total".to_string())
     })
 }
@@ -71,8 +86,12 @@ fn prom_escape(value: &str) -> String {
         .collect()
 }
 
-fn log_contains(value: &String) -> String {
-    format!("_msg:{}", value)
+fn log_field(field: &str, value: &str) -> String {
+    format!("{field}:{}", log_escape(value))
+}
+
+fn log_escape(value: &str) -> String {
+    value.replace('"', "").replace('\n', "")
 }
 
 pub(crate) fn trace_tags(command: &ObserveCommand) -> String {

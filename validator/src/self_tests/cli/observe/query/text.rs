@@ -6,22 +6,22 @@ fn observe_metric_query_text_covers_all_authority_selectors() {
         (
             "--run-id",
             "run-abc",
-            r#"count_over_time(ultragoal_command_total{run_id="run-abc"}[2h])"#,
+            r#"ultragoal_command_total{run_id="run-abc"}"#,
         ),
         (
             "--law-id",
             "law-abc",
-            r#"count_over_time(ultragoal_command_total{law_id="law-abc"}[2h])"#,
+            r#"ultragoal_command_total{law_id="law-abc"}"#,
         ),
         (
             "--check-id",
             "check-abc",
-            r#"count_over_time(ultragoal_command_total{check_id="check-abc"}[2h])"#,
+            r#"ultragoal_command_total{check_id="check-abc"}"#,
         ),
         (
             "--claim-id",
             "claim-abc",
-            r#"count_over_time(ultragoal_command_total{claim_id="claim-abc"}[2h])"#,
+            r#"ultragoal_command_total{claim_id="claim-abc"}"#,
         ),
     ] {
         assert_eq!(
