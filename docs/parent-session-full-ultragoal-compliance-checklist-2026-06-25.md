@@ -1333,8 +1333,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 89. D
   - Evidence: Current performance-only proof is same-candidate and the current source audit check `cli-performance-latency-speed-iteration-fitness` passes. Source surfaces include `validator/src/cli_performance.rs`, `validator/src/cli_performance_receipt.rs`, `validator/src/cli_performance_types.rs`, `validator/src/audit/cli/performance.rs`, `schemas/cli-performance-receipt.schema.json`, and `validation_artifacts/cli/performance-receipt.json`. This supports performance-only claims and does not support readiness/completion/update_goal.
   - CLI command: `target/debug/ultragoal --root . performance prove --receipt validation_artifacts/cli/performance-receipt.json` exited `0`.
   - Receipt: `validation_artifacts/cli/performance-receipt.json`
-  - Candidate digest: `sha256:f1fde89af147b4cf1b2a8d816065f7a52151a4989f0845e763863925a49c9595`
-  - Status: stale for current digest `sha256:e2d0c14ec5d8d5e9a20f267c8a38eb3c2e8a185f084a25d4c7a0c2240be680df`; rerun pending.
+  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`
+  - Status: current source-local performance-only proof; broader Gate 89.20, readiness, completion, final-packet correctness, and `update_goal()` remain unchecked.
 
 - [ ] Foundational trace maps the "AI Is Forcing Us To Write Good Code" requirements for fast automated guardrails, fast ephemeral concurrent dev environments, short change-check-fix loops, cheap repeated execution, high-concurrency isolated runs, cache-backed third-party calls with no-cache verification, and one-command setup to standards rows, source obligations, validator checks, schemas, fixtures, receipts, package inventory, claim-ceiling guards, and final packet evidence.
   - Evidence: `docs/foundational-law-traceability.json` now has obligation id `cli-performance-latency-speed-iteration-fitness` mapped to standards row, source-obligation row, validator check id, red fixture `cli-performance-missing-budget-red`, valid fixture `fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json`, receipt requirement, and claim guard. Digests still need final refresh after source files settle.
@@ -1347,8 +1347,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 89. D
   - Evidence: `validator/src/cli_performance_types.rs` defines closed `BudgetClass` variants and thresholds for all required budget classes; `schemas/cli-performance-receipt.schema.json` encodes the same closed budget enum and budget version.
   - CLI command: `target/debug/ultragoal --root . performance prove --receipt validation_artifacts/cli/performance-receipt.json`
   - Receipt: `validation_artifacts/cli/performance-receipt.json`
-  - Candidate digest: `sha256:f1fde89af147b4cf1b2a8d816065f7a52151a4989f0845e763863925a49c9595`
-  - Status: stale for current digest `sha256:e2d0c14ec5d8d5e9a20f267c8a38eb3c2e8a185f084a25d4c7a0c2240be680df`; rerun pending.
+  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`
+  - Status: current source-local typed-budget evidence; broader Gate 89.20, readiness, completion, final-packet correctness, and `update_goal()` remain unchecked.
 
 - [ ] Default budget thresholds are enforced: `instant` cold p95 <= 2 seconds and warm p95 <= 500 milliseconds; `interactive` cold p95 <= 5 seconds and warm p95 <= 1 second; `focused` cold p95 <= 15 seconds and warm p95 <= 5 seconds; `repair_loop` cold p95 <= 30 seconds and warm p95 <= 10 seconds; `strict_local` p95 <= 60 seconds on declared baseline; `strict_fixtures` p95 <= 120 seconds on declared baseline; `strict_final` p95 <= 10 minutes on declared baseline; `strict_coverage` and `external_live` have typed bounded budgets, no unbounded execution, and claim blocking on failure.
   - Evidence:
@@ -1407,11 +1407,11 @@ This checklist section is a tracking surface only. It does not weaken Gate 89. D
   - Status: implemented
 
 - [ ] CLI performance law is represented in agent-standards enforcement rows, source-obligation rows, foundational trace entries, schema catalog, validator checks, red fixtures, green fixtures, tamper/stale-cache fixtures where applicable, receipt requirements, package inventory, claim-ceiling guards, validation evidence, final packet, and update_goal eligibility.
-  - Evidence: Implemented source surfaces include standards row, source-obligation row, foundational trace entry, validator check id, audit module, schema catalog entry, performance receipt schema, valid mandatory-law fixture, red fixtures, package inventory entries, plugin cohesion manifest entries, and claim-ceiling blocking fields in the performance receipt. Current performance receipt is stale for package digest `sha256:e2d0c14ec5d8d5e9a20f267c8a38eb3c2e8a185f084a25d4c7a0c2240be680df`; current source audit check `cli-performance-latency-speed-iteration-fitness` remains unresolved until the same-candidate performance/control-plane proof graph is refreshed. Final packet/update_goal remain fail-closed.
+  - Evidence: Implemented source surfaces include standards row, source-obligation row, foundational trace entry, validator check id, audit module, schema catalog entry, performance receipt schema, valid mandatory-law fixture, red fixtures, package inventory entries, plugin cohesion manifest entries, and claim-ceiling blocking fields in the performance receipt. Current performance receipt is source-local and same-candidate for package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`, and current source audit records `cli-performance-latency-speed-iteration-fitness = pass`. Final packet/update_goal remain fail-closed.
   - CLI command: `target/debug/ultragoal --root . performance prove --receipt validation_artifacts/cli/performance-receipt.json`
   - Receipt: `validation_artifacts/cli/performance-receipt.json`
-  - Candidate digest: `sha256:f1fde89af147b4cf1b2a8d816065f7a52151a4989f0845e763863925a49c9595`
-  - Status: stale for current digest `sha256:e2d0c14ec5d8d5e9a20f267c8a38eb3c2e8a185f084a25d4c7a0c2240be680df`; rerun pending.
+  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`
+  - Status: current source-local performance-law evidence; broader Gate 89.20, readiness, completion, final-packet correctness, and `update_goal()` remain unchecked.
 
 ### Gate 89.21: Final Gate 89 Evidence
 
