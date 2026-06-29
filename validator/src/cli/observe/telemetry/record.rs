@@ -13,6 +13,7 @@ pub(super) fn event(
     failure: Option<&str>,
 ) -> Value {
     let failure = failure.map(redact_sensitive_text);
+    let next_repair = claims::next_repair_for(command.operation, status, failure.as_deref());
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,
         "run_id": run_id,
@@ -35,7 +36,7 @@ pub(super) fn event(
         "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
         "why_failed": failure.as_deref().unwrap_or("none"),
         "where_failed": if failure.is_some() { command.operation.id() } else { "none" },
-        "next_repair": claims::next_repair(command.operation, status),
+        "next_repair": next_repair,
         "claim_impact": if status == "pass" { "observability_evidence_only" } else { "readiness_release_completion_update_goal_blocked" },
         "timestamp": crate::audit::clock::now_iso(),
         "duration_ms": 0,

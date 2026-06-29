@@ -52,7 +52,7 @@ pub(super) fn base(
         "claim_id": types::CLAIM_ID,
         "why_failed": event["why_failed"].as_str().unwrap_or(""),
         "where_failed": event["where_failed"].as_str().unwrap_or(""),
-        "next_repair": claims::next_repair(command.operation, status),
+        "next_repair": event["next_repair"].as_str().unwrap_or(""),
         "event": event,
         "metric": metric,
         "trace": trace

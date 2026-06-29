@@ -2481,7 +2481,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Validator check: `validator/src/audit/observability/registry.rs` plus `validator/src/audit/observability/registry/fitting.rs`; package inventory includes both files.
   - Fitted rows: `0`.
   - Partial/unfitted rows: `17 partially_fitted`, `40 unfitted`; full Gate 92 remains blocked.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Claim impact: complete tracking exists, but partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
   - Status: unchecked; tracking/enforcement exists, completion does not.
 
@@ -2510,18 +2510,18 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Agent proof comes from CLI queries against VictoriaLogs, VictoriaMetrics, and VictoriaTraces; Grafana inspection is not claim authority.
-  - Evidence: current `observe prove` fitting-inventory failure run `run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94` was queried through CLI against VictoriaLogs, VictoriaMetrics, and VictoriaTraces for candidate `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`; all three query commands exited `0`. This proves queryability for the current failure only, not full command-surface fitting.
-  - Query commands: `target/debug/ultragoal --root . observe logs query --run-id run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94 --limit 100`; `target/debug/ultragoal --root . observe metrics query --run-id run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94 --limit 100`; `target/debug/ultragoal --root . observe traces query --run-id run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94 --limit 100`.
-  - Receipts: `validation_artifacts/observability/observe-logs-query.json = sha256:27f8083b7d711ea90cd1eadd8b0a2980e9ea6a6d213dbd981fbbd422db6d0f31`; `validation_artifacts/observability/observe-metrics-query.json = sha256:128af827637a868850e92e3885cd51dfff86b822a28540382773426131fc1865`; `validation_artifacts/observability/observe-traces-query.json = sha256:352005a6e45075c99ddf6178493f8e890901eb2bb56ef7b20dd9c5913cd45c7f`.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Evidence: current `observe prove` fitting-inventory failure run `run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0` was queried through CLI against VictoriaLogs, VictoriaMetrics, and VictoriaTraces for candidate `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`; all three query commands exited `0`. This proves queryability for the current failure only, not full command-surface fitting.
+  - Query commands: `target/debug/ultragoal --root . observe logs query --run-id run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0 --limit 100`; `target/debug/ultragoal --root . observe metrics query --run-id run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0 --limit 100`; `target/debug/ultragoal --root . observe traces query --run-id run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0 --limit 100`.
+  - Receipts: `validation_artifacts/observability/observe-logs-query.json = sha256:a5d7c3c661fa5671792ca30a8b9de68492fba95060e457cbf69d8c9cd4919b7e`; `validation_artifacts/observability/observe-metrics-query.json = sha256:c1bff29df62054eeb803a5dcf45fa7a61faca94bee3ba6a5357446ae426d6995`; `validation_artifacts/observability/observe-traces-query.json = sha256:dcc22227f2a36855005ba7644a39dac5c9bbf6ff1b215e2209add4579f358f21`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Claim impact: source-local query observation only; no Grafana/manual proof is used, but full Gate 92 remains blocked by unfitted command inventory rows.
   - Status: unchecked; one current failure is queryable, all law-bearing surfaces are not yet fitted.
 
 - [ ] Required query proof covers failed run by run_id, failed law by law_id, failed check by check_id, blocked claim by claim_id, command duration metrics, stale receipt counters, full command trace, and current proof-graph failure across logs, metrics, and traces.
   - Evidence: partial only. Current proof-graph failure is queryable by `run_id` across logs/metrics/traces; law/check/claim-specific queries, command duration metrics, stale receipt counters, and full command trace coverage for all law-bearing command families remain unfitted in the inventory.
-  - Query results: current run `run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94` returns rows in `observe-logs-query.json`, `observe-metrics-query.json`, and `observe-traces-query.json`.
-  - Receipt: `validation_artifacts/observability/observe-explain-failure.json = sha256:e94eda9d2cc90f6b16e534368d7ee1fd90e8f83b4326387dbf48db20650e2a95`.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Query results: current run `run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0` returns rows in `observe-logs-query.json`, `observe-metrics-query.json`, and `observe-traces-query.json`.
+  - Receipt: `validation_artifacts/observability/observe-explain-failure.json = sha256:029ec34ab0747f7b56e5394b1313709ad63f0f84d7a0d25a0833aa12769a86a1`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Status: unchecked; current-run query proof exists, complete required query matrix does not.
 
 ### Gate 92.7: Security, Redaction, Boundedness, And Resource Discipline
@@ -2582,24 +2582,24 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ### Gate 92.9: Stack Health, Smoke, Current Failure, And Final Validation
 
 - [ ] Stack health proves VictoriaLogs, VictoriaMetrics, VictoriaTraces, OpenTelemetry Collector, Vector, and Grafana are running and healthy.
-  - Evidence: current source-local Gate 92 health receipt targets package digest `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Evidence: current source-local Gate 92 health receipt targets package digest `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Command: `target/debug/ultragoal --root . observe stack health` exited `0`.
-  - Receipt: `validation_artifacts/observability/observe-stack-health.json = sha256:b54c094cd7da2effb4f1e182c1cf90657a359ea1fa905867b58427808ab16264`.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Receipt: `validation_artifacts/observability/observe-stack-health.json = sha256:3115688dfad410d4b21b6ca1dd73666cfd7b1e25af85089a8d62f848b8b88207`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Status: source-local stack health only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] Stack smoke proves log ingestion/query, metric ingestion/query, trace ingestion/query, and one correlated ultragoal CLI run visible in all three stores.
-  - Evidence: current source-local Gate 92 smoke receipt targets package digest `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Evidence: current source-local Gate 92 smoke receipt targets package digest `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Command: `target/debug/ultragoal --root . observe stack smoke --receipt validation_artifacts/observability/observe-stack-smoke.json` exited `0`.
-  - Receipt: `validation_artifacts/observability/observe-stack-smoke.json = sha256:5814613927d4081fde93274381640da0f5fe2b9abc6f7eb35b2ba6b8209daece`.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Receipt: `validation_artifacts/observability/observe-stack-smoke.json = sha256:108c73127d18006a7fd8f0b9402fb6fb610d91c7cafb504288f8ea7f2b9a4ad7`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Status: source-local stack smoke/query only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] The current proof-graph failure is visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, observe query commands, and `observe explain-failure --run-id`.
-  - Evidence: current source-local failure is visible through `observe prove` stdout and current observability proof `validation_artifacts/observability/observe-prove.json = sha256:8c1895d24c377be716430b13b1ec7e3552ad9a997db681ea6833bf7d498fb2b2`. The command exited `1` and printed `failed_check=full-local-observability-stack-integration-non-opaque-failure`, `why=observability fitting inventory incomplete: 17 partially_fitted, 40 unfitted, 0 invalid, 0 row_shape_only`, `where=observe.prove`, claim impact, next repair, run id, correlation id, and exact observe query commands. Logs/metrics/traces/explain receipts are current for the same run. Source audit and final-packet proof receipts are intentionally not rerun yet after this implementation change.
-  - Run id: `run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94`; correlation id `corr-b4083d88c5f6b9d09ced12b03fc9b6da6faed2f89bfcc6f8b8859d31bda49779`.
+  - Evidence: current source-local failure is visible through `observe prove` stdout and current observability proof `validation_artifacts/observability/observe-prove.json = sha256:df2a2617610c09101c77733a2fba5ce01c5a712b27c06a97ade6ae42443a1716`. The command exited `1` and printed `failed_check=full-local-observability-stack-integration-non-opaque-failure`, `why=observability fitting inventory incomplete: 17 partially_fitted, 40 unfitted, 0 invalid, 0 row_shape_only`, `where=observe.prove`, claim impact, `next_repair=fit every law-bearing command inventory row, then rerun observe prove`, run id, correlation id, and exact observe query commands. Logs/metrics/traces/explain receipts are current for the same run. Source audit and final-packet proof receipts are intentionally not rerun yet after this implementation change.
+  - Run id: `run-2350b5cd48e5ff87eb90b4fbadc6de6de07bd86815ca3745a5382ebdb8e654f0`; correlation id `corr-a715404f1090705598287ae633b69e964aee5b15dc94a6e128fa0fc9379fd153`.
   - Query commands: `observe logs query`, `observe metrics query`, `observe traces query`, and `observe explain-failure --run-id` all ran for this run; current receipts listed above.
-  - Candidate digest: `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`.
+  - Candidate digest: `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`.
   - Claim impact: no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility claim.
   - Status: unchecked; current failure observability improved, but full Gate 92 and source-audit closure remain incomplete.
 
@@ -2867,7 +2867,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: In progress, source-local only for package digest `sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69`. Current stack health/smoke, observe-prove fail-closed proof, logs query, metrics query, traces query, and explain-failure receipts are regenerated for this digest; the fitting inventory tracks 57 command-family surfaces with `17 partially_fitted`, `40 unfitted`, and `0 fitted`, and `observe prove` now mechanically fails while any row is not fitted. Claim impact: source-local observability implementation evidence only; final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, and full Gate 92 proof remain mechanically blocked until every law-bearing command/check/receipt path is fitted and all prior gates pass on the same candidate.
+- [ ] Gate 92 evidence path: In progress, source-local only for package digest `sha256:d69d7f3858c657bf62bb1983c1fc6dc61ca357d87feb6d2d6c258f3214577f46`. Current stack health/smoke, observe-prove fail-closed proof, logs query, metrics query, traces query, and explain-failure receipts are regenerated for this digest; the fitting inventory tracks 57 command-family surfaces with `17 partially_fitted`, `40 unfitted`, and `0 fitted`, and `observe prove` now mechanically fails while any row is not fitted with a fitting-specific repair hint. Claim impact: source-local observability implementation evidence only; final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, and full Gate 92 proof remain mechanically blocked until every law-bearing command/check/receipt path is fitted and all prior gates pass on the same candidate.
 
 ## Final Response Required Fields
 

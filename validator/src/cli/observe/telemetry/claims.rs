@@ -52,9 +52,17 @@ pub(super) fn supported(operation: ObserveOperation, status: &str) -> Value {
     }
 }
 
-pub(super) fn next_repair(operation: ObserveOperation, status: &str) -> &'static str {
+pub(super) fn next_repair_for(
+    operation: ObserveOperation,
+    status: &str,
+    failure: Option<&str>,
+) -> &'static str {
     if status == "pass" {
         "keep receipt same-candidate and rerun source audit before any readiness claim"
+    } else if failure.is_some_and(|text| {
+        text.contains("fitting inventory") || text.contains("command inventory")
+    }) {
+        "fit every law-bearing command inventory row, then rerun observe prove"
     } else {
         match operation {
             ObserveOperation::StackHealth => "run ultragoal observe stack up, then stack health",
