@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:50:19Z",
+    "completed_at": "2026-06-29T19:17:49Z",
     "cwd": "fixtures/target-repo/red/mismatched-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:50:19Z",
+    "started_at": "2026-06-29T19:17:49Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:50:19Z",
+  "generated_at": "2026-06-29T19:17:49Z",
   "invocation": "fixture init fixtures/target-repo/red/mismatched-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:08e38aeebd212d74dd84dbdd828a81e5352f0195669da279039fa7fcf100df2a",
+  "repo_fingerprint": "sha256:3dff9779323baf0f43ce87ce20544e0bc506999152b76f5cf5f4ddfa7a6edd7c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

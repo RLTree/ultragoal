@@ -53,13 +53,13 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:938ced4695c4250272fdbe52b79d7b1531907c59c739f1f6dda49fc1351a870e",
+    "digest": "sha256:0b8cc780debadd848a9961cd6346ec3dde354a460af3c8d91b2d59cfdbc8d1d1",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-29T18:47:29Z",
+  "generated_at": "2026-06-29T19:18:08Z",
   "registry_exposure": {
-    "digest": "sha256:e531ab5cb9cbe929806971f952560b12d0b8364326faa4fb9258108b095550b6",
+    "digest": "sha256:6d7fc8b50f3a97b3a306720fb68c93bf901eee9a97967523784249ac915fbac3",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },

@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:50:19Z",
+    "completed_at": "2026-06-29T19:17:49Z",
     "cwd": "fixtures/target-repo/red/product-review-evidence-absolute-path",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:50:19Z",
+    "started_at": "2026-06-29T19:17:49Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:50:19Z",
+  "generated_at": "2026-06-29T19:17:49Z",
   "invocation": "fixture init fixtures/target-repo/red/product-review-evidence-absolute-path",
   "mode": "init",
-  "repo_fingerprint": "sha256:007470ae42f42ea320710bca35dcada4846f86ce6aafd854149e85a39b42209d",
+  "repo_fingerprint": "sha256:fb99ded7c74b02d8ed84387e215d6b29e40c8b59bff97ef39e04fe0cca97dd6e",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

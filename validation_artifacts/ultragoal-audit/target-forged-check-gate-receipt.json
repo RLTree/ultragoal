@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:50:18Z",
+    "completed_at": "2026-06-29T19:17:48Z",
     "cwd": "fixtures/target-repo/red/forged-check-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:50:18Z",
+    "started_at": "2026-06-29T19:17:48Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "execplan-dirs",
     "proof-root"
   ],
-  "generated_at": "2026-06-29T18:50:18Z",
+  "generated_at": "2026-06-29T19:17:48Z",
   "invocation": "fixture init fixtures/target-repo/red/forged-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:41dd2125a4f4a34e93585cab0307ff1388847961fc36d46a202c071d648994b2",
+  "repo_fingerprint": "sha256:851c5c0888310f06c977d9e5467157871df3278d7a0a10c1c76a6eed4ba831b7",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

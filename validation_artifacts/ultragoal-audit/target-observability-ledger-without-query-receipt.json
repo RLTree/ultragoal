@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:50:19Z",
+    "completed_at": "2026-06-29T19:17:48Z",
     "cwd": "fixtures/target-repo/red/observability-ledger-without-query",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:50:19Z",
+    "started_at": "2026-06-29T19:17:48Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:50:19Z",
+  "generated_at": "2026-06-29T19:17:48Z",
   "invocation": "fixture init fixtures/target-repo/red/observability-ledger-without-query",
   "mode": "init",
-  "repo_fingerprint": "sha256:47572ed6cd33e2a2031ebac705c85804dbf03fae74ffa79fba35e818c3bfb174",
+  "repo_fingerprint": "sha256:2277ae91ee748c3a58a3330b7904cc0da162c598eec0b2e2b7784c9f5a442bab",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,

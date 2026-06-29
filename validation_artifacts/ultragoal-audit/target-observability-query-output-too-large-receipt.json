@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:50:19Z",
+    "completed_at": "2026-06-29T19:17:48Z",
     "cwd": "fixtures/target-repo/red/observability-query-output-too-large",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:50:19Z",
+    "started_at": "2026-06-29T19:17:48Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:50:19Z",
+  "generated_at": "2026-06-29T19:17:48Z",
   "invocation": "fixture init fixtures/target-repo/red/observability-query-output-too-large",
   "mode": "init",
-  "repo_fingerprint": "sha256:4291e62fa62c22af3338f4484253cea116464ca436b95778f11ede73ebc856ab",
+  "repo_fingerprint": "sha256:57dfe8b615955f638ee6adf3ef48f40dd25ce94b3acc0e0cb08198002bf3fd27",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,
