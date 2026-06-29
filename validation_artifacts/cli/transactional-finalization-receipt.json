@@ -21,16 +21,20 @@
   "failure": {
     "observed_failures": [
       "cli_control_plane_transaction_ref_status_not_pass:final_packet",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_target_digest_mismatch:sha256:2a9855e351ccdd762e0f3af0ddf1d3de681c257d542603f1f840176d6d3e3f68!=sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6",
       "cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass",
       "cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:cli_performance:validation_artifacts/cli/performance-receipt.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:registry:validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:source_audit:validation_artifacts/ultragoal-audit/validator-receipt.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:coverage:validation_artifacts/coverage/coverage-receipt.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:package:validation_artifacts/harness/fit-repo-receipt.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:package:validation_artifacts/harness/product-fitness-receipt.json",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_digest_mismatch:package:validation_artifacts/harness/plugin-product-journey-receipt.json",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_wrong_source",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_live_tool_issuer",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_missing_tool_call_identity",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_capture_method_not_live",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
       "cli_control_plane_transaction_ref_status_not_pass:registry_exposure",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface",
@@ -47,11 +51,11 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:fa92362379a82f1cefacb6d73d94be04708a6962004de14190e1f266c35f3ebc",
+    "digest": "sha256:6551a1b87bc5d8822d0fbbcecc2647307a9cca4f007bba0a3b98ddb59348ef44",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-29T10:53:17Z",
+  "generated_at": "2026-06-29T11:19:04Z",
   "registry_exposure": {
     "digest": "sha256:1dbd6cb53eda0accd0c1c8dbf95030182d2dfbd8102c2fbcff11759c16ad04ab",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",

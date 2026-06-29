@@ -30,14 +30,11 @@
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
-      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
-      "final_packet_proof_ref_embedded_status_not_pass:source_audit",
-      "final_packet_proof_source_audit_status_not_pass",
-      "final_packet_proof_source_audit_target_digest_mismatch"
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed"
     ],
     "reason": "final_packet_proof_not_proven"
   },
-  "generated_at": "2026-06-29T10:53:17Z",
+  "generated_at": "2026-06-29T11:18:46Z",
   "package_receipts": [
     {
       "digest": "sha256:f6d2400b0b7055eb158bac8bad49d2fe30031891a319b8cc87b44c4a155b22f4",
@@ -66,9 +63,9 @@
   },
   "schema": "harness-ultragoal.final-packet-proof.v1",
   "source_audit": {
-    "digest": "sha256:2c37440cdad6848539e650993fb557fd0e5a750fbf897423e6354bfabf96762c",
+    "digest": "sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483",
     "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
-    "status": "fail"
+    "status": "pass"
   },
   "status": "fail",
   "target_revision": {

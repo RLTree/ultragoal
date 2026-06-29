@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T10:56:07Z",
+    "completed_at": "2026-06-29T11:21:40Z",
     "cwd": "fixtures/target-repo/red/fake-marker-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T10:56:07Z",
+    "started_at": "2026-06-29T11:21:40Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -382,10 +382,10 @@
     "coverage-enforcement",
     "fake-marker"
   ],
-  "generated_at": "2026-06-29T10:56:07Z",
+  "generated_at": "2026-06-29T11:21:40Z",
   "invocation": "fixture init fixtures/target-repo/red/fake-marker-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:917192d8f8efe54c965e2e2420da960f636f9c7dd14105581bab6cc9264f805c",
+  "repo_fingerprint": "sha256:66af2db23f663c85b6b3444d954aebe2a2a6347cebe2663d7452163791c6413d",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

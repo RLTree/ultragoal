@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T10:56:08Z",
+    "completed_at": "2026-06-29T11:21:41Z",
     "cwd": "fixtures/target-repo/red/malformed-product-cohesion-json",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T10:56:08Z",
+    "started_at": "2026-06-29T11:21:41Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T10:56:08Z",
+  "generated_at": "2026-06-29T11:21:41Z",
   "invocation": "fixture init fixtures/target-repo/red/malformed-product-cohesion-json",
   "mode": "init",
-  "repo_fingerprint": "sha256:c7ab768b92755b6f6a1aa0de652a74b87b83f8e793f3147e3df4641c3ce8aa9a",
+  "repo_fingerprint": "sha256:fae5bf89d57a1e74e50b79b6071d2a172636bfa654056d54ec67c83d28160428",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
