@@ -22,16 +22,109 @@ pub(crate) fn base_receipt(
 
 pub(crate) fn prove(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
-    if live_stack_receipts_current(root, &candidate) {
-        base_receipt(root, command, "pass", None)
-    } else {
-        base_receipt(
+    if !live_stack_receipts_current(root, &candidate) {
+        return base_receipt(
             root,
             command,
             "fail",
             Some("live observability stack is not health-checked and smoke-proven"),
-        )
+        );
     }
+    if let Err(failure) = fitting_inventory_complete(root) {
+        return base_receipt(root, command, "fail", Some(&failure));
+    }
+    base_receipt(root, command, "pass", None)
+}
+
+fn fitting_inventory_complete(root: &Path) -> Result<(), String> {
+    let path = root.join("docs/generated/observability/command-inventory.json");
+    let value = crate::json_boundary::read_json(&path)?;
+    let rows = value
+        .get("fitting_inventory")
+        .and_then(Value::as_object)
+        .ok_or_else(|| "observability fitting inventory missing".to_string())?;
+    let commands = value
+        .get("commands")
+        .and_then(Value::as_array)
+        .ok_or_else(|| "observability command inventory missing".to_string())?;
+    if rows.is_empty() {
+        return Err("observability fitting inventory empty".to_string());
+    }
+    let command_names = commands
+        .iter()
+        .filter_map(Value::as_str)
+        .collect::<Vec<_>>();
+    let required = crate::audit::observability::required_commands();
+    if command_names.len() != required.len() {
+        return Err(format!(
+            "observability command inventory incomplete: {} of {} rows",
+            command_names.len(),
+            required.len()
+        ));
+    }
+    let unknown_commands = command_names
+        .iter()
+        .filter(|command| !required.contains(command))
+        .count();
+    if unknown_commands > 0 {
+        return Err(format!(
+            "observability command inventory contains {unknown_commands} unknown rows"
+        ));
+    }
+    let missing_rows = required
+        .iter()
+        .filter(|command| !rows.contains_key(**command))
+        .count();
+    if missing_rows > 0 {
+        return Err(format!(
+            "observability fitting inventory missing {missing_rows} command rows"
+        ));
+    }
+    let mut partial = 0usize;
+    let mut unfitted = 0usize;
+    let mut invalid = 0usize;
+    let mut row_shape_only = 0usize;
+    for row in rows.values() {
+        match row.get("fitting_status").and_then(Value::as_str) {
+            Some("fitted") if fitted_row_complete(row) => {}
+            Some("fitted") => row_shape_only += 1,
+            Some("partially_fitted") => partial += 1,
+            Some("unfitted") => unfitted += 1,
+            _ => invalid += 1,
+        }
+    }
+    if partial == 0 && unfitted == 0 && invalid == 0 && row_shape_only == 0 {
+        Ok(())
+    } else {
+        Err(format!(
+            "observability fitting inventory incomplete: {partial} partially_fitted, {unfitted} unfitted, {invalid} invalid, {row_shape_only} row_shape_only"
+        ))
+    }
+}
+
+fn fitted_row_complete(row: &Value) -> bool {
+    [
+        "fitted_surfaces",
+        "focused_tests",
+        "receipt_paths",
+        "live_query_proof_paths",
+    ]
+    .into_iter()
+    .all(|key| {
+        row.get(key)
+            .and_then(Value::as_array)
+            .is_some_and(|items| !items.is_empty())
+    }) && row
+        .get("missing_surfaces")
+        .and_then(Value::as_array)
+        .is_some_and(Vec::is_empty)
+        && ["validator_check_id", "claim_impact"]
+            .into_iter()
+            .all(|key| {
+                row.get(key)
+                    .and_then(Value::as_str)
+                    .is_some_and(|text| !text.is_empty())
+            })
 }
 
 pub(crate) fn query_result(

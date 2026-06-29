@@ -6,23 +6,23 @@
     "update_goal_eligibility"
   ],
   "byte_limit": 262144,
-  "candidate_digest": "sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5",
+  "candidate_digest": "sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-893c1e4e24628359fae6410f6f932e8ed1e57209aa39acff25ec8c25d50178b7",
+  "correlation_id": "corr-3f1fd32a42f1f0424d87c05281e5a5987cf501372008f3be5099f5c813d2d163",
   "failure": "",
   "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
-  "query": "{\"run_id\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"}",
+  "query": "{\"run_id\":\"run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94\"}",
   "query_kind": "traces",
-  "result_digest": "sha256:f1ec15679ca816ef3d992ac564646d2730be7dc1c563c857201f4197fac387d3",
+  "result_digest": "sha256:1fe7eaeede9664a81bc7c99cf8c0ebcf0f07219b9035af5febbd0da3701a5aec",
   "retention_bound": "2d",
   "row_limit": 100,
   "rows": [
     {
-      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"final-packet.prove\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"8b683cb2ed85afe1\",\"startTime\":1782776185958267,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"missing_receipt\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"final_packet_correctness\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"final_packet_correctness_review_readiness_release_completion_update_goal_blocked\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-30126e076293b5e92d4a59933f7d38a8b9dcb796c00d0240c1219bda94767527\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"missing_receipt\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"final-packet-proof\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"build a current final packet only after source-local proof graph dependencies pass\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"final-packet.prove\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"fail\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"final_packet_proof_packet_absent\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"77f921fb559c784bc0121c32f08775d5\",\"warnings\":null}],\"traceID\":\"77f921fb559c784bc0121c32f08775d5\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
+      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"observe.prove\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"c1c35cad9598892d\",\"startTime\":1782776923909926,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"gate-92-observability-control-plane\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"readiness_release_completion_update_goal_blocked\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-b4083d88c5f6b9d09ced12b03fc9b6da6faed2f89bfcc6f8b8859d31bda49779\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"observability_gate_failure\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"run observe stack health and observe stack smoke\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"observe.prove\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"fail\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"observability fitting inventory incomplete: 17 partially_fitted, 40 unfitted, 0 invalid, 0 row_shape_only\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"186a8558de372a77d7da70fe1a0955f3\",\"warnings\":null}],\"traceID\":\"186a8558de372a77d7da70fe1a0955f3\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
     }
   ],
-  "run_id": "run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe",
+  "run_id": "run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [

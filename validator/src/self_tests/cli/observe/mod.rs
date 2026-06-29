@@ -4,6 +4,7 @@ use serde_json::json;
 use std::fs;
 
 mod package;
+mod prove;
 mod query;
 mod run;
 

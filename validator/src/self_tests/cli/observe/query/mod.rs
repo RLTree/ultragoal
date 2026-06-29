@@ -15,6 +15,7 @@ fn observe_green_prove_and_query_helpers_are_typed() {
     let smoke = command(&["observe", "stack", "smoke", "--run-id", "run-smoke"]);
     write_default_receipt(&root, &health, "pass");
     write_default_receipt(&root, &smoke, "pass");
+    write_fitted_inventory(&root);
 
     let prove_path = root.join("prove.json");
     let prove = command_with_receipt(&["observe", "prove", "--run-id", "run-prove"], &prove_path);
@@ -117,6 +118,38 @@ fn write_default_receipt(root: &Path, command: &observe::types::ObserveCommand, 
         observe::telemetry::base_receipt(root, command, status, None).expect("base receipt");
     let path = root.join(command.operation.receipt_rel());
     crate::json_boundary::write_json(&path, &receipt).expect("write receipt");
+}
+
+fn write_fitted_inventory(root: &Path) {
+    let mut rows = serde_json::Map::new();
+    let commands = crate::audit::observability::required_commands()
+        .iter()
+        .map(|command| {
+            rows.insert(
+                (*command).to_string(),
+                json!({
+                    "fitting_status": "fitted",
+                    "fitted_surfaces": ["log", "metric", "trace", "receipt", "query"],
+                    "missing_surfaces": [],
+                    "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+                    "focused_tests": ["observe_green_prove_and_query_helpers_are_typed"],
+                    "receipt_paths": ["validation_artifacts/observability/test-receipt.json"],
+                    "live_query_proof_paths": ["validation_artifacts/observability/test-query.json"],
+                    "claim_impact": "test fixture supports observe prove green path only"
+                }),
+            );
+            json!(command)
+        })
+        .collect::<Vec<_>>();
+    fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory parent");
+    crate::json_boundary::write_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+        &json!({
+            "commands": commands,
+            "fitting_inventory": rows
+        }),
+    )
+    .expect("write fitted inventory");
 }
 
 fn write_bad_live_receipt(root: &Path, operation: ObserveOperation, value: Value) {

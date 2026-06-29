@@ -101,7 +101,6 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
         1
     );
     assert!(root.join(default_receipt.operation.receipt_rel()).is_file());
-
     let health_command = command(&["observe", "stack", "health"]);
     let health_pass = observe::stack::health_receipt(
         &root,

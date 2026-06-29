@@ -18,3 +18,7 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     redaction::check(root, &mut out);
     out
 }
+
+pub(crate) fn required_commands() -> &'static [&'static str] {
+    registry::required_commands()
+}

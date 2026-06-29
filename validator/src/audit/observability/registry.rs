@@ -11,6 +11,10 @@ pub(super) fn check(root: &Path, out: &mut Vec<String>) {
     require_command_inventory(root, out);
 }
 
+pub(crate) fn required_commands() -> &'static [&'static str] {
+    fitting::REQUIRED_COMMANDS
+}
+
 fn require_law_rows(root: &Path, out: &mut Vec<String>) {
     for (rel, key, code) in [
         (

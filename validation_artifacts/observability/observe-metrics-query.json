@@ -6,23 +6,23 @@
     "update_goal_eligibility"
   ],
   "byte_limit": 262144,
-  "candidate_digest": "sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5",
+  "candidate_digest": "sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-c809f46f0090b4b7e6a4b9122413845542805f43e396ac357a4a9d4f361a80d6",
+  "correlation_id": "corr-4c6c249150c636d8afbdd67a05d1d859b28aa1cc2a9689fcb8273f2d08779e09",
   "failure": "",
   "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
-  "query": "ultragoal_command_total{run_id=\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"}",
+  "query": "ultragoal_command_total{run_id=\"run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94\"}",
   "query_kind": "metrics",
-  "result_digest": "sha256:1d55e2a8a755589babccd3d757905e144ff6aee6f59ef0613e8db1b55b094dc5",
+  "result_digest": "sha256:f996a543bc5225584e8e79570d5df6d6aba20fca47ab4eec781c9bf13ea85d62",
   "retention_bound": "2d",
   "row_limit": 100,
   "rows": [
     {
-      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_command_total\",\"candidate_digest\":\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\",\"check_id\":\"missing_receipt\",\"claim_id\":\"final_packet_correctness\",\"command\":\"ultragoalfinal-packet\",\"correlation_id\":\"corr-30126e076293b5e92d4a59933f7d38a8b9dcb796c00d0240c1219bda94767527\",\"exporter\":\"victoriametrics\",\"failure_class\":\"missing_receipt\",\"law_id\":\"final-packet-proof\",\"operation\":\"final-packet.prove\",\"run_id\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\",\"span_id\":\"metric-bd36267ba83a2b5f1084ff55589a192a7c2bce37e72ca77e5ee56a7ac0b09e6e\",\"status\":\"fail\",\"surface\":\"source\",\"trace_id\":\"trace-40a3fe98be2a6b57d4442dc48a978752755abaa327d2d9f153e9a698e5bee017\"},\"value\":[1782776216,\"0\"]}]},\"stats\":{\"seriesFetched\": \"1\",\"executionTimeMsec\":0}}"
+      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_command_total\",\"candidate_digest\":\"sha256:12896961440df6346db3c7953f3170308a01508d46c42eea1341e6472b4f7d69\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"command\":\"observe\",\"correlation_id\":\"corr-b4083d88c5f6b9d09ced12b03fc9b6da6faed2f89bfcc6f8b8859d31bda49779\",\"exporter\":\"victorialogs\",\"failure_class\":\"observability_gate_failure\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"operation\":\"observe.prove\",\"run_id\":\"run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94\",\"span_id\":\"metric-8d421b35321b088b8c579bfb9c40638f371f480f346b5474ccd665131e50b0f8\",\"status\":\"fail\",\"surface\":\"live_stack\",\"trace_id\":\"trace-25f67f0caa1136678cf11cc918b931320eb8d9ac36d6177ae4171000befd1cb9\"},\"value\":[1782776953,\"0\"]}]},\"stats\":{\"seriesFetched\": \"1\",\"executionTimeMsec\":0}}"
     }
   ],
-  "run_id": "run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe",
+  "run_id": "run-ccf98d4da6611e9d5bdccb76892f946c67873159bbd4d15d53f100595a8edd94",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [

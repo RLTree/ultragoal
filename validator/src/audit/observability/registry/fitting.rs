@@ -1,6 +1,6 @@
 use serde_json::{Map, Value};
 
-pub(super) const REQUIRED_COMMANDS: &[&str] = &[
+pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "package digest",
     "source audit",
     "red fixture report",
