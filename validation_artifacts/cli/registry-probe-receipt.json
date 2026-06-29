@@ -7,7 +7,7 @@
     "update_goal_eligibility",
     "app_registry_or_reviewer_exposure"
   ],
-  "candidate_digest": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
+  "candidate_digest": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
   "claim_ceiling": "withheld_or_blocked",
   "command_surface": [
     "ultragoal audit",
@@ -67,12 +67,12 @@
     "ultragoal self update-goal eligibility"
   ],
   "evidence_graph": {
-    "candidate_digest": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
+    "candidate_digest": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
     "evaluation_mode": "production_dereferenced",
     "items": [
       {
-        "candidate_digest": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
-        "digest": "sha256:08608361f103f6b828554ffa9df689e588383659dd13249f49df2cd2b3429cbf",
+        "candidate_digest": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
+        "digest": "sha256:85bfa59ac9b3957cc637311bcd33bc458d1e83f41f484d84957a9ab69c09a2ed",
         "exists": true,
         "failures": [
           "status_not_pass",
@@ -83,17 +83,9 @@
           "plugin_self_law_registry_missing_live_tool_issuer",
           "plugin_self_law_registry_missing_tool_call_identity",
           "plugin_self_law_registry_capture_method_not_live",
-          "plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:disk_cache_synced",
-          "plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:global_toml_present",
           "plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
-          "plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:disk_cache_synced",
-          "plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:global_toml_present",
           "plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
-          "plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:disk_cache_synced",
-          "plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:global_toml_present",
           "plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
-          "plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:disk_cache_synced",
-          "plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:global_toml_present",
           "plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed"
         ],
         "label": "registry_exposure",
@@ -112,17 +104,9 @@
       "registry_surface:plugin_self_law_registry_missing_live_tool_issuer",
       "registry_surface:plugin_self_law_registry_missing_tool_call_identity",
       "registry_surface:plugin_self_law_registry_capture_method_not_live",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:disk_cache_synced",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:global_toml_present",
       "registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:disk_cache_synced",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:global_toml_present",
       "registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:disk_cache_synced",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:global_toml_present",
       "registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:disk_cache_synced",
-      "registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:global_toml_present",
       "registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed"
     ]
   },
@@ -135,20 +119,20 @@
     "gate_id": "89",
     "id": "registry_probe_evidence_not_satisfied",
     "law_id": "cli-control-plane-authority",
-    "observed_value": "registry_surface:plugin_self_law_registry_status_not_pass | registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface | registry_surface:plugin_self_law_registry_wrong_source | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_tool_call_identity | registry_surface:plugin_self_law_registry_capture_method_not_live | registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:disk_cache_synced | registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:global_toml_present | registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:disk_cache_synced | registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:global_toml_present | registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:disk_cache_synced | registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:global_toml_present | registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:disk_cache_synced | registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:global_toml_present | registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure",
+    "observed_value": "registry_surface:plugin_self_law_registry_status_not_pass | registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface | registry_surface:plugin_self_law_registry_wrong_source | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_live_tool_issuer | registry_surface:plugin_self_law_registry_missing_tool_call_identity | registry_surface:plugin_self_law_registry_capture_method_not_live | registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed | registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed | evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures | evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure | evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure",
     "repair_class": "deterministic_enforcement",
     "rerun_command": "ultragoal registry probe --receipt validation_artifacts/cli/registry-probe-receipt.json",
     "severity": "hard_blocker",
     "source_install_cache_impact": "source_only_proof_cannot_support_install_cache_app_registry_claims"
   },
-  "generated_at": "2026-06-29T01:38:57Z",
+  "generated_at": "2026-06-29T03:30:27Z",
   "issuer": {
     "authority": "cli_control_plane",
     "compatibility_binary": "ultragoal-validator",
     "self_law_state": "transition_only",
     "tool": "ultragoal"
   },
-  "notes": "Fail-closed CLI authority receipt. Evidence failures: registry_surface:plugin_self_law_registry_status_not_pass; registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface; registry_surface:plugin_self_law_registry_wrong_source; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_tool_call_identity; registry_surface:plugin_self_law_registry_capture_method_not_live; registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:disk_cache_synced; registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:global_toml_present; registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:disk_cache_synced; registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:global_toml_present; registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:disk_cache_synced; registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:global_toml_present; registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:disk_cache_synced; registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:global_toml_present; registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure",
+  "notes": "Fail-closed CLI authority receipt. Evidence failures: registry_surface:plugin_self_law_registry_status_not_pass; registry_surface:plugin_self_law_registry_claim_ceiling_not_live_surface; registry_surface:plugin_self_law_registry_wrong_source; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_live_tool_issuer; registry_surface:plugin_self_law_registry_missing_tool_call_identity; registry_surface:plugin_self_law_registry_capture_method_not_live; registry_surface:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed; registry_surface:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed; evidence_graph:cli_control_plane_receipt_evidence_graph_has_operation_failures; evidence_graph:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; evidence_graph:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure",
   "operation": "registry_probe",
   "required_evidence": [
     "live_registry_or_reviewer_exposure_same_surface_pass"

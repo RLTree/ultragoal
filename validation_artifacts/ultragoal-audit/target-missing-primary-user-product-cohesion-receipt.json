@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T01:55:19Z",
+    "completed_at": "2026-06-29T03:33:27Z",
     "cwd": "fixtures/target-repo/red/missing-primary-user-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T01:55:19Z",
+    "started_at": "2026-06-29T03:33:27Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T01:55:19Z",
+  "generated_at": "2026-06-29T03:33:27Z",
   "invocation": "fixture init fixtures/target-repo/red/missing-primary-user-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:d6902c88ee0351cb8a5d9a69efee64c1d39d727810af9625c862a5b6722d61fb",
+  "repo_fingerprint": "sha256:dd1c53c2318c32b114cdb6f31c84805118939a904014a2c87570b3ffde1c722c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1040,11 +1040,11 @@
       "path": "validator/src/cli/control/plane/evidence/item.rs"
     },
     {
-      "digest": "sha256:1492a2c6ee1e0cc9ff307b99acdc312c591e0c8ec707676565ead554d1a8a89b",
+      "digest": "sha256:6fc30bdf262a1ac2dfaa9a74e9592ef33dddfc35b17fb18fa3dc9df30d22cba6",
       "path": "validator/src/cli/control/plane/evidence/status.rs"
     },
     {
-      "digest": "sha256:bccd4212a736695c97492a16a7aeca69cef41e57b070cbf90e2a511e189f65a7",
+      "digest": "sha256:9eecaebc631a1e1895348c889025740ae1c3d6c1fba8b2fc7fa4a7657322e3d0",
       "path": "validator/src/cli/control/plane/evidence/status/label_failures.rs"
     },
     {
@@ -1080,7 +1080,7 @@
       "path": "validator/src/cli/control/plane/receipt.rs"
     },
     {
-      "digest": "sha256:e5a3016916c65f3cdfa55fc7ab9ef060c504933a36e50bfafc9a847f5a3e9388",
+      "digest": "sha256:417f505a1defa355c94f4b431fb89000f0539fa76e64fc24a1105d6ee36615d5",
       "path": "validator/src/cli/control/plane/registry.rs"
     },
     {
@@ -1740,7 +1740,7 @@
       "path": "validator/src/self_tests/cli/control/receipts.rs"
     },
     {
-      "digest": "sha256:7265277ca6d11f52ff75f2755d0ba400589898b0a847e74c67cc1574564c9b6b",
+      "digest": "sha256:918217eaf0ed28485052c20e2b4d36d11e0bcbe41fb37ac33eba49127e8756d3",
       "path": "validator/src/self_tests/cli/control/registry.rs"
     },
     {

@@ -3,33 +3,33 @@
     {
       "agent_type": "harness_contract_claim_falsifier",
       "custom_agent_path": "custom-agents/harness-contract-claim-falsifier.toml",
-      "disk_cache_synced": false,
+      "disk_cache_synced": true,
       "exposed": false,
-      "global_toml_present": false,
+      "global_toml_present": true,
       "persona": "contract_claim_falsifier"
     },
     {
       "agent_type": "harness_orchestration_recovery_falsifier",
       "custom_agent_path": "custom-agents/harness-orchestration-recovery-falsifier.toml",
-      "disk_cache_synced": false,
+      "disk_cache_synced": true,
       "exposed": false,
-      "global_toml_present": false,
+      "global_toml_present": true,
       "persona": "orchestration_recovery_falsifier"
     },
     {
       "agent_type": "harness_security_trust_boundary_falsifier",
       "custom_agent_path": "custom-agents/harness-security-trust-boundary-falsifier.toml",
-      "disk_cache_synced": false,
+      "disk_cache_synced": true,
       "exposed": false,
-      "global_toml_present": false,
+      "global_toml_present": true,
       "persona": "security_trust_boundary_falsifier"
     },
     {
       "agent_type": "harness_product_simplicity_falsifier",
       "custom_agent_path": "custom-agents/harness-product-simplicity-falsifier.toml",
-      "disk_cache_synced": false,
+      "disk_cache_synced": true,
       "exposed": false,
-      "global_toml_present": false,
+      "global_toml_present": true,
       "persona": "product_simplicity_falsifier"
     }
   ],
@@ -64,9 +64,9 @@
     "current_claim_ceiling": "withheld_or_blocked",
     "deterministic_repair_target": "provide_live_tool_registry_query_or_keep_claims_blocked",
     "disposition": "open_claim_blocked",
-    "id": "registry-reviewer-exposure-5a7bca9f8a03",
+    "id": "registry-reviewer-exposure-1a86710c5704",
     "missing_capability_class": "live_same_surface_plugin_registry_or_reviewer_exposure",
-    "observed_at": "2026-06-29T01:38:54Z",
+    "observed_at": "2026-06-29T03:30:24Z",
     "owner_surface": "codex_desktop_plugin_registry",
     "required_evidence": [
       "live same-surface tool registry query",
@@ -76,13 +76,13 @@
     ],
     "schema": "harness-ultragoal.capability-gap.v1",
     "source_artifact": {
-      "digest": "sha256:d3391127b19665579c2791c9daf21a272c9aee0e8bd218ce096a81cb11d13390",
+      "digest": "sha256:e5e6766b6d3e8d17f2007b045fa465533ff7c86c102867c7dfe753b0e9ba9053",
       "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
     },
     "source_session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1"
   },
   "capture_method": "fail_closed_no_capability",
-  "captured_at": "2026-06-29T01:38:54Z",
+  "captured_at": "2026-06-29T03:30:24Z",
   "claim_ceiling": "withheld_or_blocked",
   "failure": {
     "blocked_claim_classes": [
@@ -95,27 +95,27 @@
     "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
     "reason": "live_registry_reviewer_exposure_not_proven"
   },
-  "generated_at": "2026-06-29T01:38:54Z",
+  "generated_at": "2026-06-29T03:30:24Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
   },
   "raw_observation": {
-    "digest": "sha256:d3391127b19665579c2791c9daf21a272c9aee0e8bd218ce096a81cb11d13390",
+    "digest": "sha256:e5e6766b6d3e8d17f2007b045fa465533ff7c86c102867c7dfe753b0e9ba9053",
     "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
   },
-  "round_id": "registry_probe-unsupported-live-surface-5a7bca9f8a03",
+  "round_id": "registry_probe-unsupported-live-surface-1a86710c5704",
   "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
   "session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1",
   "source": "ultragoal.registry_probe",
   "status": "fail",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284"
+    "value": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28"
   },
   "tool_call": {
     "arguments_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "call_id": "registry_probe-fail-closed-5a7bca9f8a03",
+    "call_id": "registry_probe-fail-closed-1a86710c5704",
     "name": "ultragoal registry probe"
   }
 }

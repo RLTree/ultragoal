@@ -2184,10 +2184,73 @@ Run and capture exact commands/output for:
 - schema evolution/receipt migration/stale-version invalidation proof
 - failure remediation quality/agent-actionable validator output proof
 - review disagreement/override/judgment-boundary governance proof
+- full local observability stack, CLI queryability, telemetry binding, redaction, boundedness, and non-opaque failure proof
 - source/install/cache digest comparison
 - review-target receipt regeneration
 - candidate archive receipt regeneration
 - final packet/successor packet validation
+
+## Gate 92 - Full Local Observability Stack Integration And Non-Opaque Failure Law
+
+Gate 92 is additive to Gates 1-91. It does not replace, reduce, defer, satisfy, or weaken any existing gate, stop condition, validation requirement, source/install/cache/app-registry separation requirement, CLI authority requirement, coverage law, Product Fitness law, Product Cohesion law, Product Success law, namespace law, final-packet proof, version sync, app-registry proof, or update_goal gate.
+
+The Harness Ultragoal CLI and plugin must be a fully observability-instrumented enforcement product. Any law-bearing command, check, validator path, fixture path, receipt path, proof path, pass/fail output, metric, audit, package surface, claim guard, or update_goal eligibility path that can run without complete logs, metrics, traces, correlation, diagnostics, queryability, redaction, boundedness, and receipt binding fails the candidate.
+
+This gate cannot be satisfied by better error messages, optional diagnostics, local JSON fallback, docs-only setup, Grafana-only inspection, checklist prose, packet text, claim-ceiling language, shell wrappers, row-shape compliance, hidden network calls, stale telemetry, wrong-digest telemetry, uncorrelated telemetry, unredacted telemetry, unbounded telemetry, or opaque failure output.
+
+Required observability stack:
+
+- Docker Compose is the default runtime. Use an existing Docker runtime if present. If Docker runtime is absent and Homebrew is available, install Colima, Docker CLI, and the Docker Compose plugin unless a real technical blocker prevents it. Docker Desktop is acceptable only if already installed or explicitly chosen by the user.
+- If Compose cannot run on this machine, the CLI must mint a fail-closed blocker receipt that blocks Gate 92, readiness, release, completion, final packet, and update_goal. That blocker is not completion.
+- Repo-owned stack files must exist for `dev/observability/compose.yml`, OpenTelemetry Collector config, Vector config, Grafana datasource provisioning, observability event/metric/trace/receipt/query-result schemas, validator checks for every schema, red/green/tamper fixtures, package inventory entries, standards rows, source-obligation rows, foundational trace entries, and CLI command docs generated from the command inventory.
+- Compose must include VictoriaLogs, VictoriaMetrics, VictoriaTraces, OpenTelemetry Collector, Vector, and Grafana. Images must be pinned, not `latest`. Exposed ports must bind to `127.0.0.1`. Retention must be bounded. Volumes must be named. Every service must have a health check. No service may expose public network ports or require secrets. Grafana credentials are local-dev-only and must be documented in receipts as non-production auth.
+
+Required CLI authority:
+
+- Implement through `ultragoal`, not loose shell scripts as authority: `observe stack up`, `observe stack health`, `observe stack smoke`, `observe stack down`, `observe stack gc plan`, `observe stack gc dry-run`, `observe stack gc apply`, `observe logs query`, `observe metrics query`, `observe traces query`, `observe snapshot`, `observe prove`, `observe explain-failure --run-id`, `observe explain-claim --claim-id`, `observe explain-check --check-id`, and `observe explain-law --law-id`.
+- Shell scripts may exist only as implementation helpers. CLI receipts are the authority.
+- A machine-readable command inventory must cover every current and future `ultragoal` command family, including package digest, source audit, red fixture report, schema validation, mandatory-law validation, standards-gardener, source-obligation validation, foundational trace validation, coverage, line caps, namespace, Product Fitness/Cohesion/Journey, fit-repo, review-round, review-target, archive, final-packet proof, registry probe, install audit, cache audit, transactional finalization, CLI self-law, update-goal eligibility, Rust DevX, GC, session-log hardening, target-repo audit, and observability commands.
+- The validator must fail if any command inventory row lacks log instrumentation, metric instrumentation, trace instrumentation, pass output contract, fail output contract, receipt observability binding, focused tests, and claim impact mapping.
+
+Typed telemetry model:
+
+- Every log event, metric sample, trace span, query result, and observability receipt must carry typed fields for schema, run_id, correlation_id, trace_id, span_id, parent_span_id, command, subcommand, operation, surface, law_id, check_id, claim_id, candidate_digest, target_revision, artifact_path, receipt_path, status, failure_class, why_failed, where_failed, next_repair, claim_impact, timestamp, duration_ms, exporter, redaction_status, bounded_output_status, query_hint_logql, query_hint_promql, and query_hint_traceql.
+- Unknown authority fields, freeform authority blobs, missing fields, wrong digest, wrong correlation id, unredacted secrets, and unbounded output fail.
+- Every command and every check must emit structured logs to VictoriaLogs through the live stack and to a bounded local JSONL spool for fallback/forensics. Local JSONL fallback is transition evidence only and cannot complete Gate 92 without live VictoriaLogs ingestion and query proof.
+- Every command and check must emit VictoriaMetrics metrics for command totals/durations, check totals/failures, law failures, receipt dereferences, stale receipts, digest mismatches, claim blocks, red fixture totals/failures, proof graph cycles, registry unsupported events, observability emit failures, exporter retries/drops, stack health, and stack smoke. Labels must be bounded and may not leak secrets or unbounded paths.
+- Every CLI command opens a root span. Validator checks, schema parses, receipt dereferences, fixture runs, claim-ceiling calculations, final-packet dereferences, registry/install/cache probes, and exporter calls create child spans. Broken parentage fails Gate 92.
+
+Pass/fail output and receipt binding:
+
+- Every pass stdout states what was proven, candidate digest, receipt path, observability run id, supported claims, and explicitly unsupported claims.
+- Every fail stdout states failed law/check ids, why it failed, where it failed, claim impact, next repair action, receipt path, run_id/correlation_id, and exact observe query commands for logs, metrics, and traces.
+- Every law-bearing receipt must reference observability receipt path, log stream digest, metric snapshot digest, trace bundle digest, query examples, redaction proof, retention/bounds proof, candidate digest, and run_id/correlation_id.
+- A receipt without current same-candidate observability binding cannot support any Harness claim. Stale, wrong-digest, unqueryable, forgeable, or local-spool-only telemetry fails.
+
+Agent-queryable proof:
+
+- Grafana is a human dashboard only. Agent proof must come from CLI query commands against VictoriaLogs, VictoriaMetrics, and VictoriaTraces.
+- Required query proof includes failed run by run_id, failed law by law_id, failed check by check_id, blocked claim by claim_id, command duration metrics, stale receipt counters, full command trace, and the current `final_packet_proof_source_audit_target_digest_mismatch` failure across logs, metrics, and traces.
+- The current blocker must be visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, `observe logs query`, `observe metrics query`, `observe traces query`, and `observe explain-failure --run-id`.
+
+Security, redaction, and boundedness:
+
+- Telemetry must not leak API keys, tokens, cookies, Authorization headers, database URLs, private local proof paths except typed local-dev category evidence, raw private session logs, or full user home paths in public/package claims.
+- Validator checks must inspect logs, metric labels, traces, receipts, query output, and local spool for leaks.
+- Every query must have row limit, byte limit, timeout, retention bound, cardinality guard, output truncation marker, and claim impact when truncated.
+- Hidden background exporters, spawn-and-forget telemetry tasks, unmanaged child processes, unbounded retention, unbounded queues, and public port binding fail.
+
+Fixtures and law surfaces:
+
+- Add red fixtures for missing log event, missing metric, missing trace, missing or mismatched correlation id, wrong candidate digest, stale telemetry, unredacted secret, private path leak, public port binding, unbounded retention, unbounded query, hidden network endpoint, missing repair hint, opaque pass output, opaque fail output, receipt without observability binding, forged log bundle, forged metric bundle, forged trace bundle, metric/log/trace digest mismatch, broken span parentage, command missing from inventory, command inventory row without instrumentation proof, and local JSON fallback used as completion proof.
+- Add green fixtures for complete live-stack observability and tamper fixtures for forged telemetry.
+- Gate 92 must have same-law-id enforcement across agent standards, source obligations, foundational trace, schemas, validator check ids, red fixtures, green fixtures, tamper fixtures, receipts, package inventory, claim guards, and final packet fields.
+- Observability configs and schemas are package resources. Source stack proof does not imply installed plugin observability proof. Installed plugin proof does not imply app-registry/reviewer exposure. Cache proof does not imply live stack proof. Every surface must identify which surface emitted telemetry.
+
+Required Gate 92 validation:
+
+- Run and record runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
+- Do not refresh install/cache, bump version, finalize packet, claim registry/reviewer exposure, claim readiness/release/completion, launch parallel lanes, or call update_goal until Gate 92 and all prior gates pass on the same candidate digest.
 
 Do not call `update_goal()` until all are true:
 
@@ -2310,6 +2373,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 102. Validator source namespace topology and semantic repo-law enforcement are proven by physical source-tree repair, removal of broad `validator/src/internal*` exceptions, typed narrow exception parsing, actual repo-owned source inspection, red/green/tamper fixtures, package inventory exactly-once closure, 100 percent coverage preservation, source audit pass, and a calculated confidence score of at least 99 percent supported by evidence. No completion, review, package, readiness, release, CLI self-law, final packet, or update_goal claim may pass while top-level `validator/src/internal_*.rs`, `validator/src/internal_coverage*.rs`, `validator/src/iinternal_*.rs`, or equivalent prefix-as-directory source clusters remain accepted by the law.
 
 103. Rust Developer Experience, runtime memory/resource discipline, and workspace/artifact/cache garbage collection are proven by CLI-routed Rust command loops, current toolchain/substrate receipt, fast/standard/release/clean-proof/watch observation command surfaces, exact coverage proof, dependency/security/supply-chain proof where applicable, cache/no-cache honesty receipt, performance budget receipt, memory/resource receipt, GC plan/dry-run/apply/verify receipts where cleanup is performed, standards/source-obligation/foundational-trace bindings, red/green/tamper fixtures, source audit pass, and calculated confidence of at least 96 percent supported by evidence. No completion, review, package, readiness, release, Product Fitness, Product Cohesion, Product Success, CLI self-law, final packet, or update_goal claim may pass from raw Cargo/tool output, hidden cache state, watcher/editor state, unbounded Rust runtime resources, unmanaged long-running tasks, blind cleanup, deletion without receipt, or stale Rust DevX/memory/GC proof.
+
+104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
 Final response must include:
 - exact files changed

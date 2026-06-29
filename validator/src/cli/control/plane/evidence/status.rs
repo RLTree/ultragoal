@@ -144,7 +144,7 @@ fn package_surface_failures(
     .map(|failure| format!("package_surface_audit_schema:{failure}"))
     .collect::<Vec<_>>();
     out.extend(
-        crate::cli::control::plane::surface::same_candidate_pass_failures(
+        crate::cli::control::plane::surface::same_candidate_pass_or_fail_closed_failures(
             value, expected, operation,
         ),
     );

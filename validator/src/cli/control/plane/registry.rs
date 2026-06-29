@@ -1,6 +1,6 @@
 use crate::cli::control::plane::types::ControlOperation;
 use serde_json::json;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 mod capability;
 
@@ -78,7 +78,7 @@ pub(crate) fn mint_fail_closed_if_needed(
         "round_id": fail_closed_round_id(operation, candidate),
         "raw_observation": {"path": RAW_OBSERVATION, "digest": raw_digest},
         "capability_gap": capability::gap::record(candidate, &now, &session_id, &raw_digest),
-        "agent_types": fail_closed_agent_types(),
+        "agent_types": agent_types_with_local_state(root),
         "failure": {
             "reason": "live_registry_reviewer_exposure_not_proven",
             "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
@@ -167,7 +167,18 @@ fn existing_live_pass(root: &Path) -> Result<bool, String> {
     Ok(crate::audit::plugin::registry::value_failures(root, &store, &receipt).is_empty())
 }
 
-fn fail_closed_agent_types() -> Vec<serde_json::Value> {
+fn agent_types_with_local_state(root: &Path) -> Vec<serde_json::Value> {
+    agent_types_for_home(root, std::env::var_os("HOME").map(PathBuf::from))
+}
+
+pub(crate) fn agent_types_for_home(root: &Path, home: Option<PathBuf>) -> Vec<serde_json::Value> {
+    let plugin = crate::cli::control::plane::surface::target::plugin_metadata(root);
+    let home_root = crate::cli::control::plane::surface::target::home_root_from(root, home);
+    let install_root = home_root.join(".codex/plugins/harness-ultragoal");
+    let cache_root = home_root
+        .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal")
+        .join(&plugin.version);
+    let global_agent_root = home_root.join(".codex/agents");
     [
         (
             "harness_contract_claim_falsifier",
@@ -192,14 +203,28 @@ fn fail_closed_agent_types() -> Vec<serde_json::Value> {
     ]
     .into_iter()
     .map(|(agent_type, persona, custom_agent_path)| {
+        let source_path = root.join(custom_agent_path);
+        let disk_cache_synced =
+            same_file_digest(&source_path, &install_root.join(custom_agent_path))
+                && same_file_digest(&source_path, &cache_root.join(custom_agent_path));
+        let global_toml_present = Path::new(custom_agent_path)
+            .file_name()
+            .is_some_and(|name| same_file_digest(&source_path, &global_agent_root.join(name)));
         json!({
             "agent_type": agent_type,
             "persona": persona,
             "custom_agent_path": custom_agent_path,
-            "disk_cache_synced": false,
-            "global_toml_present": false,
+            "disk_cache_synced": disk_cache_synced,
+            "global_toml_present": global_toml_present,
             "exposed": false
         })
     })
     .collect()
+}
+
+fn same_file_digest(left: &Path, right: &Path) -> bool {
+    match (crate::digest::file(left), crate::digest::file(right)) {
+        (Ok(left), Ok(right)) => left == right,
+        _ => false,
+    }
 }

@@ -128,6 +128,43 @@ fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
     std::fs::remove_dir_all(root).expect("cleanup cli registry runtime boundary");
 }
 
+#[test]
+fn registry_probe_fail_closed_rows_report_local_disk_and_global_truth() {
+    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-local-truth");
+    let home = root.join("home");
+    write_json(
+        &root.join(".codex-plugin/plugin.json"),
+        &json!({"name":"harness-ultragoal","version":"0.0.0-test"}),
+    );
+    for (_, _, custom_agent_path) in reviewer_specs() {
+        let source = root.join(custom_agent_path);
+        let install = home
+            .join(".codex/plugins/harness-ultragoal")
+            .join(custom_agent_path);
+        let cache = home
+            .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.0-test")
+            .join(custom_agent_path);
+        let global = home.join(".codex/agents").join(
+            Path::new(custom_agent_path)
+                .file_name()
+                .expect("agent file"),
+        );
+        for path in [&source, &install, &cache, &global] {
+            std::fs::create_dir_all(path.parent().expect("parent")).expect("mkdir");
+            std::fs::write(path, format!("name = \"{}\"\n", custom_agent_path)).expect("write");
+        }
+    }
+
+    let rows = crate::cli::control::plane::registry::agent_types_for_home(&root, Some(home));
+    assert!(rows.iter().all(|row| {
+        row["disk_cache_synced"] == json!(true)
+            && row["global_toml_present"] == json!(true)
+            && row["exposed"] == json!(false)
+    }));
+
+    std::fs::remove_dir_all(root).expect("cleanup cli registry local truth");
+}
+
 fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Value {
     json!({
         "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
@@ -153,6 +190,22 @@ fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Valu
 }
 
 fn agent_types() -> Vec<Value> {
+    reviewer_specs()
+        .into_iter()
+        .map(|(agent_type, persona, custom_agent_path)| {
+            json!({
+                "agent_type": agent_type,
+                "persona": persona,
+                "custom_agent_path": custom_agent_path,
+                "disk_cache_synced": true,
+                "global_toml_present": true,
+                "exposed": true
+            })
+        })
+        .collect()
+}
+
+fn reviewer_specs() -> Vec<(&'static str, &'static str, &'static str)> {
     [
         (
             "harness_contract_claim_falsifier",
@@ -176,15 +229,5 @@ fn agent_types() -> Vec<Value> {
         ),
     ]
     .into_iter()
-    .map(|(agent_type, persona, custom_agent_path)| {
-        json!({
-            "agent_type": agent_type,
-            "persona": persona,
-            "custom_agent_path": custom_agent_path,
-            "disk_cache_synced": true,
-            "global_toml_present": true,
-            "exposed": true
-        })
-    })
     .collect()
 }

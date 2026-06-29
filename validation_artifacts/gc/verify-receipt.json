@@ -33,8 +33,6 @@
       ".",
       "gc",
       "verify",
-      "--plan-digest",
-      "sha256:aff215b46b5861608746e7ce9d349dbc1de0f85182407cf7bf2f406c06971408",
       "--receipt",
       "validation_artifacts/gc/verify-receipt.json"
     ],
@@ -44,15 +42,15 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:aff215b46b5861608746e7ce9d349dbc1de0f85182407cf7bf2f406c06971408"
+    "plan_digest": "sha256:fc28d553a12293eae94296a7a472f5401832e539f85cb7ddeb23cea4977102df"
   },
   "digests": {
-    "candidate": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
+    "candidate": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
     "fixture_catalog": "sha256:a925bc02011f7c4f767e078503add4f2409f756c99e1a904f5ade5c14b845794",
     "law_graph": "sha256:bdf2b059070fb521517b713c1287ed338dbf980096ef0cadce9067dd838f431f",
     "schema_catalog": "sha256:cc0a4ba2dd1e1755eac7d70b72387d21ed9d1d5452c2746193cfb04295b0ad56"
   },
-  "generated_at": "2026-06-29T01:38:29Z",
+  "generated_at": "2026-06-29T03:30:03Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

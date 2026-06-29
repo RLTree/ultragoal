@@ -262,7 +262,7 @@
       "validator/src/self_tests/standards/gardener.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:71782f048341a8868c532d6d7fa3088ae83f8aae90b14fd7096c817bfc8a4a0e",
+    "changed_files_digest": "sha256:45a810bdc3b858b1085a1493d78a17c5396c45f43379876146f0da4b7170799d",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -310,7 +310,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:b4d7414f6539c014866d6ae3ff87c23ff924b5c61b3c9f4332abfc519aadaa8c",
+  "repo_root_digest": "sha256:a504abf1a0b4b1668b1ecaeee20a9143172ead552b8f228f3b8701187dd43924",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

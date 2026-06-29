@@ -321,22 +321,22 @@ that surface is required by the contract.
 - [ ] Gate 3 status: in_progress
 - [ ] Gate 3: Product Fitness is current, same-candidate, and substitution-proof.
 - [ ] Gate 3: Every contract sub-requirement is satisfied.
-- [ ] Gate 3 evidence path: Source-local Product/Fit/Journey receipts are current for package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Command `target/debug/ultragoal --root . product prove-fitness --receipt-dir validation_artifacts/harness` exited `0`. Evidence file digests: `validation_artifacts/harness/fit-repo-receipt.json = sha256:336ff21c8537541126fbe8d3c411b46c47cb0ebbe0881088b2c1cb272f04647c`; `validation_artifacts/harness/product-fitness-receipt.json = sha256:d3004bc294a9a161bfb92a9cba440b693991d5423dcc6358364a6e97f98da3c2`; `validation_artifacts/harness/plugin-product-journey-receipt.json = sha256:ebee43187fc69b2e3e9076c7bda9abc62a935c38fb107afa1c2e2ddeb9cb1ed5`. Claim impact: supports source-local Product/Fit/Journey evidence only; does not support registry/reviewer exposure, readiness, release, completion, or update_goal eligibility. Gate remains unchecked until every Gate 3 contract sub-requirement is verified by the allowed post-repair source audit/red report, not merely receipt creation.
+- [ ] Gate 3 evidence path: Source-local Product/Fit/Journey receipts are current for package digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Command `target/debug/ultragoal --root . product prove-fitness --receipt-dir validation_artifacts/harness` exited `0`. Evidence file digests: `validation_artifacts/harness/fit-repo-receipt.json = sha256:ca70278d651303ce1f14d1aed4886d67aa2738532e03caccedae34287a5c5e38`; `validation_artifacts/harness/product-fitness-receipt.json = sha256:72652c3f35f4d26642748ce8487356adebd7b804c833535081c8ae44698df83a`; `validation_artifacts/harness/plugin-product-journey-receipt.json = sha256:20ecf2fa404e8312de3c6abb3f6111ebcabf5b481a0d4b81fda8f60a6246bdab`. Claim impact: supports source-local Product/Fit/Journey evidence only; does not support registry/reviewer exposure, readiness, release, completion, or update_goal eligibility.
 
 - [ ] Gate 4 status: in_progress
 - [ ] Gate 4: Source/install/cache/app-registry separation is enforced.
 - [ ] Gate 4: Every contract sub-requirement is satisfied.
-- [ ] Gate 4 evidence path: Source/install/cache disk package parity is current for package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Source, installed plugin root `/Users/terrynoblin/.codex/plugins/harness-ultragoal`, and cache root `/Users/terrynoblin/.codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.11` each returned package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Install audit command `target/debug/ultragoal --root . install audit --receipt validation_artifacts/cli/install-audit-receipt.json` exited `0`; receipt `validation_artifacts/cli/install-audit-receipt.json = sha256:031bbfd24eadc79854adc2eb42e63f2968ea75f7eff36df4dce879ff9d6455ea`, `status = pass`, `same_candidate = true`, `claim_ceiling = surface_package_digest_aligned`. Cache audit command `target/debug/ultragoal --root . cache audit --receipt validation_artifacts/cli/cache-audit-receipt.json` exited `0`; receipt `validation_artifacts/cli/cache-audit-receipt.json = sha256:d8e0bb1510f2ff664931593407f0d47acc0b64416722dc18b3b94b195831ca69`, `status = pass`, `same_candidate = true`, `claim_ceiling = surface_package_digest_aligned`. Claim impact: proves only disk source/install/cache package parity; it does not prove Plugins UI, marketplace, install button, launcher runtime, active registry, reviewer exposure, readiness, release, completion, or `update_goal()` eligibility. Gate remains unchecked until every Gate 4 contract sub-requirement, including app-registry/reviewer exposure or mechanical claim blocking, is complete.
+- [ ] Gate 4 evidence path: Source now resolves to `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Current install and cache audit receipts are same-candidate fail-closed blockers, not parity proof: `validation_artifacts/cli/install-audit-receipt.json = sha256:dad09886a7970ea53500b1552003222910c25f12f484f74a78bf7f0580a45fac`; `validation_artifacts/cli/cache-audit-receipt.json = sha256:68e5bf883400f78cd8b0b87e412a1fbea228040520e7620dd5caf37d2f366d35`. Claim impact: no current install/cache/app-registry/reviewer/readiness claim is supported.
 
 - [ ] Gate 5 status: in_progress
 - [ ] Gate 5: Plugin self-law coverage is exactly 100% for declared repo-owned scope.
 - [ ] Gate 5: Every contract sub-requirement is satisfied.
-- [ ] Gate 5 evidence path: Coverage proof is current for package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Command: `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0`. Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:a3948febe1e5acd1bca166dd6da8f5bf6b0e6f1611767bb75e14f59c29edce2d`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:34e22640db31ab41aa882473d2bc5eb1ff5cc56a1b9cc98c7c6713e0f14d79f9`; `validation_artifacts/coverage/missing-lines.txt = sha256:5655fdd9fca93c7b63a6acbe14c368b013bb75c2efa9f6bf0b2b2b82661f93d4`. Receipt: `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_claim`. Claim impact: supports source-local coverage only; it does not support source audit, red fixture propagation, readiness, release, final packet, registry/reviewer exposure, or `update_goal()` eligibility.
+- [ ] Gate 5 evidence path: Coverage proof is current for package digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Command `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0`. Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:90363bf478b6707b983151240df02be05cd5a03fb1fde241c0dc0c1d6f71c621`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:f9ee7d4952491ac8d67ca44dacece24ad543ac15241e822d323b3119f494bee8`; `validation_artifacts/coverage/missing-lines.txt = sha256:aa4c33b78653dd1b348c9022b5542e434857db17a5a5586f7d621299f9609fb6`. Receipt: `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_claim`. Claim impact: supports source-local coverage and source-audit coverage checks only; it does not support readiness, release, final packet correctness, registry/reviewer exposure, or `update_goal()` eligibility.
 
 - [ ] Gate 6 status: in_progress
 - [ ] Gate 6: Stale receipt and red fixture propagation is repaired and fails stale proof.
 - [ ] Gate 6: Every contract sub-requirement is satisfied.
-- [ ] Gate 6 evidence path: Red fixture report is current for package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`, but full Gate 6 remains unchecked until every stale-receipt and propagation sub-requirement is validated across the broader contract. Command `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`. Evidence: `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:24a963f780f46d8653a71d37f6e113c8ea178c1fd8a72f424e2b6a3f94b7ce78`, `status = pass`, `1213/1213` fixtures passing intended failures. Claim impact: supports source-local red-fixture propagation only; does not support readiness, release, final packet, registry/reviewer exposure, or `update_goal()` eligibility.
+- [ ] Gate 6 evidence path: Current red fixture report targets package digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28` and passes `1213/1213` intended red rows. Evidence: `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:e28090b7810b10a6d34e206c918c76275df859666742a3c1f5885b9006472ef7`; command `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`. Claim impact: red-fixture propagation is source-local current only; it does not support readiness, release, final packet correctness, registry/reviewer exposure, or `update_goal()` eligibility.
 
 - [ ] Gate 7 status:
 - [ ] Gate 7: Typed parsing and boundary authority is enforced.
@@ -371,7 +371,7 @@ that surface is required by the contract.
 - [ ] Gate 13 status: in_progress
 - [ ] Gate 13: Plugin version is bumped after all hardening and synchronized across source/install/cache/package metadata.
 - [ ] Gate 13: Every contract sub-requirement is satisfied.
-- [ ] Gate 13 evidence path: Source manifests currently show version `0.0.11` in `.codex-plugin/plugin.json` and `plugin-manifest-draft.json`; installed/cache disk copies now agree with source metadata and package digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Gate remains unchecked because the final required version bump is explicitly after all hardening, final packet correctness, app-surface claim handling, and update-goal eligibility are complete.
+- [ ] Gate 13 evidence path: Source manifests currently show version `0.0.11` in `.codex-plugin/plugin.json` and `plugin-manifest-draft.json`. Prior installed/cache disk copies agree with old digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`, but source now resolves to `sha256:6aae1937e63761d78a09dc68cda7c2c46ef7cd55ce303a340b2d689d28c0c9f5`; installed/cache metadata is stale until source compliance is rerun and sync is repeated. Gate remains unchecked because the final required version bump is explicitly after all hardening, final packet correctness, app-surface claim handling, and update-goal eligibility are complete.
 
 - [ ] Gate 14 status:
 - [ ] Gate 14: Architecture dependency topology is first-class and fail-closed.
@@ -1846,27 +1846,27 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status:
 
-- [ ] Line-cap proof passes after topology repair.
-  - Evidence:
-  - Command:
-  - Receipt:
-  - Candidate digest:
-  - Status:
+- [x] Line-cap proof passes after topology repair.
+  - Evidence: filtered scan emitted no files above 250 lines.
+  - Command: `find validator/src -name '*.rs' -exec awk 'FNR==1 { if (seen && n > 250) print n, f; seen=1; n=0; f=FILENAME } { n++ } END { if (seen && n > 250) print n, f }' {} +` exited `0`.
+  - Receipt: command output empty.
+  - Candidate digest: `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`.
+  - Status: current line-cap observation only; does not prove readiness, release, final packet correctness, registry/reviewer exposure, or `update_goal()` eligibility.
 
 - [x] Coverage proof remains exactly 100 percent with `uncovered_records = []` after topology repair.
-  - Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:a3948febe1e5acd1bca166dd6da8f5bf6b0e6f1611767bb75e14f59c29edce2d`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:34e22640db31ab41aa882473d2bc5eb1ff5cc56a1b9cc98c7c6713e0f14d79f9`; `validation_artifacts/coverage/missing-lines.txt = sha256:5655fdd9fca93c7b63a6acbe14c368b013bb75c2efa9f6bf0b2b2b82661f93d4`.
+  - Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:90363bf478b6707b983151240df02be05cd5a03fb1fde241c0dc0c1d6f71c621`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:f9ee7d4952491ac8d67ca44dacece24ad543ac15241e822d323b3119f494bee8`; `validation_artifacts/coverage/missing-lines.txt = sha256:aa4c33b78653dd1b348c9022b5542e434857db17a5a5586f7d621299f9609fb6`.
   - Command: `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0`.
   - Receipt: `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_claim`.
-  - Candidate digest: `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`.
+  - Candidate digest: `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`.
   - Status: current for coverage only; does not check source audit, final packet, registry/reviewer exposure, readiness, release, or `update_goal()` eligibility.
 
-- [ ] Full source audit with red fixture report passes after topology repair.
-  - Evidence:
-  - Command:
-  - Receipt:
-  - Red report:
-  - Candidate digest:
-  - Status:
+- [x] Full source audit with red fixture report passes after topology repair.
+  - Evidence: source audit passes `149/149` checks and red report passes `1213/1213` intended red rows.
+  - Command: `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`.
+  - Receipt: `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:aed7321a01d731072069dc217b67890cc244912f5e9ae38901809c0b70d4d5a9`.
+  - Red report: `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:e28090b7810b10a6d34e206c918c76275df859666742a3c1f5885b9006472ef7`.
+  - Candidate digest: `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`.
+  - Status: current source-local audit/red proof only; does not prove install/cache parity, final packet correctness, active registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility.
 
 - [ ] Source/install/cache package evidence is regenerated after source passes, and only after source passes.
   - Evidence:
@@ -1954,10 +1954,10 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - Status:
 
 - [x] `cargo llvm-cov` is the canonical Rust coverage proof path for declared Rust scope, with exact 100 percent coverage, `uncovered_records = []`, candidate/source/toolchain binding, and anti-gaming checks.
-  - Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:a3948febe1e5acd1bca166dd6da8f5bf6b0e6f1611767bb75e14f59c29edce2d`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:34e22640db31ab41aa882473d2bc5eb1ff5cc56a1b9cc98c7c6713e0f14d79f9`; `validation_artifacts/coverage/missing-lines.txt = sha256:5655fdd9fca93c7b63a6acbe14c368b013bb75c2efa9f6bf0b2b2b82661f93d4`.
+  - Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:e197a23bf488761ee1402beb317882709289e0a845946b04cc7d584540cce27d`; `validation_artifacts/coverage/llvm-cov-full.json = sha256:96cbee1bf89c83aa98d19e5fa4ce46b060ff9225329c0ca4c71c4391e4449f5f`; `validation_artifacts/coverage/missing-lines.txt = sha256:5e543e8e5684e253630e299d12732053e4849320d98903cb190cfcda17ec127f`.
   - CLI command: `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0`.
-  - Receipt: `target_revision.value = sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`, `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_claim`.
-  - Candidate digest: `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`.
+  - Receipt: `target_revision.value = sha256:6aae1937e63761d78a09dc68cda7c2c46ef7cd55ce303a340b2d689d28c0c9f5`, `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_claim`.
+  - Candidate digest: `sha256:6aae1937e63761d78a09dc68cda7c2c46ef7cd55ce303a340b2d689d28c0c9f5`.
   - Status: current for coverage proof only; broader Gate 91 and source audit remain unchecked.
 
 - [ ] Required typed-boundary and diagnostics crates or same-law replacements are governed: `serde`, `schemars`, `jsonschema`, `serde_path_to_error`, `clap` typed enums, `camino`, `thiserror`, `miette`, and `tracing`.
@@ -2342,25 +2342,283 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - Candidate digest:
   - Status:
 
+## Checklist Addition: Gate 92 - Full Local Observability Stack Integration And Non-Opaque Failure Law
+
+This checklist section is a tracking surface only. It does not weaken Gate 92 and does not replace Gates 1-91, source/install/cache/app-registry separation, CLI authority, CLI self-law, coverage, Product Fitness, Product Cohesion, Product Success, namespace law, final-packet proof, version sync, or update_goal gates. Do not check an item unless the implementation is represented in standards rows, source-obligation rows, foundational trace entries, schemas, validator checks, red/green/tamper fixtures, package inventory, claim guards, CLI receipts, live stack receipts, and current same-candidate evidence.
+
+### Gate 92.1: Doctrine And Stop Conditions
+
+- [ ] Gate 92 is represented in the canonical prompt, checklist, required claim graph, stop condition 104, standards rows, source-obligation rows, foundational trace, schema catalog, validator checks, fixtures, receipts, package inventory, claim guards, and final packet fields.
+  - Evidence:
+  - Command:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] No law-bearing command, check, validator path, fixture path, receipt path, proof path, pass/fail output, metric, audit, package surface, claim guard, or update_goal eligibility path can run without complete logs, metrics, traces, correlation, diagnostics, queryability, redaction, boundedness, and receipt binding.
+  - Evidence:
+  - Command inventory:
+  - Validator check:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] Local JSON fallback, Grafana-only inspection, docs-only setup, checklist prose, packet text, claim-ceiling language, shell wrapper output, row-shape compliance, and stale/wrong-digest telemetry cannot satisfy Gate 92 or any completion-adjacent claim.
+  - Evidence:
+  - Red fixtures:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+### Gate 92.2: Repo-Owned Stack And Runtime Setup
+
+- [ ] Docker/Compose runtime detection is CLI-routed, receipt-bound, and blocks Gate 92 when Compose cannot run.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] Repo-owned stack files exist and are package-included: `dev/observability/compose.yml`, `dev/observability/otel-collector/config.yaml`, `dev/observability/vector/vector.yaml`, and `dev/observability/grafana/provisioning/datasources/datasources.yml`.
+  - Evidence:
+  - Package inventory entries:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Observability schemas exist and are validator-owned: `schemas/observability-event.schema.json`, `schemas/observability-metric.schema.json`, `schemas/observability-trace.schema.json`, `schemas/observability-receipt.schema.json`, and `schemas/observability-query-result.schema.json`.
+  - Evidence:
+  - Schema catalog:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Compose stack includes VictoriaLogs, VictoriaMetrics, VictoriaTraces, OpenTelemetry Collector, Vector, and Grafana with pinned images, `127.0.0.1` port bindings, bounded retention, named volumes, service health checks, no public ports, and no production secrets.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+### Gate 92.3: CLI Observability Commands
+
+- [ ] `ultragoal observe stack up`, `health`, `smoke`, `down`, `gc plan`, `gc dry-run`, and `gc apply` are implemented, typed, receipt-bound, and validator-enforced.
+  - Evidence:
+  - Command inventory:
+  - Receipts:
+  - Candidate digest:
+  - Status:
+
+- [ ] `ultragoal observe logs query`, `metrics query`, `traces query`, `snapshot`, `prove`, `explain-failure --run-id`, `explain-claim --claim-id`, `explain-check --check-id`, and `explain-law --law-id` are implemented, typed, bounded, receipt-bound, and validator-enforced.
+  - Evidence:
+  - Command inventory:
+  - Receipts:
+  - Candidate digest:
+  - Status:
+
+- [ ] Shell scripts, raw Docker commands, raw Grafana inspection, and local JSON spool output cannot act as Harness claim authority without CLI receipts.
+  - Evidence:
+  - Red fixtures:
+  - Validator check:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+### Gate 92.4: Typed Telemetry, Logs, Metrics, And Traces
+
+- [ ] Every observability event, metric sample, trace span, query result, and observability receipt carries typed fields for schema, run/correlation/span ids, command, operation, surface, law/check/claim ids, candidate digest, artifact/receipt paths, status, failure class, why/where/next repair, claim impact, timestamp, duration, exporter, redaction status, bounded output status, and query hints.
+  - Evidence:
+  - Schemas:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Unknown authority fields, freeform authority blobs, missing fields, wrong digest, wrong correlation id, unredacted secrets, and unbounded output fail validation.
+  - Evidence:
+  - Red fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every command and every check emits structured logs to VictoriaLogs and bounded local JSONL fallback, with failure logs naming failed law/check, pointer/path, digest, reason, blocked claim, next repair, and query hints.
+  - Evidence:
+  - Live query:
+  - Local spool:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every command and check emits bounded VictoriaMetrics metrics for commands, durations, check failures, law failures, receipt dereferences, stale receipts, digest mismatches, claim blocks, red fixtures, proof graph cycles, registry unsupported events, exporter retries/drops, stack health, and stack smoke.
+  - Evidence:
+  - Live query:
+  - Metric snapshot:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every CLI command opens a root span, validator/schema/receipt/fixture/claim/packet/surface/exporter operation creates child spans, and broken parentage fails Gate 92.
+  - Evidence:
+  - Live query:
+  - Trace bundle:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+### Gate 92.5: Command Inventory And Output Contracts
+
+- [ ] Machine-readable command inventory covers every current `ultragoal` command family and fails future commands until inventory, instrumentation, tests, and claim-impact mapping are added.
+  - Evidence:
+  - Inventory path:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every pass stdout states what was proven, candidate digest, receipt path, observability run id, supported claims, and explicitly unsupported claims.
+  - Evidence:
+  - Focused tests:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every fail stdout states failed law/check ids, why, where, claim impact, next repair action, receipt path, run/correlation ids, and exact observe query commands for logs, metrics, and traces.
+  - Evidence:
+  - Focused tests:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+### Gate 92.6: Receipt Binding And Agent-Queryable Proof
+
+- [ ] Every law-bearing receipt references observability receipt path, log stream digest, metric snapshot digest, trace bundle digest, query examples, redaction proof, retention/bounds proof, candidate digest, and run/correlation ids.
+  - Evidence:
+  - Validator check:
+  - Red fixtures:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] Agent proof comes from CLI queries against VictoriaLogs, VictoriaMetrics, and VictoriaTraces; Grafana inspection is not claim authority.
+  - Evidence:
+  - Query commands:
+  - Receipts:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] Required query proof covers failed run by run_id, failed law by law_id, failed check by check_id, blocked claim by claim_id, command duration metrics, stale receipt counters, full command trace, and current proof-graph failure across logs, metrics, and traces.
+  - Evidence:
+  - Query results:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+### Gate 92.7: Security, Redaction, Boundedness, And Resource Discipline
+
+- [ ] Logs, metrics labels, traces, receipts, query output, and local spool reject API keys, tokens, cookies, Authorization headers, database URLs, private local proof paths except typed local-dev category evidence, raw private session logs, and full user home paths in public/package claims.
+  - Evidence:
+  - Red fixtures:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every query has row limit, byte limit, timeout, retention bound, cardinality guard, truncation marker, and claim impact when truncated.
+  - Evidence:
+  - Focused tests:
+  - Query receipts:
+  - Candidate digest:
+  - Status:
+
+- [ ] Hidden background exporters, spawn-and-forget telemetry tasks, unmanaged child processes, unbounded queues, unbounded retention, and public port binding fail Gate 92.
+  - Evidence:
+  - Red fixtures:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+### Gate 92.8: Fixtures, Standards, Traceability, And Package Integration
+
+- [ ] Observability red fixtures cover missing log, metric, trace, correlation id, wrong digest, stale telemetry, leaks, public ports, unbounded retention/query, hidden endpoints, missing repair hint, opaque pass/fail output, missing receipt binding, forged bundles, digest mismatches, broken span parentage, missing command inventory row, missing instrumentation proof, and local JSON fallback used as completion proof.
+  - Evidence:
+  - Red fixture ids:
+  - Red report:
+  - Candidate digest:
+  - Status:
+
+- [ ] Green fixtures prove complete live-stack observability and tamper fixtures reject forged telemetry.
+  - Evidence:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Gate 92 has same-law-id enforcement across agent standards, source obligations, foundational trace, schemas, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory, claim guards, and final packet fields.
+  - Evidence:
+  - Standards rows:
+  - Source obligations:
+  - Trace entries:
+  - Candidate digest:
+  - Status:
+
+- [ ] Observability configs and schemas are package resources, and source, installed plugin, cache, live stack, app-registry, and reviewer exposure observability proofs remain separate and non-substitutable.
+  - Evidence:
+  - Package inventory:
+  - Validator check:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+### Gate 92.9: Stack Health, Smoke, Current Failure, And Final Validation
+
+- [ ] Stack health proves VictoriaLogs, VictoriaMetrics, VictoriaTraces, OpenTelemetry Collector, Vector, and Grafana are running and healthy.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] Stack smoke proves log ingestion/query, metric ingestion/query, trace ingestion/query, and one correlated ultragoal CLI run visible in all three stores.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] The current proof-graph failure is visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, observe query commands, and `observe explain-failure --run-id`.
+  - Evidence:
+  - Run id:
+  - Query commands:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] Gate 92 validation commands run: runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
+  - Evidence:
+  - Commands:
+  - Receipts:
+  - Candidate digest:
+  - Status:
+
 ## Required Validation Evidence
 
 - [ ] Status: in_progress
 - [x] Run `cargo fmt --check`.
 - [ ] Run `cargo test --offline`.
-- [x] Run full source audit with receipt and red fixture report.
-- [x] Run full installed plugin audit.
-- [x] Run full cache package audit.
+- [x] Run full source audit with receipt and red fixture report. Evidence: `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`; `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:aed7321a01d731072069dc217b67890cc244912f5e9ae38901809c0b70d4d5a9` passes `149/149`; `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:e28090b7810b10a6d34e206c918c76275df859666742a3c1f5885b9006472ef7` passes `1213/1213`; target digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: source-local audit/red proof only.
+- [ ] Run full installed plugin audit.
+- [ ] Run full cache package audit.
 - [x] Run coverage command proving 100%.
-- [x] Run Rust toolchain/substrate receipt proof.
-- [x] Run Rust fast loop receipt proof.
-- [x] Run Rust standard loop receipt proof.
-- [x] Run Rust release loop receipt proof for requested release/package/product claims.
-- [x] Run Rust clean-proof/no-hidden-local-magic receipt proof.
-- [ ] Run Rust cache/no-cache honesty receipt proof.
-- [x] Run Rust dependency/security/supply-chain receipt proof.
-- [x] Run Rust performance budget receipt proof.
-- [x] Run Rust memory/resource discipline receipt proof.
-- [x] Run workspace/artifact/cache GC plan, dry-run, apply, and verify receipt proof where cleanup is performed.
+- [x] Run Rust toolchain/substrate receipt proof. Evidence: `target/debug/ultragoal --root . rust toolchain verify --receipt validation_artifacts/rust/toolchain-receipt.json` exited `0`; receipt `sha256:43b892abeaacdfe5b2a95d9a3cf6bb27c3f708876799f40d050804451bd0de94` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: Rust toolchain/substrate observation only.
+- [x] Run Rust fast loop receipt proof. Evidence: `target/debug/ultragoal --root . rust fast --receipt validation_artifacts/rust/fast-receipt.json` exited `0`; receipt `sha256:d2482d6adfbe10abdf7195462827c0fe6cd940b004bde70904cb0d5a3ece87bc` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: fast-loop observation only.
+- [x] Run Rust standard loop receipt proof. Evidence: `target/debug/ultragoal --root . rust standard --receipt validation_artifacts/rust/standard-receipt.json` exited `0`; receipt `sha256:b51b4bd306e347e51d9349380e247636f947e5458f25237a330e2bff4a8aa6e9` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: standard-loop observation only.
+- [x] Run Rust release loop receipt proof for requested release/package/product claims. Evidence: `target/debug/ultragoal --root . rust release --receipt validation_artifacts/rust/release-receipt.json` exited `0`; receipt `sha256:846786a36d6ed65224c843f49dcebf7ec8fbfee04f53a8ba597bc65778f7b05e` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: release-loop observation only, not release readiness.
+- [x] Run Rust clean-proof/no-hidden-local-magic receipt proof. Evidence: `target/debug/ultragoal --root . rust clean-proof --receipt validation_artifacts/rust/clean-proof-receipt.json` exited `0`; receipt `sha256:7f728e79d3f2b0c648c99567c692736f7ecae2196ed00a6ce806ee95b884cd3f` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: clean-checkout/no-hidden-cache observation only.
+- [x] Run Rust cache/no-cache honesty receipt proof. Evidence: `validation_artifacts/rust/clean-proof-receipt.json` records `law_ids = ["rust-cache-no-cache-honesty"]`, `cache.cache_mode = isolated_no_cache`, `rustc_wrapper = unset`, `remote_cache = none`, and `warm_cache_supports_no_cache_claim = false` for candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: cache/no-cache observation only.
+- [x] Run Rust dependency/security/supply-chain receipt proof. Evidence: `target/debug/ultragoal --root . rust dependency audit --receipt validation_artifacts/rust/dependency-receipt.json` exited `0`; receipt `sha256:bbd609a96b52eed09e2610c28cedb375fcab79c5eee60aaf99c759ec6b832a9a` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: dependency/supply-chain observation only.
+- [x] Run Rust performance budget receipt proof. Evidence: `target/debug/ultragoal --root . performance prove --receipt validation_artifacts/cli/performance-receipt.json` exited `0`; receipt `sha256:3f61fd757684e344dec3ea4e53b27e222e050cc6b1cbaad2f6d23a70b022fe92` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28` with status `pass`; claim impact: performance-only proof, no readiness/release/completion/update_goal support.
+- [x] Run Rust memory/resource discipline receipt proof. Evidence: `target/debug/ultragoal --root . rust memory prove --receipt validation_artifacts/rust/memory-receipt.json` exited `0`; receipt `sha256:3ff6a4b983337ae26ce5452f6363a0f79aef8b8884547e085646911870b58ac6` targets candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: memory/resource observation only.
+- [x] Run workspace/artifact/cache GC plan, dry-run, apply, and verify receipt proof where cleanup is performed. Evidence: `target/debug/ultragoal --root . gc plan --receipt validation_artifacts/gc/plan-receipt.json`, `gc dry-run`, `gc apply`, and `gc verify` all exited `0`; receipt digests are plan `sha256:c64505301daf2e855c362d1c3b0ff664b3d3c07790009399f7ed80b3316399c8`, dry-run `sha256:8c576af978f5e1213163abb0977bc6c0567e53827b9766de28c31afbc125d446`, apply `sha256:039d097c53711d42d9aff39130c40ca7e4ccdb7660fced1d1b802d37e541088d`, verify `sha256:17c08f854a0cf962eb8172bf4b2272f516890dfca989e6509506ea72e66e2e00`; all target candidate digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`; claim impact: GC observation only.
 - [ ] Run Rust DevX red, green, and tamper fixtures.
 - [ ] Run namespace law proof.
 - [ ] Run namespace red fixtures.
@@ -2457,11 +2715,12 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
 - [ ] Run schema evolution/receipt migration/stale-version invalidation proof.
 - [ ] Run failure remediation quality/agent-actionable validator output proof.
 - [ ] Run review disagreement/override/judgment-boundary governance proof.
-- [x] Run source/install/cache digest comparison.
+- [ ] Run Gate 92 runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
+- [ ] Run source/install/cache digest comparison.
 - [ ] Regenerate review-target receipt.
 - [ ] Regenerate candidate archive receipt.
 - [ ] Validate final packet/successor packet.
-- [ ] Evidence path: Current package digest is `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Coverage receipt `validation_artifacts/coverage/coverage-receipt.json = sha256:a3948febe1e5acd1bca166dd6da8f5bf6b0e6f1611767bb75e14f59c29edce2d` is current with `coverage.percent = 100` and `uncovered_records = []`. Product/Fit/Journey receipts are current for the same digest. Source audit command `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`; receipt `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:071777bc751650fa5fa1c8369ced9cafbafa4672a8f780b2d30e0adf56f46a05`, run id `ultragoal-audit-2026-06-29T01:53:31Z`, `149/149` checks passing. Red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:24a963f780f46d8653a71d37f6e113c8ea178c1fd8a72f424e2b6a3f94b7ce78` is current with `status = pass` and `1213/1213` fixtures passing intended failures. Install/cache audits pass for the same candidate: `validation_artifacts/cli/install-audit-receipt.json = sha256:031bbfd24eadc79854adc2eb42e63f2968ea75f7eff36df4dce879ff9d6455ea`; `validation_artifacts/cli/cache-audit-receipt.json = sha256:d8e0bb1510f2ff664931593407f0d47acc0b64416722dc18b3b94b195831ca69`; source, installed, and cache package digest commands all returned `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Post-audit verification also passed: `cargo fmt --check` exited `0`; focused tests `cargo test --offline final_packet --lib --quiet` passed 10/10, `cargo test --offline anti_theater --lib --quiet` passed 2/2, `cargo test --offline package_digest --lib --quiet` passed 7/7, `cargo test --offline coverage_digests --lib --quiet` passed 2/2, `cargo test --offline registry --lib --quiet` passed 23/23, and `cargo test --offline coverage_manifest_payload --lib --quiet` passed 1/1; filtered line-cap scan emitted no files above 250 lines; package digest remained `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Control-plane receipts were regenerated after the current audit and still fail closed while dereferencing current source/red evidence: final-packet proof `validation_artifacts/review/final-packet-proof.json = sha256:78ce3b876df4bb3e995021a7ac27e4fae265b37727adf7f09444bd042d302329`, transactional finalization `validation_artifacts/cli/transactional-finalization-receipt.json = sha256:817772473cba6ad6f4d059e46e100fe42ac6420637971caff586763e4d0321a1`, CLI self-law `validation_artifacts/cli/self-law-receipt.json = sha256:ec956662b15626668558eb491d02bd63b9425823714b3bcf0b8dc10d18fef811`, and update-goal eligibility `validation_artifacts/cli/update-goal-eligibility.json = sha256:88552f66c464e8ec3fa1c2e9997a9fa114893acb2c8149a23f2f1bf6cb497e8e` do not support readiness. Claim impact: source-local Product/Fit/Journey, exact coverage, source audit pass, red-fixture propagation, disk source/install/cache parity, and current fail-closed blockers only; no final packet correctness, active registry/reviewer exposure, readiness, release, completion claim, or `update_goal()` call is supported.
+- [ ] Evidence path: Current package digest is `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Current source-local verification: `cargo fmt --check` exited `0`; `cargo test --offline control --lib --quiet` passed 61/61; `cargo test --offline final_packet --lib --quiet` passed 10/10; `cargo test --offline registry --lib --quiet` passed 24/24; Product/Fit/Journey command `target/debug/ultragoal --root . product prove-fitness --receipt-dir validation_artifacts/harness` exited `0` with receipt digests `sha256:ca70278d651303ce1f14d1aed4886d67aa2738532e03caccedae34287a5c5e38`, `sha256:72652c3f35f4d26642748ce8487356adebd7b804c833535081c8ae44698df83a`, and `sha256:20ecf2fa404e8312de3c6abb3f6111ebcabf5b481a0d4b81fda8f60a6246bdab`; coverage command exited `0` with receipt `sha256:90363bf478b6707b983151240df02be05cd5a03fb1fde241c0dc0c1d6f71c621`, `coverage.percent = 100`, and `uncovered_records = []`; source audit command exited `0` with `149/149` checks passing and red report `1213/1213`; filtered line-cap scan emitted no files above 250 lines. Install audit, cache audit, registry probe, final-packet proof, transactional finalization, self-law, and update-goal receipts are current fail-closed receipts for this digest and do not support readiness or parity. Claim impact: source-local Product/Fit/Journey, exact coverage, line-cap observation, source audit, red fixture propagation, Rust/GC, and performance-only proof; no install/cache parity, final packet correctness, active registry/reviewer exposure, readiness, release, completion claim, or `update_goal()` call is supported.
 
 ## `update_goal()` Is Forbidden Until All Are True
 
@@ -2475,9 +2734,9 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
 - [ ] Namespace/progressive-disclosure law is first-class and fail-closed.
 - [ ] Line-cap adherence is enforced.
 - [ ] Runtime/tool identity, product live-surface, transcript-quality, clean-checkout, restartable ExecPlan, source-card freshness, and memory-context-only laws are deterministically enforced.
-- [x] Product Fitness receipt is current and substitution failures are enforced.
+- [ ] Product Fitness receipt is current and substitution failures are enforced.
 - [ ] Product Fitness review-team ownership is first-class and fail-closed.
-- [x] Source/install/cache are same candidate and same digest.
+- [ ] Source/install/cache are same candidate and same digest.
 - [ ] App-registry/reviewer exposure claims are freshly same-surface proven or impossible to emit.
 - [ ] Package inventory contains no private local proof paths.
 - [ ] Plugin version is bumped and all installed/cache/package metadata agrees.
@@ -2586,9 +2845,13 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 103. Rust Developer Experience, runtime memory/resource discipline, and workspace/artifact/cache garbage collection are proven by CLI-routed Rust command loops, current toolchain/substrate receipt, fast/standard/release/clean-proof/watch observation command surfaces, exact coverage proof, dependency/security/supply-chain proof where applicable, cache/no-cache honesty receipt, performance budget receipt, memory/resource receipt, GC plan/dry-run/apply/verify receipts where cleanup is performed, standards/source-obligation/foundational-trace bindings, red/green/tamper fixtures, source audit pass, and calculated confidence of at least 96 percent supported by evidence. No completion, review, package, readiness, release, Product Fitness, Product Cohesion, Product Success, CLI self-law, final packet, or update_goal claim may pass from raw Cargo/tool output, hidden cache state, watcher/editor state, unbounded Rust runtime resources, unmanaged long-running tasks, blind cleanup, deletion without receipt, or stale Rust DevX/memory/GC proof.
 
-- [ ] Evidence path: Current stop-condition evidence is still mixed and blocks `update_goal()`. Current package digest is `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Coverage receipt `validation_artifacts/coverage/coverage-receipt.json = sha256:a3948febe1e5acd1bca166dd6da8f5bf6b0e6f1611767bb75e14f59c29edce2d` is current with `coverage.percent = 100` and `uncovered_records = []`. Product/Fit/Journey, source audit, red fixture report, Rust DevX/GC, standards-gardener, install audit, cache audit, and fail-closed CLI blocker receipts have been regenerated for the same digest. Source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:071777bc751650fa5fa1c8369ced9cafbafa4672a8f780b2d30e0adf56f46a05` passes `149/149`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:24a963f780f46d8653a71d37f6e113c8ea178c1fd8a72f424e2b6a3f94b7ce78` passes `1213/1213`; install audit `validation_artifacts/cli/install-audit-receipt.json = sha256:031bbfd24eadc79854adc2eb42e63f2968ea75f7eff36df4dce879ff9d6455ea` passes same-candidate disk installed-plugin parity; cache audit `validation_artifacts/cli/cache-audit-receipt.json = sha256:d8e0bb1510f2ff664931593407f0d47acc0b64416722dc18b3b94b195831ca69` passes same-candidate versioned-cache parity. Final-packet proof, registry probe, transactional finalization, CLI self-law, and update_goal eligibility remain fail-closed and do not support readiness. No version bump, final packet correctness, active registry/reviewer exposure, readiness/release/completion claim, or `update_goal()` call is permitted.
-- [ ] Gate 90 evidence path: Current stop-condition evidence is partially implemented but not complete. Physical topology repair has removed the side-audit baseline violations: `find validator/src -maxdepth 1 -type f \( -name 'internal_*.rs' -o -name 'internal_coverage*.rs' -o -name 'iinternal_*.rs' \) -print | sort` previously emitted no rows; `docs/namespace-law-exceptions.json` is absent; `find validator/src -type f -name '*.rs' -exec wc -l {} + | awk '$2 != "total" && $1 > 250 { print }'` previously emitted no over-cap files. Current coverage, source audit, red fixture report, and disk source/install/cache parity are bound to `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Gate 90 remains unchecked until the required confidence calculation, full namespace red/green/tamper proof accounting, package/review projection, source audit interpretation, and all dependent stop conditions are complete.
-- [ ] Gate 91 evidence path: Current stop-condition evidence is partially implemented but not complete. Coverage, Rust DevX, GC receipts, source audit, red fixture report, and disk source/install/cache parity are current for `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`. Gate 91 remains unchecked because cache/no-cache honesty, red/green/tamper completeness, confidence calculation, final packet correctness, app-registry/reviewer proof, and update_goal eligibility are not complete. No raw Cargo/tool output, watcher/editor state, hidden cache state, blind cleanup, or memory/resource prose can satisfy this stop condition.
+- [ ] Evidence path: Current stop-condition evidence is incomplete for package digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Current source-local verification: `cargo fmt --check` exited `0`, focused tests passed (`control` 61/61, `final_packet` 10/10, `registry` 24/24), Product/Fit/Journey receipts pass, exact coverage receipt proves `coverage.percent = 100` and `uncovered_records = []`, filtered line-cap scan emitted no files above 250 lines, session-log hardening rebind exited `0`, Rust DevX receipts for toolchain/fast/standard/release/clean-proof/watch/memory/dependency/coverage/workspace-topology exit `0`, GC plan/dry-run/apply/verify receipts exit `0`, performance-only receipt exits `0`, standards-gardener rebind exits `0`, source audit passes `149/149`, and red fixture report passes `1213/1213`. Install audit, cache audit, registry probe, final-packet proof, transactional finalization, CLI self-law, and update_goal receipts are current fail-closed receipts for this digest and do not support readiness or parity. No version bump, install/cache parity, final packet correctness, active registry/reviewer exposure, readiness/release/completion claim, or `update_goal()` call is permitted.
+- [ ] Gate 90 evidence path: Current stop-condition evidence is partially implemented but not complete. Physical topology repair has removed the side-audit baseline violations: `find validator/src -maxdepth 1 -type f \( -name 'internal_*.rs' -o -name 'internal_coverage*.rs' -o -name 'iinternal_*.rs' \) -print | sort` previously emitted no rows; `docs/namespace-law-exceptions.json` is absent; current line-cap, exact coverage, source audit, and red report pass for digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Gate 90 remains unchecked until install/cache parity, required confidence calculation, full namespace red/green/tamper proof accounting, package/review projection, source audit interpretation, and all dependent stop conditions are complete.
+- [ ] Gate 91 evidence path: Current stop-condition evidence is partially implemented but not complete for package digest `sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28`. Current same-candidate receipts pass for coverage (`validation_artifacts/coverage/coverage-receipt.json`), Rust DevX toolchain/fast/standard/release/clean-proof/watch/memory/dependency/coverage/workspace-topology (`validation_artifacts/rust/*.json`), cache/no-cache honesty via `validation_artifacts/rust/clean-proof-receipt.json`, GC plan/dry-run/apply/verify (`validation_artifacts/gc/*.json`), CLI performance-only proof (`validation_artifacts/cli/performance-receipt.json`), source audit, and red fixture report. Gate 91 remains unchecked because red/green/tamper completeness, confidence calculation, final packet correctness, app-registry/reviewer proof, and update_goal eligibility are not complete. No raw Cargo/tool output, watcher/editor state, hidden cache state, blind cleanup, or memory/resource prose can satisfy this stop condition.
+
+104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
+
+- [ ] Gate 92 evidence path: Not implemented. No live observability stack, CLI observe command set, live VictoriaLogs/VictoriaMetrics/VictoriaTraces query receipts, observability schemas, command inventory enforcement, red/green/tamper fixture report, or same-candidate observability receipt binding exists yet. Gate 92 blocks final packet correctness, readiness, release, completion, and `update_goal()` eligibility.
 
 ## Final Response Required Fields
 
@@ -2640,6 +2903,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
 - [ ] Agent-queryable observability status.
+- [ ] Full local observability stack integration and non-opaque failure status.
 - [ ] Subagent orchestration explicitness/token-model-cost/reconciliation status.
 - [ ] Skill catalog context-budget/omission-warning status.
 - [ ] Distribution and sharing-surface claim-separation status.
