@@ -373,45 +373,45 @@ that surface is required by the contract.
 - [ ] Gate 13: Every contract sub-requirement is satisfied.
 - [ ] Gate 13 evidence path: Source manifests currently show version `0.0.11` in `.codex-plugin/plugin.json` and `plugin-manifest-draft.json`. Prior installed/cache disk copies agree with old digest `sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284`, but source now resolves to `sha256:6aae1937e63761d78a09dc68cda7c2c46ef7cd55ce303a340b2d689d28c0c9f5`; installed/cache metadata is stale until source compliance is rerun and sync is repeated. Gate remains unchecked because the final required version bump is explicitly after all hardening, final packet correctness, app-surface claim handling, and update-goal eligibility are complete.
 
-- [ ] Gate 14 status:
-- [ ] Gate 14: Architecture dependency topology is first-class and fail-closed.
-- [ ] Gate 14: Every contract sub-requirement is satisfied.
-- [ ] Gate 14 evidence path:
+- [x] Gate 14 status: source_local_current
+- [x] Gate 14: Architecture dependency topology is first-class and fail-closed.
+- [x] Gate 14: Every contract sub-requirement is satisfied.
+- [x] Gate 14 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `architecture-dependency-topology = pass`. Claim impact: source-local architecture topology enforcement only; no install/cache parity, final-packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 
-- [ ] Gate 15 status:
-- [ ] Gate 15: Quality Score and taste invariants are typed, current, evidence-bound gates.
-- [ ] Gate 15: Every contract sub-requirement is satisfied.
-- [ ] Gate 15 evidence path:
+- [x] Gate 15 status: source_local_current
+- [x] Gate 15: Quality Score and taste invariants are typed, current, evidence-bound gates.
+- [x] Gate 15: Every contract sub-requirement is satisfied.
+- [x] Gate 15 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `quality-score-taste-gates = pass`. Claim impact: source-local quality/taste enforcement only; no live product-success, readiness, release, completion, or `update_goal()` claim.
 
-- [ ] Gate 16 status:
-- [ ] Gate 16: Feedback-to-rule promotion has no backlog/future/reviewer-only escape.
-- [ ] Gate 16: Every contract sub-requirement is satisfied.
-- [ ] Gate 16 evidence path:
+- [x] Gate 16 status: source_local_current
+- [x] Gate 16: Feedback-to-rule promotion has no backlog/future/reviewer-only escape.
+- [x] Gate 16: Every contract sub-requirement is satisfied.
+- [x] Gate 16 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `feedback-to-rule-promotion = pass`. Claim impact: source-local feedback-to-rule enforcement only; current reviewer/sign-off disposition remains separately unchecked where listed.
 
-- [ ] Gate 17 status:
-- [ ] Gate 17: Full autonomy-loop proof exists for behavior-changing repairs.
-- [ ] Gate 17: Every contract sub-requirement is satisfied.
-- [ ] Gate 17 evidence path:
+- [x] Gate 17 status: source_local_current
+- [x] Gate 17: Full autonomy-loop proof exists for behavior-changing repairs.
+- [x] Gate 17: Every contract sub-requirement is satisfied.
+- [x] Gate 17 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `autonomy-loop-proof = pass`. Claim impact: source-local autonomy-loop enforcement only; no final-packet, readiness, release, completion, or `update_goal()` claim.
 
-- [ ] Gate 18 status:
-- [ ] Gate 18: Orchestrator state-machine invariants are enforced.
-- [ ] Gate 18: Every contract sub-requirement is satisfied.
-- [ ] Gate 18 evidence path:
+- [x] Gate 18 status: source_local_current
+- [x] Gate 18: Orchestrator state-machine invariants are enforced.
+- [x] Gate 18: Every contract sub-requirement is satisfied.
+- [x] Gate 18 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `orchestrator-state-machine = pass`. Claim impact: source-local orchestrator enforcement only; no readiness, release, completion, or `update_goal()` claim.
 
-- [ ] Gate 19 status:
-- [ ] Gate 19: Scheduler/runner/tracker mutation boundaries are enforced.
-- [ ] Gate 19: Every contract sub-requirement is satisfied.
-- [ ] Gate 19 evidence path:
+- [x] Gate 19 status: source_local_current
+- [x] Gate 19: Scheduler/runner/tracker mutation boundaries are enforced.
+- [x] Gate 19: Every contract sub-requirement is satisfied.
+- [x] Gate 19 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `scheduler-runner-tracker-boundaries = pass`. Claim impact: source-local scheduler/runner/tracker boundary enforcement only.
 
-- [ ] Gate 20 status:
-- [ ] Gate 20: Subagent/custom-agent sandbox and approval inheritance is enforced.
-- [ ] Gate 20: Every contract sub-requirement is satisfied.
-- [ ] Gate 20 evidence path:
+- [x] Gate 20 status: source_local_current
+- [x] Gate 20: Subagent/custom-agent sandbox and approval inheritance is enforced.
+- [x] Gate 20: Every contract sub-requirement is satisfied.
+- [x] Gate 20 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `subagent-custom-agent-sandbox-approval-inheritance = pass`. Claim impact: source-local subagent/custom-agent sandbox enforcement only; no reviewer or multi-agent output is treated as proof without live verification.
 
-- [ ] Gate 21 status:
-- [ ] Gate 21: Skill progressive-disclosure metadata and load routing is enforced.
-- [ ] Gate 21: Every contract sub-requirement is satisfied.
-- [ ] Gate 21 evidence path:
+- [x] Gate 21 status: source_local_current
+- [x] Gate 21: Skill progressive-disclosure metadata and load routing is enforced.
+- [x] Gate 21: Every contract sub-requirement is satisfied.
+- [x] Gate 21 evidence path: Current source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `skill-progressive-disclosure-metadata = pass`, `skill-inventory-closure = pass`, and `skill-local-reference-closure = pass`. Claim impact: source-local skill metadata/routing enforcement only; no install/cache/app-registry exposure claim.
 
 - [ ] Gate 22 status:
 - [ ] Gate 22: Plugin install-surface metadata, cache semantics, and enable-state proof are enforced.
