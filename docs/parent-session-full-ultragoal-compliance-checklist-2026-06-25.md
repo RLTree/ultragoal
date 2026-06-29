@@ -1820,10 +1820,10 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status:
 
-- [ ] `cargo test --offline` passes after topology repair.
-  - Evidence:
-  - Candidate digest:
-  - Status:
+- [x] `cargo test --offline` passes after topology repair.
+  - Evidence: full offline test suite passed for current source-local candidate. Command `cargo test --offline` exited `0`; output reported `471` library tests passed, `0` failed; binary test targets had `0` tests; `tests/cli_surface.rs` passed `1/1`; doc tests had `0` tests.
+  - Candidate digest: `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`.
+  - Status: current full offline test pass only; does not prove install/cache parity, final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility.
 
 - [ ] Namespace law proof passes through the CLI after topology repair.
   - Evidence:
@@ -2604,21 +2604,21 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 
 - [ ] Status: in_progress
 - [x] Run `cargo fmt --check`.
-- [ ] Run `cargo test --offline`.
+- [x] Run `cargo test --offline`. Evidence: command exited `0` for current source-local package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; output reported `471` library tests passed, `0` failed, binary test targets with `0` tests, `tests/cli_surface.rs` passed `1/1`, and doc tests with `0` tests. Claim impact: full offline test pass only; no install/cache parity, final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [x] Run full source audit with receipt and red fixture report. Evidence: `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; source receipt `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:18b69094e255b2e39f2e572f6a2214179e73b64634dff1ca21e40962d21b2483` records `status = pass`, `150/150`; red report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:21cda526dc23a0c89482303557764ac012b3a819e8379f2a6940a7328dc3bf67` records `status = pass`, `1238/1238`. Claim impact: source-local audit/red proof only; no install/cache parity, registry/reviewer exposure, final-packet correctness, readiness, release, completion, or update_goal claim.
 - [ ] Run full installed plugin audit.
 - [ ] Run full cache package audit.
 - [x] Run coverage command proving 100%. Evidence: `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0` for package digest `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`; receipt `validation_artifacts/coverage/coverage-receipt.json = sha256:165dd2ed36b85a33f5f214532baa6c14bee94d8c16a1e30d84683296f31171b6` records `coverage.percent = 100`, `uncovered_records = []`, and `claim_ceiling = supports_complete_claim`. Claim impact: source-local exact coverage only; no readiness/release/completion/final-packet/registry/update_goal claim.
-- [ ] Run Rust toolchain/substrate receipt proof.
-- [ ] Run Rust fast loop receipt proof.
-- [ ] Run Rust standard loop receipt proof.
-- [ ] Run Rust release loop receipt proof for requested release/package/product claims.
-- [ ] Run Rust clean-proof/no-hidden-local-magic receipt proof.
+- [x] Run Rust toolchain/substrate receipt proof. Evidence: `validation_artifacts/rust/toolchain-receipt.json = sha256:1a4512ac5d710745e5497923ba996bc05498576285e2adc9a22ee7f5960bb0a8` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust toolchain verify --receipt validation_artifacts/rust/toolchain-receipt.json`. Claim impact: Rust toolchain/substrate source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
+- [x] Run Rust fast loop receipt proof. Evidence: `validation_artifacts/rust/fast-receipt.json = sha256:087892a326783b6cf2420f8d3fffd994c372280c8faccf5e28b99924aa21a2a6` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust fast --receipt validation_artifacts/rust/fast-receipt.json`. Claim impact: Rust fast-loop source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
+- [x] Run Rust standard loop receipt proof. Evidence: `validation_artifacts/rust/standard-receipt.json = sha256:305cadef7816f893f450451ad497bff776d556970e8a511cfa8b6d7392ad15b1` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust standard --receipt validation_artifacts/rust/standard-receipt.json`. Claim impact: Rust standard-loop source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
+- [x] Run Rust release loop receipt proof for requested release/package/product claims. Evidence: `validation_artifacts/rust/release-receipt.json = sha256:6404d51c8de5bd9f0cd4f99525ab9bad1a2fae5ed7b2229066683338c327d966` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust release --receipt validation_artifacts/rust/release-receipt.json`. Claim impact: Rust release-loop source-local proof only; no package/install/cache parity, readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
+- [x] Run Rust clean-proof/no-hidden-local-magic receipt proof. Evidence: `validation_artifacts/rust/clean-proof-receipt.json = sha256:68078d932f882df87a57c4af266b2a49da6887aeb5c4df938af5e0f20d196c51` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust clean-proof --receipt validation_artifacts/rust/clean-proof-receipt.json`. Claim impact: Rust clean-proof source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
 - [ ] Run Rust cache/no-cache honesty receipt proof.
-- [ ] Run Rust dependency/security/supply-chain receipt proof.
+- [x] Run Rust dependency/security/supply-chain receipt proof. Evidence: `validation_artifacts/rust/dependency-receipt.json = sha256:ea43db1a7f5eb81331005e0ffc264f92915ab176cb9d97fc65251b9aac945d95` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust dependency audit --receipt validation_artifacts/rust/dependency-receipt.json`. Claim impact: Rust dependency/security source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
 - [ ] Run Rust performance budget receipt proof.
-- [ ] Run Rust memory/resource discipline receipt proof.
-- [ ] Run workspace/artifact/cache GC plan, dry-run, apply, and verify receipt proof where cleanup is performed.
+- [x] Run Rust memory/resource discipline receipt proof. Evidence: `validation_artifacts/rust/memory-receipt.json = sha256:8d74b84593104bdef295fbc4721179615c8d15775fc8b64c119ae5ee8cf46205` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . rust memory prove --receipt validation_artifacts/rust/memory-receipt.json`. Claim impact: Rust memory/resource source-local proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
+- [x] Run workspace/artifact/cache GC plan, dry-run, apply, and verify receipt proof where cleanup is performed. Evidence: current GC receipts target `sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6` and pass: `validation_artifacts/gc/plan-receipt.json = sha256:c416bce44861b5c01f016c30f94cec797a167635176fa7b529d20dbdbef3f36a`, `validation_artifacts/gc/dry-run-receipt.json = sha256:c75c18732320c80f6b07e03670b7df6744a959b2b6427328281f5cae28d52de7`, `validation_artifacts/gc/apply-receipt.json = sha256:ae5afaddb9b8d21e62cf8b19fb90702aad8b0a3b9596a183320d16f330fcb2a6`, and `validation_artifacts/gc/verify-receipt.json = sha256:c1c6385147b76b9a9a0757f33466db53635a8ff63f9872c4437ebc58b369cdbe`. Claim impact: source-local GC proof only; no readiness, release, final packet, registry/reviewer, completion, or `update_goal()` claim.
 - [ ] Run Rust DevX red, green, and tamper fixtures.
 - [ ] Run namespace law proof.
 - [ ] Run namespace red fixtures.
@@ -2669,7 +2669,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run distribution and sharing-surface claim-separation proof and red fixtures.
 - [ ] Run total authority types and impossible-state elimination proof and red fixtures.
 - [ ] Run CLI self-law compliance/self-hosting proof and red fixtures.
-- [ ] Run CLI performance/latency/speed/iteration-fitness proof and red fixtures.
+- [x] Run CLI performance/latency/speed/iteration-fitness proof and red fixtures. Evidence: `validation_artifacts/cli/performance-receipt.json = sha256:74be0665c4e7c5afaaff3381a6bd4b727b2e9c03c5bd2129c055b5c1a7247c6b` records `status = pass`, `digests.candidate = sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6`, and command `target/debug/ultragoal --root . performance prove --receipt validation_artifacts/cli/performance-receipt.json`; source audit check `cli-performance-latency-speed-iteration-fitness` is `pass`; red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:21cda526dc23a0c89482303557764ac012b3a819e8379f2a6940a7328dc3bf67` records `status = pass`, `1238/1238`. Claim impact: performance-specific source-local proof only; no update_goal, readiness, release, final packet, registry/reviewer, or completion claim.
 - [ ] Run agent-authored source/tooling/docs provenance proof and red fixtures.
 - [ ] Run stable identifier/normalization/collision proof and red fixtures.
 - [ ] Run agent session telemetry/token/rate-limit proof and red fixtures.
