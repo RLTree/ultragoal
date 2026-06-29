@@ -1,0 +1,122 @@
+name: harness-ultragoal-observability
+
+services:
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.146.0
+    command:
+      - -httpListenAddr=:8428
+      - -retentionPeriod=2d
+      - -storageDataPath=/storage
+    ports:
+      - "127.0.0.1:8428:8428"
+    volumes:
+      - victoriametrics-data:/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8428/health >/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  victorialogs:
+    image: victoriametrics/victoria-logs:v1.51.0
+    command:
+      - -httpListenAddr=:9428
+      - -retentionPeriod=2d
+      - -storageDataPath=/storage
+    ports:
+      - "127.0.0.1:9428:9428"
+    volumes:
+      - victorialogs-data:/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9428/health >/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  victoriatraces:
+    image: victoriametrics/victoria-traces:v0.8.0
+    command:
+      - -httpListenAddr=:10428
+      - -retentionPeriod=2d
+      - -storageDataPath=/storage
+      - -otlpGRPCListenAddr=:4317
+      - -otlpGRPC.tls=false
+    ports:
+      - "127.0.0.1:10428:10428"
+      - "127.0.0.1:4317:4317"
+    volumes:
+      - victoriatraces-data:/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:10428/health >/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.130.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    ports:
+      - "127.0.0.1:4318:4318"
+      - "127.0.0.1:13133:13133"
+    volumes:
+      - ./otel-collector/config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    depends_on:
+      victoriametrics:
+        condition: service_started
+      victorialogs:
+        condition: service_started
+      victoriatraces:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "/otelcol-contrib", "validate", "--config=/etc/otelcol-contrib/config.yaml"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  vector:
+    image: timberio/vector:0.47.0-debian
+    command: ["--config", "/etc/vector/vector.yaml"]
+    ports:
+      - "127.0.0.1:8686:8686"
+    volumes:
+      - vector-data:/var/lib/vector
+      - ./vector/vector.yaml:/etc/vector/vector.yaml:ro
+      - ../../validation_artifacts/observability/spool:/spool:ro
+    depends_on:
+      victorialogs:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "vector validate /etc/vector/vector.yaml"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  grafana:
+    image: grafana/grafana:12.0.2
+    environment:
+      GF_SECURITY_ADMIN_USER: ultragoal-local
+      GF_SECURITY_ADMIN_PASSWORD: ultragoal-local-dev-only
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "127.0.0.1:3009:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      victoriametrics:
+        condition: service_started
+      victoriatraces:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health >/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  victoriametrics-data: {}
+  victorialogs-data: {}
+  victoriatraces-data: {}
+  vector-data: {}
+  grafana-data: {}

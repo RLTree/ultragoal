@@ -74,7 +74,7 @@
       "path": "fixtures/red/product-fitness-install-substituted-for-success.json"
     }
   },
-  "generated_at": "2026-06-29T03:26:15Z",
+  "generated_at": "2026-06-29T08:25:47Z",
   "job_to_be_done": {
     "evidence": {
       "digest": "sha256:37fed1fbe4da7e91d27a24774560c367c427f7a87bfb84e30ae569017d52b59b",
@@ -126,13 +126,13 @@
     {
       "dimension": "context_coverage",
       "evidence": {
-        "digest": "sha256:aaafc7eb6da126c8f5057e44a5576ec6ef3abe77bd7eec2b330131d743d943dc",
+        "digest": "sha256:433030dadca469c6f0f459f3401f10684dca83839bf76a14230aa6315e5cf467",
         "path": "templates/agent-standards/enforcement.json"
       },
       "measure": "init, retrofit, proof-gate, standards, and product-cohesion routing name Product Fitness"
     }
   ],
-  "receipt_digest": "sha256:6d40725f01db1f19064354329f2e3cc8f2c09076f8fba14a9e55f404c1077ec1",
+  "receipt_digest": "sha256:b5447972dff88e5ea018a6a209cbd081ae211749746f22a3a3a66743c28c851b",
   "receipt_version": "1.0.0",
   "recovery_burden_gate": {
     "evidence": {
@@ -210,7 +210,7 @@
   },
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28"
+    "value": "sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5"
   },
   "user_evidence": [
     {

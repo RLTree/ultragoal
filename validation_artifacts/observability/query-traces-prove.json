@@ -1,0 +1,32 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-c7c1f02416030e93402c6a73440e92c577ae504e677aa41db2d1e8c5eb787993",
+  "failure": "",
+  "query": "_msg:run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862",
+  "query_kind": "traces",
+  "result_digest": "sha256:4ebea666411f683f1212bfc5ac789b719662f1bd9423ebeef29ac28994e0308f",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"observe.prove\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"a2d92719fcff46ee\",\"startTime\":1782708688715529,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"gate-92-observability-control-plane\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"observability_evidence_only\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-8767ae723324f3e4c2959cd66b65f4fcfdf1cca418003ba8a93bc4c64ed8dd4c\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"keep receipt same-candidate and rerun source audit before any readiness claim\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"observe.prove\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"pass\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"ab60e71694ea5cea0b12c77bb0d43a5a\",\"warnings\":null}],\"traceID\":\"ab60e71694ea5cea0b12c77bb0d43a5a\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
+    }
+  ],
+  "run_id": "run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 15000,
+  "truncated": false
+}

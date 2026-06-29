@@ -9,7 +9,7 @@
   },
   "cache": {
     "hits": 0,
-    "key": "no-cache:sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28:performance_prove",
+    "key": "no-cache:sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5:performance_prove",
     "misses": 0,
     "mode": "disabled",
     "no_cache_mode_result": "executed_without_cache"
@@ -42,15 +42,15 @@
     "worker_count": 1
   },
   "digests": {
-    "candidate": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
-    "cli_binary": "sha256:be1ed0a01db0bad46f5d85203e5d7738c4ae7199d2cca31b80f6d53a7353c9d8",
-    "config": "sha256:ae1d0a54dc7c3753f86ef18a6b7d037d58733a8838798deba0d3d0e736c04f96",
-    "fixture_catalog": "sha256:a925bc02011f7c4f767e078503add4f2409f756c99e1a904f5ade5c14b845794",
-    "law_graph": "sha256:bdf2b059070fb521517b713c1287ed338dbf980096ef0cadce9067dd838f431f",
-    "schema_catalog": "sha256:cc0a4ba2dd1e1755eac7d70b72387d21ed9d1d5452c2746193cfb04295b0ad56",
-    "source": "sha256:1a86710c5704a58834b5148d7e36dfb54216fdd32eae0d0f838333ff7aa8cc28",
-    "source_obligation": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
-    "standards": "sha256:aaafc7eb6da126c8f5057e44a5576ec6ef3abe77bd7eec2b330131d743d943dc"
+    "candidate": "sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5",
+    "cli_binary": "sha256:3223eeeda89659a09e93f90c9b5dc3aed4dc757e2331d42922f45e5392c53764",
+    "config": "sha256:7822a284cec88869a6b9144b7ef19b39d9c4e1d51eed138137a54c8ff3666da9",
+    "fixture_catalog": "sha256:5a845206eeac807ddc8c8e514113bbf84ebd359131f91b13bebaf300dae06e80",
+    "law_graph": "sha256:ff045119f82be290fa719e6f7395b4d900e33f1f4cc1a2c648d90795ab73ce42",
+    "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68",
+    "source": "sha256:4d3d91962d9163d40fc30add62eaa50dd7b24fb53ead49554cc55de2f754f0f5",
+    "source_obligation": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+    "standards": "sha256:433030dadca469c6f0f459f3401f10684dca83839bf76a14230aa6315e5cf467"
   },
   "exit_code": 0,
   "external_probe_policy": {
@@ -60,10 +60,10 @@
     "timeout_ms": 0
   },
   "failure": null,
-  "generated_at": "2026-06-29T03:30:09Z",
+  "generated_at": "2026-06-29T08:28:45Z",
   "input_size_metrics": {
-    "file_count_scanned": 4279,
-    "fixture_count_executed": 1213,
+    "file_count_scanned": 4357,
+    "fixture_count_executed": 1238,
     "receipt_count_read": 0,
     "repository_size_class": "single_plugin_proposal"
   },
@@ -89,14 +89,14 @@
   ],
   "telemetry": {
     "cpu_ms": null,
-    "end_timestamp": "2026-06-29T03:30:10Z",
+    "end_timestamp": "2026-06-29T08:28:45Z",
     "external_call_count": 0,
     "external_wait_ms": 0,
     "io_bytes": null,
     "peak_memory_bytes": null,
     "retry_count": 0,
-    "start_timestamp": "2026-06-29T03:30:10Z",
+    "start_timestamp": "2026-06-29T08:28:45Z",
     "timeout_count": 0,
-    "wall_clock_ms": 1243
+    "wall_clock_ms": 1584
   }
 }

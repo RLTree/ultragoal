@@ -1,1559 +1,1573 @@
 {
-  "schema": "harness-ultragoal.foundational-law-traceability.v1",
   "entries": [
     {
-      "obligation_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "orchestration_claims_withheld_without_setup_to_idle_transition_and_thread_bound_heartbeat",
       "law_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
-      "standards_row_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
-      "validator_check_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
-      "red_fixture_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat-multi-lane-setup-complete-without-transition-receipt-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+      "obligation_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
       "receipt_requirement": "mandatory-law receipt active-setup-to-idle-orchestration-thread-bound-heartbeat and source-obligation parity red fixture",
-      "claim_ceiling_impact": "orchestration_claims_withheld_without_setup_to_idle_transition_and_thread_bound_heartbeat"
+      "red_fixture_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat-multi-lane-setup-complete-without-transition-receipt-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/active-setup-to-idle-orchestration-thread-bound-heartbeat.json",
+      "validator_check_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat"
     },
     {
-      "obligation_id": "adversarial-packet-tampering-forged-proof-rejection",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "packet_claims_withheld_without_tamper_and_forgery_rejection",
       "law_id": "adversarial-packet-tampering-forged-proof-rejection",
-      "standards_row_id": "adversarial-packet-tampering-forged-proof-rejection",
-      "validator_check_id": "adversarial-packet-tampering-forged-proof-rejection",
-      "red_fixture_id": "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/adversarial-packet-tampering-forged-proof-rejection.json",
+      "obligation_id": "adversarial-packet-tampering-forged-proof-rejection",
       "receipt_requirement": "mandatory-law receipt adversarial-packet-tampering-forged-proof-rejection and source-obligation parity red fixture",
-      "claim_ceiling_impact": "packet_claims_withheld_without_tamper_and_forgery_rejection"
+      "red_fixture_id": "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "adversarial-packet-tampering-forged-proof-rejection",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/adversarial-packet-tampering-forged-proof-rejection.json",
+      "validator_check_id": "adversarial-packet-tampering-forged-proof-rejection"
     },
     {
-      "obligation_id": "agent-authored-source-tooling-docs-provenance",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "law_bearing_changes_withheld_without_agent_visible_provenance",
       "law_id": "agent-authored-source-tooling-docs-provenance",
-      "standards_row_id": "agent-authored-source-tooling-docs-provenance",
-      "validator_check_id": "agent-authored-source-tooling-docs-provenance",
-      "red_fixture_id": "agent-authored-source-tooling-docs-provenance-untracked-claim-source-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-authored-source-tooling-docs-provenance.json",
+      "obligation_id": "agent-authored-source-tooling-docs-provenance",
       "receipt_requirement": "mandatory-law receipt agent-authored-source-tooling-docs-provenance and source-obligation parity red fixture",
-      "claim_ceiling_impact": "law_bearing_changes_withheld_without_agent_visible_provenance"
+      "red_fixture_id": "agent-authored-source-tooling-docs-provenance-untracked-claim-source-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "agent-authored-source-tooling-docs-provenance",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-authored-source-tooling-docs-provenance.json",
+      "validator_check_id": "agent-authored-source-tooling-docs-provenance"
     },
     {
-      "obligation_id": "agent-queryable-observability",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "observability_claims_withheld_without_typed_queryable_correlated_receipt",
       "law_id": "agent-queryable-observability",
-      "standards_row_id": "agent-queryable-observability",
-      "validator_check_id": "agent-queryable-observability",
-      "red_fixture_id": "agent-queryable-observability-raw-log-dump-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json",
+      "obligation_id": "agent-queryable-observability",
       "receipt_requirement": "mandatory-law receipt agent-queryable-observability and source-obligation parity red fixture",
-      "claim_ceiling_impact": "observability_claims_withheld_without_typed_queryable_correlated_receipt"
+      "red_fixture_id": "agent-queryable-observability-raw-log-dump-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "agent-queryable-observability",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json",
+      "validator_check_id": "agent-queryable-observability"
     },
     {
-      "obligation_id": "agent-remediating-validator-failures",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "validator_claims_withheld_without_agent_remediating_failures",
       "law_id": "agent-remediating-validator-failures",
-      "standards_row_id": "agent-remediating-validator-failures",
-      "validator_check_id": "agent-remediating-validator-failures",
-      "red_fixture_id": "agent-remediating-validator-failures-law-id-present-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json",
+      "obligation_id": "agent-remediating-validator-failures",
       "receipt_requirement": "mandatory-law receipt agent-remediating-validator-failures and source-obligation parity red fixture",
-      "claim_ceiling_impact": "validator_claims_withheld_without_agent_remediating_failures"
+      "red_fixture_id": "agent-remediating-validator-failures-law-id-present-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "agent-remediating-validator-failures",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json",
+      "validator_check_id": "agent-remediating-validator-failures"
     },
     {
-      "obligation_id": "agent-session-telemetry-token-rate-limit",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "agent_run_claims_withheld_without_redacted_session_telemetry",
       "law_id": "agent-session-telemetry-token-rate-limit",
-      "standards_row_id": "agent-session-telemetry-token-rate-limit",
-      "validator_check_id": "agent-session-telemetry-token-rate-limit",
-      "red_fixture_id": "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+      "obligation_id": "agent-session-telemetry-token-rate-limit",
       "receipt_requirement": "mandatory-law receipt agent-session-telemetry-token-rate-limit and source-obligation parity red fixture",
-      "claim_ceiling_impact": "agent_run_claims_withheld_without_redacted_session_telemetry"
+      "red_fixture_id": "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "agent-session-telemetry-token-rate-limit",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/agent-session-telemetry-token-rate-limit.json",
+      "validator_check_id": "agent-session-telemetry-token-rate-limit"
     },
     {
-      "obligation_id": "architecture-dependency-topology",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "architecture_dependency_topology_withheld_without_registry_receipt",
       "law_id": "architecture-dependency-topology",
-      "standards_row_id": "architecture-dependency-topology",
-      "validator_check_id": "architecture-dependency-topology",
-      "red_fixture_id": "architecture-dependency-topology-layer-map-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json",
+      "obligation_id": "architecture-dependency-topology",
       "receipt_requirement": "mandatory-law receipt architecture-dependency-topology and source-obligation parity red fixture",
-      "claim_ceiling_impact": "architecture_dependency_topology_withheld_without_registry_receipt"
+      "red_fixture_id": "architecture-dependency-topology-layer-map-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "architecture-dependency-topology",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json",
+      "validator_check_id": "architecture-dependency-topology"
     },
     {
-      "obligation_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "authority_claims_withheld_without_closed_enum_exhaustiveness",
       "law_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
-      "standards_row_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
-      "validator_check_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
-      "red_fixture_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-claim-ceiling-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+      "obligation_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
       "receipt_requirement": "mandatory-law receipt authority-exhaustiveness-closed-enums-impossible-state-elimination and source-obligation parity red fixture",
-      "claim_ceiling_impact": "authority_claims_withheld_without_closed_enum_exhaustiveness"
+      "red_fixture_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-claim-ceiling-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/authority-exhaustiveness-closed-enums-impossible-state-elimination.json",
+      "validator_check_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination"
     },
     {
-      "obligation_id": "authority-source-binding",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "fallback_without_authority_receipt_claim_limits_or_withholds_named_authority_claims",
       "law_id": "authority-source-binding",
-      "standards_row_id": "authority-source-binding",
-      "validator_check_id": "authority-source-binding",
-      "red_fixture_id": "authority-source-binding-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/authority-source-binding.json",
+      "obligation_id": "authority-source-binding",
       "receipt_requirement": "mandatory-law receipt authority-source-binding and source-obligation parity red fixture",
-      "claim_ceiling_impact": "fallback_without_authority_receipt_claim_limits_or_withholds_named_authority_claims"
+      "red_fixture_id": "authority-source-binding-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "authority-source-binding",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/authority-source-binding.json",
+      "validator_check_id": "authority-source-binding"
     },
     {
-      "obligation_id": "autonomy-loop-proof",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "behavior_change_claims_withheld_without_before_after_receipt",
       "law_id": "autonomy-loop-proof",
-      "standards_row_id": "autonomy-loop-proof",
-      "validator_check_id": "autonomy-loop-proof",
-      "red_fixture_id": "autonomy-loop-proof-current-state-validation-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json",
+      "obligation_id": "autonomy-loop-proof",
       "receipt_requirement": "mandatory-law receipt autonomy-loop-proof and source-obligation parity red fixture",
-      "claim_ceiling_impact": "behavior_change_claims_withheld_without_before_after_receipt"
+      "red_fixture_id": "autonomy-loop-proof-current-state-validation-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "autonomy-loop-proof",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json",
+      "validator_check_id": "autonomy-loop-proof"
     },
     {
-      "obligation_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results",
       "law_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-      "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-      "validator_check_id": "batch-fanout-custom-agent-job-worker-result-discipline",
-      "red_fixture_id": "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
+      "obligation_id": "batch-fanout-custom-agent-job-worker-result-discipline",
       "receipt_requirement": "mandatory-law receipt batch-fanout-custom-agent-job-worker-result-discipline and source-obligation parity red fixture",
-      "claim_ceiling_impact": "batch_agent_claims_withheld_without_job_schema_and_reconciled_worker_results"
+      "red_fixture_id": "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/batch-fanout-custom-agent-job-worker-result-discipline.json",
+      "validator_check_id": "batch-fanout-custom-agent-job-worker-result-discipline"
     },
     {
-      "obligation_id": "behavior-example-coverage-coverage-anti-gaming",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt",
       "law_id": "behavior-example-coverage-coverage-anti-gaming",
-      "standards_row_id": "behavior-example-coverage-coverage-anti-gaming",
-      "validator_check_id": "behavior-example-coverage-coverage-anti-gaming",
-      "red_fixture_id": "behavior-example-coverage-coverage-anti-gaming-trivial-hit-only-test-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json",
+      "obligation_id": "behavior-example-coverage-coverage-anti-gaming",
       "receipt_requirement": "mandatory-law receipt behavior-example-coverage-coverage-anti-gaming and source-obligation parity red fixture",
-      "claim_ceiling_impact": "coverage_claims_withheld_without_behavior_examples_and_anti_gaming_receipt"
+      "red_fixture_id": "behavior-example-coverage-coverage-anti-gaming-trivial-hit-only-test-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "behavior-example-coverage-coverage-anti-gaming",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json",
+      "validator_check_id": "behavior-example-coverage-coverage-anti-gaming"
     },
     {
-      "obligation_id": "capability-gap-extraction-harness-capability-promotion",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "readiness_claims_withheld_without_capability_gap_promotion",
       "law_id": "capability-gap-extraction-harness-capability-promotion",
-      "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
-      "validator_check_id": "capability-gap-extraction-harness-capability-promotion",
-      "red_fixture_id": "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+      "obligation_id": "capability-gap-extraction-harness-capability-promotion",
       "receipt_requirement": "mandatory-law receipt capability-gap-extraction-harness-capability-promotion and source-obligation parity red fixture",
-      "claim_ceiling_impact": "readiness_claims_withheld_without_capability_gap_promotion"
+      "red_fixture_id": "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/capability-gap-extraction-harness-capability-promotion.json",
+      "validator_check_id": "capability-gap-extraction-harness-capability-promotion"
     },
     {
-      "obligation_id": "clean-checkout-command-discovery",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt",
       "law_id": "clean-checkout-command-discovery",
-      "standards_row_id": "clean-checkout-command-discovery",
-      "validator_check_id": "clean-checkout-command-discovery",
-      "red_fixture_id": "clean-checkout-command-discovery-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/clean-checkout-command-discovery.json",
+      "obligation_id": "clean-checkout-command-discovery",
       "receipt_requirement": "mandatory-law receipt clean-checkout-command-discovery and source-obligation parity red fixture",
-      "claim_ceiling_impact": "install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt"
+      "red_fixture_id": "clean-checkout-command-discovery-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "clean-checkout-command-discovery",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/clean-checkout-command-discovery.json",
+      "validator_check_id": "clean-checkout-command-discovery"
     },
     {
-      "obligation_id": "clean-room-rebuild-author-memory-independence",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "reproducibility_claims_withheld_without_clean_room_rebuild_receipt",
       "law_id": "clean-room-rebuild-author-memory-independence",
-      "standards_row_id": "clean-room-rebuild-author-memory-independence",
-      "validator_check_id": "clean-room-rebuild-author-memory-independence",
-      "red_fixture_id": "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/clean-room-rebuild-author-memory-independence.json",
+      "obligation_id": "clean-room-rebuild-author-memory-independence",
       "receipt_requirement": "mandatory-law receipt clean-room-rebuild-author-memory-independence and source-obligation parity red fixture",
-      "claim_ceiling_impact": "reproducibility_claims_withheld_without_clean_room_rebuild_receipt"
+      "red_fixture_id": "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "clean-room-rebuild-author-memory-independence",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/clean-room-rebuild-author-memory-independence.json",
+      "validator_check_id": "clean-room-rebuild-author-memory-independence"
     },
     {
-      "obligation_id": "cli-control-plane-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "harness_claims_withheld_without_cli_control_plane_authority",
       "law_id": "cli-control-plane-authority",
-      "standards_row_id": "cli-control-plane-authority",
-      "validator_check_id": "cli-control-plane-authority",
-      "red_fixture_id": "cli-control-plane-authority-checklist-completion-without-cli-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+      "obligation_id": "cli-control-plane-authority",
       "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-control-plane-authority; transaction self-test leaf package-listed for pass-shaped reference rejection",
-      "claim_ceiling_impact": "harness_claims_withheld_without_cli_control_plane_authority"
+      "red_fixture_id": "cli-control-plane-authority-checklist-completion-without-cli-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "cli-control-plane-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json",
+      "validator_check_id": "cli-control-plane-authority"
     },
     {
-      "obligation_id": "cli-performance-latency-speed-iteration-fitness",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof",
       "law_id": "cli-performance-latency-speed-iteration-fitness",
-      "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
-      "validator_check_id": "cli-performance-latency-speed-iteration-fitness",
-      "red_fixture_id": "cli-performance-missing-budget-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
+      "obligation_id": "cli-performance-latency-speed-iteration-fitness",
       "receipt_requirement": "CLI performance receipt plus mandatory-law receipt for cli-performance-latency-speed-iteration-fitness",
-      "claim_ceiling_impact": "performance_claims_withheld_without_typed_budget_receipts_cache_honesty_and_regression_proof"
+      "red_fixture_id": "cli-performance-missing-budget-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-performance-latency-speed-iteration-fitness.json",
+      "validator_check_id": "cli-performance-latency-speed-iteration-fitness"
     },
     {
-      "obligation_id": "cli-self-law-compliance",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt",
       "law_id": "cli-self-law-compliance",
-      "standards_row_id": "cli-self-law-compliance",
-      "validator_check_id": "cli-self-law-compliance",
-      "red_fixture_id": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+      "obligation_id": "cli-self-law-compliance",
       "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-self-law-compliance; transaction self-test leaf package-listed for pass-shaped reference rejection",
-      "claim_ceiling_impact": "completion_claims_withheld_without_same_candidate_cli_self_law_receipt"
+      "red_fixture_id": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "cli-self-law-compliance",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json",
+      "validator_check_id": "cli-self-law-compliance"
     },
     {
-      "obligation_id": "compact-agents-routed-standards",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "package_static_only",
       "law_id": "compact-agents-routed-standards",
-      "standards_row_id": "compact-agents-routed-standards",
-      "validator_check_id": "compact-agents-routed-standards",
-      "red_fixture_id": "compact-agents-routed-standards-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/compact-agents-routed-standards.json",
+      "obligation_id": "compact-agents-routed-standards",
       "receipt_requirement": "mandatory-law receipt compact-agents-routed-standards and source-obligation parity red fixture",
-      "claim_ceiling_impact": "package_static_only"
+      "red_fixture_id": "compact-agents-routed-standards-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "compact-agents-routed-standards",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/compact-agents-routed-standards.json",
+      "validator_check_id": "compact-agents-routed-standards"
     },
     {
-      "obligation_id": "conditional-observability-proof",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "no_default_observability_install_claim",
       "law_id": "conditional-observability-proof",
-      "standards_row_id": "conditional-observability-proof",
-      "validator_check_id": "conditional-observability-proof",
-      "red_fixture_id": "conditional-observability-proof-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/conditional-observability-proof.json",
+      "obligation_id": "conditional-observability-proof",
       "receipt_requirement": "mandatory-law receipt conditional-observability-proof and source-obligation parity red fixture",
-      "claim_ceiling_impact": "no_default_observability_install_claim"
+      "red_fixture_id": "conditional-observability-proof-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "conditional-observability-proof",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/conditional-observability-proof.json",
+      "validator_check_id": "conditional-observability-proof"
     },
     {
-      "obligation_id": "config-precedence-defaults-env-indirection",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "config_claims_withheld_without_typed_precedence_and_redacted_env_receipt",
       "law_id": "config-precedence-defaults-env-indirection",
-      "standards_row_id": "config-precedence-defaults-env-indirection",
-      "validator_check_id": "config-precedence-defaults-env-indirection",
-      "red_fixture_id": "config-precedence-defaults-env-indirection-default-overriding-repo-policy-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/config-precedence-defaults-env-indirection.json",
+      "obligation_id": "config-precedence-defaults-env-indirection",
       "receipt_requirement": "mandatory-law receipt config-precedence-defaults-env-indirection and source-obligation parity red fixture",
-      "claim_ceiling_impact": "config_claims_withheld_without_typed_precedence_and_redacted_env_receipt"
+      "red_fixture_id": "config-precedence-defaults-env-indirection-default-overriding-repo-policy-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "config-precedence-defaults-env-indirection",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/config-precedence-defaults-env-indirection.json",
+      "validator_check_id": "config-precedence-defaults-env-indirection"
     },
     {
-      "obligation_id": "connector-capability-discovery",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "capability_claims_withheld_without_same_surface_discovery_receipt",
       "law_id": "connector-capability-discovery",
-      "standards_row_id": "connector-capability-discovery",
-      "validator_check_id": "connector-capability-discovery",
-      "red_fixture_id": "connector-capability-discovery-claim-without-discovery-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/connector-capability-discovery.json",
+      "obligation_id": "connector-capability-discovery",
       "receipt_requirement": "mandatory-law receipt connector-capability-discovery and source-obligation parity red fixture",
-      "claim_ceiling_impact": "capability_claims_withheld_without_same_surface_discovery_receipt"
+      "red_fixture_id": "connector-capability-discovery-claim-without-discovery-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "connector-capability-discovery",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/connector-capability-discovery.json",
+      "validator_check_id": "connector-capability-discovery"
     },
     {
-      "obligation_id": "cross-artifact-consistency-solver-authority-graph-closure",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "completion_claims_withheld_without_authority_graph_closure",
       "law_id": "cross-artifact-consistency-solver-authority-graph-closure",
-      "standards_row_id": "cross-artifact-consistency-solver-authority-graph-closure",
-      "validator_check_id": "cross-artifact-consistency-solver-authority-graph-closure",
-      "red_fixture_id": "cross-artifact-consistency-solver-authority-graph-closure-orphan-claim-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cross-artifact-consistency-solver-authority-graph-closure.json",
+      "obligation_id": "cross-artifact-consistency-solver-authority-graph-closure",
       "receipt_requirement": "mandatory-law receipt cross-artifact-consistency-solver-authority-graph-closure and source-obligation parity red fixture",
-      "claim_ceiling_impact": "completion_claims_withheld_without_authority_graph_closure"
+      "red_fixture_id": "cross-artifact-consistency-solver-authority-graph-closure-orphan-claim-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "cross-artifact-consistency-solver-authority-graph-closure",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/cross-artifact-consistency-solver-authority-graph-closure.json",
+      "validator_check_id": "cross-artifact-consistency-solver-authority-graph-closure"
     },
     {
-      "obligation_id": "current-product-discovery-audit-quality-in-use-evidence",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_facing_claims_withheld_without_current_discovery_and_quality_in_use_evidence",
       "law_id": "current-product-discovery-audit-quality-in-use-evidence",
-      "standards_row_id": "current-product-discovery-audit-quality-in-use-evidence",
-      "validator_check_id": "current-product-discovery-audit-quality-in-use-evidence",
-      "red_fixture_id": "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+      "obligation_id": "current-product-discovery-audit-quality-in-use-evidence",
       "receipt_requirement": "mandatory-law receipt current-product-discovery-audit-quality-in-use-evidence and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_facing_claims_withheld_without_current_discovery_and_quality_in_use_evidence"
+      "red_fixture_id": "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "current-product-discovery-audit-quality-in-use-evidence",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/current-product-discovery-audit-quality-in-use-evidence.json",
+      "validator_check_id": "current-product-discovery-audit-quality-in-use-evidence"
     },
     {
-      "obligation_id": "derived-authority-recomputation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "content_digest_path_privacy_only_not_enough_for_behavior_authority",
       "law_id": "derived-authority-recomputation",
-      "standards_row_id": "derived-authority-recomputation",
-      "validator_check_id": "derived-authority-recomputation",
-      "red_fixture_id": "derived-authority-recomputation-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation.json",
+      "obligation_id": "derived-authority-recomputation",
       "receipt_requirement": "mandatory-law receipt derived-authority-recomputation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "content_digest_path_privacy_only_not_enough_for_behavior_authority"
+      "red_fixture_id": "derived-authority-recomputation-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "derived-authority-recomputation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation.json",
+      "validator_check_id": "derived-authority-recomputation"
     },
     {
-      "obligation_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal",
       "law_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-      "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-      "validator_check_id": "derived-authority-recomputation-named-authority-fallback-refusal",
-      "red_fixture_id": "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+      "obligation_id": "derived-authority-recomputation-named-authority-fallback-refusal",
       "receipt_requirement": "mandatory-law receipt derived-authority-recomputation-named-authority-fallback-refusal and source-obligation parity red fixture",
-      "claim_ceiling_impact": "named_authority_claims_withheld_without_current_recomputation_and_fallback_refusal"
+      "red_fixture_id": "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/derived-authority-recomputation-named-authority-fallback-refusal.json",
+      "validator_check_id": "derived-authority-recomputation-named-authority-fallback-refusal"
     },
     {
-      "obligation_id": "distinct-proof-surfaces-claim-ceilings",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "withholds_surface_substitution",
       "law_id": "distinct-proof-surfaces-claim-ceilings",
-      "standards_row_id": "distinct-proof-surfaces-claim-ceilings",
-      "validator_check_id": "distinct-proof-surfaces-claim-ceilings",
-      "red_fixture_id": "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/distinct-proof-surfaces-claim-ceilings.json",
+      "obligation_id": "distinct-proof-surfaces-claim-ceilings",
       "receipt_requirement": "mandatory-law receipt distinct-proof-surfaces-claim-ceilings and source-obligation parity red fixture",
-      "claim_ceiling_impact": "withholds_surface_substitution"
+      "red_fixture_id": "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "distinct-proof-surfaces-claim-ceilings",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/distinct-proof-surfaces-claim-ceilings.json",
+      "validator_check_id": "distinct-proof-surfaces-claim-ceilings"
     },
     {
-      "obligation_id": "distribution-sharing-surface-claim-separation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof",
       "law_id": "distribution-sharing-surface-claim-separation",
-      "standards_row_id": "distribution-sharing-surface-claim-separation",
-      "validator_check_id": "distribution-sharing-surface-claim-separation",
-      "red_fixture_id": "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
+      "obligation_id": "distribution-sharing-surface-claim-separation",
       "receipt_requirement": "mandatory-law receipt distribution-sharing-surface-claim-separation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "distribution_sharing_claims_withheld_without_same_surface_app_workspace_public_proof"
+      "red_fixture_id": "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "distribution-sharing-surface-claim-separation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json",
+      "validator_check_id": "distribution-sharing-surface-claim-separation"
     },
     {
-      "obligation_id": "execplan-no-handback-prototype-promotion-discard",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "execplan_claims_withheld_without_no_handback_and_prototype_gates",
       "law_id": "execplan-no-handback-prototype-promotion-discard",
-      "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
-      "validator_check_id": "execplan-no-handback-prototype-promotion-discard",
-      "red_fixture_id": "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json",
+      "obligation_id": "execplan-no-handback-prototype-promotion-discard",
       "receipt_requirement": "mandatory-law receipt execplan-no-handback-prototype-promotion-discard and source-obligation parity red fixture",
-      "claim_ceiling_impact": "execplan_claims_withheld_without_no_handback_and_prototype_gates"
+      "red_fixture_id": "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json",
+      "validator_check_id": "execplan-no-handback-prototype-promotion-discard"
     },
     {
-      "obligation_id": "execplan-plain-language-expected-output-interface-completeness",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "execplan_claims_withheld_without_plain_language_interface_receipt",
       "law_id": "execplan-plain-language-expected-output-interface-completeness",
-      "standards_row_id": "execplan-plain-language-expected-output-interface-completeness",
-      "validator_check_id": "execplan-plain-language-expected-output-interface-completeness",
-      "red_fixture_id": "execplan-plain-language-expected-output-interface-completeness-terms-defined-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json",
+      "obligation_id": "execplan-plain-language-expected-output-interface-completeness",
       "receipt_requirement": "mandatory-law receipt execplan-plain-language-expected-output-interface-completeness and source-obligation parity red fixture",
-      "claim_ceiling_impact": "execplan_claims_withheld_without_plain_language_interface_receipt"
+      "red_fixture_id": "execplan-plain-language-expected-output-interface-completeness-terms-defined-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "execplan-plain-language-expected-output-interface-completeness",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json",
+      "validator_check_id": "execplan-plain-language-expected-output-interface-completeness"
     },
     {
-      "obligation_id": "failure-remediation-quality-agent-actionable-output",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "repair_claims_withheld_without_agent_actionable_failure_output",
       "law_id": "failure-remediation-quality-agent-actionable-output",
-      "standards_row_id": "failure-remediation-quality-agent-actionable-output",
-      "validator_check_id": "failure-remediation-quality-agent-actionable-output",
-      "red_fixture_id": "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+      "obligation_id": "failure-remediation-quality-agent-actionable-output",
       "receipt_requirement": "mandatory-law receipt failure-remediation-quality-agent-actionable-output and source-obligation parity red fixture",
-      "claim_ceiling_impact": "repair_claims_withheld_without_agent_actionable_failure_output"
+      "red_fixture_id": "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "failure-remediation-quality-agent-actionable-output",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/failure-remediation-quality-agent-actionable-output.json",
+      "validator_check_id": "failure-remediation-quality-agent-actionable-output"
     },
     {
-      "obligation_id": "feedback-to-rule-promotion",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "material_repeated_findings_withheld_without_promotion_receipt",
       "law_id": "feedback-to-rule-promotion",
-      "standards_row_id": "feedback-to-rule-promotion",
-      "validator_check_id": "feedback-to-rule-promotion",
-      "red_fixture_id": "feedback-to-rule-promotion-source-session-id-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json",
+      "obligation_id": "feedback-to-rule-promotion",
       "receipt_requirement": "mandatory-law receipt feedback-to-rule-promotion and source-obligation parity red fixture",
-      "claim_ceiling_impact": "material_repeated_findings_withheld_without_promotion_receipt"
+      "red_fixture_id": "feedback-to-rule-promotion-source-session-id-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "feedback-to-rule-promotion",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json",
+      "validator_check_id": "feedback-to-rule-promotion"
     },
     {
-      "obligation_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "claim_green_states_withheld_without_forward_only_transition_history",
       "law_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-      "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-      "validator_check_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
-      "red_fixture_id": "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+      "obligation_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
       "receipt_requirement": "mandatory-law receipt forward-only-state-transition-integrity-silent-reopen-prevention and source-obligation parity red fixture",
-      "claim_ceiling_impact": "claim_green_states_withheld_without_forward_only_transition_history"
+      "red_fixture_id": "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
+      "validator_check_id": "forward-only-state-transition-integrity-silent-reopen-prevention"
     },
     {
-      "obligation_id": "fresh-init-retrofit-mode-separation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "setup_claims_withheld_without_same_mode_receipt",
       "law_id": "fresh-init-retrofit-mode-separation",
-      "standards_row_id": "fresh-init-retrofit-mode-separation",
-      "validator_check_id": "fresh-init-retrofit-mode-separation",
-      "red_fixture_id": "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
+      "obligation_id": "fresh-init-retrofit-mode-separation",
       "receipt_requirement": "mandatory-law receipt fresh-init-retrofit-mode-separation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "setup_claims_withheld_without_same_mode_receipt"
+      "red_fixture_id": "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "fresh-init-retrofit-mode-separation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
+      "validator_check_id": "fresh-init-retrofit-mode-separation"
     },
     {
-      "obligation_id": "fresh-retrofit-repo-shape",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "target_fixture_only",
       "law_id": "fresh-retrofit-repo-shape",
-      "standards_row_id": "fresh-retrofit-repo-shape",
-      "validator_check_id": "fresh-retrofit-repo-shape",
-      "red_fixture_id": "fresh-retrofit-repo-shape-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/fresh-retrofit-repo-shape.json",
+      "obligation_id": "fresh-retrofit-repo-shape",
       "receipt_requirement": "mandatory-law receipt fresh-retrofit-repo-shape and source-obligation parity red fixture",
-      "claim_ceiling_impact": "target_fixture_only"
+      "red_fixture_id": "fresh-retrofit-repo-shape-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "fresh-retrofit-repo-shape",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/fresh-retrofit-repo-shape.json",
+      "validator_check_id": "fresh-retrofit-repo-shape"
     },
     {
-      "obligation_id": "generated-proof-artifact-provenance-anti-fabrication",
+      "claim_ceiling_impact": "readiness_release_completion_final_packet_update_goal_claims_withheld_without_live_stack_queryable_observability_receipt",
+      "law_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "obligation_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "receipt_requirement": "observe prove receipt with live VictoriaLogs, VictoriaMetrics, VictoriaTraces query proof and same-candidate binding",
+      "red_fixture_id": "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red",
       "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
       },
+      "standards_row_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/full-local-observability-stack-integration-non-opaque-failure.json",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure"
+    },
+    {
+      "claim_ceiling_impact": "generated_proof_claims_withheld_without_reproducible_provenance",
       "law_id": "generated-proof-artifact-provenance-anti-fabrication",
-      "standards_row_id": "generated-proof-artifact-provenance-anti-fabrication",
-      "validator_check_id": "generated-proof-artifact-provenance-anti-fabrication",
-      "red_fixture_id": "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json",
+      "obligation_id": "generated-proof-artifact-provenance-anti-fabrication",
       "receipt_requirement": "mandatory-law receipt generated-proof-artifact-provenance-anti-fabrication and source-obligation parity red fixture",
-      "claim_ceiling_impact": "generated_proof_claims_withheld_without_reproducible_provenance"
+      "red_fixture_id": "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "generated-proof-artifact-provenance-anti-fabrication",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json",
+      "validator_check_id": "generated-proof-artifact-provenance-anti-fabrication"
     },
     {
-      "obligation_id": "generated-ready-completion-receipts",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "handwritten_ready_unsupported",
       "law_id": "generated-ready-completion-receipts",
-      "standards_row_id": "generated-ready-completion-receipts",
-      "validator_check_id": "generated-ready-completion-receipts",
-      "red_fixture_id": "generated-ready-completion-receipts-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/generated-ready-completion-receipts.json",
+      "obligation_id": "generated-ready-completion-receipts",
       "receipt_requirement": "mandatory-law receipt generated-ready-completion-receipts and source-obligation parity red fixture",
-      "claim_ceiling_impact": "handwritten_ready_unsupported"
+      "red_fixture_id": "generated-ready-completion-receipts-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "generated-ready-completion-receipts",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/generated-ready-completion-receipts.json",
+      "validator_check_id": "generated-ready-completion-receipts"
     },
     {
-      "obligation_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids",
       "law_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-      "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-      "validator_check_id": "goal-contract-amendment-authority-required-claim-id-mapping",
-      "red_fixture_id": "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+      "obligation_id": "goal-contract-amendment-authority-required-claim-id-mapping",
       "receipt_requirement": "mandatory-law receipt goal-contract-amendment-authority-required-claim-id-mapping and source-obligation parity red fixture",
-      "claim_ceiling_impact": "completion_claims_withheld_without_append_only_contract_amendment_and_closed_claim_ids"
+      "red_fixture_id": "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",
+      "validator_check_id": "goal-contract-amendment-authority-required-claim-id-mapping"
     },
     {
-      "obligation_id": "green-path-adequacy-satisfiable-strictness",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "compliance_claims_withheld_when_any_law_lacks_green_path",
       "law_id": "green-path-adequacy-satisfiable-strictness",
-      "standards_row_id": "green-path-adequacy-satisfiable-strictness",
-      "validator_check_id": "green-path-adequacy-satisfiable-strictness",
-      "red_fixture_id": "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/green-path-adequacy-satisfiable-strictness.json",
+      "obligation_id": "green-path-adequacy-satisfiable-strictness",
       "receipt_requirement": "mandatory-law receipt green-path-adequacy-satisfiable-strictness and source-obligation parity red fixture",
-      "claim_ceiling_impact": "compliance_claims_withheld_when_any_law_lacks_green_path"
+      "red_fixture_id": "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "green-path-adequacy-satisfiable-strictness",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/green-path-adequacy-satisfiable-strictness.json",
+      "validator_check_id": "green-path-adequacy-satisfiable-strictness"
     },
     {
-      "obligation_id": "guardrail-speed-isolation-cache-honesty",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "guardrail_claims_withheld_without_speed_isolation_cache_receipt",
       "law_id": "guardrail-speed-isolation-cache-honesty",
-      "standards_row_id": "guardrail-speed-isolation-cache-honesty",
-      "validator_check_id": "guardrail-speed-isolation-cache-honesty",
-      "red_fixture_id": "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json",
+      "obligation_id": "guardrail-speed-isolation-cache-honesty",
       "receipt_requirement": "mandatory-law receipt guardrail-speed-isolation-cache-honesty and source-obligation parity red fixture",
-      "claim_ceiling_impact": "guardrail_claims_withheld_without_speed_isolation_cache_receipt"
+      "red_fixture_id": "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "guardrail-speed-isolation-cache-honesty",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json",
+      "validator_check_id": "guardrail-speed-isolation-cache-honesty"
     },
     {
-      "obligation_id": "historical-regression-corpus-session-review-signals",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "completion_claims_withheld_without_historical_regression_corpus",
       "law_id": "historical-regression-corpus-session-review-signals",
-      "standards_row_id": "historical-regression-corpus-session-review-signals",
-      "validator_check_id": "historical-regression-corpus-session-review-signals",
-      "red_fixture_id": "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/historical-regression-corpus-session-review-signals.json",
+      "obligation_id": "historical-regression-corpus-session-review-signals",
       "receipt_requirement": "mandatory-law receipt historical-regression-corpus-session-review-signals and source-obligation parity red fixture",
-      "claim_ceiling_impact": "completion_claims_withheld_without_historical_regression_corpus"
+      "red_fixture_id": "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "historical-regression-corpus-session-review-signals",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/historical-regression-corpus-session-review-signals.json",
+      "validator_check_id": "historical-regression-corpus-session-review-signals"
     },
     {
-      "obligation_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "mandatory_law_claims_withheld_without_deterministic_split_and_judgment_only_blocker",
       "law_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
-      "standards_row_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
-      "validator_check_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
-      "red_fixture_id": "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+      "obligation_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
       "receipt_requirement": "mandatory-law receipt human-audit-disposition-decomposition-judgment-claim-blocking and source-obligation parity red fixture",
-      "claim_ceiling_impact": "mandatory_law_claims_withheld_without_deterministic_split_and_judgment_only_blocker"
+      "red_fixture_id": "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/human-audit-disposition-decomposition-judgment-claim-blocking.json",
+      "validator_check_id": "human-audit-disposition-decomposition-judgment-claim-blocking"
     },
     {
-      "obligation_id": "instruction-precedence-nested-agents-routing",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "instruction_claims_withheld_without_strict_precedence_route",
       "law_id": "instruction-precedence-nested-agents-routing",
-      "standards_row_id": "instruction-precedence-nested-agents-routing",
-      "validator_check_id": "instruction-precedence-nested-agents-routing",
-      "red_fixture_id": "instruction-precedence-nested-agents-routing-root-and-nested-agents-route-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+      "obligation_id": "instruction-precedence-nested-agents-routing",
       "receipt_requirement": "mandatory-law receipt instruction-precedence-nested-agents-routing and source-obligation parity red fixture",
-      "claim_ceiling_impact": "instruction_claims_withheld_without_strict_precedence_route"
+      "red_fixture_id": "instruction-precedence-nested-agents-routing-root-and-nested-agents-route-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "instruction-precedence-nested-agents-routing",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json",
+      "validator_check_id": "instruction-precedence-nested-agents-routing"
     },
     {
-      "obligation_id": "issue-tracker-lifecycle-eligibility-terminal-state",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "issue_goal_claims_withheld_without_typed_lifecycle_evidence",
       "law_id": "issue-tracker-lifecycle-eligibility-terminal-state",
-      "standards_row_id": "issue-tracker-lifecycle-eligibility-terminal-state",
-      "validator_check_id": "issue-tracker-lifecycle-eligibility-terminal-state",
-      "red_fixture_id": "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/issue-tracker-lifecycle-eligibility-terminal-state.json",
+      "obligation_id": "issue-tracker-lifecycle-eligibility-terminal-state",
       "receipt_requirement": "mandatory-law receipt issue-tracker-lifecycle-eligibility-terminal-state and source-obligation parity red fixture",
-      "claim_ceiling_impact": "issue_goal_claims_withheld_without_typed_lifecycle_evidence"
+      "red_fixture_id": "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "issue-tracker-lifecycle-eligibility-terminal-state",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/issue-tracker-lifecycle-eligibility-terminal-state.json",
+      "validator_check_id": "issue-tracker-lifecycle-eligibility-terminal-state"
     },
     {
-      "obligation_id": "lane-worktree-isolation-cleanup",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "fixture_only",
       "law_id": "lane-worktree-isolation-cleanup",
-      "standards_row_id": "lane-worktree-isolation-cleanup",
-      "validator_check_id": "lane-worktree-isolation-cleanup",
-      "red_fixture_id": "lane-worktree-isolation-cleanup-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/lane-worktree-isolation-cleanup.json",
+      "obligation_id": "lane-worktree-isolation-cleanup",
       "receipt_requirement": "mandatory-law receipt lane-worktree-isolation-cleanup and source-obligation parity red fixture",
-      "claim_ceiling_impact": "fixture_only"
+      "red_fixture_id": "lane-worktree-isolation-cleanup-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "lane-worktree-isolation-cleanup",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/lane-worktree-isolation-cleanup.json",
+      "validator_check_id": "lane-worktree-isolation-cleanup"
     },
     {
-      "obligation_id": "live-beneficial-e2e",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "static_fixtures_not_live_benefit",
       "law_id": "live-beneficial-e2e",
-      "standards_row_id": "live-beneficial-e2e",
-      "validator_check_id": "live-beneficial-e2e",
-      "red_fixture_id": "live-beneficial-e2e-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/live-beneficial-e2e.json",
+      "obligation_id": "live-beneficial-e2e",
       "receipt_requirement": "mandatory-law receipt live-beneficial-e2e and source-obligation parity red fixture",
-      "claim_ceiling_impact": "static_fixtures_not_live_benefit"
+      "red_fixture_id": "live-beneficial-e2e-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "live-beneficial-e2e",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/live-beneficial-e2e.json",
+      "validator_check_id": "live-beneficial-e2e"
     },
     {
-      "obligation_id": "memory-wiki-context-only",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence",
       "law_id": "memory-wiki-context-only",
-      "standards_row_id": "memory-wiki-context-only",
-      "validator_check_id": "memory-wiki-context-only",
-      "red_fixture_id": "memory-wiki-context-only-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/memory-wiki-context-only.json",
+      "obligation_id": "memory-wiki-context-only",
       "receipt_requirement": "mandatory-law receipt memory-wiki-context-only and source-obligation parity red fixture",
-      "claim_ceiling_impact": "implementation_proof_claims_withheld_when_memory_wiki_chronicle_or_session_summaries_are_not_joined_to_live_same_surface_evidence"
+      "red_fixture_id": "memory-wiki-context-only-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "memory-wiki-context-only",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/memory-wiki-context-only.json",
+      "validator_check_id": "memory-wiki-context-only"
     },
     {
-      "obligation_id": "namespace-progressive-disclosure",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "completion_review_package_readiness_release_claims_withheld_when_namespace_law_fails",
       "law_id": "namespace-progressive-disclosure",
-      "standards_row_id": "namespace-progressive-disclosure",
-      "validator_check_id": "namespace-progressive-disclosure",
-      "red_fixture_id": "namespace-progressive-disclosure-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/namespace-progressive-disclosure.json",
+      "obligation_id": "namespace-progressive-disclosure",
       "receipt_requirement": "mandatory-law receipt namespace-progressive-disclosure and source-obligation parity red fixture",
-      "claim_ceiling_impact": "completion_review_package_readiness_release_claims_withheld_when_namespace_law_fails"
+      "red_fixture_id": "namespace-progressive-disclosure-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "namespace-progressive-disclosure",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/namespace-progressive-disclosure.json",
+      "validator_check_id": "namespace-progressive-disclosure"
     },
     {
-      "obligation_id": "non-e2e-claim-ceiling-confidence-bounds",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_live_claims_withheld_above_non_e2e_ceiling",
       "law_id": "non-e2e-claim-ceiling-confidence-bounds",
-      "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
-      "validator_check_id": "non-e2e-claim-ceiling-confidence-bounds",
-      "red_fixture_id": "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+      "obligation_id": "non-e2e-claim-ceiling-confidence-bounds",
       "receipt_requirement": "mandatory-law receipt non-e2e-claim-ceiling-confidence-bounds and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_live_claims_withheld_above_non_e2e_ceiling"
+      "red_fixture_id": "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/non-e2e-claim-ceiling-confidence-bounds.json",
+      "validator_check_id": "non-e2e-claim-ceiling-confidence-bounds"
     },
     {
-      "obligation_id": "offline-schema-catalog-resolver-portability",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "schema_validation_claims_withheld_without_offline_catalog_resolution",
       "law_id": "offline-schema-catalog-resolver-portability",
-      "standards_row_id": "offline-schema-catalog-resolver-portability",
-      "validator_check_id": "offline-schema-catalog-resolver-portability",
-      "red_fixture_id": "offline-schema-catalog-resolver-portability-remote-schema-fetch-attempt-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/offline-schema-catalog-resolver-portability.json",
+      "obligation_id": "offline-schema-catalog-resolver-portability",
       "receipt_requirement": "mandatory-law receipt offline-schema-catalog-resolver-portability and source-obligation parity red fixture",
-      "claim_ceiling_impact": "schema_validation_claims_withheld_without_offline_catalog_resolution"
+      "red_fixture_id": "offline-schema-catalog-resolver-portability-remote-schema-fetch-attempt-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "offline-schema-catalog-resolver-portability",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/offline-schema-catalog-resolver-portability.json",
+      "validator_check_id": "offline-schema-catalog-resolver-portability"
     },
     {
-      "obligation_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt",
       "law_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
-      "standards_row_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
-      "validator_check_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
-      "red_fixture_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json",
+      "obligation_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
       "receipt_requirement": "mandatory-law receipt one-command-fresh-environment-bootstrap-concurrent-resource-allocation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "bootstrap_claims_withheld_without_one_command_concurrent_safe_receipt"
+      "red_fixture_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json",
+      "validator_check_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation"
     },
     {
-      "obligation_id": "orchestrator-state-machine",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "orchestration_claims_withheld_without_state_machine_receipt",
       "law_id": "orchestrator-state-machine",
-      "standards_row_id": "orchestrator-state-machine",
-      "validator_check_id": "orchestrator-state-machine",
-      "red_fixture_id": "orchestrator-state-machine-bounded-concurrency-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json",
+      "obligation_id": "orchestrator-state-machine",
       "receipt_requirement": "mandatory-law receipt orchestrator-state-machine and source-obligation parity red fixture",
-      "claim_ceiling_impact": "orchestration_claims_withheld_without_state_machine_receipt"
+      "red_fixture_id": "orchestrator-state-machine-bounded-concurrency-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "orchestrator-state-machine",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json",
+      "validator_check_id": "orchestrator-state-machine"
     },
     {
-      "obligation_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "installable_package_claims_withheld_without_closed_component_graph",
       "law_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
-      "standards_row_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
-      "validator_check_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
-      "red_fixture_id": "plugin-bundled-component-graph-hook-app-mcp-safety-component-graph-complete-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json",
+      "obligation_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
       "receipt_requirement": "mandatory-law receipt plugin-bundled-component-graph-hook-app-mcp-safety and source-obligation parity red fixture",
-      "claim_ceiling_impact": "installable_package_claims_withheld_without_closed_component_graph"
+      "red_fixture_id": "plugin-bundled-component-graph-hook-app-mcp-safety-component-graph-complete-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json",
+      "validator_check_id": "plugin-bundled-component-graph-hook-app-mcp-safety"
     },
     {
-      "obligation_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "plugin_product_claims_withheld_without_closed_flow_graph_and_journey_receipt",
       "law_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
-      "standards_row_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
-      "validator_check_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
-      "red_fixture_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+      "obligation_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
       "receipt_requirement": "mandatory-law receipt plugin-flow-graph-package-dependency-closure-plugin-product-journey and source-obligation parity red fixture",
-      "claim_ceiling_impact": "plugin_product_claims_withheld_without_closed_flow_graph_and_journey_receipt"
+      "red_fixture_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-flow-graph-package-dependency-closure-plugin-product-journey.json",
+      "validator_check_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey"
     },
     {
-      "obligation_id": "plugin-install-surface-metadata-cache-enable-state",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "install_marketplace_enable_claims_withheld_without_same_surface_receipt",
       "law_id": "plugin-install-surface-metadata-cache-enable-state",
-      "standards_row_id": "plugin-install-surface-metadata-cache-enable-state",
-      "validator_check_id": "plugin-install-surface-metadata-cache-enable-state",
-      "red_fixture_id": "plugin-install-surface-metadata-cache-enable-state-manifest-identity-match-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json",
+      "obligation_id": "plugin-install-surface-metadata-cache-enable-state",
       "receipt_requirement": "mandatory-law receipt plugin-install-surface-metadata-cache-enable-state and source-obligation parity red fixture",
-      "claim_ceiling_impact": "install_marketplace_enable_claims_withheld_without_same_surface_receipt"
+      "red_fixture_id": "plugin-install-surface-metadata-cache-enable-state-manifest-identity-match-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "plugin-install-surface-metadata-cache-enable-state",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json",
+      "validator_check_id": "plugin-install-surface-metadata-cache-enable-state"
     },
     {
-      "obligation_id": "portable-non-prescriptive-adapter-implementation-choice",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "generic_claims_withheld_without_portable_adapter_boundaries",
       "law_id": "portable-non-prescriptive-adapter-implementation-choice",
-      "standards_row_id": "portable-non-prescriptive-adapter-implementation-choice",
-      "validator_check_id": "portable-non-prescriptive-adapter-implementation-choice",
-      "red_fixture_id": "portable-non-prescriptive-adapter-implementation-choice-exact-tracker-required-by-generic-claim-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/portable-non-prescriptive-adapter-implementation-choice.json",
+      "obligation_id": "portable-non-prescriptive-adapter-implementation-choice",
       "receipt_requirement": "mandatory-law receipt portable-non-prescriptive-adapter-implementation-choice and source-obligation parity red fixture",
-      "claim_ceiling_impact": "generic_claims_withheld_without_portable_adapter_boundaries"
+      "red_fixture_id": "portable-non-prescriptive-adapter-implementation-choice-exact-tracker-required-by-generic-claim-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "portable-non-prescriptive-adapter-implementation-choice",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/portable-non-prescriptive-adapter-implementation-choice.json",
+      "validator_check_id": "portable-non-prescriptive-adapter-implementation-choice"
     },
     {
-      "obligation_id": "privacy-raw-artifact-boundary",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "raw_private_artifacts_are_not_review_or_fixture_material",
       "law_id": "privacy-raw-artifact-boundary",
-      "standards_row_id": "privacy-raw-artifact-boundary",
-      "validator_check_id": "privacy-raw-artifact-boundary",
-      "red_fixture_id": "privacy-raw-artifact-boundary-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/privacy-raw-artifact-boundary.json",
+      "obligation_id": "privacy-raw-artifact-boundary",
       "receipt_requirement": "mandatory-law receipt privacy-raw-artifact-boundary and source-obligation parity red fixture",
-      "claim_ceiling_impact": "raw_private_artifacts_are_not_review_or_fixture_material"
+      "red_fixture_id": "privacy-raw-artifact-boundary-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "privacy-raw-artifact-boundary",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/privacy-raw-artifact-boundary.json",
+      "validator_check_id": "privacy-raw-artifact-boundary"
     },
     {
-      "obligation_id": "product-cohesion-product-claims",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "engine_proof_not_product_proof",
       "law_id": "product-cohesion-product-claims",
-      "standards_row_id": "product-cohesion-product-claims",
-      "validator_check_id": "product-cohesion-product-claims",
-      "red_fixture_id": "product-cohesion-product-claims-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-cohesion-product-claims.json",
+      "obligation_id": "product-cohesion-product-claims",
       "receipt_requirement": "mandatory-law receipt product-cohesion-product-claims and source-obligation parity red fixture",
-      "claim_ceiling_impact": "engine_proof_not_product_proof"
+      "red_fixture_id": "product-cohesion-product-claims-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-cohesion-product-claims",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-cohesion-product-claims.json",
+      "validator_check_id": "product-cohesion-product-claims"
     },
     {
-      "obligation_id": "product-live-surface-receipts",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "live_product_recording_replay_parent_operation_claims_withheld_without_same_surface_live_receipt",
       "law_id": "product-live-surface-receipts",
-      "standards_row_id": "product-live-surface-receipts",
-      "validator_check_id": "product-live-surface-receipts",
-      "red_fixture_id": "product-live-surface-receipts-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-live-surface-receipts.json",
+      "obligation_id": "product-live-surface-receipts",
       "receipt_requirement": "mandatory-law receipt product-live-surface-receipts and source-obligation parity red fixture",
-      "claim_ceiling_impact": "live_product_recording_replay_parent_operation_claims_withheld_without_same_surface_live_receipt"
+      "red_fixture_id": "product-live-surface-receipts-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-live-surface-receipts",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-live-surface-receipts.json",
+      "validator_check_id": "product-live-surface-receipts"
     },
     {
-      "obligation_id": "product-proof-joins-substitution-blocking",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_success_claims_withheld_without_same_surface_product_proof_join",
       "law_id": "product-proof-joins-substitution-blocking",
-      "standards_row_id": "product-proof-joins-substitution-blocking",
-      "validator_check_id": "product-proof-joins-substitution-blocking",
-      "red_fixture_id": "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+      "obligation_id": "product-proof-joins-substitution-blocking",
       "receipt_requirement": "mandatory-law receipt product-proof-joins-substitution-blocking and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_success_claims_withheld_without_same_surface_product_proof_join"
+      "red_fixture_id": "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-proof-joins-substitution-blocking",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-proof-joins-substitution-blocking.json",
+      "validator_check_id": "product-proof-joins-substitution-blocking"
     },
     {
-      "obligation_id": "product-strategy-positioning-research-eval-before-lane-planning",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_lane_planning_claims_withheld_without_strategy_research_eval_artifacts",
       "law_id": "product-strategy-positioning-research-eval-before-lane-planning",
-      "standards_row_id": "product-strategy-positioning-research-eval-before-lane-planning",
-      "validator_check_id": "product-strategy-positioning-research-eval-before-lane-planning",
-      "red_fixture_id": "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-strategy-positioning-research-eval-before-lane-planning.json",
+      "obligation_id": "product-strategy-positioning-research-eval-before-lane-planning",
       "receipt_requirement": "mandatory-law receipt product-strategy-positioning-research-eval-before-lane-planning and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_lane_planning_claims_withheld_without_strategy_research_eval_artifacts"
+      "red_fixture_id": "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-strategy-positioning-research-eval-before-lane-planning",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-strategy-positioning-research-eval-before-lane-planning.json",
+      "validator_check_id": "product-strategy-positioning-research-eval-before-lane-planning"
     },
     {
-      "obligation_id": "product-success-binding-goal-lane-execplan-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_lane_claims_withheld_without_product_success_binding",
       "law_id": "product-success-binding-goal-lane-execplan-authority",
-      "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
-      "validator_check_id": "product-success-binding-goal-lane-execplan-authority",
-      "red_fixture_id": "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+      "obligation_id": "product-success-binding-goal-lane-execplan-authority",
       "receipt_requirement": "mandatory-law receipt product-success-binding-goal-lane-execplan-authority and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_lane_claims_withheld_without_product_success_binding"
+      "red_fixture_id": "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-binding-goal-lane-execplan-authority.json",
+      "validator_check_id": "product-success-binding-goal-lane-execplan-authority"
     },
     {
-      "obligation_id": "product-success-contract-initiation-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_claims_withheld_without_initiation_time_product_success_contract",
       "law_id": "product-success-contract-initiation-authority",
-      "standards_row_id": "product-success-contract-initiation-authority",
-      "validator_check_id": "product-success-contract-initiation-authority",
-      "red_fixture_id": "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-contract-initiation-authority.json",
+      "obligation_id": "product-success-contract-initiation-authority",
       "receipt_requirement": "mandatory-law receipt product-success-contract-initiation-authority and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_claims_withheld_without_initiation_time_product_success_contract"
+      "red_fixture_id": "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-contract-initiation-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-contract-initiation-authority.json",
+      "validator_check_id": "product-success-contract-initiation-authority"
     },
     {
-      "obligation_id": "product-success-contract-review-packet-team-skill-routing",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "review_packet_claims_withheld_without_product_success_contract_review_and_routing",
       "law_id": "product-success-contract-review-packet-team-skill-routing",
-      "standards_row_id": "product-success-contract-review-packet-team-skill-routing",
-      "validator_check_id": "product-success-contract-review-packet-team-skill-routing",
-      "red_fixture_id": "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-contract-review-packet-team-skill-routing.json",
+      "obligation_id": "product-success-contract-review-packet-team-skill-routing",
       "receipt_requirement": "mandatory-law receipt product-success-contract-review-packet-team-skill-routing and source-obligation parity red fixture",
-      "claim_ceiling_impact": "review_packet_claims_withheld_without_product_success_contract_review_and_routing"
+      "red_fixture_id": "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-contract-review-packet-team-skill-routing",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-contract-review-packet-team-skill-routing.json",
+      "validator_check_id": "product-success-contract-review-packet-team-skill-routing"
     },
     {
-      "obligation_id": "product-success-inspiration-source-provenance-disposition",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_requirements_claims_withheld_without_inspiration_source_disposition",
       "law_id": "product-success-inspiration-source-provenance-disposition",
-      "standards_row_id": "product-success-inspiration-source-provenance-disposition",
-      "validator_check_id": "product-success-inspiration-source-provenance-disposition",
-      "red_fixture_id": "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-inspiration-source-provenance-disposition.json",
+      "obligation_id": "product-success-inspiration-source-provenance-disposition",
       "receipt_requirement": "mandatory-law receipt product-success-inspiration-source-provenance-disposition and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_requirements_claims_withheld_without_inspiration_source_disposition"
+      "red_fixture_id": "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-inspiration-source-provenance-disposition",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-inspiration-source-provenance-disposition.json",
+      "validator_check_id": "product-success-inspiration-source-provenance-disposition"
     },
     {
-      "obligation_id": "product-success-lifecycle-transitions-no-late-afterthought",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_success_claims_withheld_without_lifecycle_transition_receipts",
       "law_id": "product-success-lifecycle-transitions-no-late-afterthought",
-      "standards_row_id": "product-success-lifecycle-transitions-no-late-afterthought",
-      "validator_check_id": "product-success-lifecycle-transitions-no-late-afterthought",
-      "red_fixture_id": "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-lifecycle-transitions-no-late-afterthought.json",
+      "obligation_id": "product-success-lifecycle-transitions-no-late-afterthought",
       "receipt_requirement": "mandatory-law receipt product-success-lifecycle-transitions-no-late-afterthought and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_success_claims_withheld_without_lifecycle_transition_receipts"
+      "red_fixture_id": "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-lifecycle-transitions-no-late-afterthought",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-lifecycle-transitions-no-late-afterthought.json",
+      "validator_check_id": "product-success-lifecycle-transitions-no-late-afterthought"
     },
     {
-      "obligation_id": "product-success-lineage-amendments-closed-product-claim-ids",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "product_claims_withheld_without_lineage_amendments_and_closed_product_claim_ids",
       "law_id": "product-success-lineage-amendments-closed-product-claim-ids",
-      "standards_row_id": "product-success-lineage-amendments-closed-product-claim-ids",
-      "validator_check_id": "product-success-lineage-amendments-closed-product-claim-ids",
-      "red_fixture_id": "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-lineage-amendments-closed-product-claim-ids.json",
+      "obligation_id": "product-success-lineage-amendments-closed-product-claim-ids",
       "receipt_requirement": "mandatory-law receipt product-success-lineage-amendments-closed-product-claim-ids and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_claims_withheld_without_lineage_amendments_and_closed_product_claim_ids"
+      "red_fixture_id": "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "product-success-lineage-amendments-closed-product-claim-ids",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/product-success-lineage-amendments-closed-product-claim-ids.json",
+      "validator_check_id": "product-success-lineage-amendments-closed-product-claim-ids"
     },
     {
-      "obligation_id": "purpose-backed-active-files",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "archive_only_or_orphan_files_withhold_active_repo_claims",
       "law_id": "purpose-backed-active-files",
-      "standards_row_id": "purpose-backed-active-files",
-      "validator_check_id": "purpose-backed-active-files",
-      "red_fixture_id": "purpose-backed-active-files-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/purpose-backed-active-files.json",
+      "obligation_id": "purpose-backed-active-files",
       "receipt_requirement": "mandatory-law receipt purpose-backed-active-files and source-obligation parity red fixture",
-      "claim_ceiling_impact": "archive_only_or_orphan_files_withhold_active_repo_claims"
+      "red_fixture_id": "purpose-backed-active-files-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "purpose-backed-active-files",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/purpose-backed-active-files.json",
+      "validator_check_id": "purpose-backed-active-files"
     },
     {
-      "obligation_id": "quality-score-taste-gates",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "quality_claims_withheld_without_current_evidence_bound_score",
       "law_id": "quality-score-taste-gates",
-      "standards_row_id": "quality-score-taste-gates",
-      "validator_check_id": "quality-score-taste-gates",
-      "red_fixture_id": "quality-score-taste-gates-changed-surface-rows-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json",
+      "obligation_id": "quality-score-taste-gates",
       "receipt_requirement": "mandatory-law receipt quality-score-taste-gates and source-obligation parity red fixture",
-      "claim_ceiling_impact": "quality_claims_withheld_without_current_evidence_bound_score"
+      "red_fixture_id": "quality-score-taste-gates-changed-surface-rows-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "quality-score-taste-gates",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json",
+      "validator_check_id": "quality-score-taste-gates"
     },
     {
-      "obligation_id": "raw-private-artifact-handling-category-only-evidence",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "evidence_claims_withheld_without_redacted_category_only_outputs",
       "law_id": "raw-private-artifact-handling-category-only-evidence",
-      "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
-      "validator_check_id": "raw-private-artifact-handling-category-only-evidence",
-      "red_fixture_id": "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+      "obligation_id": "raw-private-artifact-handling-category-only-evidence",
       "receipt_requirement": "mandatory-law receipt raw-private-artifact-handling-category-only-evidence and source-obligation parity red fixture",
-      "claim_ceiling_impact": "evidence_claims_withheld_without_redacted_category_only_outputs"
+      "red_fixture_id": "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/raw-private-artifact-handling-category-only-evidence.json",
+      "validator_check_id": "raw-private-artifact-handling-category-only-evidence"
     },
     {
-      "obligation_id": "repo-knowledge-index-core-beliefs",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "law_claims_withheld_without_fresh_knowledge_index",
       "law_id": "repo-knowledge-index-core-beliefs",
-      "standards_row_id": "repo-knowledge-index-core-beliefs",
-      "validator_check_id": "repo-knowledge-index-core-beliefs",
-      "red_fixture_id": "repo-knowledge-index-core-beliefs-law-docs-indexed-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
+      "obligation_id": "repo-knowledge-index-core-beliefs",
       "receipt_requirement": "mandatory-law receipt repo-knowledge-index-core-beliefs and source-obligation parity red fixture",
-      "claim_ceiling_impact": "law_claims_withheld_without_fresh_knowledge_index"
+      "red_fixture_id": "repo-knowledge-index-core-beliefs-law-docs-indexed-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "repo-knowledge-index-core-beliefs",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
+      "validator_check_id": "repo-knowledge-index-core-beliefs"
     },
     {
-      "obligation_id": "restartable-execplans",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt",
       "law_id": "restartable-execplans",
-      "standards_row_id": "restartable-execplans",
-      "validator_check_id": "restartable-execplans",
-      "red_fixture_id": "restartable-execplans-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/restartable-execplans.json",
+      "obligation_id": "restartable-execplans",
       "receipt_requirement": "mandatory-law receipt restartable-execplans and source-obligation parity red fixture",
-      "claim_ceiling_impact": "plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt"
+      "red_fixture_id": "restartable-execplans-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "restartable-execplans",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/restartable-execplans.json",
+      "validator_check_id": "restartable-execplans"
     },
     {
-      "obligation_id": "review-disagreement-override-judgment-boundary-governance",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "review_claims_withheld_without_override_boundary_governance",
       "law_id": "review-disagreement-override-judgment-boundary-governance",
-      "standards_row_id": "review-disagreement-override-judgment-boundary-governance",
-      "validator_check_id": "review-disagreement-override-judgment-boundary-governance",
-      "red_fixture_id": "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/review-disagreement-override-judgment-boundary-governance.json",
+      "obligation_id": "review-disagreement-override-judgment-boundary-governance",
       "receipt_requirement": "mandatory-law receipt review-disagreement-override-judgment-boundary-governance and source-obligation parity red fixture",
-      "claim_ceiling_impact": "review_claims_withheld_without_override_boundary_governance"
+      "red_fixture_id": "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "review-disagreement-override-judgment-boundary-governance",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/review-disagreement-override-judgment-boundary-governance.json",
+      "validator_check_id": "review-disagreement-override-judgment-boundary-governance"
     },
     {
-      "obligation_id": "review-feedback-disposition-same-round-satisfaction",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "review_signoff_withheld_without_same_round_feedback_disposition",
       "law_id": "review-feedback-disposition-same-round-satisfaction",
-      "standards_row_id": "review-feedback-disposition-same-round-satisfaction",
-      "validator_check_id": "review-feedback-disposition-same-round-satisfaction",
-      "red_fixture_id": "review-feedback-disposition-same-round-satisfaction-unresolved-reviewer-finding-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+      "obligation_id": "review-feedback-disposition-same-round-satisfaction",
       "receipt_requirement": "mandatory-law receipt review-feedback-disposition-same-round-satisfaction and source-obligation parity red fixture",
-      "claim_ceiling_impact": "review_signoff_withheld_without_same_round_feedback_disposition"
+      "red_fixture_id": "review-feedback-disposition-same-round-satisfaction-unresolved-reviewer-finding-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "review-feedback-disposition-same-round-satisfaction",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json",
+      "validator_check_id": "review-feedback-disposition-same-round-satisfaction"
     },
     {
-      "obligation_id": "reviewer-to-gate-conversion",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "human_review_agreement_alone_does_not_raise_claim_ceiling",
       "law_id": "reviewer-to-gate-conversion",
-      "standards_row_id": "reviewer-to-gate-conversion",
-      "validator_check_id": "reviewer-to-gate-conversion",
-      "red_fixture_id": "reviewer-to-gate-conversion-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/reviewer-to-gate-conversion.json",
+      "obligation_id": "reviewer-to-gate-conversion",
       "receipt_requirement": "mandatory-law receipt reviewer-to-gate-conversion and source-obligation parity red fixture",
-      "claim_ceiling_impact": "human_review_agreement_alone_does_not_raise_claim_ceiling"
+      "red_fixture_id": "reviewer-to-gate-conversion-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "reviewer-to-gate-conversion",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/reviewer-to-gate-conversion.json",
+      "validator_check_id": "reviewer-to-gate-conversion"
     },
     {
-      "obligation_id": "runtime-feasibility-cost-strict-gate-usability",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "strict_gate_claims_withheld_without_runtime_feasibility_receipt",
       "law_id": "runtime-feasibility-cost-strict-gate-usability",
-      "standards_row_id": "runtime-feasibility-cost-strict-gate-usability",
-      "validator_check_id": "runtime-feasibility-cost-strict-gate-usability",
-      "red_fixture_id": "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/runtime-feasibility-cost-strict-gate-usability.json",
+      "obligation_id": "runtime-feasibility-cost-strict-gate-usability",
       "receipt_requirement": "mandatory-law receipt runtime-feasibility-cost-strict-gate-usability and source-obligation parity red fixture",
-      "claim_ceiling_impact": "strict_gate_claims_withheld_without_runtime_feasibility_receipt"
+      "red_fixture_id": "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "runtime-feasibility-cost-strict-gate-usability",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/runtime-feasibility-cost-strict-gate-usability.json",
+      "validator_check_id": "runtime-feasibility-cost-strict-gate-usability"
     },
     {
-      "obligation_id": "runtime-tool-identity",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "ui_live_runtime_model_tool_app_claims_withheld_without_runtime_tool_identity_receipt",
       "law_id": "runtime-tool-identity",
-      "standards_row_id": "runtime-tool-identity",
-      "validator_check_id": "runtime-tool-identity",
-      "red_fixture_id": "runtime-tool-identity-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/runtime-tool-identity.json",
+      "obligation_id": "runtime-tool-identity",
       "receipt_requirement": "mandatory-law receipt runtime-tool-identity and source-obligation parity red fixture",
-      "claim_ceiling_impact": "ui_live_runtime_model_tool_app_claims_withheld_without_runtime_tool_identity_receipt"
+      "red_fixture_id": "runtime-tool-identity-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "runtime-tool-identity",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/runtime-tool-identity.json",
+      "validator_check_id": "runtime-tool-identity"
     },
     {
-      "obligation_id": "scheduler-runner-tracker-boundaries",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "scheduler-runner-tracker-boundaries",
-      "standards_row_id": "scheduler-runner-tracker-boundaries",
-      "validator_check_id": "scheduler-runner-tracker-boundaries",
-      "red_fixture_id": "scheduler-runner-tracker-boundaries-no-direct-scheduler-writes-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json",
-      "receipt_requirement": "mandatory-law receipt scheduler-runner-tracker-boundaries and source-obligation parity red fixture",
-      "claim_ceiling_impact": "tracker_mutation_claims_withheld_without_authority_receipt"
-    },
-    {
-      "obligation_id": "schema-evolution-receipt-migration-stale-version-invalidation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "schema-evolution-receipt-migration-stale-version-invalidation",
-      "standards_row_id": "schema-evolution-receipt-migration-stale-version-invalidation",
-      "validator_check_id": "schema-evolution-receipt-migration-stale-version-invalidation",
-      "red_fixture_id": "schema-evolution-receipt-migration-stale-version-invalidation-stale-schema-id-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/schema-evolution-receipt-migration-stale-version-invalidation.json",
-      "receipt_requirement": "mandatory-law receipt schema-evolution-receipt-migration-stale-version-invalidation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "current_claims_withheld_without_schema_evolution_and_migration_binding"
-    },
-    {
-      "obligation_id": "secret-token-boundaries",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "secret-token-boundaries",
-      "standards_row_id": "secret-token-boundaries",
-      "validator_check_id": "secret-token-boundaries",
-      "red_fixture_id": "secret-token-boundaries-secret-scan-prompts-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json",
-      "receipt_requirement": "mandatory-law receipt secret-token-boundaries and source-obligation parity red fixture",
-      "claim_ceiling_impact": "proof_claims_withheld_when_secret_boundaries_fail"
-    },
-    {
-      "obligation_id": "semantic-domain-type-naming",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "semantic-domain-type-naming",
-      "standards_row_id": "semantic-domain-type-naming",
-      "validator_check_id": "semantic-domain-type-naming",
-      "red_fixture_id": "semantic-domain-type-naming-generic-authority-names-rejected-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json",
-      "receipt_requirement": "mandatory-law receipt semantic-domain-type-naming and source-obligation parity red fixture",
-      "claim_ceiling_impact": "authority_surface_claims_withheld_without_semantic_domain_names"
-    },
-    {
-      "obligation_id": "skill-catalog-context-budget-omission-warning",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "skill-catalog-context-budget-omission-warning",
-      "standards_row_id": "skill-catalog-context-budget-omission-warning",
-      "validator_check_id": "skill-catalog-context-budget-omission-warning",
-      "red_fixture_id": "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
-      "receipt_requirement": "mandatory-law receipt skill-catalog-context-budget-omission-warning and source-obligation parity red fixture",
-      "claim_ceiling_impact": "skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt"
-    },
-    {
-      "obligation_id": "skill-local-reference-closure",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "skill-local-reference-closure",
-      "standards_row_id": "skill-local-reference-closure",
-      "validator_check_id": "skill-local-reference-closure",
-      "red_fixture_id": "skill-local-reference-closure-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-local-reference-closure.json",
-      "receipt_requirement": "mandatory-law receipt skill-local-reference-closure and source-obligation parity red fixture",
-      "claim_ceiling_impact": "package skill closure only; not live app install proof"
-    },
-    {
-      "obligation_id": "skill-progressive-disclosure-metadata",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "skill-progressive-disclosure-metadata",
-      "standards_row_id": "skill-progressive-disclosure-metadata",
-      "validator_check_id": "skill-progressive-disclosure-metadata",
-      "red_fixture_id": "skill-progressive-disclosure-metadata-specific-metadata-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json",
-      "receipt_requirement": "mandatory-law receipt skill-progressive-disclosure-metadata and source-obligation parity red fixture",
-      "claim_ceiling_impact": "skill_claims_withheld_without_progressive_disclosure_receipt"
-    },
-    {
-      "obligation_id": "source-card-freshness-ceiling",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "source-card-freshness-ceiling",
-      "standards_row_id": "source-card-freshness-ceiling",
-      "validator_check_id": "source-card-freshness-ceiling",
-      "red_fixture_id": "source-card-freshness-ceiling-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-card-freshness-ceiling.json",
-      "receipt_requirement": "mandatory-law receipt source-card-freshness-ceiling and source-obligation parity red fixture",
-      "claim_ceiling_impact": "current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards"
-    },
-    {
-      "obligation_id": "source-installed-cache-alignment",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "source-installed-cache-alignment",
-      "standards_row_id": "source-installed-cache-alignment",
-      "validator_check_id": "source-installed-cache-alignment",
-      "red_fixture_id": "source-installed-cache-alignment-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-installed-cache-alignment.json",
-      "receipt_requirement": "mandatory-law receipt source-installed-cache-alignment and source-obligation parity red fixture",
-      "claim_ceiling_impact": "source_repo_checks_do_not_close_installed_cache_or_app_visibility_claims"
-    },
-    {
-      "obligation_id": "source-obligation-parity-anti-bundling",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "source-obligation-parity-anti-bundling",
-      "standards_row_id": "source-obligation-parity-anti-bundling",
-      "validator_check_id": "source-obligation-parity-anti-bundling",
-      "red_fixture_id": "source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-obligation-parity-anti-bundling.json",
-      "receipt_requirement": "mandatory-law receipt source-obligation-parity-anti-bundling and source-obligation parity red fixture",
-      "claim_ceiling_impact": "compliance_claims_withheld_without_source_obligation_same_law_parity"
-    },
-    {
-      "obligation_id": "stable-identifier-normalization-collision",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "stable-identifier-normalization-collision",
-      "standards_row_id": "stable-identifier-normalization-collision",
-      "validator_check_id": "stable-identifier-normalization-collision",
-      "red_fixture_id": "stable-identifier-normalization-collision-unsanitized-workspace-key-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
-      "receipt_requirement": "mandatory-law receipt stable-identifier-normalization-collision and source-obligation parity red fixture",
-      "claim_ceiling_impact": "identifier_claims_withheld_without_typed_normalized_collision_checked_ids"
-    },
-    {
-      "obligation_id": "standards-gardener-promotion",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "standards-gardener-promotion",
-      "standards_row_id": "standards-gardener-promotion",
-      "validator_check_id": "standards-gardener-promotion",
-      "red_fixture_id": "standards-gardener-promotion-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
-      "receipt_requirement": "mandatory-law receipt standards-gardener-promotion and source-obligation parity red fixture",
-      "claim_ceiling_impact": "package_static_fixture_only"
-    },
-    {
-      "obligation_id": "subagent-custom-agent-sandbox-approval-inheritance",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "subagent-custom-agent-sandbox-approval-inheritance",
-      "standards_row_id": "subagent-custom-agent-sandbox-approval-inheritance",
-      "validator_check_id": "subagent-custom-agent-sandbox-approval-inheritance",
-      "red_fixture_id": "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
-      "receipt_requirement": "mandatory-law receipt subagent-custom-agent-sandbox-approval-inheritance and source-obligation parity red fixture",
-      "claim_ceiling_impact": "reviewer_custom_agent_claims_withheld_without_launch_receipt"
-    },
-    {
-      "obligation_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "standards_row_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "validator_check_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "red_fixture_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-implicit-spawn-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
-      "receipt_requirement": "mandatory-law receipt subagent-orchestration-explicitness-token-model-cost-result-reconciliation and source-obligation parity red fixture",
-      "claim_ceiling_impact": "subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis"
-    },
-    {
-      "obligation_id": "target-repo-audit-capability",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "target-repo-audit-capability",
-      "standards_row_id": "target-repo-audit-capability",
-      "validator_check_id": "target-repo-audit-capability",
-      "red_fixture_id": "target-repo-audit-capability-unsupported-repo-marked-fit-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
-      "receipt_requirement": "mandatory-law receipt target-repo-audit-capability and source-obligation parity red fixture",
-      "claim_ceiling_impact": "target_repo_claims_withheld_without_exact_target_capability_receipt"
-    },
-    {
-      "obligation_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-      "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-      "validator_check_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
-      "red_fixture_id": "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
-      "receipt_requirement": "mandatory-law receipt targeted-refactor-debt-removal-standards-gardener-cadence and source-obligation parity red fixture",
-      "claim_ceiling_impact": "compliance_claims_withheld_without_debt_remediation_cadence_receipt"
-    },
-    {
-      "obligation_id": "template-generation-governance-template-creator-boundary",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "template-generation-governance-template-creator-boundary",
-      "standards_row_id": "template-generation-governance-template-creator-boundary",
-      "validator_check_id": "template-generation-governance-template-creator-boundary",
-      "red_fixture_id": "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
-      "receipt_requirement": "mandatory-law receipt template-generation-governance-template-creator-boundary and source-obligation parity red fixture",
-      "claim_ceiling_impact": "product_template_claims_withheld_without_repo_owned_template_governance"
-    },
-    {
-      "obligation_id": "third-party-dependency-legibility-typed-adapters",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "third-party-dependency-legibility-typed-adapters",
-      "standards_row_id": "third-party-dependency-legibility-typed-adapters",
-      "validator_check_id": "third-party-dependency-legibility-typed-adapters",
-      "red_fixture_id": "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
-      "receipt_requirement": "mandatory-law receipt third-party-dependency-legibility-typed-adapters and source-obligation parity red fixture",
-      "claim_ceiling_impact": "dependency_claims_withheld_without_typed_adapter_registry"
-    },
-    {
-      "obligation_id": "total-authority-types-impossible-state-elimination",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "total-authority-types-impossible-state-elimination",
-      "standards_row_id": "total-authority-types-impossible-state-elimination",
-      "validator_check_id": "total-authority-types-impossible-state-elimination",
-      "red_fixture_id": "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
-      "receipt_requirement": "mandatory-law receipt total-authority-types-impossible-state-elimination and source-obligation parity red fixture",
-      "claim_ceiling_impact": "authority_claims_withheld_without_total_typed_impossible_state_elimination"
-    },
-    {
-      "obligation_id": "transcript-quality-reuse-gates",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "transcript-quality-reuse-gates",
-      "standards_row_id": "transcript-quality-reuse-gates",
-      "validator_check_id": "transcript-quality-reuse-gates",
-      "red_fixture_id": "transcript-quality-reuse-gates-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/transcript-quality-reuse-gates.json",
-      "receipt_requirement": "mandatory-law receipt transcript-quality-reuse-gates and source-obligation parity red fixture",
-      "claim_ceiling_impact": "transcript_reuse_replay_summary_word_trust_claims_withheld_without_final_quality_receipt"
-    },
-    {
-      "obligation_id": "trust-boundary-abuse-path-failure-path-coverage",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "trust-boundary-abuse-path-failure-path-coverage",
-      "standards_row_id": "trust-boundary-abuse-path-failure-path-coverage",
-      "validator_check_id": "trust-boundary-abuse-path-failure-path-coverage",
-      "red_fixture_id": "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/trust-boundary-abuse-path-failure-path-coverage.json",
-      "receipt_requirement": "mandatory-law receipt trust-boundary-abuse-path-failure-path-coverage and source-obligation parity red fixture",
-      "claim_ceiling_impact": "trust_boundary_claims_withheld_without_abuse_and_failure_path_receipts"
-    },
-    {
-      "obligation_id": "typed-records-over-prose",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "typed-records-over-prose",
-      "standards_row_id": "typed-records-over-prose",
-      "validator_check_id": "typed-records-over-prose",
-      "red_fixture_id": "typed-records-over-prose-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/typed-records-over-prose.json",
-      "receipt_requirement": "mandatory-law receipt typed-records-over-prose and source-obligation parity red fixture",
-      "claim_ceiling_impact": "prose_is_not_proof"
-    },
-    {
-      "obligation_id": "validator-source-namespace-topology",
-      "source_artifact": {
-        "path": "docs/source-article-synthesis.md",
-        "digest": "sha256:d73e9b4e2dc33c3d4d8c6f5d59d1f6c8de737d1e3d4b9048fbca7be46015a4c5"
-      },
-      "law_id": "validator-source-namespace-topology",
-      "standards_row_id": "validator-source-namespace-topology",
-      "validator_check_id": "namespace-progressive-disclosure",
-      "red_fixture_id": "namespace-validator-source-top-level-internal-cluster-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/validator-source-namespace-topology.json",
-      "receipt_requirement": "mandatory-law receipt validator-source-namespace-topology plus namespace validator red/green/tamper fixture proof",
-      "claim_ceiling_impact": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails"
-    },
-    {
-      "obligation_id": "validator-theater-miswire-resistance",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "validator-theater-miswire-resistance",
-      "standards_row_id": "validator-theater-miswire-resistance",
-      "validator_check_id": "validator-theater-miswire-resistance",
-      "red_fixture_id": "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
-      "receipt_requirement": "mandatory-law receipt validator-theater-miswire-resistance and source-obligation parity red fixture",
-      "claim_ceiling_impact": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance"
-    },
-    {
-      "obligation_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
-      "standards_row_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
-      "validator_check_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
-      "red_fixture_id": "value-adoption-continuance-business-mission-evidence-hierarchy-unlabeled-value-claim-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/value-adoption-continuance-business-mission-evidence-hierarchy.json",
-      "receipt_requirement": "mandatory-law receipt value-adoption-continuance-business-mission-evidence-hierarchy and source-obligation parity red fixture",
-      "claim_ceiling_impact": "value_claims_withheld_without_known_inferred_assumed_missing_hierarchy"
-    },
-    {
-      "obligation_id": "workflow-template-parsing-rendering-reload",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "workflow-template-parsing-rendering-reload",
-      "standards_row_id": "workflow-template-parsing-rendering-reload",
-      "validator_check_id": "workflow-template-parsing-rendering-reload",
-      "red_fixture_id": "workflow-template-parsing-rendering-reload-typed-template-parse-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json",
-      "receipt_requirement": "mandatory-law receipt workflow-template-parsing-rendering-reload and source-obligation parity red fixture",
-      "claim_ceiling_impact": "workflow_claims_withheld_without_strict_template_receipt"
-    },
-    {
-      "obligation_id": "workspace-command-confinement-lifecycle-cleanup",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "workspace-command-confinement-lifecycle-cleanup",
-      "standards_row_id": "workspace-command-confinement-lifecycle-cleanup",
-      "validator_check_id": "workspace-command-confinement-lifecycle-cleanup",
-      "red_fixture_id": "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
-      "receipt_requirement": "mandatory-law receipt workspace-command-confinement-lifecycle-cleanup and source-obligation parity red fixture",
-      "claim_ceiling_impact": "workspace_claims_withheld_without_confinement_receipt"
-    },
-    {
-      "obligation_id": "worktree-lane-owner-cost-policy",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "worktree-lane-owner-cost-policy",
-      "standards_row_id": "worktree-lane-owner-cost-policy",
-      "validator_check_id": "worktree-lane-owner-cost-policy",
-      "red_fixture_id": "worktree-lane-owner-cost-policy-source-obligation-parity-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
-      "receipt_requirement": "mandatory-law receipt worktree-lane-owner-cost-policy and source-obligation parity red fixture",
-      "claim_ceiling_impact": "lane_owner_cost_policy_not_human_review_policy"
-    },
-    {
-      "obligation_id": "rust-developer-experience-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "rust-developer-experience-authority",
-      "standards_row_id": "rust-developer-experience-authority",
-      "validator_check_id": "rust-developer-experience-authority",
-      "red_fixture_id": "rust-devx-raw-tool-output-substitution-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
-      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/dependency-receipt.json plus mandatory-law receipt for rust-developer-experience-authority",
-      "claim_ceiling_impact": "rust_devx_claims_withheld_without_cli_bound_devx_receipts"
-    },
-    {
-      "obligation_id": "rust-toolchain-substrate-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "rust-toolchain-substrate-authority",
-      "standards_row_id": "rust-toolchain-substrate-authority",
-      "validator_check_id": "rust-toolchain-substrate-authority",
-      "red_fixture_id": "rust-devx-missing-toolchain-substrate-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
-      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/toolchain-receipt.json plus mandatory-law receipt for rust-toolchain-substrate-authority",
-      "claim_ceiling_impact": "rust_claims_withheld_without_current_toolchain_substrate_receipt"
-    },
-    {
-      "obligation_id": "rust-command-loop-authority",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
-      "law_id": "rust-command-loop-authority",
-      "standards_row_id": "rust-command-loop-authority",
-      "validator_check_id": "rust-command-loop-authority",
-      "red_fixture_id": "rust-devx-cargo-test-overclaim-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-command-loop-authority.json",
-      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/standard-receipt.json plus mandatory-law receipt for rust-command-loop-authority",
-      "claim_ceiling_impact": "rust_command_loop_claims_withheld_without_cli_loop_receipts"
-    },
-    {
-      "obligation_id": "rust-cache-no-cache-honesty",
-      "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
-      },
+      "claim_ceiling_impact": "rust_no_cache_claims_withheld_without_cache_honesty_receipt",
       "law_id": "rust-cache-no-cache-honesty",
-      "standards_row_id": "rust-cache-no-cache-honesty",
-      "validator_check_id": "rust-cache-no-cache-honesty",
-      "red_fixture_id": "rust-devx-hidden-cache-no-cache-substitution-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-cache-no-cache-honesty.json",
+      "obligation_id": "rust-cache-no-cache-honesty",
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/clean-proof-receipt.json plus mandatory-law receipt for rust-cache-no-cache-honesty",
-      "claim_ceiling_impact": "rust_no_cache_claims_withheld_without_cache_honesty_receipt"
+      "red_fixture_id": "rust-devx-hidden-cache-no-cache-substitution-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "rust-cache-no-cache-honesty",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-cache-no-cache-honesty.json",
+      "validator_check_id": "rust-cache-no-cache-honesty"
     },
     {
-      "obligation_id": "rust-memory-resource-discipline",
+      "claim_ceiling_impact": "rust_command_loop_claims_withheld_without_cli_loop_receipts",
+      "law_id": "rust-command-loop-authority",
+      "obligation_id": "rust-command-loop-authority",
+      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/standard-receipt.json plus mandatory-law receipt for rust-command-loop-authority",
+      "red_fixture_id": "rust-devx-cargo-test-overclaim-red",
       "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
       },
+      "standards_row_id": "rust-command-loop-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-command-loop-authority.json",
+      "validator_check_id": "rust-command-loop-authority"
+    },
+    {
+      "claim_ceiling_impact": "rust_devx_claims_withheld_without_cli_bound_devx_receipts",
+      "law_id": "rust-developer-experience-authority",
+      "obligation_id": "rust-developer-experience-authority",
+      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/dependency-receipt.json plus mandatory-law receipt for rust-developer-experience-authority",
+      "red_fixture_id": "rust-devx-raw-tool-output-substitution-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "rust-developer-experience-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-developer-experience-authority.json",
+      "validator_check_id": "rust-developer-experience-authority"
+    },
+    {
+      "claim_ceiling_impact": "rust_runtime_claims_withheld_without_memory_resource_receipt",
       "law_id": "rust-memory-resource-discipline",
-      "standards_row_id": "rust-memory-resource-discipline",
-      "validator_check_id": "rust-memory-resource-discipline",
-      "red_fixture_id": "rust-devx-unbounded-resource-discipline-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-memory-resource-discipline.json",
+      "obligation_id": "rust-memory-resource-discipline",
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/memory-receipt.json plus mandatory-law receipt for rust-memory-resource-discipline",
-      "claim_ceiling_impact": "rust_runtime_claims_withheld_without_memory_resource_receipt"
+      "red_fixture_id": "rust-devx-unbounded-resource-discipline-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "rust-memory-resource-discipline",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-memory-resource-discipline.json",
+      "validator_check_id": "rust-memory-resource-discipline"
     },
     {
-      "obligation_id": "workspace-artifact-cache-garbage-collection",
+      "claim_ceiling_impact": "rust_claims_withheld_without_current_toolchain_substrate_receipt",
+      "law_id": "rust-toolchain-substrate-authority",
+      "obligation_id": "rust-toolchain-substrate-authority",
+      "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/toolchain-receipt.json plus mandatory-law receipt for rust-toolchain-substrate-authority",
+      "red_fixture_id": "rust-devx-missing-toolchain-substrate-red",
       "source_artifact": {
-        "path": "docs/source-obligation-matrix.json",
-        "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31"
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
       },
+      "standards_row_id": "rust-toolchain-substrate-authority",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/rust-toolchain-substrate-authority.json",
+      "validator_check_id": "rust-toolchain-substrate-authority"
+    },
+    {
+      "claim_ceiling_impact": "tracker_mutation_claims_withheld_without_authority_receipt",
+      "law_id": "scheduler-runner-tracker-boundaries",
+      "obligation_id": "scheduler-runner-tracker-boundaries",
+      "receipt_requirement": "mandatory-law receipt scheduler-runner-tracker-boundaries and source-obligation parity red fixture",
+      "red_fixture_id": "scheduler-runner-tracker-boundaries-no-direct-scheduler-writes-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "scheduler-runner-tracker-boundaries",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json",
+      "validator_check_id": "scheduler-runner-tracker-boundaries"
+    },
+    {
+      "claim_ceiling_impact": "current_claims_withheld_without_schema_evolution_and_migration_binding",
+      "law_id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "obligation_id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "receipt_requirement": "mandatory-law receipt schema-evolution-receipt-migration-stale-version-invalidation and source-obligation parity red fixture",
+      "red_fixture_id": "schema-evolution-receipt-migration-stale-version-invalidation-stale-schema-id-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "schema-evolution-receipt-migration-stale-version-invalidation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/schema-evolution-receipt-migration-stale-version-invalidation.json",
+      "validator_check_id": "schema-evolution-receipt-migration-stale-version-invalidation"
+    },
+    {
+      "claim_ceiling_impact": "proof_claims_withheld_when_secret_boundaries_fail",
+      "law_id": "secret-token-boundaries",
+      "obligation_id": "secret-token-boundaries",
+      "receipt_requirement": "mandatory-law receipt secret-token-boundaries and source-obligation parity red fixture",
+      "red_fixture_id": "secret-token-boundaries-secret-scan-prompts-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "secret-token-boundaries",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json",
+      "validator_check_id": "secret-token-boundaries"
+    },
+    {
+      "claim_ceiling_impact": "authority_surface_claims_withheld_without_semantic_domain_names",
+      "law_id": "semantic-domain-type-naming",
+      "obligation_id": "semantic-domain-type-naming",
+      "receipt_requirement": "mandatory-law receipt semantic-domain-type-naming and source-obligation parity red fixture",
+      "red_fixture_id": "semantic-domain-type-naming-generic-authority-names-rejected-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "semantic-domain-type-naming",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json",
+      "validator_check_id": "semantic-domain-type-naming"
+    },
+    {
+      "claim_ceiling_impact": "skill_visibility_claims_withheld_without_catalog_budget_and_omission_warning_receipt",
+      "law_id": "skill-catalog-context-budget-omission-warning",
+      "obligation_id": "skill-catalog-context-budget-omission-warning",
+      "receipt_requirement": "mandatory-law receipt skill-catalog-context-budget-omission-warning and source-obligation parity red fixture",
+      "red_fixture_id": "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "skill-catalog-context-budget-omission-warning",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json",
+      "validator_check_id": "skill-catalog-context-budget-omission-warning"
+    },
+    {
+      "claim_ceiling_impact": "package skill closure only; not live app install proof",
+      "law_id": "skill-local-reference-closure",
+      "obligation_id": "skill-local-reference-closure",
+      "receipt_requirement": "mandatory-law receipt skill-local-reference-closure and source-obligation parity red fixture",
+      "red_fixture_id": "skill-local-reference-closure-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "skill-local-reference-closure",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-local-reference-closure.json",
+      "validator_check_id": "skill-local-reference-closure"
+    },
+    {
+      "claim_ceiling_impact": "skill_claims_withheld_without_progressive_disclosure_receipt",
+      "law_id": "skill-progressive-disclosure-metadata",
+      "obligation_id": "skill-progressive-disclosure-metadata",
+      "receipt_requirement": "mandatory-law receipt skill-progressive-disclosure-metadata and source-obligation parity red fixture",
+      "red_fixture_id": "skill-progressive-disclosure-metadata-specific-metadata-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "skill-progressive-disclosure-metadata",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json",
+      "validator_check_id": "skill-progressive-disclosure-metadata"
+    },
+    {
+      "claim_ceiling_impact": "current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards",
+      "law_id": "source-card-freshness-ceiling",
+      "obligation_id": "source-card-freshness-ceiling",
+      "receipt_requirement": "mandatory-law receipt source-card-freshness-ceiling and source-obligation parity red fixture",
+      "red_fixture_id": "source-card-freshness-ceiling-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "source-card-freshness-ceiling",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-card-freshness-ceiling.json",
+      "validator_check_id": "source-card-freshness-ceiling"
+    },
+    {
+      "claim_ceiling_impact": "source_repo_checks_do_not_close_installed_cache_or_app_visibility_claims",
+      "law_id": "source-installed-cache-alignment",
+      "obligation_id": "source-installed-cache-alignment",
+      "receipt_requirement": "mandatory-law receipt source-installed-cache-alignment and source-obligation parity red fixture",
+      "red_fixture_id": "source-installed-cache-alignment-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "source-installed-cache-alignment",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-installed-cache-alignment.json",
+      "validator_check_id": "source-installed-cache-alignment"
+    },
+    {
+      "claim_ceiling_impact": "compliance_claims_withheld_without_source_obligation_same_law_parity",
+      "law_id": "source-obligation-parity-anti-bundling",
+      "obligation_id": "source-obligation-parity-anti-bundling",
+      "receipt_requirement": "mandatory-law receipt source-obligation-parity-anti-bundling and source-obligation parity red fixture",
+      "red_fixture_id": "source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "source-obligation-parity-anti-bundling",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/source-obligation-parity-anti-bundling.json",
+      "validator_check_id": "source-obligation-parity-anti-bundling"
+    },
+    {
+      "claim_ceiling_impact": "identifier_claims_withheld_without_typed_normalized_collision_checked_ids",
+      "law_id": "stable-identifier-normalization-collision",
+      "obligation_id": "stable-identifier-normalization-collision",
+      "receipt_requirement": "mandatory-law receipt stable-identifier-normalization-collision and source-obligation parity red fixture",
+      "red_fixture_id": "stable-identifier-normalization-collision-unsanitized-workspace-key-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "stable-identifier-normalization-collision",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/stable-identifier-normalization-collision.json",
+      "validator_check_id": "stable-identifier-normalization-collision"
+    },
+    {
+      "claim_ceiling_impact": "package_static_fixture_only",
+      "law_id": "standards-gardener-promotion",
+      "obligation_id": "standards-gardener-promotion",
+      "receipt_requirement": "mandatory-law receipt standards-gardener-promotion and source-obligation parity red fixture",
+      "red_fixture_id": "standards-gardener-promotion-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "standards-gardener-promotion",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
+      "validator_check_id": "standards-gardener-promotion"
+    },
+    {
+      "claim_ceiling_impact": "reviewer_custom_agent_claims_withheld_without_launch_receipt",
+      "law_id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "obligation_id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "receipt_requirement": "mandatory-law receipt subagent-custom-agent-sandbox-approval-inheritance and source-obligation parity red fixture",
+      "red_fixture_id": "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "subagent-custom-agent-sandbox-approval-inheritance",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
+      "validator_check_id": "subagent-custom-agent-sandbox-approval-inheritance"
+    },
+    {
+      "claim_ceiling_impact": "subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis",
+      "law_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "obligation_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "receipt_requirement": "mandatory-law receipt subagent-orchestration-explicitness-token-model-cost-result-reconciliation and source-obligation parity red fixture",
+      "red_fixture_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-implicit-spawn-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
+      "validator_check_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation"
+    },
+    {
+      "claim_ceiling_impact": "target_repo_claims_withheld_without_exact_target_capability_receipt",
+      "law_id": "target-repo-audit-capability",
+      "obligation_id": "target-repo-audit-capability",
+      "receipt_requirement": "mandatory-law receipt target-repo-audit-capability and source-obligation parity red fixture",
+      "red_fixture_id": "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "target-repo-audit-capability",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
+      "validator_check_id": "target-repo-audit-capability"
+    },
+    {
+      "claim_ceiling_impact": "compliance_claims_withheld_without_debt_remediation_cadence_receipt",
+      "law_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "obligation_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "receipt_requirement": "mandatory-law receipt targeted-refactor-debt-removal-standards-gardener-cadence and source-obligation parity red fixture",
+      "red_fixture_id": "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
+      "validator_check_id": "targeted-refactor-debt-removal-standards-gardener-cadence"
+    },
+    {
+      "claim_ceiling_impact": "product_template_claims_withheld_without_repo_owned_template_governance",
+      "law_id": "template-generation-governance-template-creator-boundary",
+      "obligation_id": "template-generation-governance-template-creator-boundary",
+      "receipt_requirement": "mandatory-law receipt template-generation-governance-template-creator-boundary and source-obligation parity red fixture",
+      "red_fixture_id": "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "template-generation-governance-template-creator-boundary",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
+      "validator_check_id": "template-generation-governance-template-creator-boundary"
+    },
+    {
+      "claim_ceiling_impact": "dependency_claims_withheld_without_typed_adapter_registry",
+      "law_id": "third-party-dependency-legibility-typed-adapters",
+      "obligation_id": "third-party-dependency-legibility-typed-adapters",
+      "receipt_requirement": "mandatory-law receipt third-party-dependency-legibility-typed-adapters and source-obligation parity red fixture",
+      "red_fixture_id": "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "third-party-dependency-legibility-typed-adapters",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
+      "validator_check_id": "third-party-dependency-legibility-typed-adapters"
+    },
+    {
+      "claim_ceiling_impact": "authority_claims_withheld_without_total_typed_impossible_state_elimination",
+      "law_id": "total-authority-types-impossible-state-elimination",
+      "obligation_id": "total-authority-types-impossible-state-elimination",
+      "receipt_requirement": "mandatory-law receipt total-authority-types-impossible-state-elimination and source-obligation parity red fixture",
+      "red_fixture_id": "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "total-authority-types-impossible-state-elimination",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
+      "validator_check_id": "total-authority-types-impossible-state-elimination"
+    },
+    {
+      "claim_ceiling_impact": "transcript_reuse_replay_summary_word_trust_claims_withheld_without_final_quality_receipt",
+      "law_id": "transcript-quality-reuse-gates",
+      "obligation_id": "transcript-quality-reuse-gates",
+      "receipt_requirement": "mandatory-law receipt transcript-quality-reuse-gates and source-obligation parity red fixture",
+      "red_fixture_id": "transcript-quality-reuse-gates-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "transcript-quality-reuse-gates",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/transcript-quality-reuse-gates.json",
+      "validator_check_id": "transcript-quality-reuse-gates"
+    },
+    {
+      "claim_ceiling_impact": "trust_boundary_claims_withheld_without_abuse_and_failure_path_receipts",
+      "law_id": "trust-boundary-abuse-path-failure-path-coverage",
+      "obligation_id": "trust-boundary-abuse-path-failure-path-coverage",
+      "receipt_requirement": "mandatory-law receipt trust-boundary-abuse-path-failure-path-coverage and source-obligation parity red fixture",
+      "red_fixture_id": "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "trust-boundary-abuse-path-failure-path-coverage",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/trust-boundary-abuse-path-failure-path-coverage.json",
+      "validator_check_id": "trust-boundary-abuse-path-failure-path-coverage"
+    },
+    {
+      "claim_ceiling_impact": "prose_is_not_proof",
+      "law_id": "typed-records-over-prose",
+      "obligation_id": "typed-records-over-prose",
+      "receipt_requirement": "mandatory-law receipt typed-records-over-prose and source-obligation parity red fixture",
+      "red_fixture_id": "typed-records-over-prose-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "typed-records-over-prose",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/typed-records-over-prose.json",
+      "validator_check_id": "typed-records-over-prose"
+    },
+    {
+      "claim_ceiling_impact": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
+      "law_id": "validator-source-namespace-topology",
+      "obligation_id": "validator-source-namespace-topology",
+      "receipt_requirement": "mandatory-law receipt validator-source-namespace-topology plus namespace validator red/green/tamper fixture proof",
+      "red_fixture_id": "namespace-validator-source-top-level-internal-cluster-red",
+      "source_artifact": {
+        "digest": "sha256:d73e9b4e2dc33c3d4d8c6f5d59d1f6c8de737d1e3d4b9048fbca7be46015a4c5",
+        "path": "docs/source-article-synthesis.md"
+      },
+      "standards_row_id": "validator-source-namespace-topology",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/validator-source-namespace-topology.json",
+      "validator_check_id": "namespace-progressive-disclosure"
+    },
+    {
+      "claim_ceiling_impact": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance",
+      "law_id": "validator-theater-miswire-resistance",
+      "obligation_id": "validator-theater-miswire-resistance",
+      "receipt_requirement": "mandatory-law receipt validator-theater-miswire-resistance and source-obligation parity red fixture",
+      "red_fixture_id": "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "validator-theater-miswire-resistance",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+      "validator_check_id": "validator-theater-miswire-resistance"
+    },
+    {
+      "claim_ceiling_impact": "value_claims_withheld_without_known_inferred_assumed_missing_hierarchy",
+      "law_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "obligation_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "receipt_requirement": "mandatory-law receipt value-adoption-continuance-business-mission-evidence-hierarchy and source-obligation parity red fixture",
+      "red_fixture_id": "value-adoption-continuance-business-mission-evidence-hierarchy-unlabeled-value-claim-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/value-adoption-continuance-business-mission-evidence-hierarchy.json",
+      "validator_check_id": "value-adoption-continuance-business-mission-evidence-hierarchy"
+    },
+    {
+      "claim_ceiling_impact": "workflow_claims_withheld_without_strict_template_receipt",
+      "law_id": "workflow-template-parsing-rendering-reload",
+      "obligation_id": "workflow-template-parsing-rendering-reload",
+      "receipt_requirement": "mandatory-law receipt workflow-template-parsing-rendering-reload and source-obligation parity red fixture",
+      "red_fixture_id": "workflow-template-parsing-rendering-reload-typed-template-parse-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "workflow-template-parsing-rendering-reload",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json",
+      "validator_check_id": "workflow-template-parsing-rendering-reload"
+    },
+    {
+      "claim_ceiling_impact": "workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts",
       "law_id": "workspace-artifact-cache-garbage-collection",
-      "standards_row_id": "workspace-artifact-cache-garbage-collection",
-      "validator_check_id": "workspace-artifact-cache-garbage-collection",
-      "red_fixture_id": "rust-devx-blind-cleanup-without-gc-receipt-red",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workspace-artifact-cache-garbage-collection.json",
+      "obligation_id": "workspace-artifact-cache-garbage-collection",
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/gc/verify-receipt.json plus mandatory-law receipt for workspace-artifact-cache-garbage-collection",
-      "claim_ceiling_impact": "workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts"
+      "red_fixture_id": "rust-devx-blind-cleanup-without-gc-receipt-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "workspace-artifact-cache-garbage-collection",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workspace-artifact-cache-garbage-collection.json",
+      "validator_check_id": "workspace-artifact-cache-garbage-collection"
+    },
+    {
+      "claim_ceiling_impact": "workspace_claims_withheld_without_confinement_receipt",
+      "law_id": "workspace-command-confinement-lifecycle-cleanup",
+      "obligation_id": "workspace-command-confinement-lifecycle-cleanup",
+      "receipt_requirement": "mandatory-law receipt workspace-command-confinement-lifecycle-cleanup and source-obligation parity red fixture",
+      "red_fixture_id": "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "workspace-command-confinement-lifecycle-cleanup",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json",
+      "validator_check_id": "workspace-command-confinement-lifecycle-cleanup"
+    },
+    {
+      "claim_ceiling_impact": "lane_owner_cost_policy_not_human_review_policy",
+      "law_id": "worktree-lane-owner-cost-policy",
+      "obligation_id": "worktree-lane-owner-cost-policy",
+      "receipt_requirement": "mandatory-law receipt worktree-lane-owner-cost-policy and source-obligation parity red fixture",
+      "red_fixture_id": "worktree-lane-owner-cost-policy-source-obligation-parity-red",
+      "source_artifact": {
+        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "worktree-lane-owner-cost-policy",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
+      "validator_check_id": "worktree-lane-owner-cost-policy"
     }
-  ]
+  ],
+  "schema": "harness-ultragoal.foundational-law-traceability.v1"
 }

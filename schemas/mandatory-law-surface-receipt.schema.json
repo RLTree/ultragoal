@@ -1,27 +1,33 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://harness-ultragoal.local/schemas/mandatory-law-surface-receipt.schema.json",
-  "title": "Harness Ultragoal Mandatory Law Surface Receipt",
-  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "required": [
-    "schema",
-    "law_id",
-    "standards_row_id",
-    "source_obligation_id",
-    "foundational_trace_id",
-    "validator_check_id",
-    "valid_fixture_path",
-    "red_fixture_ids",
-    "evidence_artifacts",
-    "claim_ceiling_guard",
-    "behavior_failure_modes",
-    "law_specific",
-    "enforcement_status"
-  ],
   "properties": {
-    "schema": {
-      "const": "harness-ultragoal.mandatory-law-surface-receipt.v1"
+    "behavior_failure_modes": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "claim_ceiling_guard": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "enforcement_status": {
+      "const": "deterministic_fail_closed"
+    },
+    "evidence_artifacts": {
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "foundational_trace_id": {
+      "minLength": 1,
+      "type": "string"
     },
     "law_id": {
       "enum": [
@@ -60,6 +66,7 @@
         "forward-only-state-transition-integrity-silent-reopen-prevention",
         "fresh-init-retrofit-mode-separation",
         "fresh-retrofit-repo-shape",
+        "full-local-observability-stack-integration-non-opaque-failure",
         "generated-proof-artifact-provenance-anti-fabrication",
         "generated-ready-completion-receipts",
         "goal-contract-amendment-authority-required-claim-id-mapping",
@@ -102,6 +109,11 @@
         "reviewer-to-gate-conversion",
         "runtime-feasibility-cost-strict-gate-usability",
         "runtime-tool-identity",
+        "rust-cache-no-cache-honesty",
+        "rust-command-loop-authority",
+        "rust-developer-experience-authority",
+        "rust-memory-resource-discipline",
+        "rust-toolchain-substrate-authority",
         "scheduler-runner-tracker-boundaries",
         "schema-evolution-receipt-migration-stale-version-invalidation",
         "secret-token-boundaries",
@@ -128,27 +140,39 @@
         "validator-theater-miswire-resistance",
         "value-adoption-continuance-business-mission-evidence-hierarchy",
         "workflow-template-parsing-rendering-reload",
+        "workspace-artifact-cache-garbage-collection",
         "workspace-command-confinement-lifecycle-cleanup",
-        "worktree-lane-owner-cost-policy",
-        "rust-developer-experience-authority",
-        "rust-toolchain-substrate-authority",
-        "rust-command-loop-authority",
-        "rust-cache-no-cache-honesty",
-        "rust-memory-resource-discipline",
-        "workspace-artifact-cache-garbage-collection"
+        "worktree-lane-owner-cost-policy"
       ]
     },
-    "standards_row_id": {
-      "type": "string",
-      "minLength": 1
+    "law_specific": {
+      "additionalProperties": {
+        "const": true
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "red_fixture_ids": {
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema": {
+      "const": "harness-ultragoal.mandatory-law-surface-receipt.v1"
     },
     "source_obligation_id": {
-      "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "type": "string"
     },
-    "foundational_trace_id": {
-      "type": "string",
-      "minLength": 1
+    "standards_row_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "valid_fixture_path": {
+      "minLength": 1,
+      "type": "string"
     },
     "validator_check_id": {
       "enum": [
@@ -187,6 +211,7 @@
         "forward-only-state-transition-integrity-silent-reopen-prevention",
         "fresh-init-retrofit-mode-separation",
         "fresh-retrofit-repo-shape",
+        "full-local-observability-stack-integration-non-opaque-failure",
         "generated-proof-artifact-provenance-anti-fabrication",
         "generated-ready-completion-receipts",
         "goal-contract-amendment-authority-required-claim-id-mapping",
@@ -229,6 +254,11 @@
         "reviewer-to-gate-conversion",
         "runtime-feasibility-cost-strict-gate-usability",
         "runtime-tool-identity",
+        "rust-cache-no-cache-honesty",
+        "rust-command-loop-authority",
+        "rust-developer-experience-authority",
+        "rust-memory-resource-discipline",
+        "rust-toolchain-substrate-authority",
         "scheduler-runner-tracker-boundaries",
         "schema-evolution-receipt-migration-stale-version-invalidation",
         "secret-token-boundaries",
@@ -254,55 +284,27 @@
         "validator-theater-miswire-resistance",
         "value-adoption-continuance-business-mission-evidence-hierarchy",
         "workflow-template-parsing-rendering-reload",
+        "workspace-artifact-cache-garbage-collection",
         "workspace-command-confinement-lifecycle-cleanup",
-        "worktree-lane-owner-cost-policy",
-        "rust-developer-experience-authority",
-        "rust-toolchain-substrate-authority",
-        "rust-command-loop-authority",
-        "rust-cache-no-cache-honesty",
-        "rust-memory-resource-discipline",
-        "workspace-artifact-cache-garbage-collection"
+        "worktree-lane-owner-cost-policy"
       ]
-    },
-    "valid_fixture_path": {
-      "type": "string",
-      "minLength": 1
-    },
-    "red_fixture_ids": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
-      }
-    },
-    "evidence_artifacts": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
-      }
-    },
-    "claim_ceiling_guard": {
-      "type": "string",
-      "minLength": 1
-    },
-    "behavior_failure_modes": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
-    },
-    "law_specific": {
-      "type": "object",
-      "additionalProperties": {
-        "const": true
-      },
-      "minProperties": 1
-    },
-    "enforcement_status": {
-      "const": "deterministic_fail_closed"
     }
-  }
+  },
+  "required": [
+    "schema",
+    "law_id",
+    "standards_row_id",
+    "source_obligation_id",
+    "foundational_trace_id",
+    "validator_check_id",
+    "valid_fixture_path",
+    "red_fixture_ids",
+    "evidence_artifacts",
+    "claim_ceiling_guard",
+    "behavior_failure_modes",
+    "law_specific",
+    "enforcement_status"
+  ],
+  "title": "Harness Ultragoal Mandatory Law Surface Receipt",
+  "type": "object"
 }

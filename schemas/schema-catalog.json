@@ -111,6 +111,26 @@
       "path": "schemas/namespace-class-registry.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/observability-event.schema.json",
+      "path": "schemas/observability-event.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/observability-metric.schema.json",
+      "path": "schemas/observability-metric.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/observability-query-result.schema.json",
+      "path": "schemas/observability-query-result.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/observability-receipt.schema.json",
+      "path": "schemas/observability-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/observability-trace.schema.json",
+      "path": "schemas/observability-trace.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
       "path": "schemas/plugin-cohesion-manifest.schema.json"
     },

@@ -117,3 +117,4 @@ rust-command-loop-authority	pass	scripts/check-agent-standards	sha256:8c3993ba47
 rust-cache-no-cache-honesty	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 rust-memory-resource-discipline	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 workspace-artifact-cache-garbage-collection	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
+full-local-observability-stack-integration-non-opaque-failure	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-29T04:50:00Z	package_static_fixture_only

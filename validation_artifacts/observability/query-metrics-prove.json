@@ -1,0 +1,32 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-4f1c2d8ab16d362e0b7e2bb3718c71d474b16ffec800c1cb18cfcde355083eaa",
+  "failure": "",
+  "query": "ultragoal_command_total{operation=\"observe.prove\",candidate_digest=\"sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8\"}",
+  "query_kind": "metrics",
+  "result_digest": "sha256:7755b485ad0b12db7bb4d3f7427ce0766e44c907135f5ebf3ba2760e4298c795",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_command_total\",\"candidate_digest\":\"sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"command\":\"observe\",\"exporter\":\"victorialogs\",\"failure_class\":\"none\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"operation\":\"observe.prove\",\"status\":\"pass\",\"surface\":\"live_stack\"},\"value\":[1782708731,\"1\"]}]},\"stats\":{\"seriesFetched\": \"1\",\"executionTimeMsec\":0}}"
+    }
+  ],
+  "run_id": "query-ec59af7114c11d3ee4714bfdeb4b179978ea6c5b59bfda0bac51e15814986371",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 15000,
+  "truncated": false
+}

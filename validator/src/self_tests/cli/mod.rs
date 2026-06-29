@@ -1,5 +1,6 @@
 pub(crate) mod control;
 pub(crate) mod final_packet;
+pub(crate) mod observe;
 pub(crate) mod parse_errors;
 pub(crate) mod performance;
 pub(crate) mod product;

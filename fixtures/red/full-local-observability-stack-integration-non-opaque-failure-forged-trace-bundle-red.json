@@ -1,0 +1,34 @@
+{
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/full-local-observability-stack-integration-non-opaque-failure.json",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:forged_trace_bundle"
+  },
+  "id": "full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/forged_trace_bundle",
+      "value": false
+    }
+  ],
+  "materialization": {
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "full-local-observability-stack-integration-non-opaque-failure must fail when forged_trace_bundle is not enforced.",
+  "postconditions": [
+    {
+      "expectation": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:forged_trace_bundle",
+      "path": "/law_specific/forged_trace_bundle"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/law_specific/forged_trace_bundle"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
+}

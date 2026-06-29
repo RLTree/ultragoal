@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T03:33:26Z",
+    "completed_at": "2026-06-29T08:34:00Z",
     "cwd": "fixtures/target-repo/red/product-review-evidence-absolute-path",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T03:33:26Z",
+    "started_at": "2026-06-29T08:34:00Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T03:33:26Z",
+  "generated_at": "2026-06-29T08:34:00Z",
   "invocation": "fixture init fixtures/target-repo/red/product-review-evidence-absolute-path",
   "mode": "init",
-  "repo_fingerprint": "sha256:ed0a1c9b8fb597840d9d4822848f71db17cd20c03c09928b2df17fcd003ee99d",
+  "repo_fingerprint": "sha256:f8c78ab43b105067a00b9805f6d38c1945221e737ff275fad9db338626b850b2",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -432,7 +432,7 @@
       "path": "validator/src/audit/agent/standards/enforcement.rs"
     },
     {
-      "digest": "sha256:a7ca4cff2cfe00936bf30be8edd21e866ed0932bd7d75a14b84406bdfeb6e3f2",
+      "digest": "sha256:f5df7ed99d666b78766449aad3294097742d2ae790c7de67cb5fc23017161188",
       "path": "validator/src/audit/agent/standards/ids.rs"
     },
     {
@@ -568,7 +568,7 @@
       "path": "validator/src/audit/mandatory/law/mod.rs"
     },
     {
-      "digest": "sha256:50483822fdf130b2360bc1c806be6527b0ea5d1a3127b1c800fbf8c0a6ab9a0f",
+      "digest": "sha256:7d0cd1b293380d0d664593dbac264b0791fda4532236cff3026975ad923eceb5",
       "path": "validator/src/audit/mandatory/law/surface/ids.rs"
     },
     {
@@ -596,7 +596,7 @@
       "path": "validator/src/audit/mandatory/mod.rs"
     },
     {
-      "digest": "sha256:bf0926bf59912d65d39833c8e83c7622de7370124d2bd4dcbabc6dd8e66b2af9",
+      "digest": "sha256:3daa13e642ce082e38979b33780133f6cc220a55ce75fc884d1069cccd79dc54",
       "path": "validator/src/audit/mod.rs"
     },
     {
@@ -624,7 +624,31 @@
       "path": "validator/src/audit/namespace/source/topology.rs"
     },
     {
-      "digest": "sha256:f3729023d1bb3989f1507f84c07d5a5a25ce126070270b34ec95c07e9e79bc8a",
+      "digest": "sha256:400589052f914a983dd0834489c069ed11d544903abe2ff0b9ea4928432c2917",
+      "path": "validator/src/audit/observability/compose.rs"
+    },
+    {
+      "digest": "sha256:8242165ca0a84179c97e1aca8743fa1a4bb09d2c39257fc83a7a7d661ae0f8d6",
+      "path": "validator/src/audit/observability/files.rs"
+    },
+    {
+      "digest": "sha256:c94ddb48e14c7db175924f48d0959a51e2cd9abb732027e6085e3d475c0d7ccb",
+      "path": "validator/src/audit/observability/mod.rs"
+    },
+    {
+      "digest": "sha256:8c602951554e32db74b10e482d2e1ab933ac45504bd5b3e6bacc34de8408390a",
+      "path": "validator/src/audit/observability/read.rs"
+    },
+    {
+      "digest": "sha256:06c0982f33c458e871222d4413ed3daa11d71d9b55d51c163ed2998126abbca7",
+      "path": "validator/src/audit/observability/receipt.rs"
+    },
+    {
+      "digest": "sha256:1ac98eae8013610fafca60e34f077c130ff66aa29166846ac34f62e9597182fc",
+      "path": "validator/src/audit/observability/registry.rs"
+    },
+    {
+      "digest": "sha256:3c30511316442d312cb3ea189f405ffcb50459db345c4d6f522131b738118509",
       "path": "validator/src/audit/package/checks.rs"
     },
     {
@@ -760,7 +784,7 @@
       "path": "validator/src/audit/session/log/hardening/requirements.rs"
     },
     {
-      "digest": "sha256:461e045650b39bf1585ac29c5d2b09476596fcae582974c25f785be7a095c789",
+      "digest": "sha256:b0809aa2608f7914120d1d71595ff9b8b08a78e87630c797d99c549e81945d5d",
       "path": "validator/src/audit/source_obligations.rs"
     },
     {
@@ -1044,7 +1068,7 @@
       "path": "validator/src/cli/control/plane/evidence/status.rs"
     },
     {
-      "digest": "sha256:9eecaebc631a1e1895348c889025740ae1c3d6c1fba8b2fc7fa4a7657322e3d0",
+      "digest": "sha256:a60384d245016b1ab5f0450a0988b56055592258b017a8a9f0777983fa89a560",
       "path": "validator/src/cli/control/plane/evidence/status/label_failures.rs"
     },
     {
@@ -1128,8 +1152,68 @@
       "path": "validator/src/cli/garbage/mod.rs"
     },
     {
-      "digest": "sha256:10065b64d5e26446d19a94c2a6a7e23f2ffdeb670da740ec979b5ae8632c064e",
+      "digest": "sha256:fb8da4aa60519182a8fc1a3c3b8a70bead7e3a925116d909abe55794c621d3e7",
       "path": "validator/src/cli/mod.rs"
+    },
+    {
+      "digest": "sha256:b609599f35497de64f89c65a4cabd66b79688ade41c46f5c143fb74929a90203",
+      "path": "validator/src/cli/observe/explain/mod.rs"
+    },
+    {
+      "digest": "sha256:fc1352b44a60f123d99502be84ccf128201bd08bcab756989c8ffa5a8a139774",
+      "path": "validator/src/cli/observe/mod.rs"
+    },
+    {
+      "digest": "sha256:6b2b7fb4874191ba085f3e0c2225e5908fa9f83b3c15b8e8f6bc8467bd192c4b",
+      "path": "validator/src/cli/observe/query/mod.rs"
+    },
+    {
+      "digest": "sha256:362f4353bf971659c4ba3f5a7be260a642910989da90434b29400becbc4937a0",
+      "path": "validator/src/cli/observe/query/text.rs"
+    },
+    {
+      "digest": "sha256:d8b71e6a2ccef72296b34a8106ff752fe042dea92963c303422fb9da7f1f5956",
+      "path": "validator/src/cli/observe/stack/health.rs"
+    },
+    {
+      "digest": "sha256:9dee2e424da30ca0f8bd15ee4b1f70179856a192f31c2bfa2451a4bf79e99131",
+      "path": "validator/src/cli/observe/stack/mod.rs"
+    },
+    {
+      "digest": "sha256:90c550c20987079b89e54799a63a4520e6db0c96ba0ba7f1ab6731d7de3df360",
+      "path": "validator/src/cli/observe/telemetry/claims.rs"
+    },
+    {
+      "digest": "sha256:ae9b6f16dbc30db797580f7c81884206aee37a38750e9bc10cd1a772d613f9af",
+      "path": "validator/src/cli/observe/telemetry/exporter.rs"
+    },
+    {
+      "digest": "sha256:96ff75fbd0ce7341ae94b84d3dd4fa3bccb4f1f2d0fcaeab02e4e6e588d03baf",
+      "path": "validator/src/cli/observe/telemetry/identity.rs"
+    },
+    {
+      "digest": "sha256:55171830e6144aacd91f38597e959871bac29087655869bfd1be8c699ecfcef4",
+      "path": "validator/src/cli/observe/telemetry/mod.rs"
+    },
+    {
+      "digest": "sha256:6694b6048d9c9d93b4a84244bb17c30c4b3ad325facfc4aaf591379489744b19",
+      "path": "validator/src/cli/observe/telemetry/query.rs"
+    },
+    {
+      "digest": "sha256:67e481956358bce2204d55b1008b36dc453413a56545504a80b878ed18409b0d",
+      "path": "validator/src/cli/observe/telemetry/receipt.rs"
+    },
+    {
+      "digest": "sha256:c71b1e43f3c5a788bab78c9e81d0e6a559064d83c8b31438ba745e1dea718857",
+      "path": "validator/src/cli/observe/telemetry/record.rs"
+    },
+    {
+      "digest": "sha256:f2cb0f8e8af0478157208b39319eb3be7c60f6d3ed0a107759e55d95c10e45ff",
+      "path": "validator/src/cli/observe/telemetry/spool.rs"
+    },
+    {
+      "digest": "sha256:5056b4abeffa363629e5b3ddf820c5f92a79e4066cef0f51fd6af011153e1aee",
+      "path": "validator/src/cli/observe/types.rs"
     },
     {
       "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
@@ -1188,11 +1272,11 @@
       "path": "validator/src/cli/standards/mod.rs"
     },
     {
-      "digest": "sha256:515ee4f0ccc7fd0c9dc480427cb27f87c6361d6d6ab8519fbe38cfd27fb763be",
+      "digest": "sha256:beffa58c8b7b66acb79ed9fe5a254e433f92882969c1c3ce10d05335b73a751e",
       "path": "validator/src/command_run.rs"
     },
     {
-      "digest": "sha256:2c97732471efcd440c5a1ff38b4cb76aa4ccc84f893e11875336ec609351f952",
+      "digest": "sha256:b8a272b112e49fcbb1385b7eb2c3bc00a312d44acbb7519109d84c15b04f35f5",
       "path": "validator/src/contract_check_ids.rs"
     },
     {
@@ -1204,7 +1288,7 @@
       "path": "validator/src/json_boundary.rs"
     },
     {
-      "digest": "sha256:6acbfb9b39bfc3949a0120572865e2cf1eab7e9e480f52582c96331e6bae239e",
+      "digest": "sha256:d3c4aea4167e8f35d7d665f1823c285759940df96f6a03c3ef0acad7bd576fad",
       "path": "validator/src/lib.rs"
     },
     {
@@ -1228,7 +1312,7 @@
       "path": "validator/src/package/inventory.rs"
     },
     {
-      "digest": "sha256:51efd17f39f3f6c009aadb0ef102b3594231a5b8771d3a1ecae43c7735347e4b",
+      "digest": "sha256:47a2ee6f32e336e038049e6edd4dbbca99b27cd8ee074ab041aaaa655ee8d429",
       "path": "validator/src/package/inventory/closure.rs"
     },
     {
@@ -1772,8 +1856,36 @@
       "path": "validator/src/self_tests/cli/final_packet.rs"
     },
     {
-      "digest": "sha256:6431720babcd1de037d26515c91dfc64281488a8991b7a7ee473deca313dbf93",
+      "digest": "sha256:a20653795214ea502b8acf65e59f32a05bf20c419e723de18f7504a8c95b9524",
       "path": "validator/src/self_tests/cli/mod.rs"
+    },
+    {
+      "digest": "sha256:311628e92b5927548119cddd360c19bf8f7def535763e9f0f5e89851b0fca2a5",
+      "path": "validator/src/self_tests/cli/observe.rs"
+    },
+    {
+      "digest": "sha256:10d4a03700f55e5df59f12aa181e5dda2633fa17e5829bf199ae0185ccef6c73",
+      "path": "validator/src/self_tests/cli/observe/package.rs"
+    },
+    {
+      "digest": "sha256:eda31a15c671aadfd02b544db60f2c3b8f27f7c760020c2a15181de1b41d8b40",
+      "path": "validator/src/self_tests/cli/observe/query.rs"
+    },
+    {
+      "digest": "sha256:a19729085a24d765841129123db2b2aaa0f1f344aa25a233519a4047d6e9c02d",
+      "path": "validator/src/self_tests/cli/observe/query/matching.rs"
+    },
+    {
+      "digest": "sha256:d083f49ae56bced44ab079aff31fc179e0c0f78d6065a9cbf47f7426d866404f",
+      "path": "validator/src/self_tests/cli/observe/query/run.rs"
+    },
+    {
+      "digest": "sha256:42bb51495e99b62b9db22c022343869b2ae359c21d83fdde1af5f961500053b1",
+      "path": "validator/src/self_tests/cli/observe/query/text.rs"
+    },
+    {
+      "digest": "sha256:60fc5250f027fb4cc7951be6531643f7285486430585337235f2982cc78085f5",
+      "path": "validator/src/self_tests/cli/observe/run.rs"
     },
     {
       "digest": "sha256:dc68989e9e5f12c43b298831458e05d9bdf8e6c9cb1736710f18ed727363778f",

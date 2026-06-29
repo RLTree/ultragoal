@@ -53,6 +53,7 @@
         "fixtures/mandatory-law-surfaces/valid/forward-only-state-transition-integrity-silent-reopen-prevention.json",
         "fixtures/mandatory-law-surfaces/valid/fresh-init-retrofit-mode-separation.json",
         "fixtures/mandatory-law-surfaces/valid/fresh-retrofit-repo-shape.json",
+        "fixtures/mandatory-law-surfaces/valid/full-local-observability-stack-integration-non-opaque-failure.json",
         "fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json",
         "fixtures/mandatory-law-surfaces/valid/generated-ready-completion-receipts.json",
         "fixtures/mandatory-law-surfaces/valid/goal-contract-amendment-authority-required-claim-id-mapping.json",

@@ -473,7 +473,7 @@
       "error": "agent_standards_required_row_missing:namespace-progressive-disclosure"
     },
     "id": "agent-standards-missing-namespace-row",
-    "packet_digest": "sha256:a39baf07bf30c4a456752e491e5c883cc4a12a61a5fefa7789de79a0d175c2a5",
+    "packet_digest": "sha256:b015c945ace010b29fb4be1bc2e53504aaac36dc4b22599ca4f1c64a3c4bf371",
     "packet_path": "fixtures/red/agent-standards-missing-namespace-row.json"
   },
   {
@@ -2516,7 +2516,7 @@
       "error": "ready_receipt_not_validator_output"
     },
     "id": "downstream-dependency-ready-receipt-generated-artifact-digest-mismatch",
-  "packet_digest": "sha256:27eb33d68a661dd57e621913a8a802fa231193b0a669312c0bfb6911071e34f9",
+    "packet_digest": "sha256:27eb33d68a661dd57e621913a8a802fa231193b0a669312c0bfb6911071e34f9",
     "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-digest-mismatch.json"
   },
   {
@@ -2525,7 +2525,7 @@
       "error": "ready_receipt_not_validator_output"
     },
     "id": "downstream-dependency-ready-receipt-generated-artifact-missing",
-  "packet_digest": "sha256:057c8b7f908d6cc7df2138677b46f7f8364caf14b2717b238804d9888b494070",
+    "packet_digest": "sha256:057c8b7f908d6cc7df2138677b46f7f8364caf14b2717b238804d9888b494070",
     "packet_path": "fixtures/red/downstream-dependency-ready-receipt-generated-artifact-missing.json"
   },
   {
@@ -2633,7 +2633,7 @@
       "error": "duplicate_red_fixture_rows"
     },
     "id": "duplicate-red-fixture-rows",
-    "packet_digest": "sha256:2bbf1c94af3eccf77c8248f28437044db3d1fff22f9a57431cc7470264af47d1",
+    "packet_digest": "sha256:8318741c184c1bc1c1c175038871cda75fcf4399b3cce562886f4f86a712662f",
     "packet_path": "fixtures/red/duplicate-red-fixture-rows.json"
   },
   {
@@ -3229,6 +3229,231 @@
     "id": "fresh-retrofit-repo-shape-source-obligation-parity-red",
     "packet_digest": "sha256:fac725328c10947c245f1f41c40c6ab70ba0d9ecd71e09290c91ba18afdf8f87",
     "packet_path": "fixtures/red/fresh-retrofit-repo-shape-source-obligation-parity-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broken_span_parentage"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red",
+    "packet_digest": "sha256:496590c3dd4a0cf9af71cd1030ea92d6eea76c194b1285e46e8a007bd43db136",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:command_inventory_row_without_instrumentation_proof"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red",
+    "packet_digest": "sha256:b0ab2899c01bf0363f4cd5aedaedf2c3a12b3c8ee3c46a627add70f54ea27594",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:command_missing_from_inventory"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red",
+    "packet_digest": "sha256:501364003d8cb1a80096018b6f6022e1713162617e8fe41659063c97c98492bb",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:forged_log_bundle"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-forged-log-bundle-red",
+    "packet_digest": "sha256:aef171b5f02733f168e5dbcd512150616ee5dfad24d1c04f445f2bc59a535cbb",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-forged-log-bundle-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:forged_metric_bundle"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-forged-metric-bundle-red",
+    "packet_digest": "sha256:83043ecce4b34ead07a8d3f304871756a6854178deab0ab5f22d5281f239288b",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-forged-metric-bundle-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:forged_trace_bundle"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red",
+    "packet_digest": "sha256:29ada1a2b572606f73c24c4c8a6fd2ee9a65b26fb05a5b10306a0a5bc13055ef",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:hidden_network_endpoint"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-hidden-network-endpoint-red",
+    "packet_digest": "sha256:1973a2095856828abf8e8397f424131a3004649f3f9626575d0ec0092a197836",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-hidden-network-endpoint-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:local_json_fallback_used_as_completion_proof"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red",
+    "packet_digest": "sha256:3b73a350c8e531c0b4178e28318c23770624badd33bca804c67765e4ee76f60d",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:metric_log_trace_digest_mismatch"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-metric-log-trace-digest-mismatch-red",
+    "packet_digest": "sha256:3e847074bc23e1cbaaeb55311c6a0b44005ddd03d4c556a4532c734bb2d26af9",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-metric-log-trace-digest-mismatch-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:mismatched_correlation_id"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-mismatched-correlation-id-red",
+    "packet_digest": "sha256:416de040a4a721c486c3114972473caaa19c4e46779633deaff9bffc60077706",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-mismatched-correlation-id-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:missing_correlation_id"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-missing-correlation-id-red",
+    "packet_digest": "sha256:8d33c33b7dcbf6966fd7f17db4f72f92e25e156f7417ac44c61f607981e1d9c4",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-missing-correlation-id-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:missing_log_event"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red",
+    "packet_digest": "sha256:49f1498411b3c79eac5afcc1b4818d3b912b6569484d9d86b58c9bbd68fa3f7f",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:missing_metric"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-missing-metric-red",
+    "packet_digest": "sha256:787314cf2cfb29f15fd511002ff6bea1edf70fba86da1b93b1121d77dbdb671f",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-missing-metric-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:missing_repair_hint"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-missing-repair-hint-red",
+    "packet_digest": "sha256:421404846df7c317fbd113615d66114d61fe81492b5f686d155279e41e4cd212",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-missing-repair-hint-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:missing_trace"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-missing-trace-red",
+    "packet_digest": "sha256:2adda2d04021ff5d0164d245a6ae6944cf62ea2d6b53c6bdc80f8cc062e765c4",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-missing-trace-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:opaque_fail_output"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-opaque-fail-output-red",
+    "packet_digest": "sha256:ef7bee511e32010a63cd51e3d015b484012923be6953a24bec258b226675620a",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-opaque-fail-output-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:opaque_pass_output"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red",
+    "packet_digest": "sha256:743a2fbfe2c1eb392e0745d1309e38dfd03883c95ae00f2471e6d68b7b0a5a87",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:private_path_leak"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red",
+    "packet_digest": "sha256:474522d416a3f11825167f680ed6950c6a87e193055f472315e8f7345c3a3fff",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:public_port_binding"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-public-port-binding-red",
+    "packet_digest": "sha256:0718d0d17b3a54e728760baabd20f7ac0f6d1442f05b9a218b2121967cf5a6b3",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-public-port-binding-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:receipt_without_observability_binding"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red",
+    "packet_digest": "sha256:27bd57bb2e2aaaac57c7e8dc7277a5799760e4b173d0482abf65362b54a1a7c1",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:stale_telemetry"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red",
+    "packet_digest": "sha256:843fa183b5abe6944afbe6f6d91a55fdfb86920327ec5d2669158194375e59a0",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:unbounded_query"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-unbounded-query-red",
+    "packet_digest": "sha256:8c6412f6479f8371872c747f2ec3d209dd83af8843f51ba07c7c37e570fb251b",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-unbounded-query-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:unbounded_retention"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-unbounded-retention-red",
+    "packet_digest": "sha256:06fd7ff1d16b96599d701ebf4a3e08b04e3c39f0bafab81bcb317b30f4470390",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-unbounded-retention-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:unredacted_secret"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-unredacted-secret-red",
+    "packet_digest": "sha256:d560b2189af7f7752c431432cb118c527b30bee916545c5d5b9ce2aa7087e19d",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-unredacted-secret-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:wrong_candidate_digest"
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-wrong-candidate-digest-red",
+    "packet_digest": "sha256:23d022d1ad3a051f0be6a651b6603f6bfe1c98ae48c4085c3210419645a23b73",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-wrong-candidate-digest-red.json"
   },
   {
     "expected_failure": {
@@ -4424,7 +4649,7 @@
       "error": "namespace_law_present_only_as_prose"
     },
     "id": "namespace-law-present-only-as-prose",
-    "packet_digest": "sha256:9b54f948a90fa74beec2e0e2fd937f0e2d23d9a28256ea8c8629d4d2e1ada53a",
+    "packet_digest": "sha256:db8607509abeb95a885a480d04d0dceb15edd68dc1e2033d5e396ab3de1644cd",
     "packet_path": "fixtures/red/namespace-law-present-only-as-prose.json"
   },
   {
@@ -4502,20 +4727,20 @@
   {
     "expected_failure": {
       "check_id": "namespace-progressive-disclosure",
-      "error": "namespace_class_waiver_field_present"
-    },
-    "id": "namespace-validator-source-class-waiver-manifest-contract-red",
-    "packet_digest": "sha256:5047b0b8fbdc86a39d56022d76c4184ac366f006d2c9cc7a114b62e1bee100e0",
-    "packet_path": "fixtures/red/namespace-validator-source-class-waiver-manifest-contract-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "namespace-progressive-disclosure",
       "error": "namespace_class_broad_source_glob_requires_direct_topology_check"
     },
     "id": "namespace-validator-source-broad-glob-red",
     "packet_digest": "sha256:b67859df7aaf9635ae49f91a6d54b10342697666c543f304d71c9e77abe794ad",
     "packet_path": "fixtures/red/namespace-validator-source-broad-glob-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "namespace-progressive-disclosure",
+      "error": "namespace_class_waiver_field_present"
+    },
+    "id": "namespace-validator-source-class-waiver-manifest-contract-red",
+    "packet_digest": "sha256:5047b0b8fbdc86a39d56022d76c4184ac366f006d2c9cc7a114b62e1bee100e0",
+    "packet_path": "fixtures/red/namespace-validator-source-class-waiver-manifest-contract-red.json"
   },
   {
     "expected_failure": {
@@ -8596,6 +8821,168 @@
   },
   {
     "expected_failure": {
+      "check_id": "workspace-artifact-cache-garbage-collection",
+      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:blind_cleanup_without_gc_receipt"
+    },
+    "id": "rust-devx-blind-cleanup-without-gc-receipt-red",
+    "packet_digest": "sha256:c622cfa2b8115ed022b1884f7ed6d67e1e9c5bfd64be151f1a66d94f525368a7",
+    "packet_path": "fixtures/red/rust-devx-blind-cleanup-without-gc-receipt-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-toolchain-substrate-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:cargo_lock_digest_tamper"
+    },
+    "id": "rust-devx-cargo-lock-digest-tamper-red",
+    "packet_digest": "sha256:97e961177246372c3e06ee9f7e4beb97340a954a5705a06c2b35b055ecfaaaac",
+    "packet_path": "fixtures/red/rust-devx-cargo-lock-digest-tamper-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-command-loop-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:cargo_test_overclaim"
+    },
+    "id": "rust-devx-cargo-test-overclaim-red",
+    "packet_digest": "sha256:b16808158a858710323414c5d376b0822ee9a46a7253654e69d52c8008504ab6",
+    "packet_path": "fixtures/red/rust-devx-cargo-test-overclaim-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-developer-experience-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:dependency_audit_missing"
+    },
+    "id": "rust-devx-dependency-audit-missing-red",
+    "packet_digest": "sha256:b6c0de7c162ddd3cd088abcb9257dcfa3eccfa2320fb9fd9812a907fcb87e94b",
+    "packet_path": "fixtures/red/rust-devx-dependency-audit-missing-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "workspace-artifact-cache-garbage-collection",
+      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:gc_plan_digest_tamper"
+    },
+    "id": "rust-devx-gc-plan-digest-tamper-red",
+    "packet_digest": "sha256:ecaa04edb4693cb98c8b85a1e4dde2832564a16c931a2d199b25f93c0a52c69b",
+    "packet_path": "fixtures/red/rust-devx-gc-plan-digest-tamper-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-cache-no-cache-honesty",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_cache_no_cache_substitution"
+    },
+    "id": "rust-devx-hidden-cache-no-cache-substitution-red",
+    "packet_digest": "sha256:4405339acb627e498ca11af3eaa1eb25ef816ac2e87b88d681484ddfa8f15386",
+    "packet_path": "fixtures/red/rust-devx-hidden-cache-no-cache-substitution-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-cache-no-cache-honesty",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_rustc_wrapper"
+    },
+    "id": "rust-devx-hidden-rustc-wrapper-red",
+    "packet_digest": "sha256:7f88f92a2eb68389d108d3c37b8d4f68094fa08e8e37d1efdadfa12f6c932304",
+    "packet_path": "fixtures/red/rust-devx-hidden-rustc-wrapper-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-developer-experience-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:makefile_or_alias_authority"
+    },
+    "id": "rust-devx-makefile-authority-red",
+    "packet_digest": "sha256:81ee85ae2b5b76af0d8160b0e1bd3b686863be7ff991275ebc77915e9aa02e15",
+    "packet_path": "fixtures/red/rust-devx-makefile-authority-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-command-loop-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:nextest_missing_or_silent_fallback"
+    },
+    "id": "rust-devx-missing-nextest-bootstrap-red",
+    "packet_digest": "sha256:778ccbe41eed4b0fa2ae11bc7cf6939dffbd7aeb2e54d43f68a0ac49b992bea6",
+    "packet_path": "fixtures/red/rust-devx-missing-nextest-bootstrap-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-toolchain-substrate-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_substrate_missing"
+    },
+    "id": "rust-devx-missing-toolchain-substrate-red",
+    "packet_digest": "sha256:6ed5132a6bdf1e9c23265648405f7adbb764a7e5bbe5009a4d94876972675de7",
+    "packet_path": "fixtures/red/rust-devx-missing-toolchain-substrate-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "workspace-artifact-cache-garbage-collection",
+      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:protected_artifact_delete"
+    },
+    "id": "rust-devx-protected-artifact-delete-red",
+    "packet_digest": "sha256:07f378801e6808e9f33d8f46f94edcc73223412123059670ad38a0c6476cea20",
+    "packet_path": "fixtures/red/rust-devx-protected-artifact-delete-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-developer-experience-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:raw_tool_output_substitution"
+    },
+    "id": "rust-devx-raw-tool-output-substitution-red",
+    "packet_digest": "sha256:03e0b2a5d6c33bdbf665d936fe09576e358e8192c2da9a3c9580a2f3b620beb0",
+    "packet_path": "fixtures/red/rust-devx-raw-tool-output-substitution-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-memory-resource-discipline",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:spawn_forget_child_process"
+    },
+    "id": "rust-devx-spawn-forget-child-process-red",
+    "packet_digest": "sha256:917528b9f8a5a968898a5a1f8df62c49f66582a5c7305f1fde960a68bdaaee18",
+    "packet_path": "fixtures/red/rust-devx-spawn-forget-child-process-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-toolchain-substrate-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_receipt_stale"
+    },
+    "id": "rust-devx-toolchain-receipt-stale-red",
+    "packet_digest": "sha256:68f033f4e8da4a45b1b0c624107d0d1075744c8105173047ef3f1b2bb37d582b",
+    "packet_path": "fixtures/red/rust-devx-toolchain-receipt-stale-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-memory-resource-discipline",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:tracing_gc_core_memory_model"
+    },
+    "id": "rust-devx-tracing-gc-core-memory-model-red",
+    "packet_digest": "sha256:0d608e6960293d6e74c3ba91b267dd02675736be76707b82384b20504136a615",
+    "packet_path": "fixtures/red/rust-devx-tracing-gc-core-memory-model-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-memory-resource-discipline",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:unbounded_resource_discipline"
+    },
+    "id": "rust-devx-unbounded-resource-discipline-red",
+    "packet_digest": "sha256:bca8ba1f93b65d22c83246b693285bce6be2efc7bb97787f5dd55595aa0a7194",
+    "packet_path": "fixtures/red/rust-devx-unbounded-resource-discipline-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-cache-no-cache-honesty",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:warm_cache_as_cold_proof"
+    },
+    "id": "rust-devx-warm-cache-as-cold-proof-red",
+    "packet_digest": "sha256:a6652a62ffcd77876ad1e70b7aa94201a89387b54336293e62466a5574f5f5db",
+    "packet_path": "fixtures/red/rust-devx-warm-cache-as-cold-proof-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "rust-command-loop-authority",
+      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:watch_observation_as_completion"
+    },
+    "id": "rust-devx-watch-observation-as-completion-red",
+    "packet_digest": "sha256:63e4accb90da9a8593c45323945140b217139d48db948247fb100bf72a11bcf8",
+    "packet_path": "fixtures/red/rust-devx-watch-observation-as-completion-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:scheduler-runner-tracker-boundaries:approval_proof"
     },
@@ -9329,7 +9716,7 @@
       "error": "source-installed-cache-alignment: source_obligation_missing_row"
     },
     "id": "source-obligation-missing-install-cache-alignment",
-    "packet_digest": "sha256:7f2876a3666ab4b53726431daf6b17dfeab97a1b8f1e238ec5c8aec136ede9d2",
+    "packet_digest": "sha256:f5eb8e010d33623159f39ca54b0fe1bb26de727e4660a2dc13572b0a9c4c7dc2",
     "packet_path": "fixtures/red/source-obligation-missing-install-cache-alignment.json"
   },
   {
@@ -9572,7 +9959,7 @@
       "error": "standards_gardener_receipt_missing"
     },
     "id": "standards-gardener-missing-promotion-receipt",
-    "packet_digest": "sha256:a3a993a5aeadb06fc32f9977dae827493e62fc27926ab346dfcd3d2eadb132c9",
+    "packet_digest": "sha256:234cde0782f8c17ade76f49496c76c078bc4ab4121baf40a93ec20a291d33207",
     "packet_path": "fixtures/red/standards-gardener-missing-promotion-receipt.json"
   },
   {
@@ -10753,167 +11140,5 @@
     "id": "wrong-worktree-or-root",
     "packet_digest": "sha256:6d8cbb72d60b9e7dd6ab36e7580eb02ae4eb0dff86d5327553548b68b1d83aaf",
     "packet_path": "fixtures/red/wrong-worktree-or-root.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-developer-experience-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:raw_tool_output_substitution"
-    },
-    "id": "rust-devx-raw-tool-output-substitution-red",
-    "packet_digest": "sha256:03e0b2a5d6c33bdbf665d936fe09576e358e8192c2da9a3c9580a2f3b620beb0",
-    "packet_path": "fixtures/red/rust-devx-raw-tool-output-substitution-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-developer-experience-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:makefile_or_alias_authority"
-    },
-    "id": "rust-devx-makefile-authority-red",
-    "packet_digest": "sha256:81ee85ae2b5b76af0d8160b0e1bd3b686863be7ff991275ebc77915e9aa02e15",
-    "packet_path": "fixtures/red/rust-devx-makefile-authority-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-developer-experience-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-developer-experience-authority:dependency_audit_missing"
-    },
-    "id": "rust-devx-dependency-audit-missing-red",
-    "packet_digest": "sha256:b6c0de7c162ddd3cd088abcb9257dcfa3eccfa2320fb9fd9812a907fcb87e94b",
-    "packet_path": "fixtures/red/rust-devx-dependency-audit-missing-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-toolchain-substrate-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_substrate_missing"
-    },
-    "id": "rust-devx-missing-toolchain-substrate-red",
-    "packet_digest": "sha256:6ed5132a6bdf1e9c23265648405f7adbb764a7e5bbe5009a4d94876972675de7",
-    "packet_path": "fixtures/red/rust-devx-missing-toolchain-substrate-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-toolchain-substrate-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:toolchain_receipt_stale"
-    },
-    "id": "rust-devx-toolchain-receipt-stale-red",
-    "packet_digest": "sha256:68f033f4e8da4a45b1b0c624107d0d1075744c8105173047ef3f1b2bb37d582b",
-    "packet_path": "fixtures/red/rust-devx-toolchain-receipt-stale-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-toolchain-substrate-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-toolchain-substrate-authority:cargo_lock_digest_tamper"
-    },
-    "id": "rust-devx-cargo-lock-digest-tamper-red",
-    "packet_digest": "sha256:97e961177246372c3e06ee9f7e4beb97340a954a5705a06c2b35b055ecfaaaac",
-    "packet_path": "fixtures/red/rust-devx-cargo-lock-digest-tamper-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-command-loop-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:cargo_test_overclaim"
-    },
-    "id": "rust-devx-cargo-test-overclaim-red",
-    "packet_digest": "sha256:b16808158a858710323414c5d376b0822ee9a46a7253654e69d52c8008504ab6",
-    "packet_path": "fixtures/red/rust-devx-cargo-test-overclaim-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-command-loop-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:nextest_missing_or_silent_fallback"
-    },
-    "id": "rust-devx-missing-nextest-bootstrap-red",
-    "packet_digest": "sha256:778ccbe41eed4b0fa2ae11bc7cf6939dffbd7aeb2e54d43f68a0ac49b992bea6",
-    "packet_path": "fixtures/red/rust-devx-missing-nextest-bootstrap-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-command-loop-authority",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-command-loop-authority:watch_observation_as_completion"
-    },
-    "id": "rust-devx-watch-observation-as-completion-red",
-    "packet_digest": "sha256:63e4accb90da9a8593c45323945140b217139d48db948247fb100bf72a11bcf8",
-    "packet_path": "fixtures/red/rust-devx-watch-observation-as-completion-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-cache-no-cache-honesty",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_cache_no_cache_substitution"
-    },
-    "id": "rust-devx-hidden-cache-no-cache-substitution-red",
-    "packet_digest": "sha256:4405339acb627e498ca11af3eaa1eb25ef816ac2e87b88d681484ddfa8f15386",
-    "packet_path": "fixtures/red/rust-devx-hidden-cache-no-cache-substitution-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-cache-no-cache-honesty",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:warm_cache_as_cold_proof"
-    },
-    "id": "rust-devx-warm-cache-as-cold-proof-red",
-    "packet_digest": "sha256:a6652a62ffcd77876ad1e70b7aa94201a89387b54336293e62466a5574f5f5db",
-    "packet_path": "fixtures/red/rust-devx-warm-cache-as-cold-proof-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-cache-no-cache-honesty",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-cache-no-cache-honesty:hidden_rustc_wrapper"
-    },
-    "id": "rust-devx-hidden-rustc-wrapper-red",
-    "packet_digest": "sha256:7f88f92a2eb68389d108d3c37b8d4f68094fa08e8e37d1efdadfa12f6c932304",
-    "packet_path": "fixtures/red/rust-devx-hidden-rustc-wrapper-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-memory-resource-discipline",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:unbounded_resource_discipline"
-    },
-    "id": "rust-devx-unbounded-resource-discipline-red",
-    "packet_digest": "sha256:bca8ba1f93b65d22c83246b693285bce6be2efc7bb97787f5dd55595aa0a7194",
-    "packet_path": "fixtures/red/rust-devx-unbounded-resource-discipline-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-memory-resource-discipline",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:spawn_forget_child_process"
-    },
-    "id": "rust-devx-spawn-forget-child-process-red",
-    "packet_digest": "sha256:917528b9f8a5a968898a5a1f8df62c49f66582a5c7305f1fde960a68bdaaee18",
-    "packet_path": "fixtures/red/rust-devx-spawn-forget-child-process-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "rust-memory-resource-discipline",
-      "error": "mandatory_law_specific_guard_not_enforced:rust-memory-resource-discipline:tracing_gc_core_memory_model"
-    },
-    "id": "rust-devx-tracing-gc-core-memory-model-red",
-    "packet_digest": "sha256:0d608e6960293d6e74c3ba91b267dd02675736be76707b82384b20504136a615",
-    "packet_path": "fixtures/red/rust-devx-tracing-gc-core-memory-model-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "workspace-artifact-cache-garbage-collection",
-      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:blind_cleanup_without_gc_receipt"
-    },
-    "id": "rust-devx-blind-cleanup-without-gc-receipt-red",
-    "packet_digest": "sha256:c622cfa2b8115ed022b1884f7ed6d67e1e9c5bfd64be151f1a66d94f525368a7",
-    "packet_path": "fixtures/red/rust-devx-blind-cleanup-without-gc-receipt-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "workspace-artifact-cache-garbage-collection",
-      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:protected_artifact_delete"
-    },
-    "id": "rust-devx-protected-artifact-delete-red",
-    "packet_digest": "sha256:07f378801e6808e9f33d8f46f94edcc73223412123059670ad38a0c6476cea20",
-    "packet_path": "fixtures/red/rust-devx-protected-artifact-delete-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "workspace-artifact-cache-garbage-collection",
-      "error": "mandatory_law_specific_guard_not_enforced:workspace-artifact-cache-garbage-collection:gc_plan_digest_tamper"
-    },
-    "id": "rust-devx-gc-plan-digest-tamper-red",
-    "packet_digest": "sha256:ecaa04edb4693cb98c8b85a1e4dde2832564a16c931a2d199b25f93c0a52c69b",
-    "packet_path": "fixtures/red/rust-devx-gc-plan-digest-tamper-red.json"
   }
 ]

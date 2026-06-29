@@ -1,0 +1,32 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-80527ed5453ef83287083f27925e4d616e5bffd835d6c887ca17ce9f958af4bf",
+  "failure": "",
+  "query": "_msg:run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862",
+  "query_kind": "logs",
+  "result_digest": "sha256:b395cc43246e97dca248f42530f98a7033817840c1fb89fbbad37584171277d5",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"_msg\":\"{\\\"artifact_path\\\":\\\"dev/observability\\\",\\\"bounded_output_status\\\":\\\"pass\\\",\\\"candidate_digest\\\":\\\"sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8\\\",\\\"check_id\\\":\\\"full-local-observability-stack-integration-non-opaque-failure\\\",\\\"claim_id\\\":\\\"gate-92-observability-control-plane\\\",\\\"claim_impact\\\":\\\"observability_evidence_only\\\",\\\"command\\\":\\\"ultragoal observe\\\",\\\"correlation_id\\\":\\\"corr-8767ae723324f3e4c2959cd66b65f4fcfdf1cca418003ba8a93bc4c64ed8dd4c\\\",\\\"duration_ms\\\":0,\\\"exporter\\\":\\\"victorialogs\\\",\\\"failure_class\\\":\\\"none\\\",\\\"law_id\\\":\\\"full-local-observability-stack-integration-non-opaque-failure\\\",\\\"next_repair\\\":\\\"keep receipt same-candidate and rerun source audit before any readiness claim\\\",\\\"operation\\\":\\\"observe.prove\\\",\\\"parent_span_id\\\":\\\"\\\",\\\"query_hint_logql\\\":\\\"_time:5m operation:observe.prove\\\",\\\"query_hint_promql\\\":\\\"ultragoal_command_total{operation=\\\\\\\"observe.prove\\\\\\\"}\\\",\\\"query_hint_traceql\\\":\\\"{operation=\\\\\\\"observe.prove\\\\\\\"}\\\",\\\"receipt_path\\\":\\\"validation_artifacts/observability/observe-prove.json\\\",\\\"redaction_status\\\":\\\"pass\\\",\\\"run_id\\\":\\\"run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862\\\",\\\"schema\\\":\\\"harness-ultragoal.observability-event.v1\\\",\\\"span_id\\\":\\\"span-26b0957378bd76603888cf7393e6070faa49a9192e696ad2fac5b622e5cbf55a\\\",\\\"status\\\":\\\"pass\\\",\\\"subcommand\\\":\\\"prove\\\",\\\"surface\\\":\\\"live_stack\\\",\\\"target_revision\\\":\\\"sha256:ee6a3665632f6b253aaf3747d3f7c783f8b0668811bc2f1a81c777589002cfa8\\\",\\\"timestamp\\\":\\\"2026-06-29T04:51:28Z\\\",\\\"trace_id\\\":\\\"trace-6a398be920eeea6f7dbb2ac20093001c7ac144192ec045193702943223d4c1d6\\\",\\\"where_failed\\\":\\\"none\\\",\\\"why_failed\\\":\\\"none\\\"}\",\"_stream\":\"{stream=\\\"ultragoal\\\"}\",\"_stream_id\":\"0000000000000000918febb1737e3d07776623927387e4e4\",\"_time\":\"2026-06-29T04:51:38.441898097Z\",\"file\":\"/spool/events.jsonl\",\"host\":\"8f75a35f95d0\",\"source_type\":\"file\",\"stream\":\"ultragoal\"}\n"
+    }
+  ],
+  "run_id": "run-b2dec6723647117f11bc90d88fd889c6e08225b1fec8d94276bedae4246f3862",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 15000,
+  "truncated": false
+}

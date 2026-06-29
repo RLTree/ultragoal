@@ -105,6 +105,13 @@ fn text_guard_checks(
     for (check, failure) in crate::audit::rust::developer::package_failures(root) {
         push(failures, &check, failure);
     }
+    for failure in crate::audit::observability::package_failures(root) {
+        push(
+            failures,
+            "full-local-observability-stack-integration-non-opaque-failure",
+            failure,
+        );
+    }
     for failure in crate::audit::text_guards::private_home_path_failures(root) {
         push(failures, "plugin-inventory-closure", failure);
     }

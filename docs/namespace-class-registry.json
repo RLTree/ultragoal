@@ -149,6 +149,19 @@
       "maximal_factoring_required": true,
       "waiver_allowed": false,
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
+      "id": "local-observability-stack-surfaces",
+      "kind": "executable_script",
+      "surface_globs": [
+        "dev/observability/**"
+      ],
+      "description": "Local observability stack configuration is a governed source-local support surface; stack proof cannot imply install, cache, app-registry, reviewer, readiness, release, completion, or update_goal claims.",
+      "authority": "full_local_observability_stack_integration",
+      "authority_path": "validator/src/audit/observability/mod.rs",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
     }
   ]
 }

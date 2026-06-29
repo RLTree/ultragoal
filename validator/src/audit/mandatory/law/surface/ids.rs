@@ -34,6 +34,7 @@ pub(crate) const REQUIRED_LAWS: &[&str] = &[
     "forward-only-state-transition-integrity-silent-reopen-prevention",
     "fresh-init-retrofit-mode-separation",
     "fresh-retrofit-repo-shape",
+    "full-local-observability-stack-integration-non-opaque-failure",
     "generated-proof-artifact-provenance-anti-fabrication",
     "generated-ready-completion-receipts",
     "goal-contract-amendment-authority-required-claim-id-mapping",

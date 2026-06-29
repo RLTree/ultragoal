@@ -8,9 +8,9 @@
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
     {
-      "op": "replace",
-      "path": "/validator_receipt/required_red_fixture_ids/0",
-      "value": "hand-written-ready-receipt"
+      "op": "add",
+      "path": "/validator_receipt/required_red_fixture_ids/-",
+      "value": "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red"
     }
   ],
   "notes": "duplicate or omit red fixture rows in receipt",
@@ -27,7 +27,7 @@
   ],
   "postconditions": [
     {
-      "path": "/validator_receipt/required_red_fixture_ids/0",
+      "path": "/validator_receipt/required_red_fixture_ids/-",
       "expectation": "duplicate_red_fixture_rows"
     }
   ]

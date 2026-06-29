@@ -10,12 +10,14 @@ const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     "validation_artifacts/coverage/",
     "validation_artifacts/rust/",
     "validation_artifacts/gc/",
+    "validation_artifacts/observability/spool/",
 ];
 const LOCAL_PROOF_PATHS: &[&str] = &[
     "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
     "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
     "validation_artifacts/harness/fit-repo-command.stderr.txt",
     "validation_artifacts/harness/fit-repo-command.stdout.txt",
+    "validation_artifacts/target-valid-init-debug-receipt.json",
 ];
 
 pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {

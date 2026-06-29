@@ -80,6 +80,32 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
             .iter()
             .any(|failure| failure == "rust_receipt_status_not_pass")
     );
+    for (label, law_id) in [
+        ("rust_dependency", "rust-developer-experience-authority"),
+        (
+            "rust_workspace_topology",
+            "rust-developer-experience-authority",
+        ),
+        ("rust_toolchain", "rust-toolchain-substrate-authority"),
+        ("rust_clean_proof", "rust-cache-no-cache-honesty"),
+        ("rust_memory", "rust-memory-resource-discipline"),
+    ] {
+        let receipt = json!({
+            "schema":"harness-ultragoal.rust-devx-receipt.v1",
+            "law_id":law_id,
+            "status":"fail",
+            "digests":{"candidate":candidate},
+            "observations":[],
+            "observation_failures":[],
+            "claim_ceiling":"rust_devx_observation_bound"
+        });
+        assert!(
+            super::label_failures(&root, label, &receipt, &candidate)
+                .iter()
+                .any(|failure| failure == "rust_receipt_status_not_pass"),
+            "{label}"
+        );
+    }
     let source_audit = json!({
         "status":"fail",
         "target_revision":{"kind":"package_digest","value":candidate}
@@ -157,12 +183,34 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
     assert!(
         super::label_failures(&root, "install_audit", &fail_closed_install, &candidate).is_empty()
     );
+    assert!(
+        super::label_failures(&root, "install_audit", &json!({}), &candidate)
+            .iter()
+            .any(|failure| failure.starts_with("package_surface_audit_schema:"))
+    );
     let fail_closed_cache =
         fail_closed_surface_receipt(&candidate, "cache_audit", "versioned_cache_package");
     assert!(super::label_failures(&root, "cache_audit", &fail_closed_cache, &candidate).is_empty());
     assert_eq!(
         super::typed_status("product_fitness", &json!({}), &[]),
         Some("pass")
+    );
+    assert_eq!(
+        super::typed_status(
+            "unknown",
+            &json!({"status":"pass"}),
+            &["ignored".to_string()]
+        ),
+        Some("pass")
+    );
+    assert_eq!(
+        super::typed_status("unknown", &json!({"status":"fail"}), &[]),
+        Some("fail")
+    );
+    assert_eq!(super::typed_status("unknown", &json!({}), &[]), None);
+    assert!(
+        super::label_failures(&root, "transactional_finalization", &json!({}), &candidate)
+            .is_empty()
     );
     for label in [
         "coverage",
