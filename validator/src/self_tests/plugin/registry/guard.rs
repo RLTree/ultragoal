@@ -20,10 +20,7 @@ fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
     assert!(failures.is_empty(), "{failures:?}");
 
     let live_raw_path = root.join("validation_artifacts/ultragoal-audit/live-registry-raw.json");
-    super::write_json(
-        &live_raw_path,
-        &json!({"tool":"multi_agent_v1.tool_registry","candidate":current}),
-    );
+    super::write_json(&live_raw_path, &super::raw_observation(&current));
     let live_raw_digest = crate::digest::file(&live_raw_path).expect("live raw digest");
     let live_pass = super::live_registry_receipt(&current, &live_raw_digest);
     assert!(

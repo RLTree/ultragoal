@@ -6,15 +6,15 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6",
+  "candidate_digest": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
   "claim_ceiling": "withheld_or_blocked",
   "cli_performance": {
-    "digest": "sha256:74be0665c4e7c5afaaff3381a6bd4b727b2e9c03c5bd2129c055b5c1a7247c6b",
+    "digest": "sha256:5001b49dc89e0de8fcf3c4be2038a676a18daf681518477879273d8c018cfe7f",
     "path": "validation_artifacts/cli/performance-receipt.json",
     "status": "pass"
   },
   "coverage": {
-    "digest": "sha256:165dd2ed36b85a33f5f214532baa6c14bee94d8c16a1e30d84683296f31171b6",
+    "digest": "sha256:71fd8f21808450c75282fe2130d0a5afcaadbff3d3f0efd6940661d2c5039374",
     "path": "validation_artifacts/coverage/coverage-receipt.json",
     "status": "pass"
   },
@@ -23,6 +23,7 @@
       "cli_control_plane_transaction_ref_status_not_pass:final_packet",
       "cli_control_plane_transaction_final_packet:final_packet_proof_status_not_pass",
       "cli_control_plane_transaction_final_packet:final_packet_proof_claim_ceiling_not_verified",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_packet_absent",
       "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:registry",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_claim_ceiling_not_live_surface",
@@ -35,6 +36,11 @@
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
+      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
       "cli_control_plane_transaction_ref_status_not_pass:registry_exposure",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface",
@@ -51,13 +57,13 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:6551a1b87bc5d8822d0fbbcecc2647307a9cca4f007bba0a3b98ddb59348ef44",
+    "digest": "sha256:2ced3893c1e23f72867ba3a88a8a8837e16b68a5da649f51816bff8a2781f794",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-29T11:19:04Z",
+  "generated_at": "2026-06-29T15:08:38Z",
   "registry_exposure": {
-    "digest": "sha256:1dbd6cb53eda0accd0c1c8dbf95030182d2dfbd8102c2fbcff11759c16ad04ab",
+    "digest": "sha256:0a6e1bad421e7237a7b4d3e27392fc2186f516eba4c890e557dd0a2645c9b45e",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },

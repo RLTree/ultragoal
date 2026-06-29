@@ -1,0 +1,22 @@
+pub(super) const REQUIRED_REVIEWERS: &[(&str, &str, &str)] = &[
+    (
+        "harness_contract_claim_falsifier",
+        "contract_claim_falsifier",
+        "custom-agents/harness-contract-claim-falsifier.toml",
+    ),
+    (
+        "harness_orchestration_recovery_falsifier",
+        "orchestration_recovery_falsifier",
+        "custom-agents/harness-orchestration-recovery-falsifier.toml",
+    ),
+    (
+        "harness_security_trust_boundary_falsifier",
+        "security_trust_boundary_falsifier",
+        "custom-agents/harness-security-trust-boundary-falsifier.toml",
+    ),
+    (
+        "harness_product_simplicity_falsifier",
+        "product_simplicity_falsifier",
+        "custom-agents/harness-product-simplicity-falsifier.toml",
+    ),
+];

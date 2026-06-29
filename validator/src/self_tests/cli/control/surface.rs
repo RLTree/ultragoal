@@ -60,12 +60,12 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
             .any(|failure| failure.as_str() == Some("package_surface_digest_mismatch"))
     );
     assert!(
-        surface::same_candidate_pass_or_fail_closed_failures(
+        !surface::same_candidate_pass_or_fail_closed_failures(
             &stale,
             &digest,
             ControlOperation::InstallAudit
         )
-        .is_empty()
+        .contains(&"package_surface_audit_target_digest_mismatch".to_string())
     );
     assert!(
         surface::same_candidate_pass_failures(&stale, &digest, ControlOperation::InstallAudit)
@@ -213,6 +213,7 @@ fn package_surface_validation_reports_malformed_and_weak_blockers() {
         "package_surface_audit_wrong_operation",
         "package_surface_audit_candidate_digest_mismatch",
         "package_surface_audit_source_digest_mismatch",
+        "package_surface_audit_target_expected_digest_mismatch",
         "package_surface_audit_target_surface_mismatch",
         "package_surface_audit_private_local_path_present",
         "package_surface_audit_status_not_pass_or_fail",

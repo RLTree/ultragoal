@@ -42,15 +42,17 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:390149942a4b71b64830ab11265a7c323bf5f1cf5f55101e3c266f9fb02c52ff"
+    "plan_digest": "sha256:c5376fd4995b3293c7992793ed6e0f0887c12131e9b5635264c236a6937d3193",
+    "plan_digest_argument_required": false,
+    "plan_digest_source": "generated_by_plan_operation"
   },
   "digests": {
-    "candidate": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6",
+    "candidate": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c",
     "fixture_catalog": "sha256:5a845206eeac807ddc8c8e514113bbf84ebd359131f91b13bebaf300dae06e80",
-    "law_graph": "sha256:92531da46dbe37240874bab05cc72b7248540e638c317d59adf3fdd68b043447",
+    "law_graph": "sha256:c683cfea426048c2ac2e3d76e0172604c3cbc9844c136beda5678c01d5ca431a",
     "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68"
   },
-  "generated_at": "2026-06-29T10:52:57Z",
+  "generated_at": "2026-06-29T15:04:51Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
@@ -58,9 +60,12 @@
   "law_ids": [
     "workspace-artifact-cache-garbage-collection"
   ],
+  "observation_failures": [],
   "policy_version": "2026-06-26.gate-91.v1",
   "post_verify": {
     "active_claim_receipts_preserved": true,
+    "apply_receipt_digest": null,
+    "apply_receipt_digest_required": false,
     "locks_pids_ports_checked": true,
     "protected_artifacts_preserved": true
   },

@@ -61,7 +61,7 @@ pub(super) fn label_failures(
         ),
         label if label.starts_with("rust_") => rust_failures(label, value, expected),
         label if label.starts_with("gc_") => gc_failures(value, expected),
-        "transactional_finalization" => Vec::new(),
+        "transactional_finalization" => transactional_finalization_failures(root, value, expected),
         _ => vec![format!("unknown_evidence_label:{label}")],
     }
 }
@@ -77,6 +77,29 @@ fn source_audit_failures(value: &Value, expected: &str) -> Vec<String> {
     let mut out = target_status_failures(value, expected, "source_audit");
     if value.get("status").and_then(Value::as_str) != Some("pass") {
         out.push("source_audit_status_not_pass".to_string());
+    }
+    if value.get("claim_ceiling").and_then(Value::as_str)
+        != Some("source_audit_pass_source_local_only")
+    {
+        out.push("source_audit_claim_ceiling_not_source_local".to_string());
+    }
+    for supported in ["source_local_audit_checks", "red_fixture_report"] {
+        if !array_contains(value, "supported_claim_classes", supported) {
+            out.push(format!("source_audit_supported_claim_missing:{supported}"));
+        }
+    }
+    for blocked in [
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure",
+    ] {
+        if !array_contains(value, "blocked_claim_classes", blocked) {
+            out.push(format!("source_audit_missing_blocked_claim:{blocked}"));
+        }
     }
     out
 }
@@ -113,10 +136,42 @@ fn coverage_failures(value: &Value, expected: &str) -> Vec<String> {
     {
         out.push("coverage_not_exact_100".to_string());
     }
-    if value.get("claim_ceiling").and_then(Value::as_str) != Some("supports_complete_claim") {
+    if value.get("claim_ceiling").and_then(Value::as_str)
+        != Some("supports_complete_coverage_claim")
+    {
         out.push("coverage_claim_ceiling_not_complete".to_string());
     }
+    if !array_contains(value, "supported_claim_classes", "complete_coverage") {
+        out.push("coverage_supported_claim_missing".to_string());
+    }
+    for blocked in [
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure",
+    ] {
+        if !array_contains(value, "blocked_claim_classes", blocked) {
+            out.push(format!("coverage_missing_blocked_claim:{blocked}"));
+        }
+    }
     out
+}
+
+fn transactional_finalization_failures(root: &Path, value: &Value, expected: &str) -> Vec<String> {
+    let store = crate::schema_catalog::load(root);
+    crate::cli::control::plane::proof::transaction::same_candidate_failures(
+        root, &store, value, expected,
+    )
+}
+
+fn array_contains(value: &Value, key: &str, needle: &str) -> bool {
+    value
+        .get(key)
+        .and_then(Value::as_array)
+        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
 }
 
 fn standards_gardener_failures(root: &Path, value: &Value) -> Vec<String> {

@@ -149,6 +149,7 @@ fn gc_receipt_value(
             operation,
             receipt: None,
             plan_digest: Some(crate::digest::bytes(b"fixture-plan")),
+            apply_receipt_digest: Some(crate::digest::bytes(b"fixture-apply")),
         },
     )
     .expect("gc receipt")

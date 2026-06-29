@@ -9914,6 +9914,37 @@
         "blocked"
       ]
     },
+    "claim_ceiling": {
+      "enum": [
+        "source_audit_pass_source_local_only",
+        "withheld_or_blocked"
+      ]
+    },
+    "supported_claim_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source_local_audit_checks",
+          "red_fixture_report"
+        ]
+      }
+    },
+    "blocked_claim_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "completion",
+          "package_readiness",
+          "review_readiness",
+          "release_readiness",
+          "final_packet_correctness",
+          "update_goal_eligibility",
+          "app_registry_or_reviewer_exposure"
+        ]
+      }
+    },
     "target": {
       "type": "string"
     },
@@ -9998,6 +10029,9 @@
     "status",
     "commit",
     "target_revision",
+    "claim_ceiling",
+    "supported_claim_classes",
+    "blocked_claim_classes",
     "root",
     "validator_execution",
     "input_digests",

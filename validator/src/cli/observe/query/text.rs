@@ -25,7 +25,7 @@ fn log_query_text(command: &ObserveCommand) -> String {
 fn metric_query_text(command: &ObserveCommand) -> String {
     command.query.clone().unwrap_or_else(|| {
         metric_filter(command)
-            .map(|filter| format!("ultragoal_command_total{{{filter}}}"))
+            .map(|filter| format!("count_over_time(ultragoal_command_total{{{filter}}}[2h])"))
             .unwrap_or_else(|| "ultragoal_command_total".to_string())
     })
 }

@@ -75,11 +75,26 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
         &root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
     )
     .expect("journey receipt");
+    let target = fit
+        .pointer("/target_revision/value")
+        .and_then(serde_json::Value::as_str)
+        .expect("fit target digest");
     let fit_failures =
-        crate::audit::plugin::product::cohesion::fit_receipt_value_failures(&root, &fit);
+        crate::audit::plugin::product::cohesion::fit_receipt_value_failures_with_candidate(
+            &root, &fit, target,
+        );
     assert!(fit_failures.is_empty(), "{fit_failures:?}");
+    let journey_target = journey
+        .pointer("/target_revision/value")
+        .and_then(serde_json::Value::as_str)
+        .expect("journey target digest");
     assert!(
-        crate::audit::plugin::product::cohesion::journey_value_failures(&root, &journey).is_empty()
+        crate::audit::plugin::product::cohesion::journey_value_failures_with_candidate(
+            &root,
+            &journey,
+            journey_target
+        )
+        .is_empty()
     );
 }
 

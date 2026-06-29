@@ -54,7 +54,17 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
         &json!({
             "coverage": {"policy":"100_percent_required","percent":100.0},
             "uncovered_records": [],
-            "claim_ceiling": "supports_complete_claim",
+            "claim_ceiling": "supports_complete_coverage_claim",
+            "supported_claim_classes": ["complete_coverage"],
+            "blocked_claim_classes": [
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "final_packet_correctness",
+                "update_goal_eligibility",
+                "app_registry_or_reviewer_exposure"
+            ],
             "target_revision": {"value": crate::self_tests::boundaries::support::sha('a')}
         }),
     );

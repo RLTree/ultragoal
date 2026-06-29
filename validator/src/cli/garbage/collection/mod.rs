@@ -10,6 +10,7 @@ pub(crate) struct GarbageCommand {
     pub(crate) operation: GarbageOperation,
     pub(crate) receipt: Option<PathBuf>,
     pub(crate) plan_digest: Option<String>,
+    pub(crate) apply_receipt_digest: Option<String>,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<GarbageCommand>, String> {
@@ -27,6 +28,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<GarbageCommand>, String> {
         operation,
         receipt: opt_path(raw, "--receipt"),
         plan_digest: opt_string(raw, "--plan-digest"),
+        apply_receipt_digest: opt_string(raw, "--apply-receipt-digest"),
     }))
 }
 
@@ -55,18 +57,22 @@ pub(crate) fn run_with_receipt_value(
 
 pub(crate) fn receipt(root: &Path, command: &GarbageCommand) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
-    let plan_digest = command
-        .plan_digest
-        .clone()
-        .unwrap_or_else(|| crate::digest::bytes(format!("gc-plan:{candidate}").as_bytes()));
+    let (status, failures) = command_binding_failures(command);
+    let plan_digest = command.plan_digest.clone().unwrap_or_else(|| {
+        if command.operation == GarbageOperation::Plan {
+            crate::digest::bytes(format!("gc-plan:{candidate}").as_bytes())
+        } else {
+            crate::digest::ZERO.to_string()
+        }
+    });
     Ok(json!({
         "schema": types::GC_RECEIPT_SCHEMA,
         "schema_version": "v1",
         "issuer": {"tool": "ultragoal", "authority": "cli_control_plane"},
         "generated_at": crate::audit::clock::now_iso(),
         "root": ".",
-        "status": "pass",
-        "claim_ceiling": "gc_observation_bound",
+        "status": status,
+        "claim_ceiling": if status == "pass" { "gc_observation_bound" } else { "withheld_or_blocked" },
         "law_ids": ["workspace-artifact-cache-garbage-collection"],
         "command": {"name": command.operation.id(), "argv": std::env::args().collect::<Vec<_>>()},
         "digests": {
@@ -114,6 +120,8 @@ pub(crate) fn receipt(root: &Path, command: &GarbageCommand) -> Result<Value, St
         },
         "deletion_plan": {
             "plan_digest": plan_digest,
+            "plan_digest_source": if command.operation == GarbageOperation::Plan { "generated_by_plan_operation" } else { "required_cli_argument" },
+            "plan_digest_argument_required": command.operation != GarbageOperation::Plan,
             "apply_requires_plan_digest": true,
             "blind_rm_rf_allowed": false,
             "deleted_artifacts": []
@@ -121,10 +129,25 @@ pub(crate) fn receipt(root: &Path, command: &GarbageCommand) -> Result<Value, St
         "post_verify": {
             "protected_artifacts_preserved": true,
             "active_claim_receipts_preserved": true,
-            "locks_pids_ports_checked": true
+            "locks_pids_ports_checked": true,
+            "apply_receipt_digest_required": command.operation == GarbageOperation::Verify,
+            "apply_receipt_digest": command.apply_receipt_digest.clone().map(Value::String).unwrap_or(Value::Null)
         },
+        "observation_failures": failures,
         "policy_version": GC_POLICY_VERSION
     }))
+}
+
+fn command_binding_failures(command: &GarbageCommand) -> (&'static str, Vec<String>) {
+    let mut failures = Vec::new();
+    if command.operation != GarbageOperation::Plan && command.plan_digest.is_none() {
+        failures.push("workspace_gc_plan_digest_missing".to_string());
+    }
+    if command.operation == GarbageOperation::Verify && command.apply_receipt_digest.is_none() {
+        failures.push("workspace_gc_apply_receipt_digest_missing".to_string());
+    }
+    let status = if failures.is_empty() { "pass" } else { "fail" };
+    (status, failures)
 }
 
 fn digest(root: &Path, rel: &str) -> Result<String, String> {

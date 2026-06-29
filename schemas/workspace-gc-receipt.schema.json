@@ -102,11 +102,26 @@
       "type": "object",
       "required": [
         "plan_digest",
+        "plan_digest_source",
+        "plan_digest_argument_required",
         "apply_requires_plan_digest",
         "blind_rm_rf_allowed",
         "deleted_artifacts"
       ],
       "properties": {
+        "plan_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "plan_digest_source": {
+          "enum": [
+            "generated_by_plan_operation",
+            "required_cli_argument"
+          ]
+        },
+        "plan_digest_argument_required": {
+          "type": "boolean"
+        },
         "apply_requires_plan_digest": {
           "const": true
         },
@@ -120,9 +135,33 @@
       "required": [
         "protected_artifacts_preserved",
         "active_claim_receipts_preserved",
-        "locks_pids_ports_checked"
-      ]
+        "locks_pids_ports_checked",
+        "apply_receipt_digest_required",
+        "apply_receipt_digest"
+      ],
+      "properties": {
+        "apply_receipt_digest_required": {
+          "type": "boolean"
+        },
+        "apply_receipt_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "observation_failures": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   }
 }
-

@@ -5,19 +5,13 @@ use crate::cli::rust::{RustCommand, parse as parse_rust, receipt_from_observatio
 use serde_json::json;
 #[test]
 fn rust_and_gc_parser_dispatch_are_authoritative() {
-    let rust_args = ["rust", "fast"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
+    let rust_args = args(&["rust", "fast"]);
     assert!(matches!(
         crate::parse_command(&rust_args).expect("rust command"),
         crate::Command::Rust(_)
     ));
 
-    let gc_args = ["gc", "plan"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
+    let gc_args = args(&["gc", "plan"]);
     assert!(matches!(
         crate::parse_command(&gc_args).expect("gc command"),
         crate::Command::Garbage(_)
@@ -44,6 +38,10 @@ fn rust_and_gc_parser_dispatch_are_authoritative() {
     assert!(parse_gc(&["gc".to_string(), "delete".to_string()]).is_err());
 }
 
+fn args(parts: &[&str]) -> Vec<String> {
+    parts.iter().map(|part| part.to_string()).collect()
+}
+
 #[test]
 fn command_run_routes_rust_and_gc_without_bypass() {
     let root = crate::self_tests::boundaries::support::repo_root();
@@ -64,6 +62,7 @@ fn command_run_routes_rust_and_gc_without_bypass() {
             operation: crate::cli::garbage::collection::types::GarbageOperation::Plan,
             receipt: Some(out.clone()),
             plan_digest: Some("sha256:test-plan".to_string()),
+            apply_receipt_digest: None,
         }),
     })
     .expect("gc run");

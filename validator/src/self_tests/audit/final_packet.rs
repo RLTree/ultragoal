@@ -85,6 +85,17 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
         "{failures:?}"
     );
 
+    let mut zero_digest = receipt.clone();
+    zero_digest["packet"]["digest"] = json!(crate::digest::ZERO);
+    support::write_proof(&root, &zero_digest);
+    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("final_packet_proof_packet_zero_digest_anchor")),
+        "{failures:?}"
+    );
+
     let mut missing_packet = receipt.clone();
     missing_packet["packet"]["path"] = json!("validation_artifacts/review/missing-packet.json");
     support::write_proof(&root, &missing_packet);
@@ -93,6 +104,18 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
         failures
             .iter()
             .any(|failure| failure.contains("final_packet_proof_packet_digest_mismatch")),
+        "{failures:?}"
+    );
+
+    let mut absent_bad_digest = receipt.clone();
+    absent_bad_digest["packet"]["exists"] = json!(false);
+    absent_bad_digest["packet"]["digest"] = json!(crate::self_tests::boundaries::support::sha('a'));
+    support::write_proof(&root, &absent_bad_digest);
+    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("final_packet_proof_packet_absent_digest_not_null")),
         "{failures:?}"
     );
 

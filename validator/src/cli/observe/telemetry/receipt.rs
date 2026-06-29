@@ -50,7 +50,7 @@ pub(super) fn base(
         "law_id": types::LAW_ID,
         "check_id": types::CHECK_ID,
         "claim_id": types::CLAIM_ID,
-        "why_failed": failure.unwrap_or(""),
+        "why_failed": event["why_failed"].as_str().unwrap_or(""),
         "where_failed": if failure.is_some() { command.operation.id() } else { "" },
         "next_repair": claims::next_repair(command.operation, status),
         "event": event,

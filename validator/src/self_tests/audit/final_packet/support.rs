@@ -1,6 +1,7 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod coverage;
 mod package_receipts;
 
 pub(crate) fn write_json(path: &Path, value: &Value) {
@@ -25,18 +26,18 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
     let raw = ref_for(
         root,
         "validation_artifacts/ultragoal-audit/live-registry-raw.json",
-        &json!({"raw":true}),
+        &registry_raw_observation(current),
     );
     let receipt = json!({
         "schema": "harness-ultragoal.final-packet-proof.v1",
         "generated_at": "2026-06-27T00:00:00Z",
         "status": "pass",
         "target_revision": {"kind": "package_digest", "value": current},
-        "packet": {"path": packet_path, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
+        "packet": {"path": packet_path, "exists": true, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
         "cli_performance": performance_ref(root, current),
         "registry_exposure": registry_ref(root, current, &raw),
         "source_audit": super::source_audit::ref_for(root, current),
-        "coverage": coverage_ref(root, current),
+        "coverage": coverage::ref_for(root, current),
         "package_receipts": package_receipts::refs(root, current),
         "claim_ceiling": "final_packet_evidence_dereferenced",
         "blocked_claim_classes": [],
@@ -57,11 +58,11 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
         "generated_at": "2026-06-27T00:00:00Z",
         "status": "fail",
         "target_revision": {"kind": "package_digest", "value": current},
-        "packet": {"path": packet_path, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
+        "packet": {"path": packet_path, "exists": true, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
         "cli_performance": performance_ref(root, current),
         "registry_exposure": fail_closed_registry_ref(root, current),
         "source_audit": super::source_audit::ref_for(root, current),
-        "coverage": coverage_ref(root, current),
+        "coverage": coverage::ref_for(root, current),
         "package_receipts": package_receipts::refs(root, current),
         "claim_ceiling": "withheld_or_blocked",
         "blocked_claim_classes": [
@@ -69,7 +70,8 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
             "package_readiness",
             "review_readiness",
             "release_readiness",
-            "update_goal_eligibility"
+            "update_goal_eligibility",
+            "app_registry_or_reviewer_exposure"
         ],
         "failure": {
             "reason": "final_packet_proof_not_proven",
@@ -137,6 +139,19 @@ fn registry_ref(root: &Path, current: &str, raw: &Value) -> Value {
             "agent_types":agent_types()
         }),
     )
+}
+
+fn registry_raw_observation(current: &str) -> Value {
+    json!({
+        "schema": "harness-ultragoal.registry-raw-observation.v1",
+        "candidate_digest": current,
+        "captured_at": "2026-06-27T00:00:00Z",
+        "issuer":{"tool":"multi_agent_v1","authority":"tool_registry"},
+        "tool_call":{"name":"multi_agent_v1.tool_registry","call_id":"call","arguments_digest":crate::self_tests::boundaries::support::sha('1')},
+        "boundary":{"account_id":"acct","workspace_id":"workspace","session_id":"session"},
+        "source":"multi_agent_v1.tool_registry",
+        "registry_rows": agent_types()
+    })
 }
 
 fn fail_closed_registry_ref(root: &Path, current: &str) -> Value {
@@ -210,37 +225,4 @@ fn agent_types() -> Vec<Value> {
             "disk_cache_synced":true,"global_toml_present":true,"exposed":true})
     })
     .collect()
-}
-
-fn coverage_ref(root: &Path, current: &str) -> Value {
-    ref_for(
-        root,
-        "validation_artifacts/coverage/coverage-receipt.json",
-        &json!({
-            "schema":"harness-ultragoal.coverage-receipt.v1",
-            "claim_id":"CLAIM-100",
-            "command":"ultragoal coverage prove",
-            "tool":"cargo-llvm-cov",
-            "source_tree_digest":crate::self_tests::boundaries::support::sha('2'),
-            "coverage_manifest_digest":crate::self_tests::boundaries::support::sha('3'),
-            "coverage_command_digest":crate::self_tests::boundaries::support::sha('4'),
-            "changed_files_digest":crate::self_tests::boundaries::support::sha('5'),
-            "tool_version":"test",
-            "workspace_root":".",
-            "target_revision":{"kind":"package_digest","value":current},
-            "command_started_at":"2026-06-27T00:00:00Z",
-            "command_completed_at":"2026-06-27T00:00:01Z",
-            "command_exit":0,
-            "machine_readable_report":{"path":"validation_artifacts/coverage/report.json","digest":crate::self_tests::boundaries::support::sha('6')},
-            "generated_by":"coverage-command",
-            "percent_source":"machine_readable_report",
-            "target_paths":["validator/src"],
-            "measured_dimensions":["line"],
-            "coverage":{"percent":100.0,"floor_percent":100.0,"policy":"100_percent_required"},
-            "uncovered_records":[],
-            "exclusions":[],
-            "generated_at":"2026-06-27T00:00:01Z",
-            "claim_ceiling":"supports_complete_claim"
-        }),
-    )
 }

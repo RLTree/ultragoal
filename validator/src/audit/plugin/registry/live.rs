@@ -1,30 +1,10 @@
 use serde_json::Value;
 use std::path::Path;
 
-const REQUIRED_CEILING: &str = "live_registry_reviewer_exposure_proven";
+mod raw;
+mod reviewers;
 
-const REQUIRED_REVIEWERS: &[(&str, &str, &str)] = &[
-    (
-        "harness_contract_claim_falsifier",
-        "contract_claim_falsifier",
-        "custom-agents/harness-contract-claim-falsifier.toml",
-    ),
-    (
-        "harness_orchestration_recovery_falsifier",
-        "orchestration_recovery_falsifier",
-        "custom-agents/harness-orchestration-recovery-falsifier.toml",
-    ),
-    (
-        "harness_security_trust_boundary_falsifier",
-        "security_trust_boundary_falsifier",
-        "custom-agents/harness-security-trust-boundary-falsifier.toml",
-    ),
-    (
-        "harness_product_simplicity_falsifier",
-        "product_simplicity_falsifier",
-        "custom-agents/harness-product-simplicity-falsifier.toml",
-    ),
-];
+const REQUIRED_CEILING: &str = "live_registry_reviewer_exposure_proven";
 
 pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = current_authority_failures(root, receipt);
@@ -101,38 +81,14 @@ fn observation_provenance_failures(root: &Path, receipt: &Value) -> Vec<String> 
     if string(receipt, "capture_method") != "live_tool_registry_query" {
         out.push("plugin_self_law_registry_capture_method_not_live".to_string());
     }
-    out.extend(raw_observation_failures(root, receipt));
+    out.extend(raw::observation_failures(root, receipt));
     out
-}
-
-fn raw_observation_failures(root: &Path, receipt: &Value) -> Vec<String> {
-    let Some(raw) = receipt.get("raw_observation") else {
-        return vec!["plugin_self_law_registry_raw_observation_missing".to_string()];
-    };
-    let path = string(raw, "path");
-    if !path.starts_with("validation_artifacts/ultragoal-audit/") {
-        return vec![format!(
-            "plugin_self_law_registry_raw_observation_path_invalid:{path}"
-        )];
-    }
-    if crate::package::inventory::package_path_error(root, path).is_some() {
-        return vec![format!(
-            "plugin_self_law_registry_raw_observation_path_invalid:{path}"
-        )];
-    }
-    let expected = string(raw, "digest");
-    match crate::digest::file(&root.join(path)) {
-        Ok(actual) if actual == expected => Vec::new(),
-        _ => vec![format!(
-            "plugin_self_law_registry_raw_observation_digest_mismatch:{path}"
-        )],
-    }
 }
 
 fn reviewer_failures(receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let rows = array(receipt, "agent_types");
-    for (agent_type, persona, path) in REQUIRED_REVIEWERS {
+    for (agent_type, persona, path) in reviewers::REQUIRED_REVIEWERS {
         let matches = rows
             .iter()
             .filter(|row| string(row, "agent_type") == *agent_type)

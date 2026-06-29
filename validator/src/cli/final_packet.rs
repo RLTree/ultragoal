@@ -57,8 +57,10 @@ pub(crate) fn receipt(root: &Path) -> Result<Value, String> {
         "package_readiness",
         "review_readiness",
         "release_readiness",
-        "update_goal_eligibility"
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure"
     ]);
+    inherit_registry_blocked_claims(root, &mut value);
     value["failure"] = json!({
         "reason": "final_packet_proof_not_proven",
         "observed_failures": failures
@@ -72,7 +74,7 @@ fn pass_shaped(root: &Path, candidate: &str) -> Value {
         "generated_at": crate::audit::clock::now_iso(),
         "status": "pass",
         "target_revision": {"kind": "package_digest", "value": candidate},
-        "packet": {"path": PACKET, "digest": digest_or_zero(root, PACKET)},
+        "packet": packet_ref(root, PACKET),
         "cli_performance": ref_row(root, CLI_PERFORMANCE, "pass"),
         "registry_exposure": ref_row(root, REGISTRY_EXPOSURE, status_or_fail(root, REGISTRY_EXPOSURE)),
         "source_audit": ref_row(root, SOURCE_AUDIT, status_or_fail(root, SOURCE_AUDIT)),
@@ -94,6 +96,38 @@ fn ref_row(root: &Path, rel: &str, status: &str) -> Value {
         "digest": digest_or_zero(root, rel),
         "status": status
     })
+}
+
+fn packet_ref(root: &Path, rel: &str) -> Value {
+    match crate::digest::file(&root.join(rel)) {
+        Ok(digest) if digest != crate::digest::ZERO => {
+            json!({"path": rel, "exists": true, "digest": digest})
+        }
+        _ => json!({"path": rel, "exists": false, "digest": Value::Null}),
+    }
+}
+
+fn inherit_registry_blocked_claims(root: &Path, value: &mut Value) {
+    let Ok(registry) = crate::json_boundary::read_json(&root.join(REGISTRY_EXPOSURE)) else {
+        return;
+    };
+    let claims = registry
+        .pointer("/failure/blocked_claim_classes")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten();
+    for claim in claims.filter_map(Value::as_str) {
+        push_unique(&mut value["blocked_claim_classes"], claim);
+    }
+}
+
+fn push_unique(value: &mut Value, item: &str) {
+    let items = value
+        .as_array_mut()
+        .expect("final-packet blocked_claim_classes starts as an array");
+    if !items.iter().any(|existing| existing.as_str() == Some(item)) {
+        items.push(json!(item));
+    }
 }
 
 fn status_or_fail(root: &Path, rel: &str) -> &'static str {

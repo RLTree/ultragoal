@@ -2,6 +2,8 @@ use super::support;
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod source_audit;
+
 #[test]
 fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
     let root = crate::self_tests::boundaries::support::temp_root("final-packet-claim-guard");
@@ -63,110 +65,31 @@ fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
         }),
         "final_packet_proof_guard_observed_failures_missing",
     );
-
-    std::fs::remove_dir_all(root).expect("cleanup final packet claim guard");
-}
-
-#[test]
-fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-claim-guard-refs");
-    support::write_json(
-        &root.join("plugin-manifest-draft.json"),
-        &json!({"resources":[]}),
-    );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
-    let current = crate::package::inventory::package_digest(&root).expect("digest");
-    let receipt = support::write_fail_closed_proof(&root, &current);
-
     assert_guard_failure(
         &root,
         &store,
         mutate(&receipt, |value| {
-            value["registry_exposure"]["status"] = json!("pending")
+            value["packet"]["digest"] = json!(crate::digest::ZERO)
         }),
-        "final_packet_proof_ref_embedded_status_not_pass_or_fail:registry",
-    );
-
-    let mut bad_registry = receipt.clone();
-    rewrite_ref(
-        &root,
-        &mut bad_registry,
-        "registry_exposure",
-        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
-        &json!({
-            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
-            "status":"fail",
-            "source":"manual-json",
-            "target_revision":{"kind":"package_digest","value":current},
-            "claim_ceiling":"withheld_or_blocked",
-            "issuer":{"tool":"ultragoal","authority":"cli_control_plane"},
-            "capture_method":"fail_closed_no_capability",
-            "failure":{"reason":"live_registry_reviewer_exposure_not_proven"},
-            "blocked_claim_classes":["completion"]
-        }),
+        "final_packet_proof_packet_zero_digest_anchor",
     );
     assert_guard_failure(
         &root,
         &store,
-        bad_registry,
-        "final_packet_proof_registry_ref:plugin_self_law_registry_guard_wrong_source",
+        mutate(&receipt, |value| {
+            value["packet"]["exists"] = json!(false);
+            value["packet"]["digest"] = json!(crate::self_tests::boundaries::support::sha('c'));
+        }),
+        "final_packet_proof_packet_absent_digest_not_null",
     );
 
-    let mut failed_source = receipt.clone();
-    rewrite_ref(
-        &root,
-        &mut failed_source,
-        "source_audit",
-        "validation_artifacts/ultragoal-audit/validator-receipt.json",
-        &json!({"status":"fail","target_revision":{"kind":"package_digest","value":current}}),
-    );
-    support::write_proof(&root, &failed_source);
-    let source_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
-    assert!(
-        source_failures
-            .iter()
-            .all(|failure| !failure.contains("final_packet_proof_source_audit")),
-        "{source_failures:?}"
-    );
-
-    let mut stale_source = failed_source;
-    stale_source["source_audit"]["digest"] = json!(crate::digest::ZERO);
-    support::write_proof(&root, &stale_source);
-    let stale_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
-    assert!(
-        stale_failures
-            .iter()
-            .all(|failure| !failure.contains("source_audit")),
-        "{stale_failures:?}"
-    );
-
-    let mut malformed_source = receipt;
-    let source_path = "validation_artifacts/ultragoal-audit/validator-receipt.json";
-    std::fs::write(root.join(source_path), "{").expect("malformed source audit");
-    malformed_source["source_audit"]["path"] = json!(source_path);
-    support::write_proof(&root, &malformed_source);
-    let malformed_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
-    assert!(
-        malformed_failures
-            .iter()
-            .all(|failure| !failure.contains("source_audit")),
-        "{malformed_failures:?}"
-    );
-
-    std::fs::remove_dir_all(root).expect("cleanup final packet claim guard refs");
+    std::fs::remove_dir_all(root).expect("cleanup final packet claim guard");
 }
 
 fn mutate(value: &Value, edit: impl FnOnce(&mut Value)) -> Value {
     let mut value = value.clone();
     edit(&mut value);
     value
-}
-
-fn rewrite_ref(root: &Path, proof: &mut Value, key: &str, path: &str, value: &Value) {
-    support::write_json(&root.join(path), value);
-    proof[key]["path"] = json!(path);
-    proof[key]["digest"] = json!(crate::digest::file(&root.join(path)).expect("ref digest"));
-    proof[key]["status"] = value["status"].clone();
 }
 
 fn assert_guard_failure(

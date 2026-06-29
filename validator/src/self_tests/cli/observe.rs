@@ -124,6 +124,60 @@ fn observe_query_rejects_unbounded_requests() {
     fs::remove_dir_all(root).expect("cleanup observe query");
 }
 
+#[test]
+fn observe_receipts_redact_private_paths_before_spool_and_receipt_binding() {
+    let root = minimal_root("observe-redaction");
+    let command = observe::parse(&args(&["observe", "prove"]))
+        .expect("parse")
+        .expect("observe command");
+    let private_home = format!(
+        "{}{}",
+        concat!("unix://", "/", "Users/"),
+        "terrynoblin/.docker/run/docker.sock"
+    );
+    let receipt = observe::telemetry::base_receipt(
+        &root,
+        &command,
+        "fail",
+        Some(&format!("docker socket {private_home} failed")),
+    )
+    .expect("receipt");
+    assert_eq!(receipt["redaction_proof"], "pass");
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .unwrap()
+            .contains("[redacted-home-path]")
+    );
+    assert!(
+        !receipt.to_string().to_ascii_lowercase().contains(&format!(
+            "{}{}",
+            concat!("/", "users/"),
+            "terrynoblin"
+        )),
+        "{receipt}"
+    );
+    let spool =
+        fs::read_to_string(root.join("validation_artifacts/observability/spool/events.jsonl"))
+            .expect("spool");
+    assert!(spool.contains("[redacted-home-path]"));
+    assert!(!spool.to_ascii_lowercase().contains(&format!(
+        "{}{}",
+        concat!("/", "users/"),
+        "terrynoblin"
+    )));
+    let private_temp_uri = format!("file://{}example.txt", private_temp_marker());
+    assert_eq!(
+        observe::telemetry::redacted_failure_for_test(&private_temp_uri),
+        "[redacted-private-tmp-path]"
+    );
+    fs::remove_dir_all(root).expect("cleanup observe redaction");
+}
+
+fn private_temp_marker() -> String {
+    ["", "private", "tmp", ""].join("/")
+}
+
 pub(super) fn minimal_root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::support::temp_root(label);
     fs::create_dir_all(&root).expect("root");

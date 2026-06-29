@@ -66,6 +66,7 @@ pub(crate) fn value_claim_guard_failures(
             .map(|err| format!("final_packet_proof_schema:{err}")),
     );
     current_candidate_guard_failures(root, receipt, &mut out);
+    packet_guard_failures(receipt, &mut out);
     out.extend(references::claim_guard_failures(root, store, receipt));
     out
 }
@@ -121,6 +122,7 @@ fn current_candidate_guard_failures(root: &Path, receipt: &Value, out: &mut Vec<
         "review_readiness",
         "release_readiness",
         "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure",
     ] {
         if !blocked_claims_contain(receipt, claim) {
             out.push(format!(
@@ -151,13 +153,44 @@ fn packet_artifact_failures(root: &Path, receipt: &Value, out: &mut Vec<String>)
         out.push(format!("final_packet_proof_packet_path_invalid:{rel}"));
         return;
     }
-    let got = crate::digest::file(&root.join(rel)).unwrap_or_else(|_| crate::digest::ZERO.into());
+    let exists = receipt
+        .pointer("/packet/exists")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
     let want = receipt
         .pointer("/packet/digest")
         .and_then(Value::as_str)
         .unwrap_or("");
+    if want == crate::digest::ZERO {
+        out.push("final_packet_proof_packet_zero_digest_anchor".to_string());
+        return;
+    }
+    if !exists {
+        if !receipt
+            .pointer("/packet/digest")
+            .is_some_and(Value::is_null)
+        {
+            out.push("final_packet_proof_packet_absent_digest_not_null".to_string());
+        }
+        out.push("final_packet_proof_packet_absent".to_string());
+        return;
+    }
+    let got = crate::digest::file(&root.join(rel)).unwrap_or_else(|_| crate::digest::ZERO.into());
     if got != want {
         out.push(format!("final_packet_proof_packet_digest_mismatch:{rel}"));
+    }
+}
+
+fn packet_guard_failures(receipt: &Value, out: &mut Vec<String>) {
+    if receipt.pointer("/packet/digest").and_then(Value::as_str) == Some(crate::digest::ZERO) {
+        out.push("final_packet_proof_packet_zero_digest_anchor".to_string());
+    }
+    if receipt.pointer("/packet/exists").and_then(Value::as_bool) == Some(false)
+        && !receipt
+            .pointer("/packet/digest")
+            .is_some_and(Value::is_null)
+    {
+        out.push("final_packet_proof_packet_absent_digest_not_null".to_string());
     }
 }
 

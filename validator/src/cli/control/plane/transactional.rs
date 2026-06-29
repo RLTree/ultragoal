@@ -88,11 +88,20 @@ fn typed_status(root: &Path, rel: &str) -> Option<&'static str> {
             .get("uncovered_records")
             .and_then(Value::as_array)
             .is_some_and(Vec::is_empty)
-        && value.get("claim_ceiling").and_then(Value::as_str) == Some("supports_complete_claim")
+        && value.get("claim_ceiling").and_then(Value::as_str)
+            == Some("supports_complete_coverage_claim")
+        && array_contains(&value, "supported_claim_classes", "complete_coverage")
     {
         return Some("pass");
     }
     None
+}
+
+fn array_contains(value: &Value, key: &str, needle: &str) -> bool {
+    value
+        .get(key)
+        .and_then(Value::as_array)
+        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
 }
 
 #[cfg(test)]
@@ -111,7 +120,9 @@ mod tests {
                 "command_exit":0,
                 "coverage":{"percent":100.0},
                 "uncovered_records":[],
-                "claim_ceiling":"supports_complete_claim"
+                "claim_ceiling":"supports_complete_coverage_claim",
+                "supported_claim_classes":["complete_coverage"],
+                "blocked_claim_classes":["completion"]
             }),
         )
         .expect("coverage receipt");

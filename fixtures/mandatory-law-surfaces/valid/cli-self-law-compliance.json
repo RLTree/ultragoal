@@ -37,7 +37,7 @@
     },
     {
       "path": "validator/src/cli/control/plane/evidence/item.rs",
-      "digest": "sha256:2b13cd7188fe7565007a9b940ea9f3eb1d8f15c469e631e5a2ec3275733ea976"
+      "digest": "sha256:bafc76cc23fe21e73fa63256e0442a720ba4e594a7e60e76fd58ab8ed6d2ccd3"
     },
     {
       "path": "validator/src/cli/control/plane/evidence/validate.rs",
@@ -53,11 +53,11 @@
     },
     {
       "path": "validator/src/cli/control/plane/proof/transaction.rs",
-      "digest": "sha256:c3063bd637d5ae244c66a673dff2c536f6f18270cdc830e6614375fc80819f79"
+      "digest": "sha256:442e5305543923c4d6206e74b850bf142b721c651273c5265d792a31078b4873"
     },
     {
       "path": "validator/src/cli/control/plane/transactional.rs",
-      "digest": "sha256:d5d4b3e64df55d76b012a9cd4474678675d4b864f6312d252eb23537d4e344bc"
+      "digest": "sha256:1a3c50686e09720625929af6e3a206e5c14b217fb035305db4308f8f7b1f4480"
     },
     {
       "path": "validator/src/self_tests/cli/control/audit.rs",
@@ -85,7 +85,7 @@
     },
     {
       "path": "validator/src/self_tests/cli/control/transaction/mod.rs",
-      "digest": "sha256:cb5430c2494551c9ba14a8a4b60fbc1c1a8d50d497cf9c2cf08ed0082e2be5fa"
+      "digest": "sha256:f5ecc1ae3e0c56bead8396d75fea09dedb2658ea4d45b29bcda938f8b7d45aa1"
     },
     {
       "path": "validator/src/self_tests/cli/control/transaction/required.rs",

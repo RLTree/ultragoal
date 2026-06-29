@@ -86,6 +86,19 @@ pub(crate) fn exporter_metric_line_for_test(metric: &Value) -> String {
     exporter::metric_line_for_test(metric)
 }
 
+#[cfg(test)]
+pub(crate) fn query_receipt_text_for_test<'a>(
+    telemetry: &'a Value,
+    field: &str,
+) -> Result<&'a str, String> {
+    query::receipt_text_for_test(telemetry, field)
+}
+
+#[cfg(test)]
+pub(crate) fn redacted_failure_for_test(input: &str) -> String {
+    record::redacted_failure_for_test(input)
+}
+
 fn live_receipt_current(
     root: &Path,
     operation: crate::cli::observe::types::ObserveOperation,

@@ -188,6 +188,19 @@ if receipt.get("coverage", {}).get("percent") != 100:
     fail("coverage_claim_uncovered_code")
 if receipt.get("uncovered_records"):
     fail("coverage_claim_uncovered_code")
-if receipt.get("claim_ceiling") != "supports_complete_claim":
+if receipt.get("claim_ceiling") != "supports_complete_coverage_claim":
     fail("coverage_ratchet_presented_as_complete")
+if "complete_coverage" not in (receipt.get("supported_claim_classes") or []):
+    fail("coverage_ratchet_presented_as_complete")
+for blocked in [
+    "completion",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "final_packet_correctness",
+    "update_goal_eligibility",
+    "app_registry_or_reviewer_exposure",
+]:
+    if blocked not in (receipt.get("blocked_claim_classes") or []):
+        fail("coverage_ratchet_presented_as_complete")
 PY

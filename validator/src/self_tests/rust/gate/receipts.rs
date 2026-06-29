@@ -105,16 +105,59 @@ fn workspace_gc_receipt_binds_plan_and_rejects_missing_law() {
         operation: GarbageOperation::Verify,
         receipt: None,
         plan_digest: Some(crate::digest::bytes(b"plan")),
+        apply_receipt_digest: Some(crate::digest::bytes(b"apply")),
     };
     let receipt = gc_receipt(&root, &command).expect("gc receipt");
     assert_eq!(receipt["issuer"]["authority"], "cli_control_plane");
     assert_eq!(receipt["deletion_plan"]["blind_rm_rf_allowed"], false);
     assert!(crate::cli::garbage::collection::receipt::surface_value_failures(&receipt).is_empty());
 
+    let mut weak_required_args = receipt.clone();
+    weak_required_args["deletion_plan"]["plan_digest_source"] = json!("derived_from_plan");
+    weak_required_args["deletion_plan"]["plan_digest_argument_required"] = json!(false);
+    weak_required_args["post_verify"]["apply_receipt_digest_required"] = json!(false);
+    let failures =
+        crate::cli::garbage::collection::receipt::surface_value_failures(&weak_required_args);
+    for expected in [
+        "workspace_gc_receipt_plan_digest_not_from_required_argument",
+        "workspace_gc_receipt_plan_digest_argument_not_required",
+        "workspace_gc_receipt_apply_digest_not_required",
+    ] {
+        assert!(
+            failures.contains(&expected.to_string()),
+            "{expected}: {failures:?}"
+        );
+    }
+
     let mut missing = receipt;
     missing["law_ids"] = json!([]);
     let failures = crate::cli::garbage::collection::receipt::surface_value_failures(&missing);
     assert!(failures.contains(&"workspace_gc_receipt_missing_law_id".to_string()));
+
+    let missing_apply = gc_receipt(
+        &root,
+        &GarbageCommand {
+            operation: GarbageOperation::Verify,
+            receipt: None,
+            plan_digest: Some(crate::digest::bytes(b"plan")),
+            apply_receipt_digest: None,
+        },
+    )
+    .expect("missing apply receipt");
+    assert_eq!(missing_apply["status"], "fail");
+    assert!(
+        missing_apply["observation_failures"]
+            .as_array()
+            .expect("gc failures")
+            .iter()
+            .any(|failure| failure.as_str() == Some("workspace_gc_apply_receipt_digest_missing"))
+    );
+
+    let mut forged_pass = missing_apply;
+    forged_pass["status"] = json!("pass");
+    forged_pass["claim_ceiling"] = json!("gc_observation_bound");
+    let failures = crate::cli::garbage::collection::receipt::surface_value_failures(&forged_pass);
+    assert!(failures.contains(&"workspace_gc_receipt_pass_with_observation_failures".to_string()));
 }
 
 #[test]

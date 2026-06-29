@@ -26,6 +26,17 @@ fn schema_shaped_receipt(current: &str) -> Value {
     receipt["status"] = json!("pass");
     receipt["commit"] = json!(current);
     receipt["target_revision"] = json!({"kind":"package_digest","value":current});
+    receipt["claim_ceiling"] = json!("source_audit_pass_source_local_only");
+    receipt["supported_claim_classes"] = json!(["source_local_audit_checks", "red_fixture_report"]);
+    receipt["blocked_claim_classes"] = json!([
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure"
+    ]);
     receipt["validator_execution"]["command"]["exit"] = json!(0);
     mark_checks_pass(&mut receipt);
     keep_validator_generated_artifacts(&mut receipt);

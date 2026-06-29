@@ -3,22 +3,22 @@
   "claim_id": "CLAIM-001",
   "command": "bash .harness/run-coverage.sh",
   "tool": "cargo-llvm-cov",
-  "source_tree_digest": "sha256:c08d4fbf98bfa16bfd6dfa449d16dc97ebe9e5ab00854ebaa3940c65c23cda1f",
-  "coverage_manifest_digest": "sha256:9b54658bf957d439a76636039ae489c84aa644501e74a81dd33acc53e3eeb720",
+  "source_tree_digest": "sha256:ca0f84fdee4d9311cb0b8db2c05748c13bf2c7e01652a40d73292a6b2ef47e56",
+  "coverage_manifest_digest": "sha256:31f08f9e023f6a2bf25db629434acdcdc8fd2942be32bfc5efbfa6756f27b876",
   "coverage_command_digest": "sha256:eb90478bbc7bf93351fc454d6796a42eb75a6c4cd1353ef6ee18f90976c6f944",
-  "changed_files_digest": "sha256:85e6cebe5c5ad51009b78afc47c824d3133db8c8e04d24e5658745ae28d28f46",
+  "changed_files_digest": "sha256:487dcd1cc6966ad535e5ca15dad8116916cdb4b82feab884d137555e805e028a",
   "tool_version": "cargo-llvm-cov 0.8.7",
   "workspace_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:5f99a89c8d67659550ceed54f7e3ec3d332d810535010ea17d26d76af926c1f6"
+    "value": "sha256:fd52f8e95732f3baa169386d5dda395e508a6819ca001caf07b30d282dbe1b6c"
   },
-  "command_started_at": "2026-06-29T10:50:34Z",
-  "command_completed_at": "2026-06-29T10:51:27Z",
+  "command_started_at": "2026-06-29T15:02:42Z",
+  "command_completed_at": "2026-06-29T15:03:44Z",
   "command_exit": 0,
   "machine_readable_report": {
     "path": "validation_artifacts/coverage/llvm-cov-full.json",
-    "digest": "sha256:f850fcb5ea29588d6529abc0b6dee52de403c2213882598ec4419921553e61f5"
+    "digest": "sha256:a585dc518d15259459aae4fa70518e435cc8646967961c92dc2581cc9285f38f"
   },
   "generated_by": "coverage-command",
   "percent_source": "machine_readable_report",
@@ -51,6 +51,18 @@
   },
   "uncovered_records": [],
   "exclusions": [],
-  "generated_at": "2026-06-29T10:51:27Z",
-  "claim_ceiling": "supports_complete_claim"
+  "generated_at": "2026-06-29T15:03:44Z",
+  "claim_ceiling": "supports_complete_coverage_claim",
+  "supported_claim_classes": [
+    "complete_coverage"
+  ],
+  "blocked_claim_classes": [
+    "completion",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "final_packet_correctness",
+    "update_goal_eligibility",
+    "app_registry_or_reviewer_exposure"
+  ]
 }

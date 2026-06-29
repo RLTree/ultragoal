@@ -171,7 +171,23 @@ fn plugin_self_law_line_scan_recurses_and_reports_over_cap_source() {
     .expect("large");
     std::fs::write(
         root.join("validation_artifacts/coverage/coverage-receipt.json"),
-        json!({"coverage":{"policy":"100_percent_required","percent":100.0},"uncovered_records":[],"claim_ceiling":"supports_complete_claim","target_revision":{"value":crate::self_tests::boundaries::support::sha('a')}}).to_string(),
+        json!({
+            "coverage":{"policy":"100_percent_required","percent":100.0},
+            "uncovered_records":[],
+            "claim_ceiling":"supports_complete_coverage_claim",
+            "supported_claim_classes":["complete_coverage"],
+            "blocked_claim_classes":[
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "final_packet_correctness",
+                "update_goal_eligibility",
+                "app_registry_or_reviewer_exposure"
+            ],
+            "target_revision":{"value":crate::self_tests::boundaries::support::sha('a')}
+        })
+        .to_string(),
     )
     .expect("coverage");
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());

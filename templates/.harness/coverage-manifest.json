@@ -132,6 +132,7 @@
       "validator/src/audit/final_packet/references.rs",
       "validator/src/audit/final_packet/references/coverage.rs",
       "validator/src/audit/final_packet/references/package.rs",
+      "validator/src/audit/final_packet/references/source_audit.rs",
       "validator/src/audit/foundational_law_trace.rs",
       "validator/src/audit/law/family/aliases.rs",
       "validator/src/audit/law/family/mod.rs",
@@ -197,6 +198,9 @@
       "validator/src/self_tests/audit/edge_cases.rs",
       "validator/src/self_tests/audit/final_packet.rs",
       "validator/src/self_tests/audit/final_packet/claim_guard.rs",
+      "validator/src/self_tests/audit/final_packet/claim_guard/source_audit.rs",
+      "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/cases.rs",
+      "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/registry.rs",
       "validator/src/self_tests/audit/final_packet/references.rs",
       "validator/src/self_tests/audit/final_packet/references/package.rs",
       "validator/src/self_tests/audit/final_packet/support.rs",
@@ -262,7 +266,7 @@
       "validator/src/self_tests/standards/gardener.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:85e6cebe5c5ad51009b78afc47c824d3133db8c8e04d24e5658745ae28d28f46",
+    "changed_files_digest": "sha256:487dcd1cc6966ad535e5ca15dad8116916cdb4b82feab884d137555e805e028a",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -310,7 +314,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:c08d4fbf98bfa16bfd6dfa449d16dc97ebe9e5ab00854ebaa3940c65c23cda1f",
+  "repo_root_digest": "sha256:ca0f84fdee4d9311cb0b8db2c05748c13bf2c7e01652a40d73292a6b2ef47e56",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

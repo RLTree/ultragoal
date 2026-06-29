@@ -55,6 +55,7 @@
       "additionalProperties": false,
       "required": [
         "path",
+        "exists",
         "digest"
       ],
       "properties": {
@@ -62,11 +63,48 @@
           "type": "string",
           "pattern": "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$"
         },
+        "exists": {
+          "type": "boolean"
+        },
         "digest": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "exists": { "const": true } },
+            "required": ["exists"]
+          },
+          "then": {
+            "properties": {
+              "digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "exists": { "const": false } },
+            "required": ["exists"]
+          },
+          "then": {
+            "properties": {
+              "digest": { "type": "null" }
+            }
+          }
+        }
+      ]
     },
     "cli_performance": {
       "$ref": "#/$defs/passReceiptRef"
@@ -101,7 +139,8 @@
           "package_readiness",
           "review_readiness",
           "release_readiness",
-          "update_goal_eligibility"
+          "update_goal_eligibility",
+          "app_registry_or_reviewer_exposure"
         ]
       },
       "uniqueItems": true

@@ -53,8 +53,26 @@ fn coverage_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<St
     if !array(&receipt, "uncovered_records").is_empty() {
         out.push("plugin_self_law_coverage_has_uncovered_records".to_string());
     }
-    if string(&receipt, "claim_ceiling") != "supports_complete_claim" {
+    if string(&receipt, "claim_ceiling") != "supports_complete_coverage_claim" {
         out.push("plugin_self_law_coverage_claim_ceiling_not_complete".to_string());
+    }
+    if !array_contains(&receipt, "supported_claim_classes", "complete_coverage") {
+        out.push("plugin_self_law_coverage_supported_claim_missing".to_string());
+    }
+    for blocked in [
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure",
+    ] {
+        if !array_contains(&receipt, "blocked_claim_classes", blocked) {
+            out.push(format!(
+                "plugin_self_law_coverage_missing_blocked_claim:{blocked}"
+            ));
+        }
     }
     if receipt
         .pointer("/target_revision/value")
@@ -141,6 +159,13 @@ fn array<'a>(value: &'a Value, key: &str) -> Vec<&'a Value> {
         .and_then(Value::as_array)
         .map(|rows| rows.iter().collect())
         .unwrap_or_default()
+}
+
+fn array_contains(value: &Value, key: &str, needle: &str) -> bool {
+    value
+        .get(key)
+        .and_then(Value::as_array)
+        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
 }
 
 fn string<'a>(value: &'a Value, key: &str) -> &'a str {

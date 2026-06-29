@@ -1,4 +1,3 @@
-use crate::cli::observe::telemetry::identity;
 use crate::cli::observe::types::{self, ObserveCommand};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -12,17 +11,16 @@ pub(super) fn result(
     status: &str,
     failure: Option<&str>,
 ) -> Result<Value, String> {
-    let candidate = crate::package::inventory::package_digest(root)?;
-    let run_id = command
-        .run_id
-        .clone()
-        .unwrap_or_else(|| identity::id("query", command.operation.id(), &candidate));
+    let telemetry = super::receipt::base(root, command, status, failure)?;
+    let candidate = receipt_text(&telemetry, "candidate_digest")?;
+    let run_id = receipt_text(&telemetry, "run_id")?;
+    let correlation_id = receipt_text(&telemetry, "correlation_id")?;
     Ok(json!({
         "schema": types::QUERY_SCHEMA,
         "status": status,
         "candidate_digest": candidate,
         "run_id": run_id,
-        "correlation_id": identity::id("corr", command.operation.id(), &candidate),
+        "correlation_id": correlation_id,
         "query_kind": query_kind,
         "query": query_text,
         "row_limit": command.row_limit,
@@ -38,4 +36,19 @@ pub(super) fn result(
         "supported_claims": if status == "pass" { json!(["observability_query_observation"]) } else { json!([]) },
         "blocked_claims": json!(["completion", "readiness", "release", "update_goal_eligibility"])
     }))
+}
+
+fn receipt_text<'a>(telemetry: &'a Value, field: &str) -> Result<&'a str, String> {
+    telemetry
+        .get(field)
+        .and_then(Value::as_str)
+        .ok_or_else(|| format!("observability telemetry receipt missing {field}"))
+}
+
+#[cfg(test)]
+pub(crate) fn receipt_text_for_test<'a>(
+    telemetry: &'a Value,
+    field: &str,
+) -> Result<&'a str, String> {
+    receipt_text(telemetry, field)
 }

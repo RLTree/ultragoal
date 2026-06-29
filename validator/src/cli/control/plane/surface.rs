@@ -191,6 +191,13 @@ fn base_failures(
     {
         out.push("package_surface_audit_source_digest_mismatch".to_string());
     }
+    if value
+        .pointer("/target/expected_package_digest")
+        .and_then(Value::as_str)
+        != Some(expected_candidate)
+    {
+        out.push("package_surface_audit_target_expected_digest_mismatch".to_string());
+    }
     if value.pointer("/target/surface").and_then(Value::as_str)
         != Some(target::surface_id(operation))
     {

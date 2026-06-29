@@ -8,11 +8,11 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:3965b2aeda40f27f5692231eea289c4a2854ae8b4cf240d10aaffe0eaf2d1bbc",
+      "digest": "sha256:db01688a55f8bbeaffd1ad0d2632650ab952b8b0ae44a9d9194edfd01cc635fb",
       "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
     },
     {
-      "digest": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
+      "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
       "path": "docs/source-obligation-matrix.json"
     },
     {
@@ -20,11 +20,11 @@
       "path": "validator/src/audit/rust/developer.rs"
     },
     {
-      "digest": "sha256:1f1af86ab8bea3a0ab3d352acbd31dbbb2d4d18293fb30be5fbe9cb0a89f7497",
+      "digest": "sha256:108eebc31f64f9e48da5c81574ec357fd08bda7c5b70772b856be9dee24bf76c",
       "path": "schemas/workspace-gc-receipt.schema.json"
     },
     {
-      "digest": "sha256:ff8861f7d2b343787562df29b3c9f53d668f9d201d6abe2c42e097f728e9ac10",
+      "digest": "sha256:44541723838962ac38e190e41452855caf693407c1543921f83f145020ba2a4f",
       "path": "validator/src/cli/garbage/collection/mod.rs"
     }
   ],

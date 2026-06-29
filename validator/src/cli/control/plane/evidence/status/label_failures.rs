@@ -1,5 +1,17 @@
 use serde_json::json;
 
+fn blocked_claims() -> serde_json::Value {
+    json!([
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure"
+    ])
+}
+
 #[test]
 fn label_failures_cover_unknown_rust_and_gc_status_edges() {
     let root = crate::self_tests::boundaries::support::repo_root();
@@ -59,14 +71,20 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
     );
     let source_audit_pass = json!({
         "status":"pass",
-        "target_revision":{"kind":"package_digest","value":candidate}
+        "target_revision":{"kind":"package_digest","value":candidate},
+        "claim_ceiling":"source_audit_pass_source_local_only",
+        "supported_claim_classes":["source_local_audit_checks", "red_fixture_report"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(&root, "source_audit", &source_audit_pass, &candidate).is_empty()
     );
     let source_audit_wrong_target = json!({
         "status":"pass",
-        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('c')}
+        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('c')},
+        "claim_ceiling":"source_audit_pass_source_local_only",
+        "supported_claim_classes":["source_local_audit_checks", "red_fixture_report"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(
@@ -82,7 +100,9 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('e')},
         "coverage":{"percent":100.0},
         "uncovered_records":[],
-        "claim_ceiling":"supports_complete_claim"
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(&root, "coverage", &coverage_wrong_target, &candidate)
@@ -93,14 +113,18 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "uncovered_records":[],
-        "claim_ceiling":"supports_complete_claim"
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(super::label_failures(&root, "coverage", &coverage_pass, &candidate).is_empty());
     let coverage_not_exact = json!({
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":99.0},
         "uncovered_records":["validator/src/main.rs:1"],
-        "claim_ceiling":"supports_complete_claim"
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(&root, "coverage", &coverage_not_exact, &candidate)
@@ -110,7 +134,9 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
     let coverage_without_uncovered_records = json!({
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
-        "claim_ceiling":"supports_complete_claim"
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(
@@ -126,7 +152,9 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "uncovered_records":["validator/src/main.rs:1"],
-        "claim_ceiling":"supports_complete_claim"
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
     });
     assert!(
         super::label_failures(

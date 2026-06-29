@@ -87,6 +87,25 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     )
     .expect("query receipt");
     assert_eq!(query_receipt["status"], "pass");
+    assert_eq!(
+        observe::telemetry::query_receipt_text_for_test(&query_receipt, "candidate_digest")
+            .expect("candidate text"),
+        query_receipt["candidate_digest"]
+            .as_str()
+            .expect("candidate")
+    );
+    for field in ["candidate_digest", "run_id", "correlation_id"] {
+        let mut missing_field = query_receipt.clone();
+        missing_field
+            .as_object_mut()
+            .expect("query receipt object")
+            .remove(field);
+        assert!(
+            observe::telemetry::query_receipt_text_for_test(&missing_field, field)
+                .expect_err("missing query telemetry field")
+                .contains(field)
+        );
+    }
     let base_query_failure = observe::telemetry::base_receipt(
         &root,
         &super::command(&["observe", "logs", "query"]),

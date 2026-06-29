@@ -21632,7 +21632,18 @@
         }
       ]
     },
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "claim_ceiling": "withheld_or_blocked",
+    "supported_claim_classes": [],
+    "blocked_claim_classes": [
+      "completion",
+      "package_readiness",
+      "review_readiness",
+      "release_readiness",
+      "final_packet_correctness",
+      "update_goal_eligibility",
+      "app_registry_or_reviewer_exposure"
+    ]
   },
   "verification_backlog": {
     "generated_at": "2026-06-16T00:00:00Z",

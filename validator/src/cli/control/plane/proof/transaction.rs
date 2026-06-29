@@ -98,6 +98,20 @@ pub(crate) fn receipt_failures(
     out
 }
 
+pub(crate) fn same_candidate_failures(
+    root: &Path,
+    store: &schema_catalog::SchemaStore,
+    receipt: &Value,
+    expected: &str,
+) -> Vec<String> {
+    let mut out = schema_catalog::schema_errors(store, SCHEMA_FILE, receipt)
+        .into_iter()
+        .map(|failure| format!("cli_control_plane_transaction_schema:{failure}"))
+        .collect::<Vec<_>>();
+    out.extend(receipt_failures(root, store, receipt, expected));
+    out
+}
+
 fn ref_failures(
     root: &Path,
     store: &schema_catalog::SchemaStore,
@@ -213,6 +227,11 @@ fn coverage_failures(
             .is_some_and(Vec::is_empty)
     {
         out.push("cli_control_plane_transaction_coverage_not_exact_100".to_string());
+    }
+    if value.get("claim_ceiling").and_then(Value::as_str)
+        != Some("supports_complete_coverage_claim")
+    {
+        out.push("cli_control_plane_transaction_coverage_claim_ceiling_not_complete".to_string());
     }
     out
 }

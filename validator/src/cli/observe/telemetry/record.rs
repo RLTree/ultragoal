@@ -12,7 +12,8 @@ pub(super) fn event(
     status: &str,
     failure: Option<&str>,
 ) -> Value {
-    json!({
+    let failure = failure.map(redact_sensitive_text);
+    let mut event = json!({
         "schema": types::EVENT_SCHEMA,
         "run_id": run_id,
         "correlation_id": correlation_id,
@@ -32,7 +33,7 @@ pub(super) fn event(
         "receipt_path": command.receipt_rel().to_string_lossy(),
         "status": status,
         "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
-        "why_failed": failure.unwrap_or("none"),
+        "why_failed": failure.as_deref().unwrap_or("none"),
         "where_failed": if failure.is_some() { command.operation.id() } else { "none" },
         "next_repair": claims::next_repair(command.operation, status),
         "claim_impact": if status == "pass" { "observability_evidence_only" } else { "readiness_release_completion_update_goal_blocked" },
@@ -44,7 +45,9 @@ pub(super) fn event(
         "query_hint_logql": format!("_time:5m operation:{}", command.operation.id()),
         "query_hint_promql": format!("ultragoal_command_total{{operation=\"{}\"}}", command.operation.id()),
         "query_hint_traceql": format!("{{operation=\"{}\"}}", command.operation.id())
-    })
+    });
+    event["redaction_status"] = json!(redaction_status(&event));
+    event
 }
 
 fn exporter(
@@ -122,20 +125,80 @@ pub(super) fn trace(event: &Value, operation: ObserveOperation) -> Value {
 
 pub(super) fn redaction_status(event: &Value) -> &'static str {
     let lower = event.to_string().to_ascii_lowercase();
-    if [
-        "authorization",
-        "api_key",
-        "token=",
-        "cookie",
-        "database_url",
-    ]
-    .iter()
-    .any(|needle| lower.contains(needle))
+    if sensitive_markers()
+        .iter()
+        .any(|needle| lower.contains(needle))
     {
         "fail"
     } else {
         "pass"
     }
+}
+
+fn sensitive_markers() -> Vec<String> {
+    let home = private_home_marker();
+    let temp = private_tmp_marker();
+    [
+        "authorization".to_string(),
+        "api_key".to_string(),
+        "token=".to_string(),
+        "cookie".to_string(),
+        "database_url".to_string(),
+        home.to_ascii_lowercase(),
+        format!("file://{}", home.to_ascii_lowercase()),
+        format!("unix://{}", home.to_ascii_lowercase()),
+        temp.to_ascii_lowercase(),
+        format!("file://{}", temp.to_ascii_lowercase()),
+        format!("unix://{}", temp.to_ascii_lowercase()),
+    ]
+    .into()
+}
+
+fn redact_sensitive_text(input: &str) -> String {
+    let home = redact_path_marker(input, private_home_marker(), "[redacted-home-path]");
+    let private_tmp =
+        redact_path_marker(&home, private_tmp_marker(), "[redacted-private-tmp-path]");
+    private_tmp
+        .replace("file://[redacted-home-path]", "[redacted-home-path]")
+        .replace("unix://[redacted-home-path]", "[redacted-home-path]")
+        .replace(
+            "file://[redacted-private-tmp-path]",
+            "[redacted-private-tmp-path]",
+        )
+}
+
+fn private_home_marker() -> &'static str {
+    concat!("/", "Users/")
+}
+
+fn private_tmp_marker() -> &'static str {
+    concat!("/", "private", "/tmp/")
+}
+
+fn redact_path_marker(body: &str, marker: &str, replacement: &str) -> String {
+    let mut output = String::with_capacity(body.len());
+    let mut index = 0;
+    while let Some(offset) = body[index..].find(marker) {
+        let start = index + offset;
+        output.push_str(&body[index..start]);
+        let end = body[start..]
+            .char_indices()
+            .find_map(|(idx, ch)| path_delimiter(ch).then_some(start + idx))
+            .unwrap_or(body.len());
+        output.push_str(replacement);
+        index = end;
+    }
+    output.push_str(&body[index..]);
+    output
+}
+
+fn path_delimiter(ch: char) -> bool {
+    ch.is_whitespace() || matches!(ch, '"' | '\'' | ',' | '}' | ']' | ')')
+}
+
+#[cfg(test)]
+pub(crate) fn redacted_failure_for_test(input: &str) -> String {
+    redact_sensitive_text(input)
 }
 
 fn labels(event: &Value, operation: ObserveOperation, status: &str) -> Value {

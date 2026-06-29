@@ -1,4 +1,4 @@
-use crate::cli::final_packet::{FinalPacketCommand, receipt, run};
+use crate::cli::final_packet::{FinalPacketCommand, parse, receipt, run};
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -53,6 +53,13 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
         &blocked.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
         &json!({"status":"fail"}),
     );
+    write_json(
+        &blocked.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+        &json!({
+            "status":"fail",
+            "failure":{"blocked_claim_classes":["custom_registry_block"]}
+        }),
+    );
     let blocked_receipt = blocked.join("validation_artifacts/review/final-packet-proof.json");
     let code = crate::command_run::run_with_exit_code(crate::Args {
         root: blocked.clone(),
@@ -65,6 +72,15 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     let value = crate::json_boundary::read_json(&blocked_receipt).expect("blocked receipt");
     assert_eq!(value["status"], "fail");
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(value["packet"]["exists"], false);
+    assert!(value["packet"]["digest"].is_null());
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("app_registry_or_reviewer_exposure"))
+    );
     assert!(
         value["failure"]["observed_failures"]
             .as_array()
@@ -75,6 +91,33 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
                 .is_some_and(|text| text.contains("final_packet_proof_ref_digest_mismatch"))),
         "{value}"
     );
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("completion"))
+    );
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("custom_registry_block"))
+    );
+    assert!(
+        parse(&[
+            "packet".to_string(),
+            "prove".to_string(),
+            "--receipt".to_string(),
+            "target/self-tests/packet-proof.json".to_string()
+        ])
+        .expect("packet alias")
+        .is_some()
+    );
+    let missing_arg = parse(&["final-packet".to_string(), "prove".to_string()])
+        .expect_err("missing final-packet receipt path");
+    assert!(missing_arg.contains("missing required argument --receipt"));
     std::fs::remove_dir_all(blocked).expect("cleanup blocked final packet root");
 
     let green = crate::self_tests::boundaries::support::temp_root("final-packet-cli-green");

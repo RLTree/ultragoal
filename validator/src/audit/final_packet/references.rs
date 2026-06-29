@@ -4,6 +4,7 @@ use std::path::Path;
 
 mod coverage;
 mod package;
+mod source_audit;
 
 pub(super) fn failures(
     root: &Path,
@@ -14,7 +15,7 @@ pub(super) fn failures(
     let mut out = Vec::new();
     check_performance_ref(root, receipt, &expected, &mut out);
     check_registry_ref(root, store, receipt, &mut out);
-    check_source_audit_ref(root, receipt, &expected, &mut out);
+    source_audit::check_ref(root, receipt, &expected, &mut out);
     check_coverage_ref(root, receipt, &expected, &mut out);
     package::failures(root, receipt, &expected, &mut out);
     out
@@ -29,6 +30,7 @@ pub(super) fn claim_guard_failures(
     let mut out = Vec::new();
     check_performance_ref(root, receipt, &expected, &mut out);
     check_registry_guard_ref(root, store, receipt, &mut out);
+    source_audit::check_guard_ref(root, receipt, &expected, &mut out);
     check_coverage_ref(root, receipt, &expected, &mut out);
     package::failures(root, receipt, &expected, &mut out);
     out
@@ -80,19 +82,6 @@ fn check_registry_guard_ref(
     }
 }
 
-fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
-    if let Some(value) = load_ref(
-        root,
-        receipt,
-        "/source_audit",
-        "source_audit",
-        RefStatusPolicy::MustPass,
-        out,
-    ) {
-        audit_receipt_failures(&value, expected, true, out);
-    }
-}
-
 fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
     if let Some(value) = load_pass_ref(root, receipt, "/coverage", "coverage", out) {
         out.extend(coverage::failures(&value, expected));
@@ -110,12 +99,12 @@ fn load_pass_ref(
 }
 
 #[derive(Clone, Copy)]
-enum RefStatusPolicy {
+pub(super) enum RefStatusPolicy {
     MustPass,
     PassOrFail,
 }
 
-fn load_ref(
+pub(super) fn load_ref(
     root: &Path,
     receipt: &Value,
     ptr: &str,
@@ -180,32 +169,5 @@ fn embedded_status_failures(
                 "final_packet_proof_ref_status_disagreement:{label}"
             ));
         }
-    }
-}
-
-fn audit_receipt_failures(
-    value: &Value,
-    expected: &str,
-    require_pass: bool,
-    out: &mut Vec<String>,
-) {
-    let Some(status) = value.get("status").and_then(Value::as_str) else {
-        out.push("final_packet_proof_source_audit_status_missing".to_string());
-        return;
-    };
-    if !matches!(status, "pass" | "fail") {
-        out.push(format!(
-            "final_packet_proof_source_audit_status_unknown:{status}"
-        ));
-    }
-    if require_pass && status != "pass" {
-        out.push("final_packet_proof_source_audit_status_not_pass".to_string());
-    }
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("final_packet_proof_source_audit_target_digest_mismatch".to_string());
     }
 }

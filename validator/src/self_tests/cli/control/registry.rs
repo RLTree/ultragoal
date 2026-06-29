@@ -31,10 +31,7 @@ fn registry_probe_preserves_existing_live_same_surface_pass() {
     );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     let raw_rel = "validation_artifacts/ultragoal-audit/live-registry-raw.json";
-    write_json(
-        &root.join(raw_rel),
-        &json!({"tool":"multi_agent_v1.tool_registry"}),
-    );
+    write_json(&root.join(raw_rel), &raw_observation(&current));
     let raw_digest = crate::digest::file(&root.join(raw_rel)).expect("raw digest");
     let active_rel = "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
     write_json(
@@ -186,6 +183,23 @@ fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Valu
         "round_id": "round",
         "raw_observation": {"path": raw_rel, "digest": raw_digest},
         "agent_types": agent_types()
+    })
+}
+
+fn raw_observation(current: &str) -> Value {
+    json!({
+        "schema": "harness-ultragoal.registry-raw-observation.v1",
+        "candidate_digest": current,
+        "captured_at": "2026-06-28T00:00:00Z",
+        "issuer": {"tool":"multi_agent_v1","authority":"tool_registry"},
+        "tool_call": {
+            "name": "multi_agent_v1.tool_registry",
+            "call_id": "call-1",
+            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+        },
+        "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
+        "source": "multi_agent_v1.tool_registry",
+        "registry_rows": agent_types()
     })
 }
 

@@ -5,6 +5,8 @@ use std::collections::BTreeMap;
 use std::io;
 use std::path::{Path, PathBuf};
 
+mod generated;
+
 pub struct ReceiptInput {
     pub root: PathBuf,
     pub red_report: PathBuf,
@@ -24,7 +26,7 @@ pub fn build(input: ReceiptInput) -> Result<Value, String> {
     let run_id = format!("ultragoal-audit-{}", input.start);
     let target_digest = crate::package::inventory::package_digest(&input.root)?;
     let root_identity = root_identity(&input.root);
-    let generated = generated_artifacts(&input, &run_id)?;
+    let generated = generated::artifacts(&input, &run_id)?;
     Ok(json!({
         "schema": "harness-ultragoal.validator-receipt.v1",
         "validator": "ultragoal-audit",
@@ -34,6 +36,9 @@ pub fn build(input: ReceiptInput) -> Result<Value, String> {
         "status": input.status,
         "commit": target_digest,
         "target_revision": {"kind": "package_digest", "value": target_digest},
+        "claim_ceiling": claim_ceiling(&input.status),
+        "supported_claim_classes": supported_claim_classes(&input.status),
+        "blocked_claim_classes": blocked_claim_classes(),
         "root": root_identity,
         "validator_execution": execution(&input)?,
         "required_execplan_refs": required_execplan_refs(),
@@ -47,6 +52,34 @@ pub fn build(input: ReceiptInput) -> Result<Value, String> {
         "generated_artifacts": generated,
         "generated_at": crate::audit::clock::now_iso()
     }))
+}
+
+fn claim_ceiling(status: &str) -> &'static str {
+    if status == "pass" {
+        "source_audit_pass_source_local_only"
+    } else {
+        "withheld_or_blocked"
+    }
+}
+
+fn supported_claim_classes(status: &str) -> Vec<&'static str> {
+    if status == "pass" {
+        vec!["source_local_audit_checks", "red_fixture_report"]
+    } else {
+        Vec::new()
+    }
+}
+
+fn blocked_claim_classes() -> Vec<&'static str> {
+    vec![
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure",
+    ]
 }
 
 fn required_execplan_refs() -> Vec<&'static str> {
@@ -142,54 +175,7 @@ pub(crate) fn source_artifact_set_digest(artifacts: &[Value]) -> String {
     digest::bytes(pairs.join("\0").as_bytes())
 }
 
-fn generated_artifacts(input: &ReceiptInput, run_id: &str) -> Result<Vec<Value>, String> {
-    let mut out = vec![json!({
-        "artifact_type": "red_fixture_report",
-        "path": rel_path(&input.root, &input.red_report),
-        "digest": digest::file(&input.red_report)?,
-        "validator_run_id": run_id,
-        "input_digest": digest::file(&input.root.join("templates/RED_FIXTURES.json"))?,
-        "generated_at": crate::audit::clock::now_iso()
-    })];
-    for row in &input.target_artifacts {
-        let mut item = row.clone();
-        item["validator_run_id"] = json!(run_id);
-        if let Some(path) = item.get("path").and_then(Value::as_str) {
-            item["path"] = json!(rel_path(&input.root, &PathBuf::from(path)));
-        }
-        out.push(item);
-    }
-    out.extend(ready_for_merge_artifacts(input, run_id)?);
-    Ok(out)
-}
-
-fn ready_for_merge_artifacts(input: &ReceiptInput, run_id: &str) -> Result<Vec<Value>, String> {
-    let dir = input.root.join("examples/generated");
-    let mut out = Vec::new();
-    for entry in generated_dir_entries(std::fs::read_dir(&dir))? {
-        let path = generated_entry_path(entry)?.path();
-        let name = path.file_name().unwrap_or_default().to_string_lossy();
-        if !name.starts_with("READY_FOR_MERGE") || !name.ends_with(".json") {
-            continue;
-        }
-        out.push(json!({
-            "artifact_type": "ready_for_merge",
-            "path": rel_path(&input.root, &path),
-            "digest": digest::file(&path)?,
-            "validator_run_id": run_id,
-            "input_digest": digest::file(&input.root.join("fixtures/valid/minimal-goal-run.json"))?,
-            "generated_at": crate::audit::clock::now_iso()
-        }));
-    }
-    out.sort_by(|a, b| {
-        a.get("path")
-            .and_then(Value::as_str)
-            .cmp(&b.get("path").and_then(Value::as_str))
-    });
-    Ok(out)
-}
-
-fn rel_path(root: &std::path::Path, path: &std::path::Path) -> String {
+pub(super) fn rel_path(root: &std::path::Path, path: &std::path::Path) -> String {
     portable_path(root, path, "external-artifact")
 }
 

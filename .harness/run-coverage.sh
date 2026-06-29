@@ -168,10 +168,24 @@ receipt = {
     "exclusions": manifest.get("exclusions", []),
     "generated_at": completed_at,
     "claim_ceiling": (
-        "supports_complete_claim"
+        "supports_complete_coverage_claim"
         if totals["lines"]["percent"] == 100 and not uncovered
         else "withheld_or_blocked"
-    )
+    ),
+    "supported_claim_classes": (
+        ["complete_coverage"]
+        if totals["lines"]["percent"] == 100 and not uncovered
+        else []
+    ),
+    "blocked_claim_classes": [
+        "completion",
+        "package_readiness",
+        "review_readiness",
+        "release_readiness",
+        "final_packet_correctness",
+        "update_goal_eligibility",
+        "app_registry_or_reviewer_exposure"
+    ]
 }
 
 receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")

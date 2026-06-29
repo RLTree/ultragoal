@@ -161,6 +161,17 @@ fn runtime_bound_fixture(root: &Path, value: &Value, validator_artifacts: &[Valu
             "kind": "package_digest",
             "value": crate::package::inventory::package_digest(root).unwrap_or_default()
         },
+        "claim_ceiling": "source_audit_pass_source_local_only",
+        "supported_claim_classes": ["source_local_audit_checks", "red_fixture_report"],
+        "blocked_claim_classes": [
+            "completion",
+            "package_readiness",
+            "review_readiness",
+            "release_readiness",
+            "final_packet_correctness",
+            "update_goal_eligibility",
+            "app_registry_or_reviewer_exposure"
+        ],
         "validator_execution": {
             "command": {
                 "command": "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json"

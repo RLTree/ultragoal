@@ -85,6 +85,14 @@ fn typed_status_and_package_surface_edges_are_explicit() {
     assert!(
         super::label_failures(&root, "install_audit", &fail_closed_install, &candidate).is_empty()
     );
+    let mut wrong_expected_install = fail_closed_install.clone();
+    wrong_expected_install["target"]["expected_package_digest"] =
+        json!(crate::self_tests::boundaries::support::sha('e'));
+    assert!(
+        super::label_failures(&root, "install_audit", &wrong_expected_install, &candidate)
+            .iter()
+            .any(|failure| failure == "package_surface_audit_target_expected_digest_mismatch")
+    );
     assert!(
         super::label_failures(&root, "install_audit", &json!({}), &candidate)
             .iter()
@@ -116,7 +124,8 @@ fn typed_status_and_package_surface_edges_are_explicit() {
     );
     assert!(
         super::label_failures(&root, "transactional_finalization", &json!({}), &candidate)
-            .is_empty()
+            .iter()
+            .any(|failure| failure == "cli_control_plane_transaction_wrong_schema")
     );
     for label in [
         "coverage",
