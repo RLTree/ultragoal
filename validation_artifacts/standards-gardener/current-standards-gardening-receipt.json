@@ -1,5 +1,5 @@
 {
-  "candidate_digest": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
+  "candidate_digest": "sha256:5a7bca9f8a038d400d742f599df3238c2a2ae53d93645b136252cede8d3c9284",
   "changed_artifacts": [
     {
       "digest": "sha256:5af10b250bd6e67b8c7a2038433fecb49c0c573c3984e59e76113f8bb4324c54",
@@ -30,11 +30,11 @@
       "path": "validator/src/audit/final_packet.rs"
     },
     {
-      "digest": "sha256:c9f3b6f03a1de6f938dad8daec9f4b5dacabc7ada1f22c71e2efe9eca94bd37c",
+      "digest": "sha256:cab26e430953d329a7919fd15e7f42bc30393f999ae3d61ac2d3a14bc1379540",
       "path": "validator/src/audit/final_packet/references.rs"
     },
     {
-      "digest": "sha256:d15624d154c45b6da45b0e8aedca1f90df270e21c9fa513ecf96bfe7f7798744",
+      "digest": "sha256:53f1d28bd19c293b06d1ca1e66c898798dd1bd04e1a6f05757d57faea02eb2f4",
       "path": "validator/src/audit/mandatory/law/surfaces.rs"
     },
     {
@@ -42,7 +42,7 @@
       "path": "validator/src/audit/mandatory/law/surfaces/dependencies.rs"
     },
     {
-      "digest": "sha256:a20c37f7277307253bf9becbcd2289d45df4dcf03888ea7a14d59d1f131e2449",
+      "digest": "sha256:118062cc218141679fe2f6724d6d428d29147f077783420a1644770dfc32e8bc",
       "path": "validator/src/audit/mandatory/law/surfaces/production.rs"
     },
     {
@@ -178,11 +178,11 @@
       "path": "validator/src/self_tests/law/mandatory/surfaces/mod.rs"
     },
     {
-      "digest": "sha256:62a26b77ef5ea5a5c386d659ab4d27c84dda1d39ebae7754b05d8feb1c9c771c",
+      "digest": "sha256:fa7fce78917eeca7cf8874397edd94444d12266c1bdf8d01d8482b861c439866",
       "path": "validator/src/self_tests/law/mandatory/surfaces/production.rs"
     },
     {
-      "digest": "sha256:d338b426e79cf33b9af74160a117834642b4a7d8239c1183d5dc09e718c5e2c6",
+      "digest": "sha256:b624a9506d13869dab5b9152e0697bc961e172b5cb6e4587bbee9217b213f334",
       "path": "validator/src/self_tests/law/mandatory_surfaces.rs"
     },
     {
@@ -206,7 +206,7 @@
       "path": "validator/src/self_tests/plugin/registry/guard.rs"
     },
     {
-      "digest": "sha256:caf82bdf1c69c30ed4c1b678922fc9101bb55b996a080c4645781fdab41e1485",
+      "digest": "sha256:ae1d0a54dc7c3753f86ef18a6b7d037d58733a8838798deba0d3d0e736c04f96",
       "path": "plugin-manifest-draft.json"
     },
     {
@@ -234,7 +234,7 @@
       "path": "fixtures/valid/two-lane-ready-dependency.json"
     },
     {
-      "digest": "sha256:a5529a90beccc15b3ffa1572ae2a43fd290f7f9046219a89460a5b5e68c4f35f",
+      "digest": "sha256:bdf2b059070fb521517b713c1287ed338dbf980096ef0cadce9067dd838f431f",
       "path": "docs/mandatory-law-surfaces.json"
     },
     {
@@ -260,7 +260,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-29T00:12:03Z",
+  "generated_at": "2026-06-29T01:39:40Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

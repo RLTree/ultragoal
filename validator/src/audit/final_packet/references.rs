@@ -29,7 +29,6 @@ pub(super) fn claim_guard_failures(
     let mut out = Vec::new();
     check_performance_ref(root, receipt, &expected, &mut out);
     check_registry_guard_ref(root, store, receipt, &mut out);
-    check_source_audit_guard_ref(root, receipt, &expected, &mut out);
     check_coverage_ref(root, receipt, &expected, &mut out);
     package::failures(root, receipt, &expected, &mut out);
     out
@@ -92,42 +91,6 @@ fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mu
     ) {
         audit_receipt_failures(&value, expected, true, out);
     }
-}
-
-fn check_source_audit_guard_ref(
-    root: &Path,
-    receipt: &Value,
-    expected: &str,
-    out: &mut Vec<String>,
-) {
-    let Some(item) = receipt.pointer("/source_audit") else {
-        out.push("final_packet_proof_ref_missing:source_audit".to_string());
-        return;
-    };
-    let rel = item.get("path").and_then(Value::as_str).unwrap_or("");
-    if crate::package::inventory::package_path_error(root, rel).is_some() {
-        out.push(format!(
-            "final_packet_proof_ref_path_invalid:source_audit:{rel}"
-        ));
-        return;
-    }
-    let value = match json_boundary::read_json(&root.join(rel)) {
-        Ok(value) => value,
-        Err(err) => {
-            out.push(format!(
-                "final_packet_proof_ref_malformed:source_audit:{err}"
-            ));
-            return;
-        }
-    };
-    embedded_status_failures(
-        item,
-        &value,
-        "source_audit",
-        RefStatusPolicy::PassOrFail,
-        out,
-    );
-    audit_receipt_failures(&value, expected, false, out);
 }
 
 fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {

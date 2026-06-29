@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T00:09:07Z",
+    "completed_at": "2026-06-29T01:44:58Z",
     "cwd": "fixtures/target-repo/valid-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T00:09:07Z",
+    "started_at": "2026-06-29T01:44:58Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T00:09:07Z",
+  "generated_at": "2026-06-29T01:44:58Z",
   "invocation": "fixture init fixtures/target-repo/valid-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:d579cdf820a8977dbc8fb05cb6783f750a4436cea69c209b5dbbafae1a00c9c8",
+  "repo_fingerprint": "sha256:5af06c3df68b0dac0e1e966236dcadcc8c41bc9145626e59892fc521144ebdd2",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -508,7 +508,7 @@
       "path": "validator/src/audit/final_packet.rs"
     },
     {
-      "digest": "sha256:c9f3b6f03a1de6f938dad8daec9f4b5dacabc7ada1f22c71e2efe9eca94bd37c",
+      "digest": "sha256:cab26e430953d329a7919fd15e7f42bc30393f999ae3d61ac2d3a14bc1379540",
       "path": "validator/src/audit/final_packet/references.rs"
     },
     {
@@ -576,7 +576,7 @@
       "path": "validator/src/audit/mandatory/law/surface/mod.rs"
     },
     {
-      "digest": "sha256:d15624d154c45b6da45b0e8aedca1f90df270e21c9fa513ecf96bfe7f7798744",
+      "digest": "sha256:53f1d28bd19c293b06d1ca1e66c898798dd1bd04e1a6f05757d57faea02eb2f4",
       "path": "validator/src/audit/mandatory/law/surfaces.rs"
     },
     {
@@ -584,7 +584,7 @@
       "path": "validator/src/audit/mandatory/law/surfaces/dependencies.rs"
     },
     {
-      "digest": "sha256:a20c37f7277307253bf9becbcd2289d45df4dcf03888ea7a14d59d1f131e2449",
+      "digest": "sha256:118062cc218141679fe2f6724d6d428d29147f077783420a1644770dfc32e8bc",
       "path": "validator/src/audit/mandatory/law/surfaces/production.rs"
     },
     {
@@ -1224,12 +1224,16 @@
       "path": "validator/src/package/artifact/refs.rs"
     },
     {
-      "digest": "sha256:784aaa6483b6f0b06bd36bc2f330d0e27e2a69731395db40f2db2ade344ab079",
+      "digest": "sha256:71cd255e2d4b7f0eabfd4d7d50d4004aaff7feac954823ae6d276683ce262c56",
       "path": "validator/src/package/inventory.rs"
     },
     {
       "digest": "sha256:51efd17f39f3f6c009aadb0ef102b3594231a5b8771d3a1ecae43c7735347e4b",
       "path": "validator/src/package/inventory/closure.rs"
+    },
+    {
+      "digest": "sha256:d4d5e184a29f1295524d49d0ad917d812f13fb0a87bcab685b12009b5f4135bf",
+      "path": "validator/src/package/inventory/payload.rs"
     },
     {
       "digest": "sha256:c6dd8772ec961d9b98f0410d9c8343b143bfc56edf750c6b4223779455f75609",
@@ -1476,7 +1480,7 @@
       "path": "validator/src/self_tests/audit/final_packet.rs"
     },
     {
-      "digest": "sha256:8ccb4fa180c01ee59370ec5d4639ec2500e9eddf8101aaa1bd66d40ced58ee5e",
+      "digest": "sha256:7a2be6919c6b40050f2df4e0d80eb9040c839563fd1e8c8b894e4b43fd0887b9",
       "path": "validator/src/self_tests/audit/final_packet/claim_guard.rs"
     },
     {
@@ -1888,11 +1892,11 @@
       "path": "validator/src/self_tests/law/mandatory/surfaces/mod.rs"
     },
     {
-      "digest": "sha256:62a26b77ef5ea5a5c386d659ab4d27c84dda1d39ebae7754b05d8feb1c9c771c",
+      "digest": "sha256:fa7fce78917eeca7cf8874397edd94444d12266c1bdf8d01d8482b861c439866",
       "path": "validator/src/self_tests/law/mandatory/surfaces/production.rs"
     },
     {
-      "digest": "sha256:d338b426e79cf33b9af74160a117834642b4a7d8239c1183d5dc09e718c5e2c6",
+      "digest": "sha256:b624a9506d13869dab5b9152e0697bc961e172b5cb6e4587bbee9217b213f334",
       "path": "validator/src/self_tests/law/mandatory_surfaces.rs"
     },
     {

@@ -3997,6 +3997,7 @@
     "validator/src/package/artifact/refs.rs",
     "validator/src/package/inventory.rs",
     "validator/src/package/inventory/closure.rs",
+    "validator/src/package/inventory/payload.rs",
     "validator/src/package/resource/mod.rs",
     "validator/src/package/resource/purpose.rs",
     "validator/src/red/filesystem/fixtures.rs",

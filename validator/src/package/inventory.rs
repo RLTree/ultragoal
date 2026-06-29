@@ -4,8 +4,10 @@ use serde_json::Value;
 use std::path::{Component, Path, PathBuf};
 
 pub(crate) mod closure;
+pub(crate) mod payload;
 
 pub use closure::{final_bytecode_failures, inventory_closure_failures};
+pub(crate) use payload::stable_package_payload;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
@@ -136,27 +138,10 @@ pub fn package_digest(root: &Path) -> Result<String, String> {
             }
             Err(err) => return Err(format!("{rel}: package digest path invalid: {err}")),
         };
-        payload.extend_from_slice(&stable_package_payload(&rel, &bytes)?);
+        payload.extend_from_slice(&payload::stable_package_payload(&rel, &bytes)?);
         payload.push(0);
     }
     Ok(digest::bytes(&payload))
-}
-
-pub(crate) fn stable_package_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
-    if !rel.starts_with("fixtures/valid/") || !rel.ends_with(".json") {
-        return Ok(bytes.to_vec());
-    }
-    let mut value: Value = serde_json::from_slice(bytes)
-        .map_err(|err| format!("{rel}: valid fixture digest canonicalization failed: {err}"))?;
-    scrub_valid_fixture_runtime_proof(&mut value);
-    Ok(value.to_string().into_bytes())
-}
-
-fn scrub_valid_fixture_runtime_proof(value: &mut Value) {
-    value["validator_receipt"] = serde_json::json!({
-        "schema": "harness-ultragoal.validator-receipt.v1",
-        "runtime_binding": "audit_time_overlay"
-    });
 }
 
 #[cfg(test)]
@@ -218,32 +203,5 @@ mod tests {
         assert!(super::package_digest_excluded(
             "validation_artifacts/semantic-classification/minimal-goal-run/CLAIM-001.semantic-classification-receipt.json"
         ));
-    }
-
-    #[test]
-    fn package_digest_canonicalizes_valid_fixture_runtime_receipts() {
-        let root = crate::self_tests::boundaries::support::temp_root("stable-fixture-digest");
-        std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
-        write_manifest(&root, json!(["fixtures/valid/fixture.json"]));
-        let fixture = |run_id: &str| {
-            json!({
-                "schema":"fixture",
-                "validator_receipt":{"schema":"harness-ultragoal.validator-receipt.v1","run_id":run_id},
-                "content":{"claim":"same"}
-            })
-        };
-        std::fs::write(
-            root.join("fixtures/valid/fixture.json"),
-            serde_json::to_vec(&fixture("run-a")).expect("fixture a"),
-        )
-        .expect("write fixture a");
-        let first = super::package_digest(&root).expect("digest a");
-        std::fs::write(
-            root.join("fixtures/valid/fixture.json"),
-            serde_json::to_vec(&fixture("run-b")).expect("fixture b"),
-        )
-        .expect("write fixture b");
-        assert_eq!(first, super::package_digest(&root).expect("digest b"));
-        std::fs::remove_dir_all(root).expect("cleanup stable fixture digest");
     }
 }

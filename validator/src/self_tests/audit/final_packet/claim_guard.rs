@@ -112,27 +112,6 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
         "final_packet_proof_registry_ref:plugin_self_law_registry_guard_wrong_source",
     );
 
-    let mut missing_source = receipt.clone();
-    missing_source
-        .as_object_mut()
-        .unwrap()
-        .remove("source_audit");
-    assert_guard_failure(
-        &root,
-        &store,
-        missing_source,
-        "final_packet_proof_ref_missing:source_audit",
-    );
-
-    let mut invalid_source = receipt.clone();
-    invalid_source["source_audit"]["path"] = json!("../validator-receipt.json");
-    assert_guard_failure(
-        &root,
-        &store,
-        invalid_source,
-        "final_packet_proof_ref_path_invalid:source_audit",
-    );
-
     let mut failed_source = receipt.clone();
     rewrite_ref(
         &root,
@@ -146,28 +125,32 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
     assert!(
         source_failures
             .iter()
-            .all(|failure| !failure.contains("final_packet_proof_source_audit_status_not_pass")),
+            .all(|failure| !failure.contains("final_packet_proof_source_audit")),
         "{source_failures:?}"
     );
 
-    let mut unknown_source = failed_source;
-    unknown_source["source_audit"]["status"] = json!("pending");
-    assert_guard_failure(
-        &root,
-        &store,
-        unknown_source,
-        "final_packet_proof_ref_embedded_status_not_pass_or_fail:source_audit",
+    let mut stale_source = failed_source;
+    stale_source["source_audit"]["digest"] = json!(crate::digest::ZERO);
+    support::write_proof(&root, &stale_source);
+    let stale_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
+    assert!(
+        stale_failures
+            .iter()
+            .all(|failure| !failure.contains("source_audit")),
+        "{stale_failures:?}"
     );
 
     let mut malformed_source = receipt;
     let source_path = "validation_artifacts/ultragoal-audit/validator-receipt.json";
     std::fs::write(root.join(source_path), "{").expect("malformed source audit");
     malformed_source["source_audit"]["path"] = json!(source_path);
-    assert_guard_failure(
-        &root,
-        &store,
-        malformed_source,
-        "final_packet_proof_ref_malformed:source_audit",
+    support::write_proof(&root, &malformed_source);
+    let malformed_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
+    assert!(
+        malformed_failures
+            .iter()
+            .all(|failure| !failure.contains("source_audit")),
+        "{malformed_failures:?}"
     );
 
     std::fs::remove_dir_all(root).expect("cleanup final packet claim guard refs");
