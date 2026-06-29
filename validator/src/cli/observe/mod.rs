@@ -24,7 +24,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ObserveCommand>, String> {
         law_id: opt_string(raw, "--law-id"),
         row_limit: opt_usize(raw, "--limit").unwrap_or(100),
         byte_limit: opt_usize(raw, "--byte-limit").unwrap_or(262_144),
-        timeout_ms: opt_u64(raw, "--timeout-ms").unwrap_or(5_000),
+        timeout_ms: opt_u64(raw, "--timeout-ms").unwrap_or(30_000),
     }))
 }
 
@@ -62,7 +62,7 @@ fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Resu
         .and_then(Value::as_str)
         .unwrap_or("fail");
     println!(
-        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} supported_claims={} unsupported_claims={}",
+        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
         command.operation.id(),
         value
             .get("candidate_digest")
@@ -73,12 +73,22 @@ fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Resu
             .get("run_id")
             .and_then(Value::as_str)
             .unwrap_or("<missing>"),
+        value
+            .get("correlation_id")
+            .and_then(Value::as_str)
+            .unwrap_or("<missing>"),
+        value
+            .get("event")
+            .and_then(|event| event.get("claim_impact"))
+            .and_then(Value::as_str)
+            .or_else(|| value.get("claim_impact").and_then(Value::as_str))
+            .unwrap_or("<missing>"),
         csv(value.get("supported_claims")),
         csv(value.get("blocked_claims"))
     );
     if status != "pass" {
         println!(
-            "failed_check={} why={} where={} next_repair={} query_logs='ultragoal observe logs query --run-id {}' query_metrics='ultragoal observe metrics query --run-id {}' query_traces='ultragoal observe traces query --run-id {}'",
+            "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
             value
                 .get("check_id")
                 .and_then(Value::as_str)
@@ -92,9 +102,24 @@ fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Resu
                 .and_then(Value::as_str)
                 .unwrap_or("observe command"),
             value
+                .get("event")
+                .and_then(|event| event.get("claim_impact"))
+                .and_then(Value::as_str)
+                .or_else(|| value.get("claim_impact").and_then(Value::as_str))
+                .unwrap_or("readiness_release_completion_update_goal_blocked"),
+            value
                 .get("next_repair")
                 .and_then(Value::as_str)
                 .unwrap_or("run observe stack health and smoke"),
+            receipt.display(),
+            value
+                .get("run_id")
+                .and_then(Value::as_str)
+                .unwrap_or("unknown"),
+            value
+                .get("correlation_id")
+                .and_then(Value::as_str)
+                .unwrap_or("unknown"),
             value
                 .get("run_id")
                 .and_then(Value::as_str)

@@ -71,6 +71,36 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     assert_eq!(code, 1);
     let value = crate::json_boundary::read_json(&blocked_receipt).expect("blocked receipt");
     assert_eq!(value["status"], "fail");
+    assert_eq!(value["observability"]["status"], "fail");
+    assert_eq!(value["observability"]["operation"], "final-packet.prove");
+    assert_eq!(
+        value["observability"]["candidate_digest"],
+        value["candidate_digest"]
+    );
+    assert!(
+        value["run_id"]
+            .as_str()
+            .is_some_and(|text| !text.is_empty())
+    );
+    assert!(
+        value["correlation_id"]
+            .as_str()
+            .is_some_and(|text| !text.is_empty())
+    );
+    assert!(
+        value["why_failed"]
+            .as_str()
+            .is_some_and(|text| text.contains("final_packet_proof"))
+    );
+    assert!(
+        value["next_repair"]
+            .as_str()
+            .is_some_and(|text| !text.is_empty() && text != "none")
+    );
+    assert_eq!(
+        value["observability"]["log_stream_digest"],
+        crate::digest::canonical_json(&value["observability"]["event"])
+    );
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
     assert_eq!(value["packet"]["exists"], false);
     assert!(value["packet"]["digest"].is_null());
@@ -172,5 +202,11 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     );
     let written = crate::json_boundary::read_json(&output).expect("written green receipt");
     assert_eq!(written["status"], "pass");
+    assert_eq!(written["observability"]["status"], "pass");
+    assert_eq!(written["why_failed"], "none");
+    assert_eq!(
+        written["observability"]["supported_claims"][0],
+        "final_packet_evidence_dereferenced"
+    );
     std::fs::remove_dir_all(green).expect("cleanup green final packet root");
 }

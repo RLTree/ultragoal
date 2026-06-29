@@ -5,6 +5,7 @@ use std::path::Path;
 const RECEIPT: &str = "validation_artifacts/review/final-packet-proof.json";
 const SCHEMA: &str = "final-packet-proof.schema.json";
 
+mod observability;
 mod references;
 
 pub(crate) fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
@@ -48,6 +49,7 @@ pub(crate) fn value_failures(
     current_candidate_failures(root, &receipt, &mut out);
     packet_artifact_failures(root, &receipt, &mut out);
     out.extend(references::failures(root, store, &receipt));
+    out.extend(observability::failures(root, receipt));
     out
 }
 
@@ -68,6 +70,7 @@ pub(crate) fn value_claim_guard_failures(
     current_candidate_guard_failures(root, receipt, &mut out);
     packet_guard_failures(receipt, &mut out);
     out.extend(references::claim_guard_failures(root, store, receipt));
+    out.extend(observability::failures(root, receipt));
     out
 }
 

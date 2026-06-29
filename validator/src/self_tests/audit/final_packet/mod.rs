@@ -27,6 +27,32 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     let failures = crate::audit::final_packet::package_failures(&root, &store);
     assert!(failures.is_empty(), "{failures:?}");
 
+    let mut missing_observability = receipt.clone();
+    missing_observability
+        .as_object_mut()
+        .expect("receipt object")
+        .remove("observability");
+    support::write_proof(&root, &missing_observability);
+    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("final_packet_proof_observability_missing")),
+        "{failures:?}"
+    );
+
+    let mut corrupt_observability = receipt.clone();
+    corrupt_observability["observability"]["event"]["candidate_digest"] =
+        json!(crate::self_tests::boundaries::support::sha('c'));
+    support::write_proof(&root, &corrupt_observability);
+    let failures = crate::audit::final_packet::package_failures(&root, &store);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("final_packet_proof_observability_digest_mismatch")),
+        "{failures:?}"
+    );
+
     let mut bad_status = receipt.clone();
     bad_status["status"] = json!("fail");
     bad_status["claim_ceiling"] = json!("withheld_or_blocked");

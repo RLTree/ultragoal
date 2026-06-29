@@ -5,28 +5,31 @@
     "release",
     "update_goal_eligibility"
   ],
-  "byte_limit": 32768,
-  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-f649bc8285eb9a4e3c976fe6701b954c37666a702f966d333ed4b90518e05b59",
+  "correlation_id": "corr-cb63dbfacb3068e681c0a4ad90e7419a90109eea6f2258d912efb7b06c13d0e3",
   "failure": "",
-  "query": "run_id:run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "run_id:run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe",
   "query_kind": "logs",
-  "result_digest": "sha256:b7c48d1c6ef9b11cfcd678009f5735c289fd5c59749c1b2cf9ca2293db4cbbab",
+  "result_digest": "sha256:21c7d3777c9877d9c0139472e6723532341f793b83301b36fe32cf8141f1ac37",
   "retention_bound": "2d",
-  "row_limit": 10,
+  "row_limit": 100,
   "rows": [
     {
-      "body": "{\"_msg\":\"missing _msg field; see https://docs.victoriametrics.com/victorialogs/keyconcepts/#message-field\",\"_stream\":\"{candidate_digest=\\\"sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b\\\",check_id=\\\"full-local-observability-stack-integration-non-opaque-failure\\\",claim_id=\\\"gate-92-observability-control-plane\\\",command=\\\"ultragoal observe\\\",law_id=\\\"full-local-observability-stack-integration-non-opaque-failure\\\"}\",\"_stream_id\":\"0000000000000000a66042c5f56ed6dfe7410958d1a5057a\",\"_time\":\"2026-06-29T20:21:02Z\",\"artifact_path\":\"dev/observability\",\"bounded_output_status\":\"pass\",\"candidate_digest\":\"sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"claim_impact\":\"observability_evidence_only\",\"command\":\"ultragoal observe\",\"correlation_id\":\"corr-bae95d0ce18b3db1e9cf67789869f58dc88963fa28cb2e1c7d9d22253da6b3d8\",\"duration_ms\":\"0\",\"exporter\":\"victorialogs\",\"failure_class\":\"none\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"next_repair\":\"keep receipt same-candidate and rerun source audit before any readiness claim\",\"operation\":\"observe.stack.smoke\",\"query_hint_logql\":\"_time:5m operation:observe.stack.smoke\",\"query_hint_promql\":\"ultragoal_command_total{operation=\\\"observe.stack.smoke\\\"}\",\"query_hint_traceql\":\"{operation=\\\"observe.stack.smoke\\\"}\",\"receipt_path\":\"validation_artifacts/observability/observe-stack-smoke.json\",\"redaction_status\":\"pass\",\"run_id\":\"run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea\",\"schema\":\"harness-ultragoal.observability-event.v1\",\"span_id\":\"span-f5465fad0b9033085a0b8b114da03b23e3ea4a7fb798052f7f0d6ad04bf41099\",\"status\":\"pass\",\"subcommand\":\"stack\",\"surface\":\"live_stack\",\"target_revision\":\"sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b\",\"trace_id\":\"trace-4aeca25e17d94313d70b903925d8dbd5ac9eaed0f80ea1fa5430d2ab5193b4e5\",\"where_failed\":\"none\",\"why_failed\":\"none\"}\n"
+      "body": "{\"_msg\":\"missing _msg field; see https://docs.victoriametrics.com/victorialogs/keyconcepts/#message-field\",\"_stream\":\"{candidate_digest=\\\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\\\",check_id=\\\"missing_receipt\\\",claim_id=\\\"final_packet_correctness\\\",command=\\\"ultragoal final-packet\\\",law_id=\\\"final-packet-proof\\\"}\",\"_stream_id\":\"00000000000000007bb326eb5f82b225dad5f06ebed74f80\",\"_time\":\"2026-06-29T23:36:25Z\",\"artifact_path\":\"validation_artifacts/review\",\"bounded_output_status\":\"pass\",\"candidate_digest\":\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\",\"check_id\":\"missing_receipt\",\"claim_id\":\"final_packet_correctness\",\"claim_impact\":\"final_packet_correctness_review_readiness_release_completion_update_goal_blocked\",\"command\":\"ultragoal final-packet\",\"correlation_id\":\"corr-30126e076293b5e92d4a59933f7d38a8b9dcb796c00d0240c1219bda94767527\",\"duration_ms\":\"0\",\"exporter\":\"local_spool\",\"failure_class\":\"missing_receipt\",\"law_id\":\"final-packet-proof\",\"next_repair\":\"build a current final packet only after source-local proof graph dependencies pass\",\"operation\":\"final-packet.prove\",\"query_hint_logql\":\"run_id:run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe operation:final-packet.prove\",\"query_hint_promql\":\"ultragoal_command_total{run_id=\\\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\\\"}\",\"query_hint_traceql\":\"{\\\"run_id\\\":\\\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\\\"}\",\"receipt_path\":\"validation_artifacts/review/final-packet-proof.json\",\"redaction_status\":\"pass\",\"run_id\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\",\"schema\":\"harness-ultragoal.observability-event.v1\",\"span_id\":\"span-cc9f146820526ab4c425a493d61ac0f24bb032a48a44ffec96e01cac2933341f\",\"status\":\"fail\",\"subcommand\":\"prove\",\"surface\":\"source\",\"target_revision\":\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\",\"trace_id\":\"trace-40a3fe98be2a6b57d4442dc48a978752755abaa327d2d9f153e9a698e5bee017\",\"where_failed\":\"validation_artifacts/review/final-packet-proof.json#/failure/observed_failures/0\",\"why_failed\":\"final_packet_proof_packet_absent\"}\n"
     }
   ],
-  "run_id": "run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea",
+  "run_id": "run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [
     "observability_query_observation"
   ],
-  "timeout_ms": 10000,
-  "truncated": false
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
 }

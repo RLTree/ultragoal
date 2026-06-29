@@ -51,7 +51,7 @@ pub(super) fn base(
         "check_id": types::CHECK_ID,
         "claim_id": types::CLAIM_ID,
         "why_failed": event["why_failed"].as_str().unwrap_or(""),
-        "where_failed": if failure.is_some() { command.operation.id() } else { "" },
+        "where_failed": event["where_failed"].as_str().unwrap_or(""),
         "next_repair": claims::next_repair(command.operation, status),
         "event": event,
         "metric": metric,

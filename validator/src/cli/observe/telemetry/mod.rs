@@ -3,6 +3,7 @@ use serde_json::Value;
 use std::path::Path;
 
 mod claims;
+mod command;
 mod exporter;
 mod identity;
 mod query;
@@ -44,6 +45,15 @@ pub(crate) fn query_result(
 ) -> Result<Value, String> {
     query::result(root, command, query_kind, query_text, rows, status, failure)
 }
+
+pub(crate) fn command_receipt(
+    root: &Path,
+    input: command::CommandTelemetry<'_>,
+) -> Result<Value, String> {
+    command::receipt(root, input)
+}
+
+pub(crate) use command::CommandTelemetry;
 
 pub(crate) fn live_stack_receipts_current(root: &Path, candidate: &str) -> bool {
     live_receipt_current(

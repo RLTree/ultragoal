@@ -5,28 +5,31 @@
     "release",
     "update_goal_eligibility"
   ],
-  "byte_limit": 32768,
-  "candidate_digest": "sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b",
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-aa96c39907e9d7906e6bab97065c7b0897aff63aba56d11b39925ba6f0f8ab57",
+  "correlation_id": "corr-893c1e4e24628359fae6410f6f932e8ed1e57209aa39acff25ec8c25d50178b7",
   "failure": "",
-  "query": "{\"run_id\":\"run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea\"}",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "{\"run_id\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"}",
   "query_kind": "traces",
-  "result_digest": "sha256:ec33545df81915f82432fef687c2aa43085b1b0e75423c2353dba994fdcbb422",
+  "result_digest": "sha256:f1ec15679ca816ef3d992ac564646d2730be7dc1c563c857201f4197fac387d3",
   "retention_bound": "2d",
-  "row_limit": 10,
+  "row_limit": 100,
   "rows": [
     {
-      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:1fdef95e079d238d3162b179211cc460862a3a9227a1f5e6496e4740b7a3923b\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"observe.stack.smoke\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"72ba4115c7490c38\",\"startTime\":1782764462063287,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"gate-92-observability-control-plane\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"observability_evidence_only\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-bae95d0ce18b3db1e9cf67789869f58dc88963fa28cb2e1c7d9d22253da6b3d8\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"keep receipt same-candidate and rerun source audit before any readiness claim\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"observe.stack.smoke\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"pass\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"c946e26e5586ec876fea0623edcf0dad\",\"warnings\":null}],\"traceID\":\"c946e26e5586ec876fea0623edcf0dad\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
+      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"final-packet.prove\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"8b683cb2ed85afe1\",\"startTime\":1782776185958267,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"missing_receipt\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"final_packet_correctness\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"final_packet_correctness_review_readiness_release_completion_update_goal_blocked\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-30126e076293b5e92d4a59933f7d38a8b9dcb796c00d0240c1219bda94767527\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"missing_receipt\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"final-packet-proof\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"build a current final packet only after source-local proof graph dependencies pass\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"final-packet.prove\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"fail\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"final_packet_proof_packet_absent\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"77f921fb559c784bc0121c32f08775d5\",\"warnings\":null}],\"traceID\":\"77f921fb559c784bc0121c32f08775d5\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
     }
   ],
-  "run_id": "run-6cd5834ef895addf740002d8ad9c09ff19dff54123c612453e2ff79252a3d1ea",
+  "run_id": "run-90d9b4d4eae635dcb2d5a2f0598b3eb783d85e2056279ca503c072d488638bfe",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [
     "observability_query_observation"
   ],
-  "timeout_ms": 10000,
-  "truncated": false
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
 }

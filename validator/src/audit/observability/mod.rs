@@ -4,6 +4,7 @@ mod compose;
 mod files;
 mod read;
 mod receipt;
+mod redaction;
 mod registry;
 
 pub(crate) const LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
@@ -14,5 +15,6 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     registry::check(root, &mut out);
     compose::check(root, &mut out);
     receipt::check(root, &mut out);
+    redaction::check(root, &mut out);
     out
 }

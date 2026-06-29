@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
+mod proof;
+
 const SCHEMA: &str = "harness-ultragoal.final-packet-proof.v1";
 const PACKET: &str = "validation_artifacts/review/final-packet.json";
 const CLI_PERFORMANCE: &str = "validation_artifacts/cli/performance-receipt.json";
@@ -11,6 +13,8 @@ const COVERAGE: &str = "validation_artifacts/coverage/coverage-receipt.json";
 const FIT_REPO: &str = "validation_artifacts/harness/fit-repo-receipt.json";
 const PRODUCT_FITNESS: &str = "validation_artifacts/harness/product-fitness-receipt.json";
 const PRODUCT_JOURNEY: &str = "validation_artifacts/harness/plugin-product-journey-receipt.json";
+#[cfg(test)]
+const DEFAULT_RECEIPT: &str = "validation_artifacts/review/final-packet-proof.json";
 
 #[derive(Debug)]
 pub(crate) struct FinalPacketCommand {
@@ -30,22 +34,17 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<FinalPacketCommand>, String
 }
 
 pub(crate) fn run(root: &Path, command: &FinalPacketCommand) -> Result<i32, String> {
-    let receipt = receipt(root)?;
+    let receipt = receipt_for_path(root, &command.receipt)?;
     crate::json_boundary::write_json(&command.receipt, &receipt)?;
-    println!(
-        "ultragoal-final-packet {} receipt={}",
-        receipt["status"],
-        command.receipt.display()
-    );
-    Ok(i32::from(
-        receipt.get("status").and_then(Value::as_str) != Some("pass"),
-    ))
+    proof::print_receipt(&command.receipt, &receipt);
+    Ok(i32::from(proof::status(&receipt) != "pass"))
 }
 
-pub(crate) fn receipt(root: &Path) -> Result<Value, String> {
+fn receipt_for_path(root: &Path, receipt_path: &Path) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
     let store = crate::schema_catalog::load(root);
     let mut value = pass_shaped(root, &candidate);
+    proof::attach_for_evaluation(root, receipt_path, &mut value)?;
     let failures = crate::audit::final_packet::value_failures(root, &store, &value);
     if failures.is_empty() {
         return Ok(value);
@@ -72,7 +71,13 @@ pub(crate) fn receipt(root: &Path) -> Result<Value, String> {
         "reason": "final_packet_proof_not_proven",
         "observed_failures": failures
     });
+    proof::attach_observability(root, receipt_path, &mut value)?;
     Ok(value)
+}
+
+#[cfg(test)]
+pub(crate) fn receipt(root: &Path) -> Result<Value, String> {
+    receipt_for_path(root, Path::new(DEFAULT_RECEIPT))
 }
 
 fn pass_shaped(root: &Path, candidate: &str) -> Value {
@@ -80,6 +85,7 @@ fn pass_shaped(root: &Path, candidate: &str) -> Value {
         "schema": SCHEMA,
         "generated_at": crate::audit::clock::now_iso(),
         "status": "pass",
+        "candidate_digest": candidate,
         "target_revision": {"kind": "package_digest", "value": candidate},
         "packet": packet_ref(root, PACKET),
         "cli_performance": ref_row(root, CLI_PERFORMANCE, "pass"),

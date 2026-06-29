@@ -26,7 +26,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     assert_eq!(not_query["status"], "fail");
     assert_eq!(not_query["failure"], "not an observability query");
 
-    let command = super::command(&["observe", "logs", "query"]);
+    let command = super::command(&["observe", "logs", "query", "--timeout-ms", "1"]);
     let matched = observe::query::retry_until_match_for_test(
         &command,
         vec![Ok("".to_string()), Ok("{\"row\":1}".to_string())],
@@ -60,6 +60,29 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     )
     .expect("same candidate output");
     assert_eq!(same_candidate["status"], "pass");
+    let explanatory_stale_digest = observe::query::result_from_output(
+        &root,
+        &command,
+        "*".to_string(),
+        Ok(format!(
+            "{{\"candidate_digest\":\"{current_candidate}\",\"why_failed\":\"dependency was stale: {}\"}}",
+            crate::self_tests::boundaries::support::sha('e')
+        )),
+    )
+    .expect("explanatory stale digest");
+    assert_eq!(explanatory_stale_digest["status"], "pass");
+    let nested_row_candidate = observe::query::result_from_output(
+        &root,
+        &command,
+        "*".to_string(),
+        Ok(format!(
+            "{{\"rows\":[{{\"body\":\"{{\\\"candidate_digest\\\":\\\"{}\\\",\\\"why_failed\\\":\\\"old {}\\\"}}\"}}]}}",
+            current_candidate,
+            crate::self_tests::boundaries::support::sha('d')
+        )),
+    )
+    .expect("nested row candidate");
+    assert_eq!(nested_row_candidate["status"], "pass");
     let truncated_candidate = observe::query::result_from_output(
         &root,
         &command,
@@ -93,6 +116,12 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     )
     .expect("fail output");
     assert_eq!(fail["status"], "fail");
+    assert_eq!(fail["why_failed"], "curl query failed");
+    assert_eq!(fail["where_failed"], "observe.logs.query");
+    assert_eq!(
+        fail["next_repair"],
+        "run stack health and smoke, then rerun bounded query"
+    );
 
     let ok_output = Command::new("printf")
         .arg("ok")
@@ -123,6 +152,12 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     )
     .expect("query receipt");
     assert_eq!(query_receipt["status"], "pass");
+    assert_eq!(query_receipt["why_failed"], "none");
+    assert_eq!(query_receipt["where_failed"], "none");
+    assert_eq!(
+        query_receipt["next_repair"],
+        "keep receipt same-candidate and rerun source audit before any readiness claim"
+    );
     assert_eq!(
         observe::telemetry::query_receipt_text_for_test(&query_receipt, "candidate_digest")
             .expect("candidate text"),

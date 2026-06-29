@@ -95,6 +95,7 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     let default_receipt = observe::parse(&super::args(&["observe", "prove"]))
         .expect("parse")
         .expect("observe command");
+    assert_eq!(default_receipt.timeout_ms, 30_000);
     assert_eq!(
         observe::run(&root, &default_receipt).expect("default run"),
         1

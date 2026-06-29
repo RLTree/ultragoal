@@ -2,31 +2,67 @@ use crate::cli::observe::types::ObserveOperation;
 use serde_json::{Value, json};
 
 pub(crate) fn candidate_digest_failure(body: &str, expected: &str) -> Option<String> {
-    candidate_digests(body)
+    typed_candidate_digests(body)
         .into_iter()
         .find(|digest| digest != expected)
         .map(|digest| format!("observability_query_candidate_digest_mismatch:{digest}!={expected}"))
 }
 
-fn candidate_digests(body: &str) -> Vec<String> {
+fn typed_candidate_digests(body: &str) -> Vec<String> {
     let mut out = Vec::new();
-    let mut offset = 0;
-    while let Some(index) = body[offset..].find("sha256:") {
-        let start = offset + index;
-        let end = start + "sha256:".len() + 64;
-        if end <= body.len() {
-            let candidate = &body[start..end];
-            if candidate["sha256:".len()..]
-                .chars()
-                .all(|ch| ch.is_ascii_hexdigit())
-                && !out.iter().any(|item| item == candidate)
-            {
-                out.push(candidate.to_string());
-            }
-        }
-        offset = start + "sha256:".len();
+    if let Ok(value) = serde_json::from_str::<Value>(body) {
+        collect_candidate_digests(&value, &mut out);
     }
     out
+}
+
+fn collect_candidate_digests(value: &Value, out: &mut Vec<String>) {
+    match value {
+        Value::Object(map) => {
+            for (key, value) in map {
+                if key == "candidate_digest" {
+                    collect_candidate_string(value, out);
+                } else {
+                    collect_candidate_digests(value, out);
+                }
+            }
+        }
+        Value::Array(items) => {
+            for item in items {
+                collect_candidate_digests(item, out);
+            }
+        }
+        Value::String(raw) if starts_with_json(raw) => {
+            if let Ok(nested) = serde_json::from_str::<Value>(raw) {
+                collect_candidate_digests(&nested, out);
+            }
+        }
+        _ => {}
+    }
+}
+
+fn starts_with_json(raw: &str) -> bool {
+    raw.trim_start()
+        .chars()
+        .next()
+        .is_some_and(|ch| matches!(ch, '{' | '['))
+}
+
+fn collect_candidate_string(value: &Value, out: &mut Vec<String>) {
+    let Some(candidate) = value.as_str().filter(|candidate| valid_digest(candidate)) else {
+        return;
+    };
+    if !out.iter().any(|item| item == candidate) {
+        out.push(candidate.to_string());
+    }
+}
+
+fn valid_digest(candidate: &str) -> bool {
+    candidate.len() == "sha256:".len() + 64
+        && candidate.starts_with("sha256:")
+        && candidate["sha256:".len()..]
+            .chars()
+            .all(|ch| ch.is_ascii_hexdigit())
 }
 
 pub(crate) fn bounded_rows(body: String, byte_limit: usize) -> Vec<Value> {

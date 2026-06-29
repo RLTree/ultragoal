@@ -15,12 +15,18 @@ pub(super) fn result(
     let candidate = receipt_text(&telemetry, "candidate_digest")?;
     let run_id = receipt_text(&telemetry, "run_id")?;
     let correlation_id = receipt_text(&telemetry, "correlation_id")?;
+    let why_failed = receipt_text(&telemetry, "why_failed")?;
+    let where_failed = receipt_text(&telemetry, "where_failed")?;
+    let next_repair = receipt_text(&telemetry, "next_repair")?;
     Ok(json!({
         "schema": types::QUERY_SCHEMA,
         "status": status,
         "candidate_digest": candidate,
         "run_id": run_id,
         "correlation_id": correlation_id,
+        "why_failed": why_failed,
+        "where_failed": where_failed,
+        "next_repair": next_repair,
         "query_kind": query_kind,
         "query": query_text,
         "row_limit": command.row_limit,

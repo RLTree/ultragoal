@@ -8,6 +8,17 @@
     "schema",
     "generated_at",
     "status",
+    "candidate_digest",
+    "run_id",
+    "correlation_id",
+    "proof_law_id",
+    "proof_check_id",
+    "proof_claim_id",
+    "why_failed",
+    "where_failed",
+    "next_repair",
+    "claim_impact",
+    "observability",
     "target_revision",
     "packet",
     "cli_performance",
@@ -32,6 +43,46 @@
         "pass",
         "fail"
       ]
+    },
+    "candidate_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proof_law_id": {
+      "const": "final-packet-proof"
+    },
+    "proof_check_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proof_claim_id": {
+      "const": "final_packet_correctness"
+    },
+    "why_failed": {
+      "type": "string",
+      "minLength": 1
+    },
+    "where_failed": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next_repair": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observability": {
+      "$ref": "observability-receipt.schema.json"
     },
     "target_revision": {
       "type": "object",

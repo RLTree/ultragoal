@@ -2,6 +2,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 mod coverage;
+mod observability;
 mod package_receipts;
 
 pub(crate) fn write_json(path: &Path, value: &Value) {
@@ -28,7 +29,7 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
         "validation_artifacts/ultragoal-audit/live-registry-raw.json",
         &registry_raw_observation(current),
     );
-    let receipt = json!({
+    let mut receipt = json!({
         "schema": "harness-ultragoal.final-packet-proof.v1",
         "generated_at": "2026-06-27T00:00:00Z",
         "status": "pass",
@@ -43,6 +44,7 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
         "blocked_claim_classes": [],
         "failure": Value::Null
     });
+    observability::attach(root, &mut receipt, "pass", "none");
     write_proof(root, &receipt);
     receipt
 }
@@ -53,7 +55,7 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
         &root.join(packet_path),
         &json!({"schema":"harness-ultragoal.review-packet-successor.v1"}),
     );
-    let receipt = json!({
+    let mut receipt = json!({
         "schema": "harness-ultragoal.final-packet-proof.v1",
         "generated_at": "2026-06-27T00:00:00Z",
         "status": "fail",
@@ -78,6 +80,12 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
             "observed_failures": ["live_registry_reviewer_exposure_not_proven"]
         }
     });
+    observability::attach(
+        root,
+        &mut receipt,
+        "fail",
+        "live_registry_reviewer_exposure_not_proven",
+    );
     write_proof(root, &receipt);
     receipt
 }
