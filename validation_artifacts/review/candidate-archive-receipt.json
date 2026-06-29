@@ -1,0 +1,46 @@
+{
+  "archive": {
+    "digest": "sha256:7395f7bd8d2024fe2172484ac2986885cea46723b41cf20a2f98d01ac9c010c7",
+    "entry_count": 4382,
+    "entry_list_digest": "sha256:048565ba4a18d9f95740774ac2ae81ac79e4bfe2e11a4aa72cc3f996d8aa0cf2",
+    "path": "validation_artifacts/review/harness-ultragoal-source-local-candidate.zip",
+    "root_names": [
+      "harness-ultragoal-plugin-proposal"
+    ]
+  },
+  "archive_purpose": "candidate_review_anchor",
+  "claim_ceiling": "detached candidate review anchor only; not upload or distribution proof",
+  "determinism": {
+    "compression": "ZIP_STORED",
+    "fixed_timestamp": "1980-01-01T00:00:00Z",
+    "sorted_entries": true
+  },
+  "generated_at": "2026-06-29T22:31:06Z",
+  "hygiene": {
+    "bad_entries": [],
+    "duplicate_entries": [],
+    "excluded_junk_dirs": [
+      "__MACOSX",
+      "__pycache__",
+      ".serena"
+    ],
+    "excluded_junk_files": [
+      ".DS_Store"
+    ],
+    "excluded_junk_suffixes": [
+      ".pyc",
+      ".pyo"
+    ],
+    "path_traversal_entries": [],
+    "status": "pass",
+    "symlinks": []
+  },
+  "schema": "harness-ultragoal.distribution-archive-receipt.v1",
+  "source": {
+    "manifest_digest": "sha256:87a11927fe8a32bc6cc662d239c8993cbf0c99d2da25ea98e0c71e984fd76983",
+    "manifest_path": "plugin-manifest-draft.json",
+    "package_digest": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+    "root": "."
+  },
+  "status": "pass"
+}
