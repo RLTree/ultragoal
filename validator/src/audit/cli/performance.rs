@@ -4,7 +4,7 @@ use std::path::Path;
 const LAW: &str = "cli-performance-latency-speed-iteration-fitness";
 const SCHEMA: &str = "schemas/cli-performance-receipt.schema.json";
 const RECEIPT: &str = "validation_artifacts/cli/performance-receipt.json";
-const SRC: &str = "validator/src/cli/performance.rs";
+const SRC: &str = "validator/src/cli/performance/mod.rs";
 const TYPES: &str = "validator/src/cli/performance/types.rs";
 const REDS: &[&str] = &[
     "cli-performance-missing-budget-red",

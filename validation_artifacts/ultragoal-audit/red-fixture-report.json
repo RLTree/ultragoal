@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T16:00:59Z",
+  "generated_at": "2026-06-29T17:05:10Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -5318,6 +5318,16 @@
       "observed_failing_check": "namespace-progressive-disclosure",
       "packet_digest": "sha256:de37a4a4185672a2820724c9291b19be8e86ed56ea65b15b85939fabd93b906a",
       "packet_path": "fixtures/red/namespace-validator-source-manifest-listing-cannot-bless-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
+    "namespace-validator-source-partial-module-factoring-red": {
+      "expected_error": "namespace_validator_source_partial_module_factoring",
+      "expected_failing_check": "namespace-progressive-disclosure",
+      "observed_error": "namespace_validator_source_partial_module_factoring",
+      "observed_failing_check": "namespace-progressive-disclosure",
+      "packet_digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
+      "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json",
       "status": "pass",
       "validator_exit": 1
     },
@@ -12386,6 +12396,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e"
+    "value": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4"
   }
 }

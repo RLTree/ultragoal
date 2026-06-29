@@ -119,7 +119,7 @@
       "dimension": "freedom_from_risk",
       "measure": "validator rejects proof substitution",
       "evidence": {
-        "path": "validator/src/audit/product/fitness.rs",
+        "path": "validator/src/audit/product/fitness/mod.rs",
         "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       }
     },

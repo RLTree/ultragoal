@@ -1,7 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
-#[path = "receipt/fields.rs"]
+#[path = "fields.rs"]
 mod fields;
 use fields::{evidence_present, pointer_string, required_fields, string};
 

@@ -16,7 +16,7 @@
       "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0"
     },
     {
-      "path": "validator/src/audit/cli/control_plane/authority.rs",
+      "path": "validator/src/audit/cli/control_plane/authority/mod.rs",
       "digest": "sha256:6e9d03729061c1bd85a83ed46cedc502e2f3b73b1ef9dc48aca63a4229556d79"
     },
     {
@@ -24,7 +24,7 @@
       "digest": "sha256:313fc4178d101806ed5772830d96bea3383d617fb5d6b1c39ed6620e1e8b2775"
     },
     {
-      "path": "validator/src/cli/control/plane.rs",
+      "path": "validator/src/cli/control/plane/mod.rs",
       "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21"
     },
     {
@@ -32,7 +32,7 @@
       "digest": "sha256:bb86fd94e30c7f28a9e1d39565bf7910d12f18d835520f9c96d6795ad3dc00f5"
     },
     {
-      "path": "validator/src/cli/control/plane/evidence.rs",
+      "path": "validator/src/cli/control/plane/evidence/mod.rs",
       "digest": "sha256:be0d4cbdbba64d1339a2be8a44637fbcce9494cffac68515ca792f1b68061117"
     },
     {
@@ -48,7 +48,7 @@
       "digest": "sha256:8c96172f8c4b63c858e4a3ca2e184b1465070c5308768f515b0ca8a2b538a1b4"
     },
     {
-      "path": "validator/src/cli/control/plane/proof.rs",
+      "path": "validator/src/cli/control/plane/proof/mod.rs",
       "digest": "sha256:0bfca4493ddccbeb8b1126c25274be1e61de66c59b2537c87b371a6c09a8bd0b"
     },
     {
@@ -72,7 +72,7 @@
       "digest": "sha256:e3f21f167ee7c31e1cedad7df447f8edf33292ff1f9cc1442f912f08c089bca8"
     },
     {
-      "path": "validator/src/self_tests/cli/control/production.rs",
+      "path": "validator/src/self_tests/cli/control/production/mod.rs",
       "digest": "sha256:58ec5595c8d743f175b8a132d7f525e534495eb8e919433feff50158cf7e1f7f"
     },
     {

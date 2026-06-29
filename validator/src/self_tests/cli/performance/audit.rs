@@ -12,7 +12,7 @@ fn write_json(path: &Path, value: &Value) {
 fn performance_audit_binds_rows_inventory_catalog_and_receipt() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-performance-audit");
     for rel in [
-        "validator/src/cli/performance.rs",
+        "validator/src/cli/performance/mod.rs",
         "validator/src/cli/performance/types.rs",
         "schemas/cli-performance-receipt.schema.json",
     ] {
@@ -22,7 +22,7 @@ fn performance_audit_binds_rows_inventory_catalog_and_receipt() {
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[
-            "validator/src/cli/performance.rs",
+            "validator/src/cli/performance/mod.rs",
             "validator/src/cli/performance/types.rs",
             "schemas/cli-performance-receipt.schema.json",
             "validation_artifacts/cli/performance-receipt.json"

@@ -1,5 +1,5 @@
 {
-  "candidate_digest": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e",
+  "candidate_digest": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4",
   "changed_artifacts": [
     {
       "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
@@ -18,24 +18,24 @@
       "path": "schemas/schema-catalog.json"
     },
     {
-      "digest": "sha256:6e9d03729061c1bd85a83ed46cedc502e2f3b73b1ef9dc48aca63a4229556d79",
-      "path": "validator/src/audit/cli/control_plane/authority.rs"
+      "digest": "sha256:55827acb2cec91ba12e7f5a36e90987cefa106ca98cb6386d066ab52ce284530",
+      "path": "validator/src/audit/cli/control_plane/authority/mod.rs"
     },
     {
-      "digest": "sha256:893e8fdb290f5222ca87601430048fb42aedda858295f928ad07f5dbf9a23a57",
+      "digest": "sha256:2ce4e604b4adb706e672cf2139abb663702823ed31bb2ccd3014f2191ed63c70",
       "path": "validator/src/audit/cli/performance.rs"
     },
     {
       "digest": "sha256:467dae8558b5cb3fb945e2e77d7e5650b36d5a082dffb0efe3c48797ea8cf0bb",
-      "path": "validator/src/audit/final_packet.rs"
+      "path": "validator/src/audit/final_packet/mod.rs"
     },
     {
       "digest": "sha256:9dd1a113fc047dfd8113ed70133cc7fcc19ecf7573ab374adbfbd4f3ecb906bc",
-      "path": "validator/src/audit/final_packet/references.rs"
+      "path": "validator/src/audit/final_packet/references/mod.rs"
     },
     {
       "digest": "sha256:53f1d28bd19c293b06d1ca1e66c898798dd1bd04e1a6f05757d57faea02eb2f4",
-      "path": "validator/src/audit/mandatory/law/surfaces.rs"
+      "path": "validator/src/audit/mandatory/law/surfaces/mod.rs"
     },
     {
       "digest": "sha256:d7d29bfe77f070e7afdf06e1475b3e26b1b857d30f3dada478350449809b39bf",
@@ -67,7 +67,7 @@
     },
     {
       "digest": "sha256:120d187e00d0a027de2e79f71e0824088906ffe58338e6c06233ce205c822fb3",
-      "path": "validator/src/audit/plugin/registry.rs"
+      "path": "validator/src/audit/plugin/registry/mod.rs"
     },
     {
       "digest": "sha256:4462c33710de2cd5c7627f195d5bb3fdd1d864f2a4e7fec618aa93ac4f7ef7c7",
@@ -75,11 +75,11 @@
     },
     {
       "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21",
-      "path": "validator/src/cli/control/plane.rs"
+      "path": "validator/src/cli/control/plane/mod.rs"
     },
     {
       "digest": "sha256:417f505a1defa355c94f4b431fb89000f0539fa76e64fc24a1105d6ee36615d5",
-      "path": "validator/src/cli/control/plane/registry.rs"
+      "path": "validator/src/cli/control/plane/registry/mod.rs"
     },
     {
       "digest": "sha256:cf0e8dac59e5f17dfef310daf118eab8ed881602313c732767cfeb4789eb27c2",
@@ -123,15 +123,15 @@
     },
     {
       "digest": "sha256:59f76d0e3bb18bb816e7ec630e9ab6de7a77f47bcecac8f6d2ab2499e9fc5ed5",
-      "path": "validator/src/self_tests/audit/final_packet.rs"
+      "path": "validator/src/self_tests/audit/final_packet/mod.rs"
     },
     {
       "digest": "sha256:423b5acbc4d615d535fa53528be3565ee4177ffb2c83d8bead0f34d1184470ed",
-      "path": "validator/src/self_tests/audit/final_packet/references.rs"
+      "path": "validator/src/self_tests/audit/final_packet/references/mod.rs"
     },
     {
       "digest": "sha256:011e015e36193d33c22d9cfa9a54d273982b4d1d423c42c7952a36a8e7242d05",
-      "path": "validator/src/self_tests/audit/final_packet/support.rs"
+      "path": "validator/src/self_tests/audit/final_packet/support/mod.rs"
     },
     {
       "digest": "sha256:cf716ff4a7a1d612a0378a418a5eff04e2da165c2e11a94860bba59c312e06ab",
@@ -150,7 +150,7 @@
       "path": "validator/src/self_tests/audit/mod.rs"
     },
     {
-      "digest": "sha256:93fc74b95a8198c354a71a1a03247606049a747d66fa74543a7f0a1347eadd37",
+      "digest": "sha256:10f573a9b5a2d94dd0db8d8aa7aff110890ddf7cedcdc8642693d798d39af785",
       "path": "validator/src/self_tests/boundaries/filesystem_inventory_law_edges.rs"
     },
     {
@@ -167,7 +167,7 @@
     },
     {
       "digest": "sha256:4b2a5b235150d232d343667b1cf798f0eb01409e6542880285e0c96c47254bec",
-      "path": "validator/src/self_tests/law/anti_theater_dependencies.rs"
+      "path": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs"
     },
     {
       "digest": "sha256:0782c5b8a115b5e19b78b366d86252c83c47ddfd67496fa4e698effe89bfbaa1",
@@ -199,42 +199,42 @@
     },
     {
       "digest": "sha256:87e35777ad627345408dcea8ef3a97ae3681a50789d2568c70f030e3ae8003a7",
-      "path": "validator/src/self_tests/plugin/registry.rs"
+      "path": "validator/src/self_tests/plugin/registry/mod.rs"
     },
     {
       "digest": "sha256:fbe26770cd69289348fcc3a8aa02c27740fd723c9dcc4c43fbf39caa108d384f",
       "path": "validator/src/self_tests/plugin/registry/guard.rs"
     },
     {
-      "digest": "sha256:b4c7e4614dd445e9380c7bd916f3be9cd52834f8455e6db739ae22018ac7233b",
+      "digest": "sha256:5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
       "path": "plugin-manifest-draft.json"
     },
     {
-      "digest": "sha256:ca204533b5e5acd5b0c1eddb925ae385e26269c36b521d44535a523339f2471b",
+      "digest": "sha256:2416ef8a41048f41ce8bc76c2fa58c7aa9d498bc858c470f8dac6861081e6f23",
       "path": "docs/plugin-cohesion-manifest.json"
     },
     {
-      "digest": "sha256:e3684f6b9adf6e5d7d11621f3f742585633fd7b4d551f453fe9db70049445f14",
+      "digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "fixtures/valid/minimal-goal-run.json"
     },
     {
-      "digest": "sha256:456f360ec9a0287a93a558a7d0ad4aab222aa160d933b04988f7d670f96f529e",
+      "digest": "sha256:c8fc596bdcd5bf65ee050a1636852c276770251828b922e8403c38f2f0ee193b",
       "path": "fixtures/valid/non-product-engineering-language.json"
     },
     {
-      "digest": "sha256:27c045fdaa793e32e5d6cf97854f419c67a2dd3f84d5b56ce2e7242cbb112767",
+      "digest": "sha256:5599abb9cb5c6a5eb7e4ae802d56b6b24237d558cc8679348626fc2f990119e9",
       "path": "fixtures/valid/non-product-feature-completion.json"
     },
     {
-      "digest": "sha256:7e418f0347f129ddb80d5de186d5506d5d76e6741588693e917827e08e24198c",
+      "digest": "sha256:25234b15aca60d572e9d318ee083ae87ff694e24c4046af3479ab57d0bf9470c",
       "path": "fixtures/valid/proof-surface-negative-probe.json"
     },
     {
-      "digest": "sha256:fb3ff9754fa8cedaa3c9f33a1e043dfd203b85bc88d27bf65047127831d61468",
+      "digest": "sha256:f0283898d8ba86a5e5098fb091b6aa25a87f4f557ae1ceb4b2215f8c37ca47c3",
       "path": "fixtures/valid/two-lane-ready-dependency.json"
     },
     {
-      "digest": "sha256:c683cfea426048c2ac2e3d76e0172604c3cbc9844c136beda5678c01d5ca431a",
+      "digest": "sha256:f2c9e7a5dccc637f51d8f03f276fb9e63a59e36ec86ca9cd105eacfe83017397",
       "path": "docs/mandatory-law-surfaces.json"
     },
     {
@@ -243,7 +243,7 @@
     },
     {
       "digest": "sha256:0bfca4493ddccbeb8b1126c25274be1e61de66c59b2537c87b371a6c09a8bd0b",
-      "path": "validator/src/cli/control/plane/proof.rs"
+      "path": "validator/src/cli/control/plane/proof/mod.rs"
     },
     {
       "digest": "sha256:75089d1ae57fc26f4ac185fb0249c8fd1287498890403ae5ff69f2d3d3bb1a2a",
@@ -260,7 +260,7 @@
     "action": "validator_check",
     "rationale": "The source-obligation gate now requires authority-source-binding and source-installed-cache-alignment rows with token validation, adds red fixtures for omission of both rows, and promotes related runtime/product/transcript/privacy lessons into standards and proof-gate skills with strict package/static claim ceilings."
   },
-  "generated_at": "2026-06-29T15:53:14Z",
+  "generated_at": "2026-06-29T17:02:57Z",
   "safeguards": {
     "deterministic_first": true,
     "no_hook_by_default": true

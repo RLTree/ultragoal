@@ -40,7 +40,7 @@ fn audit_catalog_and_receipt_edges() {
 
     let control = crate::audit::cli::control_plane::authority::package_failures(&root);
     for expected in [
-        "cli_control_plane_package_inventory_missing:validator/src/cli/control/plane.rs",
+        "cli_control_plane_package_inventory_missing:validator/src/cli/control/plane/mod.rs",
         "cli_control_plane_schema_catalog_missing_receipt_schema",
         "cli_control_plane_missing_standards_row:cli-control-plane-authority",
         "cli_control_plane_missing_source_obligation:cli-control-plane-authority",

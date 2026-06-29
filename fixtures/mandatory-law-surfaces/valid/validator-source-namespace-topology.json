@@ -19,7 +19,7 @@
     },
     {
       "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa",
-      "path": "validator/src/audit/namespace/law.rs"
+      "path": "validator/src/audit/namespace/law/mod.rs"
     },
     {
       "digest": "sha256:8b6eeffa12538adc45655f1dbc6c71eceb6d7b06f3e6f6ddb829c600f96ad3cc",

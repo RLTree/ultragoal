@@ -4790,6 +4790,15 @@
   {
     "expected_failure": {
       "check_id": "namespace-progressive-disclosure",
+      "error": "namespace_validator_source_partial_module_factoring"
+    },
+    "id": "namespace-validator-source-partial-module-factoring-red",
+    "packet_digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
+    "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "namespace-progressive-disclosure",
       "error": "namespace_validator_source_top_level_internal_cluster"
     },
     "id": "namespace-validator-source-top-level-internal-cluster-red",

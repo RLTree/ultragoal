@@ -10,6 +10,7 @@ const IDS: &[&str] = &[
     "namespace-validator-source-broad-glob-red",
     "namespace-validator-source-generated-class-red",
     "namespace-validator-source-manifest-listing-cannot-bless-red",
+    "namespace-validator-source-partial-module-factoring-red",
     "namespace-validator-source-coverage-wave-history-red",
     "namespace-validator-source-error-not-hidden-by-other-proof-red",
     "namespace-validator-source-widened-class-tamper-red",

@@ -1,7 +1,7 @@
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 
-#[path = "boundaries/materialization.rs"]
+#[path = "materialization.rs"]
 mod materialization;
 
 fn write_json(path: &std::path::Path, value: &Value) {

@@ -4108,32 +4108,32 @@
       "validation_artifacts/ultragoal-audit/validator-receipt.stderr.txt",
       "validation_artifacts/ultragoal-audit/validator-receipt.stdout.txt",
       "validator/Cargo.toml",
-      "validator/src/archive.rs",
+      "validator/src/archive/mod.rs",
       "validator/src/archive/names.rs",
       "validator/src/archive/zip.rs",
       "validator/src/audit/agent/mod.rs",
       "validator/src/audit/agent/standards/enforcement.rs",
       "validator/src/audit/agent/standards/ids.rs",
       "validator/src/audit/agent/standards/mod.rs",
-      "validator/src/audit/agent/standards/tsv.rs",
+      "validator/src/audit/agent/standards/tsv/mod.rs",
       "validator/src/audit/agent/standards/tsv/checks.rs",
       "validator/src/audit/artifacts.rs",
-      "validator/src/audit/cli/control_plane/authority.rs",
+      "validator/src/audit/cli/control_plane/authority/mod.rs",
       "validator/src/audit/cli/control_plane/mod.rs",
       "validator/src/audit/cli/mod.rs",
       "validator/src/audit/cli/performance.rs",
       "validator/src/audit/clock.rs",
       "validator/src/audit/contract.rs",
       "validator/src/audit/coverage/mod.rs",
-      "validator/src/audit/coverage/scope.rs",
+      "validator/src/audit/coverage/scope/mod.rs",
       "validator/src/audit/coverage/scope/changed_files.rs",
       "validator/src/audit/coverage/scope/exclusions.rs",
       "validator/src/audit/coverage/scope/roots.rs",
       "validator/src/audit/coverage/scope/scripts.rs",
-      "validator/src/audit/final_packet.rs",
+      "validator/src/audit/final_packet/mod.rs",
       "validator/src/audit/final_packet/references/coverage.rs",
       "validator/src/audit/final_packet/references/package.rs",
-      "validator/src/audit/final_packet/references.rs",
+      "validator/src/audit/final_packet/references/mod.rs",
       "validator/src/audit/fit_repo_receipt.rs",
       "validator/src/audit/foundational_law_trace.rs",
       "validator/src/audit/law/family/aliases.rs",
@@ -4148,14 +4148,14 @@
       "validator/src/audit/mandatory/law/mod.rs",
       "validator/src/audit/mandatory/law/surface/ids.rs",
       "validator/src/audit/mandatory/law/surface/mod.rs",
-      "validator/src/audit/mandatory/law/surfaces.rs",
+      "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "validator/src/audit/mandatory/law/surfaces/dependencies.rs",
       "validator/src/audit/mandatory/law/surfaces/production.rs",
       "validator/src/audit/mandatory/law/surfaces/registry.rs",
       "validator/src/audit/mandatory/mod.rs",
       "validator/src/audit/mod.rs",
       "validator/src/audit/namespace/classes.rs",
-      "validator/src/audit/namespace/law.rs",
+      "validator/src/audit/namespace/law/mod.rs",
       "validator/src/audit/namespace/law/support.rs",
       "validator/src/audit/namespace/mod.rs",
       "validator/src/audit/namespace/source/mod.rs",
@@ -4175,33 +4175,33 @@
       "validator/src/audit/plugin/product/journey.rs",
       "validator/src/audit/plugin/product/mod.rs",
       "validator/src/audit/plugin/registry/guard.rs",
-      "validator/src/audit/plugin/registry/live.rs",
-      "validator/src/audit/plugin/registry.rs",
-      "validator/src/audit/product/fitness.rs",
+      "validator/src/audit/plugin/registry/live/mod.rs",
+      "validator/src/audit/plugin/registry/mod.rs",
+      "validator/src/audit/product/fitness/mod.rs",
       "validator/src/audit/product/fitness/evidence.rs",
-      "validator/src/audit/product/fitness/receipt.rs",
+      "validator/src/audit/product/fitness/receipt/mod.rs",
       "validator/src/audit/product/fitness/substitutions.rs",
       "validator/src/audit/product/mod.rs",
-      "validator/src/audit/receipt.rs",
+      "validator/src/audit/receipt/mod.rs",
       "validator/src/audit/red/catalog.rs",
       "validator/src/audit/red/identity.rs",
       "validator/src/audit/red/mod.rs",
       "validator/src/audit/review_history.rs",
       "validator/src/audit/rust/developer.rs",
       "validator/src/audit/rust/mod.rs",
-      "validator/src/audit/session.rs",
-      "validator/src/audit/session/log.rs",
-      "validator/src/audit/session/log/hardening.rs",
+      "validator/src/audit/session/mod.rs",
+      "validator/src/audit/session/log/mod.rs",
+      "validator/src/audit/session/log/hardening/mod.rs",
       "validator/src/audit/session/log/hardening/requirements.rs",
       "validator/src/audit/source_obligations.rs",
       "validator/src/audit/standards_gardening.rs",
       "validator/src/audit/template_integrity.rs",
-      "validator/src/audit/text_guards.rs",
+      "validator/src/audit/text_guards/mod.rs",
       "validator/src/audit/text_guards/moving_values.rs",
       "validator/src/audit/text_guards/stale_review.rs",
       "validator/src/bin/ultragoal-validator.rs",
       "validator/src/bin/ultragoal.rs",
-      "validator/src/claim/language.rs",
+      "validator/src/claim/language/mod.rs",
       "validator/src/claim/language/product.rs",
       "validator/src/claim/mod.rs",
       "validator/src/claim/text.rs",
@@ -4210,14 +4210,14 @@
       "validator/src/claim_semantics/claim/evidence.rs",
       "validator/src/claim_semantics/claim/identity.rs",
       "validator/src/claim_semantics/claim/mod.rs",
-      "validator/src/claim_semantics/claim/proof.rs",
+      "validator/src/claim_semantics/claim/proof/mod.rs",
       "validator/src/claim_semantics/claim/proof/text.rs",
       "validator/src/claim_semantics/coverage/digests.rs",
       "validator/src/claim_semantics/coverage/mod.rs",
       "validator/src/claim_semantics/coverage/policy.rs",
       "validator/src/claim_semantics/coverage/ready/join.rs",
       "validator/src/claim_semantics/coverage/ready/mod.rs",
-      "validator/src/claim_semantics/coverage/receipt/authority.rs",
+      "validator/src/claim_semantics/coverage/receipt/authority/mod.rs",
       "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
       "validator/src/claim_semantics/coverage/receipt/mod.rs",
       "validator/src/claim_semantics/coverage/receipt/rules.rs",
@@ -4236,7 +4236,7 @@
       "validator/src/claim_semantics/lane/runtime/state.rs",
       "validator/src/claim_semantics/lane/status.rs",
       "validator/src/claim_semantics/mod.rs",
-      "validator/src/claim_semantics/plugin_policy.rs",
+      "validator/src/claim_semantics/plugin_policy/mod.rs",
       "validator/src/claim_semantics/product/cohesion.rs",
       "validator/src/claim_semantics/product/fitness.rs",
       "validator/src/claim_semantics/product/mod.rs",
@@ -4257,20 +4257,20 @@
       "validator/src/claim_semantics/semantic/receipt/provenance.rs",
       "validator/src/claim_semantics/semantic/receipt/text.rs",
       "validator/src/cli/control/mod.rs",
-      "validator/src/cli/control/plane.rs",
+      "validator/src/cli/control/plane/mod.rs",
       "validator/src/cli/control/plane/emit.rs",
-      "validator/src/cli/control/plane/evidence.rs",
+      "validator/src/cli/control/plane/evidence/mod.rs",
       "validator/src/cli/control/plane/evidence/item.rs",
-      "validator/src/cli/control/plane/evidence/status.rs",
+      "validator/src/cli/control/plane/evidence/status/mod.rs",
       "validator/src/cli/control/plane/evidence/validate.rs",
       "validator/src/cli/control/plane/path.rs",
-      "validator/src/cli/control/plane/proof.rs",
+      "validator/src/cli/control/plane/proof/mod.rs",
       "validator/src/cli/control/plane/proof/authority.rs",
       "validator/src/cli/control/plane/proof/diagnostic.rs",
       "validator/src/cli/control/plane/proof/red.rs",
       "validator/src/cli/control/plane/proof/transaction.rs",
       "validator/src/cli/control/plane/receipt.rs",
-      "validator/src/cli/control/plane/registry.rs",
+      "validator/src/cli/control/plane/registry/mod.rs",
       "validator/src/cli/control/plane/registry/capability/gap.rs",
       "validator/src/cli/control/plane/registry/capability/mod.rs",
       "validator/src/cli/control/plane/transactional.rs",
@@ -4281,12 +4281,12 @@
       "validator/src/cli/garbage/collection/types.rs",
       "validator/src/cli/garbage/mod.rs",
       "validator/src/cli/mod.rs",
-      "validator/src/cli/performance.rs",
+      "validator/src/cli/performance/mod.rs",
       "validator/src/cli/performance/proof.rs",
       "validator/src/cli/performance/receipt.rs",
       "validator/src/cli/performance/types.rs",
-      "validator/src/cli/product.rs",
-      "validator/src/cli/product/receipts.rs",
+      "validator/src/cli/product/mod.rs",
+      "validator/src/cli/product/receipts/mod.rs",
       "validator/src/cli/product/receipts/tests.rs",
       "validator/src/cli/session.rs",
       "validator/src/cli/rust/mod.rs",
@@ -4301,10 +4301,10 @@
       "validator/src/json_boundary.rs",
       "validator/src/lib.rs",
       "validator/src/output_path.rs",
-      "validator/src/package.rs",
+      "validator/src/package/mod.rs",
       "validator/src/package/artifact/mod.rs",
       "validator/src/package/artifact/refs.rs",
-      "validator/src/package/inventory.rs",
+      "validator/src/package/inventory/mod.rs",
       "validator/src/package/inventory/closure.rs",
       "validator/src/package/resource/mod.rs",
       "validator/src/package/resource/purpose.rs",
@@ -4331,7 +4331,7 @@
       "validator/src/review/round/config.rs",
       "validator/src/review/round/mod.rs",
       "validator/src/review/round/personas.rs",
-      "validator/src/review/round/product/fitness.rs",
+      "validator/src/review/round/product/fitness/mod.rs",
       "validator/src/review/round/product/fitness/criteria.rs",
       "validator/src/review/round/product/mod.rs",
       "validator/src/review/round/registry.rs",
@@ -4362,13 +4362,13 @@
       "validator/src/schema_catalog/schema/supported/mod.rs",
       "validator/src/self_tests/audit/branch_failures.rs",
       "validator/src/self_tests/audit/edge_cases.rs",
-      "validator/src/self_tests/audit/final_packet.rs",
-      "validator/src/self_tests/audit/final_packet/claim_guard.rs",
+      "validator/src/self_tests/audit/final_packet/mod.rs",
+      "validator/src/self_tests/audit/final_packet/claim_guard/mod.rs",
       "validator/src/self_tests/audit/final_packet/references/package.rs",
-      "validator/src/self_tests/audit/final_packet/references.rs",
+      "validator/src/self_tests/audit/final_packet/references/mod.rs",
       "validator/src/self_tests/audit/final_packet/source_audit.rs",
       "validator/src/self_tests/audit/final_packet/support/package_receipts.rs",
-      "validator/src/self_tests/audit/final_packet/support.rs",
+      "validator/src/self_tests/audit/final_packet/support/mod.rs",
       "validator/src/self_tests/audit/final_packet/registry/capability/gap.rs",
       "validator/src/self_tests/audit/final_packet/registry/capability/mod.rs",
       "validator/src/self_tests/audit/final_packet/registry/mod.rs",
@@ -4424,7 +4424,7 @@
       "validator/src/self_tests/cli/control/output_paths.rs",
       "validator/src/self_tests/cli/control/parse.rs",
       "validator/src/self_tests/cli/control/production/receipts.rs",
-      "validator/src/self_tests/cli/control/production.rs",
+      "validator/src/self_tests/cli/control/production/mod.rs",
       "validator/src/self_tests/cli/control/receipt_modes.rs",
       "validator/src/self_tests/cli/control/receipts.rs",
       "validator/src/self_tests/cli/control/registry.rs",
@@ -4457,7 +4457,7 @@
       "validator/src/self_tests/coverage/scope/boundaries.rs",
       "validator/src/self_tests/coverage/scope/mod.rs",
       "validator/src/self_tests/coverage/template_trace_package_edges.rs",
-      "validator/src/self_tests/law/anti_theater_dependencies.rs",
+      "validator/src/self_tests/law/anti_theater_dependencies/mod.rs",
       "validator/src/self_tests/law/anti_theater_dependencies/cli_receipts.rs",
       "validator/src/self_tests/law/family_aliases.rs",
       "validator/src/self_tests/law/mandatory/mod.rs",
@@ -4468,7 +4468,7 @@
       "validator/src/self_tests/law/surface_runtime.rs",
       "validator/src/self_tests/law/traceability.rs",
       "validator/src/self_tests/mod.rs",
-      "validator/src/self_tests/namespace/binding.rs",
+      "validator/src/self_tests/namespace/binding/mod.rs",
       "validator/src/self_tests/namespace/binding/class/mod.rs",
       "validator/src/self_tests/namespace/binding/class/registry.rs",
       "validator/src/self_tests/namespace/binding/law.rs",
@@ -4488,7 +4488,7 @@
       "validator/src/self_tests/plugin/product/mod.rs",
       "validator/src/self_tests/plugin/product/package.rs",
       "validator/src/self_tests/plugin/registry/guard.rs",
-      "validator/src/self_tests/plugin/registry.rs",
+      "validator/src/self_tests/plugin/registry/mod.rs",
       "validator/src/self_tests/product/law_receipts.rs",
       "validator/src/self_tests/product/mod.rs",
       "validator/src/self_tests/receipts/fit_repo.rs",
@@ -4497,7 +4497,7 @@
       "validator/src/self_tests/receipts/validator_boundaries.rs",
       "validator/src/self_tests/red/catalog_output.rs",
       "validator/src/self_tests/red/filesystem.rs",
-      "validator/src/self_tests/red/fixture/boundaries.rs",
+      "validator/src/self_tests/red/fixture/boundaries/mod.rs",
       "validator/src/self_tests/red/fixture/mod.rs",
       "validator/src/self_tests/red/fixture/runtime/binding.rs",
       "validator/src/self_tests/red/fixture/runtime/mod.rs",
@@ -4560,7 +4560,7 @@
       "validator/src/self_tests/text/guards.rs",
       "validator/src/self_tests/text/mod.rs",
       "validator/src/semantic/mod.rs",
-      "validator/src/semantic/receipt.rs",
+      "validator/src/semantic/receipt/mod.rs",
       "validator/src/semantic/receipt/classifier.rs",
       "validator/src/semantic/receipt/tests.rs",
       "validator/src/skill_links.rs",
@@ -5392,7 +5392,7 @@
         "status": "pass"
       },
       "validator-execution-provenance": {
-        "details": "session_log_hardening_package_digest_mismatch; final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet_proof_source_audit_status_not_pass; final_packet_proof_source_audit_target_digest_mismatch; fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status.rs",
+        "details": "session_log_hardening_package_digest_mismatch; final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet_proof_source_audit_status_not_pass; final_packet_proof_source_audit_target_digest_mismatch; fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs",
         "status": "fail"
       },
       "validator-theater-miswire-resistance": {
@@ -18255,6 +18255,16 @@
         "packet_path": "fixtures/red/wrong-worktree-or-root.json",
         "status": "fail",
         "validator_exit": 1
+      },
+      "namespace-validator-source-partial-module-factoring-red": {
+        "expected_error": "namespace_validator_source_partial_module_factoring",
+        "expected_failing_check": "namespace-progressive-disclosure",
+        "observed_error": "namespace_validator_source_partial_module_factoring",
+        "observed_failing_check": "namespace-progressive-disclosure",
+        "packet_digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
+        "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json",
+        "status": "pass",
+        "validator_exit": 1
       }
     },
     "required_check_ids": [
@@ -18942,13 +18952,14 @@
       "namespace-vague-common-domain-path",
       "namespace-vague-lib-domain-path",
       "namespace-vague-shared-domain-path",
-      "namespace-validator-source-class-waiver-manifest-contract-red",
       "namespace-validator-source-broad-glob-red",
+      "namespace-validator-source-class-waiver-manifest-contract-red",
       "namespace-validator-source-coverage-wave-history-red",
       "namespace-validator-source-error-not-hidden-by-other-proof-red",
       "namespace-validator-source-generated-class-red",
       "namespace-validator-source-iinternal-typo-red",
       "namespace-validator-source-manifest-listing-cannot-bless-red",
+      "namespace-validator-source-partial-module-factoring-red",
       "namespace-validator-source-top-level-internal-cluster-red",
       "namespace-validator-source-top-level-internal-coverage-wave-red",
       "namespace-validator-source-widened-class-tamper-red",
@@ -19397,6 +19408,24 @@
       "runtime-tool-identity-source-obligation-parity-red",
       "runtime-tool-identity-stale-version",
       "runtime-tool-identity-wrong-workspace",
+      "rust-devx-blind-cleanup-without-gc-receipt-red",
+      "rust-devx-cargo-lock-digest-tamper-red",
+      "rust-devx-cargo-test-overclaim-red",
+      "rust-devx-dependency-audit-missing-red",
+      "rust-devx-gc-plan-digest-tamper-red",
+      "rust-devx-hidden-cache-no-cache-substitution-red",
+      "rust-devx-hidden-rustc-wrapper-red",
+      "rust-devx-makefile-authority-red",
+      "rust-devx-missing-nextest-bootstrap-red",
+      "rust-devx-missing-toolchain-substrate-red",
+      "rust-devx-protected-artifact-delete-red",
+      "rust-devx-raw-tool-output-substitution-red",
+      "rust-devx-spawn-forget-child-process-red",
+      "rust-devx-toolchain-receipt-stale-red",
+      "rust-devx-tracing-gc-core-memory-model-red",
+      "rust-devx-unbounded-resource-discipline-red",
+      "rust-devx-warm-cache-as-cold-proof-red",
+      "rust-devx-watch-observation-as-completion-red",
       "scheduler-runner-tracker-boundaries-approval-proof-red",
       "scheduler-runner-tracker-boundaries-external-mutation-provenance-red",
       "scheduler-runner-tracker-boundaries-handoff-not-done-red",
@@ -19636,25 +19665,7 @@
       "workspace-command-confinement-lifecycle-cleanup-teardown-recorded-red",
       "worktree-lane-owner-cost-policy-source-obligation-parity-red",
       "wrong-lane-worktree-root",
-      "wrong-worktree-or-root",
-      "rust-devx-raw-tool-output-substitution-red",
-      "rust-devx-makefile-authority-red",
-      "rust-devx-dependency-audit-missing-red",
-      "rust-devx-missing-toolchain-substrate-red",
-      "rust-devx-toolchain-receipt-stale-red",
-      "rust-devx-cargo-lock-digest-tamper-red",
-      "rust-devx-cargo-test-overclaim-red",
-      "rust-devx-missing-nextest-bootstrap-red",
-      "rust-devx-watch-observation-as-completion-red",
-      "rust-devx-hidden-cache-no-cache-substitution-red",
-      "rust-devx-warm-cache-as-cold-proof-red",
-      "rust-devx-hidden-rustc-wrapper-red",
-      "rust-devx-unbounded-resource-discipline-red",
-      "rust-devx-spawn-forget-child-process-red",
-      "rust-devx-tracing-gc-core-memory-model-red",
-      "rust-devx-blind-cleanup-without-gc-receipt-red",
-      "rust-devx-protected-artifact-delete-red",
-      "rust-devx-gc-plan-digest-tamper-red"
+      "wrong-worktree-or-root"
     ],
     "root": "source-workspace:harness-ultragoal-plugin-proposal",
     "run_id": "ultragoal-audit-2026-06-28T18:39:34Z",
@@ -19728,7 +19739,7 @@
         },
         {
           "digest": "sha256:fc67aab33ce3fb52a972fffbec364d46aa6767e087255f985a5aeb218dafcae4",
-          "path": "validator/src/archive.rs"
+          "path": "validator/src/archive/mod.rs"
         },
         {
           "digest": "sha256:f2b8904f286153ab8b9d683c6245ab1094ba1262b799d706605f7f53a730648c",
@@ -19756,7 +19767,7 @@
         },
         {
           "digest": "sha256:de03f50abd9b7a60c2272c3265be095f87004ea0556691d75d86dce2eb2fcd52",
-          "path": "validator/src/audit/agent/standards/tsv.rs"
+          "path": "validator/src/audit/agent/standards/tsv/mod.rs"
         },
         {
           "digest": "sha256:16b9935ca984528d8d8faa7a10fa9aa98af44dfc9dfa863a032dd12f5b10dfd5",
@@ -19768,7 +19779,7 @@
         },
         {
           "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0",
-          "path": "validator/src/audit/cli/control_plane/authority.rs"
+          "path": "validator/src/audit/cli/control_plane/authority/mod.rs"
         },
         {
           "digest": "sha256:099708a639f0d410ac0a52a93eac2bd8099c920cad01f5d153c7d22802464eea",
@@ -19796,7 +19807,7 @@
         },
         {
           "digest": "sha256:f2b99b5e2f0075f1b0bdda0d4bcc9b616ee4f84a568d0085f97d74223fcc882b",
-          "path": "validator/src/audit/coverage/scope.rs"
+          "path": "validator/src/audit/coverage/scope/mod.rs"
         },
         {
           "digest": "sha256:4fc8596cab129c7e4e8696cae1606b2e0429ad896243fcf5cde065e48752cc65",
@@ -19816,11 +19827,11 @@
         },
         {
           "digest": "sha256:fa99f4cabb5449f3f2d30335a04f316408626adf46ceb99a84df2cac20bb6fa1",
-          "path": "validator/src/audit/final_packet.rs"
+          "path": "validator/src/audit/final_packet/mod.rs"
         },
         {
           "digest": "sha256:c9f3b6f03a1de6f938dad8daec9f4b5dacabc7ada1f22c71e2efe9eca94bd37c",
-          "path": "validator/src/audit/final_packet/references.rs"
+          "path": "validator/src/audit/final_packet/references/mod.rs"
         },
         {
           "digest": "sha256:9bb61ff565d35b98aacb7b2af2c85a20726771e51de75faa32f92791e2cd94d6",
@@ -19888,7 +19899,7 @@
         },
         {
           "digest": "sha256:d15624d154c45b6da45b0e8aedca1f90df270e21c9fa513ecf96bfe7f7798744",
-          "path": "validator/src/audit/mandatory/law/surfaces.rs"
+          "path": "validator/src/audit/mandatory/law/surfaces/mod.rs"
         },
         {
           "digest": "sha256:d7d29bfe77f070e7afdf06e1475b3e26b1b857d30f3dada478350449809b39bf",
@@ -19916,7 +19927,7 @@
         },
         {
           "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa",
-          "path": "validator/src/audit/namespace/law.rs"
+          "path": "validator/src/audit/namespace/law/mod.rs"
         },
         {
           "digest": "sha256:ffb6bfb9882af9988c295f1e17ae42e83217570457f7e53aa370a83dff019237",
@@ -19992,7 +20003,7 @@
         },
         {
           "digest": "sha256:120d187e00d0a027de2e79f71e0824088906ffe58338e6c06233ce205c822fb3",
-          "path": "validator/src/audit/plugin/registry.rs"
+          "path": "validator/src/audit/plugin/registry/mod.rs"
         },
         {
           "digest": "sha256:4462c33710de2cd5c7627f195d5bb3fdd1d864f2a4e7fec618aa93ac4f7ef7c7",
@@ -20000,11 +20011,11 @@
         },
         {
           "digest": "sha256:9db2198f0dd334f16eb514a33f7180d43eebddb495b2ec2c9b7309001a73c703",
-          "path": "validator/src/audit/plugin/registry/live.rs"
+          "path": "validator/src/audit/plugin/registry/live/mod.rs"
         },
         {
           "digest": "sha256:2f7751c7eb087cdfadfd8cadae02473b4e642753182f6900a4091a630cee541c",
-          "path": "validator/src/audit/product/fitness.rs"
+          "path": "validator/src/audit/product/fitness/mod.rs"
         },
         {
           "digest": "sha256:7589b97a8fcb86cad8e848b580bc3d0a31b776bcda1cdecc34fbfa96c7f7e0be",
@@ -20012,7 +20023,7 @@
         },
         {
           "digest": "sha256:93bc1f62210b609a69b26803d41d199c60268293fdc99e4780db36e1c6c16b76",
-          "path": "validator/src/audit/product/fitness/receipt.rs"
+          "path": "validator/src/audit/product/fitness/receipt/mod.rs"
         },
         {
           "digest": "sha256:e5263a4644ee78a9a7971afc9eb1b18ce3c567a1801b27ceea3edc0d3954539a",
@@ -20024,7 +20035,7 @@
         },
         {
           "digest": "sha256:73c7193b2894eba353211491b779ce45ea126c70e958b69f71b598647946b16b",
-          "path": "validator/src/audit/receipt.rs"
+          "path": "validator/src/audit/receipt/mod.rs"
         },
         {
           "digest": "sha256:e2d63a3aed6d0d184f628ee5dfeaf004a899b91cd50b9fce5373beb03a733085",
@@ -20052,15 +20063,15 @@
         },
         {
           "digest": "sha256:94c559007fa18533984c802d11768296e10ee9ddbfa0de2853a7cbc45a38d37b",
-          "path": "validator/src/audit/session.rs"
+          "path": "validator/src/audit/session/mod.rs"
         },
         {
           "digest": "sha256:043564b2ca5a53bc848e1ed2894982421e7a4938a0c89c19e5976caea4fb32c0",
-          "path": "validator/src/audit/session/log.rs"
+          "path": "validator/src/audit/session/log/mod.rs"
         },
         {
           "digest": "sha256:f2383f98a27eff743196c8ad5ff0974f9bb0c637395e8892f2b816818473d826",
-          "path": "validator/src/audit/session/log/hardening.rs"
+          "path": "validator/src/audit/session/log/hardening/mod.rs"
         },
         {
           "digest": "sha256:100a918084b3c56426751a5e3f430ad661280dbb5079dd4ba738c25c5fcefa87",
@@ -20080,7 +20091,7 @@
         },
         {
           "digest": "sha256:c2308ca03c168ffbf2aaad1f1254bf5f521f022ac6438338e81c4945d7bd4926",
-          "path": "validator/src/audit/text_guards.rs"
+          "path": "validator/src/audit/text_guards/mod.rs"
         },
         {
           "digest": "sha256:5d42f3d67e317a64daf3ee49a8b6704ee5469a6e7499e2b96f9d90bca64370da",
@@ -20100,7 +20111,7 @@
         },
         {
           "digest": "sha256:d70bd5ae30b1426484ddebafe492ef495b2758f1a9eacd661ce0bd6e4c1b3a3f",
-          "path": "validator/src/claim/language.rs"
+          "path": "validator/src/claim/language/mod.rs"
         },
         {
           "digest": "sha256:6fbf8711375ba2a3602781e8068c47044566d4038715a188c81a8ccf690f0c8e",
@@ -20136,7 +20147,7 @@
         },
         {
           "digest": "sha256:1ad53b11e59065a287e9410baa6c06a857790f8c5663c330fc7f2b1c1b498bef",
-          "path": "validator/src/claim_semantics/claim/proof.rs"
+          "path": "validator/src/claim_semantics/claim/proof/mod.rs"
         },
         {
           "digest": "sha256:c70401d0131d505b4c507770ee6b313ce8b9c5173df6e62e157ca725dcbf6d02",
@@ -20164,7 +20175,7 @@
         },
         {
           "digest": "sha256:f274957430157ef102e5616060cc59080e8326bcbdabe97c64b56916eb3e0eb6",
-          "path": "validator/src/claim_semantics/coverage/receipt/authority.rs"
+          "path": "validator/src/claim_semantics/coverage/receipt/authority/mod.rs"
         },
         {
           "digest": "sha256:72021c5f55ab90b64fb7a38c54d2c0a59b7ee8d72aa8f20b17de665133040053",
@@ -20240,7 +20251,7 @@
         },
         {
           "digest": "sha256:b83c241a0f28f291b56082c40d98e647b4bae7cac1d28f2ec62f9ce8f092c627",
-          "path": "validator/src/claim_semantics/plugin_policy.rs"
+          "path": "validator/src/claim_semantics/plugin_policy/mod.rs"
         },
         {
           "digest": "sha256:d082bfade32cef9293c9daa7ca08129f1989066b8ebd01096f94b3e19b86c06c",
@@ -20324,7 +20335,7 @@
         },
         {
           "digest": "sha256:218735ef6064a3464a6c189ac04e55111c66bbef9263eae16178285df65909dc",
-          "path": "validator/src/cli/control/plane.rs"
+          "path": "validator/src/cli/control/plane/mod.rs"
         },
         {
           "digest": "sha256:b15738d6a77e214f6ec66c0a376c24ab5f45498fc1222332ba233f7d53a2fe43",
@@ -20332,7 +20343,7 @@
         },
         {
           "digest": "sha256:0fd5fcf9192264f09ea0adb18a60ecf188abf5a5abce9367dd12220147f2cd59",
-          "path": "validator/src/cli/control/plane/evidence.rs"
+          "path": "validator/src/cli/control/plane/evidence/mod.rs"
         },
         {
           "digest": "sha256:2b13cd7188fe7565007a9b940ea9f3eb1d8f15c469e631e5a2ec3275733ea976",
@@ -20340,7 +20351,7 @@
         },
         {
           "digest": "sha256:565ba68c79c854c74fa475c664c15a55fa6c41b7705f53e2f2d7e7987409e482",
-          "path": "validator/src/cli/control/plane/evidence/status.rs"
+          "path": "validator/src/cli/control/plane/evidence/status/mod.rs"
         },
         {
           "digest": "sha256:3ab98e4668453308643309ee07ac92ef7ef97c8e75c66c6876afd1b4529d856f",
@@ -20352,7 +20363,7 @@
         },
         {
           "digest": "sha256:0bfca4493ddccbeb8b1126c25274be1e61de66c59b2537c87b371a6c09a8bd0b",
-          "path": "validator/src/cli/control/plane/proof.rs"
+          "path": "validator/src/cli/control/plane/proof/mod.rs"
         },
         {
           "digest": "sha256:ea0705131e0aeb7dfcb84fa558e0b329713dbca5cefbd625f4d1abe7035111ec",
@@ -20376,7 +20387,7 @@
         },
         {
           "digest": "sha256:e5a3016916c65f3cdfa55fc7ab9ef060c504933a36e50bfafc9a847f5a3e9388",
-          "path": "validator/src/cli/control/plane/registry.rs"
+          "path": "validator/src/cli/control/plane/registry/mod.rs"
         },
         {
           "digest": "sha256:94f49d64f1532ac4979147b9bdd3ffe54e0279ba47ab9fa3378f1d2c4e2a9a7e",
@@ -20420,7 +20431,7 @@
         },
         {
           "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
-          "path": "validator/src/cli/performance.rs"
+          "path": "validator/src/cli/performance/mod.rs"
         },
         {
           "digest": "sha256:149d16e013c769b26910edd360866785378a6ed2e5ee4f421717b5f567f1c9ab",
@@ -20436,11 +20447,11 @@
         },
         {
           "digest": "sha256:ee306a0fc457a6e66a9079cb9b001ac7ae95f3746f0cbe9ffa502fffa7a38aa8",
-          "path": "validator/src/cli/product.rs"
+          "path": "validator/src/cli/product/mod.rs"
         },
         {
           "digest": "sha256:786951386fa3c98980dc17a54bbd57b26071aece588699944a4dc80a30e3b236",
-          "path": "validator/src/cli/product/receipts.rs"
+          "path": "validator/src/cli/product/receipts/mod.rs"
         },
         {
           "digest": "sha256:90968c3180aff5986a1c42bbcee5ef046c0c0bbf489ddee876c954f0427680dc",
@@ -20500,7 +20511,7 @@
         },
         {
           "digest": "sha256:16a617a4081ad9cb8b11a9357549cc53d50b739ccf0a25cd861d4ca419518fa4",
-          "path": "validator/src/package.rs"
+          "path": "validator/src/package/mod.rs"
         },
         {
           "digest": "sha256:70a692f343ecbeb49d1a224085e3a47030d21bedea049fc5534a2b630e2fad39",
@@ -20512,7 +20523,7 @@
         },
         {
           "digest": "sha256:784aaa6483b6f0b06bd36bc2f330d0e27e2a69731395db40f2db2ade344ab079",
-          "path": "validator/src/package/inventory.rs"
+          "path": "validator/src/package/inventory/mod.rs"
         },
         {
           "digest": "sha256:51efd17f39f3f6c009aadb0ef102b3594231a5b8771d3a1ecae43c7735347e4b",
@@ -20620,7 +20631,7 @@
         },
         {
           "digest": "sha256:606f8ae3517a48d956829b20a186c3d48738e479b585706c5397da4f6d8b8192",
-          "path": "validator/src/review/round/product/fitness.rs"
+          "path": "validator/src/review/round/product/fitness/mod.rs"
         },
         {
           "digest": "sha256:702b91043426614164cd484080f80adedbaf23db344f18bb729df1a28dca0f05",
@@ -20744,15 +20755,15 @@
         },
         {
           "digest": "sha256:088602738ae0c6511c70e7c86ed0a52dd15540bb65de72fcf8e17727e5eaf355",
-          "path": "validator/src/self_tests/audit/final_packet.rs"
+          "path": "validator/src/self_tests/audit/final_packet/mod.rs"
         },
         {
           "digest": "sha256:8ccb4fa180c01ee59370ec5d4639ec2500e9eddf8101aaa1bd66d40ced58ee5e",
-          "path": "validator/src/self_tests/audit/final_packet/claim_guard.rs"
+          "path": "validator/src/self_tests/audit/final_packet/claim_guard/mod.rs"
         },
         {
           "digest": "sha256:423b5acbc4d615d535fa53528be3565ee4177ffb2c83d8bead0f34d1184470ed",
-          "path": "validator/src/self_tests/audit/final_packet/references.rs"
+          "path": "validator/src/self_tests/audit/final_packet/references/mod.rs"
         },
         {
           "digest": "sha256:58461eb3ecb71166e5b7bbee446c19778a19ed3207a03e62009a42366a7df249",
@@ -20776,7 +20787,7 @@
         },
         {
           "digest": "sha256:a8d46e4650830479bd4e8cbfdf8b91291154eb95cb873cfd945252a19a05ad02",
-          "path": "validator/src/self_tests/audit/final_packet/support.rs"
+          "path": "validator/src/self_tests/audit/final_packet/support/mod.rs"
         },
         {
           "digest": "sha256:b01d2cbcf8cb7e27865297b2f2eb288f997bba5704b6d79b621c3fb6c3e2b271",
@@ -20988,7 +20999,7 @@
         },
         {
           "digest": "sha256:47575e31536467f6bb18af16d2c5c188df771e045c7bd16f31adeddbfebfe68e",
-          "path": "validator/src/self_tests/cli/control/production.rs"
+          "path": "validator/src/self_tests/cli/control/production/mod.rs"
         },
         {
           "digest": "sha256:02ffc945e5dde77092da2d68501ee8be465a66be7e1e4706eb7e165fa729a66a",
@@ -21124,7 +21135,7 @@
         },
         {
           "digest": "sha256:1a2c67fc7a83f08b06d7aadea468fb37f3e9dd6d8134fd1d8e8bb2c3e43a63d2",
-          "path": "validator/src/self_tests/law/anti_theater_dependencies.rs"
+          "path": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs"
         },
         {
           "digest": "sha256:b6f1491440687eaece5086f58f78ae8e02d0bfd9ab494a8d9649962f6b6dcce0",
@@ -21168,7 +21179,7 @@
         },
         {
           "digest": "sha256:459629a9b653517eab90838e2352d903ee701d7621766939f4a82659863cd9fc",
-          "path": "validator/src/self_tests/namespace/binding.rs"
+          "path": "validator/src/self_tests/namespace/binding/mod.rs"
         },
         {
           "digest": "sha256:3e98f2aa1b8ea35d9707a600c3d950a48f2e20cdc831d39a77e3f28681e0e004",
@@ -21244,7 +21255,7 @@
         },
         {
           "digest": "sha256:e46e668d3ba4056d57a96bee92e3ed82a95b3a81a5244c7c4a2b3805abfb1bde",
-          "path": "validator/src/self_tests/plugin/registry.rs"
+          "path": "validator/src/self_tests/plugin/registry/mod.rs"
         },
         {
           "digest": "sha256:fe2120f286be66de1612e2cc39d1db3f267a26a66e02fc43a5242f9e7e58bb4f",
@@ -21284,7 +21295,7 @@
         },
         {
           "digest": "sha256:311fcea1f812f3fe7f626f4c6d8e84531dbdc91588632ecf10348dad879c0301",
-          "path": "validator/src/self_tests/red/fixture/boundaries.rs"
+          "path": "validator/src/self_tests/red/fixture/boundaries/mod.rs"
         },
         {
           "digest": "sha256:1d51b05a0b679801a6f446a75531684835fdf51cd5999a8369964f203058598b",
@@ -21536,7 +21547,7 @@
         },
         {
           "digest": "sha256:b8e7653820b055c65aa1b5d12559e3939a0203b20067adaf7ff1837fbfaea799",
-          "path": "validator/src/semantic/receipt.rs"
+          "path": "validator/src/semantic/receipt/mod.rs"
         },
         {
           "digest": "sha256:3ad1e16a0dfa7ce543143bad411b05c7432f58cb52adf8415d432346036564d6",

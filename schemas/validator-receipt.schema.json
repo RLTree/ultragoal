@@ -735,7 +735,7 @@
                 }
               ]
             },
-            "maxProperties": 1238,
+            "maxProperties": 1239,
             "minProperties": 1195,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
@@ -1270,6 +1270,7 @@
               "namespace-validator-source-generated-class-red",
               "namespace-validator-source-iinternal-typo-red",
               "namespace-validator-source-manifest-listing-cannot-bless-red",
+              "namespace-validator-source-partial-module-factoring-red",
               "namespace-validator-source-top-level-internal-cluster-red",
               "namespace-validator-source-top-level-internal-coverage-wave-red",
               "namespace-validator-source-widened-class-tamper-red",
@@ -2186,7 +2187,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/redFixtureResult"
       },
-      "maxProperties": 1238,
+      "maxProperties": 1239,
       "minProperties": 1195,
       "propertyNames": {
         "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
@@ -2724,6 +2725,7 @@
         "namespace-validator-source-generated-class-red",
         "namespace-validator-source-iinternal-typo-red",
         "namespace-validator-source-manifest-listing-cannot-bless-red",
+        "namespace-validator-source-partial-module-factoring-red",
         "namespace-validator-source-top-level-internal-cluster-red",
         "namespace-validator-source-top-level-internal-coverage-wave-red",
         "namespace-validator-source-widened-class-tamper-red",
@@ -9183,6 +9185,7 @@
           "namespace-validator-source-generated-class-red",
           "namespace-validator-source-iinternal-typo-red",
           "namespace-validator-source-manifest-listing-cannot-bless-red",
+          "namespace-validator-source-partial-module-factoring-red",
           "namespace-validator-source-top-level-internal-cluster-red",
           "namespace-validator-source-top-level-internal-coverage-wave-red",
           "namespace-validator-source-widened-class-tamper-red",
@@ -9891,8 +9894,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1238,
-      "minItems": 1238,
+      "maxItems": 1239,
+      "minItems": 1239,
       "type": "array",
       "uniqueItems": true
     },

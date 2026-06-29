@@ -38,6 +38,28 @@ fn namespace_topology_rejects_history_names_after_directory_move() {
 }
 
 #[test]
+fn namespace_topology_rejects_partially_factored_module_roots() {
+    let root = crate::self_tests::boundaries::support::temp_root("namespace-partial-module-root");
+    write_text(
+        &root.join("validator/src/claim_semantics.rs"),
+        "pub(crate) mod product;\n",
+    );
+    write_text(
+        &root.join("validator/src/claim_semantics/product.rs"),
+        "pub(crate) fn marker() {}\n",
+    );
+    let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_partial_module_factoring"
+        ),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace partial module root");
+}
+
+#[test]
 fn namespace_topology_accepts_semantic_validator_self_test_routes() {
     let root = crate::self_tests::boundaries::support::temp_root("namespace-semantic-green");
     write_text(
@@ -47,6 +69,14 @@ fn namespace_topology_accepts_semantic_validator_self_test_routes() {
     write_text(
         &root.join("validator/src/self_tests/coverage/receipt/authority.rs"),
         "#[test]\nfn semantic() {}\n",
+    );
+    write_text(
+        &root.join("validator/src/claim_semantics/mod.rs"),
+        "pub(crate) mod product;\n",
+    );
+    write_text(
+        &root.join("validator/src/claim_semantics/product/mod.rs"),
+        "pub(crate) fn marker() {}\n",
     );
     let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
     assert!(

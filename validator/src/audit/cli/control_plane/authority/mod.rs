@@ -5,9 +5,9 @@ mod surface;
 
 const CLI_SCHEMA: &str = "schemas/cli-control-plane-receipt.schema.json";
 const SURFACE_SCHEMA: &str = "schemas/package-surface-audit-receipt.schema.json";
-const CONTROL_SOURCE: &str = "validator/src/cli/control/plane.rs";
+const CONTROL_SOURCE: &str = "validator/src/cli/control/plane/mod.rs";
 const CONTROL_RECEIPT: &str = "validator/src/cli/control/plane/receipt.rs";
-const CONTROL_SURFACE: &str = "validator/src/cli/control/plane/surface.rs";
+const CONTROL_SURFACE: &str = "validator/src/cli/control/plane/surface/mod.rs";
 const CONTROL_TYPES: &str = "validator/src/cli/control/plane/types.rs";
 const INSTALL_AUDIT_RECEIPT: &str = "validation_artifacts/cli/install-audit-receipt.json";
 const CACHE_AUDIT_RECEIPT: &str = "validation_artifacts/cli/cache-audit-receipt.json";

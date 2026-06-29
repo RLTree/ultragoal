@@ -6614,6 +6614,20 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "namespace-validator-source-partial-module-factoring-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "nested-overlapping-active-lanes"
           }
         },
@@ -16204,8 +16218,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1238,
-  "minItems": 1238,
+  "maxItems": 1239,
+  "minItems": 1239,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

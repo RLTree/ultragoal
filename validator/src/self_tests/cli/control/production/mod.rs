@@ -55,7 +55,7 @@ fn write_control_green_root(root: &Path) -> String {
         copy_file(root, &repo, rel);
     }
     write_text(
-        root.join("validator/src/cli/performance.rs").as_path(),
+        root.join("validator/src/cli/performance/mod.rs").as_path(),
         "source\n",
     );
     write_text(
@@ -74,7 +74,7 @@ fn write_control_green_root(root: &Path) -> String {
             "schema_catalog":"schemas/schema-catalog.json",
             "schemas":["schemas/cli-performance-receipt.schema.json"],
             "resources":[
-                "validator/src/cli/performance.rs",
+                "validator/src/cli/performance/mod.rs",
                 "validator/src/cli/performance/types.rs",
                 "schemas/cli-performance-receipt.schema.json",
                 "validation_artifacts/cli/performance-receipt.json"

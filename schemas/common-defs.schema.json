@@ -1340,6 +1340,7 @@
         "namespace-validator-source-generated-class-red",
         "namespace-validator-source-iinternal-typo-red",
         "namespace-validator-source-manifest-listing-cannot-bless-red",
+        "namespace-validator-source-partial-module-factoring-red",
         "namespace-validator-source-top-level-internal-cluster-red",
         "namespace-validator-source-top-level-internal-coverage-wave-red",
         "namespace-validator-source-widened-class-tamper-red",

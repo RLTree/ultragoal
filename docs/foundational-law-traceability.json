@@ -7,7 +7,7 @@
       "receipt_requirement": "mandatory-law receipt active-setup-to-idle-orchestration-thread-bound-heartbeat and source-obligation parity red fixture",
       "red_fixture_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat-multi-lane-setup-complete-without-transition-receipt-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "active-setup-to-idle-orchestration-thread-bound-heartbeat",
@@ -21,7 +21,7 @@
       "receipt_requirement": "mandatory-law receipt adversarial-packet-tampering-forged-proof-rejection and source-obligation parity red fixture",
       "red_fixture_id": "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "adversarial-packet-tampering-forged-proof-rejection",
@@ -35,7 +35,7 @@
       "receipt_requirement": "mandatory-law receipt agent-authored-source-tooling-docs-provenance and source-obligation parity red fixture",
       "red_fixture_id": "agent-authored-source-tooling-docs-provenance-untracked-claim-source-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "agent-authored-source-tooling-docs-provenance",
@@ -49,7 +49,7 @@
       "receipt_requirement": "mandatory-law receipt agent-queryable-observability and source-obligation parity red fixture",
       "red_fixture_id": "agent-queryable-observability-raw-log-dump-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "agent-queryable-observability",
@@ -63,7 +63,7 @@
       "receipt_requirement": "mandatory-law receipt agent-remediating-validator-failures and source-obligation parity red fixture",
       "red_fixture_id": "agent-remediating-validator-failures-law-id-present-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "agent-remediating-validator-failures",
@@ -77,7 +77,7 @@
       "receipt_requirement": "mandatory-law receipt agent-session-telemetry-token-rate-limit and source-obligation parity red fixture",
       "red_fixture_id": "agent-session-telemetry-token-rate-limit-missing-token-totals-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "agent-session-telemetry-token-rate-limit",
@@ -91,7 +91,7 @@
       "receipt_requirement": "mandatory-law receipt architecture-dependency-topology and source-obligation parity red fixture",
       "red_fixture_id": "architecture-dependency-topology-layer-map-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "architecture-dependency-topology",
@@ -105,7 +105,7 @@
       "receipt_requirement": "mandatory-law receipt authority-exhaustiveness-closed-enums-impossible-state-elimination and source-obligation parity red fixture",
       "red_fixture_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-claim-ceiling-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "authority-exhaustiveness-closed-enums-impossible-state-elimination",
@@ -119,7 +119,7 @@
       "receipt_requirement": "mandatory-law receipt authority-source-binding and source-obligation parity red fixture",
       "red_fixture_id": "authority-source-binding-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "authority-source-binding",
@@ -133,7 +133,7 @@
       "receipt_requirement": "mandatory-law receipt autonomy-loop-proof and source-obligation parity red fixture",
       "red_fixture_id": "autonomy-loop-proof-current-state-validation-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "autonomy-loop-proof",
@@ -147,7 +147,7 @@
       "receipt_requirement": "mandatory-law receipt batch-fanout-custom-agent-job-worker-result-discipline and source-obligation parity red fixture",
       "red_fixture_id": "batch-fanout-custom-agent-job-worker-result-discipline-missing-id-column-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "batch-fanout-custom-agent-job-worker-result-discipline",
@@ -161,7 +161,7 @@
       "receipt_requirement": "mandatory-law receipt behavior-example-coverage-coverage-anti-gaming and source-obligation parity red fixture",
       "red_fixture_id": "behavior-example-coverage-coverage-anti-gaming-trivial-hit-only-test-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "behavior-example-coverage-coverage-anti-gaming",
@@ -175,7 +175,7 @@
       "receipt_requirement": "mandatory-law receipt capability-gap-extraction-harness-capability-promotion and source-obligation parity red fixture",
       "red_fixture_id": "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "capability-gap-extraction-harness-capability-promotion",
@@ -189,7 +189,7 @@
       "receipt_requirement": "mandatory-law receipt clean-checkout-command-discovery and source-obligation parity red fixture",
       "red_fixture_id": "clean-checkout-command-discovery-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "clean-checkout-command-discovery",
@@ -203,7 +203,7 @@
       "receipt_requirement": "mandatory-law receipt clean-room-rebuild-author-memory-independence and source-obligation parity red fixture",
       "red_fixture_id": "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "clean-room-rebuild-author-memory-independence",
@@ -217,7 +217,7 @@
       "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-control-plane-authority; transaction self-test leaf package-listed for pass-shaped reference rejection",
       "red_fixture_id": "cli-control-plane-authority-checklist-completion-without-cli-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "cli-control-plane-authority",
@@ -231,7 +231,7 @@
       "receipt_requirement": "CLI performance receipt plus mandatory-law receipt for cli-performance-latency-speed-iteration-fitness",
       "red_fixture_id": "cli-performance-missing-budget-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "cli-performance-latency-speed-iteration-fitness",
@@ -245,7 +245,7 @@
       "receipt_requirement": "CLI control-plane receipt, transactional finalization receipt, and mandatory-law receipt for cli-self-law-compliance; transaction self-test leaf package-listed for pass-shaped reference rejection",
       "red_fixture_id": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "cli-self-law-compliance",
@@ -259,7 +259,7 @@
       "receipt_requirement": "mandatory-law receipt compact-agents-routed-standards and source-obligation parity red fixture",
       "red_fixture_id": "compact-agents-routed-standards-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "compact-agents-routed-standards",
@@ -273,7 +273,7 @@
       "receipt_requirement": "mandatory-law receipt conditional-observability-proof and source-obligation parity red fixture",
       "red_fixture_id": "conditional-observability-proof-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "conditional-observability-proof",
@@ -287,7 +287,7 @@
       "receipt_requirement": "mandatory-law receipt config-precedence-defaults-env-indirection and source-obligation parity red fixture",
       "red_fixture_id": "config-precedence-defaults-env-indirection-default-overriding-repo-policy-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "config-precedence-defaults-env-indirection",
@@ -301,7 +301,7 @@
       "receipt_requirement": "mandatory-law receipt connector-capability-discovery and source-obligation parity red fixture",
       "red_fixture_id": "connector-capability-discovery-claim-without-discovery-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "connector-capability-discovery",
@@ -315,7 +315,7 @@
       "receipt_requirement": "mandatory-law receipt cross-artifact-consistency-solver-authority-graph-closure and source-obligation parity red fixture",
       "red_fixture_id": "cross-artifact-consistency-solver-authority-graph-closure-orphan-claim-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "cross-artifact-consistency-solver-authority-graph-closure",
@@ -329,7 +329,7 @@
       "receipt_requirement": "mandatory-law receipt current-product-discovery-audit-quality-in-use-evidence and source-obligation parity red fixture",
       "red_fixture_id": "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "current-product-discovery-audit-quality-in-use-evidence",
@@ -343,7 +343,7 @@
       "receipt_requirement": "mandatory-law receipt derived-authority-recomputation and source-obligation parity red fixture",
       "red_fixture_id": "derived-authority-recomputation-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "derived-authority-recomputation",
@@ -357,7 +357,7 @@
       "receipt_requirement": "mandatory-law receipt derived-authority-recomputation-named-authority-fallback-refusal and source-obligation parity red fixture",
       "red_fixture_id": "derived-authority-recomputation-named-authority-fallback-refusal-stale-derived-package-inventory-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "derived-authority-recomputation-named-authority-fallback-refusal",
@@ -371,7 +371,7 @@
       "receipt_requirement": "mandatory-law receipt distinct-proof-surfaces-claim-ceilings and source-obligation parity red fixture",
       "red_fixture_id": "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "distinct-proof-surfaces-claim-ceilings",
@@ -385,7 +385,7 @@
       "receipt_requirement": "mandatory-law receipt distribution-sharing-surface-claim-separation and source-obligation parity red fixture",
       "red_fixture_id": "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "distribution-sharing-surface-claim-separation",
@@ -399,7 +399,7 @@
       "receipt_requirement": "mandatory-law receipt execplan-no-handback-prototype-promotion-discard and source-obligation parity red fixture",
       "red_fixture_id": "execplan-no-handback-prototype-promotion-discard-no-ask-user-next-steps-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "execplan-no-handback-prototype-promotion-discard",
@@ -413,7 +413,7 @@
       "receipt_requirement": "mandatory-law receipt execplan-plain-language-expected-output-interface-completeness and source-obligation parity red fixture",
       "red_fixture_id": "execplan-plain-language-expected-output-interface-completeness-terms-defined-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "execplan-plain-language-expected-output-interface-completeness",
@@ -427,7 +427,7 @@
       "receipt_requirement": "mandatory-law receipt failure-remediation-quality-agent-actionable-output and source-obligation parity red fixture",
       "red_fixture_id": "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "failure-remediation-quality-agent-actionable-output",
@@ -441,7 +441,7 @@
       "receipt_requirement": "mandatory-law receipt feedback-to-rule-promotion and source-obligation parity red fixture",
       "red_fixture_id": "feedback-to-rule-promotion-source-session-id-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "feedback-to-rule-promotion",
@@ -455,7 +455,7 @@
       "receipt_requirement": "mandatory-law receipt forward-only-state-transition-integrity-silent-reopen-prevention and source-obligation parity red fixture",
       "red_fixture_id": "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "forward-only-state-transition-integrity-silent-reopen-prevention",
@@ -469,7 +469,7 @@
       "receipt_requirement": "mandatory-law receipt fresh-init-retrofit-mode-separation and source-obligation parity red fixture",
       "red_fixture_id": "fresh-init-retrofit-mode-separation-fresh-init-used-as-retrofit-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "fresh-init-retrofit-mode-separation",
@@ -483,7 +483,7 @@
       "receipt_requirement": "mandatory-law receipt fresh-retrofit-repo-shape and source-obligation parity red fixture",
       "red_fixture_id": "fresh-retrofit-repo-shape-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "fresh-retrofit-repo-shape",
@@ -497,7 +497,7 @@
       "receipt_requirement": "observe prove receipt with live VictoriaLogs, VictoriaMetrics, VictoriaTraces query proof and same-candidate binding",
       "red_fixture_id": "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -511,7 +511,7 @@
       "receipt_requirement": "mandatory-law receipt generated-proof-artifact-provenance-anti-fabrication and source-obligation parity red fixture",
       "red_fixture_id": "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "generated-proof-artifact-provenance-anti-fabrication",
@@ -525,7 +525,7 @@
       "receipt_requirement": "mandatory-law receipt generated-ready-completion-receipts and source-obligation parity red fixture",
       "red_fixture_id": "generated-ready-completion-receipts-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "generated-ready-completion-receipts",
@@ -539,7 +539,7 @@
       "receipt_requirement": "mandatory-law receipt goal-contract-amendment-authority-required-claim-id-mapping and source-obligation parity red fixture",
       "red_fixture_id": "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "goal-contract-amendment-authority-required-claim-id-mapping",
@@ -553,7 +553,7 @@
       "receipt_requirement": "mandatory-law receipt green-path-adequacy-satisfiable-strictness and source-obligation parity red fixture",
       "red_fixture_id": "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "green-path-adequacy-satisfiable-strictness",
@@ -567,7 +567,7 @@
       "receipt_requirement": "mandatory-law receipt guardrail-speed-isolation-cache-honesty and source-obligation parity red fixture",
       "red_fixture_id": "guardrail-speed-isolation-cache-honesty-runtime-budget-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "guardrail-speed-isolation-cache-honesty",
@@ -581,7 +581,7 @@
       "receipt_requirement": "mandatory-law receipt historical-regression-corpus-session-review-signals and source-obligation parity red fixture",
       "red_fixture_id": "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "historical-regression-corpus-session-review-signals",
@@ -595,7 +595,7 @@
       "receipt_requirement": "mandatory-law receipt human-audit-disposition-decomposition-judgment-claim-blocking and source-obligation parity red fixture",
       "red_fixture_id": "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "human-audit-disposition-decomposition-judgment-claim-blocking",
@@ -609,7 +609,7 @@
       "receipt_requirement": "mandatory-law receipt instruction-precedence-nested-agents-routing and source-obligation parity red fixture",
       "red_fixture_id": "instruction-precedence-nested-agents-routing-root-and-nested-agents-route-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "instruction-precedence-nested-agents-routing",
@@ -623,7 +623,7 @@
       "receipt_requirement": "mandatory-law receipt issue-tracker-lifecycle-eligibility-terminal-state and source-obligation parity red fixture",
       "red_fixture_id": "issue-tracker-lifecycle-eligibility-terminal-state-done-accepted-as-verified-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "issue-tracker-lifecycle-eligibility-terminal-state",
@@ -637,7 +637,7 @@
       "receipt_requirement": "mandatory-law receipt lane-worktree-isolation-cleanup and source-obligation parity red fixture",
       "red_fixture_id": "lane-worktree-isolation-cleanup-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "lane-worktree-isolation-cleanup",
@@ -651,7 +651,7 @@
       "receipt_requirement": "mandatory-law receipt live-beneficial-e2e and source-obligation parity red fixture",
       "red_fixture_id": "live-beneficial-e2e-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "live-beneficial-e2e",
@@ -665,7 +665,7 @@
       "receipt_requirement": "mandatory-law receipt memory-wiki-context-only and source-obligation parity red fixture",
       "red_fixture_id": "memory-wiki-context-only-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "memory-wiki-context-only",
@@ -679,7 +679,7 @@
       "receipt_requirement": "mandatory-law receipt namespace-progressive-disclosure and source-obligation parity red fixture",
       "red_fixture_id": "namespace-progressive-disclosure-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "namespace-progressive-disclosure",
@@ -693,7 +693,7 @@
       "receipt_requirement": "mandatory-law receipt non-e2e-claim-ceiling-confidence-bounds and source-obligation parity red fixture",
       "red_fixture_id": "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "non-e2e-claim-ceiling-confidence-bounds",
@@ -707,7 +707,7 @@
       "receipt_requirement": "mandatory-law receipt offline-schema-catalog-resolver-portability and source-obligation parity red fixture",
       "red_fixture_id": "offline-schema-catalog-resolver-portability-remote-schema-fetch-attempt-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "offline-schema-catalog-resolver-portability",
@@ -721,7 +721,7 @@
       "receipt_requirement": "mandatory-law receipt one-command-fresh-environment-bootstrap-concurrent-resource-allocation and source-obligation parity red fixture",
       "red_fixture_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-missing-bootstrap-command-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
@@ -735,7 +735,7 @@
       "receipt_requirement": "mandatory-law receipt orchestrator-state-machine and source-obligation parity red fixture",
       "red_fixture_id": "orchestrator-state-machine-bounded-concurrency-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "orchestrator-state-machine",
@@ -749,7 +749,7 @@
       "receipt_requirement": "mandatory-law receipt plugin-bundled-component-graph-hook-app-mcp-safety and source-obligation parity red fixture",
       "red_fixture_id": "plugin-bundled-component-graph-hook-app-mcp-safety-component-graph-complete-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "plugin-bundled-component-graph-hook-app-mcp-safety",
@@ -763,7 +763,7 @@
       "receipt_requirement": "mandatory-law receipt plugin-flow-graph-package-dependency-closure-plugin-product-journey and source-obligation parity red fixture",
       "red_fixture_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey-missing-fit-repo-entrypoint-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
@@ -777,7 +777,7 @@
       "receipt_requirement": "mandatory-law receipt plugin-install-surface-metadata-cache-enable-state and source-obligation parity red fixture",
       "red_fixture_id": "plugin-install-surface-metadata-cache-enable-state-manifest-identity-match-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "plugin-install-surface-metadata-cache-enable-state",
@@ -791,7 +791,7 @@
       "receipt_requirement": "mandatory-law receipt portable-non-prescriptive-adapter-implementation-choice and source-obligation parity red fixture",
       "red_fixture_id": "portable-non-prescriptive-adapter-implementation-choice-exact-tracker-required-by-generic-claim-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "portable-non-prescriptive-adapter-implementation-choice",
@@ -805,7 +805,7 @@
       "receipt_requirement": "mandatory-law receipt privacy-raw-artifact-boundary and source-obligation parity red fixture",
       "red_fixture_id": "privacy-raw-artifact-boundary-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "privacy-raw-artifact-boundary",
@@ -819,7 +819,7 @@
       "receipt_requirement": "mandatory-law receipt product-cohesion-product-claims and source-obligation parity red fixture",
       "red_fixture_id": "product-cohesion-product-claims-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-cohesion-product-claims",
@@ -833,7 +833,7 @@
       "receipt_requirement": "mandatory-law receipt product-live-surface-receipts and source-obligation parity red fixture",
       "red_fixture_id": "product-live-surface-receipts-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-live-surface-receipts",
@@ -847,7 +847,7 @@
       "receipt_requirement": "mandatory-law receipt product-proof-joins-substitution-blocking and source-obligation parity red fixture",
       "red_fixture_id": "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-proof-joins-substitution-blocking",
@@ -861,7 +861,7 @@
       "receipt_requirement": "mandatory-law receipt product-strategy-positioning-research-eval-before-lane-planning and source-obligation parity red fixture",
       "red_fixture_id": "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-strategy-positioning-research-eval-before-lane-planning",
@@ -875,7 +875,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-binding-goal-lane-execplan-authority and source-obligation parity red fixture",
       "red_fixture_id": "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-binding-goal-lane-execplan-authority",
@@ -889,7 +889,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-contract-initiation-authority and source-obligation parity red fixture",
       "red_fixture_id": "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-contract-initiation-authority",
@@ -903,7 +903,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-contract-review-packet-team-skill-routing and source-obligation parity red fixture",
       "red_fixture_id": "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-contract-review-packet-team-skill-routing",
@@ -917,7 +917,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-inspiration-source-provenance-disposition and source-obligation parity red fixture",
       "red_fixture_id": "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-inspiration-source-provenance-disposition",
@@ -931,7 +931,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-lifecycle-transitions-no-late-afterthought and source-obligation parity red fixture",
       "red_fixture_id": "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-lifecycle-transitions-no-late-afterthought",
@@ -945,7 +945,7 @@
       "receipt_requirement": "mandatory-law receipt product-success-lineage-amendments-closed-product-claim-ids and source-obligation parity red fixture",
       "red_fixture_id": "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "product-success-lineage-amendments-closed-product-claim-ids",
@@ -959,7 +959,7 @@
       "receipt_requirement": "mandatory-law receipt purpose-backed-active-files and source-obligation parity red fixture",
       "red_fixture_id": "purpose-backed-active-files-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "purpose-backed-active-files",
@@ -973,7 +973,7 @@
       "receipt_requirement": "mandatory-law receipt quality-score-taste-gates and source-obligation parity red fixture",
       "red_fixture_id": "quality-score-taste-gates-changed-surface-rows-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "quality-score-taste-gates",
@@ -987,7 +987,7 @@
       "receipt_requirement": "mandatory-law receipt raw-private-artifact-handling-category-only-evidence and source-obligation parity red fixture",
       "red_fixture_id": "raw-private-artifact-handling-category-only-evidence-raw-transcript-in-packet-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "raw-private-artifact-handling-category-only-evidence",
@@ -1001,7 +1001,7 @@
       "receipt_requirement": "mandatory-law receipt repo-knowledge-index-core-beliefs and source-obligation parity red fixture",
       "red_fixture_id": "repo-knowledge-index-core-beliefs-law-docs-indexed-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "repo-knowledge-index-core-beliefs",
@@ -1015,7 +1015,7 @@
       "receipt_requirement": "mandatory-law receipt restartable-execplans and source-obligation parity red fixture",
       "red_fixture_id": "restartable-execplans-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "restartable-execplans",
@@ -1029,7 +1029,7 @@
       "receipt_requirement": "mandatory-law receipt review-disagreement-override-judgment-boundary-governance and source-obligation parity red fixture",
       "red_fixture_id": "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "review-disagreement-override-judgment-boundary-governance",
@@ -1043,7 +1043,7 @@
       "receipt_requirement": "mandatory-law receipt review-feedback-disposition-same-round-satisfaction and source-obligation parity red fixture",
       "red_fixture_id": "review-feedback-disposition-same-round-satisfaction-unresolved-reviewer-finding-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "review-feedback-disposition-same-round-satisfaction",
@@ -1057,7 +1057,7 @@
       "receipt_requirement": "mandatory-law receipt reviewer-to-gate-conversion and source-obligation parity red fixture",
       "red_fixture_id": "reviewer-to-gate-conversion-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "reviewer-to-gate-conversion",
@@ -1071,7 +1071,7 @@
       "receipt_requirement": "mandatory-law receipt runtime-feasibility-cost-strict-gate-usability and source-obligation parity red fixture",
       "red_fixture_id": "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "runtime-feasibility-cost-strict-gate-usability",
@@ -1085,7 +1085,7 @@
       "receipt_requirement": "mandatory-law receipt runtime-tool-identity and source-obligation parity red fixture",
       "red_fixture_id": "runtime-tool-identity-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "runtime-tool-identity",
@@ -1099,7 +1099,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/clean-proof-receipt.json plus mandatory-law receipt for rust-cache-no-cache-honesty",
       "red_fixture_id": "rust-devx-hidden-cache-no-cache-substitution-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "rust-cache-no-cache-honesty",
@@ -1113,7 +1113,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/standard-receipt.json plus mandatory-law receipt for rust-command-loop-authority",
       "red_fixture_id": "rust-devx-cargo-test-overclaim-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "rust-command-loop-authority",
@@ -1127,7 +1127,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/dependency-receipt.json plus mandatory-law receipt for rust-developer-experience-authority",
       "red_fixture_id": "rust-devx-raw-tool-output-substitution-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "rust-developer-experience-authority",
@@ -1141,7 +1141,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/memory-receipt.json plus mandatory-law receipt for rust-memory-resource-discipline",
       "red_fixture_id": "rust-devx-unbounded-resource-discipline-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "rust-memory-resource-discipline",
@@ -1155,7 +1155,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/rust/toolchain-receipt.json plus mandatory-law receipt for rust-toolchain-substrate-authority",
       "red_fixture_id": "rust-devx-missing-toolchain-substrate-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "rust-toolchain-substrate-authority",
@@ -1169,7 +1169,7 @@
       "receipt_requirement": "mandatory-law receipt scheduler-runner-tracker-boundaries and source-obligation parity red fixture",
       "red_fixture_id": "scheduler-runner-tracker-boundaries-no-direct-scheduler-writes-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "scheduler-runner-tracker-boundaries",
@@ -1183,7 +1183,7 @@
       "receipt_requirement": "mandatory-law receipt schema-evolution-receipt-migration-stale-version-invalidation and source-obligation parity red fixture",
       "red_fixture_id": "schema-evolution-receipt-migration-stale-version-invalidation-stale-schema-id-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "schema-evolution-receipt-migration-stale-version-invalidation",
@@ -1197,7 +1197,7 @@
       "receipt_requirement": "mandatory-law receipt secret-token-boundaries and source-obligation parity red fixture",
       "red_fixture_id": "secret-token-boundaries-secret-scan-prompts-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "secret-token-boundaries",
@@ -1211,7 +1211,7 @@
       "receipt_requirement": "mandatory-law receipt semantic-domain-type-naming and source-obligation parity red fixture",
       "red_fixture_id": "semantic-domain-type-naming-generic-authority-names-rejected-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "semantic-domain-type-naming",
@@ -1225,7 +1225,7 @@
       "receipt_requirement": "mandatory-law receipt skill-catalog-context-budget-omission-warning and source-obligation parity red fixture",
       "red_fixture_id": "skill-catalog-context-budget-omission-warning-catalog-over-budget-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "skill-catalog-context-budget-omission-warning",
@@ -1239,7 +1239,7 @@
       "receipt_requirement": "mandatory-law receipt skill-local-reference-closure and source-obligation parity red fixture",
       "red_fixture_id": "skill-local-reference-closure-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "skill-local-reference-closure",
@@ -1253,7 +1253,7 @@
       "receipt_requirement": "mandatory-law receipt skill-progressive-disclosure-metadata and source-obligation parity red fixture",
       "red_fixture_id": "skill-progressive-disclosure-metadata-specific-metadata-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "skill-progressive-disclosure-metadata",
@@ -1267,7 +1267,7 @@
       "receipt_requirement": "mandatory-law receipt source-card-freshness-ceiling and source-obligation parity red fixture",
       "red_fixture_id": "source-card-freshness-ceiling-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "source-card-freshness-ceiling",
@@ -1281,7 +1281,7 @@
       "receipt_requirement": "mandatory-law receipt source-installed-cache-alignment and source-obligation parity red fixture",
       "red_fixture_id": "source-installed-cache-alignment-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "source-installed-cache-alignment",
@@ -1295,7 +1295,7 @@
       "receipt_requirement": "mandatory-law receipt source-obligation-parity-anti-bundling and source-obligation parity red fixture",
       "red_fixture_id": "source-obligation-parity-anti-bundling-aliased-to-unrelated-row-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "source-obligation-parity-anti-bundling",
@@ -1309,7 +1309,7 @@
       "receipt_requirement": "mandatory-law receipt stable-identifier-normalization-collision and source-obligation parity red fixture",
       "red_fixture_id": "stable-identifier-normalization-collision-unsanitized-workspace-key-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "stable-identifier-normalization-collision",
@@ -1323,7 +1323,7 @@
       "receipt_requirement": "mandatory-law receipt standards-gardener-promotion and source-obligation parity red fixture",
       "red_fixture_id": "standards-gardener-promotion-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "standards-gardener-promotion",
@@ -1337,7 +1337,7 @@
       "receipt_requirement": "mandatory-law receipt subagent-custom-agent-sandbox-approval-inheritance and source-obligation parity red fixture",
       "red_fixture_id": "subagent-custom-agent-sandbox-approval-inheritance-parent-sandbox-recorded-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "subagent-custom-agent-sandbox-approval-inheritance",
@@ -1351,7 +1351,7 @@
       "receipt_requirement": "mandatory-law receipt subagent-orchestration-explicitness-token-model-cost-result-reconciliation and source-obligation parity red fixture",
       "red_fixture_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-implicit-spawn-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
@@ -1365,7 +1365,7 @@
       "receipt_requirement": "mandatory-law receipt target-repo-audit-capability and source-obligation parity red fixture",
       "red_fixture_id": "target-repo-audit-capability-unsupported-repo-marked-fit-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "target-repo-audit-capability",
@@ -1379,7 +1379,7 @@
       "receipt_requirement": "mandatory-law receipt targeted-refactor-debt-removal-standards-gardener-cadence and source-obligation parity red fixture",
       "red_fixture_id": "targeted-refactor-debt-removal-standards-gardener-cadence-repeated-namespace-violation-not-promoted-to-check-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "targeted-refactor-debt-removal-standards-gardener-cadence",
@@ -1393,7 +1393,7 @@
       "receipt_requirement": "mandatory-law receipt template-generation-governance-template-creator-boundary and source-obligation parity red fixture",
       "red_fixture_id": "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "template-generation-governance-template-creator-boundary",
@@ -1407,7 +1407,7 @@
       "receipt_requirement": "mandatory-law receipt third-party-dependency-legibility-typed-adapters and source-obligation parity red fixture",
       "red_fixture_id": "third-party-dependency-legibility-typed-adapters-dependency-registry-entry-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "third-party-dependency-legibility-typed-adapters",
@@ -1421,7 +1421,7 @@
       "receipt_requirement": "mandatory-law receipt total-authority-types-impossible-state-elimination and source-obligation parity red fixture",
       "red_fixture_id": "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "total-authority-types-impossible-state-elimination",
@@ -1435,7 +1435,7 @@
       "receipt_requirement": "mandatory-law receipt transcript-quality-reuse-gates and source-obligation parity red fixture",
       "red_fixture_id": "transcript-quality-reuse-gates-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "transcript-quality-reuse-gates",
@@ -1449,7 +1449,7 @@
       "receipt_requirement": "mandatory-law receipt trust-boundary-abuse-path-failure-path-coverage and source-obligation parity red fixture",
       "red_fixture_id": "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "trust-boundary-abuse-path-failure-path-coverage",
@@ -1463,7 +1463,7 @@
       "receipt_requirement": "mandatory-law receipt typed-records-over-prose and source-obligation parity red fixture",
       "red_fixture_id": "typed-records-over-prose-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "typed-records-over-prose",
@@ -1491,7 +1491,7 @@
       "receipt_requirement": "mandatory-law receipt validator-theater-miswire-resistance and source-obligation parity red fixture",
       "red_fixture_id": "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "validator-theater-miswire-resistance",
@@ -1505,7 +1505,7 @@
       "receipt_requirement": "mandatory-law receipt value-adoption-continuance-business-mission-evidence-hierarchy and source-obligation parity red fixture",
       "red_fixture_id": "value-adoption-continuance-business-mission-evidence-hierarchy-unlabeled-value-claim-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "value-adoption-continuance-business-mission-evidence-hierarchy",
@@ -1519,7 +1519,7 @@
       "receipt_requirement": "mandatory-law receipt workflow-template-parsing-rendering-reload and source-obligation parity red fixture",
       "red_fixture_id": "workflow-template-parsing-rendering-reload-typed-template-parse-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "workflow-template-parsing-rendering-reload",
@@ -1533,7 +1533,7 @@
       "receipt_requirement": "Gate 91 CLI receipt validation_artifacts/gc/verify-receipt.json plus mandatory-law receipt for workspace-artifact-cache-garbage-collection",
       "red_fixture_id": "rust-devx-blind-cleanup-without-gc-receipt-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "workspace-artifact-cache-garbage-collection",
@@ -1547,7 +1547,7 @@
       "receipt_requirement": "mandatory-law receipt workspace-command-confinement-lifecycle-cleanup and source-obligation parity red fixture",
       "red_fixture_id": "workspace-command-confinement-lifecycle-cleanup-declared-workspace-root-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "workspace-command-confinement-lifecycle-cleanup",
@@ -1561,7 +1561,7 @@
       "receipt_requirement": "mandatory-law receipt worktree-lane-owner-cost-policy and source-obligation parity red fixture",
       "red_fixture_id": "worktree-lane-owner-cost-policy-source-obligation-parity-red",
       "source_artifact": {
-        "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0",
+        "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
         "path": "docs/source-obligation-matrix.json"
       },
       "standards_row_id": "worktree-lane-owner-cost-policy",

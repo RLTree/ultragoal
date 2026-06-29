@@ -210,5 +210,5 @@ fn str_field(value: &Value, key: &str) -> String {
 }
 
 #[cfg(test)]
-#[path = "authority/tests.rs"]
+#[path = "tests.rs"]
 mod tests;

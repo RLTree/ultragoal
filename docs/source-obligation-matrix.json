@@ -37,7 +37,7 @@
       "id": "agent-queryable-observability",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Agent Queryable Observability",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-queryable-observability.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -47,7 +47,7 @@
       "id": "agent-remediating-validator-failures",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Agent Remediating Validator Failures",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/agent-remediating-validator-failures.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -67,7 +67,7 @@
       "id": "architecture-dependency-topology",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Architecture Dependency Topology",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/architecture-dependency-topology.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -110,7 +110,7 @@
       "id": "autonomy-loop-proof",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Autonomy Loop Proof",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/autonomy-loop-proof.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -130,7 +130,7 @@
       "id": "behavior-example-coverage-coverage-anti-gaming",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Behavior Example Coverage Coverage Anti Gaming",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/behavior-example-coverage-coverage-anti-gaming.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -170,7 +170,7 @@
       "id": "cli-control-plane-authority",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "obligation": "CLI Control Plane Authority must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
-      "package_surface": "validator/src/cli/control/plane.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
+      "package_surface": "validator/src/cli/control/plane/mod.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority/mod.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-control-plane-authority.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution"
     },
     {
@@ -180,7 +180,7 @@
       "id": "cli-performance-latency-speed-iteration-fitness",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires typed budget classes, performance receipt schema, fail-closed receipt, red fixtures for performance theater, valid fixture, standards row, foundational trace, package inventory coverage, and claim guard",
       "obligation": "CLI performance, latency, speed, and iteration fitness must fail closed for Harness Ultragoal claims without typed budgets, current performance receipts, cache/no-cache honesty, concurrency isolation, external-probe timeout and retry/backoff policy, regression baselines, and final packet evidence.",
-      "package_surface": "validator/src/cli/performance.rs; validator/src/cli/performance/types.rs; validator/src/audit/cli/performance.rs; schemas/cli-performance-receipt.schema.json; validation_artifacts/cli/performance-receipt.json",
+      "package_surface": "validator/src/cli/performance/mod.rs; validator/src/cli/performance/types.rs; validator/src/audit/cli/performance.rs; schemas/cli-performance-receipt.schema.json; validation_artifacts/cli/performance-receipt.json",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-22-cli-performance-latency-speed-and-iteration-fitness"
     },
     {
@@ -190,7 +190,7 @@
       "id": "cli-self-law-compliance",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 3 red fixtures, a valid receipt, CLI control-plane receipt schema, transactional finalization receipt schema, package inventory coverage, standards row, foundational trace, and claim guard",
       "obligation": "CLI Self Law Compliance must fail closed for all Harness Ultragoal claims and update_goal eligibility.",
-      "package_surface": "validator/src/cli/control/plane.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
+      "package_surface": "validator/src/cli/control/plane/mod.rs; validator/src/cli/control/plane/proof/transaction.rs; validator/src/audit/cli/control_plane/authority/mod.rs; schemas/cli-control-plane-receipt.schema.json; schemas/cli-transactional-finalization-receipt.schema.json; fixtures/mandatory-law-surfaces/valid/cli-self-law-compliance.json; validator/src/self_tests/cli/control/transaction/mod.rs; validator/src/self_tests/cli/control/transaction/required.rs; validator/src/self_tests/cli/control/transaction/reference.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-89-cli-control-plane-authority-and-non-bypassable-harness-law-execution"
     },
     {
@@ -303,7 +303,7 @@
       "id": "distribution-sharing-surface-claim-separation",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Distribution Sharing Surface Claim Separation",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/distribution-sharing-surface-claim-separation.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -313,7 +313,7 @@
       "id": "execplan-no-handback-prototype-promotion-discard",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Execplan No Handback Prototype Promotion Discard",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-no-handback-prototype-promotion-discard.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -323,7 +323,7 @@
       "id": "execplan-plain-language-expected-output-interface-completeness",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Execplan Plain Language Expected Output Interface Completeness",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/execplan-plain-language-expected-output-interface-completeness.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -343,7 +343,7 @@
       "id": "feedback-to-rule-promotion",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Feedback To Rule Promotion",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/feedback-to-rule-promotion.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -393,7 +393,7 @@
       "id": "generated-proof-artifact-provenance-anti-fabrication",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Generated Proof Artifact Provenance Anti Fabrication",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -433,7 +433,7 @@
       "id": "guardrail-speed-isolation-cache-honesty",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Guardrail Speed Isolation Cache Honesty",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/guardrail-speed-isolation-cache-honesty.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -463,7 +463,7 @@
       "id": "instruction-precedence-nested-agents-routing",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Instruction Precedence Nested Agents Routing",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/instruction-precedence-nested-agents-routing.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -513,7 +513,7 @@
       "id": "namespace-progressive-disclosure",
       "missing_validation_fixture_or_receipt": "namespace-progressive-disclosure validator with red fixtures for junk drawer, vague common/shared/lib/services, repeated prefix, root clutter, excessive depth, mixed-domain folder, exception contract, exception generator, orphan file, and prose form only law",
       "obligation": "namespace and progressive disclosure as an agent-facing filesystem interface",
-      "package_surface": "plugin-manifest-draft.json; docs/namespace-class-registry.json; validator/src/audit/namespace/law.rs; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json",
+      "package_surface": "plugin-manifest-draft.json; docs/namespace-class-registry.json; validator/src/audit/namespace/law/mod.rs; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json",
       "source": "docs/source-article-synthesis.md#AI Is Forcing Us To Write Good Code; templates/agent-standards/01-namespace-and-progressive-disclosure.md#Namespace And Progressive Disclosure"
     },
     {
@@ -543,7 +543,7 @@
       "id": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 8 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "One Command Fresh Environment Bootstrap Concurrent Resource Allocation",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/one-command-fresh-environment-bootstrap-concurrent-resource-allocation.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -553,7 +553,7 @@
       "id": "orchestrator-state-machine",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Orchestrator State Machine",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/orchestrator-state-machine.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -563,7 +563,7 @@
       "id": "plugin-bundled-component-graph-hook-app-mcp-safety",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Plugin Bundled Component Graph Hook App Mcp Safety",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-bundled-component-graph-hook-app-mcp-safety.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -583,7 +583,7 @@
       "id": "plugin-install-surface-metadata-cache-enable-state",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Plugin Install Surface Metadata Cache Enable State",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/plugin-install-surface-metadata-cache-enable-state.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -749,7 +749,7 @@
       "id": "quality-score-taste-gates",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Quality Score Taste Gates",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/quality-score-taste-gates.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -769,7 +769,7 @@
       "id": "repo-knowledge-index-core-beliefs",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Repo Knowledge Index Core Beliefs",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -799,7 +799,7 @@
       "id": "review-feedback-disposition-same-round-satisfaction",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Review Feedback Disposition Same Round Satisfaction",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/review-feedback-disposition-same-round-satisfaction.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -902,7 +902,7 @@
       "id": "scheduler-runner-tracker-boundaries",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Scheduler Runner Tracker Boundaries",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/scheduler-runner-tracker-boundaries.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -922,7 +922,7 @@
       "id": "secret-token-boundaries",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Secret Token Boundaries",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/secret-token-boundaries.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -932,7 +932,7 @@
       "id": "semantic-domain-type-naming",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 5 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Semantic Domain Type Naming",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/semantic-domain-type-naming.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -942,7 +942,7 @@
       "id": "skill-catalog-context-budget-omission-warning",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Skill Catalog Context Budget Omission Warning",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-catalog-context-budget-omission-warning.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -962,7 +962,7 @@
       "id": "skill-progressive-disclosure-metadata",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Skill Progressive Disclosure Metadata",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/skill-progressive-disclosure-metadata.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -1049,7 +1049,7 @@
       "id": "subagent-custom-agent-sandbox-approval-inheritance",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 6 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Subagent Custom Agent Sandbox Approval Inheritance",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#expanded mandatory laws"
     },
     {
@@ -1059,7 +1059,7 @@
       "id": "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Subagent Orchestration Explicitness Token Model Cost Result Reconciliation",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -1099,7 +1099,7 @@
       "id": "third-party-dependency-legibility-typed-adapters",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Third Party Dependency Legibility Typed Adapters",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -1109,7 +1109,7 @@
       "id": "total-authority-types-impossible-state-elimination",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Total Authority Types Impossible State Elimination",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -1149,7 +1149,7 @@
       "id": "validator-source-namespace-topology",
       "missing_validation_fixture_or_receipt": "validator source namespace topology red fixtures, semantic green unit test, tamper red fixture, mandatory-law valid fixture, and namespace-progressive-disclosure validator receipt",
       "obligation": "validator source namespace topology and semantic repo-law enforcement as a first-class child of namespace and semantic naming law",
-      "package_surface": "validator/src/audit/namespace/source/topology.rs; validator/src/audit/namespace/classes.rs; validator/src/audit/namespace/law.rs; docs/namespace-class-registry.json; schemas/namespace-class-registry.schema.json; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json; docs/mandatory-law-surfaces.json",
+      "package_surface": "validator/src/audit/namespace/source/topology.rs; validator/src/audit/namespace/classes.rs; validator/src/audit/namespace/law/mod.rs; docs/namespace-class-registry.json; schemas/namespace-class-registry.schema.json; templates/agent-standards/enforcement.json; docs/foundational-law-traceability.json; docs/mandatory-law-surfaces.json",
       "source": "docs/source-article-synthesis.md#AI Is Forcing Us To Write Good Code; templates/agent-standards/01-namespace-and-progressive-disclosure.md#Namespace And Progressive Disclosure; docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#90. Validator Source Namespace Topology And Semantic Repo-Law Enforcement"
     },
     {
@@ -1179,7 +1179,7 @@
       "id": "workflow-template-parsing-rendering-reload",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Workflow Template Parsing Rendering Reload",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workflow-template-parsing-rendering-reload.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
@@ -1199,7 +1199,7 @@
       "id": "workspace-command-confinement-lifecycle-cleanup",
       "missing_validation_fixture_or_receipt": "mandatory law registry requires 7 red fixtures, typed receipt, evidence digests, source obligation row, standards row, and foundational trace",
       "obligation": "Workspace Command Confinement Lifecycle Cleanup",
-      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json; validator/src/audit/mandatory/law/surfaces.rs",
+      "package_surface": "docs/mandatory-law-surfaces.json; fixtures/mandatory-law-surfaces/valid/workspace-command-confinement-lifecycle-cleanup.json; validator/src/audit/mandatory/law/surfaces/mod.rs",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {

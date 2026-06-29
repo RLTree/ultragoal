@@ -10,7 +10,7 @@
   "live_same_surface_evidence": [
     {
       "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:92f837e15a7620cfe59bbdb1529b26dbe2b7903106a2cf17e2d08a6d6588d6b0"
+      "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c"
     },
     {
       "path": "validator/src/audit/law/surface/receipts.rs",

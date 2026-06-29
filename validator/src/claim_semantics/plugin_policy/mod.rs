@@ -230,5 +230,5 @@ fn required_agent_checks(manifest: &Value, out: &mut Vec<Failure>) {
 }
 
 #[cfg(test)]
-#[path = "plugin_policy/tests.rs"]
+#[path = "tests.rs"]
 mod tests;

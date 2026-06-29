@@ -19,6 +19,7 @@ pub(crate) fn failures_with_repo_paths(
     paths.extend(repo_source_paths.iter().cloned());
     let mut out = Vec::new();
     out.extend(forbidden_top_level_clusters(&paths));
+    out.extend(partial_module_factoring_failures(&paths));
     out.extend(maximal_factoring_failures(&paths));
     out.extend(generic_leaf_name_failures(&paths));
     out.extend(history_name_failures(&paths));
@@ -67,6 +68,28 @@ fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {
         "move_repo_owned_validator_tests_into_validator_src_self_tests_semantic_domain_dirs",
         false,
     )]
+}
+
+fn partial_module_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    paths
+        .iter()
+        .filter(|path| source_stem(path) != "mod")
+        .filter_map(|path| {
+            let module_dir = path.strip_suffix(".rs")?;
+            let child_prefix = format!("{module_dir}/");
+            let has_child_source = paths.iter().any(|other| other.starts_with(&child_prefix));
+            has_child_source.then(|| {
+                remediating_failure(
+                    "namespace_validator_source_partial_module_factoring",
+                    parent_dir(path),
+                    source_stem(path),
+                    &[path.to_string()],
+                    "move_partially_factored_module_root_to_mod_rs_so_the_directory_is_the_module_boundary",
+                    false,
+                )
+            })
+        })
+        .collect()
 }
 
 fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {

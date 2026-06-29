@@ -74,7 +74,7 @@
       "path": "fixtures/red/product-fitness-install-substituted-for-success.json"
     }
   },
-  "generated_at": "2026-06-29T15:31:35Z",
+  "generated_at": "2026-06-29T16:54:09Z",
   "job_to_be_done": {
     "evidence": {
       "digest": "sha256:37fed1fbe4da7e91d27a24774560c367c427f7a87bfb84e30ae569017d52b59b",
@@ -119,20 +119,20 @@
       "dimension": "freedom_from_risk",
       "evidence": {
         "digest": "sha256:170816066058d503fb9e8bc7c40bc61cf01697cc823b0f9bd6fb655e6a50dfcc",
-        "path": "validator/src/audit/product/fitness.rs"
+        "path": "validator/src/audit/product/fitness/mod.rs"
       },
       "measure": "validator rejects proof substitution"
     },
     {
       "dimension": "context_coverage",
       "evidence": {
-        "digest": "sha256:433030dadca469c6f0f459f3401f10684dca83839bf76a14230aa6315e5cf467",
+        "digest": "sha256:6367299d760018cdc6735ed07295150ae51e3e37e1e25c7b16c177f33eddc731",
         "path": "templates/agent-standards/enforcement.json"
       },
       "measure": "init, retrofit, proof-gate, standards, and product-cohesion routing name Product Fitness"
     }
   ],
-  "receipt_digest": "sha256:32fa4d853434e3320c92bfbdc564dfab0b4e8803e0edd9a35ef198f337d38215",
+  "receipt_digest": "sha256:f67d6c1094b2cfbd3a07cc12365d1db6702feaf3fcfdd03addc4671719e7c915",
   "receipt_version": "1.0.0",
   "recovery_burden_gate": {
     "evidence": {
@@ -210,14 +210,14 @@
   },
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:b12120f4d4a35d0439f996c5113f0860dda487d3427bb75500987ba93fad295e"
+    "value": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4"
   },
   "user_evidence": [
     {
       "audience": "Harness Ultragoal repo-fitting agent operator",
       "context": "Codex app and local repo setup or retrofit session",
       "evidence": {
-        "digest": "sha256:07e90f5410d53c6eaf2bfb4d9d02cdcb63a258fce8b5594631e24a842e94b0ce",
+        "digest": "sha256:ca0647a1bccc0b5927c859094ce25ad242ee2a43fb3de0b4f603ab3f68b8d098",
         "path": "docs/exec-plans/active/mandatory-product-fitness-quality-in-use-enforcement.md"
       },
       "job": "Fit a repository with product proof rules without relying on memory",

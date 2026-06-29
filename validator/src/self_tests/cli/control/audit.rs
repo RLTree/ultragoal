@@ -22,7 +22,10 @@ fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
         &root.join("validator/Cargo.toml"),
         "[[bin]]\nname = \"ultragoal\"\n[[bin]]\nname = \"ultragoal-validator\"\n",
     );
-    write_text(&root.join("validator/src/cli/control/plane.rs"), "source");
+    write_text(
+        &root.join("validator/src/cli/control/plane/mod.rs"),
+        "source",
+    );
     write_text(
         &root.join("validator/src/cli/control/plane/types.rs"),
         "types",
@@ -34,7 +37,7 @@ fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[
-            {"path":"validator/src/cli/control/plane.rs"},
+            {"path":"validator/src/cli/control/plane/mod.rs"},
             {"path":"validator/src/cli/control/plane/types.rs"},
             {"path":"schemas/cli-control-plane-receipt.schema.json"}
         ]}),

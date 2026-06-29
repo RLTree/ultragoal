@@ -695,11 +695,11 @@
         },
         {
           "path": "docs/source-obligation-matrix.md",
-      "digest": "sha256:3a244897aeec4cc36812921b480ed2a5e77d66cee8f6ea8fb17d0f62ccd93f31"
+          "digest": "sha256:3a244897aeec4cc36812921b480ed2a5e77d66cee8f6ea8fb17d0f62ccd93f31"
         },
         {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
         }
       ],
       "material_blockers": [],
@@ -756,7 +756,7 @@
         },
         {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
         }
       ],
       "claim_ceiling_assessment": {
@@ -822,7 +822,7 @@
         "status": "pass",
         "receipt": {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51"
+          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
         },
         "receipt_generated_at": "2026-06-18T00:00:00Z",
         "claim_ids_reviewed": [
@@ -850,7 +850,7 @@
       },
       "product_fitness_required": true,
       "product_fitness_owner": "product_simplicity_falsifier",
-      "product_fitness_receipt_digest": "sha256:32779c025bd3ca48660dad1c4556997b9862a22bfdd4f566342799c272752e51",
+      "product_fitness_receipt_digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f",
       "product_fitness_claim_ids": [
         "plugins_ui_visibility",
         "install_button_success",

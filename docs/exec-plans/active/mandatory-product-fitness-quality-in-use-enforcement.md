@@ -227,7 +227,7 @@ Planned authority artifacts:
 
 ```text
 docs/product-fitness-and-quality-in-use.md; templates/PRODUCT_FITNESS.md; templates/PRODUCT_FITNESS_RECEIPT.json
-schemas/product-fitness-receipt.schema.json; validator/src/claim_semantics/product/fitness.rs; validator/src/audit/product/fitness.rs
+schemas/product-fitness-receipt.schema.json; validator/src/claim_semantics/product/fitness.rs; validator/src/audit/product/fitness/mod.rs
 fixtures/red/product-fitness-*.json; fixtures/target-repo/product-fitness-*/
 validation_artifacts/harness/product-fitness-receipt.json; validation_artifacts/harness/product-fitness-ready-receipt.json
 ```

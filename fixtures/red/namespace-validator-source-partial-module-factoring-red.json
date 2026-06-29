@@ -1,0 +1,51 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "namespace-validator-source-partial-module-factoring-red",
+  "expected_failure": {
+    "check_id": "namespace-progressive-disclosure",
+    "error": "namespace_validator_source_partial_module_factoring"
+  },
+  "base_fixture_path": "plugin-manifest-draft.json",
+  "json_patch": [
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/self_tests/coverage.rs"
+    },
+    {
+      "op": "add",
+      "path": "/resources/-",
+      "value": "validator/src/self_tests/coverage/receipt.rs"
+    }
+  ],
+  "notes": "A repo-owned Rust module root cannot remain as coverage.rs once coverage/ exists; the directory must become the module boundary through coverage/mod.rs.",
+  "materialization": {
+    "post_patch_schema_valid": true,
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": false
+  },
+  "preconditions": [
+    {
+      "path": "plugin-manifest-draft.json",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "validator/src/self_tests/coverage.rs",
+      "expectation": "namespace_validator_source_partial_module_factoring"
+    }
+  ],
+  "filesystem_fixtures": [
+    {
+      "kind": "file",
+      "path": "validator/src/self_tests/coverage.rs",
+      "contents": "pub(crate) mod receipt;\n"
+    },
+    {
+      "kind": "file",
+      "path": "validator/src/self_tests/coverage/receipt.rs",
+      "contents": "pub(crate) fn marker() {}\n"
+    }
+  ]
+}
