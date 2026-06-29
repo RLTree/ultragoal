@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:57:59Z",
+    "completed_at": "2026-06-29T18:06:49Z",
     "cwd": "fixtures/target-repo/red/missing-primary-user-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:57:59Z",
+    "started_at": "2026-06-29T18:06:49Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:57:59Z",
+  "generated_at": "2026-06-29T18:06:49Z",
   "invocation": "fixture init fixtures/target-repo/red/missing-primary-user-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:90b2add6350d1adfa01ac88611ab4eaac057f78a5ba6d22072a31addb95180a1",
+  "repo_fingerprint": "sha256:7a3aee118c931d7e3137205d1e121726f363a51619dd41ccc17029a1695ae49c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

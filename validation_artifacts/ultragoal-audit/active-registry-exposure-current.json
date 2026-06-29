@@ -66,7 +66,7 @@
     "disposition": "open_claim_blocked",
     "id": "registry-reviewer-exposure-904d38ecc6af",
     "missing_capability_class": "live_same_surface_plugin_registry_or_reviewer_exposure",
-    "observed_at": "2026-06-29T17:34:39Z",
+    "observed_at": "2026-06-29T18:03:34Z",
     "owner_surface": "codex_desktop_plugin_registry",
     "required_evidence": [
       "live same-surface tool registry query",
@@ -76,13 +76,13 @@
     ],
     "schema": "harness-ultragoal.capability-gap.v1",
     "source_artifact": {
-      "digest": "sha256:86d0739dfd067f005503c7ba19c15e2abaf9a0339b16c632c872003595b6a287",
+      "digest": "sha256:30d07da4e4ca3f9ad34f7ea0e6e463510c49354d3b7d52c84dc47c59fe4a1504",
       "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
     },
     "source_session_id": "019f0024-e3a1-7ed0-949a-4c52bd825fb1"
   },
   "capture_method": "fail_closed_no_capability",
-  "captured_at": "2026-06-29T17:34:39Z",
+  "captured_at": "2026-06-29T18:03:34Z",
   "claim_ceiling": "withheld_or_blocked",
   "failure": {
     "blocked_claim_classes": [
@@ -95,13 +95,13 @@
     "observed": "same-surface registry/reviewer proof unavailable; disk source/install/cache proof is not accepted as a substitute",
     "reason": "live_registry_reviewer_exposure_not_proven"
   },
-  "generated_at": "2026-06-29T17:34:39Z",
+  "generated_at": "2026-06-29T18:03:34Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
   },
   "raw_observation": {
-    "digest": "sha256:86d0739dfd067f005503c7ba19c15e2abaf9a0339b16c632c872003595b6a287",
+    "digest": "sha256:30d07da4e4ca3f9ad34f7ea0e6e463510c49354d3b7d52c84dc47c59fe4a1504",
     "path": "validation_artifacts/ultragoal-audit/active-registry-observation-current.json"
   },
   "round_id": "app_surface_probe-unsupported-live-surface-904d38ecc6af",

@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:57:58Z",
+    "completed_at": "2026-06-29T18:06:48Z",
     "cwd": "fixtures/target-repo/red/stale-worktree-env",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:57:58Z",
+    "started_at": "2026-06-29T18:06:48Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:57:58Z",
+  "generated_at": "2026-06-29T18:06:48Z",
   "invocation": "fixture init fixtures/target-repo/red/stale-worktree-env",
   "mode": "init",
-  "repo_fingerprint": "sha256:787504ff3565d9e683d47578028c9efdaeaa55065faf7491159735f4cdeb949d",
+  "repo_fingerprint": "sha256:8452883c813f7a7be44a66245252efcbf4f9c56b0b5844364fbe3c10fcf096bf",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

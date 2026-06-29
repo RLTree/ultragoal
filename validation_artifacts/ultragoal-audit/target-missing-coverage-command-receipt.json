@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:57:57Z",
+    "completed_at": "2026-06-29T18:06:48Z",
     "cwd": "fixtures/target-repo/red/missing-coverage-command",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:57:57Z",
+    "started_at": "2026-06-29T18:06:48Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:57:57Z",
+  "generated_at": "2026-06-29T18:06:48Z",
   "invocation": "fixture init fixtures/target-repo/red/missing-coverage-command",
   "mode": "init",
-  "repo_fingerprint": "sha256:31618ee3fbdc9e8c00c6455d75f1a64f1fae2cd8905428a1466c84113fdf5f16",
+  "repo_fingerprint": "sha256:41aa1b075778df328cbe5164dc2c5b8266cba66eaa1240cc6ba140e87f524f21",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

@@ -32,16 +32,11 @@
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_contract_claim_falsifier:exposed",
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
       "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
-      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
-      "final_packet_proof_ref_embedded_status_not_pass:source_audit",
-      "final_packet_proof_source_audit_status_not_pass",
-      "final_packet_proof_source_audit_claim_ceiling_not_source_local",
-      "final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
-      "final_packet_proof_source_audit_supported_claim_missing:red_fixture_report"
+      "final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed"
     ],
     "reason": "final_packet_proof_not_proven"
   },
-  "generated_at": "2026-06-29T17:37:43Z",
+  "generated_at": "2026-06-29T18:03:52Z",
   "package_receipts": [
     {
       "digest": "sha256:21909d0c550271ad59fcaaea7be35ccd130b4d5f5016c1f48f373d9bd306ae81",
@@ -65,15 +60,15 @@
     "path": "validation_artifacts/review/final-packet.json"
   },
   "registry_exposure": {
-    "digest": "sha256:84524f48d650e79821ddaaefdd076873a5ac80709853278fc6e407808e8956f0",
+    "digest": "sha256:7b72bdfc40d20c3140a272f5746c788a92a437b74bdd3d97ea44b7df847e7382",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },
   "schema": "harness-ultragoal.final-packet-proof.v1",
   "source_audit": {
-    "digest": "sha256:bf8361631c381ab8fb51562acb0aba06c2489e57befd0128eda58949d417b92f",
+    "digest": "sha256:2fee0e4eac772e2b001911b27469922eb6bfe5e4c5fa918e8caa858c061032c8",
     "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
-    "status": "fail"
+    "status": "pass"
   },
   "status": "fail",
   "target_revision": {
