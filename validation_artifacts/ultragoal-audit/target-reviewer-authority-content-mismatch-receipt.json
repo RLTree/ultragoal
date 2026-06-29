@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T09:40:52Z",
+    "completed_at": "2026-06-29T09:57:00Z",
     "cwd": "fixtures/target-repo/red/reviewer-authority-content-mismatch",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T09:40:52Z",
+    "started_at": "2026-06-29T09:57:00Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T09:40:52Z",
+  "generated_at": "2026-06-29T09:57:00Z",
   "invocation": "fixture init fixtures/target-repo/red/reviewer-authority-content-mismatch",
   "mode": "init",
-  "repo_fingerprint": "sha256:8decb4533e360df4f9af4c7a99f6a501e00f3e75f1822ab01e7593f888e8d373",
+  "repo_fingerprint": "sha256:946097d39260348e30b7b1f651c9f37bc2716d9660aa0b5491625d7892c872e3",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

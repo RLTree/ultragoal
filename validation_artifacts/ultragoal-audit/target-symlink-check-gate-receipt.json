@@ -363,17 +363,17 @@
   },
   "command": {
     "command": "scripts/check",
-    "completed_at": "2026-06-29T09:40:51Z",
+    "completed_at": "2026-06-29T09:56:59Z",
     "cwd": "fixtures/target-repo/red/symlink-check-gate",
     "exit": 127,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T09:40:51Z"
+    "started_at": "2026-06-29T09:56:59Z"
   },
   "gate_markers": [],
-  "generated_at": "2026-06-29T09:40:51Z",
+  "generated_at": "2026-06-29T09:56:59Z",
   "invocation": "fixture init fixtures/target-repo/red/symlink-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:ac689e1b82b880872e1c7bd83fd3913266365426cc1c8df157907bd24435d391",
+  "repo_fingerprint": "sha256:e746d72872586211500d2414d79cec1d45f85e98a21f9a65124d1fec4948c26d",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

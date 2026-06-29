@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T09:40:51Z",
+    "completed_at": "2026-06-29T09:56:59Z",
     "cwd": "fixtures/target-repo/red/malformed-observability-json",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T09:40:51Z",
+    "started_at": "2026-06-29T09:56:59Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T09:40:51Z",
+  "generated_at": "2026-06-29T09:56:59Z",
   "invocation": "fixture init fixtures/target-repo/red/malformed-observability-json",
   "mode": "init",
-  "repo_fingerprint": "sha256:2d50316932c74b613c84663d0a90928f712388e3d1b0c67d68b42def56a2a742",
+  "repo_fingerprint": "sha256:b95124a2054f0ede54a1264bf837a49ec250d8e1a8c1bb6d5f3df28f38a058db",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,

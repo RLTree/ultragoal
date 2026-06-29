@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T09:40:51Z",
+    "completed_at": "2026-06-29T09:56:59Z",
     "cwd": "fixtures/target-repo/red/comment-only-worktree-env",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T09:40:51Z",
+    "started_at": "2026-06-29T09:56:59Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T09:40:51Z",
+  "generated_at": "2026-06-29T09:56:59Z",
   "invocation": "fixture init fixtures/target-repo/red/comment-only-worktree-env",
   "mode": "init",
-  "repo_fingerprint": "sha256:ea795bd1c3d81ae69d1286c5bcfa827b044975172c5d940fc9184b1e9f509780",
+  "repo_fingerprint": "sha256:9d54828b8321c93c1d6ceb58ef07f27ef55858b5cceff50cb6a2c18c704735c7",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
