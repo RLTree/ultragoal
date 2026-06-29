@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:19:51Z",
+    "completed_at": "2026-06-29T17:40:21Z",
     "cwd": "fixtures/target-repo/red/empty-coverage-command",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:19:51Z",
+    "started_at": "2026-06-29T17:40:21Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:19:51Z",
+  "generated_at": "2026-06-29T17:40:21Z",
   "invocation": "fixture init fixtures/target-repo/red/empty-coverage-command",
   "mode": "init",
-  "repo_fingerprint": "sha256:db9897bddd70aabb8148454617f81d6ed15492849fe224d2d93dd961dec85655",
+  "repo_fingerprint": "sha256:4430d87a0c958196eb4c273063d388bbc3a6376450e0112ad0bb7ed2b32d3b8c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
