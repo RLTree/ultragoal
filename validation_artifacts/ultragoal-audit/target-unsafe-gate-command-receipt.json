@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T01:44:59Z",
+    "completed_at": "2026-06-29T01:55:18Z",
     "cwd": "fixtures/target-repo/red/unsafe-gate-command",
     "exit": 1,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T01:44:59Z",
+    "started_at": "2026-06-29T01:55:18Z",
     "stderr": {
       "digest": "sha256:e61702dd8f4bdb36a74455f965f86a1013f110e604290675f38d6c3c8c0403ab",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "execplan-dirs",
     "proof-root"
   ],
-  "generated_at": "2026-06-29T01:44:59Z",
+  "generated_at": "2026-06-29T01:55:18Z",
   "invocation": "fixture init fixtures/target-repo/red/unsafe-gate-command",
   "mode": "init",
-  "repo_fingerprint": "sha256:d55617fcd4a67a54ea58f593e5121b1ba4f9150f90be4651c7d3a7e1d0b3526d",
+  "repo_fingerprint": "sha256:98ffe5122ba1c1077ef542ca1e9461b3d8237e57213a5f87097cbb2ff5a2d949",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

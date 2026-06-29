@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T01:44:59Z",
+    "completed_at": "2026-06-29T01:55:18Z",
     "cwd": "fixtures/target-repo/red/marker-only-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T01:44:59Z",
+    "started_at": "2026-06-29T01:55:18Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "execplan-dirs",
     "proof-root"
   ],
-  "generated_at": "2026-06-29T01:44:59Z",
+  "generated_at": "2026-06-29T01:55:18Z",
   "invocation": "fixture init fixtures/target-repo/red/marker-only-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:f3f474c6021c8ff8b2a9a24d702c04b2dffd011878cb881cccb5cd2ac097a114",
+  "repo_fingerprint": "sha256:6e8c52bdf6f5f072ecd88c80687c9da62093c12c1f8135854e57d758e79f0921",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T01:44:58Z",
+    "completed_at": "2026-06-29T01:55:17Z",
     "cwd": "fixtures/target-repo/red/fake-retrofit",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T01:44:58Z",
+    "started_at": "2026-06-29T01:55:17Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T01:44:58Z",
+  "generated_at": "2026-06-29T01:55:17Z",
   "invocation": "fixture retrofit fixtures/target-repo/red/fake-retrofit",
   "mode": "retrofit",
-  "repo_fingerprint": "sha256:5719a2083cd22427090aa17270d4e285249019fbaec916404c76f06df8d46f05",
+  "repo_fingerprint": "sha256:d46c727f75fc033301cef233dbba471c6095620f093394328afabe38ed3e997a",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
