@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:40:22Z",
+    "completed_at": "2026-06-29T17:57:58Z",
     "cwd": "fixtures/target-repo/red/partial-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:40:22Z",
+    "started_at": "2026-06-29T17:57:58Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:40:22Z",
+  "generated_at": "2026-06-29T17:57:58Z",
   "invocation": "fixture init fixtures/target-repo/red/partial-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:4929cf5d4460e7f3c918900d5ea4e62159bea27650c9cbb6cb81860717e05967",
+  "repo_fingerprint": "sha256:3c523408ea2ba3354bd7a43a0820d7cc7eb1e328b0cf0f4def87df5d0e29c608",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

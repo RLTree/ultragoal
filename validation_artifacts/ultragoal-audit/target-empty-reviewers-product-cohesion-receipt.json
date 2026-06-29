@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:40:22Z",
+    "completed_at": "2026-06-29T17:57:58Z",
     "cwd": "fixtures/target-repo/red/empty-reviewers-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:40:22Z",
+    "started_at": "2026-06-29T17:57:58Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:40:22Z",
+  "generated_at": "2026-06-29T17:57:58Z",
   "invocation": "fixture init fixtures/target-repo/red/empty-reviewers-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:74b4519e8fae5232370ae5abe9a8c3b55043db5588644ea6e3411dee9f2dbb78",
+  "repo_fingerprint": "sha256:601687eb2452a29e7cfbd687cb82c68ba5dcbdc622ccc429afb8b4931cce77d0",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
