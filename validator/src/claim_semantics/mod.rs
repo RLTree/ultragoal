@@ -13,6 +13,7 @@ mod retired_reviewer_policy;
 pub(crate) mod semantic;
 
 use crate::audit::contract::Failure;
+use crate::claim_semantics::coverage::receipt::authority::DigestCache;
 use crate::digest;
 use crate::json_boundary;
 use serde_json::Value;
@@ -21,10 +22,27 @@ use std::path::Path;
 
 pub use json_patch::apply_patch;
 
+#[derive(Default)]
+pub(crate) struct SemanticCache {
+    coverage_digests: DigestCache,
+    plugin_policy_failures: BTreeMap<String, Vec<Failure>>,
+    pub(crate) package_observations: crate::red::fixture::package::ObservationCache,
+}
+
 pub fn semantic_failures(
     bundle: &Value,
     root: &Path,
     validator_digests: &BTreeMap<String, String>,
+) -> Vec<Failure> {
+    let mut cache = SemanticCache::default();
+    semantic_failures_with_cache(bundle, root, validator_digests, &mut cache)
+}
+
+pub(crate) fn semantic_failures_with_cache(
+    bundle: &Value,
+    root: &Path,
+    validator_digests: &BTreeMap<String, String>,
+    cache: &mut SemanticCache,
 ) -> Vec<Failure> {
     let cm = &bundle["completion_manifest"];
     let lr = &bundle["lane_registry"];
@@ -61,7 +79,15 @@ pub fn semantic_failures(
     ready::receipt::check_ready_receipt_set(bundle, &ready_receipts, &mut out);
     ready::join::check_ready_join(cm, lr, ready, &mut out);
     for claim in claims.values() {
-        claim::proof::check_claim(claim, &rows, cm, ready, root, &mut out);
+        claim::proof::check_claim_with_cache(
+            claim,
+            &rows,
+            cm,
+            ready,
+            root,
+            &mut out,
+            &mut cache.coverage_digests,
+        );
     }
     bundle_hash_checks(bundle, &mut out);
     goal_checks(cm, &mut out);
@@ -75,7 +101,12 @@ pub fn semantic_failures(
         validation_clock,
         &mut out,
     );
-    plugin_policy::check_plugin(bundle, root, &mut out);
+    plugin_policy::check_plugin_with_cache(
+        bundle,
+        root,
+        &mut out,
+        &mut cache.plugin_policy_failures,
+    );
     automation_tick::check(&bundle["automation_tick_receipt"], &mut out);
     amendment_checks(&bundle["amendments"], &mut out);
     ready::join::check_ready_integrity(lr, ready, &mut out);

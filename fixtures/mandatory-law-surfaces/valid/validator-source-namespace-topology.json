@@ -1,12 +1,10 @@
 {
   "behavior_failure_modes": [
-    "top_level_validator_internal_cluster",
-    "coverage_wave_history_filename",
-    "iinternal_typo_prefix",
-    "broad_validator_source_exception",
-    "generated_exception_for_hand_authored_source",
-    "package_manifest_blesses_bad_source",
-    "widened_namespace_class_tamper"
+    "namespace_class_broad_source_glob_requires_direct_topology_check",
+    "namespace_class_generated_for_hand_authored_source",
+    "namespace_class_waiver_field_present",
+    "namespace_validator_source_history_name",
+    "namespace_validator_source_top_level_internal_cluster"
   ],
   "claim_ceiling_guard": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
   "enforcement_status": "deterministic_fail_closed",
@@ -39,11 +37,11 @@
   "foundational_trace_id": "validator-source-namespace-topology",
   "law_id": "validator-source-namespace-topology",
   "law_specific": {
-    "actual_repo_owned_source_inspected": true,
-    "broad_validator_source_exceptions_rejected": true,
-    "claim_ceiling_guard_blocks_material_claims": true,
-    "package_manifest_cannot_bless_source_topology": true,
-    "red_green_tamper_fixture_bound": true
+    "namespace_class_broad_source_glob_requires_direct_topology_check": true,
+    "namespace_class_generated_for_hand_authored_source": true,
+    "namespace_class_waiver_field_present": true,
+    "namespace_validator_source_history_name": true,
+    "namespace_validator_source_top_level_internal_cluster": true
   },
   "red_fixture_ids": [
     "namespace-validator-source-class-waiver-manifest-contract-red",

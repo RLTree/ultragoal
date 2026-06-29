@@ -140,6 +140,8 @@ fn required_evidence(operation: ControlOperation) -> Vec<&'static str> {
         "current_product_fitness_pass",
         "current_product_journey_pass",
         "current_standards_gardener_pass",
+        "current_install_audit_same_candidate_pass",
+        "current_cache_audit_same_candidate_pass",
         "current_rust_devx_pass",
         "current_gc_pass",
     ];

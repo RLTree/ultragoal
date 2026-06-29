@@ -128,6 +128,7 @@ fn run_refuses_law_specific_proof_paths_without_overwrite() {
         let command = ControlCommand {
             operation,
             receipt: Some(path.to_path_buf()),
+            surface_root: None,
         };
         let err = run(&root, &command).expect_err("wrong surface rejected");
         assert!(
@@ -155,6 +156,7 @@ fn wrong_control_receipt_path_fails_before_package_digest() {
         receipt: Some(
             root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
         ),
+        surface_root: None,
     };
 
     let err = run(&root, &command).expect_err("path rejected before package read");

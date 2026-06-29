@@ -1,11 +1,33 @@
 use crate::audit::contract::{Failure, REQUIRED_AGENTS, REQUIRED_SKILLS};
 use crate::claim_semantics::str_field;
 use serde_json::Value;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+#[cfg(test)]
 pub fn check_plugin(bundle: &Value, root: &Path, out: &mut Vec<Failure>) {
     let manifest = &bundle["plugin_manifest"];
+    check_plugin_manifest(manifest, root, out);
+}
+
+pub(crate) fn check_plugin_with_cache(
+    bundle: &Value,
+    root: &Path,
+    out: &mut Vec<Failure>,
+    cache: &mut BTreeMap<String, Vec<Failure>>,
+) {
+    let manifest = &bundle["plugin_manifest"];
+    let digest = crate::digest::canonical_json(manifest);
+    if let Some(cached) = cache.get(&digest) {
+        out.extend(cached.clone());
+        return;
+    }
+    let start = out.len();
+    check_plugin_manifest(manifest, root, out);
+    cache.insert(digest, out[start..].to_vec());
+}
+
+fn check_plugin_manifest(manifest: &Value, root: &Path, out: &mut Vec<Failure>) {
     let plugin_paths = crate::package::inventory::inventory_paths(manifest);
     super::retired_reviewer_policy::check_packaged_paths(&plugin_paths, out);
     for failure in crate::package::resource::purpose::failures(root, manifest) {
@@ -208,18 +230,5 @@ fn required_agent_checks(manifest: &Value, out: &mut Vec<Failure>) {
 }
 
 #[cfg(test)]
-mod tests {
-    #[test]
-    fn toml_string_field_reads_quoted_multiline_and_missing_values() {
-        let text = "name = \"Agent\"\ndescription = \"\"\"Long\"\"\"\n";
-        assert_eq!(
-            super::toml_string_field(text, "name").as_deref(),
-            Some("Agent")
-        );
-        assert_eq!(
-            super::toml_string_field(text, "description").as_deref(),
-            Some("multiline-string")
-        );
-        assert!(super::toml_string_field(text, "missing").is_none());
-    }
-}
+#[path = "plugin_policy/tests.rs"]
+mod tests;

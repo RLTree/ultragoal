@@ -59,7 +59,7 @@ fn write_bad_cli_receipt(root: &std::path::Path, current: &str, name: &str, oper
                 "evaluation_mode": "production_dereferenced",
                 "operation": operation,
                 "operation_failures": [],
-                "items": super::evidence_items(current)
+                "items": super::evidence::items(current)
             },
             "command_surface":["ultragoal update-goal eligibility"],
             "notes":"test malformed control proof"

@@ -1,6 +1,8 @@
 pub(crate) mod bases;
+pub(crate) mod materialization;
 pub(crate) mod observation;
 pub(crate) mod package;
 pub(crate) mod review;
 pub(crate) mod row;
+pub(crate) mod runtime;
 pub(crate) mod schema;

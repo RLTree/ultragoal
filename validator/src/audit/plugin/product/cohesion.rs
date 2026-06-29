@@ -187,6 +187,14 @@ pub fn fit_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
     crate::audit::fit_repo_receipt::failures(root, receipt)
 }
 
+pub fn fit_receipt_value_failures_with_candidate(
+    root: &Path,
+    receipt: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    crate::audit::fit_repo_receipt::failures_with_candidate(root, receipt, target_digest)
+}
+
 fn journey_failures(root: &Path) -> Vec<String> {
     let value = match crate::json_boundary::read_json(&root.join(JOURNEY)) {
         Ok(value) => value,
@@ -197,6 +205,14 @@ fn journey_failures(root: &Path) -> Vec<String> {
 
 pub fn journey_value_failures(root: &Path, value: &Value) -> Vec<String> {
     crate::audit::plugin::product::journey::failures(root, value)
+}
+
+pub fn journey_value_failures_with_candidate(
+    root: &Path,
+    value: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    crate::audit::plugin::product::journey::failures_with_candidate(root, value, target_digest)
 }
 
 fn strings(value: &Value, key: &str) -> Vec<String> {

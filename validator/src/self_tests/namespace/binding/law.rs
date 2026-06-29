@@ -36,6 +36,22 @@ fn namespace_value_failures_accepts_fully_listed_files_without_orphans() {
 }
 
 #[test]
+fn namespace_value_cache_reuses_repo_source_paths() {
+    let root = crate::self_tests::boundaries::support::temp_root("namespace-value-cache");
+    std::fs::create_dir_all(root.join("validator/src/domain")).expect("validator src");
+    std::fs::write(root.join("validator/src/domain/leaf.rs"), "fn leaf() {}\n")
+        .expect("source leaf");
+    let manifest = json!({"resources":["validator/src/domain/leaf.rs"]});
+    let mut cache = crate::audit::namespace::law::ValueCache::default();
+    let first =
+        crate::audit::namespace::law::value_failures_with_cache(&root, &manifest, &mut cache);
+    let second =
+        crate::audit::namespace::law::value_failures_with_cache(&root, &manifest, &mut cache);
+    assert_eq!(first, second);
+    std::fs::remove_dir_all(root).expect("cleanup namespace value cache");
+}
+
+#[test]
 fn namespace_law_detects_mixed_domains_and_accepts_current_red_binding() {
     let root = crate::self_tests::boundaries::support::temp_root("namespace-mixed-domain");
     std::fs::create_dir_all(root.join("runtime-product")).expect("mixed domain dir");

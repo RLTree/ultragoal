@@ -1,13 +1,22 @@
 use std::collections::{BTreeMap, BTreeSet};
+#[cfg(test)]
 use std::path::Path;
 
+#[cfg(test)]
 pub(crate) fn failures(root: &Path, manifest_paths: &[String]) -> Vec<String> {
+    failures_with_repo_paths(manifest_paths, &repo_source_paths(root))
+}
+
+pub(crate) fn failures_with_repo_paths(
+    manifest_paths: &[String],
+    repo_source_paths: &[String],
+) -> Vec<String> {
     let mut paths = manifest_paths
         .iter()
         .filter(|path| is_validator_rust_source(path))
         .cloned()
         .collect::<BTreeSet<_>>();
-    paths.extend(repo_source_paths(root));
+    paths.extend(repo_source_paths.iter().cloned());
     let mut out = Vec::new();
     out.extend(forbidden_top_level_clusters(&paths));
     out.extend(maximal_factoring_failures(&paths));
@@ -16,12 +25,19 @@ pub(crate) fn failures(root: &Path, manifest_paths: &[String]) -> Vec<String> {
     out
 }
 
-fn repo_source_paths(root: &Path) -> Vec<String> {
-    crate::package::inventory::closure::actual_files(root)
-        .unwrap_or_default()
-        .into_iter()
+pub(crate) fn repo_source_paths_from_actual_files(actual_files: &[String]) -> Vec<String> {
+    actual_files
+        .iter()
         .filter(|path| is_validator_rust_source(path))
+        .cloned()
         .collect()
+}
+
+#[cfg(test)]
+fn repo_source_paths(root: &Path) -> Vec<String> {
+    repo_source_paths_from_actual_files(
+        &crate::package::inventory::closure::actual_files(root).unwrap_or_default(),
+    )
 }
 
 fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {

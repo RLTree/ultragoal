@@ -113,9 +113,12 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
         &json!({"status":"fail","target_revision":{"value":current}}),
     );
     honest_failed_source_audit["source_audit"]["status"] = json!("fail");
-    support::write_proof(&root, &honest_failed_source_audit);
-    let failures = crate::audit::final_packet::package_failures(&root, &store);
-    assert!(failures.is_empty(), "{failures:?}");
+    expect_failure(
+        &root,
+        &store,
+        &honest_failed_source_audit,
+        "final_packet_proof_source_audit_status_not_pass",
+    );
 
     let mut bad_embedded_source_status = support::write_green_proof(&root, &current);
     bad_embedded_source_status["source_audit"]["status"] = json!("pending");
@@ -123,7 +126,7 @@ fn final_packet_proof_dereferences_receipts_instead_of_embedded_status() {
         &root,
         &store,
         &bad_embedded_source_status,
-        "final_packet_proof_ref_embedded_status_not_pass_or_fail:source_audit",
+        "final_packet_proof_ref_embedded_status_not_pass:source_audit",
     );
 
     let mut missing_source_status = support::write_green_proof(&root, &current);

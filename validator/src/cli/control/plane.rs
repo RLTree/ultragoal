@@ -8,6 +8,7 @@ pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.cli-control-plane-rec
 pub(crate) struct ControlCommand {
     pub(crate) operation: ControlOperation,
     pub(crate) receipt: Option<PathBuf>,
+    pub(crate) surface_root: Option<PathBuf>,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
@@ -109,12 +110,16 @@ pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
     Some(ControlCommand {
         operation,
         receipt: opt_path(raw, "--receipt"),
+        surface_root: surface_root(raw),
     })
 }
 
 pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> {
     if let Some(path) = &command.receipt {
         path::validate_receipt_path(root, path, command.operation)?;
+    }
+    if surface::supports(command.operation) {
+        return surface::run(root, command);
     }
     let package_digest = crate::package::inventory::package_digest(root)?;
     registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
@@ -156,12 +161,19 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .map(PathBuf::from)
 }
 
+fn surface_root(args: &[String]) -> Option<PathBuf> {
+    opt_path(args, "--surface-root")
+        .or_else(|| opt_path(args, "--installed-root"))
+        .or_else(|| opt_path(args, "--cache-root"))
+}
+
 pub(crate) mod emit;
 pub(crate) mod evidence;
 pub(crate) mod path;
 pub(crate) mod proof;
 pub(crate) mod receipt;
 pub(crate) mod registry;
+pub(crate) mod surface;
 pub(crate) mod transactional;
 pub(crate) mod types;
 #[cfg(test)]

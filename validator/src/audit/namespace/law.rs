@@ -9,6 +9,34 @@ const CLASS_REGISTRY_PATH: &str = "docs/namespace-class-registry.json";
 const STANDARD_ID: &str = "namespace-progressive-disclosure";
 const TRACE_OBLIGATION_ID: &str = "namespace-progressive-disclosure";
 
+#[derive(Default)]
+pub(crate) struct ValueCache {
+    actual_files: Option<Vec<String>>,
+    repo_source_paths: Option<Vec<String>>,
+}
+
+impl ValueCache {
+    fn actual_files(&mut self, root: &Path) -> Vec<String> {
+        self.actual_files
+            .get_or_insert_with(|| {
+                crate::package::inventory::closure::actual_files(root).unwrap_or_default()
+            })
+            .clone()
+    }
+
+    fn repo_source_paths(&mut self, root: &Path) -> Vec<String> {
+        if let Some(paths) = &self.repo_source_paths {
+            return paths.clone();
+        }
+        let actual_files = self.actual_files(root);
+        let paths = crate::audit::namespace::source::topology::repo_source_paths_from_actual_files(
+            &actual_files,
+        );
+        self.repo_source_paths = Some(paths.clone());
+        paths
+    }
+}
+
 pub fn package_failures(root: &Path, manifest: &Value) -> Vec<String> {
     let registry = match json_boundary::read_json(&root.join(CLASS_REGISTRY_PATH)) {
         Ok(value) => value,
@@ -25,16 +53,31 @@ pub fn package_failures(root: &Path, manifest: &Value) -> Vec<String> {
 }
 
 pub fn value_failures(root: &Path, manifest: &Value) -> Vec<String> {
+    let mut cache = ValueCache::default();
+    value_failures_with_cache(root, manifest, &mut cache)
+}
+
+pub(crate) fn value_failures_with_cache(
+    root: &Path,
+    manifest: &Value,
+    cache: &mut ValueCache,
+) -> Vec<String> {
     let listed = crate::package::inventory::inventory_paths(manifest);
     let mut out = Vec::new();
     out.extend(path_name_failures(&listed));
-    out.extend(crate::audit::namespace::source::topology::failures(
-        root, &listed,
-    ));
+    out.extend(
+        crate::audit::namespace::source::topology::failures_with_repo_paths(
+            &listed,
+            &cache.repo_source_paths(root),
+        ),
+    );
     out.extend(crate::audit::namespace::classes::legacy_surface_failures(
         root, &listed,
     ));
-    out.extend(orphan_file_failures(root, &listed));
+    out.extend(orphan_file_failures_for_actual_files(
+        &cache.actual_files(root),
+        &listed,
+    ));
     out
 }
 
@@ -83,13 +126,16 @@ fn path_name_failures(listed: &[String]) -> Vec<String> {
     out
 }
 
-fn orphan_file_failures(root: &Path, listed: &[String]) -> Vec<String> {
+fn orphan_file_failures_for_actual_files(
+    actual_files: &[String],
+    listed: &[String],
+) -> Vec<String> {
     let listed = listed.iter().cloned().collect::<BTreeSet<_>>();
-    let unlisted = crate::package::inventory::closure::actual_files(root)
-        .unwrap_or_default()
-        .into_iter()
-        .filter(|rel| !listed.contains(rel))
+    let unlisted = actual_files
+        .iter()
+        .filter(|rel| !listed.contains(rel.as_str()))
         .filter(|rel| !rel.starts_with("validation_artifacts/"))
+        .cloned()
         .collect::<Vec<_>>();
     match unlisted.len() {
         0 => Vec::new(),

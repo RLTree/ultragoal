@@ -74,7 +74,7 @@
       "path": "fixtures/red/product-fitness-install-substituted-for-success.json"
     }
   },
-  "generated_at": "2026-06-28T15:37:00Z",
+  "generated_at": "2026-06-29T00:35:30Z",
   "job_to_be_done": {
     "evidence": {
       "digest": "sha256:37fed1fbe4da7e91d27a24774560c367c427f7a87bfb84e30ae569017d52b59b",
@@ -118,7 +118,7 @@
     {
       "dimension": "freedom_from_risk",
       "evidence": {
-        "digest": "sha256:2f7751c7eb087cdfadfd8cadae02473b4e642753182f6900a4091a630cee541c",
+        "digest": "sha256:170816066058d503fb9e8bc7c40bc61cf01697cc823b0f9bd6fb655e6a50dfcc",
         "path": "validator/src/audit/product/fitness.rs"
       },
       "measure": "validator rejects proof substitution"
@@ -132,7 +132,7 @@
       "measure": "init, retrofit, proof-gate, standards, and product-cohesion routing name Product Fitness"
     }
   ],
-  "receipt_digest": "sha256:1ea0073796622a522ba485972643f88d9f769a265a19bfa202cb9b00e29e6ba3",
+  "receipt_digest": "sha256:e84787a8577de519c8c4cfc39b5274f4db6622d09ae2e09284530e89ceb96828",
   "receipt_version": "1.0.0",
   "recovery_burden_gate": {
     "evidence": {
@@ -210,7 +210,7 @@
   },
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863"
+    "value": "sha256:2d1f0386d936bb1770d614cfa8c8fb889a34c939ff4e8a89bfa0fe923d960aa7"
   },
   "user_evidence": [
     {

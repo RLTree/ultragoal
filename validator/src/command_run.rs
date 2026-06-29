@@ -76,6 +76,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::Performance(command) => crate::cli::performance::run(&root, &command),
         Command::Rust(command) => crate::cli::rust::run(&root, &command),
         Command::Garbage(command) => crate::cli::garbage::collection::run(&root, &command),
+        Command::Session(command) => crate::cli::session::run(&root, &command),
         Command::PackageDigest => {
             println!("{}", crate::package::inventory::package_digest(&root)?);
             Ok(0)

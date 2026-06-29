@@ -91,8 +91,10 @@ pub fn review_payload(root: &Path, rel: &str) -> Result<Vec<u8>, String> {
     }
     let path = crate::package::inventory::resolve(root, rel)?;
     if path.is_file() {
-        digest::read_file_bytes(&path)
+        let bytes = digest::read_file_bytes(&path)
             .map_err(|err| format!("{}: review payload read failed: {err}", path.display()))
+            .and_then(|bytes| crate::package::inventory::stable_package_payload(rel, &bytes))?;
+        Ok(bytes)
     } else {
         Err(format!(
             "{}: review target manifest path is missing",

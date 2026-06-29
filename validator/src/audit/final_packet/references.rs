@@ -87,10 +87,10 @@ fn check_source_audit_ref(root: &Path, receipt: &Value, expected: &str, out: &mu
         receipt,
         "/source_audit",
         "source_audit",
-        RefStatusPolicy::PassOrFail,
+        RefStatusPolicy::MustPass,
         out,
     ) {
-        audit_receipt_failures(&value, expected, out);
+        audit_receipt_failures(&value, expected, true, out);
     }
 }
 
@@ -127,7 +127,7 @@ fn check_source_audit_guard_ref(
         RefStatusPolicy::PassOrFail,
         out,
     );
-    audit_receipt_failures(&value, expected, out);
+    audit_receipt_failures(&value, expected, false, out);
 }
 
 fn check_coverage_ref(root: &Path, receipt: &Value, expected: &str, out: &mut Vec<String>) {
@@ -220,7 +220,12 @@ fn embedded_status_failures(
     }
 }
 
-fn audit_receipt_failures(value: &Value, expected: &str, out: &mut Vec<String>) {
+fn audit_receipt_failures(
+    value: &Value,
+    expected: &str,
+    require_pass: bool,
+    out: &mut Vec<String>,
+) {
     let Some(status) = value.get("status").and_then(Value::as_str) else {
         out.push("final_packet_proof_source_audit_status_missing".to_string());
         return;
@@ -229,6 +234,9 @@ fn audit_receipt_failures(value: &Value, expected: &str, out: &mut Vec<String>) 
         out.push(format!(
             "final_packet_proof_source_audit_status_unknown:{status}"
         ));
+    }
+    if require_pass && status != "pass" {
+        out.push("final_packet_proof_source_audit_status_not_pass".to_string());
     }
     if value
         .pointer("/target_revision/value")

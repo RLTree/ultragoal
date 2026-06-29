@@ -80,6 +80,32 @@ fn final_packet_parse_constructs_typed_receipt_command() {
 }
 
 #[test]
+fn session_log_hardening_parse_constructs_typed_rebind_command() {
+    let command = crate::parse_command(&args(&[
+        "session-log",
+        "hardening",
+        "rebind",
+        "--receipt",
+        "validation_artifacts/harness/session-log-hardening-receipt.json",
+    ]))
+    .expect("session-log hardening command");
+    assert!(matches!(
+        command,
+        crate::Command::Session(command)
+            if command.receipt
+                == std::path::PathBuf::from(
+                    "validation_artifacts/harness/session-log-hardening-receipt.json"
+                )
+    ));
+    let err = crate::parse_command(&args(&["session-log", "hardening", "rebind"]))
+        .expect_err("missing receipt");
+    assert!(err.contains("missing required argument --receipt"));
+    let err = crate::parse_command(&args(&["session-log", "hardening"]))
+        .expect_err("missing session subcommand");
+    assert!(err.contains("unknown session-log command"));
+}
+
+#[test]
 fn parser_error_arms_are_explicit_for_required_receipts() {
     let cases = [
         (

@@ -1,6 +1,10 @@
 use serde_json::Value;
 use std::path::Path;
 
+#[path = "receipt/fields.rs"]
+mod fields;
+use fields::{evidence_present, pointer_string, required_fields, string};
+
 pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
@@ -10,13 +14,46 @@ pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<St
     out
 }
 
+pub(crate) fn canonical_package_failures_with_candidate(
+    root: &Path,
+    receipt: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    let mut out = Vec::new();
+    if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
+        out.push("product_fitness_receipt_wrong_claim_id".to_string());
+    }
+    out.extend(failures_with_candidate(root, receipt, target_digest));
+    out
+}
+
 pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
+    failures_with_digest(
+        root,
+        receipt,
+        crate::package::inventory::package_digest(root),
+    )
+}
+
+pub(crate) fn failures_with_candidate(
+    root: &Path,
+    receipt: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    failures_with_digest(root, receipt, Ok(target_digest.to_string()))
+}
+
+fn failures_with_digest(
+    root: &Path,
+    receipt: &Value,
+    current: Result<String, String>,
+) -> Vec<String> {
     let mut out = required_field_failures(receipt);
     crate::audit::product::fitness::evidence::failures(root, receipt, "", &mut out);
     out.extend(journey_and_evidence_failures(receipt));
     out.extend(metric_failures(receipt));
     out.extend(burden_and_continuance_failures(receipt));
-    out.extend(authority_failures(root, receipt));
+    out.extend(authority_failures(receipt, current));
     out.extend(crate::audit::product::fitness::substitutions::failures(
         receipt,
     ));
@@ -51,36 +88,6 @@ fn required_field_failures(receipt: &Value) -> Vec<String> {
         out.push("product_fitness_generic_user_claim".to_string());
     }
     out
-}
-
-fn required_fields() -> &'static [(&'static str, &'static str)] {
-    &[
-        ("/claim/id", "product_fitness_receipt_wrong_claim_id"),
-        ("/target_revision/value", "product_fitness_receipt_stale"),
-        ("/target_audience/name", "product_fitness_audience_missing"),
-        ("/job_to_be_done/job", "product_fitness_job_missing"),
-        ("/context_of_use/context", "product_fitness_context_missing"),
-        (
-            "/desired_user_outcome/outcome",
-            "product_fitness_outcome_missing",
-        ),
-        (
-            "/business_or_mission_outcome/outcome",
-            "product_fitness_business_or_mission_outcome_missing",
-        ),
-        (
-            "/critical_journey/id",
-            "product_fitness_context_of_use_unproven",
-        ),
-        (
-            "/proof_surface/kind",
-            "product_fitness_quality_in_use_receipt_missing",
-        ),
-        ("/claim_ceiling", "product_fitness_claim_ceiling_missing"),
-        ("/producer_actor_id", "product_fitness_receipt_malformed"),
-        ("/reviewer_actor_id", "product_fitness_receipt_malformed"),
-        ("/receipt_digest", "product_fitness_receipt_malformed"),
-    ]
 }
 
 fn journey_and_evidence_failures(receipt: &Value) -> Vec<String> {
@@ -178,7 +185,7 @@ fn accessibility_failures(receipt: &Value) -> Vec<String> {
     }
 }
 
-fn authority_failures(root: &Path, receipt: &Value) -> Vec<String> {
+fn authority_failures(receipt: &Value, current: Result<String, String>) -> Vec<String> {
     let mut out = Vec::new();
     if string(receipt, "producer_actor_id") == string(receipt, "reviewer_actor_id") {
         out.push("product_fitness_actor_nondisjoint".to_string());
@@ -189,34 +196,10 @@ fn authority_failures(root: &Path, receipt: &Value) -> Vec<String> {
     if string(receipt, "receipt_digest") != canonical_digest(receipt) {
         out.push("product_fitness_receipt_digest_mismatch".to_string());
     }
-    match crate::package::inventory::package_digest(root) {
+    match current {
         Ok(current) if pointer_string(receipt, "/target_revision/value") == current => {}
         Ok(_) => out.push("product_fitness_receipt_stale".to_string()),
         Err(err) => out.push(format!("product_fitness_digest_unavailable:{err}")),
     }
     out
-}
-
-fn pointer_string(value: &Value, pointer: &str) -> String {
-    value
-        .pointer(pointer)
-        .and_then(Value::as_str)
-        .unwrap_or("")
-        .to_string()
-}
-
-fn evidence_present(value: Option<&Value>) -> bool {
-    value
-        .and_then(Value::as_object)
-        .and_then(|obj| obj.get("path"))
-        .and_then(Value::as_str)
-        .is_some_and(|path| !path.is_empty())
-}
-
-fn string(value: &Value, key: &str) -> String {
-    value
-        .get(key)
-        .and_then(Value::as_str)
-        .unwrap_or("")
-        .to_string()
 }

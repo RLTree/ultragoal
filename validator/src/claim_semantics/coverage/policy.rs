@@ -1,9 +1,21 @@
 use crate::audit::contract::Failure;
+use crate::claim_semantics::coverage::receipt::authority::DigestCache;
 use crate::claim_semantics::{evidence, str_field};
 use serde_json::Value;
 use std::path::Path;
 
+#[cfg(test)]
 pub fn check(claim: &Value, root: &Path, out: &mut Vec<Failure>) {
+    let mut cache = DigestCache::default();
+    check_with_cache(claim, root, out, &mut cache);
+}
+
+pub(crate) fn check_with_cache(
+    claim: &Value,
+    root: &Path,
+    out: &mut Vec<Failure>,
+    cache: &mut DigestCache,
+) {
     let text = crate::claim::text::normalized_text(&[
         &str_field(claim, "title"),
         &str_field(claim, "description"),
@@ -22,7 +34,7 @@ pub fn check(claim: &Value, root: &Path, out: &mut Vec<Failure>) {
         return;
     }
     for ev in receipts {
-        check_receipt(claim, ev, root, &text, out);
+        check_receipt(claim, ev, root, &text, out, cache);
     }
 }
 
@@ -89,7 +101,14 @@ fn coverage_evidence(claim: &Value) -> Vec<&Value> {
         .collect()
 }
 
-fn check_receipt(claim: &Value, ev: &Value, root: &Path, text: &str, out: &mut Vec<Failure>) {
+fn check_receipt(
+    claim: &Value,
+    ev: &Value,
+    root: &Path,
+    text: &str,
+    out: &mut Vec<Failure>,
+    cache: &mut DigestCache,
+) {
     let Ok(path) = crate::package::inventory::resolve(root, &str_field(ev, "path")) else {
         out.push(Failure::new(
             "coverage-proof-policy",
@@ -108,7 +127,9 @@ fn check_receipt(claim: &Value, ev: &Value, root: &Path, text: &str, out: &mut V
     };
     evidence_freshness_checks(ev, out);
     crate::claim_semantics::coverage::receipt::rules::shape(claim, &receipt, ev, out);
-    crate::claim_semantics::coverage::receipt::authority::check(&receipt, root, out);
+    crate::claim_semantics::coverage::receipt::authority::check_with_cache(
+        &receipt, root, out, cache,
+    );
     crate::claim_semantics::coverage::receipt::rules::percent(&receipt, text, out);
     crate::claim_semantics::coverage::receipt::rules::dimensions(&receipt, text, out);
     crate::claim_semantics::coverage::receipt::exclusions::check(&receipt, out);

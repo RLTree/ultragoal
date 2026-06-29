@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/package-surface-audit-receipt.schema.json",
+  "title": "Harness Ultragoal Package Surface Audit Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "issuer",
+    "generated_at",
+    "root",
+    "operation",
+    "status",
+    "claim_ceiling",
+    "candidate_digest",
+    "source",
+    "target",
+    "same_candidate",
+    "unsupported_claim_classes",
+    "blocked_claim_classes",
+    "failures"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.package-surface-audit-receipt.v1"
+    },
+    "schema_version": {
+      "const": "v1"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "authority",
+        "compatibility_binary"
+      ],
+      "properties": {
+        "tool": {
+          "const": "ultragoal"
+        },
+        "authority": {
+          "const": "cli_control_plane"
+        },
+        "compatibility_binary": {
+          "const": "ultragoal-validator"
+        }
+      }
+    },
+    "generated_at": {
+      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+    },
+    "root": {
+      "const": "."
+    },
+    "operation": {
+      "enum": [
+        "install_audit",
+        "cache_audit"
+      ]
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "claim_ceiling": {
+      "enum": [
+        "surface_package_digest_aligned",
+        "withheld_or_blocked"
+      ]
+    },
+    "candidate_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256"
+    },
+    "source": {
+      "$ref": "#/$defs/packageSurfaceSource"
+    },
+    "target": {
+      "$ref": "#/$defs/packageSurfaceTarget"
+    },
+    "same_candidate": {
+      "type": "boolean"
+    },
+    "unsupported_claim_classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/unsupportedClaimClass"
+      }
+    },
+    "blocked_claim_classes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/blockedClaimClass"
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "blockedClaimClass": {
+      "enum": [
+        "completion",
+        "install_cache_parity",
+        "package_readiness",
+        "release_readiness",
+        "review_readiness",
+        "update_goal_eligibility"
+      ]
+    },
+    "logicalPath": {
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "type": "string"
+    },
+    "packageSurfaceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_digest",
+        "plugin_manifest_digest",
+        "plugin_name",
+        "plugin_version"
+      ],
+      "properties": {
+        "package_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "plugin_manifest_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "plugin_name": {
+          "const": "harness-ultragoal"
+        },
+        "plugin_version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "packageSurfaceTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surface",
+        "logical_path",
+        "path_authority",
+        "exists",
+        "package_digest",
+        "package_error",
+        "plugin_manifest_digest",
+        "plugin_name",
+        "plugin_version",
+        "expected_package_digest",
+        "source_plugin_version"
+      ],
+      "properties": {
+        "surface": {
+          "enum": [
+            "installed_plugin",
+            "versioned_cache_package"
+          ]
+        },
+        "logical_path": {
+          "$ref": "#/$defs/logicalPath"
+        },
+        "path_authority": {
+          "enum": [
+            "cli_or_default_local_root_redacted",
+            "relative_test_root"
+          ]
+        },
+        "exists": {
+          "type": "boolean"
+        },
+        "package_digest": {
+          "oneOf": [
+            {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "package_error": {
+          "oneOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "plugin_manifest_digest": {
+          "oneOf": [
+            {
+              "$ref": "common-defs.schema.json#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "plugin_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "plugin_version": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "expected_package_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "source_plugin_version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "unsupportedClaimClass": {
+      "enum": [
+        "app_registry_or_reviewer_exposure",
+        "completion",
+        "install_button_success",
+        "launcher_runtime_exposure",
+        "marketplace_publication",
+        "plugins_ui_visibility",
+        "release_readiness",
+        "review_readiness",
+        "update_goal_eligibility"
+      ]
+    }
+  }
+}

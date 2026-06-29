@@ -216,7 +216,7 @@ pub fn receipt_value_failures(root: &Path, value: &Value) -> Vec<String> {
             _ => out.push(format!("mandatory_law_evidence_digest_mismatch:{law}")),
         }
     }
-    out.extend(production::binding_failures(value, law));
+    out.extend(production::binding_failures(root, value, law));
     out
 }
 

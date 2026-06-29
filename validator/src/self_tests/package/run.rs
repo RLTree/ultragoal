@@ -31,6 +31,7 @@ fn package_run_valid_fixture_loader_reports_malformed_json_and_skips_non_json() 
     crate::audit::package::run::semantic_valid_fixture_checks(
         &root,
         &BTreeMap::new(),
+        &[],
         &mut failures,
     );
     let schema = failures.get("schema-valid").cloned().unwrap_or_default();
@@ -148,6 +149,7 @@ fn package_run_semantic_fixture_reports_absolute_outside_paths() {
     crate::audit::package::run::semantic_valid_fixture_check(
         &root,
         &BTreeMap::new(),
+        &[],
         &mut failures,
         &outside,
     );
@@ -157,4 +159,52 @@ fn package_run_semantic_fixture_reports_absolute_outside_paths() {
         "{details}"
     );
     let _ = std::fs::remove_file(outside);
+}
+
+#[test]
+fn package_run_ready_artifacts_are_digest_bound_and_filtered() {
+    let root = crate::self_tests::boundaries::support::temp_root("package-run-ready-artifacts");
+    std::fs::create_dir_all(root.join("examples/generated")).expect("generated");
+    write_json(
+        &root.join("examples/generated/READY_FOR_MERGE-b.json"),
+        &json!({"id":"b"}),
+    );
+    write_json(
+        &root.join("examples/generated/READY_FOR_MERGE-a.json"),
+        &json!({"id":"a"}),
+    );
+    write_json(
+        &root.join("examples/generated/READY_FOR_REVIEW-a.json"),
+        &json!({"id":"ignored"}),
+    );
+
+    let artifacts = crate::audit::package::run::ready_artifacts(&root, "run-current");
+    assert_eq!(artifacts.len(), 2);
+    assert_eq!(
+        artifacts
+            .iter()
+            .map(|row| row["path"].as_str().unwrap_or_default())
+            .collect::<Vec<_>>(),
+        vec![
+            "examples/generated/READY_FOR_MERGE-a.json",
+            "examples/generated/READY_FOR_MERGE-b.json"
+        ]
+    );
+    assert!(artifacts.iter().all(|row| {
+        row["validator_run_id"] == "run-current"
+            && row["artifact_type"] == "ready_for_merge"
+            && row["digest"]
+                .as_str()
+                .unwrap_or_default()
+                .starts_with("sha256:")
+    }));
+    std::fs::remove_dir_all(root).expect("cleanup ready artifacts");
+}
+
+#[test]
+fn package_run_ready_artifacts_missing_directory_is_empty() {
+    let root = crate::self_tests::boundaries::support::temp_root("package-run-no-ready-artifacts");
+    std::fs::create_dir_all(&root).expect("root");
+    assert!(crate::audit::package::run::ready_artifacts(&root, "run").is_empty());
+    std::fs::remove_dir_all(root).expect("cleanup no ready artifacts");
 }

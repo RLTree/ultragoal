@@ -47,6 +47,18 @@ pub(super) fn label_failures(
             crate::audit::plugin::product::cohesion::journey_value_failures(root, value)
         }
         "standards_gardener" => standards_gardener_failures(root, value),
+        "install_audit" => package_surface_failures(
+            root,
+            value,
+            expected,
+            crate::cli::control::plane::types::ControlOperation::InstallAudit,
+        ),
+        "cache_audit" => package_surface_failures(
+            root,
+            value,
+            expected,
+            crate::cli::control::plane::types::ControlOperation::CacheAudit,
+        ),
         label if label.starts_with("rust_") => rust_failures(label, value, expected),
         label if label.starts_with("gc_") => gc_failures(value, expected),
         "transactional_finalization" => Vec::new(),
@@ -116,6 +128,29 @@ fn standards_gardener_failures(root: &Path, value: &Value) -> Vec<String> {
     out
 }
 
+fn package_surface_failures(
+    root: &Path,
+    value: &Value,
+    expected: &str,
+    operation: crate::cli::control::plane::types::ControlOperation,
+) -> Vec<String> {
+    let store = crate::schema_catalog::load(root);
+    let mut out = crate::schema_catalog::schema_errors(
+        &store,
+        crate::cli::control::plane::surface::SCHEMA_FILE,
+        value,
+    )
+    .into_iter()
+    .map(|failure| format!("package_surface_audit_schema:{failure}"))
+    .collect::<Vec<_>>();
+    out.extend(
+        crate::cli::control::plane::surface::same_candidate_pass_failures(
+            value, expected, operation,
+        ),
+    );
+    out
+}
+
 fn rust_failures(label: &str, value: &Value, expected: &str) -> Vec<String> {
     let expected_law = match label {
         "rust_dependency" | "rust_workspace_topology" => "rust-developer-experience-authority",
@@ -146,57 +181,4 @@ fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
 }
 
 #[cfg(test)]
-mod tests {
-    use serde_json::json;
-
-    #[test]
-    fn label_failures_cover_unknown_rust_and_gc_status_edges() {
-        let root = crate::self_tests::boundaries::support::repo_root();
-        let candidate = crate::self_tests::boundaries::support::sha('d');
-        assert_eq!(
-            super::label_failures(&root, "unknown", &json!({}), &candidate),
-            vec!["unknown_evidence_label:unknown"]
-        );
-
-        let rust = json!({
-            "schema":"harness-ultragoal.rust-devx-receipt.v1",
-            "law_id":"rust-command-loop-authority",
-            "status":"fail",
-            "digests":{"candidate":candidate},
-            "observations":[],
-            "observation_failures":[],
-            "claim_ceiling":"rust_devx_observation_bound"
-        });
-        assert!(
-            super::label_failures(&root, "rust_fast", &rust, &candidate)
-                .iter()
-                .any(|failure| failure == "rust_receipt_status_not_pass")
-        );
-
-        let source_audit = json!({
-            "status":"fail",
-            "target_revision":{"kind":"package_digest","value":candidate}
-        });
-        assert!(
-            super::label_failures(&root, "source_audit", &source_audit, &candidate)
-                .iter()
-                .any(|failure| failure == "source_audit_status_not_pass")
-        );
-
-        let gc = json!({
-            "schema":"harness-ultragoal.workspace-gc-receipt.v1",
-            "law_id":"workspace-artifact-cache-garbage-collection",
-            "status":"fail",
-            "digests":{"candidate":candidate},
-            "plan":{"id":"plan"},
-            "observations":[],
-            "observation_failures":[],
-            "claim_ceiling":"gc_observation_bound"
-        });
-        assert!(
-            super::label_failures(&root, "gc_plan", &gc, &candidate)
-                .iter()
-                .any(|failure| failure == "gc_receipt_status_not_pass")
-        );
-    }
-}
+mod label_failures;

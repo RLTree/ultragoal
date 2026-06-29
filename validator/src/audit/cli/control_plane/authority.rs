@@ -1,10 +1,16 @@
 use serde_json::Value;
 use std::path::Path;
 
+mod surface;
+
 const CLI_SCHEMA: &str = "schemas/cli-control-plane-receipt.schema.json";
+const SURFACE_SCHEMA: &str = "schemas/package-surface-audit-receipt.schema.json";
 const CONTROL_SOURCE: &str = "validator/src/cli/control/plane.rs";
 const CONTROL_RECEIPT: &str = "validator/src/cli/control/plane/receipt.rs";
+const CONTROL_SURFACE: &str = "validator/src/cli/control/plane/surface.rs";
 const CONTROL_TYPES: &str = "validator/src/cli/control/plane/types.rs";
+const INSTALL_AUDIT_RECEIPT: &str = "validation_artifacts/cli/install-audit-receipt.json";
+const CACHE_AUDIT_RECEIPT: &str = "validation_artifacts/cli/cache-audit-receipt.json";
 const UPDATE_GOAL_RECEIPT: &str = "validation_artifacts/cli/update-goal-eligibility.json";
 const SELF_LAW_RECEIPT: &str = "validation_artifacts/cli/self-law-receipt.json";
 const REQUIRED_LAWS: &[&str] = &["cli-control-plane-authority", "cli-self-law-compliance"];
@@ -30,7 +36,14 @@ pub fn package_failures(root: &Path) -> Vec<String> {
 }
 
 fn require_files(root: &Path, out: &mut Vec<String>) {
-    for rel in [CONTROL_SOURCE, CONTROL_RECEIPT, CONTROL_TYPES, CLI_SCHEMA] {
+    for rel in [
+        CONTROL_SOURCE,
+        CONTROL_RECEIPT,
+        CONTROL_SURFACE,
+        CONTROL_TYPES,
+        CLI_SCHEMA,
+        SURFACE_SCHEMA,
+    ] {
         if !root.join(rel).is_file() {
             out.push(format!("cli_control_plane_missing_artifact:{rel}"));
         }
@@ -53,8 +66,12 @@ fn require_manifest_resources(root: &Path, out: &mut Vec<String>) {
     for rel in [
         CONTROL_SOURCE,
         CONTROL_RECEIPT,
+        CONTROL_SURFACE,
         CONTROL_TYPES,
         CLI_SCHEMA,
+        SURFACE_SCHEMA,
+        INSTALL_AUDIT_RECEIPT,
+        CACHE_AUDIT_RECEIPT,
         UPDATE_GOAL_RECEIPT,
         SELF_LAW_RECEIPT,
     ] {
@@ -75,6 +92,12 @@ fn require_schema_catalog(root: &Path, out: &mut Vec<String>) {
         .any(|row| row.get("path").and_then(Value::as_str) == Some(CLI_SCHEMA))
     {
         out.push("cli_control_plane_schema_catalog_missing_receipt_schema".to_string());
+    }
+    if !items
+        .iter()
+        .any(|row| row.get("path").and_then(Value::as_str) == Some(SURFACE_SCHEMA))
+    {
+        out.push("cli_control_plane_schema_catalog_missing_surface_schema".to_string());
     }
 }
 
@@ -128,18 +151,35 @@ fn require_receipts(root: &Path, out: &mut Vec<String>) {
         }
     };
     for (rel, operation) in [
+        (INSTALL_AUDIT_RECEIPT, "install_audit"),
+        (CACHE_AUDIT_RECEIPT, "cache_audit"),
         (UPDATE_GOAL_RECEIPT, "update_goal_eligibility"),
         (SELF_LAW_RECEIPT, "self_update_goal_eligibility"),
     ] {
         match crate::json_boundary::read_json(&root.join(rel)) {
             Ok(value) => {
-                for failure in
+                let failures = if operation == "install_audit" {
+                    surface::receipt_failures(
+                        root,
+                        &value,
+                        &expected_candidate,
+                        crate::cli::control::plane::types::ControlOperation::InstallAudit,
+                    )
+                } else if operation == "cache_audit" {
+                    surface::receipt_failures(
+                        root,
+                        &value,
+                        &expected_candidate,
+                        crate::cli::control::plane::types::ControlOperation::CacheAudit,
+                    )
+                } else {
                     crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(
                         &value,
                         &expected_candidate,
                         operation,
                     )
-                {
+                };
+                for failure in failures {
                     out.push(format!("{rel}: {failure}"));
                 }
             }

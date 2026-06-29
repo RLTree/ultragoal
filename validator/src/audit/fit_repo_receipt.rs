@@ -11,6 +11,18 @@ pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     out
 }
 
+pub(crate) fn failures_with_candidate(
+    root: &Path,
+    receipt: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    let mut out = base_failures_with_candidate(root, receipt, Ok(target_digest.to_string()));
+    out.extend(classification_failures(receipt));
+    out.extend(check_artifact_failures(root, receipt));
+    out.extend(blocker_failures(receipt));
+    out
+}
+
 pub(crate) fn canonical_digest(receipt: &Value) -> String {
     let mut canonical = receipt.clone();
     if let Some(obj) = canonical.as_object_mut() {
@@ -23,6 +35,18 @@ pub(crate) fn canonical_digest(receipt: &Value) -> String {
 }
 
 fn base_failures(root: &Path, receipt: &Value) -> Vec<String> {
+    base_failures_with_candidate(
+        root,
+        receipt,
+        crate::package::inventory::package_digest(root),
+    )
+}
+
+fn base_failures_with_candidate(
+    root: &Path,
+    receipt: &Value,
+    current: Result<String, String>,
+) -> Vec<String> {
     let mut out = Vec::new();
     if str_field(receipt, "schema") != "harness-ultragoal.fit-repo-receipt.v1" {
         out.push("fit_repo_receipt_malformed:schema".to_string());
@@ -34,7 +58,7 @@ fn base_failures(root: &Path, receipt: &Value) -> Vec<String> {
     {
         out.push("plugin_flow_entrypoint_missing".to_string());
     }
-    match crate::package::inventory::package_digest(root) {
+    match current {
         Ok(current)
             if receipt
                 .pointer("/target_revision/value")

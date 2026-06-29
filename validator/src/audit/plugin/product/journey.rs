@@ -4,6 +4,22 @@ use std::path::Path;
 const FIT_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
 
 pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
+    failures_with_digest(root, value, crate::package::inventory::package_digest(root))
+}
+
+pub(crate) fn failures_with_candidate(
+    root: &Path,
+    value: &Value,
+    target_digest: &str,
+) -> Vec<String> {
+    failures_with_digest(root, value, Ok(target_digest.to_string()))
+}
+
+fn failures_with_digest(
+    root: &Path,
+    value: &Value,
+    current: Result<String, String>,
+) -> Vec<String> {
     let steps = value
         .get("journey")
         .and_then(Value::as_array)
@@ -12,7 +28,7 @@ pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
         return vec!["plugin_product_journey_incomplete".to_string()];
     }
     let mut out = evidence_count_failures(value);
-    out.extend(authority_failures(root, value));
+    out.extend(authority_failures(value, current));
     if str_field(value, "claim_ceiling") != "package_static_fixture_only" {
         out.push("plugin_product_journey_claim_ceiling_missing".to_string());
     }
@@ -42,7 +58,7 @@ fn evidence_count_failures(value: &Value) -> Vec<String> {
     }
 }
 
-fn authority_failures(root: &Path, value: &Value) -> Vec<String> {
+fn authority_failures(value: &Value, current: Result<String, String>) -> Vec<String> {
     let mut out = Vec::new();
     if str_field(value, "status") != "pass" {
         out.push("plugin_product_journey_status_not_pass".to_string());
@@ -54,7 +70,7 @@ fn authority_failures(root: &Path, value: &Value) -> Vec<String> {
     {
         out.push("plugin_product_journey_target_revision_not_package_digest".to_string());
     }
-    match crate::package::inventory::package_digest(root) {
+    match current {
         Ok(current)
             if value
                 .pointer("/target_revision/value")

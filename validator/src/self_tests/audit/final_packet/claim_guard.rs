@@ -78,6 +78,15 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     let receipt = support::write_fail_closed_proof(&root, &current);
 
+    assert_guard_failure(
+        &root,
+        &store,
+        mutate(&receipt, |value| {
+            value["registry_exposure"]["status"] = json!("pending")
+        }),
+        "final_packet_proof_ref_embedded_status_not_pass_or_fail:registry",
+    );
+
     let mut bad_registry = receipt.clone();
     rewrite_ref(
         &root,
@@ -122,6 +131,32 @@ fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
         &store,
         invalid_source,
         "final_packet_proof_ref_path_invalid:source_audit",
+    );
+
+    let mut failed_source = receipt.clone();
+    rewrite_ref(
+        &root,
+        &mut failed_source,
+        "source_audit",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        &json!({"status":"fail","target_revision":{"kind":"package_digest","value":current}}),
+    );
+    support::write_proof(&root, &failed_source);
+    let source_failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
+    assert!(
+        source_failures
+            .iter()
+            .all(|failure| !failure.contains("final_packet_proof_source_audit_status_not_pass")),
+        "{source_failures:?}"
+    );
+
+    let mut unknown_source = failed_source;
+    unknown_source["source_audit"]["status"] = json!("pending");
+    assert_guard_failure(
+        &root,
+        &store,
+        unknown_source,
+        "final_packet_proof_ref_embedded_status_not_pass_or_fail:source_audit",
     );
 
     let mut malformed_source = receipt;

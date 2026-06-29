@@ -8,12 +8,12 @@
   ],
   "claim_ceiling": "withheld_or_blocked",
   "cli_performance": {
-    "digest": "sha256:85004730d6cfc047b5d7567418fc5534101cd14915bd2a8e55fb0d55458d9680",
+    "digest": "sha256:d6406f96566eacdefd84252c27fd53323a53f1ff9b5149d0a6146907fe72fe37",
     "path": "validation_artifacts/cli/performance-receipt.json",
     "status": "pass"
   },
   "coverage": {
-    "digest": "sha256:d0c098c5bced8b1bc5e444bc18294e048fb9dd6644b2b88e30767d0461f3e2e9",
+    "digest": "sha256:a6c0be328fc752ada2aa1db579c394c22fc47df0bd05c78cb26c5566b8f6b293",
     "path": "validation_artifacts/coverage/coverage-receipt.json",
     "status": "pass"
   },
@@ -42,20 +42,20 @@
     ],
     "reason": "final_packet_proof_not_proven"
   },
-  "generated_at": "2026-06-28T16:12:00Z",
+  "generated_at": "2026-06-29T00:10:15Z",
   "package_receipts": [
     {
-      "digest": "sha256:d171ec8bc515dfa6ab9dce102a5d752836f702e644f8dfd6eb4bcdd4e974f886",
+      "digest": "sha256:6b13a8e3329451c2d1876da0967b0131f5b7aef8526d7e8b94d471dfee872dab",
       "path": "validation_artifacts/harness/fit-repo-receipt.json",
       "status": "pass"
     },
     {
-      "digest": "sha256:c6e1bc18493e11d8e32e19bc46a07ddcde298f0c4cb22d82d43ef002eafa4371",
+      "digest": "sha256:0d0b31cf4dd433feafa38f6b30f821d6927b4e48b3e1bd74bb0246321fad7580",
       "path": "validation_artifacts/harness/product-fitness-receipt.json",
       "status": "pass"
     },
     {
-      "digest": "sha256:82880cadc684dcb4adc23bec47baeb05d4cddbb58d79447a462f027344480ff6",
+      "digest": "sha256:a00a9a4f5590d079dbe0a7183915df1d413476d823abc81cb7024dfc624ff8bb",
       "path": "validation_artifacts/harness/plugin-product-journey-receipt.json",
       "status": "pass"
     }
@@ -65,19 +65,19 @@
     "path": "validation_artifacts/review/final-packet.json"
   },
   "registry_exposure": {
-    "digest": "sha256:beccae4e294a7e0f53ce2c661d651448a3eeb89be012e3791a3923db3cccede8",
+    "digest": "sha256:241c37fb04ef10e0a0a6b6a377834bc04e59a1a4a3120c3543dd0e82ddb5a107",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },
   "schema": "harness-ultragoal.final-packet-proof.v1",
   "source_audit": {
-    "digest": "sha256:ebf8894a1b788d49d84e608e964c9567a8f4ede8bc1634c1c860ef889a364435",
+    "digest": "sha256:f3ffacd3cbc333c95c0744624a6d6c047866b20f0984730b38d833db1fc352a8",
     "path": "validation_artifacts/ultragoal-audit/validator-receipt.json",
     "status": "pass"
   },
   "status": "fail",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863"
+    "value": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0"
   }
 }

@@ -144,10 +144,12 @@
         "enum": [
           "all_89_gates_and_100_stop_conditions_pass",
           "coverage_100_no_uncovered_records",
+          "current_cache_audit_same_candidate_pass",
           "current_cli_performance_pass",
           "current_final_packet_proof_pass",
           "current_fit_repo_pass",
           "current_gc_pass",
+          "current_install_audit_same_candidate_pass",
           "current_product_fitness_pass",
           "current_product_journey_pass",
           "current_red_fixture_report_status_pass",

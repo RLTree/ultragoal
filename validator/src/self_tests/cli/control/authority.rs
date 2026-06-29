@@ -20,6 +20,7 @@ fn control_plane_receipt_failure_is_evidence_derived() {
     let command = ControlCommand {
         operation: ControlOperation::UpdateGoalEligibility,
         receipt: None,
+        surface_root: None,
     };
 
     let value = receipt(&root, &command).expect("receipt");
@@ -58,6 +59,7 @@ fn production_control_plane_does_not_use_source_audit_as_green_path() {
     let command = ControlCommand {
         operation: ControlOperation::UpdateGoalEligibility,
         receipt: None,
+        surface_root: None,
     };
 
     let value = receipt(&root, &command).expect("receipt");

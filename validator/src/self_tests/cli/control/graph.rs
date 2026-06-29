@@ -21,7 +21,7 @@ pub(crate) fn control(candidate: &str, operation: &str, fail_closed: bool) -> Va
     })
 }
 
-fn labels() -> [&'static str; 25] {
+fn labels() -> [&'static str; 27] {
     [
         "source_audit",
         "red_fixture_report",
@@ -33,6 +33,8 @@ fn labels() -> [&'static str; 25] {
         "product_fitness",
         "product_journey",
         "standards_gardener",
+        "install_audit",
+        "cache_audit",
         "rust_toolchain",
         "rust_fast",
         "rust_standard",

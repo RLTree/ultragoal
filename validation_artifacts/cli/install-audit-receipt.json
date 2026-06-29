@@ -1,0 +1,57 @@
+{
+  "blocked_claim_classes": [
+    "install_cache_parity",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "completion",
+    "update_goal_eligibility"
+  ],
+  "candidate_digest": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
+  "claim_ceiling": "withheld_or_blocked",
+  "failures": [
+    "package_surface_digest_mismatch"
+  ],
+  "generated_at": "2026-06-29T00:01:00Z",
+  "issuer": {
+    "authority": "cli_control_plane",
+    "compatibility_binary": "ultragoal-validator",
+    "tool": "ultragoal"
+  },
+  "operation": "install_audit",
+  "root": ".",
+  "same_candidate": false,
+  "schema": "harness-ultragoal.package-surface-audit-receipt.v1",
+  "schema_version": "v1",
+  "source": {
+    "package_digest": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
+    "plugin_manifest_digest": "sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+    "plugin_name": "harness-ultragoal",
+    "plugin_version": "0.0.11"
+  },
+  "status": "fail",
+  "target": {
+    "exists": true,
+    "expected_package_digest": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
+    "logical_path": "codex-plugin-install-harness-ultragoal",
+    "package_digest": "sha256:3d7ae67eb161ec3053ee7a1f0154ed4a0e96c54f386e651b51c4b09a8f2d1664",
+    "package_error": null,
+    "path_authority": "cli_or_default_local_root_redacted",
+    "plugin_manifest_digest": "sha256:8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
+    "plugin_name": "harness-ultragoal",
+    "plugin_version": "0.0.11",
+    "source_plugin_version": "0.0.11",
+    "surface": "installed_plugin"
+  },
+  "unsupported_claim_classes": [
+    "app_registry_or_reviewer_exposure",
+    "plugins_ui_visibility",
+    "marketplace_publication",
+    "install_button_success",
+    "launcher_runtime_exposure",
+    "review_readiness",
+    "release_readiness",
+    "completion",
+    "update_goal_eligibility"
+  ]
+}

@@ -6,15 +6,15 @@
     "release_readiness",
     "update_goal_eligibility"
   ],
-  "candidate_digest": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
+  "candidate_digest": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
   "claim_ceiling": "withheld_or_blocked",
   "cli_performance": {
-    "digest": "sha256:85004730d6cfc047b5d7567418fc5534101cd14915bd2a8e55fb0d55458d9680",
+    "digest": "sha256:d6406f96566eacdefd84252c27fd53323a53f1ff9b5149d0a6146907fe72fe37",
     "path": "validation_artifacts/cli/performance-receipt.json",
     "status": "pass"
   },
   "coverage": {
-    "digest": "sha256:d0c098c5bced8b1bc5e444bc18294e048fb9dd6644b2b88e30767d0461f3e2e9",
+    "digest": "sha256:a6c0be328fc752ada2aa1db579c394c22fc47df0bd05c78cb26c5566b8f6b293",
     "path": "validation_artifacts/coverage/coverage-receipt.json",
     "status": "pass"
   },
@@ -67,13 +67,13 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:5fdf35861c7e94256011c25c2f1e0a9f4e1dc65711cb25b89ad8804afd051f24",
+    "digest": "sha256:482d7b65f7e4d64650e45dbf760019823fd8d96ea02737f02bd6e0fcce471eac",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-28T16:12:14Z",
+  "generated_at": "2026-06-29T00:10:26Z",
   "registry_exposure": {
-    "digest": "sha256:beccae4e294a7e0f53ce2c661d651448a3eeb89be012e3791a3923db3cccede8",
+    "digest": "sha256:241c37fb04ef10e0a0a6b6a377834bc04e59a1a4a3120c3543dd0e82ddb5a107",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
     "status": "fail"
   },

@@ -27,6 +27,7 @@ fn receipt_blocks_claims_and_records_required_evidence() {
     let registry = ControlCommand {
         operation: ControlOperation::RegistryProbe,
         receipt: None,
+        surface_root: None,
     };
     let value = receipt(&root, &registry).expect("receipt builds");
     assert_eq!(value["schema"], RECEIPT_SCHEMA);
@@ -45,6 +46,7 @@ fn receipt_blocks_claims_and_records_required_evidence() {
     let update_goal = ControlCommand {
         operation: ControlOperation::SelfUpdateGoalEligibility,
         receipt: None,
+        surface_root: None,
     };
     let value = receipt(&root, &update_goal).expect("update-goal receipt builds");
     assert!(
@@ -67,6 +69,7 @@ fn run_writes_and_prints_fail_closed_receipts() {
     let command = ControlCommand {
         operation: ControlOperation::PacketVerify,
         receipt: Some(path.clone()),
+        surface_root: None,
     };
     assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
     let value = crate::json_boundary::read_json(&path).expect("read receipt");
@@ -76,6 +79,7 @@ fn run_writes_and_prints_fail_closed_receipts() {
     let no_write = ControlCommand {
         operation: ControlOperation::FixturesAll,
         receipt: None,
+        surface_root: None,
     };
     assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
     std::fs::remove_dir_all(root).expect("cleanup cli control run");

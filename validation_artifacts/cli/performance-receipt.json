@@ -9,7 +9,7 @@
   },
   "cache": {
     "hits": 0,
-    "key": "no-cache:sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863:performance_prove",
+    "key": "no-cache:sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0:performance_prove",
     "misses": 0,
     "mode": "disabled",
     "no_cache_mode_result": "executed_without_cache"
@@ -42,13 +42,13 @@
     "worker_count": 1
   },
   "digests": {
-    "candidate": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
-    "cli_binary": "sha256:7b6f7ed8ca040d306818fac1170ed7c0db50f66fb696f3564da88c81187f555b",
-    "config": "sha256:043247a76b645fbef7da8f7f54e2d3e5b228f79c1ded44628c1cc15cebeab0a4",
-    "fixture_catalog": "sha256:1916534667e875a14e3a49ed9970de6be8e594f5f23872c8cc8bc878f9be1391",
-    "law_graph": "sha256:e7bce3d142266064582f119a50c299b50652ae66fc01c6bbf3840bc00cccd28f",
-    "schema_catalog": "sha256:a0225c3faa19b3bad977596ccac723e34de004a7ca3c5f4e99677f79b07a33c4",
-    "source": "sha256:73ef498b05b215766dd5d62124e633c9f999e3b8369f32309cc8823008f32863",
+    "candidate": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
+    "cli_binary": "sha256:ac30326391b99af8f5deb443744ca35dec71807b3cf391fd78b28e9109537cb5",
+    "config": "sha256:caf82bdf1c69c30ed4c1b678922fc9101bb55b996a080c4645781fdab41e1485",
+    "fixture_catalog": "sha256:a925bc02011f7c4f767e078503add4f2409f756c99e1a904f5ade5c14b845794",
+    "law_graph": "sha256:a5529a90beccc15b3ffa1572ae2a43fd290f7f9046219a89460a5b5e68c4f35f",
+    "schema_catalog": "sha256:cc0a4ba2dd1e1755eac7d70b72387d21ed9d1d5452c2746193cfb04295b0ad56",
+    "source": "sha256:33b09266f53ac3f0bd37ae8c73ec258a0f0be23bf9f33278d3f290a8fa2deed0",
     "source_obligation": "sha256:dc11c22077bac9a0f2f6c7f08749ae74d95e906c5d51fae6dfec6a270680de31",
     "standards": "sha256:aaafc7eb6da126c8f5057e44a5576ec6ef3abe77bd7eec2b330131d743d943dc"
   },
@@ -60,9 +60,9 @@
     "timeout_ms": 0
   },
   "failure": null,
-  "generated_at": "2026-06-28T15:40:57Z",
+  "generated_at": "2026-06-29T00:00:52Z",
   "input_size_metrics": {
-    "file_count_scanned": 4254,
+    "file_count_scanned": 4278,
     "fixture_count_executed": 1213,
     "receipt_count_read": 0,
     "repository_size_class": "single_plugin_proposal"
@@ -89,14 +89,14 @@
   ],
   "telemetry": {
     "cpu_ms": null,
-    "end_timestamp": "2026-06-28T15:40:57Z",
+    "end_timestamp": "2026-06-29T00:00:52Z",
     "external_call_count": 0,
     "external_wait_ms": 0,
     "io_bytes": null,
     "peak_memory_bytes": null,
     "retry_count": 0,
-    "start_timestamp": "2026-06-28T15:40:57Z",
+    "start_timestamp": "2026-06-29T00:00:52Z",
     "timeout_count": 0,
-    "wall_clock_ms": 1359
+    "wall_clock_ms": 1234
   }
 }

@@ -156,3 +156,36 @@ fn parses_all_control_command_families() {
     assert!(parse(&args(&["law", "graph"])).is_none());
     assert!(parse(&args(&["unknown"])).is_none());
 }
+
+#[test]
+fn parses_package_surface_audit_roots() {
+    let install = parse(&args(&[
+        "install",
+        "audit",
+        "--receipt",
+        "validation_artifacts/cli/install-audit-receipt.json",
+        "--installed-root",
+        "target/installed",
+    ]))
+    .expect("install audit");
+    assert_eq!(install.operation, ControlOperation::InstallAudit);
+    assert_eq!(
+        install.surface_root.as_deref(),
+        Some(std::path::Path::new("target/installed"))
+    );
+
+    let cache = parse(&args(&[
+        "cache",
+        "audit",
+        "--receipt",
+        "validation_artifacts/cli/cache-audit-receipt.json",
+        "--cache-root",
+        "target/cache",
+    ]))
+    .expect("cache audit");
+    assert_eq!(cache.operation, ControlOperation::CacheAudit);
+    assert_eq!(
+        cache.surface_root.as_deref(),
+        Some(std::path::Path::new("target/cache"))
+    );
+}

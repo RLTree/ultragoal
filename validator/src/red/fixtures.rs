@@ -1,10 +1,13 @@
 use crate::claim_semantics;
 use crate::json_boundary;
-use crate::red::fixture::row::{expected_check, expected_status, invalid_row, result_row};
+use crate::red::fixture::row::{invalid_row, result_row};
 use crate::schema_catalog::SchemaStore;
 use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
+
+pub(crate) use crate::red::fixture::materialization::{Observation, base_fixture_json_result};
+use crate::red::fixture::materialization::{base_fixture_error, simple_row};
 
 pub fn red_fixture_results(
     root: &Path,
@@ -17,13 +20,37 @@ pub fn red_fixture_results(
     let Some(items) = rows.as_array() else {
         return BTreeMap::new();
     };
+    let target_digest = crate::package::inventory::package_digest(root).unwrap_or_default();
+    let mut runtime_digest_cache = BTreeMap::new();
+    let runtime_red_fixture_ids = crate::audit::artifacts::safe_red_ids(root);
+    let runtime_red_fixtures = crate::red::fixture::runtime::receipt::red_fixtures_with_ids(
+        root,
+        &runtime_red_fixture_ids,
+        &mut runtime_digest_cache,
+    );
+    let runtime_input_digests = crate::red::fixture::runtime::receipt::input_digests_with_cache(
+        root,
+        &mut runtime_digest_cache,
+    );
+    let mut semantic_cache = crate::claim_semantics::SemanticCache::default();
     let mut results = BTreeMap::new();
     for row in items {
         let row_id = row
             .get("id")
             .and_then(Value::as_str)
             .unwrap_or("invalid-row");
-        let result = result_for_row(root, store, validator_digests, row);
+        let result = result_for_row(
+            root,
+            store,
+            validator_digests,
+            row,
+            &target_digest,
+            &mut runtime_digest_cache,
+            &runtime_red_fixture_ids,
+            &runtime_red_fixtures,
+            &runtime_input_digests,
+            &mut semantic_cache,
+        );
         results.insert(row_id.to_string(), result);
     }
     results
@@ -34,6 +61,12 @@ fn result_for_row(
     store: &SchemaStore,
     validator_digests: &BTreeMap<String, String>,
     row: &Value,
+    target_digest: &str,
+    runtime_digest_cache: &mut BTreeMap<String, String>,
+    runtime_red_fixture_ids: &[String],
+    runtime_red_fixtures: &Value,
+    runtime_input_digests: &[Value],
+    semantic_cache: &mut crate::claim_semantics::SemanticCache,
 ) -> Value {
     let packet_rel = row.get("packet_path").and_then(Value::as_str).unwrap_or("");
     let row_expected = row.get("expected_failure").unwrap_or(&Value::Null);
@@ -68,7 +101,19 @@ fn result_for_row(
             );
         }
     };
-    materialized_result(root, store, validator_digests, &packet, packet_rel)
+    materialized_result(
+        root,
+        store,
+        validator_digests,
+        &packet,
+        packet_rel,
+        target_digest,
+        runtime_digest_cache,
+        runtime_red_fixture_ids,
+        runtime_red_fixtures,
+        runtime_input_digests,
+        semantic_cache,
+    )
 }
 
 fn materialized_result(
@@ -77,13 +122,30 @@ fn materialized_result(
     validator_digests: &BTreeMap<String, String>,
     packet: &Value,
     packet_rel: &str,
+    target_digest: &str,
+    runtime_digest_cache: &mut BTreeMap<String, String>,
+    runtime_red_fixture_ids: &[String],
+    runtime_red_fixtures: &Value,
+    runtime_input_digests: &[Value],
+    semantic_cache: &mut crate::claim_semantics::SemanticCache,
 ) -> Value {
     let expected = &packet["expected_failure"];
     let _filesystem_guard = match crate::red::filesystem::fixtures::materialize(root, packet) {
         Ok(guard) => guard,
         Err(error) => return simple_row(root, packet_rel, expected, &error),
     };
-    let bad = match materialize_bad_bundle(root, packet, packet_rel, expected) {
+    let bad = match materialize_bad_bundle(
+        root,
+        packet,
+        packet_rel,
+        expected,
+        validator_digests,
+        target_digest,
+        runtime_digest_cache,
+        runtime_red_fixture_ids,
+        runtime_red_fixtures,
+        runtime_input_digests,
+    ) {
         Ok(value) => value,
         Err(row) => return row,
     };
@@ -91,7 +153,7 @@ fn materialized_result(
         .get("base_fixture_path")
         .and_then(Value::as_str)
         .unwrap_or("");
-    let observation = crate::red::fixture::observation::observe_materialized_with_candidate(
+    let observation = crate::red::fixture::observation::observe_materialized_with_candidate_cached(
         root,
         store,
         validator_digests,
@@ -99,6 +161,8 @@ fn materialized_result(
         expected,
         &bad,
         base_path,
+        target_digest,
+        semantic_cache,
     );
     result_row(
         root,
@@ -116,6 +180,12 @@ fn materialize_bad_bundle(
     packet: &Value,
     packet_rel: &str,
     expected: &Value,
+    validator_digests: &BTreeMap<String, String>,
+    target_digest: &str,
+    runtime_digest_cache: &mut BTreeMap<String, String>,
+    runtime_red_fixture_ids: &[String],
+    runtime_red_fixtures: &Value,
+    runtime_input_digests: &[Value],
 ) -> Result<Value, Value> {
     let base_path = packet
         .get("base_fixture_path")
@@ -130,6 +200,16 @@ fn materialize_bad_bundle(
         packet_rel,
         expected,
     )?;
+    let base = crate::red::fixture::runtime::receipt::bind_with_candidate_and_cache(
+        root,
+        &base,
+        validator_digests,
+        target_digest,
+        runtime_digest_cache,
+        runtime_red_fixture_ids,
+        runtime_red_fixtures,
+        runtime_input_digests,
+    );
     let Some(patch) = packet.get("json_patch") else {
         return Err(simple_row(
             root,
@@ -148,42 +228,11 @@ fn materialize_bad_bundle(
     })
 }
 
-fn simple_row(root: &Path, packet_rel: &str, expected: &Value, error: &str) -> Value {
-    result_row(
-        root,
-        packet_rel,
-        expected,
-        error,
-        expected_status(expected, error),
-        None,
-        Some(&expected_check(expected)),
-    )
-}
-
-pub(crate) fn base_fixture_json_result(
-    result: Result<Value, String>,
+#[cfg(test)]
+pub(crate) fn runtime_bound_bundle(
     root: &Path,
-    packet_rel: &str,
-    expected: &Value,
-) -> Result<Value, Value> {
-    result.map_err(|_| simple_row(root, packet_rel, expected, "base_fixture_malformed_json"))
-}
-
-pub(crate) struct Observation {
-    pub(crate) error: String,
-    pub(crate) check: String,
-    pub(crate) ok: bool,
-}
-
-fn base_fixture_error(root: &Path, rel: &str) -> Option<String> {
-    if !crate::red::fixture::bases::is_allowed(rel) {
-        return Some("invalid_base_fixture_path".to_string());
-    }
-    if crate::package::inventory::package_path_error(root, rel).is_some() {
-        return Some("base_fixture_path_escapes_root".to_string());
-    }
-    if !root.join(rel).is_file() {
-        return Some("base_fixture_missing".to_string());
-    }
-    None
+    value: &Value,
+    validator_digests: &BTreeMap<String, String>,
+) -> Value {
+    crate::red::fixture::runtime::receipt::bind(root, value, validator_digests)
 }

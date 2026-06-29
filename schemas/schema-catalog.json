@@ -27,6 +27,10 @@
       "path": "schemas/cli-performance-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/package-surface-audit-receipt.schema.json",
+      "path": "schemas/package-surface-audit-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/codex-registry-exposure.schema.json",
       "path": "schemas/codex-registry-exposure.schema.json"
     },

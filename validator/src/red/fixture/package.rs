@@ -3,6 +3,11 @@ use crate::red::fixtures::Observation;
 use serde_json::Value;
 use std::path::Path;
 
+#[derive(Default)]
+pub(crate) struct ObservationCache {
+    namespace: crate::audit::namespace::law::ValueCache,
+}
+
 #[cfg(test)]
 pub(crate) fn observation(
     root: &Path,
@@ -10,14 +15,29 @@ pub(crate) fn observation(
     bad: &Value,
     base_path: &str,
 ) -> Option<Observation> {
-    observation_with_candidate(root, expected, bad, base_path)
+    let target_digest = crate::package::inventory::package_digest(root).unwrap_or_default();
+    observation_with_candidate(root, expected, bad, base_path, &target_digest)
 }
 
+#[cfg(test)]
 pub(crate) fn observation_with_candidate(
     root: &Path,
     expected: &Value,
     bad: &Value,
     base_path: &str,
+    target_digest: &str,
+) -> Option<Observation> {
+    let mut cache = ObservationCache::default();
+    observation_with_candidate_cached(root, expected, bad, base_path, target_digest, &mut cache)
+}
+
+pub(crate) fn observation_with_candidate_cached(
+    root: &Path,
+    expected: &Value,
+    bad: &Value,
+    base_path: &str,
+    target_digest: &str,
+    cache: &mut ObservationCache,
 ) -> Option<Observation> {
     match base_path {
         "docs/source-cards.json" => Some(from_failures(
@@ -66,7 +86,11 @@ pub(crate) fn observation_with_candidate(
         "validation_artifacts/harness/fit-repo-receipt.json"
         | "templates/validation_artifacts/harness/fit-repo-receipt.json" => Some(from_failures(
             expected,
-            &crate::audit::plugin::product::cohesion::fit_receipt_value_failures(root, bad),
+            &crate::audit::plugin::product::cohesion::fit_receipt_value_failures_with_candidate(
+                root,
+                bad,
+                target_digest,
+            ),
         )),
         ".codex-plugin/plugin.json" => Some(from_failures(
             expected,
@@ -74,7 +98,11 @@ pub(crate) fn observation_with_candidate(
         )),
         "plugin-manifest-draft.json" => Some(from_failures(
             expected,
-            &crate::audit::namespace::law::value_failures(root, bad),
+            &crate::audit::namespace::law::value_failures_with_cache(
+                root,
+                bad,
+                &mut cache.namespace,
+            ),
         )),
         "docs/namespace-class-registry.json" => Some(from_failures(
             expected,
@@ -116,11 +144,19 @@ pub(crate) fn observation_with_candidate(
         )),
         "validation_artifacts/harness/plugin-product-journey-receipt.json" => Some(from_failures(
             expected,
-            &crate::audit::plugin::product::cohesion::journey_value_failures(root, bad),
+            &crate::audit::plugin::product::cohesion::journey_value_failures_with_candidate(
+                root,
+                bad,
+                target_digest,
+            ),
         )),
         "validation_artifacts/harness/product-fitness-receipt.json" => Some(from_failures(
             expected,
-            &crate::audit::product::fitness::canonical_package_receipt_value_failures(root, bad),
+            &crate::audit::product::fitness::canonical_package_receipt_value_failures_with_candidate(
+                root,
+                bad,
+                target_digest,
+            ),
         )),
         path if path.starts_with("fixtures/review-materiality/valid/") => Some(from_failures(
             expected,

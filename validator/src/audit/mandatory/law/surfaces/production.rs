@@ -1,7 +1,8 @@
 use serde_json::Value;
 use std::collections::BTreeMap;
+use std::path::Path;
 
-pub(super) fn binding_failures(value: &Value, law: &str) -> Vec<String> {
+pub(super) fn binding_failures(root: &Path, value: &Value, law: &str) -> Vec<String> {
     let mut out = Vec::new();
     let check_id = value
         .get("validator_check_id")
@@ -24,6 +25,11 @@ pub(super) fn binding_failures(value: &Value, law: &str) -> Vec<String> {
     }
     if !has_real_red_fixture(value) {
         out.push(format!("mandatory_law_missing_real_red_fixture:{law}"));
+    }
+    if let Some(fields) = value.get("law_specific").and_then(Value::as_object) {
+        out.extend(specific_guard_red_fixture_failures(
+            root, value, law, fields,
+        ));
     }
     out
 }
@@ -59,4 +65,49 @@ fn has_real_red_fixture(value: &Value) -> bool {
             rows.iter()
                 .any(|row| row.as_str().is_some_and(|id| id.ends_with("-red")))
         })
+}
+
+fn specific_guard_red_fixture_failures(
+    root: &Path,
+    value: &Value,
+    law: &str,
+    fields: &serde_json::Map<String, Value>,
+) -> Vec<String> {
+    fields
+        .iter()
+        .filter_map(|(field, enabled)| {
+            (enabled.as_bool() == Some(true)
+                && !specific_guard_has_red_fixture(root, value, law, field))
+            .then(|| format!("mandatory_law_specific_guard_missing_red_fixture:{law}:{field}"))
+        })
+        .collect()
+}
+
+fn specific_guard_has_red_fixture(root: &Path, value: &Value, law: &str, field: &str) -> bool {
+    value
+        .get("red_fixture_ids")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .any(|id| red_fixture_enforces_guard(root, id, law, field))
+}
+
+fn red_fixture_enforces_guard(root: &Path, id: &str, law: &str, field: &str) -> bool {
+    let path = root.join("fixtures/red").join(format!("{id}.json"));
+    let Ok(value) = crate::json_boundary::read_json(&path) else {
+        return false;
+    };
+    if value.get("id").and_then(Value::as_str) != Some(id) {
+        return false;
+    }
+    let Some(expected) = value
+        .get("expected_failure")
+        .and_then(|failure| failure.get("error"))
+        .and_then(Value::as_str)
+    else {
+        return false;
+    };
+    expected == format!("mandatory_law_specific_guard_not_enforced:{law}:{field}")
+        || expected == field
 }

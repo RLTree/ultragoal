@@ -19,6 +19,8 @@ const PRODUCT_FITNESS: &str = "validation_artifacts/harness/product-fitness-rece
 const PRODUCT_JOURNEY: &str = "validation_artifacts/harness/plugin-product-journey-receipt.json";
 const STANDARDS_GARDENER: &str =
     "validation_artifacts/standards-gardener/current-standards-gardening-receipt.json";
+const INSTALL_AUDIT: &str = "validation_artifacts/cli/install-audit-receipt.json";
+const CACHE_AUDIT: &str = "validation_artifacts/cli/cache-audit-receipt.json";
 
 pub(crate) fn production(
     root: &Path,
@@ -88,6 +90,8 @@ fn specs(operation: ControlOperation) -> Vec<(&'static str, &'static str)> {
         ("product_fitness", PRODUCT_FITNESS),
         ("product_journey", PRODUCT_JOURNEY),
         ("standards_gardener", STANDARDS_GARDENER),
+        ("install_audit", INSTALL_AUDIT),
+        ("cache_audit", CACHE_AUDIT),
         (
             "rust_toolchain",
             "validation_artifacts/rust/toolchain-receipt.json",
@@ -150,6 +154,8 @@ pub(super) fn required_labels(operation: &str) -> &'static [&'static str] {
             "product_fitness",
             "product_journey",
             "standards_gardener",
+            "install_audit",
+            "cache_audit",
             "rust_toolchain",
             "rust_fast",
             "rust_standard",
@@ -177,6 +183,8 @@ pub(super) fn required_labels(operation: &str) -> &'static [&'static str] {
             "product_fitness",
             "product_journey",
             "standards_gardener",
+            "install_audit",
+            "cache_audit",
             "rust_toolchain",
             "rust_fast",
             "rust_standard",

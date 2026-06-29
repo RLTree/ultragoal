@@ -4,4 +4,5 @@ pub(crate) mod parse_errors;
 pub(crate) mod performance;
 pub(crate) mod product;
 pub(crate) mod root;
+pub(crate) mod session;
 pub(crate) mod standards;

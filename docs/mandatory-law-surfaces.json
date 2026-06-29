@@ -724,7 +724,7 @@
         },
         {
           "path": "validator/src/audit/cli/control_plane/authority.rs",
-          "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0"
+          "digest": "sha256:6e9d03729061c1bd85a83ed46cedc502e2f3b73b1ef9dc48aca63a4229556d79"
         },
         {
           "path": "validator/src/cli/control/plane/types.rs",
@@ -732,15 +732,15 @@
         },
         {
           "path": "validator/src/cli/control/plane.rs",
-          "digest": "sha256:218735ef6064a3464a6c189ac04e55111c66bbef9263eae16178285df65909dc"
+          "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21"
         },
         {
           "path": "validator/src/cli/control/plane/emit.rs",
-          "digest": "sha256:b15738d6a77e214f6ec66c0a376c24ab5f45498fc1222332ba233f7d53a2fe43"
+          "digest": "sha256:f87a2ea81ca4b9da93ecbc7d355cf7a579ca8b396cb7d929e46025d85265ce7a"
         },
         {
           "path": "validator/src/cli/control/plane/evidence.rs",
-          "digest": "sha256:0fd5fcf9192264f09ea0adb18a60ecf188abf5a5abce9367dd12220147f2cd59"
+          "digest": "sha256:be0d4cbdbba64d1339a2be8a44637fbcce9494cffac68515ca792f1b68061117"
         },
         {
           "path": "validator/src/cli/control/plane/evidence/item.rs",
@@ -772,15 +772,15 @@
         },
         {
           "path": "validator/src/self_tests/cli/control/graph.rs",
-          "digest": "sha256:b41f80e78ddce29b6534f9088b54f6b9ac63c55470faf34cca417f12a83f4447"
+          "digest": "sha256:ab92d90dee01563d11fa477c243edd7c543f60dc750a1444aad2250c5e7a5c55"
         },
         {
           "path": "validator/src/self_tests/cli/control/parse.rs",
-          "digest": "sha256:5cd401e346126352bd34ec3c20835c0d3f4da34a85a016c92aa9d268176bd99f"
+          "digest": "sha256:e3f21f167ee7c31e1cedad7df447f8edf33292ff1f9cc1442f912f08c089bca8"
         },
         {
           "path": "validator/src/self_tests/cli/control/production.rs",
-          "digest": "sha256:47575e31536467f6bb18af16d2c5c188df771e045c7bd16f31adeddbfebfe68e"
+          "digest": "sha256:58ec5595c8d743f175b8a132d7f525e534495eb8e919433feff50158cf7e1f7f"
         },
         {
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs",
@@ -788,7 +788,7 @@
         },
         {
           "path": "validator/src/self_tests/cli/control/receipts.rs",
-          "digest": "sha256:d0f1ec1a251b986c144050aebd33bd566ed210013eba186908181037704ab487"
+          "digest": "sha256:b3f0f0915ca4d1d0d3fedf99810342ce09ab6cae1d73d7afa967de208f853201"
         },
         {
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs",
@@ -804,11 +804,11 @@
         },
         {
           "path": "validator/src/self_tests/cli/parse_errors.rs",
-          "digest": "sha256:d63dc285480783644a86212fa12315e6ddbdae009b25b4dd76e8ee16cc6973b3"
+          "digest": "sha256:dc68989e9e5f12c43b298831458e05d9bdf8e6c9cb1736710f18ed727363778f"
         },
         {
           "path": "schemas/cli-control-plane-receipt.schema.json",
-          "digest": "sha256:f3c2043bd28ea04435ec07b2a6703088f4970bdba0d976a10bd1df842a827d82"
+          "digest": "sha256:5af10b250bd6e67b8c7a2038433fecb49c0c573c3984e59e76113f8bb4324c54"
         },
         {
           "path": "schemas/cli-transactional-finalization-receipt.schema.json",
@@ -961,7 +961,7 @@
         },
         {
           "path": "validator/src/audit/cli/control_plane/authority.rs",
-          "digest": "sha256:77cd57361476c56310ce628c867566f30aa94e87e31ba904ab45d9f97801fba0"
+          "digest": "sha256:6e9d03729061c1bd85a83ed46cedc502e2f3b73b1ef9dc48aca63a4229556d79"
         },
         {
           "path": "validator/src/cli/control/plane/types.rs",
@@ -969,15 +969,15 @@
         },
         {
           "path": "validator/src/cli/control/plane.rs",
-          "digest": "sha256:218735ef6064a3464a6c189ac04e55111c66bbef9263eae16178285df65909dc"
+          "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21"
         },
         {
           "path": "validator/src/cli/control/plane/emit.rs",
-          "digest": "sha256:b15738d6a77e214f6ec66c0a376c24ab5f45498fc1222332ba233f7d53a2fe43"
+          "digest": "sha256:f87a2ea81ca4b9da93ecbc7d355cf7a579ca8b396cb7d929e46025d85265ce7a"
         },
         {
           "path": "validator/src/cli/control/plane/evidence.rs",
-          "digest": "sha256:0fd5fcf9192264f09ea0adb18a60ecf188abf5a5abce9367dd12220147f2cd59"
+          "digest": "sha256:be0d4cbdbba64d1339a2be8a44637fbcce9494cffac68515ca792f1b68061117"
         },
         {
           "path": "validator/src/cli/control/plane/evidence/item.rs",
@@ -1009,15 +1009,15 @@
         },
         {
           "path": "validator/src/self_tests/cli/control/graph.rs",
-          "digest": "sha256:b41f80e78ddce29b6534f9088b54f6b9ac63c55470faf34cca417f12a83f4447"
+          "digest": "sha256:ab92d90dee01563d11fa477c243edd7c543f60dc750a1444aad2250c5e7a5c55"
         },
         {
           "path": "validator/src/self_tests/cli/control/parse.rs",
-          "digest": "sha256:5cd401e346126352bd34ec3c20835c0d3f4da34a85a016c92aa9d268176bd99f"
+          "digest": "sha256:e3f21f167ee7c31e1cedad7df447f8edf33292ff1f9cc1442f912f08c089bca8"
         },
         {
           "path": "validator/src/self_tests/cli/control/production.rs",
-          "digest": "sha256:47575e31536467f6bb18af16d2c5c188df771e045c7bd16f31adeddbfebfe68e"
+          "digest": "sha256:58ec5595c8d743f175b8a132d7f525e534495eb8e919433feff50158cf7e1f7f"
         },
         {
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs",
@@ -1025,7 +1025,7 @@
         },
         {
           "path": "validator/src/self_tests/cli/control/receipts.rs",
-          "digest": "sha256:d0f1ec1a251b986c144050aebd33bd566ed210013eba186908181037704ab487"
+          "digest": "sha256:b3f0f0915ca4d1d0d3fedf99810342ce09ab6cae1d73d7afa967de208f853201"
         },
         {
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs",
@@ -1041,11 +1041,11 @@
         },
         {
           "path": "validator/src/self_tests/cli/parse_errors.rs",
-          "digest": "sha256:d63dc285480783644a86212fa12315e6ddbdae009b25b4dd76e8ee16cc6973b3"
+          "digest": "sha256:dc68989e9e5f12c43b298831458e05d9bdf8e6c9cb1736710f18ed727363778f"
         },
         {
           "path": "schemas/cli-control-plane-receipt.schema.json",
-          "digest": "sha256:f3c2043bd28ea04435ec07b2a6703088f4970bdba0d976a10bd1df842a827d82"
+          "digest": "sha256:5af10b250bd6e67b8c7a2038433fecb49c0c573c3984e59e76113f8bb4324c54"
         },
         {
           "path": "schemas/cli-transactional-finalization-receipt.schema.json",
@@ -4621,19 +4621,17 @@
     },
     {
       "behavior_failure_modes": [
-        "top_level_validator_internal_cluster",
-        "coverage_wave_history_filename",
-        "iinternal_typo_prefix",
-        "broad_validator_source_exception",
-        "generated_exception_for_hand_authored_source",
-        "package_manifest_blesses_bad_source",
-        "widened_namespace_class_tamper"
+        "namespace_class_broad_source_glob_requires_direct_topology_check",
+        "namespace_class_generated_for_hand_authored_source",
+        "namespace_class_waiver_field_present",
+        "namespace_validator_source_history_name",
+        "namespace_validator_source_top_level_internal_cluster"
       ],
       "claim_ceiling_guard": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
       "enforcement_status": "deterministic_fail_closed",
       "evidence_artifacts": [
         {
-          "digest": "sha256:3b2e69b5feef3eeae31b9d4513d280ebead8bffe0ed77329cf6801e63b394042",
+          "digest": "sha256:e28a5feb6c2e0467e96faf5c5c753884d253f034649279d830863b4eb7a76167",
           "path": "validator/src/audit/namespace/source/topology.rs"
         },
         {
@@ -4641,7 +4639,7 @@
           "path": "validator/src/audit/namespace/classes.rs"
         },
         {
-          "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa",
+          "digest": "sha256:0ba725663a2482e58e7a47b45ac6a8b3f5f9c1f0792ae908694c0cec78ccc9e9",
           "path": "validator/src/audit/namespace/law.rs"
         },
         {
@@ -4660,11 +4658,11 @@
       "foundational_trace_id": "validator-source-namespace-topology",
       "law_id": "validator-source-namespace-topology",
       "law_specific": {
-        "actual_repo_owned_source_inspected": true,
-        "broad_validator_source_exceptions_rejected": true,
-        "claim_ceiling_guard_blocks_material_claims": true,
-        "package_manifest_cannot_bless_source_topology": true,
-        "red_green_tamper_fixture_bound": true
+        "namespace_class_broad_source_glob_requires_direct_topology_check": true,
+        "namespace_class_generated_for_hand_authored_source": true,
+        "namespace_class_waiver_field_present": true,
+        "namespace_validator_source_history_name": true,
+        "namespace_validator_source_top_level_internal_cluster": true
       },
       "red_fixture_ids": [
         "namespace-validator-source-class-waiver-manifest-contract-red",

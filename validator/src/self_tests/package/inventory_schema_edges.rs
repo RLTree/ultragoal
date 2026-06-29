@@ -69,3 +69,72 @@ fn inventory_nonexistent_only_hits_right_side_branches() {
     assert!(joined.contains("actual=0 listed=1"), "{joined}");
     std::fs::remove_dir_all(root).expect("cleanup inventory");
 }
+
+#[test]
+fn package_inventory_paths_ignore_untyped_rows_and_collect_typed_paths() {
+    let paths = crate::package::inventory::inventory_paths(&json!({
+        "skills":[{"path":"skills/a/SKILL.md"},{}],
+        "agents":[{"path":"agents/a.md"},{"path":7}],
+        "schema_catalog":"schemas/schema-catalog.json",
+        "resources":["README.md", false],
+        "schemas":["schemas/a.schema.json"]
+    }));
+    assert_eq!(
+        paths,
+        vec![
+            "skills/a/SKILL.md",
+            "agents/a.md",
+            "schemas/schema-catalog.json",
+            "schemas/a.schema.json",
+            "README.md"
+        ]
+    );
+}
+
+#[test]
+fn package_digest_valid_fixture_canonicalization_rejects_malformed_json() {
+    let err = crate::package::inventory::stable_package_payload(
+        "fixtures/valid/current.json",
+        b"{not-json",
+    )
+    .expect_err("malformed valid fixture rejected");
+    assert!(
+        err.contains("valid fixture digest canonicalization failed"),
+        "{err}"
+    );
+
+    assert_eq!(
+        crate::package::inventory::stable_package_payload(
+            "fixtures/red/current.json",
+            b"{not-json"
+        )
+        .expect("red fixtures are not canonicalized"),
+        b"{not-json".to_vec()
+    );
+}
+
+#[test]
+fn package_digest_rejects_malformed_valid_fixture_through_digest_path() {
+    let root = crate::self_tests::boundaries::support::temp_root("package-digest-bad-valid");
+    std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
+    std::fs::write(
+        root.join("plugin-manifest-draft.json"),
+        serde_json::to_vec(&json!({"resources":["fixtures/valid/bad.json"]})).expect("manifest"),
+    )
+    .expect("manifest");
+    std::fs::write(root.join("fixtures/valid/bad.json"), b"{bad").expect("bad fixture");
+
+    let err = crate::package::inventory::package_digest(&root)
+        .expect_err("malformed valid fixture blocks package digest");
+    assert!(
+        err.contains("valid fixture digest canonicalization failed"),
+        "{err}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup package digest bad valid");
+}
+
+#[test]
+fn package_path_error_falls_back_when_root_cannot_be_canonicalized() {
+    let missing_root = std::path::Path::new("/definitely-missing-ultragoal-root");
+    assert!(crate::package::inventory::package_path_error(missing_root, "docs/a.md").is_none());
+}

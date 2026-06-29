@@ -1,5 +1,6 @@
 pub(crate) mod text;
 use crate::audit::contract::Failure;
+use crate::claim_semantics::coverage::receipt::authority::DigestCache;
 use crate::claim_semantics::{array_strings, bool_field, evidence, good_status, str_field};
 use crate::claim_semantics::{
     claim::evidence as claim_evidence, coverage::policy as coverage_policy, dogfood_receipt,
@@ -10,13 +11,14 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
-pub fn check_claim(
+pub(crate) fn check_claim_with_cache(
     claim: &Value,
     rows: &BTreeMap<String, &Value>,
     cm: &Value,
     ready: &Value,
     root: &Path,
     out: &mut Vec<Failure>,
+    coverage_cache: &mut DigestCache,
 ) {
     ceiling_checks(claim, rows, out);
     observability_checks(claim, out);
@@ -25,7 +27,7 @@ pub fn check_claim(
     fitness::check(claim, root, out);
     promotion_receipt::check(claim, root, out);
     dogfood_receipt::check(claim, root, out);
-    coverage_policy::check(claim, root, out);
+    coverage_policy::check_with_cache(claim, root, out, coverage_cache);
     if bool_field(claim, "requires_goal_binding") && !goal_binding_satisfied(cm) {
         out.push(Failure::new(
             "goal-binding-receipt-match",

@@ -4,4 +4,5 @@ pub(crate) mod garbage;
 pub(crate) mod performance;
 pub(crate) mod product;
 pub(crate) mod rust;
+pub(crate) mod session;
 pub(crate) mod standards;

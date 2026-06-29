@@ -1324,6 +1324,8 @@
     "schemas/clean-checkout-command-discovery-receipt.schema.json",
     "schemas/cli-control-plane-receipt.schema.json",
     "schemas/cli-transactional-finalization-receipt.schema.json",
+    "schemas/cli-performance-receipt.schema.json",
+    "schemas/package-surface-audit-receipt.schema.json",
     "schemas/codex-registry-exposure.schema.json",
     "schemas/final-packet-proof.schema.json",
     "schemas/fit-repo-receipt.schema.json",
@@ -1377,6 +1379,7 @@
     "validation_artifacts/harness/product-success-contract-receipt.json",
     "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
     "validator/src/audit/cli/control_plane/authority.rs",
+    "validator/src/audit/cli/control_plane/authority/surface.rs",
     "validator/src/audit/final_packet/references/package.rs",
     "validator/src/audit/mandatory/law/surface/ids.rs",
     "validator/src/audit/namespace/classes.rs",
@@ -1388,6 +1391,7 @@
     "validator/src/cli/control/plane/evidence.rs",
     "validator/src/cli/control/plane/evidence/item.rs",
     "validator/src/cli/control/plane/evidence/status.rs",
+    "validator/src/cli/control/plane/evidence/status/label_failures.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/path.rs",
     "validator/src/cli/control/plane/proof.rs",
@@ -1396,6 +1400,8 @@
     "validator/src/cli/control/plane/proof/red.rs",
     "validator/src/cli/control/plane/proof/transaction.rs",
     "validator/src/cli/control/plane/registry.rs",
+    "validator/src/cli/control/plane/surface.rs",
+    "validator/src/cli/control/plane/surface/target.rs",
     "validator/src/cli/control/plane/transactional.rs",
     "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
@@ -1415,8 +1421,11 @@
     "validator/src/self_tests/cli/control/graph.rs",
     "validator/src/self_tests/cli/control/output_paths.rs",
     "validator/src/self_tests/cli/control/production/receipts.rs",
+    "validator/src/self_tests/cli/control/production/registry.rs",
     "validator/src/self_tests/cli/control/production.rs",
     "validator/src/self_tests/cli/control/registry.rs",
+    "validator/src/self_tests/cli/control/surface.rs",
+    "validator/src/self_tests/cli/control/surface/target.rs",
     "validator/src/self_tests/cli/control/transaction/mod.rs",
     "validator/src/self_tests/cli/control/transaction/reference.rs",
     "validator/src/self_tests/cli/control/transaction/required.rs",
@@ -1530,6 +1539,11 @@
       "reason": "Evidence graph items use label-specific typed validators instead of pass-shaped receipt rows"
     },
     {
+      "from": "validator/src/cli/control/plane/evidence/status.rs",
+      "to": "validator/src/cli/control/plane/evidence/status/label_failures.rs",
+      "reason": "Status-label tests prove typed package-surface schema errors and stale proof labels fail without row-shape authority"
+    },
+    {
       "from": "validator/src/cli/control/plane/evidence.rs",
       "to": "validator/src/cli/control/plane/evidence/validate.rs",
       "reason": "Receipt validators reject missing, synthetic, stale, or non-production evidence graphs"
@@ -1625,6 +1639,11 @@
       "reason": "Anti-theater dependency tests isolate malformed CLI receipts that are neither production green proof nor valid fail-closed blockers"
     },
     {
+      "from": "validator/src/self_tests/law/anti_theater_dependencies.rs",
+      "to": "validator/src/self_tests/law/anti_theater_dependencies/evidence.rs",
+      "reason": "Anti-theater dependency tests share the complete production evidence graph, including install/cache audit labels, through a semantic test helper"
+    },
+    {
       "from": "validator/src/cli/control/plane.rs",
       "to": "validator/src/cli/control/plane/types.rs",
       "reason": "CLI parser and receipt issuer consume closed authority operation types"
@@ -1698,6 +1717,11 @@
       "from": "validator/src/cli/performance/proof.rs",
       "to": "validator/src/cli/performance/types.rs",
       "reason": "Performance receipt issuer consumes closed budget classes"
+    },
+    {
+      "from": "validator/src/self_tests/cli/control/surface.rs",
+      "to": "validator/src/self_tests/cli/control/surface/target.rs",
+      "reason": "Package-surface audit tests route target/default-root and unavailable-surface coverage through a semantic child module"
     },
     {
       "from": "validator/src/self_tests/cli/control/transaction/mod.rs",
@@ -2861,6 +2885,7 @@
     "schemas/cli-control-plane-receipt.schema.json",
     "schemas/cli-transactional-finalization-receipt.schema.json",
     "schemas/cli-performance-receipt.schema.json",
+    "schemas/package-surface-audit-receipt.schema.json",
     "schemas/codex-registry-exposure.schema.json",
     "schemas/common-defs.schema.json",
     "schemas/completion-manifest.schema.json",
@@ -2963,6 +2988,8 @@
     "docs/plugin-scout-receipt.json",
     "validation_artifacts/cli/performance-receipt.json",
     "validation_artifacts/cli/registry-probe-receipt.json",
+    "validation_artifacts/cli/cache-audit-receipt.json",
+    "validation_artifacts/cli/install-audit-receipt.json",
     "validation_artifacts/cli/self-law-receipt.json",
     "validation_artifacts/cli/transactional-finalization-receipt.json",
     "validation_artifacts/cli/update-goal-eligibility.json",
