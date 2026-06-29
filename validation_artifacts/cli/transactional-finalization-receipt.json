@@ -36,11 +36,6 @@
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_orchestration_recovery_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_security_trust_boundary_falsifier:exposed",
       "cli_control_plane_transaction_final_packet:final_packet_proof_registry_ref:plugin_self_law_registry_agent_not_current:harness_product_simplicity_falsifier:exposed",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_ref_embedded_status_not_pass:source_audit",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_status_not_pass",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_claim_ceiling_not_source_local",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:source_local_audit_checks",
-      "cli_control_plane_transaction_final_packet:final_packet_proof_source_audit_supported_claim_missing:red_fixture_report",
       "cli_control_plane_transaction_ref_status_not_pass:registry_exposure",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_status_not_pass",
       "cli_control_plane_transaction_registry:plugin_self_law_registry_claim_ceiling_not_live_surface",
@@ -57,11 +52,11 @@
     "reason": "transactional_finalization_not_proven"
   },
   "final_packet": {
-    "digest": "sha256:2ced3893c1e23f72867ba3a88a8a8837e16b68a5da649f51816bff8a2781f794",
+    "digest": "sha256:7ce8e6d17513d51ca7a6e43c53e28d68ef2dcfc0aaccbb21c8bce51ffd1536eb",
     "path": "validation_artifacts/review/final-packet-proof.json",
     "status": "fail"
   },
-  "generated_at": "2026-06-29T15:08:38Z",
+  "generated_at": "2026-06-29T15:21:32Z",
   "registry_exposure": {
     "digest": "sha256:0a6e1bad421e7237a7b4d3e27392fc2186f516eba4c890e557dd0a2645c9b45e",
     "path": "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
