@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:05:06Z",
+    "completed_at": "2026-06-29T17:19:51Z",
     "cwd": "fixtures/target-repo/red/partial-observability",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:05:06Z",
+    "started_at": "2026-06-29T17:19:51Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:05:06Z",
+  "generated_at": "2026-06-29T17:19:51Z",
   "invocation": "fixture init fixtures/target-repo/red/partial-observability",
   "mode": "init",
-  "repo_fingerprint": "sha256:78c7176babfe80a10c807899e2da84f4ae36bc25deb00b34801e5ff57a8a1ae5",
+  "repo_fingerprint": "sha256:dc3360dcc7794dca842fa0edc9bf0a34db5f02579774f243922849bffe9b1a92",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,

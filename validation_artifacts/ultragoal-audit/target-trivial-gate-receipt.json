@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:05:06Z",
+    "completed_at": "2026-06-29T17:19:51Z",
     "cwd": "fixtures/target-repo/red/trivial-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:05:06Z",
+    "started_at": "2026-06-29T17:19:51Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -380,10 +380,10 @@
   "gate_markers": [
     "coverage-enforcement"
   ],
-  "generated_at": "2026-06-29T17:05:06Z",
+  "generated_at": "2026-06-29T17:19:51Z",
   "invocation": "fixture init fixtures/target-repo/red/trivial-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:c66e9af54364cd57ab7c2bb987f96cd8d278c01e4c5e068fb700672c48a53720",
+  "repo_fingerprint": "sha256:6abc12277c73db212eb9e3a87833bd7fd4fc97fbef74f96f3568cc01cc525a08",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,

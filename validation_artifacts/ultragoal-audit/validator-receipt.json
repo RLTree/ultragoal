@@ -20,7 +20,7 @@
         "app_registry_or_reviewer_exposure"
       ],
       "claim_impact": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal",
-      "digest": "sha256:43d244f2c353fef9f04f459bd9af571a41c1c031299f4f489e4adbbac6a5398a",
+      "digest": "sha256:bd86217d40e83c8abf2ed20c0fc7647aab618293524f5bb0127013c98f268ab9",
       "observed_failures": [],
       "path": "validation_artifacts/review/final-packet-proof.json",
       "status": "clear",
@@ -635,430 +635,430 @@
   "generated_artifacts": [
     {
       "artifact_type": "red_fixture_report",
-      "digest": "sha256:0797cbe74c1f83c49167ae7bee458995080ca8985ea8b38ee8585b9cd4e571b2",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "digest": "sha256:d7034884027bd750308efa56a7f833b8f79c00b92effde9c6ef56b887d51a093",
+      "generated_at": "2026-06-29T17:19:55Z",
       "input_digest": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
       "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:b6c7d1799b4fe7d54d4726e759cae9545fd27739887bbfe16b9b063e236b5c0a",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:e90f25a676e6551c9c8e4ba0e76053816b7e70475aac0198db8acce6f2658f3b",
+      "generated_at": "2026-06-29T17:19:50Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:1c5feadb499ebdcdecc5b0b34aa4ed6ce13d330661320a94a1a3c42649ce261f",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:a9a7b743d064454723ac35afc07bafebcbdaedc83128c0d0ca2a82befe1b1aaa",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:851af7867159018e7ae5b88a1db31e2bc79964aa7db24e9003b2b7b212089426",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:593e4ad25111fc7b78f706706a942b44125fb0041dafd6963e0b2d90d457ae1c",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:2c361019367488d670198be3032a02c3e8ab3ec55aeb7a813131358aaedf8741",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:2b8139e76761f67223e9670f76b3dc7aacc7fa9f42a6c59675d47183207f4c2a",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3f13f7f0a22cd9263ca472366b0067984f3bedf3419c4147974f55ad9a3d8e60",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:fdf904397ab400a3153381b5d1d34b93d6b85483f544056700849803b0a9316f",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-retrofit-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:eab31f5a2368484c6343bca52db1731ecdc3f8da0b837e947c2da900f5f1e7ec",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:2cff2b9f83dca8f71ddcb78e3e3c3e57670545470de0b47ec60cc7819432a2e9",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:d8c7875cd5d5b5bf596e26797f3788332ded18eb24acfcd0959c4b5a92f6e3bf",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:50312c1f913f1cbee8af38adc5305328bea924b4c7fbcd936badcb5ba24be4b1",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:48f0f0a5d213733d5008fcbaf0cc9a5e88a99752a60c88b1dfeede5cfd462e0b",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:2057594400bfb1523f11cc5879f4a08dccd8144febe2722fff39d03421a1e997",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:cddf3cf4d61f5d6823d2df21af27aa0478b3e774b571d1081bd6a4a52d4cb7b9",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:a2d8340ae3b97892a7819c446a2d779dd6ebd863b60b409725beaa806e617a36",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:401fe63f134a4f7c610f67d651705325cea2162281d9341a1105ba271d9d5907",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:27953af3ca33074a815348141f95052852494e874bb39004c00e9007e9e54a88",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:fd1785cdb966baa7b850adbfeab33ad39872d61e2e1477f6970e9b077101b477",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:dc837e4ad8d358304a32d46d7527fce78b65e546bb204d62ef1a8a960e0971d4",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-trivial-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:cf5c7b03c3484c71b72b631040f5dc03d3fb61a76e5932bce303a2df58e11497",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:d7c8645febb559e389e09323346a4c29f39a1df4e594db21882aeaf9de40c0c1",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-readme-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:595380f8a241f0653ba307c0283927d1ccb962a18290d086e3d7b713225a263a",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:c6293e03893f39f501de183d89424e4f52f184355d6dbdd86a319ce6dadd8f48",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-marker-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:59ebcfb38e6d9826c82e02f501011a0cad985fa1af3b6a5ced1d66f66be9310e",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:c1f995b556974113b714144936a9a2abddc1194b091b76a6420aed537945a42b",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-marker-only-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:77f67e298445b17a70a93af6b21caa6ec19dbda6d4eca82e3f74fcf9db0d1a8f",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:58bf8511e0adf10e64b7141dfbee0dc8ed6541228862c8072a475251a112e7d3",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-unsafe-gate-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9d3f294c6904e65719ac06849c71cd7765b8659c4dacdf73d467861c2056d6a0",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:3f7a238466312ef609ebfc5f3de5ff05a89790fac15564297badb3588f0effcc",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-forged-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e83a107b0171ccf4c294b6b9d6cec944475362977eeb8153bfed8bc1d7d1e68a",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:49393d9e65d2c3a6019e79ee4939b4b2ece37dc812e06c075064bf49c976b2fe",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3249865ebf4af2cadbc41a09bd2cbca39432a7b40851a8772a7c59d7bcb97928",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:aa04e7e26f5a03a83c13f1e0250225b486b78e093e2aa2268fcae899a64cb8a4",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-symlink-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:20db6ddd08695018d78782d805cd217d739ee721a60bd423c6bac9ef0be4d47e",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:449a0292ac9b1c1da3b11bb74bf767099644914e29629d8965128a5f8c25217b",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-stale-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:16d2dbbef947aa00a4a2e39a2881a6d8f1a1c584c9bfb4e470ceb7e509dd2f08",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:4ebb05b8e99f9d96b9367fbac5411c5c3163cf9a8ccf184122ea4c28b94019a2",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9d7802c56a6793bac80296dfff9304c7ca060c86f661840280d39af7ebed2592",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:3493ec823a3a1af50259f92ac84b6ce4346d2f927a0ac2bb93da2fbacb5ac3c7",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:1fd34e00a6ce07f1b6ed67b8b31e528885299c79eb750dbcfa8dc965fd18186d",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:349186fdd48887eb3e3dcbf79b0160654a706fd3cd24e28495affc10521c503b",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:db7606973647a5e4c832aa3d156fd39d0eada0149aa66160e9b67b6042ad419b",
-      "generated_at": "2026-06-29T17:05:06Z",
+      "digest": "sha256:dd1c27c141f765ce3f0e80260ae938a67d7b1c57845870fd3f4560be1d046e48",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-incomplete-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:f3de904c0bb20f933505be37d16047d515bacd521b18e26897a08103b095046b",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:3f171cbd77f5f5dcf1e4923d25365216f667cb3bb132412aa3e642ef917a6e79",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-invented-observability-artifact-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a4e9b0cf9d37b0a9bb708b2b02ede9aa3f673a9665ae4907e037fa8b7e74c7d2",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:045417c3876bc7c13d387ae60810e479d38a4d9b0554581b80ee78ac165944d6",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-ledger-without-query-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:fabc149dc407f18dba40944c9111d528e74af85bcc250c62ae148dc9faad4a7b",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:18e33da9a9e8c40d5e01aca22153dbb5c421245d6b4b81c01729290f23608b94",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-timeout-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:37ffdc3fb8e0dc8437fe5f8fb4fb2dd76e6a3a20917e979cdb6417b20ee15832",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:2fb4296b1d48c86b6512e3c73223d7c39e99ea713876d8d46a1100f4cfaa2c1b",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-output-too-large-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:28eeb7bb574ab0734cabdee062872b3a4df555a7caaa6ec72333b6c2882f8684",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:3e3b8655e6035511238830f26669157f4dfb0c8d9b6f1d79df0ade5b2ec0188c",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-side-effect-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3e63229b45faf231aa3b1e25f72d37eb5e473efb766baf4925eca288c271cf7e",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:b46d6ee40f606aa071e01975e7347bf79ea394e812b99ddf528f577f13ec2e66",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-shell-wrapper-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a1493aa680d4c2fb1542341ccefe94cf808013209a2cdaa4c33ce85e153f84d0",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:88d3b72b9e1fe8fa3fd1b0154b5aab35272be3c5701eee6df4b1861975d8882d",
+      "generated_at": "2026-06-29T17:19:51Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-row-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:187a3abef9dd232843734c94659d5e2917ee1bcc60465cac323efb8e1c16b603",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:c7ce30fcab4dab4690a196a155b581c62e3d45c4291ce285f0cef7d5b16370c5",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:70e22f95208e8761ff122c91c52bb49ff4f0a6c5380fec3d8190c3e2959957b2",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:3700018e2a6baa0b877c07b3c788482844c425c1c533c01ba4f438714df8e8e1",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:b01748033251c3f5b6b23a929262da2ffe44639fed8d4d40c7f1f917b35522c8",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:89685f820ec131f47b7f98c27c99f3c922e28e15c0acc4285cbc72e13751ab27",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9ab4fb146da8200546dea27783714a315e93dde2e79e905baab8191daa453dc7",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:5afbfdc1096838911614bf509f5c40af16160e377b989c3eb1850da03c7deaf9",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-mismatched-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:edc0da8eff87b63861a84144ac91369ee7002a81899ca7028a15bab207dab681",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:5b9cd550e72cc767af76f7f5bad0531a1d4c5c2566d9e4bb1c098af89ad35ab4",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-exception-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:71392fd503ec028710478246ecbd240cb7be0bec500c5ad016819333641fb148",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:9aa310f75303c752944a07874745101e8284fe66e70da0b90bbf9a3e13a92072",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-reviewers-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e49253cbe1425e804432646a9001ed7dfce400640144bbbd5fc7859baef807b5",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:676a588a0b6b9a75e150ac0773601128455ce0008ce7f892210bb178f1cf2b3d",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-self-review-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:cdce1edfaf4522a96046062277f155afa539e7408e03fa77f2ec2dbedfca8bc2",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:23796b93c67892702357053f13c3432536561e0e3bbc5102a8a11c67cbcf8f49",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-reviewer-authority-content-mismatch-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:08f12984b735fcd2f9eb865384782353c01e4bbe82032099eaf445bd42fdeee5",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:5b7f4cc25660d23e238d0d5d3814f172a9cef4a158c78fe9fac505fea5245f40",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-reviewer-authority-alias-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e2ac59878fd3a0821228e7a83a5fc7d1a2a0f7f5d3e1a8d956f7c35d404ec2b1",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:6498cb6cb7736bf5fc262497d5ad32be35b7ce12617d694c3355e525f3388b5b",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-absolute-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:7281441547386bffc86651a1df242e73faac44762cfff8b4765d203cb42ba3bf",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:349e8eaf4dba090377124244f8a20f5fd1a3f94354edeb5e48d4a7708994ab3d",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-parent-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:8d0916b7e5c50c60b366f816dac6c212ca08f34d7f9c5d276413166d8d08e557",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:61c88c5366f1f5fe6ababa951f59248cf241f83d33fb3e478a6a876f069f3316",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-symlink-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:0c9a407496c076a4f43cd4858ba593b1ff72e1867373d6f143d0ee2c5051991b",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:caf1dbb0849241ae22c77a6d6c18d21a76a2541e7ff5ffb02efda7ab9be58b4c",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-special-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:623ec42ff53dfe160fe7b301a0f4ccbe4bc90e430750216688cc604722c2d9b9",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:e3a68ef53f11ab2bd00c1b5bb112232bb703bbd722ca47af83191a95b35ea3ab",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-product-cohesion-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:4bfe4fc7a7161840b856bb29c502cbb3d73c4037b5f47c2f9d07673ef49615f0",
-      "generated_at": "2026-06-29T17:05:07Z",
+      "digest": "sha256:e82244ecd4a8831260afc131b4068312b49368b171119057b7c3ba89a565b758",
+      "generated_at": "2026-06-29T17:19:52Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-primary-user-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-LANE-001.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:62267add53035a3dcd9bbc4f4568bc22f0bf12fe0d6d122577b2bf72bbcd2c1d",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:44dd286634c864fedbb306b7e762480d1645e5a834f2547322c6dea1174024aa",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:8c2a29c76397f43f1012d93b05264feef1e697707abb8611e2903c4e6ecb0b5e",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:8e9aff3a6b22967e9505ba30af80c32714610e2918b9d84763dfa73362c077a4",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:7ac6bb6edf2aa474d0d8ce6e964c1f1641faf2b8f54097176e591de871c3af22",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-29T17:05:11Z",
+      "generated_at": "2026-06-29T17:19:56Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE.example.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T17:03:10Z"
+      "validator_run_id": "ultragoal-audit-2026-06-29T17:17:57Z"
     }
   ],
-  "generated_at": "2026-06-29T17:05:17Z",
+  "generated_at": "2026-06-29T17:20:02Z",
   "input_digests": [
     {
       "digest": "sha256:5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
@@ -14871,7 +14871,7 @@
     "wrong-worktree-or-root"
   ],
   "root": "source-workspace:harness-ultragoal-plugin-proposal",
-  "run_id": "ultragoal-audit-2026-06-29T17:03:10Z",
+  "run_id": "ultragoal-audit-2026-06-29T17:17:57Z",
   "schema": "harness-ultragoal.validator-receipt.v1",
   "status": "pass",
   "supported_claim_classes": [
@@ -14888,16 +14888,16 @@
     "actor_disjoint": true,
     "command": {
       "command": "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "completed_at": "2026-06-29T17:05:17Z",
+      "completed_at": "2026-06-29T17:20:02Z",
       "cwd": "source-workspace:harness-ultragoal-plugin-proposal",
       "exit": 0,
       "id": "ultragoal-audit",
-      "started_at": "2026-06-29T17:03:10Z"
+      "started_at": "2026-06-29T17:17:57Z"
     },
-    "completed_at": "2026-06-29T17:05:17Z",
+    "completed_at": "2026-06-29T17:20:02Z",
     "environment": "local Rust package audit; semantic_validation_clock=automation_tick_receipt.freshness_policy.clock_at_validation",
     "executable_provenance": {
-      "digest": "sha256:93e593bc3d1a25b4240247cbbb3564391a54dd9adc262c5842a4200aeae3f064",
+      "digest": "sha256:a6a14c4180997e8a6f55d0f6f1af7ae586b810369e20d978e39a7432d2931f88",
       "invocation_mode": "direct_executable",
       "path": "target/debug/ultragoal",
       "source_artifact_set_digest": "sha256:672230b245e9e22124f69ec71e5870b1eb9ce077c8386818e892dcfdf2707523"
@@ -14921,7 +14921,7 @@
       }
     ],
     "producer_actor_id": "package-author",
-    "started_at": "2026-06-29T17:03:10Z",
+    "started_at": "2026-06-29T17:17:57Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.stderr.txt"

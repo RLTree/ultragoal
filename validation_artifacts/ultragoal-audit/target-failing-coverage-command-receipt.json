@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T17:05:06Z",
+    "completed_at": "2026-06-29T17:19:51Z",
     "cwd": "fixtures/target-repo/red/failing-coverage-command",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T17:05:06Z",
+    "started_at": "2026-06-29T17:19:51Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T17:05:06Z",
+  "generated_at": "2026-06-29T17:19:51Z",
   "invocation": "fixture init fixtures/target-repo/red/failing-coverage-command",
   "mode": "init",
-  "repo_fingerprint": "sha256:dd96560c61052ada058abb05abfe0968330539e9da81a100bbe574bb6fb8f5bf",
+  "repo_fingerprint": "sha256:ebea0f27235fbc66e5ff57da7607a3ec999e768e2fd8d2c47602c0c692a111e4",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
