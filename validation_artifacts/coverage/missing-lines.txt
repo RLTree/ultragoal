@@ -351,14 +351,14 @@
    43|       |
    44|  4.38k|pub fn crc32(bytes: &[u8]) -> u32 {
    45|  4.38k|    let mut crc = 0xffff_ffffu32;
-   46|  27.8M|    for byte in bytes {
+   46|  28.1M|    for byte in bytes {
                               ^4.38k
-   47|  27.8M|        crc ^= u32::from(*byte);
-   48|  27.8M|        for _ in 0..8 {
-   49|   222M|            crc = if crc & 1 != 0 {
-   50|   111M|                (crc >> 1) ^ 0xedb8_8320
+   47|  28.1M|        crc ^= u32::from(*byte);
+   48|  28.1M|        for _ in 0..8 {
+   49|   224M|            crc = if crc & 1 != 0 {
+   50|   112M|                (crc >> 1) ^ 0xedb8_8320
    51|       |            } else {
-   52|   111M|                crc >> 1
+   52|   112M|                crc >> 1
    53|       |            };
    54|       |        }
    55|       |    }
@@ -1320,10 +1320,10 @@
   179|      4|                        operation,
   180|       |                    )
   181|       |                };
-  182|     48|                for failure in failures {
+  182|     46|                for failure in failures {
                                              ^6
-  183|     48|                    out.push(format!("{rel}: {failure}"));
-  184|     48|                }
+  183|     46|                    out.push(format!("{rel}: {failure}"));
+  184|     46|                }
   185|       |            }
   186|     26|            Err(_) => out.push(format!(
   187|       |                "cli_control_plane_missing_fail_closed_receipt:{rel}"
@@ -1624,30 +1624,30 @@
     8|    806|    unix_to_iso(seconds)
     9|    806|}
    10|       |
-   11|    295|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
-   12|    295|    let trimmed = value.strip_suffix('Z')?;
-                      ^255                             ^40
-   13|    255|    let (date, time) = trimmed.split_once('T')?;
-                       ^254  ^254                           ^1
-   14|    763|    let mut d = date.split('-').map(|p| p.parse::<i64>().ok());
-                      ^254    ^254 ^254       ^254
-   15|    763|    let mut t = time.split(':').map(|p| p.parse::<i64>().ok());
-                      ^254    ^254 ^254       ^254
-   16|    254|    let (year, month, day) = (d.next()?, d.next()?, d.next()?);
+   11|    294|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
+   12|    294|    let trimmed = value.strip_suffix('Z')?;
+                      ^254                             ^40
+   13|    254|    let (date, time) = trimmed.split_once('T')?;
+                       ^253  ^253                           ^1
+   14|    760|    let mut d = date.split('-').map(|p| p.parse::<i64>().ok());
+                      ^253    ^253 ^253       ^253
+   15|    760|    let mut t = time.split(':').map(|p| p.parse::<i64>().ok());
+                      ^253    ^253 ^253       ^253
+   16|    253|    let (year, month, day) = (d.next()?, d.next()?, d.next()?);
                                                     ^0         ^0         ^0
-   17|    254|    let (hour, minute, second) = (t.next()?, t.next()?, t.next()?);
+   17|    253|    let (hour, minute, second) = (t.next()?, t.next()?, t.next()?);
                                                         ^0         ^0         ^0
-   18|    254|    if d.next().is_some() || t.next().is_some() {
-                                           ^253     ^253
+   18|    253|    if d.next().is_some() || t.next().is_some() {
+                                           ^252     ^252
    19|      2|        return None;
-   20|    252|    }
-   21|    252|    let (year, month, day, hour, minute, second) = (year?, month?, day?, hour?, minute?, second?);
+   20|    251|    }
+   21|    251|    let (year, month, day, hour, minute, second) = (year?, month?, day?, hour?, minute?, second?);
                                                                       ^0      ^0    ^0     ^0       ^0       ^0
-   22|    252|    if !valid_parts(year, month, day, hour, minute, second) {
+   22|    251|    if !valid_parts(year, month, day, hour, minute, second) {
    23|      5|        return None;
-   24|    247|    }
-   25|    247|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
-   26|    295|}
+   24|    246|    }
+   25|    246|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
+   26|    294|}
    27|       |
    28|    808|pub fn unix_to_iso(seconds: i64) -> String {
    29|    808|    let days = seconds.div_euclid(86_400);
@@ -1659,37 +1659,37 @@
    35|    808|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
    36|    808|}
    37|       |
-   38|    247|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
-   39|    247|    let y = year - (month <= 2) as i64;
-   40|    247|    let era = if y >= 0 { y } else { y - 399 } / 400;
+   38|    246|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
+   39|    246|    let y = year - (month <= 2) as i64;
+   40|    246|    let era = if y >= 0 { y } else { y - 399 } / 400;
                                                    ^0
-   41|    247|    let yoe = y - era * 400;
-   42|    247|    let m = month + if month > 2 { -3 } else { 9 };
-                                                 ^236        ^11
-   43|    247|    let doy = (153 * m + 2) / 5 + day - 1;
-   44|    247|    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
-   45|    247|    era * 146_097 + doe - 719_468
-   46|    247|}
+   41|    246|    let yoe = y - era * 400;
+   42|    246|    let m = month + if month > 2 { -3 } else { 9 };
+                                                 ^235        ^11
+   43|    246|    let doy = (153 * m + 2) / 5 + day - 1;
+   44|    246|    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+   45|    246|    era * 146_097 + doe - 719_468
+   46|    246|}
    47|       |
-   48|    252|fn valid_parts(year: i64, month: i64, day: i64, hour: i64, minute: i64, second: i64) -> bool {
-   49|    252|    (1..=9999).contains(&year)
-   50|    252|        && (1..=12).contains(&month)
-   51|    251|        && (1..=days_in_month(year, month)).contains(&day)
-   52|    250|        && (0..=23).contains(&hour)
-   53|    249|        && (0..=59).contains(&minute)
-   54|    248|        && (0..=59).contains(&second)
-   55|    252|}
+   48|    251|fn valid_parts(year: i64, month: i64, day: i64, hour: i64, minute: i64, second: i64) -> bool {
+   49|    251|    (1..=9999).contains(&year)
+   50|    251|        && (1..=12).contains(&month)
+   51|    250|        && (1..=days_in_month(year, month)).contains(&day)
+   52|    249|        && (0..=23).contains(&hour)
+   53|    248|        && (0..=59).contains(&minute)
+   54|    247|        && (0..=59).contains(&second)
+   55|    251|}
    56|       |
-   57|    252|fn days_in_month(year: i64, month: i64) -> i64 {
+   57|    251|fn days_in_month(year: i64, month: i64) -> i64 {
    58|      2|    match month {
    59|     10|        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
-   60|    239|        4 | 6 | 9 | 11 => 30,
+   60|    238|        4 | 6 | 9 | 11 => 30,
    61|      2|        2 if leap_year(year) => 29,
                                          ^1   ^1
    62|      1|        2 => 28,
    63|      1|        _ => 0,
    64|       |    }
-   65|    252|}
+   65|    251|}
    66|       |
    67|      2|fn leap_year(year: i64) -> bool {
    68|      2|    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
@@ -2364,10 +2364,10 @@
    78|     56|        .and_then(Value::as_str)
    79|     56|        .unwrap_or("");
    80|     56|    if actual != expected {
-   81|      5|        out.push(format!(
-   82|      5|            "final_packet_proof_target_digest_mismatch:{actual}!={expected}"
-   83|      5|        ));
-   84|     51|    }
+   81|      1|        out.push(format!(
+   82|      1|            "final_packet_proof_target_digest_mismatch:{actual}!={expected}"
+   83|      1|        ));
+   84|     55|    }
    85|     56|    if receipt.get("status").and_then(Value::as_str) != Some("pass") {
    86|     12|        out.push("final_packet_proof_status_not_pass".to_string());
    87|     44|    }
@@ -2498,9 +2498,9 @@
     6|     74|        .pointer("/target_revision/value")
     7|     74|        .and_then(Value::as_str)
     8|     74|        != Some(expected)
-    9|      7|    {
-   10|      7|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
-   11|     67|    }
+    9|      3|    {
+   10|      3|        out.push("final_packet_proof_coverage_target_digest_mismatch".to_string());
+   11|     71|    }
    12|     74|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
    13|     71|        || !value
    14|     71|            .get("uncovered_records")
@@ -2589,10 +2589,10 @@
    42|     18|        return;
    43|       |    };
    44|     65|    for failure in crate::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
-                      ^21
-   45|     21|    {
-   46|     21|        out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
-   47|     21|    }
+                      ^17
+   45|     17|    {
+   46|     17|        out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
+   47|     17|    }
    48|     83|}
    49|       |
    50|     56|fn check_registry_ref(
@@ -2605,10 +2605,10 @@
                            ^47
    57|      9|        return;
    58|       |    };
-   59|    117|    for failure in crate::audit::plugin::registry::value_failures(root, store, &value) {
+   59|    113|    for failure in crate::audit::plugin::registry::value_failures(root, store, &value) {
                                  ^47                                            ^47   ^47    ^47
-   60|    117|        out.push(format!("final_packet_proof_registry_ref:{failure}"));
-   61|    117|    }
+   60|    113|        out.push(format!("final_packet_proof_registry_ref:{failure}"));
+   61|    113|    }
    62|     56|}
    63|       |
    64|     27|fn check_registry_guard_ref(
@@ -2679,36 +2679,36 @@
   124|    518|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   125|    518|    match crate::digest::file(&root.join(rel)) {
   126|    506|        Ok(actual) if actual == expected_digest => {}
-                         ^484                               ^484 ^484
+                         ^496                               ^496 ^496
   127|       |        _ => {
-  128|     34|            out.push(format!(
+  128|     22|            out.push(format!(
   129|       |                "final_packet_proof_ref_digest_mismatch:{label}:{rel}"
   130|       |            ));
-  131|     34|            return None;
+  131|     22|            return None;
   132|       |        }
   133|       |    }
-  134|    484|    let value = match json_boundary::read_json(&root.join(rel)) {
-                      ^482
-  135|    482|        Ok(value) => value,
+  134|    496|    let value = match json_boundary::read_json(&root.join(rel)) {
+                      ^494
+  135|    494|        Ok(value) => value,
   136|      2|        Err(err) => {
   137|      2|            out.push(format!("final_packet_proof_ref_malformed:{label}:{err}"));
   138|      2|            return None;
   139|       |        }
   140|       |    };
-  141|    482|    embedded_status_failures(item, &value, label, status_policy, out);
-  142|    482|    Some(value)
+  141|    494|    embedded_status_failures(item, &value, label, status_policy, out);
+  142|    494|    Some(value)
   143|    550|}
   144|       |
-  145|    482|fn embedded_status_failures(
-  146|    482|    item: &Value,
-  147|    482|    value: &Value,
-  148|    482|    label: &str,
-  149|    482|    status_policy: RefStatusPolicy,
-  150|    482|    out: &mut Vec<String>,
-  151|    482|) {
-  152|    482|    let embedded_status = item.get("status").and_then(Value::as_str);
-  153|    436|    match status_policy {
-  154|    436|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
+  145|    494|fn embedded_status_failures(
+  146|    494|    item: &Value,
+  147|    494|    value: &Value,
+  148|    494|    label: &str,
+  149|    494|    status_policy: RefStatusPolicy,
+  150|    494|    out: &mut Vec<String>,
+  151|    494|) {
+  152|    494|    let embedded_status = item.get("status").and_then(Value::as_str);
+  153|    448|    match status_policy {
+  154|    448|        RefStatusPolicy::MustPass if embedded_status != Some("pass") => {
                                                                                  ^9
   155|      9|            out.push(format!(
   156|      9|                "final_packet_proof_ref_embedded_status_not_pass:{label}"
@@ -2720,17 +2720,17 @@
   161|      3|                "final_packet_proof_ref_embedded_status_not_pass_or_fail:{label}"
   162|      3|            ));
   163|      3|        }
-  164|    470|        _ => {}
+  164|    482|        _ => {}
   165|       |    }
-  166|    482|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
-                              ^271
-  167|    271|        if embedded_status != Some(actual) {
+  166|    494|    if let Some(actual) = value.get("status").and_then(Value::as_str) {
+                              ^275
+  167|    275|        if embedded_status != Some(actual) {
   168|      9|            out.push(format!(
   169|      9|                "final_packet_proof_ref_status_disagreement:{label}"
   170|      9|            ));
-  171|    262|        }
-  172|    211|    }
-  173|    482|}
+  171|    266|        }
+  172|    219|    }
+  173|    494|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/package.rs:
     1|       |use serde_json::Value;
@@ -2752,10 +2752,10 @@
                                   ^75         ^75
    16|    224|        let ptr = format!("/package_receipts/{idx}");
    17|    224|        if let Some(value) = super::load_pass_ref(root, receipt, &ptr, "package", out) {
-                                  ^206
-   18|    206|            value_failures(root, receipt, &ptr, &value, expected, out);
-   19|    206|        }
-                      ^18
+                                  ^218
+   18|    218|            value_failures(root, receipt, &ptr, &value, expected, out);
+   19|    218|        }
+                      ^6
    20|       |    }
    21|     83|}
    22|       |
@@ -2773,57 +2773,57 @@
    33|       |    }
    34|     75|}
    35|       |
-   36|    206|fn value_failures(
-   37|    206|    root: &Path,
-   38|    206|    receipt: &Value,
-   39|    206|    ptr: &str,
-   40|    206|    value: &Value,
-   41|    206|    expected: &str,
-   42|    206|    out: &mut Vec<String>,
-   43|    206|) {
-   44|    206|    if value
-   45|    206|        .pointer("/target_revision/value")
-   46|    206|        .and_then(Value::as_str)
-   47|    206|        != Some(expected)
+   36|    218|fn value_failures(
+   37|    218|    root: &Path,
+   38|    218|    receipt: &Value,
+   39|    218|    ptr: &str,
+   40|    218|    value: &Value,
+   41|    218|    expected: &str,
+   42|    218|    out: &mut Vec<String>,
+   43|    218|) {
+   44|    218|    if value
+   45|    218|        .pointer("/target_revision/value")
+   46|    218|        .and_then(Value::as_str)
+   47|    218|        != Some(expected)
    48|      1|    {
    49|      1|        out.push("final_packet_proof_package_target_digest_mismatch".to_string());
-   50|    205|    }
-   51|    206|    match receipt
-   52|    206|        .pointer(&format!("{ptr}/path"))
-   53|    206|        .and_then(Value::as_str)
-   54|    206|        .unwrap_or("")
+   50|    217|    }
+   51|    218|    match receipt
+   52|    218|        .pointer(&format!("{ptr}/path"))
+   53|    218|        .and_then(Value::as_str)
+   54|    218|        .unwrap_or("")
    55|       |    {
-   56|    206|        FIT_REPO => fit_repo_failures(root, value, out),
-                                  ^68               ^68   ^68    ^68
-   57|    138|        PRODUCT_FITNESS => product_fitness_failures(root, value, out),
-                                         ^68                      ^68   ^68    ^68
-   58|     70|        PRODUCT_JOURNEY => product_journey_failures(root, value, out),
-                                         ^69                      ^69   ^69    ^69
+   56|    218|        FIT_REPO => fit_repo_failures(root, value, out),
+                                  ^72               ^72   ^72    ^72
+   57|    146|        PRODUCT_FITNESS => product_fitness_failures(root, value, out),
+                                         ^72                      ^72   ^72    ^72
+   58|     74|        PRODUCT_JOURNEY => product_journey_failures(root, value, out),
+                                         ^73                      ^73   ^73    ^73
    59|      1|        path => out.push(format!("final_packet_proof_package_receipt_unknown:{path}")),
    60|       |    }
-   61|    206|}
+   61|    218|}
    62|       |
-   63|     68|fn fit_repo_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
-   64|     68|    for failure in crate::audit::fit_repo_receipt::failures(root, value) {
+   63|     72|fn fit_repo_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
+   64|     72|    for failure in crate::audit::fit_repo_receipt::failures(root, value) {
                       ^12
    65|     12|        out.push(format!("final_packet_proof_fit_repo_ref:{failure}"));
    66|     12|    }
-   67|     68|}
+   67|     72|}
    68|       |
-   69|     68|fn product_fitness_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
+   69|     72|fn product_fitness_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
    70|     40|    for failure in
-   71|     68|        crate::audit::product::fitness::canonical_package_receipt_value_failures(root, value)
+   71|     72|        crate::audit::product::fitness::canonical_package_receipt_value_failures(root, value)
    72|     40|    {
    73|     40|        out.push(format!("final_packet_proof_product_fitness_ref:{failure}"));
    74|     40|    }
-   75|     68|}
+   75|     72|}
    76|       |
-   77|     69|fn product_journey_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
-   78|     69|    for failure in crate::audit::plugin::product::cohesion::journey_value_failures(root, value) {
+   77|     73|fn product_journey_failures(root: &Path, value: &Value, out: &mut Vec<String>) {
+   78|     73|    for failure in crate::audit::plugin::product::cohesion::journey_value_failures(root, value) {
                       ^2
    79|      2|        out.push(format!("final_packet_proof_product_journey_ref:{failure}"));
    80|      2|    }
-   81|     69|}
+   81|     73|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/final_packet/references/source_audit.rs:
     1|       |use super::{RefStatusPolicy, load_ref};
@@ -3032,13 +3032,13 @@
     3|       |
     4|       |const FIT_ENTRYPOINT: &str = "harness-ultragoal:fit-repo";
     5|       |
-    6|     81|pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
-    7|     81|    let mut out = base_failures(root, receipt);
-    8|     81|    out.extend(classification_failures(receipt));
-    9|     81|    out.extend(check_artifact_failures(root, receipt));
-   10|     81|    out.extend(blocker_failures(receipt));
-   11|     81|    out
-   12|     81|}
+    6|     85|pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
+    7|     85|    let mut out = base_failures(root, receipt);
+    8|     85|    out.extend(classification_failures(receipt));
+    9|     85|    out.extend(check_artifact_failures(root, receipt));
+   10|     85|    out.extend(blocker_failures(receipt));
+   11|     85|    out
+   12|     85|}
    13|       |
    14|      3|pub(crate) fn failures_with_candidate(
    15|      3|    root: &Path,
@@ -3052,178 +3052,178 @@
    23|      3|    out
    24|      3|}
    25|       |
-   26|    147|pub(crate) fn canonical_digest(receipt: &Value) -> String {
-   27|    147|    let mut canonical = receipt.clone();
-   28|    147|    if let Some(obj) = canonical.as_object_mut() {
-                              ^146
-   29|    146|        obj.insert(
-   30|    146|            "receipt_digest".to_string(),
-   31|    146|            Value::String(crate::digest::ZERO.to_string()),
-   32|    146|        );
-   33|    146|    }
+   26|    151|pub(crate) fn canonical_digest(receipt: &Value) -> String {
+   27|    151|    let mut canonical = receipt.clone();
+   28|    151|    if let Some(obj) = canonical.as_object_mut() {
+                              ^150
+   29|    150|        obj.insert(
+   30|    150|            "receipt_digest".to_string(),
+   31|    150|            Value::String(crate::digest::ZERO.to_string()),
+   32|    150|        );
+   33|    150|    }
                   ^1
-   34|    147|    crate::digest::bytes(&serde_json::to_vec(&canonical).unwrap_or_default())
-   35|    147|}
+   34|    151|    crate::digest::bytes(&serde_json::to_vec(&canonical).unwrap_or_default())
+   35|    151|}
    36|       |
-   37|     81|fn base_failures(root: &Path, receipt: &Value) -> Vec<String> {
-   38|     81|    base_failures_with_candidate(
-   39|     81|        root,
-   40|     81|        receipt,
-   41|     81|        crate::package::inventory::package_digest(root),
+   37|     85|fn base_failures(root: &Path, receipt: &Value) -> Vec<String> {
+   38|     85|    base_failures_with_candidate(
+   39|     85|        root,
+   40|     85|        receipt,
+   41|     85|        crate::package::inventory::package_digest(root),
    42|       |    )
-   43|     81|}
+   43|     85|}
    44|       |
-   45|     84|fn base_failures_with_candidate(
-   46|     84|    root: &Path,
-   47|     84|    receipt: &Value,
-   48|     84|    current: Result<String, String>,
-   49|     84|) -> Vec<String> {
-   50|     84|    let mut out = Vec::new();
-   51|     84|    if str_field(receipt, "schema") != "harness-ultragoal.fit-repo-receipt.v1" {
+   45|     88|fn base_failures_with_candidate(
+   46|     88|    root: &Path,
+   47|     88|    receipt: &Value,
+   48|     88|    current: Result<String, String>,
+   49|     88|) -> Vec<String> {
+   50|     88|    let mut out = Vec::new();
+   51|     88|    if str_field(receipt, "schema") != "harness-ultragoal.fit-repo-receipt.v1" {
    52|      6|        out.push("fit_repo_receipt_malformed:schema".to_string());
-   53|     78|    }
-   54|     84|    if receipt
-   55|     84|        .pointer("/entrypoint_contract/id")
-   56|     84|        .and_then(Value::as_str)
-   57|     84|        != Some(FIT_ENTRYPOINT)
+   53|     82|    }
+   54|     88|    if receipt
+   55|     88|        .pointer("/entrypoint_contract/id")
+   56|     88|        .and_then(Value::as_str)
+   57|     88|        != Some(FIT_ENTRYPOINT)
    58|      6|    {
    59|      6|        out.push("plugin_flow_entrypoint_missing".to_string());
-   60|     78|    }
-   61|     82|    match current {
-   62|     78|        Ok(current)
-   63|     82|            if receipt
-   64|     82|                .pointer("/target_revision/value")
-   65|     82|                .and_then(Value::as_str)
-   66|     82|                == Some(current.as_str()) => {}
-                                                      ^78  ^78
+   60|     82|    }
+   61|     86|    match current {
+   62|     82|        Ok(current)
+   63|     86|            if receipt
+   64|     86|                .pointer("/target_revision/value")
+   65|     86|                .and_then(Value::as_str)
+   66|     86|                == Some(current.as_str()) => {}
+                                                      ^82  ^82
    67|      4|        Ok(_) => out.push("fit_repo_receipt_target_digest_mismatch".to_string()),
    68|      2|        Err(err) => out.push(format!("fit_repo_receipt_target_digest_unavailable:{err}")),
    69|       |    }
-   70|    252|    for key in [
-   71|     84|        "plugin_source_path",
-   72|     84|        "installed_plugin_path",
-   73|     84|        "cache_package_path",
-   74|     84|    ] {
-   75|    252|        if str_field(receipt, key).is_empty() {
+   70|    264|    for key in [
+   71|     88|        "plugin_source_path",
+   72|     88|        "installed_plugin_path",
+   73|     88|        "cache_package_path",
+   74|     88|    ] {
+   75|    264|        if str_field(receipt, key).is_empty() {
    76|     18|            out.push(format!("fit_repo_receipt_surface_missing:{key}"));
-   77|    234|        }
+   77|    246|        }
    78|       |    }
-   79|     84|    out.extend(version_failures(root, receipt));
-   80|     84|    out.extend(authority_failures(receipt));
-   81|     84|    out
-   82|     84|}
+   79|     88|    out.extend(version_failures(root, receipt));
+   80|     88|    out.extend(authority_failures(receipt));
+   81|     88|    out
+   82|     88|}
    83|       |
-   84|     84|fn version_failures(root: &Path, receipt: &Value) -> Vec<String> {
-   85|     84|    let Ok(plugin) = crate::json_boundary::read_json(&root.join(".codex-plugin/plugin.json"))
-                         ^27
+   84|     88|fn version_failures(root: &Path, receipt: &Value) -> Vec<String> {
+   85|     88|    let Ok(plugin) = crate::json_boundary::read_json(&root.join(".codex-plugin/plugin.json"))
+                         ^31
    86|       |    else {
    87|     57|        return Vec::new();
    88|       |    };
-   89|     27|    let mut out = Vec::new();
-   90|     27|    let version = str_field(&plugin, "version");
-   91|     27|    if str_field(receipt, "plugin_version") != version {
+   89|     31|    let mut out = Vec::new();
+   90|     31|    let version = str_field(&plugin, "version");
+   91|     31|    if str_field(receipt, "plugin_version") != version {
    92|      4|        out.push("fit_repo_receipt_wrong_plugin_version".to_string());
-   93|     23|    }
-   94|     27|    let expected_cache = format!("local-harness-plugins/harness-ultragoal/{version}");
-   95|     27|    if str_field(receipt, "cache_package_path") != expected_cache {
+   93|     27|    }
+   94|     31|    let expected_cache = format!("local-harness-plugins/harness-ultragoal/{version}");
+   95|     31|    if str_field(receipt, "cache_package_path") != expected_cache {
    96|      5|        out.push("fit_repo_receipt_wrong_cache_package".to_string());
-   97|     22|    }
-   98|     27|    out
-   99|     84|}
+   97|     26|    }
+   98|     31|    out
+   99|     88|}
   100|       |
-  101|     84|fn authority_failures(receipt: &Value) -> Vec<String> {
-  102|     84|    let mut out = Vec::new();
-  103|     84|    if str_field(receipt, "producer_actor_id") == "fixture-author"
-  104|     82|        || str_field(receipt, "producer_actor_id").is_empty()
+  101|     88|fn authority_failures(receipt: &Value) -> Vec<String> {
+  102|     88|    let mut out = Vec::new();
+  103|     88|    if str_field(receipt, "producer_actor_id") == "fixture-author"
+  104|     86|        || str_field(receipt, "producer_actor_id").is_empty()
   105|      8|    {
   106|      8|        out.push("fit_repo_receipt_placeholder_actor".to_string());
-  107|     76|    }
-  108|     84|    if str_field(receipt, "receipt_digest") == crate::digest::ZERO {
+  107|     80|    }
+  108|     88|    if str_field(receipt, "receipt_digest") == crate::digest::ZERO {
   109|      1|        out.push("fit_repo_receipt_placeholder_digest".to_string());
-  110|     83|    }
-  111|     84|    if str_field(receipt, "receipt_digest") != canonical_digest(receipt) {
+  110|     87|    }
+  111|     88|    if str_field(receipt, "receipt_digest") != canonical_digest(receipt) {
   112|      8|        out.push("fit_repo_receipt_digest_mismatch".to_string());
-  113|     76|    }
-  114|     84|    out
-  115|     84|}
+  113|     80|    }
+  114|     88|    out
+  115|     88|}
   116|       |
-  117|     84|fn classification_failures(receipt: &Value) -> Vec<String> {
-  118|     84|    let mut out = Vec::new();
-  119|     84|    if str_field(receipt, "target_classification").is_empty()
-  120|     78|        || str_field(receipt, "target_classification") == "blocked_unclassified_repo"
+  117|     88|fn classification_failures(receipt: &Value) -> Vec<String> {
+  118|     88|    let mut out = Vec::new();
+  119|     88|    if str_field(receipt, "target_classification").is_empty()
+  120|     82|        || str_field(receipt, "target_classification") == "blocked_unclassified_repo"
   121|      8|    {
   122|      8|        out.push("fit_repo_receipt_unclassified_target".to_string());
-  123|     76|    }
-  124|     84|    if str_field(receipt, "runtime_surface_classification").is_empty() {
+  123|     80|    }
+  124|     88|    if str_field(receipt, "runtime_surface_classification").is_empty() {
   125|      8|        out.push("fit_repo_receipt_unclassified_runtime_surface".to_string());
-  126|     76|    }
-  127|     84|    if str_field(receipt, "product_surface_classification").is_empty()
-  128|     78|        || str_field(receipt, "product_surface_classification") == "ambiguous_requires_blocker"
+  126|     80|    }
+  127|     88|    if str_field(receipt, "product_surface_classification").is_empty()
+  128|     82|        || str_field(receipt, "product_surface_classification") == "ambiguous_requires_blocker"
   129|      8|    {
   130|      8|        out.push("fit_repo_receipt_unclassified_product_surface".to_string());
-  131|     76|    }
-  132|     84|    if receipt
-  133|     84|        .get("checks")
-  134|     84|        .and_then(Value::as_array)
-  135|     84|        .is_none_or(Vec::is_empty)
+  131|     80|    }
+  132|     88|    if receipt
+  133|     88|        .get("checks")
+  134|     88|        .and_then(Value::as_array)
+  135|     88|        .is_none_or(Vec::is_empty)
   136|      6|    {
   137|      6|        out.push("fit_repo_receipt_missing_check_result".to_string());
-  138|     78|    }
-  139|     84|    if str_field(receipt, "claim_ceiling").is_empty() {
+  138|     82|    }
+  139|     88|    if str_field(receipt, "claim_ceiling").is_empty() {
   140|      8|        out.push("fit_repo_receipt_claim_ceiling_missing".to_string());
-  141|     76|    }
-  142|     84|    out
-  143|     84|}
+  141|     80|    }
+  142|     88|    out
+  143|     88|}
   144|       |
-  145|     84|fn check_artifact_failures(root: &Path, receipt: &Value) -> Vec<String> {
-  146|     84|    receipt
-  147|     84|        .get("checks")
-  148|     84|        .and_then(Value::as_array)
-  149|     84|        .into_iter()
-  150|     84|        .flatten()
-  151|     84|        .flat_map(|check| {
-                                        ^78
-  152|     78|            ["stdout", "stderr"]
-  153|     78|                .into_iter()
-  154|    156|                .filter_map(|key| check.get(key))
-                               ^78
-  155|     78|        })
-  156|    156|        .filter_map(|artifact| artifact_failure(root, artifact))
-                       ^84
-  157|     84|        .collect()
-  158|     84|}
+  145|     88|fn check_artifact_failures(root: &Path, receipt: &Value) -> Vec<String> {
+  146|     88|    receipt
+  147|     88|        .get("checks")
+  148|     88|        .and_then(Value::as_array)
+  149|     88|        .into_iter()
+  150|     88|        .flatten()
+  151|     88|        .flat_map(|check| {
+                                        ^82
+  152|     82|            ["stdout", "stderr"]
+  153|     82|                .into_iter()
+  154|    164|                .filter_map(|key| check.get(key))
+                               ^82
+  155|     82|        })
+  156|    164|        .filter_map(|artifact| artifact_failure(root, artifact))
+                       ^88
+  157|     88|        .collect()
+  158|     88|}
   159|       |
-  160|    156|fn artifact_failure(root: &Path, artifact: &Value) -> Option<String> {
-  161|    156|    let path = str_field(artifact, "path");
-  162|    156|    if !path.starts_with("validation_artifacts/harness/fit-repo-command.") {
+  160|    164|fn artifact_failure(root: &Path, artifact: &Value) -> Option<String> {
+  161|    164|    let path = str_field(artifact, "path");
+  162|    164|    if !path.starts_with("validation_artifacts/harness/fit-repo-command.") {
   163|      2|        return Some("fit_repo_receipt_command_output_not_command_artifact".to_string());
-  164|    154|    }
-  165|    154|    crate::package::artifact::refs::validate_object(root, artifact, "fit-repo command artifact")
-  166|    154|        .err()
-  167|    154|        .map(|err| format!("fit_repo_receipt_artifact_invalid:{err}"))
+  164|    162|    }
+  165|    162|    crate::package::artifact::refs::validate_object(root, artifact, "fit-repo command artifact")
+  166|    162|        .err()
+  167|    162|        .map(|err| format!("fit_repo_receipt_artifact_invalid:{err}"))
                                  ^2
-  168|    156|}
+  168|    164|}
   169|       |
-  170|     84|fn blocker_failures(receipt: &Value) -> Vec<String> {
-  171|     84|    receipt
-  172|     84|        .get("blockers")
-  173|     84|        .and_then(Value::as_array)
-  174|     84|        .into_iter()
-  175|     84|        .flatten()
-  176|     84|        .filter(|blocker| str_field(blocker, "owner").is_empty())
+  170|     88|fn blocker_failures(receipt: &Value) -> Vec<String> {
+  171|     88|    receipt
+  172|     88|        .get("blockers")
+  173|     88|        .and_then(Value::as_array)
+  174|     88|        .into_iter()
+  175|     88|        .flatten()
+  176|     88|        .filter(|blocker| str_field(blocker, "owner").is_empty())
                                         ^2                          ^2
-  177|     84|        .map(|_| "fit_repo_receipt_blocker_without_owner".to_string())
+  177|     88|        .map(|_| "fit_repo_receipt_blocker_without_owner".to_string())
                                ^2                                       ^2
-  178|     84|        .collect()
-  179|     84|}
+  178|     88|        .collect()
+  179|     88|}
   180|       |
-  181|  1.40k|fn str_field(value: &Value, key: &str) -> String {
-  182|  1.40k|    value
-  183|  1.40k|        .get(key)
-  184|  1.40k|        .and_then(Value::as_str)
-  185|  1.40k|        .unwrap_or_default()
-  186|  1.40k|        .to_string()
-  187|  1.40k|}
+  181|  1.47k|fn str_field(value: &Value, key: &str) -> String {
+  182|  1.47k|    value
+  183|  1.47k|        .get(key)
+  184|  1.47k|        .and_then(Value::as_str)
+  185|  1.47k|        .unwrap_or_default()
+  186|  1.47k|        .to_string()
+  187|  1.47k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/foundational_law_trace.rs:
     1|       |use crate::{digest, json_boundary};
@@ -7208,9 +7208,9 @@
   203|      1|    journey_value_failures(root, &value)
   204|     11|}
   205|       |
-  206|     83|pub fn journey_value_failures(root: &Path, value: &Value) -> Vec<String> {
-  207|     83|    crate::audit::plugin::product::journey::failures(root, value)
-  208|     83|}
+  206|     87|pub fn journey_value_failures(root: &Path, value: &Value) -> Vec<String> {
+  207|     87|    crate::audit::plugin::product::journey::failures(root, value)
+  208|     87|}
   209|       |
   210|      2|pub fn journey_value_failures_with_candidate(
   211|      2|    root: &Path,
@@ -7245,9 +7245,9 @@
     3|       |
     4|       |const FIT_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
     5|       |
-    6|     86|pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
-    7|     86|    failures_with_digest(root, value, crate::package::inventory::package_digest(root))
-    8|     86|}
+    6|     90|pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
+    7|     90|    failures_with_digest(root, value, crate::package::inventory::package_digest(root))
+    8|     90|}
     9|       |
    10|      2|pub(crate) fn failures_with_candidate(
    11|      2|    root: &Path,
@@ -7257,112 +7257,112 @@
    15|      2|    failures_with_digest(root, value, Ok(target_digest.to_string()))
    16|      2|}
    17|       |
-   18|     88|fn failures_with_digest(
-   19|     88|    root: &Path,
-   20|     88|    value: &Value,
-   21|     88|    current: Result<String, String>,
-   22|     88|) -> Vec<String> {
-   23|     88|    let steps = value
-   24|     88|        .get("journey")
-   25|     88|        .and_then(Value::as_array)
-   26|     88|        .map_or(0, Vec::len);
-   27|     88|    if steps < 10 {
+   18|     92|fn failures_with_digest(
+   19|     92|    root: &Path,
+   20|     92|    value: &Value,
+   21|     92|    current: Result<String, String>,
+   22|     92|) -> Vec<String> {
+   23|     92|    let steps = value
+   24|     92|        .get("journey")
+   25|     92|        .and_then(Value::as_array)
+   26|     92|        .map_or(0, Vec::len);
+   27|     92|    if steps < 10 {
    28|      6|        return vec!["plugin_product_journey_incomplete".to_string()];
-   29|     82|    }
-   30|     82|    let mut out = evidence_count_failures(value);
-   31|     82|    out.extend(authority_failures(value, current));
-   32|     82|    if str_field(value, "claim_ceiling") != "package_static_fixture_only" {
+   29|     86|    }
+   30|     86|    let mut out = evidence_count_failures(value);
+   31|     86|    out.extend(authority_failures(value, current));
+   32|     86|    if str_field(value, "claim_ceiling") != "package_static_fixture_only" {
    33|      1|        out.push("plugin_product_journey_claim_ceiling_missing".to_string());
-   34|     81|    }
-   35|     82|    if str_field(value, "generated_at").contains("2026-06-24T00:00:00Z") {
+   34|     85|    }
+   35|     86|    if str_field(value, "generated_at").contains("2026-06-24T00:00:00Z") {
    36|      1|        out.push("plugin_product_journey_placeholder_timestamp".to_string());
-   37|     81|    }
-   38|     82|    out.extend(evidence_ref_failures(root, value));
-   39|     82|    out
-   40|     88|}
+   37|     85|    }
+   38|     86|    out.extend(evidence_ref_failures(root, value));
+   39|     86|    out
+   40|     92|}
    41|       |
-   42|     82|fn evidence_count_failures(value: &Value) -> Vec<String> {
-   43|     82|    let evidence = value
-   44|     82|        .get("evidence")
-   45|     82|        .and_then(Value::as_array)
-   46|     82|        .cloned()
-   47|     82|        .unwrap_or_default();
-   48|     82|    if evidence.len() < 3
-   49|     80|        || evidence
-   50|     80|            .iter()
-   51|    249|            .filter(|item| str_field(item, "path") != FIT_RECEIPT)
-                           ^80
-   52|     80|            .count()
+   42|     86|fn evidence_count_failures(value: &Value) -> Vec<String> {
+   43|     86|    let evidence = value
+   44|     86|        .get("evidence")
+   45|     86|        .and_then(Value::as_array)
+   46|     86|        .cloned()
+   47|     86|        .unwrap_or_default();
+   48|     86|    if evidence.len() < 3
+   49|     84|        || evidence
+   50|     84|            .iter()
+   51|    265|            .filter(|item| str_field(item, "path") != FIT_RECEIPT)
+                           ^84
+   52|     84|            .count()
    53|       |            < 2
    54|       |    {
    55|      2|        vec!["plugin_product_journey_evidence_incomplete".to_string()]
    56|       |    } else {
-   57|     80|        Vec::new()
+   57|     84|        Vec::new()
    58|       |    }
-   59|     82|}
+   59|     86|}
    60|       |
-   61|     82|fn authority_failures(value: &Value, current: Result<String, String>) -> Vec<String> {
-   62|     82|    let mut out = Vec::new();
-   63|     82|    if str_field(value, "status") != "pass" {
+   61|     86|fn authority_failures(value: &Value, current: Result<String, String>) -> Vec<String> {
+   62|     86|    let mut out = Vec::new();
+   63|     86|    if str_field(value, "status") != "pass" {
    64|      4|        out.push("plugin_product_journey_status_not_pass".to_string());
-   65|     78|    }
-   66|     82|    if value
-   67|     82|        .pointer("/target_revision/kind")
-   68|     82|        .and_then(Value::as_str)
-   69|     82|        != Some("package_digest")
+   65|     82|    }
+   66|     86|    if value
+   67|     86|        .pointer("/target_revision/kind")
+   68|     86|        .and_then(Value::as_str)
+   69|     86|        != Some("package_digest")
    70|      4|    {
    71|      4|        out.push("plugin_product_journey_target_revision_not_package_digest".to_string());
-   72|     78|    }
-   73|     80|    match current {
-   74|     78|        Ok(current)
-   75|     80|            if value
-   76|     80|                .pointer("/target_revision/value")
-   77|     80|                .and_then(Value::as_str)
-   78|     80|                == Some(current.as_str()) => {}
-                                                      ^78  ^78
+   72|     82|    }
+   73|     84|    match current {
+   74|     82|        Ok(current)
+   75|     84|            if value
+   76|     84|                .pointer("/target_revision/value")
+   77|     84|                .and_then(Value::as_str)
+   78|     84|                == Some(current.as_str()) => {}
+                                                      ^82  ^82
    79|      2|        Ok(_) => out.push("plugin_product_journey_target_digest_mismatch".to_string()),
    80|      2|        Err(err) => out.push(format!(
    81|       |            "plugin_product_journey_target_digest_unavailable:{err}"
    82|       |        )),
    83|       |    }
-   84|     82|    out
-   85|     82|}
+   84|     86|    out
+   85|     86|}
    86|       |
-   87|     82|fn evidence_ref_failures(root: &Path, value: &Value) -> Vec<String> {
-   88|     82|    let mut out = Vec::new();
-   89|    250|    for item in value
-                              ^82
-   90|     82|        .get("evidence")
-   91|     82|        .and_then(Value::as_array)
-   92|     82|        .into_iter()
-   93|     82|        .flatten()
+   87|     86|fn evidence_ref_failures(root: &Path, value: &Value) -> Vec<String> {
+   88|     86|    let mut out = Vec::new();
+   89|    266|    for item in value
+                              ^86
+   90|     86|        .get("evidence")
+   91|     86|        .and_then(Value::as_array)
+   92|     86|        .into_iter()
+   93|     86|        .flatten()
    94|       |    {
    95|      2|        if let Err(err) =
-   96|    250|            crate::package::artifact::refs::validate_object(root, item, "plugin journey evidence")
+   96|    266|            crate::package::artifact::refs::validate_object(root, item, "plugin journey evidence")
    97|      2|        {
    98|      2|            out.push(format!("plugin_product_journey_evidence_invalid:{err}"));
-   99|    248|        }
+   99|    264|        }
   100|       |    }
-  101|     82|    if let Some(item) = value.get("error_path_evidence") {
-                              ^81
+  101|     86|    if let Some(item) = value.get("error_path_evidence") {
+                              ^85
   102|      1|        if let Err(err) =
-  103|     81|            crate::package::artifact::refs::validate_object(root, item, "plugin journey error path")
+  103|     85|            crate::package::artifact::refs::validate_object(root, item, "plugin journey error path")
   104|      1|        {
   105|      1|            out.push(format!("plugin_product_journey_evidence_invalid:{err}"));
-  106|     80|        }
+  106|     84|        }
   107|      1|    } else {
   108|      1|        out.push("plugin_product_journey_error_path_missing".to_string());
   109|      1|    }
-  110|     82|    out
-  111|     82|}
+  110|     86|    out
+  111|     86|}
   112|       |
-  113|    495|fn str_field(value: &Value, key: &str) -> String {
-  114|    495|    value
-  115|    495|        .get(key)
-  116|    495|        .and_then(Value::as_str)
-  117|    495|        .unwrap_or_default()
-  118|    495|        .to_string()
-  119|    495|}
+  113|    523|fn str_field(value: &Value, key: &str) -> String {
+  114|    523|    value
+  115|    523|        .get(key)
+  116|    523|        .and_then(Value::as_str)
+  117|    523|        .unwrap_or_default()
+  118|    523|        .to_string()
+  119|    523|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/plugin/registry/guard.rs:
     1|       |use serde_json::Value;
@@ -7379,10 +7379,10 @@
    12|     47|        .and_then(Value::as_str)
    13|     47|        .unwrap_or("");
    14|     47|    if actual != expected {
-   15|      4|        out.push(format!(
-   16|      4|            "plugin_self_law_registry_target_digest_mismatch:{actual}!={expected}"
-   17|      4|        ));
-   18|     43|    }
+   15|      3|        out.push(format!(
+   16|      3|            "plugin_self_law_registry_target_digest_mismatch:{actual}!={expected}"
+   17|      3|        ));
+   18|     44|    }
    19|     47|    if receipt.get("status").and_then(Value::as_str) != Some("fail") {
    20|      1|        out.push("plugin_self_law_registry_guard_status_not_fail".to_string());
    21|     46|    }
@@ -7551,10 +7551,10 @@
    21|     83|        .and_then(Value::as_str)
    22|     83|        .unwrap_or("");
    23|     83|    if actual != expected {
-   24|     13|        out.push(format!(
-   25|     13|            "plugin_self_law_registry_target_digest_mismatch:{actual}!={expected}"
-   26|     13|        ));
-   27|     70|    }
+   24|      4|        out.push(format!(
+   25|      4|            "plugin_self_law_registry_target_digest_mismatch:{actual}!={expected}"
+   26|      4|        ));
+   27|     79|    }
    28|     83|    if receipt.get("status").and_then(Value::as_str) != Some("pass") {
    29|     21|        out.push("plugin_self_law_registry_status_not_pass".to_string());
    30|     62|    }
@@ -7897,55 +7897,55 @@
     1|       |use serde_json::Value;
     2|       |use std::path::Path;
     3|       |
-    4|  8.61k|pub(crate) fn failures(root: &Path, value: &Value, pointer: &str, out: &mut Vec<String>) {
-    5|  8.61k|    match value {
-    6|  2.78k|        Value::Object(map) => {
-    7|  8.13k|            for (key, item) in map {
-                                             ^2.78k
-    8|  8.13k|                let next = format!("{pointer}/{key}");
-    9|  8.13k|                if key == "evidence" {
-   10|  1.36k|                    evidence_ref_failure(root, item, &next, out);
-   11|  6.77k|                } else {
-   12|  6.77k|                    failures(root, item, &next, out);
-   13|  6.77k|                }
+    4|  9.07k|pub(crate) fn failures(root: &Path, value: &Value, pointer: &str, out: &mut Vec<String>) {
+    5|  9.07k|    match value {
+    6|  2.93k|        Value::Object(map) => {
+    7|  8.55k|            for (key, item) in map {
+                                             ^2.93k
+    8|  8.55k|                let next = format!("{pointer}/{key}");
+    9|  8.55k|                if key == "evidence" {
+   10|  1.43k|                    evidence_ref_failure(root, item, &next, out);
+   11|  7.12k|                } else {
+   12|  7.12k|                    failures(root, item, &next, out);
+   13|  7.12k|                }
    14|       |            }
    15|       |        }
-   16|    381|        Value::Array(items) => {
-   17|  1.75k|            for (index, item) in items.iter().enumerate() {
-                                               ^381         ^381
-   18|  1.75k|                failures(root, item, &format!("{pointer}/{index}"), out);
-   19|  1.75k|            }
+   16|    401|        Value::Array(items) => {
+   17|  1.85k|            for (index, item) in items.iter().enumerate() {
+                                               ^401         ^401
+   18|  1.85k|                failures(root, item, &format!("{pointer}/{index}"), out);
+   19|  1.85k|            }
    20|       |        }
-   21|  5.44k|        _ => {}
+   21|  5.74k|        _ => {}
    22|       |    }
-   23|  8.61k|}
+   23|  9.07k|}
    24|       |
-   25|  1.36k|fn evidence_ref_failure(root: &Path, value: &Value, pointer: &str, out: &mut Vec<String>) {
-   26|  1.36k|    let Some(obj) = value.as_object() else {
-                           ^1.36k
+   25|  1.43k|fn evidence_ref_failure(root: &Path, value: &Value, pointer: &str, out: &mut Vec<String>) {
+   26|  1.43k|    let Some(obj) = value.as_object() else {
+                           ^1.43k
    27|      1|        out.push(format!("product_fitness_evidence_untyped:{pointer}"));
    28|      1|        return;
    29|       |    };
-   30|  1.36k|    let path = obj.get("path").and_then(Value::as_str).unwrap_or("");
-   31|  1.36k|    let digest = obj.get("digest").and_then(Value::as_str).unwrap_or("");
-   32|  1.36k|    if path.is_empty() || digest.is_empty() {
-                                        ^1.36k ^1.36k
+   30|  1.43k|    let path = obj.get("path").and_then(Value::as_str).unwrap_or("");
+   31|  1.43k|    let digest = obj.get("digest").and_then(Value::as_str).unwrap_or("");
+   32|  1.43k|    if path.is_empty() || digest.is_empty() {
+                                        ^1.43k ^1.43k
    33|      1|        out.push(format!("product_fitness_evidence_untyped:{pointer}"));
    34|      1|        return;
-   35|  1.36k|    }
-   36|  1.36k|    if crate::package::inventory::package_path_error(root, path).is_some() {
+   35|  1.43k|    }
+   36|  1.43k|    if crate::package::inventory::package_path_error(root, path).is_some() {
    37|      1|        out.push(format!("product_fitness_evidence_path_invalid:{pointer}"));
    38|      1|        return;
-   39|  1.36k|    }
-   40|  1.36k|    match crate::digest::file(&root.join(path)) {
-   41|  1.35k|        Ok(actual) if actual == digest => {}
-                         ^1.35k                    ^1.35k^1.35k
+   39|  1.43k|    }
+   40|  1.43k|    match crate::digest::file(&root.join(path)) {
+   41|  1.43k|        Ok(actual) if actual == digest => {}
+                         ^1.43k                    ^1.43k^1.43k
    42|      1|        Ok(_) => out.push(format!(
    43|       |            "product_fitness_evidence_digest_mismatch:{pointer}"
    44|       |        )),
    45|      1|        Err(_) => out.push(format!("product_fitness_evidence_missing:{pointer}")),
    46|       |    }
-   47|  1.36k|}
+   47|  1.43k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/product/fitness/mod.rs:
     1|       |pub(crate) mod evidence;
@@ -7981,9 +7981,9 @@
    28|      1|    out
    29|     10|}
    30|       |
-   31|     78|pub fn canonical_package_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
-   32|     78|    crate::audit::product::fitness::receipt::canonical_package_failures(root, receipt)
-   33|     78|}
+   31|     82|pub fn canonical_package_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
+   32|     82|    crate::audit::product::fitness::receipt::canonical_package_failures(root, receipt)
+   33|     82|}
    34|       |
    35|      1|pub fn canonical_package_receipt_value_failures_with_candidate(
    36|      1|    root: &Path,
@@ -8024,61 +8024,61 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/product/fitness/receipt/fields.rs:
     1|       |use serde_json::Value;
     2|       |
-    3|     86|pub(super) fn required_fields() -> &'static [(&'static str, &'static str)] {
-    4|     86|    &[
-    5|     86|        ("/claim/id", "product_fitness_receipt_wrong_claim_id"),
-    6|     86|        ("/target_revision/value", "product_fitness_receipt_stale"),
-    7|     86|        ("/target_audience/name", "product_fitness_audience_missing"),
-    8|     86|        ("/job_to_be_done/job", "product_fitness_job_missing"),
-    9|     86|        ("/context_of_use/context", "product_fitness_context_missing"),
-   10|     86|        (
-   11|     86|            "/desired_user_outcome/outcome",
-   12|     86|            "product_fitness_outcome_missing",
-   13|     86|        ),
-   14|     86|        (
-   15|     86|            "/business_or_mission_outcome/outcome",
-   16|     86|            "product_fitness_business_or_mission_outcome_missing",
-   17|     86|        ),
-   18|     86|        (
-   19|     86|            "/critical_journey/id",
-   20|     86|            "product_fitness_context_of_use_unproven",
-   21|     86|        ),
-   22|     86|        (
-   23|     86|            "/proof_surface/kind",
-   24|     86|            "product_fitness_quality_in_use_receipt_missing",
-   25|     86|        ),
-   26|     86|        ("/claim_ceiling", "product_fitness_claim_ceiling_missing"),
-   27|     86|        ("/producer_actor_id", "product_fitness_receipt_malformed"),
-   28|     86|        ("/reviewer_actor_id", "product_fitness_receipt_malformed"),
-   29|     86|        ("/receipt_digest", "product_fitness_receipt_malformed"),
-   30|     86|    ]
-   31|     86|}
+    3|     90|pub(super) fn required_fields() -> &'static [(&'static str, &'static str)] {
+    4|     90|    &[
+    5|     90|        ("/claim/id", "product_fitness_receipt_wrong_claim_id"),
+    6|     90|        ("/target_revision/value", "product_fitness_receipt_stale"),
+    7|     90|        ("/target_audience/name", "product_fitness_audience_missing"),
+    8|     90|        ("/job_to_be_done/job", "product_fitness_job_missing"),
+    9|     90|        ("/context_of_use/context", "product_fitness_context_missing"),
+   10|     90|        (
+   11|     90|            "/desired_user_outcome/outcome",
+   12|     90|            "product_fitness_outcome_missing",
+   13|     90|        ),
+   14|     90|        (
+   15|     90|            "/business_or_mission_outcome/outcome",
+   16|     90|            "product_fitness_business_or_mission_outcome_missing",
+   17|     90|        ),
+   18|     90|        (
+   19|     90|            "/critical_journey/id",
+   20|     90|            "product_fitness_context_of_use_unproven",
+   21|     90|        ),
+   22|     90|        (
+   23|     90|            "/proof_surface/kind",
+   24|     90|            "product_fitness_quality_in_use_receipt_missing",
+   25|     90|        ),
+   26|     90|        ("/claim_ceiling", "product_fitness_claim_ceiling_missing"),
+   27|     90|        ("/producer_actor_id", "product_fitness_receipt_malformed"),
+   28|     90|        ("/reviewer_actor_id", "product_fitness_receipt_malformed"),
+   29|     90|        ("/receipt_digest", "product_fitness_receipt_malformed"),
+   30|     90|    ]
+   31|     90|}
    32|       |
-   33|  1.44k|pub(super) fn pointer_string(value: &Value, pointer: &str) -> String {
-   34|  1.44k|    value
-   35|  1.44k|        .pointer(pointer)
-   36|  1.44k|        .and_then(Value::as_str)
-   37|  1.44k|        .unwrap_or("")
-   38|  1.44k|        .to_string()
-   39|  1.44k|}
+   33|  1.50k|pub(super) fn pointer_string(value: &Value, pointer: &str) -> String {
+   34|  1.50k|    value
+   35|  1.50k|        .pointer(pointer)
+   36|  1.50k|        .and_then(Value::as_str)
+   37|  1.50k|        .unwrap_or("")
+   38|  1.50k|        .to_string()
+   39|  1.50k|}
    40|       |
-   41|    467|pub(super) fn evidence_present(value: Option<&Value>) -> bool {
-   42|    467|    value
-   43|    467|        .and_then(Value::as_object)
-   44|    467|        .and_then(|obj| obj.get("path"))
-                                      ^456^456^456
-   45|    467|        .and_then(Value::as_str)
-   46|    467|        .is_some_and(|path| !path.is_empty())
-                                           ^456 ^456
-   47|    467|}
+   41|    491|pub(super) fn evidence_present(value: Option<&Value>) -> bool {
+   42|    491|    value
+   43|    491|        .and_then(Value::as_object)
+   44|    491|        .and_then(|obj| obj.get("path"))
+                                      ^480^480^480
+   45|    491|        .and_then(Value::as_str)
+   46|    491|        .is_some_and(|path| !path.is_empty())
+                                           ^480 ^480
+   47|    491|}
    48|       |
-   49|  1.82k|pub(super) fn string(value: &Value, key: &str) -> String {
-   50|  1.82k|    value
-   51|  1.82k|        .get(key)
-   52|  1.82k|        .and_then(Value::as_str)
-   53|  1.82k|        .unwrap_or("")
-   54|  1.82k|        .to_string()
-   55|  1.82k|}
+   49|  1.92k|pub(super) fn string(value: &Value, key: &str) -> String {
+   50|  1.92k|    value
+   51|  1.92k|        .get(key)
+   52|  1.92k|        .and_then(Value::as_str)
+   53|  1.92k|        .unwrap_or("")
+   54|  1.92k|        .to_string()
+   55|  1.92k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/product/fitness/receipt/mod.rs:
     1|       |use serde_json::Value;
@@ -8088,14 +8088,14 @@
     5|       |mod fields;
     6|       |use fields::{evidence_present, pointer_string, required_fields, string};
     7|       |
-    8|     79|pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<String> {
-    9|     79|    let mut out = Vec::new();
-   10|     79|    if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
+    8|     83|pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<String> {
+    9|     83|    let mut out = Vec::new();
+   10|     83|    if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
    11|      4|        out.push("product_fitness_receipt_wrong_claim_id".to_string());
-   12|     75|    }
-   13|     79|    out.extend(failures(root, receipt));
-   14|     79|    out
-   15|     79|}
+   12|     79|    }
+   13|     83|    out.extend(failures(root, receipt));
+   14|     83|    out
+   15|     83|}
    16|       |
    17|      1|pub(crate) fn canonical_package_failures_with_candidate(
    18|      1|    root: &Path,
@@ -8111,13 +8111,13 @@
    27|      1|    out
    28|      1|}
    29|       |
-   30|     85|pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
-   31|     85|    failures_with_digest(
-   32|     85|        root,
-   33|     85|        receipt,
-   34|     85|        crate::package::inventory::package_digest(root),
+   30|     89|pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
+   31|     89|    failures_with_digest(
+   32|     89|        root,
+   33|     89|        receipt,
+   34|     89|        crate::package::inventory::package_digest(root),
    35|       |    )
-   36|     85|}
+   36|     89|}
    37|       |
    38|      1|pub(crate) fn failures_with_candidate(
    39|      1|    root: &Path,
@@ -8127,173 +8127,173 @@
    43|      1|    failures_with_digest(root, receipt, Ok(target_digest.to_string()))
    44|      1|}
    45|       |
-   46|     86|fn failures_with_digest(
-   47|     86|    root: &Path,
-   48|     86|    receipt: &Value,
-   49|     86|    current: Result<String, String>,
-   50|     86|) -> Vec<String> {
-   51|     86|    let mut out = required_field_failures(receipt);
-   52|     86|    crate::audit::product::fitness::evidence::failures(root, receipt, "", &mut out);
-   53|     86|    out.extend(journey_and_evidence_failures(receipt));
-   54|     86|    out.extend(metric_failures(receipt));
-   55|     86|    out.extend(burden_and_continuance_failures(receipt));
-   56|     86|    out.extend(authority_failures(receipt, current));
-   57|     86|    out.extend(crate::audit::product::fitness::substitutions::failures(
-   58|     86|        receipt,
+   46|     90|fn failures_with_digest(
+   47|     90|    root: &Path,
+   48|     90|    receipt: &Value,
+   49|     90|    current: Result<String, String>,
+   50|     90|) -> Vec<String> {
+   51|     90|    let mut out = required_field_failures(receipt);
+   52|     90|    crate::audit::product::fitness::evidence::failures(root, receipt, "", &mut out);
+   53|     90|    out.extend(journey_and_evidence_failures(receipt));
+   54|     90|    out.extend(metric_failures(receipt));
+   55|     90|    out.extend(burden_and_continuance_failures(receipt));
+   56|     90|    out.extend(authority_failures(receipt, current));
+   57|     90|    out.extend(crate::audit::product::fitness::substitutions::failures(
+   58|     90|        receipt,
    59|       |    ));
-   60|     86|    out
-   61|     86|}
+   60|     90|    out
+   61|     90|}
    62|       |
-   63|    121|pub(crate) fn canonical_digest(receipt: &Value) -> String {
-   64|    121|    let mut canonical = receipt.clone();
-   65|    121|    if let Some(obj) = canonical.as_object_mut() {
-                              ^120
-   66|    120|        obj.insert(
-   67|    120|            "receipt_digest".to_string(),
-   68|    120|            Value::String(crate::digest::ZERO.to_string()),
-   69|    120|        );
-   70|    120|    }
+   63|    125|pub(crate) fn canonical_digest(receipt: &Value) -> String {
+   64|    125|    let mut canonical = receipt.clone();
+   65|    125|    if let Some(obj) = canonical.as_object_mut() {
+                              ^124
+   66|    124|        obj.insert(
+   67|    124|            "receipt_digest".to_string(),
+   68|    124|            Value::String(crate::digest::ZERO.to_string()),
+   69|    124|        );
+   70|    124|    }
                   ^1
-   71|    121|    crate::digest::bytes(&serde_json::to_vec(&canonical).unwrap_or_default())
-   72|    121|}
+   71|    125|    crate::digest::bytes(&serde_json::to_vec(&canonical).unwrap_or_default())
+   72|    125|}
    73|       |
-   74|     86|fn required_field_failures(receipt: &Value) -> Vec<String> {
-   75|     86|    let mut out = Vec::new();
-   76|     86|    if string(receipt, "schema") != "harness-ultragoal.product-fitness-receipt.v1" {
+   74|     90|fn required_field_failures(receipt: &Value) -> Vec<String> {
+   75|     90|    let mut out = Vec::new();
+   76|     90|    if string(receipt, "schema") != "harness-ultragoal.product-fitness-receipt.v1" {
    77|      6|        out.push("product_fitness_receipt_malformed:schema".to_string());
-   78|     80|    }
-   79|  1.11k|    for (ptr, error) in required_fields() {
-                                      ^86
-   80|  1.11k|        if pointer_string(receipt, ptr).is_empty() {
+   78|     84|    }
+   79|  1.17k|    for (ptr, error) in required_fields() {
+                                      ^90
+   80|  1.17k|        if pointer_string(receipt, ptr).is_empty() {
    81|     85|            out.push((*error).to_string());
-   82|  1.03k|        }
+   82|  1.08k|        }
    83|       |    }
-   84|     86|    if pointer_string(receipt, "/target_audience/name")
-   85|     86|        .to_ascii_lowercase()
-   86|     86|        .contains("generic")
+   84|     90|    if pointer_string(receipt, "/target_audience/name")
+   85|     90|        .to_ascii_lowercase()
+   86|     90|        .contains("generic")
    87|      1|    {
    88|      1|        out.push("product_fitness_generic_user_claim".to_string());
-   89|     85|    }
-   90|     86|    out
-   91|     86|}
+   89|     89|    }
+   90|     90|    out
+   91|     90|}
    92|       |
-   93|     86|fn journey_and_evidence_failures(receipt: &Value) -> Vec<String> {
-   94|     86|    let mut out = Vec::new();
-   95|     86|    if !evidence_present(receipt.pointer("/first_value_event/evidence")) {
+   93|     90|fn journey_and_evidence_failures(receipt: &Value) -> Vec<String> {
+   94|     90|    let mut out = Vec::new();
+   95|     90|    if !evidence_present(receipt.pointer("/first_value_event/evidence")) {
    96|     10|        out.push("product_fitness_output_substituted_for_outcome".to_string());
-   97|     76|    }
-   98|     86|    if receipt
-   99|     86|        .pointer("/assumption_tests")
-  100|     86|        .and_then(Value::as_array)
-  101|     86|        .is_none_or(Vec::is_empty)
+   97|     80|    }
+   98|     90|    if receipt
+   99|     90|        .pointer("/assumption_tests")
+  100|     90|        .and_then(Value::as_array)
+  101|     90|        .is_none_or(Vec::is_empty)
   102|     10|    {
   103|     10|        out.push("product_fitness_assumption_test_missing".to_string());
-  104|     76|    }
-  105|     86|    if receipt
-  106|     86|        .pointer("/user_evidence")
-  107|     86|        .and_then(Value::as_array)
-  108|     86|        .is_none_or(Vec::is_empty)
+  104|     80|    }
+  105|     90|    if receipt
+  106|     90|        .pointer("/user_evidence")
+  107|     90|        .and_then(Value::as_array)
+  108|     90|        .is_none_or(Vec::is_empty)
   109|     10|    {
   110|     10|        out.push("product_fitness_unbound_user_evidence".to_string());
-  111|     76|    }
-  112|     86|    out
-  113|     86|}
+  111|     80|    }
+  112|     90|    out
+  113|     90|}
   114|       |
-  115|     86|fn metric_failures(receipt: &Value) -> Vec<String> {
-  116|     86|    let metrics = receipt
-  117|     86|        .pointer("/quality_in_use_metrics")
-  118|     86|        .and_then(Value::as_array)
-  119|     86|        .cloned()
-  120|     86|        .unwrap_or_default();
-  121|     86|    let mut out = Vec::new();
-  122|     86|    if metrics.len() < 5 {
+  115|     90|fn metric_failures(receipt: &Value) -> Vec<String> {
+  116|     90|    let metrics = receipt
+  117|     90|        .pointer("/quality_in_use_metrics")
+  118|     90|        .and_then(Value::as_array)
+  119|     90|        .cloned()
+  120|     90|        .unwrap_or_default();
+  121|     90|    let mut out = Vec::new();
+  122|     90|    if metrics.len() < 5 {
   123|     10|        out.push("product_fitness_single_metric_theater".to_string());
-  124|     76|    }
-  125|    430|    for required in [
-  126|     86|        "effectiveness",
-  127|     86|        "efficiency",
-  128|     86|        "satisfaction",
-  129|     86|        "freedom_from_risk",
-  130|     86|        "context_coverage",
-  131|     86|    ] {
-  132|  1.14k|        if !metrics.iter().any(|row| {
-                          ^430           ^430
-  133|  1.14k|            string(row, "dimension") == required && evidence_present(row.get("evidence"))
-                                                                  ^380             ^380^380
-  134|  1.14k|        }) {
+  124|     80|    }
+  125|    450|    for required in [
+  126|     90|        "effectiveness",
+  127|     90|        "efficiency",
+  128|     90|        "satisfaction",
+  129|     90|        "freedom_from_risk",
+  130|     90|        "context_coverage",
+  131|     90|    ] {
+  132|  1.20k|        if !metrics.iter().any(|row| {
+                          ^450           ^450
+  133|  1.20k|            string(row, "dimension") == required && evidence_present(row.get("evidence"))
+                                                                  ^400             ^400^400
+  134|  1.20k|        }) {
   135|     50|            out.push(format!("product_fitness_quality_in_use_missing:{required}"));
-  136|    380|        }
+  136|    400|        }
   137|       |    }
-  138|     86|    out
-  139|     86|}
+  138|     90|    out
+  139|     90|}
   140|       |
-  141|     86|fn burden_and_continuance_failures(receipt: &Value) -> Vec<String> {
-  142|     86|    let mut out = accessibility_failures(receipt);
-  143|     86|    if string(
-  144|     86|        receipt
-  145|     86|            .pointer("/cognitive_load_gate")
-  146|     86|            .unwrap_or(&Value::Null),
-  147|     86|        "burden_assessment",
-  148|     86|    )
-  149|     86|    .is_empty()
+  141|     90|fn burden_and_continuance_failures(receipt: &Value) -> Vec<String> {
+  142|     90|    let mut out = accessibility_failures(receipt);
+  143|     90|    if string(
+  144|     90|        receipt
+  145|     90|            .pointer("/cognitive_load_gate")
+  146|     90|            .unwrap_or(&Value::Null),
+  147|     90|        "burden_assessment",
+  148|     90|    )
+  149|     90|    .is_empty()
   150|     10|    {
   151|     10|        out.push("product_fitness_developer_burden_unmeasured".to_string());
-  152|     76|    }
-  153|     86|    if string(
-  154|     86|        receipt
-  155|     86|            .pointer("/recovery_burden_gate")
-  156|     86|            .unwrap_or(&Value::Null),
-  157|     86|        "recovery_path",
-  158|     86|    )
-  159|     86|    .is_empty()
+  152|     80|    }
+  153|     90|    if string(
+  154|     90|        receipt
+  155|     90|            .pointer("/recovery_burden_gate")
+  156|     90|            .unwrap_or(&Value::Null),
+  157|     90|        "recovery_path",
+  158|     90|    )
+  159|     90|    .is_empty()
   160|     10|    {
   161|     10|        out.push("product_fitness_recovery_burden_missing".to_string());
-  162|     76|    }
-  163|     86|    let repeated = receipt
-  164|     86|        .pointer("/claim/repeated_use_claimed")
-  165|     86|        .and_then(Value::as_bool)
-  166|     86|        .unwrap_or(false);
-  167|     86|    if repeated && !evidence_present(receipt.pointer("/continuance_signal/evidence")) {
+  162|     80|    }
+  163|     90|    let repeated = receipt
+  164|     90|        .pointer("/claim/repeated_use_claimed")
+  165|     90|        .and_then(Value::as_bool)
+  166|     90|        .unwrap_or(false);
+  167|     90|    if repeated && !evidence_present(receipt.pointer("/continuance_signal/evidence")) {
                                  ^1^1               ^1
   168|      1|        out.push("product_fitness_continuance_missing".to_string());
-  169|     85|    }
-  170|     86|    out
-  171|     86|}
+  169|     89|    }
+  170|     90|    out
+  171|     90|}
   172|       |
-  173|     86|fn accessibility_failures(receipt: &Value) -> Vec<String> {
-  174|     86|    let accessibility = receipt
-  175|     86|        .pointer("/accessibility_gate")
-  176|     86|        .unwrap_or(&Value::Null);
-  177|     86|    let journey_binding = string(accessibility, "journey_binding");
-  178|     86|    if journey_binding.is_empty() {
+  173|     90|fn accessibility_failures(receipt: &Value) -> Vec<String> {
+  174|     90|    let accessibility = receipt
+  175|     90|        .pointer("/accessibility_gate")
+  176|     90|        .unwrap_or(&Value::Null);
+  177|     90|    let journey_binding = string(accessibility, "journey_binding");
+  178|     90|    if journey_binding.is_empty() {
   179|      8|        return vec!["product_fitness_accessibility_missing".to_string()];
-  180|     78|    }
-  181|     78|    if journey_binding != pointer_string(receipt, "/critical_journey/id") {
+  180|     82|    }
+  181|     82|    if journey_binding != pointer_string(receipt, "/critical_journey/id") {
   182|      2|        vec!["product_fitness_accessibility_unbound_to_journey".to_string()]
   183|       |    } else {
-  184|     76|        Vec::new()
+  184|     80|        Vec::new()
   185|       |    }
-  186|     86|}
+  186|     90|}
   187|       |
-  188|     86|fn authority_failures(receipt: &Value, current: Result<String, String>) -> Vec<String> {
-  189|     86|    let mut out = Vec::new();
-  190|     86|    if string(receipt, "producer_actor_id") == string(receipt, "reviewer_actor_id") {
+  188|     90|fn authority_failures(receipt: &Value, current: Result<String, String>) -> Vec<String> {
+  189|     90|    let mut out = Vec::new();
+  190|     90|    if string(receipt, "producer_actor_id") == string(receipt, "reviewer_actor_id") {
   191|      8|        out.push("product_fitness_actor_nondisjoint".to_string());
-  192|     78|    }
-  193|     86|    if string(receipt, "receipt_digest") == crate::digest::ZERO {
+  192|     82|    }
+  193|     90|    if string(receipt, "receipt_digest") == crate::digest::ZERO {
   194|      2|        out.push("product_fitness_receipt_malformed:zero_digest".to_string());
-  195|     84|    }
-  196|     86|    if string(receipt, "receipt_digest") != canonical_digest(receipt) {
+  195|     88|    }
+  196|     90|    if string(receipt, "receipt_digest") != canonical_digest(receipt) {
   197|     10|        out.push("product_fitness_receipt_digest_mismatch".to_string());
-  198|     76|    }
-  199|     79|    match current {
-  200|     79|        Ok(current) if pointer_string(receipt, "/target_revision/value") == current => {}
-                         ^77                                                                    ^77  ^77
+  198|     80|    }
+  199|     83|    match current {
+  200|     83|        Ok(current) if pointer_string(receipt, "/target_revision/value") == current => {}
+                         ^81                                                                    ^81  ^81
   201|      2|        Ok(_) => out.push("product_fitness_receipt_stale".to_string()),
   202|      7|        Err(err) => out.push(format!("product_fitness_digest_unavailable:{err}")),
   203|       |    }
-  204|     86|    out
-  205|     86|}
+  204|     90|    out
+  205|     90|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/product/fitness/substitutions.rs:
     1|       |use serde_json::Value;
@@ -8342,40 +8342,40 @@
    44|       |    ("hidden power", "product_fitness_power_hidden_by_interface"),
    45|       |];
    46|       |
-   47|     86|pub(crate) fn failures(receipt: &Value) -> Vec<String> {
-   48|     86|    let substitutions = receipt
-   49|     86|        .pointer("/substitution_rejections")
-   50|     86|        .and_then(Value::as_array)
-   51|     86|        .cloned()
-   52|     86|        .unwrap_or_default();
-   53|     86|    SUBSTITUTION_TERMS
-   54|     86|        .iter()
-   55|  1.20k|        .filter_map(|(term, error)| {
-                       ^86
-   56|  8.00k|            match substitutions.iter().find(|evidence| {
-                                ^1.20k               ^1.20k
-   57|  8.00k|                string(evidence, "rejected_substitute")
-   58|  8.00k|                    .to_ascii_lowercase()
-   59|  8.00k|                    .contains(term)
-   60|  8.00k|            }) {
-   61|  1.06k|                Some(evidence) if string(evidence, "reason").is_empty() => {
+   47|     90|pub(crate) fn failures(receipt: &Value) -> Vec<String> {
+   48|     90|    let substitutions = receipt
+   49|     90|        .pointer("/substitution_rejections")
+   50|     90|        .and_then(Value::as_array)
+   51|     90|        .cloned()
+   52|     90|        .unwrap_or_default();
+   53|     90|    SUBSTITUTION_TERMS
+   54|     90|        .iter()
+   55|  1.26k|        .filter_map(|(term, error)| {
+                       ^90
+   56|  8.42k|            match substitutions.iter().find(|evidence| {
+                                ^1.26k               ^1.26k
+   57|  8.42k|                string(evidence, "rejected_substitute")
+   58|  8.42k|                    .to_ascii_lowercase()
+   59|  8.42k|                    .contains(term)
+   60|  8.42k|            }) {
+   61|  1.12k|                Some(evidence) if string(evidence, "reason").is_empty() => {
                                    ^2                                               ^2
    62|      2|                    Some((*error).to_string())
    63|       |                }
-   64|  1.06k|                Some(_) => None,
+   64|  1.12k|                Some(_) => None,
    65|    138|                None => Some((*error).to_string()),
    66|       |            }
-   67|  1.20k|        })
-   68|     86|        .collect()
-   69|     86|}
+   67|  1.26k|        })
+   68|     90|        .collect()
+   69|     90|}
    70|       |
-   71|  9.07k|fn string(value: &Value, key: &str) -> String {
-   72|  9.07k|    value
-   73|  9.07k|        .get(key)
-   74|  9.07k|        .and_then(Value::as_str)
-   75|  9.07k|        .unwrap_or("")
-   76|  9.07k|        .to_string()
-   77|  9.07k|}
+   71|  9.55k|fn string(value: &Value, key: &str) -> String {
+   72|  9.55k|    value
+   73|  9.55k|        .get(key)
+   74|  9.55k|        .and_then(Value::as_str)
+   75|  9.55k|        .unwrap_or("")
+   76|  9.55k|        .to_string()
+   77|  9.55k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/receipt/generated.rs:
     1|       |use super::ReceiptInput;
@@ -9102,16 +9102,14 @@
   167|     11|    if law.id == "workspace-artifact-cache-garbage-collection" {
   168|      3|        let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
   169|      3|        if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(candidate) {
-  170|      2|            out.push("workspace_gc_receipt_candidate_digest_mismatch".to_string());
+  170|      1|            out.push("workspace_gc_receipt_candidate_digest_mismatch".to_string());
   171|      2|        }
-                      ^1
   172|      3|        return out;
   173|      8|    }
   174|      8|    let mut out = crate::cli::rust::receipt::surface_value_failures(value, law.id);
   175|      8|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(candidate) {
-  176|      7|        out.push("rust_devx_receipt_candidate_digest_mismatch".to_string());
-  177|      7|    }
-                  ^1
+  176|      2|        out.push("rust_devx_receipt_candidate_digest_mismatch".to_string());
+  177|      6|    }
   178|      8|    out
   179|     11|}
   180|       |
@@ -9788,9 +9786,9 @@
   109|       |        }
   110|       |    };
   111|     13|    if receipt.get("candidate_digest").and_then(Value::as_str) == Some(expected.as_str()) {
-  112|      9|        Vec::new()
+  112|     10|        Vec::new()
   113|       |    } else {
-  114|      4|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
+  114|      3|        vec!["standards_gardener_candidate_digest_mismatch".to_string()]
   115|       |    }
   116|     17|}
   117|       |
@@ -9804,8 +9802,8 @@
   124|     83|    }
   125|     83|    match digest::file(&resolved) {
   126|     83|        Ok(actual) if actual == got => None,
-                         ^74                    ^74  ^74
-  127|      9|        _ => Some("standards_gardener_changed_artifact_digest_mismatch".to_string()),
+                         ^81                    ^81  ^81
+  127|      2|        _ => Some("standards_gardener_changed_artifact_digest_mismatch".to_string()),
   128|       |    }
   129|     86|}
   130|       |
@@ -16135,7 +16133,7 @@
    46|     15|        evidence_failures.extend(
    47|     15|            graph_failures
    48|     15|                .into_iter()
-   49|  1.03k|                .map(|failure| format!("evidence_graph:{failure}")),
+   49|    993|                .map(|failure| format!("evidence_graph:{failure}")),
                                ^15
    50|       |        );
    51|     15|        fail_receipt(package_digest, operation, evidence_failures, graph)
@@ -16282,14 +16280,14 @@
    30|    355|        .and_then(|value| super::status::typed_status(label, value, &label_failures));
                                         ^117                        ^117   ^117   ^117
    31|    355|    if status != Some("pass") {
-   32|    249|        failures.push("status_not_pass".to_string());
-   33|    249|    }
-                  ^106
+   32|    246|        failures.push("status_not_pass".to_string());
+   33|    246|    }
+                  ^109
    34|    355|    let candidate = parsed.as_ref().and_then(candidate_digest);
    35|    355|    if candidate.as_deref() != Some(expected) {
-   36|    270|        failures.push("candidate_digest_mismatch".to_string());
-   37|    270|    }
-                  ^85
+   36|    247|        failures.push("candidate_digest_mismatch".to_string());
+   37|    247|    }
+                  ^108
    38|    355|    failures.extend(label_failures);
    39|    355|    json!({
    40|    355|        "label": label,
@@ -16862,16 +16860,16 @@
     7|    130|    failures: &[String],
     8|    130|) -> Option<&'static str> {
     9|    130|    if value.get("status").and_then(Value::as_str) == Some("pass") {
-   10|     95|        return Some("pass");
-   11|     35|    }
-   12|     35|    if value.get("status").and_then(Value::as_str) == Some("fail") {
-   13|     10|        return Some("fail");
+   10|     97|        return Some("pass");
+   11|     33|    }
+   12|     33|    if value.get("status").and_then(Value::as_str) == Some("fail") {
+   13|      8|        return Some("fail");
    14|     25|    }
    15|     25|    if inferred_status_label(label) && failures.is_empty() {
                                                      ^23      ^23
-   16|     17|        return Some("pass");
-   17|      8|    }
-   18|      8|    None
+   16|     18|        return Some("pass");
+   17|      7|    }
+   18|      7|    None
    19|    130|}
    20|       |
    21|    143|pub(super) fn label_failures(
@@ -16978,9 +16976,9 @@
   110|     12|        .pointer("/target_revision/value")
   111|     12|        .and_then(Value::as_str)
   112|     12|        != Some(expected)
-  113|      4|    {
-  114|      4|        out.push(format!("{label}_target_digest_mismatch"));
-  115|      8|    }
+  113|      2|    {
+  114|      2|        out.push(format!("{label}_target_digest_mismatch"));
+  115|     10|    }
   116|     12|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   117|      3|        out.push(format!("{label}_status_not_pass"));
   118|      9|    }
@@ -16993,9 +16991,9 @@
   125|     12|        .pointer("/target_revision/value")
   126|     12|        .and_then(Value::as_str)
   127|     12|        != Some(expected)
-  128|      2|    {
-  129|      2|        out.push("coverage_target_digest_mismatch".to_string());
-  130|     10|    }
+  128|      1|    {
+  129|      1|        out.push("coverage_target_digest_mismatch".to_string());
+  130|     11|    }
   131|     12|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
   132|     10|        || !value
   133|     10|            .get("uncovered_records")
@@ -17090,8 +17088,8 @@
   216|       |    };
   217|     49|    let mut out = crate::cli::rust::receipt::surface_value_failures(value, expected_law);
   218|     49|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
-  219|     13|        out.push("rust_receipt_candidate_digest_mismatch".to_string());
-  220|     36|    }
+  219|      3|        out.push("rust_receipt_candidate_digest_mismatch".to_string());
+  220|     46|    }
   221|     49|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   222|      6|        out.push("rust_receipt_status_not_pass".to_string());
   223|     43|    }
@@ -17101,8 +17099,8 @@
   227|     20|fn gc_failures(value: &Value, expected: &str) -> Vec<String> {
   228|     20|    let mut out = crate::cli::garbage::collection::receipt::surface_value_failures(value);
   229|     20|    if value.pointer("/digests/candidate").and_then(Value::as_str) != Some(expected) {
-  230|      7|        out.push("gc_receipt_candidate_digest_mismatch".to_string());
-  231|     13|    }
+  230|      3|        out.push("gc_receipt_candidate_digest_mismatch".to_string());
+  231|     17|    }
   232|     20|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   233|      1|        out.push("gc_receipt_status_not_pass".to_string());
   234|     19|    }
@@ -17302,11 +17300,11 @@
    38|    621|    for item in items(value) {
                               ^26   ^26
    39|    621|        if !item_failures(item).is_empty() {
-   40|    297|            out.push(format!(
-   41|    297|                "cli_control_plane_receipt_evidence_graph_item_has_failures:{}",
-   42|    297|                label(item)
-   43|    297|            ));
-   44|    324|        }
+   40|    279|            out.push(format!(
+   41|    279|                "cli_control_plane_receipt_evidence_graph_item_has_failures:{}",
+   42|    279|                label(item)
+   43|    279|            ));
+   44|    342|        }
    45|    621|        if item.get("exists").and_then(Value::as_bool) != Some(true) {
    46|    237|            out.push(format!(
    47|    237|                "cli_control_plane_receipt_evidence_graph_item_missing:{}",
@@ -17314,17 +17312,17 @@
    49|    237|            ));
    50|    384|        }
    51|    621|        if item.get("status").and_then(Value::as_str) != Some("pass") {
-   52|    274|            out.push(format!(
-   53|    274|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
-   54|    274|                label(item)
-   55|    274|            ));
-   56|    347|        }
+   52|    271|            out.push(format!(
+   53|    271|                "cli_control_plane_receipt_evidence_graph_item_not_pass:{}",
+   54|    271|                label(item)
+   55|    271|            ));
+   56|    350|        }
    57|    621|        if item.get("same_candidate").and_then(Value::as_bool) != Some(true) {
-   58|    269|            out.push(format!(
-   59|    269|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
-   60|    269|                label(item)
-   61|    269|            ));
-   62|    352|        }
+   58|    246|            out.push(format!(
+   59|    246|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
+   60|    246|                label(item)
+   61|    246|            ));
+   62|    375|        }
    63|       |    }
    64|     26|    out
    65|     26|}
@@ -17336,20 +17334,20 @@
    71|     11|) -> Vec<String> {
    72|     11|    let out = graph_binding_failures(value, expected_candidate, expected_operation);
    73|     11|    if !out.is_empty() {
-   74|      4|        return out;
-   75|      7|    }
-   76|    137|    let has_item_failure = items(value).iter().any(|item| {
-                      ^7                 ^7                  ^7
-   77|    137|        !item_failures(item).is_empty()
+   74|      2|        return out;
+   75|      9|    }
+   76|    139|    let has_item_failure = items(value).iter().any(|item| {
+                      ^9                 ^9                  ^9
+   77|    139|        !item_failures(item).is_empty()
    78|    135|            || item.get("exists").and_then(Value::as_bool) == Some(false)
    79|    135|            || item.get("status").and_then(Value::as_str) != Some("pass")
    80|    135|            || item.get("same_candidate").and_then(Value::as_bool) == Some(false)
-   81|    137|    });
-   82|      7|    if operation_failures(value).is_empty() && !has_item_failure {
+   81|    139|    });
+   82|      9|    if operation_failures(value).is_empty() && !has_item_failure {
                                                              ^3
    83|      3|        return vec!["cli_control_plane_receipt_evidence_graph_not_fail_closed".to_string()];
-   84|      4|    }
-   85|      4|    Vec::new()
+   84|      6|    }
+   85|      6|    Vec::new()
    86|     11|}
    87|       |
    88|     37|fn graph_binding_failures(
@@ -17363,8 +17361,8 @@
    95|      2|        return out;
    96|       |    };
    97|     35|    if graph.get("candidate_digest").and_then(Value::as_str) != Some(expected_candidate) {
-   98|      3|        out.push("cli_control_plane_receipt_evidence_graph_wrong_candidate".to_string());
-   99|     32|    }
+   98|      1|        out.push("cli_control_plane_receipt_evidence_graph_wrong_candidate".to_string());
+   99|     34|    }
   100|     35|    if graph.get("operation").and_then(Value::as_str) != Some(expected_operation) {
   101|      1|        out.push("cli_control_plane_receipt_evidence_graph_wrong_operation".to_string());
   102|     34|    }
@@ -17380,38 +17378,38 @@
   110|     35|    out
   111|     37|}
   112|       |
-  113|    898|fn items(value: &Value) -> Vec<&Value> {
-  114|    898|    value
-  115|    898|        .pointer("/evidence_graph/items")
-  116|    898|        .and_then(Value::as_array)
-  117|    898|        .map(|items| items.iter().collect())
-  118|    898|        .unwrap_or_default()
-  119|    898|}
+  113|    900|fn items(value: &Value) -> Vec<&Value> {
+  114|    900|    value
+  115|    900|        .pointer("/evidence_graph/items")
+  116|    900|        .and_then(Value::as_array)
+  117|    900|        .map(|items| items.iter().collect())
+  118|    900|        .unwrap_or_default()
+  119|    900|}
   120|       |
-  121|     33|fn operation_failures(value: &Value) -> Vec<&Value> {
-  122|     33|    value
-  123|     33|        .pointer("/evidence_graph/operation_failures")
-  124|     33|        .and_then(Value::as_array)
-  125|     33|        .map(|items| items.iter().collect())
-  126|     33|        .unwrap_or_default()
-  127|     33|}
+  121|     35|fn operation_failures(value: &Value) -> Vec<&Value> {
+  122|     35|    value
+  123|     35|        .pointer("/evidence_graph/operation_failures")
+  124|     35|        .and_then(Value::as_array)
+  125|     35|        .map(|items| items.iter().collect())
+  126|     35|        .unwrap_or_default()
+  127|     35|}
   128|       |
-  129|    758|fn item_failures(item: &Value) -> Vec<&Value> {
-  130|    758|    item.get("failures")
-  131|    758|        .and_then(Value::as_array)
-  132|    758|        .map(|items| items.iter().collect())
-  133|    758|        .unwrap_or_default()
-  134|    758|}
+  129|    760|fn item_failures(item: &Value) -> Vec<&Value> {
+  130|    760|    item.get("failures")
+  131|    760|        .and_then(Value::as_array)
+  132|    760|        .map(|items| items.iter().collect())
+  133|    760|        .unwrap_or_default()
+  134|    760|}
   135|       |
   136|  12.0k|fn item_label_is(item: &Value, expected: &str) -> bool {
   137|  12.0k|    item.get("label").and_then(Value::as_str) == Some(expected)
   138|  12.0k|}
   139|       |
-  140|  1.07k|fn label(item: &Value) -> &str {
-  141|  1.07k|    item.get("label")
-  142|  1.07k|        .and_then(Value::as_str)
-  143|  1.07k|        .unwrap_or("unknown")
-  144|  1.07k|}
+  140|  1.03k|fn label(item: &Value) -> &str {
+  141|  1.03k|    item.get("label")
+  142|  1.03k|        .and_then(Value::as_str)
+  143|  1.03k|        .unwrap_or("unknown")
+  144|  1.03k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/control/plane/mod.rs:
     1|       |use crate::cli::control::plane::types::ControlOperation;
@@ -17773,7 +17771,7 @@
    40|     64|fn prefixed(prefix: &str, failures: Vec<String>) -> Vec<String> {
    41|     64|    failures
    42|     64|        .into_iter()
-   43|    817|        .map(|failure| format!("{prefix}:{failure}"))
+   43|    807|        .map(|failure| format!("{prefix}:{failure}"))
                        ^64
    44|     64|        .collect()
    45|     64|}
@@ -17924,18 +17922,18 @@
                                          ^2
    18|       |    );
    19|      9|    match crate::package::inventory::package_digest(root) {
-   20|      5|        Ok(expected)
+   20|      6|        Ok(expected)
    21|      8|            if receipt
    22|      8|                .pointer("/target_revision/value")
    23|      8|                .and_then(Value::as_str)
    24|      8|                == Some(expected.as_str()) => {}
-                                                       ^5   ^5
-   25|      3|        Ok(expected) => out.push(format!(
+                                                       ^6   ^6
+   25|      2|        Ok(expected) => out.push(format!(
    26|       |            "red_fixture_report_target_digest_mismatch:{actual}!={expected}",
-   27|      3|            actual = receipt
-   28|      3|                .pointer("/target_revision/value")
-   29|      3|                .and_then(Value::as_str)
-   30|      3|                .unwrap_or("missing")
+   27|      2|            actual = receipt
+   28|      2|                .pointer("/target_revision/value")
+   29|      2|                .and_then(Value::as_str)
+   30|      2|                .unwrap_or("missing")
    31|       |        )),
    32|      1|        Err(err) => out.push(format!(
    33|       |            "red_fixture_report_target_digest_unavailable:{err}"
@@ -18227,8 +18225,8 @@
    68|      5|        out.push("cli_control_plane_transaction_status_not_pass".to_string());
    69|     12|    }
    70|     17|    if receipt.get("candidate_digest").and_then(Value::as_str) != Some(expected) {
-   71|      4|        out.push("cli_control_plane_transaction_candidate_digest_mismatch".to_string());
-   72|     13|    }
+   71|      2|        out.push("cli_control_plane_transaction_candidate_digest_mismatch".to_string());
+   72|     15|    }
    73|     17|    if receipt.get("claim_ceiling").and_then(Value::as_str)
    74|     17|        != Some("supports_update_goal_eligibility")
    75|      5|    {
@@ -18303,9 +18301,10 @@
   142|     61|    let expected_digest = item.get("digest").and_then(Value::as_str).unwrap_or("");
   143|     61|    match crate::digest::file(&root.join(rel)) {
   144|     46|        Ok(actual) if actual == expected_digest => {}
-  145|     15|        _ => out.push(format!(
+                         ^44                                ^44  ^44
+  145|     17|        _ => out.push(format!(
   146|       |            "cli_control_plane_transaction_ref_digest_mismatch:{}:{rel}",
-  147|     15|            ptr.trim_start_matches('/')
+  147|     17|            ptr.trim_start_matches('/')
   148|       |        )),
   149|       |    }
   150|     61|    if item.get("status").and_then(Value::as_str) != Some("pass") {
@@ -18345,19 +18344,20 @@
   182|     47|        "final_packet" => crate::audit::final_packet::package_failures(root, store)
                                         ^10                                          ^10   ^10
   183|     10|            .into_iter()
-  184|     76|            .map(|failure| format!("cli_control_plane_transaction_final_packet:{failure}"))
+  184|     62|            .map(|failure| format!("cli_control_plane_transaction_final_packet:{failure}"))
                            ^10
   185|     10|            .collect(),
   186|     37|        "registry_exposure" => crate::audit::plugin::registry::value_failures(root, store, value)
                                              ^12                                            ^12   ^12    ^12
   187|     12|            .into_iter()
-  188|    114|            .map(|failure| format!("cli_control_plane_transaction_registry:{failure}"))
+  188|    112|            .map(|failure| format!("cli_control_plane_transaction_registry:{failure}"))
                            ^12
   189|     12|            .collect(),
   190|     25|        "cli_performance" => {
   191|     13|            crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
   192|     13|                .into_iter()
   193|     13|                .map(|failure| format!("cli_control_plane_transaction_performance:{failure}"))
+                                             ^11
   194|     13|                .collect()
   195|       |        }
   196|     12|        "coverage" => coverage_failures(store, value, expected),
@@ -18386,9 +18386,9 @@
   217|     11|        .pointer("/target_revision/value")
   218|     11|        .and_then(Value::as_str)
   219|     11|        != Some(expected)
-  220|      3|    {
-  221|      3|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
-  222|      8|    }
+  220|      1|    {
+  221|      1|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
+  222|     10|    }
   223|     11|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
   224|      9|        || !value
   225|      9|            .get("uncovered_records")
@@ -18514,10 +18514,10 @@
   105|     11|        .and_then(Value::as_str)
   106|     11|        .unwrap_or("");
   107|     11|    if candidate != expected_candidate {
-  108|      4|        out.push(format!(
-  109|      4|            "cli_control_plane_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
-  110|      4|        ));
-  111|      7|    }
+  108|      2|        out.push(format!(
+  109|      2|            "cli_control_plane_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
+  110|      2|        ));
+  111|      9|    }
   112|     11|    if value.get("operation").and_then(Value::as_str) != Some(expected_operation) {
   113|      2|        out.push(format!(
   114|      2|            "cli_control_plane_receipt_wrong_operation:{expected_operation}"
@@ -18983,24 +18983,24 @@
    92|       |    }))
    93|      9|}
    94|       |
-   95|      9|pub(crate) fn same_candidate_pass_failures(
-   96|      9|    value: &Value,
-   97|      9|    expected_candidate: &str,
-   98|      9|    operation: ControlOperation,
-   99|      9|) -> Vec<String> {
-  100|      9|    let mut out = surface_failures(value, operation, expected_candidate);
-  101|      9|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+   95|     13|pub(crate) fn same_candidate_pass_failures(
+   96|     13|    value: &Value,
+   97|     13|    expected_candidate: &str,
+   98|     13|    operation: ControlOperation,
+   99|     13|) -> Vec<String> {
+  100|     13|    let mut out = surface_failures(value, operation, expected_candidate);
+  101|     13|    if value.get("status").and_then(Value::as_str) != Some("pass") {
   102|      1|        out.push("package_surface_audit_status_not_pass".to_string());
-  103|      8|    }
-  104|      9|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("surface_package_digest_aligned")
+  103|     12|    }
+  104|     13|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("surface_package_digest_aligned")
   105|      2|    {
   106|      2|        out.push("package_surface_audit_claim_ceiling_not_surface_aligned".to_string());
-  107|      7|    }
-  108|      9|    if value.get("same_candidate").and_then(Value::as_bool) != Some(true) {
+  107|     11|    }
+  108|     13|    if value.get("same_candidate").and_then(Value::as_bool) != Some(true) {
   109|      1|        out.push("package_surface_audit_not_same_candidate".to_string());
-  110|      8|    }
-  111|      9|    out
-  112|      9|}
+  110|     12|    }
+  111|     13|    out
+  112|     13|}
   113|       |
   114|     20|pub(crate) fn same_candidate_pass_or_fail_closed_failures(
   115|     20|    value: &Value,
@@ -19008,57 +19008,58 @@
   117|     20|    operation: ControlOperation,
   118|     20|) -> Vec<String> {
   119|     20|    if value.get("status").and_then(Value::as_str) == Some("pass") {
-  120|      7|        return same_candidate_pass_failures(value, expected_candidate, operation);
-  121|     13|    }
-  122|     13|    let mut out = base_failures(value, operation, expected_candidate);
-  123|     13|    if value.get("status").and_then(Value::as_str) != Some("fail") {
+  120|     11|        return same_candidate_pass_failures(value, expected_candidate, operation);
+  121|      9|    }
+  122|      9|    let mut out = base_failures(value, operation, expected_candidate);
+  123|      9|    if value.get("status").and_then(Value::as_str) != Some("fail") {
   124|      4|        out.push("package_surface_audit_status_not_pass_or_fail".to_string());
-  125|      9|    }
-  126|     13|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("withheld_or_blocked") {
+  125|      5|    }
+  126|      9|    if value.get("claim_ceiling").and_then(Value::as_str) != Some("withheld_or_blocked") {
   127|      4|        out.push("package_surface_audit_fail_closed_claim_ceiling_not_blocking".to_string());
-  128|      9|    }
-  129|     13|    if value.get("same_candidate").and_then(Value::as_bool) != Some(false) {
+  128|      5|    }
+  129|      9|    if value.get("same_candidate").and_then(Value::as_bool) != Some(false) {
   130|      4|        out.push("package_surface_audit_fail_closed_same_candidate_not_false".to_string());
-  131|      9|    }
-  132|     13|    if value
-  133|     13|        .get("failures")
-  134|     13|        .and_then(Value::as_array)
-  135|     13|        .is_none_or(Vec::is_empty)
+  131|      5|    }
+  132|      9|    if value
+  133|      9|        .get("failures")
+  134|      9|        .and_then(Value::as_array)
+  135|      9|        .is_none_or(Vec::is_empty)
   136|      4|    {
   137|      4|        out.push("package_surface_audit_fail_closed_missing_failures".to_string());
-  138|      9|    }
-  139|     78|    for claim in [
-  140|     13|        "install_cache_parity",
-  141|     13|        "package_readiness",
-  142|     13|        "review_readiness",
-  143|     13|        "release_readiness",
-  144|     13|        "completion",
-  145|     13|        "update_goal_eligibility",
-  146|     13|    ] {
-  147|     78|        if !claim_array_contains(value, "blocked_claim_classes", claim) {
+  138|      5|    }
+  139|     54|    for claim in [
+  140|      9|        "install_cache_parity",
+  141|      9|        "package_readiness",
+  142|      9|        "review_readiness",
+  143|      9|        "release_readiness",
+  144|      9|        "completion",
+  145|      9|        "update_goal_eligibility",
+  146|      9|    ] {
+  147|     54|        if !claim_array_contains(value, "blocked_claim_classes", claim) {
   148|     30|            out.push(format!(
   149|     30|                "package_surface_audit_fail_closed_missing_blocked_claim:{claim}"
   150|     30|            ));
-  151|     48|        }
+  151|     30|        }
+                      ^24
   152|       |    }
-  153|     13|    out
+  153|      9|    out
   154|     20|}
   155|       |
-  156|      9|pub(crate) fn surface_failures(
-  157|      9|    value: &Value,
-  158|      9|    operation: ControlOperation,
-  159|      9|    expected_candidate: &str,
-  160|      9|) -> Vec<String> {
-  161|      9|    let mut out = base_failures(value, operation, expected_candidate);
-  162|      9|    if value
-  163|      9|        .pointer("/target/package_digest")
-  164|      9|        .and_then(Value::as_str)
-  165|      9|        != Some(expected_candidate)
-  166|      2|    {
-  167|      2|        out.push("package_surface_audit_target_digest_mismatch".to_string());
+  156|     13|pub(crate) fn surface_failures(
+  157|     13|    value: &Value,
+  158|     13|    operation: ControlOperation,
+  159|     13|    expected_candidate: &str,
+  160|     13|) -> Vec<String> {
+  161|     13|    let mut out = base_failures(value, operation, expected_candidate);
+  162|     13|    if value
+  163|     13|        .pointer("/target/package_digest")
+  164|     13|        .and_then(Value::as_str)
+  165|     13|        != Some(expected_candidate)
+  166|      6|    {
+  167|      6|        out.push("package_surface_audit_target_digest_mismatch".to_string());
   168|      7|    }
-  169|      9|    out
-  170|      9|}
+  169|     13|    out
+  170|     13|}
   171|       |
   172|     22|fn base_failures(
   173|     22|    value: &Value,
@@ -19100,13 +19101,13 @@
   209|     22|    out
   210|     22|}
   211|       |
-  212|     78|fn claim_array_contains(value: &Value, key: &str, expected: &str) -> bool {
-  213|     78|    value
-  214|     78|        .get(key)
-  215|     78|        .and_then(Value::as_array)
-  216|    168|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(expected)))
-                       ^78                 ^54          ^54
-  217|     78|}
+  212|     54|fn claim_array_contains(value: &Value, key: &str, expected: &str) -> bool {
+  213|     54|    value
+  214|     54|        .get(key)
+  215|     54|        .and_then(Value::as_array)
+  216|     84|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(expected)))
+                       ^54                 ^30          ^30
+  217|     54|}
   218|       |
   219|      9|pub(crate) fn value_failures_for_target(
   220|      9|    operation: ControlOperation,
@@ -22143,10 +22144,10 @@
    23|       |    };
    24|     10|    let class = match opt_string(raw, "--class") {
                       ^8
-   25|      4|        Some(raw) => BudgetClass::from_str(&raw)
-   26|      4|            .ok_or_else(|| "invalid --class performance budget".to_string())?,
+   25|      5|        Some(raw) => BudgetClass::from_str(&raw)
+   26|      5|            .ok_or_else(|| "invalid --class performance budget".to_string())?,
                                          ^2                                   ^2          ^2
-   27|      6|        None => default_class(operation),
+   27|      5|        None => default_class(operation),
    28|       |    };
    29|      8|    Ok(Some(PerformanceCommand {
    30|      8|        operation,
@@ -22181,20 +22182,20 @@
    56|      5|    Ok(receipt["exit_code"].as_i64().unwrap_or(1) as i32)
    57|      7|}
    58|       |
-   59|      6|fn default_class(operation: PerformanceOperation) -> BudgetClass {
-   60|      6|    match operation {
-   61|      2|        PerformanceOperation::Budgets => BudgetClass::Instant,
+   59|      5|fn default_class(operation: PerformanceOperation) -> BudgetClass {
+   60|      5|    match operation {
+   61|      1|        PerformanceOperation::Budgets => BudgetClass::Instant,
    62|      1|        PerformanceOperation::Verify => BudgetClass::Focused,
    63|      3|        PerformanceOperation::Prove | PerformanceOperation::SelfProve => BudgetClass::StrictLocal,
    64|       |    }
-   65|      6|}
+   65|      5|}
    66|       |
    67|     18|fn opt_string(args: &[String], key: &str) -> Option<String> {
    68|     18|    args.iter()
-   69|     56|        .position(|arg| arg == key)
+   69|     57|        .position(|arg| arg == key)
                        ^18
    70|     18|        .and_then(|index| args.get(index + 1))
-                                        ^8   ^8  ^8
+                                        ^9   ^9  ^9
    71|     18|        .cloned()
    72|     18|}
    73|       |
@@ -22467,10 +22468,10 @@
    52|     97|        .and_then(Value::as_str)
    53|     97|        .unwrap_or("");
    54|     97|    if candidate != expected_candidate {
-   55|     16|        out.push(format!(
-   56|     16|            "cli_performance_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
-   57|     16|        ));
-   58|     81|    }
+   55|      8|        out.push(format!(
+   56|      8|            "cli_performance_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
+   57|      8|        ));
+   58|     89|    }
    59|     97|    if value.get("status").and_then(Value::as_str) != Some("pass") {
    60|      3|        out.push("cli_performance_receipt_not_pass".to_string());
    61|     94|    }
@@ -22577,9 +22578,9 @@
    48|       |impl BudgetClass {
    49|     68|    pub(crate) fn id(self) -> &'static str {
    50|     68|        match self {
-   51|      7|            Self::Instant => "instant",
+   51|      1|            Self::Instant => "instant",
    52|      1|            Self::Interactive => "interactive",
-   53|     27|            Self::Focused => "focused",
+   53|     33|            Self::Focused => "focused",
    54|      1|            Self::RepairLoop => "repair_loop",
    55|     18|            Self::StrictLocal => "strict_local",
    56|      1|            Self::StrictFixtures => "strict_fixtures",
@@ -22589,14 +22590,14 @@
    60|       |        }
    61|     68|    }
    62|       |
-   63|     23|    pub(crate) fn from_str(raw: &str) -> Option<Self> {
-   64|     23|        match raw {
-   65|     23|            "instant" => Some(Self::Instant),
+   63|     24|    pub(crate) fn from_str(raw: &str) -> Option<Self> {
+   64|     24|        match raw {
+   65|     24|            "instant" => Some(Self::Instant),
                                        ^2
-   66|     21|            "interactive" => Some(Self::Interactive),
+   66|     22|            "interactive" => Some(Self::Interactive),
                                            ^2
-   67|     19|            "focused" => Some(Self::Focused),
-                                       ^2
+   67|     20|            "focused" => Some(Self::Focused),
+                                       ^3
    68|     17|            "repair_loop" | "repair-loop" => Some(Self::RepairLoop),
                                           ^16              ^3
    69|     14|            "strict_local" | "strict-local" => Some(Self::StrictLocal),
@@ -22611,13 +22612,13 @@
                                             ^4                 ^3
    74|      3|            _ => None,
    75|       |        }
-   76|     23|    }
+   76|     24|    }
    77|       |
    78|     54|    pub(crate) fn cold_p95_ms(self) -> u64 {
    79|     54|        match self {
-   80|      5|            Self::Instant => 2_000,
+   80|      1|            Self::Instant => 2_000,
    81|      1|            Self::Interactive => 5_000,
-   82|     22|            Self::Focused => 15_000,
+   82|     26|            Self::Focused => 15_000,
    83|      1|            Self::RepairLoop => 30_000,
    84|     13|            Self::StrictLocal => 60_000,
    85|      1|            Self::StrictFixtures => 120_000,
@@ -22629,9 +22630,9 @@
    91|       |
    92|     23|    pub(crate) fn warm_p95_ms(self) -> Option<u64> {
    93|     23|        match self {
-   94|      2|            Self::Instant => Some(500),
+   94|      1|            Self::Instant => Some(500),
    95|      1|            Self::Interactive => Some(1_000),
-   96|      9|            Self::Focused => Some(5_000),
+   96|     10|            Self::Focused => Some(5_000),
    97|      1|            Self::RepairLoop => Some(10_000),
    98|     10|            _ => None,
    99|       |        }
@@ -24001,61 +24002,61 @@
    15|       |#[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
    16|       |const O_NOFOLLOW: i32 = 0;
    17|       |
-   18|  29.9k|pub fn bytes(payload: &[u8]) -> String {
-   19|  29.9k|    format!("sha256:{:x}", Sha256::digest(payload))
-   20|  29.9k|}
+   18|  30.0k|pub fn bytes(payload: &[u8]) -> String {
+   19|  30.0k|    format!("sha256:{:x}", Sha256::digest(payload))
+   20|  30.0k|}
    21|       |
-   22|  10.8k|pub fn file(path: &Path) -> Result<String, String> {
-   23|  10.8k|    read_file_bytes(path).map(|payload| bytes(&payload))
-                                                      ^10.5k^10.5k
-   24|  10.8k|}
+   22|  10.9k|pub fn file(path: &Path) -> Result<String, String> {
+   23|  10.9k|    read_file_bytes(path).map(|payload| bytes(&payload))
+                                                      ^10.6k^10.6k
+   24|  10.9k|}
    25|       |
-   26|   561k|pub fn read_file_bytes(path: &Path) -> Result<Vec<u8>, String> {
-   27|   561k|    let before = metadata_result(path, fs::symlink_metadata(path), "metadata failed")?;
-                      ^559k                                                                        ^2.24k
-   28|   559k|    if before.file_type().is_symlink() || !before.file_type().is_file() {
-                                                        ^559k
+   26|   612k|pub fn read_file_bytes(path: &Path) -> Result<Vec<u8>, String> {
+   27|   612k|    let before = metadata_result(path, fs::symlink_metadata(path), "metadata failed")?;
+                      ^610k                                                                        ^2.24k
+   28|   610k|    if before.file_type().is_symlink() || !before.file_type().is_file() {
+                                                        ^610k
    29|      4|        return Err(format!("{}: not a regular file", path.display()));
-   30|   559k|    }
-   31|   559k|    if is_hard_linked(&before) {
+   30|   610k|    }
+   31|   610k|    if is_hard_linked(&before) {
    32|     14|        return Err(format!("{}: hard-linked file rejected", path.display()));
-   33|   559k|    }
-   34|   559k|    let mut options = OpenOptions::new();
-   35|   559k|    options.read(true);
+   33|   610k|    }
+   34|   610k|    let mut options = OpenOptions::new();
+   35|   610k|    options.read(true);
    36|       |    #[cfg(unix)]
-   37|   559k|    options.custom_flags(O_NOFOLLOW);
-   38|   559k|    let mut file = open_result(path, options.open(path))?;
+   37|   610k|    options.custom_flags(O_NOFOLLOW);
+   38|   610k|    let mut file = open_result(path, options.open(path))?;
                                                                       ^0
-   39|   559k|    let opened = metadata_result(path, file.metadata(), "opened metadata failed")?;
+   39|   610k|    let opened = metadata_result(path, file.metadata(), "opened metadata failed")?;
                                                                                                ^0
-   40|   559k|    reject_changed_or_linked(path, &before, &opened)?;
+   40|   610k|    reject_changed_or_linked(path, &before, &opened)?;
                                                                   ^0
-   41|   559k|    let mut payload = Vec::new();
-   42|   559k|    read_result(path, file.read_to_end(&mut payload))?;
+   41|   610k|    let mut payload = Vec::new();
+   42|   610k|    read_result(path, file.read_to_end(&mut payload))?;
                                                                    ^0
-   43|   559k|    Ok(payload)
-   44|   561k|}
+   43|   610k|    Ok(payload)
+   44|   612k|}
    45|       |
-   46|  1.12M|fn metadata_result(
-   47|  1.12M|    path: &Path,
-   48|  1.12M|    result: io::Result<fs::Metadata>,
-   49|  1.12M|    label: &str,
-   50|  1.12M|) -> Result<fs::Metadata, String> {
-   51|  1.12M|    result.map_err(|err| format!("{}: {label}: {err}", path.display()))
+   46|  1.22M|fn metadata_result(
+   47|  1.22M|    path: &Path,
+   48|  1.22M|    result: io::Result<fs::Metadata>,
+   49|  1.22M|    label: &str,
+   50|  1.22M|) -> Result<fs::Metadata, String> {
+   51|  1.22M|    result.map_err(|err| format!("{}: {label}: {err}", path.display()))
                                        ^2.24k                        ^2.24k^2.24k
-   52|  1.12M|}
+   52|  1.22M|}
    53|       |
-   54|   559k|fn open_result(path: &Path, result: io::Result<fs::File>) -> Result<fs::File, String> {
-   55|   559k|    result.map_err(|err| format!("{}: open failed: {err}", path.display()))
+   54|   610k|fn open_result(path: &Path, result: io::Result<fs::File>) -> Result<fs::File, String> {
+   55|   610k|    result.map_err(|err| format!("{}: open failed: {err}", path.display()))
                                        ^1                                ^1   ^1
-   56|   559k|}
+   56|   610k|}
    57|       |
-   58|   559k|fn read_result(path: &Path, result: io::Result<usize>) -> Result<(), String> {
-   59|   559k|    result
-   60|   559k|        .map(|_| ())
-   61|   559k|        .map_err(|err| format!("{}: read failed: {err}", path.display()))
+   58|   610k|fn read_result(path: &Path, result: io::Result<usize>) -> Result<(), String> {
+   59|   610k|    result
+   60|   610k|        .map(|_| ())
+   61|   610k|        .map_err(|err| format!("{}: read failed: {err}", path.display()))
                                      ^1                                ^1   ^1
-   62|   559k|}
+   62|   610k|}
    63|       |
    64|  14.4k|pub fn canonical_json(value: &serde_json::Value) -> String {
    65|  14.4k|    let sorted = sorted_value(value);
@@ -24081,14 +24082,14 @@
    84|   144k|}
    85|       |
    86|       |#[cfg(unix)]
-   87|   559k|fn metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
-   88|   559k|    before.dev() != opened.dev() || before.ino() != opened.ino()
-   89|   559k|}
+   87|   610k|fn metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
+   88|   610k|    before.dev() != opened.dev() || before.ino() != opened.ino()
+   89|   610k|}
    90|       |
    91|       |#[cfg(unix)]
-   92|  1.11M|fn is_hard_linked(meta: &fs::Metadata) -> bool {
-   93|  1.11M|    meta.nlink() > 1
-   94|  1.11M|}
+   92|  1.22M|fn is_hard_linked(meta: &fs::Metadata) -> bool {
+   93|  1.22M|    meta.nlink() > 1
+   94|  1.22M|}
    95|       |
    96|       |#[cfg(not(unix))]
    97|       |fn metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
@@ -24100,19 +24101,19 @@
   103|       |    false
   104|       |}
   105|       |
-  106|   559k|fn reject_changed_or_linked(
-  107|   559k|    path: &Path,
-  108|   559k|    before: &fs::Metadata,
-  109|   559k|    opened: &fs::Metadata,
-  110|   559k|) -> Result<(), String> {
-  111|   559k|    if metadata_changed(before, opened) {
+  106|   610k|fn reject_changed_or_linked(
+  107|   610k|    path: &Path,
+  108|   610k|    before: &fs::Metadata,
+  109|   610k|    opened: &fs::Metadata,
+  110|   610k|) -> Result<(), String> {
+  111|   610k|    if metadata_changed(before, opened) {
   112|      1|        return Err(format!("{}: file changed during open", path.display()));
-  113|   559k|    }
-  114|   559k|    if is_hard_linked(opened) {
+  113|   610k|    }
+  114|   610k|    if is_hard_linked(opened) {
   115|      1|        return Err(format!("{}: hard-linked file rejected", path.display()));
-  116|   559k|    }
-  117|   559k|    Ok(())
-  118|   559k|}
+  116|   610k|    }
+  117|   610k|    Ok(())
+  118|   610k|}
   119|       |
   120|       |#[cfg(all(test, unix))]
   121|       |mod tests {
@@ -24769,54 +24770,54 @@
     3|       |use std::fs::Metadata;
     4|       |use std::path::{Component, Path};
     5|       |
-    6|    534|pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> Result<(), String> {
-    7|    534|    if path.is_empty() || got.is_empty() || got == digest::ZERO {
-                                        ^532^532          ^532
+    6|    562|pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> Result<(), String> {
+    7|    562|    if path.is_empty() || got.is_empty() || got == digest::ZERO {
+                                        ^560^560          ^560
     8|      3|        return Err(format!("{label} lacks non-zero artifact digest"));
-    9|    531|    }
-   10|    531|    if placeholder_path(path) {
+    9|    559|    }
+   10|    559|    if placeholder_path(path) {
    11|      1|        return Err(format!("{label} uses placeholder artifact path: {path}"));
-   12|    530|    }
-   13|    530|    let rel = Path::new(path);
-   14|    530|    if rel.is_absolute() {
+   12|    558|    }
+   13|    558|    let rel = Path::new(path);
+   14|    558|    if rel.is_absolute() {
    15|      1|        return Err(format!("{label} uses absolute artifact path"));
-   16|    529|    }
-   17|    529|    if rel
-   18|    529|        .components()
-   19|  1.52k|        .any(|part| !matches!(part, Component::Normal(_)))
-                       ^529        ^6
+   16|    557|    }
+   17|    557|    if rel
+   18|    557|        .components()
+   19|  1.59k|        .any(|part| !matches!(part, Component::Normal(_)))
+                       ^557        ^6
    20|       |    {
    21|      6|        return Err(format!("{label} escapes package root"));
-   22|    523|    }
-   23|    523|    reject_symlink_component(root, rel, label)?;
+   22|    551|    }
+   23|    551|    reject_symlink_component(root, rel, label)?;
                                                             ^1
-   24|    522|    let resolved = crate::package::inventory::resolve(root, path)?;
+   24|    550|    let resolved = crate::package::inventory::resolve(root, path)?;
                                                                                ^0
-   25|    522|    let canonical_root = package_root_result(root.canonicalize())?;
-                      ^521                                                     ^1
-   26|    521|    let canonical = package_artifact_canonical_result(label, path, resolved.canonicalize())?;
-                      ^518                                                                               ^3
-   27|    518|    ensure_inside_package(&canonical_root, &canonical, label)?;
+   25|    550|    let canonical_root = package_root_result(root.canonicalize())?;
+                      ^549                                                     ^1
+   26|    549|    let canonical = package_artifact_canonical_result(label, path, resolved.canonicalize())?;
+                      ^546                                                                               ^3
+   27|    546|    ensure_inside_package(&canonical_root, &canonical, label)?;
                                                                            ^0
-   28|    518|    let meta =
-   29|    518|        package_artifact_metadata_result(label, path, std::fs::symlink_metadata(&canonical))?;
+   28|    546|    let meta =
+   29|    546|        package_artifact_metadata_result(label, path, std::fs::symlink_metadata(&canonical))?;
                                                                                                           ^0
-   30|    518|    if meta.file_type().is_symlink() || !meta.file_type().is_file() {
+   30|    546|    if meta.file_type().is_symlink() || !meta.file_type().is_file() {
    31|      1|        return Err(format!("{label} artifact is not a regular file: {path}"));
-   32|    517|    }
-   33|    517|    match package_artifact_digest_result(digest::file(&canonical)) {
-   34|    516|        Ok(actual) if actual == got => Ok(()),
-                         ^512                   ^512 ^512
+   32|    545|    }
+   33|    545|    match package_artifact_digest_result(digest::file(&canonical)) {
+   34|    544|        Ok(actual) if actual == got => Ok(()),
+                         ^540                   ^540 ^540
    35|      4|        Ok(_) => Err(format!("{label} digest mismatch: {path}")),
    36|      1|        Err(_) => Err(format!("{label} artifact unreadable: {path}")),
    37|       |    }
-   38|    534|}
+   38|    562|}
    39|       |
-   40|    517|pub fn validate_object(root: &Path, item: &Value, label: &str) -> Result<(), String> {
-   41|    517|    let path = item.get("path").and_then(Value::as_str).unwrap_or("");
-   42|    517|    let got = item.get("digest").and_then(Value::as_str).unwrap_or("");
-   43|    517|    validate_path_digest(root, path, got, label)
-   44|    517|}
+   40|    545|pub fn validate_object(root: &Path, item: &Value, label: &str) -> Result<(), String> {
+   41|    545|    let path = item.get("path").and_then(Value::as_str).unwrap_or("");
+   42|    545|    let got = item.get("digest").and_then(Value::as_str).unwrap_or("");
+   43|    545|    validate_path_digest(root, path, got, label)
+   44|    545|}
    45|       |
    46|      7|pub fn validate_command_artifact(root: &Path, item: &Value, label: &str) -> Result<(), String> {
    47|      7|    let path = item
@@ -24830,67 +24831,67 @@
    55|      7|    validate_path_digest(root, path, got, label)
    56|      7|}
    57|       |
-   58|    531|fn placeholder_path(path: &str) -> bool {
-   59|    531|    let lower = path.to_ascii_lowercase();
-   60|    531|    ["placeholder", "mock", "dummy", "fixture"]
-   61|    531|        .iter()
-   62|  2.12k|        .any(|token| lower.contains(token))
-                       ^531
-   63|    531|}
+   58|    559|fn placeholder_path(path: &str) -> bool {
+   59|    559|    let lower = path.to_ascii_lowercase();
+   60|    559|    ["placeholder", "mock", "dummy", "fixture"]
+   61|    559|        .iter()
+   62|  2.23k|        .any(|token| lower.contains(token))
+                       ^559
+   63|    559|}
    64|       |
-   65|    523|fn reject_symlink_component(root: &Path, rel: &Path, label: &str) -> Result<(), String> {
-   66|    523|    let mut cursor = root.to_path_buf();
-   67|  1.51k|    for name in rel.iter() {
-                              ^523^523
-   68|  1.51k|        cursor.push(name);
-   69|  1.51k|        if std::fs::symlink_metadata(&cursor)
-   70|  1.51k|            .map(|meta| meta.file_type().is_symlink())
-                                      ^1.51k           ^1.51k
-   71|  1.51k|            .unwrap_or(false)
+   65|    551|fn reject_symlink_component(root: &Path, rel: &Path, label: &str) -> Result<(), String> {
+   66|    551|    let mut cursor = root.to_path_buf();
+   67|  1.59k|    for name in rel.iter() {
+                              ^551^551
+   68|  1.59k|        cursor.push(name);
+   69|  1.59k|        if std::fs::symlink_metadata(&cursor)
+   70|  1.59k|            .map(|meta| meta.file_type().is_symlink())
+                                      ^1.58k           ^1.58k
+   71|  1.59k|            .unwrap_or(false)
    72|       |        {
    73|      1|            return Err(format!("{label} uses symlink artifact path"));
-   74|  1.51k|        }
+   74|  1.59k|        }
    75|       |    }
-   76|    522|    Ok(())
-   77|    523|}
+   76|    550|    Ok(())
+   77|    551|}
    78|       |
-   79|    520|fn ensure_inside_package(root: &Path, canonical: &Path, label: &str) -> Result<(), String> {
-   80|    520|    if canonical.strip_prefix(root).is_err() {
+   79|    548|fn ensure_inside_package(root: &Path, canonical: &Path, label: &str) -> Result<(), String> {
+   80|    548|    if canonical.strip_prefix(root).is_err() {
    81|      1|        return Err(format!("{label} escapes package root"));
-   82|    519|    }
-   83|    519|    Ok(())
-   84|    520|}
+   82|    547|    }
+   83|    547|    Ok(())
+   84|    548|}
    85|       |
-   86|    523|pub(crate) fn package_root_result(
-   87|    523|    result: std::io::Result<std::path::PathBuf>,
-   88|    523|) -> Result<std::path::PathBuf, String> {
-   89|    523|    result.map_err(|err| format!("package root unavailable: {err}"))
+   86|    551|pub(crate) fn package_root_result(
+   87|    551|    result: std::io::Result<std::path::PathBuf>,
+   88|    551|) -> Result<std::path::PathBuf, String> {
+   89|    551|    result.map_err(|err| format!("package root unavailable: {err}"))
                                        ^2
-   90|    523|}
+   90|    551|}
    91|       |
-   92|    522|pub(crate) fn package_artifact_canonical_result(
-   93|    522|    label: &str,
-   94|    522|    path: &str,
-   95|    522|    result: std::io::Result<std::path::PathBuf>,
-   96|    522|) -> Result<std::path::PathBuf, String> {
-   97|    522|    result.map_err(|_| format!("{label} artifact missing: {path}"))
+   92|    550|pub(crate) fn package_artifact_canonical_result(
+   93|    550|    label: &str,
+   94|    550|    path: &str,
+   95|    550|    result: std::io::Result<std::path::PathBuf>,
+   96|    550|) -> Result<std::path::PathBuf, String> {
+   97|    550|    result.map_err(|_| format!("{label} artifact missing: {path}"))
                                      ^4
-   98|    522|}
+   98|    550|}
    99|       |
-  100|    519|pub(crate) fn package_artifact_metadata_result(
-  101|    519|    label: &str,
-  102|    519|    path: &str,
-  103|    519|    result: std::io::Result<Metadata>,
-  104|    519|) -> Result<Metadata, String> {
-  105|    519|    result.map_err(|_| format!("{label} artifact missing: {path}"))
+  100|    547|pub(crate) fn package_artifact_metadata_result(
+  101|    547|    label: &str,
+  102|    547|    path: &str,
+  103|    547|    result: std::io::Result<Metadata>,
+  104|    547|) -> Result<Metadata, String> {
+  105|    547|    result.map_err(|_| format!("{label} artifact missing: {path}"))
                                      ^1
-  106|    519|}
+  106|    547|}
   107|       |
-  108|    518|pub(crate) fn package_artifact_digest_result(
-  109|    518|    result: Result<String, String>,
-  110|    518|) -> Result<String, String> {
-  111|    518|    result
-  112|    518|}
+  108|    546|pub(crate) fn package_artifact_digest_result(
+  109|    546|    result: Result<String, String>,
+  110|    546|) -> Result<String, String> {
+  111|    546|    result
+  112|    546|}
   113|       |
   114|       |#[cfg(test)]
   115|       |mod tests {
@@ -24934,7 +24935,7 @@
    21|       |];
    22|       |
    23|     43|pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
-   24|   864k|    walk_package_entries(root, |entry| entry.file_type().is_file())
+   24|   867k|    walk_package_entries(root, |entry| entry.file_type().is_file())
                   ^43                  ^43
    25|     43|}
    26|       |
@@ -24948,37 +24949,37 @@
    33|     53|    include: impl Fn(&walkdir::DirEntry) -> bool,
    34|     53|) -> Result<Vec<String>, String> {
    35|     53|    let mut paths = Vec::new();
-   36|   864k|    for entry in WalkDir::new(root).follow_links(false) {
+   36|   867k|    for entry in WalkDir::new(root).follow_links(false) {
                                ^53          ^53   ^53
-   37|   864k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
-                          ^864k                       ^1                            ^1
-   38|   864k|        if include(&entry) {
-   39|   859k|            let rel = rel_path(root, entry.path())?;
+   37|   867k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
+                          ^867k                       ^1                            ^1
+   38|   867k|        if include(&entry) {
+   39|   862k|            let rel = rel_path(root, entry.path())?;
                                                                 ^0
-   40|   859k|            if !local_only(&rel) {
+   40|   862k|            if !local_only(&rel) {
    41|  9.02k|                paths.push(rel);
-   42|   850k|            }
-   43|  5.36k|        }
+   42|   853k|            }
+   43|  5.38k|        }
    44|       |    }
    45|     52|    paths.sort();
    46|     52|    Ok(paths)
    47|     53|}
    48|       |
-   49|   859k|fn local_only(rel: &str) -> bool {
-   50|   859k|    LOCAL_PROOF_PATHS.contains(&rel)
-   51|   859k|        || LOCAL_BUILD_OUTPUT_PREFIXES
-   52|   859k|            .iter()
-   53|  1.17M|            .any(|prefix| rel.starts_with(prefix))
-                           ^859k
-   54|   859k|}
+   49|   862k|fn local_only(rel: &str) -> bool {
+   50|   862k|    LOCAL_PROOF_PATHS.contains(&rel)
+   51|   862k|        || LOCAL_BUILD_OUTPUT_PREFIXES
+   52|   862k|            .iter()
+   53|  1.18M|            .any(|prefix| rel.starts_with(prefix))
+                           ^862k
+   54|   862k|}
    55|       |
-   56|   859k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-   57|   859k|    path.strip_prefix(root)
-   58|   859k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-                                 ^859k                 ^859k         ^859k
-   59|   859k|        .map_err(|err| format!("walk root strip failed: {err}"))
+   56|   862k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
+   57|   862k|    path.strip_prefix(root)
+   58|   862k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
+                                 ^862k                 ^862k         ^862k
+   59|   862k|        .map_err(|err| format!("walk root strip failed: {err}"))
                                      ^1
-   60|   859k|}
+   60|   862k|}
    61|       |
    62|     10|pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
    63|     10|    let listed = crate::package::inventory::inventory_paths(manifest);
@@ -25195,102 +25196,102 @@
    12|       |pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
    13|       |pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
    14|       |
-   15|  1.18k|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
-   16|  1.18k|    let mut out = Vec::new();
-   17|  2.37k|    for key in ["skills", "agents"] {
-                             ^1.18k
-   18|  2.37k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
-                                  ^392
-   19|  4.06k|            for row in rows {
-                                     ^392
-   20|  4.06k|                if let Some(path) = row.get("path").and_then(Value::as_str) {
-                                          ^4.06k
-   21|  4.06k|                    out.push(path.to_string());
-   22|  4.06k|                }
+   15|  1.20k|pub fn inventory_paths(manifest: &Value) -> Vec<String> {
+   16|  1.20k|    let mut out = Vec::new();
+   17|  2.40k|    for key in ["skills", "agents"] {
+                             ^1.20k
+   18|  2.40k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
+                                  ^416
+   19|  4.39k|            for row in rows {
+                                     ^416
+   20|  4.39k|                if let Some(path) = row.get("path").and_then(Value::as_str) {
+                                          ^4.38k
+   21|  4.38k|                    out.push(path.to_string());
+   22|  4.38k|                }
                               ^2
    23|       |            }
    24|  1.98k|        }
    25|       |    }
-   26|  1.18k|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
-                              ^284
-   27|    284|        out.push(path.to_string());
+   26|  1.20k|    if let Some(path) = manifest.get("schema_catalog").and_then(Value::as_str) {
+                              ^296
+   27|    296|        out.push(path.to_string());
    28|    904|    }
-   29|  5.94k|    for key in [
-   30|  1.18k|        "schemas",
-   31|  1.18k|        "fixtures",
-   32|  1.18k|        "authorable_templates",
-   33|  1.18k|        "generated_examples",
-   34|  1.18k|        "resources",
-   35|  1.18k|    ] {
-   36|  5.94k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
-                                  ^1.97k
-   37|   647k|            for row in rows {
-                                     ^1.97k
-   38|   647k|                if let Some(path) = row.as_str() {
-                                          ^647k
-   39|   647k|                    out.push(path.to_string());
-   40|   647k|                }
+   29|  6.00k|    for key in [
+   30|  1.20k|        "schemas",
+   31|  1.20k|        "fixtures",
+   32|  1.20k|        "authorable_templates",
+   33|  1.20k|        "generated_examples",
+   34|  1.20k|        "resources",
+   35|  1.20k|    ] {
+   36|  6.00k|        if let Some(rows) = manifest.get(key).and_then(Value::as_array) {
+                                  ^2.03k
+   37|   700k|            for row in rows {
+                                     ^2.03k
+   38|   700k|                if let Some(path) = row.as_str() {
+                                          ^700k
+   39|   700k|                    out.push(path.to_string());
+   40|   700k|                }
                               ^7
    41|       |            }
    42|  3.96k|        }
    43|       |    }
-   44|  1.18k|    out
-   45|  1.18k|}
+   44|  1.20k|    out
+   45|  1.20k|}
    46|       |
-   47|   609k|pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
-   48|   609k|    if rel.is_empty() {
+   47|   660k|pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
+   48|   660k|    if rel.is_empty() {
    49|     14|        return Some("package path is not a non-empty string".to_string());
-   50|   609k|    }
-   51|   609k|    if Path::new(rel).is_absolute() {
+   50|   660k|    }
+   51|   660k|    if Path::new(rel).is_absolute() {
    52|      1|        return Some(format!("package path is absolute: {rel}"));
-   53|   609k|    }
-   54|   609k|    if Path::new(rel)
-   55|   609k|        .components()
-   56|  2.85M|        .any(|part| !matches!(part, Component::Normal(_)))
-                       ^609k       ^50
+   53|   660k|    }
+   54|   660k|    if Path::new(rel)
+   55|   660k|        .components()
+   56|  3.09M|        .any(|part| !matches!(part, Component::Normal(_)))
+                       ^660k       ^50
    57|       |    {
    58|     50|        return Some(format!("package path escapes package root: {rel}"));
-   59|   609k|    }
-   60|   609k|    let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
+   59|   660k|    }
+   60|   660k|    let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
                                                                         ^6   ^6
-   61|   609k|    if symlink_component_error(&root_abs, rel).is_some() {
+   61|   660k|    if symlink_component_error(&root_abs, rel).is_some() {
    62|      7|        return Some(format!("package path uses symlink: {rel}"));
-   63|   609k|    }
-   64|   609k|    let full = root_abs.join(rel);
-   65|   609k|    let full = full.canonicalize().unwrap_or(full);
-   66|   609k|    canonical_escape_error(&root_abs, &full, rel)
-   67|   609k|}
+   63|   660k|    }
+   64|   660k|    let full = root_abs.join(rel);
+   65|   660k|    let full = full.canonicalize().unwrap_or(full);
+   66|   660k|    canonical_escape_error(&root_abs, &full, rel)
+   67|   660k|}
    68|       |
-   69|   560k|pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {
-   70|   560k|    if let Some(error) = package_path_error(root, rel) {
+   69|   611k|pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {
+   70|   611k|    if let Some(error) = package_path_error(root, rel) {
                               ^27
    71|     27|        return Err(error);
-   72|   560k|    }
-   73|   560k|    Ok(root.join(Path::new(rel)))
-   74|   560k|}
+   72|   611k|    }
+   73|   611k|    Ok(root.join(Path::new(rel)))
+   74|   611k|}
    75|       |
-   76|   609k|fn symlink_component_error(root: &Path, rel: &str) -> Option<()> {
-   77|   609k|    let mut cursor = root.to_path_buf();
-   78|  2.85M|    for name in Path::new(rel).iter() {
-                              ^609k          ^609k
-   79|  2.85M|        cursor.push(name);
-   80|  2.85M|        let Ok(meta) = std::fs::symlink_metadata(&cursor) else {
-                             ^2.80M
+   76|   660k|fn symlink_component_error(root: &Path, rel: &str) -> Option<()> {
+   77|   660k|    let mut cursor = root.to_path_buf();
+   78|  3.09M|    for name in Path::new(rel).iter() {
+                              ^660k          ^660k
+   79|  3.09M|        cursor.push(name);
+   80|  3.09M|        let Ok(meta) = std::fs::symlink_metadata(&cursor) else {
+                             ^3.05M
    81|  41.4k|            continue;
    82|       |        };
-   83|  2.80M|        if meta.file_type().is_symlink() {
+   83|  3.05M|        if meta.file_type().is_symlink() {
    84|      7|            return Some(());
-   85|  2.80M|        }
+   85|  3.05M|        }
    86|       |    }
-   87|   609k|    None
-   88|   609k|}
+   87|   660k|    None
+   88|   660k|}
    89|       |
-   90|   609k|fn canonical_escape_error(root: &Path, full: &Path, rel: &str) -> Option<String> {
-   91|   609k|    if full.strip_prefix(root).is_err() {
+   90|   660k|fn canonical_escape_error(root: &Path, full: &Path, rel: &str) -> Option<String> {
+   91|   660k|    if full.strip_prefix(root).is_err() {
    92|      1|        return Some(format!("package path escapes package root: {rel}"));
-   93|   609k|    }
-   94|   609k|    None
-   95|   609k|}
+   93|   660k|    }
+   94|   660k|    None
+   95|   660k|}
    96|       |
    97|       |#[cfg(test)]
    98|       |mod canonical_tests {
@@ -25307,32 +25308,32 @@
   109|      1|    }
   110|       |}
   111|       |
-  112|   535k|pub fn package_digest_excluded(rel: &str) -> bool {
-  113|   535k|    PACKAGE_DIGEST_EXCLUDED_PATHS.contains(&rel)
-  114|   535k|        || PACKAGE_DIGEST_EXCLUDED_PREFIXES
-  115|   535k|            .iter()
-  116|   535k|            .any(|prefix| rel.starts_with(prefix))
-  117|   535k|}
+  112|   587k|pub fn package_digest_excluded(rel: &str) -> bool {
+  113|   587k|    PACKAGE_DIGEST_EXCLUDED_PATHS.contains(&rel)
+  114|   587k|        || PACKAGE_DIGEST_EXCLUDED_PREFIXES
+  115|   587k|            .iter()
+  116|   587k|            .any(|prefix| rel.starts_with(prefix))
+  117|   587k|}
   118|       |
-  119|  1.00k|pub fn package_digest(root: &Path) -> Result<String, String> {
-  120|  1.00k|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
-                      ^937                                                                         ^64
-  121|    937|    let mut paths = inventory_paths(&manifest)
-  122|    937|        .into_iter()
-  123|   535k|        .filter(|rel| !package_digest_excluded(rel))
-                       ^937
-  124|    937|        .collect::<Vec<_>>();
-  125|    937|    paths.sort();
-  126|    937|    let mut payload = Vec::new();
-  127|   519k|    for rel in paths {
-                             ^937
-  128|   519k|        payload.extend_from_slice(rel.as_bytes());
-  129|   519k|        payload.push(0);
-  130|   519k|        let bytes = match resolve(root, &rel) {
-                          ^519k
-  131|   519k|            Ok(path) if path.is_file() => crate::digest::read_file_bytes(&path)
-                             ^519k                 ^519k^519k                          ^519k
-  132|   519k|                .map_err(|err| format!("{}: package digest read failed: {err}", path.display()))?,
+  119|  1.01k|pub fn package_digest(root: &Path) -> Result<String, String> {
+  120|  1.01k|    let manifest = json_boundary::read_json(&root.join("plugin-manifest-draft.json"))?;
+                      ^949                                                                         ^64
+  121|    949|    let mut paths = inventory_paths(&manifest)
+  122|    949|        .into_iter()
+  123|   587k|        .filter(|rel| !package_digest_excluded(rel))
+                       ^949
+  124|    949|        .collect::<Vec<_>>();
+  125|    949|    paths.sort();
+  126|    949|    let mut payload = Vec::new();
+  127|   570k|    for rel in paths {
+                             ^949
+  128|   570k|        payload.extend_from_slice(rel.as_bytes());
+  129|   570k|        payload.push(0);
+  130|   570k|        let bytes = match resolve(root, &rel) {
+                          ^570k
+  131|   570k|            Ok(path) if path.is_file() => crate::digest::read_file_bytes(&path)
+                             ^570k                 ^570k^570k                          ^570k
+  132|   570k|                .map_err(|err| format!("{}: package digest read failed: {err}", path.display()))?,
                                              ^1                                               ^1              ^1
   133|      5|            Ok(path) => {
   134|      5|                return Err(format!(
@@ -25342,12 +25343,12 @@
   138|       |            }
   139|      5|            Err(err) => return Err(format!("{rel}: package digest path invalid: {err}")),
   140|       |        };
-  141|   519k|        payload.extend_from_slice(&payload::stable_package_payload(&rel, &bytes)?);
-                              ^519k                                                           ^1
-  142|   519k|        payload.push(0);
+  141|   570k|        payload.extend_from_slice(&payload::stable_package_payload(&rel, &bytes)?);
+                              ^570k                                                           ^1
+  142|   570k|        payload.push(0);
   143|       |    }
-  144|    925|    Ok(digest::bytes(&payload))
-  145|  1.00k|}
+  144|    937|    Ok(digest::bytes(&payload))
+  145|  1.01k|}
   146|       |
   147|       |#[cfg(test)]
   148|       |mod tests {
@@ -25421,49 +25422,49 @@
     7|       |    "templates/.harness/coverage-manifest.json",
     8|       |];
     9|       |
-   10|   523k|pub(crate) fn stable_package_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
-   11|   523k|    if rel.starts_with("fixtures/valid/") && rel.ends_with(".json") {
-                                                           ^619^619
-   12|    619|        return stable_valid_fixture_payload(rel, bytes);
-   13|   522k|    }
-   14|   522k|    if COVERAGE_MANIFESTS.contains(&rel) {
-   15|    250|        return stable_coverage_manifest_payload(rel, bytes);
-   16|   522k|    }
-   17|   522k|    Ok(bytes.to_vec())
-   18|   523k|}
+   10|   574k|pub(crate) fn stable_package_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
+   11|   574k|    if rel.starts_with("fixtures/valid/") && rel.ends_with(".json") {
+                                                           ^679^679
+   12|    679|        return stable_valid_fixture_payload(rel, bytes);
+   13|   573k|    }
+   14|   573k|    if COVERAGE_MANIFESTS.contains(&rel) {
+   15|    274|        return stable_coverage_manifest_payload(rel, bytes);
+   16|   573k|    }
+   17|   573k|    Ok(bytes.to_vec())
+   18|   574k|}
    19|       |
-   20|    619|fn stable_valid_fixture_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
-   21|    619|    let mut value: Value = serde_json::from_slice(bytes)
-                      ^617       ^617
-   22|    619|        .map_err(|err| format!("{rel}: valid fixture digest canonicalization failed: {err}"))?;
+   20|    679|fn stable_valid_fixture_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
+   21|    679|    let mut value: Value = serde_json::from_slice(bytes)
+                      ^677       ^677
+   22|    679|        .map_err(|err| format!("{rel}: valid fixture digest canonicalization failed: {err}"))?;
                                      ^2                                                                    ^2
-   23|    617|    value["validator_receipt"] = json!({
-   24|    617|        "schema": "harness-ultragoal.validator-receipt.v1",
-   25|    617|        "runtime_binding": "audit_time_overlay"
+   23|    677|    value["validator_receipt"] = json!({
+   24|    677|        "schema": "harness-ultragoal.validator-receipt.v1",
+   25|    677|        "runtime_binding": "audit_time_overlay"
    26|       |    });
-   27|    617|    Ok(value.to_string().into_bytes())
-   28|    619|}
+   27|    677|    Ok(value.to_string().into_bytes())
+   28|    679|}
    29|       |
-   30|    250|fn stable_coverage_manifest_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
-   31|    250|    let mut value: Value = serde_json::from_slice(bytes)
-                      ^249       ^249
-   32|    250|        .map_err(|err| format!("{rel}: coverage manifest canonicalization failed: {err}"))?;
+   30|    274|fn stable_coverage_manifest_payload(rel: &str, bytes: &[u8]) -> Result<Vec<u8>, String> {
+   31|    274|    let mut value: Value = serde_json::from_slice(bytes)
+                      ^273       ^273
+   32|    274|        .map_err(|err| format!("{rel}: coverage manifest canonicalization failed: {err}"))?;
                                      ^1                                                                 ^1
-   33|    249|    value["repo_root_digest"] = json!(RUNTIME_BINDING_DIGEST);
-   34|    249|    value["generated_at"] = json!("runtime_binding");
-   35|    249|    if let Some(policy) = value
-                              ^248
-   36|    249|        .get_mut("changed_file_coupling_policy")
-   37|    249|        .and_then(Value::as_object_mut)
-   38|    248|    {
-   39|    248|        policy.insert(
-   40|    248|            "changed_files_digest".to_string(),
-   41|    248|            json!(RUNTIME_BINDING_DIGEST),
-   42|    248|        );
-   43|    248|    }
+   33|    273|    value["repo_root_digest"] = json!(RUNTIME_BINDING_DIGEST);
+   34|    273|    value["generated_at"] = json!("runtime_binding");
+   35|    273|    if let Some(policy) = value
+                              ^272
+   36|    273|        .get_mut("changed_file_coupling_policy")
+   37|    273|        .and_then(Value::as_object_mut)
+   38|    272|    {
+   39|    272|        policy.insert(
+   40|    272|            "changed_files_digest".to_string(),
+   41|    272|            json!(RUNTIME_BINDING_DIGEST),
+   42|    272|        );
+   43|    272|    }
                   ^1
-   44|    249|    Ok(value.to_string().into_bytes())
-   45|    250|}
+   44|    273|    Ok(value.to_string().into_bytes())
+   45|    274|}
    46|       |
    47|       |#[cfg(test)]
    48|       |mod tests {
@@ -30008,13 +30009,13 @@
    53|    191|    }
    54|    191|}
    55|       |
-   56|  9.79k|pub(super) fn ref_cache_hit(store: &SchemaStore, key: &str) -> bool {
-   57|  9.79k|    store.ref_success_cache.borrow().contains(key)
-   58|  9.79k|}
+   56|  9.77k|pub(super) fn ref_cache_hit(store: &SchemaStore, key: &str) -> bool {
+   57|  9.77k|    store.ref_success_cache.borrow().contains(key)
+   58|  9.77k|}
    59|       |
-   60|  4.26k|pub(super) fn cache_ref_success(store: &SchemaStore, key: String) {
-   61|  4.26k|    store.ref_success_cache.borrow_mut().insert(key);
-   62|  4.26k|}
+   60|  4.23k|pub(super) fn cache_ref_success(store: &SchemaStore, key: String) {
+   61|  4.23k|    store.ref_success_cache.borrow_mut().insert(key);
+   62|  4.23k|}
    63|       |
    64|    428|pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -> Vec<String> {
    65|    428|    let Some(schema) = store.schemas.get(schema_name) else {
@@ -30724,16 +30725,16 @@
     1|       |use crate::schema_catalog::SchemaStore;
     2|       |use serde_json::Value;
     3|       |
-    4|   633k|pub(crate) fn check(
-    5|   633k|    store: &SchemaStore,
-    6|   633k|    root: &Value,
-    7|   633k|    schema: &Value,
-    8|   633k|    instance: &Value,
-    9|   633k|    path: &str,
-   10|   633k|    errors: &mut Vec<String>,
-   11|   633k|    depth: usize,
-   12|   633k|) {
-   13|   633k|    let Some(items) = instance.as_array() else {
+    4|   632k|pub(crate) fn check(
+    5|   632k|    store: &SchemaStore,
+    6|   632k|    root: &Value,
+    7|   632k|    schema: &Value,
+    8|   632k|    instance: &Value,
+    9|   632k|    path: &str,
+   10|   632k|    errors: &mut Vec<String>,
+   11|   632k|    depth: usize,
+   12|   632k|) {
+   13|   632k|    let Some(items) = instance.as_array() else {
                            ^4.22k
    14|   628k|        return;
    15|       |    };
@@ -30743,7 +30744,7 @@
    19|  3.90k|    }
    20|  4.22k|    item_schema_checks(store, root, schema, items, path, errors, depth);
    21|  4.22k|    contains_check(store, root, schema, items, path, errors, depth);
-   22|   633k|}
+   22|   632k|}
    23|       |
    24|  4.22k|fn item_count_checks(schema: &Value, items: &[Value], path: &str, errors: &mut Vec<String>) {
    25|  4.22k|    if let Some(min) = schema.get("minItems").and_then(Value::as_u64)
@@ -30771,18 +30772,18 @@
    45|  4.22k|) {
    46|  4.22k|    if let Some(item_schema) = schema.get("items") {
                               ^903
-   47|  4.28k|        for (index, value) in items.iter().enumerate() {
+   47|  4.23k|        for (index, value) in items.iter().enumerate() {
                                             ^903  ^903   ^903
-   48|  4.28k|            crate::schema_catalog::schema::keywords::validate_at(
-   49|  4.28k|                store,
-   50|  4.28k|                root,
-   51|  4.28k|                item_schema,
-   52|  4.28k|                value,
-   53|  4.28k|                &format!("{path}[{index}]"),
-   54|  4.28k|                errors,
-   55|  4.28k|                depth + 1,
-   56|  4.28k|            );
-   57|  4.28k|        }
+   48|  4.23k|            crate::schema_catalog::schema::keywords::validate_at(
+   49|  4.23k|                store,
+   50|  4.23k|                root,
+   51|  4.23k|                item_schema,
+   52|  4.23k|                value,
+   53|  4.23k|                &format!("{path}[{index}]"),
+   54|  4.23k|                errors,
+   55|  4.23k|                depth + 1,
+   56|  4.23k|            );
+   57|  4.23k|        }
    58|  3.31k|    }
    59|  4.22k|}
    60|       |
@@ -30941,35 +30942,35 @@
    22|      1|        return;
    23|   642k|    }
    24|   642k|    if let Some(reference) = schema.get("$ref").and_then(Value::as_str) {
-                              ^9.79k
-   25|  9.79k|        if let Some(key) = cache_key(root, reference, instance)
-   26|  9.79k|            && crate::schema_catalog::ref_cache_hit(store, &key)
+                              ^9.77k
+   25|  9.77k|        if let Some(key) = cache_key(root, reference, instance)
+   26|  9.77k|            && crate::schema_catalog::ref_cache_hit(store, &key)
    27|       |        {
-   28|  5.41k|            return;
-   29|  4.37k|        }
-   30|  4.37k|        let before = errors.len();
-   31|  4.37k|        match resolve_ref(store, root, reference) {
-   32|  4.37k|            Some((doc, target)) => {
-   33|  4.37k|                validate_at(store, &doc, &target, instance, path, errors, depth + 1);
-   34|  4.37k|                if errors.len() == before
-   35|  4.26k|                    && let Some(key) = cache_key(root, reference, instance)
-   36|  4.26k|                {
-   37|  4.26k|                    crate::schema_catalog::cache_ref_success(store, key);
-   38|  4.26k|                }
+   28|  5.42k|            return;
+   29|  4.34k|        }
+   30|  4.34k|        let before = errors.len();
+   31|  4.34k|        match resolve_ref(store, root, reference) {
+   32|  4.34k|            Some((doc, target)) => {
+   33|  4.34k|                validate_at(store, &doc, &target, instance, path, errors, depth + 1);
+   34|  4.34k|                if errors.len() == before
+   35|  4.23k|                    && let Some(key) = cache_key(root, reference, instance)
+   36|  4.23k|                {
+   37|  4.23k|                    crate::schema_catalog::cache_ref_success(store, key);
+   38|  4.23k|                }
                               ^109
    39|       |            }
    40|      3|            None => errors.push(format!("{path}: unresolved schema ref {reference}")),
    41|       |        }
-   42|  4.37k|        return;
-   43|   633k|    }
-   44|   633k|    structural_checks(store, root, schema, instance, path, errors, depth);
-   45|   633k|    crate::schema_catalog::schema::object::keywords::check(
-   46|   633k|        store, root, schema, instance, path, errors, depth,
+   42|  4.34k|        return;
+   43|   632k|    }
+   44|   632k|    structural_checks(store, root, schema, instance, path, errors, depth);
+   45|   632k|    crate::schema_catalog::schema::object::keywords::check(
+   46|   632k|        store, root, schema, instance, path, errors, depth,
    47|       |    );
-   48|   633k|    crate::schema_catalog::schema::array::keywords::check(
-   49|   633k|        store, root, schema, instance, path, errors, depth,
+   48|   632k|    crate::schema_catalog::schema::array::keywords::check(
+   49|   632k|        store, root, schema, instance, path, errors, depth,
    50|       |    );
-   51|   633k|    crate::schema_catalog::schema::scalar::keywords::check(schema, instance, path, errors);
+   51|   632k|    crate::schema_catalog::schema::scalar::keywords::check(schema, instance, path, errors);
    52|   642k|}
    53|       |
    54|  14.0k|fn cache_key(root: &Value, reference: &str, instance: &Value) -> Option<String> {
@@ -30979,82 +30980,82 @@
    57|  14.0k|    Some(format!("{root_id}\n{reference}\n{digest}"))
    58|  14.0k|}
    59|       |
-   60|   633k|fn structural_checks(
-   61|   633k|    store: &SchemaStore,
-   62|   633k|    root: &Value,
-   63|   633k|    schema: &Value,
-   64|   633k|    instance: &Value,
-   65|   633k|    path: &str,
-   66|   633k|    errors: &mut Vec<String>,
-   67|   633k|    depth: usize,
-   68|   633k|) {
-   69|   633k|    if let Some(expected) = schema.get("const")
+   60|   632k|fn structural_checks(
+   61|   632k|    store: &SchemaStore,
+   62|   632k|    root: &Value,
+   63|   632k|    schema: &Value,
+   64|   632k|    instance: &Value,
+   65|   632k|    path: &str,
+   66|   632k|    errors: &mut Vec<String>,
+   67|   632k|    depth: usize,
+   68|   632k|) {
+   69|   632k|    if let Some(expected) = schema.get("const")
                               ^602k
    70|   602k|        && instance != expected
    71|   598k|    {
    72|   598k|        errors.push(format!("{path}: const mismatch"));
    73|   598k|    }
-                  ^34.3k
-   74|   633k|    if let Some(items) = schema.get("enum").and_then(Value::as_array)
-                              ^4.96k
+                  ^34.2k
+   74|   632k|    if let Some(items) = schema.get("enum").and_then(Value::as_array)
+                              ^4.94k
    75|   791k|        && !items.iter().any(|item| item == instance)
-                          ^4.96k       ^4.96k
+                          ^4.94k       ^4.94k
    76|     20|    {
    77|     20|        errors.push(format!("{path}: enum mismatch"));
    78|   632k|    }
-   79|   633k|    if !type_matches(schema.get("type"), instance) {
+   79|   632k|    if !type_matches(schema.get("type"), instance) {
    80|    218|        errors.push(format!("{path}: type mismatch"));
    81|   632k|    }
-   82|   633k|    crate::schema_catalog::schema::scalar::keywords::number_checks(schema, instance, path, errors);
-   83|   633k|    for subschema in schema
+   82|   632k|    crate::schema_catalog::schema::scalar::keywords::number_checks(schema, instance, path, errors);
+   83|   632k|    for subschema in schema
                       ^7.80k
-   84|   633k|        .get("allOf")
-   85|   633k|        .and_then(Value::as_array)
-   86|   633k|        .into_iter()
-   87|   633k|        .flatten()
+   84|   632k|        .get("allOf")
+   85|   632k|        .and_then(Value::as_array)
+   86|   632k|        .into_iter()
+   87|   632k|        .flatten()
    88|  7.80k|    {
    89|  7.80k|        validate_at(store, root, subschema, instance, path, errors, depth + 1);
    90|  7.80k|    }
-   91|   633k|    any_one_of_checks(store, root, schema, instance, path, errors, depth);
-   92|   633k|    conditional_checks(store, root, schema, instance, path, errors, depth);
-   93|   633k|    not_check(store, root, schema, instance, path, errors, depth);
-   94|   633k|}
+   91|   632k|    any_one_of_checks(store, root, schema, instance, path, errors, depth);
+   92|   632k|    conditional_checks(store, root, schema, instance, path, errors, depth);
+   93|   632k|    not_check(store, root, schema, instance, path, errors, depth);
+   94|   632k|}
    95|       |
-   96|   633k|fn any_one_of_checks(
-   97|   633k|    store: &SchemaStore,
-   98|   633k|    root: &Value,
-   99|   633k|    schema: &Value,
-  100|   633k|    instance: &Value,
-  101|   633k|    path: &str,
-  102|   633k|    errors: &mut Vec<String>,
-  103|   633k|    depth: usize,
-  104|   633k|) {
-  105|   633k|    if let Some(branches) = schema.get("anyOf").and_then(Value::as_array) {
+   96|   632k|fn any_one_of_checks(
+   97|   632k|    store: &SchemaStore,
+   98|   632k|    root: &Value,
+   99|   632k|    schema: &Value,
+  100|   632k|    instance: &Value,
+  101|   632k|    path: &str,
+  102|   632k|    errors: &mut Vec<String>,
+  103|   632k|    depth: usize,
+  104|   632k|) {
+  105|   632k|    if let Some(branches) = schema.get("anyOf").and_then(Value::as_array) {
                               ^375
   106|    375|        let matches = branch_matches(store, root, branches, instance, path, depth);
   107|    375|        if matches == 0 {
   108|      8|            errors.push(format!("{path}: anyOf mismatch"));
   109|    367|        }
   110|   632k|    }
-  111|   633k|    if let Some(branches) = schema.get("oneOf").and_then(Value::as_array) {
+  111|   632k|    if let Some(branches) = schema.get("oneOf").and_then(Value::as_array) {
                               ^42
   112|     42|        let matches = branch_matches(store, root, branches, instance, path, depth);
   113|     42|        if matches != 1 {
   114|      2|            errors.push(format!("{path}: oneOf mismatch"));
   115|     40|        }
   116|   632k|    }
-  117|   633k|}
+  117|   632k|}
   118|       |
-  119|   633k|fn conditional_checks(
-  120|   633k|    store: &SchemaStore,
-  121|   633k|    root: &Value,
-  122|   633k|    schema: &Value,
-  123|   633k|    instance: &Value,
-  124|   633k|    path: &str,
-  125|   633k|    errors: &mut Vec<String>,
-  126|   633k|    depth: usize,
-  127|   633k|) {
-  128|   633k|    let Some(if_schema) = schema.get("if") else {
+  119|   632k|fn conditional_checks(
+  120|   632k|    store: &SchemaStore,
+  121|   632k|    root: &Value,
+  122|   632k|    schema: &Value,
+  123|   632k|    instance: &Value,
+  124|   632k|    path: &str,
+  125|   632k|    errors: &mut Vec<String>,
+  126|   632k|    depth: usize,
+  127|   632k|) {
+  128|   632k|    let Some(if_schema) = schema.get("if") else {
                            ^464
   129|   632k|        return;
   130|       |    };
@@ -31086,18 +31087,18 @@
   155|    237|        );
   156|    237|    }
                   ^227
-  157|   633k|}
+  157|   632k|}
   158|       |
-  159|   633k|fn not_check(
-  160|   633k|    store: &SchemaStore,
-  161|   633k|    root: &Value,
-  162|   633k|    schema: &Value,
-  163|   633k|    instance: &Value,
-  164|   633k|    path: &str,
-  165|   633k|    errors: &mut Vec<String>,
-  166|   633k|    depth: usize,
-  167|   633k|) {
-  168|   633k|    if let Some(not_schema) = schema.get("not") {
+  159|   632k|fn not_check(
+  160|   632k|    store: &SchemaStore,
+  161|   632k|    root: &Value,
+  162|   632k|    schema: &Value,
+  163|   632k|    instance: &Value,
+  164|   632k|    path: &str,
+  165|   632k|    errors: &mut Vec<String>,
+  166|   632k|    depth: usize,
+  167|   632k|) {
+  168|   632k|    if let Some(not_schema) = schema.get("not") {
                               ^9
   169|      9|        let mut nested = Vec::new();
   170|      9|        validate_at(
@@ -31113,7 +31114,7 @@
   180|      4|            errors.push(format!("{path}: not matched forbidden schema"));
   181|      5|        }
   182|   632k|    }
-  183|   633k|}
+  183|   632k|}
   184|       |
   185|    417|fn branch_matches(
   186|    417|    store: &SchemaStore,
@@ -31134,31 +31135,31 @@
   200|    417|        .count()
   201|    417|}
   202|       |
-  203|  4.37k|fn resolve_ref(store: &SchemaStore, root: &Value, reference: &str) -> Option<(Value, Value)> {
-  204|  4.37k|    let (base, fragment) = reference.split_once('#').unwrap_or((reference, ""));
-  205|  4.37k|    let doc = if base.is_empty() {
-                      ^4.37k
-  206|  1.29k|        root.clone()
+  203|  4.34k|fn resolve_ref(store: &SchemaStore, root: &Value, reference: &str) -> Option<(Value, Value)> {
+  204|  4.34k|    let (base, fragment) = reference.split_once('#').unwrap_or((reference, ""));
+  205|  4.34k|    let doc = if base.is_empty() {
+                      ^4.34k
+  206|  1.27k|        root.clone()
   207|       |    } else {
-  208|  3.08k|        store.schemas.get(base).cloned().or_else(|| {
+  208|  3.07k|        store.schemas.get(base).cloned().or_else(|| {
                                                                   ^3
   209|      3|            let name = base.rsplit('/').next().unwrap_or(base);
   210|      3|            store.schemas.get(name).cloned()
   211|      3|        })?
                         ^1
   212|       |    };
-  213|  4.37k|    let target = if fragment.is_empty() {
-                      ^4.37k
+  213|  4.34k|    let target = if fragment.is_empty() {
+                      ^4.34k
   214|      9|        doc.clone()
   215|       |    } else {
-  216|  4.36k|        doc.pointer(fragment).cloned()?
+  216|  4.33k|        doc.pointer(fragment).cloned()?
                                                     ^2
   217|       |    };
-  218|  4.37k|    Some((doc, target))
-  219|  4.37k|}
+  218|  4.34k|    Some((doc, target))
+  219|  4.34k|}
   220|       |
-  221|   633k|fn type_matches(schema_type: Option<&Value>, instance: &Value) -> bool {
-  222|  14.4k|    match schema_type {
+  221|   632k|fn type_matches(schema_type: Option<&Value>, instance: &Value) -> bool {
+  222|  14.3k|    match schema_type {
   223|   618k|        None => true,
   224|  14.3k|        Some(Value::String(kind)) => one_type_matches(kind, instance),
   225|     56|        Some(Value::Array(kinds)) => kinds
@@ -31167,16 +31168,16 @@
   228|     56|            .any(|kind| one_type_matches(kind, instance)),
   229|      1|        _ => true,
   230|       |    }
-  231|   633k|}
+  231|   632k|}
   232|       |
-  233|  14.4k|fn one_type_matches(kind: &str, instance: &Value) -> bool {
-  234|  14.4k|    match kind {
-  235|  14.4k|        "object" => instance.is_object(),
+  233|  14.3k|fn one_type_matches(kind: &str, instance: &Value) -> bool {
+  234|  14.3k|    match kind {
+  235|  14.3k|        "object" => instance.is_object(),
                                   ^4.70k   ^4.70k
-  236|  9.72k|        "array" => instance.is_array(),
+  236|  9.69k|        "array" => instance.is_array(),
                                  ^910     ^910
-  237|  8.81k|        "string" => instance.is_string(),
-                                  ^7.94k   ^7.94k
+  237|  8.78k|        "string" => instance.is_string(),
+                                  ^7.91k   ^7.91k
   238|    864|        "boolean" => instance.is_boolean(),
                                    ^620     ^620
   239|    244|        "integer" => instance.as_i64().is_some(),
@@ -31187,24 +31188,24 @@
                                 ^206     ^206
   242|      1|        _ => true,
   243|       |    }
-  244|  14.4k|}
+  244|  14.3k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/schema_catalog/schema/object/keywords.rs:
     1|       |use crate::schema_catalog::SchemaStore;
     2|       |use serde_json::Value;
     3|       |
-    4|   633k|pub(crate) fn check(
-    5|   633k|    store: &SchemaStore,
-    6|   633k|    root: &Value,
-    7|   633k|    schema: &Value,
-    8|   633k|    instance: &Value,
-    9|   633k|    path: &str,
-   10|   633k|    errors: &mut Vec<String>,
-   11|   633k|    depth: usize,
-   12|   633k|) {
-   13|   633k|    let Some(object) = instance.as_object() else {
+    4|   632k|pub(crate) fn check(
+    5|   632k|    store: &SchemaStore,
+    6|   632k|    root: &Value,
+    7|   632k|    schema: &Value,
+    8|   632k|    instance: &Value,
+    9|   632k|    path: &str,
+   10|   632k|    errors: &mut Vec<String>,
+   11|   632k|    depth: usize,
+   12|   632k|) {
+   13|   632k|    let Some(object) = instance.as_object() else {
                            ^9.97k
-   14|   623k|        return;
+   14|   622k|        return;
    15|       |    };
    16|  9.97k|    property_count_checks(schema, object, path, errors);
    17|  9.97k|    property_names_checks(store, root, schema, object, path, errors, depth);
@@ -31229,7 +31230,7 @@
    32|       |        }
    33|  3.20k|    }
    34|  9.97k|    additional_property_checks(store, root, schema, object, path, errors, depth);
-   35|   633k|}
+   35|   632k|}
    36|       |
    37|  9.97k|fn property_count_checks(
    38|  9.97k|    schema: &Value,
@@ -31347,7 +31348,7 @@
     2|  1.10k|    match pattern {
     3|  6.05k|        "^sha256:[0-9a-f]{64}$" => sha(text, false),
                                                  ^855^855
-    4|  5.20k|        "^sha256:[a-fA-F0-9]{64}$" => sha(text, true),
+    4|  5.19k|        "^sha256:[a-fA-F0-9]{64}$" => sha(text, true),
                                                     ^1.57k^1.57k
     5|  3.62k|        "^[a-fA-F0-9]{7,64}$" => hex_range(text, 7, 64),
                                                ^2        ^2
@@ -31399,16 +31400,16 @@
    40|       |    }
    41|  6.05k|}
    42|       |
-   43|  2.43k|fn sha(text: &str, mixed: bool) -> bool {
-   44|  2.43k|    text.strip_prefix("sha256:").is_some_and(|hex| {
-                                                                 ^2.43k
-   45|  2.43k|        hex.len() == 64
-   46|  2.43k|            && hex
-   47|  2.43k|                .chars()
+   43|  2.42k|fn sha(text: &str, mixed: bool) -> bool {
+   44|  2.42k|    text.strip_prefix("sha256:").is_some_and(|hex| {
+                                                                 ^2.42k
+   45|  2.42k|        hex.len() == 64
+   46|  2.42k|            && hex
+   47|  2.42k|                .chars()
    48|   155k|                .all(|c| c.is_ascii_hexdigit() && (mixed || !c.is_ascii_uppercase()))
-                               ^2.43k                                     ^54.6k
-   49|  2.43k|    })
-   50|  2.43k|}
+                               ^2.42k                                     ^54.6k
+   49|  2.42k|    })
+   50|  2.42k|}
    51|       |
    52|      2|fn hex_range(text: &str, min: usize, max: usize) -> bool {
    53|      7|    (min..=max).contains(&text.len()) && text.chars().all(|c| c.is_ascii_hexdigit())
@@ -31570,10 +31571,10 @@
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/schema_catalog/schema/scalar/keywords.rs:
     1|       |use serde_json::Value;
     2|       |
-    3|   633k|pub(crate) fn check(schema: &Value, instance: &Value, path: &str, errors: &mut Vec<String>) {
-    4|   633k|    string_checks(schema, instance, path, errors);
-    5|   633k|    number_checks(schema, instance, path, errors);
-    6|   633k|}
+    3|   632k|pub(crate) fn check(schema: &Value, instance: &Value, path: &str, errors: &mut Vec<String>) {
+    4|   632k|    string_checks(schema, instance, path, errors);
+    5|   632k|    number_checks(schema, instance, path, errors);
+    6|   632k|}
     7|       |
     8|  1.26M|pub(crate) fn number_checks(
     9|  1.26M|    schema: &Value,
@@ -31599,14 +31600,14 @@
    26|    104|    }
    27|  1.26M|}
    28|       |
-   29|   633k|fn string_checks(schema: &Value, instance: &Value, path: &str, errors: &mut Vec<String>) {
-   30|   633k|    let Some(text) = instance.as_str() else {
+   29|   632k|fn string_checks(schema: &Value, instance: &Value, path: &str, errors: &mut Vec<String>) {
+   30|   632k|    let Some(text) = instance.as_str() else {
                            ^617k
    31|  15.3k|        return;
    32|       |    };
    33|   617k|    if let Some(min) = schema.get("minLength").and_then(Value::as_u64)
-                              ^3.53k
-   34|  3.53k|        && text.chars().count() < min as usize
+                              ^3.51k
+   34|  3.51k|        && text.chars().count() < min as usize
    35|      3|    {
    36|      3|        errors.push(format!("{path}: minLength"));
    37|   617k|    }
@@ -31617,11 +31618,11 @@
    41|  1.72k|        errors.push(format!("{path}: pattern mismatch"));
    42|   615k|    }
    43|   617k|    if schema.get("format").and_then(Value::as_str) == Some("date-time")
-   44|     83|        && crate::audit::clock::parse_iso_seconds(text).is_none()
+   44|     82|        && crate::audit::clock::parse_iso_seconds(text).is_none()
    45|      1|    {
    46|      1|        errors.push(format!("{path}: format date-time"));
    47|   617k|    }
-   48|   633k|}
+   48|   632k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/schema_catalog/schema/supported/keywords.rs:
     1|       |use serde_json::Value;
@@ -44623,7 +44624,7 @@
    11|      2|fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
    12|       |    crate::Args {
    13|      2|        root,
-   14|     10|        command: crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
+   14|     12|        command: crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
                                ^2                    ^2  ^2     ^2                     ^2
    15|      2|            .expect("parse command"),
    16|       |    }
@@ -44671,15 +44672,17 @@
    58|      1|        &[
    59|      1|            "performance",
    60|      1|            "budgets",
-   61|      1|            "--receipt",
-   62|      1|            performance_receipt.to_str().expect("performance receipt"),
-   63|      1|        ],
-   64|       |    ))
-   65|      1|    .expect("performance command");
-   66|      1|    assert_eq!(code, 0);
-   67|      1|    assert!(performance_receipt.is_file());
-   68|      1|    std::fs::remove_dir_all(root).expect("cleanup command dispatch routes");
-   69|      1|}
+   61|      1|            "--class",
+   62|      1|            "focused",
+   63|      1|            "--receipt",
+   64|      1|            performance_receipt.to_str().expect("performance receipt"),
+   65|      1|        ],
+   66|       |    ))
+   67|      1|    .expect("performance command");
+   68|      1|    assert_eq!(code, 0);
+   69|      1|    assert!(performance_receipt.is_file());
+   70|      1|    std::fs::remove_dir_all(root).expect("cleanup command dispatch routes");
+   71|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/command/product.rs:
     1|       |use std::path::PathBuf;
@@ -53584,11 +53587,11 @@
   166|      1|}
   167|       |
   168|     11|fn has_failure_prefix(failures: &[(String, String)], prefix: &str) -> bool {
-  169|     56|    for (_, failure) in failures {
-                                      ^11
-  170|     56|        if failure.starts_with(prefix) {
+  169|     11|    for (_, failure) in failures {
+                          ^2
+  170|      2|        if failure.starts_with(prefix) {
   171|      1|            return true;
-  172|     55|        }
+  172|      1|        }
   173|       |    }
   174|     10|    false
   175|     11|}

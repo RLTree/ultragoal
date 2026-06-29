@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:06:49Z",
+    "completed_at": "2026-06-29T18:50:19Z",
     "cwd": "fixtures/target-repo/red/empty-reviewers-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:06:49Z",
+    "started_at": "2026-06-29T18:50:19Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:06:49Z",
+  "generated_at": "2026-06-29T18:50:19Z",
   "invocation": "fixture init fixtures/target-repo/red/empty-reviewers-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:e18c54bef828b0a2b1e964fae62c124de530efac60b7eeccefc933fbf34f5eb5",
+  "repo_fingerprint": "sha256:0c37d8a0a238ddb8052642d3bb747459ec50dff56110be77e9a901c93dc3dc9b",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1968,7 +1968,7 @@
       "path": "validator/src/self_tests/cli/standards.rs"
     },
     {
-      "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
+      "digest": "sha256:47b1865422afcf038d2cbb9480db42dc20fd657e3cdaacff12ef1d4fb043b3d0",
       "path": "validator/src/self_tests/command/dispatch.rs"
     },
     {

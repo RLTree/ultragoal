@@ -348,7 +348,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:2bb5bb27a3373f95dc2014c8e47b0093c8a1bb00ecd14dadd15943bb391aa7c9",
+  "repo_root_digest": "sha256:a795dbfd201c22b5a9b88f50f32cf8900c2e9680f38ee89d7dcaad9d360c1f81",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

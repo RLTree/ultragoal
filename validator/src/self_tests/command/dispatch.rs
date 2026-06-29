@@ -58,6 +58,8 @@ fn command_run_routes_audit_and_performance_variants() {
         &[
             "performance",
             "budgets",
+            "--class",
+            "focused",
             "--receipt",
             performance_receipt.to_str().expect("performance receipt"),
         ],

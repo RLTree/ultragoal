@@ -363,17 +363,17 @@
   },
   "command": {
     "command": "scripts/check",
-    "completed_at": "2026-06-29T18:06:48Z",
+    "completed_at": "2026-06-29T18:50:18Z",
     "cwd": "fixtures/target-repo/red/symlink-check-gate",
     "exit": 127,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:06:48Z"
+    "started_at": "2026-06-29T18:50:18Z"
   },
   "gate_markers": [],
-  "generated_at": "2026-06-29T18:06:48Z",
+  "generated_at": "2026-06-29T18:50:18Z",
   "invocation": "fixture init fixtures/target-repo/red/symlink-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:7187880db055b11cf1b044df17d694aa0eabeafb1bc8a1479b0d7eb0a95e3754",
+  "repo_fingerprint": "sha256:4f37fc11aa438e6e3af37ded3ecd7ebc7a2c9e7c7b9be1be2e919d73592a532c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1953,7 +1953,7 @@
       "path": "validator/src/self_tests/cli/standards.rs"
     },
     {
-      "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
+      "digest": "sha256:47b1865422afcf038d2cbb9480db42dc20fd657e3cdaacff12ef1d4fb043b3d0",
       "path": "validator/src/self_tests/command/dispatch.rs"
     },
     {

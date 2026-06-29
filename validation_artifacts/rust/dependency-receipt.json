@@ -48,7 +48,7 @@
     "ultragoal rust workspace topology check"
   ],
   "digests": {
-    "candidate": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4",
+    "candidate": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
     "cargo_config": "sha256:6a60d9d70c9ad7f839042e7dfe5e2c993e8db8f27a83acb71e36a3b723d1fa91",
     "cargo_lock": "sha256:ee05ce5f44fb7ce1e1544f585ac36d155367c58109be2c7b29f90b6fcbf6a1c8",
     "cargo_workspace": "sha256:b8d083a304e1ff96717b16610ef9a0dd1cf3bfaaebd4d06d9f4320b045849f41",
@@ -56,11 +56,11 @@
     "law_graph": "sha256:f2c9e7a5dccc637f51d8f03f276fb9e63a59e36ec86ca9cd105eacfe83017397",
     "rust_toolchain": "sha256:2d157d0deed991e8b3cd711051cd4c1aace1c7ecbfc94df49bf3eaaf8f573d56",
     "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68",
-    "source": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4",
+    "source": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
     "source_obligation": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
     "standards": "sha256:6367299d760018cdc6735ed07295150ae51e3e37e1e25c7b16c177f33eddc731"
   },
-  "generated_at": "2026-06-29T16:56:53Z",
+  "generated_at": "2026-06-29T18:33:18Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"

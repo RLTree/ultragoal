@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:06:49Z",
+    "completed_at": "2026-06-29T18:50:19Z",
     "cwd": "fixtures/target-repo/red/reviewer-authority-content-mismatch",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:06:49Z",
+    "started_at": "2026-06-29T18:50:19Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:06:49Z",
+  "generated_at": "2026-06-29T18:50:19Z",
   "invocation": "fixture init fixtures/target-repo/red/reviewer-authority-content-mismatch",
   "mode": "init",
-  "repo_fingerprint": "sha256:512b51af6bb0bf4a862a6fd146953d00f76298572c5ce3eec40d4425649b34a7",
+  "repo_fingerprint": "sha256:2f78d42e6afb13c5e510b761ba5be48782e1ee993c2f427c3646c5c4289c033c",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1968,7 +1968,7 @@
       "path": "validator/src/self_tests/cli/standards.rs"
     },
     {
-      "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
+      "digest": "sha256:47b1865422afcf038d2cbb9480db42dc20fd657e3cdaacff12ef1d4fb043b3d0",
       "path": "validator/src/self_tests/command/dispatch.rs"
     },
     {

@@ -34,9 +34,9 @@
       "gc",
       "verify",
       "--plan-digest",
-      "sha256:223e19ff35f59e95698870cfffe7ab32c53f1838d84576bac34c366447ffa3cc",
+      "sha256:f6fa2b3668da6b6b237ec2bf4b57cea5483504fc3700671e2130a88d66f850d1",
       "--apply-receipt-digest",
-      "sha256:621b87d996d87dea47a08d04fc58d1ea424fdf29376d1d377e38751b7f350ab3",
+      "sha256:26adaee9c0485b9508805e2502f71390a7db3ae26a4e3f813d663a37efc7fb83",
       "--receipt",
       "validation_artifacts/gc/verify-receipt.json"
     ],
@@ -46,17 +46,17 @@
     "apply_requires_plan_digest": true,
     "blind_rm_rf_allowed": false,
     "deleted_artifacts": [],
-    "plan_digest": "sha256:223e19ff35f59e95698870cfffe7ab32c53f1838d84576bac34c366447ffa3cc",
+    "plan_digest": "sha256:f6fa2b3668da6b6b237ec2bf4b57cea5483504fc3700671e2130a88d66f850d1",
     "plan_digest_argument_required": true,
     "plan_digest_source": "required_cli_argument"
   },
   "digests": {
-    "candidate": "sha256:904d38ecc6afc01e02418f836c9985043ccf32a5cb2a97dd863885f9aa403be4",
+    "candidate": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",
     "fixture_catalog": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
     "law_graph": "sha256:f2c9e7a5dccc637f51d8f03f276fb9e63a59e36ec86ca9cd105eacfe83017397",
     "schema_catalog": "sha256:3cbb23d3acdf2d96bf9b9448dadb1ee42fde6da6e553c89ddfce9e256ed0aa68"
   },
-  "generated_at": "2026-06-29T16:57:46Z",
+  "generated_at": "2026-06-29T18:33:55Z",
   "issuer": {
     "authority": "cli_control_plane",
     "tool": "ultragoal"
@@ -68,7 +68,7 @@
   "policy_version": "2026-06-26.gate-91.v1",
   "post_verify": {
     "active_claim_receipts_preserved": true,
-    "apply_receipt_digest": "sha256:621b87d996d87dea47a08d04fc58d1ea424fdf29376d1d377e38751b7f350ab3",
+    "apply_receipt_digest": "sha256:26adaee9c0485b9508805e2502f71390a7db3ae26a4e3f813d663a37efc7fb83",
     "apply_receipt_digest_required": true,
     "locks_pids_ports_checked": true,
     "protected_artifacts_preserved": true

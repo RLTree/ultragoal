@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T18:06:49Z",
+    "completed_at": "2026-06-29T18:50:19Z",
     "cwd": "fixtures/target-repo/red/missing-product-cohesion",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T18:06:49Z",
+    "started_at": "2026-06-29T18:50:19Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -384,10 +384,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-29T18:06:49Z",
+  "generated_at": "2026-06-29T18:50:19Z",
   "invocation": "fixture init fixtures/target-repo/red/missing-product-cohesion",
   "mode": "init",
-  "repo_fingerprint": "sha256:1d25c825e77dff592707bf8cd05c5b9819da2840d7cf8a7f45536605d6e08b05",
+  "repo_fingerprint": "sha256:047983ee5c45aa00f32ac39612c89c521ebfd58ecaee1df1e1e51285f1541246",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -1967,7 +1967,7 @@
       "path": "validator/src/self_tests/cli/standards.rs"
     },
     {
-      "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
+      "digest": "sha256:47b1865422afcf038d2cbb9480db42dc20fd657e3cdaacff12ef1d4fb043b3d0",
       "path": "validator/src/self_tests/command/dispatch.rs"
     },
     {
