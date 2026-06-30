@@ -20,66 +20,81 @@
         "app_registry_or_reviewer_exposure"
       ],
       "claim_impact": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal",
-      "digest": "sha256:075c5197fbbe8cf8beadb3e5acd34097fcefee6bdc26dab0b33586320d94e0b9",
-      "observed_failures": [],
+      "digest": "sha256:46b6868dec0664b371524a40598dcf7c87024b027a1e701ef4f9185323e07485",
+      "observed_failures": [
+        "final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
+        "final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
+        "final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
+        "final_packet_proof_ref_status_disagreement:source_audit",
+        "final_packet_proof_source_audit_target_digest_mismatch",
+        "final_packet_proof_coverage_target_digest_mismatch",
+        "final_packet_proof_package_target_digest_mismatch",
+        "final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch",
+        "final_packet_proof_package_target_digest_mismatch",
+        "final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence",
+        "final_packet_proof_product_fitness_ref:product_fitness_receipt_stale",
+        "final_packet_proof_package_target_digest_mismatch",
+        "final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch",
+        "final_packet_proof_observability_candidate_digest_mismatch"
+      ],
       "path": "validation_artifacts/review/final-packet-proof.json",
-      "status": "clear",
+      "status": "blocked",
       "surface": "final_packet_proof"
     }
   ],
   "check_set_digest": "sha256:ae900668ba43c856cc081bc852b82dd1b7cfc97bdb6f9f1348118f0eabe1a9ed",
   "checks": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:active-setup-to-idle-orchestration-thread-bound-heartbeat; mandatory_law_evidence_digest_mismatch:active-setup-to-idle-orchestration-thread-bound-heartbeat",
+      "status": "fail"
     },
     "adversarial-packet-tampering-forged-proof-rejection": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:adversarial-packet-tampering-forged-proof-rejection; mandatory_law_evidence_digest_mismatch:adversarial-packet-tampering-forged-proof-rejection; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_ref_status_disagreement:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_source_audit_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_coverage_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_fitness_ref:product_fitness_receipt_stale; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_observability_candidate_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
+      "status": "fail"
     },
     "agent-authored-source-tooling-docs-provenance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:agent-authored-source-tooling-docs-provenance; mandatory_law_evidence_digest_mismatch:agent-authored-source-tooling-docs-provenance",
+      "status": "fail"
     },
     "agent-queryable-observability": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:agent-queryable-observability; mandatory_law_evidence_digest_mismatch:agent-queryable-observability",
+      "status": "fail"
     },
     "agent-remediating-validator-failures": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:agent-remediating-validator-failures; mandatory_law_evidence_digest_mismatch:agent-remediating-validator-failures",
+      "status": "fail"
     },
     "agent-session-telemetry-token-rate-limit": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:agent-session-telemetry-token-rate-limit; mandatory_law_evidence_digest_mismatch:agent-session-telemetry-token-rate-limit",
+      "status": "fail"
     },
     "agent-standards-enforcement": {
-      "details": "pass",
-      "status": "pass"
+      "details": "agent_standards_audit_evidence_invalid:full-local-observability-stack-integration-non-opaque-failure; coverage_receipt_source_digest_mismatch; coverage_receipt_changed_files_digest_mismatch; fit_repo_receipt_target_digest_mismatch; plugin_product_journey_target_digest_mismatch",
+      "status": "fail"
     },
     "amendment-monotonicity": {
       "details": "pass",
       "status": "pass"
     },
     "architecture-dependency-topology": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:architecture-dependency-topology; mandatory_law_evidence_digest_mismatch:architecture-dependency-topology",
+      "status": "fail"
     },
     "authority-exhaustiveness-closed-enums-impossible-state-elimination": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:authority-exhaustiveness-closed-enums-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:authority-exhaustiveness-closed-enums-impossible-state-elimination",
+      "status": "fail"
     },
     "authority-source-binding": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:authority-source-binding; mandatory_law_evidence_digest_mismatch:authority-source-binding",
+      "status": "fail"
     },
     "automation-tick-freshness": {
       "details": "pass",
       "status": "pass"
     },
     "autonomy-loop-proof": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:autonomy-loop-proof; mandatory_law_evidence_digest_mismatch:autonomy-loop-proof",
+      "status": "fail"
     },
     "backlog-attempt-proof": {
       "details": "pass",
@@ -90,16 +105,16 @@
       "status": "pass"
     },
     "batch-fanout-custom-agent-job-worker-result-discipline": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:batch-fanout-custom-agent-job-worker-result-discipline; mandatory_law_evidence_digest_mismatch:batch-fanout-custom-agent-job-worker-result-discipline",
+      "status": "fail"
     },
     "behavior-example-coverage-coverage-anti-gaming": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:behavior-example-coverage-coverage-anti-gaming; mandatory_law_evidence_digest_mismatch:behavior-example-coverage-coverage-anti-gaming",
+      "status": "fail"
     },
     "capability-gap-extraction-harness-capability-promotion": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:capability-gap-extraction-harness-capability-promotion; mandatory_law_evidence_digest_mismatch:capability-gap-extraction-harness-capability-promotion",
+      "status": "fail"
     },
     "claim-evidence-coupling": {
       "details": "pass",
@@ -114,44 +129,44 @@
       "status": "pass"
     },
     "clean-checkout-command-discovery": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:clean-checkout-command-discovery; mandatory_law_evidence_digest_mismatch:clean-checkout-command-discovery",
+      "status": "fail"
     },
     "clean-room-rebuild-author-memory-independence": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:clean-room-rebuild-author-memory-independence; mandatory_law_evidence_digest_mismatch:clean-room-rebuild-author-memory-independence",
+      "status": "fail"
     },
     "cli-control-plane-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "validation_artifacts/cli/install-audit-receipt.json: package_surface_audit_candidate_digest_mismatch; validation_artifacts/cli/install-audit-receipt.json: package_surface_audit_source_digest_mismatch; validation_artifacts/cli/install-audit-receipt.json: package_surface_audit_target_expected_digest_mismatch; validation_artifacts/cli/cache-audit-receipt.json: package_surface_audit_candidate_digest_mismatch; validation_artifacts/cli/cache-audit-receipt.json: package_surface_audit_source_digest_mismatch; validation_artifacts/cli/cache-audit-receipt.json: package_surface_audit_target_expected_digest_mismatch; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_evidence_digest_mismatch:cli-control-plane-authority; mandatory_law_evidence_digest_mismatch:cli-control-plane-authority; mandatory_law_current_check_not_pass:cli-control-plane-authority:cli-control-plane-authority",
+      "status": "fail"
     },
     "cli-performance-latency-speed-iteration-fitness": {
-      "details": "pass",
-      "status": "pass"
+      "details": "cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_evidence_digest_mismatch:cli-performance-latency-speed-iteration-fitness; mandatory_law_evidence_digest_mismatch:cli-performance-latency-speed-iteration-fitness; mandatory_law_current_check_not_pass:cli-performance-latency-speed-iteration-fitness:cli-performance-latency-speed-iteration-fitness",
+      "status": "fail"
     },
     "cli-self-law-compliance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_evidence_digest_mismatch:cli-self-law-compliance; mandatory_law_evidence_digest_mismatch:cli-self-law-compliance; mandatory_law_current_check_not_pass:cli-self-law-compliance:cli-self-law-compliance",
+      "status": "fail"
     },
     "command-evidence": {
       "details": "pass",
       "status": "pass"
     },
     "compact-agents-routed-standards": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:compact-agents-routed-standards; mandatory_law_evidence_digest_mismatch:compact-agents-routed-standards",
+      "status": "fail"
     },
     "conditional-observability-proof": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:conditional-observability-proof; mandatory_law_evidence_digest_mismatch:conditional-observability-proof",
+      "status": "fail"
     },
     "config-precedence-defaults-env-indirection": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:config-precedence-defaults-env-indirection; mandatory_law_evidence_digest_mismatch:config-precedence-defaults-env-indirection",
+      "status": "fail"
     },
     "connector-capability-discovery": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:connector-capability-discovery; mandatory_law_evidence_digest_mismatch:connector-capability-discovery",
+      "status": "fail"
     },
     "contract-bundle-hash": {
       "details": "pass",
@@ -162,28 +177,28 @@
       "status": "pass"
     },
     "cross-artifact-consistency-solver-authority-graph-closure": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:cross-artifact-consistency-solver-authority-graph-closure; mandatory_law_evidence_digest_mismatch:cross-artifact-consistency-solver-authority-graph-closure",
+      "status": "fail"
     },
     "current-product-discovery-audit-quality-in-use-evidence": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:current-product-discovery-audit-quality-in-use-evidence; mandatory_law_evidence_digest_mismatch:current-product-discovery-audit-quality-in-use-evidence",
+      "status": "fail"
     },
     "derived-authority-recomputation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:derived-authority-recomputation; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation-named-authority-fallback-refusal; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation-named-authority-fallback-refusal",
+      "status": "fail"
     },
     "derived-authority-recomputation-named-authority-fallback-refusal": {
       "details": "pass",
       "status": "pass"
     },
     "distinct-proof-surfaces-claim-ceilings": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:distinct-proof-surfaces-claim-ceilings; mandatory_law_evidence_digest_mismatch:distinct-proof-surfaces-claim-ceilings",
+      "status": "fail"
     },
     "distribution-sharing-surface-claim-separation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:distribution-sharing-surface-claim-separation; mandatory_law_evidence_digest_mismatch:distribution-sharing-surface-claim-separation",
+      "status": "fail"
     },
     "evidence-freshness": {
       "details": "pass",
@@ -194,80 +209,80 @@
       "status": "pass"
     },
     "execplan-no-handback-prototype-promotion-discard": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:execplan-no-handback-prototype-promotion-discard; mandatory_law_evidence_digest_mismatch:execplan-no-handback-prototype-promotion-discard",
+      "status": "fail"
     },
     "execplan-plain-language-expected-output-interface-completeness": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:execplan-plain-language-expected-output-interface-completeness; mandatory_law_evidence_digest_mismatch:execplan-plain-language-expected-output-interface-completeness",
+      "status": "fail"
     },
     "failure-remediation-quality-agent-actionable-output": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:failure-remediation-quality-agent-actionable-output; mandatory_law_evidence_digest_mismatch:failure-remediation-quality-agent-actionable-output",
+      "status": "fail"
     },
     "feedback-to-rule-promotion": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:feedback-to-rule-promotion; mandatory_law_evidence_digest_mismatch:feedback-to-rule-promotion",
+      "status": "fail"
     },
     "forward-only-state-transition-integrity-silent-reopen-prevention": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:forward-only-state-transition-integrity-silent-reopen-prevention; mandatory_law_evidence_digest_mismatch:forward-only-state-transition-integrity-silent-reopen-prevention",
+      "status": "fail"
     },
     "fresh-init-retrofit-mode-separation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:fresh-init-retrofit-mode-separation; mandatory_law_evidence_digest_mismatch:fresh-init-retrofit-mode-separation",
+      "status": "fail"
     },
     "fresh-retrofit-repo-shape": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:fresh-retrofit-repo-shape; mandatory_law_evidence_digest_mismatch:fresh-retrofit-repo-shape",
+      "status": "fail"
     },
     "full-local-observability-stack-integration-non-opaque-failure": {
-      "details": "pass",
-      "status": "pass"
+      "details": "observability_command_fitting_unfitted:source audit:partially_fitted; observability_command_fitting_unfitted:red fixture report:unfitted; observability_command_fitting_unfitted:schema validation:unfitted; observability_command_fitting_unfitted:mandatory-law validation:unfitted; observability_command_fitting_unfitted:standards-gardener rebind:unfitted; observability_command_fitting_unfitted:source-obligations check:unfitted; observability_command_fitting_unfitted:foundational-trace check:unfitted; observability_command_fitting_unfitted:coverage prove:unfitted; observability_command_fitting_unfitted:line-cap check:unfitted; observability_command_fitting_unfitted:namespace check:unfitted; observability_command_fitting_unfitted:product prove-fitness:unfitted; observability_command_fitting_unfitted:product prove-cohesion:unfitted; observability_command_fitting_unfitted:product prove-journey:unfitted; observability_command_fitting_unfitted:fit-repo prove:unfitted; observability_command_fitting_unfitted:review-round verify:unfitted; observability_command_fitting_unfitted:review-target build:unfitted; observability_command_fitting_unfitted:archive build:unfitted; observability_command_fitting_unfitted:final-packet prove:partially_fitted; observability_command_fitting_unfitted:registry probe:unfitted; observability_command_fitting_unfitted:install audit:unfitted; observability_command_fitting_unfitted:cache audit:unfitted; observability_command_fitting_unfitted:transaction finalize:unfitted; observability_command_fitting_unfitted:self law prove:unfitted; observability_command_fitting_unfitted:self update-goal eligibility:unfitted; observability_command_fitting_unfitted:rust toolchain verify:unfitted; observability_command_fitting_unfitted:rust fast:unfitted; observability_command_fitting_unfitted:rust standard:unfitted; observability_command_fitting_unfitted:rust release:unfitted; observability_command_fitting_unfitted:rust clean-proof:unfitted; observability_command_fitting_unfitted:rust watch:unfitted; observability_command_fitting_unfitted:rust memory prove:unfitted; observability_command_fitting_unfitted:rust dependency audit:unfitted; observability_command_fitting_unfitted:rust coverage prove:unfitted; observability_command_fitting_unfitted:rust workspace topology:unfitted; observability_command_fitting_unfitted:gc plan:unfitted; observability_command_fitting_unfitted:gc dry-run:unfitted; observability_command_fitting_unfitted:gc apply:unfitted; observability_command_fitting_unfitted:gc verify:unfitted; observability_command_fitting_unfitted:session-log hardening:unfitted; observability_command_fitting_unfitted:target-repo audit:unfitted; observability_command_fitting_unfitted:observe stack up:partially_fitted; observability_command_fitting_unfitted:observe stack health:partially_fitted; observability_command_fitting_unfitted:observe stack smoke:partially_fitted; observability_command_fitting_unfitted:observe stack down:partially_fitted; observability_command_fitting_unfitted:observe stack gc plan:partially_fitted; observability_command_fitting_unfitted:observe stack gc dry-run:partially_fitted; observability_command_fitting_unfitted:observe stack gc apply:partially_fitted; observability_command_fitting_unfitted:observe logs query:partially_fitted; observability_command_fitting_unfitted:observe metrics query:partially_fitted; observability_command_fitting_unfitted:observe traces query:partially_fitted; observability_command_fitting_unfitted:observe snapshot:partially_fitted; observability_command_fitting_unfitted:observe prove:partially_fitted; observability_command_fitting_unfitted:observe explain-failure:partially_fitted; observability_command_fitting_unfitted:observe explain-claim:partially_fitted; observability_command_fitting_unfitted:observe explain-check:partially_fitted; observability_command_fitting_unfitted:observe explain-law:partially_fitted; observability_surface_fitting_unfitted:cli command families:partially_fitted; observability_surface_fitting_unfitted:validator check families:unfitted; observability_surface_fitting_unfitted:schema parse boundaries:unfitted; observability_surface_fitting_unfitted:receipt proof artifacts:unfitted; observability_surface_fitting_unfitted:fixture report artifacts:unfitted; observability_surface_fitting_unfitted:package plugin resources:partially_fitted; observability_surface_fitting_unfitted:source install cache registry surfaces:unfitted; observability_surface_fitting_unfitted:claim guards update_goal eligibility:unfitted; observability_surface_fitting_unfitted:local spool live exporters:partially_fitted; observability_surface_fitting_unfitted:observability stack configs:partially_fitted; observability_loop_fitting_unfitted:run_failing_command_once:partially_fitted; observability_loop_fitting_unfitted:query_logs_metrics_traces_by_run_id:partially_fitted; observability_loop_fitting_unfitted:explain_failure_before_manual_artifact_inspection:partially_fitted; observability_loop_fitting_unfitted:repair_smallest_root_cause:unfitted; observability_loop_fitting_unfitted:rerun_narrow_command:unfitted; observability_loop_fitting_unfitted:compare_before_after_telemetry:unfitted; observability_loop_fitting_unfitted:broad_audit_after_narrow_pass:unfitted; observability_loop_fitting_unfitted:stale_telemetry_blocks_claims:partially_fitted; observability_loop_fitting_unfitted:structured_feedback_feeds_next_pass:unfitted; observability_signal_fitting_unfitted:latency:partially_fitted; observability_signal_fitting_unfitted:traffic:partially_fitted; observability_signal_fitting_unfitted:errors:partially_fitted; observability_signal_fitting_unfitted:saturation:unfitted; observability_signal_fitting_unfitted:freshness:partially_fitted; observability_signal_fitting_unfitted:correlation:partially_fitted; observability_signal_fitting_unfitted:redaction:partially_fitted; observability_signal_fitting_unfitted:boundedness:partially_fitted; observability_proof_wrong_candidate_digest; observability_proof_not_passing; mandatory_law_current_check_not_pass:full-local-observability-stack-integration-non-opaque-failure:full-local-observability-stack-integration-non-opaque-failure",
+      "status": "fail"
     },
     "generated-proof-artifact-provenance-anti-fabrication": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:generated-proof-artifact-provenance-anti-fabrication; mandatory_law_evidence_digest_mismatch:generated-proof-artifact-provenance-anti-fabrication; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_ref_status_disagreement:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_source_audit_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_coverage_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_fitness_ref:product_fitness_receipt_stale; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_observability_candidate_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization",
+      "status": "fail"
     },
     "generated-ready-completion-receipts": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:generated-ready-completion-receipts; mandatory_law_evidence_digest_mismatch:generated-ready-completion-receipts",
+      "status": "fail"
     },
     "goal-binding-receipt-match": {
       "details": "pass",
       "status": "pass"
     },
     "goal-contract-amendment-authority-required-claim-id-mapping": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:goal-contract-amendment-authority-required-claim-id-mapping; mandatory_law_evidence_digest_mismatch:goal-contract-amendment-authority-required-claim-id-mapping",
+      "status": "fail"
     },
     "goal-tool-discovery-probe": {
       "details": "pass",
       "status": "pass"
     },
     "green-path-adequacy-satisfiable-strictness": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:green-path-adequacy-satisfiable-strictness; mandatory_law_evidence_digest_mismatch:green-path-adequacy-satisfiable-strictness",
+      "status": "fail"
     },
     "guardrail-speed-isolation-cache-honesty": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:guardrail-speed-isolation-cache-honesty; mandatory_law_evidence_digest_mismatch:guardrail-speed-isolation-cache-honesty",
+      "status": "fail"
     },
     "historical-regression-corpus-session-review-signals": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:historical-regression-corpus-session-review-signals; mandatory_law_evidence_digest_mismatch:historical-regression-corpus-session-review-signals",
+      "status": "fail"
     },
     "human-audit-disposition-decomposition-judgment-claim-blocking": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:human-audit-disposition-decomposition-judgment-claim-blocking; mandatory_law_evidence_digest_mismatch:human-audit-disposition-decomposition-judgment-claim-blocking",
+      "status": "fail"
     },
     "instruction-precedence-nested-agents-routing": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:instruction-precedence-nested-agents-routing; mandatory_law_evidence_digest_mismatch:instruction-precedence-nested-agents-routing",
+      "status": "fail"
     },
     "issue-tracker-lifecycle-eligibility-terminal-state": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:issue-tracker-lifecycle-eligibility-terminal-state; mandatory_law_evidence_digest_mismatch:issue-tracker-lifecycle-eligibility-terminal-state",
+      "status": "fail"
     },
     "lane-actor-binding": {
       "details": "pass",
@@ -286,12 +301,12 @@
       "status": "pass"
     },
     "lane-worktree-isolation-cleanup": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:lane-worktree-isolation-cleanup; mandatory_law_evidence_digest_mismatch:lane-worktree-isolation-cleanup",
+      "status": "fail"
     },
     "live-beneficial-e2e": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:live-beneficial-e2e; mandatory_law_evidence_digest_mismatch:live-beneficial-e2e",
+      "status": "fail"
     },
     "macro-lane-sizing": {
       "details": "pass",
@@ -302,766 +317,766 @@
       "status": "pass"
     },
     "memory-wiki-context-only": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:memory-wiki-context-only; mandatory_law_evidence_digest_mismatch:memory-wiki-context-only",
+      "status": "fail"
     },
     "namespace-progressive-disclosure": {
-      "details": "pass",
-      "status": "pass"
+      "details": "namespace_validator_source_partial_module_factoring:directory=validator/src/audit/observability;prefix=registry;count=1;examples=validator/src/audit/observability/registry.rs;why=prefix_or_history_name_is_standing_in_for_semantic_directory;repair=move_partially_factored_module_root_to_mod_rs_so_the_directory_is_the_module_boundary;claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed=false; namespace_validator_source_partial_module_factoring:directory=validator/src/audit/observability/registry;prefix=tests;count=1;examples=validator/src/audit/observability/registry/tests.rs;why=prefix_or_history_name_is_standing_in_for_semantic_directory;repair=move_partially_factored_module_root_to_mod_rs_so_the_directory_is_the_module_boundary;claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed=false; namespace_validator_source_partial_module_factoring:directory=validator/src/cli;prefix=final_packet;count=1;examples=validator/src/cli/final_packet.rs;why=prefix_or_history_name_is_standing_in_for_semantic_directory;repair=move_partially_factored_module_root_to_mod_rs_so_the_directory_is_the_module_boundary;claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed=false; mandatory_law_evidence_digest_mismatch:namespace-progressive-disclosure; mandatory_law_evidence_digest_mismatch:namespace-progressive-disclosure; mandatory_law_current_check_not_pass:namespace-progressive-disclosure:namespace-progressive-disclosure; mandatory_law_current_check_not_pass:validator-source-namespace-topology:namespace-progressive-disclosure",
+      "status": "fail"
     },
     "non-e2e-claim-ceiling-confidence-bounds": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:non-e2e-claim-ceiling-confidence-bounds; mandatory_law_evidence_digest_mismatch:non-e2e-claim-ceiling-confidence-bounds",
+      "status": "fail"
     },
     "observability-claim-proof": {
       "details": "pass",
       "status": "pass"
     },
     "offline-schema-catalog-resolver-portability": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:offline-schema-catalog-resolver-portability; mandatory_law_evidence_digest_mismatch:offline-schema-catalog-resolver-portability",
+      "status": "fail"
     },
     "one-command-fresh-environment-bootstrap-concurrent-resource-allocation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:one-command-fresh-environment-bootstrap-concurrent-resource-allocation; mandatory_law_evidence_digest_mismatch:one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
+      "status": "fail"
     },
     "orchestrator-state-machine": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:orchestrator-state-machine; mandatory_law_evidence_digest_mismatch:orchestrator-state-machine",
+      "status": "fail"
     },
     "parent-role-boundary": {
       "details": "pass",
       "status": "pass"
     },
     "plugin-bundled-component-graph-hook-app-mcp-safety": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:plugin-bundled-component-graph-hook-app-mcp-safety; mandatory_law_evidence_digest_mismatch:plugin-bundled-component-graph-hook-app-mcp-safety",
+      "status": "fail"
     },
     "plugin-flow-graph-package-dependency-closure-plugin-product-journey": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:plugin-flow-graph-package-dependency-closure-plugin-product-journey; mandatory_law_evidence_digest_mismatch:plugin-flow-graph-package-dependency-closure-plugin-product-journey",
+      "status": "fail"
     },
     "plugin-install-surface-metadata-cache-enable-state": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:plugin-install-surface-metadata-cache-enable-state; mandatory_law_evidence_digest_mismatch:plugin-install-surface-metadata-cache-enable-state",
+      "status": "fail"
     },
     "plugin-inventory-closure": {
-      "details": "pass",
-      "status": "pass"
+      "details": "missing=[\"validation_artifacts/observability/package-digest-logs-query.json\", \"validation_artifacts/observability/package-digest-metrics-query.json\", \"validation_artifacts/observability/package-digest-traces-query.json\", \"validation_artifacts/observability/package-digest.json\", \"validation_artifacts/review/candidate-archive-receipt.json\", \"validation_artifacts/review/harness-ultragoal-source-local-candidate.zip\", \"validation_artifacts/review/review-target-receipt.json\"] nonexistent=[]; validator/src/audit/observability/redaction.rs: manifest_owned_private_local_path",
+      "status": "fail"
     },
     "plugin-inventory-exactly-once": {
-      "details": "pass",
-      "status": "pass"
+      "details": "duplicates={} actual=4412 listed=4405",
+      "status": "fail"
     },
     "portable-non-prescriptive-adapter-implementation-choice": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:portable-non-prescriptive-adapter-implementation-choice; mandatory_law_evidence_digest_mismatch:portable-non-prescriptive-adapter-implementation-choice",
+      "status": "fail"
     },
     "privacy-raw-artifact-boundary": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:privacy-raw-artifact-boundary; mandatory_law_evidence_digest_mismatch:privacy-raw-artifact-boundary",
+      "status": "fail"
     },
     "product-cohesion-product-claims": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-cohesion-product-claims; mandatory_law_evidence_digest_mismatch:product-cohesion-product-claims",
+      "status": "fail"
     },
     "product-cohesion-proof": {
       "details": "pass",
       "status": "pass"
     },
     "product-fitness-proof": {
-      "details": "pass",
-      "status": "pass"
+      "details": "product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; product_fitness_receipt_stale",
+      "status": "fail"
     },
     "product-live-surface-receipts": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-live-surface-receipts; mandatory_law_evidence_digest_mismatch:product-live-surface-receipts",
+      "status": "fail"
     },
     "product-proof-joins-substitution-blocking": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-proof-joins-substitution-blocking; mandatory_law_evidence_digest_mismatch:product-proof-joins-substitution-blocking",
+      "status": "fail"
     },
     "product-strategy-positioning-research-eval-before-lane-planning": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-strategy-positioning-research-eval-before-lane-planning; mandatory_law_evidence_digest_mismatch:product-strategy-positioning-research-eval-before-lane-planning",
+      "status": "fail"
     },
     "product-success-binding-goal-lane-execplan-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-binding-goal-lane-execplan-authority; mandatory_law_evidence_digest_mismatch:product-success-binding-goal-lane-execplan-authority",
+      "status": "fail"
     },
     "product-success-contract-initiation-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-contract-initiation-authority; mandatory_law_evidence_digest_mismatch:product-success-contract-initiation-authority",
+      "status": "fail"
     },
     "product-success-contract-review-packet-team-skill-routing": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-contract-review-packet-team-skill-routing; mandatory_law_evidence_digest_mismatch:product-success-contract-review-packet-team-skill-routing",
+      "status": "fail"
     },
     "product-success-inspiration-source-provenance-disposition": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-inspiration-source-provenance-disposition; mandatory_law_evidence_digest_mismatch:product-success-inspiration-source-provenance-disposition",
+      "status": "fail"
     },
     "product-success-lifecycle-transitions-no-late-afterthought": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-lifecycle-transitions-no-late-afterthought; mandatory_law_evidence_digest_mismatch:product-success-lifecycle-transitions-no-late-afterthought",
+      "status": "fail"
     },
     "product-success-lineage-amendments-closed-product-claim-ids": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:product-success-lineage-amendments-closed-product-claim-ids; mandatory_law_evidence_digest_mismatch:product-success-lineage-amendments-closed-product-claim-ids",
+      "status": "fail"
     },
     "purpose-backed-active-files": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:purpose-backed-active-files; mandatory_law_evidence_digest_mismatch:purpose-backed-active-files",
+      "status": "fail"
     },
     "quality-score-taste-gates": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:quality-score-taste-gates; mandatory_law_evidence_digest_mismatch:quality-score-taste-gates",
+      "status": "fail"
     },
     "raw-private-artifact-handling-category-only-evidence": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:raw-private-artifact-handling-category-only-evidence; mandatory_law_evidence_digest_mismatch:raw-private-artifact-handling-category-only-evidence",
+      "status": "fail"
     },
     "ready-receipt-provenance": {
       "details": "pass",
       "status": "pass"
     },
     "red-fixture-coverage": {
-      "details": "pass",
-      "status": "pass"
+      "details": "red catalog count or id uniqueness mismatch; common-defs requiredRedFixtureId diverges from red catalog: missing=[] extra=[\"full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red\", \"full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red\"]; validator-receipt red_fixtures.required diverges from red catalog: missing=[] extra=[\"full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red\", \"full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red\"]; red catalog digest mismatch: fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json; red catalog digest mismatch: fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json; red catalog digest mismatch: fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json; red catalog digest mismatch: fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+      "status": "fail"
     },
     "repo-knowledge-index-core-beliefs": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:repo-knowledge-index-core-beliefs; mandatory_law_evidence_digest_mismatch:repo-knowledge-index-core-beliefs",
+      "status": "fail"
     },
     "required-claim-closure": {
       "details": "pass",
       "status": "pass"
     },
     "restartable-execplans": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:restartable-execplans; mandatory_law_evidence_digest_mismatch:restartable-execplans",
+      "status": "fail"
     },
     "review-disagreement-override-judgment-boundary-governance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:review-disagreement-override-judgment-boundary-governance; mandatory_law_evidence_digest_mismatch:review-disagreement-override-judgment-boundary-governance",
+      "status": "fail"
     },
     "review-feedback-disposition-same-round-satisfaction": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:review-feedback-disposition-same-round-satisfaction; mandatory_law_evidence_digest_mismatch:review-feedback-disposition-same-round-satisfaction",
+      "status": "fail"
     },
     "reviewer-to-gate-conversion": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:reviewer-to-gate-conversion; mandatory_law_evidence_digest_mismatch:reviewer-to-gate-conversion",
+      "status": "fail"
     },
     "root-verification-phase-coverage": {
       "details": "pass",
       "status": "pass"
     },
     "runtime-feasibility-cost-strict-gate-usability": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:runtime-feasibility-cost-strict-gate-usability; mandatory_law_evidence_digest_mismatch:runtime-feasibility-cost-strict-gate-usability",
+      "status": "fail"
     },
     "runtime-tool-identity": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:runtime-tool-identity; mandatory_law_evidence_digest_mismatch:runtime-tool-identity",
+      "status": "fail"
     },
     "rust-cache-no-cache-honesty": {
-      "details": "pass",
-      "status": "pass"
+      "details": "rust_devx_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:rust-cache-no-cache-honesty; mandatory_law_evidence_digest_mismatch:rust-cache-no-cache-honesty; mandatory_law_current_check_not_pass:rust-cache-no-cache-honesty:rust-cache-no-cache-honesty",
+      "status": "fail"
     },
     "rust-command-loop-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "rust_devx_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:rust-command-loop-authority; mandatory_law_evidence_digest_mismatch:rust-command-loop-authority; mandatory_law_current_check_not_pass:rust-command-loop-authority:rust-command-loop-authority",
+      "status": "fail"
     },
     "rust-developer-experience-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "rust_devx_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:rust-developer-experience-authority; mandatory_law_evidence_digest_mismatch:rust-developer-experience-authority; mandatory_law_current_check_not_pass:rust-developer-experience-authority:rust-developer-experience-authority",
+      "status": "fail"
     },
     "rust-memory-resource-discipline": {
-      "details": "pass",
-      "status": "pass"
+      "details": "rust_devx_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:rust-memory-resource-discipline; mandatory_law_evidence_digest_mismatch:rust-memory-resource-discipline; mandatory_law_current_check_not_pass:rust-memory-resource-discipline:rust-memory-resource-discipline",
+      "status": "fail"
     },
     "rust-toolchain-substrate-authority": {
-      "details": "pass",
-      "status": "pass"
+      "details": "rust_devx_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:rust-toolchain-substrate-authority; mandatory_law_evidence_digest_mismatch:rust-toolchain-substrate-authority; mandatory_law_current_check_not_pass:rust-toolchain-substrate-authority:rust-toolchain-substrate-authority",
+      "status": "fail"
     },
     "scheduler-runner-tracker-boundaries": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:scheduler-runner-tracker-boundaries; mandatory_law_evidence_digest_mismatch:scheduler-runner-tracker-boundaries",
+      "status": "fail"
     },
     "schema-evolution-receipt-migration-stale-version-invalidation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:schema-evolution-receipt-migration-stale-version-invalidation; mandatory_law_evidence_digest_mismatch:schema-evolution-receipt-migration-stale-version-invalidation",
+      "status": "fail"
     },
     "schema-valid": {
-      "details": "pass",
-      "status": "pass"
+      "details": "fixtures/valid/minimal-goal-run.json: $.validator_receipt.red_fixtures.full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red: required; fixtures/valid/non-product-engineering-language.json: $.validator_receipt.red_fixtures.full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red: required; fixtures/valid/non-product-feature-completion.json: $.validator_receipt.red_fixtures.full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red: required; fixtures/valid/proof-surface-negative-probe.json: $.validator_receipt.red_fixtures.full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red: required; fixtures/valid/two-lane-ready-dependency.json: $.validator_receipt.red_fixtures.full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red: required; templates/RED_FIXTURES.json: $: maxItems; templates/agent-standards/enforcement.json: $.rows[38].agent_action: additional property",
+      "status": "fail"
     },
     "secret-token-boundaries": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:secret-token-boundaries; mandatory_law_evidence_digest_mismatch:secret-token-boundaries",
+      "status": "fail"
     },
     "semantic-domain-type-naming": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:semantic-domain-type-naming; mandatory_law_evidence_digest_mismatch:semantic-domain-type-naming",
+      "status": "fail"
     },
     "skill-catalog-context-budget-omission-warning": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:skill-catalog-context-budget-omission-warning; mandatory_law_evidence_digest_mismatch:skill-catalog-context-budget-omission-warning",
+      "status": "fail"
     },
     "skill-inventory-closure": {
       "details": "pass",
       "status": "pass"
     },
     "skill-local-reference-closure": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:skill-local-reference-closure; mandatory_law_evidence_digest_mismatch:skill-local-reference-closure",
+      "status": "fail"
     },
     "skill-progressive-disclosure-metadata": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:skill-progressive-disclosure-metadata; mandatory_law_evidence_digest_mismatch:skill-progressive-disclosure-metadata",
+      "status": "fail"
     },
     "source-card-freshness": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:source-card-freshness-ceiling; mandatory_law_evidence_digest_mismatch:source-card-freshness-ceiling",
+      "status": "fail"
     },
     "source-card-freshness-ceiling": {
       "details": "pass",
       "status": "pass"
     },
     "source-installed-cache-alignment": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:source-installed-cache-alignment; mandatory_law_evidence_digest_mismatch:source-installed-cache-alignment",
+      "status": "fail"
     },
     "source-obligation-coverage": {
-      "details": "pass",
-      "status": "pass"
+      "details": "foundational_law_trace_source_stale:active-setup-to-idle-orchestration-thread-bound-heartbeat; foundational_law_trace_source_stale:adversarial-packet-tampering-forged-proof-rejection; foundational_law_trace_source_stale:agent-authored-source-tooling-docs-provenance; foundational_law_trace_source_stale:agent-queryable-observability; foundational_law_trace_source_stale:agent-remediating-validator-failures; foundational_law_trace_source_stale:agent-session-telemetry-token-rate-limit; foundational_law_trace_source_stale:architecture-dependency-topology; foundational_law_trace_source_stale:authority-exhaustiveness-closed-enums-impossible-state-elimination; foundational_law_trace_source_stale:authority-source-binding; foundational_law_trace_source_stale:autonomy-loop-proof; foundational_law_trace_source_stale:batch-fanout-custom-agent-job-worker-result-discipline; foundational_law_trace_source_stale:behavior-example-coverage-coverage-anti-gaming; foundational_law_trace_source_stale:capability-gap-extraction-harness-capability-promotion; foundational_law_trace_source_stale:clean-checkout-command-discovery; foundational_law_trace_source_stale:clean-room-rebuild-author-memory-independence; foundational_law_trace_source_stale:cli-control-plane-authority; foundational_law_trace_source_stale:cli-performance-latency-speed-iteration-fitness; foundational_law_trace_source_stale:cli-self-law-compliance; foundational_law_trace_source_stale:compact-agents-routed-standards; foundational_law_trace_source_stale:conditional-observability-proof; foundational_law_trace_source_stale:config-precedence-defaults-env-indirection; foundational_law_trace_source_stale:connector-capability-discovery; foundational_law_trace_source_stale:cross-artifact-consistency-solver-authority-graph-closure; foundational_law_trace_source_stale:current-product-discovery-audit-quality-in-use-evidence; foundational_law_trace_source_stale:derived-authority-recomputation; foundational_law_trace_source_stale:derived-authority-recomputation-named-authority-fallback-refusal; foundational_law_trace_source_stale:distinct-proof-surfaces-claim-ceilings; foundational_law_trace_source_stale:distribution-sharing-surface-claim-separation; foundational_law_trace_source_stale:execplan-no-handback-prototype-promotion-discard; foundational_law_trace_source_stale:execplan-plain-language-expected-output-interface-completeness; foundational_law_trace_source_stale:failure-remediation-quality-agent-actionable-output; foundational_law_trace_source_stale:feedback-to-rule-promotion; foundational_law_trace_source_stale:forward-only-state-transition-integrity-silent-reopen-prevention; foundational_law_trace_source_stale:fresh-init-retrofit-mode-separation; foundational_law_trace_source_stale:fresh-retrofit-repo-shape; foundational_law_trace_source_stale:full-local-observability-stack-integration-non-opaque-failure; foundational_law_trace_source_stale:generated-proof-artifact-provenance-anti-fabrication; foundational_law_trace_source_stale:generated-ready-completion-receipts; foundational_law_trace_source_stale:goal-contract-amendment-authority-required-claim-id-mapping; foundational_law_trace_source_stale:green-path-adequacy-satisfiable-strictness; foundational_law_trace_source_stale:guardrail-speed-isolation-cache-honesty; foundational_law_trace_source_stale:historical-regression-corpus-session-review-signals; foundational_law_trace_source_stale:human-audit-disposition-decomposition-judgment-claim-blocking; foundational_law_trace_source_stale:instruction-precedence-nested-agents-routing; foundational_law_trace_source_stale:issue-tracker-lifecycle-eligibility-terminal-state; foundational_law_trace_source_stale:lane-worktree-isolation-cleanup; foundational_law_trace_source_stale:live-beneficial-e2e; foundational_law_trace_source_stale:memory-wiki-context-only; foundational_law_trace_source_stale:namespace-progressive-disclosure; foundational_law_trace_source_stale:non-e2e-claim-ceiling-confidence-bounds; foundational_law_trace_source_stale:offline-schema-catalog-resolver-portability; foundational_law_trace_source_stale:one-command-fresh-environment-bootstrap-concurrent-resource-allocation; foundational_law_trace_source_stale:orchestrator-state-machine; foundational_law_trace_source_stale:plugin-bundled-component-graph-hook-app-mcp-safety; foundational_law_trace_source_stale:plugin-flow-graph-package-dependency-closure-plugin-product-journey; foundational_law_trace_source_stale:plugin-install-surface-metadata-cache-enable-state; foundational_law_trace_source_stale:portable-non-prescriptive-adapter-implementation-choice; foundational_law_trace_source_stale:privacy-raw-artifact-boundary; foundational_law_trace_source_stale:product-cohesion-product-claims; foundational_law_trace_source_stale:product-live-surface-receipts; foundational_law_trace_source_stale:product-proof-joins-substitution-blocking; foundational_law_trace_source_stale:product-strategy-positioning-research-eval-before-lane-planning; foundational_law_trace_source_stale:product-success-binding-goal-lane-execplan-authority; foundational_law_trace_source_stale:product-success-contract-initiation-authority; foundational_law_trace_source_stale:product-success-contract-review-packet-team-skill-routing; foundational_law_trace_source_stale:product-success-inspiration-source-provenance-disposition; foundational_law_trace_source_stale:product-success-lifecycle-transitions-no-late-afterthought; foundational_law_trace_source_stale:product-success-lineage-amendments-closed-product-claim-ids; foundational_law_trace_source_stale:purpose-backed-active-files; foundational_law_trace_source_stale:quality-score-taste-gates; foundational_law_trace_source_stale:raw-private-artifact-handling-category-only-evidence; foundational_law_trace_source_stale:repo-knowledge-index-core-beliefs; foundational_law_trace_source_stale:restartable-execplans; foundational_law_trace_source_stale:review-disagreement-override-judgment-boundary-governance; foundational_law_trace_source_stale:review-feedback-disposition-same-round-satisfaction; foundational_law_trace_source_stale:reviewer-to-gate-conversion; foundational_law_trace_source_stale:runtime-feasibility-cost-strict-gate-usability; foundational_law_trace_source_stale:runtime-tool-identity; foundational_law_trace_source_stale:rust-cache-no-cache-honesty; foundational_law_trace_source_stale:rust-command-loop-authority; foundational_law_trace_source_stale:rust-developer-experience-authority; foundational_law_trace_source_stale:rust-memory-resource-discipline; foundational_law_trace_source_stale:rust-toolchain-substrate-authority; foundational_law_trace_source_stale:scheduler-runner-tracker-boundaries; foundational_law_trace_source_stale:schema-evolution-receipt-migration-stale-version-invalidation; foundational_law_trace_source_stale:secret-token-boundaries; foundational_law_trace_source_stale:semantic-domain-type-naming; foundational_law_trace_source_stale:skill-catalog-context-budget-omission-warning; foundational_law_trace_source_stale:skill-local-reference-closure; foundational_law_trace_source_stale:skill-progressive-disclosure-metadata; foundational_law_trace_source_stale:source-card-freshness-ceiling; foundational_law_trace_source_stale:source-installed-cache-alignment; foundational_law_trace_source_stale:source-obligation-parity-anti-bundling; foundational_law_trace_source_stale:stable-identifier-normalization-collision; foundational_law_trace_source_stale:standards-gardener-promotion; foundational_law_trace_source_stale:subagent-custom-agent-sandbox-approval-inheritance; foundational_law_trace_source_stale:subagent-orchestration-explicitness-token-model-cost-result-reconciliation; foundational_law_trace_source_stale:target-repo-audit-capability; foundational_law_trace_source_stale:targeted-refactor-debt-removal-standards-gardener-cadence; foundational_law_trace_source_stale:template-generation-governance-template-creator-boundary; foundational_law_trace_source_stale:third-party-dependency-legibility-typed-adapters; foundational_law_trace_source_stale:total-authority-types-impossible-state-elimination; foundational_law_trace_source_stale:transcript-quality-reuse-gates; foundational_law_trace_source_stale:trust-boundary-abuse-path-failure-path-coverage; foundational_law_trace_source_stale:typed-records-over-prose; foundational_law_trace_source_stale:validator-theater-miswire-resistance; foundational_law_trace_source_stale:value-adoption-continuance-business-mission-evidence-hierarchy; foundational_law_trace_source_stale:workflow-template-parsing-rendering-reload; foundational_law_trace_source_stale:workspace-artifact-cache-garbage-collection; foundational_law_trace_source_stale:workspace-command-confinement-lifecycle-cleanup; foundational_law_trace_source_stale:worktree-lane-owner-cost-policy; fixtures/law-surfaces/valid/memory-context-boundary-receipt.json: memory_context_artifact_digest_mismatch; fixtures/law-surfaces/valid/memory-context-boundary-receipt.json: memory_context_live_evidence_digest_mismatch; mandatory_law_evidence_digest_mismatch:active-setup-to-idle-orchestration-thread-bound-heartbeat; mandatory_law_evidence_digest_mismatch:active-setup-to-idle-orchestration-thread-bound-heartbeat; mandatory_law_evidence_digest_mismatch:adversarial-packet-tampering-forged-proof-rejection; mandatory_law_evidence_digest_mismatch:adversarial-packet-tampering-forged-proof-rejection; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_ref_status_disagreement:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_source_audit_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_coverage_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_fitness_ref:product_fitness_receipt_stale; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:final_packet_proof_observability_candidate_digest_mismatch; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:adversarial-packet-tampering-forged-proof-rejection:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_evidence_digest_mismatch:agent-authored-source-tooling-docs-provenance; mandatory_law_evidence_digest_mismatch:agent-authored-source-tooling-docs-provenance; mandatory_law_evidence_digest_mismatch:agent-queryable-observability; mandatory_law_evidence_digest_mismatch:agent-queryable-observability; mandatory_law_evidence_digest_mismatch:agent-remediating-validator-failures; mandatory_law_evidence_digest_mismatch:agent-remediating-validator-failures; mandatory_law_evidence_digest_mismatch:agent-session-telemetry-token-rate-limit; mandatory_law_evidence_digest_mismatch:agent-session-telemetry-token-rate-limit; mandatory_law_evidence_digest_mismatch:architecture-dependency-topology; mandatory_law_evidence_digest_mismatch:architecture-dependency-topology; mandatory_law_evidence_digest_mismatch:authority-exhaustiveness-closed-enums-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:authority-exhaustiveness-closed-enums-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:authority-source-binding; mandatory_law_evidence_digest_mismatch:authority-source-binding; mandatory_law_evidence_digest_mismatch:autonomy-loop-proof; mandatory_law_evidence_digest_mismatch:autonomy-loop-proof; mandatory_law_evidence_digest_mismatch:batch-fanout-custom-agent-job-worker-result-discipline; mandatory_law_evidence_digest_mismatch:batch-fanout-custom-agent-job-worker-result-discipline; mandatory_law_evidence_digest_mismatch:behavior-example-coverage-coverage-anti-gaming; mandatory_law_evidence_digest_mismatch:behavior-example-coverage-coverage-anti-gaming; mandatory_law_evidence_digest_mismatch:capability-gap-extraction-harness-capability-promotion; mandatory_law_evidence_digest_mismatch:capability-gap-extraction-harness-capability-promotion; mandatory_law_evidence_digest_mismatch:clean-checkout-command-discovery; mandatory_law_evidence_digest_mismatch:clean-checkout-command-discovery; mandatory_law_evidence_digest_mismatch:clean-room-rebuild-author-memory-independence; mandatory_law_evidence_digest_mismatch:clean-room-rebuild-author-memory-independence; mandatory_law_evidence_digest_mismatch:cli-control-plane-authority; mandatory_law_evidence_digest_mismatch:cli-control-plane-authority; mandatory_law_evidence_digest_mismatch:cli-performance-latency-speed-iteration-fitness; mandatory_law_evidence_digest_mismatch:cli-performance-latency-speed-iteration-fitness; mandatory_law_evidence_digest_mismatch:cli-self-law-compliance; mandatory_law_evidence_digest_mismatch:cli-self-law-compliance; mandatory_law_evidence_digest_mismatch:compact-agents-routed-standards; mandatory_law_evidence_digest_mismatch:compact-agents-routed-standards; mandatory_law_evidence_digest_mismatch:conditional-observability-proof; mandatory_law_evidence_digest_mismatch:conditional-observability-proof; mandatory_law_evidence_digest_mismatch:config-precedence-defaults-env-indirection; mandatory_law_evidence_digest_mismatch:config-precedence-defaults-env-indirection; mandatory_law_evidence_digest_mismatch:connector-capability-discovery; mandatory_law_evidence_digest_mismatch:connector-capability-discovery; mandatory_law_evidence_digest_mismatch:cross-artifact-consistency-solver-authority-graph-closure; mandatory_law_evidence_digest_mismatch:cross-artifact-consistency-solver-authority-graph-closure; mandatory_law_evidence_digest_mismatch:current-product-discovery-audit-quality-in-use-evidence; mandatory_law_evidence_digest_mismatch:current-product-discovery-audit-quality-in-use-evidence; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation-named-authority-fallback-refusal; mandatory_law_evidence_digest_mismatch:derived-authority-recomputation-named-authority-fallback-refusal; mandatory_law_evidence_digest_mismatch:distinct-proof-surfaces-claim-ceilings; mandatory_law_evidence_digest_mismatch:distinct-proof-surfaces-claim-ceilings; mandatory_law_evidence_digest_mismatch:distribution-sharing-surface-claim-separation; mandatory_law_evidence_digest_mismatch:distribution-sharing-surface-claim-separation; mandatory_law_evidence_digest_mismatch:execplan-no-handback-prototype-promotion-discard; mandatory_law_evidence_digest_mismatch:execplan-no-handback-prototype-promotion-discard; mandatory_law_evidence_digest_mismatch:execplan-plain-language-expected-output-interface-completeness; mandatory_law_evidence_digest_mismatch:execplan-plain-language-expected-output-interface-completeness; mandatory_law_evidence_digest_mismatch:failure-remediation-quality-agent-actionable-output; mandatory_law_evidence_digest_mismatch:failure-remediation-quality-agent-actionable-output; mandatory_law_evidence_digest_mismatch:feedback-to-rule-promotion; mandatory_law_evidence_digest_mismatch:feedback-to-rule-promotion; mandatory_law_evidence_digest_mismatch:forward-only-state-transition-integrity-silent-reopen-prevention; mandatory_law_evidence_digest_mismatch:forward-only-state-transition-integrity-silent-reopen-prevention; mandatory_law_evidence_digest_mismatch:fresh-init-retrofit-mode-separation; mandatory_law_evidence_digest_mismatch:fresh-init-retrofit-mode-separation; mandatory_law_evidence_digest_mismatch:fresh-retrofit-repo-shape; mandatory_law_evidence_digest_mismatch:fresh-retrofit-repo-shape; mandatory_law_evidence_digest_mismatch:generated-proof-artifact-provenance-anti-fabrication; mandatory_law_evidence_digest_mismatch:generated-proof-artifact-provenance-anti-fabrication; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_ref_status_disagreement:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_source_audit_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_coverage_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_fitness_ref:product_fitness_receipt_stale; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_package_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:final_packet_proof_observability_candidate_digest_mismatch; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_candidate_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_pass; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_not_self_hosted; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_claim_ceiling_not_update_goal; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_blocks_claims; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_pass_has_failure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_wrong_candidate; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_has_operation_failures; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:source_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:final_packet; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:registry_exposure; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:install_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:cache_audit; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_has_failures:transactional_finalization; mandatory_law_anti_theater_dependency:generated-proof-artifact-provenance-anti-fabrication:cli_control_plane_receipt_evidence_graph_item_not_pass:transactional_finalization; mandatory_law_evidence_digest_mismatch:generated-ready-completion-receipts; mandatory_law_evidence_digest_mismatch:generated-ready-completion-receipts; mandatory_law_evidence_digest_mismatch:goal-contract-amendment-authority-required-claim-id-mapping; mandatory_law_evidence_digest_mismatch:goal-contract-amendment-authority-required-claim-id-mapping; mandatory_law_evidence_digest_mismatch:green-path-adequacy-satisfiable-strictness; mandatory_law_evidence_digest_mismatch:green-path-adequacy-satisfiable-strictness; mandatory_law_evidence_digest_mismatch:guardrail-speed-isolation-cache-honesty; mandatory_law_evidence_digest_mismatch:guardrail-speed-isolation-cache-honesty; mandatory_law_evidence_digest_mismatch:historical-regression-corpus-session-review-signals; mandatory_law_evidence_digest_mismatch:historical-regression-corpus-session-review-signals; mandatory_law_evidence_digest_mismatch:human-audit-disposition-decomposition-judgment-claim-blocking; mandatory_law_evidence_digest_mismatch:human-audit-disposition-decomposition-judgment-claim-blocking; mandatory_law_evidence_digest_mismatch:instruction-precedence-nested-agents-routing; mandatory_law_evidence_digest_mismatch:instruction-precedence-nested-agents-routing; mandatory_law_evidence_digest_mismatch:issue-tracker-lifecycle-eligibility-terminal-state; mandatory_law_evidence_digest_mismatch:issue-tracker-lifecycle-eligibility-terminal-state; mandatory_law_evidence_digest_mismatch:lane-worktree-isolation-cleanup; mandatory_law_evidence_digest_mismatch:lane-worktree-isolation-cleanup; mandatory_law_evidence_digest_mismatch:live-beneficial-e2e; mandatory_law_evidence_digest_mismatch:live-beneficial-e2e; mandatory_law_evidence_digest_mismatch:memory-wiki-context-only; mandatory_law_evidence_digest_mismatch:memory-wiki-context-only; mandatory_law_evidence_digest_mismatch:namespace-progressive-disclosure; mandatory_law_evidence_digest_mismatch:namespace-progressive-disclosure; mandatory_law_evidence_digest_mismatch:non-e2e-claim-ceiling-confidence-bounds; mandatory_law_evidence_digest_mismatch:non-e2e-claim-ceiling-confidence-bounds; mandatory_law_evidence_digest_mismatch:offline-schema-catalog-resolver-portability; mandatory_law_evidence_digest_mismatch:offline-schema-catalog-resolver-portability; mandatory_law_evidence_digest_mismatch:one-command-fresh-environment-bootstrap-concurrent-resource-allocation; mandatory_law_evidence_digest_mismatch:one-command-fresh-environment-bootstrap-concurrent-resource-allocation; mandatory_law_evidence_digest_mismatch:orchestrator-state-machine; mandatory_law_evidence_digest_mismatch:orchestrator-state-machine; mandatory_law_evidence_digest_mismatch:plugin-bundled-component-graph-hook-app-mcp-safety; mandatory_law_evidence_digest_mismatch:plugin-bundled-component-graph-hook-app-mcp-safety; mandatory_law_evidence_digest_mismatch:plugin-flow-graph-package-dependency-closure-plugin-product-journey; mandatory_law_evidence_digest_mismatch:plugin-flow-graph-package-dependency-closure-plugin-product-journey; mandatory_law_evidence_digest_mismatch:plugin-install-surface-metadata-cache-enable-state; mandatory_law_evidence_digest_mismatch:plugin-install-surface-metadata-cache-enable-state; mandatory_law_evidence_digest_mismatch:portable-non-prescriptive-adapter-implementation-choice; mandatory_law_evidence_digest_mismatch:portable-non-prescriptive-adapter-implementation-choice; mandatory_law_evidence_digest_mismatch:privacy-raw-artifact-boundary; mandatory_law_evidence_digest_mismatch:privacy-raw-artifact-boundary; mandatory_law_evidence_digest_mismatch:product-cohesion-product-claims; mandatory_law_evidence_digest_mismatch:product-cohesion-product-claims; mandatory_law_evidence_digest_mismatch:product-live-surface-receipts; mandatory_law_evidence_digest_mismatch:product-live-surface-receipts; mandatory_law_evidence_digest_mismatch:product-proof-joins-substitution-blocking; mandatory_law_evidence_digest_mismatch:product-proof-joins-substitution-blocking; mandatory_law_evidence_digest_mismatch:product-strategy-positioning-research-eval-before-lane-planning; mandatory_law_evidence_digest_mismatch:product-strategy-positioning-research-eval-before-lane-planning; mandatory_law_evidence_digest_mismatch:product-success-binding-goal-lane-execplan-authority; mandatory_law_evidence_digest_mismatch:product-success-binding-goal-lane-execplan-authority; mandatory_law_evidence_digest_mismatch:product-success-contract-initiation-authority; mandatory_law_evidence_digest_mismatch:product-success-contract-initiation-authority; mandatory_law_evidence_digest_mismatch:product-success-contract-review-packet-team-skill-routing; mandatory_law_evidence_digest_mismatch:product-success-contract-review-packet-team-skill-routing; mandatory_law_evidence_digest_mismatch:product-success-inspiration-source-provenance-disposition; mandatory_law_evidence_digest_mismatch:product-success-inspiration-source-provenance-disposition; mandatory_law_evidence_digest_mismatch:product-success-lifecycle-transitions-no-late-afterthought; mandatory_law_evidence_digest_mismatch:product-success-lifecycle-transitions-no-late-afterthought; mandatory_law_evidence_digest_mismatch:product-success-lineage-amendments-closed-product-claim-ids; mandatory_law_evidence_digest_mismatch:product-success-lineage-amendments-closed-product-claim-ids; mandatory_law_evidence_digest_mismatch:purpose-backed-active-files; mandatory_law_evidence_digest_mismatch:purpose-backed-active-files; mandatory_law_evidence_digest_mismatch:quality-score-taste-gates; mandatory_law_evidence_digest_mismatch:quality-score-taste-gates; mandatory_law_evidence_digest_mismatch:raw-private-artifact-handling-category-only-evidence; mandatory_law_evidence_digest_mismatch:raw-private-artifact-handling-category-only-evidence; mandatory_law_evidence_digest_mismatch:repo-knowledge-index-core-beliefs; mandatory_law_evidence_digest_mismatch:repo-knowledge-index-core-beliefs; mandatory_law_evidence_digest_mismatch:restartable-execplans; mandatory_law_evidence_digest_mismatch:restartable-execplans; mandatory_law_evidence_digest_mismatch:review-disagreement-override-judgment-boundary-governance; mandatory_law_evidence_digest_mismatch:review-disagreement-override-judgment-boundary-governance; mandatory_law_evidence_digest_mismatch:review-feedback-disposition-same-round-satisfaction; mandatory_law_evidence_digest_mismatch:review-feedback-disposition-same-round-satisfaction; mandatory_law_evidence_digest_mismatch:reviewer-to-gate-conversion; mandatory_law_evidence_digest_mismatch:reviewer-to-gate-conversion; mandatory_law_evidence_digest_mismatch:runtime-feasibility-cost-strict-gate-usability; mandatory_law_evidence_digest_mismatch:runtime-feasibility-cost-strict-gate-usability; mandatory_law_evidence_digest_mismatch:runtime-tool-identity; mandatory_law_evidence_digest_mismatch:runtime-tool-identity; mandatory_law_evidence_digest_mismatch:rust-cache-no-cache-honesty; mandatory_law_evidence_digest_mismatch:rust-cache-no-cache-honesty; mandatory_law_evidence_digest_mismatch:rust-command-loop-authority; mandatory_law_evidence_digest_mismatch:rust-command-loop-authority; mandatory_law_evidence_digest_mismatch:rust-developer-experience-authority; mandatory_law_evidence_digest_mismatch:rust-developer-experience-authority; mandatory_law_evidence_digest_mismatch:rust-memory-resource-discipline; mandatory_law_evidence_digest_mismatch:rust-memory-resource-discipline; mandatory_law_evidence_digest_mismatch:rust-toolchain-substrate-authority; mandatory_law_evidence_digest_mismatch:rust-toolchain-substrate-authority; mandatory_law_evidence_digest_mismatch:scheduler-runner-tracker-boundaries; mandatory_law_evidence_digest_mismatch:scheduler-runner-tracker-boundaries; mandatory_law_evidence_digest_mismatch:schema-evolution-receipt-migration-stale-version-invalidation; mandatory_law_evidence_digest_mismatch:schema-evolution-receipt-migration-stale-version-invalidation; mandatory_law_evidence_digest_mismatch:secret-token-boundaries; mandatory_law_evidence_digest_mismatch:secret-token-boundaries; mandatory_law_evidence_digest_mismatch:semantic-domain-type-naming; mandatory_law_evidence_digest_mismatch:semantic-domain-type-naming; mandatory_law_evidence_digest_mismatch:skill-catalog-context-budget-omission-warning; mandatory_law_evidence_digest_mismatch:skill-catalog-context-budget-omission-warning; mandatory_law_evidence_digest_mismatch:skill-local-reference-closure; mandatory_law_evidence_digest_mismatch:skill-local-reference-closure; mandatory_law_evidence_digest_mismatch:skill-progressive-disclosure-metadata; mandatory_law_evidence_digest_mismatch:skill-progressive-disclosure-metadata; mandatory_law_evidence_digest_mismatch:source-card-freshness-ceiling; mandatory_law_evidence_digest_mismatch:source-card-freshness-ceiling; mandatory_law_evidence_digest_mismatch:source-installed-cache-alignment; mandatory_law_evidence_digest_mismatch:source-installed-cache-alignment; mandatory_law_evidence_digest_mismatch:source-obligation-parity-anti-bundling; mandatory_law_evidence_digest_mismatch:source-obligation-parity-anti-bundling; mandatory_law_evidence_digest_mismatch:stable-identifier-normalization-collision; mandatory_law_evidence_digest_mismatch:stable-identifier-normalization-collision; mandatory_law_evidence_digest_mismatch:standards-gardener-promotion; mandatory_law_evidence_digest_mismatch:standards-gardener-promotion; mandatory_law_evidence_digest_mismatch:subagent-custom-agent-sandbox-approval-inheritance; mandatory_law_evidence_digest_mismatch:subagent-custom-agent-sandbox-approval-inheritance; mandatory_law_evidence_digest_mismatch:subagent-orchestration-explicitness-token-model-cost-result-reconciliation; mandatory_law_evidence_digest_mismatch:subagent-orchestration-explicitness-token-model-cost-result-reconciliation; mandatory_law_evidence_digest_mismatch:target-repo-audit-capability; mandatory_law_evidence_digest_mismatch:target-repo-audit-capability; mandatory_law_evidence_digest_mismatch:targeted-refactor-debt-removal-standards-gardener-cadence; mandatory_law_evidence_digest_mismatch:targeted-refactor-debt-removal-standards-gardener-cadence; mandatory_law_evidence_digest_mismatch:template-generation-governance-template-creator-boundary; mandatory_law_evidence_digest_mismatch:template-generation-governance-template-creator-boundary; mandatory_law_evidence_digest_mismatch:third-party-dependency-legibility-typed-adapters; mandatory_law_evidence_digest_mismatch:third-party-dependency-legibility-typed-adapters; mandatory_law_evidence_digest_mismatch:total-authority-types-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:total-authority-types-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:transcript-quality-reuse-gates; mandatory_law_evidence_digest_mismatch:transcript-quality-reuse-gates; mandatory_law_evidence_digest_mismatch:trust-boundary-abuse-path-failure-path-coverage; mandatory_law_evidence_digest_mismatch:trust-boundary-abuse-path-failure-path-coverage; mandatory_law_evidence_digest_mismatch:typed-records-over-prose; mandatory_law_evidence_digest_mismatch:typed-records-over-prose; mandatory_law_evidence_digest_mismatch:validator-theater-miswire-resistance; mandatory_law_evidence_digest_mismatch:validator-theater-miswire-resistance; mandatory_law_evidence_digest_mismatch:value-adoption-continuance-business-mission-evidence-hierarchy; mandatory_law_evidence_digest_mismatch:value-adoption-continuance-business-mission-evidence-hierarchy; mandatory_law_evidence_digest_mismatch:workflow-template-parsing-rendering-reload; mandatory_law_evidence_digest_mismatch:workflow-template-parsing-rendering-reload; mandatory_law_evidence_digest_mismatch:workspace-artifact-cache-garbage-collection; mandatory_law_evidence_digest_mismatch:workspace-artifact-cache-garbage-collection; mandatory_law_evidence_digest_mismatch:workspace-command-confinement-lifecycle-cleanup; mandatory_law_evidence_digest_mismatch:workspace-command-confinement-lifecycle-cleanup; mandatory_law_evidence_digest_mismatch:worktree-lane-owner-cost-policy; mandatory_law_evidence_digest_mismatch:worktree-lane-owner-cost-policy; mandatory_law_current_check_not_pass:cli-control-plane-authority:cli-control-plane-authority; mandatory_law_current_check_not_pass:cli-performance-latency-speed-iteration-fitness:cli-performance-latency-speed-iteration-fitness; mandatory_law_current_check_not_pass:cli-self-law-compliance:cli-self-law-compliance; mandatory_law_current_check_not_pass:full-local-observability-stack-integration-non-opaque-failure:full-local-observability-stack-integration-non-opaque-failure; mandatory_law_current_check_not_pass:namespace-progressive-disclosure:namespace-progressive-disclosure; mandatory_law_current_check_not_pass:rust-cache-no-cache-honesty:rust-cache-no-cache-honesty; mandatory_law_current_check_not_pass:rust-command-loop-authority:rust-command-loop-authority; mandatory_law_current_check_not_pass:rust-developer-experience-authority:rust-developer-experience-authority; mandatory_law_current_check_not_pass:rust-memory-resource-discipline:rust-memory-resource-discipline; mandatory_law_current_check_not_pass:rust-toolchain-substrate-authority:rust-toolchain-substrate-authority; mandatory_law_current_check_not_pass:standards-gardener-promotion:standards-gardener-promotion; mandatory_law_current_check_not_pass:validator-source-namespace-topology:namespace-progressive-disclosure; mandatory_law_current_check_not_pass:workspace-artifact-cache-garbage-collection:workspace-artifact-cache-garbage-collection",
+      "status": "fail"
     },
     "source-obligation-parity-anti-bundling": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:source-obligation-parity-anti-bundling; mandatory_law_evidence_digest_mismatch:source-obligation-parity-anti-bundling",
+      "status": "fail"
     },
     "stable-identifier-normalization-collision": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:stable-identifier-normalization-collision; mandatory_law_evidence_digest_mismatch:stable-identifier-normalization-collision",
+      "status": "fail"
     },
     "standards-gardener-promotion": {
-      "details": "pass",
-      "status": "pass"
+      "details": "standards_gardener_changed_artifact_digest_mismatch; standards_gardener_changed_artifact_digest_mismatch; standards_gardener_changed_artifact_digest_mismatch; standards_gardener_changed_artifact_digest_mismatch; standards_gardener_changed_artifact_digest_mismatch; standards_gardener_changed_artifact_digest_mismatch; standards_gardener_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:standards-gardener-promotion; mandatory_law_evidence_digest_mismatch:standards-gardener-promotion; mandatory_law_current_check_not_pass:standards-gardener-promotion:standards-gardener-promotion",
+      "status": "fail"
     },
     "subagent-custom-agent-sandbox-approval-inheritance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:subagent-custom-agent-sandbox-approval-inheritance; mandatory_law_evidence_digest_mismatch:subagent-custom-agent-sandbox-approval-inheritance",
+      "status": "fail"
     },
     "subagent-orchestration-explicitness-token-model-cost-result-reconciliation": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:subagent-orchestration-explicitness-token-model-cost-result-reconciliation; mandatory_law_evidence_digest_mismatch:subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
+      "status": "fail"
     },
     "target-repo-audit-capability": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:target-repo-audit-capability; mandatory_law_evidence_digest_mismatch:target-repo-audit-capability",
+      "status": "fail"
     },
     "targeted-refactor-debt-removal-standards-gardener-cadence": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:targeted-refactor-debt-removal-standards-gardener-cadence; mandatory_law_evidence_digest_mismatch:targeted-refactor-debt-removal-standards-gardener-cadence",
+      "status": "fail"
     },
     "template-generation-governance-template-creator-boundary": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:template-generation-governance-template-creator-boundary; mandatory_law_evidence_digest_mismatch:template-generation-governance-template-creator-boundary",
+      "status": "fail"
     },
     "third-party-dependency-legibility-typed-adapters": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:third-party-dependency-legibility-typed-adapters; mandatory_law_evidence_digest_mismatch:third-party-dependency-legibility-typed-adapters",
+      "status": "fail"
     },
     "total-authority-types-impossible-state-elimination": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:total-authority-types-impossible-state-elimination; mandatory_law_evidence_digest_mismatch:total-authority-types-impossible-state-elimination",
+      "status": "fail"
     },
     "transcript-quality-reuse-gates": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:transcript-quality-reuse-gates; mandatory_law_evidence_digest_mismatch:transcript-quality-reuse-gates",
+      "status": "fail"
     },
     "trust-boundary-abuse-path-failure-path-coverage": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:trust-boundary-abuse-path-failure-path-coverage; mandatory_law_evidence_digest_mismatch:trust-boundary-abuse-path-failure-path-coverage",
+      "status": "fail"
     },
     "typed-records-over-prose": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:typed-records-over-prose; mandatory_law_evidence_digest_mismatch:typed-records-over-prose",
+      "status": "fail"
     },
     "validator-artifact-provenance": {
       "details": "pass",
       "status": "pass"
     },
     "validator-execution-provenance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "session_log_hardening_package_digest_mismatch; final_packet_proof_target_digest_mismatch:sha256:b8a4b634ba4edf59d6cc51660ebb52d8660a615a92c863e1c7ec9f425f3ff8e5!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; final_packet_proof_cli_performance_ref:cli_performance_receipt_candidate_digest_mismatch:sha256:dfab1d7691f072dee3406a577867f210196a967c58a2a1f946bdcc9719dd0e7f!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; final_packet_proof_registry_ref:plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; final_packet_proof_ref_status_disagreement:source_audit; final_packet_proof_source_audit_target_digest_mismatch; final_packet_proof_coverage_target_digest_mismatch; final_packet_proof_package_target_digest_mismatch; final_packet_proof_fit_repo_ref:fit_repo_receipt_target_digest_mismatch; final_packet_proof_package_target_digest_mismatch; final_packet_proof_product_fitness_ref:product_fitness_evidence_digest_mismatch:/quality_in_use_metrics/4/evidence; final_packet_proof_product_fitness_ref:product_fitness_receipt_stale; final_packet_proof_package_target_digest_mismatch; final_packet_proof_product_journey_ref:plugin_product_journey_target_digest_mismatch; final_packet_proof_observability_candidate_digest_mismatch; plugin_self_law_registry_target_digest_mismatch:sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce!=sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794; review-round fixture: review_round_report_artifact_mismatch",
+      "status": "fail"
     },
     "validator-theater-miswire-resistance": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:validator-theater-miswire-resistance; mandatory_law_evidence_digest_mismatch:validator-theater-miswire-resistance",
+      "status": "fail"
     },
     "value-adoption-continuance-business-mission-evidence-hierarchy": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:value-adoption-continuance-business-mission-evidence-hierarchy; mandatory_law_evidence_digest_mismatch:value-adoption-continuance-business-mission-evidence-hierarchy",
+      "status": "fail"
     },
     "workflow-template-parsing-rendering-reload": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:workflow-template-parsing-rendering-reload; mandatory_law_evidence_digest_mismatch:workflow-template-parsing-rendering-reload",
+      "status": "fail"
     },
     "workspace-artifact-cache-garbage-collection": {
-      "details": "pass",
-      "status": "pass"
+      "details": "workspace_gc_receipt_candidate_digest_mismatch; mandatory_law_evidence_digest_mismatch:workspace-artifact-cache-garbage-collection; mandatory_law_evidence_digest_mismatch:workspace-artifact-cache-garbage-collection; mandatory_law_current_check_not_pass:workspace-artifact-cache-garbage-collection:workspace-artifact-cache-garbage-collection",
+      "status": "fail"
     },
     "workspace-binding": {
       "details": "pass",
       "status": "pass"
     },
     "workspace-command-confinement-lifecycle-cleanup": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:workspace-command-confinement-lifecycle-cleanup; mandatory_law_evidence_digest_mismatch:workspace-command-confinement-lifecycle-cleanup",
+      "status": "fail"
     },
     "worktree-lane-owner-cost-policy": {
-      "details": "pass",
-      "status": "pass"
+      "details": "mandatory_law_evidence_digest_mismatch:worktree-lane-owner-cost-policy; mandatory_law_evidence_digest_mismatch:worktree-lane-owner-cost-policy",
+      "status": "fail"
     },
     "worktree-teardown": {
       "details": "pass",
       "status": "pass"
     }
   },
-  "claim_ceiling": "source_audit_pass_source_local_only",
-  "commit": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce",
+  "claim_ceiling": "withheld_or_blocked",
+  "commit": "sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
   "generated_artifacts": [
     {
       "artifact_type": "red_fixture_report",
-      "digest": "sha256:13e8e7af7a05b38b763e461c1fb691e82ccb3e31cbe490190d0b694562a75c48",
-      "generated_at": "2026-06-29T22:11:45Z",
-      "input_digest": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
+      "digest": "sha256:f36cbf6f11d2dc28a35aac87d64001e47a563fa1a1a01a6276e067a3d604f018",
+      "generated_at": "2026-06-30T01:25:39Z",
+      "input_digest": "sha256:1e0e70655a01eb25e9f8c2fbdf831b95bc52c2a9ccf6e00714fa4efbd8d04b76",
       "path": "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:4d68898830eafd92cbe69f8db78127a861bd5d3171d9cd2f156c3e614427e83d",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:1703df5af8522c57a56b24ff3071e99c5e75bf5fe0dcbe0b97f9f01ed47c89ee",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:821595186e7a52966eb1c56a202f0f5b364546818efe6ff4eef98c02ca944476",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:adcb7a0bab8a4754caad7e74cd1972b543663e5122700f2623f7dc6bf00f24f4",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:bb5520b7423d02ecb2515893a992daf946b851380e16249132736c1d3a3cf5ab",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:d10066884790b37ea1309e70e1b73cea3fabd23cadaae4adcd2fbec75947c67e",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-valid-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:86c282f61c60386ac8d7da135a6be80cb4f9facff00445c26dd9d7aeb8074482",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:a709b7eb8f8ccae2e5c3bce25ec96bff62a92f558f7a84a67f254dd1080c947d",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:851f8986271d397400540e75162ed5a2f695a1886a6eeeff2712a378f73501bc",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:8f9ef5450799c3357bea293406728a07124f63042ae559f4df601a1373fb797d",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-retrofit-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:88a9cd847170cf814d3c389c357dc0b304c4f9f9c01f754e9a568d6ba7a05b55",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:58a89ba2ff9e2bbd1fdb8c377435fc136e8ae4eb5113a4c799e4f047e7b9128b",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:7d0e554b97255252731c86f0c49672fe7554c9973cdf930f09aef49e68ec5af5",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:4e1df1b191af47bdae9345d2eb609695b43bcbaaa5c75e931e86d0672f262df5",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ae82fc29f3f3d2b40de5631402da3c1a535caeb2e02d3cd0fef42ae0fea4f56a",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:270c68d979a85675f3b1c5448ec06054ddfa9ecc28fe4968b266c0e3bb79427c",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:95da34020fd25a23f9edf38e0ab2d64f7575d3825ad13765b44ed75d5c28eda6",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:ff600037ac4dbea8ea8a07bfaf8101617e7e5b6a3235510259e346fe5e74c933",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c1941dded95eeb878f97a74acbe8a7543b9aa37ad702ce1f91766dbb22c5dc3a",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:890b0102cb8b562b7931a69eaaa5732cf0785899cd4e3a77f6df6c60569d7f86",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-failing-coverage-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ebae76ebe45615c7d06661cf59c6dae9e5e98a4340ea8ed6c1a8cfda0b3df434",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:56c3ff2cc01cab99c81e6ad4e351b8c3a30b01271e8e1811c1852b9299ef760d",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-trivial-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:e2d52b2436c3360dcddc37454757d69cef2a9b84e2bb3cfb22cefb286effbc0d",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:e3086f8d685f08eb28e5c81751c23d11c29e33f092e8f1e019a9a636649c34bf",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-readme-existing-as-init-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:299d562e8b77e5ff7cd92d061f3c047a927c2234f377789c91710abba4f1ddda",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:ff657f8c629a84caafd0b7b1fa05f951689fff0c3385d88d0c88122a4161669d",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-fake-marker-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:4dd5e9f9aaed415e0fadc287db7ec8ad02e917f49985fea664fe7ac4a3bd7bfa",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:e8a598661c8036483cea18b0f7359fb9d208109575d04ba1b9f53c1cf33629c7",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-marker-only-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9df7c08f29eeaf28e5f419ce4d16fb6e6bb4d89e60ebda1bdd2911cdeec96bc4",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:a4d1983016c6d634eaad576f566b3defa718d52fb7719e48db6e75756ca8354b",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-unsafe-gate-command-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:58b9552579d4ef0acb3e2038657088475bd718a79560ea131d50413f0eddab21",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:8222ec0666384153df8855d0da25f5e20ec93b9b37d5952be697e5f62bacce4c",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-forged-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:4c880b50e5872d91cb9199475352264b3ae9ba67abf8ff674c5b45b6177c759b",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:21f3de9bd81d87b1a6711abf67adba910ef8f324c1233f8d8242aeeffd917c13",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:8a7ade6854d763770c1e0f94cddf7fc5832f424ba4f6cc7357345b5a7112a2c2",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:6371fc378c017a00cee942b2277aed64db79dfdadd487435c287429b4b26f424",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-symlink-check-gate-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:1eeae2c19955ad4e40249a323e83d285cbde0b63444760f5c7b27bd08cd12f6e",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:5c456c5d09c138d1143bfadad35e11be24d0eab0b9940b982b1c2b22c05e38fd",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-stale-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:55a8902ae8dc1ab0d83ef203f1445bb0430408113a9c2244099c0a318f26b205",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:6a12d616c90338c6846ab8c01ec40f788657de2551c236e97493c213f955f618",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:6dc0ce5b0e3b23d71be0cdcc0fb4948b0315e362cd5f6bf4def25b2478a5db9f",
-      "generated_at": "2026-06-29T22:11:40Z",
+      "digest": "sha256:99270e96444a5bfc1b932169b7f607d7b2177fa45426587ae1f2b301dc88eeb7",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:3e963813ff6e446e8cbfb2f4881375dfae3e6b7a57020b75fc5a8dc061b7a0f9",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:fa18d700bf3d8c8c927807cfcfe718b064512bb930a0dd0b20603c8386f29583",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c33713d1165a45fe532ccbc5053e50801774990c1108c0a1ef2a9cfe0749683b",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:7da46c2318bea891dfbe75d897a15c081785efdd4abc601bc307e43a7b3f4ed8",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-incomplete-observability-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:af2ca72cfb2b02a6ab9fab8a71b63787db7088b19b220982851a7068d2c78f90",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:902440e26e64610c57fd74bb4cfe4eef18d40d9f5642b089b984bfc72ccd5ced",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-invented-observability-artifact-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:8d2ef4aa30c132e7ea1c179e3ea09a30396573e866c088651568e391537784ef",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:7eeaf9fa6229c57d11c2051385d74de4edacb19b6d7a058506b9f001c1abb9a4",
+      "generated_at": "2026-06-30T01:25:34Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-ledger-without-query-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:bebc7aa5144ed745ee8544ab6c0fb41c74ef3039479d565ec286b48a90de5e96",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:73b94ec9aac7e4edd72c2101cf07e8d3928179598ddb911086249f80e7aeff4c",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-timeout-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c992be4c4e58c09c2de3c25ae53f5451dd0436955f62bfbc487f0f5fdbe1f502",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:57bccd19debf6a68eec10b5d670ba50ccde1eb09511fc0688abce03f66e5024a",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-output-too-large-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c59c557541b1706c7116e2230cbfbf9e6ad9c1cd47e5582c593e1d2b5912fa3c",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:9ed871fd8d37156c7d467dcec678cd52344a030012b9193875447f8978983584",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-query-side-effect-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:121d67324a055ff119af1cfe6b87514cfe2ac5e1a947769249f80fecc0375ae8",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:f4168dbd0547eea4a97fc9c4e3d6167356b8839d938b077f00c8e8a8c1256603",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-observability-shell-wrapper-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a49d47ed607c01ece710b4996a60eeab941e1cbd8c594ea6e1fcf606933ca443",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:89d4aa77865b8240affaef36fb2d4eea83faaf948e81c3f78c3ca8d3f174ec0c",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-row-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9802bf824a2439f2f789a2740d63ca753f3a31f3f41b9831db0fa167c97fbd94",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:6d8974c7559a0d1df43fff310ccd48846408d6d130c9ba413910929f79de3593",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-observability-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:fda4db614fc25d92dfb2401012d210dc92d0d77acc1e0c6c1a693c303389a958",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:85d2ade746aef43bd799b814430936aad447203ce08639116f4fc1ee2658e079",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:9cc79726f2983bca1e8506c092d9523db6069864c0fe9832aba756ae260d3e91",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:d1b53da73c0b4d494e2ebb7f490b60cc7d66664246dd63cdab98613ba8a5624c",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-partial-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:a1a23df1598131b920ea1b8b651e9c714f54464d74710d241b058af5f7078920",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:3a1800d58f925ab100e772b1f0f5cafaeb9229cb3b4ff584310ed5dea2c0801d",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-mismatched-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:ba6942617ed1d2bcf66cda9ac2798830ca03830f9b12be817a8a0cdfe5ec2b9d",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:4c2703e3942add51d00310e360a9c8efc46ea53bd69cbce4a4df12ebbf5d7d88",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-exception-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:b4f2a3076f621028e253dd4170656af8bf307a03cfe19d6363f89e26928917fb",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:ce36ae6c7f89616c65f554d64b031b0445f91678817de95501bf81da4b979a9c",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-empty-reviewers-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:df815aec17960e6f023c7895360058a84665e0a17dd41a55c9edd295172edb12",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:07352e51af18dcf45ef0c7f53f0252a432ddd066af66d5db7e98eccf6ed3bba5",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-self-review-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:6b291eec9fa58ff44ee67ba42cd813a970354622a3807348386ddd1ef1c5cc96",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:7e31dd8e2bf5e1e10218136351b0489d5dabc0dc9acd0a4f702d1ef9f6341fef",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-reviewer-authority-content-mismatch-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:c2aad06aafee7a25e46cb124f0ff09df6b488c05d1deede7c2ab685f8cdb80f4",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:e71d8cee576869fe943625237ee79d062bb768d202d42c1d635ad7899143385a",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-reviewer-authority-alias-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:2c6b7ba7d501181a5f10373616217ee75598260726d5205cf23a252c070f87eb",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:d9c15653e4f0803b752a65ffd85464624e511625a1101172bb68ff6e61486963",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-absolute-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:1eb627856bdbc9e944989d8e72d33752f01473f223ccd286fc40e36b84a1c814",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:51c8ecf4ebae112a87b941f4ad7bd7bb1b703c93e7ddfbdf72ab099b8a5a11d1",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-parent-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:72af75c3b6a9f389e254353f365ce8221660b6fae6e38b5cc28054bbb1622da5",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:eb47eb5da400299daf0e325ced45797e8fbda4834425987773dca62819a25c23",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-symlink-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:aa8d1d744b32b5481a6ad68ca5f7da3652547372eea33a119bbbb345851e460a",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:bd0a400f05e4007075f7a571bfe004ec911fa75a73b085b3a5f9eb09106977ec",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-product-review-evidence-special-path-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:d831d5649fee0600709ded2b8d84f2371754077f4c299ddbb063ec939fe9c34c",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:41a1524572693e9005c3e6203d6117a44d716cdb5480f45c08fb7faf99904963",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-malformed-product-cohesion-json-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "target_repo_receipt",
-      "digest": "sha256:34f6e2a8ce27dc6e523e82ebced5c828efbbabcc3d058ba3e52bb1ae55fab5dc",
-      "generated_at": "2026-06-29T22:11:41Z",
+      "digest": "sha256:7a3033858ea3ff9f361b2ab735e46ba43a074c43925bf13048f6e602d4a595db",
+      "generated_at": "2026-06-30T01:25:35Z",
       "input_digest": "sha256:3bb6d4437ab4bfe3a90983a34b6f0efda1291e43dc09b62e4f329067e3a6cd51",
       "path": "validation_artifacts/ultragoal-audit/target-missing-primary-user-product-cohesion-receipt.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-LANE-001.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:62267add53035a3dcd9bbc4f4568bc22f0bf12fe0d6d122577b2bf72bbcd2c1d",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-minimal-goal-run.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:44dd286634c864fedbb306b7e762480d1645e5a834f2547322c6dea1174024aa",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:8c2a29c76397f43f1012d93b05264feef1e697707abb8611e2903c4e6ecb0b5e",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-non-product-feature-completion.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:8e9aff3a6b22967e9505ba30af80c32714610e2918b9d84763dfa73362c077a4",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-proof-surface-negative-probe.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:7ac6bb6edf2aa474d0d8ce6e964c1f1641faf2b8f54097176e591de871c3af22",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE-two-lane-ready-dependency.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     },
     {
       "artifact_type": "ready_for_merge",
       "digest": "sha256:cd8ccb5353af329a7de8a993b1969e6174837b9c143e90bac5f0e34185c848b3",
-      "generated_at": "2026-06-29T22:11:45Z",
+      "generated_at": "2026-06-30T01:25:39Z",
       "input_digest": "sha256:c51e72b3e022367d6365278a49bbb90e5bd75aa6c8da1a40fe3ffc7baf406612",
       "path": "examples/generated/READY_FOR_MERGE.example.json",
-      "validator_run_id": "ultragoal-audit-2026-06-29T22:09:46Z"
+      "validator_run_id": "ultragoal-audit-2026-06-30T01:23:29Z"
     }
   ],
-  "generated_at": "2026-06-29T22:11:51Z",
+  "generated_at": "2026-06-30T01:25:46Z",
   "input_digests": [
     {
-      "digest": "sha256:87a11927fe8a32bc6cc662d239c8993cbf0c99d2da25ea98e0c71e984fd76983",
+      "digest": "sha256:f34aad26cf752ce4c0e2e222a7f8b71ebc669b087126a1d35b082b68791c7a25",
       "path": "plugin-manifest-draft.json"
     },
     {
@@ -1069,7 +1084,7 @@
       "path": "schemas/schema-catalog.json"
     },
     {
-      "digest": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
+      "digest": "sha256:1e0e70655a01eb25e9f8c2fbdf831b95bc52c2a9ccf6e00714fa4efbd8d04b76",
       "path": "templates/RED_FIXTURES.json"
     },
     {
@@ -1077,7 +1092,7 @@
       "path": "fixtures/valid/minimal-goal-run.json"
     }
   ],
-  "red_fixture_catalog_digest": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
+  "red_fixture_catalog_digest": "sha256:1e0e70655a01eb25e9f8c2fbdf831b95bc52c2a9ccf6e00714fa4efbd8d04b76",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -4669,6 +4684,16 @@
       "status": "pass",
       "validator_exit": 1
     },
+    "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
     "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broken_span_parentage",
       "expected_failing_check": "source-obligation-coverage",
@@ -4746,6 +4771,16 @@
       "observed_failing_check": "source-obligation-coverage",
       "packet_digest": "sha256:3b73a350c8e531c0b4178e28318c23770624badd33bca804c67765e4ee76f60d",
       "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
+    "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
       "status": "pass",
       "validator_exit": 1
     },
@@ -4839,6 +4874,16 @@
       "status": "pass",
       "validator_exit": 1
     },
+    "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
     "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:private_path_leak",
       "expected_failing_check": "source-obligation-coverage",
@@ -4866,6 +4911,16 @@
       "observed_failing_check": "source-obligation-coverage",
       "packet_digest": "sha256:27bd57bb2e2aaaac57c7e8dc7277a5799760e4b173d0482abf65362b54a1a7c1",
       "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
+    "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
       "status": "pass",
       "validator_exit": 1
     },
@@ -14868,43 +14923,44 @@
     "workspace-command-confinement-lifecycle-cleanup-teardown-recorded-red",
     "worktree-lane-owner-cost-policy-source-obligation-parity-red",
     "wrong-lane-worktree-root",
-    "wrong-worktree-or-root"
+    "wrong-worktree-or-root",
+    "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
+    "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
+    "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
+    "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red"
   ],
   "root": "source-workspace:harness-ultragoal-plugin-proposal",
-  "run_id": "ultragoal-audit-2026-06-29T22:09:46Z",
+  "run_id": "ultragoal-audit-2026-06-30T01:23:29Z",
   "schema": "harness-ultragoal.validator-receipt.v1",
-  "status": "pass",
-  "supported_claim_classes": [
-    "source_local_audit_checks",
-    "red_fixture_report"
-  ],
+  "status": "fail",
+  "supported_claim_classes": [],
   "target": "source-workspace:harness-ultragoal-plugin-proposal",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce"
+    "value": "sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794"
   },
   "validator": "ultragoal-audit",
   "validator_execution": {
     "actor_disjoint": true,
     "command": {
       "command": "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "completed_at": "2026-06-29T22:11:51Z",
+      "completed_at": "2026-06-30T01:25:46Z",
       "cwd": "source-workspace:harness-ultragoal-plugin-proposal",
-      "exit": 0,
+      "exit": 1,
       "id": "ultragoal-audit",
-      "started_at": "2026-06-29T22:09:46Z"
+      "started_at": "2026-06-30T01:23:29Z"
     },
-    "completed_at": "2026-06-29T22:11:51Z",
+    "completed_at": "2026-06-30T01:25:46Z",
     "environment": "local Rust package audit; semantic_validation_clock=automation_tick_receipt.freshness_policy.clock_at_validation",
     "executable_provenance": {
-      "digest": "sha256:523ff16ad6900490838e4ff7b9c53b372c3614ef4a553dc2f47750c5106df484",
+      "digest": "sha256:f085ecf36af1969ea06931dbb6cc44e11af056fb47c8f19bdc2233931482b880",
       "invocation_mode": "direct_executable",
       "path": "target/debug/ultragoal",
-      "source_artifact_set_digest": "sha256:8c736017489fe4bad56569716649c83720db73fdbfe7f43520b6cba3aa45fc10"
+      "source_artifact_set_digest": "sha256:6e5abf4bf7949e837005e7615356ba87372d7b0a534f9b44f0d0e7e101efcd52"
     },
     "input_digests": [
       {
-        "digest": "sha256:87a11927fe8a32bc6cc662d239c8993cbf0c99d2da25ea98e0c71e984fd76983",
+        "digest": "sha256:f34aad26cf752ce4c0e2e222a7f8b71ebc669b087126a1d35b082b68791c7a25",
         "path": "plugin-manifest-draft.json"
       },
       {
@@ -14912,7 +14968,7 @@
         "path": "schemas/schema-catalog.json"
       },
       {
-        "digest": "sha256:9e11703ec9ced02a0943ef88cf65a8c36bcc16718e5e07342f00267b2a08716c",
+        "digest": "sha256:1e0e70655a01eb25e9f8c2fbdf831b95bc52c2a9ccf6e00714fa4efbd8d04b76",
         "path": "templates/RED_FIXTURES.json"
       },
       {
@@ -14921,13 +14977,13 @@
       }
     ],
     "producer_actor_id": "package-author",
-    "started_at": "2026-06-29T22:09:46Z",
+    "started_at": "2026-06-30T01:23:29Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.stderr.txt"
     },
     "stdout": {
-      "digest": "sha256:413da665e6bcc0c4ff5f2a545a990d7308038b35cd285f36666ffce77d4776b5",
+      "digest": "sha256:0f3f15716915c9d9b74e2b89ccdee1a02ae7f57e2233f2b23f09d0c5f5a69774",
       "path": "validation_artifacts/ultragoal-audit/validator-receipt.stdout.txt"
     },
     "validator_actor_id": "ultragoal-rust-validator",
@@ -15037,8 +15093,12 @@
         "path": "validator/src/audit/coverage/scope/scripts.rs"
       },
       {
-        "digest": "sha256:467dae8558b5cb3fb945e2e77d7e5650b36d5a082dffb0efe3c48797ea8cf0bb",
+        "digest": "sha256:5a4da02c6c27f00449a8d5a845d9480f0ae38d3327353fc2faa978e6cafa34eb",
         "path": "validator/src/audit/final_packet/mod.rs"
+      },
+      {
+        "digest": "sha256:9845fcec1cbc12bb3fbf7371049aa8784d5f5bd589a924e8bbfce720bd7536ad",
+        "path": "validator/src/audit/final_packet/observability.rs"
       },
       {
         "digest": "sha256:6b73fb435dc5019c1658d3d3e0d5ff0c6e52748a85ec5b1d61dcc33983517f11",
@@ -15169,7 +15229,7 @@
         "path": "validator/src/audit/observability/files.rs"
       },
       {
-        "digest": "sha256:c94ddb48e14c7db175924f48d0959a51e2cd9abb732027e6085e3d475c0d7ccb",
+        "digest": "sha256:28f868819914da7a7cdab156d736b93226bae9dd96b82f46af5276ae303c7804",
         "path": "validator/src/audit/observability/mod.rs"
       },
       {
@@ -15181,8 +15241,40 @@
         "path": "validator/src/audit/observability/receipt.rs"
       },
       {
-        "digest": "sha256:1ac98eae8013610fafca60e34f077c130ff66aa29166846ac34f62e9597182fc",
+        "digest": "sha256:5deb7ea8f4553112ac4e6d267ddf592aa7089446f327a75fd02ea95ac9ff5b38",
+        "path": "validator/src/audit/observability/redaction.rs"
+      },
+      {
+        "digest": "sha256:1f8ee5a923c85f1781a397841d73f1602e837f993834749d18c3598d49c487e9",
         "path": "validator/src/audit/observability/registry.rs"
+      },
+      {
+        "digest": "sha256:61c94397645bee467f61693eb0e81d4a06a9f0b467f71df8e1a01be50de8cb37",
+        "path": "validator/src/audit/observability/registry/fitting.rs"
+      },
+      {
+        "digest": "sha256:0a3ba1fafecb96bb961cef2ff8cb9efaec50041aeea0600001996043f9f22703",
+        "path": "validator/src/audit/observability/registry/operating.rs"
+      },
+      {
+        "digest": "sha256:85b888ddabfd2facb31eca022107dae86ed6f8d750d510947e1ba75c6322417f",
+        "path": "validator/src/audit/observability/registry/proof.rs"
+      },
+      {
+        "digest": "sha256:d6736df0bd52030f1d2504ceb09b6bcc61e238dae53251a525cab4ce433d3493",
+        "path": "validator/src/audit/observability/registry/surfaces.rs"
+      },
+      {
+        "digest": "sha256:4957b5d68ede313205f3732dbf0526e5e4cf7d9d7c6f08ab6d1d62407d5ff9cd",
+        "path": "validator/src/audit/observability/registry/tests.rs"
+      },
+      {
+        "digest": "sha256:a916ede02d88a4d9dfe3ab01ace68f6939da42def3430c36784b8faa985fcd30",
+        "path": "validator/src/audit/observability/registry/tests/receipts.rs"
+      },
+      {
+        "digest": "sha256:859083900a98be0684a12a80a4acf9c817f8a74136034c985924c52842b93d48",
+        "path": "validator/src/audit/observability/registry/tests/support.rs"
       },
       {
         "digest": "sha256:3c30511316442d312cb3ea189f405ffcb50459db345c4d6f522131b738118509",
@@ -15593,6 +15685,10 @@
         "path": "validator/src/claim_semantics/semantic/receipt/text.rs"
       },
       {
+        "digest": "sha256:4ef3a584fd90ae419ab3c3cecef78d340e420c3129b9d943894b9afc7b2005f8",
+        "path": "validator/src/cli/audit/mod.rs"
+      },
+      {
         "digest": "sha256:c06268cd8b76c25f425e14b1d20ada6eacb6c6a638024ea845f086ae0bdf158d",
         "path": "validator/src/cli/control/mod.rs"
       },
@@ -15685,8 +15781,12 @@
         "path": "validator/src/cli/control/plane/types.rs"
       },
       {
-        "digest": "sha256:8f91e51c98b96c9fd539d722460ef43754a80483f36621eacec91cf02c907f85",
+        "digest": "sha256:78efe91cd029bd22fd811726f0dc490a4abbb96e5908d7edb5f5c0ba22b3aa2c",
         "path": "validator/src/cli/final_packet.rs"
+      },
+      {
+        "digest": "sha256:ef208829878223bb017546c983fdcd46f5ce3e5191a4224a0bcffd40ceb7bbe6",
+        "path": "validator/src/cli/final_packet/proof.rs"
       },
       {
         "digest": "sha256:44541723838962ac38e190e41452855caf693407c1543921f83f145020ba2a4f",
@@ -15705,7 +15805,7 @@
         "path": "validator/src/cli/garbage/mod.rs"
       },
       {
-        "digest": "sha256:fb8da4aa60519182a8fc1a3c3b8a70bead7e3a925116d909abe55794c621d3e7",
+        "digest": "sha256:61c8ec89b1a657ec81e960f878d3c10322ce88364677645a4edf7b843268bf2b",
         "path": "validator/src/cli/mod.rs"
       },
       {
@@ -15713,11 +15813,11 @@
         "path": "validator/src/cli/observe/explain/mod.rs"
       },
       {
-        "digest": "sha256:fc1352b44a60f123d99502be84ccf128201bd08bcab756989c8ffa5a8a139774",
+        "digest": "sha256:d520bbd17c758cf80c86da6ca1cde7261ca340d50501508972d7247669617746",
         "path": "validator/src/cli/observe/mod.rs"
       },
       {
-        "digest": "sha256:897ac75d348ebf498aceb252664a877855cba8558c9228c7e8033dbcf53478a2",
+        "digest": "sha256:98d4ec6e2e07f3015182c560c11868f37b94a888496a5a4f0d373cfad8f62240",
         "path": "validator/src/cli/observe/query/body.rs"
       },
       {
@@ -15737,8 +15837,12 @@
         "path": "validator/src/cli/observe/stack/mod.rs"
       },
       {
-        "digest": "sha256:90c550c20987079b89e54799a63a4520e6db0c96ba0ba7f1ab6731d7de3df360",
+        "digest": "sha256:b179b4c8aa06b2ed77c745073cbc3ef3cc8e866cc25ce66080211c30866160e2",
         "path": "validator/src/cli/observe/telemetry/claims.rs"
+      },
+      {
+        "digest": "sha256:9ef4770c83ef4a4560ea5fd011f3785df46d3fffccf8d8b77b34c8b819763ced",
+        "path": "validator/src/cli/observe/telemetry/command.rs"
       },
       {
         "digest": "sha256:ae9b6f16dbc30db797580f7c81884206aee37a38750e9bc10cd1a772d613f9af",
@@ -15749,19 +15853,19 @@
         "path": "validator/src/cli/observe/telemetry/identity.rs"
       },
       {
-        "digest": "sha256:545c50a64225ac84b3ec8e9107a024c83069cf07f575f9bae368807350c22bb8",
+        "digest": "sha256:0f3fc6145d60ed308f42ae4845717e5c73afdfb06c654a041d528791b9913697",
         "path": "validator/src/cli/observe/telemetry/mod.rs"
       },
       {
-        "digest": "sha256:531ce0c92f11a929bafa28ac9e88c4d84490b1bc7ecc730aab2ec32891dbed4d",
+        "digest": "sha256:a9b62f7c1514846078d49ba969b50467d31353269e114b667e075c84869695fd",
         "path": "validator/src/cli/observe/telemetry/query.rs"
       },
       {
-        "digest": "sha256:5a16adcc5d062af247298dd24013157c1f47c862421588dcc9115c5ec5f14a80",
+        "digest": "sha256:bf83327deb2dc10249f81a5fe523c4d3d8d699e447bd0252b7a334123fccffe4",
         "path": "validator/src/cli/observe/telemetry/receipt.rs"
       },
       {
-        "digest": "sha256:d408835700ccfbdfe6b3045b8acc2572f884d9631c5bd9e63f981a8b23235e4b",
+        "digest": "sha256:f1f6fb7ca0656d693b5166721e585e0d4cacc007d2df1a5eac2e012ec8070f68",
         "path": "validator/src/cli/observe/telemetry/record.rs"
       },
       {
@@ -15771,6 +15875,14 @@
       {
         "digest": "sha256:5056b4abeffa363629e5b3ddf820c5f92a79e4066cef0f51fd6af011153e1aee",
         "path": "validator/src/cli/observe/types.rs"
+      },
+      {
+        "digest": "sha256:7803b5f477e9e9e56aba233b82d0dcc02fd0be7a493fefb6512170f20173e23c",
+        "path": "validator/src/cli/package/digest.rs"
+      },
+      {
+        "digest": "sha256:f5849b7e9e1847dc3fba24329f102edab286ba14bf20dd1ea9aaec773210591a",
+        "path": "validator/src/cli/package/mod.rs"
       },
       {
         "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
@@ -15829,7 +15941,7 @@
         "path": "validator/src/cli/standards/mod.rs"
       },
       {
-        "digest": "sha256:beffa58c8b7b66acb79ed9fe5a254e433f92882969c1c3ce10d05335b73a751e",
+        "digest": "sha256:f1dd0924a50c8f11eba1ea378897d2bb548542e9bd9f971c240458c09be916cd",
         "path": "validator/src/command_run.rs"
       },
       {
@@ -16137,7 +16249,7 @@
         "path": "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/registry.rs"
       },
       {
-        "digest": "sha256:59f76d0e3bb18bb816e7ec630e9ab6de7a77f47bcecac8f6d2ab2499e9fc5ed5",
+        "digest": "sha256:ac3f1f4218f501e9c56ae06237eb5e3dd7e561da096042eb9a3e1b931b79af7b",
         "path": "validator/src/self_tests/audit/final_packet/mod.rs"
       },
       {
@@ -16169,8 +16281,12 @@
         "path": "validator/src/self_tests/audit/final_packet/support/coverage.rs"
       },
       {
-        "digest": "sha256:011e015e36193d33c22d9cfa9a54d273982b4d1d423c42c7952a36a8e7242d05",
+        "digest": "sha256:87d3a5e9df90e75b86e4fd160f579e9751d4cd85f594d20d7be31abd63604673",
         "path": "validator/src/self_tests/audit/final_packet/support/mod.rs"
+      },
+      {
+        "digest": "sha256:ec2068cb5adb9ef9b56124aa7e3c4a1ce29fe9ee7cdf4dbf495dc869646fa198",
+        "path": "validator/src/self_tests/audit/final_packet/support/observability.rs"
       },
       {
         "digest": "sha256:b01d2cbcf8cb7e27865297b2f2eb288f997bba5704b6d79b621c3fb6c3e2b271",
@@ -16429,7 +16545,7 @@
         "path": "validator/src/self_tests/cli/control/types.rs"
       },
       {
-        "digest": "sha256:94a54bd15fb2c2ed81123d911d5bb5ca4cccf968028d07a6371acba0c909a853",
+        "digest": "sha256:9ebe85baab65337f0cc07ecafa3f9d8ef7c51957609f6a1d399f7a742226066a",
         "path": "validator/src/self_tests/cli/final_packet.rs"
       },
       {
@@ -16437,23 +16553,31 @@
         "path": "validator/src/self_tests/cli/mod.rs"
       },
       {
-        "digest": "sha256:254692fcebfe6e13e7bfe7d75ba8b0252eef02a16c612edcefab4252ec28e322",
+        "digest": "sha256:bebd05e535a1190a33bcfb8d77b7162e5f3dbd13e435debd21ccfa22b1f63fce",
         "path": "validator/src/self_tests/cli/observe/mod.rs"
       },
       {
-        "digest": "sha256:10d4a03700f55e5df59f12aa181e5dda2633fa17e5829bf199ae0185ccef6c73",
+        "digest": "sha256:39078e5ca48134743a7d8d862e6dbba73a0fd40b7efd40493fd3981b88e383f8",
         "path": "validator/src/self_tests/cli/observe/package.rs"
+      },
+      {
+        "digest": "sha256:9f3b02e1014156d17cf3cb6daa9464e8dabbcbbeed213e335916de0f22c129eb",
+        "path": "validator/src/self_tests/cli/observe/prove.rs"
+      },
+      {
+        "digest": "sha256:fe5067dbf0da8226e5c53b910cbfaea3d3e9f4eed0bb852577ef9639b443cdb0",
+        "path": "validator/src/self_tests/cli/observe/query/fitting_support.rs"
       },
       {
         "digest": "sha256:229502a6e7c212a2667ff721c3738af62f1aa4e6f08e5f1bdb755ce67fe3a817",
         "path": "validator/src/self_tests/cli/observe/query/matching.rs"
       },
       {
-        "digest": "sha256:eda31a15c671aadfd02b544db60f2c3b8f27f7c760020c2a15181de1b41d8b40",
+        "digest": "sha256:36805db227d1bb598c3ecf18cd1ab6ea89cffec5088a97cf56cbc68b3b07b2e1",
         "path": "validator/src/self_tests/cli/observe/query/mod.rs"
       },
       {
-        "digest": "sha256:13559cefded12def04423bae1a494392077ea086dc0f5a6ad7bb88d0c9c1b2a3",
+        "digest": "sha256:dd3aa42645d77f613c9b9ef1f285972cd95f13704023de1722ebe9b7964586fd",
         "path": "validator/src/self_tests/cli/observe/query/run.rs"
       },
       {
@@ -16461,7 +16585,7 @@
         "path": "validator/src/self_tests/cli/observe/query/text.rs"
       },
       {
-        "digest": "sha256:60fc5250f027fb4cc7951be6531643f7285486430585337235f2982cc78085f5",
+        "digest": "sha256:20c0b434d626a2852f800e0213ce7636f812a12e0c235ea402c088493f126d8e",
         "path": "validator/src/self_tests/cli/observe/run.rs"
       },
       {

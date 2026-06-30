@@ -1,0 +1,35 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-48eed6f84c91cf8717aa567ed9977d2a98dc361bef9b89dd374d87315d1622e5",
+  "failure": "",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "ultragoal_command_total{run_id=\"run-6652023d95756c7cd0ba074dad7739aa8c113864a13031be5dd1606b150592cd\"}",
+  "query_kind": "metrics",
+  "result_digest": "sha256:0b4845593c2d3dbe596057ec12e74ef3114aee6b2bf471071833f4cbfe3e95f0",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_command_total\",\"candidate_digest\":\"sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794\",\"check_id\":\"source-audit-observability-binding\",\"claim_id\":\"source_audit\",\"command\":\"ultragoalsource\",\"correlation_id\":\"corr-61b79f6fba11a3dbffc3411b72f7521777831db9a153bf9758d3ee8ecce6d5b7\",\"exporter\":\"victoriametrics\",\"failure_class\":\"source_audit_check_failure\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"operation\":\"source.audit\",\"run_id\":\"run-6652023d95756c7cd0ba074dad7739aa8c113864a13031be5dd1606b150592cd\",\"span_id\":\"metric-19627db138c9db0e87dfa1d5e15ed6f683664a786c6ce7b60f5396673e769983\",\"status\":\"fail\",\"surface\":\"source\",\"trace_id\":\"trace-ee743b60693fc4756560eb7bd8291e6c0dc9602206f6256c7b1feaa62dbd524b\"},\"value\":[1782782777,\"0\"]}]},\"stats\":{\"seriesFetched\": \"1\",\"executionTimeMsec\":0}}"
+    }
+  ],
+  "run_id": "run-6652023d95756c7cd0ba074dad7739aa8c113864a13031be5dd1606b150592cd",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
+}

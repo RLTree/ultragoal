@@ -122,19 +122,26 @@
       "claim_impact": "supports_source_package_digest_only_no_readiness_release_completion_update_goal"
     },
     "source audit": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "command-level observability receipt",
+        "claim-blocking fail receipt",
+        "local spool emission"
+      ],
       "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "stdout contract",
-        "receipt binding",
-        "query proof"
+        "current same-candidate logs query proof",
+        "current same-candidate metrics query proof",
+        "current same-candidate traces query proof",
+        "pass and fail stdout contract across source-audit statuses",
+        "red report paired command instrumentation"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
+      "focused_tests": [
+        "source_audit_observability_receipt_blocks_claims_on_failed_audit"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/source-audit.json"
+      ],
       "live_query_proof_paths": [],
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
     },

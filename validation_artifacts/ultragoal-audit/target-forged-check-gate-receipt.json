@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-29T22:11:40Z",
+    "completed_at": "2026-06-30T01:25:34Z",
     "cwd": "fixtures/target-repo/red/forged-check-gate",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-29T22:11:40Z",
+    "started_at": "2026-06-30T01:25:34Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -383,10 +383,10 @@
     "execplan-dirs",
     "proof-root"
   ],
-  "generated_at": "2026-06-29T22:11:40Z",
+  "generated_at": "2026-06-30T01:25:34Z",
   "invocation": "fixture init fixtures/target-repo/red/forged-check-gate",
   "mode": "init",
-  "repo_fingerprint": "sha256:2b14cdea7df652b1694fff50d71d82a913a4bf5a7aecabe8d4e0c6ebd852f1e9",
+  "repo_fingerprint": "sha256:9961973f3fae49381bd629107c8f37cd7b2bd8488e896d4aa3c1371aca4c0243",
   "requirements": {
     "observability_reason": "not_requested",
     "observability_required": false,
@@ -502,8 +502,12 @@
       "path": "validator/src/audit/coverage/scope/scripts.rs"
     },
     {
-      "digest": "sha256:467dae8558b5cb3fb945e2e77d7e5650b36d5a082dffb0efe3c48797ea8cf0bb",
+      "digest": "sha256:5a4da02c6c27f00449a8d5a845d9480f0ae38d3327353fc2faa978e6cafa34eb",
       "path": "validator/src/audit/final_packet/mod.rs"
+    },
+    {
+      "digest": "sha256:9845fcec1cbc12bb3fbf7371049aa8784d5f5bd589a924e8bbfce720bd7536ad",
+      "path": "validator/src/audit/final_packet/observability.rs"
     },
     {
       "digest": "sha256:6b73fb435dc5019c1658d3d3e0d5ff0c6e52748a85ec5b1d61dcc33983517f11",
@@ -634,7 +638,7 @@
       "path": "validator/src/audit/observability/files.rs"
     },
     {
-      "digest": "sha256:c94ddb48e14c7db175924f48d0959a51e2cd9abb732027e6085e3d475c0d7ccb",
+      "digest": "sha256:28f868819914da7a7cdab156d736b93226bae9dd96b82f46af5276ae303c7804",
       "path": "validator/src/audit/observability/mod.rs"
     },
     {
@@ -646,8 +650,40 @@
       "path": "validator/src/audit/observability/receipt.rs"
     },
     {
-      "digest": "sha256:1ac98eae8013610fafca60e34f077c130ff66aa29166846ac34f62e9597182fc",
+      "digest": "sha256:5deb7ea8f4553112ac4e6d267ddf592aa7089446f327a75fd02ea95ac9ff5b38",
+      "path": "validator/src/audit/observability/redaction.rs"
+    },
+    {
+      "digest": "sha256:1f8ee5a923c85f1781a397841d73f1602e837f993834749d18c3598d49c487e9",
       "path": "validator/src/audit/observability/registry.rs"
+    },
+    {
+      "digest": "sha256:61c94397645bee467f61693eb0e81d4a06a9f0b467f71df8e1a01be50de8cb37",
+      "path": "validator/src/audit/observability/registry/fitting.rs"
+    },
+    {
+      "digest": "sha256:0a3ba1fafecb96bb961cef2ff8cb9efaec50041aeea0600001996043f9f22703",
+      "path": "validator/src/audit/observability/registry/operating.rs"
+    },
+    {
+      "digest": "sha256:85b888ddabfd2facb31eca022107dae86ed6f8d750d510947e1ba75c6322417f",
+      "path": "validator/src/audit/observability/registry/proof.rs"
+    },
+    {
+      "digest": "sha256:d6736df0bd52030f1d2504ceb09b6bcc61e238dae53251a525cab4ce433d3493",
+      "path": "validator/src/audit/observability/registry/surfaces.rs"
+    },
+    {
+      "digest": "sha256:4957b5d68ede313205f3732dbf0526e5e4cf7d9d7c6f08ab6d1d62407d5ff9cd",
+      "path": "validator/src/audit/observability/registry/tests.rs"
+    },
+    {
+      "digest": "sha256:a916ede02d88a4d9dfe3ab01ace68f6939da42def3430c36784b8faa985fcd30",
+      "path": "validator/src/audit/observability/registry/tests/receipts.rs"
+    },
+    {
+      "digest": "sha256:859083900a98be0684a12a80a4acf9c817f8a74136034c985924c52842b93d48",
+      "path": "validator/src/audit/observability/registry/tests/support.rs"
     },
     {
       "digest": "sha256:3c30511316442d312cb3ea189f405ffcb50459db345c4d6f522131b738118509",
@@ -1058,6 +1094,10 @@
       "path": "validator/src/claim_semantics/semantic/receipt/text.rs"
     },
     {
+      "digest": "sha256:4ef3a584fd90ae419ab3c3cecef78d340e420c3129b9d943894b9afc7b2005f8",
+      "path": "validator/src/cli/audit/mod.rs"
+    },
+    {
       "digest": "sha256:c06268cd8b76c25f425e14b1d20ada6eacb6c6a638024ea845f086ae0bdf158d",
       "path": "validator/src/cli/control/mod.rs"
     },
@@ -1150,8 +1190,12 @@
       "path": "validator/src/cli/control/plane/types.rs"
     },
     {
-      "digest": "sha256:8f91e51c98b96c9fd539d722460ef43754a80483f36621eacec91cf02c907f85",
+      "digest": "sha256:78efe91cd029bd22fd811726f0dc490a4abbb96e5908d7edb5f5c0ba22b3aa2c",
       "path": "validator/src/cli/final_packet.rs"
+    },
+    {
+      "digest": "sha256:ef208829878223bb017546c983fdcd46f5ce3e5191a4224a0bcffd40ceb7bbe6",
+      "path": "validator/src/cli/final_packet/proof.rs"
     },
     {
       "digest": "sha256:44541723838962ac38e190e41452855caf693407c1543921f83f145020ba2a4f",
@@ -1170,7 +1214,7 @@
       "path": "validator/src/cli/garbage/mod.rs"
     },
     {
-      "digest": "sha256:fb8da4aa60519182a8fc1a3c3b8a70bead7e3a925116d909abe55794c621d3e7",
+      "digest": "sha256:61c8ec89b1a657ec81e960f878d3c10322ce88364677645a4edf7b843268bf2b",
       "path": "validator/src/cli/mod.rs"
     },
     {
@@ -1178,11 +1222,11 @@
       "path": "validator/src/cli/observe/explain/mod.rs"
     },
     {
-      "digest": "sha256:fc1352b44a60f123d99502be84ccf128201bd08bcab756989c8ffa5a8a139774",
+      "digest": "sha256:d520bbd17c758cf80c86da6ca1cde7261ca340d50501508972d7247669617746",
       "path": "validator/src/cli/observe/mod.rs"
     },
     {
-      "digest": "sha256:897ac75d348ebf498aceb252664a877855cba8558c9228c7e8033dbcf53478a2",
+      "digest": "sha256:98d4ec6e2e07f3015182c560c11868f37b94a888496a5a4f0d373cfad8f62240",
       "path": "validator/src/cli/observe/query/body.rs"
     },
     {
@@ -1202,8 +1246,12 @@
       "path": "validator/src/cli/observe/stack/mod.rs"
     },
     {
-      "digest": "sha256:90c550c20987079b89e54799a63a4520e6db0c96ba0ba7f1ab6731d7de3df360",
+      "digest": "sha256:b179b4c8aa06b2ed77c745073cbc3ef3cc8e866cc25ce66080211c30866160e2",
       "path": "validator/src/cli/observe/telemetry/claims.rs"
+    },
+    {
+      "digest": "sha256:9ef4770c83ef4a4560ea5fd011f3785df46d3fffccf8d8b77b34c8b819763ced",
+      "path": "validator/src/cli/observe/telemetry/command.rs"
     },
     {
       "digest": "sha256:ae9b6f16dbc30db797580f7c81884206aee37a38750e9bc10cd1a772d613f9af",
@@ -1214,19 +1262,19 @@
       "path": "validator/src/cli/observe/telemetry/identity.rs"
     },
     {
-      "digest": "sha256:545c50a64225ac84b3ec8e9107a024c83069cf07f575f9bae368807350c22bb8",
+      "digest": "sha256:0f3fc6145d60ed308f42ae4845717e5c73afdfb06c654a041d528791b9913697",
       "path": "validator/src/cli/observe/telemetry/mod.rs"
     },
     {
-      "digest": "sha256:531ce0c92f11a929bafa28ac9e88c4d84490b1bc7ecc730aab2ec32891dbed4d",
+      "digest": "sha256:a9b62f7c1514846078d49ba969b50467d31353269e114b667e075c84869695fd",
       "path": "validator/src/cli/observe/telemetry/query.rs"
     },
     {
-      "digest": "sha256:5a16adcc5d062af247298dd24013157c1f47c862421588dcc9115c5ec5f14a80",
+      "digest": "sha256:bf83327deb2dc10249f81a5fe523c4d3d8d699e447bd0252b7a334123fccffe4",
       "path": "validator/src/cli/observe/telemetry/receipt.rs"
     },
     {
-      "digest": "sha256:d408835700ccfbdfe6b3045b8acc2572f884d9631c5bd9e63f981a8b23235e4b",
+      "digest": "sha256:f1f6fb7ca0656d693b5166721e585e0d4cacc007d2df1a5eac2e012ec8070f68",
       "path": "validator/src/cli/observe/telemetry/record.rs"
     },
     {
@@ -1236,6 +1284,14 @@
     {
       "digest": "sha256:5056b4abeffa363629e5b3ddf820c5f92a79e4066cef0f51fd6af011153e1aee",
       "path": "validator/src/cli/observe/types.rs"
+    },
+    {
+      "digest": "sha256:7803b5f477e9e9e56aba233b82d0dcc02fd0be7a493fefb6512170f20173e23c",
+      "path": "validator/src/cli/package/digest.rs"
+    },
+    {
+      "digest": "sha256:f5849b7e9e1847dc3fba24329f102edab286ba14bf20dd1ea9aaec773210591a",
+      "path": "validator/src/cli/package/mod.rs"
     },
     {
       "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
@@ -1294,7 +1350,7 @@
       "path": "validator/src/cli/standards/mod.rs"
     },
     {
-      "digest": "sha256:beffa58c8b7b66acb79ed9fe5a254e433f92882969c1c3ce10d05335b73a751e",
+      "digest": "sha256:f1dd0924a50c8f11eba1ea378897d2bb548542e9bd9f971c240458c09be916cd",
       "path": "validator/src/command_run.rs"
     },
     {
@@ -1602,7 +1658,7 @@
       "path": "validator/src/self_tests/audit/final_packet/claim_guard/source_audit/registry.rs"
     },
     {
-      "digest": "sha256:59f76d0e3bb18bb816e7ec630e9ab6de7a77f47bcecac8f6d2ab2499e9fc5ed5",
+      "digest": "sha256:ac3f1f4218f501e9c56ae06237eb5e3dd7e561da096042eb9a3e1b931b79af7b",
       "path": "validator/src/self_tests/audit/final_packet/mod.rs"
     },
     {
@@ -1634,8 +1690,12 @@
       "path": "validator/src/self_tests/audit/final_packet/support/coverage.rs"
     },
     {
-      "digest": "sha256:011e015e36193d33c22d9cfa9a54d273982b4d1d423c42c7952a36a8e7242d05",
+      "digest": "sha256:87d3a5e9df90e75b86e4fd160f579e9751d4cd85f594d20d7be31abd63604673",
       "path": "validator/src/self_tests/audit/final_packet/support/mod.rs"
+    },
+    {
+      "digest": "sha256:ec2068cb5adb9ef9b56124aa7e3c4a1ce29fe9ee7cdf4dbf495dc869646fa198",
+      "path": "validator/src/self_tests/audit/final_packet/support/observability.rs"
     },
     {
       "digest": "sha256:b01d2cbcf8cb7e27865297b2f2eb288f997bba5704b6d79b621c3fb6c3e2b271",
@@ -1894,7 +1954,7 @@
       "path": "validator/src/self_tests/cli/control/types.rs"
     },
     {
-      "digest": "sha256:94a54bd15fb2c2ed81123d911d5bb5ca4cccf968028d07a6371acba0c909a853",
+      "digest": "sha256:9ebe85baab65337f0cc07ecafa3f9d8ef7c51957609f6a1d399f7a742226066a",
       "path": "validator/src/self_tests/cli/final_packet.rs"
     },
     {
@@ -1902,23 +1962,31 @@
       "path": "validator/src/self_tests/cli/mod.rs"
     },
     {
-      "digest": "sha256:254692fcebfe6e13e7bfe7d75ba8b0252eef02a16c612edcefab4252ec28e322",
+      "digest": "sha256:bebd05e535a1190a33bcfb8d77b7162e5f3dbd13e435debd21ccfa22b1f63fce",
       "path": "validator/src/self_tests/cli/observe/mod.rs"
     },
     {
-      "digest": "sha256:10d4a03700f55e5df59f12aa181e5dda2633fa17e5829bf199ae0185ccef6c73",
+      "digest": "sha256:39078e5ca48134743a7d8d862e6dbba73a0fd40b7efd40493fd3981b88e383f8",
       "path": "validator/src/self_tests/cli/observe/package.rs"
+    },
+    {
+      "digest": "sha256:9f3b02e1014156d17cf3cb6daa9464e8dabbcbbeed213e335916de0f22c129eb",
+      "path": "validator/src/self_tests/cli/observe/prove.rs"
+    },
+    {
+      "digest": "sha256:fe5067dbf0da8226e5c53b910cbfaea3d3e9f4eed0bb852577ef9639b443cdb0",
+      "path": "validator/src/self_tests/cli/observe/query/fitting_support.rs"
     },
     {
       "digest": "sha256:229502a6e7c212a2667ff721c3738af62f1aa4e6f08e5f1bdb755ce67fe3a817",
       "path": "validator/src/self_tests/cli/observe/query/matching.rs"
     },
     {
-      "digest": "sha256:eda31a15c671aadfd02b544db60f2c3b8f27f7c760020c2a15181de1b41d8b40",
+      "digest": "sha256:36805db227d1bb598c3ecf18cd1ab6ea89cffec5088a97cf56cbc68b3b07b2e1",
       "path": "validator/src/self_tests/cli/observe/query/mod.rs"
     },
     {
-      "digest": "sha256:13559cefded12def04423bae1a494392077ea086dc0f5a6ad7bb88d0c9c1b2a3",
+      "digest": "sha256:dd3aa42645d77f613c9b9ef1f285972cd95f13704023de1722ebe9b7964586fd",
       "path": "validator/src/self_tests/cli/observe/query/run.rs"
     },
     {
@@ -1926,7 +1994,7 @@
       "path": "validator/src/self_tests/cli/observe/query/text.rs"
     },
     {
-      "digest": "sha256:60fc5250f027fb4cc7951be6531643f7285486430585337235f2982cc78085f5",
+      "digest": "sha256:20c0b434d626a2852f800e0213ce7636f812a12e0c235ea402c088493f126d8e",
       "path": "validator/src/self_tests/cli/observe/run.rs"
     },
     {

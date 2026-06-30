@@ -14,7 +14,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             mode,
             require_observability,
             require_product_cohesion,
-        } => run_audit(
+        } => crate::cli::audit::run(crate::cli::audit::RunArgs {
             root,
             receipt,
             red_report,
@@ -22,7 +22,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             mode,
             require_observability,
             require_product_cohesion,
-        ),
+        }),
         Command::ReviewTarget { receipt } => run_review_target(root, receipt),
         Command::Archive {
             zip,
@@ -96,33 +96,6 @@ fn run_transactional_finalization(
     Ok(i32::from(
         value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
     ))
-}
-
-fn run_audit(
-    root: std::path::PathBuf,
-    receipt: std::path::PathBuf,
-    red_report: Option<std::path::PathBuf>,
-    target_repo: Option<std::path::PathBuf>,
-    mode: String,
-    require_observability: bool,
-    require_product_cohesion: bool,
-) -> Result<i32, String> {
-    let command_text = command_text(&root);
-    crate::audit::run(crate::audit::AuditOptions {
-        root,
-        receipt,
-        red_report,
-        target_repo,
-        mode,
-        require_observability,
-        require_product_cohesion,
-        command_text,
-    })
-}
-
-fn command_text(root: &std::path::Path) -> String {
-    let raw = std::env::args().collect::<Vec<_>>().join(" ");
-    raw.replace(&root.to_string_lossy().to_string(), ".")
 }
 
 fn run_review_target(root: std::path::PathBuf, receipt: std::path::PathBuf) -> Result<i32, String> {

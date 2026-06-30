@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T22:11:44Z",
+  "generated_at": "2026-06-30T01:25:38Z",
   "red_fixtures": {
     "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:active-setup-to-idle-orchestration-thread-bound-heartbeat:automation_tick_without_cursor_inspection",
@@ -3591,6 +3591,16 @@
       "status": "pass",
       "validator_exit": 1
     },
+    "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
     "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broken_span_parentage",
       "expected_failing_check": "source-obligation-coverage",
@@ -3668,6 +3678,16 @@
       "observed_failing_check": "source-obligation-coverage",
       "packet_digest": "sha256:3b73a350c8e531c0b4178e28318c23770624badd33bca804c67765e4ee76f60d",
       "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
+    "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
       "status": "pass",
       "validator_exit": 1
     },
@@ -3761,6 +3781,16 @@
       "status": "pass",
       "validator_exit": 1
     },
+    "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
     "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red": {
       "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:private_path_leak",
       "expected_failing_check": "source-obligation-coverage",
@@ -3788,6 +3818,16 @@
       "observed_failing_check": "source-obligation-coverage",
       "packet_digest": "sha256:27bd57bb2e2aaaac57c7e8dc7277a5799760e4b173d0482abf65362b54a1a7c1",
       "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red.json",
+      "status": "pass",
+      "validator_exit": 1
+    },
+    "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red": {
+      "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+      "expected_failing_check": "source-obligation-coverage",
+      "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+      "observed_failing_check": "source-obligation-coverage",
+      "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
+      "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
       "status": "pass",
       "validator_exit": 1
     },
@@ -12396,6 +12436,6 @@
   "status": "pass",
   "target_revision": {
     "kind": "package_digest",
-    "value": "sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce"
+    "value": "sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794"
   }
 }
