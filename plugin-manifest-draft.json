@@ -4236,6 +4236,7 @@
     "validator/src/red/fixture/runtime/receipt/execution.rs",
     "validator/src/red/fixture/runtime/receipt/mod.rs",
     "validator/src/red/fixture/schema.rs",
+    "validator/src/red/fixtures/isolation.rs",
     "validator/src/red/fixtures/mod.rs",
     "validator/src/red/fixtures/parallel.rs",
     "validator/src/red/mod.rs",

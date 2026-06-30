@@ -6,6 +6,7 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
+mod isolation;
 mod parallel;
 
 pub(crate) use crate::red::fixture::materialization::{Observation, base_fixture_json_result};

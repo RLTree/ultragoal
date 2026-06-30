@@ -1,4 +1,5 @@
 use crate::json_boundary;
+use crate::red::fixture::row::invalid_row;
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::SchemaStore;
 use serde_json::Value;
@@ -21,31 +22,30 @@ pub(super) struct EvaluateInput<'a> {
 
 pub(super) fn evaluate(input: EvaluateInput<'_>) -> super::FixtureResults {
     let shared = Shared::new(&input);
-    let mut parallel_rows = Vec::new();
-    let mut serial_rows = Vec::new();
+    let mut pure_rows = Vec::new();
+    let mut isolated_rows = Vec::new();
     for row in input.items {
-        if row_allows_parallel(input.root, row) {
-            parallel_rows.push(row.clone());
-        } else {
-            serial_rows.push(row.clone());
+        match row_mode(input.root, row) {
+            RowMode::PureRead => pure_rows.push(row.clone()),
+            RowMode::IsolatedTempWrite => isolated_rows.push(row.clone()),
         }
     }
     let mut rows = BTreeMap::new();
     let mut metrics = Vec::new();
-    if !parallel_rows.is_empty() {
+    if !pure_rows.is_empty() {
         let scheduled = crate::scheduler::run_ordered(
             input.scheduler,
             TaskClass::PureReadParallel,
-            tasks(shared.clone(), parallel_rows),
+            tasks(shared.clone(), pure_rows, RowMode::PureRead),
         );
         metrics.push(scheduled.metrics);
         rows.extend(scheduled.values);
     }
-    if !serial_rows.is_empty() {
+    if !isolated_rows.is_empty() {
         let scheduled = crate::scheduler::run_ordered(
             input.scheduler,
-            TaskClass::SharedAuthorityWriteSerial,
-            tasks(shared, serial_rows),
+            TaskClass::IsolatedTempWriteParallel,
+            tasks(shared, isolated_rows, RowMode::IsolatedTempWrite),
         );
         metrics.push(scheduled.metrics);
         rows.extend(scheduled.values);
@@ -54,6 +54,12 @@ pub(super) fn evaluate(input: EvaluateInput<'_>) -> super::FixtureResults {
         rows,
         scheduler_metrics: metrics,
     }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum RowMode {
+    PureRead,
+    IsolatedTempWrite,
 }
 
 #[derive(Clone)]
@@ -85,101 +91,104 @@ impl Shared {
 
 type RowTask = Box<dyn FnOnce() -> (String, Value) + Send>;
 
-fn tasks(shared: Shared, rows: Vec<Value>) -> Vec<RowTask> {
+fn tasks(shared: Shared, rows: Vec<Value>, mode: RowMode) -> Vec<RowTask> {
     rows.into_iter()
         .map(|row| {
             let shared = shared.clone();
-            Box::new(move || evaluate_row(shared, row)) as RowTask
+            Box::new(move || evaluate_row(shared, row, mode)) as RowTask
         })
         .collect()
 }
 
-fn evaluate_row(shared: Shared, row: Value) -> (String, Value) {
+fn evaluate_row(shared: Shared, row: Value, mode: RowMode) -> (String, Value) {
     let row_id = row
         .get("id")
         .and_then(Value::as_str)
         .unwrap_or("invalid-row")
         .to_string();
+    let packet_rel = row.get("packet_path").and_then(Value::as_str).unwrap_or("");
+    let result = match mode {
+        RowMode::PureRead => evaluate_row_at_root(&shared, &row, &shared.root),
+        RowMode::IsolatedTempWrite => super::isolation::with_isolated_root(
+            &shared.root,
+            &row_id,
+            &[packet_rel],
+            |isolated_root| evaluate_row_at_root(&shared, &row, isolated_root),
+        )
+        .unwrap_or_else(|error| invalid_row(&row, &error)),
+    };
+    (row_id, result)
+}
+
+fn evaluate_row_at_root(shared: &Shared, row: &Value, root: &Path) -> Value {
     let mut runtime_digest_cache = (*shared.runtime_digest_cache).clone();
     let mut semantic_cache = crate::claim_semantics::SemanticCache::default();
-    let result = super::result_for_row(
-        &shared.root,
+    super::result_for_row(
+        root,
         &shared.store,
         &shared.validator_digests,
-        &row,
+        row,
         &shared.target_digest,
         &mut runtime_digest_cache,
         &shared.runtime_red_fixture_ids,
         &shared.runtime_red_fixtures,
         &shared.runtime_input_digests,
         &mut semantic_cache,
-    );
-    (row_id, result)
+    )
 }
 
-fn row_allows_parallel(root: &Path, row: &Value) -> bool {
+fn row_mode(root: &Path, row: &Value) -> RowMode {
     let packet_rel = row.get("packet_path").and_then(Value::as_str).unwrap_or("");
     if crate::package::inventory::package_path_error(root, packet_rel).is_some() {
-        return true;
+        return RowMode::PureRead;
     }
     let packet_path = root.join(packet_rel);
     let Ok(packet) = json_boundary::read_json(&packet_path) else {
-        return true;
+        return RowMode::PureRead;
     };
-    !packet
-        .get("filesystem_fixtures")
-        .and_then(Value::as_array)
-        .is_some_and(|fixtures| !fixtures.is_empty())
+    if super::isolation::has_filesystem_fixtures(&packet) {
+        RowMode::IsolatedTempWrite
+    } else {
+        RowMode::PureRead
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{EvaluateInput, evaluate, row_allows_parallel};
+    use super::{EvaluateInput, evaluate};
     use crate::scheduler::SchedulerConfig;
     use serde_json::json;
     use std::collections::BTreeMap;
     use std::fs;
 
     #[test]
-    fn filesystem_fixture_rows_stay_serial() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-fixture-scheduler");
-        fs::create_dir_all(root.join("fixtures/red")).expect("fixtures");
-        crate::json_boundary::write_json(
-            &root.join("fixtures/red/no-filesystem.json"),
-            &json!({"expected_failure": {"code": "x"}}),
-        )
-        .expect("parallel packet");
-        crate::json_boundary::write_json(
-            &root.join("fixtures/red/filesystem.json"),
-            &json!({
-                "expected_failure": {"code": "x"},
-                "filesystem_fixtures": [{"kind": "file", "path": "tmp/red.txt", "content": "x"}]
-            }),
-        )
-        .expect("serial packet");
-        assert!(row_allows_parallel(
-            &root,
-            &json!({"packet_path": "fixtures/red/no-filesystem.json"})
-        ));
-        assert!(!row_allows_parallel(
-            &root,
-            &json!({"packet_path": "fixtures/red/filesystem.json"})
-        ));
-        fs::remove_dir_all(root).expect("cleanup");
-    }
-
-    #[test]
-    fn evaluator_records_parallel_and_serial_scheduler_metrics() {
+    fn evaluator_records_parallel_and_isolated_scheduler_metrics() {
         let root = crate::self_tests::boundaries::support::temp_root("red-fixture-metrics");
         fs::create_dir_all(root.join("fixtures/red")).expect("fixtures");
+        fs::create_dir_all(root.join("tmp")).expect("tmp");
         crate::json_boundary::write_json(
-            &root.join("fixtures/red/filesystem.json"),
+            &root.join("plugin-manifest-draft.json"),
             &json!({
-                "expected_failure": {"code": "red_fixture_base_path_not_allowed"},
-                "filesystem_fixtures": [{"kind": "file", "path": "tmp/red.txt", "content": "x"}]
+                "resources":[
+                    "fixtures/red/filesystem-one.json",
+                    "fixtures/red/filesystem-two.json"
+                ]
             }),
         )
-        .expect("serial packet");
+        .expect("manifest");
+        for (name, path) in [
+            ("filesystem-one.json", "tmp/red-one.txt"),
+            ("filesystem-two.json", "tmp/red-two.txt"),
+        ] {
+            crate::json_boundary::write_json(
+                &root.join("fixtures/red").join(name),
+                &json!({
+                    "expected_failure": {"error": "invalid_base_fixture_path"},
+                    "filesystem_fixtures": [{"kind": "file", "path": path, "contents": "x"}]
+                }),
+            )
+            .expect("isolated packet");
+        }
         let store = crate::schema_catalog::load(&root);
         let runtime_cache = BTreeMap::new();
         let runtime_ids = Vec::new();
@@ -191,7 +200,8 @@ mod tests {
             validator_digests: &BTreeMap::new(),
             items: &[
                 json!({"id": "missing-packet", "packet_path": "fixtures/red/missing.json"}),
-                json!({"id": "filesystem-packet", "packet_path": "fixtures/red/filesystem.json"}),
+                json!({"id": "filesystem-one", "packet_path": "fixtures/red/filesystem-one.json"}),
+                json!({"id": "filesystem-two", "packet_path": "fixtures/red/filesystem-two.json"}),
             ],
             target_digest: "sha256:test",
             runtime_digest_cache: &runtime_cache,
@@ -200,7 +210,7 @@ mod tests {
             runtime_input_digests: &runtime_inputs,
             scheduler: SchedulerConfig::from_jobs(Some(4)).expect("scheduler"),
         });
-        assert_eq!(results.rows.len(), 2);
+        assert_eq!(results.rows.len(), 3);
         assert!(
             results
                 .scheduler_metrics
@@ -208,10 +218,12 @@ mod tests {
                 .any(|metric| metric.task_class == "pure_read_parallel" && metric.task_count == 1)
         );
         assert!(results.scheduler_metrics.iter().any(|metric| {
-            metric.task_class == "shared_authority_write_serial"
-                && metric.worker_count == 1
-                && metric.task_count == 1
+            metric.task_class == "isolated_temp_write_parallel"
+                && metric.worker_count > 1
+                && metric.task_count == 2
         }));
+        assert!(!root.join("tmp/red-one.txt").exists());
+        assert!(!root.join("tmp/red-two.txt").exists());
         fs::remove_dir_all(root).expect("cleanup");
     }
 }
