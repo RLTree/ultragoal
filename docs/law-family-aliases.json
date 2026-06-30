@@ -375,6 +375,7 @@
         "clean-room-rebuild-author-memory-independence",
         "generated-proof-artifact-provenance-anti-fabrication",
         "green-path-adequacy-satisfiable-strictness",
+        "harness-improvement-loop-trace-feedback-eval-codex-handoff",
         "human-audit-disposition-decomposition-judgment-claim-blocking",
         "review-disagreement-override-judgment-boundary-governance",
         "reviewer-to-gate-conversion",
@@ -406,7 +407,7 @@
   "aliases_claim_authority": false,
   "canonical_authority": "source_obligation_and_mandatory_law_ids",
   "canonical_id_replacement_allowed": false,
-  "canonical_law_count": 114,
+  "canonical_law_count": 115,
   "doctrine_source": "attachment:d9c71d90-233f-4f47-bdf5-95ced6e4766c/pasted-text.txt",
   "doctrine_vocabulary": [
     "claim-governance system",

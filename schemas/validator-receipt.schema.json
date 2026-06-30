@@ -123,8 +123,8 @@
                 }
               ]
             },
+            "maxProperties": 153,
             "minProperties": 143,
-            "maxProperties": 152,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat",
               "adversarial-packet-tampering-forged-proof-rejection",
@@ -182,6 +182,7 @@
               "goal-tool-discovery-probe",
               "green-path-adequacy-satisfiable-strictness",
               "guardrail-speed-isolation-cache-honesty",
+              "harness-improvement-loop-trace-feedback-eval-codex-handoff",
               "historical-regression-corpus-session-review-signals",
               "human-audit-disposition-decomposition-judgment-claim-blocking",
               "instruction-precedence-nested-agents-routing",
@@ -737,7 +738,7 @@
                 }
               ]
             },
-            "maxProperties": 1253,
+            "maxProperties": 1257,
             "minProperties": 1195,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
@@ -2007,6 +2008,82 @@
     }
   ],
   "properties": {
+    "blocked_claim_classes": {
+      "items": {
+        "enum": [
+          "completion",
+          "package_readiness",
+          "review_readiness",
+          "release_readiness",
+          "final_packet_correctness",
+          "update_goal_eligibility",
+          "app_registry_or_reviewer_exposure"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "blocked_claim_diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "blocked_claim_classes": {
+            "items": {
+              "enum": [
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "final_packet_correctness",
+                "update_goal_eligibility",
+                "app_registry_or_reviewer_exposure"
+              ]
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "claim_impact": {
+            "const": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
+          },
+          "digest": {
+            "$ref": "common-defs.schema.json#/$defs/sha256"
+          },
+          "observed_failures": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "path": {
+            "const": "validation_artifacts/review/final-packet-proof.json"
+          },
+          "status": {
+            "enum": [
+              "blocked",
+              "clear"
+            ]
+          },
+          "surface": {
+            "enum": [
+              "final_packet_proof"
+            ]
+          }
+        },
+        "required": [
+          "surface",
+          "path",
+          "digest",
+          "status",
+          "observed_failures",
+          "blocked_claim_classes",
+          "claim_impact"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
     "check_set_digest": {
       "$ref": "common-defs.schema.json#/$defs/sha256"
     },
@@ -2014,7 +2091,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/checkResult"
       },
-      "maxProperties": 152,
+      "maxProperties": 153,
       "minProperties": 143,
       "propertyNames": {
         "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
@@ -2076,6 +2153,7 @@
         "goal-tool-discovery-probe",
         "green-path-adequacy-satisfiable-strictness",
         "guardrail-speed-isolation-cache-honesty",
+        "harness-improvement-loop-trace-feedback-eval-codex-handoff",
         "historical-regression-corpus-session-review-signals",
         "human-audit-disposition-decomposition-judgment-claim-blocking",
         "instruction-precedence-nested-agents-routing",
@@ -2175,6 +2253,12 @@
       ],
       "type": "object"
     },
+    "claim_ceiling": {
+      "enum": [
+        "source_audit_pass_source_local_only",
+        "withheld_or_blocked"
+      ]
+    },
     "commit": {
       "$ref": "common-defs.schema.json#/$defs/sha256"
     },
@@ -2201,7 +2285,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/redFixtureResult"
       },
-      "maxProperties": 1253,
+      "maxProperties": 1257,
       "minProperties": 1195,
       "propertyNames": {
         "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
@@ -3460,13 +3544,6 @@
       "type": "object"
     },
     "required_check_ids": {
-      "items": {
-        "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
-      },
-      "maxItems": 152,
-      "minItems": 152,
-      "type": "array",
-      "uniqueItems": true,
       "allOf": [
         {
           "contains": {
@@ -4033,7 +4110,14 @@
             "const": "worktree-teardown"
           }
         }
-      ]
+      ],
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+      },
+      "maxItems": 153,
+      "minItems": 153,
+      "type": "array",
+      "uniqueItems": true
     },
     "required_execplan_refs": {
       "items": {
@@ -9107,6 +9191,10 @@
           "guardrail-speed-isolation-cache-honesty-source-obligation-parity-red",
           "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
           "hand-written-ready-receipt",
+          "harness-improvement-loop-hand-authored-receipt-red",
+          "harness-improvement-loop-raw-halo-authority-red",
+          "harness-improvement-loop-trace-without-feedback-red",
+          "harness-improvement-loop-validation-skipped-red",
           "hidden-withheld-claim",
           "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
           "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red",
@@ -9932,8 +10020,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1253,
-      "minItems": 1253,
+      "maxItems": 1257,
+      "minItems": 1257,
       "type": "array",
       "uniqueItems": true
     },
@@ -9955,97 +10043,15 @@
         "blocked"
       ]
     },
-    "claim_ceiling": {
-      "enum": [
-        "source_audit_pass_source_local_only",
-        "withheld_or_blocked"
-      ]
-    },
     "supported_claim_classes": {
-      "type": "array",
-      "uniqueItems": true,
       "items": {
         "enum": [
           "source_local_audit_checks",
           "red_fixture_report"
         ]
-      }
-    },
-    "blocked_claim_classes": {
+      },
       "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "enum": [
-          "completion",
-          "package_readiness",
-          "review_readiness",
-          "release_readiness",
-          "final_packet_correctness",
-          "update_goal_eligibility",
-          "app_registry_or_reviewer_exposure"
-        ]
-      }
-    },
-    "blocked_claim_diagnostics": {
-      "minItems": 1,
-      "type": "array",
-      "items": {
-        "additionalProperties": false,
-        "properties": {
-          "surface": {
-            "enum": [
-              "final_packet_proof"
-            ]
-          },
-          "path": {
-            "const": "validation_artifacts/review/final-packet-proof.json"
-          },
-          "digest": {
-            "$ref": "common-defs.schema.json#/$defs/sha256"
-          },
-          "status": {
-            "enum": [
-              "blocked",
-              "clear"
-            ]
-          },
-          "observed_failures": {
-            "type": "array",
-            "items": {
-              "minLength": 1,
-              "type": "string"
-            }
-          },
-          "blocked_claim_classes": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "enum": [
-                "completion",
-                "package_readiness",
-                "review_readiness",
-                "release_readiness",
-                "final_packet_correctness",
-                "update_goal_eligibility",
-                "app_registry_or_reviewer_exposure"
-              ]
-            }
-          },
-          "claim_impact": {
-            "const": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
-          }
-        },
-        "required": [
-          "surface",
-          "path",
-          "digest",
-          "status",
-          "observed_failures",
-          "blocked_claim_classes",
-          "claim_impact"
-        ],
-        "type": "object"
-      }
+      "uniqueItems": true
     },
     "target": {
       "type": "string"

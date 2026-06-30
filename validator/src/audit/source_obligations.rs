@@ -43,6 +43,7 @@ const REQUIRED_OBLIGATIONS: &[&str] = &[
     "generated-ready-completion-receipts",
     "goal-contract-amendment-authority-required-claim-id-mapping",
     "green-path-adequacy-satisfiable-strictness",
+    "harness-improvement-loop-trace-feedback-eval-codex-handoff",
     "guardrail-speed-isolation-cache-honesty",
     "historical-regression-corpus-session-review-signals",
     "human-audit-disposition-decomposition-judgment-claim-blocking",

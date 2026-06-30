@@ -575,6 +575,20 @@
       "validator_check_id": "guardrail-speed-isolation-cache-honesty"
     },
     {
+      "claim_ceiling_impact": "self_improvement_claims_withheld_without_same_candidate_loop_closure",
+      "law_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "obligation_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "receipt_requirement": "validation_artifacts/improvement-loop/loop-closure-receipt.json with same-candidate complete loop closure",
+      "red_fixture_id": "harness-improvement-loop-trace-without-feedback-red",
+      "source_artifact": {
+        "digest": "sha256:c808587badd97bb4cc35e6170ee2c1c9c7b4d98c5ac38910c5222afdb4aad9ec",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
+      "validator_check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff"
+    },
+    {
       "claim_ceiling_impact": "completion_claims_withheld_without_historical_regression_corpus",
       "law_id": "historical-regression-corpus-session-review-signals",
       "obligation_id": "historical-regression-corpus-session-review-signals",
@@ -735,8 +749,8 @@
       "receipt_requirement": "OpenAI config receipt plus future same-candidate OpenAI call receipts before model/eval/feedback claims can be supported",
       "red_fixture_id": "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red",
       "source_artifact": {
-        "path": "docs/openai-key-policy.json",
-        "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8"
+        "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8",
+        "path": "docs/openai-key-policy.json"
       },
       "standards_row_id": "openai-api-key-model-cost-external-ai-boundary",
       "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
@@ -1021,6 +1035,20 @@
       "standards_row_id": "repo-knowledge-index-core-beliefs",
       "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/repo-knowledge-index-core-beliefs.json",
       "validator_check_id": "repo-knowledge-index-core-beliefs"
+    },
+    {
+      "claim_ceiling_impact": "research_backed_claims_withheld_without_current_article_to_law_trace",
+      "law_id": "research-source-authority-article-to-law-integration",
+      "obligation_id": "research-source-authority-article-to-law-integration",
+      "receipt_requirement": "source audit check research-source-authority-article-to-law-integration plus mandatory-law surface receipt",
+      "red_fixture_id": "research-source-authority-article-to-law-integration-unmapped-source-red",
+      "source_artifact": {
+        "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339",
+        "path": "docs/source-obligation-matrix.json"
+      },
+      "standards_row_id": "research-source-authority-article-to-law-integration",
+      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
+      "validator_check_id": "research-source-authority-article-to-law-integration"
     },
     {
       "claim_ceiling_impact": "plan_orchestration_completion_claims_withheld_without_restartable_execplan_receipt",
@@ -1581,20 +1609,6 @@
       "standards_row_id": "worktree-lane-owner-cost-policy",
       "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/worktree-lane-owner-cost-policy.json",
       "validator_check_id": "worktree-lane-owner-cost-policy"
-    },
-    {
-      "claim_ceiling_impact": "research_backed_claims_withheld_without_current_article_to_law_trace",
-      "law_id": "research-source-authority-article-to-law-integration",
-      "obligation_id": "research-source-authority-article-to-law-integration",
-      "receipt_requirement": "source audit check research-source-authority-article-to-law-integration plus mandatory-law surface receipt",
-      "red_fixture_id": "research-source-authority-article-to-law-integration-unmapped-source-red",
-      "source_artifact": {
-        "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339",
-        "path": "docs/source-obligation-matrix.json"
-      },
-      "standards_row_id": "research-source-authority-article-to-law-integration",
-      "valid_fixture_id": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
-      "validator_check_id": "research-source-authority-article-to-law-integration"
     }
   ],
   "schema": "harness-ultragoal.foundational-law-traceability.v1"

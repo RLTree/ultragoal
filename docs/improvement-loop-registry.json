@@ -1,0 +1,100 @@
+{
+  "schema": "harness-ultragoal.improvement-loop-registry.v1",
+  "law_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "forbidden_substitutions": [
+    "raw_trace_as_loop_closure",
+    "raw_feedback_as_loop_closure",
+    "raw_model_output_as_loop_closure",
+    "raw_promptfoo_output_as_loop_closure",
+    "raw_halo_output_as_loop_closure",
+    "reviewer_agreement_as_loop_closure",
+    "checklist_prose_as_loop_closure",
+    "hand_authored_receipt_as_loop_closure"
+  ],
+  "loops": [
+    {
+      "loop_id": "source-local-gate-94-bootstrap",
+      "loop_closure_status": "incomplete_fail_closed",
+      "trace_ids": [
+        "gate-92-current-failure-observability"
+      ],
+      "feedback_ids": [
+        "ct-006-through-ct-011-control-loop-steers"
+      ],
+      "cluster_ids": [
+        "completion-theater-proof-graph"
+      ],
+      "eval_ids": [
+        "promptfoo-claim-ceiling-provider-separation-smoke"
+      ],
+      "promptfoo_suite_ids": [
+        "claim-ceiling-provider-separation-smoke"
+      ],
+      "halo_ranking_ids": [
+        "halo-capability-manual-observation-only"
+      ],
+      "codex_handoff_ids": [
+        "parent-session-source-local-repair-contract"
+      ],
+      "implementation_change_ids": [
+        "gate-93-research-law-registry-checkpoint"
+      ],
+      "validation_receipt_ids": [
+        "cargo-test-offline-research-lib-quiet",
+        "cargo-test-offline-lib-quiet"
+      ],
+      "before_after_telemetry_ids": [
+        "gate-92-package-digest-only"
+      ],
+      "promotion_ids": [
+        "research-source-authority-article-to-law-integration"
+      ],
+      "stage_statuses": [
+        {
+          "stage_id": "trace_capture",
+          "status": "complete"
+        },
+        {
+          "stage_id": "typed_feedback",
+          "status": "complete"
+        },
+        {
+          "stage_id": "feedback_clustering",
+          "status": "partial"
+        },
+        {
+          "stage_id": "eval_generation",
+          "status": "partial"
+        },
+        {
+          "stage_id": "promptfoo_execution",
+          "status": "partial"
+        },
+        {
+          "stage_id": "halo_ranking",
+          "status": "partial"
+        },
+        {
+          "stage_id": "codex_handoff",
+          "status": "partial"
+        },
+        {
+          "stage_id": "implementation_linkage",
+          "status": "partial"
+        },
+        {
+          "stage_id": "narrow_validation",
+          "status": "partial"
+        },
+        {
+          "stage_id": "before_after_telemetry",
+          "status": "partial"
+        },
+        {
+          "stage_id": "promotion_to_law",
+          "status": "partial"
+        }
+      ]
+    }
+  ]
+}

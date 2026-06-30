@@ -1,0 +1,39 @@
+{
+  "behavior_failure_modes": [
+    "improvement_loop_trace_without_feedback",
+    "improvement_loop_raw_halo_authority",
+    "improvement_loop_validation_skipped",
+    "improvement_loop_hand_authored_receipt"
+  ],
+  "claim_ceiling_guard": "self_improvement_claims_withheld_without_same_candidate_loop_closure",
+  "enforcement_status": "deterministic_fail_closed",
+  "evidence_artifacts": [
+    {
+      "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    },
+    {
+      "digest": "sha256:c808587badd97bb4cc35e6170ee2c1c9c7b4d98c5ac38910c5222afdb4aad9ec",
+      "path": "docs/source-obligation-matrix.json"
+    }
+  ],
+  "foundational_trace_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "law_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "law_specific": {
+    "hand_authored_receipt": true,
+    "raw_halo_authority": true,
+    "trace_without_feedback": true,
+    "validation_skipped": true
+  },
+  "red_fixture_ids": [
+    "harness-improvement-loop-trace-without-feedback-red",
+    "harness-improvement-loop-raw-halo-authority-red",
+    "harness-improvement-loop-validation-skipped-red",
+    "harness-improvement-loop-hand-authored-receipt-red"
+  ],
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "source_obligation_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "standards_row_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
+  "validator_check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff"
+}

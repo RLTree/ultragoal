@@ -24,6 +24,10 @@ pub fn checks(
         .entry("research-source-authority-article-to-law-integration".to_string())
         .or_default()
         .extend(crate::audit::research::failures(root));
+    failures
+        .entry("harness-improvement-loop-trace-feedback-eval-codex-handoff".to_string())
+        .or_default()
+        .extend(crate::audit::improvement_loop::package_failures(root));
     for failure in crate::review::round::fixture_failures(root) {
         push(&mut failures, "validator-execution-provenance", failure);
     }

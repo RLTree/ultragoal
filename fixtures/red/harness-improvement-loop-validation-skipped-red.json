@@ -1,0 +1,15 @@
+{
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
+  "expected_failure": {
+    "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+    "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped"
+  },
+  "id": "harness-improvement-loop-validation-skipped-red",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/validation_skipped",
+      "value": false
+    }
+  ]
+}

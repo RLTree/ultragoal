@@ -8,6 +8,7 @@ pub(crate) mod final_packet;
 pub(crate) mod fit_repo_receipt;
 pub(crate) mod foundational_law_trace;
 pub(crate) mod halo;
+pub(crate) mod improvement_loop;
 pub(crate) mod law;
 pub(crate) mod mandatory;
 pub(crate) mod namespace;

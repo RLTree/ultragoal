@@ -3,6 +3,7 @@ pub(crate) mod control;
 pub(crate) mod final_packet;
 pub(crate) mod garbage;
 pub(crate) mod halo;
+pub(crate) mod improvement_loop;
 pub(crate) mod observe;
 pub(crate) mod openai;
 pub(crate) mod package;

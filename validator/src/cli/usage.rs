@@ -18,6 +18,7 @@ pub(crate) fn text() -> &'static str {
         " --receipt <path>",
         " | gc <plan|dry-run|apply|verify> --receipt <path>",
         " | halo capability prove --receipt <path>",
+        " | improvement-loop prove --receipt <path>",
         " | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ...",
         " | openai config prove --receipt <path>",
         " | openai call prove --receipt <path> [--mode no_network|offline_fixture|local_mock]",

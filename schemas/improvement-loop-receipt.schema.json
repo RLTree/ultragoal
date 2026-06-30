@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/improvement-loop-receipt.schema.json",
+  "title": "Harness Ultragoal Improvement Loop Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "registry_path",
+    "registry_digest",
+    "loop_ids",
+    "promptfoo_adapter_receipt_digest",
+    "halo_capability_receipt_digest",
+    "raw_observation_authority",
+    "observability_receipt",
+    "supported_claims",
+    "blocked_claims",
+    "claim_impact",
+    "failures"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.improvement-loop-receipt.v1"
+    },
+    "status": {
+      "enum": ["pass", "fail"]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "registry_path": {
+      "const": "docs/improvement-loop-registry.json"
+    },
+    "registry_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "loop_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "promptfoo_adapter_receipt_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "halo_capability_receipt_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "raw_observation_authority": {
+      "const": "observation_only_until_cli_parsed_loop_receipt"
+    },
+    "observability_receipt": {
+      "type": "object"
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_claims": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -54,6 +54,7 @@ pub const CHECK_IDS: &[&str] = &[
     "goal-contract-amendment-authority-required-claim-id-mapping",
     "goal-tool-discovery-probe",
     "green-path-adequacy-satisfiable-strictness",
+    "harness-improvement-loop-trace-feedback-eval-codex-handoff",
     "guardrail-speed-isolation-cache-honesty",
     "historical-regression-corpus-session-review-signals",
     "human-audit-disposition-decomposition-judgment-claim-blocking",

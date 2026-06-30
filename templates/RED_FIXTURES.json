@@ -3231,13 +3231,13 @@
     "packet_path": "fixtures/red/fresh-retrofit-repo-shape-source-obligation-parity-red.json"
   },
   {
-    "id": "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red",
-    "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
-    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
     "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair"
-    }
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red",
+    "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json"
   },
   {
     "expected_failure": {
@@ -3312,13 +3312,13 @@
     "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red.json"
   },
   {
-    "id": "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
-    "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
-    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
     "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop"
-    }
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
+    "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json"
   },
   {
     "expected_failure": {
@@ -3402,13 +3402,13 @@
     "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red.json"
   },
   {
-    "id": "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
-    "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
-    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
     "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof"
-    }
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
+    "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json"
   },
   {
     "expected_failure": {
@@ -3438,13 +3438,13 @@
     "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red.json"
   },
   {
-    "id": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
-    "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
-    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
     "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory"
-    }
+    },
+    "id": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
+    "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json"
   },
   {
     "expected_failure": {
@@ -3868,6 +3868,42 @@
     "id": "hand-written-ready-receipt",
     "packet_digest": "sha256:202e311366664d9c95f0bfda626dedcac5101edd011279404f10d48622de6b13",
     "packet_path": "fixtures/red/hand-written-ready-receipt.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt"
+    },
+    "id": "harness-improvement-loop-hand-authored-receipt-red",
+    "packet_digest": "sha256:7ff225468bc63ebef606937798ca6d749212c2438ef9e9d3b2b94eb95a5edbbe",
+    "packet_path": "fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority"
+    },
+    "id": "harness-improvement-loop-raw-halo-authority-red",
+    "packet_digest": "sha256:26f9f05cc993ef6142828210ac5bdeb30887c001479d35695617bfb587d4c79b",
+    "packet_path": "fixtures/red/harness-improvement-loop-raw-halo-authority-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback"
+    },
+    "id": "harness-improvement-loop-trace-without-feedback-red",
+    "packet_digest": "sha256:5bd431eb29896ffdf9b63cebd646492c4ab68a1d8e98c2e11c56520b95c2d70e",
+    "packet_path": "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+      "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped"
+    },
+    "id": "harness-improvement-loop-validation-skipped-red",
+    "packet_digest": "sha256:da7afe8fca25a46851f7db57f1700fd36a92428c51c874bfc1490cd71ff11dc8",
+    "packet_path": "fixtures/red/harness-improvement-loop-validation-skipped-red.json"
   },
   {
     "expected_failure": {
@@ -7984,6 +8020,42 @@
   },
   {
     "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard"
+    },
+    "id": "research-source-authority-article-to-law-integration-missing-claim-guard-red",
+    "packet_digest": "sha256:b5ce26dcfa5c4c6a867fcab863f4c6141889ef171f7dab6cc2efd7c9684dbb62",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted"
+    },
+    "id": "research-source-authority-article-to-law-integration-package-omitted-red",
+    "packet_digest": "sha256:6766030b3c89ae61e02e45424a6a18b3bcfce808faab3fc672ac03cba146c618",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map"
+    },
+    "id": "research-source-authority-article-to-law-integration-prose-only-map-red",
+    "packet_digest": "sha256:6dd14c0908e8e401121603ecf91e6189b9393c059c3642b702d867cf8ffae856",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source"
+    },
+    "id": "research-source-authority-article-to-law-integration-unmapped-source-red",
+    "packet_digest": "sha256:95e53980e2379f1d12c6d1970aad6f81a4549d7a0812c0c869bd874f82d6e078",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "restartable_execplan_missing_section:purpose"
     },
@@ -11221,42 +11293,6 @@
     "id": "worktree-lane-owner-cost-policy-source-obligation-parity-red",
     "packet_digest": "sha256:bd4e4ec67a71158d1048b60837db853b5435d5274e984299ed8f4b7dd51ef7e6",
     "packet_path": "fixtures/red/worktree-lane-owner-cost-policy-source-obligation-parity-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "research-source-authority-article-to-law-integration",
-      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source"
-    },
-    "id": "research-source-authority-article-to-law-integration-unmapped-source-red",
-    "packet_digest": "sha256:95e53980e2379f1d12c6d1970aad6f81a4549d7a0812c0c869bd874f82d6e078",
-    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "research-source-authority-article-to-law-integration",
-      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map"
-    },
-    "id": "research-source-authority-article-to-law-integration-prose-only-map-red",
-    "packet_digest": "sha256:6dd14c0908e8e401121603ecf91e6189b9393c059c3642b702d867cf8ffae856",
-    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "research-source-authority-article-to-law-integration",
-      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard"
-    },
-    "id": "research-source-authority-article-to-law-integration-missing-claim-guard-red",
-    "packet_digest": "sha256:b5ce26dcfa5c4c6a867fcab863f4c6141889ef171f7dab6cc2efd7c9684dbb62",
-    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json"
-  },
-  {
-    "expected_failure": {
-      "check_id": "research-source-authority-article-to-law-integration",
-      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted"
-    },
-    "id": "research-source-authority-article-to-law-integration-package-omitted-red",
-    "packet_digest": "sha256:6766030b3c89ae61e02e45424a6a18b3bcfce808faab3fc672ac03cba146c618",
-    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json"
   },
   {
     "expected_failure": {

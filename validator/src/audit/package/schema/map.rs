@@ -77,6 +77,14 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "halo-capability-receipt.schema.json",
         ),
         (
+            "docs/improvement-loop-registry.json",
+            "improvement-loop-registry.schema.json",
+        ),
+        (
+            "validation_artifacts/improvement-loop/loop-closure-receipt.json",
+            "improvement-loop-receipt.schema.json",
+        ),
+        (
             "fixtures/namespace/valid/namespace-class-registry-valid.json",
             "namespace-class-registry.schema.json",
         ),

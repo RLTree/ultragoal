@@ -1,27 +1,27 @@
 {
-  "schema": "harness-ultragoal.memory-context-boundary-receipt.v1",
-  "memory_context_only": true,
-  "memory_artifacts": [
-    {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba"
-    }
-  ],
+  "claim_ceiling": "live_same_surface_evidence_required",
   "live_same_surface_evidence": [
     {
-      "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339"
+      "digest": "sha256:c808587badd97bb4cc35e6170ee2c1c9c7b4d98c5ac38910c5222afdb4aad9ec",
+      "path": "docs/source-obligation-matrix.json"
     },
     {
-      "path": "validator/src/audit/law/surface/receipts.rs",
-      "digest": "sha256:22d24906aa61fb4d06489e7d2622e3d4b073bb90a57cfa8f5868da9f04db752a"
+      "digest": "sha256:22d24906aa61fb4d06489e7d2622e3d4b073bb90a57cfa8f5868da9f04db752a",
+      "path": "validator/src/audit/law/surface/receipts.rs"
     }
   ],
+  "memory_artifacts": [
+    {
+      "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba",
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+    }
+  ],
+  "memory_context_only": true,
+  "schema": "harness-ultragoal.memory-context-boundary-receipt.v1",
   "substitutions_rejected": [
     "memory_only",
     "summary_only",
     "packet_only",
     "session_summary_only"
-  ],
-  "claim_ceiling": "live_same_surface_evidence_required"
+  ]
 }

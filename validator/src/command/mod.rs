@@ -54,6 +54,7 @@ pub(crate) enum Command {
     Rust(crate::cli::rust::RustCommand),
     Garbage(crate::cli::garbage::collection::GarbageCommand),
     Halo(crate::cli::halo::HaloCommand),
+    ImprovementLoop(crate::cli::improvement_loop::ImprovementLoopCommand),
     Observe(crate::cli::observe::types::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),

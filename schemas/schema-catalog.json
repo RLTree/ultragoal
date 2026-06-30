@@ -1,6 +1,6 @@
 {
-  "schema": "harness-ultragoal.schema-catalog.v1",
   "resolver_contract": "Validators must preload this catalog and resolve all harness-ultragoal.local schema ids to package-relative files. Remote fetch is a validation failure.",
+  "schema": "harness-ultragoal.schema-catalog.v1",
   "schemas": [
     {
       "id": "https://harness-ultragoal.local/schemas/agent-standards-enforcement.schema.json",
@@ -85,6 +85,14 @@
     {
       "id": "https://harness-ultragoal.local/schemas/halo-capability-receipt.schema.json",
       "path": "schemas/halo-capability-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/improvement-loop-receipt.schema.json",
+      "path": "schemas/improvement-loop-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/improvement-loop-registry.schema.json",
+      "path": "schemas/improvement-loop-registry.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",

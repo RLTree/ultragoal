@@ -2657,36 +2657,36 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 94 - Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff
 
 - [ ] Plugin provides a first-class Harness Improvement Loop skill/surface with progressive-disclosure routing, schemas, CLI commands, setup/retrofit integration, package inventory coverage, and same-candidate receipts.
-  - Evidence:
-  - Skill/surface path:
-  - Schemas:
-  - CLI commands:
-  - Package entries:
-  - Candidate digest:
-  - Status:
+  - Evidence: Partial source-local fail-closed Gate 94 surface is implemented for package digest `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`. `target/debug/ultragoal --root . improvement-loop prove --receipt validation_artifacts/improvement-loop/loop-closure-receipt.json` exited `1` and minted `validation_artifacts/improvement-loop/loop-closure-receipt.json` with `status = fail`, nested observability run id `run-b380f75beea9a753c49cde325e197f5d78ffdcc59175bf9da29ee81db88f0ba6`, correlation id `corr-d5865f3302c7041739cb319355b8de1245f707d7caa7f1f849e226fa8e1b215b`, and `claim_impact = withheld_or_blocked`.
+  - Skill/surface path: `skills/agent-improvement-loop/SKILL.md`
+  - Schemas: `schemas/improvement-loop-registry.schema.json`; `schemas/improvement-loop-receipt.schema.json`
+  - CLI commands: `target/debug/ultragoal --root . improvement-loop prove --receipt validation_artifacts/improvement-loop/loop-closure-receipt.json`
+  - Package entries: `plugin-manifest-draft.json` includes the improvement-loop skill, registry, schemas, validator source, fixtures, and receipt path.
+  - Candidate digest: `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`
+  - Status: Partial, not checked. This blocks self-improving, learning, regression-prevention, product-learning, final-packet correctness, readiness, release, completion, registry/reviewer exposure, and `update_goal()` claims. Setup/retrofit integration and complete loop closure remain open.
 
 - [ ] Improvement-loop registry binds traces, feedback, feedback clusters, eval ids, promptfoo suite ids, HALO ranking ids, Codex handoff ids, implementation change ids, validation receipt ids, before/after telemetry comparison ids, and promotion ids.
-  - Evidence:
-  - Registry path:
-  - Receipt:
-  - Candidate digest:
-  - Status:
+  - Evidence: `docs/improvement-loop-registry.json` now records a source-local bootstrap loop with trace, feedback, cluster, eval, promptfoo suite, HALO ranking, Codex handoff, implementation change, validation receipt, before/after telemetry, and promotion ids. The CLI requires all Gate 94 stage ids and rejects incomplete closure with typed failures such as `improvement_loop_missing_stage:*` and `improvement_loop_not_complete_same_candidate`.
+  - Registry path: `docs/improvement-loop-registry.json`
+  - Receipt: `validation_artifacts/improvement-loop/loop-closure-receipt.json`
+  - Candidate digest: `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`
+  - Status: Partial, not checked. Registry binding exists, but the persisted loop is intentionally `incomplete_fail_closed` and cannot close Gate 94 until same-candidate artifacts prove all stages.
 
 - [ ] CLI proves the loop from current same-candidate traces to typed feedback, clustering, eval generation, promptfoo execution, HALO ranking, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, and promotion into laws/fixtures/schemas/standards.
-  - Evidence:
-  - Commands:
-  - Receipts:
-  - Before/after telemetry:
-  - Candidate digest:
-  - Status:
+  - Evidence: CLI authority exists and fails closed from dereferenced source-local registry/receipt evidence. Focused tests passed: `cargo test --offline improvement_loop --lib --quiet` (`3/3`), `cargo test --offline red_identity --lib --quiet` (`3/3`), `cargo test --offline red_fixture_runtime_binding --lib --quiet` (`1/1`), and `cargo test --offline hu_family --lib --quiet` (`5/5`). These prove the bad path, possible green path in fixture, red-fixture registration, and HU family mapping, not production loop completion.
+  - Commands: `target/debug/ultragoal --root . improvement-loop prove --receipt validation_artifacts/improvement-loop/loop-closure-receipt.json`
+  - Receipts: `validation_artifacts/improvement-loop/loop-closure-receipt.json`
+  - Before/after telemetry: Not complete; receipt records `improvement_loop_missing_stage:before_after_telemetry` and blocks dependent claims.
+  - Candidate digest: `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`
+  - Status: Partial, not checked. The production CLI currently proves fail-closed blockers, not a complete improvement loop.
 
 - [ ] Red/green/tamper fixtures prove raw traces, raw feedback, raw model output, raw promptfoo output, raw HALO output, reviewer agreement, checklist prose, stale telemetry, and hand-authored receipts cannot close an improvement loop.
-  - Evidence:
-  - Red fixtures:
-  - Green fixtures:
-  - Tamper fixtures:
-  - Candidate digest:
-  - Status:
+  - Evidence: Initial red/green/tamper-style fixtures and tests are registered and focused tests passed, but this is not full Gate 94 fixture closure. The validator rejects hand-authored green receipts in `improvement_loop_receipt_rejects_hand_authored_green` and has a possible green fixture path in `improvement_loop_receipt_has_possible_green_path`.
+  - Red fixtures: `fixtures/red/harness-improvement-loop-trace-without-feedback-red.json`; `fixtures/red/harness-improvement-loop-raw-halo-authority-red.json`; `fixtures/red/harness-improvement-loop-validation-skipped-red.json`; `fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json`
+  - Green fixtures: `fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json`
+  - Tamper fixtures: Partial only through focused Rust tamper test; dedicated tamper fixture catalog entries remain open.
+  - Candidate digest: `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`
+  - Status: Partial, not checked. Raw HALO authority and hand-authored receipt substitutions fail in the focused slice; complete raw trace/raw feedback/raw model/raw promptfoo/reviewer/checklist/stale-telemetry/tamper fixture closure remains open.
 
 ## Gate 95 - OpenAI API, Key Authority, Model Identity, Cost, And External AI Boundary
 
@@ -3310,7 +3310,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 106. Harness Improvement Loop proof is current and same-candidate across traces, typed feedback, clusters, promptfoo eval generation and execution, HALO-ranked proposals, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, promotion into laws/fixtures/schemas/standards, and CLI loop-closure receipt.
 
-- [ ] Gate 94 evidence path:
+- [ ] Gate 94 evidence path: Partial source-local fail-closed checkpoint for package digest `sha256:2416c6b0451aad7e8e73d51d4322212a3d70bf97ec5388e1a14cd21fee51adac`. Evidence paths: `skills/agent-improvement-loop/SKILL.md`, `docs/improvement-loop-registry.json`, `schemas/improvement-loop-registry.schema.json`, `schemas/improvement-loop-receipt.schema.json`, `fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json`, `fixtures/red/harness-improvement-loop-*.json`, `validator/src/cli/improvement_loop/`, `validator/src/audit/improvement_loop/`, and `validation_artifacts/improvement-loop/loop-closure-receipt.json`. Verification so far: `cargo test --offline improvement_loop --lib --quiet` (`3/3`), `cargo test --offline red_identity --lib --quiet` (`3/3`), `cargo test --offline red_fixture_runtime_binding --lib --quiet` (`1/1`), `cargo test --offline hu_family --lib --quiet` (`5/5`), `cargo test --offline schema_catalog --lib --quiet` (`3/3`), `cargo test --offline --lib --quiet` (`506/506`), `cargo fmt --check` pass, raw line-cap scan emitted no rows, `cargo build --offline` pass, and `target/debug/ultragoal --root . package digest` returned the same digest before the receipt was rebound. The loop-closure receipt remains `status = fail` with explicit missing-stage failures and blocks self-improving, learning, regression-prevention, product-learning, final-packet correctness, readiness, release, completion, registry/reviewer exposure, and `update_goal()` claims. Stop condition 106 remains unchecked until a real same-candidate production loop green path exists with full red/green/tamper and current source-audit/red-report evidence.
 
 107. OpenAI API use is governed by typed config, redaction, model identity, prompt/input digest, output digest, token/cost/rate-limit accounting, timeout/retry/backoff policy, offline fixture mode, live-provider policy, and CLI-parsed model-output authority. No OpenAI output can directly satisfy a Harness claim.
 

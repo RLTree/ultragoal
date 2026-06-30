@@ -142,6 +142,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Garbage(command)
             } else if let Some(command) = cli::halo::parse(raw)? {
                 Command::Halo(command)
+            } else if let Some(command) = cli::improvement_loop::parse(raw)? {
+                Command::ImprovementLoop(command)
             } else if let Some(command) = cli::observe::parse(raw)? {
                 Command::Observe(command)
             } else if let Some(command) = cli::openai::parse(raw)? {

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/improvement-loop-registry.schema.json",
+  "title": "Harness Ultragoal Improvement Loop Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "law_id", "forbidden_substitutions", "loops"],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.improvement-loop-registry.v1"
+    },
+    "law_id": {
+      "const": "harness-improvement-loop-trace-feedback-eval-codex-handoff"
+    },
+    "forbidden_substitutions": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "loops": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "loop_id",
+          "loop_closure_status",
+          "trace_ids",
+          "feedback_ids",
+          "cluster_ids",
+          "eval_ids",
+          "promptfoo_suite_ids",
+          "halo_ranking_ids",
+          "codex_handoff_ids",
+          "implementation_change_ids",
+          "validation_receipt_ids",
+          "before_after_telemetry_ids",
+          "promotion_ids",
+          "stage_statuses"
+        ],
+        "properties": {
+          "loop_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "loop_closure_status": {
+            "enum": ["complete_same_candidate", "incomplete_fail_closed"]
+          },
+          "trace_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "feedback_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "cluster_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "eval_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "promptfoo_suite_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "halo_ranking_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "codex_handoff_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "implementation_change_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "validation_receipt_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "before_after_telemetry_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "promotion_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "stage_statuses": {
+            "type": "array",
+            "minItems": 11,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["stage_id", "status"],
+              "properties": {
+                "stage_id": {
+                  "enum": [
+                    "trace_capture",
+                    "typed_feedback",
+                    "feedback_clustering",
+                    "eval_generation",
+                    "promptfoo_execution",
+                    "halo_ranking",
+                    "codex_handoff",
+                    "implementation_linkage",
+                    "narrow_validation",
+                    "before_after_telemetry",
+                    "promotion_to_law"
+                  ]
+                },
+                "status": {
+                  "enum": ["complete", "partial", "missing"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

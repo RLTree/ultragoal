@@ -1,0 +1,15 @@
+{
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
+  "expected_failure": {
+    "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+    "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt"
+  },
+  "id": "harness-improvement-loop-hand-authored-receipt-red",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/hand_authored_receipt",
+      "value": false
+    }
+  ]
+}
