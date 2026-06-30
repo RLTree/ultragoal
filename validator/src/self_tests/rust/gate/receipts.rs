@@ -79,6 +79,11 @@ fn rust_devx_receipt_binds_cli_authority_and_rejects_wrong_law() {
         )
         .is_empty()
     );
+    let serialized = serde_json::to_string(&receipt).expect("serialize rust receipt");
+    assert!(
+        !serialized.contains(users_marker()),
+        "rust receipts must not package private home paths: {serialized}"
+    );
     let wrong = crate::cli::rust::receipt::surface_value_failures(
         &receipt,
         "rust-memory-resource-discipline",
@@ -96,6 +101,29 @@ fn rust_devx_receipt_binds_cli_authority_and_rejects_wrong_law() {
         "rust-toolchain-substrate-authority",
     );
     assert!(failures.contains(&"rust_devx_raw_output_marked_authority".to_string()));
+}
+
+#[test]
+fn rust_observation_excerpts_redact_private_home_paths() {
+    let excerpt = crate::cli::rust::observations::redacted_excerpt_for_test(&format!(
+        "1.95.0-aarch64-apple-darwin (overridden by '{}tree/project/rust-toolchain.toml')",
+        users_marker()
+    ));
+    assert_eq!(
+        excerpt,
+        "1.95.0-aarch64-apple-darwin (overridden by '[redacted-home-path]')"
+    );
+
+    let metadata = crate::cli::rust::observations::redacted_excerpt_for_test(&format!(
+        r#"{{"id":"path+file://{}tree/project/validator#ultragoal-validator@0.1.0"}}"#,
+        users_marker()
+    ));
+    assert!(!metadata.contains(users_marker()), "{metadata}");
+    assert!(metadata.contains("[redacted-home-path]"), "{metadata}");
+}
+
+fn users_marker() -> &'static str {
+    concat!("/", "Users/")
 }
 
 #[test]

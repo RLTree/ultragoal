@@ -1,0 +1,87 @@
+{
+  "$id": "https://harness-ultragoal.local/schemas/parent-source-runtime-verification.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_digest": {
+      "$ref": "common-defs.schema.json#/$defs/sha256Digest"
+    },
+    "cli_pass_alone_rejected": {
+      "const": true
+    },
+    "law_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "manual_checks": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "finding": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "verification_method": {
+            "enum": [
+              "source_inspection",
+              "receipt_inspection",
+              "runtime_query",
+              "focused_test",
+              "manual_e2e"
+            ]
+          }
+        },
+        "required": [
+          "claim_path",
+          "verification_method",
+          "finding"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "runtime_evidence_paths": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema": {
+      "const": "harness-ultragoal.parent-source-runtime-verification.v1"
+    },
+    "source_paths": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "status": {
+      "const": "verified_current"
+    }
+  },
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "law_ids",
+    "cli_pass_alone_rejected",
+    "source_paths",
+    "runtime_evidence_paths",
+    "manual_checks"
+  ],
+  "title": "Harness Ultragoal Parent Source Runtime Verification Receipt",
+  "type": "object"
+}

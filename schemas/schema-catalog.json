@@ -171,6 +171,10 @@
       "path": "schemas/package-surface-audit-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/parent-source-runtime-verification.schema.json",
+      "path": "schemas/parent-source-runtime-verification.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
       "path": "schemas/plugin-cohesion-manifest.schema.json"
     },

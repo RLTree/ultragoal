@@ -195,3 +195,6 @@ fn default_endpoint(provider_mode: &str) -> &'static str {
         DEFAULT_ENDPOINT
     }
 }
+
+#[cfg(test)]
+mod tests;

@@ -4,6 +4,9 @@ use std::path::Path;
 const RECEIPT_REL: &str = "validation_artifacts/improvement-loop/loop-closure-receipt.json";
 const SCHEMA: &str = "harness-ultragoal.improvement-loop-receipt.v1";
 
+#[cfg(test)]
+mod tests;
+
 pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     let receipt = match crate::json_boundary::read_json(&root.join(RECEIPT_REL)) {

@@ -6,15 +6,15 @@ mod schema;
 
 use crate::json_boundary;
 use serde_json::Value;
-use std::cell::RefCell;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
+use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Clone)]
 pub struct SchemaStore {
     pub schemas: BTreeMap<String, Value>,
     pub errors: Vec<String>,
-    ref_success_cache: RefCell<BTreeSet<String>>,
+    ref_success_cache: Arc<Mutex<BTreeSet<String>>>,
 }
 
 pub fn load(root: &Path) -> SchemaStore {
@@ -49,16 +49,24 @@ fn store(schemas: BTreeMap<String, Value>, errors: Vec<String>) -> SchemaStore {
     SchemaStore {
         schemas,
         errors,
-        ref_success_cache: RefCell::new(BTreeSet::new()),
+        ref_success_cache: Arc::new(Mutex::new(BTreeSet::new())),
     }
 }
 
 pub(super) fn ref_cache_hit(store: &SchemaStore, key: &str) -> bool {
-    store.ref_success_cache.borrow().contains(key)
+    store
+        .ref_success_cache
+        .lock()
+        .expect("schema ref cache")
+        .contains(key)
 }
 
 pub(super) fn cache_ref_success(store: &SchemaStore, key: String) {
-    store.ref_success_cache.borrow_mut().insert(key);
+    store
+        .ref_success_cache
+        .lock()
+        .expect("schema ref cache")
+        .insert(key);
 }
 
 pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -> Vec<String> {

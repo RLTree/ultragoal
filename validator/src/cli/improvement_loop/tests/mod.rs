@@ -2,6 +2,8 @@ use super::{ImprovementLoopCommand, proof, registry};
 use serde_json::json;
 use std::path::{Path, PathBuf};
 
+mod edges;
+
 #[test]
 fn improvement_loop_receipt_fails_closed_for_partial_loop() {
     let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-partial");
@@ -81,6 +83,32 @@ fn improvement_loop_receipt_rejects_hand_authored_green() {
     });
     receipt["candidate_digest"] = json!(crate::package::inventory::package_digest(&root).unwrap());
     assert!(!proof::receipt_failures(&root, &receipt).is_empty());
+}
+
+#[test]
+fn improvement_loop_defaults_and_run_error_boundaries_are_typed() {
+    let default = super::parse(&["improvement-loop".to_string(), "prove".to_string()])
+        .expect("parse default")
+        .expect("improvement loop default");
+    assert_eq!(default.receipt, PathBuf::from(super::DEFAULT_RECEIPT));
+    super::print_receipt(std::path::Path::new("receipt.json"), &json!({}));
+
+    let missing_root = std::env::temp_dir().join(format!(
+        "ultragoal-improvement-loop-missing-root-{}",
+        std::process::id()
+    ));
+    let _ = std::fs::remove_dir_all(&missing_root);
+    assert!(super::run(&missing_root, &default).is_err());
+
+    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-write-error");
+    seed_root(&root, "partial");
+    std::fs::remove_dir_all(root.join("validation_artifacts")).expect("remove artifacts dir");
+    std::fs::write(root.join("validation_artifacts"), "not a directory").expect("blocker");
+    let command = ImprovementLoopCommand {
+        receipt: PathBuf::from("validation_artifacts/improvement-loop/write-error.json"),
+    };
+    assert!(super::run(&root, &command).is_err());
+    std::fs::remove_dir_all(root).expect("cleanup write error");
 }
 
 fn seed_root(root: &Path, closure_status: &str) {

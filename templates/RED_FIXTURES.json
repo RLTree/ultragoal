@@ -10971,6 +10971,15 @@
     "packet_path": "fixtures/red/validator-theater-miswire-resistance-adjacent-law-misattribution-red.json"
   },
   {
+    "id": "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
+    "packet_path": "fixtures/red/validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red.json",
+    "packet_digest": "sha256:b201b1246441afb72764636227022030f58f2fce0a997d7306a588b7d0924c24",
+    "expected_failure": {
+      "check_id": "validator-theater-miswire-resistance",
+      "error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance"
+    }
+  },
+  {
     "expected_failure": {
       "check_id": "validator-theater-miswire-resistance",
       "error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:completion_claim_with_only_validator_theater_evidence"

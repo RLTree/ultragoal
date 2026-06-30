@@ -81,8 +81,8 @@ pub(crate) fn command(program: &str, args: &[&str]) -> Value {
                 "status_code": output.status.code(),
                 "stdout_digest": crate::digest::bytes(stdout.as_bytes()),
                 "stderr_digest": crate::digest::bytes(stderr.as_bytes()),
-                "stdout_excerpt": excerpt(&stdout),
-                "stderr_excerpt": excerpt(&stderr)
+                "stdout_excerpt": excerpt(&redact_private_paths(&stdout)),
+                "stderr_excerpt": excerpt(&redact_private_paths(&stderr))
             })
         }
         Err(err) => json!({
@@ -184,4 +184,57 @@ impl Probe {
 
 fn excerpt(text: &str) -> String {
     text.chars().take(500).collect()
+}
+
+pub(crate) fn redact_private_paths(text: &str) -> String {
+    let mut redacted = text.to_string();
+    if let Some(home) = std::env::var_os("HOME").and_then(|value| value.into_string().ok()) {
+        redacted = redacted.replace(&home, "[redacted-home-path]");
+    }
+    redact_users_paths(&redacted)
+}
+
+fn redact_users_paths(text: &str) -> String {
+    let marker = users_marker();
+    text.split_whitespace()
+        .map(|token| {
+            if token.contains(marker) {
+                redact_users_path_token(token)
+            } else {
+                token.to_string()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+fn redact_users_path_token(token: &str) -> String {
+    let marker = users_marker();
+    let mut out = String::new();
+    let mut rest = token;
+    while let Some(index) = rest.find(marker) {
+        out.push_str(&rest[..index]);
+        let path_tail = &rest[index..];
+        let end = path_tail
+            .find(|ch: char| {
+                matches!(
+                    ch,
+                    '"' | '\'' | ')' | ']' | '}' | ',' | ';' | ':' | '\n' | '\r' | '\t'
+                )
+            })
+            .unwrap_or(path_tail.len());
+        out.push_str("[redacted-home-path]");
+        rest = &path_tail[end..];
+    }
+    out.push_str(rest);
+    out
+}
+
+fn users_marker() -> &'static str {
+    concat!("/", "Users/")
+}
+
+#[cfg(test)]
+pub(crate) fn redacted_excerpt_for_test(text: &str) -> String {
+    excerpt(&redact_private_paths(text))
 }

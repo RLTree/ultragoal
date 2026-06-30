@@ -4163,7 +4163,7 @@
       "validator/src/audit/package/checks.rs",
       "validator/src/audit/package/mod.rs",
       "validator/src/audit/package/outputs.rs",
-      "validator/src/audit/package/run.rs",
+      "validator/src/audit/package/run/mod.rs",
       "validator/src/audit/package/schema/map.rs",
       "validator/src/audit/package/schema/mod.rs",
       "validator/src/audit/package/targets.rs",
@@ -4493,8 +4493,8 @@
       "validator/src/self_tests/product/mod.rs",
       "validator/src/self_tests/receipts/fit_repo.rs",
       "validator/src/self_tests/receipts/mod.rs",
-      "validator/src/self_tests/receipts/validator.rs",
-      "validator/src/self_tests/receipts/validator_boundaries.rs",
+      "validator/src/self_tests/receipts/validator/mod.rs",
+      "validator/src/self_tests/receipts/validator/boundaries.rs",
       "validator/src/self_tests/red/catalog_output.rs",
       "validator/src/self_tests/red/filesystem.rs",
       "validator/src/self_tests/red/fixture/boundaries/mod.rs",
@@ -20025,7 +20025,7 @@
         },
         {
           "digest": "sha256:0df4f0dd9beba5d6abc0f4fe448f468983892da5c7e55d37b2c9ab739e5c234b",
-          "path": "validator/src/audit/package/run.rs"
+          "path": "validator/src/audit/package/run/mod.rs"
         },
         {
           "digest": "sha256:a2da20cdccded4138544f1f452282e2dd95781657e0403ee126f869f6e688296",
@@ -21345,11 +21345,11 @@
         },
         {
           "digest": "sha256:c3035b5327484f977be1179ad39dced910b233d9e0db8a325d7061680ba09aba",
-          "path": "validator/src/self_tests/receipts/validator.rs"
+          "path": "validator/src/self_tests/receipts/validator/mod.rs"
         },
         {
           "digest": "sha256:830fe9d5a48ebed3895cd31cdcdd11237c8ff3f323a70e2528bee9e09ad7ea41",
-          "path": "validator/src/self_tests/receipts/validator_boundaries.rs"
+          "path": "validator/src/self_tests/receipts/validator/boundaries.rs"
         },
         {
           "digest": "sha256:d6b2bbe8fac64871afef0d097b4ef3cb8e3b0f0c726b7386e8d81d017c6bf454",

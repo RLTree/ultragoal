@@ -1,4 +1,5 @@
 {
+  "schema": "harness-ultragoal.red-packet.v1",
   "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
   "expected_failure": {
     "check_id": "research-source-authority-article-to-law-integration",
@@ -10,6 +11,24 @@
       "op": "replace",
       "path": "/law_specific/missing_claim_guard",
       "value": false
+    }
+  ],
+  "notes": "Research-source law must fail when mapped requirements do not have claim guards.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/missing_claim_guard",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/missing_claim_guard",
+      "expectation": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard"
     }
   ]
 }

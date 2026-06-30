@@ -6,6 +6,8 @@ use std::io;
 use std::path::{Path, PathBuf};
 
 mod generated;
+mod scheduler_execution;
+mod speed;
 
 pub struct ReceiptInput {
     pub root: PathBuf,
@@ -20,6 +22,8 @@ pub struct ReceiptInput {
     pub status: String,
     pub validator_artifacts: Vec<Value>,
     pub command_text: String,
+    pub mode: String,
+    pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
 
 pub fn build(input: ReceiptInput) -> Result<Value, String> {
@@ -40,6 +44,8 @@ pub fn build(input: ReceiptInput) -> Result<Value, String> {
         "supported_claim_classes": supported_claim_classes(&input.status),
         "blocked_claim_classes": blocked_claim_classes(),
         "blocked_claim_diagnostics": blocked_claim_diagnostics(&input.root),
+        "speed_budget": speed::budget(&input.mode),
+        "scheduler_execution": scheduler_execution::evidence(&input.scheduler_metrics, &target_digest),
         "root": root_identity,
         "validator_execution": execution(&input)?,
         "required_execplan_refs": required_execplan_refs(),

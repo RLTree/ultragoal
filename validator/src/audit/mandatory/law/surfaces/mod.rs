@@ -3,24 +3,13 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 mod dependencies;
+mod independent;
 mod production;
 mod registry;
 
 const REGISTRY: &str = "docs/mandatory-law-surfaces.json";
 const REQUIRED_LAWS: &[&str] = crate::audit::mandatory::law::surface::ids::REQUIRED_LAWS;
-const WEAK_TERMS: &[&str] = &[
-    "partial",
-    "backlog",
-    "blocked",
-    "future",
-    "follow-up",
-    "reviewer-only",
-    "documentation-only",
-    "prose-only",
-    "row-shape-only",
-    "claim-ceiling-only",
-    "stale-source-backed",
-];
+const WEAK_TERMS: &str = "partial backlog blocked future follow-up reviewer-only documentation-only prose-only row-shape-only claim-ceiling-only stale-source-backed";
 
 pub fn package_failures(root: &Path) -> Vec<String> {
     let registry = match crate::json_boundary::read_json(&root.join(REGISTRY)) {
@@ -29,13 +18,18 @@ pub fn package_failures(root: &Path) -> Vec<String> {
     };
     let mut out = value_failures(root, &registry);
     let store = crate::schema_catalog::load(root);
+    let current_digest = crate::package::inventory::package_digest(root).unwrap_or_default();
     for receipt in registry
         .get("laws")
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
     {
-        out.extend(receipt_value_failures(root, receipt));
+        out.extend(receipt_value_failures_with_candidate(
+            root,
+            receipt,
+            &current_digest,
+        ));
         if let Some(law) = receipt.get("law_id").and_then(Value::as_str) {
             out.extend(dependencies::anti_theater_failures(root, &store, law));
         }
@@ -141,7 +135,17 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
     out
 }
 
+#[cfg(test)]
 pub fn receipt_value_failures(root: &Path, value: &Value) -> Vec<String> {
+    let current_digest = crate::package::inventory::package_digest(root).unwrap_or_default();
+    receipt_value_failures_with_candidate(root, value, &current_digest)
+}
+
+pub fn receipt_value_failures_with_candidate(
+    root: &Path,
+    value: &Value,
+    current_digest: &str,
+) -> Vec<String> {
     let mut out = Vec::new();
     let law = value
         .get("law_id")
@@ -186,6 +190,12 @@ pub fn receipt_value_failures(root: &Path, value: &Value) -> Vec<String> {
     {
         out.push(format!("mandatory_law_missing_failure_modes:{law}"));
     }
+    out.extend(independent::verification_failures(
+        root,
+        value,
+        law,
+        current_digest,
+    ));
     let Some(fields) = value.get("law_specific").and_then(Value::as_object) else {
         out.push(format!("mandatory_law_missing_specific_guards:{law}"));
         return out;
@@ -233,5 +243,7 @@ fn contains_weak_term(value: &Value) -> bool {
     .collect::<Vec<_>>()
     .join(" ")
     .to_ascii_lowercase();
-    WEAK_TERMS.iter().any(|term| text.contains(term))
+    WEAK_TERMS
+        .split_whitespace()
+        .any(|term| text.contains(term))
 }

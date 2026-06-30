@@ -29,6 +29,9 @@ pub(super) fn matches(pattern: &str, text: &str) -> bool {
         "^validation_artifacts/harness/[-A-Za-z0-9._/]+[.]json$" => {
             artifact_json_under("validation_artifacts/harness/", text)
         }
+        "^validation_artifacts/manual/[-A-Za-z0-9._/]+[.]json$" => {
+            artifact_json_under("validation_artifacts/manual/", text)
+        }
         "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$" => {
             artifact_json_under("validation_artifacts/ultragoal-audit/", text)
         }
@@ -177,6 +180,14 @@ mod tests {
         assert!(super::matches(
             "^validation_artifacts/harness/[-A-Za-z0-9._/]+[.]json$",
             "validation_artifacts/harness/fit-repo-receipt.json"
+        ));
+        assert!(super::matches(
+            "^validation_artifacts/manual/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/manual/parent-source-runtime-verification.json"
+        ));
+        assert!(!super::matches(
+            "^validation_artifacts/manual/[-A-Za-z0-9._/]+[.]json$",
+            "validation_artifacts/manual/../escape.json"
         ));
         assert!(super::matches(
             "^validation_artifacts/ultragoal-audit/[-A-Za-z0-9._/]+[.]json$",

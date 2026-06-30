@@ -9,6 +9,9 @@ const SCHEMA: &str = "harness-ultragoal.openai-config-receipt.v1";
 const CALL_SCHEMA: &str = "harness-ultragoal.openai-call-receipt.v1";
 const PROVIDER_POLICY_REL: &str = "docs/openai-provider-policy.json";
 
+#[cfg(test)]
+mod tests;
+
 pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     check_policy(root, &mut out);

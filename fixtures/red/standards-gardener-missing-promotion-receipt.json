@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "remove",
-      "path": "/obligations/94/standards_gardening_receipt_path"
+      "path": "/obligations/97/standards_gardening_receipt_path"
     }
   ],
   "notes": "Standards-gardener promotion claims must point at a typed receipt; prose-only gardening is not enough.",
@@ -20,13 +20,13 @@
   },
   "preconditions": [
     {
-      "path": "/obligations/94/standards_gardening_receipt_path",
+      "path": "/obligations/97/standards_gardening_receipt_path",
       "exists": true
     }
   ],
   "postconditions": [
     {
-      "path": "/obligations/88/standards_gardening_receipt_path",
+      "path": "/obligations/97/standards_gardening_receipt_path",
       "expectation": "standards_gardener_receipt_missing"
     }
   ]

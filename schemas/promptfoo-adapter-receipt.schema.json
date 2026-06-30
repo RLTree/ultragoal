@@ -12,6 +12,8 @@
     "pnpm_lock_digest",
     "pnpm_workspace_digest",
     "promptfoo_version",
+    "promptfoo_binary",
+    "install_lifecycle_status",
     "provider_registry_path",
     "provider_registry_digest",
     "suite_registry_path",
@@ -53,6 +55,13 @@
     },
     "promptfoo_version": {
       "const": "0.121.17"
+    },
+    "promptfoo_binary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "install_lifecycle_status": {
+      "const": "build_scripts_not_approved_no_eval_execution_claimed"
     },
     "provider_registry_path": {
       "const": "docs/promptfoo-provider-registry.json"

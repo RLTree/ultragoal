@@ -17492,8 +17492,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1257,
-  "minItems": 1257,
+  "maxItems": 1258,
+  "minItems": 1258,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

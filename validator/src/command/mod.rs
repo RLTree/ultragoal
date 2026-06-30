@@ -15,6 +15,7 @@ pub(crate) enum Command {
         mode: String,
         require_observability: bool,
         require_product_cohesion: bool,
+        jobs: Option<usize>,
     },
     ReviewTarget {
         receipt: PathBuf,

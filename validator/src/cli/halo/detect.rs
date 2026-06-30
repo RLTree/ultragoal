@@ -23,7 +23,11 @@ pub(super) fn app(path: &Path) -> AppObservation {
 }
 
 pub(super) fn command_on_path(name: &str) -> bool {
-    let Some(paths) = std::env::var_os("PATH") else {
+    command_on_paths(name, std::env::var_os("PATH"))
+}
+
+pub(super) fn command_on_paths(name: &str, paths: Option<std::ffi::OsString>) -> bool {
+    let Some(paths) = paths else {
         return false;
     };
     std::env::split_paths(&paths).any(|dir| dir.join(name).is_file())

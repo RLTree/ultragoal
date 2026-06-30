@@ -14,6 +14,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             mode,
             require_observability,
             require_product_cohesion,
+            jobs,
         } => crate::cli::audit::run(crate::cli::audit::RunArgs {
             root,
             receipt,
@@ -22,6 +23,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             mode,
             require_observability,
             require_product_cohesion,
+            jobs,
         }),
         Command::ReviewTarget { receipt } => run_review_target(root, receipt),
         Command::Archive {

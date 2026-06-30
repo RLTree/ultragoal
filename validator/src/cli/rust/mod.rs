@@ -111,7 +111,9 @@ pub(crate) fn receipt_from_observations(
         "law_ids": [law],
         "command": {
             "name": command.operation.id(),
-            "argv": std::env::args().collect::<Vec<_>>(),
+            "argv": std::env::args()
+                .map(|arg| observations::redact_private_paths(&arg))
+                .collect::<Vec<_>>(),
             "proof_surface": command.operation.proof_surface(),
             "raw_tools_are_observations_only": true
         },
@@ -198,8 +200,12 @@ pub(crate) fn cache_with_env(
     json!({
         "cache_mode": if operation == RustOperation::CleanProof { "isolated_no_cache" } else { "declared_local" },
         "cargo_incremental": "0",
-        "rustc_wrapper": rustc_wrapper.unwrap_or_else(|| "unset".to_string()),
-        "cargo_target_dir": cargo_target_dir.unwrap_or_else(|| "target".to_string()),
+        "rustc_wrapper": rustc_wrapper
+            .map(|value| observations::redact_private_paths(&value))
+            .unwrap_or_else(|| "unset".to_string()),
+        "cargo_target_dir": cargo_target_dir
+            .map(|value| observations::redact_private_paths(&value))
+            .unwrap_or_else(|| "target".to_string()),
         "remote_cache": "none",
         "warm_cache_supports_no_cache_claim": false
     })

@@ -5170,7 +5170,8 @@
         "validator_theater_miswire_resistance_stale_validator_receipt_accepted",
         "validator_theater_miswire_resistance_red_fixture_fails_for_wrong_reason",
         "validator_theater_miswire_resistance_swallowed_validator_error",
-        "validator_theater_miswire_resistance_completion_claim_with_only_validator_theater_evidence"
+        "validator_theater_miswire_resistance_completion_claim_with_only_validator_theater_evidence",
+        "validator_theater_miswire_resistance_cli_pass_without_parent_source_runtime_verification"
       ],
       "claim_ceiling_guard": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance",
       "enforcement_status": "deterministic_fail_closed",
@@ -5206,13 +5207,21 @@
         "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
         "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
         "validator-theater-miswire-resistance-swallowed-validator-error-red",
-        "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red"
+        "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
+        "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "validator-theater-miswire-resistance",
       "standards_row_id": "validator-theater-miswire-resistance",
       "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
-      "validator_check_id": "validator-theater-miswire-resistance"
+      "validator_check_id": "validator-theater-miswire-resistance",
+      "independent_verification": {
+        "authority": "parent_verified_source_runtime",
+        "cli_pass_alone_allowed": false,
+        "source_runtime_manual_required": true,
+        "verification_scope": "per_law",
+        "receipt_path": "validation_artifacts/manual/parent-source-runtime-verification.json"
+      }
     },
     {
       "behavior_failure_modes": [

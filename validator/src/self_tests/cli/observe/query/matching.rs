@@ -1,5 +1,6 @@
 use crate::cli::observe;
 use crate::cli::observe::types::ObserveOperation;
+use serde_json::json;
 
 #[test]
 fn observe_query_helpers_cover_matching_tags_and_bounds() {
@@ -116,6 +117,26 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
     assert!(!private_body.contains(&tmp_marker));
     assert!(private_body.contains("[redacted-home-path]"));
     assert!(private_body.contains("[redacted-private-tmp-path]"));
+    let digest = crate::self_tests::boundaries::support::sha('a');
+    assert!(observe::query::candidate_digest_failure("not json", &digest).is_some());
+    assert!(observe::query::candidate_digest_failure(
+        &format!(
+            r#"{{"outer":[{{"candidate_digest":"{digest}"}},{{"candidate_digest":"{digest}"}}],"nested":"{{\"candidate_digest\":\"{digest}\"}}"}}"#
+        ),
+        &digest,
+    )
+    .is_none());
+    assert!(observe::query::candidate_digest_failure(
+        r#"{"candidate_digest":"sha256:short"}"#,
+        &digest,
+    )
+    .is_some());
+    let observed = observe::query::observed_failure(&[
+        json!({"not_body": true}),
+        json!({"body": r#"{"rows":[{"status":"fail","why_failed":"nested failure"}]}"#}),
+    ])
+    .expect("nested observed failure");
+    assert_eq!(observed["why_failed"], "nested failure");
     for (raw, expected) in [
         (&["observe", "traces", "query", "--run-id", "r1"][..], "r1"),
         (

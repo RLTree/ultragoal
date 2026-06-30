@@ -103,6 +103,7 @@ fn audit_schema_cli_and_target_edges() {
         mode: "init".to_string(),
         require_observability: false,
         require_product_cohesion: false,
+        jobs: None,
         command_text: "ultragoal target audit".to_string(),
     })
     .expect("target audit runs");

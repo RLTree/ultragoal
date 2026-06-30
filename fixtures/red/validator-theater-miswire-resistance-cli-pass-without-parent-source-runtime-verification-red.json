@@ -1,0 +1,43 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
+  "expected_failure": {
+    "check_id": "validator-theater-miswire-resistance",
+    "error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/independent_verification/authority",
+      "value": "cli_pass_only"
+    },
+    {
+      "op": "replace",
+      "path": "/independent_verification/cli_pass_alone_allowed",
+      "value": true
+    }
+  ],
+  "notes": "validator-theater-miswire-resistance must fail when a mandatory law surface relies on CLI pass output without parent source/runtime verification.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": false,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/independent_verification/authority",
+      "exists": true
+    },
+    {
+      "path": "/independent_verification/cli_pass_alone_allowed",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/independent_verification/authority",
+      "expectation": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance"
+    }
+  ]
+}

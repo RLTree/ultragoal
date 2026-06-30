@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "remove",
-      "path": "/rows/51"
+      "path": "/rows/52"
     }
   ],
   "notes": "The central standards required-id set must include namespace-progressive-disclosure.",
@@ -20,7 +20,7 @@
   },
   "preconditions": [
     {
-      "path": "/rows/51/id",
+      "path": "/rows/52/id",
       "exists": true
     }
   ],

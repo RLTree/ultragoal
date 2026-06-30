@@ -41,6 +41,8 @@ fn input(root: &std::path::Path) -> crate::audit::receipt::ReceiptInput {
         status: "fail".to_string(),
         validator_artifacts: Vec::new(),
         command_text: "ultragoal source audit".to_string(),
+        mode: "strict".to_string(),
+        scheduler_metrics: Vec::new(),
     }
 }
 

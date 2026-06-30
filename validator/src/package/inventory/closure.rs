@@ -7,6 +7,8 @@ const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     "target/",
     ".codex-worktree/",
     ".git/",
+    "node_modules/",
+    ".pnpm-store/",
     "validation_artifacts/coverage/",
     "validation_artifacts/rust/",
     "validation_artifacts/gc/",

@@ -108,6 +108,7 @@ fn package_run_records_nonpassing_red_fixture_results() {
             mode: "source".to_string(),
             require_observability: false,
             require_product_cohesion: false,
+            jobs: None,
             command_text: "ultragoal source audit --unit".to_string(),
         },
         red_report.clone(),

@@ -1,5 +1,8 @@
 use serde_json::json;
 
+mod output;
+mod run_paths;
+
 fn prepare_root(label: &str) -> std::path::PathBuf {
     crate::self_tests::openai::prepare_root(
         label,

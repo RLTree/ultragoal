@@ -1,6 +1,9 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+#[cfg(test)]
+mod tests;
+
 pub(super) fn attach_observability(
     root: &Path,
     receipt_path: &Path,

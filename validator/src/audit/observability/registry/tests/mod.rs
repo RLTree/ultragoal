@@ -2,7 +2,9 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
+mod proof_edges;
 mod receipts;
+mod shape;
 mod support;
 use support::*;
 

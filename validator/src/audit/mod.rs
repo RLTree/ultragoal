@@ -42,6 +42,7 @@ pub struct AuditOptions {
     pub mode: String,
     pub require_observability: bool,
     pub require_product_cohesion: bool,
+    pub jobs: Option<usize>,
     pub command_text: String,
 }
 

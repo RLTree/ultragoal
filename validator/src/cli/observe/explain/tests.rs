@@ -57,6 +57,12 @@ fn explain_reports_current_failure_and_bad_root_errors() {
             .unwrap()
             .contains("plugin_self_law_registry_status_not_pass")
     );
+    write_run_event(&root, "run-1", "none");
+    let opaque_event_receipt = run(&root, &command).expect("explain ignores opaque event");
+    assert_eq!(
+        opaque_event_receipt["explanation"]["known_current_failure"][0],
+        "final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass"
+    );
     write_run_event(
         &root,
         "run-1",

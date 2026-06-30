@@ -1,21 +1,47 @@
 use crate::json_boundary;
+use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::{self, SchemaStore};
 use crate::target_fixtures;
 use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
+use std::sync::Arc;
 
+pub struct CheckResults {
+    pub failures: BTreeMap<String, Vec<String>>,
+    pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
+}
+
+#[cfg(test)]
 pub fn checks(
     root: &Path,
     store: &SchemaStore,
     check_ids: &[String],
     validator_artifacts: &[Value],
 ) -> BTreeMap<String, Vec<String>> {
+    checks_with_scheduler(
+        root,
+        store,
+        check_ids,
+        validator_artifacts,
+        SchedulerConfig::from_jobs(None).expect("default scheduler"),
+    )
+    .failures
+}
+
+pub fn checks_with_scheduler(
+    root: &Path,
+    store: &SchemaStore,
+    check_ids: &[String],
+    validator_artifacts: &[Value],
+    scheduler: SchedulerConfig,
+) -> CheckResults {
     let mut failures = check_ids
         .iter()
         .map(|id| (id.clone(), Vec::new()))
         .collect::<BTreeMap<_, _>>();
-    mapped_schema_checks(root, store, &mut failures);
+    let mut scheduler_metrics = Vec::new();
+    scheduler_metrics.extend(mapped_schema_checks(root, store, scheduler, &mut failures));
     inventory_checks(root, &mut failures);
     crate::audit::red::catalog::check(root, store, &mut failures);
     crate::audit::package::text_checks::run(root, store, check_ids, &mut failures);
@@ -41,7 +67,10 @@ pub fn checks(
             root,
             validator_artifacts,
         ));
-    failures
+    CheckResults {
+        failures,
+        scheduler_metrics,
+    }
 }
 
 pub fn final_hygiene_check(root: &Path, failures: &mut BTreeMap<String, Vec<String>>) {
@@ -57,24 +86,37 @@ pub fn final_hygiene_check(root: &Path, failures: &mut BTreeMap<String, Vec<Stri
 fn mapped_schema_checks(
     root: &Path,
     store: &SchemaStore,
+    scheduler: SchedulerConfig,
     failures: &mut BTreeMap<String, Vec<String>>,
-) {
+) -> Vec<crate::scheduler::Metrics> {
     let mut mapped = crate::audit::package::schema::map::base();
     add_mapped_globs(root, &mut mapped);
-    for (rel, schema) in mapped {
-        match json_boundary::read_json(&root.join(&rel)) {
-            Ok(value) => {
-                if let Some(first) = schema_catalog::schema_errors(store, schema, &value).first() {
-                    push(failures, "schema-valid", format!("{rel}: {first}"));
+    let root = Arc::new(root.to_path_buf());
+    let store = Arc::new(store.clone());
+    let tasks = mapped
+        .into_iter()
+        .map(|(rel, schema)| {
+            let root = Arc::clone(&root);
+            let store = Arc::clone(&store);
+            Box::new(move || match json_boundary::read_json(&root.join(&rel)) {
+                Ok(value) => {
+                    if let Some(first) =
+                        schema_catalog::schema_errors(store.as_ref(), schema, &value).first()
+                    {
+                        Some(format!("{rel}: {first}"))
+                    } else {
+                        None
+                    }
                 }
-            }
-            Err(err) => push(
-                failures,
-                "schema-valid",
-                format!("{rel}: json_load_failed: {err}"),
-            ),
-        }
+                Err(err) => Some(format!("{rel}: json_load_failed: {err}")),
+            }) as Box<dyn FnOnce() -> Option<String> + Send>
+        })
+        .collect::<Vec<_>>();
+    let scheduled = crate::scheduler::run_ordered(scheduler, TaskClass::PureReadParallel, tasks);
+    for failure in scheduled.values.into_iter().flatten() {
+        push(failures, "schema-valid", failure);
     }
+    vec![scheduled.metrics]
 }
 
 fn add_mapped_globs(root: &Path, mapped: &mut BTreeMap<String, &'static str>) {

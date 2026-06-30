@@ -104,7 +104,7 @@
       "evidence_id": "gate94-narrow-validation",
       "evidence_kind": "focused_test_validation",
       "status": "pass",
-      "source_paths": ["validator/src/cli/improvement_loop/tests.rs"],
+      "source_paths": ["validator/src/cli/improvement_loop/tests/mod.rs"],
       "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
       "command_ids": [
         "cargo test --offline improvement_loop --lib --quiet",

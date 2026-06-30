@@ -22,6 +22,9 @@
         "Cargo.lock",
         "Cargo.toml",
         "validator/Cargo.toml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
         ".gitignore"
       ],
       "description": "Build, workspace, and package manifests are governed root authority surfaces; root placement is explicit and does not waive any downstream package or source law.",

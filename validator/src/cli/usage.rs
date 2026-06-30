@@ -1,6 +1,6 @@
 pub(crate) fn text() -> &'static str {
     concat!(
-        "usage: ultragoal --root <root> source audit --receipt <path>",
+        "usage: ultragoal --root <root> source audit --receipt <path> [--jobs N]",
         " | package digest",
         " | install audit --receipt <path> [--installed-root <path>]",
         " | cache audit --receipt <path> [--cache-root <path>]",

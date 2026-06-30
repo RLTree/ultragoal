@@ -3,6 +3,9 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+#[cfg(test)]
+mod tests;
+
 pub(super) fn coverage_failures(
     requirements: &BTreeMap<String, String>,
     trace: &BTreeMap<String, Value>,

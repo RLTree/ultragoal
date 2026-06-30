@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "remove",
-      "path": "/obligations/48"
+      "path": "/obligations/49"
     }
   ],
   "notes": "Namespace law fails when it exists only as prose without the source-obligation machine binding.",
@@ -20,7 +20,7 @@
   },
   "preconditions": [
     {
-      "path": "/obligations/48/id",
+      "path": "/obligations/49/id",
       "exists": true
     }
   ],

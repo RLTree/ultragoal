@@ -10,6 +10,9 @@ const CARDS_PATH: &str = "docs/research-source-cards.json";
 const REGISTRY_PATH: &str = "docs/research-source-registry.json";
 const TRACE_PATH: &str = "docs/research-article-to-law-trace.json";
 
+#[cfg(test)]
+mod tests;
+
 pub fn failures(root: &Path) -> Vec<String> {
     let cards = read(root, CARDS_PATH);
     let registry = read(root, REGISTRY_PATH);

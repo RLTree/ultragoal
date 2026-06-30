@@ -140,6 +140,18 @@ mod tests {
                 .iter()
                 .any(|item| item.as_str() == Some("update_goal_eligibility"))
         );
+
+        crate::json_boundary::write_json(
+            &report,
+            &json!({"status":"fail","red_fixtures":{"red-one":{"status":"pass"}}}),
+        )
+        .expect("empty failure red report");
+        write_report(&root, &report, None).expect("empty failure observe");
+        let empty = crate::json_boundary::read_json(&root.join(RECEIPT)).expect("empty receipt");
+        assert_eq!(
+            empty["why_failed"],
+            "red fixture report missing, malformed, stale, or not pass"
+        );
         fs::remove_dir_all(root).expect("cleanup");
     }
 }

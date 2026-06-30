@@ -9,6 +9,7 @@ fn options(root: PathBuf) -> crate::audit::AuditOptions {
         mode: "fresh-init".to_string(),
         require_observability: false,
         require_product_cohesion: false,
+        jobs: None,
         command_text: "ultragoal source audit".to_string(),
     }
 }

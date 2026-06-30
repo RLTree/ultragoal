@@ -1,6 +1,9 @@
 use serde_json::Value;
 use std::path::Path;
 
+#[cfg(test)]
+mod tests;
+
 pub(super) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let Some(obs) = receipt.get("observability") else {

@@ -98,6 +98,7 @@ fn package_run_entrypoint_writes_fail_closed_receipts_for_incomplete_package() {
             mode: "source".to_string(),
             require_observability: false,
             require_product_cohesion: false,
+            jobs: None,
             command_text: "ultragoal source audit --unit".to_string(),
         },
         red_report.clone(),

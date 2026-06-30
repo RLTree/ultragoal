@@ -178,6 +178,7 @@ fn incomplete_package_audit_collects_fail_closed_package_branches() {
         mode: "source".to_string(),
         require_observability: false,
         require_product_cohesion: false,
+        jobs: None,
         command_text: "ultragoal source audit --test".to_string(),
     })
     .expect("incomplete source audit writes fail receipt");

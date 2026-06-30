@@ -164,6 +164,7 @@ fn cli_law_and_audit_default_paths_are_exercised() {
         mode: "retrofit".to_string(),
         require_observability: false,
         require_product_cohesion: false,
+        jobs: None,
         command_text: "ultragoal source audit".to_string(),
     });
     assert!(matches!(result, Err(_) | Ok(1)), "{result:?}");

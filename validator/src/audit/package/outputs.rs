@@ -17,6 +17,7 @@ pub struct ReceiptParts {
     pub start: String,
     pub status: &'static str,
     pub validator_artifacts: Vec<Value>,
+    pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
 
 pub fn package_status(failures: &BTreeMap<String, Vec<String>>) -> &'static str {
@@ -88,6 +89,8 @@ pub fn write_validator_receipt(parts: ReceiptParts) -> Result<i32, String> {
         status: parts.status.to_string(),
         validator_artifacts: parts.validator_artifacts,
         command_text: parts.options.command_text,
+        mode: parts.options.mode,
+        scheduler_metrics: parts.scheduler_metrics,
     })?;
     json_boundary::write_json(&parts.options.receipt, &validator_receipt)?;
     println!(

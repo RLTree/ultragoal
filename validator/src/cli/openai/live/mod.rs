@@ -1,8 +1,10 @@
 use serde_json::{Value, json};
 use std::io::Write;
-use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::path::Path;
+use std::process::{Command, Output, Stdio};
+
+mod temp;
+use temp::{TempPaths, read_temp, write_temp};
 
 pub(super) struct Observation {
     pub(super) prompt_input_digest: String,
@@ -21,6 +23,15 @@ pub(super) fn execute(
     command: &super::call::CallCommand,
     budget: &super::budget::BudgetSelection,
 ) -> Result<Observation, String> {
+    execute_with_program(root, command, budget, "/usr/bin/curl")
+}
+
+fn execute_with_program(
+    root: &Path,
+    command: &super::call::CallCommand,
+    budget: &super::budget::BudgetSelection,
+    program: &str,
+) -> Result<Observation, String> {
     let mut failures = Vec::new();
     let key = match super::policy::api_key(root, Path::new(super::config::DEFAULT_POLICY)) {
         Ok(key) => key,
@@ -38,7 +49,13 @@ pub(super) fn execute(
     let body_text = body.to_string();
     write_temp(&paths.request, body_text.as_bytes(), &mut failures);
     let output = if failures.is_empty() {
-        run_curl(&key, &paths, timeout_seconds(budget), &mut failures)
+        run_curl_with_program(
+            program,
+            &key,
+            &paths,
+            timeout_seconds(budget),
+            &mut failures,
+        )
     } else {
         None
     };
@@ -72,13 +89,14 @@ fn request_body(model: &str) -> Value {
     })
 }
 
-fn run_curl(
+fn run_curl_with_program(
+    program: &str,
     key: &str,
     paths: &TempPaths,
     timeout_seconds: i64,
     failures: &mut Vec<String>,
 ) -> Option<String> {
-    let mut child = match Command::new("/usr/bin/curl")
+    let mut child = match Command::new(program)
         .arg("-K")
         .arg("-")
         .stdin(Stdio::piped())
@@ -93,24 +111,29 @@ fn run_curl(
         }
     };
     if let Some(stdin) = child.stdin.as_mut() {
-        if stdin
-            .write_all(config(key, paths, timeout_seconds).as_bytes())
-            .is_err()
-        {
-            failures.push("openai_live_curl_config_write_failed".to_string());
-        }
+        write_curl_config(stdin, &config(key, paths, timeout_seconds), failures);
     }
-    let output = match child.wait_with_output() {
-        Ok(output) => output,
-        Err(_) => {
-            failures.push("openai_live_curl_wait_failed".to_string());
-            return None;
-        }
-    };
+    let output = wait_with_output(child.wait_with_output(), failures)?;
     if !output.status.success() {
         failures.push("openai_live_curl_exit_failed".to_string());
     }
     Some(String::from_utf8_lossy(&output.stdout).to_string())
+}
+
+fn write_curl_config(writer: &mut dyn Write, config: &str, failures: &mut Vec<String>) {
+    if writer.write_all(config.as_bytes()).is_err() {
+        failures.push("openai_live_curl_config_write_failed".to_string());
+    }
+}
+
+fn wait_with_output(result: std::io::Result<Output>, failures: &mut Vec<String>) -> Option<Output> {
+    match result {
+        Ok(output) => Some(output),
+        Err(_) => {
+            failures.push("openai_live_curl_wait_failed".to_string());
+            None
+        }
+    }
 }
 
 fn config(key: &str, paths: &TempPaths, timeout_seconds: i64) -> String {
@@ -185,45 +208,5 @@ fn latency_ms(output: Option<&str>) -> i64 {
         .unwrap_or(0)
 }
 
-fn write_temp(path: &Path, bytes: &[u8], failures: &mut Vec<String>) {
-    if std::fs::write(path, bytes).is_err() {
-        failures.push("openai_live_temp_write_failed".to_string());
-    }
-}
-
-fn read_temp(path: &Path, failures: &mut Vec<String>) -> String {
-    match std::fs::read_to_string(path) {
-        Ok(text) => text,
-        Err(_) => {
-            failures.push("openai_live_temp_read_failed".to_string());
-            String::new()
-        }
-    }
-}
-
-struct TempPaths {
-    request: PathBuf,
-    response: PathBuf,
-    headers: PathBuf,
-}
-
-impl TempPaths {
-    fn new() -> Self {
-        let stamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .map(|value| value.as_nanos())
-            .unwrap_or(0);
-        let base = std::env::temp_dir().join(format!("ultragoal-openai-live-{stamp}"));
-        Self {
-            request: base.with_extension("request.json"),
-            response: base.with_extension("response.json"),
-            headers: base.with_extension("headers.txt"),
-        }
-    }
-
-    fn cleanup(&self) {
-        let _ = std::fs::remove_file(&self.request);
-        let _ = std::fs::remove_file(&self.response);
-        let _ = std::fs::remove_file(&self.headers);
-    }
-}
+#[cfg(test)]
+mod tests;

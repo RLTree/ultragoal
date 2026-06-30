@@ -147,3 +147,32 @@ fn package_checks_report_missing_manifest_as_inventory_failure() {
     );
     std::fs::remove_dir_all(root).expect("cleanup no manifest");
 }
+
+#[test]
+fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
+    let root = crate::self_tests::boundaries::support::temp_root("package-checks-scheduler");
+    std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    write_json(&root.join("fixtures/valid/good.json"), &json!({}));
+    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let results = crate::audit::package::checks::checks_with_scheduler(
+        &root,
+        &store,
+        &["schema-valid".to_string()],
+        &[],
+        crate::scheduler::SchedulerConfig::from_jobs(Some(2)).expect("jobs"),
+    );
+    let metric = results
+        .scheduler_metrics
+        .first()
+        .expect("schema scheduler metric");
+    assert_eq!(metric.task_class, "pure_read_parallel");
+    assert!(metric.task_count > 0);
+    assert!(metric.worker_count <= 2);
+    assert!(metric.deterministic_ordering);
+    assert!(!metric.shared_validation_artifact_writes_allowed);
+    std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
+}

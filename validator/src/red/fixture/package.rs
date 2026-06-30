@@ -136,7 +136,11 @@ pub(crate) fn observation_with_candidate_cached(
         )),
         path if path.starts_with("fixtures/mandatory-law-surfaces/valid/") => Some(from_failures(
             expected,
-            &crate::audit::mandatory::law::surfaces::receipt_value_failures(root, bad),
+            &crate::audit::mandatory::law::surfaces::receipt_value_failures_with_candidate(
+                root,
+                bad,
+                target_digest,
+            ),
         )),
         "docs/plugin-cohesion-manifest.json" => Some(from_failures(
             expected,

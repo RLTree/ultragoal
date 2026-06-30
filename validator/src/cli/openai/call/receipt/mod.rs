@@ -130,3 +130,6 @@ fn is_sha256(value: &str) -> bool {
         .strip_prefix("sha256:")
         .is_some_and(|tail| tail.len() == 64 && tail.chars().all(|ch| ch.is_ascii_hexdigit()))
 }
+
+#[cfg(test)]
+mod tests;

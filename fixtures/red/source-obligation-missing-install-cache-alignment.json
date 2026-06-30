@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "remove",
-      "path": "/obligations/91"
+      "path": "/obligations/94"
     }
   ],
   "notes": "Plugin availability claims require separate source, installed-plugin, cache-package, package-sync, package-hygiene, and per-surface receipts.",
@@ -20,7 +20,7 @@
   },
   "preconditions": [
     {
-      "path": "/obligations/91/id",
+      "path": "/obligations/94/id",
       "exists": true
     }
   ],

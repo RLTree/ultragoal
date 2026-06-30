@@ -12,6 +12,7 @@ mod output_path;
 mod package;
 mod red;
 mod review;
+mod scheduler;
 mod schema_catalog;
 #[cfg(test)]
 pub(crate) mod self_tests;
@@ -176,6 +177,7 @@ fn parse_audit(args: &[String]) -> Result<Command, String> {
         mode: opt_string(args, "--mode").unwrap_or_else(|| "init".to_string()),
         require_observability: args.iter().any(|a| a == "--require-observability"),
         require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),
+        jobs: opt_usize(args, "--jobs")?,
     })
 }
 
@@ -190,6 +192,15 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
         .position(|a| a == key)
         .and_then(|i| args.get(i + 1))
         .cloned()
+}
+
+fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
+    let Some(raw) = opt_string(args, key) else {
+        return Ok(None);
+    };
+    raw.parse::<usize>()
+        .map(Some)
+        .map_err(|_| format!("invalid numeric value for {key}: {raw}"))
 }
 
 fn usage() -> String {

@@ -1,4 +1,5 @@
 {
+  "schema": "harness-ultragoal.red-packet.v1",
   "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
   "expected_failure": {
     "check_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
@@ -10,6 +11,24 @@
       "op": "replace",
       "path": "/law_specific/raw_halo_authority",
       "value": false
+    }
+  ],
+  "notes": "Improvement-loop law must fail when raw HALO output is treated as deterministic authority before CLI parsing and validation.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/raw_halo_authority",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/raw_halo_authority",
+      "expectation": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority"
     }
   ]
 }

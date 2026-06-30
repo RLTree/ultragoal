@@ -1,6 +1,9 @@
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
+mod tests;
+
 const APPROVED_DESTINATION: &str = ".codex-worktree/env.sh";
 
 pub(crate) struct PolicyState {
@@ -121,8 +124,15 @@ pub(crate) fn api_key(root: &Path, rel: &Path) -> Result<String, String> {
     if !failures.is_empty() {
         return Err("openai_key_policy_not_passing".to_string());
     }
+    api_key_from_state(root, &state, |path| std::fs::read_to_string(path))
+}
+
+fn api_key_from_state<F>(root: &Path, state: &PolicyState, read: F) -> Result<String, String>
+where
+    F: FnOnce(&Path) -> std::io::Result<String>,
+{
     let path = root.join(&state.destination);
-    let text = std::fs::read_to_string(path).map_err(|_| "openai_key_read_failed".to_string())?;
+    let text = read(&path).map_err(|_| "openai_key_read_failed".to_string())?;
     parse_api_key(&text).ok_or_else(|| "openai_key_not_found".to_string())
 }
 

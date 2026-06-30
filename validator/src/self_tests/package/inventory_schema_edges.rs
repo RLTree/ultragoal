@@ -71,6 +71,26 @@ fn inventory_nonexistent_only_hits_right_side_branches() {
 }
 
 #[test]
+fn package_inventory_ignores_local_dependency_caches_but_keeps_manifests() {
+    let root = crate::self_tests::boundaries::support::temp_root("inventory-local-deps");
+    std::fs::create_dir_all(root.join("node_modules/.bin")).expect("node modules");
+    std::fs::create_dir_all(root.join(".pnpm-store/v3")).expect("pnpm store");
+    std::fs::write(root.join("node_modules/.bin/promptfoo"), "generated").expect("node module");
+    std::fs::write(root.join(".pnpm-store/v3/index.json"), "{}").expect("pnpm cache");
+    std::fs::write(root.join("package.json"), "{}").expect("package manifest");
+    std::fs::write(root.join("pnpm-lock.yaml"), "lockfileVersion: '9.0'").expect("lock");
+    std::fs::write(root.join("pnpm-workspace.yaml"), "packages: []").expect("workspace");
+
+    let files = crate::package::inventory::closure::actual_files(&root).expect("actual files");
+    assert!(!files.iter().any(|path| path.starts_with("node_modules/")));
+    assert!(!files.iter().any(|path| path.starts_with(".pnpm-store/")));
+    assert!(files.contains(&"package.json".to_string()));
+    assert!(files.contains(&"pnpm-lock.yaml".to_string()));
+    assert!(files.contains(&"pnpm-workspace.yaml".to_string()));
+    std::fs::remove_dir_all(root).expect("cleanup inventory local deps");
+}
+
+#[test]
 fn package_inventory_paths_ignore_untyped_rows_and_collect_typed_paths() {
     let paths = crate::package::inventory::inventory_paths(&json!({
         "skills":[{"path":"skills/a/SKILL.md"},{}],

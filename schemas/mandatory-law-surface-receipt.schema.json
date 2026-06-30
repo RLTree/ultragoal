@@ -29,6 +29,39 @@
       "minLength": 1,
       "type": "string"
     },
+    "independent_verification": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "parent_verified_source_runtime"
+        },
+        "cli_pass_alone_allowed": {
+          "const": false
+        },
+        "receipt_path": {
+          "pattern": "^validation_artifacts/manual/[-A-Za-z0-9._/]+[.]json$",
+          "type": "string"
+        },
+        "source_runtime_manual_required": {
+          "const": true
+        },
+        "verification_scope": {
+          "enum": [
+            "per_law",
+            "per_slice",
+            "full_contract"
+          ]
+        }
+      },
+      "required": [
+        "authority",
+        "cli_pass_alone_allowed",
+        "receipt_path",
+        "source_runtime_manual_required",
+        "verification_scope"
+      ],
+      "type": "object"
+    },
     "law_id": {
       "enum": [
         "active-setup-to-idle-orchestration-thread-bound-heartbeat",
@@ -72,6 +105,7 @@
         "goal-contract-amendment-authority-required-claim-id-mapping",
         "green-path-adequacy-satisfiable-strictness",
         "guardrail-speed-isolation-cache-honesty",
+        "harness-improvement-loop-trace-feedback-eval-codex-handoff",
         "historical-regression-corpus-session-review-signals",
         "human-audit-disposition-decomposition-judgment-claim-blocking",
         "instruction-precedence-nested-agents-routing",
@@ -104,6 +138,7 @@
         "quality-score-taste-gates",
         "raw-private-artifact-handling-category-only-evidence",
         "repo-knowledge-index-core-beliefs",
+        "research-source-authority-article-to-law-integration",
         "restartable-execplans",
         "review-disagreement-override-judgment-boundary-governance",
         "review-feedback-disposition-same-round-satisfaction",
@@ -218,6 +253,7 @@
         "goal-contract-amendment-authority-required-claim-id-mapping",
         "green-path-adequacy-satisfiable-strictness",
         "guardrail-speed-isolation-cache-honesty",
+        "harness-improvement-loop-trace-feedback-eval-codex-handoff",
         "historical-regression-corpus-session-review-signals",
         "human-audit-disposition-decomposition-judgment-claim-blocking",
         "instruction-precedence-nested-agents-routing",
@@ -250,6 +286,7 @@
         "quality-score-taste-gates",
         "raw-private-artifact-handling-category-only-evidence",
         "repo-knowledge-index-core-beliefs",
+        "research-source-authority-article-to-law-integration",
         "restartable-execplans",
         "review-disagreement-override-judgment-boundary-governance",
         "review-feedback-disposition-same-round-satisfaction",

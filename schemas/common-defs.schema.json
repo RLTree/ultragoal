@@ -2027,6 +2027,7 @@
         "validator-commit-value-not-sha",
         "validator-package-digest-value-not-sha",
         "validator-theater-miswire-resistance-adjacent-law-misattribution-red",
+        "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
         "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
         "validator-theater-miswire-resistance-fixture-name-only-pass-red",
         "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
