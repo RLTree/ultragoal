@@ -18,6 +18,8 @@ pub(crate) struct CallCommand {
     schema_id: String,
     input_digest: String,
     output_digest: String,
+    provider_policy: PathBuf,
+    budget_class: String,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<CallCommand, String> {
@@ -28,6 +30,8 @@ pub(crate) fn parse(raw: &[String]) -> Result<CallCommand, String> {
             "openai call prove supports no_network, offline_fixture, or local_mock only".into(),
         );
     }
+    let budget_class = super::opt_string(raw, "--budget-class")
+        .unwrap_or_else(|| super::budget::default_class(&provider_mode).to_string());
     Ok(CallCommand {
         receipt: super::opt_path(raw, "--receipt")
             .unwrap_or_else(|| PathBuf::from(DEFAULT_RECEIPT)),
@@ -43,6 +47,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<CallCommand, String> {
             .unwrap_or_else(|| crate::digest::ZERO.to_string()),
         output_digest: super::opt_string(raw, "--output-digest")
             .unwrap_or_else(|| crate::digest::ZERO.to_string()),
+        provider_policy: super::opt_path(raw, "--provider-policy")
+            .unwrap_or_else(|| PathBuf::from(super::budget::DEFAULT_POLICY)),
+        budget_class,
     })
 }
 
@@ -62,16 +69,18 @@ pub(crate) fn run(root: &Path, command: &CallCommand) -> Result<i32, String> {
 
 pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
-    let digest_failures = digest_failures(command);
-    let status = if digest_failures.is_empty() {
-        "pass"
-    } else {
-        "fail"
-    };
-    let failure_text = if digest_failures.is_empty() {
+    let budget = super::budget::load(
+        root,
+        &command.provider_policy,
+        &command.budget_class,
+        &command.provider_mode,
+    );
+    let failures = receipt_failures(command, &budget);
+    let status = if failures.is_empty() { "pass" } else { "fail" };
+    let failure_text = if failures.is_empty() {
         "none".to_string()
     } else {
-        digest_failures.join("; ")
+        failures.join("; ")
     };
     let receipt_rel = command.receipt.to_string_lossy().replace('\\', "/");
     let observability = crate::cli::observe::telemetry::command_receipt(
@@ -97,7 +106,7 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
             next_repair: if status == "pass" {
                 "none"
             } else {
-                "provide sha256 input and output digests for OpenAI call receipt"
+                "provide sha256 digests and a bounded OpenAI provider budget policy"
             },
             claim_impact: if status == "pass" {
                 "supports_openai_call_receipt_shape_only"
@@ -118,6 +127,9 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
         "status": status,
         "candidate_digest": candidate,
         "provider_mode": command.provider_mode,
+        "provider_policy_path": command.provider_policy.to_string_lossy().replace('\\', "/"),
+        "provider_policy_digest": budget.policy_digest,
+        "budget_class": budget.budget_class,
         "model_identity": command.model_identity,
         "endpoint_api_family": command.endpoint_api_family,
         "purpose": command.purpose,
@@ -125,8 +137,13 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
         "output_digest": command.output_digest,
         "schema_id": command.schema_id,
         "request_id": request_id(&command.provider_mode),
-        "token_cost_rate_limit": token_cost_rate_limit(&command.provider_mode),
-        "timeout_retry_backoff": timeout_retry_backoff(),
+        "token_cost_rate_limit": super::budget::cost_rate_limit(
+            &candidate,
+            &command.provider_mode,
+            &budget
+        ),
+        "timeout_retry_backoff": super::budget::timeout_retry_backoff(&budget),
+        "cache_policy": super::budget::cache_policy(&budget),
         "run_id": observability.get("run_id").and_then(Value::as_str).unwrap_or("missing"),
         "correlation_id": observability
             .get("correlation_id")
@@ -146,7 +163,7 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
         } else {
             "withheld_or_blocked"
         },
-        "failures": digest_failures
+        "failures": failures
     });
     if super::policy::contains_secret_shape(&value) {
         return Ok(secret_leak_receipt(value));
@@ -154,7 +171,7 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
     Ok(value)
 }
 
-fn digest_failures(command: &CallCommand) -> Vec<String> {
+fn receipt_failures(command: &CallCommand, budget: &super::budget::BudgetSelection) -> Vec<String> {
     let mut failures = Vec::new();
     if !is_sha256(&command.input_digest) {
         failures.push("openai_call_prompt_input_digest_invalid".to_string());
@@ -162,6 +179,7 @@ fn digest_failures(command: &CallCommand) -> Vec<String> {
     if !is_sha256(&command.output_digest) {
         failures.push("openai_call_output_digest_invalid".to_string());
     }
+    failures.extend(budget.failures.clone());
     failures
 }
 
@@ -177,28 +195,6 @@ fn request_id(mode: &str) -> String {
         "offline_fixture" => "not_available:offline_fixture".to_string(),
         _ => "not_available:local_mock".to_string(),
     }
-}
-
-fn token_cost_rate_limit(mode: &str) -> Value {
-    json!({
-        "prompt_tokens": 0,
-        "completion_tokens": 0,
-        "total_tokens": 0,
-        "estimated_cost_usd": 0,
-        "cost_unavailable_reason": if mode == "no_network" { "no_provider_call" } else { "offline_or_mock_provider" },
-        "rate_limit_observed": false,
-        "rate_limit_unavailable_reason": if mode == "no_network" { "no_provider_call" } else { "offline_or_mock_provider" }
-    })
-}
-
-fn timeout_retry_backoff() -> Value {
-    json!({
-        "timeout_ms": 30000,
-        "max_retries": 0,
-        "backoff_policy": "none_for_no_network_or_offline_fixture",
-        "cache_policy": "no_live_provider_cache",
-        "no_cache_verification": "not_applicable_without_live_provider"
-    })
 }
 
 fn secret_leak_receipt(mut value: Value) -> Value {

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/openai-cost-rate-limit-receipt.schema.json",
+  "title": "Harness Ultragoal OpenAI Cost And Rate Limit Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "provider_mode",
+    "budget_class",
+    "max_prompt_tokens",
+    "max_completion_tokens",
+    "max_total_tokens",
+    "prompt_tokens",
+    "completion_tokens",
+    "total_tokens",
+    "cost_ceiling_usd",
+    "estimated_cost_usd",
+    "cost_unavailable_reason",
+    "rate_limit_observed",
+    "rate_limit_policy",
+    "rate_limit_unavailable_reason",
+    "claim_impact"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.openai-cost-rate-limit-receipt.v1"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "provider_mode": {
+      "enum": [
+        "openai_live",
+        "offline_fixture",
+        "local_mock",
+        "no_network"
+      ]
+    },
+    "budget_class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "max_prompt_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_completion_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_total_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "prompt_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "completion_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cost_ceiling_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "estimated_cost_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "cost_unavailable_reason": {
+      "type": "string"
+    },
+    "rate_limit_observed": {
+      "type": "boolean"
+    },
+    "rate_limit_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rate_limit_unavailable_reason": {
+      "type": "string"
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

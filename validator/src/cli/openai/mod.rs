@@ -1,6 +1,7 @@
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
+pub(crate) mod budget;
 mod call;
 mod config;
 pub(crate) mod policy;

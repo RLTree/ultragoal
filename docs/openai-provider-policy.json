@@ -1,0 +1,97 @@
+{
+  "schema": "harness-ultragoal.openai-provider-policy.v1",
+  "law_id": "openai-api-key-model-cost-external-ai-boundary",
+  "default_provider_mode": "no_network",
+  "default_budget_class": "source_no_network",
+  "allowed_provider_modes": [
+    "openai_live",
+    "offline_fixture",
+    "local_mock",
+    "no_network"
+  ],
+  "budget_classes": {
+    "source_no_network": {
+      "provider_modes": [
+        "no_network"
+      ],
+      "max_prompt_tokens": 0,
+      "max_completion_tokens": 0,
+      "max_total_tokens": 0,
+      "cost_ceiling_usd": 0,
+      "timeout_ms": 30000,
+      "max_retries": 0,
+      "backoff_policy": "none",
+      "backoff_initial_ms": 0,
+      "backoff_max_ms": 0,
+      "cache_policy": "no_live_provider_cache",
+      "no_cache_verification": "not_applicable_without_live_provider",
+      "rate_limit_policy": "not_applicable_without_live_provider",
+      "allowed_claim_ceiling": "openai_call_receipt_shape_only"
+    },
+    "source_offline_fixture": {
+      "provider_modes": [
+        "offline_fixture"
+      ],
+      "max_prompt_tokens": 4096,
+      "max_completion_tokens": 2048,
+      "max_total_tokens": 6144,
+      "cost_ceiling_usd": 0,
+      "timeout_ms": 30000,
+      "max_retries": 0,
+      "backoff_policy": "none",
+      "backoff_initial_ms": 0,
+      "backoff_max_ms": 0,
+      "cache_policy": "fixture_digest_only",
+      "no_cache_verification": "offline_fixture_digest_bound",
+      "rate_limit_policy": "not_applicable_without_live_provider",
+      "allowed_claim_ceiling": "offline_fixture_observation_only"
+    },
+    "source_local_mock": {
+      "provider_modes": [
+        "local_mock"
+      ],
+      "max_prompt_tokens": 4096,
+      "max_completion_tokens": 2048,
+      "max_total_tokens": 6144,
+      "cost_ceiling_usd": 0,
+      "timeout_ms": 30000,
+      "max_retries": 0,
+      "backoff_policy": "none",
+      "backoff_initial_ms": 0,
+      "backoff_max_ms": 0,
+      "cache_policy": "mock_digest_only",
+      "no_cache_verification": "local_mock_digest_bound",
+      "rate_limit_policy": "not_applicable_without_live_provider",
+      "allowed_claim_ceiling": "local_mock_observation_only"
+    },
+    "source_live_low": {
+      "provider_modes": [
+        "openai_live"
+      ],
+      "max_prompt_tokens": 8192,
+      "max_completion_tokens": 2048,
+      "max_total_tokens": 10240,
+      "cost_ceiling_usd": 0.05,
+      "timeout_ms": 30000,
+      "max_retries": 2,
+      "backoff_policy": "exponential_jitter",
+      "backoff_initial_ms": 500,
+      "backoff_max_ms": 4000,
+      "cache_policy": "forbid_cache_for_live_claims",
+      "no_cache_verification": "required_for_live_claims",
+      "rate_limit_policy": "record_headers_or_unavailable_reason",
+      "allowed_claim_ceiling": "live_model_observation_only"
+    }
+  },
+  "forbidden_claim_substitutions": [
+    "completion",
+    "readiness",
+    "release",
+    "reviewer_exposure",
+    "app_registry_exposure",
+    "final_packet_correctness",
+    "update_goal_eligibility",
+    "product_success",
+    "model_output_authority"
+  ]
+}

@@ -53,6 +53,10 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "openai-key-policy.schema.json",
         ),
         (
+            "docs/openai-provider-policy.json",
+            "openai-provider-policy.schema.json",
+        ),
+        (
             "validation_artifacts/openai/config-receipt.json",
             "openai-config-receipt.schema.json",
         ),

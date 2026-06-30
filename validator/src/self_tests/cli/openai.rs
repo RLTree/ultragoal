@@ -1,84 +1,15 @@
 use serde_json::json;
-use std::path::Path;
-
-fn write_json(path: &Path, value: &serde_json::Value) {
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent).expect("parent");
-    }
-    crate::json_boundary::write_json(path, value).expect("write json");
-}
 
 fn prepare_root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
-    std::fs::create_dir_all(root.join(".codex-worktree")).expect("worktree env dir");
-    std::fs::create_dir_all(root.join("docs")).expect("docs");
-    std::fs::write(root.join(".gitignore"), ".codex-worktree/\n").expect("gitignore");
-    std::fs::write(
-        root.join(".codex-worktree/env.sh"),
-        "export OPENAI_API_KEY=test-key-redacted\n",
+    crate::self_tests::openai::prepare_root(
+        label,
+        &[
+            ".gitignore",
+            "docs/openai-key-policy.json",
+            "docs/openai-provider-policy.json",
+        ],
     )
-    .expect("env");
-    secure_env_file(&root.join(".codex-worktree/env.sh"));
-    write_json(
-        &root.join("docs/openai-key-policy.json"),
-        &json!({
-            "schema": "harness-ultragoal.openai-key-policy.v1",
-            "law_id": crate::cli::openai::LAW_ID,
-            "env_var": "OPENAI_API_KEY",
-            "active_destination": ".codex-worktree/env.sh",
-            "allowed_destinations": [".codex-worktree/env.sh"],
-            "destination_must_be_gitignored": true,
-            "unix_mode_required": "0600",
-            "secret_serialization_policy": "forbid",
-            "model_output_authority": "observation_only",
-            "live_provider_requires": [
-                "model_identity",
-                "endpoint_api_family",
-                "purpose",
-                "prompt_input_digest",
-                "output_digest",
-                "schema_id",
-                "timeout_retry_backoff",
-                "token_cost_rate_limit_accounting",
-                "candidate_digest",
-                "run_id",
-                "correlation_id",
-                "claim_impact"
-            ],
-            "provider_modes": [
-                "openai_live",
-                "offline_fixture",
-                "local_mock",
-                "no_network"
-            ],
-            "claim_ceiling": "config_resolution_only"
-        }),
-    );
-    write_json(
-        &root.join("plugin-manifest-draft.json"),
-        &json!({
-            "resources": [".gitignore", "docs/openai-key-policy.json"],
-            "schemas": [],
-            "fixtures": [],
-            "skills": [],
-            "agents": [],
-            "authorable_templates": [],
-            "generated_examples": []
-        }),
-    );
-    root
 }
-
-#[cfg(unix)]
-fn secure_env_file(path: &Path) {
-    use std::os::unix::fs::PermissionsExt;
-    let mut permissions = std::fs::metadata(path).expect("metadata").permissions();
-    permissions.set_mode(0o600);
-    std::fs::set_permissions(path, permissions).expect("mode");
-}
-
-#[cfg(not(unix))]
-fn secure_env_file(_path: &Path) {}
 
 #[test]
 fn openai_config_receipt_redacts_secret_and_blocks_completion_claims() {
@@ -111,7 +42,7 @@ fn openai_config_receipt_redacts_secret_and_blocks_completion_claims() {
 #[test]
 fn openai_config_receipt_fails_unapproved_destination() {
     let root = prepare_root("openai-bad-policy");
-    write_json(
+    crate::self_tests::openai::write_json(
         &root.join("docs/openai-key-policy.json"),
         &json!({
             "schema": "harness-ultragoal.openai-key-policy.v1",
@@ -170,11 +101,14 @@ fn openai_call_receipt_blocks_live_model_claims() {
     let receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
     assert_eq!(receipt["status"], "pass");
     assert_eq!(receipt["provider_mode"], "no_network");
+    assert_eq!(receipt["budget_class"], "source_no_network");
+    assert_eq!(receipt["cache_policy"], "no_live_provider_cache");
     assert_eq!(
         receipt["model_output_authority"],
         "observation_only_until_cli_schema_validated"
     );
     assert_eq!(receipt["token_cost_rate_limit"]["total_tokens"], 0);
+    assert_eq!(receipt["timeout_retry_backoff"]["max_retries"], 0);
     assert!(
         receipt["blocked_claims"]
             .as_array()

@@ -6,10 +6,12 @@ const RECEIPT_REL: &str = "validation_artifacts/openai/config-receipt.json";
 const CALL_RECEIPT_REL: &str = "validation_artifacts/openai/call-receipt.json";
 const SCHEMA: &str = "harness-ultragoal.openai-config-receipt.v1";
 const CALL_SCHEMA: &str = "harness-ultragoal.openai-call-receipt.v1";
+const PROVIDER_POLICY_REL: &str = "docs/openai-provider-policy.json";
 
 pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     check_policy(root, &mut out);
+    check_provider_policy(root, &mut out);
     check_receipt(root, &mut out);
     check_call_receipt(root, &mut out);
     out
@@ -18,6 +20,16 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
 fn check_policy(root: &Path, out: &mut Vec<String>) {
     let policy = crate::cli::openai::policy::load(root, Path::new(POLICY_REL));
     out.extend(policy.failures());
+}
+
+fn check_provider_policy(root: &Path, out: &mut Vec<String>) {
+    let policy = crate::cli::openai::budget::load(
+        root,
+        Path::new(PROVIDER_POLICY_REL),
+        "source_no_network",
+        "no_network",
+    );
+    out.extend(policy.failures);
 }
 
 fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
@@ -62,6 +74,7 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
     if !blocks_completion_claims(&receipt) {
         out.push("openai_call_receipt_missing_completion_blockers".to_string());
     }
+    out.extend(crate::cli::openai::budget::receipt_failures(root, &receipt));
     check_observability_binding(&receipt, &candidate, "openai_call", out);
 }
 

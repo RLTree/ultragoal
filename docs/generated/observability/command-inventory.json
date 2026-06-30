@@ -1361,6 +1361,9 @@
       "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "typed no-network and offline call receipt producer",
+        "typed provider budget policy",
+        "bounded timeout/retry/cache policy receipt fields",
+        "cost/rate-limit receipt object",
         "command-level observability receipt",
         "package audit currentness check",
         "redacted model-output non-authority blockers"
@@ -1370,6 +1373,7 @@
         "same-candidate live metrics query proof",
         "same-candidate live traces query proof",
         "live OpenAI provider invocation receipt",
+        "live token/cost/rate-limit header capture",
         "promptfoo and improvement-loop call adapter binding"
       ],
       "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
