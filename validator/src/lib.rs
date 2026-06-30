@@ -19,7 +19,6 @@ mod skill_links;
 mod target_fixtures;
 mod target_repo;
 use std::path::PathBuf;
-
 #[derive(Debug)]
 pub(crate) struct Args {
     root: PathBuf,
@@ -75,6 +74,7 @@ pub(crate) enum Command {
     Garbage(cli::garbage::collection::GarbageCommand),
     Observe(cli::observe::types::ObserveCommand),
     OpenAi(cli::openai::OpenAiCommand),
+    Promptfoo(cli::promptfoo::PromptfooCommand),
     Session(cli::session::SessionCommand),
     PackageDigest,
 }
@@ -201,6 +201,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Observe(command)
             } else if let Some(command) = cli::openai::parse(raw)? {
                 Command::OpenAi(command)
+            } else if let Some(command) = cli::promptfoo::parse(raw)? {
+                Command::Promptfoo(command)
             } else if let Some(command) = cli::session::parse(raw)? {
                 Command::Session(command)
             } else if let Some(command) = cli::control::plane::parse(raw) {
@@ -244,5 +246,5 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 }
 
 fn usage() -> String {
-    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | install audit --receipt <path> [--installed-root <path>] | cache audit --receipt <path> [--cache-root <path>] | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | session-log hardening rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ... | openai config prove --receipt <path> | openai call prove --receipt <path> [--mode no_network|offline_fixture|local_mock] | openai output prove --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
+    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | install audit --receipt <path> [--installed-root <path>] | cache audit --receipt <path> [--cache-root <path>] | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | session-log hardening rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ... | openai config prove --receipt <path> | openai call prove --receipt <path> [--mode no_network|offline_fixture|local_mock] | openai output prove --receipt <path> | promptfoo prove --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
 }

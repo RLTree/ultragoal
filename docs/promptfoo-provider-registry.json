@@ -1,0 +1,45 @@
+{
+  "schema": "harness-ultragoal.promptfoo-provider-registry.v1",
+  "law_id": "promptfoo-eval-red-team-provider-separation",
+  "providers": [
+    {
+      "id": "no_network_deterministic",
+      "mode": "no_network",
+      "authority": "fixture_observation_only",
+      "requires_openai_key": false,
+      "may_support_live_model_claim": false,
+      "claim_ceiling": "promptfoo_adapter_setup_only"
+    },
+    {
+      "id": "offline_fixture",
+      "mode": "offline_fixture",
+      "authority": "fixture_observation_only",
+      "requires_openai_key": false,
+      "may_support_live_model_claim": false,
+      "claim_ceiling": "offline_eval_observation_only"
+    },
+    {
+      "id": "local_mock",
+      "mode": "local_mock",
+      "authority": "mock_observation_only",
+      "requires_openai_key": false,
+      "may_support_live_model_claim": false,
+      "claim_ceiling": "local_mock_eval_observation_only"
+    },
+    {
+      "id": "openai_live",
+      "mode": "openai_live",
+      "authority": "external_observation_only_until_cli_parsed",
+      "requires_openai_key": true,
+      "may_support_live_model_claim": true,
+      "claim_ceiling": "live_eval_observation_only"
+    }
+  ],
+  "forbidden_substitutions": [
+    "raw_promptfoo_pass_as_claim",
+    "offline_fixture_as_live_proof",
+    "live_provider_as_offline_regression",
+    "promptfoo_eval_as_product_success",
+    "promptfoo_eval_as_update_goal_eligibility"
+  ]
+}

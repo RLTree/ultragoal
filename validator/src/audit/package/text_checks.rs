@@ -97,6 +97,13 @@ fn control_and_observability(root: &Path, failures: &mut BTreeMap<String, Vec<St
             failure,
         );
     }
+    for failure in crate::audit::promptfoo::package_failures(root) {
+        push(
+            failures,
+            "promptfoo-eval-red-team-provider-separation",
+            failure,
+        );
+    }
 }
 
 fn mandatory_surfaces(

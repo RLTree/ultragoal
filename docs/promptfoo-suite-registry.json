@@ -1,0 +1,37 @@
+{
+  "schema": "harness-ultragoal.promptfoo-suite-registry.v1",
+  "law_id": "promptfoo-eval-red-team-provider-separation",
+  "suites": [
+    {
+      "id": "claim-ceiling-provider-separation-smoke",
+      "purpose": "prove raw promptfoo output remains observation-only and provider surfaces are non-substitutable",
+      "provider_ids": [
+        "no_network_deterministic",
+        "offline_fixture",
+        "local_mock",
+        "openai_live"
+      ],
+      "law_ids": [
+        "promptfoo-eval-red-team-provider-separation",
+        "openai-api-key-model-cost-external-ai-boundary"
+      ],
+      "claim_ids": [
+        "promptfoo_eval_observation_only",
+        "unsupported_readiness_blocked"
+      ],
+      "case_counts": {
+        "red": 3,
+        "green": 1,
+        "tamper": 1
+      },
+      "source_trace_binding": "required_before_loop_closure",
+      "expected_failure_reasons": [
+        "raw_promptfoo_pass_without_cli_receipt",
+        "offline_provider_used_as_live_proof",
+        "promptfoo_eval_used_as_product_success"
+      ],
+      "promotion_path": "validator_fixture_claim_guard_required",
+      "claim_ceiling": "promptfoo_adapter_setup_only"
+    }
+  ]
+}

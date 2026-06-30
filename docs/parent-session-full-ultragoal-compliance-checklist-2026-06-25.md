@@ -2725,36 +2725,36 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 96 - promptfoo Eval, Red-Team, Regression, And Provider Separation
 
 - [ ] promptfoo is installed, pinned, package-inventoried, provider-separated, and CLI-governed; raw promptfoo output is observation only.
-  - Evidence:
-  - Install receipt:
-  - Config path:
-  - Package entries:
-  - Candidate digest:
-  - Status:
+  - Evidence: `package.json` pins `promptfoo` to `0.121.17` with `packageManager: pnpm@11.1.2`; `pnpm-lock.yaml` binds the resolved package; `pnpm-workspace.yaml` explicitly sets the generated native/browser build approvals to `false`; `target/debug/ultragoal --root . promptfoo prove --receipt validation_artifacts/promptfoo/adapter-receipt.json` minted a CLI receipt with `raw_promptfoo_authority = observation_only_until_cli_parsed_receipt`, provider modes, registry digests, and completion/readiness/release/final-packet/update_goal/product-success blockers.
+  - Install receipt: `validation_artifacts/promptfoo/adapter-receipt.json` (`status: pass`, source-local adapter boundary only; `install_lifecycle_status: build_scripts_not_approved_no_eval_execution_claimed`).
+  - Config path: `docs/promptfoo-provider-registry.json`; `docs/promptfoo-suite-registry.json`; `schemas/promptfoo-adapter-receipt.schema.json`.
+  - Package entries: `plugin-manifest-draft.json` lists `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, promptfoo registries, promptfoo schema, `validation_artifacts/promptfoo/adapter-receipt.json`, and the promptfoo CLI/audit source files.
+  - Candidate digest: `sha256:0e96ed517c2025f1fa31d11e47566b1f2d7767178abeb6a87da24d6e2cd83dd4`.
+  - Status: Partial; adapter setup/provider-separation boundary is current, but full promptfoo eval/red-team/regression coverage and live/offline parsed result authority remain open.
 
 - [ ] Repo-owned promptfoo suites cover Harness improvement loops, validator remediation, claim ceilings, Product Fitness, Product Cohesion, Product Success, review-packet language, setup/retrofit, active-repo rollout, and model/provider comparisons.
-  - Evidence:
-  - Suite registry:
-  - Eval ids:
-  - Provider ids:
-  - Candidate digest:
-  - Status:
+  - Evidence: Initial suite registry exists for claim-ceiling/provider-separation smoke coverage only; it explicitly does not close the complete Gate 96 suite scope.
+  - Suite registry: `docs/promptfoo-suite-registry.json`.
+  - Eval ids: `claim-ceiling-provider-separation-smoke` only.
+  - Provider ids: `no_network_deterministic`, `offline_fixture`, `local_mock`, `openai_live`.
+  - Candidate digest: `sha256:0e96ed517c2025f1fa31d11e47566b1f2d7767178abeb6a87da24d6e2cd83dd4`.
+  - Status: Open; broad suite coverage for improvement loops, product gates, setup/retrofit, rollout, and model/provider comparisons is not complete.
 
 - [ ] promptfoo suites contain law ids, claim ids, source trace/feedback binding, red cases, green cases, tamper cases where applicable, expected failure reasons, provider boundaries, prompt/input digests, output digests, current candidate digests, and promotion paths.
-  - Evidence:
-  - Validator check:
-  - Red fixtures:
-  - Green fixtures:
-  - Tamper fixtures:
-  - Candidate digest:
-  - Status:
+  - Evidence: `docs/promptfoo-suite-registry.json` now includes law ids, claim ids, provider ids, case counts, expected failure reasons, a source-trace binding marker, promotion path, and adapter-only claim ceiling for the initial smoke suite.
+  - Validator check: `validator/src/audit/promptfoo/mod.rs` plus `validator/src/cli/promptfoo/*` reject stale/wrong digest receipts, overbroad raw promptfoo authority, missing blockers, wrong schema/status, and invalid observability binding.
+  - Red fixtures: Pending beyond focused unit bad-path tests.
+  - Green fixtures: Focused source-local green path in `validator/src/cli/promptfoo/tests.rs`.
+  - Tamper fixtures: Pending.
+  - Candidate digest: `sha256:0e96ed517c2025f1fa31d11e47566b1f2d7767178abeb6a87da24d6e2cd83dd4`.
+  - Status: Partial; registry shape and receipt enforcement exist, but full red/green/tamper fixture coverage remains open.
 
 - [ ] Validator rejects promptfoo pass accepted without CLI receipt, wrong-candidate results, live-provider proof without key receipt, offline-provider proof used as live proof, missing red cases, missing rubric, altered result JSON, and promptfoo output accepted despite failed cases.
-  - Evidence:
-  - Focused tests:
-  - Red fixtures:
-  - Candidate digest:
-  - Status:
+  - Evidence: Production package audit now requires `validation_artifacts/promptfoo/adapter-receipt.json` and validates schema/status/current candidate digest/file digests/raw-authority blockers/observability binding through `validator/src/audit/promptfoo/mod.rs`.
+  - Focused tests: `cargo test --offline promptfoo --lib --quiet` passed `2/2`, including source-local green receipt and wrong-candidate bad path.
+  - Red fixtures: Pending; focused tests are not a substitute for the complete Gate 96 red/tamper catalog.
+  - Candidate digest: `sha256:0e96ed517c2025f1fa31d11e47566b1f2d7767178abeb6a87da24d6e2cd83dd4`.
+  - Status: Partial; wrong-candidate and raw-authority boundary are enforced, but the full forbidden-substitution matrix remains open.
 
 ## Gate 97 - HALO Ranked Harness Change Optimization
 

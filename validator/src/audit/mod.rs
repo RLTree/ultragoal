@@ -15,6 +15,7 @@ pub(crate) mod openai;
 pub(crate) mod package;
 pub(crate) mod plugin;
 pub(crate) mod product;
+pub(crate) mod promptfoo;
 pub(crate) mod receipt;
 pub(crate) mod red;
 pub(crate) mod review_history;

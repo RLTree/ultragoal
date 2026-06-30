@@ -1,0 +1,11 @@
+{
+  "name": "harness-ultragoal-plugin-proposal",
+  "private": true,
+  "packageManager": "pnpm@11.1.2",
+  "devDependencies": {
+    "promptfoo": "0.121.17"
+  },
+  "scripts": {
+    "promptfoo:version": "promptfoo --version"
+  }
+}

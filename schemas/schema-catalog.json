@@ -167,6 +167,10 @@
       "path": "schemas/plugin-product-journey-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/promptfoo-adapter-receipt.schema.json",
+      "path": "schemas/promptfoo-adapter-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/plugin-scout-receipt.schema.json",
       "path": "schemas/plugin-scout-receipt.schema.json"
     },

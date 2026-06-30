@@ -1,2 +1,4 @@
 .codex-worktree/
 target/
+node_modules/
+.pnpm-store/
