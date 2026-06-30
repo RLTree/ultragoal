@@ -1624,30 +1624,30 @@
     8|    989|    unix_to_iso(seconds)
     9|    989|}
    10|       |
-   11|    397|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
-   12|    397|    let trimmed = value.strip_suffix('Z')?;
-                      ^357                             ^40
-   13|    357|    let (date, time) = trimmed.split_once('T')?;
-                       ^356  ^356                           ^1
-   14|  1.06k|    let mut d = date.split('-').map(|p| p.parse::<i64>().ok());
-                      ^356    ^356 ^356       ^356
-   15|  1.06k|    let mut t = time.split(':').map(|p| p.parse::<i64>().ok());
-                      ^356    ^356 ^356       ^356
-   16|    356|    let (year, month, day) = (d.next()?, d.next()?, d.next()?);
+   11|    409|pub fn parse_iso_seconds(value: &str) -> Option<i64> {
+   12|    409|    let trimmed = value.strip_suffix('Z')?;
+                      ^369                             ^40
+   13|    369|    let (date, time) = trimmed.split_once('T')?;
+                       ^368  ^368                           ^1
+   14|  1.10k|    let mut d = date.split('-').map(|p| p.parse::<i64>().ok());
+                      ^368    ^368 ^368       ^368
+   15|  1.10k|    let mut t = time.split(':').map(|p| p.parse::<i64>().ok());
+                      ^368    ^368 ^368       ^368
+   16|    368|    let (year, month, day) = (d.next()?, d.next()?, d.next()?);
                                                     ^0         ^0         ^0
-   17|    356|    let (hour, minute, second) = (t.next()?, t.next()?, t.next()?);
+   17|    368|    let (hour, minute, second) = (t.next()?, t.next()?, t.next()?);
                                                         ^0         ^0         ^0
-   18|    356|    if d.next().is_some() || t.next().is_some() {
-                                           ^355     ^355
+   18|    368|    if d.next().is_some() || t.next().is_some() {
+                                           ^367     ^367
    19|      2|        return None;
-   20|    354|    }
-   21|    354|    let (year, month, day, hour, minute, second) = (year?, month?, day?, hour?, minute?, second?);
+   20|    366|    }
+   21|    366|    let (year, month, day, hour, minute, second) = (year?, month?, day?, hour?, minute?, second?);
                                                                       ^0      ^0    ^0     ^0       ^0       ^0
-   22|    354|    if !valid_parts(year, month, day, hour, minute, second) {
+   22|    366|    if !valid_parts(year, month, day, hour, minute, second) {
    23|      5|        return None;
-   24|    349|    }
-   25|    349|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
-   26|    397|}
+   24|    361|    }
+   25|    361|    Some(days_from_civil(year, month, day) * 86_400 + hour * 3_600 + minute * 60 + second)
+   26|    409|}
    27|       |
    28|    991|pub fn unix_to_iso(seconds: i64) -> String {
    29|    991|    let days = seconds.div_euclid(86_400);
@@ -1659,37 +1659,37 @@
    35|    991|    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z")
    36|    991|}
    37|       |
-   38|    349|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
-   39|    349|    let y = year - (month <= 2) as i64;
-   40|    349|    let era = if y >= 0 { y } else { y - 399 } / 400;
+   38|    361|fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
+   39|    361|    let y = year - (month <= 2) as i64;
+   40|    361|    let era = if y >= 0 { y } else { y - 399 } / 400;
                                                    ^0
-   41|    349|    let yoe = y - era * 400;
-   42|    349|    let m = month + if month > 2 { -3 } else { 9 };
-                                                 ^338        ^11
-   43|    349|    let doy = (153 * m + 2) / 5 + day - 1;
-   44|    349|    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
-   45|    349|    era * 146_097 + doe - 719_468
-   46|    349|}
+   41|    361|    let yoe = y - era * 400;
+   42|    361|    let m = month + if month > 2 { -3 } else { 9 };
+                                                 ^350        ^11
+   43|    361|    let doy = (153 * m + 2) / 5 + day - 1;
+   44|    361|    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+   45|    361|    era * 146_097 + doe - 719_468
+   46|    361|}
    47|       |
-   48|    354|fn valid_parts(year: i64, month: i64, day: i64, hour: i64, minute: i64, second: i64) -> bool {
-   49|    354|    (1..=9999).contains(&year)
-   50|    354|        && (1..=12).contains(&month)
-   51|    353|        && (1..=days_in_month(year, month)).contains(&day)
-   52|    352|        && (0..=23).contains(&hour)
-   53|    351|        && (0..=59).contains(&minute)
-   54|    350|        && (0..=59).contains(&second)
-   55|    354|}
+   48|    366|fn valid_parts(year: i64, month: i64, day: i64, hour: i64, minute: i64, second: i64) -> bool {
+   49|    366|    (1..=9999).contains(&year)
+   50|    366|        && (1..=12).contains(&month)
+   51|    365|        && (1..=days_in_month(year, month)).contains(&day)
+   52|    364|        && (0..=23).contains(&hour)
+   53|    363|        && (0..=59).contains(&minute)
+   54|    362|        && (0..=59).contains(&second)
+   55|    366|}
    56|       |
-   57|    354|fn days_in_month(year: i64, month: i64) -> i64 {
+   57|    366|fn days_in_month(year: i64, month: i64) -> i64 {
    58|      2|    match month {
    59|     10|        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
-   60|    341|        4 | 6 | 9 | 11 => 30,
+   60|    353|        4 | 6 | 9 | 11 => 30,
    61|      2|        2 if leap_year(year) => 29,
                                          ^1   ^1
    62|      1|        2 => 28,
    63|      1|        _ => 0,
    64|       |    }
-   65|    354|}
+   65|    366|}
    66|       |
    67|      2|fn leap_year(year: i64) -> bool {
    68|      2|    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
@@ -2662,10 +2662,10 @@
    42|     23|        return;
    43|       |    };
    44|     67|    for failure in crate::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
-                      ^17
-   45|     17|    {
-   46|     17|        out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
-   47|     17|    }
+                      ^22
+   45|     22|    {
+   46|     22|        out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
+   47|     22|    }
    48|     90|}
    49|       |
    50|     60|fn check_registry_ref(
@@ -5584,7 +5584,7 @@
    29|     23|pub(crate) fn repo_source_paths_from_actual_files(actual_files: &[String]) -> Vec<String> {
    30|     23|    actual_files
    31|     23|        .iter()
-   32|  9.26k|        .filter(|path| is_validator_rust_source(path))
+   32|  4.70k|        .filter(|path| is_validator_rust_source(path))
                        ^23
    33|     23|        .cloned()
    34|     23|        .collect()
@@ -5600,19 +5600,20 @@
    44|     24|fn forbidden_top_level_clusters(paths: &BTreeSet<String>) -> Vec<String> {
    45|     24|    let top_level = paths
    46|     24|        .iter()
-   47|  1.28k|        .filter_map(|path| path.strip_prefix("validator/src/"))
+   47|    657|        .filter_map(|path| path.strip_prefix("validator/src/"))
                        ^24
-   48|  1.28k|        .filter(|tail| !tail.contains('/'))
+   48|    655|        .filter(|tail| !tail.contains('/'))
                        ^24
    49|     24|        .collect::<Vec<_>>();
    50|     24|    let internal = top_level
    51|     24|        .iter()
    52|     24|        .filter(|file| {
-   53|     24|            file.starts_with("internal_")
-   54|     17|                || file.starts_with("internal-")
-   55|     17|                || file.starts_with("internal.")
-   56|     17|                || file.starts_with("iinternal_")
-   57|     24|        })
+                                     ^17
+   53|     17|            file.starts_with("internal_")
+   54|     10|                || file.starts_with("internal-")
+   55|     10|                || file.starts_with("internal.")
+   56|     10|                || file.starts_with("iinternal_")
+   57|     17|        })
    58|     24|        .map(|file| format!("validator/src/{file}"))
                                   ^8
    59|     24|        .collect::<Vec<_>>();
@@ -5632,16 +5633,16 @@
    73|     24|fn partial_module_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
    74|     24|    paths
    75|     24|        .iter()
-   76|  1.28k|        .filter(|path| source_stem(path) != "mod")
+   76|    657|        .filter(|path| source_stem(path) != "mod")
                        ^24
-   77|    863|        .filter_map(|path| {
+   77|    444|        .filter_map(|path| {
                        ^24
-   78|    863|            let module_dir = path.strip_suffix(".rs")?;
+   78|    444|            let module_dir = path.strip_suffix(".rs")?;
                                                                    ^0
-   79|    863|            let child_prefix = format!("{module_dir}/");
-   80|   530k|            let has_child_source = paths.iter().any(|other| other.starts_with(&child_prefix));
-                              ^863               ^863         ^863
-   81|    863|            has_child_source.then(|| {
+   79|    444|            let child_prefix = format!("{module_dir}/");
+   80|   264k|            let has_child_source = paths.iter().any(|other| other.starts_with(&child_prefix));
+                              ^444               ^444         ^444
+   81|    444|            has_child_source.then(|| {
                                                    ^2
    82|      2|                remediating_failure(
    83|      2|                    "namespace_validator_source_partial_module_factoring",
@@ -5652,31 +5653,31 @@
    88|       |                    false,
    89|       |                )
    90|      2|            })
-   91|    863|        })
+   91|    444|        })
    92|     24|        .collect()
    93|     24|}
    94|       |
    95|     24|fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
    96|     24|    let mut by_dir_prefix: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
-   97|  1.28k|    for path in paths {
+   97|    657|    for path in paths {
                               ^24
-   98|  1.28k|        let stem = source_stem(path);
-   99|  1.28k|        if route_file(stem) || !stem.contains('_') {
-                                             ^861
-  100|  1.07k|            continue;
-  101|    209|        }
-  102|    209|        let prefix = stem.split('_').next().unwrap_or("");
-  103|    209|        if prefix.len() < 2 {
+   98|    657|        let stem = source_stem(path);
+   99|    657|        if route_file(stem) || !stem.contains('_') {
+                                             ^443
+  100|    544|            continue;
+  101|    113|        }
+  102|    113|        let prefix = stem.split('_').next().unwrap_or("");
+  103|    113|        if prefix.len() < 2 {
   104|      1|            continue;
-  105|    208|        }
-  106|    208|        by_dir_prefix
-  107|    208|            .entry((parent_dir(path).to_string(), prefix.to_string()))
-  108|    208|            .or_default()
-  109|    208|            .push(path.to_string());
+  105|    112|        }
+  106|    112|        by_dir_prefix
+  107|    112|            .entry((parent_dir(path).to_string(), prefix.to_string()))
+  108|    112|            .or_default()
+  109|    112|            .push(path.to_string());
   110|       |    }
   111|     24|    by_dir_prefix
   112|     24|        .into_iter()
-  113|    204|        .filter(|(_, examples)| examples.len() > 1)
+  113|    108|        .filter(|(_, examples)| examples.len() > 1)
                        ^24
   114|     24|        .map(|((dir, prefix), examples)| {
                                                        ^3
@@ -5695,15 +5696,15 @@
   127|     24|fn generic_leaf_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
   128|     24|    paths
   129|     24|        .iter()
-  130|  1.28k|        .filter(|path| {
+  130|    657|        .filter(|path| {
                        ^24
-  131|  1.28k|            let stem = source_stem(path);
+  131|    657|            let stem = source_stem(path);
   132|      1|            matches!(
-  133|  1.28k|                stem,
-  134|  1.28k|                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
-                                                     ^1.28k    ^1.28k     ^1.28k     ^1.28k
+  133|    657|                stem,
+  134|    657|                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
+                                                     ^656      ^656       ^656       ^656
   135|       |            )
-  136|  1.28k|        })
+  136|    657|        })
   137|     24|        .map(|path| {
                                   ^1
   138|      1|            remediating_failure(
@@ -5721,15 +5722,15 @@
   150|     24|fn history_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
   151|     24|    paths
   152|     24|        .iter()
-  153|  1.28k|        .filter(|path| {
+  153|    657|        .filter(|path| {
                        ^24
-  154|  1.28k|            let stem = source_stem(path);
-  155|  1.28k|            stem.starts_with("coverage_wave")
-  156|  1.28k|                || stem.contains("_coverage_wave")
-  157|  1.28k|                || stem.contains("_wave")
-  158|  1.28k|                || stem.starts_with("wave_")
-  159|  1.28k|                || stem.starts_with("iinternal_")
-  160|  1.28k|        })
+  154|    657|            let stem = source_stem(path);
+  155|    657|            stem.starts_with("coverage_wave")
+  156|    655|                || stem.contains("_coverage_wave")
+  157|    654|                || stem.contains("_wave")
+  158|    654|                || stem.starts_with("wave_")
+  159|    654|                || stem.starts_with("iinternal_")
+  160|    657|        })
   161|     24|        .map(|path| {
                                   ^4
   162|      4|            remediating_failure(
@@ -5764,30 +5765,30 @@
   191|       |    )
   192|     16|}
   193|       |
-  194|  9.29k|fn is_validator_rust_source(path: &str) -> bool {
-  195|  9.29k|    (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
-                                                         ^8.00k^8.00k
-  196|  1.29k|        && path.ends_with(".rs")
-  197|  9.29k|}
+  194|  4.74k|fn is_validator_rust_source(path: &str) -> bool {
+  195|  4.74k|    (path.starts_with("validator/src/") || path.starts_with("validator/tests/"))
+                                                         ^4.07k^4.07k
+  196|    668|        && path.ends_with(".rs")
+  197|  4.74k|}
   198|       |
-  199|  1.28k|fn route_file(stem: &str) -> bool {
-  200|  1.28k|    matches!(stem, "mod" | "lib" | "main")
-                  ^426                   ^863    ^861
-  201|  1.28k|}
+  199|    657|fn route_file(stem: &str) -> bool {
+  200|    657|    matches!(stem, "mod" | "lib" | "main")
+                  ^214                   ^444    ^443
+  201|    657|}
   202|       |
-  203|    215|fn parent_dir(path: &str) -> &str {
-  204|    215|    path.rsplit_once('/').map(|(dir, _)| dir).unwrap_or("")
-  205|    215|}
+  203|    119|fn parent_dir(path: &str) -> &str {
+  204|    119|    path.rsplit_once('/').map(|(dir, _)| dir).unwrap_or("")
+  205|    119|}
   206|       |
   207|      4|fn first_token(path: &str) -> &str {
   208|      4|    let name = path.rsplit('/').next().unwrap_or(path);
   209|      4|    name.split(['_', '-', '.']).next().unwrap_or("")
   210|      4|}
   211|       |
-  212|  5.15k|fn source_stem(path: &str) -> &str {
-  213|  5.15k|    let name = path.rsplit('/').next().unwrap_or(path);
-  214|  5.15k|    name.strip_suffix(".rs").unwrap_or(name)
-  215|  5.15k|}
+  212|  2.63k|fn source_stem(path: &str) -> &str {
+  213|  2.63k|    let name = path.rsplit('/').next().unwrap_or(path);
+  214|  2.63k|    name.strip_suffix(".rs").unwrap_or(name)
+  215|  2.63k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/audit/observability/compose.rs:
     1|       |use std::path::Path;
@@ -8695,20 +8696,17 @@
    48|      5|        out.push("plugin_self_law_coverage_policy_not_100_required".to_string());
    49|      6|    }
    50|     11|    if receipt.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0) {
-   51|      5|        out.push("plugin_self_law_coverage_not_100_percent".to_string());
-   52|      6|    }
+   51|      4|        out.push("plugin_self_law_coverage_not_100_percent".to_string());
+   52|      7|    }
    53|     11|    if !array(&receipt, "uncovered_records").is_empty() {
-   54|      6|        out.push("plugin_self_law_coverage_has_uncovered_records".to_string());
+   54|      5|        out.push("plugin_self_law_coverage_has_uncovered_records".to_string());
    55|      6|    }
-                  ^5
    56|     11|    if string(&receipt, "claim_ceiling") != "supports_complete_coverage_claim" {
-   57|      6|        out.push("plugin_self_law_coverage_claim_ceiling_not_complete".to_string());
+   57|      5|        out.push("plugin_self_law_coverage_claim_ceiling_not_complete".to_string());
    58|      6|    }
-                  ^5
    59|     11|    if !array_contains(&receipt, "supported_claim_classes", "complete_coverage") {
-   60|      6|        out.push("plugin_self_law_coverage_supported_claim_missing".to_string());
+   60|      5|        out.push("plugin_self_law_coverage_supported_claim_missing".to_string());
    61|      6|    }
-                  ^5
    62|     77|    for blocked in [
    63|     11|        "completion",
    64|     11|        "package_readiness",
@@ -8821,7 +8819,7 @@
   165|     88|    value
   166|     88|        .get(key)
   167|     88|        .and_then(Value::as_array)
-  168|    173|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
+  168|    174|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
                        ^88                 ^48          ^48
   169|     88|}
   170|       |
@@ -19408,9 +19406,9 @@
                   ^103
    34|    355|    let candidate = parsed.as_ref().and_then(candidate_digest);
    35|    355|    if candidate.as_deref() != Some(expected) {
-   36|    273|        failures.push("candidate_digest_mismatch".to_string());
-   37|    273|    }
-                  ^82
+   36|    272|        failures.push("candidate_digest_mismatch".to_string());
+   37|    272|    }
+                  ^83
    38|    355|    failures.extend(label_failures);
    39|    355|    json!({
    40|    355|        "label": label,
@@ -20118,21 +20116,21 @@
   129|      2|        out.push("coverage_target_digest_mismatch".to_string());
   130|     10|    }
   131|     12|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-  132|      9|        || !value
-  133|      9|            .get("uncovered_records")
-  134|      9|            .and_then(Value::as_array)
-  135|      9|            .is_some_and(Vec::is_empty)
-  136|      5|    {
-  137|      5|        out.push("coverage_not_exact_100".to_string());
-  138|      7|    }
+  132|     10|        || !value
+  133|     10|            .get("uncovered_records")
+  134|     10|            .and_then(Value::as_array)
+  135|     10|            .is_some_and(Vec::is_empty)
+  136|      4|    {
+  137|      4|        out.push("coverage_not_exact_100".to_string());
+  138|      8|    }
   139|     12|    if value.get("claim_ceiling").and_then(Value::as_str)
   140|     12|        != Some("supports_complete_coverage_claim")
-  141|      3|    {
-  142|      3|        out.push("coverage_claim_ceiling_not_complete".to_string());
-  143|      9|    }
+  141|      2|    {
+  142|      2|        out.push("coverage_claim_ceiling_not_complete".to_string());
+  143|     10|    }
   144|     12|    if !array_contains(value, "supported_claim_classes", "complete_coverage") {
-  145|      3|        out.push("coverage_supported_claim_missing".to_string());
-  146|      9|    }
+  145|      2|        out.push("coverage_supported_claim_missing".to_string());
+  146|     10|    }
   147|     84|    for blocked in [
   148|     12|        "completion",
   149|     12|        "package_readiness",
@@ -20160,7 +20158,7 @@
   171|    159|    value
   172|    159|        .get(key)
   173|    159|        .and_then(Value::as_array)
-  174|    472|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
+  174|    473|        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(needle)))
                        ^159                ^134         ^134
   175|    159|}
   176|       |
@@ -20423,11 +20421,11 @@
    38|    621|    for item in items(value) {
                               ^26   ^26
    39|    621|        if !item_failures(item).is_empty() {
-   40|    300|            out.push(format!(
-   41|    300|                "cli_control_plane_receipt_evidence_graph_item_has_failures:{}",
-   42|    300|                label(item)
-   43|    300|            ));
-   44|    321|        }
+   40|    299|            out.push(format!(
+   41|    299|                "cli_control_plane_receipt_evidence_graph_item_has_failures:{}",
+   42|    299|                label(item)
+   43|    299|            ));
+   44|    322|        }
    45|    621|        if item.get("exists").and_then(Value::as_bool) != Some(true) {
    46|    237|            out.push(format!(
    47|    237|                "cli_control_plane_receipt_evidence_graph_item_missing:{}",
@@ -20441,11 +20439,11 @@
    55|    277|            ));
    56|    344|        }
    57|    621|        if item.get("same_candidate").and_then(Value::as_bool) != Some(true) {
-   58|    272|            out.push(format!(
-   59|    272|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
-   60|    272|                label(item)
-   61|    272|            ));
-   62|    349|        }
+   58|    271|            out.push(format!(
+   59|    271|                "cli_control_plane_receipt_evidence_graph_item_not_same_candidate:{}",
+   60|    271|                label(item)
+   61|    271|            ));
+   62|    350|        }
    63|       |    }
    64|     26|    out
    65|     26|}
@@ -20894,7 +20892,7 @@
    40|     64|fn prefixed(prefix: &str, failures: Vec<String>) -> Vec<String> {
    41|     64|    failures
    42|     64|        .into_iter()
-   43|    826|        .map(|failure| format!("{prefix}:{failure}"))
+   43|    821|        .map(|failure| format!("{prefix}:{failure}"))
                        ^64
    44|     64|        .collect()
    45|     64|}
@@ -21480,6 +21478,7 @@
   191|     13|            crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
   192|     13|                .into_iter()
   193|     13|                .map(|failure| format!("cli_control_plane_transaction_performance:{failure}"))
+                                             ^11
   194|     13|                .collect()
   195|       |        }
   196|     12|        "coverage" => coverage_failures(store, value, expected),
@@ -21512,18 +21511,18 @@
   221|      3|        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
   222|      8|    }
   223|     11|    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-  224|      7|        || !value
-  225|      7|            .get("uncovered_records")
-  226|      7|            .and_then(Value::as_array)
-  227|      7|            .is_some_and(Vec::is_empty)
-  228|      5|    {
-  229|      5|        out.push("cli_control_plane_transaction_coverage_not_exact_100".to_string());
-  230|      6|    }
+  224|      9|        || !value
+  225|      9|            .get("uncovered_records")
+  226|      9|            .and_then(Value::as_array)
+  227|      9|            .is_some_and(Vec::is_empty)
+  228|      3|    {
+  229|      3|        out.push("cli_control_plane_transaction_coverage_not_exact_100".to_string());
+  230|      8|    }
   231|     11|    if value.get("claim_ceiling").and_then(Value::as_str)
   232|     11|        != Some("supports_complete_coverage_claim")
-  233|      5|    {
-  234|      5|        out.push("cli_control_plane_transaction_coverage_claim_ceiling_not_complete".to_string());
-  235|      6|    }
+  233|      3|    {
+  234|      3|        out.push("cli_control_plane_transaction_coverage_claim_ceiling_not_complete".to_string());
+  235|      8|    }
   236|     11|    out
   237|     11|}
 
@@ -29035,217 +29034,231 @@
   140|      9|}
   141|       |
   142|      9|fn concurrency_value() -> Value {
-  143|      9|    json!({
-  144|      9|        "level": 1,
-  145|      9|        "worker_count": 1,
-  146|      9|        "queue_depth": 0,
-  147|      9|        "isolation_namespace": "single_process_no_shared_mutable_cache"
-  148|       |    })
-  149|      9|}
-  150|       |
-  151|      9|fn telemetry_value(wall_ms: u64) -> Value {
-  152|      9|    json!({
-  153|      9|        "start_timestamp": crate::audit::clock::now_iso(),
-  154|      9|        "end_timestamp": crate::audit::clock::now_iso(),
-  155|      9|        "wall_clock_ms": wall_ms,
-  156|      9|        "cpu_ms": null,
-  157|      9|        "peak_memory_bytes": null,
-  158|      9|        "io_bytes": null,
-  159|      9|        "external_call_count": 0,
-  160|      9|        "external_wait_ms": 0,
-  161|      9|        "timeout_count": 0,
-  162|      9|        "retry_count": 0
-  163|       |    })
-  164|      9|}
-  165|       |
-  166|      9|fn external_policy(class: BudgetClass) -> Value {
-  167|      9|    json!({
-  168|      9|        "live_probe_class": class.id() == "external_live",
-  169|      9|        "timeout_ms": if class.id() == "external_live" { 30_000 } else { 0 },
+  143|      9|    let worker_count = crate::scheduler::SchedulerConfig::default_jobs();
+  144|      9|    json!({
+  145|      9|        "level": worker_count,
+  146|      9|        "worker_count": worker_count,
+  147|      9|        "queue_depth": 0,
+  148|      9|        "isolation_namespace": "scheduler_default_available_parallelism_minus_one_no_shared_artifact_writes"
+  149|       |    })
+  150|      9|}
+  151|       |
+  152|      9|fn telemetry_value(wall_ms: u64) -> Value {
+  153|      9|    json!({
+  154|      9|        "start_timestamp": crate::audit::clock::now_iso(),
+  155|      9|        "end_timestamp": crate::audit::clock::now_iso(),
+  156|      9|        "wall_clock_ms": wall_ms,
+  157|      9|        "cpu_ms": null,
+  158|      9|        "peak_memory_bytes": null,
+  159|      9|        "io_bytes": null,
+  160|      9|        "external_call_count": 0,
+  161|      9|        "external_wait_ms": 0,
+  162|      9|        "timeout_count": 0,
+  163|      9|        "retry_count": 0
+  164|       |    })
+  165|      9|}
+  166|       |
+  167|      9|fn external_policy(class: BudgetClass) -> Value {
+  168|      9|    json!({
+  169|      9|        "live_probe_class": class.id() == "external_live",
+  170|      9|        "timeout_ms": if class.id() == "external_live" { 30_000 } else { 0 },
                                                                        ^2              ^7
-  170|      9|        "retry_backoff": if class.id() == "external_live" { "bounded_exponential_backoff" } else { "not_applicable_no_external_calls" },
+  171|      9|        "retry_backoff": if class.id() == "external_live" { "bounded_exponential_backoff" } else { "not_applicable_no_external_calls" },
                                                                           ^2                                     ^7
-  171|      9|        "offline_fallback_claim_behavior": "dependent_live_surface_claims_blocked"
-  172|       |    })
-  173|      9|}
-  174|       |
-  175|     15|fn regression_value(status: &str) -> Value {
-  176|     15|    json!({
-  177|     15|        "baseline_version": PERFORMANCE_BUDGET_VERSION,
-  178|     15|        "baseline_machine_class": "local_macos_codex_desktop",
-  179|     15|        "tolerance_percent": 0,
-  180|     15|        "status": status
-  181|       |    })
-  182|     15|}
-  183|       |
-  184|     60|fn digest(root: &Path, rel: &str) -> Result<String, String> {
-  185|     60|    crate::digest::file(&root.join(rel))
-  186|     60|}
-  187|       |
-  188|     14|fn cli_binary_digest() -> String {
-  189|     14|    cli_binary_digest_for_path(std::env::current_exe().ok())
-  190|     14|}
+  172|      9|        "offline_fallback_claim_behavior": "dependent_live_surface_claims_blocked"
+  173|       |    })
+  174|      9|}
+  175|       |
+  176|     15|fn regression_value(status: &str) -> Value {
+  177|     15|    json!({
+  178|     15|        "baseline_version": PERFORMANCE_BUDGET_VERSION,
+  179|     15|        "baseline_machine_class": "local_macos_codex_desktop",
+  180|     15|        "tolerance_percent": 0,
+  181|     15|        "status": status
+  182|       |    })
+  183|     15|}
+  184|       |
+  185|     60|fn digest(root: &Path, rel: &str) -> Result<String, String> {
+  186|     60|    crate::digest::file(&root.join(rel))
+  187|     60|}
+  188|       |
+  189|     14|fn cli_binary_digest() -> String {
+  190|     14|    cli_binary_digest_for_path(std::env::current_exe().ok())
+  191|     14|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/performance/receipt.rs:
     1|       |use crate::cli::performance::types::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
     2|       |use serde_json::Value;
     3|       |
-    4|    109|pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
-    5|    109|    let mut out = Vec::new();
-    6|    109|    if value.get("schema").and_then(Value::as_str) != Some(PERFORMANCE_RECEIPT_SCHEMA) {
+    4|    110|pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
+    5|    110|    let mut out = Vec::new();
+    6|    110|    if value.get("schema").and_then(Value::as_str) != Some(PERFORMANCE_RECEIPT_SCHEMA) {
     7|      3|        out.push("cli_performance_receipt_wrong_schema".to_string());
-    8|    106|    }
-    9|    109|    let status = value.get("status").and_then(Value::as_str);
-   10|    654|    for ptr in [
-   11|    109|        "/command/argv",
-   12|    109|        "/budget/class",
-   13|    109|        "/digests/candidate",
-   14|    109|        "/cache/mode",
-   15|    109|        "/concurrency/worker_count",
-   16|    109|        "/telemetry/wall_clock_ms",
-   17|    109|    ] {
-   18|    654|        if value.pointer(ptr).is_none() {
-   19|     12|            out.push(format!("cli_performance_receipt_missing:{ptr}"));
-   20|    642|        }
-   21|       |    }
-   22|    109|    check_budget_authority(value, &mut out);
-   23|    109|    if status == Some("fail") && value.pointer("/failure/check_id").is_none() {
-                                               ^7                                 ^7
-   24|      3|        out.push("cli_performance_receipt_missing:/failure/check_id".to_string());
-   25|    106|    }
-   26|    109|    if status == Some("pass")
-   27|    101|        && value.get("claim_ceiling").and_then(Value::as_str) != Some("performance_proven")
-   28|      1|    {
-   29|      1|        out.push("cli_performance_pass_without_positive_claim_ceiling".to_string());
-   30|    108|    }
-   31|    109|    if status == Some("pass")
-   32|    101|        && value
-   33|    101|            .get("blocked_claim_classes")
-   34|    101|            .and_then(Value::as_array)
-   35|    101|            .is_some_and(|rows| !rows.is_empty())
-   36|      1|    {
-   37|      1|        out.push("cli_performance_pass_with_blocked_claims".to_string());
-   38|    108|    }
-   39|    109|    let blocked = value
-   40|    109|        .get("blocked_claim_classes")
-   41|    109|        .and_then(Value::as_array)
-   42|    109|        .is_some_and(|rows| !rows.is_empty());
-                                           ^107 ^107
-   43|    109|    if status == Some("fail") && !blocked {
-                                               ^7
-   44|      3|        out.push("cli_performance_fail_without_blocked_claims".to_string());
-   45|    106|    }
-   46|    109|    out
-   47|    109|}
-   48|       |
-   49|    109|fn check_budget_authority(value: &Value, out: &mut Vec<String>) {
-   50|    109|    let Some(raw_class) = value.pointer("/budget/class").and_then(Value::as_str) else {
+    8|    107|    }
+    9|    110|    let status = value.get("status").and_then(Value::as_str);
+   10|  1.21k|    for ptr in [
+   11|    110|        "/command/argv",
+   12|    110|        "/budget/class",
+   13|    110|        "/digests/candidate",
+   14|    110|        "/cache/mode",
+   15|    110|        "/concurrency/worker_count",
+   16|    110|        "/concurrency/queue_depth",
+   17|    110|        "/concurrency/isolation_namespace",
+   18|    110|        "/telemetry/wall_clock_ms",
+   19|    110|        "/telemetry/cpu_ms",
+   20|    110|        "/telemetry/peak_memory_bytes",
+   21|    110|        "/telemetry/io_bytes",
+   22|    110|    ] {
+   23|  1.21k|        if value.pointer(ptr).is_none() {
+   24|     23|            out.push(format!("cli_performance_receipt_missing:{ptr}"));
+   25|  1.18k|        }
+   26|       |    }
+   27|    110|    check_budget_authority(value, &mut out);
+   28|    110|    if status == Some("fail") && value.pointer("/failure/check_id").is_none() {
+                                               ^8                                 ^8
+   29|      3|        out.push("cli_performance_receipt_missing:/failure/check_id".to_string());
+   30|    107|    }
+   31|    110|    if status == Some("pass")
+   32|    101|        && value.get("claim_ceiling").and_then(Value::as_str) != Some("performance_proven")
+   33|      1|    {
+   34|      1|        out.push("cli_performance_pass_without_positive_claim_ceiling".to_string());
+   35|    109|    }
+   36|    110|    if status == Some("pass")
+   37|    101|        && value
+   38|    101|            .get("blocked_claim_classes")
+   39|    101|            .and_then(Value::as_array)
+   40|    101|            .is_some_and(|rows| !rows.is_empty())
+   41|      1|    {
+   42|      1|        out.push("cli_performance_pass_with_blocked_claims".to_string());
+   43|    109|    }
+   44|    110|    let blocked = value
+   45|    110|        .get("blocked_claim_classes")
+   46|    110|        .and_then(Value::as_array)
+   47|    110|        .is_some_and(|rows| !rows.is_empty());
+                                           ^108 ^108
+   48|    110|    if status == Some("fail") && !blocked {
+                                               ^8
+   49|      3|        out.push("cli_performance_fail_without_blocked_claims".to_string());
+   50|    107|    }
+   51|    110|    out
+   52|    110|}
+   53|       |
+   54|    110|fn check_budget_authority(value: &Value, out: &mut Vec<String>) {
+   55|    110|    let Some(raw_class) = value.pointer("/budget/class").and_then(Value::as_str) else {
+                           ^108
+   56|      2|        return;
+   57|       |    };
+   58|    108|    let Some(class) = BudgetClass::from_str(raw_class).filter(|class| class.id() == raw_class)
                            ^107
-   51|      2|        return;
-   52|       |    };
-   53|    107|    let Some(class) = BudgetClass::from_str(raw_class).filter(|class| class.id() == raw_class)
-                           ^106
-   54|       |    else {
-   55|      1|        out.push(format!(
-   56|       |            "cli_performance_receipt_noncanonical_budget_class:{raw_class}"
-   57|       |        ));
-   58|      1|        return;
-   59|       |    };
-   60|    106|    let fields = [
-   61|    106|        (
-   62|    106|            "/budget/cold_p95_ms",
-   63|    106|            class.cold_p95_ms(),
-   64|    106|            "cli_performance_receipt_budget_cold_p95_mismatch",
-   65|    106|        ),
-   66|    106|        (
-   67|    106|            "/budget/target_ms",
-   68|    106|            class.cold_p95_ms(),
-   69|    106|            "cli_performance_receipt_budget_target_mismatch",
-   70|    106|        ),
-   71|    106|        (
-   72|    106|            "/budget/threshold_ms",
-   73|    106|            class.cold_p95_ms(),
-   74|    106|            "cli_performance_receipt_budget_threshold_mismatch",
-   75|    106|        ),
-   76|    106|        (
-   77|    106|            "/budget/hard_ceiling_ms",
-   78|    106|            class.hard_ceiling_ms(),
-   79|    106|            "cli_performance_receipt_budget_hard_ceiling_mismatch",
-   80|    106|        ),
-   81|    106|    ];
-   82|    424|    for (ptr, expected, code) in fields {
-                                               ^106
-   83|    424|        if value.pointer(ptr).and_then(Value::as_u64) != Some(expected) {
-   84|      1|            out.push(format!("{code}:{raw_class}"));
-   85|    423|        }
-   86|       |    }
-   87|    109|}
-   88|       |
-   89|     99|pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &str) -> Vec<String> {
-   90|     99|    let mut out = surface_value_failures(value);
-   91|     99|    let candidate = value
-   92|     99|        .pointer("/digests/candidate")
-   93|     99|        .and_then(Value::as_str)
-   94|     99|        .unwrap_or("");
-   95|     99|    if candidate != expected_candidate {
-   96|     12|        out.push(format!(
-   97|     12|            "cli_performance_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
-   98|     12|        ));
-   99|     87|    }
-  100|     99|    if value.get("status").and_then(Value::as_str) != Some("pass") {
-  101|      3|        out.push("cli_performance_receipt_not_pass".to_string());
-  102|     96|    }
-  103|     99|    if value
-  104|     99|        .get("failure")
-  105|     99|        .is_some_and(|failure| failure != &Value::Null)
+   59|       |    else {
+   60|      1|        out.push(format!(
+   61|       |            "cli_performance_receipt_noncanonical_budget_class:{raw_class}"
+   62|       |        ));
+   63|      1|        return;
+   64|       |    };
+   65|    107|    let fields = [
+   66|    107|        (
+   67|    107|            "/budget/cold_p95_ms",
+   68|    107|            class.cold_p95_ms(),
+   69|    107|            "cli_performance_receipt_budget_cold_p95_mismatch",
+   70|    107|        ),
+   71|    107|        (
+   72|    107|            "/budget/target_ms",
+   73|    107|            class.cold_p95_ms(),
+   74|    107|            "cli_performance_receipt_budget_target_mismatch",
+   75|    107|        ),
+   76|    107|        (
+   77|    107|            "/budget/threshold_ms",
+   78|    107|            class.cold_p95_ms(),
+   79|    107|            "cli_performance_receipt_budget_threshold_mismatch",
+   80|    107|        ),
+   81|    107|        (
+   82|    107|            "/budget/hard_ceiling_ms",
+   83|    107|            class.hard_ceiling_ms(),
+   84|    107|            "cli_performance_receipt_budget_hard_ceiling_mismatch",
+   85|    107|        ),
+   86|    107|    ];
+   87|    428|    for (ptr, expected, code) in fields {
+                                               ^107
+   88|    428|        if value.pointer(ptr).and_then(Value::as_u64) != Some(expected) {
+   89|      1|            out.push(format!("{code}:{raw_class}"));
+   90|    427|        }
+   91|       |    }
+   92|    110|}
+   93|       |
+   94|     99|pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &str) -> Vec<String> {
+   95|     99|    let mut out = surface_value_failures(value);
+   96|     99|    let candidate = value
+   97|     99|        .pointer("/digests/candidate")
+   98|     99|        .and_then(Value::as_str)
+   99|     99|        .unwrap_or("");
+  100|     99|    if candidate != expected_candidate {
+  101|      8|        out.push(format!(
+  102|      8|            "cli_performance_receipt_candidate_digest_mismatch:{candidate}!={expected_candidate}"
+  103|      8|        ));
+  104|     91|    }
+  105|     99|    if value.get("status").and_then(Value::as_str) != Some("pass") {
+  106|      3|        out.push("cli_performance_receipt_not_pass".to_string());
+  107|     96|    }
+  108|     99|    if value
+  109|     99|        .get("failure")
+  110|     99|        .is_some_and(|failure| failure != &Value::Null)
                                              ^97        ^97
-  106|      1|    {
-  107|      1|        out.push("cli_performance_pass_has_failure".to_string());
-  108|     98|    }
-  109|     99|    let wall_ms = value
-  110|     99|        .pointer("/telemetry/wall_clock_ms")
-  111|     99|        .and_then(Value::as_u64)
-  112|     99|        .unwrap_or(0);
-  113|     99|    if wall_ms == 0 {
-  114|      3|        out.push("cli_performance_receipt_placeholder_wall_clock".to_string());
-  115|     96|    }
-  116|     99|    if value
-  117|     99|        .pointer("/performance_regression/status")
-  118|     99|        .and_then(Value::as_str)
-  119|     99|        != Some("pass")
-  120|      3|    {
-  121|      3|        out.push("cli_performance_receipt_regression_not_pass".to_string());
-  122|     96|    }
-  123|     99|    if value.pointer("/cache/mode").and_then(Value::as_str) != Some("disabled")
-  124|     87|        || value
-  125|     87|            .pointer("/cache/no_cache_mode_result")
-  126|     87|            .and_then(Value::as_str)
-  127|     87|            != Some("executed_without_cache")
-  128|     12|    {
-  129|     12|        out.push("cli_performance_receipt_cache_honesty_missing".to_string());
-  130|     87|    }
-  131|     99|    if value
-  132|     99|        .pointer("/concurrency/worker_count")
-  133|     99|        .and_then(Value::as_u64)
-  134|     99|        .unwrap_or(0)
-  135|     99|        == 0
-  136|      2|    {
-  137|      2|        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
-  138|     97|    }
-  139|     99|    if value
-  140|     99|        .get("supported_claim_classes")
-  141|     99|        .and_then(Value::as_array)
-  142|     99|        .is_some_and(|rows| {
+  111|      1|    {
+  112|      1|        out.push("cli_performance_pass_has_failure".to_string());
+  113|     98|    }
+  114|     99|    let wall_ms = value
+  115|     99|        .pointer("/telemetry/wall_clock_ms")
+  116|     99|        .and_then(Value::as_u64)
+  117|     99|        .unwrap_or(0);
+  118|     99|    if wall_ms == 0 {
+  119|      3|        out.push("cli_performance_receipt_placeholder_wall_clock".to_string());
+  120|     96|    }
+  121|     99|    if value
+  122|     99|        .pointer("/performance_regression/status")
+  123|     99|        .and_then(Value::as_str)
+  124|     99|        != Some("pass")
+  125|      3|    {
+  126|      3|        out.push("cli_performance_receipt_regression_not_pass".to_string());
+  127|     96|    }
+  128|     99|    if value.pointer("/cache/mode").and_then(Value::as_str) != Some("disabled")
+  129|     87|        || value
+  130|     87|            .pointer("/cache/no_cache_mode_result")
+  131|     87|            .and_then(Value::as_str)
+  132|     87|            != Some("executed_without_cache")
+  133|     12|    {
+  134|     12|        out.push("cli_performance_receipt_cache_honesty_missing".to_string());
+  135|     87|    }
+  136|     99|    if value
+  137|     99|        .pointer("/concurrency/worker_count")
+  138|     99|        .and_then(Value::as_u64)
+  139|     99|        .unwrap_or(0)
+  140|     99|        == 0
+  141|      2|    {
+  142|      2|        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
+  143|     97|    }
+  144|     99|    if value
+  145|     99|        .pointer("/concurrency/worker_count")
+  146|     99|        .and_then(Value::as_u64)
+  147|     99|        .is_some_and(|worker_count| worker_count > 256)
+                                                  ^97
+  148|      1|    {
+  149|      1|        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
+  150|     98|    }
+  151|     99|    if value
+  152|     99|        .get("supported_claim_classes")
+  153|     99|        .and_then(Value::as_array)
+  154|     99|        .is_some_and(|rows| {
                                           ^97
-  143|     97|            rows.iter()
-  144|     98|                .any(|row| row.as_str() == Some("update_goal_eligibility"))
+  155|     97|            rows.iter()
+  156|     98|                .any(|row| row.as_str() == Some("update_goal_eligibility"))
                                ^97
-  145|     97|        })
-  146|     10|    {
-  147|     10|        out.push("cli_performance_receipt_update_goal_overclaim".to_string());
-  148|     89|    }
-  149|     99|    out
-  150|     99|}
+  157|     97|        })
+  158|     10|    {
+  159|     10|        out.push("cli_performance_receipt_update_goal_overclaim".to_string());
+  160|     89|    }
+  161|     99|    out
+  162|     99|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/performance/types.rs:
     1|       |use serde::Serialize;
@@ -29295,37 +29308,37 @@
    45|       |}
    46|       |
    47|       |impl BudgetClass {
-   48|    174|    pub(crate) fn id(self) -> &'static str {
-   49|    174|        match self {
+   48|    175|    pub(crate) fn id(self) -> &'static str {
+   49|    175|        match self {
    50|      1|            Self::HotEditCheck => "hot_edit_check",
    51|     34|            Self::FocusedRepair => "focused_repair",
    52|      1|            Self::StandardSourceLocal => "standard_source_local",
-   53|    124|            Self::StrictLocal => "strict_local",
+   53|    125|            Self::StrictLocal => "strict_local",
    54|      1|            Self::StrictFixtures => "strict_fixtures",
    55|      1|            Self::StrictCoverage => "strict_coverage",
    56|      1|            Self::StrictFinal => "strict_final",
    57|     11|            Self::ExternalLive => "external_live",
    58|       |        }
-   59|    174|    }
+   59|    175|    }
    60|       |
-   61|    132|    pub(crate) fn from_str(raw: &str) -> Option<Self> {
-   62|    132|        match raw {
-   63|    132|            "hot" | "hot_edit_check" | "hot-edit-check" | "instant" | "interactive" => {
-                                                     ^131               ^130        ^129
+   61|    133|    pub(crate) fn from_str(raw: &str) -> Option<Self> {
+   62|    133|        match raw {
+   63|    133|            "hot" | "hot_edit_check" | "hot-edit-check" | "instant" | "interactive" => {
+                                                     ^132               ^131        ^130
    64|      4|                Some(Self::HotEditCheck)
    65|       |            }
-   66|    128|            "focused" | "focused_repair" | "focused-repair" => Some(Self::FocusedRepair),
-                                      ^126               ^125                ^4
-   67|    124|            "standard"
-   68|    124|            | "source-local"
-   69|    124|            | "source_local"
-   70|    124|            | "standard_source_local"
-   71|    123|            | "standard-source-local"
-   72|    122|            | "repair_loop"
-   73|    121|            | "repair-loop" => Some(Self::StandardSourceLocal),
+   66|    129|            "focused" | "focused_repair" | "focused-repair" => Some(Self::FocusedRepair),
+                                      ^127               ^126                ^4
+   67|    125|            "standard"
+   68|    125|            | "source-local"
+   69|    125|            | "source_local"
+   70|    125|            | "standard_source_local"
+   71|    124|            | "standard-source-local"
+   72|    123|            | "repair_loop"
+   73|    122|            | "repair-loop" => Some(Self::StandardSourceLocal),
                                              ^4
-   74|    120|            "strict_local" | "strict-local" => Some(Self::StrictLocal),
-                                           ^13               ^108
+   74|    121|            "strict_local" | "strict-local" => Some(Self::StrictLocal),
+                                           ^13               ^109
    75|     12|            "strict_fixtures" | "strict-fixtures" => Some(Self::StrictFixtures),
                                               ^11                  ^2
    76|     10|            "strict_coverage" | "strict-coverage" => Some(Self::StrictCoverage),
@@ -29336,20 +29349,20 @@
                                             ^4                 ^3
    79|      3|            _ => None,
    80|       |        }
-   81|    132|    }
+   81|    133|    }
    82|       |
-   83|    385|    pub(crate) fn cold_p95_ms(self) -> u64 {
-   84|    385|        match self {
+   83|    388|    pub(crate) fn cold_p95_ms(self) -> u64 {
+   84|    388|        match self {
    85|      1|            Self::HotEditCheck => 5_000,
    86|     35|            Self::FocusedRepair => 15_000,
    87|      1|            Self::StandardSourceLocal => 30_000,
-   88|    334|            Self::StrictLocal => 60_000,
+   88|    337|            Self::StrictLocal => 60_000,
    89|      1|            Self::StrictFixtures => 60_000,
    90|      1|            Self::StrictCoverage => 60_000,
    91|      1|            Self::StrictFinal => 60_000,
    92|     11|            Self::ExternalLive => 30_000,
    93|       |        }
-   94|    385|    }
+   94|    388|    }
    95|       |
    96|     22|    pub(crate) fn warm_p95_ms(self) -> Option<u64> {
    97|     22|        match self {
@@ -29360,17 +29373,17 @@
   102|       |        }
   103|     22|    }
   104|       |
-  105|    128|    pub(crate) fn hard_ceiling_ms(self) -> u64 {
-  106|    128|        match self {
+  105|    129|    pub(crate) fn hard_ceiling_ms(self) -> u64 {
+  106|    129|        match self {
   107|      1|            Self::HotEditCheck => 5_000,
   108|     10|            Self::FocusedRepair => 15_000,
   109|      1|            Self::StandardSourceLocal => 60_000,
   110|       |            Self::StrictLocal | Self::StrictFixtures | Self::StrictCoverage | Self::StrictFinal => {
-  111|    113|                180_000
+  111|    114|                180_000
   112|       |            }
   113|      3|            Self::ExternalLive => 30_000,
   114|       |        }
-  115|    128|    }
+  115|    129|    }
   116|       |}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/product/mod.rs:
@@ -31259,9 +31272,9 @@
    15|       |#[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
    16|       |const O_NOFOLLOW: i32 = 0;
    17|       |
-   18|  36.0k|pub fn bytes(payload: &[u8]) -> String {
-   19|  36.0k|    format!("sha256:{:x}", Sha256::digest(payload))
-   20|  36.0k|}
+   18|  36.1k|pub fn bytes(payload: &[u8]) -> String {
+   19|  36.1k|    format!("sha256:{:x}", Sha256::digest(payload))
+   20|  36.1k|}
    21|       |
    22|  11.7k|pub fn file(path: &Path) -> Result<String, String> {
    23|  11.7k|    read_file_bytes(path).map(|payload| bytes(&payload))
@@ -32169,7 +32182,7 @@
    23|       |];
    24|       |
    25|     49|pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
-   26|  1.02M|    walk_package_entries(root, |entry| entry.file_type().is_file())
+   26|   517k|    walk_package_entries(root, |entry| entry.file_type().is_file())
                   ^49                  ^49
    27|     49|}
    28|       |
@@ -32183,37 +32196,37 @@
    35|     62|    include: impl Fn(&walkdir::DirEntry) -> bool,
    36|     62|) -> Result<Vec<String>, String> {
    37|     62|    let mut paths = Vec::new();
-   38|  1.02M|    for entry in WalkDir::new(root).follow_links(false) {
+   38|   517k|    for entry in WalkDir::new(root).follow_links(false) {
                                ^62          ^62   ^62
-   39|  1.02M|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
-                          ^1.02M                      ^1                            ^1
-   40|  1.02M|        if include(&entry) {
-   41|   996k|            let rel = rel_path(root, entry.path())?;
+   39|   517k|        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
+                          ^517k                       ^2                            ^2
+   40|   517k|        if include(&entry) {
+   41|   501k|            let rel = rel_path(root, entry.path())?;
                                                                 ^0
-   42|   996k|            if !local_only(&rel) {
-   43|  9.42k|                paths.push(rel);
-   44|   987k|            }
-   45|  30.9k|        }
+   42|   501k|            if !local_only(&rel) {
+   43|  5.54k|                paths.push(rel);
+   44|   495k|            }
+   45|  16.4k|        }
    46|       |    }
-   47|     61|    paths.sort();
-   48|     61|    Ok(paths)
+   47|     60|    paths.sort();
+   48|     60|    Ok(paths)
    49|     62|}
    50|       |
-   51|   996k|fn local_only(rel: &str) -> bool {
-   52|   996k|    LOCAL_PROOF_PATHS.contains(&rel)
-   53|   996k|        || LOCAL_BUILD_OUTPUT_PREFIXES
-   54|   996k|            .iter()
-   55|  1.43M|            .any(|prefix| rel.starts_with(prefix))
-                           ^996k
-   56|   996k|}
+   51|   501k|fn local_only(rel: &str) -> bool {
+   52|   501k|    LOCAL_PROOF_PATHS.contains(&rel)
+   53|   501k|        || LOCAL_BUILD_OUTPUT_PREFIXES
+   54|   501k|            .iter()
+   55|   728k|            .any(|prefix| rel.starts_with(prefix))
+                           ^501k
+   56|   501k|}
    57|       |
-   58|   996k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-   59|   996k|    path.strip_prefix(root)
-   60|   996k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-                                 ^996k                 ^996k         ^996k
-   61|   996k|        .map_err(|err| format!("walk root strip failed: {err}"))
+   58|   501k|fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
+   59|   501k|    path.strip_prefix(root)
+   60|   501k|        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
+                                 ^501k                 ^501k         ^501k
+   61|   501k|        .map_err(|err| format!("walk root strip failed: {err}"))
                                      ^1
-   62|   996k|}
+   62|   501k|}
    63|       |
    64|     13|pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
    65|     13|    let listed = crate::package::inventory::inventory_paths(manifest);
@@ -37173,8 +37186,8 @@
    56|       |}
    57|       |
    58|       |impl SchedulerConfig {
-   59|     26|    pub(crate) fn from_jobs(jobs: Option<usize>) -> Result<Self, String> {
-   60|     24|        let jobs = match jobs {
+   59|     27|    pub(crate) fn from_jobs(jobs: Option<usize>) -> Result<Self, String> {
+   60|     25|        let jobs = match jobs {
                                        ^7
    61|      1|            Some(0) => return Err("scheduler jobs must be at least 1".to_string()),
    62|      7|            Some(value) if value > MAX_EXPLICIT_JOBS => {
@@ -37184,138 +37197,154 @@
    65|      1|                ));
    66|       |            }
    67|      6|            Some(value) => value,
-   68|     18|            None => default_worker_count(),
+   68|     19|            None => default_worker_count(),
    69|       |        };
-   70|     24|        Ok(Self { jobs })
-   71|     26|    }
+   70|     25|        Ok(Self { jobs })
+   71|     27|    }
    72|       |
-   73|     21|    pub(crate) fn jobs(self) -> usize {
-   74|     21|        self.jobs
-   75|     21|    }
-   76|       |}
-   77|       |
-   78|       |#[derive(Clone, Debug, Eq, PartialEq)]
-   79|       |pub(crate) struct Metrics {
-   80|       |    pub(crate) task_class: &'static str,
-   81|       |    pub(crate) worker_count: usize,
-   82|       |    pub(crate) task_count: usize,
-   83|       |    pub(crate) queue_depth: usize,
-   84|       |    pub(crate) wall_ms: u128,
-   85|       |    pub(crate) cache_mode: &'static str,
-   86|       |    pub(crate) deterministic_ordering: bool,
-   87|       |    pub(crate) shared_validation_artifact_writes_allowed: bool,
-   88|       |}
-   89|       |
-   90|       |impl Metrics {
-   91|      7|    pub(crate) fn to_value(&self, candidate_digest: &str, claim_impact: &str) -> Value {
-   92|      7|        debug_assert!(TaskClass::is_known_id(self.task_class));
-   93|      7|        json!({
-   94|      7|            "task_class": self.task_class,
-   95|      7|            "worker_count": self.worker_count,
-   96|      7|            "task_count": self.task_count,
-   97|      7|            "queue_depth": self.queue_depth,
-   98|      7|            "wall_ms": self.wall_ms,
-   99|      7|            "cache_mode": self.cache_mode,
-  100|      7|            "candidate_digest": candidate_digest,
-  101|      7|            "deterministic_ordering": self.deterministic_ordering,
-  102|      7|            "shared_validation_artifact_writes_allowed": self.shared_validation_artifact_writes_allowed,
-  103|      7|            "claim_impact": claim_impact
-  104|       |        })
-  105|      7|    }
-  106|       |}
-  107|       |
-  108|       |pub(crate) struct Scheduled<T> {
-  109|       |    pub(crate) values: Vec<T>,
-  110|       |    pub(crate) metrics: Metrics,
-  111|       |}
-  112|       |
-  113|       |type Task<T> = Box<dyn FnOnce() -> T + Send + 'static>;
-  114|       |
-  115|     24|pub(crate) fn run_ordered<T: Send + 'static>(
-  116|     24|    config: SchedulerConfig,
-  117|     24|    task_class: TaskClass,
-  118|     24|    tasks: Vec<Task<T>>,
-  119|     24|) -> Scheduled<T> {
-  120|     24|    let start = Instant::now();
-  121|     24|    let task_count = tasks.len();
-  122|     24|    let queue_depth = task_count;
-  123|     24|    let worker_count = worker_count(config, task_class, task_count);
-  124|     24|    let mut indexed_tasks = tasks.into_iter().enumerate().collect::<VecDeque<_>>();
-  125|       |
-  126|     24|    let results = if worker_count == 1 {
-  127|      8|        let mut out = Vec::with_capacity(task_count);
-  128|     24|        while let Some((index, task)) = indexed_tasks.pop_front() {
+   73|     22|    pub(crate) fn jobs(self) -> usize {
+   74|     22|        self.jobs
+   75|     22|    }
+   76|       |
+   77|     11|    pub(crate) fn default_jobs() -> usize {
+   78|     11|        default_worker_count()
+   79|     11|    }
+   80|       |}
+   81|       |
+   82|       |#[derive(Clone, Debug, Eq, PartialEq)]
+   83|       |pub(crate) struct Metrics {
+   84|       |    pub(crate) task_class: &'static str,
+   85|       |    pub(crate) worker_count: usize,
+   86|       |    pub(crate) task_count: usize,
+   87|       |    pub(crate) queue_depth: usize,
+   88|       |    pub(crate) wall_ms: u128,
+   89|       |    pub(crate) cpu_ms: Option<u128>,
+   90|       |    pub(crate) memory_bytes: Option<u64>,
+   91|       |    pub(crate) io_bytes: Option<u64>,
+   92|       |    pub(crate) cache_mode: &'static str,
+   93|       |    pub(crate) resource_measurement_status: &'static str,
+   94|       |    pub(crate) deterministic_ordering: bool,
+   95|       |    pub(crate) shared_validation_artifact_writes_allowed: bool,
+   96|       |}
+   97|       |
+   98|       |impl Metrics {
+   99|      7|    pub(crate) fn to_value(&self, candidate_digest: &str, claim_impact: &str) -> Value {
+  100|      7|        debug_assert!(TaskClass::is_known_id(self.task_class));
+  101|      7|        json!({
+  102|      7|            "task_class": self.task_class,
+  103|      7|            "worker_count": self.worker_count,
+  104|      7|            "task_count": self.task_count,
+  105|      7|            "queue_depth": self.queue_depth,
+  106|      7|            "wall_ms": self.wall_ms,
+  107|      7|            "cpu_ms": self.cpu_ms,
+  108|      7|            "memory_bytes": self.memory_bytes,
+  109|      7|            "io_bytes": self.io_bytes,
+  110|      7|            "cache_mode": self.cache_mode,
+  111|      7|            "resource_measurement_status": self.resource_measurement_status,
+  112|      7|            "candidate_digest": candidate_digest,
+  113|      7|            "deterministic_ordering": self.deterministic_ordering,
+  114|      7|            "shared_validation_artifact_writes_allowed": self.shared_validation_artifact_writes_allowed,
+  115|      7|            "claim_impact": claim_impact
+  116|       |        })
+  117|      7|    }
+  118|       |}
+  119|       |
+  120|       |pub(crate) struct Scheduled<T> {
+  121|       |    pub(crate) values: Vec<T>,
+  122|       |    pub(crate) metrics: Metrics,
+  123|       |}
+  124|       |
+  125|       |type Task<T> = Box<dyn FnOnce() -> T + Send + 'static>;
+  126|       |
+  127|     24|pub(crate) fn run_ordered<T: Send + 'static>(
+  128|     24|    config: SchedulerConfig,
+  129|     24|    task_class: TaskClass,
+  130|     24|    tasks: Vec<Task<T>>,
+  131|     24|) -> Scheduled<T> {
+  132|     24|    let start = Instant::now();
+  133|     24|    let task_count = tasks.len();
+  134|     24|    let queue_depth = task_count;
+  135|     24|    let worker_count = worker_count(config, task_class, task_count);
+  136|     24|    let mut indexed_tasks = tasks.into_iter().enumerate().collect::<VecDeque<_>>();
+  137|       |
+  138|     24|    let results = if worker_count == 1 {
+  139|      8|        let mut out = Vec::with_capacity(task_count);
+  140|     24|        while let Some((index, task)) = indexed_tasks.pop_front() {
                                       ^16    ^16
-  129|     16|            out.push((index, task()));
-  130|     16|        }
-  131|      8|        out
-  132|       |    } else {
-  133|     16|        run_parallel(worker_count, indexed_tasks)
-  134|       |    };
-  135|       |
-  136|     24|    let mut results = results;
-  137|     24|    results.sort_by_key(|(index, _)| *index);
-  138|     24|    let values = results.into_iter().map(|(_, value)| value).collect();
-  139|     24|    Scheduled {
-  140|     24|        values,
-  141|     24|        metrics: Metrics {
-  142|     24|            task_class: task_class.id(),
-  143|     24|            worker_count,
-  144|     24|            task_count,
-  145|     24|            queue_depth,
-  146|     24|            wall_ms: start.elapsed().as_millis(),
-  147|     24|            cache_mode: "declared_local",
-  148|     24|            deterministic_ordering: true,
-  149|     24|            shared_validation_artifact_writes_allowed: false,
-  150|     24|        },
-  151|     24|    }
-  152|     24|}
-  153|       |
-  154|     16|fn run_parallel<T: Send + 'static>(
-  155|     16|    worker_count: usize,
-  156|     16|    tasks: VecDeque<(usize, Task<T>)>,
-  157|     16|) -> Vec<(usize, T)> {
-  158|     16|    let queue = Arc::new(Mutex::new(tasks));
-  159|     16|    let results = Arc::new(Mutex::new(Vec::new()));
-  160|     16|    let mut handles = Vec::with_capacity(worker_count);
-  161|     16|    for _ in 0..worker_count {
-  162|    171|        let queue = Arc::clone(&queue);
-  163|    171|        let results = Arc::clone(&results);
-  164|    171|        handles.push(std::thread::spawn(move || {
-  165|       |            loop {
-  166|    766|                let next = queue.lock().expect("scheduler queue").pop_front();
-  167|    766|                let Some((index, task)) = next else {
+  141|     16|            out.push((index, task()));
+  142|     16|        }
+  143|      8|        out
+  144|       |    } else {
+  145|     16|        run_parallel(worker_count, indexed_tasks)
+  146|       |    };
+  147|       |
+  148|     24|    let mut results = results;
+  149|     24|    results.sort_by_key(|(index, _)| *index);
+  150|     24|    let values = results.into_iter().map(|(_, value)| value).collect();
+  151|     24|    Scheduled {
+  152|     24|        values,
+  153|     24|        metrics: Metrics {
+  154|     24|            task_class: task_class.id(),
+  155|     24|            worker_count,
+  156|     24|            task_count,
+  157|     24|            queue_depth,
+  158|     24|            wall_ms: start.elapsed().as_millis(),
+  159|     24|            cpu_ms: None,
+  160|     24|            memory_bytes: None,
+  161|     24|            io_bytes: None,
+  162|     24|            cache_mode: "declared_local",
+  163|     24|            resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
+  164|     24|            deterministic_ordering: true,
+  165|     24|            shared_validation_artifact_writes_allowed: false,
+  166|     24|        },
+  167|     24|    }
+  168|     24|}
+  169|       |
+  170|     16|fn run_parallel<T: Send + 'static>(
+  171|     16|    worker_count: usize,
+  172|     16|    tasks: VecDeque<(usize, Task<T>)>,
+  173|     16|) -> Vec<(usize, T)> {
+  174|     16|    let queue = Arc::new(Mutex::new(tasks));
+  175|     16|    let results = Arc::new(Mutex::new(Vec::new()));
+  176|     16|    let mut handles = Vec::with_capacity(worker_count);
+  177|     16|    for _ in 0..worker_count {
+  178|    171|        let queue = Arc::clone(&queue);
+  179|    171|        let results = Arc::clone(&results);
+  180|    171|        handles.push(std::thread::spawn(move || {
+  181|       |            loop {
+  182|    766|                let next = queue.lock().expect("scheduler queue").pop_front();
+  183|    766|                let Some((index, task)) = next else {
                                         ^595   ^595
-  168|    171|                    break;
-  169|       |                };
-  170|    595|                let value = task();
-  171|    595|                results
-  172|    595|                    .lock()
-  173|    595|                    .expect("scheduler results")
-  174|    595|                    .push((index, value));
-  175|       |            }
-  176|    171|        }));
-  177|       |    }
-  178|    171|    for handle in handles {
+  184|    171|                    break;
+  185|       |                };
+  186|    595|                let value = task();
+  187|    595|                results
+  188|    595|                    .lock()
+  189|    595|                    .expect("scheduler results")
+  190|    595|                    .push((index, value));
+  191|       |            }
+  192|    171|        }));
+  193|       |    }
+  194|    171|    for handle in handles {
                                 ^16
-  179|    171|        handle.join().expect("scheduler worker");
-  180|    171|    }
-  181|     16|    let mut results = results.lock().expect("scheduler results");
-  182|     16|    std::mem::take(&mut *results)
-  183|     16|}
-  184|       |
-  185|     24|fn worker_count(config: SchedulerConfig, task_class: TaskClass, task_count: usize) -> usize {
-  186|     24|    if task_count == 0 || !task_class.allows_parallel() {
-  187|      4|        return usize::from(task_count > 0);
-  188|     20|    }
-  189|     20|    config.jobs().min(task_count).max(1)
-  190|     24|}
-  191|       |
-  192|     18|fn default_worker_count() -> usize {
-  193|     18|    std::thread::available_parallelism()
-  194|     18|        .map(|count| count.get().saturating_sub(1).max(1))
-  195|     18|        .unwrap_or(1)
-  196|     18|}
+  195|    171|        handle.join().expect("scheduler worker");
+  196|    171|    }
+  197|     16|    let mut results = results.lock().expect("scheduler results");
+  198|     16|    std::mem::take(&mut *results)
+  199|     16|}
+  200|       |
+  201|     24|fn worker_count(config: SchedulerConfig, task_class: TaskClass, task_count: usize) -> usize {
+  202|     24|    if task_count == 0 || !task_class.allows_parallel() {
+  203|      4|        return usize::from(task_count > 0);
+  204|     20|    }
+  205|     20|    config.jobs().min(task_count).max(1)
+  206|     24|}
+  207|       |
+  208|     30|fn default_worker_count() -> usize {
+  209|     30|    std::thread::available_parallelism()
+  210|     30|        .map(|count| count.get().saturating_sub(1).max(1))
+  211|     30|        .unwrap_or(1)
+  212|     30|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/schema_catalog/catalog_refs.rs:
     1|       |use crate::json_boundary;
@@ -37693,13 +37722,13 @@
    61|  10.7k|        .contains(key)
    62|  10.7k|}
    63|       |
-   64|  4.87k|pub(super) fn cache_ref_success(store: &SchemaStore, key: String) {
-   65|  4.87k|    store
-   66|  4.87k|        .ref_success_cache
-   67|  4.87k|        .lock()
-   68|  4.87k|        .expect("schema ref cache")
-   69|  4.87k|        .insert(key);
-   70|  4.87k|}
+   64|  4.88k|pub(super) fn cache_ref_success(store: &SchemaStore, key: String) {
+   65|  4.88k|    store
+   66|  4.88k|        .ref_success_cache
+   67|  4.88k|        .lock()
+   68|  4.88k|        .expect("schema ref cache")
+   69|  4.88k|        .insert(key);
+   70|  4.88k|}
    71|       |
    72|    452|pub fn schema_errors(store: &SchemaStore, schema_name: &str, instance: &Value) -> Vec<String> {
    73|    452|    let Some(schema) = store.schemas.get(schema_name) else {
@@ -38595,7 +38624,7 @@
   164|       |
   165|    323|fn unique_items_check(items: &[Value], path: &str, errors: &mut Vec<String>) {
   166|    323|    let mut seen = std::collections::BTreeSet::new();
-  167|  2.38k|    if items.iter().any(|item| !seen.insert(item.to_string())) {
+  167|  2.39k|    if items.iter().any(|item| !seen.insert(item.to_string())) {
                      ^323         ^323
   168|      2|        errors.push(format!("{path}: uniqueItems"));
   169|    321|    }
@@ -38630,22 +38659,22 @@
    25|  10.7k|        if let Some(key) = cache_key(root, reference, instance)
    26|  10.7k|            && crate::schema_catalog::ref_cache_hit(store, &key)
    27|       |        {
-   28|  5.76k|            return;
-   29|  4.99k|        }
-   30|  4.99k|        let before = errors.len();
-   31|  4.99k|        match resolve_ref(store, root, reference) {
-   32|  4.98k|            Some((doc, target)) => {
-   33|  4.98k|                validate_at(store, &doc, &target, instance, path, errors, depth + 1);
-   34|  4.98k|                if errors.len() == before
-   35|  4.87k|                    && let Some(key) = cache_key(root, reference, instance)
-   36|  4.87k|                {
-   37|  4.87k|                    crate::schema_catalog::cache_ref_success(store, key);
-   38|  4.87k|                }
+   28|  5.74k|            return;
+   29|  5.00k|        }
+   30|  5.00k|        let before = errors.len();
+   31|  5.00k|        match resolve_ref(store, root, reference) {
+   32|  4.99k|            Some((doc, target)) => {
+   33|  4.99k|                validate_at(store, &doc, &target, instance, path, errors, depth + 1);
+   34|  4.99k|                if errors.len() == before
+   35|  4.88k|                    && let Some(key) = cache_key(root, reference, instance)
+   36|  4.88k|                {
+   37|  4.88k|                    crate::schema_catalog::cache_ref_success(store, key);
+   38|  4.88k|                }
                               ^110
    39|       |            }
    40|      3|            None => errors.push(format!("{path}: unresolved schema ref {reference}")),
    41|       |        }
-   42|  4.99k|        return;
+   42|  5.00k|        return;
    43|   651k|    }
    44|   651k|    structural_checks(store, root, schema, instance, path, errors, depth);
    45|   651k|    crate::schema_catalog::schema::object::keywords::check(
@@ -38720,7 +38749,7 @@
   107|    398|        if matches == 0 {
   108|      8|            errors.push(format!("{path}: anyOf mismatch"));
   109|    390|        }
-  110|   651k|    }
+  110|   650k|    }
   111|   651k|    if let Some(branches) = schema.get("oneOf").and_then(Value::as_array) {
                               ^42
   112|     42|        let matches = branch_matches(store, root, branches, instance, path, depth);
@@ -38819,33 +38848,33 @@
   200|    440|        .count()
   201|    440|}
   202|       |
-  203|  4.99k|fn resolve_ref(store: &SchemaStore, root: &Value, reference: &str) -> Option<(Value, Value)> {
-  204|  4.99k|    let (base, fragment) = reference.split_once('#').unwrap_or((reference, ""));
-  205|  4.99k|    let doc = if base.is_empty() {
-                      ^4.98k
+  203|  5.00k|fn resolve_ref(store: &SchemaStore, root: &Value, reference: &str) -> Option<(Value, Value)> {
+  204|  5.00k|    let (base, fragment) = reference.split_once('#').unwrap_or((reference, ""));
+  205|  5.00k|    let doc = if base.is_empty() {
+                      ^5.00k
   206|  1.30k|        root.clone()
   207|       |    } else {
-  208|  3.68k|        store.schemas.get(base).cloned().or_else(|| {
+  208|  3.69k|        store.schemas.get(base).cloned().or_else(|| {
                                                                   ^3
   209|      3|            let name = base.rsplit('/').next().unwrap_or(base);
   210|      3|            store.schemas.get(name).cloned()
   211|      3|        })?
                         ^1
   212|       |    };
-  213|  4.98k|    let target = if fragment.is_empty() {
-                      ^4.98k
+  213|  5.00k|    let target = if fragment.is_empty() {
+                      ^4.99k
   214|    195|        doc.clone()
   215|       |    } else {
-  216|  4.79k|        doc.pointer(fragment).cloned()?
+  216|  4.80k|        doc.pointer(fragment).cloned()?
                                                     ^2
   217|       |    };
-  218|  4.98k|    Some((doc, target))
-  219|  4.99k|}
+  218|  4.99k|    Some((doc, target))
+  219|  5.00k|}
   220|       |
   221|   651k|fn type_matches(schema_type: Option<&Value>, instance: &Value) -> bool {
   222|  20.8k|    match schema_type {
   223|   630k|        None => true,
-  224|  20.8k|        Some(Value::String(kind)) => one_type_matches(kind, instance),
+  224|  20.7k|        Some(Value::String(kind)) => one_type_matches(kind, instance),
   225|     59|        Some(Value::Array(kinds)) => kinds
   226|     59|            .iter()
   227|     59|            .filter_map(Value::as_str)
@@ -38857,8 +38886,8 @@
   233|  20.8k|fn one_type_matches(kind: &str, instance: &Value) -> bool {
   234|  20.8k|    match kind {
   235|  20.8k|        "object" => instance.is_object(),
-                                  ^5.05k   ^5.05k
-  236|  15.8k|        "array" => instance.is_array(),
+                                  ^5.03k   ^5.03k
+  236|  15.7k|        "array" => instance.is_array(),
                                  ^1.07k   ^1.07k
   237|  14.7k|        "string" => instance.is_string(),
                                   ^13.6k   ^13.6k
@@ -38895,10 +38924,10 @@
    17|  10.5k|    property_names_checks(store, root, schema, object, path, errors, depth);
    18|  10.5k|    required_checks(schema, object, path, errors);
    19|  10.5k|    if let Some(properties) = schema.get("properties").and_then(Value::as_object) {
-                              ^7.17k
-   20|  27.1k|        for (key, subschema) in properties {
-                                              ^7.17k
-   21|  27.1k|            if let Some(value) = object.get(key) {
+                              ^7.16k
+   20|  27.0k|        for (key, subschema) in properties {
+                                              ^7.16k
+   21|  27.0k|            if let Some(value) = object.get(key) {
                                       ^25.9k
    22|  25.9k|                crate::schema_catalog::schema::keywords::validate_at(
    23|  25.9k|                    store,
@@ -38980,7 +39009,7 @@
    93|  29.5k|            && !object.contains_key(name)
    94|  3.03k|        {
    95|  3.03k|            errors.push(format!("{path}.{name}: required"));
-   96|  26.5k|        }
+   96|  26.4k|        }
    97|       |    }
    98|  10.5k|}
    99|       |
@@ -38997,7 +39026,7 @@
   110|  47.7k|    for (key, value) in object
                                       ^10.5k
   111|  10.5k|        .iter()
-  112|  73.7k|        .filter(|(key, _)| known.is_none_or(|props| !props.contains_key(*key)))
+  112|  73.6k|        .filter(|(key, _)| known.is_none_or(|props| !props.contains_key(*key)))
                        ^10.5k                                      ^53.3k^53.3k       ^53.3k
   113|       |    {
   114|  47.7k|        match schema.get("additionalProperties") {
@@ -39019,13 +39048,13 @@
   129|       |    }
   130|  10.5k|}
   131|       |
-  132|  30.0k|fn join(path: &str, key: &str) -> String {
-  133|  30.0k|    if path == "$" {
+  132|  29.9k|fn join(path: &str, key: &str) -> String {
+  133|  29.9k|    if path == "$" {
   134|  5.76k|        format!("$.{key}")
   135|       |    } else {
   136|  24.2k|        format!("{path}.{key}")
   137|       |    }
-  138|  30.0k|}
+  138|  29.9k|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/schema_catalog/schema/patterns.rs:
     1|  6.47k|pub(super) fn matches(pattern: &str, text: &str) -> bool {
@@ -39301,8 +39330,8 @@
    31|  16.3k|        return;
    32|       |    };
    33|   635k|    if let Some(min) = schema.get("minLength").and_then(Value::as_u64)
-                              ^5.48k
-   34|  5.48k|        && text.chars().count() < min as usize
+                              ^5.43k
+   34|  5.43k|        && text.chars().count() < min as usize
    35|      3|    {
    36|      3|        errors.push(format!("{path}: minLength"));
    37|   635k|    }
@@ -39313,7 +39342,7 @@
    41|  1.74k|        errors.push(format!("{path}: pattern mismatch"));
    42|   633k|    }
    43|   635k|    if schema.get("format").and_then(Value::as_str) == Some("date-time")
-   44|    185|        && crate::audit::clock::parse_iso_seconds(text).is_none()
+   44|    197|        && crate::audit::clock::parse_iso_seconds(text).is_none()
    45|      1|    {
    46|      1|        errors.push(format!("{path}: format date-time"));
    47|   635k|    }
@@ -41276,8 +41305,8 @@
   122|     29|            },
   123|     29|            "digests":{"candidate":candidate},
   124|     29|            "cache":{"mode":"disabled","no_cache_mode_result":"executed_without_cache"},
-  125|     29|            "concurrency":{"worker_count":1},
-  126|     29|            "telemetry":{"wall_clock_ms":1},
+  125|     29|            "concurrency":{"worker_count":1,"queue_depth":0,"isolation_namespace":"test_isolated_no_shared_artifact_writes"},
+  126|     29|            "telemetry":{"wall_clock_ms":1,"cpu_ms":null,"peak_memory_bytes":null,"io_bytes":null},
   127|     29|            "performance_regression":{"status":"pass"},
   128|     29|            "failure":null,
   129|     29|            "blocked_claim_classes":[],
@@ -49560,167 +49589,176 @@
    63|       |        },
    64|      5|        "digests":{"candidate":current},
    65|      5|        "cache":{"mode":"enabled","no_cache_mode_result":"used_cache"},
-   66|      5|        "concurrency":{"worker_count":1},
-   67|      5|        "telemetry":{"wall_clock_ms":1},
-   68|      5|        "performance_regression":{"status":"pass"},
-   69|      5|        "failure":null,
-   70|      5|        "claim_ceiling":"performance_proven",
-   71|      5|        "blocked_claim_classes":[],
-   72|      5|        "supported_claim_classes":["update_goal_eligibility"]
-   73|       |    })
-   74|      5|}
-   75|       |
-   76|      4|fn missing_ref(rel: &str) -> Value {
-   77|      4|    json!({"path": rel, "digest": crate::digest::ZERO, "status": "pass"})
-   78|      4|}
-   79|       |
-   80|      3|fn write_transaction(root: &Path, current: &str) {
-   81|      3|    write_json(
-   82|      3|        &root.join(RECEIPT),
-   83|      3|        &json!({
-   84|      3|            "schema": SCHEMA,
-   85|      3|            "generated_at": "2026-06-27T00:00:00Z",
-   86|      3|            "status": "pass",
-   87|      3|            "candidate_digest": current,
-   88|      3|            "claim_ceiling": "supports_update_goal_eligibility",
-   89|      3|            "transaction_mode": "same_candidate_atomic_finalization",
-   90|      3|            "blocked_claim_classes": [],
-   91|      3|            "failure": null,
-   92|      3|            "final_packet": ref_row(root, "validation_artifacts/review/final-packet-proof.json"),
-   93|      3|            "registry_exposure": ref_row(root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
-   94|      3|            "cli_performance": ref_row(root, "validation_artifacts/cli/performance-receipt.json"),
-   95|      3|            "coverage": ref_row(root, "validation_artifacts/coverage/coverage-receipt.json")
-   96|      3|        }),
-   97|       |    );
-   98|      3|}
-   99|       |
-  100|     14|fn ref_row(root: &Path, rel: &str) -> Value {
-  101|     14|    json!({
-  102|     14|        "path": rel,
-  103|     14|        "digest": crate::digest::file(&root.join(rel)).expect("digest"),
-  104|     14|        "status": "pass"
-  105|       |    })
-  106|     14|}
-  107|       |
-  108|       |#[test]
-  109|      1|fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
-  110|      1|    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-fail");
-  111|      1|    write_manifest(&root);
-  112|      1|    let receipt = root.join(RECEIPT);
-  113|      1|    let code = crate::command_run::run_with_exit_code(crate::Args {
-  114|      1|        root: root.clone(),
-  115|      1|        command: crate::Command::TransactionalFinalization {
-  116|      1|            receipt: receipt.clone(),
-  117|      1|        },
-  118|      1|    })
-  119|      1|    .expect("transaction command");
-  120|      1|    assert_eq!(code, 1);
-  121|      1|    let value = crate::json_boundary::read_json(&receipt).expect("receipt json");
-  122|      1|    let current = crate::package::inventory::package_digest(&root).expect("digest");
-  123|      1|    assert_eq!(value["schema"], SCHEMA);
-  124|      1|    assert_eq!(value["status"], "fail");
-  125|      1|    assert_eq!(value["candidate_digest"], current);
-  126|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-  127|      1|    assert!(
-  128|      1|        value["failure"]["observed_failures"]
-  129|      1|            .as_array()
-  130|      1|            .expect("failures")
-  131|      1|            .iter()
-  132|      1|            .any(|failure| failure
-  133|      1|                .as_str()
-  134|      1|                .is_some_and(|text| text.contains("final_packet"))),
-  135|       |        "{value}"
-  136|       |    );
-  137|      1|    let failures = crate::cli::control::plane::proof::failures(
-  138|      1|        &root,
-  139|      1|        crate::cli::control::plane::types::ControlOperation::UpdateGoalEligibility,
-  140|       |    );
-  141|      1|    assert!(
-  142|      1|        !failures
-  143|      1|            .iter()
-  144|     58|            .any(|failure| failure.contains("transactional_finalization_missing")),
+   66|      5|        "concurrency":{
+   67|      5|            "worker_count":1,
+   68|      5|            "queue_depth":0,
+   69|      5|            "isolation_namespace":"test_isolated_no_shared_artifact_writes"
+   70|       |        },
+   71|      5|        "telemetry":{
+   72|      5|            "wall_clock_ms":1,
+   73|      5|            "cpu_ms":null,
+   74|      5|            "peak_memory_bytes":null,
+   75|      5|            "io_bytes":null
+   76|       |        },
+   77|      5|        "performance_regression":{"status":"pass"},
+   78|      5|        "failure":null,
+   79|      5|        "claim_ceiling":"performance_proven",
+   80|      5|        "blocked_claim_classes":[],
+   81|      5|        "supported_claim_classes":["update_goal_eligibility"]
+   82|       |    })
+   83|      5|}
+   84|       |
+   85|      4|fn missing_ref(rel: &str) -> Value {
+   86|      4|    json!({"path": rel, "digest": crate::digest::ZERO, "status": "pass"})
+   87|      4|}
+   88|       |
+   89|      3|fn write_transaction(root: &Path, current: &str) {
+   90|      3|    write_json(
+   91|      3|        &root.join(RECEIPT),
+   92|      3|        &json!({
+   93|      3|            "schema": SCHEMA,
+   94|      3|            "generated_at": "2026-06-27T00:00:00Z",
+   95|      3|            "status": "pass",
+   96|      3|            "candidate_digest": current,
+   97|      3|            "claim_ceiling": "supports_update_goal_eligibility",
+   98|      3|            "transaction_mode": "same_candidate_atomic_finalization",
+   99|      3|            "blocked_claim_classes": [],
+  100|      3|            "failure": null,
+  101|      3|            "final_packet": ref_row(root, "validation_artifacts/review/final-packet-proof.json"),
+  102|      3|            "registry_exposure": ref_row(root, "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+  103|      3|            "cli_performance": ref_row(root, "validation_artifacts/cli/performance-receipt.json"),
+  104|      3|            "coverage": ref_row(root, "validation_artifacts/coverage/coverage-receipt.json")
+  105|      3|        }),
+  106|       |    );
+  107|      3|}
+  108|       |
+  109|     14|fn ref_row(root: &Path, rel: &str) -> Value {
+  110|     14|    json!({
+  111|     14|        "path": rel,
+  112|     14|        "digest": crate::digest::file(&root.join(rel)).expect("digest"),
+  113|     14|        "status": "pass"
+  114|       |    })
+  115|     14|}
+  116|       |
+  117|       |#[test]
+  118|      1|fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
+  119|      1|    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-fail");
+  120|      1|    write_manifest(&root);
+  121|      1|    let receipt = root.join(RECEIPT);
+  122|      1|    let code = crate::command_run::run_with_exit_code(crate::Args {
+  123|      1|        root: root.clone(),
+  124|      1|        command: crate::Command::TransactionalFinalization {
+  125|      1|            receipt: receipt.clone(),
+  126|      1|        },
+  127|      1|    })
+  128|      1|    .expect("transaction command");
+  129|      1|    assert_eq!(code, 1);
+  130|      1|    let value = crate::json_boundary::read_json(&receipt).expect("receipt json");
+  131|      1|    let current = crate::package::inventory::package_digest(&root).expect("digest");
+  132|      1|    assert_eq!(value["schema"], SCHEMA);
+  133|      1|    assert_eq!(value["status"], "fail");
+  134|      1|    assert_eq!(value["candidate_digest"], current);
+  135|      1|    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+  136|      1|    assert!(
+  137|      1|        value["failure"]["observed_failures"]
+  138|      1|            .as_array()
+  139|      1|            .expect("failures")
+  140|      1|            .iter()
+  141|      1|            .any(|failure| failure
+  142|      1|                .as_str()
+  143|      1|                .is_some_and(|text| text.contains("final_packet"))),
+  144|       |        "{value}"
+  145|       |    );
+  146|      1|    let failures = crate::cli::control::plane::proof::failures(
+  147|      1|        &root,
+  148|      1|        crate::cli::control::plane::types::ControlOperation::UpdateGoalEligibility,
+  149|       |    );
+  150|      1|    assert!(
+  151|      1|        !failures
+  152|      1|            .iter()
+  153|     58|            .any(|failure| failure.contains("transactional_finalization_missing")),
                            ^1
-  145|       |        "{failures:?}"
-  146|       |    );
-  147|      1|    assert!(
-  148|      1|        failures
-  149|      1|            .iter()
-  150|     44|            .any(|failure| failure == "cli_control_plane_transaction_status_not_pass"),
+  154|       |        "{failures:?}"
+  155|       |    );
+  156|      1|    assert!(
+  157|      1|        failures
+  158|      1|            .iter()
+  159|     44|            .any(|failure| failure == "cli_control_plane_transaction_status_not_pass"),
                            ^1
-  151|       |        "{failures:?}"
-  152|       |    );
-  153|      1|    std::fs::remove_dir_all(root).expect("cleanup transaction command fail");
-  154|      1|}
-  155|       |
-  156|       |#[test]
-  157|      1|fn transaction_references_use_typed_receipt_status_not_file_existence() {
-  158|      1|    let root = crate::self_tests::boundaries::support::temp_root("transaction-typed-refs");
-  159|      1|    write_manifest(&root);
-  160|      1|    let current = crate::package::inventory::package_digest(&root).expect("digest");
-  161|      1|    write_json(
-  162|      1|        &root.join("validation_artifacts/review/final-packet-proof.json"),
-  163|      1|        &json!({
-  164|      1|            "schema":"harness-ultragoal.final-packet-proof.v1",
-  165|      1|            "status":"fail",
-  166|      1|            "target_revision":{"kind":"package_digest","value":current},
-  167|      1|            "claim_ceiling":"withheld_or_blocked"
-  168|      1|        }),
-  169|       |    );
+  160|       |        "{failures:?}"
+  161|       |    );
+  162|      1|    std::fs::remove_dir_all(root).expect("cleanup transaction command fail");
+  163|      1|}
+  164|       |
+  165|       |#[test]
+  166|      1|fn transaction_references_use_typed_receipt_status_not_file_existence() {
+  167|      1|    let root = crate::self_tests::boundaries::support::temp_root("transaction-typed-refs");
+  168|      1|    write_manifest(&root);
+  169|      1|    let current = crate::package::inventory::package_digest(&root).expect("digest");
   170|      1|    write_json(
-  171|      1|        &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+  171|      1|        &root.join("validation_artifacts/review/final-packet-proof.json"),
   172|      1|        &json!({
-  173|      1|            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
+  173|      1|            "schema":"harness-ultragoal.final-packet-proof.v1",
   174|      1|            "status":"fail",
   175|      1|            "target_revision":{"kind":"package_digest","value":current},
   176|      1|            "claim_ceiling":"withheld_or_blocked"
   177|      1|        }),
   178|       |    );
   179|      1|    write_json(
-  180|      1|        &root.join("validation_artifacts/cli/performance-receipt.json"),
-  181|      1|        &performance_overclaim(&current),
-  182|       |    );
-  183|      1|    write_json(
-  184|      1|        &root.join("validation_artifacts/coverage/coverage-receipt.json"),
-  185|      1|        &json!({
-  186|      1|            "schema":"harness-ultragoal.coverage-receipt.v1",
-  187|      1|            "command_exit":0,
-  188|      1|            "coverage":{"percent":100.0},
-  189|      1|            "uncovered_records":[],
-  190|      1|            "claim_ceiling":"supports_complete_coverage_claim",
-  191|      1|            "supported_claim_classes":["complete_coverage"],
-  192|      1|            "blocked_claim_classes":[
-  193|      1|                "completion",
-  194|      1|                "package_readiness",
-  195|      1|                "review_readiness",
-  196|      1|                "release_readiness",
-  197|      1|                "final_packet_correctness",
-  198|      1|                "update_goal_eligibility",
-  199|      1|                "app_registry_or_reviewer_exposure"
-  200|      1|            ],
-  201|      1|            "target_revision":{"kind":"package_digest","value":current}
-  202|      1|        }),
-  203|       |    );
-  204|      1|    let value = crate::cli::control::plane::transactional::receipt(&root).expect("receipt");
-  205|      1|    assert_eq!(value["status"], "fail");
-  206|      1|    assert_eq!(value["final_packet"]["status"], "fail");
-  207|      1|    assert_eq!(value["registry_exposure"]["status"], "fail");
-  208|      1|    assert_eq!(value["coverage"]["status"], "pass");
-  209|      1|    let failures = value["failure"]["observed_failures"]
-  210|      1|        .as_array()
-  211|      1|        .expect("observed failures");
-  212|      1|    assert!(failures.iter().any(|failure| {
-  213|      1|        failure
-  214|      1|            .as_str()
-  215|      1|            .is_some_and(|text| text.contains("ref_status_not_pass:final_packet"))
-  216|      1|    }));
-  217|     13|    assert!(failures.iter().any(|failure| {
+  180|      1|        &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+  181|      1|        &json!({
+  182|      1|            "schema":"harness-ultragoal.multi-agent-registry-exposure.v1",
+  183|      1|            "status":"fail",
+  184|      1|            "target_revision":{"kind":"package_digest","value":current},
+  185|      1|            "claim_ceiling":"withheld_or_blocked"
+  186|      1|        }),
+  187|       |    );
+  188|      1|    write_json(
+  189|      1|        &root.join("validation_artifacts/cli/performance-receipt.json"),
+  190|      1|        &performance_overclaim(&current),
+  191|       |    );
+  192|      1|    write_json(
+  193|      1|        &root.join("validation_artifacts/coverage/coverage-receipt.json"),
+  194|      1|        &json!({
+  195|      1|            "schema":"harness-ultragoal.coverage-receipt.v1",
+  196|      1|            "command_exit":0,
+  197|      1|            "coverage":{"percent":100.0},
+  198|      1|            "uncovered_records":[],
+  199|      1|            "claim_ceiling":"supports_complete_coverage_claim",
+  200|      1|            "supported_claim_classes":["complete_coverage"],
+  201|      1|            "blocked_claim_classes":[
+  202|      1|                "completion",
+  203|      1|                "package_readiness",
+  204|      1|                "review_readiness",
+  205|      1|                "release_readiness",
+  206|      1|                "final_packet_correctness",
+  207|      1|                "update_goal_eligibility",
+  208|      1|                "app_registry_or_reviewer_exposure"
+  209|      1|            ],
+  210|      1|            "target_revision":{"kind":"package_digest","value":current}
+  211|      1|        }),
+  212|       |    );
+  213|      1|    let value = crate::cli::control::plane::transactional::receipt(&root).expect("receipt");
+  214|      1|    assert_eq!(value["status"], "fail");
+  215|      1|    assert_eq!(value["final_packet"]["status"], "fail");
+  216|      1|    assert_eq!(value["registry_exposure"]["status"], "fail");
+  217|      1|    assert_eq!(value["coverage"]["status"], "pass");
+  218|      1|    let failures = value["failure"]["observed_failures"]
+  219|      1|        .as_array()
+  220|      1|        .expect("observed failures");
+  221|      1|    assert!(failures.iter().any(|failure| {
+  222|      1|        failure
+  223|      1|            .as_str()
+  224|      1|            .is_some_and(|text| text.contains("ref_status_not_pass:final_packet"))
+  225|      1|    }));
+  226|     13|    assert!(failures.iter().any(|failure| {
                   ^1      ^1              ^1
-  218|     13|        failure
-  219|     13|            .as_str()
-  220|     13|            .is_some_and(|text| text.contains("ref_status_not_pass:registry_exposure"))
-  221|     13|    }));
-  222|      1|    std::fs::remove_dir_all(root).expect("cleanup transaction typed refs");
-  223|      1|}
+  227|     13|        failure
+  228|     13|            .as_str()
+  229|     13|            .is_some_and(|text| text.contains("ref_status_not_pass:registry_exposure"))
+  230|     13|    }));
+  231|      1|    std::fs::remove_dir_all(root).expect("cleanup transaction typed refs");
+  232|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/cli/control/transaction/reference.rs:
     1|       |use crate::cli::control::plane::{proof, types::ControlOperation};
@@ -52719,10 +52757,10 @@
    57|      1|    assert!(
    58|      1|        !failures
    59|      1|            .iter()
-   60|     35|            .any(|failure| failure.contains("missing_standards_row")
+   60|     40|            .any(|failure| failure.contains("missing_standards_row")
                            ^1
-   61|     35|                || failure.contains("missing_source_obligation")
-   62|     35|                || failure.contains("missing_foundational_trace")),
+   61|     40|                || failure.contains("missing_source_obligation")
+   62|     40|                || failure.contains("missing_foundational_trace")),
    63|       |        "{failures:?}"
    64|       |    );
    65|      1|    assert!(
@@ -53156,161 +53194,192 @@
     2|       |use crate::cli::performance::types::PERFORMANCE_RECEIPT_SCHEMA;
     3|       |use serde_json::{Value, json};
     4|       |
-    5|     10|fn valid_fail() -> Value {
-    6|     10|    json!({
-    7|     10|        "schema": PERFORMANCE_RECEIPT_SCHEMA,
-    8|     10|        "status": "fail",
-    9|     10|        "claim_ceiling": "withheld_or_blocked",
-   10|     10|        "command": {"argv": ["ultragoal", "performance", "prove"]},
-   11|     10|        "budget": strict_budget(),
-   12|     10|        "digests": {"candidate": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
-   13|     10|        "cache": {"mode": "disabled"},
-   14|     10|        "concurrency": {"worker_count": 1},
-   15|     10|        "telemetry": {"wall_clock_ms": 1},
-   16|     10|        "failure": {"check_id": "cli-performance-latency-speed-iteration-fitness"},
-   17|     10|        "blocked_claim_classes": ["completion"]
-   18|       |    })
-   19|     10|}
-   20|       |
-   21|      5|fn valid_pass() -> Value {
-   22|      5|    let mut value = valid_fail();
-   23|      5|    value["status"] = json!("pass");
-   24|      5|    value["claim_ceiling"] = json!("performance_proven");
-   25|      5|    value["failure"] = Value::Null;
-   26|      5|    value["blocked_claim_classes"] = json!([]);
-   27|      5|    value["supported_claim_classes"] = json!(["routine_usability"]);
-   28|      5|    value
-   29|      5|}
-   30|       |
-   31|      2|fn strict_pass(candidate: &str) -> Value {
-   32|      2|    json!({
-   33|      2|        "schema": PERFORMANCE_RECEIPT_SCHEMA,
-   34|      2|        "status": "pass",
-   35|      2|        "claim_ceiling": "performance_proven",
-   36|      2|        "command": {"argv": ["ultragoal", "performance", "prove"]},
-   37|      2|        "budget": strict_budget(),
-   38|      2|        "digests": {"candidate": candidate},
-   39|      2|        "cache": {"mode": "disabled", "no_cache_mode_result": "executed_without_cache"},
-   40|      2|        "concurrency": {"worker_count": 1},
-   41|      2|        "telemetry": {"wall_clock_ms": 1},
-   42|      2|        "performance_regression": {"status": "pass"},
-   43|      2|        "failure": null,
-   44|      2|        "blocked_claim_classes": [],
-   45|      2|        "supported_claim_classes": ["routine_usability"]
-   46|       |    })
-   47|      2|}
-   48|       |
-   49|     12|fn strict_budget() -> Value {
-   50|     12|    json!({
-   51|     12|        "class": "strict_local",
-   52|     12|        "cold_p95_ms": 60_000,
-   53|     12|        "warm_p95_ms": null,
-   54|     12|        "target_ms": 60_000,
-   55|     12|        "hard_ceiling_ms": 180_000,
-   56|     12|        "threshold_ms": 60_000
-   57|       |    })
-   58|     12|}
-   59|       |
-   60|       |#[test]
-   61|      1|fn accepts_fail_closed_receipt_surface() {
-   62|      1|    assert!(surface_value_failures(&valid_fail()).is_empty());
-   63|      1|    assert!(surface_value_failures(&valid_pass()).is_empty());
-   64|      1|}
-   65|       |
-   66|       |#[test]
-   67|      1|fn rejects_wrong_schema_missing_fields_and_claim_theater() {
-   68|      1|    let mut wrong_schema = valid_fail();
-   69|      1|    wrong_schema["schema"] = json!("other");
-   70|      1|    assert!(
-   71|      1|        surface_value_failures(&wrong_schema)
-   72|      1|            .contains(&"cli_performance_receipt_wrong_schema".to_string())
-   73|       |    );
-   74|       |
-   75|      1|    let mut missing = valid_fail();
-   76|      1|    missing["telemetry"]
-   77|      1|        .as_object_mut()
-   78|      1|        .expect("telemetry object")
-   79|      1|        .remove("wall_clock_ms");
-   80|      1|    assert!(
-   81|      1|        surface_value_failures(&missing)
-   82|      1|            .iter()
-   83|      1|            .any(|failure| failure == "cli_performance_receipt_missing:/telemetry/wall_clock_ms")
-   84|       |    );
-   85|       |
-   86|      1|    let mut fake_pass = valid_pass();
-   87|      1|    fake_pass["claim_ceiling"] = json!("withheld_or_blocked");
+    5|     11|fn valid_fail() -> Value {
+    6|     11|    json!({
+    7|     11|        "schema": PERFORMANCE_RECEIPT_SCHEMA,
+    8|     11|        "status": "fail",
+    9|     11|        "claim_ceiling": "withheld_or_blocked",
+   10|     11|        "command": {"argv": ["ultragoal", "performance", "prove"]},
+   11|     11|        "budget": strict_budget(),
+   12|     11|        "digests": {"candidate": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+   13|     11|        "cache": {"mode": "disabled"},
+   14|     11|        "concurrency": {
+   15|     11|            "worker_count": 1,
+   16|     11|            "queue_depth": 0,
+   17|     11|            "isolation_namespace": "typed_serial_reason"
+   18|       |        },
+   19|     11|        "telemetry": {
+   20|     11|            "wall_clock_ms": 1,
+   21|     11|            "cpu_ms": null,
+   22|     11|            "peak_memory_bytes": null,
+   23|     11|            "io_bytes": null
+   24|       |        },
+   25|     11|        "failure": {"check_id": "cli-performance-latency-speed-iteration-fitness"},
+   26|     11|        "blocked_claim_classes": ["completion"]
+   27|       |    })
+   28|     11|}
+   29|       |
+   30|      5|fn valid_pass() -> Value {
+   31|      5|    let mut value = valid_fail();
+   32|      5|    value["status"] = json!("pass");
+   33|      5|    value["claim_ceiling"] = json!("performance_proven");
+   34|      5|    value["failure"] = Value::Null;
+   35|      5|    value["blocked_claim_classes"] = json!([]);
+   36|      5|    value["supported_claim_classes"] = json!(["routine_usability"]);
+   37|      5|    value
+   38|      5|}
+   39|       |
+   40|      2|fn strict_pass(candidate: &str) -> Value {
+   41|      2|    json!({
+   42|      2|        "schema": PERFORMANCE_RECEIPT_SCHEMA,
+   43|      2|        "status": "pass",
+   44|      2|        "claim_ceiling": "performance_proven",
+   45|      2|        "command": {"argv": ["ultragoal", "performance", "prove"]},
+   46|      2|        "budget": strict_budget(),
+   47|      2|        "digests": {"candidate": candidate},
+   48|      2|        "cache": {"mode": "disabled", "no_cache_mode_result": "executed_without_cache"},
+   49|      2|        "concurrency": {
+   50|      2|            "worker_count": 1,
+   51|      2|            "queue_depth": 0,
+   52|      2|            "isolation_namespace": "typed_serial_reason"
+   53|       |        },
+   54|      2|        "telemetry": {
+   55|      2|            "wall_clock_ms": 1,
+   56|      2|            "cpu_ms": null,
+   57|      2|            "peak_memory_bytes": null,
+   58|      2|            "io_bytes": null
+   59|       |        },
+   60|      2|        "performance_regression": {"status": "pass"},
+   61|      2|        "failure": null,
+   62|      2|        "blocked_claim_classes": [],
+   63|      2|        "supported_claim_classes": ["routine_usability"]
+   64|       |    })
+   65|      2|}
+   66|       |
+   67|     13|fn strict_budget() -> Value {
+   68|     13|    json!({
+   69|     13|        "class": "strict_local",
+   70|     13|        "cold_p95_ms": 60_000,
+   71|     13|        "warm_p95_ms": null,
+   72|     13|        "target_ms": 60_000,
+   73|     13|        "hard_ceiling_ms": 180_000,
+   74|     13|        "threshold_ms": 60_000
+   75|       |    })
+   76|     13|}
+   77|       |
+   78|       |#[test]
+   79|      1|fn accepts_fail_closed_receipt_surface() {
+   80|      1|    assert!(surface_value_failures(&valid_fail()).is_empty());
+   81|      1|    assert!(surface_value_failures(&valid_pass()).is_empty());
+   82|      1|}
+   83|       |
+   84|       |#[test]
+   85|      1|fn rejects_wrong_schema_missing_fields_and_claim_theater() {
+   86|      1|    let mut wrong_schema = valid_fail();
+   87|      1|    wrong_schema["schema"] = json!("other");
    88|      1|    assert!(
-   89|      1|        surface_value_failures(&fake_pass)
-   90|      1|            .contains(&"cli_performance_pass_without_positive_claim_ceiling".to_string())
+   89|      1|        surface_value_failures(&wrong_schema)
+   90|      1|            .contains(&"cli_performance_receipt_wrong_schema".to_string())
    91|       |    );
    92|       |
-   93|      1|    let mut blocked_pass = valid_pass();
-   94|      1|    blocked_pass["blocked_claim_classes"] = json!(["completion"]);
-   95|      1|    assert!(
-   96|      1|        surface_value_failures(&blocked_pass)
-   97|      1|            .contains(&"cli_performance_pass_with_blocked_claims".to_string())
-   98|       |    );
-   99|       |
-  100|      1|    let mut missing_failure_check = valid_fail();
-  101|      1|    missing_failure_check["failure"]
-  102|      1|        .as_object_mut()
-  103|      1|        .expect("failure object")
-  104|      1|        .remove("check_id");
-  105|      1|    assert!(
-  106|      1|        surface_value_failures(&missing_failure_check)
-  107|      1|            .contains(&"cli_performance_receipt_missing:/failure/check_id".to_string())
-  108|       |    );
-  109|       |
-  110|      1|    let mut unsupported_fail = valid_fail();
-  111|      1|    unsupported_fail["blocked_claim_classes"] = json!([]);
-  112|      1|    assert!(
-  113|      1|        surface_value_failures(&unsupported_fail)
-  114|      1|            .contains(&"cli_performance_fail_without_blocked_claims".to_string())
-  115|       |    );
-  116|       |
-  117|      1|    let mut legacy_budget = valid_pass();
-  118|      1|    legacy_budget["budget"]["class"] = json!("focused");
-  119|      1|    assert!(
-  120|      1|        surface_value_failures(&legacy_budget)
-  121|      1|            .iter()
-  122|      1|            .any(|failure| failure == "cli_performance_receipt_noncanonical_budget_class:focused")
-  123|       |    );
-  124|       |
-  125|      1|    let mut wrong_target = valid_pass();
-  126|      1|    wrong_target["budget"]["hard_ceiling_ms"] = json!(60_000);
-  127|      1|    assert!(surface_value_failures(&wrong_target).iter().any(|failure| {
-  128|      1|        failure == "cli_performance_receipt_budget_hard_ceiling_mismatch:strict_local"
-  129|      1|    }));
-  130|      1|}
-  131|       |
-  132|       |#[test]
-  133|      1|fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
-  134|      1|    let stale = crate::self_tests::boundaries::support::sha('a');
-  135|      1|    let current = crate::self_tests::boundaries::support::sha('b');
-  136|      1|    let mut receipt = strict_pass(&stale);
-  137|      1|    receipt["telemetry"]["wall_clock_ms"] = json!(0);
-  138|      1|    receipt["performance_regression"]["status"] = json!("missing_baseline");
-  139|      1|    receipt["cache"]["mode"] = json!("hidden");
-  140|      1|    receipt["failure"] = json!({"check_id": "still-blocked"});
-  141|      1|    receipt["supported_claim_classes"] = json!(["routine_usability", "update_goal_eligibility"]);
-  142|      1|    let failures = same_candidate_pass_failures(&receipt, &current);
-  143|      6|    for expected in [
-  144|      1|        "cli_performance_receipt_candidate_digest_mismatch",
-  145|      1|        "cli_performance_pass_has_failure",
-  146|      1|        "cli_performance_receipt_placeholder_wall_clock",
-  147|      1|        "cli_performance_receipt_regression_not_pass",
-  148|      1|        "cli_performance_receipt_cache_honesty_missing",
-  149|      1|        "cli_performance_receipt_update_goal_overclaim",
-  150|      1|    ] {
-  151|      6|        assert!(
-  152|     21|            failures.iter().any(|failure| failure.contains(expected)),
-                          ^6              ^6
-  153|       |            "{expected}: {failures:?}"
-  154|       |        );
-  155|       |    }
-  156|      1|    let green_failures = same_candidate_pass_failures(&strict_pass(&current), &current);
-  157|      1|    assert!(green_failures.is_empty(), "{green_failures:?}");
-  158|      1|}
+   93|      1|    let mut missing = valid_fail();
+   94|      1|    missing["telemetry"]
+   95|      1|        .as_object_mut()
+   96|      1|        .expect("telemetry object")
+   97|      1|        .remove("wall_clock_ms");
+   98|      1|    assert!(
+   99|      1|        surface_value_failures(&missing)
+  100|      1|            .iter()
+  101|      1|            .any(|failure| failure == "cli_performance_receipt_missing:/telemetry/wall_clock_ms")
+  102|       |    );
+  103|       |
+  104|      1|    let mut missing_concurrency = valid_fail();
+  105|      1|    missing_concurrency["concurrency"]
+  106|      1|        .as_object_mut()
+  107|      1|        .expect("concurrency object")
+  108|      1|        .remove("queue_depth");
+  109|      1|    assert!(
+  110|      1|        surface_value_failures(&missing_concurrency)
+  111|      1|            .iter()
+  112|      1|            .any(|failure| failure == "cli_performance_receipt_missing:/concurrency/queue_depth")
+  113|       |    );
+  114|       |
+  115|      1|    let mut fake_pass = valid_pass();
+  116|      1|    fake_pass["claim_ceiling"] = json!("withheld_or_blocked");
+  117|      1|    assert!(
+  118|      1|        surface_value_failures(&fake_pass)
+  119|      1|            .contains(&"cli_performance_pass_without_positive_claim_ceiling".to_string())
+  120|       |    );
+  121|       |
+  122|      1|    let mut blocked_pass = valid_pass();
+  123|      1|    blocked_pass["blocked_claim_classes"] = json!(["completion"]);
+  124|      1|    assert!(
+  125|      1|        surface_value_failures(&blocked_pass)
+  126|      1|            .contains(&"cli_performance_pass_with_blocked_claims".to_string())
+  127|       |    );
+  128|       |
+  129|      1|    let mut missing_failure_check = valid_fail();
+  130|      1|    missing_failure_check["failure"]
+  131|      1|        .as_object_mut()
+  132|      1|        .expect("failure object")
+  133|      1|        .remove("check_id");
+  134|      1|    assert!(
+  135|      1|        surface_value_failures(&missing_failure_check)
+  136|      1|            .contains(&"cli_performance_receipt_missing:/failure/check_id".to_string())
+  137|       |    );
+  138|       |
+  139|      1|    let mut unsupported_fail = valid_fail();
+  140|      1|    unsupported_fail["blocked_claim_classes"] = json!([]);
+  141|      1|    assert!(
+  142|      1|        surface_value_failures(&unsupported_fail)
+  143|      1|            .contains(&"cli_performance_fail_without_blocked_claims".to_string())
+  144|       |    );
+  145|       |
+  146|      1|    let mut legacy_budget = valid_pass();
+  147|      1|    legacy_budget["budget"]["class"] = json!("focused");
+  148|      1|    assert!(
+  149|      1|        surface_value_failures(&legacy_budget)
+  150|      1|            .iter()
+  151|      1|            .any(|failure| failure == "cli_performance_receipt_noncanonical_budget_class:focused")
+  152|       |    );
+  153|       |
+  154|      1|    let mut wrong_target = valid_pass();
+  155|      1|    wrong_target["budget"]["hard_ceiling_ms"] = json!(60_000);
+  156|      1|    assert!(surface_value_failures(&wrong_target).iter().any(|failure| {
+  157|      1|        failure == "cli_performance_receipt_budget_hard_ceiling_mismatch:strict_local"
+  158|      1|    }));
+  159|      1|}
+  160|       |
+  161|       |#[test]
+  162|      1|fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
+  163|      1|    let stale = crate::self_tests::boundaries::support::sha('a');
+  164|      1|    let current = crate::self_tests::boundaries::support::sha('b');
+  165|      1|    let mut receipt = strict_pass(&stale);
+  166|      1|    receipt["telemetry"]["wall_clock_ms"] = json!(0);
+  167|      1|    receipt["performance_regression"]["status"] = json!("missing_baseline");
+  168|      1|    receipt["cache"]["mode"] = json!("hidden");
+  169|      1|    receipt["failure"] = json!({"check_id": "still-blocked"});
+  170|      1|    receipt["concurrency"]["worker_count"] = json!(999);
+  171|      1|    receipt["supported_claim_classes"] = json!(["routine_usability", "update_goal_eligibility"]);
+  172|      1|    let failures = same_candidate_pass_failures(&receipt, &current);
+  173|      7|    for expected in [
+  174|      1|        "cli_performance_receipt_candidate_digest_mismatch",
+  175|      1|        "cli_performance_pass_has_failure",
+  176|      1|        "cli_performance_receipt_placeholder_wall_clock",
+  177|      1|        "cli_performance_receipt_regression_not_pass",
+  178|      1|        "cli_performance_receipt_cache_honesty_missing",
+  179|      1|        "cli_performance_receipt_unbounded_concurrency",
+  180|      1|        "cli_performance_receipt_update_goal_overclaim",
+  181|      1|    ] {
+  182|      7|        assert!(
+  183|     28|            failures.iter().any(|failure| failure.contains(expected)),
+                          ^7              ^7
+  184|       |            "{expected}: {failures:?}"
+  185|       |        );
+  186|       |    }
+  187|      1|    let green_failures = same_candidate_pass_failures(&strict_pass(&current), &current);
+  188|      1|    assert!(green_failures.is_empty(), "{green_failures:?}");
+  189|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/cli/performance/runtime.rs:
     1|       |use crate::cli::performance::types::{
@@ -53354,75 +53423,82 @@
    39|      1|    assert_eq!(value["budget"]["hard_ceiling_ms"], 30_000);
    40|      1|    assert_eq!(value["budget"]["threshold_ms"], 30_000);
    41|      1|    assert_eq!(value["cache"]["mode"], "disabled");
-   42|      1|    assert_eq!(value["concurrency"]["worker_count"], 1);
-   43|      1|    assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
-   44|      1|    assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
-   45|      1|    assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);
-   46|      1|    assert_eq!(value["failure"], serde_json::Value::Null);
-   47|      1|    let claims = value["supported_claim_classes"]
-   48|      1|        .as_array()
-   49|      1|        .expect("supported claims")
-   50|      1|        .iter()
-   51|      1|        .filter_map(|claim| claim.as_str())
-   52|      1|        .collect::<Vec<_>>();
-   53|      1|    assert_eq!(claims, vec!["routine_usability"]);
-   54|     11|    for ptr in [
-   55|      1|        "/digests/candidate",
-   56|      1|        "/digests/cli_binary",
-   57|      1|        "/digests/schema_catalog",
-   58|      1|        "/digests/law_graph",
-   59|      1|        "/digests/standards",
-   60|      1|        "/digests/fixture_catalog",
-   61|      1|        "/digests/source_obligation",
-   62|      1|        "/digests/config",
-   63|      1|        "/input_size_metrics/file_count_scanned",
-   64|      1|        "/input_size_metrics/fixture_count_executed",
-   65|      1|        "/performance_regression/baseline_machine_class",
-   66|      1|    ] {
-   67|     11|        assert!(value.pointer(ptr).is_some(), "missing {ptr}");
-   68|       |    }
-   69|       |
-   70|      1|    let over_budget =
-   71|      1|        receipt(&root, &command, BudgetClass::ExternalLive.cold_p95_ms() + 1).expect("receipt");
-   72|      1|    assert_eq!(over_budget["status"], "fail");
-   73|      1|    assert_eq!(over_budget["claim_ceiling"], "withheld_or_blocked");
-   74|      1|    assert_eq!(
-   75|      1|        over_budget["failure"]["id"],
-   76|       |        "cli_performance_budget_exceeded"
-   77|       |    );
-   78|      1|    assert!(
-   79|      1|        over_budget["blocked_claim_classes"]
-   80|      1|            .as_array()
-   81|      1|            .expect("blocked claims")
-   82|      1|            .iter()
-   83|      6|            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
-                           ^1
+   42|      1|    assert_eq!(
+   43|      1|        value["concurrency"]["worker_count"],
+   44|      1|        crate::scheduler::SchedulerConfig::default_jobs()
+   45|       |    );
+   46|      1|    assert_eq!(
+   47|      1|        value["concurrency"]["isolation_namespace"],
+   48|       |        "scheduler_default_available_parallelism_minus_one_no_shared_artifact_writes"
+   49|       |    );
+   50|      1|    assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
+   51|      1|    assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
+   52|      1|    assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);
+   53|      1|    assert_eq!(value["failure"], serde_json::Value::Null);
+   54|      1|    let claims = value["supported_claim_classes"]
+   55|      1|        .as_array()
+   56|      1|        .expect("supported claims")
+   57|      1|        .iter()
+   58|      1|        .filter_map(|claim| claim.as_str())
+   59|      1|        .collect::<Vec<_>>();
+   60|      1|    assert_eq!(claims, vec!["routine_usability"]);
+   61|     11|    for ptr in [
+   62|      1|        "/digests/candidate",
+   63|      1|        "/digests/cli_binary",
+   64|      1|        "/digests/schema_catalog",
+   65|      1|        "/digests/law_graph",
+   66|      1|        "/digests/standards",
+   67|      1|        "/digests/fixture_catalog",
+   68|      1|        "/digests/source_obligation",
+   69|      1|        "/digests/config",
+   70|      1|        "/input_size_metrics/file_count_scanned",
+   71|      1|        "/input_size_metrics/fixture_count_executed",
+   72|      1|        "/performance_regression/baseline_machine_class",
+   73|      1|    ] {
+   74|     11|        assert!(value.pointer(ptr).is_some(), "missing {ptr}");
+   75|       |    }
+   76|       |
+   77|      1|    let over_budget =
+   78|      1|        receipt(&root, &command, BudgetClass::ExternalLive.cold_p95_ms() + 1).expect("receipt");
+   79|      1|    assert_eq!(over_budget["status"], "fail");
+   80|      1|    assert_eq!(over_budget["claim_ceiling"], "withheld_or_blocked");
+   81|      1|    assert_eq!(
+   82|      1|        over_budget["failure"]["id"],
+   83|       |        "cli_performance_budget_exceeded"
    84|       |    );
-   85|      1|}
-   86|       |
-   87|       |#[test]
-   88|      1|fn run_writes_receipt_and_returns_typed_exit_code() {
-   89|      1|    let root = repo_root();
-   90|      1|    let path = temp_receipt(&root);
-   91|      1|    let command = PerformanceCommand {
-   92|      1|        operation: PerformanceOperation::Prove,
-   93|      1|        receipt: Some(path.clone()),
-   94|      1|        class: BudgetClass::FocusedRepair,
-   95|      1|    };
-   96|      1|    assert_eq!(run(&root, &command).expect("run succeeds"), 0);
-   97|      1|    let value = crate::json_boundary::read_json(&path).expect("read written receipt");
-   98|      1|    assert_eq!(value["command"]["name"], "performance_prove");
-   99|      1|    assert_eq!(value["budget"]["class"], "focused_repair");
-  100|      1|    assert_eq!(value["output_size_metrics"]["receipt_count_written"], 1);
-  101|      1|    assert_eq!(value["status"], "pass");
-  102|       |
-  103|      1|    let no_write = PerformanceCommand {
-  104|      1|        operation: PerformanceOperation::Budgets,
-  105|      1|        receipt: None,
-  106|      1|        class: BudgetClass::StrictLocal,
-  107|      1|    };
-  108|      1|    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 0);
-  109|      1|}
+   85|      1|    assert!(
+   86|      1|        over_budget["blocked_claim_classes"]
+   87|      1|            .as_array()
+   88|      1|            .expect("blocked claims")
+   89|      1|            .iter()
+   90|      6|            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+                           ^1
+   91|       |    );
+   92|      1|}
+   93|       |
+   94|       |#[test]
+   95|      1|fn run_writes_receipt_and_returns_typed_exit_code() {
+   96|      1|    let root = repo_root();
+   97|      1|    let path = temp_receipt(&root);
+   98|      1|    let command = PerformanceCommand {
+   99|      1|        operation: PerformanceOperation::Prove,
+  100|      1|        receipt: Some(path.clone()),
+  101|      1|        class: BudgetClass::FocusedRepair,
+  102|      1|    };
+  103|      1|    assert_eq!(run(&root, &command).expect("run succeeds"), 0);
+  104|      1|    let value = crate::json_boundary::read_json(&path).expect("read written receipt");
+  105|      1|    assert_eq!(value["command"]["name"], "performance_prove");
+  106|      1|    assert_eq!(value["budget"]["class"], "focused_repair");
+  107|      1|    assert_eq!(value["output_size_metrics"]["receipt_count_written"], 1);
+  108|      1|    assert_eq!(value["status"], "pass");
+  109|       |
+  110|      1|    let no_write = PerformanceCommand {
+  111|      1|        operation: PerformanceOperation::Budgets,
+  112|      1|        receipt: None,
+  113|      1|        class: BudgetClass::StrictLocal,
+  114|      1|    };
+  115|      1|    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 0);
+  116|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/cli/product.rs:
     1|       |use std::path::PathBuf;
@@ -57979,19 +58055,26 @@
   193|      1|    assert_eq!(metric.task_class, "pure_read_parallel");
   194|      1|    assert!(metric.task_count > 0);
   195|      1|    assert!(metric.worker_count <= 2);
-  196|      1|    assert!(metric.deterministic_ordering);
-  197|      1|    assert!(!metric.shared_validation_artifact_writes_allowed);
-  198|      1|    assert!(
-  199|      1|        !results
-  200|      1|            .failures
-  201|      1|            .get("schema-valid")
-  202|      1|            .into_iter()
-  203|      1|            .flatten()
-  204|     46|            .any(|failure| failure.contains("docs/openai-key-policy.json"))
+  196|      1|    assert_eq!(
+  197|       |        metric.resource_measurement_status,
+  198|       |        "wall_time_only_cpu_memory_io_unavailable"
+  199|       |    );
+  200|      1|    assert_eq!(metric.cpu_ms, None);
+  201|      1|    assert_eq!(metric.memory_bytes, None);
+  202|      1|    assert_eq!(metric.io_bytes, None);
+  203|      1|    assert!(metric.deterministic_ordering);
+  204|      1|    assert!(!metric.shared_validation_artifact_writes_allowed);
+  205|      1|    assert!(
+  206|      1|        !results
+  207|      1|            .failures
+  208|      1|            .get("schema-valid")
+  209|      1|            .into_iter()
+  210|      1|            .flatten()
+  211|     46|            .any(|failure| failure.contains("docs/openai-key-policy.json"))
                            ^1
-  205|       |    );
-  206|      1|    std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
-  207|      1|}
+  212|       |    );
+  213|      1|    std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
+  214|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/package/inventory_schema_edges.rs:
     1|       |use serde_json::json;
@@ -60360,7 +60443,7 @@
    93|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/receipts/validator/mod.rs:
-    1|       |use serde_json::json;
+    1|       |use serde_json::{Value, json};
     2|       |use std::collections::BTreeMap;
     3|       |use std::path::Path;
     4|       |
@@ -60471,90 +60554,104 @@
   109|      1|            task_count: 3,
   110|      1|            queue_depth: 3,
   111|      1|            wall_ms: 7,
-  112|      1|            cache_mode: "declared_local",
-  113|      1|            deterministic_ordering: true,
-  114|      1|            shared_validation_artifact_writes_allowed: false,
-  115|      1|        }],
-  116|      1|    })
-  117|      1|    .expect("validator receipt");
-  118|      1|    assert_eq!(receipt["status"], "pass");
-  119|      1|    assert_eq!(receipt["checks"]["schema-valid"]["status"], "pass");
-  120|      1|    assert_eq!(
-  121|      1|        receipt["blocked_claim_diagnostics"][0]["surface"],
-  122|       |        "final_packet_proof"
-  123|       |    );
-  124|      1|    assert_eq!(receipt["blocked_claim_diagnostics"][0]["status"], "blocked");
-  125|      1|    assert!(
-  126|      1|        receipt["blocked_claim_diagnostics"][0]["observed_failures"]
-  127|      1|            .as_array()
-  128|      1|            .expect("diagnostic failures")
-  129|      1|            .iter()
-  130|      1|            .any(|failure| failure
-  131|      1|                .as_str()
-  132|      1|                .unwrap_or("")
-  133|      1|                .starts_with("final_packet_proof_missing"))
-  134|       |    );
-  135|      1|    assert_eq!(
-  136|      1|        receipt["validator_execution"]["executable_provenance"]["invocation_mode"],
-  137|       |        "cargo_run"
+  112|      1|            cpu_ms: None,
+  113|      1|            memory_bytes: None,
+  114|      1|            io_bytes: None,
+  115|      1|            cache_mode: "declared_local",
+  116|      1|            resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
+  117|      1|            deterministic_ordering: true,
+  118|      1|            shared_validation_artifact_writes_allowed: false,
+  119|      1|        }],
+  120|      1|    })
+  121|      1|    .expect("validator receipt");
+  122|      1|    assert_eq!(receipt["status"], "pass");
+  123|      1|    assert_eq!(receipt["checks"]["schema-valid"]["status"], "pass");
+  124|      1|    assert_eq!(
+  125|      1|        receipt["blocked_claim_diagnostics"][0]["surface"],
+  126|       |        "final_packet_proof"
+  127|       |    );
+  128|      1|    assert_eq!(receipt["blocked_claim_diagnostics"][0]["status"], "blocked");
+  129|      1|    assert!(
+  130|      1|        receipt["blocked_claim_diagnostics"][0]["observed_failures"]
+  131|      1|            .as_array()
+  132|      1|            .expect("diagnostic failures")
+  133|      1|            .iter()
+  134|      1|            .any(|failure| failure
+  135|      1|                .as_str()
+  136|      1|                .unwrap_or("")
+  137|      1|                .starts_with("final_packet_proof_missing"))
   138|       |    );
   139|      1|    assert_eq!(
-  140|      1|        receipt["speed_budget"]["profile"],
-  141|       |        "strict_local_source_audit"
+  140|      1|        receipt["validator_execution"]["executable_provenance"]["invocation_mode"],
+  141|       |        "cargo_run"
   142|       |    );
   143|      1|    assert_eq!(
-  144|      1|        receipt["scheduler_execution"][0]["task_class"],
-  145|       |        "pure_read_parallel"
+  144|      1|        receipt["speed_budget"]["profile"],
+  145|       |        "strict_local_source_audit"
   146|       |    );
-  147|      1|    assert_eq!(receipt["scheduler_execution"][0]["worker_count"], 2);
-  148|      1|    assert_eq!(
-  149|      1|        receipt["scheduler_execution"][0]["shared_validation_artifact_writes_allowed"],
-  150|       |        false
-  151|       |    );
-  152|      1|    assert_eq!(
-  153|      1|        receipt["scheduler_execution"][0]["claim_impact"],
-  154|       |        "supports_source_local_scheduler_timing_only_not_readiness"
-  155|       |    );
-  156|      1|    assert!(
-  157|      1|        receipt["generated_artifacts"]
-  158|      1|            .as_array()
-  159|      1|            .expect("generated artifacts")
-  160|      1|            .iter()
-  161|      3|            .any(|row| row["artifact_type"] == "ready_for_merge")
-                           ^1
-  162|       |    );
-  163|      1|    assert!(
-  164|      1|        !receipt["generated_artifacts"]
-  165|      1|            .as_array()
-  166|      1|            .expect("generated artifacts")
-  167|      1|            .iter()
-  168|      4|            .any(|row| row["path"].as_str().unwrap_or("").ends_with("OTHER.json"))
-                           ^1
+  147|      1|    assert_eq!(
+  148|      1|        receipt["scheduler_execution"][0]["task_class"],
+  149|       |        "pure_read_parallel"
+  150|       |    );
+  151|      1|    assert_eq!(receipt["scheduler_execution"][0]["worker_count"], 2);
+  152|      1|    assert_eq!(receipt["scheduler_execution"][0]["cpu_ms"], Value::Null);
+  153|      1|    assert_eq!(
+  154|      1|        receipt["scheduler_execution"][0]["memory_bytes"],
+  155|       |        Value::Null
+  156|       |    );
+  157|      1|    assert_eq!(receipt["scheduler_execution"][0]["io_bytes"], Value::Null);
+  158|      1|    assert_eq!(
+  159|      1|        receipt["scheduler_execution"][0]["resource_measurement_status"],
+  160|       |        "wall_time_only_cpu_memory_io_unavailable"
+  161|       |    );
+  162|      1|    assert_eq!(
+  163|      1|        receipt["scheduler_execution"][0]["shared_validation_artifact_writes_allowed"],
+  164|       |        false
+  165|       |    );
+  166|      1|    assert_eq!(
+  167|      1|        receipt["scheduler_execution"][0]["claim_impact"],
+  168|       |        "supports_source_local_scheduler_timing_only_not_readiness"
   169|       |    );
-  170|      1|    let direct_receipt = crate::audit::receipt::build(crate::audit::receipt::ReceiptInput {
-  171|      1|        root: root.clone(),
-  172|      1|        red_report: root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json"),
-  173|      1|        stdout: root.join("validation_artifacts/ultragoal-audit/stdout.txt"),
-  174|      1|        stderr: root.join("validation_artifacts/ultragoal-audit/stderr.txt"),
-  175|      1|        check_ids: vec!["schema-valid".to_string()],
-  176|      1|        failures: BTreeMap::from([("schema-valid".to_string(), vec!["bad".to_string()])]),
-  177|      1|        red: BTreeMap::new(),
-  178|      1|        target_artifacts: Vec::new(),
-  179|      1|        start: "2026-06-26T00:00:01Z".to_string(),
-  180|      1|        status: "fail".to_string(),
-  181|      1|        validator_artifacts: Vec::new(),
-  182|      1|        command_text: "ultragoal source audit".to_string(),
-  183|      1|        mode: "strict".to_string(),
-  184|      1|        scheduler_metrics: Vec::new(),
-  185|      1|    })
-  186|      1|    .expect("direct validator receipt");
-  187|      1|    assert_eq!(direct_receipt["checks"]["schema-valid"]["status"], "fail");
-  188|      1|    assert_eq!(
-  189|      1|        direct_receipt["validator_execution"]["executable_provenance"]["invocation_mode"],
-  190|       |        "direct_executable"
-  191|       |    );
-  192|      1|    std::fs::remove_dir_all(root).expect("cleanup receipt build");
-  193|      1|}
+  170|      1|    assert!(
+  171|      1|        receipt["generated_artifacts"]
+  172|      1|            .as_array()
+  173|      1|            .expect("generated artifacts")
+  174|      1|            .iter()
+  175|      3|            .any(|row| row["artifact_type"] == "ready_for_merge")
+                           ^1
+  176|       |    );
+  177|      1|    assert!(
+  178|      1|        !receipt["generated_artifacts"]
+  179|      1|            .as_array()
+  180|      1|            .expect("generated artifacts")
+  181|      1|            .iter()
+  182|      4|            .any(|row| row["path"].as_str().unwrap_or("").ends_with("OTHER.json"))
+                           ^1
+  183|       |    );
+  184|      1|    let direct_receipt = crate::audit::receipt::build(crate::audit::receipt::ReceiptInput {
+  185|      1|        root: root.clone(),
+  186|      1|        red_report: root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json"),
+  187|      1|        stdout: root.join("validation_artifacts/ultragoal-audit/stdout.txt"),
+  188|      1|        stderr: root.join("validation_artifacts/ultragoal-audit/stderr.txt"),
+  189|      1|        check_ids: vec!["schema-valid".to_string()],
+  190|      1|        failures: BTreeMap::from([("schema-valid".to_string(), vec!["bad".to_string()])]),
+  191|      1|        red: BTreeMap::new(),
+  192|      1|        target_artifacts: Vec::new(),
+  193|      1|        start: "2026-06-26T00:00:01Z".to_string(),
+  194|      1|        status: "fail".to_string(),
+  195|      1|        validator_artifacts: Vec::new(),
+  196|      1|        command_text: "ultragoal source audit".to_string(),
+  197|      1|        mode: "strict".to_string(),
+  198|      1|        scheduler_metrics: Vec::new(),
+  199|      1|    })
+  200|      1|    .expect("direct validator receipt");
+  201|      1|    assert_eq!(direct_receipt["checks"]["schema-valid"]["status"], "fail");
+  202|      1|    assert_eq!(
+  203|      1|        direct_receipt["validator_execution"]["executable_provenance"]["invocation_mode"],
+  204|       |        "direct_executable"
+  205|       |    );
+  206|      1|    std::fs::remove_dir_all(root).expect("cleanup receipt build");
+  207|      1|}
 
 /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/self_tests/red/catalog_output.rs:
     1|       |use serde_json::{Value, json};
