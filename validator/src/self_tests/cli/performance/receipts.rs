@@ -11,8 +11,17 @@ fn valid_fail() -> Value {
         "budget": strict_budget(),
         "digests": {"candidate": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
         "cache": {"mode": "disabled"},
-        "concurrency": {"worker_count": 1},
-        "telemetry": {"wall_clock_ms": 1},
+        "concurrency": {
+            "worker_count": 1,
+            "queue_depth": 0,
+            "isolation_namespace": "typed_serial_reason"
+        },
+        "telemetry": {
+            "wall_clock_ms": 1,
+            "cpu_ms": null,
+            "peak_memory_bytes": null,
+            "io_bytes": null
+        },
         "failure": {"check_id": "cli-performance-latency-speed-iteration-fitness"},
         "blocked_claim_classes": ["completion"]
     })
@@ -37,8 +46,17 @@ fn strict_pass(candidate: &str) -> Value {
         "budget": strict_budget(),
         "digests": {"candidate": candidate},
         "cache": {"mode": "disabled", "no_cache_mode_result": "executed_without_cache"},
-        "concurrency": {"worker_count": 1},
-        "telemetry": {"wall_clock_ms": 1},
+        "concurrency": {
+            "worker_count": 1,
+            "queue_depth": 0,
+            "isolation_namespace": "typed_serial_reason"
+        },
+        "telemetry": {
+            "wall_clock_ms": 1,
+            "cpu_ms": null,
+            "peak_memory_bytes": null,
+            "io_bytes": null
+        },
         "performance_regression": {"status": "pass"},
         "failure": null,
         "blocked_claim_classes": [],
@@ -81,6 +99,17 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
         surface_value_failures(&missing)
             .iter()
             .any(|failure| failure == "cli_performance_receipt_missing:/telemetry/wall_clock_ms")
+    );
+
+    let mut missing_concurrency = valid_fail();
+    missing_concurrency["concurrency"]
+        .as_object_mut()
+        .expect("concurrency object")
+        .remove("queue_depth");
+    assert!(
+        surface_value_failures(&missing_concurrency)
+            .iter()
+            .any(|failure| failure == "cli_performance_receipt_missing:/concurrency/queue_depth")
     );
 
     let mut fake_pass = valid_pass();
@@ -138,6 +167,7 @@ fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
     receipt["performance_regression"]["status"] = json!("missing_baseline");
     receipt["cache"]["mode"] = json!("hidden");
     receipt["failure"] = json!({"check_id": "still-blocked"});
+    receipt["concurrency"]["worker_count"] = json!(999);
     receipt["supported_claim_classes"] = json!(["routine_usability", "update_goal_eligibility"]);
     let failures = same_candidate_pass_failures(&receipt, &current);
     for expected in [
@@ -146,6 +176,7 @@ fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
         "cli_performance_receipt_placeholder_wall_clock",
         "cli_performance_receipt_regression_not_pass",
         "cli_performance_receipt_cache_honesty_missing",
+        "cli_performance_receipt_unbounded_concurrency",
         "cli_performance_receipt_update_goal_overclaim",
     ] {
         assert!(

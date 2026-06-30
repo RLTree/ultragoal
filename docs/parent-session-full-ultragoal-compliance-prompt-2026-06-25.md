@@ -1728,6 +1728,29 @@ The CLI must support fast iterative use and honest final proof at the same time:
 
 The CLI must be scalable and bounded:
 
+- Parallelism, multi-threading, and concurrency are the default posture for every
+  safe CLI, plugin, validator, fixture, receipt, package, setup, retrofit,
+  observability, shell-helper, and proof path. Serial execution is allowed only
+  for typed authority-write, destructive/mutating, or externally constrained
+  phases that declare why serial execution is required. Agents must not be able
+  to skip available safe parallelism by omission, convention, local wrapper,
+  shell script, or hidden global lock.
+- Safe phases must use typed task classes: `pure_read_parallel`,
+  `isolated_temp_write_parallel`, `external_live_bounded_parallel`,
+  `shared_authority_write_serial`, and `destructive_or_mutating_serial`.
+  Every law-bearing command or helper that performs multiple independent units
+  of work must either execute through the scheduler/executor or emit a typed
+  fail-closed reason showing why no parallelization is possible.
+- The default worker count must be `available_parallelism - 1`, minimum `1`,
+  with an explicit bounded `--jobs N` or equivalent for supported commands.
+  Unbounded worker counts, hidden serial global locks, nondeterministic result
+  ordering, shared `validation_artifacts/**` writes from workers, stale shared
+  caches across workers, and fixture temp-state leaks are hard failures.
+- Scheduler/performance receipts must record worker count, task count, queue
+  depth, wall time, CPU time when available, memory and IO when available, cache
+  mode, resource-measurement status, candidate digest, and claim impact. Missing
+  duration, fake placeholder timing, or absent concurrency metadata blocks
+  speed, routine-usability, product-readiness, release, and update_goal claims.
 - Every law-bearing scan must declare its input size model and expected complexity class.
 - Full strict commands must reject unbounded recursion, unbounded globbing, unbounded network calls, unbounded subprocess fan-out, unbounded model/tool loops, global locks that serialize independent work, and hidden shared mutable cache state.
 - Concurrent execution must allocate ports, temp directories, cache namespaces, database names, log paths, receipt paths, and worker IDs without cross-talk.

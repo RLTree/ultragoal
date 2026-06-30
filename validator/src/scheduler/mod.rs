@@ -73,6 +73,10 @@ impl SchedulerConfig {
     pub(crate) fn jobs(self) -> usize {
         self.jobs
     }
+
+    pub(crate) fn default_jobs() -> usize {
+        default_worker_count()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -82,7 +86,11 @@ pub(crate) struct Metrics {
     pub(crate) task_count: usize,
     pub(crate) queue_depth: usize,
     pub(crate) wall_ms: u128,
+    pub(crate) cpu_ms: Option<u128>,
+    pub(crate) memory_bytes: Option<u64>,
+    pub(crate) io_bytes: Option<u64>,
     pub(crate) cache_mode: &'static str,
+    pub(crate) resource_measurement_status: &'static str,
     pub(crate) deterministic_ordering: bool,
     pub(crate) shared_validation_artifact_writes_allowed: bool,
 }
@@ -96,7 +104,11 @@ impl Metrics {
             "task_count": self.task_count,
             "queue_depth": self.queue_depth,
             "wall_ms": self.wall_ms,
+            "cpu_ms": self.cpu_ms,
+            "memory_bytes": self.memory_bytes,
+            "io_bytes": self.io_bytes,
             "cache_mode": self.cache_mode,
+            "resource_measurement_status": self.resource_measurement_status,
             "candidate_digest": candidate_digest,
             "deterministic_ordering": self.deterministic_ordering,
             "shared_validation_artifact_writes_allowed": self.shared_validation_artifact_writes_allowed,
@@ -144,7 +156,11 @@ pub(crate) fn run_ordered<T: Send + 'static>(
             task_count,
             queue_depth,
             wall_ms: start.elapsed().as_millis(),
+            cpu_ms: None,
+            memory_bytes: None,
+            io_bytes: None,
             cache_mode: "declared_local",
+            resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
             deterministic_ordering: true,
             shared_validation_artifact_writes_allowed: false,
         },

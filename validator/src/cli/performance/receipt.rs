@@ -13,7 +13,12 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
         "/digests/candidate",
         "/cache/mode",
         "/concurrency/worker_count",
+        "/concurrency/queue_depth",
+        "/concurrency/isolation_namespace",
         "/telemetry/wall_clock_ms",
+        "/telemetry/cpu_ms",
+        "/telemetry/peak_memory_bytes",
+        "/telemetry/io_bytes",
     ] {
         if value.pointer(ptr).is_none() {
             out.push(format!("cli_performance_receipt_missing:{ptr}"));
@@ -133,6 +138,13 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
         .and_then(Value::as_u64)
         .unwrap_or(0)
         == 0
+    {
+        out.push("cli_performance_receipt_unbounded_concurrency".to_string());
+    }
+    if value
+        .pointer("/concurrency/worker_count")
+        .and_then(Value::as_u64)
+        .is_some_and(|worker_count| worker_count > 256)
     {
         out.push("cli_performance_receipt_unbounded_concurrency".to_string());
     }

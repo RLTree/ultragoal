@@ -39,7 +39,14 @@ fn receipt_is_fail_closed_and_surface_bound() {
     assert_eq!(value["budget"]["hard_ceiling_ms"], 30_000);
     assert_eq!(value["budget"]["threshold_ms"], 30_000);
     assert_eq!(value["cache"]["mode"], "disabled");
-    assert_eq!(value["concurrency"]["worker_count"], 1);
+    assert_eq!(
+        value["concurrency"]["worker_count"],
+        crate::scheduler::SchedulerConfig::default_jobs()
+    );
+    assert_eq!(
+        value["concurrency"]["isolation_namespace"],
+        "scheduler_default_available_parallelism_minus_one_no_shared_artifact_writes"
+    );
     assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
     assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
     assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);

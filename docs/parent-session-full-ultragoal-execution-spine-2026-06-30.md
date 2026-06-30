@@ -183,6 +183,29 @@ this spine.
 If any forbidden action happens, stop and repair the execution violation before
 continuing.
 
+## Parallel-First Default
+
+Every safe CLI, plugin, validator, fixture, package scan, setup/retrofit,
+observability, shell-helper, and proof path must use available parallelism by
+default. Serial behavior is allowed only when the path is a typed
+`shared_authority_write_serial`, `destructive_or_mutating_serial`, or externally
+bounded live phase with an explicit reason.
+
+The canonical scheduler task classes are `pure_read_parallel`,
+`isolated_temp_write_parallel`, `external_live_bounded_parallel`,
+`shared_authority_write_serial`, and `destructive_or_mutating_serial`. Safe
+multi-item work must use the scheduler/executor or emit a fail-closed reason
+showing why parallelization is impossible. Default workers are
+`available_parallelism - 1`, minimum `1`, with bounded `--jobs N` where exposed.
+Worker results must be deterministically ordered, fixture workers must use
+isolated temp roots, and no worker may write shared `validation_artifacts/**`.
+
+Scheduler/performance evidence must record worker count, task count, queue
+depth, wall time, CPU time when available, memory/IO when available, cache mode,
+resource-measurement status, candidate digest, and claim impact. Missing timing
+or concurrency metadata blocks speed, routine-usability, product-readiness,
+release, and update_goal claims.
+
 ## Disobedience Detection
 
 A parent action is invalid if it:

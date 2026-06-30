@@ -1,4 +1,4 @@
-use serde_json::json;
+use serde_json::{Value, json};
 use std::collections::BTreeMap;
 use std::path::Path;
 
@@ -109,7 +109,11 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
             task_count: 3,
             queue_depth: 3,
             wall_ms: 7,
+            cpu_ms: None,
+            memory_bytes: None,
+            io_bytes: None,
             cache_mode: "declared_local",
+            resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable",
             deterministic_ordering: true,
             shared_validation_artifact_writes_allowed: false,
         }],
@@ -145,6 +149,16 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
         "pure_read_parallel"
     );
     assert_eq!(receipt["scheduler_execution"][0]["worker_count"], 2);
+    assert_eq!(receipt["scheduler_execution"][0]["cpu_ms"], Value::Null);
+    assert_eq!(
+        receipt["scheduler_execution"][0]["memory_bytes"],
+        Value::Null
+    );
+    assert_eq!(receipt["scheduler_execution"][0]["io_bytes"], Value::Null);
+    assert_eq!(
+        receipt["scheduler_execution"][0]["resource_measurement_status"],
+        "wall_time_only_cpu_memory_io_unavailable"
+    );
     assert_eq!(
         receipt["scheduler_execution"][0]["shared_validation_artifact_writes_allowed"],
         false

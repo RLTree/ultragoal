@@ -193,6 +193,13 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
     assert_eq!(metric.task_class, "pure_read_parallel");
     assert!(metric.task_count > 0);
     assert!(metric.worker_count <= 2);
+    assert_eq!(
+        metric.resource_measurement_status,
+        "wall_time_only_cpu_memory_io_unavailable"
+    );
+    assert_eq!(metric.cpu_ms, None);
+    assert_eq!(metric.memory_bytes, None);
+    assert_eq!(metric.io_bytes, None);
     assert!(metric.deterministic_ordering);
     assert!(!metric.shared_validation_artifact_writes_allowed);
     assert!(

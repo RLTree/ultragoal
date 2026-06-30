@@ -63,8 +63,17 @@ fn performance_overclaim(current: &str) -> Value {
         },
         "digests":{"candidate":current},
         "cache":{"mode":"enabled","no_cache_mode_result":"used_cache"},
-        "concurrency":{"worker_count":1},
-        "telemetry":{"wall_clock_ms":1},
+        "concurrency":{
+            "worker_count":1,
+            "queue_depth":0,
+            "isolation_namespace":"test_isolated_no_shared_artifact_writes"
+        },
+        "telemetry":{
+            "wall_clock_ms":1,
+            "cpu_ms":null,
+            "peak_memory_bytes":null,
+            "io_bytes":null
+        },
         "performance_regression":{"status":"pass"},
         "failure":null,
         "claim_ceiling":"performance_proven",

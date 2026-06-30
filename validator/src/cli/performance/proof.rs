@@ -140,11 +140,12 @@ fn cache_value(candidate: &str, command: &PerformanceCommand) -> Value {
 }
 
 fn concurrency_value() -> Value {
+    let worker_count = crate::scheduler::SchedulerConfig::default_jobs();
     json!({
-        "level": 1,
-        "worker_count": 1,
+        "level": worker_count,
+        "worker_count": worker_count,
         "queue_depth": 0,
-        "isolation_namespace": "single_process_no_shared_mutable_cache"
+        "isolation_namespace": "scheduler_default_available_parallelism_minus_one_no_shared_artifact_writes"
     })
 }
 

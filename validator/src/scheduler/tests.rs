@@ -26,6 +26,13 @@ fn scheduler_returns_deterministic_order_after_parallel_join() {
     assert_eq!(scheduled.metrics.worker_count, 4);
     assert!(scheduled.metrics.deterministic_ordering);
     assert!(!scheduled.metrics.shared_validation_artifact_writes_allowed);
+    assert_eq!(
+        scheduled.metrics.resource_measurement_status,
+        "wall_time_only_cpu_memory_io_unavailable"
+    );
+    assert_eq!(scheduled.metrics.cpu_ms, None);
+    assert_eq!(scheduled.metrics.memory_bytes, None);
+    assert_eq!(scheduled.metrics.io_bytes, None);
 }
 
 #[test]
@@ -46,6 +53,15 @@ fn scheduler_keeps_authority_writes_serial() {
         scheduled.metrics.task_class,
         TaskClass::SharedAuthorityWriteSerial.id()
     );
+}
+
+#[test]
+fn scheduler_default_jobs_uses_available_parallelism_minus_one_or_one() {
+    let expected = std::thread::available_parallelism()
+        .map(|count| count.get().saturating_sub(1).max(1))
+        .unwrap_or(1);
+    assert_eq!(SchedulerConfig::default_jobs(), expected);
+    assert_eq!(SchedulerConfig::from_jobs(None).unwrap().jobs(), expected);
 }
 
 #[test]
