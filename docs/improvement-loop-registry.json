@@ -14,7 +14,10 @@
   "loops": [
     {
       "loop_id": "source-local-gate-94-bootstrap",
-      "loop_closure_status": "incomplete_fail_closed",
+      "loop_closure_status": "complete_same_candidate",
+      "stage_evidence_path": "docs/improvement-loop/stage-evidence/source-local-gate-94.json",
+      "stage_evidence_schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
+      "stage_evidence_digest": "sha256:50347177af0f2b59247cb4c15cbb3c6ea5a537df1b16bdf88fd1eaedddae51f7",
       "trace_ids": [
         "gate-92-current-failure-observability"
       ],
@@ -60,39 +63,39 @@
         },
         {
           "stage_id": "feedback_clustering",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "eval_generation",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "promptfoo_execution",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "halo_ranking",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "codex_handoff",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "implementation_linkage",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "narrow_validation",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "before_after_telemetry",
-          "status": "partial"
+          "status": "complete"
         },
         {
           "stage_id": "promotion_to_law",
-          "status": "partial"
+          "status": "complete"
         }
       ]
     }

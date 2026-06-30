@@ -1,0 +1,145 @@
+{
+  "schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
+  "law_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+  "loop_id": "source-local-gate-94-bootstrap",
+  "status": "pass",
+  "authority": "cli_parsed_package_static_stage_evidence",
+  "candidate_binding": "package_static_source_evidence",
+  "claim_impact": "supports_source_local_improvement_loop_closure_only_not_readiness_release_update_goal",
+  "stages": [
+    {
+      "stage_id": "trace_capture",
+      "evidence_id": "gate94-trace-capture",
+      "evidence_kind": "observability_trace_receipt",
+      "status": "pass",
+      "source_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["ultragoal improvement-loop prove"],
+      "forbidden_substitutions_rejected": ["raw_trace_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "typed_feedback",
+      "evidence_id": "gate94-typed-feedback",
+      "evidence_kind": "control_loop_feedback_binding",
+      "status": "pass",
+      "source_paths": ["docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["source-local-gate-94-control-loop-steer"],
+      "forbidden_substitutions_rejected": ["raw_feedback_as_loop_closure", "reviewer_agreement_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "feedback_clustering",
+      "evidence_id": "gate94-feedback-clustering",
+      "evidence_kind": "completion_theater_cluster",
+      "status": "pass",
+      "source_paths": ["docs/improvement-loop-registry.json"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["ultragoal improvement-loop prove"],
+      "forbidden_substitutions_rejected": ["checklist_prose_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "eval_generation",
+      "evidence_id": "gate94-eval-generation",
+      "evidence_kind": "red_green_fixture_generation",
+      "status": "pass",
+      "source_paths": [
+        "fixtures/mandatory-law-surfaces/valid/harness-improvement-loop-trace-feedback-eval-codex-handoff.json",
+        "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json",
+        "fixtures/red/harness-improvement-loop-validation-skipped-red.json"
+      ],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["cargo test --offline improvement_loop --lib --quiet"],
+      "forbidden_substitutions_rejected": ["raw_model_output_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "promptfoo_execution",
+      "evidence_id": "gate94-promptfoo-execution",
+      "evidence_kind": "promptfoo_adapter_source_local_execution_boundary",
+      "status": "pass",
+      "source_paths": ["docs/promptfoo-suite-registry.json", "docs/promptfoo-provider-registry.json"],
+      "receipt_paths": ["validation_artifacts/promptfoo/adapter-receipt.json"],
+      "command_ids": ["ultragoal promptfoo prove"],
+      "forbidden_substitutions_rejected": ["raw_promptfoo_output_as_loop_closure"],
+      "claim_impact": "stage_only_promptfoo_eval_claims_remain_blocked_until_gate96_closure"
+    },
+    {
+      "stage_id": "halo_ranking",
+      "evidence_id": "gate94-halo-ranking",
+      "evidence_kind": "halo_governed_equivalent_source_local_ranking_boundary",
+      "status": "pass",
+      "source_paths": ["docs/halo-adapter-registry.json"],
+      "receipt_paths": ["validation_artifacts/halo/capability-receipt.json"],
+      "command_ids": ["ultragoal halo capability prove"],
+      "forbidden_substitutions_rejected": ["raw_halo_output_as_loop_closure"],
+      "claim_impact": "stage_only_halo_ranking_claims_remain_blocked_until_gate97_closure"
+    },
+    {
+      "stage_id": "codex_handoff",
+      "evidence_id": "gate94-codex-handoff",
+      "evidence_kind": "codex_handoff_contract",
+      "status": "pass",
+      "source_paths": ["docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["parent-session-gate94-slice"],
+      "forbidden_substitutions_rejected": ["checklist_prose_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "implementation_linkage",
+      "evidence_id": "gate94-implementation-linkage",
+      "evidence_kind": "source_commit_linkage",
+      "status": "pass",
+      "source_paths": ["validator/src/cli/improvement_loop/proof.rs", "validator/src/cli/improvement_loop/registry.rs"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["git commit ca5a146e5"],
+      "forbidden_substitutions_rejected": ["hand_authored_receipt_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "narrow_validation",
+      "evidence_id": "gate94-narrow-validation",
+      "evidence_kind": "focused_test_validation",
+      "status": "pass",
+      "source_paths": ["validator/src/cli/improvement_loop/tests.rs"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": [
+        "cargo test --offline improvement_loop --lib --quiet",
+        "cargo test --offline red_identity --lib --quiet",
+        "cargo test --offline red_fixture_runtime_binding --lib --quiet"
+      ],
+      "forbidden_substitutions_rejected": ["hand_authored_receipt_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "before_after_telemetry",
+      "evidence_id": "gate94-before-after-telemetry",
+      "evidence_kind": "fail_closed_to_green_receipt_transition",
+      "status": "pass",
+      "source_paths": ["validation_artifacts/observability/spool/events.jsonl"],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["ultragoal improvement-loop prove"],
+      "forbidden_substitutions_rejected": ["raw_trace_as_loop_closure"],
+      "claim_impact": "stage_only"
+    },
+    {
+      "stage_id": "promotion_to_law",
+      "evidence_id": "gate94-promotion-to-law",
+      "evidence_kind": "law_surface_promotion",
+      "status": "pass",
+      "source_paths": [
+        "templates/agent-standards/enforcement.json",
+        "docs/source-obligation-matrix.json",
+        "docs/foundational-law-traceability.json",
+        "docs/mandatory-law-surfaces.json"
+      ],
+      "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
+      "command_ids": ["cargo test --offline hu_family --lib --quiet"],
+      "forbidden_substitutions_rejected": ["checklist_prose_as_loop_closure"],
+      "claim_impact": "stage_only"
+    }
+  ]
+}

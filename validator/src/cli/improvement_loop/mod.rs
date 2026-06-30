@@ -1,6 +1,7 @@
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
+mod evidence;
 mod proof;
 mod registry;
 #[cfg(test)]

@@ -18,10 +18,9 @@ fn improvement_loop_receipt_fails_closed_for_partial_loop() {
     assert!(
         registry::array_strings(receipt.get("blocked_claims")).contains("update_goal_eligibility")
     );
+    let failures = receipt["failures"].as_array().unwrap();
     assert!(
-        receipt["failures"]
-            .as_array()
-            .unwrap()
+        failures
             .iter()
             .any(|failure| failure == "improvement_loop_not_complete_same_candidate")
     );
@@ -37,6 +36,27 @@ fn improvement_loop_receipt_has_possible_green_path() {
     let receipt = proof::build_receipt(&root, &command).expect("receipt");
     assert_eq!(receipt["status"], "pass");
     assert!(proof::receipt_failures(&root, &receipt).is_empty());
+}
+
+#[test]
+fn improvement_loop_receipt_rejects_missing_stage_evidence() {
+    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-no-evidence");
+    seed_root(&root, "complete_same_candidate");
+    let mut registry_doc = crate::json_boundary::read_json(&root.join(super::REGISTRY)).unwrap();
+    registry_doc["loops"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("stage_evidence_path");
+    crate::json_boundary::write_json(&root.join(super::REGISTRY), &registry_doc).unwrap();
+    let command = ImprovementLoopCommand {
+        receipt: PathBuf::from(super::DEFAULT_RECEIPT),
+    };
+    let receipt = proof::build_receipt(&root, &command).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    let failures = receipt["failures"].as_array().unwrap();
+    assert!(failures.iter().any(|failure| {
+        failure == "improvement_loop_stage_evidence_missing_field:stage_evidence_path"
+    }));
 }
 
 #[test]
@@ -72,8 +92,14 @@ fn seed_root(root: &Path, closure_status: &str) {
         &json!({"resources": [super::REGISTRY]}),
     )
     .expect("manifest");
-    crate::json_boundary::write_json(&root.join(super::REGISTRY), &registry_doc(closure_status))
-        .expect("registry");
+    crate::json_boundary::write_json(&root.join("stage-evidence.json"), &stage_evidence_doc())
+        .expect("stage evidence");
+    let digest = crate::digest::file(&root.join("stage-evidence.json")).expect("stage digest");
+    crate::json_boundary::write_json(
+        &root.join(super::REGISTRY),
+        &registry_doc(closure_status, &digest),
+    )
+    .expect("registry");
     std::fs::write(
         root.join("validation_artifacts/promptfoo/adapter-receipt.json"),
         "{}",
@@ -86,7 +112,7 @@ fn seed_root(root: &Path, closure_status: &str) {
     .expect("halo receipt");
 }
 
-fn registry_doc(closure_status: &str) -> serde_json::Value {
+fn registry_doc(closure_status: &str, evidence_digest: &str) -> serde_json::Value {
     json!({
         "schema": "harness-ultragoal.improvement-loop-registry.v1",
         "law_id": super::LAW_ID,
@@ -103,6 +129,9 @@ fn registry_doc(closure_status: &str) -> serde_json::Value {
         "loops": [{
             "loop_id": "source-local-gate-94-fixture",
             "loop_closure_status": closure_status,
+            "stage_evidence_path": "stage-evidence.json",
+            "stage_evidence_schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
+            "stage_evidence_digest": evidence_digest,
             "trace_ids": ["trace"],
             "feedback_ids": ["feedback"],
             "cluster_ids": ["cluster"],
@@ -119,5 +148,31 @@ fn registry_doc(closure_status: &str) -> serde_json::Value {
                 .map(|stage| json!({"stage_id": stage, "status": "complete"}))
                 .collect::<Vec<_>>()
         }]
+    })
+}
+
+fn stage_evidence_doc() -> serde_json::Value {
+    json!({
+        "schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
+        "law_id": super::LAW_ID,
+        "loop_id": "source-local-gate-94-fixture",
+        "status": "pass",
+        "authority": "cli_parsed_package_static_stage_evidence",
+        "candidate_binding": "package_static_source_evidence",
+        "claim_impact": "stage_only",
+        "stages": registry::REQUIRED_STAGES
+            .iter()
+            .map(|stage| json!({
+                "stage_id": stage,
+                "evidence_id": format!("evidence-{stage}"),
+                "evidence_kind": "fixture",
+                "status": "pass",
+                "source_paths": ["plugin-manifest-draft.json"],
+                "receipt_paths": ["validation_artifacts/promptfoo/adapter-receipt.json"],
+                "command_ids": ["fixture-command"],
+                "forbidden_substitutions_rejected": ["fixture-substitution"],
+                "claim_impact": "stage_only"
+            }))
+            .collect::<Vec<_>>()
     })
 }

@@ -9,7 +9,7 @@ pub(super) fn build_receipt(
     let candidate = crate::package::inventory::package_digest(root)?;
     let mut failures = Vec::new();
     let registry_doc = read_json(root, super::REGISTRY, &mut failures);
-    failures.extend(registry::registry_failures(&registry_doc));
+    failures.extend(registry::registry_failures(root, &registry_doc));
     let promptfoo_digest =
         digest_or_zero(root, "validation_artifacts/promptfoo/adapter-receipt.json");
     let halo_digest = digest_or_zero(root, "validation_artifacts/halo/capability-receipt.json");

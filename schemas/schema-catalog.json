@@ -95,6 +95,10 @@
       "path": "schemas/improvement-loop-registry.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/improvement-loop-stage-evidence.schema.json",
+      "path": "schemas/improvement-loop-stage-evidence.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",
       "path": "schemas/lane-registry.schema.json"
     },

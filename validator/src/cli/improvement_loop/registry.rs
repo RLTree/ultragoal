@@ -26,7 +26,7 @@ const FORBIDDEN_SUBSTITUTIONS: &[&str] = &[
     "hand_authored_receipt_as_loop_closure",
 ];
 
-pub(super) fn registry_failures(registry: &Value) -> Vec<String> {
+pub(super) fn registry_failures(root: &std::path::Path, registry: &Value) -> Vec<String> {
     let mut out = Vec::new();
     require_str(
         registry,
@@ -52,7 +52,7 @@ pub(super) fn registry_failures(registry: &Value) -> Vec<String> {
         out.push("improvement_loop_registry_has_no_loops".to_string());
     }
     for item in loops {
-        loop_failures(&item, &mut out);
+        loop_failures(root, &item, &mut out);
     }
     out
 }
@@ -81,7 +81,7 @@ pub(super) fn complete_same_candidate(registry: &Value) -> bool {
         })
 }
 
-fn loop_failures(item: &Value, out: &mut Vec<String>) {
+fn loop_failures(root: &std::path::Path, item: &Value, out: &mut Vec<String>) {
     if item
         .get("loop_id")
         .and_then(Value::as_str)
@@ -125,6 +125,7 @@ fn loop_failures(item: &Value, out: &mut Vec<String>) {
     {
         out.push("improvement_loop_not_complete_same_candidate".to_string());
     }
+    out.extend(super::evidence::stage_evidence_failures(root, item));
 }
 
 fn stage_set(item: &Value) -> BTreeSet<&str> {

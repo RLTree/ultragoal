@@ -40,6 +40,9 @@
           "validation_receipt_ids",
           "before_after_telemetry_ids",
           "promotion_ids",
+          "stage_evidence_path",
+          "stage_evidence_schema",
+          "stage_evidence_digest",
           "stage_statuses"
         ],
         "properties": {
@@ -61,6 +64,18 @@
           "validation_receipt_ids": { "$ref": "#/$defs/non_empty_strings" },
           "before_after_telemetry_ids": { "$ref": "#/$defs/non_empty_strings" },
           "promotion_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "stage_evidence_path": {
+            "type": "string",
+            "minLength": 1,
+            "not": { "pattern": "^/|(^|/)\\.\\.(/|$)" }
+          },
+          "stage_evidence_schema": {
+            "const": "harness-ultragoal.improvement-loop-stage-evidence.v1"
+          },
+          "stage_evidence_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
           "stage_statuses": {
             "type": "array",
             "minItems": 11,

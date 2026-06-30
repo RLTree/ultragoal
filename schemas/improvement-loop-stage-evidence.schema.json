@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/improvement-loop-stage-evidence.schema.json",
+  "title": "Harness Ultragoal Improvement Loop Stage Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "law_id", "loop_id", "status", "authority", "candidate_binding", "claim_impact", "stages"],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.improvement-loop-stage-evidence.v1" },
+    "law_id": { "const": "harness-improvement-loop-trace-feedback-eval-codex-handoff" },
+    "loop_id": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["pass", "fail"] },
+    "authority": { "const": "cli_parsed_package_static_stage_evidence" },
+    "candidate_binding": { "const": "package_static_source_evidence" },
+    "claim_impact": { "type": "string", "minLength": 1 },
+    "stages": {
+      "type": "array",
+      "minItems": 11,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stage_id",
+          "evidence_id",
+          "evidence_kind",
+          "status",
+          "source_paths",
+          "receipt_paths",
+          "command_ids",
+          "forbidden_substitutions_rejected",
+          "claim_impact"
+        ],
+        "properties": {
+          "stage_id": {
+            "enum": [
+              "trace_capture",
+              "typed_feedback",
+              "feedback_clustering",
+              "eval_generation",
+              "promptfoo_execution",
+              "halo_ranking",
+              "codex_handoff",
+              "implementation_linkage",
+              "narrow_validation",
+              "before_after_telemetry",
+              "promotion_to_law"
+            ]
+          },
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "evidence_kind": { "type": "string", "minLength": 1 },
+          "status": { "const": "pass" },
+          "source_paths": { "$ref": "#/$defs/relative_paths" },
+          "receipt_paths": { "$ref": "#/$defs/relative_paths" },
+          "command_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "forbidden_substitutions_rejected": { "$ref": "#/$defs/non_empty_strings" },
+          "claim_impact": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "relative_paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": { "pattern": "^/|(^|/)\\.\\.(/|$)" }
+      }
+    }
+  }
+}
