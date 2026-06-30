@@ -2,7 +2,11 @@ use crate::cli::observe::types::ObserveOperation;
 use serde_json::{Value, json};
 
 pub(crate) fn candidate_digest_failure(body: &str, expected: &str) -> Option<String> {
-    typed_candidate_digests(body)
+    let digests = typed_candidate_digests(body);
+    if digests.is_empty() {
+        return Some("observability_query_candidate_digest_missing".to_string());
+    }
+    digests
         .into_iter()
         .find(|digest| digest != expected)
         .map(|digest| format!("observability_query_candidate_digest_mismatch:{digest}!={expected}"))
@@ -19,6 +23,9 @@ fn typed_candidate_digests(body: &str) -> Vec<String> {
 fn collect_candidate_digests(value: &Value, out: &mut Vec<String>) {
     match value {
         Value::Object(map) => {
+            if map.get("key").and_then(Value::as_str) == Some("candidate_digest") {
+                collect_candidate_string(map.get("value").unwrap_or(&Value::Null), out);
+            }
             for (key, value) in map {
                 if key == "candidate_digest" {
                     collect_candidate_string(value, out);
@@ -73,6 +80,78 @@ pub(crate) fn bounded_rows(body: String, byte_limit: usize) -> Vec<Value> {
         redacted
     };
     vec![json!({"body": clipped})]
+}
+
+pub(crate) fn observed_failure(rows: &[Value]) -> Option<Value> {
+    rows.iter()
+        .filter_map(|row| row.get("body").and_then(Value::as_str))
+        .filter_map(|body| serde_json::from_str::<Value>(body).ok())
+        .find_map(|value| first_observed_failure(&value))
+}
+
+fn first_observed_failure(value: &Value) -> Option<Value> {
+    match value {
+        Value::Object(map) => {
+            if is_failure_object(value) {
+                return Some(observed_failure_object(value));
+            }
+            for nested in map.values() {
+                if let Some(found) = first_observed_failure(nested) {
+                    return Some(found);
+                }
+            }
+            None
+        }
+        Value::Array(items) => items.iter().find_map(first_observed_failure),
+        Value::String(raw) if starts_with_json(raw) => serde_json::from_str::<Value>(raw)
+            .ok()
+            .and_then(|nested| first_observed_failure(&nested)),
+        _ => None,
+    }
+}
+
+fn is_failure_object(value: &Value) -> bool {
+    let failing_status = semantic_text_field(value, "status") != Some("pass");
+    let failure_class = semantic_text_field(value, "failure_class").unwrap_or("none");
+    let why = semantic_text_field(value, "why_failed").unwrap_or("none");
+    failing_status
+        && ((failure_class != "none" && !failure_class.is_empty())
+            || (why != "none" && !why.is_empty()))
+}
+
+fn observed_failure_object(value: &Value) -> Value {
+    json!({
+        "status": semantic_text_field(value, "status").unwrap_or("fail"),
+        "failure_class": semantic_text_field(value, "failure_class").unwrap_or("unknown_failure"),
+        "why_failed": semantic_text_field(value, "why_failed").unwrap_or("metric-or-trace-row omitted why_failed"),
+        "where_failed": semantic_text_field(value, "where_failed").unwrap_or_else(|| semantic_text_field(value, "operation").unwrap_or("unknown surface")),
+        "next_repair": semantic_text_field(value, "next_repair").unwrap_or("query logs and traces for the full repair hint"),
+        "claim_impact": semantic_text_field(value, "claim_impact").unwrap_or("claim_blocked"),
+        "law_id": semantic_text_field(value, "law_id").unwrap_or("unknown-law"),
+        "check_id": semantic_text_field(value, "check_id").unwrap_or("unknown-check"),
+        "claim_id": semantic_text_field(value, "claim_id").unwrap_or("unknown-claim"),
+        "run_id": semantic_text_field(value, "run_id").unwrap_or("unknown-run"),
+        "correlation_id": semantic_text_field(value, "correlation_id").unwrap_or("unknown-correlation"),
+    })
+}
+
+fn semantic_text_field<'a>(value: &'a Value, field: &str) -> Option<&'a str> {
+    value
+        .get(field)
+        .and_then(Value::as_str)
+        .or_else(|| tag_array_text_field(value, field))
+}
+
+fn tag_array_text_field<'a>(value: &'a Value, field: &str) -> Option<&'a str> {
+    value
+        .get("tags")
+        .and_then(Value::as_array)?
+        .iter()
+        .find_map(|tag| {
+            (tag.get("key").and_then(Value::as_str) == Some(field))
+                .then(|| tag.get("value").and_then(Value::as_str))
+                .flatten()
+        })
 }
 
 fn redact_private_paths(body: &str) -> String {

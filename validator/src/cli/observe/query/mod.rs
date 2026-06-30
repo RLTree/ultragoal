@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 
 mod body;
 mod text;
-pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches};
+pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
 pub(crate) use text::{query_text, trace_tags};
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {

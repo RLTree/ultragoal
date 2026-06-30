@@ -134,6 +134,10 @@ fn metric(event: &Value) -> Value {
             "claim_id": event["claim_id"],
             "surface": event["surface"],
             "failure_class": event["failure_class"],
+            "why_failed": event["why_failed"],
+            "where_failed": event["where_failed"],
+            "next_repair": event["next_repair"],
+            "claim_impact": event["claim_impact"],
             "candidate_digest": event["candidate_digest"],
             "exporter": exporter
         },

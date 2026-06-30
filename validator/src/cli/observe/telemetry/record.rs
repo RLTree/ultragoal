@@ -212,6 +212,10 @@ fn labels(event: &Value, operation: ObserveOperation, status: &str) -> Value {
         "claim_id": types::CLAIM_ID,
         "surface": "live_stack",
         "failure_class": event["failure_class"].as_str().unwrap_or("none"),
+        "why_failed": event["why_failed"].as_str().unwrap_or("none"),
+        "where_failed": event["where_failed"].as_str().unwrap_or("none"),
+        "next_repair": event["next_repair"].as_str().unwrap_or("none"),
+        "claim_impact": event["claim_impact"].as_str().unwrap_or("none"),
         "candidate_digest": event["candidate_digest"].as_str().unwrap_or(""),
         "exporter": event["exporter"].as_str().unwrap_or("")
     })

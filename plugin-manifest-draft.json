@@ -4345,6 +4345,7 @@
     "validator/src/self_tests/cli/observe/query/matching.rs",
     "validator/src/self_tests/cli/observe/query/mod.rs",
     "validator/src/self_tests/cli/observe/query/run.rs",
+    "validator/src/self_tests/cli/observe/query/spool.rs",
     "validator/src/self_tests/cli/observe/query/text.rs",
     "validator/src/self_tests/cli/observe/run.rs",
     "validator/src/self_tests/cli/openai.rs",

@@ -7,6 +7,7 @@ use std::path::Path;
 mod fitting;
 mod matching;
 mod run;
+mod spool;
 mod text;
 use fitting::support::write_fitted_inventory;
 
