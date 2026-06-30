@@ -2211,7 +2211,7 @@ Required CLI authority:
 - Shell scripts may exist only as implementation helpers. CLI receipts are the authority.
 - A machine-readable command inventory must cover every current and future `ultragoal` command family, including package digest, source audit, red fixture report, schema validation, mandatory-law validation, standards-gardener, source-obligation validation, foundational trace validation, coverage, line caps, namespace, Product Fitness/Cohesion/Journey, fit-repo, review-round, review-target, archive, final-packet proof, registry probe, install audit, cache audit, transactional finalization, CLI self-law, update-goal eligibility, Rust DevX, GC, session-log hardening, target-repo audit, and observability commands.
 - The validator must fail if any command inventory row lacks log instrumentation, metric instrumentation, trace instrumentation, pass output contract, fail output contract, receipt observability binding, focused tests, and claim impact mapping.
-- The command inventory must include explicit observability fitting inventory for every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, and package/plugin surface. Command fitting and surface fitting are both mandatory and distinct. Each row must state `fitting_status` as `fitted`, `partially_fitted`, or `unfitted`, name the fitted surfaces, missing surfaces, validator check id, focused test ids, same-candidate receipt paths, live query proof paths, and claim impact. Fitted rows must dereference current same-candidate observability receipts and logs/metrics/traces query proof; row shape alone fails. `partially_fitted`, `unfitted`, missing, stale, wrong-digest, local-spool-only, or row-shape-only fitting rows fail Gate 92 and block completion-adjacent claims. A few fitted commands cannot substitute for unfitted commands, validator checks, receipts, fixtures, package resources, plugin surfaces, or claim guards elsewhere in the CLI or plugin.
+- The command inventory must include explicit observability fitting inventory for every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, and package/plugin surface. Command fitting and surface fitting are both mandatory and distinct. Each row must state `fitting_status` as `fitted`, `partially_fitted`, or `unfitted`, name the fitted surfaces, missing surfaces, validator check id, focused test ids, same-candidate receipt paths, live query proof paths, current owner surface, next unfitted surface, and claim impact. The inventory must also include a validator-checked `fitting_control_board` that recomputes totals by command, surface, operating-loop, and signal family, names the first incomplete row, names its next unfitted surface, and blocks claims when any row is partial, unfitted, stale, or row-shape-only. This inventory plus control board is the Gate 92 tracking surface; mutable checklist prose, side ledgers, adjacent command coverage, or a fitted neighbor cannot stand in for it. Fitted rows must dereference current same-candidate observability receipts and logs/metrics/traces query proof; row shape alone fails. `partially_fitted`, `unfitted`, missing, stale, wrong-digest, local-spool-only, or row-shape-only fitting rows fail Gate 92 and block completion-adjacent claims. A few fitted commands cannot substitute for unfitted commands, validator checks, receipts, fixtures, package resources, plugin surfaces, or claim guards elsewhere in the CLI or plugin.
 - The command inventory must also include an observability operating-loop inventory and signal inventory. Gate 92 treats observability as the repair operating system, not a receipt family. The required loop is: current digest first; run the highest-authority failing command once; query logs, metrics, and traces by run id/correlation id; explain the failure through CLI output before manual artifact inspection; repair the smallest root cause; rerun the narrow command; compare before/after telemetry; and run broad source audit only after the narrow observable proof passes. The required signal classes are CLI-translated latency, traffic, errors, saturation, freshness, correlation, redaction, and boundedness. Each loop stage and signal class must have the same `fitting_status`, fitted/missing surfaces, validator check id, tests, current receipt paths, live query proof paths, and claim impact as command and surface rows. Fitted loop/signal rows must dereference same-candidate telemetry. Partial, unfitted, stale, wrong-digest, or row-shape-only loop/signal rows fail Gate 92 and block completion-adjacent claims.
 
 Typed telemetry model:
@@ -2253,6 +2253,335 @@ Required Gate 92 validation:
 
 - Run and record runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
 - Do not refresh install/cache, bump version, finalize packet, claim registry/reviewer exposure, claim readiness/release/completion, launch parallel lanes, or call update_goal until Gate 92 and all prior gates pass on the same candidate digest.
+
+## Gate 93 - Research Source Authority And Article-To-Law Integration
+
+Gate 93 is additive to Gates 1-92. It does not replace, reduce, defer, satisfy, or weaken observability, CLI authority, source/install/cache/app-registry separation, Product Fitness, Product Cohesion, Product Success, coverage, namespace, line caps, typed parsing, final-packet proof, version sync, or any update_goal stop condition.
+
+The Harness Ultragoal plugin must convert the full research corpus into governed law surfaces. The research corpus includes the original nine observability and harness-engineering sources already introduced into Gate 92 plus the newer OpenAI agent-improvement loop cookbook and the OpenAI self-improving tax-agent article. Research is not authority by itself. Research becomes authority only when each requirement, practice, workflow shape, failure mode, tooling need, and claim boundary is mapped into canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, final-packet fields, and update_goal blockers.
+
+Mandatory research sources:
+
+- OpenAI Harness Engineering: agent-legible repos, local worktree-scoped logs/metrics/traces, repo-local maps, mechanical invariants, short high-signal guidance, filesystem-as-agent-interface, and agent-runner feedback loops.
+- OpenAI Codex iterative repair loops: review, repair, validate, structured feedback, repeatable validation, and Codex handoffs driven by concrete failures.
+- OpenAI Agents observability/tracing guidance: full workflow traces, tool/model/guardrail/custom spans, trace-first debugging, and trace reuse for evals.
+- Google SRE monitoring guidance: alerting, investigating, diagnosing, visualizing, before/after comparison, trend understanding, freshness, stale telemetry as false evidence, and telemetry fit for action.
+- Google SRE four golden signals: latency, traffic, errors, and saturation translated into CLI command/check/fixture/receipt/query latency, command/check/fixture/receipt traffic, failed checks/stale receipts/digest mismatches/claim blocks, and saturation of queues/caches/processes/exporters.
+- Charity Majors/Honeycomb structured-event doctrine: wide structured events, high-cardinality run and receipt identifiers where appropriate, debugging by asking new questions, no dashboard theater, and fast localization of unknown failures.
+- Honeycomb high-cardinality guidance: run_id, correlation_id, trace_id, receipt digest, candidate digest, law id, check id, and claim id are essential correlation keys, with bounded metric labels and no secret/path label leaks.
+- OpenTelemetry semantic conventions and naming guidance: one stable telemetry vocabulary across logs, metrics, traces, receipts, query outputs, schemas, command inventory, and claim guards.
+- OpenAI agent-improvement loop cookbook: traces, human/model feedback, generated evals, promptfoo eval suites, HALO-ranked improvement proposals, Codex handoff, implementation, validation, and durable loop closure.
+- OpenAI self-improving tax-agent article: production-style domain tasks, expert feedback, trace/eval-driven improvement, domain-specific failure taxonomy, ranked fixes, validation against realistic cases, and productized improvement loops.
+
+Required implementation:
+
+- Create or extend a machine-readable research-source registry. Each source row must include stable source id, canonical URL, retrieved_at or source_card digest, source artifact digest, applicable law-family aliases, canonical law ids affected, required plugin surfaces, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
+- Create or extend an article-to-law trace registry. Each research requirement must map to at least one existing canonical law id or a newly added canonical law id. HU-style aliases may be explanatory only and may not replace existing canonical law ids.
+- Every mapped requirement must name the standards row id, source-obligation id, foundational trace id, validator check id, red fixture id, valid fixture id or receipt requirement, package inventory path, setup/retrofit output path, and claim-ceiling guard.
+- Validator must fail research rows that are unmapped, mapped only to umbrella categories, mapped only to prose, mapped only to a checklist row, mapped only to a source-obligation row, mapped only to a trace row, missing fixtures, missing receipts, missing claim guards, missing setup/retrofit integration, stale against the research-source digest, or detached from canonical law ids.
+- Add red fixtures for missing research source, stale source digest, article requirement mapped only to prose, article requirement mapped only to a law-family alias, article requirement with no red fixture, article requirement with no green/valid path, article requirement with no setup/retrofit propagation, article requirement with no package inventory entry, article requirement with no claim-ceiling guard, and article requirement used to support readiness without same-candidate evidence.
+- Add green fixtures proving a complete research-to-law mapping for at least one observability source, one SRE source, one OpenTelemetry source, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article.
+- Add tamper fixtures proving swapped URLs, stale source digests, altered article summaries, duplicate research ids, forged source-card digests, and omitted mandatory sources fail.
+
+Required claim ceiling:
+
+- No completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, or update_goal claim may pass while any mandatory research source is unmapped, stale, prose-only, row-shape-only, fixture-incomplete, package-omitted, setup/retrofit-omitted, or claim-guard-omitted.
+
+## Gate 94 - Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff Law
+
+Gate 94 is additive to Gates 1-93. It does not replace or weaken Gate 92 observability. Gate 92 makes failures legible. Gate 94 makes legible failures improve the harness. Observability without an improvement loop is incomplete. An improvement loop without same-candidate observability is theater.
+
+The Harness Ultragoal plugin must implement a first-class Harness Improvement Loop that operates across the CLI, plugin skills, validators, setup/retrofit flows, review rounds, active repos, and future repos. The required loop is:
+
+1. Capture current same-candidate traces, logs, metrics, receipts, stdout/stderr, query results, and claim impacts from real law-bearing runs.
+2. Attach typed human feedback, reviewer feedback, model feedback, side-thread findings, session-log findings, Chronicle summaries, validation failures, product findings, and user corrections to exact runs/spans/checks/claims.
+3. Cluster feedback and failures into stable failure modes with law ids, check ids, claim ids, surface ids, artifact ids, severity, recurrence count, source digests, and affected repos.
+4. Generate or update evals, red fixtures, green fixtures, tamper fixtures, promptfoo suites, product journey cases, domain task cases, and validator regression tests.
+5. Rank potential harness changes with HALO or a governed equivalent adapter using typed inputs and explicit optimization objectives.
+6. Produce Codex handoff artifacts that name the exact files, laws, checks, tests, receipts, metrics, traces, evals, expected outputs, forbidden shortcuts, and claim ceilings.
+7. Implement the smallest real fix, rerun narrow proof, compare before/after telemetry, rerun affected evals/fixtures, then rerun broad validation only after narrow proof passes.
+8. Promote repeated fixes into standards rows, source obligations, schemas, validators, setup/retrofit templates, package inventory, and final-packet requirements.
+9. Mint an improvement-loop receipt that proves the loop closed without relying on prose, memory, checklist text, stale telemetry, or reviewer agreement.
+
+Required plugin surfaces:
+
+- Add or update `harness-ultragoal:agent-improvement-loop` skill or equivalent plugin-owned progressive-disclosure surface.
+- Add setup and retrofit integration so every plugin-activated repo can install or explicitly fail-close the improvement loop.
+- Add a machine-readable improvement-loop registry with loop ids, run ids, trace ids, feedback ids, cluster ids, eval ids, promptfoo suite ids, HALO ranking ids, Codex handoff ids, implementation change ids, validation receipt ids, and promotion ids.
+- Add receipt schemas for trace feedback, feedback clustering, eval generation, promptfoo execution, HALO ranking, Codex handoff, implementation closure, before/after telemetry comparison, and promotion-to-law.
+- Add CLI commands or command families for improvement loop capture, feedback import, feedback cluster, eval generate, eval run, HALO rank, handoff build, repair validate, before-after compare, promote rule, and prove loop closure.
+- The CLI must be the authority for the improvement loop. Raw OpenAI output, raw HALO output, raw promptfoo output, raw reviewer notes, raw trace comments, and raw Codex summaries are observations only.
+
+Required enforcement:
+
+- Validator must fail improvement-loop claims when feedback lacks run/span/check/claim binding, when traces are stale or wrong digest, when evals are generated without source feedback, when evals have no negative cases, when HALO ranks changes without typed objective and evidence, when Codex handoff lacks expected outputs, when implementation is not linked to the ranked proposal, when validation is not rerun after implementation, when before/after telemetry is missing, when repeated findings are not promoted, or when a loop is declared closed by prose.
+- Add red fixtures for trace without feedback binding, feedback without trace/run binding, cluster without source examples, eval generated from summary only, promptfoo suite without red cases, HALO ranking without objective, HALO output treated as authority, Codex handoff without files/tests/receipts, implementation not linked to proposal, validation skipped after repair, before/after telemetry omitted, repeated failure not promoted, and improvement-loop receipt hand-authored.
+- Add green fixtures proving a complete trace-to-feedback-to-eval-to-ranked-change-to-Codex-handoff-to-validation-to-promotion loop.
+- Add tamper fixtures for swapped trace ids, changed feedback labels, forged HALO ranking, forged promptfoo results, stale Codex handoff, altered validation status, and removed promotion record.
+
+Required claim ceiling:
+
+- No claim that a repo, plugin, skill, validator, product flow, or setup/retrofit path is self-improving may pass without a current same-candidate Harness Improvement Loop receipt. Lowering the claim ceiling is not compliance; missing improvement-loop proof must block self-improvement, learning, regression-prevention, product-learning, and update_goal-adjacent claims.
+
+## Gate 95 - OpenAI API, Key Authority, Model Identity, Cost, And External AI Boundary Law
+
+Gate 95 is additive to Gates 1-94. It does not make external model output authoritative. OpenAI API calls, Agents SDK traces, model graders, feedback classifiers, eval generators, and Codex handoffs are external observations unless the CLI parses them into typed authority, binds them to current same-candidate evidence, validates them, and computes claim ceilings.
+
+Required OpenAI setup:
+
+- The repo must declare a governed OpenAI API key destination and environment indirection policy. The key must be provided as `OPENAI_API_KEY` only through a local untracked env file or Codex secure key setup flow selected by the parent. It may not be committed, copied into receipts, printed in logs, included in traces, included in metrics labels, embedded in prompt/checklist files, or passed to child agents without typed authorization.
+- The parent must prefer the OpenAI Platform secure API key setup flow where available. If a manual env file is used, it must be repo-local, untracked, and named by the parent after adding a typed config rule. The recommended default for this repo is `.codex-worktree/env.sh` for active worktree sessions or `.env.local` only after `.gitignore`, config precedence, redaction, and unknown-key rejection are verified. The CLI must load the key through typed config indirection and emit a redacted config-resolution receipt.
+- Every OpenAI call must record model id, endpoint or API family, tool/call purpose, prompt/input digest, schema id, output digest, request id when available, token counts when available, cost estimate or cost-unavailable reason, latency, retry/backoff data, rate-limit observations, redaction status, candidate digest, run id, correlation id, and claim impact.
+- OpenAI model outputs used for feedback clustering, eval generation, grading, summary, or ranking must be parsed into typed schemas. Freeform model output may not satisfy authority.
+- Live OpenAI calls must have budget classes, maximum retries, timeout, backoff, cache policy, no-cache verification when a claim requires live proof, and offline fixture mode for deterministic tests.
+
+Required enforcement:
+
+- Add schemas for OpenAI call receipts, model-output authority records, LLM grader results, eval-generation receipts, feedback-classifier receipts, and cost/rate-limit receipts.
+- Add validators for missing API key, wrong env var, key exposed in logs/receipts/traces, unredacted request body, freeform output used as authority, missing model id, missing prompt/input digest, stale model output, wrong candidate digest, unknown endpoint, unbounded retry, missing timeout, missing cost/rate-limit accounting, cached output used for live claim, and live output used without schema parse.
+- Add red fixtures for pasted secret in docs, secret in receipt, secret in metric label, secret in trace attribute, child-agent secret leak, missing model identity, model output accepted without schema, grader accepted without rubric, eval generated without source traces, stale model output used for current claim, wrong-candidate model output, unbounded cost, rate-limit ignored, and OpenAI output treated as final claim authority.
+- Add green fixtures for redacted OpenAI config resolution, typed model-output parse, bounded eval generation, bounded grader execution, cost receipt, rate-limit receipt, and offline fixture-mode replay.
+- Add tamper fixtures for swapped model id, altered output digest, changed prompt digest, forged request id, stale cache hit, and removed redaction status.
+
+Required claim ceiling:
+
+- No model-generated summary, model-generated eval, model-generated grade, model-generated repair proposal, Codex handoff, or HALO ranking may support completion, readiness, release, product success, registry exposure, final packet, or update_goal unless it is parsed, receipt-bound, same-candidate, redacted, cost-bounded, and consumed by deterministic CLI validators. OpenAI availability does not prove product readiness. OpenAI unavailability must produce typed fail-closed evidence and block only claims that depend on live model calls.
+
+## Gate 96 - Promptfoo Eval, Red-Team, Regression, And Provider-Separation Law
+
+Gate 96 is additive to Gates 1-95. promptfoo is the canonical eval and red-team adapter for prompt, model, grader, tool-output, claim-language, product-journey, and harness-improvement evals unless a typed adapter proves an equivalent or stricter surface. promptfoo output is observation. The Harness Ultragoal CLI is claim authority.
+
+Required setup:
+
+- Install and pin promptfoo through a governed Node/pnpm or standalone adapter path. The install source, version, lockfile digest, config digest, provider config, plugin list, and execution mode must be receipt-bound.
+- Add repo-owned promptfoo config templates for Harness improvement-loop evals, validator remediation evals, claim-ceiling evals, Product Fitness/Product Cohesion/Product Success evals, review-packet language evals, setup/retrofit evals, and active-repo rollout evals.
+- Add provider separation for OpenAI live provider, offline fixture provider, local/mock provider, and no-network deterministic provider. A live-provider pass may not substitute for offline regression, and an offline pass may not substitute for live external-model proof when a live model claim is made.
+- Add promptfoo result schemas, eval-suite registry, eval-case registry, rubric registry, grader registry, provider registry, and eval-to-law mapping.
+
+Required enforcement:
+
+- Validator must fail promptfoo suites with no red cases, no green cases, no tamper cases where applicable, no source trace/feedback binding, no law id, no claim id, no expected failure reason, no deterministic fixture mode, no provider boundary, no prompt/input digest, no output digest, no current candidate digest, no cost/latency receipt for live providers, no regression baseline, or no promotion path.
+- promptfoo suites must include adversarial tests for claim inflation, stale receipt acceptance, source/install/cache/app-surface substitution, model overclaim, prompt injection, rubric drift, private-path leakage, secret leakage, ambiguous pass language, unsupported readiness, and reviewer-agreement substitution.
+- Add red fixtures for promptfoo pass accepted without CLI receipt, promptfoo config missing red cases, promptfoo eval unbound to law id, promptfoo run wrong candidate, promptfoo live provider used without key receipt, promptfoo offline provider used as live proof, promptfoo grader without rubric, promptfoo result altered after run, promptfoo output accepted despite failed cases, and promptfoo eval omitted from package inventory.
+- Add green fixtures proving promptfoo eval generation from real feedback, deterministic offline run, live OpenAI run when key is configured, result parsing into typed authority, and promotion into validator/fixture/claim guard.
+- Add tamper fixtures for altered result JSON, swapped provider, modified rubric, stale baseline, and mismatched eval-case digest.
+
+Required claim ceiling:
+
+- No eval-backed claim may pass from a raw promptfoo pass. Only the CLI-parsed promptfoo receipt may support eval coverage, and only for the exact law, claim, provider, candidate digest, and surface named in the receipt.
+
+## Gate 97 - HALO Ranked Harness Change Optimization Law
+
+Gate 97 is additive to Gates 1-96. HALO is a governed improvement-ranking adapter, not claim authority. The installed HALO desktop app may be used only after the CLI records the capability surface, version/build identity when available, invocation mode, input digest, output digest, and same-candidate binding. HALO recommendations cannot substitute for deterministic enforcement.
+
+Required HALO integration:
+
+- Detect the installed HALO desktop app and any command/API surfaces available on this machine. If HALO exposes no stable CLI/API integration, the parent must create a fail-closed HALO capability receipt and integrate HALO as a manual observation source only until a stable adapter exists. Manual HALO output cannot support completion, readiness, release, or update_goal.
+- Add a HALO adapter registry with invocation mode: desktop_manual, cli, api, fixture, or unavailable. Each mode must declare authority class, allowed claims, required receipts, privacy boundaries, and whether live OpenAI access is used.
+- HALO inputs must be generated by the CLI from typed failure clusters, eval results, trace summaries, product findings, cost/performance data, and claim impacts. HALO may not receive raw private session logs, raw secrets, unredacted local paths, or unrestricted repo dumps.
+- HALO objectives must be typed and explicit: reduce repeated failures, improve first-pass validation, reduce time-to-repair, reduce claim-theater escapes, improve Product Fitness evidence quality, reduce stale receipts, improve active-repo rollout completeness, or another declared objective. A ranking without typed objective fails.
+- HALO outputs must be parsed into typed ranked-change records with rank, hypothesis, expected effect, evidence ids, affected law ids, affected files/surfaces, cost/risk estimate, required validation, forbidden shortcuts, and claim impact.
+
+Required enforcement:
+
+- Validator must fail HALO claims when HALO is unavailable but treated as integrated, desktop/manual output is treated as deterministic authority, input lacks source trace/eval binding, raw private data is included, objective is missing, output is freeform, ranking lacks validation plan, recommended change lacks Codex handoff, implementation diverges from ranked proposal without disposition, or HALO recommendation is used to raise claim ceiling without deterministic proof.
+- Add red fixtures for HALO app present but no adapter receipt, HALO manual screenshot treated as proof, HALO output without objective, HALO output without source evidence ids, HALO output with private raw logs, HALO output with secret leak, HALO ranking accepted without promptfoo/eval data, HALO ranking accepted without Codex handoff, and HALO recommendation used as readiness proof.
+- Add green fixtures for unavailable fail-closed HALO capability, fixture-mode ranking, live/desktop adapter ranking if available, typed output parse, Codex handoff generation, and validation closure.
+- Add tamper fixtures for altered rank order, swapped input digest, changed objective, forged HALO output, stale ranking, and removed privacy boundary.
+
+Required claim ceiling:
+
+- HALO can support improvement-prioritization claims only when typed and current. It cannot support completion, readiness, release, final-packet correctness, Product Success, registry/reviewer exposure, or update_goal unless the ranked change has been implemented, validated, and promoted through deterministic CLI enforcement.
+
+## Gate 98 - Self-Improving Domain-Agent Pattern And Tax-Agent Generalization Law
+
+Gate 98 is additive to Gates 1-97. The OpenAI self-improving tax-agent article must be generalized into a domain-agent improvement law for Harness Ultragoal repos. The point is not tax-specific code. The point is production-style domain task traces, expert feedback, domain failure taxonomy, eval generation, ranked repair, validation against realistic cases, and durable improvement.
+
+Required implementation:
+
+- Add a domain-agent improvement pattern that every plugin-activated repo can adopt when it has domain-specific workflows, product workflows, support workflows, review workflows, compliance workflows, analysis workflows, or any expert-evaluable output.
+- The pattern must define domain task case schemas, expert feedback schemas, expected-answer/rubric schemas, trace binding, task outcome status, product/user impact, error taxonomy, eval generation, regression cases, ranked repair, and loop closure receipts.
+- The pattern must support both generic Harness domains and repo-specific domain packs. A domain pack must declare task type, expert role, evidence level, allowed data, forbidden data, rubric, eval cases, failure taxonomy, product claim impact, and retention/redaction policy.
+- The plugin must include setup/retrofit templates for domain task capture, expert feedback intake, eval generation, promptfoo execution, HALO ranking, Codex handoff, validation, and promotion into laws/fixtures.
+- Domain expert feedback may be human, model-assisted, or reviewer-generated, but the feedback type must be explicit. Human expertise cannot be forged by model output. Model feedback cannot substitute for human expert feedback when human expertise is claimed.
+
+Required enforcement:
+
+- Validator must fail self-improving-domain claims when tasks are toy-only, cases are not realistic, feedback has no expert/source binding, rubric is missing, model feedback is labeled human, eval cases are generated without trace/feedback source, ranked repair has no validation, domain pack lacks privacy rules, domain output includes raw private data, or product/domain success claims are raised from internal eval pass alone.
+- Add red fixtures for toy-only evals, feedback without task trace, model feedback mislabeled as expert, domain case with no expected output/rubric, private data in domain pack, eval generated from summary only, repair ranked without validation, domain improvement claimed without before/after cases, and product success claimed from eval-only proof.
+- Add green fixtures for complete domain task, expert feedback, eval, ranking, Codex handoff, validation, and promotion loop.
+- Add tamper fixtures for swapped expert id, changed rubric, altered expected answer, stale task trace, and forged before/after improvement.
+
+Required claim ceiling:
+
+- No active repo may claim self-improving domain behavior, expert-quality behavior, product success, daily-driver readiness, or sustained-value improvement from domain-agent loops unless current same-surface domain tasks, expert feedback, evals, ranked repairs, before/after proof, and claim guards are present.
+
+## Gate 99 - Setup And Retrofit Skill Deep Integration Law
+
+Gate 99 is additive to Gates 1-98. The research stack and improvement loop must be installed through the plugin, not manually rediscovered in each repo. Fresh setup and retrofit are law-bearing product surfaces.
+
+Required setup integration:
+
+- `agent-first-repo-init` must install or fail-close the observability stack, command inventory, improvement-loop registry, research-source registry, OpenAI config policy, promptfoo config, HALO adapter policy, telemetry schemas, eval schemas, domain pack templates, feedback schemas, Codex handoff templates, and claim guards.
+- `agent-first-repo-init` must detect repo type: Rust backend, TypeScript frontend/UI, mixed Rust/TypeScript, CLI-only, plugin-only, app/service, docs-only, product-facing, review-only, or target-repo audit fixture. Detection must be typed and may not rely on prose.
+- Fresh setup must produce a setup receipt with installed surfaces, skipped surfaces, fail-closed blockers, setup commands, tool versions, key requirements, env destinations, package managers, cache locations, telemetry destinations, eval providers, privacy boundaries, and claim ceiling.
+- Fresh setup must include one-command bootstrap for local observability, OpenAI key redacted resolution, promptfoo offline fixture mode, HALO availability check, Rust DevX where Rust exists, TypeScript DevX where TS/UI exists, and target-repo rollout templates.
+
+Required retrofit integration:
+
+- `agent-first-repo-retrofit` must audit existing repos for observability coverage, improvement-loop coverage, command inventory, law-bearing commands, opaque failures, receipt telemetry binding, promptfoo suites, HALO adapter status, OpenAI key policy, eval-to-law mapping, domain pack needs, Rust/TypeScript DevX gaps, package inventory gaps, and claim guard gaps.
+- Retrofit must produce a fitting inventory with `fitted`, `partially_fitted`, `unfitted`, and `not_applicable_with_typed_reason` rows for every required surface. `not_applicable` rows must block only claims that depend on the absent surface and must include typed rationale and red fixtures.
+- Retrofit must generate an implementation plan with exact files, validators, schemas, fixtures, receipts, commands, and validation steps. It may not terminate as documentation-only, checklist-only, or "follow-up needed."
+
+Required enforcement:
+
+- Validator must fail setup/retrofit claims when templates are missing, outputs are not package-owned, generated docs are hand memory, OpenAI key setup is undocumented or insecure, promptfoo/HALO are absent without fail-closed receipts, TypeScript/Rust stacks are not detected correctly, observability is partial without claim blocking, or active-repo rollout omits setup/retrofit receipts.
+- Add red fixtures for init missing improvement loop, init missing OpenAI key policy, init missing promptfoo config, init missing HALO adapter policy, init missing TypeScript templates for UI repo, retrofit treating docs-only observability as fitted, retrofit ignoring opaque failures, retrofit omitting command inventory, retrofit omitting eval promotion, and setup receipt used as product success proof.
+- Add green fixtures for fresh Rust repo, fresh TypeScript UI repo, mixed Rust/TypeScript repo, CLI-only repo, and existing repo retrofit with explicit partial/fail-closed surfaces.
+
+Required claim ceiling:
+
+- No plugin-activated repo may claim Harness Ultragoal setup completeness, retrofit completeness, observability integration, improvement-loop integration, eval integration, or self-improvement readiness unless setup/retrofit receipts prove the required surfaces or block unsupported claims.
+
+## Gate 100 - Cross-Repo Harness Rollout, Active Repo Inventory, And Propagation Law
+
+Gate 100 is additive to Gates 1-99. The CLI/plugin improvements must propagate to all plugin-activated repos through governed rollout, not through parent-session memory or opportunistic manual edits.
+
+Required implementation:
+
+- Add an active-repo registry for plugin-activated repos. Each row must include repo root or category-safe id, plugin activation surface, installed plugin version, source/install/cache/app surface status, language/runtime classes, product-surface classes, observability fitting status, improvement-loop fitting status, OpenAI key policy status, promptfoo status, HALO status, Rust DevX status, TypeScript DevX status, setup/retrofit receipt paths, last audit digest, claim ceiling, and next required repair.
+- Add rollout modes: source repo self-compliance, fresh-init target, retrofit target, installed plugin target, cache package target, app-registry target, and review-packet target. Modes must be typed and non-substitutable.
+- Add a cross-repo rollout command or registry builder that can enumerate active repos without leaking private paths into public/package artifacts. Public/package outputs must use category-safe ids where required.
+- Add rollout receipts proving which repos were evaluated, which were fitted, which were fail-closed, which claims are blocked, and which next repairs are required.
+- Add per-repo fitting inventories for observability, improvement loops, promptfoo, HALO, OpenAI key policy, Rust DevX, TypeScript DevX, domain-agent packs, and setup/retrofit.
+
+Required enforcement:
+
+- Validator must fail cross-repo claims when active repo inventory is missing, repo rows are stale, private paths leak into package claims, installed/cache/app surfaces are collapsed, setup/retrofit receipts are missing, fitting statuses are row-shape-only, a source repo proof is used for another repo, or rollout claims exceed repo-specific claim ceilings.
+- Add red fixtures for missing active repo, stale active repo row, source proof reused for target repo, private repo path in public packet, installed plugin proof used as app proof, promptfoo fitted in one repo used as all-repo proof, HALO available in source repo used as target proof, and active repo marked complete with partial fitting.
+- Add green fixtures for one fully fitted local fixture repo, one partially fitted fail-closed fixture repo, and one not-applicable typed fixture repo.
+
+Required claim ceiling:
+
+- Plugin-wide rollout claims require current per-repo receipts. A single repo pass, source package pass, installed plugin pass, cache pass, or parent-session statement cannot support all-active-repo readiness.
+
+## Gate 101 - Rust And TypeScript Developer Experience Integration Law
+
+Gate 101 is additive to Gates 1-100. Gate 91 already governs Rust DevX for the current Rust CLI/backend. Gate 101 extends the attached Rust and TypeScript developer guides into setup/retrofit, active-repo rollout, and mixed-stack support. Rust remains the backend/control-plane implementation language. TypeScript is the governed language for frontend/UI work when present.
+
+Required Rust integration:
+
+- The CLI/plugin must keep Rust tooling as governed infrastructure: pinned toolchain, cargo substrate, rustfmt, clippy, cargo metadata, cargo nextest, cargo llvm-cov exact coverage, cargo-deny, cargo-audit, cargo-vet, CycloneDX SBOM, sccache where available, cargo-binstall or locked installs, proptest, cargo-fuzz, insta/snapbox/assert_cmd, criterion/hyperfine, tracing/OpenTelemetry, serde/schemars/serde_path_to_error, cargo-dist where release surfaces exist, and explicit rejection of raw Cargo output as claim authority.
+- Setup/retrofit must install or fail-close Rust DevX surfaces for Rust repos and must not require Rust surfaces for non-Rust repos except where plugin tooling itself is Rust.
+- Rust acceleration is mandatory where it materially improves speed, but every cache and accelerator must be declared, receipt-bound, and excluded from clean/no-cache claims unless proven.
+
+Required TypeScript integration:
+
+- The CLI/plugin must add governed TypeScript/UI support for plugin-owned UI/frontend surfaces and plugin-activated repos with UI code: Node Active LTS pin, pnpm pin and lockfile, strict TypeScript stable compiler, project references where applicable, Vite, ESLint v9 flat config, typescript-eslint typed linting, Prettier, Vitest, Playwright, Playwright traces/screenshots/videos, `@axe-core/playwright`, Testing Library, MSW, Vitest V8 coverage, Zod default boundary parsers with Valibot as governed adapter, knip, dependency-cruiser, Lighthouse CI, size-limit, rollup-plugin-visualizer, pnpm audit, OSV scanner, Gitleaks, pnpm SBOM, npm provenance/trusted publishing for public package release, and typed browser/runtime memory/resource receipts.
+- TypeScript 7/native, Biome, Bun, Valibot, Storybook, visual comparison, Node GC traces, and heap snapshots are governed adapters unless and until receipt parity proves they can satisfy a stricter claim surface.
+- npm and Yarn are rejected as canonical package managers for Harness UI repos unless a typed legacy adapter blocks the affected claims and proves why migration is not in scope.
+- TypeScript runtime boundaries must parse external data from JSON, network, DOM, localStorage, URL params, postMessage, env vars, generated files, browser APIs, plugin messages, and third-party packages from `unknown` into typed authority. TypeScript typecheck alone cannot prove runtime authority.
+
+Required enforcement:
+
+- Add setup/retrofit language-detection schemas and receipts.
+- Add Rust/TypeScript tool-inventory schemas, toolchain receipts, cache receipts, coverage receipts, lint/typecheck/test/build/browser receipts, bundle budget receipts, accessibility receipts, memory/resource receipts, GC receipts, and package-publishing receipts where applicable.
+- Validator must fail raw Cargo, raw pnpm, raw tsc, raw eslint, raw vitest, raw Playwright, raw Vite, raw Storybook, raw Lighthouse, or raw package-manager output used as Harness claim authority.
+- Add red fixtures for TypeScript `any` authority leaks, unparsed JSON, eslint-disable without law id/expiry, Vite build used as product success, Storybook used as product success, Lighthouse score used as Product Success, warm pnpm store used as clean proof, Playwright smoke used as complete product journey, raw pnpm test used as completion, and TypeScript UI repo missing strict config.
+- Add green fixtures for Rust CLI repo, TypeScript UI repo, and mixed Rust/TypeScript repo setup/retrofit.
+
+Required claim ceiling:
+
+- No Rust or TypeScript developer-tool output can support completion, readiness, release, product success, or update_goal unless routed through CLI receipts, same-candidate evidence, correct surface separation, and claim guards.
+
+## Gate 102 - Feedback, Eval, Telemetry, Privacy, Retention, And Data-Minimization Law
+
+Gate 102 is additive to Gates 1-101. Deep observability and improvement loops must not become private-data hoarding. Durable evidence must be useful, queryable, and category-safe.
+
+Required implementation:
+
+- Define data classes for public package artifacts, private local receipts, raw private traces, redacted traces, model prompts, model outputs, feedback comments, domain examples, eval cases, screenshots/videos, logs, metrics, spans, HALO inputs/outputs, promptfoo results, Codex handoffs, and final packets.
+- Each data class must declare retention, redaction, package inclusion eligibility, child-agent eligibility, model-call eligibility, query eligibility, digest strategy, and claim support.
+- Raw private session logs, raw user prompts, raw secrets, raw local paths, raw screenshots with sensitive data, raw traces containing private payloads, and raw model prompts may not become durable package artifacts. They may be converted into category-only, redacted, digest-bound evidence when required.
+- Model calls must use minimized inputs. HALO, promptfoo, OpenAI graders, and Codex handoffs must receive only the necessary redacted evidence for the task.
+- Every feedback/eval/telemetry surface must have deletion/GC policy, protected set, retention bound, and no-surprise package inventory rules.
+
+Required enforcement:
+
+- Validator must fail raw private artifact inclusion, secret leakage, unredacted home paths, unbounded trace retention, prompt bodies in public package artifacts, model outputs containing raw secrets, promptfoo outputs leaking private paths, HALO inputs containing raw private logs, Codex handoff containing secrets, and final packets containing private local proof paths.
+- Add red fixtures for each leak class across logs, metrics, traces, receipts, query output, promptfoo results, HALO inputs, OpenAI call receipts, Codex handoffs, eval cases, screenshots, videos, and final packets.
+- Add green fixtures for category-only durable evidence, redacted trace bundle, minimized OpenAI input, minimized HALO input, redacted promptfoo result, and package-safe final-packet evidence.
+- Add tamper fixtures for redaction-status flip, retention-bound removal, package-eligible flag change, and raw-private artifact relabeling.
+
+Required claim ceiling:
+
+- No improvement-loop, observability, eval, promptfoo, HALO, OpenAI, product, or final-packet claim may pass while private-data boundaries are violated. A useful trace that leaks secrets is failing evidence.
+
+## Gate 103 - Improvement Surface Separation And Non-Substitution Law
+
+Gate 103 is additive to Gates 1-102. Improvement evidence must preserve exact surfaces. Source improvement proof does not prove installed plugin improvement. Installed plugin proof does not prove cache proof. Cache proof does not prove app registry. App registry does not prove reviewer exposure. Eval pass does not prove product success. Observability pass does not prove improvement-loop closure. HALO ranking does not prove implementation. OpenAI output does not prove deterministic enforcement.
+
+Required implementation:
+
+- Define separate proof surfaces for source, installed plugin, versioned cache, app registry, Plugins UI, marketplace, install button, launcher runtime, reviewer exposure, final packet, target repo, active repo, promptfoo eval, HALO ranking, OpenAI model output, Codex handoff, product journey, domain task, and improvement-loop closure.
+- Every receipt must name exactly one primary proof surface and any referenced lower-level surfaces. Referenced surfaces must be dereferenced by path, digest, schema, status, candidate digest, currentness, and claim class.
+- Improvement-loop and eval receipts may reference observability receipts, but observability receipts may not independently support improvement-loop closure.
+- Final packet proof may dereference lower-level evidence but must not create a circular dependency with source audit, self-law, update-goal eligibility, or improvement-loop closure.
+
+Required enforcement:
+
+- Validator must fail source proof used as installed/cache/app proof, installed proof used as reviewer exposure, promptfoo pass used as Product Success, HALO ranking used as readiness, OpenAI output used as deterministic law, observability stack health used as Gate 92 completion, improvement-loop receipt used without before/after validation, and active-repo rollout used for another repo.
+- Add red fixtures for every forbidden substitution path and green fixtures for correct same-surface proof joins.
+- Add tamper fixtures for swapped receipt path, altered surface id, stale lower-level receipt, digest mismatch, and embedded summary disagreeing with dereferenced receipt.
+
+Required claim ceiling:
+
+- Any surface mismatch blocks the dependent claim. Claim ceilings must say exactly which surface is supported and which surfaces remain unsupported.
+
+## Gate 104 - Research-To-Standards, Source Obligations, Traceability, Fixtures, And Package Closure Law
+
+Gate 104 is additive to Gates 1-103. Gates 93-103 are not complete when written in the prompt. They are complete only when they exist across the same mandatory law surfaces as every other Harness Ultragoal law.
+
+Required implementation for Gates 93-103:
+
+- Add canonical law ids and any explanatory HU-family aliases without replacing existing canonical ids.
+- Add agent standards rows, source obligations, foundational trace entries, mandatory-law surface entries, source-obligation matrix rows, schema enums/check ids, validator checks, red fixtures, green fixtures, tamper fixtures, valid fixtures or current receipt requirements, package inventory entries, plugin cohesion manifest entries, setup/retrofit templates, command inventory rows, improvement-loop inventory rows, claim-ceiling guards, final-packet fields, and update_goal blockers.
+- Add typed schemas for research registry, improvement-loop registry, trace-feedback receipt, feedback-cluster receipt, eval-generation receipt, promptfoo receipt, HALO receipt, OpenAI call receipt, Codex handoff receipt, setup/retrofit fitting receipt, active-repo rollout receipt, TypeScript DevX receipt, and surface-separation proof.
+- Add CLI commands or extend existing command families for every new law surface. Commands must emit observability, structured stdout, receipts, and claim ceilings.
+- Add source/install/cache/app-surface package inventory coverage for every new resource.
+
+Required enforcement:
+
+- Validator must fail any Gate 93-103 law that is prompt-only, checklist-only, standards-row-only, source-obligation-only, trace-row-only, package-entry-only, fixture-name-only, red-only, green-only, receipt-only, claim-ceiling-only, reviewer-only, or setup-template-only.
+- Validator must fail if any new law has no bad-path red fixture and no realistic green path.
+- Validator must fail if Gates 93-103 are omitted from source audit, red fixture report, CLI self-law, update_goal eligibility, final packet, setup/retrofit, package inventory, or active-repo rollout.
+
+Required claim ceiling:
+
+- No parent session may claim Gates 93-103 are integrated until source audit, red fixture report, focused tests, package inventory, setup/retrofit proof, and CLI self-law all include them on the same candidate digest.
+
+## Gate 105 - Measured Improvement, Regression Prevention, And Harness Evolution Law
+
+Gate 105 is additive to Gates 1-104. A self-improving harness must prove improvement, not merely create more machinery.
+
+Required implementation:
+
+- Define improvement metrics for time-to-diagnosis, time-to-repair, rerun count, stale-receipt recurrence, wrong-digest recurrence, opaque-failure recurrence, claim-theater escape count, source-audit failure recurrence, red-fixture drift recurrence, Product Fitness substitution recurrence, active-repo rollout fitting percentage, eval pass/fail trend, command latency, and user/parent manual-spelunking burden.
+- Each metric must have schema, baseline, current value, collection command, telemetry source, receipt path, candidate digest, confidence, and claim impact.
+- Improvement claims must compare before/after values using same-surface telemetry and must explain regressions. A single successful run cannot prove sustained improvement.
+- Regression prevention must include evals, fixtures, source-audit checks, setup/retrofit checks, package inventory checks, and active-repo rollout checks.
+- Standards-gardener must promote recurring improvement-loop findings into law changes, fixture changes, schema changes, or typed non-goals with claim blocking.
+
+Required enforcement:
+
+- Validator must fail measured-improvement claims when no baseline exists, baseline and current surfaces differ, metrics are stale, metrics are manually typed without telemetry, improvements are cherry-picked, regressions are ignored, evals are absent, active repos are omitted, or standards-gardener promotion is missing.
+- Add red fixtures for fabricated baseline, stale baseline, wrong-surface comparison, one-run improvement claim, no-regression-suite claim, ignored regression, metric without telemetry source, and active-repo omission.
+- Add green fixtures for before/after telemetry comparison, regression-prevention eval, standards-gardener promotion, and active-repo rollout improvement proof.
+- Add tamper fixtures for altered metric value, removed regression, swapped baseline digest, and changed active-repo denominator.
+
+Required claim ceiling:
+
+- No "self-improving", "improved", "faster", "more reliable", "better observability", "better product fitness", "better active-repo rollout", or "reduced theater" claim may pass without measured same-surface before/after evidence, regression protection, and claim-ceiling guards.
 
 Do not call `update_goal()` until all are true:
 
@@ -2378,6 +2707,32 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
+105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article. Every source requirement is mapped to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, validator checks, red/green/tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, and final-packet fields. No mandatory source may remain unmapped, stale, prose-only, row-shape-only, alias-only, fixture-incomplete, or package-omitted.
+
+106. Harness Improvement Loop proof is current and same-candidate: traces, typed feedback, feedback clusters, promptfoo eval generation, promptfoo eval execution, HALO-ranked proposals, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, standards/fixture/schema promotion, and loop-closure receipt all pass through CLI authority. No self-improvement, learning, feedback-to-rule, regression-prevention, or product-learning claim may pass from raw traces, raw feedback, raw model output, raw promptfoo output, raw HALO output, reviewer agreement, or prose.
+
+107. OpenAI API use is governed by typed config and redaction. `OPENAI_API_KEY` is provided only through an untracked local env surface or secure OpenAI Platform key setup flow, never committed or printed. Every OpenAI call records model identity, endpoint/API family, purpose, prompt/input digest, schema id, output digest, request id when available, token/cost/rate-limit data when available, timeout/retry/backoff, redaction status, candidate digest, run id, correlation id, and claim impact. Model output cannot support any law claim unless parsed into typed authority and validated by the CLI.
+
+108. promptfoo is installed, pinned, configured, package-included, provider-separated, schema-bound, and CLI-governed for Harness evals, red-team suites, regression suites, Product Fitness/Cohesion/Success evals, claim-ceiling evals, setup/retrofit evals, and active-repo rollout evals. No raw promptfoo pass may support a claim without CLI-parsed same-candidate promptfoo receipt, law id, claim id, provider id, source trace/feedback binding, red/green/tamper cases, and claim guard.
+
+109. HALO integration is governed. The installed HALO desktop app or any HALO CLI/API surface is detected, capability-receipted, privacy-bounded, objective-bound, input-digest-bound, output-digest-bound, parsed into typed ranked-change records, linked to Codex handoffs, and validated after implementation. HALO manual output, screenshots, untyped ranking, stale ranking, missing objective, private-data-bearing input, or HALO recommendation alone cannot support completion, readiness, release, Product Success, final packet, or update_goal.
+
+110. The self-improving domain-agent pattern from the tax-agent article is generalized and enforced for plugin-activated repos with domain workflows. Domain task cases, expert feedback, rubrics, traces, failure taxonomies, evals, ranked repairs, before/after validations, domain packs, privacy rules, and claim guards are schema-bound and same-candidate. Toy-only evals, model feedback mislabeled as human expertise, eval-only product success, or domain improvement without before/after proof fail.
+
+111. Setup and retrofit skills install or fail-close every research/improvement surface: observability, command inventory, improvement-loop registry, research registry, OpenAI key policy, promptfoo config, HALO adapter policy, telemetry schemas, eval schemas, domain packs, feedback schemas, Codex handoff templates, Rust DevX where applicable, TypeScript DevX where applicable, and active-repo rollout templates. Fresh setup and retrofit receipts prove exact installed, skipped, blocked, and claim-limited surfaces.
+
+112. Cross-repo Harness rollout is governed by an active-repo registry and per-repo fitting receipts. Source repo proof, installed plugin proof, cache proof, app proof, promptfoo proof, HALO proof, OpenAI proof, or setup proof from one repo cannot satisfy another repo. Plugin-wide rollout claims require current per-repo same-surface evidence and category-safe handling of private repo identities.
+
+113. Rust and TypeScript Developer Experience integration is enforced across setup/retrofit and active repos. Rust tooling remains governed infrastructure under CLI authority. TypeScript/UI repos require pinned Node Active LTS, pnpm, strict TypeScript, Vite, typed ESLint, Prettier, Vitest, Playwright, accessibility checks, MSW, runtime parsers, bundle/performance/security tooling, memory/resource receipts, and GC receipts where applicable. Raw Cargo/pnpm/tsc/eslint/vitest/Playwright/Vite/Storybook/Lighthouse output cannot support Harness claims.
+
+114. Feedback, eval, telemetry, OpenAI, promptfoo, HALO, Codex handoff, screenshot/video, trace, and final-packet data classes have enforced privacy, retention, redaction, package-inclusion, child-agent, model-call, query, digest, and claim-support policies. Raw private material and secrets never enter package artifacts or public claims. Useful leaked telemetry is failing evidence.
+
+115. Improvement surface separation is enforced. Observability proof, improvement-loop proof, promptfoo proof, HALO proof, OpenAI proof, source proof, install proof, cache proof, app-registry proof, reviewer proof, product journey proof, domain-task proof, and final-packet proof remain non-substitutable and dereferenced by path, digest, schema, status, currentness, surface id, and claim class.
+
+116. Gates 93-105 are represented across all mandatory law surfaces: standards, source obligations, foundational trace, schemas, check enums, validators, red fixtures, green fixtures, tamper fixtures, valid fixtures or receipt requirements, package inventory, plugin cohesion manifest, setup/retrofit templates, command inventory, improvement-loop inventory, claim guards, final packet fields, CLI self-law, source audit, red fixture report, and update_goal eligibility. Prompt-only or checklist-only additions fail.
+
+117. Measured improvement and regression prevention are proven. Time-to-diagnosis, time-to-repair, rerun count, stale-receipt recurrence, wrong-digest recurrence, opaque-failure recurrence, claim-theater escape count, Product Fitness substitution recurrence, active-repo fitting percentage, eval trend, command latency, and manual-spelunking burden have baselines, current values, same-surface telemetry, receipts, regression protection, and standards-gardener promotion. No "self-improving", "improved", "faster", "more reliable", or "reduced theater" claim may pass from anecdotes, one successful run, stale baselines, or cherry-picked metrics.
+
 Final response must include:
 - exact files changed
 - exact commands run and results
@@ -2427,6 +2782,19 @@ Final response must include:
 - one-command fresh environment bootstrap/concurrency status
 - agent-queryable observability status
 - subagent orchestration explicitness/token-model-cost/reconciliation status
+- research source authority/article-to-law integration status
+- Harness Improvement Loop trace/feedback/eval/Codex handoff status
+- OpenAI API/key/model/cost/privacy boundary status
+- promptfoo eval/red-team/provider-separation status
+- HALO ranked-change optimization status
+- self-improving domain-agent/tax-agent-pattern status
+- setup/retrofit deep-integration status
+- cross-repo active-repo rollout status
+- Rust and TypeScript Developer Experience integration status
+- feedback/eval/telemetry privacy-retention status
+- improvement surface separation status
+- Gates 93-105 law-surface closure status
+- measured improvement/regression-prevention status
 - skill catalog context-budget/omission-warning status
 - distribution and sharing-surface claim-separation status
 - total authority types and impossible-state elimination status

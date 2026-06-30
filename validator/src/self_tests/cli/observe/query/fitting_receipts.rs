@@ -1,0 +1,128 @@
+use serde_json::json;
+use std::{fs, path::Path};
+
+pub(super) fn write_fitting_receipts(root: &Path) {
+    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
+    let dir = root.join("validation_artifacts/observability/fitting");
+    fs::create_dir_all(&dir).expect("fitting dir");
+    write_command_receipts(&dir, &candidate);
+    write_surface_receipts(&dir, &candidate);
+    write_loop_receipts(&dir, &candidate);
+    write_signal_receipts(&dir, &candidate);
+}
+
+fn write_command_receipts(dir: &Path, candidate: &str) {
+    for command in crate::audit::observability::required_commands() {
+        let slug = slug(command);
+        write_receipt_set(
+            dir,
+            candidate,
+            &slug,
+            &format!("run-{slug}"),
+            &format!("corr-{slug}"),
+            &command.replace(' ', "."),
+        );
+    }
+}
+
+fn write_surface_receipts(dir: &Path, candidate: &str) {
+    for surface in crate::audit::observability::required_surfaces() {
+        let slug = slug(surface);
+        write_receipt_set(
+            dir,
+            candidate,
+            &format!("surface-{slug}"),
+            &format!("run-surface-{slug}"),
+            &format!("corr-surface-{slug}"),
+            &surface_operation(surface),
+        );
+    }
+}
+
+fn write_loop_receipts(dir: &Path, candidate: &str) {
+    for stage in crate::audit::observability::required_loop_stages() {
+        let slug = slug(stage);
+        write_receipt_set(
+            dir,
+            candidate,
+            &format!("loop-{slug}"),
+            &format!("run-loop-{slug}"),
+            &format!("corr-loop-{slug}"),
+            &format!("observability.loop.{slug}"),
+        );
+    }
+}
+
+fn write_signal_receipts(dir: &Path, candidate: &str) {
+    for signal in crate::audit::observability::required_signal_classes() {
+        let slug = slug(signal);
+        write_receipt_set(
+            dir,
+            candidate,
+            &format!("signal-{slug}"),
+            &format!("run-signal-{slug}"),
+            &format!("corr-signal-{slug}"),
+            &format!("observability.signal.{slug}"),
+        );
+    }
+}
+
+fn write_receipt_set(
+    dir: &Path,
+    candidate: &str,
+    slug: &str,
+    run: &str,
+    corr: &str,
+    operation: &str,
+) {
+    crate::json_boundary::write_json(
+        &dir.join(format!("{slug}.json")),
+        &json!({
+            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
+            "status": "pass",
+            "candidate_digest": candidate,
+            "operation": operation,
+            "run_id": run,
+            "correlation_id": corr
+        }),
+    )
+    .expect("receipt");
+    write_query_receipts(dir, candidate, slug, run, corr, operation);
+}
+
+fn write_query_receipts(
+    dir: &Path,
+    candidate: &str,
+    slug: &str,
+    run: &str,
+    corr: &str,
+    operation: &str,
+) {
+    for kind in ["logs", "metrics", "traces"] {
+        crate::json_boundary::write_json(
+            &dir.join(format!("{slug}-{kind}.json")),
+            &json!({
+                "schema": crate::cli::observe::types::QUERY_SCHEMA,
+                "status": "pass",
+                "candidate_digest": candidate,
+                "run_id": run,
+                "correlation_id": corr,
+                "query_kind": kind,
+                "rows": [{
+                    "candidate_digest": candidate,
+                    "operation": operation,
+                    "correlation_id": corr
+                }]
+            }),
+        )
+        .expect("query receipt");
+    }
+}
+
+fn slug(value: &str) -> String {
+    value.replace(' ', "-")
+}
+
+fn surface_operation(surface: &str) -> String {
+    format!("surface.{}", surface.replace(' ', "."))
+}

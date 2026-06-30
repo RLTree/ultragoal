@@ -1,3 +1,4 @@
+use crate::cli::observe::telemetry::{claims, record};
 use crate::cli::observe::types::{self, ObserveCommand};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -18,6 +19,9 @@ pub(super) fn result(
     let why_failed = receipt_text(&telemetry, "why_failed")?;
     let where_failed = receipt_text(&telemetry, "where_failed")?;
     let next_repair = receipt_text(&telemetry, "next_repair")?;
+    let row_value = Value::Array(rows.clone());
+    let row_text = row_value.to_string();
+    let redaction_status = record::redaction_status(&row_value);
     Ok(json!({
         "schema": types::QUERY_SCHEMA,
         "status": status,
@@ -32,9 +36,13 @@ pub(super) fn result(
         "row_limit": command.row_limit,
         "byte_limit": command.byte_limit,
         "timeout_ms": command.timeout_ms,
+        "row_count": rows.len(),
+        "byte_count": row_text.len(),
         "retention_bound": "2d",
         "cardinality_guard": "bounded",
         "truncated": rows.len() >= command.row_limit,
+        "bounded_output_status": claims::bounds_status(command),
+        "redaction_status": redaction_status,
         "claim_impact": if status == "pass" { "query_observation_only" } else { "observability_claims_blocked" },
         "result_digest": crate::digest::canonical_json(&Value::Array(rows.clone())),
         "rows": rows,

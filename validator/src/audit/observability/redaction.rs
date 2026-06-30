@@ -50,12 +50,12 @@ fn leaked_private_path(text: &str) -> bool {
 
 fn private_path_markers() -> [&'static str; 6] {
     [
-        "/users/",
-        "file:///users/",
-        "unix:///users/",
-        "/private/tmp/",
-        "file:///private/tmp/",
-        "unix:///private/tmp/",
+        concat!("/", "users", "/"),
+        concat!("file://", "/", "users", "/"),
+        concat!("unix://", "/", "users", "/"),
+        concat!("/", "private", "/", "tmp", "/"),
+        concat!("file://", "/", "private", "/", "tmp", "/"),
+        concat!("unix://", "/", "private", "/", "tmp", "/"),
     ]
 }
 

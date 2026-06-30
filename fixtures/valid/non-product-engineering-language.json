@@ -4275,7 +4275,7 @@
       "validator/src/cli/control/plane/registry/capability/mod.rs",
       "validator/src/cli/control/plane/transactional.rs",
       "validator/src/cli/control/plane/types.rs",
-      "validator/src/cli/final_packet.rs",
+      "validator/src/cli/final_packet/mod.rs",
       "validator/src/cli/garbage/collection/mod.rs",
       "validator/src/cli/garbage/collection/receipt.rs",
       "validator/src/cli/garbage/collection/types.rs",
@@ -18265,6 +18265,66 @@
         "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json",
         "status": "pass",
         "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:38cd48d60233ab8ce424fc8e80c09f467be5278dceff1b90888b76d19abe06d2",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:dfe8ff8d3edd5a692ce9d4873561a71745ea713127786d1107c6fb3c40ba456c",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+        "status": "pass",
+        "validator_exit": 1
       }
     },
     "required_check_ids": [
@@ -18786,6 +18846,7 @@
       "fresh-init-retrofit-mode-separation-rollback-claim-with-no-restored-digest-red",
       "fresh-init-retrofit-mode-separation-source-obligation-parity-red",
       "fresh-retrofit-repo-shape-source-obligation-parity-red",
+      "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red",
       "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red",
       "full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red",
       "full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red",
@@ -18794,6 +18855,7 @@
       "full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red",
       "full-local-observability-stack-integration-non-opaque-failure-hidden-network-endpoint-red",
       "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red",
+      "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
       "full-local-observability-stack-integration-non-opaque-failure-metric-log-trace-digest-mismatch-red",
       "full-local-observability-stack-integration-non-opaque-failure-mismatched-correlation-id-red",
       "full-local-observability-stack-integration-non-opaque-failure-missing-correlation-id-red",
@@ -18803,10 +18865,14 @@
       "full-local-observability-stack-integration-non-opaque-failure-missing-trace-red",
       "full-local-observability-stack-integration-non-opaque-failure-opaque-fail-output-red",
       "full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red",
+      "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
       "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red",
       "full-local-observability-stack-integration-non-opaque-failure-public-port-binding-red",
       "full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red",
+      "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
       "full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red",
+      "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red",
+      "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red",
       "full-local-observability-stack-integration-non-opaque-failure-unbounded-query-red",
       "full-local-observability-stack-integration-non-opaque-failure-unbounded-retention-red",
       "full-local-observability-stack-integration-non-opaque-failure-unredacted-secret-red",
@@ -20407,7 +20473,7 @@
         },
         {
           "digest": "sha256:e67fae7b7fff7483081281f06a7addfedd5ae26377174dcd3cdc2a8fe6f7501d",
-          "path": "validator/src/cli/final_packet.rs"
+          "path": "validator/src/cli/final_packet/mod.rs"
         },
         {
           "digest": "sha256:ff8861f7d2b343787562df29b3c9f53d668f9d201d6abe2c42e097f728e9ac10",

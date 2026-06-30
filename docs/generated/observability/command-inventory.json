@@ -84,13 +84,52 @@
     "focused_tests": true,
     "claim_impact_mapping": true,
     "same_candidate_query_proof": true,
-    "validator_enforced": true
+    "validator_enforced": true,
+    "owner_surface_tracking": true,
+    "next_unfitted_surface_tracking": true,
+    "fitting_control_board": true
   },
   "fitting_status_values": [
     "fitted",
     "partially_fitted",
     "unfitted"
   ],
+  "fitting_control_board": {
+    "status": "blocked",
+    "families": {
+      "commands": {
+        "total": 57,
+        "fitted": 1,
+        "partially_fitted": 19,
+        "unfitted": 37
+      },
+      "surfaces": {
+        "total": 10,
+        "fitted": 0,
+        "partially_fitted": 4,
+        "unfitted": 6
+      },
+      "operating_loop": {
+        "total": 10,
+        "fitted": 1,
+        "partially_fitted": 4,
+        "unfitted": 5
+      },
+      "signals": {
+        "total": 8,
+        "fitted": 0,
+        "partially_fitted": 7,
+        "unfitted": 1
+      }
+    },
+    "first_incomplete": {
+      "family": "commands",
+      "id": "source audit",
+      "fitting_status": "partially_fitted",
+      "next_unfitted_surface": "pass and fail stdout contract across source-audit statuses"
+    },
+    "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
+  },
   "fitting_inventory": {
     "package digest": {
       "fitting_status": "fitted",
@@ -119,21 +158,24 @@
         "validation_artifacts/observability/package-digest-metrics-query.json",
         "validation_artifacts/observability/package-digest-traces-query.json"
       ],
-      "claim_impact": "supports_source_package_digest_only_no_readiness_release_completion_update_goal"
+      "claim_impact": "supports_source_package_digest_only_no_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:package digest",
+      "next_unfitted_surface": "none"
     },
     "source audit": {
       "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "claim-blocking fail receipt",
-        "local spool emission"
-      ],
-      "missing_surfaces": [
+        "local spool emission",
         "current same-candidate logs query proof",
         "current same-candidate metrics query proof",
         "current same-candidate traces query proof",
-        "pass and fail stdout contract across source-audit statuses",
         "red report paired command instrumentation"
+      ],
+      "missing_surfaces": [
+        "pass and fail stdout contract across source-audit statuses",
+        "all source audit producer paths instrumented"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -142,8 +184,14 @@
       "receipt_paths": [
         "validation_artifacts/observability/source-audit.json"
       ],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/source-audit-logs-query.json",
+        "validation_artifacts/observability/source-audit-metrics-query.json",
+        "validation_artifacts/observability/source-audit-traces-query.json"
+      ],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:source audit",
+      "next_unfitted_surface": "pass and fail stdout contract across source-audit statuses"
     },
     "red fixture report": {
       "fitting_status": "partially_fitted",
@@ -151,12 +199,12 @@
         "command-level observability receipt",
         "red-report-only claim ceiling",
         "claim-blocking fail receipt",
-        "local spool emission"
-      ],
-      "missing_surfaces": [
+        "local spool emission",
         "current same-candidate logs query proof",
         "current same-candidate metrics query proof",
-        "current same-candidate traces query proof",
+        "current same-candidate traces query proof"
+      ],
+      "missing_surfaces": [
         "dedicated pass/fail stdout contract outside source audit wrapper",
         "all red report producer paths instrumented"
       ],
@@ -172,7 +220,9 @@
         "validation_artifacts/observability/red-fixture-report-metrics-query.json",
         "validation_artifacts/observability/red-fixture-report-traces-query.json"
       ],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:red fixture report",
+      "next_unfitted_surface": "dedicated pass/fail stdout contract outside source audit wrapper"
     },
     "schema validation": {
       "fitting_status": "unfitted",
@@ -188,7 +238,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:schema validation",
+      "next_unfitted_surface": "log"
     },
     "mandatory-law validation": {
       "fitting_status": "unfitted",
@@ -204,7 +256,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:mandatory-law validation",
+      "next_unfitted_surface": "log"
     },
     "standards-gardener rebind": {
       "fitting_status": "unfitted",
@@ -220,7 +274,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:standards-gardener rebind",
+      "next_unfitted_surface": "log"
     },
     "source-obligations check": {
       "fitting_status": "unfitted",
@@ -236,7 +292,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:source-obligations check",
+      "next_unfitted_surface": "log"
     },
     "foundational-trace check": {
       "fitting_status": "unfitted",
@@ -252,7 +310,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:foundational-trace check",
+      "next_unfitted_surface": "log"
     },
     "coverage prove": {
       "fitting_status": "unfitted",
@@ -270,7 +330,9 @@
         "validation_artifacts/coverage/coverage-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:coverage prove",
+      "next_unfitted_surface": "log"
     },
     "line-cap check": {
       "fitting_status": "unfitted",
@@ -286,7 +348,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:line-cap check",
+      "next_unfitted_surface": "log"
     },
     "namespace check": {
       "fitting_status": "unfitted",
@@ -302,7 +366,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:namespace check",
+      "next_unfitted_surface": "log"
     },
     "product prove-fitness": {
       "fitting_status": "unfitted",
@@ -320,7 +386,9 @@
         "validation_artifacts/harness/product-fitness-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:product prove-fitness",
+      "next_unfitted_surface": "log"
     },
     "product prove-cohesion": {
       "fitting_status": "unfitted",
@@ -336,7 +404,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:product prove-cohesion",
+      "next_unfitted_surface": "log"
     },
     "product prove-journey": {
       "fitting_status": "unfitted",
@@ -354,7 +424,9 @@
         "validation_artifacts/harness/plugin-product-journey-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:product prove-journey",
+      "next_unfitted_surface": "log"
     },
     "fit-repo prove": {
       "fitting_status": "unfitted",
@@ -372,7 +444,9 @@
         "validation_artifacts/harness/fit-repo-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:fit-repo prove",
+      "next_unfitted_surface": "log"
     },
     "review-round verify": {
       "fitting_status": "unfitted",
@@ -389,7 +463,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:review-round verify",
+      "next_unfitted_surface": "log"
     },
     "review-target build": {
       "fitting_status": "unfitted",
@@ -408,7 +484,9 @@
         "validation_artifacts/review/review-target-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:review-target build",
+      "next_unfitted_surface": "log"
     },
     "archive build": {
       "fitting_status": "unfitted",
@@ -427,7 +505,9 @@
         "validation_artifacts/review/candidate-archive-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:archive build",
+      "next_unfitted_surface": "log"
     },
     "final-packet prove": {
       "fitting_status": "partially_fitted",
@@ -464,7 +544,9 @@
         "validation_artifacts/observability/observe-traces-query.json",
         "validation_artifacts/observability/observe-explain-failure.json"
       ],
-      "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted"
+      "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted",
+      "current_owner_surface": "command:final-packet prove",
+      "next_unfitted_surface": "child spans for every dereferenced lower-level receipt"
     },
     "registry probe": {
       "fitting_status": "unfitted",
@@ -482,7 +564,9 @@
         "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:registry probe",
+      "next_unfitted_surface": "live same-surface logs"
     },
     "install audit": {
       "fitting_status": "unfitted",
@@ -500,7 +584,9 @@
         "validation_artifacts/cli/install-audit-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:install audit",
+      "next_unfitted_surface": "surface-specific logs"
     },
     "cache audit": {
       "fitting_status": "unfitted",
@@ -518,7 +604,9 @@
         "validation_artifacts/cli/cache-audit-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_cache_parity_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_cache_parity_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:cache audit",
+      "next_unfitted_surface": "surface-specific logs"
     },
     "transaction finalize": {
       "fitting_status": "unfitted",
@@ -536,7 +624,9 @@
         "validation_artifacts/cli/transactional-finalization.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_transactional_finalization_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_transactional_finalization_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:transaction finalize",
+      "next_unfitted_surface": "transaction logs"
     },
     "self law prove": {
       "fitting_status": "unfitted",
@@ -554,7 +644,9 @@
         "validation_artifacts/cli/self-law-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_cli_self_law_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_cli_self_law_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:self law prove",
+      "next_unfitted_surface": "self-law logs"
     },
     "self update-goal eligibility": {
       "fitting_status": "unfitted",
@@ -572,7 +664,9 @@
         "validation_artifacts/cli/update-goal-eligibility.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_update_goal_eligibility"
+      "claim_impact": "blocks_update_goal_eligibility",
+      "current_owner_surface": "command:self update-goal eligibility",
+      "next_unfitted_surface": "eligibility logs"
     },
     "rust toolchain verify": {
       "fitting_status": "unfitted",
@@ -588,7 +682,9 @@
         "validation_artifacts/rust/toolchain-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust toolchain verify",
+      "next_unfitted_surface": "Rust command telemetry"
     },
     "rust fast": {
       "fitting_status": "unfitted",
@@ -604,7 +700,9 @@
         "validation_artifacts/rust/fast-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust fast",
+      "next_unfitted_surface": "Rust command telemetry"
     },
     "rust standard": {
       "fitting_status": "unfitted",
@@ -620,7 +718,9 @@
         "validation_artifacts/rust/standard-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust standard",
+      "next_unfitted_surface": "Rust command telemetry"
     },
     "rust release": {
       "fitting_status": "unfitted",
@@ -636,7 +736,9 @@
         "validation_artifacts/rust/release-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust release",
+      "next_unfitted_surface": "Rust command telemetry"
     },
     "rust clean-proof": {
       "fitting_status": "unfitted",
@@ -652,7 +754,9 @@
         "validation_artifacts/rust/clean-proof-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust clean-proof",
+      "next_unfitted_surface": "Rust command telemetry"
     },
     "rust watch": {
       "fitting_status": "unfitted",
@@ -666,7 +770,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust watch",
+      "next_unfitted_surface": "watch lifecycle telemetry"
     },
     "rust memory prove": {
       "fitting_status": "unfitted",
@@ -682,7 +788,9 @@
         "validation_artifacts/rust/memory-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust memory prove",
+      "next_unfitted_surface": "Rust memory telemetry"
     },
     "rust dependency audit": {
       "fitting_status": "unfitted",
@@ -698,7 +806,9 @@
         "validation_artifacts/rust/dependency-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust dependency audit",
+      "next_unfitted_surface": "dependency telemetry"
     },
     "rust coverage prove": {
       "fitting_status": "unfitted",
@@ -712,7 +822,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust coverage prove",
+      "next_unfitted_surface": "coverage telemetry"
     },
     "rust workspace topology": {
       "fitting_status": "unfitted",
@@ -726,7 +838,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:rust workspace topology",
+      "next_unfitted_surface": "topology telemetry"
     },
     "gc plan": {
       "fitting_status": "unfitted",
@@ -742,7 +856,9 @@
         "validation_artifacts/gc/plan-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:gc plan",
+      "next_unfitted_surface": "GC command telemetry"
     },
     "gc dry-run": {
       "fitting_status": "unfitted",
@@ -758,7 +874,9 @@
         "validation_artifacts/gc/dry-run-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:gc dry-run",
+      "next_unfitted_surface": "GC command telemetry"
     },
     "gc apply": {
       "fitting_status": "unfitted",
@@ -774,7 +892,9 @@
         "validation_artifacts/gc/apply-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:gc apply",
+      "next_unfitted_surface": "GC command telemetry"
     },
     "gc verify": {
       "fitting_status": "unfitted",
@@ -790,7 +910,9 @@
         "validation_artifacts/gc/verify-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:gc verify",
+      "next_unfitted_surface": "GC command telemetry"
     },
     "session-log hardening": {
       "fitting_status": "unfitted",
@@ -806,7 +928,9 @@
         "validation_artifacts/harness/session-log-hardening-receipt.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:session-log hardening",
+      "next_unfitted_surface": "session log telemetry"
     },
     "target-repo audit": {
       "fitting_status": "unfitted",
@@ -820,7 +944,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "current_owner_surface": "command:target-repo audit",
+      "next_unfitted_surface": "target-surface telemetry"
     },
     "observe stack up": {
       "fitting_status": "partially_fitted",
@@ -842,7 +968,9 @@
         "validation_artifacts/observability/observe-stack-up.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"
+      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted",
+      "current_owner_surface": "command:observe stack up",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe stack health": {
       "fitting_status": "partially_fitted",
@@ -865,7 +993,9 @@
         "validation_artifacts/observability/observe-stack-health.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_health_only_until_fitted"
+      "claim_impact": "supports_stack_health_only_until_fitted",
+      "current_owner_surface": "command:observe stack health",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe stack smoke": {
       "fitting_status": "partially_fitted",
@@ -888,7 +1018,9 @@
         "validation_artifacts/observability/observe-stack-smoke.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_smoke_only_until_fitted"
+      "claim_impact": "supports_stack_smoke_only_until_fitted",
+      "current_owner_surface": "command:observe stack smoke",
+      "next_unfitted_surface": "same-candidate query proof in logs metrics traces"
     },
     "observe stack down": {
       "fitting_status": "partially_fitted",
@@ -910,7 +1042,9 @@
         "validation_artifacts/observability/observe-stack-down.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"
+      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted",
+      "current_owner_surface": "command:observe stack down",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe stack gc plan": {
       "fitting_status": "partially_fitted",
@@ -931,7 +1065,9 @@
         "validation_artifacts/observability/observe-stack-gc-plan.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted",
+      "current_owner_surface": "command:observe stack gc plan",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe stack gc dry-run": {
       "fitting_status": "partially_fitted",
@@ -952,7 +1088,9 @@
         "validation_artifacts/observability/observe-stack-gc-dry-run.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted",
+      "current_owner_surface": "command:observe stack gc dry-run",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe stack gc apply": {
       "fitting_status": "partially_fitted",
@@ -973,7 +1111,9 @@
         "validation_artifacts/observability/observe-stack-gc-apply.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted",
+      "current_owner_surface": "command:observe stack gc apply",
+      "next_unfitted_surface": "same-candidate live query proof"
     },
     "observe logs query": {
       "fitting_status": "partially_fitted",
@@ -997,7 +1137,9 @@
       "live_query_proof_paths": [
         "validation_artifacts/observability/observe-logs-query.json"
       ],
-      "claim_impact": "supports_query_observation_only_until_fitted"
+      "claim_impact": "supports_query_observation_only_until_fitted",
+      "current_owner_surface": "command:observe logs query",
+      "next_unfitted_surface": "current same-candidate query receipt for every law-bearing failure class"
     },
     "observe metrics query": {
       "fitting_status": "partially_fitted",
@@ -1021,7 +1163,9 @@
       "live_query_proof_paths": [
         "validation_artifacts/observability/observe-metrics-query.json"
       ],
-      "claim_impact": "supports_query_observation_only_until_fitted"
+      "claim_impact": "supports_query_observation_only_until_fitted",
+      "current_owner_surface": "command:observe metrics query",
+      "next_unfitted_surface": "current same-candidate metric query proof for every law-bearing failure class"
     },
     "observe traces query": {
       "fitting_status": "partially_fitted",
@@ -1045,7 +1189,9 @@
       "live_query_proof_paths": [
         "validation_artifacts/observability/observe-traces-query.json"
       ],
-      "claim_impact": "supports_query_observation_only_until_fitted"
+      "claim_impact": "supports_query_observation_only_until_fitted",
+      "current_owner_surface": "command:observe traces query",
+      "next_unfitted_surface": "current same-candidate trace query proof for every law-bearing failure class"
     },
     "observe snapshot": {
       "fitting_status": "partially_fitted",
@@ -1064,7 +1210,9 @@
         "validation_artifacts/observability/observe-snapshot.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_snapshot_observation_only_until_fitted"
+      "claim_impact": "supports_snapshot_observation_only_until_fitted",
+      "current_owner_surface": "command:observe snapshot",
+      "next_unfitted_surface": "snapshot contents query proof"
     },
     "observe prove": {
       "fitting_status": "partially_fitted",
@@ -1088,7 +1236,9 @@
         "validation_artifacts/observability/observe-prove.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_source_local_observability_stack_only_until_all_rows_fitted"
+      "claim_impact": "supports_source_local_observability_stack_only_until_all_rows_fitted",
+      "current_owner_surface": "command:observe prove",
+      "next_unfitted_surface": "all law-bearing commands fitted"
     },
     "observe explain-failure": {
       "fitting_status": "partially_fitted",
@@ -1112,7 +1262,9 @@
       "live_query_proof_paths": [
         "validation_artifacts/observability/observe-explain-failure.json"
       ],
-      "claim_impact": "supports_failure_explanation_observation_only_until_fitted"
+      "claim_impact": "supports_failure_explanation_observation_only_until_fitted",
+      "current_owner_surface": "command:observe explain-failure",
+      "next_unfitted_surface": "live query reconciliation across logs metrics traces for every current blocker"
     },
     "observe explain-claim": {
       "fitting_status": "partially_fitted",
@@ -1130,7 +1282,9 @@
         "validation_artifacts/observability/observe-explain-claim.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_explanation_observation_only_until_fitted"
+      "claim_impact": "supports_explanation_observation_only_until_fitted",
+      "current_owner_surface": "command:observe explain-claim",
+      "next_unfitted_surface": "claim-specific live query reconciliation"
     },
     "observe explain-check": {
       "fitting_status": "partially_fitted",
@@ -1148,7 +1302,9 @@
         "validation_artifacts/observability/observe-explain-check.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_explanation_observation_only_until_fitted"
+      "claim_impact": "supports_explanation_observation_only_until_fitted",
+      "current_owner_surface": "command:observe explain-check",
+      "next_unfitted_surface": "check-specific live query reconciliation"
     },
     "observe explain-law": {
       "fitting_status": "partially_fitted",
@@ -1166,7 +1322,9 @@
         "validation_artifacts/observability/observe-explain-law.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_explanation_observation_only_until_fitted"
+      "claim_impact": "supports_explanation_observation_only_until_fitted",
+      "current_owner_surface": "command:observe explain-law",
+      "next_unfitted_surface": "law-specific live query reconciliation"
     }
   },
   "surface_inventory": {
@@ -1193,7 +1351,9 @@
         "validation_artifacts/observability/package-digest-metrics-query.json",
         "validation_artifacts/observability/package-digest-traces-query.json"
       ],
-      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal_until_every_command_row_is_fitted"
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal_until_every_command_row_is_fitted",
+      "current_owner_surface": "surface:cli command families",
+      "next_unfitted_surface": "all remaining law-bearing command families fitted with current receipt and live query proof"
     },
     "validator check families": {
       "fitting_status": "unfitted",
@@ -1209,7 +1369,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:validator check families",
+      "next_unfitted_surface": "per-check logs"
     },
     "schema parse boundaries": {
       "fitting_status": "unfitted",
@@ -1225,7 +1387,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:schema parse boundaries",
+      "next_unfitted_surface": "schema parse child spans"
     },
     "receipt proof artifacts": {
       "fitting_status": "unfitted",
@@ -1243,7 +1407,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_final_packet_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_gate_92_final_packet_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:receipt proof artifacts",
+      "next_unfitted_surface": "all law-bearing receipts reference observability receipts"
     },
     "fixture report artifacts": {
       "fitting_status": "unfitted",
@@ -1261,7 +1427,9 @@
         "validation_artifacts/ultragoal-audit/red-fixture-report.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:fixture report artifacts",
+      "next_unfitted_surface": "red fixture telemetry"
     },
     "package plugin resources": {
       "fitting_status": "partially_fitted",
@@ -1282,7 +1450,9 @@
         "plugin-manifest-draft.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_package_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_package_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:package plugin resources",
+      "next_unfitted_surface": "all telemetry source files and receipts package-inventory checked exactly once"
     },
     "source install cache registry surfaces": {
       "fitting_status": "unfitted",
@@ -1301,7 +1471,9 @@
         "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:source install cache registry surfaces",
+      "next_unfitted_surface": "surface-specific telemetry for source"
     },
     "claim guards update_goal eligibility": {
       "fitting_status": "unfitted",
@@ -1320,7 +1492,9 @@
         "validation_artifacts/cli/update-goal-eligibility.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_completion_update_goal_readiness_release"
+      "claim_impact": "blocks_completion_update_goal_readiness_release",
+      "current_owner_surface": "surface:claim guards update_goal eligibility",
+      "next_unfitted_surface": "claim-ceiling calculation spans"
     },
     "local spool live exporters": {
       "fitting_status": "partially_fitted",
@@ -1345,7 +1519,9 @@
         "validation_artifacts/observability/observe-stack-smoke.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal",
+      "current_owner_surface": "surface:local spool live exporters",
+      "next_unfitted_surface": "exporter retry/drop metrics for every command"
     },
     "observability stack configs": {
       "fitting_status": "partially_fitted",
@@ -1368,7 +1544,9 @@
         "validation_artifacts/observability/observe-stack-smoke.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "supports_source_local_stack_observation_only_until_fitted"
+      "claim_impact": "supports_source_local_stack_observation_only_until_fitted",
+      "current_owner_surface": "surface:observability stack configs",
+      "next_unfitted_surface": "validator-enforced config coverage for every stack file"
     }
   },
   "operating_loop": {
@@ -1455,7 +1633,9 @@
         "validation_artifacts/observability/package-digest-metrics-query.json",
         "validation_artifacts/observability/package-digest-traces-query.json"
       ],
-      "claim_impact": "supports source package digest only; no readiness/release/completion/update_goal"
+      "claim_impact": "supports source package digest only; no readiness/release/completion/update_goal",
+      "current_owner_surface": "operating_loop:current_digest_first",
+      "next_unfitted_surface": "none"
     },
     "run_failing_command_once": {
       "fitting_status": "partially_fitted",
@@ -1474,7 +1654,9 @@
         "validation_artifacts/observability/observe-prove.json"
       ],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks broad audit and completion-adjacent claims until every high-authority failing command is observable"
+      "claim_impact": "blocks broad audit and completion-adjacent claims until every high-authority failing command is observable",
+      "current_owner_surface": "operating_loop:run_failing_command_once",
+      "next_unfitted_surface": "source audit/final-packet/self-law/update-goal failing commands are not all fitted"
     },
     "query_logs_metrics_traces_by_run_id": {
       "fitting_status": "partially_fitted",
@@ -1499,7 +1681,9 @@
         "validation_artifacts/observability/observe-metrics-query.json",
         "validation_artifacts/observability/observe-traces-query.json"
       ],
-      "claim_impact": "supports current run investigation only; no Gate 92 completion"
+      "claim_impact": "supports current run investigation only; no Gate 92 completion",
+      "current_owner_surface": "operating_loop:query_logs_metrics_traces_by_run_id",
+      "next_unfitted_surface": "law/check/claim-specific query matrix for every failure class"
     },
     "explain_failure_before_manual_artifact_inspection": {
       "fitting_status": "partially_fitted",
@@ -1520,7 +1704,9 @@
       "live_query_proof_paths": [
         "validation_artifacts/observability/observe-explain-failure.json"
       ],
-      "claim_impact": "blocks repair-loop claims when why_failed is none, generic, stale, or wrong digest"
+      "claim_impact": "blocks repair-loop claims when why_failed is none, generic, stale, or wrong digest",
+      "current_owner_surface": "operating_loop:explain_failure_before_manual_artifact_inspection",
+      "next_unfitted_surface": "every failing command must emit non-generic why/where/next_repair before manual artifact inspection"
     },
     "repair_smallest_root_cause": {
       "fitting_status": "unfitted",
@@ -1533,7 +1719,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks broad audit churn and completion-adjacent claims"
+      "claim_impact": "blocks broad audit churn and completion-adjacent claims",
+      "current_owner_surface": "operating_loop:repair_smallest_root_cause",
+      "next_unfitted_surface": "typed smallest-repair command mapping for every failure class"
     },
     "rerun_narrow_command": {
       "fitting_status": "unfitted",
@@ -1546,7 +1734,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks source-audit reruns as first repair step"
+      "claim_impact": "blocks source-audit reruns as first repair step",
+      "current_owner_surface": "operating_loop:rerun_narrow_command",
+      "next_unfitted_surface": "narrow rerun receipt linked to prior failing run for every repair class"
     },
     "compare_before_after_telemetry": {
       "fitting_status": "unfitted",
@@ -1559,7 +1749,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks claims that a repair changed behavior"
+      "claim_impact": "blocks claims that a repair changed behavior",
+      "current_owner_surface": "operating_loop:compare_before_after_telemetry",
+      "next_unfitted_surface": "before/after logs metrics traces comparison receipt for repaired check"
     },
     "broad_audit_after_narrow_pass": {
       "fitting_status": "unfitted",
@@ -1572,7 +1764,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks audit churn and validator theater"
+      "claim_impact": "blocks audit churn and validator theater",
+      "current_owner_surface": "operating_loop:broad_audit_after_narrow_pass",
+      "next_unfitted_surface": "validator guard that broad source audit runs only after narrow observable repair proof"
     },
     "stale_telemetry_blocks_claims": {
       "fitting_status": "partially_fitted",
@@ -1595,7 +1789,9 @@
         "validation_artifacts/observability/package-digest-metrics-query.json",
         "validation_artifacts/observability/package-digest-traces-query.json"
       ],
-      "claim_impact": "stale telemetry blocks every dependent claim"
+      "claim_impact": "stale telemetry blocks every dependent claim",
+      "current_owner_surface": "operating_loop:stale_telemetry_blocks_claims",
+      "next_unfitted_surface": "all law-bearing receipts must reject stale telemetry binding"
     },
     "structured_feedback_feeds_next_pass": {
       "fitting_status": "unfitted",
@@ -1608,7 +1804,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks opaque failure and manual JSON spelunking loops"
+      "claim_impact": "blocks opaque failure and manual JSON spelunking loops",
+      "current_owner_surface": "operating_loop:structured_feedback_feeds_next_pass",
+      "next_unfitted_surface": "validation failure converted into typed next repair input for every check"
     }
   },
   "signal_inventory": {
@@ -1626,7 +1824,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "supports local latency observation only"
+      "claim_impact": "supports local latency observation only",
+      "current_owner_surface": "signal:latency",
+      "next_unfitted_surface": "per-command/check/receipt/query latency across all law-bearing paths"
     },
     "traffic": {
       "fitting_status": "partially_fitted",
@@ -1641,7 +1841,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks capacity and workflow-volume claims"
+      "claim_impact": "blocks capacity and workflow-volume claims",
+      "current_owner_surface": "signal:traffic",
+      "next_unfitted_surface": "complete command/check/fixture/receipt count proof"
     },
     "errors": {
       "fitting_status": "partially_fitted",
@@ -1656,7 +1858,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks correctness and repair-loop claims"
+      "claim_impact": "blocks correctness and repair-loop claims",
+      "current_owner_surface": "signal:errors",
+      "next_unfitted_surface": "all check failures, stale receipts, digest mismatches, claim blocks, exporter errors"
     },
     "saturation": {
       "fitting_status": "unfitted",
@@ -1672,7 +1876,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "blocks speed/resource/readiness claims"
+      "claim_impact": "blocks speed/resource/readiness claims",
+      "current_owner_surface": "signal:saturation",
+      "next_unfitted_surface": "queue size"
     },
     "freshness": {
       "fitting_status": "partially_fitted",
@@ -1687,7 +1893,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "stale telemetry blocks every dependent claim"
+      "claim_impact": "stale telemetry blocks every dependent claim",
+      "current_owner_surface": "signal:freshness",
+      "next_unfitted_surface": "all telemetry receipts and query rows reject older candidate digests"
     },
     "correlation": {
       "fitting_status": "partially_fitted",
@@ -1702,7 +1910,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "uncorrelated telemetry blocks Gate 92"
+      "claim_impact": "uncorrelated telemetry blocks Gate 92",
+      "current_owner_surface": "signal:correlation",
+      "next_unfitted_surface": "every command/check/span/log/metric row shares correlation across the full workflow"
     },
     "redaction": {
       "fitting_status": "partially_fitted",
@@ -1717,7 +1927,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "unredacted telemetry blocks Gate 92 and package claims"
+      "claim_impact": "unredacted telemetry blocks Gate 92 and package claims",
+      "current_owner_surface": "signal:redaction",
+      "next_unfitted_surface": "live logs metrics traces query outputs all leak-checked"
     },
     "boundedness": {
       "fitting_status": "partially_fitted",
@@ -1732,7 +1944,9 @@
       "focused_tests": [],
       "receipt_paths": [],
       "live_query_proof_paths": [],
-      "claim_impact": "unbounded telemetry blocks Gate 92"
+      "claim_impact": "unbounded telemetry blocks Gate 92",
+      "current_owner_surface": "signal:boundedness",
+      "next_unfitted_surface": "all queries/exports/spools enforce row, byte, timeout, retention, and cardinality bounds"
     }
   }
 }

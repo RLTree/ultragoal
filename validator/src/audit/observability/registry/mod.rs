@@ -1,6 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
+mod control;
 mod fitting;
 mod operating;
 mod proof;
@@ -70,6 +71,7 @@ fn require_law_rows(root: &Path, out: &mut Vec<String>) {
 
 fn require_command_inventory(root: &Path, out: &mut Vec<String>) {
     let value = super::read::json(root, "docs/generated/observability/command-inventory.json");
+    control::check(&value, out);
     fitting::check(root, &value, out);
     surfaces::check(root, &value, out);
     operating::check(root, &value, out);

@@ -32,7 +32,7 @@ completion substitute and does not check any gate by itself.
 - 2026-06-26T03:11:18Z: Full source audit still failed. Evidence: `validation_artifacts/ultragoal-audit/validator-receipt.json` run id `ultragoal-audit-2026-06-26T03:11:18Z`, 134/140 checks passing, 6 failing. Failing checks: `agent-standards-enforcement`, `product-fitness-proof`, `ready-receipt-provenance`, `red-fixture-coverage`, `schema-valid`, and `validator-execution-provenance`.
 - 2026-06-26T03:12Z: Recomputed package digest after proof-artifact edits: `sha256:48f8907f61992e443a812a5cb973147751310c5bde0a95a60b2005fbcab841d0`. Because the digest changed after receipt refresh, Product Fitness and fit-repo receipts must be refreshed again after source and generated artifacts stabilize.
 - Coverage remains non-compliant. Current evidence path: `validation_artifacts/coverage/coverage-receipt.json` from the prior coverage run recorded `coverage.percent = 91.00642398286938`, `claim_ceiling = withheld_or_blocked`, and nonempty `uncovered_records`; `validator-execution-provenance` still reports `plugin_self_law_coverage_not_100_percent`, `plugin_self_law_coverage_has_uncovered_records`, and `plugin_self_law_coverage_claim_ceiling_not_complete`.
-- Current source-local Gate 92 checkpoint is bound to package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Evidence refreshed for this digest: package digest receipt/query proof, source-audit observability receipt/query proof, red-report observability receipt/query proof, stack health/smoke, observe-prove fail-closed proof, observe logs/metrics/traces query proof, observe explain-failure, source audit receipt, and red fixture report. Current source audit is failing `32/150`; current red fixture report is passing `1243/1243`. Coverage, Product/Fit/Journey, Rust/GC, performance, install/cache, final-packet, registry, self-law, and update-goal receipts not explicitly rebound below remain stale or unsupported. Claim impact: Gate 92 source-local observability implementation evidence only; no disk source/install/cache parity, no app registry exposure, no Plugins UI visibility, no reviewer exposure, no readiness, no release, no completion, and no `update_goal()` eligibility.
+- Current source-local Gate 92 work target is package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Evidence refreshed for this digest so far: `target/debug/ultragoal --root . package digest`, package-digest logs/metrics/traces query receipts, stack health/smoke receipts, fail-closed `observe prove`, `observe prove` logs/metrics/traces query receipts, and `observe explain-failure` for run `run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f`. Source audit, red report, coverage, Product/Fit/Journey, Rust/GC, performance, install/cache, final-packet, registry, self-law, and update-goal receipts not explicitly rebound below are stale or unsupported. Claim impact: source-local Gate 92 diagnostic proof only; no disk source/install/cache parity, no app registry exposure, no Plugins UI visibility, no reviewer exposure, no readiness, no release, no completion, and no `update_goal()` eligibility.
 - 2026-06-26T03:20Z-03:24Z: Refreshed embedded valid-fixture validator provenance from 113 checks to the current 140-check receipt shape and rebound generated ready receipts for `fixtures/valid/*.json` and `examples/generated/READY_FOR_MERGE-*.json`.
 - 2026-06-26T03:24:54Z: Full source audit still failed, but red fixture propagation improved materially. Evidence: `validation_artifacts/ultragoal-audit/validator-receipt.json` run id `ultragoal-audit-2026-06-26T03:24:54Z`, 34/140 checks passing and 106 failing, mostly stale mandatory-law evidence digests after package-owned fixture changes; `validation_artifacts/ultragoal-audit/red-fixture-report.json`, 1141/1157 passing and 16 failing. Current package digest: `sha256:1f4211ce88804ae52200a803ee84e6cbd3749654bd20628bcd18a817f367aaeb`.
 - 2026-06-26T03:30:45Z: Reran full source audit after canonical ready-receipt lane binding refresh. Evidence: `validation_artifacts/ultragoal-audit/validator-receipt.json` run id `ultragoal-audit-2026-06-26T03:30:45Z`, target package digest `sha256:c5ccbb88e0d132b935e2a8bbfc69a6329035768c4881f73a72179699e44d1d31`, 35/140 checks passing and 105 failing. Red report improved to 1145/1157 passing and 12 failing; remaining failures are mandatory-law evidence digest drift, Product Fitness stale receipt, coverage below 100%, review-round artifact mismatch, agent-standards audit evidence drift, and 12 red fixture intent mismatches.
@@ -2475,23 +2475,23 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Candidate digest:
   - Status:
 
-- [ ] Machine-readable observability fitting inventory tracks every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, package surface, and plugin surface as `fitted`, `partially_fitted`, or `unfitted`, and the validator fails every partial, unfitted, missing, stale, or row-shape-only fitting row.
-  - Evidence: inventory is validator-enforced and dereferences `fitted` command and surface rows by receipt path, schema, status, candidate digest, operation, run id, correlation id, and logs/metrics/traces query proof. `docs/generated/observability/command-inventory.json = sha256:398d8870ad09ea11d47f2b26bea9d1ca9312b65c71e71c2ddb69f649201f947b` declares 57/57 law-bearing command-family rows and 10/10 plugin/validator/package surface rows. Focused tests passed: `cargo test --offline source_audit_observability --lib --quiet` `1/1`, `cargo test --offline red_fixture_report_observability --lib --quiet` `1/1`, `cargo test --offline observability_registry --lib --quiet` `2/2`, and `cargo test --offline observe --lib --quiet` `18/18`.
+- [ ] Machine-readable observability fitting inventory tracks every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, package surface, and plugin surface as `fitted`, `partially_fitted`, or `unfitted`, names the current owner surface and next unfitted surface for each row, includes a validator-recomputed `fitting_control_board`, and the validator fails every partial, unfitted, missing, stale, adjacent-surface-substituted, count-mismatched, pass-shaped-control-board, or row-shape-only fitting row.
+  - Evidence: inventory is validator-enforced and dereferences `fitted` command and surface rows by receipt path, schema, status, candidate digest, operation, run id, correlation id, and logs/metrics/traces query proof. `docs/generated/observability/command-inventory.json` declares 57/57 law-bearing command-family rows, 10/10 plugin/validator/package surface rows, a 10-stage operating-loop inventory, an 8-class signal inventory, and a `fitting_control_board` with status `blocked`. Focused tests cover green path, row-shape rejection, unfitted rejection, pass-shaped control-board rejection, and canonical required-order first-incomplete recomputation through `cargo test --offline observability_registry --lib --quiet`, `cargo test --offline control_board --lib --quiet`, and `cargo test --offline observe --lib --quiet`.
   - Inventory path: `docs/generated/observability/command-inventory.json`.
-  - Validator check: `validator/src/audit/observability/registry.rs`, `validator/src/audit/observability/registry/fitting.rs`, `validator/src/audit/observability/registry/surfaces.rs`, `validator/src/audit/observability/registry/operating.rs`, and `validator/src/audit/observability/registry/proof.rs`; package inventory includes these files plus the focused test support modules.
-  - Fitted command rows: `1` (`package digest`) with receipt `validation_artifacts/observability/package-digest.json = sha256:b5693d94ad66de70abbb36747e4910c2e87f80db7191c77f7540e279508076ee` and query proofs `package-digest-logs-query.json = sha256:6901497eebdfc5838c74b688e16f25ad8285a505f670a309644d9b81d5412a74`, `package-digest-metrics-query.json = sha256:8f67340ef5d252fa459a0234d5f91297f791105feca5f2b6ae8932c8c822802d`, `package-digest-traces-query.json = sha256:35d27478bb0df6439c823e57127ef42b7585680b146e51b4725808dcc50591de`.
-  - Source-audit command row is `partially_fitted` with command-level receipt `validation_artifacts/observability/source-audit.json = sha256:af788522dad452ea91475f21a755152cec86fa019b21aaf55d0c0ef0569c263d` and query receipts `source-audit-logs-query.json = sha256:76d9c8c79f465d5573fb4b5b380db9e5f37b24d3d572cb4266868dc0aac8b717`, `source-audit-metrics-query.json = sha256:89ca6132e54128b59a8306425e19ffd33d58602659f93ac3042dea6030261fd3`, `source-audit-traces-query.json = sha256:a134daea8b6dae3328bead228b0b82c55d7d1feb5fc53e7c1912470ef0aaa03d`; missing surfaces keep it partial.
-  - Red fixture report command row is now `partially_fitted` with command-level receipt `validation_artifacts/observability/red-fixture-report.json = sha256:aa3ce929d23fdfdbe35b98458fc6cb19a76a7523ff3e6c3433ae25fc5f760511` and query receipts `red-fixture-report-logs-query.json = sha256:982463c0ef0f9f758ad47b52370fde777b280f6d671068f42a286370155e483b`, `red-fixture-report-metrics-query.json = sha256:80cf1b0682f62121949677244147e651429b8b0def7e834507b7b180282be772`, `red-fixture-report-traces-query.json = sha256:93d24c1ad170d4caa5f31f5ba0acb742bb857e22b1c3915130c12cec58b9bc21`; missing surfaces keep it partial.
-  - Partial/unfitted command rows: `19 partially_fitted`, `37 unfitted`; surface rows: `4 partially_fitted`, `6 unfitted`; full Gate 92 remains blocked.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Validator check: `validator/src/audit/observability/registry/mod.rs`, `validator/src/audit/observability/registry/control.rs`, `validator/src/audit/observability/registry/fitting.rs`, `validator/src/audit/observability/registry/surfaces.rs`, `validator/src/audit/observability/registry/operating.rs`, and `validator/src/audit/observability/registry/proof.rs`; package inventory includes these files plus the focused test support modules.
+  - Fitted command rows: `1` (`package digest`) with receipt `validation_artifacts/observability/package-digest.json = sha256:68b7311372ab910a051fd5b1582ca046ab3db0f0217d89f2168fe85dd6a69f9f` and query proofs `package-digest-logs-query.json = sha256:888694f67d3df5b9cbdec4c1e2e38993030ac57cfb2e47c9b6141d06ba9cbda4`, `package-digest-metrics-query.json = sha256:44834ebd78f7321558a5a65caccb70968ec78009460c36cfab77bfb590365105`, `package-digest-traces-query.json = sha256:90b3daa7b931a69ab2fc0eb9d4495dc1c6dbf9b12a87b41914ab86083a4d4861`.
+  - Source-audit command row is `partially_fitted`, but its command-level receipts have not been rebound for `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`; missing surfaces keep it partial.
+  - Red fixture report command row is `partially_fitted`, but its command-level receipts have not been rebound for `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`; missing surfaces keep it partial.
+  - Control board: commands `1 fitted`, `19 partially_fitted`, `37 unfitted`; surfaces `0 fitted`, `4 partially_fitted`, `6 unfitted`; operating loop `1 fitted`, `4 partially_fitted`, `5 unfitted`; signals `0 fitted`, `7 partially_fitted`, `1 unfitted`; first incomplete row is command `source audit`, next unfitted surface `pass and fail stdout contract across source-audit statuses`. Full Gate 92 remains blocked.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: complete tracking exists, but partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
   - Status: unchecked; tracking/enforcement exists, completion does not.
 
 - [ ] Machine-readable operating-loop and signal inventory tracks whether observability is actually usable as the repair loop: current digest first, failing command capture, logs/metrics/traces query by run id, CLI explanation before manual artifact inspection, smallest repair, narrow rerun, before/after telemetry comparison, broad-audit gating, freshness, and the CLI-translated latency/traffic/error/saturation/freshness/correlation/redaction/boundedness signal model.
-  - Evidence: `docs/generated/observability/command-inventory.json = sha256:398d8870ad09ea11d47f2b26bea9d1ca9312b65c71e71c2ddb69f649201f947b` now carries Gate 92 research doctrine, a 10-stage operating-loop inventory, and an 8-class signal inventory. Current row counts: loop `1 fitted`, `4 partially_fitted`, `5 unfitted`; signal `7 partially_fitted`, `1 unfitted`. Focused bad-path and green-path tests passed through `cargo test --offline observability_registry --lib --quiet` and `cargo test --offline observe --lib --quiet`.
+  - Evidence: `docs/generated/observability/command-inventory.json = sha256:0844b19aeed17fa77934cd69ed54678b00626c3a40fbe2d062a39a2958abaabf` now carries Gate 92 research doctrine, a 10-stage operating-loop inventory, and an 8-class signal inventory. Current row counts: loop `1 fitted`, `4 partially_fitted`, `5 unfitted`; signal `7 partially_fitted`, `1 unfitted`. Focused bad-path and green-path tests passed through `cargo test --offline observability_registry --lib --quiet`, `cargo test --offline control_board --lib --quiet`, and `cargo test --offline observe --lib --quiet`.
   - Inventory path: `docs/generated/observability/command-inventory.json`.
   - Validator check: `validator/src/audit/observability/registry/operating.rs`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: partial/unfitted operating-loop or signal rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
   - Status: unchecked; tracking/enforcement exists, completion does not.
 
@@ -2520,18 +2520,18 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Agent proof comes from CLI queries against VictoriaLogs, VictoriaMetrics, and VictoriaTraces; Grafana inspection is not claim authority.
-  - Evidence: current `observe prove` fitting-inventory failure run `run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160` was queried through CLI against VictoriaLogs, VictoriaMetrics, and VictoriaTraces for candidate `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`; all three query commands exited `0`. This proves queryability for the current failure only, not full command, plugin surface, operating-loop, or signal fitting.
-  - Query commands: `target/debug/ultragoal --root . observe logs query --run-id run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160 --limit 100`; `target/debug/ultragoal --root . observe metrics query --run-id run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160 --limit 100`; `target/debug/ultragoal --root . observe traces query --run-id run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160 --limit 100`.
-  - Receipts: `validation_artifacts/observability/observe-logs-query.json = sha256:b56671273f452a48b10b33c676d7524347d062689493226e6a13c11fa7c35571`; `validation_artifacts/observability/observe-metrics-query.json = sha256:d3d1891182a79644b9f8106509ddbba6a11c8c10008634b613790a573bd17c9f`; `validation_artifacts/observability/observe-traces-query.json = sha256:525be733e5c5f0f2bcb5164635c1588bbc2177a34894ac8a896a36203ca817e7`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Evidence: current `observe prove` fitting-inventory failure run `run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f` was queried through CLI against VictoriaLogs, VictoriaMetrics, and VictoriaTraces for candidate `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`; all three query commands exited `0`. This proves queryability for the current failure only, not full command, plugin surface, operating-loop, or signal fitting.
+  - Query commands: `target/debug/ultragoal --root . observe logs query --run-id run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f --limit 100 --receipt validation_artifacts/observability/observe-prove-logs-query.json`; `target/debug/ultragoal --root . observe metrics query --run-id run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f --limit 100 --receipt validation_artifacts/observability/observe-prove-metrics-query.json`; `target/debug/ultragoal --root . observe traces query --run-id run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f --limit 100 --receipt validation_artifacts/observability/observe-prove-traces-query.json`.
+  - Receipts: `validation_artifacts/observability/observe-prove-logs-query.json = sha256:91b628c599b1298ebe23bdc614436d3bd092db8277531d668a1c526c4768a0e3`; `validation_artifacts/observability/observe-prove-metrics-query.json = sha256:81d0465b2fa7700285fc6f4f6e3f1fcf3c0553f465f300c06caabcf4d6bf439e`; `validation_artifacts/observability/observe-prove-traces-query.json = sha256:a51903a6f761673127cf7bab9c6c491ea51fac719a9b4654be7b5bbd378731c6`.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: source-local query observation only; no Grafana/manual proof is used, but full Gate 92 remains blocked by unfitted command, plugin surface, operating-loop, and signal inventory rows.
   - Status: unchecked; one current failure is queryable, all law-bearing surfaces are not yet fitted.
 
 - [ ] Required query proof covers failed run by run_id, failed law by law_id, failed check by check_id, blocked claim by claim_id, command duration metrics, stale receipt counters, full command trace, and current proof-graph failure across logs, metrics, and traces.
   - Evidence: partial only. Current proof-graph failure is queryable by `run_id` across logs/metrics/traces and `observe explain-failure`; law/check/claim-specific queries, command duration metrics, stale receipt counters, and full command/surface/loop/signal trace coverage for all law-bearing paths remain unfitted in the inventory.
-  - Query results: current run `run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160` returns rows in `observe-logs-query.json`, `observe-metrics-query.json`, and `observe-traces-query.json`.
-  - Receipt: `validation_artifacts/observability/observe-explain-failure.json = sha256:e4a2ce67499e59ba84d210e765839876b97de2f53b0ae5369eec358c70c49b5e`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Query results: current run `run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f` returns rows in `observe-prove-logs-query.json`, `observe-prove-metrics-query.json`, and `observe-prove-traces-query.json`.
+  - Receipt: `validation_artifacts/observability/observe-explain-failure.json = sha256:ab8e84dd66429d435e273f0a85b269c331c0ccaf2d354469edefb79fe9f469f5`; `why_failed`, `where_failed`, `next_repair`, `law_id`, `check_id`, `claim_id`, `claim_impact`, and query hints all describe the failed `observe.prove` run, not the successful explanation wrapper.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Status: unchecked; current-run query proof exists, complete required query matrix does not.
 
 ### Gate 92.7: Security, Redaction, Boundedness, And Resource Discipline
@@ -2592,24 +2592,24 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ### Gate 92.9: Stack Health, Smoke, Current Failure, And Final Validation
 
 - [ ] Stack health proves VictoriaLogs, VictoriaMetrics, VictoriaTraces, OpenTelemetry Collector, Vector, and Grafana are running and healthy.
-  - Evidence: current source-local Gate 92 health receipt targets package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
-  - Command: `target/debug/ultragoal --root . observe stack health` exited `0`.
-  - Receipt: `validation_artifacts/observability/observe-stack-health.json = sha256:cdecc8bac5cb0fcadfe1031e141da5a17a50c687ee2dc08194d00372df516207`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Evidence: current source-local Gate 92 health receipt targets package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
+  - Command: `target/debug/ultragoal --root . observe stack health --receipt validation_artifacts/observability/observe-stack-health.json` exited `0`.
+  - Receipt: `validation_artifacts/observability/observe-stack-health.json = sha256:9c432dae19f5690d972f90432d3eabfb0ccdee615578363f0bc78b922e2e4cbe`.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Status: source-local stack health only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] Stack smoke proves log ingestion/query, metric ingestion/query, trace ingestion/query, and one correlated ultragoal CLI run visible in all three stores.
-  - Evidence: current source-local Gate 92 smoke receipt targets package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Evidence: current source-local Gate 92 smoke receipt targets package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Command: `target/debug/ultragoal --root . observe stack smoke --receipt validation_artifacts/observability/observe-stack-smoke.json` exited `0`.
-  - Receipt: `validation_artifacts/observability/observe-stack-smoke.json = sha256:dff07db6162d9d7cff250a0d4ce5e23251df17530a53b499626b9b7e6c4566fa`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Receipt: `validation_artifacts/observability/observe-stack-smoke.json = sha256:e20aab1c6c15e5e61de73ed795074ee8c987dce63ae38e870d9c717f7b70c97f`.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Status: source-local stack smoke/query only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] The current proof-graph failure is visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, observe query commands, and `observe explain-failure --run-id`.
-  - Evidence: current source-local failure is visible through `observe prove` stdout and current observability proof `validation_artifacts/observability/observe-prove.json = sha256:c2b7e5e59ce6e73b626d43073c466d29ec5581015961a3571f7c563c634b37c1`. The command exited `1` and printed `failed_check=full-local-observability-stack-integration-non-opaque-failure`, `why=observability fitting inventory incomplete` with remaining command, plugin surface, operating-loop, and signal inventory gaps, `where=observe.prove`, claim impact, `next_repair=fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove`, run id, correlation id, and exact observe query commands. Logs/metrics/traces/explain receipts are current for the same run. Source audit is current/failing and has separate source-audit observability proof; red fixture report is current/pass with separate observability proof; final-packet proof remains unsupported and not green.
-  - Run id: `run-230287a85ec5501da8252be256d41afa73939a1fa368e00eadf9eb20d6008160`; correlation id `corr-eadad4dbd62f73559829e6eeb2dea7fe0567abe15f919ca6fcf8c5ca6977c078`.
-  - Query receipts: `validation_artifacts/observability/observe-logs-query.json = sha256:b56671273f452a48b10b33c676d7524347d062689493226e6a13c11fa7c35571`, `validation_artifacts/observability/observe-metrics-query.json = sha256:d3d1891182a79644b9f8106509ddbba6a11c8c10008634b613790a573bd17c9f`, `validation_artifacts/observability/observe-traces-query.json = sha256:525be733e5c5f0f2bcb5164635c1588bbc2177a34894ac8a896a36203ca817e7`, and `validation_artifacts/observability/observe-explain-failure.json = sha256:e4a2ce67499e59ba84d210e765839876b97de2f53b0ae5369eec358c70c49b5e`.
-  - Candidate digest: `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`.
+  - Evidence: current source-local failure is visible through `observe prove` stdout and current observability proof `validation_artifacts/observability/observe-prove.json = sha256:762375ffd0f9e9d965145a72b636f0e8110de599a152e93b94452b633930f976`. The command exited `1` and printed `failed_check=full-local-observability-stack-integration-non-opaque-failure`, `why=observability fitting inventory incomplete` with remaining command, plugin surface, operating-loop, and signal inventory gaps, `where=observe.prove`, claim impact, `next_repair=fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove`, run id, correlation id, and exact observe query commands. Logs/metrics/traces/explain receipts are current for the same run. Source audit, red fixture report, and final-packet proof remain stale or unsupported for this digest.
+  - Run id: `run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f`; correlation id `corr-4e4d594f8ee84b32aeda4e0eb5de4a09b0d0a7d19b1d7f08e965da0626bf4894`.
+  - Query receipts: `validation_artifacts/observability/observe-prove-logs-query.json = sha256:91b628c599b1298ebe23bdc614436d3bd092db8277531d668a1c526c4768a0e3`, `validation_artifacts/observability/observe-prove-metrics-query.json = sha256:81d0465b2fa7700285fc6f4f6e3f1fcf3c0553f465f300c06caabcf4d6bf439e`, `validation_artifacts/observability/observe-prove-traces-query.json = sha256:a51903a6f761673127cf7bab9c6c491ea51fac719a9b4654be7b5bbd378731c6`, and `validation_artifacts/observability/observe-explain-failure.json = sha256:ab8e84dd66429d435e273f0a85b269c331c0ccaf2d354469edefb79fe9f469f5`.
+  - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility claim.
   - Status: unchecked; current failure observability improved, but full Gate 92 and source-audit closure remain incomplete.
 
@@ -2617,6 +2617,430 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Evidence:
   - Commands:
   - Receipts:
+  - Candidate digest:
+  - Status:
+
+## Gate 93 - Research Source Authority And Article-To-Law Integration
+
+- [ ] Mandatory research-source registry includes the original nine observability/harness-engineering sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article with stable ids, URLs, source digests, retrieved/source-card evidence, affected canonical law ids, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
+  - Evidence:
+  - Registry path:
+  - Source digests:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Article-to-law trace maps every source requirement to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim guards, and final-packet fields.
+  - Evidence:
+  - Trace path:
+  - Standards rows:
+  - Source obligations:
+  - Fixture ids:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator fails unmapped, stale, prose-only, umbrella-only, law-family-alias-only, fixture-incomplete, receipt-missing, package-omitted, setup/retrofit-omitted, or claim-guard-omitted research requirements.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Claim guards block completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, and `update_goal()` when mandatory research mapping is incomplete.
+  - Evidence:
+  - Claim guards:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+## Gate 94 - Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff
+
+- [ ] Plugin provides a first-class Harness Improvement Loop skill/surface with progressive-disclosure routing, schemas, CLI commands, setup/retrofit integration, package inventory coverage, and same-candidate receipts.
+  - Evidence:
+  - Skill/surface path:
+  - Schemas:
+  - CLI commands:
+  - Package entries:
+  - Candidate digest:
+  - Status:
+
+- [ ] Improvement-loop registry binds traces, feedback, feedback clusters, eval ids, promptfoo suite ids, HALO ranking ids, Codex handoff ids, implementation change ids, validation receipt ids, before/after telemetry comparison ids, and promotion ids.
+  - Evidence:
+  - Registry path:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] CLI proves the loop from current same-candidate traces to typed feedback, clustering, eval generation, promptfoo execution, HALO ranking, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, and promotion into laws/fixtures/schemas/standards.
+  - Evidence:
+  - Commands:
+  - Receipts:
+  - Before/after telemetry:
+  - Candidate digest:
+  - Status:
+
+- [ ] Red/green/tamper fixtures prove raw traces, raw feedback, raw model output, raw promptfoo output, raw HALO output, reviewer agreement, checklist prose, stale telemetry, and hand-authored receipts cannot close an improvement loop.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 95 - OpenAI API, Key Authority, Model Identity, Cost, And External AI Boundary
+
+- [ ] Repo declares governed OpenAI API key destination and typed config policy; `OPENAI_API_KEY` is loaded only from an untracked local env surface or secure OpenAI Platform setup flow and is never committed, logged, traced, metric-labeled, packeted, or passed to child agents without typed authorization.
+  - Evidence:
+  - Config path:
+  - Redaction proof:
+  - Secret-scan proof:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every OpenAI call receipt records model id, endpoint/API family, purpose, prompt/input digest, schema id, output digest, request id when available, token counts when available, cost estimate or cost-unavailable reason, latency, retry/backoff, rate-limit observations, redaction status, candidate digest, run id, correlation id, and claim impact.
+  - Evidence:
+  - Schema:
+  - Receipt:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Model outputs used for feedback clustering, eval generation, grading, summarization, ranking, or handoff are parsed into typed schemas before they affect any law, fixture, receipt, claim ceiling, or final packet.
+  - Evidence:
+  - Parser/schema:
+  - Focused tests:
+  - Red fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] OpenAI live calls have budget classes, max retries, timeout, backoff, cache policy, no-cache verification when required, offline fixture mode, cost/rate-limit receipts, and fail-closed behavior when the key or provider is unavailable.
+  - Evidence:
+  - Budget policy:
+  - Offline fixture proof:
+  - Live proof if configured:
+  - Candidate digest:
+  - Status:
+
+## Gate 96 - promptfoo Eval, Red-Team, Regression, And Provider Separation
+
+- [ ] promptfoo is installed, pinned, package-inventoried, provider-separated, and CLI-governed; raw promptfoo output is observation only.
+  - Evidence:
+  - Install receipt:
+  - Config path:
+  - Package entries:
+  - Candidate digest:
+  - Status:
+
+- [ ] Repo-owned promptfoo suites cover Harness improvement loops, validator remediation, claim ceilings, Product Fitness, Product Cohesion, Product Success, review-packet language, setup/retrofit, active-repo rollout, and model/provider comparisons.
+  - Evidence:
+  - Suite registry:
+  - Eval ids:
+  - Provider ids:
+  - Candidate digest:
+  - Status:
+
+- [ ] promptfoo suites contain law ids, claim ids, source trace/feedback binding, red cases, green cases, tamper cases where applicable, expected failure reasons, provider boundaries, prompt/input digests, output digests, current candidate digests, and promotion paths.
+  - Evidence:
+  - Validator check:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects promptfoo pass accepted without CLI receipt, wrong-candidate results, live-provider proof without key receipt, offline-provider proof used as live proof, missing red cases, missing rubric, altered result JSON, and promptfoo output accepted despite failed cases.
+  - Evidence:
+  - Focused tests:
+  - Red fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 97 - HALO Ranked Harness Change Optimization
+
+- [ ] HALO desktop app or HALO CLI/API availability is detected and capability-receipted with invocation mode, version/build identity when available, privacy boundary, authority class, allowed claims, and required receipts.
+  - Evidence:
+  - Capability receipt:
+  - Invocation mode:
+  - Candidate digest:
+  - Status:
+
+- [ ] HALO adapter consumes only CLI-generated typed inputs from failure clusters, eval results, trace summaries, product findings, cost/performance data, and claim impacts; raw private logs, secrets, unrestricted repo dumps, and unredacted local paths are forbidden.
+  - Evidence:
+  - Input schema:
+  - Redaction proof:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] HALO objectives are typed, explicit, and receipt-bound; HALO output is parsed into ranked-change records with rank, hypothesis, expected effect, evidence ids, affected laws/files/surfaces, cost/risk estimate, validation plan, forbidden shortcuts, and claim impact.
+  - Evidence:
+  - Objective schema:
+  - Ranking receipt:
+  - Parser tests:
+  - Candidate digest:
+  - Status:
+
+- [ ] HALO recommendations are linked to Codex handoffs, implementation changes, validation receipts, before/after telemetry, and standards/fixture/schema promotion before any improvement claim can pass.
+  - Evidence:
+  - Handoff:
+  - Implementation link:
+  - Validation receipt:
+  - Candidate digest:
+  - Status:
+
+## Gate 98 - Self-Improving Domain-Agent Pattern And Tax-Agent Generalization
+
+- [ ] Plugin provides a domain-agent improvement pattern generalized from the tax-agent article for domain workflows, product workflows, support workflows, review workflows, compliance workflows, analysis workflows, and expert-evaluable outputs.
+  - Evidence:
+  - Pattern docs/templates:
+  - Schemas:
+  - Package entries:
+  - Candidate digest:
+  - Status:
+
+- [ ] Domain packs declare task type, expert role, evidence level, allowed data, forbidden data, rubric, eval cases, failure taxonomy, product claim impact, retention/redaction policy, and setup/retrofit install path.
+  - Evidence:
+  - Domain pack schema:
+  - Fixture pack:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Domain improvement loop binds realistic task traces, expert feedback, expected answers/rubrics, error taxonomy, eval generation, regression cases, ranked repair, before/after validation, and claim guards.
+  - Evidence:
+  - Receipt:
+  - Eval cases:
+  - Before/after proof:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects toy-only evals, feedback without task trace, model feedback mislabeled as human expert feedback, missing rubrics, private data leaks, eval-only product success, and domain improvement without before/after proof.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 99 - Setup And Retrofit Skill Deep Integration
+
+- [ ] `agent-first-repo-init` installs or fail-closes observability, command inventory, improvement-loop registry, research registry, OpenAI key policy, promptfoo config, HALO adapter policy, telemetry schemas, eval schemas, domain pack templates, feedback schemas, Codex handoff templates, Rust DevX where applicable, TypeScript DevX where applicable, and active-repo rollout templates.
+  - Evidence:
+  - Skill/template paths:
+  - Setup receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] `agent-first-repo-init` detects repo type through typed evidence: Rust backend, TypeScript frontend/UI, mixed Rust/TypeScript, CLI-only, plugin-only, app/service, docs-only, product-facing, review-only, or target-repo audit fixture.
+  - Evidence:
+  - Detection schema:
+  - Red fixtures:
+  - Green fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] `agent-first-repo-retrofit` audits observability coverage, improvement-loop coverage, command inventory, law-bearing commands, opaque failures, receipt telemetry binding, promptfoo suites, HALO status, OpenAI key policy, eval-to-law mapping, domain pack needs, Rust/TypeScript DevX gaps, package inventory gaps, and claim guard gaps.
+  - Evidence:
+  - Retrofit receipt:
+  - Fitting inventory:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Setup/retrofit fitting inventory uses `fitted`, `partially_fitted`, `unfitted`, and `not_applicable_with_typed_reason`; row-shape-only, docs-only, prose-only, missing receipts, and unsupported positive claims fail.
+  - Evidence:
+  - Inventory path:
+  - Red fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 100 - Cross-Repo Harness Rollout, Active Repo Inventory, And Propagation
+
+- [ ] Active-repo registry tracks every plugin-activated repo with category-safe identity, activation surface, plugin version, source/install/cache/app status, language/runtime classes, product surfaces, observability fitting, improvement-loop fitting, OpenAI key policy, promptfoo status, HALO status, Rust/TypeScript DevX status, setup/retrofit receipts, last audit digest, claim ceiling, and next required repair.
+  - Evidence:
+  - Registry path:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Rollout modes are typed and non-substitutable: source self-compliance, fresh-init target, retrofit target, installed plugin target, cache package target, app-registry target, and review-packet target.
+  - Evidence:
+  - Schema:
+  - Red fixtures:
+  - Green fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Cross-repo rollout receipts prove which repos were evaluated, fitted, fail-closed, claim-blocked, and next-repair assigned without leaking private paths into public/package artifacts.
+  - Evidence:
+  - Receipt:
+  - Privacy proof:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects source proof reused for another repo, private repo paths in public packets, installed proof used as app proof, promptfoo/HALO/OpenAI proof from one repo used for all repos, and active repo marked complete with partial fitting.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 101 - Rust And TypeScript Developer Experience Integration
+
+- [ ] Rust DevX setup/retrofit keeps pinned toolchain, Cargo substrate, rustfmt, clippy, metadata, nextest, llvm-cov, deny, audit, vet, SBOM, sccache where available, locked installs, proptest, fuzzing, snapshots, performance tools, tracing/OpenTelemetry, serde/schemars/path diagnostics, and release tooling under CLI authority.
+  - Evidence:
+  - Rust tool inventory:
+  - Setup/retrofit receipts:
+  - Candidate digest:
+  - Status:
+
+- [ ] TypeScript/UI setup/retrofit requires pinned Node Active LTS, pnpm, lockfile, strict TypeScript, Vite, ESLint v9 flat config, typed typescript-eslint, Prettier, Vitest, Playwright, accessibility checks, Testing Library, MSW, V8 coverage, runtime parsers, dependency/bundle/performance/security tooling, memory/resource receipts, and GC receipts where applicable.
+  - Evidence:
+  - TypeScript tool inventory:
+  - Setup/retrofit receipts:
+  - Candidate digest:
+  - Status:
+
+- [ ] TypeScript external values from JSON, network, DOM, storage, URL params, postMessage, env vars, generated files, browser APIs, plugin messages, and third-party packages enter as `unknown` and are parsed into typed authority.
+  - Evidence:
+  - Parser schemas:
+  - Red fixtures:
+  - Green fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects raw Cargo/pnpm/tsc/eslint/vitest/Playwright/Vite/Storybook/Lighthouse/package-manager output as Harness claim authority and rejects TypeScript `any` authority leaks, unparsed JSON, missing strict config, cache dishonesty, and UI proof substitution.
+  - Evidence:
+  - Red fixtures:
+  - Focused tests:
+  - Candidate digest:
+  - Status:
+
+## Gate 102 - Feedback, Eval, Telemetry, Privacy, Retention, And Data Minimization
+
+- [ ] Data-class registry covers public package artifacts, private local receipts, raw private traces, redacted traces, model prompts, model outputs, feedback comments, domain examples, eval cases, screenshots/videos, logs, metrics, spans, HALO inputs/outputs, promptfoo results, Codex handoffs, and final packets.
+  - Evidence:
+  - Registry path:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every data class declares retention, redaction, package-inclusion eligibility, child-agent eligibility, model-call eligibility, query eligibility, digest strategy, and claim support.
+  - Evidence:
+  - Schema:
+  - Red fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Raw private session logs, user prompts, secrets, local paths, sensitive screenshots, private traces, and raw model prompts do not become durable package artifacts; only category-only, redacted, digest-bound evidence may support durable claims.
+  - Evidence:
+  - Redaction proof:
+  - Package scan:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator inspects logs, metrics, traces, receipts, query output, promptfoo results, HALO inputs, OpenAI call receipts, Codex handoffs, eval cases, screenshots, videos, and final packets for leaks, retention violations, and redaction-status tampering.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 103 - Improvement Surface Separation And Non-Substitution
+
+- [ ] Proof surfaces are separately typed for source, installed plugin, cache, app registry, Plugins UI, marketplace, install button, launcher runtime, reviewer exposure, final packet, target repo, active repo, promptfoo eval, HALO ranking, OpenAI model output, Codex handoff, product journey, domain task, and improvement-loop closure.
+  - Evidence:
+  - Surface schema:
+  - Validator check:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every receipt names one primary surface and dereferences lower-level surfaces by path, digest, schema, status, currentness, surface id, and claim class.
+  - Evidence:
+  - Receipt schema:
+  - Focused tests:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects observability proof as improvement closure, promptfoo proof as Product Success, HALO ranking as readiness, OpenAI output as deterministic law, source proof as installed/cache/app proof, and installed proof as reviewer exposure.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+- [ ] Final-packet proof dereferences lower-level evidence without creating circular dependencies with source audit, self-law, update-goal eligibility, or improvement-loop closure.
+  - Evidence:
+  - Final-packet proof:
+  - Cycle checks:
+  - Candidate digest:
+  - Status:
+
+## Gate 104 - Research-To-Standards, Source Obligations, Traceability, Fixtures, And Package Closure
+
+- [ ] Gates 93-103 have canonical law ids, explanatory law-family aliases only where useful, standards rows, source obligations, foundational trace entries, mandatory-law surface entries, schema enums/check ids, validator checks, red fixtures, green fixtures, tamper fixtures, valid fixtures or receipt requirements, package inventory entries, plugin cohesion manifest entries, setup/retrofit templates, command inventory rows, improvement-loop inventory rows, claim guards, final-packet fields, and update_goal blockers.
+  - Evidence:
+  - Law-surface paths:
+  - Package inventory:
+  - Candidate digest:
+  - Status:
+
+- [ ] Gates 93-103 include schemas for research registry, improvement-loop registry, trace-feedback receipt, feedback-cluster receipt, eval-generation receipt, promptfoo receipt, HALO receipt, OpenAI call receipt, Codex handoff receipt, setup/retrofit fitting receipt, active-repo rollout receipt, TypeScript DevX receipt, and surface-separation proof.
+  - Evidence:
+  - Schema paths:
+  - Validator checks:
+  - Candidate digest:
+  - Status:
+
+- [ ] Source audit, red fixture report, CLI self-law, update_goal eligibility, final packet, setup/retrofit, package inventory, and active-repo rollout all include Gates 93-103.
+  - Evidence:
+  - Source audit:
+  - Red report:
+  - Self-law:
+  - Update-goal eligibility:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects prompt-only, checklist-only, standards-row-only, source-obligation-only, trace-row-only, package-entry-only, fixture-name-only, red-only, green-only, receipt-only, claim-ceiling-only, reviewer-only, or setup-template-only Gate 93-103 compliance.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Candidate digest:
+  - Status:
+
+## Gate 105 - Measured Improvement, Regression Prevention, And Harness Evolution
+
+- [ ] Improvement metrics are defined for time-to-diagnosis, time-to-repair, rerun count, stale-receipt recurrence, wrong-digest recurrence, opaque-failure recurrence, claim-theater escape count, source-audit failure recurrence, red-fixture drift recurrence, Product Fitness substitution recurrence, active-repo rollout fitting percentage, eval trend, command latency, and manual-spelunking burden.
+  - Evidence:
+  - Metric registry:
+  - Telemetry source:
+  - Candidate digest:
+  - Status:
+
+- [ ] Every improvement metric has schema, baseline, current value, collection command, telemetry source, receipt path, candidate digest, confidence, and claim impact.
+  - Evidence:
+  - Baseline receipt:
+  - Current receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] Improvement claims compare before/after values using same-surface telemetry, explain regressions, and are protected by evals, fixtures, source-audit checks, setup/retrofit checks, package inventory checks, active-repo rollout checks, and standards-gardener promotion.
+  - Evidence:
+  - Before/after proof:
+  - Regression suite:
+  - Standards-gardener proof:
+  - Candidate digest:
+  - Status:
+
+- [ ] Validator rejects fabricated baselines, stale baselines, wrong-surface comparisons, one-run improvement claims, no-regression-suite claims, ignored regressions, metric-without-telemetry claims, active-repo omissions, cherry-picked metrics, and anecdotal improvement claims.
+  - Evidence:
+  - Red fixtures:
+  - Green fixtures:
+  - Tamper fixtures:
   - Candidate digest:
   - Status:
 
@@ -2740,18 +3164,18 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Regenerate review-target receipt. Evidence: `target/debug/ultragoal --root . review-target build --receipt validation_artifacts/review/review-target-receipt.json` exited `0` for package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`; stdout reported review-target digest `sha256:f1cbbb528d97e43f26fc82fb2abe842adae891d34fa571f028ad99fafb550aa5`, receipt path `validation_artifacts/review/review-target-receipt.json`, and receipt file digest `sha256:ef6034fae25950b625e2ab762fdd41d40a39f31cf77417c66b51f4f8c20cef8b`. Claim impact: detached review-target identity anchor only; no final packet correctness, reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Regenerate candidate archive receipt. Evidence: `target/debug/ultragoal --root . archive build --zip validation_artifacts/review/harness-ultragoal-source-local-candidate.zip --receipt validation_artifacts/review/candidate-archive-receipt.json` exited `0` for source package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`; archive receipt `validation_artifacts/review/candidate-archive-receipt.json = sha256:059f6773010a164258cb4338c43514098179d8d14b4c636818d0874b4eebb245` records `status = pass`, `source.package_digest = sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`, archive path `validation_artifacts/review/harness-ultragoal-source-local-candidate.zip`, archive digest `sha256:7395f7bd8d2024fe2172484ac2986885cea46723b41cf20a2f98d01ac9c010c7`, `entry_count = 4382`, and `claim_ceiling = detached candidate review anchor only; not upload or distribution proof`. Claim impact: detached candidate archive identity anchor only; no upload, distribution, package-readiness, reviewer exposure, readiness, release, completion, or `update_goal()` proof.
 - [ ] Validate final packet/successor packet.
-- [ ] Evidence path: Current Gate 92 source-local package digest is `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b` from `validation_artifacts/observability/package-digest.json = sha256:b5693d94ad66de70abbb36747e4910c2e87f80db7191c77f7540e279508076ee`. Source audit and red report are current for this digest; source audit fails `32/150`, red report passes `1243/1243`. Product/Fit/Journey, exact coverage, Rust/GC, standards-gardener, fail-closed install/cache, fail-closed registry/app-surface, fail-closed final-packet, transactional finalization, CLI self-law, update-goal, review-target, and candidate-archive evidence not explicitly rebound for this digest is stale or unsupported. Claim impact: Gate 92 source-local observability implementation evidence only; final-packet correctness, transactional finalization green proof, CLI self-law green proof, update_goal eligibility, registry/reviewer exposure, readiness, release, completion claim, and `update_goal()` call remain unsupported.
+- [ ] Evidence path: Current Gate 92 source-local package digest is `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912` from `validation_artifacts/observability/package-digest.json = sha256:68b7311372ab910a051fd5b1582ca046ab3db0f0217d89f2168fe85dd6a69f9f`. Current evidence for this digest is limited to package digest/query, stack health/smoke, fail-closed `observe prove`, `observe prove` query receipts, and `observe explain-failure`. Source audit, red report, Product/Fit/Journey, exact coverage, Rust/GC, standards-gardener, fail-closed install/cache, fail-closed registry/app-surface, fail-closed final-packet, transactional finalization, CLI self-law, update-goal, review-target, and candidate-archive evidence not explicitly rebound for this digest is stale or unsupported. Claim impact: Gate 92 source-local observability diagnostic evidence only; final-packet correctness, transactional finalization green proof, CLI self-law green proof, update_goal eligibility, registry/reviewer exposure, readiness, release, completion claim, and `update_goal()` call remain unsupported.
 
 ## `update_goal()` Is Forbidden Until All Are True
 
 - [ ] Status: in_progress
 - [ ] Current source audit passes.
-  - Evidence: unchecked. Latest persisted source audit `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:b30fed9fa66b17be17c2d3227c8b70c8a6a2f42b94c125975a9ccea1e5482efd` targets current package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`, but status is `fail` with `32/150` checks passing and 118 failing. Claim impact: no current source-audit pass claim; readiness, release, completion, final-packet correctness, and `update_goal()` remain blocked.
-- [x] Current red fixture report passes with all fixtures failing for intended reasons.
-  - Evidence: current red fixture report `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:fa6814d527681b43f9476c2eacad10511ce9d3ddc4317117c8f8c70f6bdb9626` targets package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`, status `pass`, `1243/1243` red fixtures failing for intended reasons. Claim impact: red fixture propagation proof only; no source-audit pass, readiness, release, completion, final-packet correctness, or `update_goal()` claim.
-- [ ] No standards law remains optional or unmechanized for material claims. Evidence: unchecked. Latest standards/source-audit evidence targets prior package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and is stale relative to current Gate 92 source-local digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Claim impact: no current standards-complete claim.
+  - Evidence: unchecked. Latest persisted source audit is stale relative to current package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`; it has not been rerun after the Gate 92 control-board and explain-failure repairs. Claim impact: no current source-audit pass claim; readiness, release, completion, final-packet correctness, and `update_goal()` remain blocked.
+- [ ] Current red fixture report passes with all fixtures failing for intended reasons.
+  - Evidence: unchecked. Latest persisted red fixture report is stale relative to current package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`; it has not been rerun after the Gate 92 control-board and explain-failure repairs. Claim impact: no current red-fixture pass claim, no source-audit pass, readiness, release, completion, final-packet correctness, or `update_goal()` claim.
+- [ ] No standards law remains optional or unmechanized for material claims. Evidence: unchecked. Latest standards/source-audit evidence targets prior package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and is stale relative to current Gate 92 source-local digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Claim impact: no current standards-complete claim.
 - [ ] Foundational article law trace is complete and validator-enforced with no weak/deferral escape hatch.
-  - Evidence: unchecked. Latest foundational trace/source-obligation evidence targets prior package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and is stale relative to current Gate 92 source-local digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Claim impact: no current foundational-trace-complete claim.
+  - Evidence: unchecked. Latest foundational trace/source-obligation evidence targets prior package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and is stale relative to current Gate 92 source-local digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Claim impact: no current foundational-trace-complete claim.
 - [ ] Plugin self-coverage is 100% with typed receipt and no uncovered records.
   - Evidence: `validation_artifacts/coverage/coverage-receipt.json = sha256:2cb58a465ff52414cfb455793a88d3d1dbc9b13f0f169f8086f45c66e0a8b7c8` targets package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce` and records `coverage.percent = 100`, `uncovered_records = []`, `claim_ceiling = supports_complete_coverage_claim`. Command: `bash scripts/check-coverage-full /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal` exited `0`. Claim impact: exact source-local coverage only; no readiness/release/final-packet/registry/reviewer/completion or `update_goal()` claim.
 - [ ] Parsing/typed-boundary checks are enforced and tested. Evidence: see Gate 7. Current source audit records `typed-records-over-prose = pass`, `schema-valid = pass`, `authority-exhaustiveness-closed-enums-impossible-state-elimination = pass`, and `total-authority-types-impossible-state-elimination = pass`. Claim impact: source-local typed-boundary enforcement only.
@@ -2871,13 +3295,65 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 103. Rust Developer Experience, runtime memory/resource discipline, and workspace/artifact/cache garbage collection are proven by CLI-routed Rust command loops, current toolchain/substrate receipt, fast/standard/release/clean-proof/watch observation command surfaces, exact coverage proof, dependency/security/supply-chain proof where applicable, cache/no-cache honesty receipt, performance budget receipt, memory/resource receipt, GC plan/dry-run/apply/verify receipts where cleanup is performed, standards/source-obligation/foundational-trace bindings, red/green/tamper fixtures, source audit pass, and calculated confidence of at least 96 percent supported by evidence. No completion, review, package, readiness, release, Product Fitness, Product Cohesion, Product Success, CLI self-law, final packet, or update_goal claim may pass from raw Cargo/tool output, hidden cache state, watcher/editor state, unbounded Rust runtime resources, unmanaged long-running tasks, blind cleanup, deletion without receipt, or stale Rust DevX/memory/GC proof.
 
-- [ ] Evidence path: Current stop-condition evidence is incomplete for package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Only Gate 92 source-local package-digest, source-audit, red-report, stack/query/prove/explain evidence and the red fixture report have been rebound for this digest. Product/Fit/Journey, coverage, Rust DevX/GC/performance, standards-gardener, final-packet, control-plane, registry, install/cache, review-target, and candidate-archive receipts from prior digests are stale until rerun. No version bump, final packet correctness, active registry/reviewer exposure, readiness/release/completion claim, or `update_goal()` call is permitted.
-- [ ] Gate 90 evidence path: Current stop-condition evidence is incomplete for package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Prior physical topology/source-audit/coverage evidence is stale or failing relative to this Gate 92 checkpoint; the current red fixture report is pass-only proof and does not satisfy Gate 90. Confidence calculation and dependent stop conditions remain unchecked.
-- [ ] Gate 91 evidence path: Current stop-condition evidence is incomplete for package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Prior Rust DevX/GC/performance receipts are stale relative to this Gate 92 checkpoint unless separately rebound; final packet correctness, app-registry/reviewer proof, update_goal eligibility, and confidence calculation remain unchecked. No raw Cargo/tool output, watcher/editor state, hidden cache state, blind cleanup, or memory/resource prose can satisfy this stop condition.
+- [ ] Evidence path: Current stop-condition evidence is incomplete for package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Only Gate 92 source-local package-digest/query, stack health/smoke, fail-closed observe-prove, observe-prove query, and explain-failure evidence have been rebound for this digest. Product/Fit/Journey, coverage, Rust DevX/GC/performance, standards-gardener, source audit, red report, final-packet, control-plane, registry, install/cache, review-target, and candidate-archive receipts from prior digests are stale until rerun. No version bump, final packet correctness, active registry/reviewer exposure, readiness/release/completion claim, or `update_goal()` call is permitted.
+- [ ] Gate 90 evidence path: Current stop-condition evidence is incomplete for package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Prior physical topology/source-audit/coverage evidence is stale or failing relative to this Gate 92 checkpoint; no current red fixture report has been rebound for this digest. Confidence calculation and dependent stop conditions remain unchecked.
+- [ ] Gate 91 evidence path: Current stop-condition evidence is incomplete for package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Prior Rust DevX/GC/performance receipts are stale relative to this Gate 92 checkpoint unless separately rebound; final packet correctness, app-registry/reviewer proof, update_goal eligibility, and confidence calculation remain unchecked. No raw Cargo/tool output, watcher/editor state, hidden cache state, blind cleanup, or memory/resource prose can satisfy this stop condition.
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: In progress, source-local only for package digest `sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b`. Current stack health/smoke, package-digest telemetry, source-audit telemetry, red-report telemetry, observe-prove fail-closed proof, logs query, metrics query, traces query, and explain-failure receipts are regenerated for this digest; the fitting inventory tracks 57 command-family rows with `1 fitted`, `19 partially_fitted`, and `37 unfitted`; 10 plugin/validator/package surface rows with `4 partially_fitted` and `6 unfitted`; 10 operating-loop rows with `1 fitted`, `4 partially_fitted`, and `5 unfitted`; and 8 signal rows with `7 partially_fitted` and `1 unfitted`. `observe prove` now mechanically fails while any command, plugin surface, operating-loop stage, or signal row is not fitted with same-candidate query proof. Source audit and red fixture report command-level observability are partially fitted and query-bound, but full Gate 92 remains blocked. Claim impact: source-local observability implementation evidence only; final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, and full Gate 92 proof remain mechanically blocked until every law-bearing command/check/receipt path, plugin surface, loop stage, and signal class is fitted and all prior gates pass on the same candidate.
+- [ ] Gate 92 evidence path: In progress, source-local only for package digest `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`. Current stack health/smoke, package-digest telemetry, observe-prove fail-closed proof, logs query, metrics query, traces query, and explain-failure receipts are regenerated for this digest; the fitting inventory tracks 57 command-family rows with `1 fitted`, `19 partially_fitted`, and `37 unfitted`; 10 plugin/validator/package surface rows with `4 partially_fitted` and `6 unfitted`; 10 operating-loop rows with `1 fitted`, `4 partially_fitted`, and `5 unfitted`; and 8 signal rows with `7 partially_fitted` and `1 unfitted`. `observe prove` mechanically fails while any command, plugin surface, operating-loop stage, or signal row is not fitted with same-candidate query proof, and `observe explain-failure` now reports the failed `observe.prove` run's `why_failed`, `where_failed`, `next_repair`, law/check/claim ids, claim impact, and query hints. Source audit and red fixture report command-level observability are stale for this digest, and full Gate 92 remains blocked. Claim impact: source-local observability diagnostic evidence only; final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, and full Gate 92 proof remain mechanically blocked until every law-bearing command/check/receipt path, plugin surface, loop stage, and signal class is fitted and all prior gates pass on the same candidate.
+
+105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
+
+- [ ] Gate 93 evidence path:
+
+106. Harness Improvement Loop proof is current and same-candidate across traces, typed feedback, clusters, promptfoo eval generation and execution, HALO-ranked proposals, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, promotion into laws/fixtures/schemas/standards, and CLI loop-closure receipt.
+
+- [ ] Gate 94 evidence path:
+
+107. OpenAI API use is governed by typed config, redaction, model identity, prompt/input digest, output digest, token/cost/rate-limit accounting, timeout/retry/backoff policy, offline fixture mode, live-provider policy, and CLI-parsed model-output authority. No OpenAI output can directly satisfy a Harness claim.
+
+- [ ] Gate 95 evidence path:
+
+108. promptfoo is installed, pinned, provider-separated, package-included, schema-bound, CLI-governed, and enforced for Harness evals, red-team suites, regression suites, product evals, setup/retrofit evals, and active-repo rollout evals. Raw promptfoo output cannot satisfy a claim.
+
+- [ ] Gate 96 evidence path:
+
+109. HALO integration is governed by capability receipt, invocation mode, version/build identity when available, privacy boundary, typed objective, typed input/output digests, parsed ranked-change records, Codex handoff linkage, validation receipt, and deterministic claim guards. HALO output cannot satisfy completion, readiness, release, Product Success, final packet, or update_goal claims by itself.
+
+- [ ] Gate 97 evidence path:
+
+110. Self-improving domain-agent pattern is enforced for plugin-activated repos with domain workflows using realistic task traces, expert feedback, rubrics, failure taxonomies, evals, ranked repairs, before/after validation, domain packs, privacy rules, and claim guards. Toy-only evals, mislabeled expertise, and eval-only product success fail.
+
+- [ ] Gate 98 evidence path:
+
+111. Setup and retrofit skills install or fail-close observability, command inventory, improvement-loop registry, research registry, OpenAI key policy, promptfoo config, HALO adapter policy, telemetry schemas, eval schemas, domain packs, feedback schemas, Codex handoff templates, Rust DevX where applicable, TypeScript DevX where applicable, and active-repo rollout templates.
+
+- [ ] Gate 99 evidence path:
+
+112. Cross-repo Harness rollout is governed by active-repo registry, per-repo fitting receipts, non-substitutable rollout modes, category-safe repo identity, source/install/cache/app-surface separation, and current per-repo claim ceilings.
+
+- [ ] Gate 100 evidence path:
+
+113. Rust and TypeScript Developer Experience integration is enforced across setup/retrofit and active repos. Rust and TypeScript tools are observations only; CLI receipts are authority. TypeScript/UI surfaces require pinned Node/pnpm/TypeScript, strict type/lint/test/build/browser/accessibility/bundle/security/memory/GC proof where applicable.
+
+- [ ] Gate 101 evidence path:
+
+114. Feedback, eval, telemetry, OpenAI, promptfoo, HALO, Codex handoff, screenshots/videos, traces, and final packets obey data-class privacy, retention, redaction, package-inclusion, child-agent, model-call, query, digest, and claim-support policies. Raw private material and secrets never enter package artifacts or public claims.
+
+- [ ] Gate 102 evidence path:
+
+115. Improvement surface separation is enforced for source, install, cache, app registry, Plugins UI, marketplace, install button, launcher runtime, reviewer exposure, final packet, target repo, active repo, promptfoo, HALO, OpenAI, Codex handoff, product journey, domain task, and improvement-loop closure.
+
+- [ ] Gate 103 evidence path:
+
+116. Gates 93-105 are represented across all mandatory law surfaces and are included in source audit, red fixture report, CLI self-law, update_goal eligibility, final packet, setup/retrofit, package inventory, plugin cohesion manifest, command inventory, and active-repo rollout. Prompt-only or checklist-only additions fail.
+
+- [ ] Gate 104 evidence path:
+
+117. Measured improvement and regression prevention are proven with baselines, current values, same-surface telemetry, receipts, regression protection, standards-gardener promotion, active-repo denominator, and claim guards. Anecdotes, one-run improvements, stale baselines, wrong-surface comparisons, and cherry-picked metrics fail.
+
+- [ ] Gate 105 evidence path:
 
 ## Final Response Required Fields
 
@@ -2930,6 +3406,19 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] One-command fresh environment bootstrap/concurrency status.
 - [ ] Agent-queryable observability status.
 - [ ] Full local observability stack integration and non-opaque failure status.
+- [ ] Research source authority/article-to-law integration status.
+- [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
+- [ ] OpenAI API/key/model/cost/privacy boundary status.
+- [ ] promptfoo eval/red-team/provider-separation status.
+- [ ] HALO ranked-change optimization status.
+- [ ] Self-improving domain-agent/tax-agent-pattern status.
+- [ ] Setup/retrofit deep-integration status.
+- [ ] Cross-repo active-repo rollout status.
+- [ ] Rust and TypeScript Developer Experience integration status.
+- [ ] Feedback/eval/telemetry privacy-retention status.
+- [ ] Improvement surface separation status.
+- [ ] Gates 93-105 law-surface closure status.
+- [ ] Measured improvement/regression-prevention status.
 - [ ] Subagent orchestration explicitness/token-model-cost/reconciliation status.
 - [ ] Skill catalog context-budget/omission-warning status.
 - [ ] Distribution and sharing-surface claim-separation status.

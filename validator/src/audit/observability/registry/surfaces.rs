@@ -96,7 +96,10 @@ fn require_surface_row(
 }
 
 fn require_unfitted_metadata(surface: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
-    if !non_empty_array(row, "missing_surfaces") || !non_empty_string(row, "claim_impact") {
+    if !owner_tracking(row)
+        || !non_empty_array(row, "missing_surfaces")
+        || !non_empty_string(row, "claim_impact")
+    {
         out.push(format!(
             "observability_surface_fitting_missing_metadata:{surface}"
         ));
@@ -117,6 +120,7 @@ fn require_fitted_evidence(
         non_empty_array(row, "focused_tests"),
         non_empty_array(row, "receipt_paths"),
         non_empty_array(row, "live_query_proof_paths"),
+        owner_tracking(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {
@@ -144,4 +148,8 @@ fn empty_array(row: &Map<String, Value>, key: &str) -> bool {
     row.get(key)
         .and_then(Value::as_array)
         .is_some_and(Vec::is_empty)
+}
+
+fn owner_tracking(row: &Map<String, Value>) -> bool {
+    non_empty_string(row, "current_owner_surface") && non_empty_string(row, "next_unfitted_surface")
 }

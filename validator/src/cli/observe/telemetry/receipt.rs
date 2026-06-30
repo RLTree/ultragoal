@@ -50,9 +50,13 @@ pub(super) fn base(
         "law_id": types::LAW_ID,
         "check_id": types::CHECK_ID,
         "claim_id": types::CLAIM_ID,
+        "claim_impact": event["claim_impact"],
         "why_failed": event["why_failed"].as_str().unwrap_or(""),
         "where_failed": event["where_failed"].as_str().unwrap_or(""),
         "next_repair": event["next_repair"].as_str().unwrap_or(""),
+        "query_hint_logql": event["query_hint_logql"],
+        "query_hint_promql": event["query_hint_promql"],
+        "query_hint_traceql": event["query_hint_traceql"],
         "event": event,
         "metric": metric,
         "trace": trace

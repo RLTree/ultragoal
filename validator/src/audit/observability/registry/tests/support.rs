@@ -83,6 +83,7 @@ pub(super) fn fitted_inventory() -> Value {
                 "semantic_naming_across_telemetry": true
             }
         },
+        "fitting_control_board": fitted_control_board(),
         "row_requirements": {
             "log_instrumentation": true,
             "metric_instrumentation": true,
@@ -93,12 +94,48 @@ pub(super) fn fitted_inventory() -> Value {
             "focused_tests": true,
             "claim_impact_mapping": true,
             "same_candidate_query_proof": true,
-            "validator_enforced": true
+            "validator_enforced": true,
+            "owner_surface_tracking": true,
+            "next_unfitted_surface_tracking": true,
+            "fitting_control_board": true
         },
         "fitting_inventory": rows,
         "surface_inventory": surface_rows,
         "operating_loop_inventory": loop_rows,
         "signal_inventory": signal_rows
+    })
+}
+
+fn fitted_control_board() -> Value {
+    json!({
+        "status": "fitted",
+        "families": {
+            "commands": {
+                "total": super::super::fitting::REQUIRED_COMMANDS.len(),
+                "fitted": super::super::fitting::REQUIRED_COMMANDS.len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "surfaces": {
+                "total": super::super::surfaces::REQUIRED_SURFACES.len(),
+                "fitted": super::super::surfaces::REQUIRED_SURFACES.len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "operating_loop": {
+                "total": super::super::operating::REQUIRED_LOOP_STAGES.len(),
+                "fitted": super::super::operating::REQUIRED_LOOP_STAGES.len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "signals": {
+                "total": super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
+                "fitted": super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            }
+        },
+        "claim_impact": "supports_gate_92_only_when_every_inventory_row_is_fitted_same_candidate"
     })
 }
 
@@ -116,6 +153,8 @@ fn fitted_row(command: &str) -> Value {
             format!("validation_artifacts/observability/fitting/{slug}-metrics.json"),
             format!("validation_artifacts/observability/fitting/{slug}-traces.json")
         ],
+        "current_owner_surface": format!("command:{command}"),
+        "next_unfitted_surface": "none",
         "claim_impact": "supports_gate_92_when_same_candidate"
     })
 }
@@ -135,6 +174,8 @@ fn fitted_surface_row(surface: &str) -> Value {
             format!("validation_artifacts/observability/fitting/surface-{slug}-metrics.json"),
             format!("validation_artifacts/observability/fitting/surface-{slug}-traces.json")
         ],
+        "current_owner_surface": format!("surface:{surface}"),
+        "next_unfitted_surface": "none",
         "claim_impact": "supports_gate_92_when_same_candidate"
     })
 }
@@ -154,6 +195,8 @@ fn fitted_operating_row(kind: &str, name: &str) -> Value {
             format!("validation_artifacts/observability/fitting/{kind}-{slug}-metrics.json"),
             format!("validation_artifacts/observability/fitting/{kind}-{slug}-traces.json")
         ],
+        "current_owner_surface": format!("{kind}:{name}"),
+        "next_unfitted_surface": "none",
         "claim_impact": "supports_gate_92_when_same_candidate"
     })
 }

@@ -735,7 +735,7 @@
                 }
               ]
             },
-            "maxProperties": 1239,
+            "maxProperties": 1245,
             "minProperties": 1195,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
@@ -2193,7 +2193,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/redFixtureResult"
       },
-      "maxProperties": 1239,
+      "maxProperties": 1245,
       "minProperties": 1195,
       "propertyNames": {
         "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
@@ -9912,8 +9912,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1239,
-      "minItems": 1239,
+      "maxItems": 1245,
+      "minItems": 1245,
       "type": "array",
       "uniqueItems": true
     },

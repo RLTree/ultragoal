@@ -125,3 +125,93 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
     }));
     fs::remove_dir_all(root).expect("cleanup fit registry");
 }
+
+#[test]
+fn observability_registry_rejects_pass_shaped_control_board() {
+    let root = crate::self_tests::boundaries::support::temp_root("observe-control-board");
+    let mut inventory = fitted_inventory();
+    inventory["fitting_inventory"]["source audit"] = json!({
+        "fitting_status": "partially_fitted",
+        "fitted_surfaces": ["log"],
+        "missing_surfaces": ["metrics", "traces"],
+        "validator_check_id": super::super::LAW,
+        "focused_tests": ["source_audit_observability_receipt_blocks_claims_on_failed_audit"],
+        "receipt_paths": [],
+        "live_query_proof_paths": [],
+        "current_owner_surface": "command:source audit",
+        "next_unfitted_surface": "metrics",
+        "claim_impact": "blocks_gate_92"
+    });
+    inventory["fitting_control_board"]["status"] = json!("fitted");
+    inventory["fitting_control_board"]["families"]["commands"]["fitted"] =
+        json!(super::fitting::REQUIRED_COMMANDS.len());
+    inventory["fitting_control_board"]["families"]["commands"]["partially_fitted"] = json!(0);
+    write_registry_root(&root, inventory);
+    write_valid_fixture(&root);
+    let mut failures = Vec::new();
+    check(&root, &mut failures);
+    assert!(
+        failures
+            .iter()
+            .any(|item| { item == "observability_fitting_control_board_status_mismatch:blocked" })
+    );
+    assert!(failures.iter().any(|item| {
+        item == "observability_fitting_control_board_count_mismatch:commands:fitted"
+    }));
+    assert!(failures.iter().any(|item| {
+        item == "observability_fitting_control_board_first_incomplete_missing:commands:source audit"
+    }));
+    fs::remove_dir_all(root).expect("cleanup control board");
+}
+
+#[test]
+fn observability_control_board_uses_required_command_order() {
+    let root = crate::self_tests::boundaries::support::temp_root("observe-control-board-order");
+    let mut inventory = fitted_inventory();
+    inventory["fitting_inventory"]["source audit"] = json!({
+        "fitting_status": "partially_fitted",
+        "fitted_surfaces": ["log", "receipt", "query"],
+        "missing_surfaces": ["pass/fail stdout contract"],
+        "validator_check_id": super::super::LAW,
+        "focused_tests": ["source_audit_observability_receipt_blocks_claims_on_failed_audit"],
+        "receipt_paths": [],
+        "live_query_proof_paths": [],
+        "current_owner_surface": "command:source audit",
+        "next_unfitted_surface": "pass/fail stdout contract",
+        "claim_impact": "blocks_gate_92"
+    });
+    inventory["fitting_inventory"]["archive build"] = json!({
+        "fitting_status": "unfitted",
+        "fitted_surfaces": [],
+        "missing_surfaces": ["log"],
+        "validator_check_id": super::super::LAW,
+        "focused_tests": [],
+        "receipt_paths": [],
+        "live_query_proof_paths": [],
+        "current_owner_surface": "command:archive build",
+        "next_unfitted_surface": "log",
+        "claim_impact": "blocks_gate_92"
+    });
+    inventory["fitting_control_board"]["status"] = json!("blocked");
+    inventory["fitting_control_board"]["families"]["commands"]["fitted"] =
+        json!(super::fitting::REQUIRED_COMMANDS.len() - 2);
+    inventory["fitting_control_board"]["families"]["commands"]["partially_fitted"] = json!(1);
+    inventory["fitting_control_board"]["families"]["commands"]["unfitted"] = json!(1);
+    inventory["fitting_control_board"]["first_incomplete"] = json!({
+        "family": "commands",
+        "id": "source audit",
+        "fitting_status": "partially_fitted",
+        "next_unfitted_surface": "pass/fail stdout contract"
+    });
+    write_registry_root(&root, inventory);
+    write_valid_fixture(&root);
+    let mut failures = Vec::new();
+    check(&root, &mut failures);
+    assert!(
+        !failures
+            .iter()
+            .any(|item| item.starts_with("observability_fitting_control_board_")),
+        "{failures:?}"
+    );
+    fs::remove_dir_all(root).expect("cleanup control board order");
+}

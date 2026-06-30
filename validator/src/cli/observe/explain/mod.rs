@@ -5,9 +5,20 @@ use std::path::Path;
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
-    let known_current_failure = current_failure(root);
+    let observed_run = command
+        .run_id
+        .as_deref()
+        .and_then(|run_id| run_event(root, run_id));
+    let known_current_failure = observed_run
+        .as_ref()
+        .and_then(event_failure)
+        .unwrap_or_else(|| current_failure(root));
     let failure_summary = failure_summary(&known_current_failure);
     let mut receipt = telemetry::base_receipt(root, command, "pass", failure_summary.as_deref())?;
+    if let Some(event) = observed_run {
+        promote_observed_failure_fields(&mut receipt, &event);
+        receipt["observed_run"] = event;
+    }
     receipt["explanation"] = json!({
         "requested_run_id": command.run_id,
         "requested_claim_id": command.claim_id,
@@ -19,6 +30,51 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         "repair_guidance": "Inspect final-packet proof/source-audit digest dereference, regenerate same-candidate lower-level receipts, and rerun source audit once after implementation changes."
     });
     Ok(receipt)
+}
+
+fn promote_observed_failure_fields(receipt: &mut Value, event: &Value) {
+    for key in [
+        "law_id",
+        "check_id",
+        "claim_id",
+        "where_failed",
+        "next_repair",
+        "claim_impact",
+        "query_hint_logql",
+        "query_hint_promql",
+        "query_hint_traceql",
+    ] {
+        if event
+            .get(key)
+            .and_then(Value::as_str)
+            .is_some_and(|text| !text.trim().is_empty() && text != "none")
+        {
+            receipt[key] = event[key].clone();
+        }
+    }
+}
+
+fn event_failure(event: &Value) -> Option<Value> {
+    let status = event.get("status").and_then(Value::as_str)?;
+    if status == "pass" {
+        return None;
+    }
+    let why = event.get("why_failed").and_then(Value::as_str)?;
+    if why.trim().is_empty() || why == "none" {
+        return None;
+    }
+    Some(json!([why]))
+}
+
+fn run_event(root: &Path, run_id: &str) -> Option<Value> {
+    let path = root.join("validation_artifacts/observability/spool/events.jsonl");
+    let text = std::fs::read_to_string(path).ok()?;
+    text.lines().rev().find_map(|line| {
+        let value: Value = serde_json::from_str(line).ok()?;
+        (value.get("run_id").and_then(Value::as_str) == Some(run_id)
+            && event_failure(&value).is_some())
+        .then_some(value)
+    })
 }
 
 fn failure_summary(value: &Value) -> Option<String> {
@@ -98,152 +154,4 @@ fn check_failures(value: &Value) -> Vec<Value> {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use std::fs;
-
-    #[test]
-    fn explain_reports_current_failure_and_bad_root_errors() {
-        let root = crate::self_tests::boundaries::support::temp_root("observe-explain");
-        fs::create_dir_all(&root).expect("root");
-        fs::write(root.join("owned.txt"), "owned").expect("owned");
-        crate::json_boundary::write_json(
-            &root.join("plugin-manifest-draft.json"),
-            &json!({"resources":["owned.txt"]}),
-        )
-        .expect("manifest");
-        fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit")).expect("audit dir");
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            &json!({"failures":["final_packet_proof_source_audit_target_digest_mismatch"]}),
-        )
-        .expect("audit receipt");
-        let command = crate::cli::observe::parse(&[
-            "observe".to_string(),
-            "explain-failure".to_string(),
-            "--run-id".to_string(),
-            "run-1".to_string(),
-        ])
-        .expect("parse")
-        .expect("observe");
-        let receipt = run(&root, &command).expect("explain");
-        assert_eq!(
-            receipt["explanation"]["known_current_failure"][0],
-            "final_packet_proof_source_audit_target_digest_mismatch"
-        );
-        assert!(
-            receipt["why_failed"]
-                .as_str()
-                .unwrap()
-                .contains("final_packet_proof_source_audit_target_digest_mismatch")
-        );
-        fs::create_dir_all(root.join("validation_artifacts/review")).expect("review dir");
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/review/final-packet-proof.json"),
-            &json!({
-                "status":"fail",
-                "failure":{"observed_failures":["final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass"]}
-            }),
-        )
-        .expect("packet receipt");
-        let packet_receipt = run(&root, &command).expect("explain packet");
-        assert_eq!(
-            packet_receipt["explanation"]["known_current_failure"][0],
-            "final_packet_proof_registry_ref:plugin_self_law_registry_status_not_pass"
-        );
-        assert!(
-            packet_receipt["why_failed"]
-                .as_str()
-                .unwrap()
-                .contains("plugin_self_law_registry_status_not_pass")
-        );
-        fs::remove_file(root.join("validation_artifacts/review/final-packet-proof.json"))
-            .expect("remove packet receipt");
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            &json!({
-                "failures":[],
-                "checks":[
-                    {"id":"source-audit-pass","status":"pass"},
-                    {"id":"validator-execution-provenance","status":"fail"}
-                ]
-            }),
-        )
-        .expect("audit checks receipt");
-        let check_receipt = run(&root, &command).expect("explain checks");
-        assert_eq!(
-            check_receipt["explanation"]["known_current_failure"][0],
-            "validator-execution-provenance"
-        );
-        assert!(
-            check_receipt["why_failed"]
-                .as_str()
-                .unwrap()
-                .contains("validator-execution-provenance")
-        );
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            &json!({
-                "failures":[],
-                "checks":{
-                    "source-audit-pass":{"status":"pass","details":"pass"},
-                    "validator-execution-provenance":{
-                        "status":"fail",
-                        "details":"final_packet_proof_source_audit_target_digest_mismatch"
-                    }
-                }
-            }),
-        )
-        .expect("audit object checks receipt");
-        let object_check_receipt = run(&root, &command).expect("explain object checks");
-        assert!(
-            object_check_receipt["why_failed"]
-                .as_str()
-                .unwrap()
-                .contains("final_packet_proof_source_audit_target_digest_mismatch")
-        );
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            &json!({
-                "failures":[],
-                "checks":{
-                    "source-audit-pass":{"status":"pass","details":"pass"},
-                    "validator-execution-provenance":{"status":"fail","details":"pass"}
-                }
-            }),
-        )
-        .expect("audit object checks without details receipt");
-        let object_no_details_receipt =
-            run(&root, &command).expect("explain object checks without details");
-        assert_eq!(
-            object_no_details_receipt["explanation"]["known_current_failure"][0],
-            "validator-execution-provenance"
-        );
-        crate::json_boundary::write_json(
-            &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-            &json!({"failures":[],"checks":[{"id":"source-audit-pass","status":"pass"}]}),
-        )
-        .expect("audit pass receipt");
-        let no_failure_receipt = run(&root, &command).expect("explain no failure");
-        assert_eq!(
-            no_failure_receipt["explanation"]["known_current_failure"][0],
-            "no current source-audit failure; inspect final-packet/control receipts"
-        );
-        fs::remove_file(root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"))
-            .expect("remove audit receipt");
-        let missing_receipt = run(&root, &command).expect("explain missing audit");
-        assert_eq!(
-            missing_receipt["explanation"]["known_current_failure"][0],
-            "source audit receipt unavailable"
-        );
-        let bad_root = crate::self_tests::boundaries::support::temp_root("observe-explain-bad");
-        fs::create_dir_all(&bad_root).expect("bad root");
-        assert!(
-            run(&bad_root, &command)
-                .unwrap_err()
-                .contains("plugin-manifest-draft.json")
-        );
-        fs::remove_dir_all(root).expect("cleanup explain");
-        fs::remove_dir_all(bad_root).expect("cleanup explain bad");
-    }
-}
+mod tests;

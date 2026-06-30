@@ -4,6 +4,7 @@ use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 
+mod fitting_receipts;
 mod fitting_support;
 mod matching;
 mod run;

@@ -150,7 +150,10 @@ fn require_fitting_row(
 }
 
 fn require_unfitted_metadata(command: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
-    if !non_empty_array(row, "missing_surfaces") || !non_empty_string(row, "claim_impact") {
+    if !owner_tracking(row)
+        || !non_empty_array(row, "missing_surfaces")
+        || !non_empty_string(row, "claim_impact")
+    {
         out.push(format!(
             "observability_command_fitting_missing_metadata:{command}"
         ));
@@ -170,6 +173,7 @@ fn require_fitted_evidence(
         non_empty_array(row, "focused_tests"),
         non_empty_array(row, "receipt_paths"),
         non_empty_array(row, "live_query_proof_paths"),
+        owner_tracking(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {
@@ -199,7 +203,11 @@ fn empty_array(row: &Map<String, Value>, key: &str) -> bool {
         .is_some_and(Vec::is_empty)
 }
 
-fn row_requirement_keys() -> [&'static str; 10] {
+fn owner_tracking(row: &Map<String, Value>) -> bool {
+    non_empty_string(row, "current_owner_surface") && non_empty_string(row, "next_unfitted_surface")
+}
+
+fn row_requirement_keys() -> [&'static str; 13] {
     [
         "log_instrumentation",
         "metric_instrumentation",
@@ -211,5 +219,8 @@ fn row_requirement_keys() -> [&'static str; 10] {
         "claim_impact_mapping",
         "same_candidate_query_proof",
         "validator_enforced",
+        "owner_surface_tracking",
+        "next_unfitted_surface_tracking",
+        "fitting_control_board",
     ]
 }

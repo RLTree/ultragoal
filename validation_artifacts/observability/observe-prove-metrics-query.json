@@ -1,0 +1,39 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "bounded_output_status": "pass",
+  "byte_count": 1074,
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-0b5b16e8c5e04655380d0e770b1f5b728c63d0890156b4a48372cae87e7c89c6",
+  "failure": "",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "ultragoal_command_total{run_id=\"run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f\"}",
+  "query_kind": "metrics",
+  "redaction_status": "pass",
+  "result_digest": "sha256:f427726238735a6def8fe9b3bae78e9bbbeb489cd70044e314fe72e87a7a99ff",
+  "retention_bound": "2d",
+  "row_count": 1,
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"status\":\"success\",\"data\":{\"resultType\":\"vector\",\"result\":[{\"metric\":{\"__name__\":\"ultragoal_command_total\",\"candidate_digest\":\"sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"command\":\"observe\",\"correlation_id\":\"corr-4e4d594f8ee84b32aeda4e0eb5de4a09b0d0a7d19b1d7f08e965da0626bf4894\",\"exporter\":\"victorialogs\",\"failure_class\":\"observability_gate_failure\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"operation\":\"observe.prove\",\"run_id\":\"run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f\",\"span_id\":\"metric-7154dd6d7dd6a011d60feb8cd9988b00518c6a04e70a4549035bba26c1422e0f\",\"status\":\"fail\",\"surface\":\"live_stack\",\"trace_id\":\"trace-725e1abbcb5cd0f3a1f929d25ed9f1e92f9e13f680a0b4e5a020a43fb861c005\"},\"value\":[1782791387,\"0\"]}]},\"stats\":{\"seriesFetched\": \"1\",\"executionTimeMsec\":0}}"
+    }
+  ],
+  "run_id": "run-728fe028616c460e22dff84d0ea6147a486780e5b562bea7edc2b312bc367d8f",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
+}

@@ -546,9 +546,7 @@
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ],
-      "source_law": "mandatory law: Full Local Observability Stack Integration And Non-Opaque Failure",
-      "description": ", with operating-loop and signal-class fitting enforced.",
-      "agent_action": " Verify operating-loop and signal inventories before broad audit."
+      "source_law": "mandatory law: Full Local Observability Stack Integration And Non-Opaque Failure"
     },
     {
       "blocker_or_repair_action": "Run mandatory-law surface validation; generated_proof_claims_withheld_without_reproducible_provenance.",

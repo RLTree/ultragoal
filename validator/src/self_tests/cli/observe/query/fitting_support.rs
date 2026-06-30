@@ -43,6 +43,7 @@ pub(super) fn write_fitted_inventory(root: &Path) {
                     "semantic_naming_across_telemetry": true
                 }
             },
+            "fitting_control_board": fitted_control_board(),
             "row_requirements": row_requirements(),
             "fitting_inventory": rows,
             "surface_inventory": surface_rows,
@@ -51,7 +52,40 @@ pub(super) fn write_fitted_inventory(root: &Path) {
         }),
     )
     .expect("write fitted inventory");
-    write_fitting_receipts(root);
+    super::fitting_receipts::write_fitting_receipts(root);
+}
+
+fn fitted_control_board() -> serde_json::Value {
+    json!({
+        "status": "fitted",
+        "families": {
+            "commands": {
+                "total": crate::audit::observability::required_commands().len(),
+                "fitted": crate::audit::observability::required_commands().len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "surfaces": {
+                "total": crate::audit::observability::required_surfaces().len(),
+                "fitted": crate::audit::observability::required_surfaces().len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "operating_loop": {
+                "total": crate::audit::observability::required_loop_stages().len(),
+                "fitted": crate::audit::observability::required_loop_stages().len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            },
+            "signals": {
+                "total": crate::audit::observability::required_signal_classes().len(),
+                "fitted": crate::audit::observability::required_signal_classes().len(),
+                "partially_fitted": 0,
+                "unfitted": 0
+            }
+        },
+        "claim_impact": "supports_gate_92_only_when_every_inventory_row_is_fitted_same_candidate"
+    })
 }
 
 fn insert_command_row(rows: &mut serde_json::Map<String, serde_json::Value>, command: &str) {
@@ -70,6 +104,8 @@ fn insert_command_row(rows: &mut serde_json::Map<String, serde_json::Value>, com
                 format!("validation_artifacts/observability/fitting/{slug}-metrics.json"),
                 format!("validation_artifacts/observability/fitting/{slug}-traces.json")
             ],
+            "current_owner_surface": format!("command:{command}"),
+            "next_unfitted_surface": "none",
             "claim_impact": "test fixture supports observe prove green path only"
         }),
     );
@@ -92,6 +128,8 @@ fn insert_surface_row(rows: &mut serde_json::Map<String, serde_json::Value>, sur
                 format!("validation_artifacts/observability/fitting/surface-{slug}-metrics.json"),
                 format!("validation_artifacts/observability/fitting/surface-{slug}-traces.json")
             ],
+            "current_owner_surface": format!("surface:{surface}"),
+            "next_unfitted_surface": "none",
             "claim_impact": "test fixture supports observe prove green path only"
         }),
     );
@@ -118,100 +156,11 @@ fn insert_operating_row(
                 format!("validation_artifacts/observability/fitting/{kind}-{slug}-metrics.json"),
                 format!("validation_artifacts/observability/fitting/{kind}-{slug}-traces.json")
             ],
+            "current_owner_surface": format!("{kind}:{name}"),
+            "next_unfitted_surface": "none",
             "claim_impact": "test fixture supports observe prove green path only"
         }),
     );
-}
-
-fn write_fitting_receipts(root: &Path) {
-    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
-    let dir = root.join("validation_artifacts/observability/fitting");
-    fs::create_dir_all(&dir).expect("fitting dir");
-    for command in crate::audit::observability::required_commands() {
-        let slug = slug(command);
-        write_receipt_set(
-            &dir,
-            &candidate,
-            &slug,
-            &format!("run-{slug}"),
-            &format!("corr-{slug}"),
-            &command.replace(' ', "."),
-        );
-    }
-    for surface in crate::audit::observability::required_surfaces() {
-        let slug = slug(surface);
-        write_receipt_set(
-            &dir,
-            &candidate,
-            &format!("surface-{slug}"),
-            &format!("run-surface-{slug}"),
-            &format!("corr-surface-{slug}"),
-            &surface_operation(surface),
-        );
-    }
-    for stage in crate::audit::observability::required_loop_stages() {
-        let slug = slug(stage);
-        write_receipt_set(
-            &dir,
-            &candidate,
-            &format!("loop-{slug}"),
-            &format!("run-loop-{slug}"),
-            &format!("corr-loop-{slug}"),
-            &format!("observability.loop.{slug}"),
-        );
-    }
-    for signal in crate::audit::observability::required_signal_classes() {
-        let slug = slug(signal);
-        write_receipt_set(
-            &dir,
-            &candidate,
-            &format!("signal-{slug}"),
-            &format!("run-signal-{slug}"),
-            &format!("corr-signal-{slug}"),
-            &format!("observability.signal.{slug}"),
-        );
-    }
-}
-
-fn write_receipt_set(
-    dir: &Path,
-    candidate: &str,
-    slug: &str,
-    run: &str,
-    corr: &str,
-    operation: &str,
-) {
-    crate::json_boundary::write_json(
-        &dir.join(format!("{slug}.json")),
-        &json!({
-            "schema": crate::cli::observe::types::RECEIPT_SCHEMA,
-            "status": "pass",
-            "candidate_digest": candidate,
-            "operation": operation,
-            "run_id": run,
-            "correlation_id": corr
-        }),
-    )
-    .expect("receipt");
-    for kind in ["logs", "metrics", "traces"] {
-        crate::json_boundary::write_json(
-            &dir.join(format!("{slug}-{kind}.json")),
-            &json!({
-                "schema": crate::cli::observe::types::QUERY_SCHEMA,
-                "status": "pass",
-                "candidate_digest": candidate,
-                "run_id": run,
-                "correlation_id": corr,
-                "query_kind": kind,
-                "rows": [{
-                    "candidate_digest": candidate,
-                    "operation": operation,
-                    "correlation_id": corr
-                }]
-            }),
-        )
-        .expect("query receipt");
-    }
 }
 
 fn row_requirements() -> serde_json::Value {
@@ -225,7 +174,10 @@ fn row_requirements() -> serde_json::Value {
         "focused_tests": true,
         "claim_impact_mapping": true,
         "same_candidate_query_proof": true,
-        "validator_enforced": true
+        "validator_enforced": true,
+        "owner_surface_tracking": true,
+        "next_unfitted_surface_tracking": true,
+        "fitting_control_board": true
     })
 }
 
