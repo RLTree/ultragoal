@@ -52,6 +52,7 @@ fn package_check_tasks(
             let store = Arc::clone(&store);
             let check_ids = Arc::clone(&check_ids);
             move |out| {
+                seed_check_context(out, &check_ids);
                 crate::audit::package::text_checks::run(&root, &store, &check_ids, out);
             }
         }),
@@ -109,6 +110,12 @@ fn task(f: impl FnOnce(&mut Failures) + Send + 'static) -> PackageCheckTask {
         f(&mut out);
         out
     })
+}
+
+fn seed_check_context(failures: &mut Failures, check_ids: &[String]) {
+    for id in check_ids {
+        failures.entry(id.clone()).or_default();
+    }
 }
 
 fn merge_failures(failures: &mut Failures, source: Failures) {

@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod scheduler;
+
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent).expect("parent");
