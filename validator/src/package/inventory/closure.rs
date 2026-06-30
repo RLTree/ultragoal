@@ -15,8 +15,6 @@ const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     "validation_artifacts/observability/spool/",
 ];
 const LOCAL_PROOF_PATHS: &[&str] = &[
-    "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
-    "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
     "validation_artifacts/harness/fit-repo-command.stderr.txt",
     "validation_artifacts/harness/fit-repo-command.stdout.txt",
     "validation_artifacts/target-valid-init-debug-receipt.json",
@@ -49,7 +47,8 @@ fn walk_package_entries(
 }
 
 fn local_only(rel: &str) -> bool {
-    LOCAL_PROOF_PATHS.contains(&rel)
+    crate::package::inventory::parent_session_contract_path(rel)
+        || LOCAL_PROOF_PATHS.contains(&rel)
         || LOCAL_BUILD_OUTPUT_PREFIXES
             .iter()
             .any(|prefix| rel.starts_with(prefix))

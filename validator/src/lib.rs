@@ -67,6 +67,7 @@ fn parse_args() -> Result<Args, String> {
 
 fn parse_command(raw: &[String]) -> Result<Command, String> {
     Ok(match raw[0].as_str() {
+        "help" | "--help" | "-h" => Command::Help,
         "audit" => parse_audit(&raw[1..])?,
         "source" if raw.get(1).map(String::as_str) == Some("audit") => parse_audit(&raw[2..])?,
         "review-target" => {
@@ -121,6 +122,12 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
             };
             Command::Product(command)
         }
+        "fit-repo" => {
+            let Some(command) = cli::product::parse(raw)? else {
+                return Err(usage());
+            };
+            Command::Product(command)
+        }
         "standards-gardener" => {
             let Some(command) = cli::standards::parse(raw)? else {
                 return Err(usage());
@@ -151,6 +158,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::OpenAi(command)
             } else if let Some(command) = cli::promptfoo::parse(raw)? {
                 Command::Promptfoo(command)
+            } else if let Some(command) = cli::routine::parse(raw)? {
+                Command::Routine(command)
             } else if let Some(command) = cli::session::parse(raw)? {
                 Command::Session(command)
             } else if let Some(command) = cli::control::plane::parse(raw) {

@@ -59,6 +59,8 @@ pub(crate) enum Command {
     Observe(crate::cli::observe::types::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),
+    Routine(crate::cli::routine::RoutineCommand),
     Session(crate::cli::session::SessionCommand),
     PackageDigest,
+    Help,
 }

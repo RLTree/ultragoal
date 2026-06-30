@@ -439,8 +439,7 @@
       "target/**",
       "node_modules/**",
       "__pycache__/**",
-      "validation_artifacts/**",
-      "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"
+      "validation_artifacts/**"
     ],
     "include": [
       ".harness/**",

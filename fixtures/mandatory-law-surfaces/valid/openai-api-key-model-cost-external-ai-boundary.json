@@ -28,10 +28,6 @@
   "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
   "evidence_artifacts": [
     {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba"
-    },
-    {
       "path": "docs/openai-key-policy.json",
       "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8"
     }

@@ -69,6 +69,22 @@ Do not trust older source-audit, red-report, coverage, Gate 92, Product/Fit,
 Rust/GC, OpenAI, promptfoo, HALO, final-packet, install/cache, or update_goal
 receipts until they are rebound or explicitly stale-marked.
 
+## Builder-Contract Versus Package Boundary
+
+The parent-session prompt, checklist, and execution spine are agent-governing
+builder contracts for this work session. They are not package resources, plugin
+product surfaces, coverage targets, package digest inputs, shipped law evidence,
+valid fixture dependencies, product receipts, review/archive contents, install
+inputs, cache inputs, registry inputs, or update_goal evidence.
+
+The Ultragoal CLI and plugin package must not depend on these parent-session
+files in any capacity. Editing them may change agent instructions and execution
+order, but it must not stale package digest, coverage, source audit, Product/Fit,
+review-target, archive, install/cache, registry, final-packet, or update_goal
+receipts. Any current package manifest, package inventory, coverage manifest,
+fixture, receipt, or validator check that treats these files as package-owned
+must be repaired as a package-boundary bug before the affected claim can close.
+
 ## Carry-Forward Control Loop Requirements
 
 The checklist is a progress surface, not a receipt ledger. Use only concise row

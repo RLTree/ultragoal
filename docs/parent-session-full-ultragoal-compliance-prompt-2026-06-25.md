@@ -1792,6 +1792,30 @@ Mandatory Product Usage Fitness and CLI Discoverability:
   omitted target-repo routine path, and `scripts/check` substituting for the
   routine CLI path without a narrow-helper claim ceiling.
 
+Mandatory Builder-Contract And Package-Boundary Separation:
+
+- The parent-session full-compliance prompt, checklist, and execution spine are
+  agent-governing builder contracts for this work session. They are not package
+  resources, plugin product surfaces, coverage targets, package digest inputs,
+  shipped law evidence, valid fixture dependencies, product receipts,
+  review/archive contents, install inputs, cache inputs, registry inputs, or
+  update_goal evidence.
+- The package may contain reusable laws, schemas, templates, fixtures, skills,
+  docs, receipts, and generated artifacts produced from the work, but it must not
+  depend on session-specific parent prompt/checklist/spine files.
+- Editing the parent prompt/checklist/spine may change agent instructions,
+  execution order, or checklist progress state, but it must not stale package
+  digest, coverage, source audit, Product/Fit/Journey, review target, archive,
+  install/cache, registry, final packet, or update_goal receipts.
+- The CLI must fail closed if package inventory, plugin manifests, coverage
+  manifests, package digest logic, package closure, valid fixtures, receipts,
+  source audit checks, final packet proof, install/cache proof, or update_goal
+  eligibility treat the parent prompt/checklist/spine as package-owned evidence.
+- Add focused tests and red fixtures proving parent-session contract files are
+  excluded from package digest, package inventory closure, coverage changed-file
+  coupling, plugin manifest resources, plugin cohesion resources, valid fixture
+  evidence, receipt dereferencing, final packet proof, and update_goal proof.
+
 Mandatory Control-Loop Discipline, Validation Budget, and Receipt Boundaries:
 
 - Receipts are claim-bound artifacts, not progress journal entries. Checklist

@@ -79,3 +79,36 @@ fn coverage_scope_package_failures_report_malformed_manifest_before_substitution
     );
     std::fs::remove_dir_all(root).expect("cleanup coverage package malformed");
 }
+
+#[test]
+fn coverage_manifest_rejects_parent_session_contract_dependencies() {
+    let manifest = json!({
+        "schema": "harness-ultragoal.coverage-manifest.v1",
+        "coverage_command_path": ".harness/coverage-command",
+        "required_target_paths": ["src"],
+        "repo_owned_source_roots": ["src"],
+        "source_discovery_rules": {
+            "ignore": [
+                "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"
+            ]
+        },
+        "changed_file_coupling_policy": {
+            "required": true,
+            "changed_files": [
+                "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
+            ],
+            "changed_files_digest": crate::self_tests::boundaries::support::sha('1')
+        },
+        "required_measured_dimensions_per_root": [{
+            "root": "src",
+            "dimensions": ["line", "branch", "function", "artifact", "ui_state"]
+        }]
+    });
+    let failures = crate::audit::coverage::scope::value_failures_with_root(&manifest, None);
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "coverage_parent_session_contract_dependency"),
+        "{failures:?}"
+    );
+}

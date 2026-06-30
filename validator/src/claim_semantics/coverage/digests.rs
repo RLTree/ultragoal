@@ -48,6 +48,9 @@ fn digest_files(root: &Path, files: &[String]) -> Result<String, String> {
 }
 
 fn ignored(rel: &str, manifest: &Value) -> bool {
+    if crate::package::inventory::parent_session_contract_path(rel) {
+        return true;
+    }
     if matches!(
         rel,
         "templates/.harness/coverage-manifest.json"

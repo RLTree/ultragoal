@@ -4,6 +4,8 @@ set -euo pipefail
 root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
 cd "$root"
 
+echo "scripts/check narrow-helper ceiling: standards and exact coverage observations only; unsupported claims include routine_usability, product_readiness, readiness, release, final_packet, registry/reviewer exposure, completion, and update_goal." >&2
+
 bash scripts/check-agent-standards "$root"
 
 coverage_cmd_file=".harness/coverage-command"

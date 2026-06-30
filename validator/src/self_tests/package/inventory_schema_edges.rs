@@ -91,6 +91,27 @@ fn package_inventory_ignores_local_dependency_caches_but_keeps_manifests() {
 }
 
 #[test]
+fn package_inventory_ignores_parent_session_contract_files() {
+    let root = crate::self_tests::boundaries::support::temp_root("inventory-parent-contract");
+    std::fs::create_dir_all(root.join("docs")).expect("docs");
+    std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
+    std::fs::write(
+        root.join("docs/parent-session-full-ultragoal-execution-spine-2026-06-30.md"),
+        "builder contract",
+    )
+    .expect("execution spine");
+    let files = crate::package::inventory::closure::actual_files(&root).expect("actual files");
+    assert!(files.contains(&"docs/package.md".to_string()));
+    assert!(
+        !files
+            .iter()
+            .any(|rel| rel.contains("parent-session-full-ultragoal")),
+        "{files:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup parent contract inventory");
+}
+
+#[test]
 fn package_inventory_paths_ignore_untyped_rows_and_collect_typed_paths() {
     let paths = crate::package::inventory::inventory_paths(&json!({
         "skills":[{"path":"skills/a/SKILL.md"},{}],

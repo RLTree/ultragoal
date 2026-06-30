@@ -184,10 +184,7 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
     }
     let manifest = json!({
         "required_target_paths":["src", "docs", ".harness", "templates/.harness"],
-        "source_discovery_rules":{"ignore":[
-            "src/generated/**",
-            "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"
-        ]},
+        "source_discovery_rules":{"ignore":["src/generated/**"]},
         "changed_file_coupling_policy":{"changed_files":["src/lib.rs"]}
     });
     let before = crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)

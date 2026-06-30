@@ -11,6 +11,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
         [a, b, ..] if a == "product" && b == "prove-fitness" => Ok(Some(ProductCommand {
             receipt_dir: opt_path(&raw[2..], "--receipt-dir")?,
         })),
+        [a, b, ..] if a == "fit-repo" && b == "prove" => Ok(Some(ProductCommand {
+            receipt_dir: opt_path(&raw[2..], "--receipt-dir")?,
+        })),
         _ => Ok(None),
     }
 }

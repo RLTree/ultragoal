@@ -36,11 +36,7 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:7658ad95f412deb7f1b4196cb9a3acbadd44167657c43a1f4ea92b4614e311be",
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
-    },
-    {
-      "digest": "sha256:a0fc260325df1d5e6a672cf5ac4d9d712ead12c5051358390edc573d5d1e2c3a",
+      "digest": "sha256:7863a129ea9aa2c7f3428f1ea5f34ae1c1b9caee766afa68e5c486e2d36f991a",
       "path": "docs/source-obligation-matrix.json"
     }
   ],

@@ -71,10 +71,13 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
         &root.join("validation_artifacts/harness/fit-repo-receipt.json"),
     )
     .expect("fit receipt");
-    let journey = crate::json_boundary::read_json(
-        &root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
-    )
-    .expect("journey receipt");
+    let journey = with_current_evidence_digests(
+        &root,
+        crate::json_boundary::read_json(
+            &root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
+        )
+        .expect("journey receipt"),
+    );
     let target = fit
         .pointer("/target_revision/value")
         .and_then(serde_json::Value::as_str)
@@ -96,6 +99,30 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
         )
         .is_empty()
     );
+}
+
+fn with_current_evidence_digests(root: &std::path::Path, mut value: Value) -> Value {
+    for item in value
+        .get_mut("evidence")
+        .and_then(Value::as_array_mut)
+        .into_iter()
+        .flatten()
+    {
+        rebind_item_digest(root, item);
+    }
+    if let Some(item) = value.get_mut("error_path_evidence") {
+        rebind_item_digest(root, item);
+    }
+    value
+}
+
+fn rebind_item_digest(root: &std::path::Path, item: &mut Value) {
+    let Some(path) = item.get("path").and_then(Value::as_str) else {
+        return;
+    };
+    if let Ok(digest) = crate::digest::file(&root.join(path)) {
+        item["digest"] = json!(digest);
+    }
 }
 
 #[test]

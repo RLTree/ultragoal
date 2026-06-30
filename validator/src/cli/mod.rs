@@ -10,6 +10,7 @@ pub(crate) mod package;
 pub(crate) mod performance;
 pub(crate) mod product;
 pub(crate) mod promptfoo;
+pub(crate) mod routine;
 pub(crate) mod rust;
 pub(crate) mod session;
 pub(crate) mod standards;

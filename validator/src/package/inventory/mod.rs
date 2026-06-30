@@ -11,6 +11,7 @@ pub(crate) use payload::stable_package_payload;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
+const PARENT_SESSION_CONTRACT_PREFIX: &str = "docs/parent-session-full-ultragoal-";
 
 pub fn inventory_paths(manifest: &Value) -> Vec<String> {
     let mut out = Vec::new();
@@ -48,6 +49,11 @@ pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
     if rel.is_empty() {
         return Some("package path is not a non-empty string".to_string());
     }
+    if parent_session_contract_path(rel) {
+        return Some(format!(
+            "parent-session contract is not a package resource: {rel}"
+        ));
+    }
     if Path::new(rel).is_absolute() {
         return Some(format!("package path is absolute: {rel}"));
     }
@@ -64,6 +70,10 @@ pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
     let full = root_abs.join(rel);
     let full = full.canonicalize().unwrap_or(full);
     canonical_escape_error(&root_abs, &full, rel)
+}
+
+pub(crate) fn parent_session_contract_path(rel: &str) -> bool {
+    rel.starts_with(PARENT_SESSION_CONTRACT_PREFIX) && rel.ends_with(".md")
 }
 
 pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {
@@ -203,5 +213,37 @@ mod tests {
         assert!(super::package_digest_excluded(
             "validation_artifacts/semantic-classification/minimal-goal-run/CLAIM-001.semantic-classification-receipt.json"
         ));
+    }
+
+    #[test]
+    fn package_digest_rejects_parent_session_contract_resources() {
+        let root = crate::self_tests::boundaries::support::temp_root("package-parent-contract");
+        std::fs::create_dir_all(root.join("docs")).expect("docs");
+        std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
+        std::fs::write(
+            root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+            "builder contract",
+        )
+        .expect("parent prompt");
+        write_manifest(&root, json!(["docs/package.md"]));
+        let before = super::package_digest(&root).expect("digest before");
+        std::fs::write(
+            root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+            "updated builder contract",
+        )
+        .expect("parent prompt update");
+        let after = super::package_digest(&root).expect("digest after");
+        assert_eq!(before, after);
+
+        write_manifest(
+            &root,
+            json!(["docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"]),
+        );
+        let err = super::package_digest(&root).expect_err("parent contract listed");
+        assert!(
+            err.contains("parent-session contract is not a package resource"),
+            "{err}"
+        );
+        std::fs::remove_dir_all(root).expect("cleanup parent contract digest");
     }
 }

@@ -28,12 +28,8 @@
   ],
   "evidence_artifacts": [
     {
-      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:db01688a55f8bbeaffd1ad0d2632650ab952b8b0ae44a9d9194edfd01cc635fb"
-    },
-    {
       "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339"
+      "digest": "sha256:7863a129ea9aa2c7f3428f1ea5f34ae1c1b9caee766afa68e5c486e2d36f991a"
     }
   ]
 }
