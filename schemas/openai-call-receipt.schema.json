@@ -22,7 +22,11 @@
     "correlation_id",
     "redaction_status",
     "model_output_authority",
-    "claim_impact"
+    "observability_receipt",
+    "supported_claims",
+    "blocked_claims",
+    "claim_impact",
+    "failures"
   ],
   "properties": {
     "schema": {
@@ -94,9 +98,31 @@
     "model_output_authority": {
       "const": "observation_only_until_cli_schema_validated"
     },
+    "observability_receipt": {
+      "type": "object"
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_claims": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string"
+      }
+    },
     "claim_impact": {
       "type": "string",
       "minLength": 1
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   }
 }

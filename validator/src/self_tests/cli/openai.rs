@@ -148,3 +148,69 @@ fn openai_config_receipt_fails_unapproved_destination() {
     );
     std::fs::remove_dir_all(root).expect("cleanup");
 }
+
+#[test]
+fn openai_call_receipt_blocks_live_model_claims() {
+    let root = prepare_root("openai-call-receipt");
+    let args = [
+        "openai",
+        "call",
+        "prove",
+        "--input-digest",
+        &crate::self_tests::boundaries::support::sha('a'),
+        "--output-digest",
+        &crate::self_tests::boundaries::support::sha('b'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let command = crate::cli::openai::parse(&args)
+        .expect("parse")
+        .expect("openai call command");
+    let receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["provider_mode"], "no_network");
+    assert_eq!(
+        receipt["model_output_authority"],
+        "observation_only_until_cli_schema_validated"
+    );
+    assert_eq!(receipt["token_cost_rate_limit"]["total_tokens"], 0);
+    assert!(
+        receipt["blocked_claims"]
+            .as_array()
+            .expect("blocked")
+            .iter()
+            .any(|claim| claim.as_str() == Some("live_model_claim"))
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn openai_call_receipt_rejects_missing_digest_authority() {
+    let root = prepare_root("openai-call-bad-digest");
+    let args = [
+        "openai",
+        "call",
+        "prove",
+        "--input-digest",
+        "not-a-digest",
+        "--output-digest",
+        &crate::self_tests::boundaries::support::sha('b'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let command = crate::cli::openai::parse(&args)
+        .expect("parse")
+        .expect("openai call command");
+    let receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert!(
+        receipt["failures"]
+            .as_array()
+            .expect("failures")
+            .iter()
+            .any(|item| item.as_str() == Some("openai_call_prompt_input_digest_invalid"))
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}

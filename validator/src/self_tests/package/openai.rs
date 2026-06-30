@@ -60,6 +60,7 @@ fn prepare_root(label: &str) -> std::path::PathBuf {
             "resources": [
                 ".gitignore",
                 "docs/openai-key-policy.json",
+                "validation_artifacts/openai/call-receipt.json",
                 "validation_artifacts/openai/config-receipt.json"
             ],
             "schemas": [],
@@ -71,6 +72,42 @@ fn prepare_root(label: &str) -> std::path::PathBuf {
         }),
     );
     root
+}
+
+fn write_config_and_call_receipts(root: &Path) {
+    let config_args = ["openai", "config", "prove"]
+        .into_iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
+    let config_command = crate::cli::openai::parse(&config_args)
+        .expect("parse config")
+        .expect("config command");
+    let config = crate::cli::openai::build_receipt(root, &config_command).expect("config");
+    write_json(
+        &root.join("validation_artifacts/openai/config-receipt.json"),
+        &config,
+    );
+
+    let call_args = [
+        "openai",
+        "call",
+        "prove",
+        "--input-digest",
+        &crate::self_tests::boundaries::support::sha('a'),
+        "--output-digest",
+        &crate::self_tests::boundaries::support::sha('b'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let call_command = crate::cli::openai::parse(&call_args)
+        .expect("parse call")
+        .expect("call command");
+    let call = crate::cli::openai::build_receipt(root, &call_command).expect("call");
+    write_json(
+        &root.join("validation_artifacts/openai/call-receipt.json"),
+        &call,
+    );
 }
 
 #[cfg(unix)]
@@ -87,20 +124,13 @@ fn secure_env_file(_path: &Path) {}
 #[test]
 fn openai_package_audit_rejects_secret_shaped_receipt() {
     let root = prepare_root("openai-package-audit");
-    let args = ["openai", "config", "prove"]
-        .into_iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>();
-    let command = crate::cli::openai::parse(&args)
-        .expect("parse")
-        .expect("openai command");
-    let mut receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
-    write_json(
-        &root.join("validation_artifacts/openai/config-receipt.json"),
-        &receipt,
-    );
+    write_config_and_call_receipts(&root);
     assert!(crate::audit::openai::package_failures(&root).is_empty());
 
+    let mut receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/openai/config-receipt.json"),
+    )
+    .expect("receipt");
     receipt["debug_secret"] = json!(format!("{}-{}", "sk", "leak"));
     write_json(
         &root.join("validation_artifacts/openai/config-receipt.json"),
@@ -118,14 +148,11 @@ fn openai_package_audit_rejects_secret_shaped_receipt() {
 #[test]
 fn openai_package_audit_rejects_wrong_candidate_receipt() {
     let root = prepare_root("openai-wrong-candidate");
-    let args = ["openai", "config", "prove"]
-        .into_iter()
-        .map(ToString::to_string)
-        .collect::<Vec<_>>();
-    let command = crate::cli::openai::parse(&args)
-        .expect("parse")
-        .expect("openai command");
-    let mut receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
+    write_config_and_call_receipts(&root);
+    let mut receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/openai/config-receipt.json"),
+    )
+    .expect("receipt");
     receipt["candidate_digest"] = json!(crate::self_tests::boundaries::support::sha('b'));
     write_json(
         &root.join("validation_artifacts/openai/config-receipt.json"),
@@ -136,6 +163,28 @@ fn openai_package_audit_rejects_wrong_candidate_receipt() {
         failures
             .iter()
             .any(|item| item == "openai_config_receipt_candidate_digest_mismatch")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn openai_package_audit_rejects_wrong_call_candidate() {
+    let root = prepare_root("openai-wrong-call-candidate");
+    write_config_and_call_receipts(&root);
+    let mut receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/openai/call-receipt.json"),
+    )
+    .expect("receipt");
+    receipt["candidate_digest"] = json!(crate::self_tests::boundaries::support::sha('c'));
+    write_json(
+        &root.join("validation_artifacts/openai/call-receipt.json"),
+        &receipt,
+    );
+    let failures = crate::audit::openai::package_failures(&root);
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "openai_call_receipt_candidate_digest_mismatch")
     );
     std::fs::remove_dir_all(root).expect("cleanup");
 }

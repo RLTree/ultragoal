@@ -34,6 +34,7 @@
     "observe stack smoke",
     "observe stack up",
     "observe traces query",
+    "openai call prove",
     "openai config prove",
     "package digest",
     "product prove-cohesion",
@@ -99,9 +100,9 @@
     "status": "blocked",
     "families": {
       "commands": {
-        "total": 58,
+        "total": 59,
         "fitted": 1,
-        "partially_fitted": 20,
+        "partially_fitted": 21,
         "unfitted": 37
       },
       "surfaces": {
@@ -1355,6 +1356,34 @@
       "claim_impact": "supports_openai_config_resolution_only_and_blocks_openai_dependent_completion_readiness_release_update_goal_claims",
       "current_owner_surface": "command:openai config prove",
       "next_unfitted_surface": "same-candidate live log metric trace query proof for openai config prove"
+    },
+    "openai call prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "typed no-network and offline call receipt producer",
+        "command-level observability receipt",
+        "package audit currentness check",
+        "redacted model-output non-authority blockers"
+      ],
+      "missing_surfaces": [
+        "same-candidate live logs query proof",
+        "same-candidate live metrics query proof",
+        "same-candidate live traces query proof",
+        "live OpenAI provider invocation receipt",
+        "promptfoo and improvement-loop call adapter binding"
+      ],
+      "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
+      "focused_tests": [
+        "openai_call_receipt_blocks_live_model_claims",
+        "openai_package_audit_rejects_wrong_call_candidate"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/openai/call-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_openai_call_receipt_shape_only_and_blocks_live_model_completion_readiness_release_update_goal_claims",
+      "current_owner_surface": "command:openai call prove",
+      "next_unfitted_surface": "same-candidate live log metric trace query proof for openai call prove"
     }
   },
   "surface_inventory": {
