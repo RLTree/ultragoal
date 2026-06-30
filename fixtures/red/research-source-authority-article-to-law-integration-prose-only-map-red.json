@@ -1,0 +1,15 @@
+{
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
+  "expected_failure": {
+    "check_id": "research-source-authority-article-to-law-integration",
+    "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map"
+  },
+  "id": "research-source-authority-article-to-law-integration-prose-only-map-red",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/prose_only_map",
+      "value": false
+    }
+  ]
+}

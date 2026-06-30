@@ -100,6 +100,7 @@ pub const CHECK_IDS: &[&str] = &[
     "raw-private-artifact-handling-category-only-evidence",
     "ready-receipt-provenance",
     "red-fixture-coverage",
+    "research-source-authority-article-to-law-integration",
     "repo-knowledge-index-core-beliefs",
     "required-claim-closure",
     "restartable-execplans",

@@ -1234,6 +1234,16 @@
       "obligation": "worktree lane-owner model/reasoning cost policy",
       "package_surface": "templates/PLANS.md; templates/LANE_EXECPLAN.md; skills/execplan-lane; skills/orchestrator-reconciler",
       "source": "templates/agent-standards/03-execplans-worktrees-and-orchestration.md#Worktree And State Isolation; user operating preference"
+    },
+    {
+      "claim_ceiling_impact": "research_backed_claims_withheld_without_current_article_to_law_trace",
+      "coverage_status": "covered",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "id": "research-source-authority-article-to-law-integration",
+      "missing_validation_fixture_or_receipt": "source audit requires research source cards, source registry, article-to-law trace, schema validation, mandatory-law surface, source-obligation parity, red fixtures, green fixture, package inventory entries, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers",
+      "obligation": "Research source authority and article-to-law integration",
+      "package_surface": "docs/research-source-cards.json; docs/research-source-registry.json; docs/research-article-to-law-trace.json; schemas/research-source-cards.schema.json; schemas/research-source-registry.schema.json; schemas/research-article-to-law-trace.schema.json; validator/src/audit/research/mod.rs",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#gate-93-research-source-authority-and-article-to-law-integration"
     }
   ],
   "schema": "harness-ultragoal.source-obligation-matrix.v1"

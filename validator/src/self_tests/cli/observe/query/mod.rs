@@ -4,12 +4,11 @@ use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 
-mod fitting_receipts;
-mod fitting_support;
+mod fitting;
 mod matching;
 mod run;
 mod text;
-use fitting_support::write_fitted_inventory;
+use fitting::support::write_fitted_inventory;
 
 #[test]
 fn observe_green_prove_and_query_helpers_are_typed() {

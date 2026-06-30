@@ -109,6 +109,18 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "mandatory-law-surfaces.schema.json",
         ),
         (
+            "docs/research-source-cards.json",
+            "research-source-cards.schema.json",
+        ),
+        (
+            "docs/research-source-registry.json",
+            "research-source-registry.schema.json",
+        ),
+        (
+            "docs/research-article-to-law-trace.json",
+            "research-article-to-law-trace.schema.json",
+        ),
+        (
             "docs/plugin-cohesion-manifest.json",
             "plugin-cohesion-manifest.schema.json",
         ),

@@ -1666,6 +1666,34 @@
       "required_execplan_refs": [
         "tech-debt-tracker.md"
       ]
+    },
+    {
+      "id": "openai-api-key-model-cost-external-ai-boundary",
+      "source_law": "target-repo green fixture central law: openai-api-key-model-cost-external-ai-boundary",
+      "required_behavior": "The openai-api-key-model-cost-external-ai-boundary law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
+    },
+    {
+      "id": "research-source-authority-article-to-law-integration",
+      "source_law": "target-repo green fixture central law: research-source-authority-article-to-law-integration",
+      "required_behavior": "The research-source-authority-article-to-law-integration law is represented in the target-repo green fixture and routed through the target standards check.",
+      "enforcement_status": "mechanized",
+      "gate_or_fixture_path": "scripts/check-agent-standards",
+      "owner_lane": "target-repo-fixture",
+      "claim_ids_affected": "package_static_fixture_only",
+      "current_status": "active",
+      "blocker_or_repair_action": "Run scripts/check-agent-standards; target green fixture cannot claim compliance if this row or evidence is stale.",
+      "required_execplan_refs": [
+        "tech-debt-tracker.md"
+      ]
     }
   ]
 }

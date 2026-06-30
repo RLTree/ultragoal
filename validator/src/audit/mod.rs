@@ -19,6 +19,7 @@ pub(crate) mod product;
 pub(crate) mod promptfoo;
 pub(crate) mod receipt;
 pub(crate) mod red;
+pub(crate) mod research;
 pub(crate) mod review_history;
 pub(crate) mod rust;
 pub(crate) mod session;

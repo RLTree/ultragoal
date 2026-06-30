@@ -20,6 +20,10 @@ pub fn checks(
     crate::audit::red::catalog::check(root, store, &mut failures);
     crate::audit::package::text_checks::run(root, store, check_ids, &mut failures);
     crate::audit::review_history::check(root, &mut failures);
+    failures
+        .entry("research-source-authority-article-to-law-integration".to_string())
+        .or_default()
+        .extend(crate::audit::research::failures(root));
     for failure in crate::review::round::fixture_failures(root) {
         push(&mut failures, "validator-execution-provenance", failure);
     }

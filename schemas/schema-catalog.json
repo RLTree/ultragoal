@@ -19,16 +19,12 @@
       "path": "schemas/cli-control-plane-receipt.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/cli-transactional-finalization-receipt.schema.json",
-      "path": "schemas/cli-transactional-finalization-receipt.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/cli-performance-receipt.schema.json",
       "path": "schemas/cli-performance-receipt.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/package-surface-audit-receipt.schema.json",
-      "path": "schemas/package-surface-audit-receipt.schema.json"
+      "id": "https://harness-ultragoal.local/schemas/cli-transactional-finalization-receipt.schema.json",
+      "path": "schemas/cli-transactional-finalization-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/codex-registry-exposure.schema.json",
@@ -67,16 +63,16 @@
       "path": "schemas/dogfood-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/final-packet-proof.schema.json",
+      "path": "schemas/final-packet-proof.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/fit-repo-receipt.schema.json",
       "path": "schemas/fit-repo-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/fixture-bundle.schema.json",
       "path": "schemas/fixture-bundle.schema.json"
-    },
-    {
-      "id": "https://harness-ultragoal.local/schemas/final-packet-proof.schema.json",
-      "path": "schemas/final-packet-proof.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/foundational-law-traceability.schema.json",
@@ -91,12 +87,12 @@
       "path": "schemas/halo-capability-receipt.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/law-family-aliases.schema.json",
-      "path": "schemas/law-family-aliases.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/lane-registry.schema.json",
       "path": "schemas/lane-registry.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/law-family-aliases.schema.json",
+      "path": "schemas/law-family-aliases.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/mandatory-law-surface-receipt.schema.json",
@@ -139,12 +135,12 @@
       "path": "schemas/openai-call-receipt.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/openai-cost-rate-limit-receipt.schema.json",
-      "path": "schemas/openai-cost-rate-limit-receipt.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/openai-config-receipt.schema.json",
       "path": "schemas/openai-config-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/openai-cost-rate-limit-receipt.schema.json",
+      "path": "schemas/openai-cost-rate-limit-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/openai-key-policy.schema.json",
@@ -159,6 +155,10 @@
       "path": "schemas/openai-provider-policy.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/package-surface-audit-receipt.schema.json",
+      "path": "schemas/package-surface-audit-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
       "path": "schemas/plugin-cohesion-manifest.schema.json"
     },
@@ -169,10 +169,6 @@
     {
       "id": "https://harness-ultragoal.local/schemas/plugin-product-journey-receipt.schema.json",
       "path": "schemas/plugin-product-journey-receipt.schema.json"
-    },
-    {
-      "id": "https://harness-ultragoal.local/schemas/promptfoo-adapter-receipt.schema.json",
-      "path": "schemas/promptfoo-adapter-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/plugin-scout-receipt.schema.json",
@@ -231,16 +227,20 @@
       "path": "schemas/promotion-receipt.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/promptfoo-adapter-receipt.schema.json",
+      "path": "schemas/promptfoo-adapter-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/ready-for-merge.schema.json",
       "path": "schemas/ready-for-merge.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/red-fixture.schema.json",
-      "path": "schemas/red-fixture.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/red-fixture-report.schema.json",
       "path": "schemas/red-fixture-report.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/red-fixture.schema.json",
+      "path": "schemas/red-fixture.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/red-fixtures-catalog.schema.json",
@@ -249,6 +249,18 @@
     {
       "id": "https://harness-ultragoal.local/schemas/red-packet.schema.json",
       "path": "schemas/red-packet.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/research-article-to-law-trace.schema.json",
+      "path": "schemas/research-article-to-law-trace.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/research-source-cards.schema.json",
+      "path": "schemas/research-source-cards.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/research-source-registry.schema.json",
+      "path": "schemas/research-source-registry.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/restartable-execplan-receipt.schema.json",
@@ -265,6 +277,10 @@
     {
       "id": "https://harness-ultragoal.local/schemas/runtime-tool-identity-receipt.schema.json",
       "path": "schemas/runtime-tool-identity-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/rust-devx-receipt.schema.json",
+      "path": "schemas/rust-devx-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/semantic-classification-receipt.schema.json",
@@ -297,10 +313,6 @@
     {
       "id": "https://harness-ultragoal.local/schemas/verification-backlog.schema.json",
       "path": "schemas/verification-backlog.schema.json"
-    },
-    {
-      "id": "https://harness-ultragoal.local/schemas/rust-devx-receipt.schema.json",
-      "path": "schemas/rust-devx-receipt.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/workspace-gc-receipt.schema.json",

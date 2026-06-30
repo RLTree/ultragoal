@@ -76,6 +76,7 @@ const REQUIRED_OBLIGATIONS: &[&str] = &[
     "purpose-backed-active-files",
     "quality-score-taste-gates",
     "raw-private-artifact-handling-category-only-evidence",
+    "research-source-authority-article-to-law-integration",
     "repo-knowledge-index-core-beliefs",
     "restartable-execplans",
     "review-disagreement-override-judgment-boundary-governance",

@@ -11224,6 +11224,42 @@
   },
   {
     "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source"
+    },
+    "id": "research-source-authority-article-to-law-integration-unmapped-source-red",
+    "packet_digest": "sha256:95e53980e2379f1d12c6d1970aad6f81a4549d7a0812c0c869bd874f82d6e078",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map"
+    },
+    "id": "research-source-authority-article-to-law-integration-prose-only-map-red",
+    "packet_digest": "sha256:6dd14c0908e8e401121603ecf91e6189b9393c059c3642b702d867cf8ffae856",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard"
+    },
+    "id": "research-source-authority-article-to-law-integration-missing-claim-guard-red",
+    "packet_digest": "sha256:b5ce26dcfa5c4c6a867fcab863f4c6141889ef171f7dab6cc2efd7c9684dbb62",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "research-source-authority-article-to-law-integration",
+      "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted"
+    },
+    "id": "research-source-authority-article-to-law-integration-package-omitted-red",
+    "packet_digest": "sha256:6766030b3c89ae61e02e45424a6a18b3bcfce808faab3fc672ac03cba146c618",
+    "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "worktree-teardown",
       "error": "wrong_lane_worktree_root"
     },

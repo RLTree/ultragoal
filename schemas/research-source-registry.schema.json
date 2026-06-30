@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/research-source-registry.schema.json",
+  "title": "Harness Ultragoal Research Source Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "claim_impact", "sources"],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.research-source-registry.v1" },
+    "claim_impact": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "canonical_url",
+          "retrieved_at",
+          "source_card_path",
+          "source_card_digest",
+          "law_family_aliases",
+          "canonical_law_ids_affected",
+          "required_plugin_surfaces",
+          "setup_retrofit_implications",
+          "tool_package_implications",
+          "privacy_implications",
+          "claim_ceiling_impact"
+        ],
+        "properties": {
+          "source_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "canonical_url": { "type": "string", "minLength": 1 },
+          "retrieved_at": { "type": "string", "minLength": 1 },
+          "source_card_path": { "type": "string", "minLength": 1 },
+          "source_card_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "law_family_aliases": { "$ref": "#/$defs/non_empty_strings" },
+          "canonical_law_ids_affected": { "$ref": "#/$defs/non_empty_strings" },
+          "required_plugin_surfaces": { "$ref": "#/$defs/non_empty_strings" },
+          "setup_retrofit_implications": { "$ref": "#/$defs/non_empty_strings" },
+          "tool_package_implications": { "$ref": "#/$defs/non_empty_strings" },
+          "privacy_implications": { "$ref": "#/$defs/non_empty_strings" },
+          "claim_ceiling_impact": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

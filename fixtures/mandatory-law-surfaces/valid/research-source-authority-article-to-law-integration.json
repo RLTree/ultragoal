@@ -1,0 +1,39 @@
+{
+  "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+  "law_id": "research-source-authority-article-to-law-integration",
+  "standards_row_id": "research-source-authority-article-to-law-integration",
+  "source_obligation_id": "research-source-authority-article-to-law-integration",
+  "foundational_trace_id": "research-source-authority-article-to-law-integration",
+  "validator_check_id": "research-source-authority-article-to-law-integration",
+  "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
+  "claim_ceiling_guard": "research_backed_claims_withheld_without_current_article_to_law_trace",
+  "enforcement_status": "deterministic_fail_closed",
+  "behavior_failure_modes": [
+    "research_source_authority_article_to_law_integration_unmapped_source",
+    "research_source_authority_article_to_law_integration_prose_only_map",
+    "research_source_authority_article_to_law_integration_missing_claim_guard",
+    "research_source_authority_article_to_law_integration_package_omitted"
+  ],
+  "law_specific": {
+    "unmapped_source": true,
+    "prose_only_map": true,
+    "missing_claim_guard": true,
+    "package_omitted": true
+  },
+  "red_fixture_ids": [
+    "research-source-authority-article-to-law-integration-unmapped-source-red",
+    "research-source-authority-article-to-law-integration-prose-only-map-red",
+    "research-source-authority-article-to-law-integration-missing-claim-guard-red",
+    "research-source-authority-article-to-law-integration-package-omitted-red"
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+      "digest": "sha256:db01688a55f8bbeaffd1ad0d2632650ab952b8b0ae44a9d9194edfd01cc635fb"
+    },
+    {
+      "path": "docs/source-obligation-matrix.json",
+      "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339"
+    }
+  ]
+}

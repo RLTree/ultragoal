@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/research-source-cards.schema.json",
+  "title": "Harness Ultragoal Research Source Cards",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "captured_at", "sources"],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.research-source-cards.v1" },
+    "captured_at": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "title", "canonical_url", "source_kind", "requirements"],
+        "properties": {
+          "source_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "canonical_url": { "type": "string", "minLength": 1 },
+          "source_kind": {
+            "type": "string",
+            "enum": ["public_web", "attached_user_source_card"]
+          },
+          "requirements": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["requirement_id", "summary"],
+              "properties": {
+                "requirement_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+                "summary": { "type": "string", "minLength": 20 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

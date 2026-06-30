@@ -82,6 +82,7 @@
         "authority-exhaustiveness-closed-enums-impossible-state-elimination",
         "config-precedence-defaults-env-indirection",
         "offline-schema-catalog-resolver-portability",
+        "openai-api-key-model-cost-external-ai-boundary",
         "portable-non-prescriptive-adapter-implementation-choice",
         "schema-evolution-receipt-migration-stale-version-invalidation",
         "secret-token-boundaries",
@@ -360,6 +361,7 @@
         "failure-remediation-quality-agent-actionable-output",
         "feedback-to-rule-promotion",
         "historical-regression-corpus-session-review-signals",
+        "research-source-authority-article-to-law-integration",
         "standards-gardener-promotion"
       ],
       "claim_authority": "none",
@@ -404,7 +406,7 @@
   "aliases_claim_authority": false,
   "canonical_authority": "source_obligation_and_mandatory_law_ids",
   "canonical_id_replacement_allowed": false,
-  "canonical_law_count": 112,
+  "canonical_law_count": 114,
   "doctrine_source": "attachment:d9c71d90-233f-4f47-bdf5-95ced6e4766c/pasted-text.txt",
   "doctrine_vocabulary": [
     "claim-governance system",

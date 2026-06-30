@@ -1,0 +1,15 @@
+{
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json",
+  "expected_failure": {
+    "check_id": "research-source-authority-article-to-law-integration",
+    "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted"
+  },
+  "id": "research-source-authority-article-to-law-integration-package-omitted-red",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/package_omitted",
+      "value": false
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/research-article-to-law-trace.schema.json",
+  "title": "Harness Ultragoal Research Article To Law Trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "claim_impact", "entries"],
+  "properties": {
+    "schema": { "const": "harness-ultragoal.research-article-to-law-trace.v1" },
+    "claim_impact": { "type": "string", "minLength": 1 },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirement_id",
+          "source_id",
+          "canonical_law_ids",
+          "standards_row_ids",
+          "source_obligation_ids",
+          "foundational_trace_ids",
+          "schemas",
+          "validator_check_ids",
+          "red_fixture_ids",
+          "green_fixture_paths",
+          "receipt_requirements",
+          "package_inventory_paths",
+          "setup_retrofit_outputs",
+          "claim_guards",
+          "final_packet_fields",
+          "update_goal_blockers"
+        ],
+        "properties": {
+          "requirement_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "source_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "canonical_law_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "standards_row_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "source_obligation_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "foundational_trace_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "schemas": { "$ref": "#/$defs/non_empty_strings" },
+          "validator_check_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "red_fixture_ids": { "$ref": "#/$defs/non_empty_strings" },
+          "green_fixture_paths": { "$ref": "#/$defs/non_empty_strings" },
+          "receipt_requirements": { "$ref": "#/$defs/non_empty_strings" },
+          "package_inventory_paths": { "$ref": "#/$defs/non_empty_strings" },
+          "setup_retrofit_outputs": { "$ref": "#/$defs/non_empty_strings" },
+          "claim_guards": { "$ref": "#/$defs/non_empty_strings" },
+          "final_packet_fields": { "$ref": "#/$defs/non_empty_strings" },
+          "update_goal_blockers": { "$ref": "#/$defs/non_empty_strings" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

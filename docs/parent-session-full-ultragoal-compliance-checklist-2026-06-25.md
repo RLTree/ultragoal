@@ -2622,37 +2622,37 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 
 ## Gate 93 - Research Source Authority And Article-To-Law Integration
 
-- [ ] Mandatory research-source registry includes the original nine observability/harness-engineering sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article with stable ids, URLs, source digests, retrieved/source-card evidence, affected canonical law ids, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
-  - Evidence:
-  - Registry path:
-  - Source digests:
-  - Validator check:
-  - Candidate digest:
-  - Status:
+- [x] Mandatory research-source registry includes the original nine observability/harness-engineering sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article with stable ids, URLs, source digests, retrieved/source-card evidence, affected canonical law ids, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
+  - Evidence: `cargo test --offline research --lib --quiet` passed 5/5; `jq -r '.sources | length, (.[] | .source_id)' docs/research-source-registry.json` reported 13 governed sources including the nine observability/harness sources, OpenAI agent-improvement loop, OpenAI self-improving tax-agent, attached Rust guide, and attached TypeScript guide.
+  - Registry path: `docs/research-source-registry.json`; source-card path `docs/research-source-cards.json`; schemas `schemas/research-source-registry.schema.json` and `schemas/research-source-cards.schema.json`.
+  - Source digests: Registry binds source-card digest `sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d`.
+  - Validator check: `research-source-authority-article-to-law-integration` implemented in `validator/src/audit/research/` and wired into source audit check ids/schema enums.
+  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383` from `target/debug/ultragoal --root . package digest`.
+  - Status: validated for the registry sub-row only. Claim impact: source-local research registry authority only; no review readiness, package readiness, release readiness, final-packet correctness, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] Article-to-law trace maps every source requirement to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim guards, and final-packet fields.
-  - Evidence:
-  - Trace path:
-  - Standards rows:
-  - Source obligations:
-  - Fixture ids:
-  - Candidate digest:
-  - Status:
+  - Evidence: Partial source-local trace exists and focused green/bad-path tests passed: `cargo test --offline research --lib --quiet` 5/5, `cargo test --offline hu_family --lib --quiet` 5/5, `cargo test --offline schema_catalog --lib --quiet` 3/3. `jq -r '.entries | length' docs/research-article-to-law-trace.json` reports 14 mapped requirement rows. This row remains unchecked because complete tamper-fixture closure and full same-candidate source-audit proof are not yet present.
+  - Trace path: `docs/research-article-to-law-trace.json`; schema `schemas/research-article-to-law-trace.schema.json`.
+  - Standards rows: `templates/agent-standards/enforcement.json` row `research-source-authority-article-to-law-integration`.
+  - Source obligations: `docs/source-obligation-matrix.json` row `research-source-authority-article-to-law-integration`; foundational trace row in `docs/foundational-law-traceability.json`; mandatory-law row in `docs/mandatory-law-surfaces.json`.
+  - Fixture ids: red fixtures `research-source-authority-article-to-law-integration-unmapped-source-red`, `research-source-authority-article-to-law-integration-prose-only-map-red`, `research-source-authority-article-to-law-integration-missing-claim-guard-red`, and `research-source-authority-article-to-law-integration-package-omitted-red`; green fixture `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
+  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
+  - Status: in_progress. Claim impact: trace mapping is source-local only and does not satisfy full Gate 93 until tamper fixtures, complete claim guards, final-packet fields, and source-audit/red-report evidence are current.
 
 - [ ] Validator fails unmapped, stale, prose-only, umbrella-only, law-family-alias-only, fixture-incomplete, receipt-missing, package-omitted, setup/retrofit-omitted, or claim-guard-omitted research requirements.
-  - Evidence:
-  - Red fixtures:
-  - Green fixtures:
-  - Tamper fixtures:
-  - Candidate digest:
-  - Status:
+  - Evidence: Partial production validator and tests exist. `cargo test --offline research --lib --quiet` passed current-repo green path plus stale source-card digest, alias-only mapping, missing claim guard/package path, and missing mandatory source bad paths. Full `cargo test --offline --lib --quiet` passed 503/503 before this checklist update. This row remains unchecked until complete tamper fixtures and current source audit/red report prove the production path.
+  - Red fixtures: `fixtures/red/research-source-authority-article-to-law-integration-*.json` four bad-path packets, cataloged in `templates/RED_FIXTURES.json` and schema enums.
+  - Green fixtures: `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
+  - Tamper fixtures: Pending; no checked claim for tamper closure.
+  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
+  - Status: in_progress. Claim impact: source-local validator hardening only; broad research-law completion and completion-adjacent claims remain blocked.
 
 - [ ] Claim guards block completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, and `update_goal()` when mandatory research mapping is incomplete.
-  - Evidence:
-  - Claim guards:
-  - Receipt:
-  - Candidate digest:
-  - Status:
+  - Evidence: Partial guard strings and validator bad paths exist in `docs/research-article-to-law-trace.json`, `docs/mandatory-law-surfaces.json`, `templates/agent-standards/enforcement.json`, and `validator/src/audit/research/`. This row remains unchecked because final-packet/update_goal claim-guard closure and current source-audit proof have not been regenerated.
+  - Claim guards: `research_backed_claims_withheld_without_current_article_to_law_trace`; update_goal blocker `research_source_authority_incomplete`.
+  - Receipt: No current same-candidate source-audit receipt yet for this Gate 93 checkpoint.
+  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
+  - Status: in_progress. Claim impact: all completion, readiness, release, registry/reviewer exposure, final-packet correctness, and `update_goal()` claims remain unsupported.
 
 ## Gate 94 - Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff
 
@@ -3306,7 +3306,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
-- [ ] Gate 93 evidence path:
+- [ ] Gate 93 evidence path: Partial source-local checkpoint for candidate `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`. Evidence paths: `docs/research-source-cards.json`, `docs/research-source-registry.json`, `docs/research-article-to-law-trace.json`, `schemas/research-source-*.schema.json`, `schemas/research-article-to-law-trace.schema.json`, `validator/src/audit/research/`, `validator/src/self_tests/audit/research.rs`, `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`, and `fixtures/red/research-source-authority-article-to-law-integration-*.json`. Verification so far: `cargo test --offline research --lib --quiet` 5/5, `cargo test --offline hu_family --lib --quiet` 5/5, `cargo test --offline red_identity --lib --quiet` 3/3, `cargo test --offline red_fixture_runtime_binding --lib --quiet` 1/1, `cargo test --offline schema_catalog --lib --quiet` 3/3, `cargo test --offline namespace_source_topology_is_selective_about_prefixes_and_generic_leaves --lib --quiet` 1/1, `cargo test --offline audit_schema_cli_and_target_edges --lib --quiet` 1/1, `cargo test --offline target_capability_failures_report_expected_mismatch_and_missing_fixture --lib --quiet` 1/1, `cargo test --offline --lib --quiet` 503/503, `cargo fmt --check` pass, and raw line-cap scan emitted no rows. Stop condition 105 remains unchecked because tamper fixtures, full claim-guard/final-packet/update_goal closure, and current canonical source audit/red report evidence are not complete. Claim impact: source-local Gate 93 progress only; no readiness, release, completion, final-packet correctness, registry/reviewer exposure, or `update_goal()` support.
 
 106. Harness Improvement Loop proof is current and same-candidate across traces, typed feedback, clusters, promptfoo eval generation and execution, HALO-ranked proposals, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, promotion into laws/fixtures/schemas/standards, and CLI loop-closure receipt.
 

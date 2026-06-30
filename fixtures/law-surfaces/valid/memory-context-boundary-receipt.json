@@ -4,13 +4,13 @@
   "memory_artifacts": [
     {
       "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-      "digest": "sha256:5a88466aa08388aa960a53159095f2073cc284628298bf7541d9fe8f4343e741"
+      "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba"
     }
   ],
   "live_same_surface_evidence": [
     {
       "path": "docs/source-obligation-matrix.json",
-      "digest": "sha256:a0fc260325df1d5e6a672cf5ac4d9d712ead12c5051358390edc573d5d1e2c3a"
+      "digest": "sha256:7933585dada133587ca1109f45cf15b52ee9a4cad4770db892add60148523339"
     },
     {
       "path": "validator/src/audit/law/surface/receipts.rs",

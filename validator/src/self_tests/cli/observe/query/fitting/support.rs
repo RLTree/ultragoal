@@ -1,7 +1,7 @@
 use serde_json::json;
 use std::{fs, path::Path};
 
-pub(super) fn write_fitted_inventory(root: &Path) {
+pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &Path) {
     let mut rows = serde_json::Map::new();
     let mut surface_rows = serde_json::Map::new();
     let commands = crate::audit::observability::required_commands()
@@ -52,7 +52,7 @@ pub(super) fn write_fitted_inventory(root: &Path) {
         }),
     )
     .expect("write fitted inventory");
-    super::fitting_receipts::write_fitting_receipts(root);
+    super::receipts::write_fitting_receipts(root);
 }
 
 fn fitted_control_board() -> serde_json::Value {

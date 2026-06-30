@@ -1,0 +1,166 @@
+{
+  "schema": "harness-ultragoal.research-source-cards.v1",
+  "captured_at": "2026-06-30T00:00:00Z",
+  "sources": [
+    {
+      "source_id": "openai-harness-engineering",
+      "title": "OpenAI Harness Engineering",
+      "canonical_url": "https://openai.com/index/harness-engineering/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "openai-harness-agent-legible-repo",
+          "summary": "Repositories must expose compact maps, mechanical invariants, and filesystem surfaces that agents can navigate without relying on author memory."
+        },
+        {
+          "requirement_id": "openai-harness-local-observability-loop",
+          "summary": "Local worktree-scoped logs, metrics, traces, runtime state, and failure evidence must be queryable by agents and used in repair loops."
+        }
+      ]
+    },
+    {
+      "source_id": "openai-codex-iterative-repair-loops",
+      "title": "Build iterative repair loops with Codex",
+      "canonical_url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "codex-repair-review-repair-validate",
+          "summary": "Validation feedback must become structured repair input in a review, repair, validate loop rather than dead-end logs or manual spelunking."
+        }
+      ]
+    },
+    {
+      "source_id": "openai-agents-observability",
+      "title": "OpenAI Agents observability guidance",
+      "canonical_url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "openai-agents-run-observability",
+          "summary": "Workflow runs must expose traceable model, tool, guardrail, and custom spans that can be inspected before outputs influence claims."
+        }
+      ]
+    },
+    {
+      "source_id": "openai-agents-sdk-tracing",
+      "title": "OpenAI Agents SDK tracing",
+      "canonical_url": "https://openai.github.io/openai-agents-python/tracing/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "openai-agents-trace-span-discipline",
+          "summary": "Runs must have coherent traces with root spans, child spans, processors/exporters, and enough metadata to debug and evaluate workflows."
+        }
+      ]
+    },
+    {
+      "source_id": "google-sre-monitoring-workbook",
+      "title": "Google SRE Monitoring Workbook",
+      "canonical_url": "https://sre.google/workbook/monitoring/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "sre-monitoring-diagnose-compare-freshness",
+          "summary": "Monitoring must support alerting, investigation, diagnosis, visualization, before/after comparison, trend understanding, and freshness-sensitive interpretation."
+        }
+      ]
+    },
+    {
+      "source_id": "google-sre-four-golden-signals",
+      "title": "Google SRE four golden signals",
+      "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "sre-four-golden-signals-cli",
+          "summary": "Latency, traffic, errors, and saturation must be translated into command, check, fixture, receipt, query, cache, process, and exporter measurements."
+        }
+      ]
+    },
+    {
+      "source_id": "charity-majors-structured-events",
+      "title": "Live Your Best Life With Structured Events",
+      "canonical_url": "https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "structured-events-wide-context",
+          "summary": "Events should be wide and richly structured so agents can ask new questions and localize unknown failures without dashboard theater."
+        }
+      ]
+    },
+    {
+      "source_id": "honeycomb-high-cardinality",
+      "title": "Honeycomb high cardinality guidance",
+      "canonical_url": "https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "high-cardinality-correlation-keys",
+          "summary": "Run, correlation, trace, receipt, candidate, law, check, and claim identifiers are essential correlation keys, while metrics labels must remain bounded and redacted."
+        }
+      ]
+    },
+    {
+      "source_id": "opentelemetry-semantic-conventions",
+      "title": "OpenTelemetry semantic conventions and naming",
+      "canonical_url": "https://opentelemetry.io/docs/concepts/semantic-conventions/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "otel-semantic-naming-correlation",
+          "summary": "Logs, metrics, traces, and resources need consistent semantic names and attributes so telemetry can correlate across signals."
+        }
+      ]
+    },
+    {
+      "source_id": "openai-agent-improvement-loop",
+      "title": "OpenAI agent improvement loop cookbook",
+      "canonical_url": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "openai-agent-improvement-feedback-evals",
+          "summary": "Agent improvement must connect traces and feedback to generated evals, ranked repairs, validation, before/after comparison, and durable promotion."
+        }
+      ]
+    },
+    {
+      "source_id": "openai-self-improving-tax-agent",
+      "title": "OpenAI self-improving tax-agent pattern",
+      "canonical_url": "https://openai.com/index/building-self-improving-tax-agents-with-codex/",
+      "source_kind": "public_web",
+      "requirements": [
+        {
+          "requirement_id": "tax-agent-domain-task-feedback-loop",
+          "summary": "Domain-agent improvement claims require realistic domain tasks, expert-source feedback, rubrics, error taxonomy, eval generation, ranked repair, and before/after proof."
+        }
+      ]
+    },
+    {
+      "source_id": "attached-rust-devx-guide",
+      "title": "Attached Rust Developer Experience Governance Proposal",
+      "canonical_url": "codex-attachment://rust-devx-guide",
+      "source_kind": "attached_user_source_card",
+      "requirements": [
+        {
+          "requirement_id": "rust-devx-cli-authority",
+          "summary": "Cargo and Rust tools are observations; only ultragoal may convert tool output into typed same-candidate receipts and claim ceilings."
+        }
+      ]
+    },
+    {
+      "source_id": "attached-typescript-frontend-guide",
+      "title": "Attached TypeScript/frontend developer guide",
+      "canonical_url": "codex-attachment://typescript-frontend-guide",
+      "source_kind": "attached_user_source_card",
+      "requirements": [
+        {
+          "requirement_id": "typescript-frontend-governed-boundaries",
+          "summary": "TypeScript and UI repos require pinned toolchains, strict type/lint/test/browser/accessibility coverage, governed parsers, and CLI receipts before tool output can affect claims."
+        }
+      ]
+    }
+  ]
+}
