@@ -49,6 +49,14 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "namespace-class-registry.schema.json",
         ),
         (
+            "docs/openai-key-policy.json",
+            "openai-key-policy.schema.json",
+        ),
+        (
+            "validation_artifacts/openai/config-receipt.json",
+            "openai-config-receipt.schema.json",
+        ),
+        (
             "fixtures/namespace/valid/namespace-class-registry-valid.json",
             "namespace-class-registry.schema.json",
         ),

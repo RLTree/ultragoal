@@ -131,6 +131,18 @@
       "path": "schemas/observability-trace.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/openai-call-receipt.schema.json",
+      "path": "schemas/openai-call-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/openai-config-receipt.schema.json",
+      "path": "schemas/openai-config-receipt.schema.json"
+    },
+    {
+      "id": "https://harness-ultragoal.local/schemas/openai-key-policy.schema.json",
+      "path": "schemas/openai-key-policy.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/plugin-cohesion-manifest.schema.json",
       "path": "schemas/plugin-cohesion-manifest.schema.json"
     },

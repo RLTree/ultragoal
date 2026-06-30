@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/openai-call-receipt.schema.json",
+  "title": "Harness Ultragoal OpenAI Call Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "provider_mode",
+    "model_identity",
+    "endpoint_api_family",
+    "purpose",
+    "prompt_input_digest",
+    "output_digest",
+    "schema_id",
+    "request_id",
+    "token_cost_rate_limit",
+    "timeout_retry_backoff",
+    "run_id",
+    "correlation_id",
+    "redaction_status",
+    "model_output_authority",
+    "claim_impact"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.openai-call-receipt.v1"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail",
+        "not_run"
+      ]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "provider_mode": {
+      "enum": [
+        "openai_live",
+        "offline_fixture",
+        "local_mock",
+        "no_network"
+      ]
+    },
+    "model_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "endpoint_api_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prompt_input_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "output_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "schema_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "token_cost_rate_limit": {
+      "type": "object"
+    },
+    "timeout_retry_backoff": {
+      "type": "object"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "redaction_status": {
+      "const": "pass"
+    },
+    "model_output_authority": {
+      "const": "observation_only_until_cli_schema_validated"
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

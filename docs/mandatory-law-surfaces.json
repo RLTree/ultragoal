@@ -2623,6 +2623,45 @@
     },
     {
       "behavior_failure_modes": [
+        "openai_api_key_model_cost_external_ai_boundary_secret_serialized",
+        "openai_api_key_model_cost_external_ai_boundary_model_output_authority_claim",
+        "openai_api_key_model_cost_external_ai_boundary_wrong_candidate_digest",
+        "openai_api_key_model_cost_external_ai_boundary_unbounded_cost"
+      ],
+      "claim_ceiling_guard": "openai_dependent_claims_withheld_without_redacted_typed_same_candidate_receipts",
+      "enforcement_status": "deterministic_fail_closed",
+      "evidence_artifacts": [
+        {
+          "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
+          "digest": "sha256:09170a8f6a1a3c5e3eff1ac4c1d9063650e55cd711acdadbd442cd64b4f0eeba"
+        },
+        {
+          "path": "docs/openai-key-policy.json",
+          "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8"
+        }
+      ],
+      "foundational_trace_id": "openai-api-key-model-cost-external-ai-boundary",
+      "law_id": "openai-api-key-model-cost-external-ai-boundary",
+      "law_specific": {
+        "secret_serialized": true,
+        "model_output_authority_claim": true,
+        "wrong_candidate_digest": true,
+        "unbounded_cost": true
+      },
+      "red_fixture_ids": [
+        "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red",
+        "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red",
+        "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red",
+        "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red"
+      ],
+      "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
+      "source_obligation_id": "openai-api-key-model-cost-external-ai-boundary",
+      "standards_row_id": "openai-api-key-model-cost-external-ai-boundary",
+      "valid_fixture_path": "fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
+      "validator_check_id": "openai-api-key-model-cost-external-ai-boundary"
+    },
+    {
+      "behavior_failure_modes": [
         "orchestrator_state_machine_bounded_concurrency",
         "orchestrator_state_machine_single_authoritative_state",
         "orchestrator_state_machine_deterministic_workspaces",

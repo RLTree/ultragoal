@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/model_output_authority_claim",
+      "value": false
+    }
+  ],
+  "notes": "OpenAI model output must remain observation-only until parsed, schema-valid, and claim-guarded by the CLI.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/model_output_authority_claim",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/model_output_authority_claim",
+      "expectation": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim"
+    }
+  ]
+}

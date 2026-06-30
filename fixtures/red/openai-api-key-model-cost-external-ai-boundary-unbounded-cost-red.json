@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red",
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/unbounded_cost",
+      "value": false
+    }
+  ],
+  "notes": "OpenAI use must be bounded by timeout, retry, backoff, token, cost, and rate-limit receipt fields.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/unbounded_cost",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/unbounded_cost",
+      "expectation": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost"
+    }
+  ]
+}

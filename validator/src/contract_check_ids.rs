@@ -72,6 +72,7 @@ pub const CHECK_IDS: &[&str] = &[
     "non-e2e-claim-ceiling-confidence-bounds",
     "observability-claim-proof",
     "offline-schema-catalog-resolver-portability",
+    "openai-api-key-model-cost-external-ai-boundary",
     "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
     "orchestrator-state-machine",
     "parent-role-boundary",

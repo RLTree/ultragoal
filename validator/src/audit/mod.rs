@@ -11,6 +11,7 @@ pub(crate) mod law;
 pub(crate) mod mandatory;
 pub(crate) mod namespace;
 pub(crate) mod observability;
+pub(crate) mod openai;
 pub(crate) mod package;
 pub(crate) mod plugin;
 pub(crate) mod product;

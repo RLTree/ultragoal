@@ -55,6 +55,7 @@ const REQUIRED_OBLIGATIONS: &[&str] = &[
     "validator-source-namespace-topology",
     "non-e2e-claim-ceiling-confidence-bounds",
     "offline-schema-catalog-resolver-portability",
+    "openai-api-key-model-cost-external-ai-boundary",
     "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
     "orchestrator-state-machine",
     "plugin-bundled-component-graph-hook-app-mcp-safety",

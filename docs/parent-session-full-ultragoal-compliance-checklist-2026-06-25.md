@@ -2691,36 +2691,36 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 95 - OpenAI API, Key Authority, Model Identity, Cost, And External AI Boundary
 
 - [ ] Repo declares governed OpenAI API key destination and typed config policy; `OPENAI_API_KEY` is loaded only from an untracked local env surface or secure OpenAI Platform setup flow and is never committed, logged, traced, metric-labeled, packeted, or passed to child agents without typed authorization.
-  - Evidence:
-  - Config path:
-  - Redaction proof:
-  - Secret-scan proof:
-  - Candidate digest:
-  - Status:
+  - Evidence: Partial source-local config governance exists for package digest `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`. `target/debug/ultragoal --root . openai config prove --receipt validation_artifacts/openai/config-receipt.json` exited `0` and minted a passing receipt with `claim_ceiling = openai_config_resolution_only`; `cargo test --offline openai --lib --quiet` passed `4/4`; `cargo test --offline observability_registry --lib --quiet` passed `3/3`; `cargo fmt --check` passed; `find validator/src -name '*.rs' -exec wc -l {} + | awk '$2 != "total" && $1 > 250 { print }'` emitted no rows.
+  - Config path: `docs/openai-key-policy.json`; local key destination `.codex-worktree/env.sh` remains gitignored and untracked.
+  - Redaction proof: `validation_artifacts/openai/config-receipt.json` has `status = pass`, `redaction_status = pass`, `secret_material_serialized = false`, supports only `openai_config_redacted_resolution`, and blocks `completion`, `readiness`, `release`, `reviewer_exposure`, `app_registry_exposure`, `final_packet_correctness`, `update_goal_eligibility`, `product_success`, `model_output_authority`, and `live_model_claim`.
+  - Secret-scan proof: focused receipt/key-policy scan found no secret material in `validation_artifacts/openai/config-receipt.json`, `docs/openai-key-policy.json`, or the OpenAI schemas; tracked source contains detector literals and dummy test env declarations only, not the local key.
+  - Candidate digest: `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`; rerunning `target/debug/ultragoal --root . package digest` after receipt generation returned the same digest.
+  - Status: Partial, not checked. Config resolution is governed and redacted, but full Gate 95 remains open until live/offline OpenAI call receipts, token/cost/rate-limit policy, model-output parsing, provider-mode fixtures, and end-to-end claim guards are implemented and current.
 
 - [ ] Every OpenAI call receipt records model id, endpoint/API family, purpose, prompt/input digest, schema id, output digest, request id when available, token counts when available, cost estimate or cost-unavailable reason, latency, retry/backoff, rate-limit observations, redaction status, candidate digest, run id, correlation id, and claim impact.
-  - Evidence:
-  - Schema:
-  - Receipt:
-  - Validator check:
-  - Candidate digest:
-  - Status:
+  - Evidence: `schemas/openai-call-receipt.schema.json` now defines the required call receipt fields, but no OpenAI live/offline call producer has been implemented or minted for this digest.
+  - Schema: `schemas/openai-call-receipt.schema.json`
+  - Receipt: Missing; no OpenAI call receipt claim is supported.
+  - Validator check: `openai-api-key-model-cost-external-ai-boundary` is registered in standards, source obligations, foundational traceability, mandatory-law surfaces, schema enums, and `validator/src/audit/openai/mod.rs`.
+  - Candidate digest: `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`
+  - Status: Open; config-only proof does not satisfy call-receipt proof.
 
 - [ ] Model outputs used for feedback clustering, eval generation, grading, summarization, ranking, or handoff are parsed into typed schemas before they affect any law, fixture, receipt, claim ceiling, or final packet.
-  - Evidence:
-  - Parser/schema:
-  - Focused tests:
-  - Red fixtures:
-  - Candidate digest:
-  - Status:
+  - Evidence: Model-output authority is blocked by `validation_artifacts/openai/config-receipt.json`; no parser/producer path is complete yet.
+  - Parser/schema: Pending beyond `schemas/openai-call-receipt.schema.json`.
+  - Focused tests: Pending.
+  - Red fixtures: Mandatory-law red fixtures added for `secret_serialized`, `model_output_authority_claim`, `wrong_candidate_digest`, and `unbounded_cost`, but model-output parser fixtures remain pending.
+  - Candidate digest: `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`
+  - Status: Open.
 
 - [ ] OpenAI live calls have budget classes, max retries, timeout, backoff, cache policy, no-cache verification when required, offline fixture mode, cost/rate-limit receipts, and fail-closed behavior when the key or provider is unavailable.
-  - Evidence:
-  - Budget policy:
-  - Offline fixture proof:
-  - Live proof if configured:
-  - Candidate digest:
-  - Status:
+  - Evidence: Provider modes are declared in `docs/openai-key-policy.json`, but budget-class enforcement and offline/live provider execution are not implemented.
+  - Budget policy: Pending.
+  - Offline fixture proof: Pending.
+  - Live proof if configured: Pending; no live OpenAI call was made for this checkpoint.
+  - Candidate digest: `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`
+  - Status: Open.
 
 ## Gate 96 - promptfoo Eval, Red-Team, Regression, And Provider Separation
 
@@ -3313,7 +3313,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 107. OpenAI API use is governed by typed config, redaction, model identity, prompt/input digest, output digest, token/cost/rate-limit accounting, timeout/retry/backoff policy, offline fixture mode, live-provider policy, and CLI-parsed model-output authority. No OpenAI output can directly satisfy a Harness claim.
 
-- [ ] Gate 95 evidence path:
+- [ ] Gate 95 evidence path: Partial source-local config checkpoint for package digest `sha256:13dafa282ce6251cb9e8cd7599e75c545fd3e2ec5769229a9e541d8947172ab2`. Evidence paths: `docs/openai-key-policy.json`, `schemas/openai-key-policy.schema.json`, `schemas/openai-config-receipt.schema.json`, `schemas/openai-call-receipt.schema.json`, `fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json`, `fixtures/red/openai-api-key-model-cost-external-ai-boundary-*.json`, `validator/src/cli/openai/`, `validator/src/audit/openai/mod.rs`, and `validation_artifacts/openai/config-receipt.json`. Current proof supports OpenAI config resolution only and blocks completion/readiness/release/final-packet/update_goal/model-output/live-model claims. Full stop condition 107 remains unchecked because live/offline call receipts, token/cost/rate-limit accounting, timeout/retry/backoff enforcement, model-output parser authority, promptfoo/HALO/OpenAI integration calls, and complete provider-mode red/green/tamper proof are not yet implemented.
 
 108. promptfoo is installed, pinned, provider-separated, package-included, schema-bound, CLI-governed, and enforced for Harness evals, red-team suites, regression suites, product evals, setup/retrofit evals, and active-repo rollout evals. Raw promptfoo output cannot satisfy a claim.
 

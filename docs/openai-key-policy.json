@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.openai-key-policy.v1",
+  "law_id": "openai-api-key-model-cost-external-ai-boundary",
+  "env_var": "OPENAI_API_KEY",
+  "active_destination": ".codex-worktree/env.sh",
+  "allowed_destinations": [
+    ".codex-worktree/env.sh"
+  ],
+  "destination_must_be_gitignored": true,
+  "unix_mode_required": "0600",
+  "secret_serialization_policy": "forbid",
+  "model_output_authority": "observation_only",
+  "live_provider_requires": [
+    "model_identity",
+    "endpoint_api_family",
+    "purpose",
+    "prompt_input_digest",
+    "output_digest",
+    "schema_id",
+    "timeout_retry_backoff",
+    "token_cost_rate_limit_accounting",
+    "candidate_digest",
+    "run_id",
+    "correlation_id",
+    "claim_impact"
+  ],
+  "provider_modes": [
+    "openai_live",
+    "offline_fixture",
+    "local_mock",
+    "no_network"
+  ],
+  "claim_ceiling": "config_resolution_only"
+}

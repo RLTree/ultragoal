@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/openai-config-receipt.schema.json",
+  "title": "Harness Ultragoal OpenAI Config Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "issuer",
+    "generated_at",
+    "status",
+    "candidate_digest",
+    "policy_path",
+    "env_var",
+    "key_resolution",
+    "provider_modes",
+    "model_output_authority",
+    "redaction_status",
+    "secret_material_serialized",
+    "observability_receipt",
+    "claim_ceiling",
+    "supported_claims",
+    "blocked_claims",
+    "failures"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.openai-config-receipt.v1"
+    },
+    "schema_version": {
+      "const": "v1"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "authority"
+      ],
+      "properties": {
+        "tool": {
+          "const": "ultragoal"
+        },
+        "authority": {
+          "const": "cli_control_plane"
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "policy_path": {
+      "const": "docs/openai-key-policy.json"
+    },
+    "env_var": {
+      "const": "OPENAI_API_KEY"
+    },
+    "key_resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "destination_path",
+        "policy_path",
+        "destination_gitignored",
+        "env_file_exists",
+        "env_file_mode_secure",
+        "env_file_declares_openai_api_key",
+        "secret_value_redacted",
+        "secret_value_digest_recorded",
+        "secret_value_length_recorded"
+      ],
+      "properties": {
+        "source": {
+          "const": "local_untracked_env_file"
+        },
+        "destination_path": {
+          "const": ".codex-worktree/env.sh"
+        },
+        "policy_path": {
+          "const": "docs/openai-key-policy.json"
+        },
+        "destination_gitignored": {
+          "type": "boolean"
+        },
+        "env_file_exists": {
+          "type": "boolean"
+        },
+        "env_file_mode_secure": {
+          "type": "boolean"
+        },
+        "env_file_declares_openai_api_key": {
+          "type": "boolean"
+        },
+        "secret_value_redacted": {
+          "const": true
+        },
+        "secret_value_digest_recorded": {
+          "const": false
+        },
+        "secret_value_length_recorded": {
+          "const": false
+        }
+      }
+    },
+    "provider_modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "live",
+        "offline_fixture",
+        "local_mock",
+        "no_network"
+      ],
+      "properties": {
+        "live": {
+          "const": "requires_same_candidate_call_receipt"
+        },
+        "offline_fixture": {
+          "const": "deterministic_tests_only"
+        },
+        "local_mock": {
+          "const": "non_authoritative_observation"
+        },
+        "no_network": {
+          "const": "deterministic_no_provider"
+        }
+      }
+    },
+    "model_output_authority": {
+      "const": "observation_only_until_cli_schema_validated"
+    },
+    "redaction_status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "secret_material_serialized": {
+      "const": false
+    },
+    "observability_receipt": {
+      "type": "object"
+    },
+    "claim_ceiling": {
+      "enum": [
+        "openai_config_resolution_only",
+        "withheld_or_blocked"
+      ]
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_claims": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string"
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

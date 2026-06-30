@@ -547,6 +547,16 @@
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#mandatory repair gates"
     },
     {
+      "claim_ceiling_impact": "openai_dependent_claims_withheld_without_redacted_typed_same_candidate_receipts",
+      "coverage_status": "covered_for_package_policy",
+      "enforcement_disposition": "deterministic_fail_closed",
+      "id": "openai-api-key-model-cost-external-ai-boundary",
+      "missing_validation_fixture_or_receipt": "OpenAI config policy docs/openai-key-policy.json; config receipt validation_artifacts/openai/config-receipt.json; red fixtures openai-api-key-model-cost-external-ai-boundary-secret-serialized-red, openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red, openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red, openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red; valid fixture fixtures/mandatory-law-surfaces/valid/openai-api-key-model-cost-external-ai-boundary.json",
+      "obligation": "OpenAI API keys, model calls, token/cost/rate-limit data, and model outputs must be redacted, typed, same-candidate, bounded, and observation-only until CLI schema validation and claim guards bind them.",
+      "package_surface": "OpenAI key policy, config receipt, call receipt schema, standards row, foundational trace, red fixtures, valid fixture, package inventory, and claim ceiling guard",
+      "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md#Gate 95; docs/openai-key-policy.json"
+    },
+    {
       "claim_ceiling_impact": "orchestration_claims_withheld_without_state_machine_receipt",
       "coverage_status": "covered",
       "enforcement_disposition": "deterministic",

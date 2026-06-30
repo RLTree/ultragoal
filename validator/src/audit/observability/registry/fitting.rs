@@ -59,6 +59,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "observe explain-claim",
     "observe explain-check",
     "observe explain-law",
+    "openai config prove",
 ];
 
 pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {

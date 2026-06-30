@@ -2008,7 +2008,399 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "cli-control-plane-authority-checklist-completion-without-cli-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-control-plane-authority-reviewer-agreement-bypass-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-control-plane-authority-source-audit-substituted-for-update-goal-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-cached-proof-substituted-for-no-cache-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-final-packet-omits-status-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-focused-substituted-for-final-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-hidden-cache-pass-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-budget-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-cache-key-telemetry-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-external-call-telemetry-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-fixture-count-telemetry-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-input-size-telemetry-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-live-probe-backoff-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-regression-baseline-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-missing-timeout-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-network-call-in-local-only-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-over-budget-without-claim-blocking-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-prose-only-budget-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-serial-global-lock-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-stale-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-unbounded-concurrency-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-wrong-candidate-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-wrong-cli-binary-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-performance-wrong-schema-law-fixture-digest-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "cli-proof-used-for-ui-claim"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-self-law-compliance-cli-source-excluded-from-coverage-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "cli-self-law-compliance-update-goal-without-self-law-red"
           }
         },
         "required": [
@@ -4640,6 +5032,440 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-log-bundle-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-metric-bundle-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-hidden-network-endpoint-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-metric-log-trace-digest-mismatch-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-mismatched-correlation-id-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-correlation-id-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-metric-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-repair-hint-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-trace-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-opaque-fail-output-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-public-port-binding-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unbounded-query-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unbounded-retention-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unredacted-secret-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-wrong-candidate-digest-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "future-actor-validation"
           }
         },
@@ -6614,7 +7440,147 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "namespace-validator-source-broad-glob-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-class-waiver-manifest-contract-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-coverage-wave-history-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-error-not-hidden-by-other-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-generated-class-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-iinternal-typo-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-manifest-listing-cannot-bless-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "namespace-validator-source-partial-module-factoring-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-top-level-internal-cluster-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-top-level-internal-coverage-wave-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "namespace-validator-source-widened-class-tamper-red"
           }
         },
         "required": [
@@ -7133,6 +8099,62 @@
         "properties": {
           "id": {
             "const": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-source-obligation-parity-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red"
           }
         },
         "required": [
@@ -12858,6 +13880,258 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "rust-devx-blind-cleanup-without-gc-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-cargo-lock-digest-tamper-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-cargo-test-overclaim-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-dependency-audit-missing-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-gc-plan-digest-tamper-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-hidden-cache-no-cache-substitution-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-hidden-rustc-wrapper-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-makefile-authority-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-missing-nextest-bootstrap-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-missing-toolchain-substrate-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-protected-artifact-delete-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-raw-tool-output-substitution-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-spawn-forget-child-process-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-toolchain-receipt-stale-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-tracing-gc-core-memory-model-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-unbounded-resource-discipline-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-warm-cache-as-cold-proof-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "rust-devx-watch-observation-as-completion-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "scheduler-runner-tracker-boundaries-approval-proof-red"
           }
         },
@@ -16218,8 +17492,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1245,
-  "minItems": 1245,
+  "maxItems": 1249,
+  "minItems": 1249,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

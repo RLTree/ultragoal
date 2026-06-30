@@ -74,6 +74,7 @@ pub(crate) enum Command {
     Rust(cli::rust::RustCommand),
     Garbage(cli::garbage::collection::GarbageCommand),
     Observe(cli::observe::types::ObserveCommand),
+    OpenAi(cli::openai::OpenAiCommand),
     Session(cli::session::SessionCommand),
     PackageDigest,
 }
@@ -198,6 +199,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Garbage(command)
             } else if let Some(command) = cli::observe::parse(raw)? {
                 Command::Observe(command)
+            } else if let Some(command) = cli::openai::parse(raw)? {
+                Command::OpenAi(command)
             } else if let Some(command) = cli::session::parse(raw)? {
                 Command::Session(command)
             } else if let Some(command) = cli::control::plane::parse(raw) {
@@ -241,5 +244,5 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 }
 
 fn usage() -> String {
-    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | install audit --receipt <path> [--installed-root <path>] | cache audit --receipt <path> [--cache-root <path>] | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | session-log hardening rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ... | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
+    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | install audit --receipt <path> [--installed-root <path>] | cache audit --receipt <path> [--cache-root <path>] | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | session-log hardening rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ... | openai config prove --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
 }
