@@ -6,19 +6,48 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
+mod parallel;
+
 pub(crate) use crate::red::fixture::materialization::{Observation, base_fixture_json_result};
 use crate::red::fixture::materialization::{base_fixture_error, simple_row};
 
+pub(crate) struct FixtureResults {
+    pub(crate) rows: BTreeMap<String, Value>,
+    pub(crate) scheduler_metrics: Vec<crate::scheduler::Metrics>,
+}
+
+#[cfg(test)]
 pub fn red_fixture_results(
     root: &Path,
     store: &SchemaStore,
     validator_digests: &BTreeMap<String, String>,
 ) -> BTreeMap<String, Value> {
+    red_fixture_results_with_scheduler(
+        root,
+        store,
+        validator_digests,
+        crate::scheduler::SchedulerConfig::from_jobs(None).expect("default scheduler"),
+    )
+    .rows
+}
+
+pub(crate) fn red_fixture_results_with_scheduler(
+    root: &Path,
+    store: &SchemaStore,
+    validator_digests: &BTreeMap<String, String>,
+    scheduler: crate::scheduler::SchedulerConfig,
+) -> FixtureResults {
     let Ok(rows) = json_boundary::read_json(&root.join("templates/RED_FIXTURES.json")) else {
-        return BTreeMap::new();
+        return FixtureResults {
+            rows: BTreeMap::new(),
+            scheduler_metrics: Vec::new(),
+        };
     };
     let Some(items) = rows.as_array() else {
-        return BTreeMap::new();
+        return FixtureResults {
+            rows: BTreeMap::new(),
+            scheduler_metrics: Vec::new(),
+        };
     };
     let target_digest = crate::package::inventory::package_digest(root).unwrap_or_default();
     let mut runtime_digest_cache = BTreeMap::new();
@@ -32,28 +61,18 @@ pub fn red_fixture_results(
         root,
         &mut runtime_digest_cache,
     );
-    let mut semantic_cache = crate::claim_semantics::SemanticCache::default();
-    let mut results = BTreeMap::new();
-    for row in items {
-        let row_id = row
-            .get("id")
-            .and_then(Value::as_str)
-            .unwrap_or("invalid-row");
-        let result = result_for_row(
-            root,
-            store,
-            validator_digests,
-            row,
-            &target_digest,
-            &mut runtime_digest_cache,
-            &runtime_red_fixture_ids,
-            &runtime_red_fixtures,
-            &runtime_input_digests,
-            &mut semantic_cache,
-        );
-        results.insert(row_id.to_string(), result);
-    }
-    results
+    parallel::evaluate(parallel::EvaluateInput {
+        root,
+        store,
+        validator_digests,
+        items,
+        target_digest: &target_digest,
+        runtime_digest_cache: &runtime_digest_cache,
+        runtime_red_fixture_ids: &runtime_red_fixture_ids,
+        runtime_red_fixtures: &runtime_red_fixtures,
+        runtime_input_digests: &runtime_input_digests,
+        scheduler,
+    })
 }
 
 fn result_for_row(
@@ -226,13 +245,4 @@ fn materialize_bad_bundle(
             "red_fixture_json_pointer_invalid",
         )
     })
-}
-
-#[cfg(test)]
-pub(crate) fn runtime_bound_bundle(
-    root: &Path,
-    value: &Value,
-    validator_digests: &BTreeMap<String, String>,
-) -> Value {
-    crate::red::fixture::runtime::receipt::bind(root, value, validator_digests)
 }

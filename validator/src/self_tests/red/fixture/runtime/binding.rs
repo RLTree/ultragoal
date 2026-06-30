@@ -17,7 +17,7 @@ fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
     let provenance_base =
         crate::json_boundary::read_json(&root.join(provenance_base_path)).expect("base fixture");
     let provenance_bound =
-        crate::red::fixtures::runtime_bound_bundle(&root, &provenance_base, &validator_digests);
+        crate::red::fixture::runtime::receipt::bind(&root, &provenance_base, &validator_digests);
     let provenance_bad =
         crate::claim_semantics::apply_patch(&provenance_bound, &provenance_packet["json_patch"])
             .expect("provenance patch applies");
@@ -55,7 +55,7 @@ fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
     let expected = &packet["expected_failure"];
 
     let runtime_bound =
-        crate::red::fixtures::runtime_bound_bundle(&root, &base, &validator_digests);
+        crate::red::fixture::runtime::receipt::bind(&root, &base, &validator_digests);
     let bad = crate::claim_semantics::apply_patch(&runtime_bound, &packet["json_patch"])
         .expect("runtime-bound patch applies");
     let observation = crate::red::fixture::observation::observe_materialized(
@@ -78,7 +78,7 @@ fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
         .remove("validator_run_id");
     fallback["validator_receipt"]["run_id"] = serde_json::json!("receipt-run-id");
     let fallback_bound =
-        crate::red::fixtures::runtime_bound_bundle(&root, &fallback, &validator_digests);
+        crate::red::fixture::runtime::receipt::bind(&root, &fallback, &validator_digests);
     assert_eq!(
         fallback_bound["validator_receipt"]["run_id"],
         "receipt-run-id"
@@ -145,7 +145,7 @@ fn runtime_bound_receipt_falls_back_when_input_refs_are_unreadable() {
         validator_artifact_digest(&crate::self_tests::boundaries::support::repo_root());
     let bundle = serde_json::json!({"schema": "harness-ultragoal.fixture-bundle.v1"});
 
-    let bound = crate::red::fixtures::runtime_bound_bundle(&root, &bundle, &validator_digests);
+    let bound = crate::red::fixture::runtime::receipt::bind(&root, &bundle, &validator_digests);
     assert_eq!(
         bound["validator_receipt"]["input_digests"][0]["path"],
         "fixtures/valid/minimal-goal-run.json"
@@ -184,9 +184,14 @@ fn runtime_input_digest_falls_back_for_unsafe_file_refs() {
 
 fn validator_artifact_digest(root: &std::path::Path) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
-    out.insert(
-        "validator/src/red/fixtures.rs".to_string(),
-        crate::digest::file(&root.join("validator/src/red/fixtures.rs")).expect("fixture digest"),
-    );
+    for rel in [
+        "validator/src/red/fixtures/mod.rs",
+        "validator/src/red/fixtures/parallel.rs",
+    ] {
+        out.insert(
+            rel.to_string(),
+            crate::digest::file(&root.join(rel)).expect("fixture digest"),
+        );
+    }
     out
 }

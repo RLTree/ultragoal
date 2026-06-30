@@ -4290,7 +4290,7 @@
       "validator/src/red/fixture/review/round.rs",
       "validator/src/red/fixture/row.rs",
       "validator/src/red/fixture/schema.rs",
-      "validator/src/red/fixtures.rs",
+      "validator/src/red/fixtures/mod.rs",
       "validator/src/red/mod.rs",
       "validator/src/review/materiality.rs",
       "validator/src/review/mod.rs",
@@ -20608,7 +20608,7 @@
         },
         {
           "digest": "sha256:ed88915c77af5e2a657b7a6fa93d0ad29478ef82e41514c06d3eef9ac3c02657",
-          "path": "validator/src/red/fixtures.rs"
+          "path": "validator/src/red/fixtures/mod.rs"
         },
         {
           "digest": "sha256:cfb5b5f4c3f7cdf602709a7ed4c360c92c5c19395273486d5b380b1900135686",

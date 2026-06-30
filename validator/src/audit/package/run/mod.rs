@@ -28,7 +28,7 @@ pub fn run(options: AuditOptions, red_report: PathBuf) -> Result<i32, String> {
         scheduler,
     );
     let mut failures = check_results.failures;
-    let scheduler_metrics = check_results.scheduler_metrics;
+    let mut scheduler_metrics = check_results.scheduler_metrics;
     collect_failures(
         &options,
         &store,
@@ -36,7 +36,14 @@ pub fn run(options: AuditOptions, red_report: PathBuf) -> Result<i32, String> {
         &validator_artifacts,
         &mut failures,
     );
-    let red = collect_red(&options, &store, &validator_digests, &mut failures);
+    let (red, red_metrics) = collect_red(
+        &options,
+        &store,
+        &validator_digests,
+        &mut failures,
+        scheduler,
+    );
+    scheduler_metrics.extend(red_metrics);
     let target_artifacts =
         targets::collect(&options, &red_report, &validator_artifacts, &mut failures);
     targets::validate(&store, &mut failures, &target_artifacts);
@@ -88,8 +95,15 @@ fn collect_red(
     store: &schema_catalog::SchemaStore,
     validator_digests: &BTreeMap<String, String>,
     failures: &mut BTreeMap<String, Vec<String>>,
-) -> BTreeMap<String, Value> {
-    let red = crate::red::fixtures::red_fixture_results(&options.root, store, validator_digests);
+    scheduler: SchedulerConfig,
+) -> (BTreeMap<String, Value>, Vec<crate::scheduler::Metrics>) {
+    let red_results = crate::red::fixtures::red_fixture_results_with_scheduler(
+        &options.root,
+        store,
+        validator_digests,
+        scheduler,
+    );
+    let red = red_results.rows;
     if red.is_empty() {
         push_failure(
             failures,
@@ -107,7 +121,7 @@ fn collect_red(
             "one or more red fixtures did not fail as expected",
         );
     }
-    red
+    (red, red_results.scheduler_metrics)
 }
 
 fn push_failure(
