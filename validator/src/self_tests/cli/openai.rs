@@ -148,3 +148,59 @@ fn openai_call_receipt_rejects_missing_digest_authority() {
     );
     std::fs::remove_dir_all(root).expect("cleanup");
 }
+
+#[test]
+fn openai_output_receipt_dereferences_current_call_and_blocks_claims() {
+    let root = prepare_root("openai-output-receipt");
+    write_call_receipt(&root);
+    let args = [
+        "openai",
+        "output",
+        "prove",
+        "--parsed-output-digest",
+        &crate::self_tests::boundaries::support::sha('c'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let command = crate::cli::openai::parse(&args)
+        .expect("parse")
+        .expect("openai output command");
+    let receipt = crate::cli::openai::build_receipt(&root, &command).expect("receipt");
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(
+        receipt["authority_state"],
+        "typed_observation_not_claim_authority"
+    );
+    assert!(
+        receipt["blocked_claims"]
+            .as_array()
+            .expect("blocked")
+            .iter()
+            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+fn write_call_receipt(root: &std::path::Path) {
+    let args = [
+        "openai",
+        "call",
+        "prove",
+        "--input-digest",
+        &crate::self_tests::boundaries::support::sha('a'),
+        "--output-digest",
+        &crate::self_tests::boundaries::support::sha('b'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let command = crate::cli::openai::parse(&args)
+        .expect("parse")
+        .expect("openai call command");
+    let receipt = crate::cli::openai::build_receipt(root, &command).expect("receipt");
+    crate::self_tests::openai::write_json(
+        &root.join("validation_artifacts/openai/call-receipt.json"),
+        &receipt,
+    );
+}

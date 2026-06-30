@@ -4,6 +4,7 @@ use std::path::Path;
 const POLICY_REL: &str = "docs/openai-key-policy.json";
 const RECEIPT_REL: &str = "validation_artifacts/openai/config-receipt.json";
 const CALL_RECEIPT_REL: &str = "validation_artifacts/openai/call-receipt.json";
+const OUTPUT_RECEIPT_REL: &str = "validation_artifacts/openai/model-output-authority.json";
 const SCHEMA: &str = "harness-ultragoal.openai-config-receipt.v1";
 const CALL_SCHEMA: &str = "harness-ultragoal.openai-call-receipt.v1";
 const PROVIDER_POLICY_REL: &str = "docs/openai-provider-policy.json";
@@ -14,12 +15,17 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     check_provider_policy(root, &mut out);
     check_receipt(root, &mut out);
     check_call_receipt(root, &mut out);
+    check_output_receipt(root, &mut out);
     out
 }
 
 fn check_policy(root: &Path, out: &mut Vec<String>) {
     let policy = crate::cli::openai::policy::load(root, Path::new(POLICY_REL));
     out.extend(policy.failures());
+}
+
+fn candidate_or_empty(root: &Path) -> String {
+    crate::package::inventory::package_digest(root).unwrap_or_default()
 }
 
 fn check_provider_policy(root: &Path, out: &mut Vec<String>) {
@@ -76,6 +82,25 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
     }
     out.extend(crate::cli::openai::budget::receipt_failures(root, &receipt));
     check_observability_binding(&receipt, &candidate, "openai_call", out);
+}
+
+fn check_output_receipt(root: &Path, out: &mut Vec<String>) {
+    let receipt = match crate::json_boundary::read_json(&root.join(OUTPUT_RECEIPT_REL)) {
+        Ok(value) => value,
+        Err(err) => {
+            out.push(format!(
+                "openai_model_output_receipt_missing_or_malformed:{err}"
+            ));
+            return;
+        }
+    };
+    out.extend(crate::cli::openai::output::receipt_failures(root, &receipt));
+    check_observability_binding(
+        &receipt,
+        &candidate_or_empty(root),
+        "openai_model_output",
+        out,
+    );
 }
 
 fn check_receipt(root: &Path, out: &mut Vec<String>) {

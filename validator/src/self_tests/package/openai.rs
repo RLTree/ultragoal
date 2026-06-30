@@ -14,6 +14,7 @@ fn prepare_root(label: &str) -> std::path::PathBuf {
             "docs/openai-provider-policy.json",
             "validation_artifacts/openai/call-receipt.json",
             "validation_artifacts/openai/config-receipt.json",
+            "validation_artifacts/openai/model-output-authority.json",
         ],
     )
 }
@@ -51,6 +52,25 @@ fn write_config_and_call_receipts(root: &Path) {
     write_json(
         &root.join("validation_artifacts/openai/call-receipt.json"),
         &call,
+    );
+
+    let output_args = [
+        "openai",
+        "output",
+        "prove",
+        "--parsed-output-digest",
+        &crate::self_tests::boundaries::support::sha('c'),
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>();
+    let output_command = crate::cli::openai::parse(&output_args)
+        .expect("parse output")
+        .expect("output command");
+    let output = crate::cli::openai::build_receipt(root, &output_command).expect("output");
+    write_json(
+        &root.join("validation_artifacts/openai/model-output-authority.json"),
+        &output,
     );
 }
 
@@ -162,6 +182,28 @@ fn openai_package_audit_rejects_provider_policy_digest_mismatch() {
         failures
             .iter()
             .any(|item| item == "openai_call_receipt_provider_policy_digest_mismatch")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn openai_package_audit_rejects_output_authority_overclaim() {
+    let root = prepare_root("openai-output-overclaim");
+    write_config_and_call_receipts(&root);
+    let mut receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/openai/model-output-authority.json"),
+    )
+    .expect("receipt");
+    receipt["authority_state"] = json!("deterministic_claim_authority");
+    write_json(
+        &root.join("validation_artifacts/openai/model-output-authority.json"),
+        &receipt,
+    );
+    let failures = crate::audit::openai::package_failures(&root);
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "openai_model_output_receipt_authority_overbroad")
     );
     std::fs::remove_dir_all(root).expect("cleanup");
 }

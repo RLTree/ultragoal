@@ -36,6 +36,7 @@
     "observe traces query",
     "openai call prove",
     "openai config prove",
+    "openai output prove",
     "package digest",
     "product prove-cohesion",
     "product prove-fitness",
@@ -1388,6 +1389,35 @@
       "claim_impact": "supports_openai_call_receipt_shape_only_and_blocks_live_model_completion_readiness_release_update_goal_claims",
       "current_owner_surface": "command:openai call prove",
       "next_unfitted_surface": "same-candidate live log metric trace query proof for openai call prove"
+    },
+    "openai output prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "typed model-output authority receipt producer",
+        "current call receipt dereference",
+        "model-output non-authority claim blockers",
+        "command-level observability receipt",
+        "package audit currentness check"
+      ],
+      "missing_surfaces": [
+        "same-candidate live logs query proof",
+        "same-candidate live metrics query proof",
+        "same-candidate live traces query proof",
+        "schema-specific parser adapters for feedback/eval/grader/ranking outputs",
+        "promptfoo and improvement-loop model-output binding"
+      ],
+      "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
+      "focused_tests": [
+        "openai_output_receipt_dereferences_current_call_and_blocks_claims",
+        "openai_package_audit_rejects_output_authority_overclaim"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/openai/model-output-authority.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_typed_model_output_observation_only_and_blocks_model_output_completion_readiness_release_update_goal_claims",
+      "current_owner_surface": "command:openai output prove",
+      "next_unfitted_surface": "schema-specific parser adapters for feedback eval grader and ranking outputs"
     }
   },
   "surface_inventory": {

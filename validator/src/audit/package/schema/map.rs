@@ -65,6 +65,10 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "openai-call-receipt.schema.json",
         ),
         (
+            "validation_artifacts/openai/model-output-authority.json",
+            "openai-model-output-authority.schema.json",
+        ),
+        (
             "fixtures/namespace/valid/namespace-class-registry-valid.json",
             "namespace-class-registry.schema.json",
         ),

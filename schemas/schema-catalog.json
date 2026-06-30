@@ -147,6 +147,10 @@
       "path": "schemas/openai-key-policy.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/openai-model-output-authority.schema.json",
+      "path": "schemas/openai-model-output-authority.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/openai-provider-policy.schema.json",
       "path": "schemas/openai-provider-policy.schema.json"
     },

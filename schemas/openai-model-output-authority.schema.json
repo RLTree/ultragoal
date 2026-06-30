@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/openai-model-output-authority.schema.json",
+  "title": "Harness Ultragoal OpenAI Model Output Authority Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "provider_mode",
+    "model_identity",
+    "source_call_receipt_path",
+    "source_call_receipt_digest",
+    "prompt_input_digest",
+    "raw_output_digest",
+    "parser_schema_id",
+    "parsed_output_digest",
+    "authority_state",
+    "redaction_status",
+    "observability_receipt",
+    "supported_claims",
+    "blocked_claims",
+    "claim_impact",
+    "failures"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.openai-model-output-authority.v1"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "provider_mode": {
+      "enum": [
+        "openai_live",
+        "offline_fixture",
+        "local_mock",
+        "no_network"
+      ]
+    },
+    "model_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_call_receipt_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_call_receipt_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "prompt_input_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "raw_output_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "parser_schema_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parsed_output_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authority_state": {
+      "const": "typed_observation_not_claim_authority"
+    },
+    "redaction_status": {
+      "const": "pass"
+    },
+    "observability_receipt": {
+      "type": "object"
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_claims": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

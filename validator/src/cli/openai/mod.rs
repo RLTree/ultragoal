@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 pub(crate) mod budget;
 mod call;
 mod config;
+pub(crate) mod output;
 pub(crate) mod policy;
 
 pub(crate) const LAW_ID: &str = "openai-api-key-model-cost-external-ai-boundary";
@@ -13,6 +14,7 @@ pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.openai-config-receipt
 pub(crate) enum OpenAiCommand {
     Config(config::ConfigCommand),
     Call(call::CallCommand),
+    Output(output::OutputCommand),
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<OpenAiCommand>, String> {
@@ -31,6 +33,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<OpenAiCommand>, String> {
         [_, action, subject, ..] if action == "call" && subject == "prove" => {
             Ok(Some(OpenAiCommand::Call(call::parse(raw)?)))
         }
+        [_, action, subject, ..] if action == "output" && subject == "prove" => {
+            Ok(Some(OpenAiCommand::Output(output::parse(raw))))
+        }
         _ => Err("unknown ultragoal openai command".to_string()),
     }
 }
@@ -39,6 +44,7 @@ pub(crate) fn run(root: &Path, command: &OpenAiCommand) -> Result<i32, String> {
     match command {
         OpenAiCommand::Config(config) => config::run(root, config),
         OpenAiCommand::Call(call) => call::run(root, call),
+        OpenAiCommand::Output(output) => output::run(root, output),
     }
 }
 
@@ -47,6 +53,7 @@ pub(crate) fn build_receipt(root: &Path, command: &OpenAiCommand) -> Result<Valu
     match command {
         OpenAiCommand::Config(config) => config::build_config_receipt(root, config),
         OpenAiCommand::Call(call) => call::build_call_receipt(root, call),
+        OpenAiCommand::Output(output) => output::build_output_receipt(root, output),
     }
 }
 
