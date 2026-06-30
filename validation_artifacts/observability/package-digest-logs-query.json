@@ -1,0 +1,35 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:226e3d96a4bba6b2bbeb10b9d4665fda4271c183335be3fe511d9e8ece1e5888",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-da17c34735719d0a1dfd901634d47c185220d7dc67ca40c6744bb454821d0d19",
+  "failure": "",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "run_id:run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9",
+  "query_kind": "logs",
+  "result_digest": "sha256:29c31e967fc84db01c3c3a44b93423f8dff9695016a488357112feb9e7a90ad0",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"_msg\":\"missing _msg field; see https://docs.victoriametrics.com/victorialogs/keyconcepts/#message-field\",\"_stream\":\"{candidate_digest=\\\"sha256:226e3d96a4bba6b2bbeb10b9d4665fda4271c183335be3fe511d9e8ece1e5888\\\",check_id=\\\"package-digest-observability-binding\\\",claim_id=\\\"source_package_digest\\\",command=\\\"ultragoal package\\\",law_id=\\\"full-local-observability-stack-integration-non-opaque-failure\\\"}\",\"_stream_id\":\"00000000000000009f72372aecd850d6ebf9343cf4f1aea4\",\"_time\":\"2026-06-30T01:13:22Z\",\"artifact_path\":\"plugin-manifest-draft.json\",\"bounded_output_status\":\"pass\",\"candidate_digest\":\"sha256:226e3d96a4bba6b2bbeb10b9d4665fda4271c183335be3fe511d9e8ece1e5888\",\"check_id\":\"package-digest-observability-binding\",\"claim_id\":\"source_package_digest\",\"claim_impact\":\"supports_source_package_digest_only\",\"command\":\"ultragoal package\",\"correlation_id\":\"corr-3684f14decd2d5c362d3762c0aa6d82e01905dda7135fe6a53ac1a61f991988e\",\"duration_ms\":\"0\",\"exporter\":\"victorialogs\",\"failure_class\":\"none\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"next_repair\":\"none\",\"operation\":\"package.digest\",\"query_hint_logql\":\"run_id:run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9 operation:package.digest\",\"query_hint_promql\":\"ultragoal_command_total{run_id=\\\"run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9\\\"}\",\"query_hint_traceql\":\"{\\\"run_id\\\":\\\"run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9\\\"}\",\"receipt_path\":\"validation_artifacts/observability/package-digest.json\",\"redaction_status\":\"pass\",\"run_id\":\"run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9\",\"schema\":\"harness-ultragoal.observability-event.v1\",\"span_id\":\"span-71822f701e5b5ce1b660e4845204bae80f411c83cb6cce6a86bfb044313902e7\",\"status\":\"pass\",\"subcommand\":\"digest\",\"surface\":\"source_package\",\"target_revision\":\"sha256:226e3d96a4bba6b2bbeb10b9d4665fda4271c183335be3fe511d9e8ece1e5888\",\"trace_id\":\"trace-b73f9f2450957216d03d4d0c5882ac70fb1d69d5c1d9ec5e5ebce424e1f0ed6a\",\"where_failed\":\"none\",\"why_failed\":\"none\"}\n"
+    }
+  ],
+  "run_id": "run-2e88598404ff8688ed41fa8645e4e95e491d1150c0448b3ce344926035c9dba9",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
+}

@@ -62,7 +62,7 @@ pub(super) fn next_repair_for(
     } else if failure.is_some_and(|text| {
         text.contains("fitting inventory") || text.contains("command inventory")
     }) {
-        "fit every law-bearing command inventory row, then rerun observe prove"
+        "fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove"
     } else {
         match operation {
             ObserveOperation::StackHealth => "run ultragoal observe stack up, then stack health",

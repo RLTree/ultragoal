@@ -9,6 +9,13 @@ pub(super) fn attach(root: &Path, receipt: &mut Value, status: &str, why: &str) 
             subcommand: "prove",
             operation: "final-packet.prove",
             surface: "source",
+            law_id: "final-packet-proof",
+            check_id: if status == "pass" {
+                "none"
+            } else {
+                "unsupported_live_surface"
+            },
+            claim_id: "final_packet_correctness",
             artifact_path: "validation_artifacts/review",
             receipt_path: "validation_artifacts/review/final-packet-proof.json",
             status,

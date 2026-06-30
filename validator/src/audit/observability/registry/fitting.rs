@@ -1,4 +1,5 @@
 use serde_json::{Map, Value};
+use std::path::Path;
 
 pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "package digest",
@@ -60,7 +61,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "observe explain-law",
 ];
 
-pub(super) fn check(value: &Value, out: &mut Vec<String>) {
+pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {
     for command in REQUIRED_COMMANDS {
         if !commands_contain(value, command) {
             out.push(format!("observability_command_inventory_missing:{command}"));
@@ -74,7 +75,7 @@ pub(super) fn check(value: &Value, out: &mut Vec<String>) {
             ));
         }
     }
-    require_fitting_inventory(value, out);
+    require_fitting_inventory(root, value, out);
 }
 
 fn commands_contain(value: &Value, command: &str) -> bool {
@@ -105,7 +106,7 @@ fn reject_unknown_inventory_commands(value: &Value, out: &mut Vec<String>) {
     }
 }
 
-fn require_fitting_inventory(value: &Value, out: &mut Vec<String>) {
+fn require_fitting_inventory(root: &Path, value: &Value, out: &mut Vec<String>) {
     let Some(rows) = value.get("fitting_inventory").and_then(Value::as_object) else {
         out.push("observability_command_fitting_inventory_missing".to_string());
         return;
@@ -121,13 +122,18 @@ fn require_fitting_inventory(value: &Value, out: &mut Vec<String>) {
             ));
             continue;
         };
-        require_fitting_row(command, object, out);
+        require_fitting_row(root, command, object, out);
     }
 }
 
-fn require_fitting_row(command: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
+fn require_fitting_row(
+    root: &Path,
+    command: &str,
+    row: &Map<String, Value>,
+    out: &mut Vec<String>,
+) {
     match row.get("fitting_status").and_then(Value::as_str) {
-        Some("fitted") => require_fitted_evidence(command, row, out),
+        Some("fitted") => require_fitted_evidence(root, command, row, out),
         Some(status @ ("partially_fitted" | "unfitted")) => {
             require_unfitted_metadata(command, row, out);
             out.push(format!(
@@ -151,7 +157,12 @@ fn require_unfitted_metadata(command: &str, row: &Map<String, Value>, out: &mut 
     }
 }
 
-fn require_fitted_evidence(command: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
+fn require_fitted_evidence(
+    root: &Path,
+    command: &str,
+    row: &Map<String, Value>,
+    out: &mut Vec<String>,
+) {
     let required = [
         non_empty_array(row, "fitted_surfaces"),
         empty_array(row, "missing_surfaces"),
@@ -165,7 +176,9 @@ fn require_fitted_evidence(command: &str, row: &Map<String, Value>, out: &mut Ve
         out.push(format!(
             "observability_command_fitting_row_shape_only:{command}"
         ));
+        return;
     }
+    super::proof::require_current_receipts(root, command, row, out);
 }
 
 fn non_empty_string(row: &Map<String, Value>, key: &str) -> bool {

@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/full-local-observability-stack-integration-non-opaque-failure.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/signal_class_missing_from_inventory",
+      "value": false
+    }
+  ],
+  "expected_failure": {
+    "check_id": "source-obligation-coverage",
+    "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory"
+  },
+  "materialization": {
+    "expected_validation_layer": "package",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/signal_class_missing_from_inventory",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/signal_class_missing_from_inventory",
+      "expectation": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory"
+    }
+  ],
+  "notes": "full-local-observability-stack-integration-non-opaque-failure must fail when signal_class_missing_from_inventory is not enforced."
+}

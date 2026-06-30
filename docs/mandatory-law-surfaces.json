@@ -1843,17 +1843,21 @@
         "full_local_observability_stack_integration_non_opaque_failure_broken_span_parentage",
         "full_local_observability_stack_integration_non_opaque_failure_command_missing_from_inventory",
         "full_local_observability_stack_integration_non_opaque_failure_command_inventory_row_without_instrumentation_proof",
-        "full_local_observability_stack_integration_non_opaque_failure_local_json_fallback_used_as_completion_proof"
+        "full_local_observability_stack_integration_non_opaque_failure_local_json_fallback_used_as_completion_proof",
+        "full_local_observability_stack_integration_non_opaque_failure_operating_loop_stage_without_query_proof",
+        "full_local_observability_stack_integration_non_opaque_failure_signal_class_missing_from_inventory",
+        "full_local_observability_stack_integration_non_opaque_failure_manual_json_spelunking_used_as_repair_loop",
+        "full_local_observability_stack_integration_non_opaque_failure_broad_audit_before_narrow_observable_repair"
       ],
       "claim_ceiling_guard": "readiness_release_completion_final_packet_update_goal_claims_withheld_without_live_stack_queryable_observability_receipt",
       "enforcement_status": "deterministic_fail_closed",
       "evidence_artifacts": [
         {
-          "digest": "sha256:db01688a55f8bbeaffd1ad0d2632650ab952b8b0ae44a9d9194edfd01cc635fb",
+          "digest": "sha256:7658ad95f412deb7f1b4196cb9a3acbadd44167657c43a1f4ea92b4614e311be",
           "path": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
         },
         {
-          "digest": "sha256:d42fd66c47d2f7f93b6e4720362d8dee2373097c5d2cb8ff7dc9aea2f24cb43c",
+          "digest": "sha256:a0fc260325df1d5e6a672cf5ac4d9d712ead12c5051358390edc573d5d1e2c3a",
           "path": "docs/source-obligation-matrix.json"
         }
       ],
@@ -1884,7 +1888,11 @@
         "unbounded_query": true,
         "unbounded_retention": true,
         "unredacted_secret": true,
-        "wrong_candidate_digest": true
+        "wrong_candidate_digest": true,
+        "operating_loop_stage_without_query_proof": true,
+        "signal_class_missing_from_inventory": true,
+        "manual_json_spelunking_used_as_repair_loop": true,
+        "broad_audit_before_narrow_observable_repair": true
       },
       "red_fixture_ids": [
         "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red",
@@ -1911,7 +1919,11 @@
         "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red",
         "full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red",
         "full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red",
-        "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red"
+        "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red",
+        "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
+        "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
+        "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
+        "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "full-local-observability-stack-integration-non-opaque-failure",

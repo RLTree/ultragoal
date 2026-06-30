@@ -381,7 +381,7 @@
       "coverage_status": "covered_for_package_policy",
       "enforcement_disposition": "deterministic_fail_closed",
       "id": "full-local-observability-stack-integration-non-opaque-failure",
-      "missing_validation_fixture_or_receipt": "mandatory-law receipt full-local-observability-stack-integration-non-opaque-failure; red fixtures for missing log, metric, trace, correlation, digest, stale telemetry, redaction, public ports, unboundedness, opaque output, forged telemetry, command inventory gaps, and local JSON fallback substitution; live observe prove receipt",
+      "missing_validation_fixture_or_receipt": "mandatory-law receipt full-local-observability-stack-integration-non-opaque-failure; red fixtures for missing log, metric, trace, correlation, digest, stale telemetry, redaction, public ports, unboundedness, opaque output, forged telemetry, command inventory gaps, surface inventory gaps, and local JSON fallback substitution; live observe prove receipt; operating-loop stage gaps; signal-class inventory gaps; manual JSON spelunking substitution; broad audit before narrow observable repair",
       "obligation": "Full local observability stack integration and non-opaque failure law must make every law-bearing CLI/check/proof path emit typed logs, metrics, traces, diagnostics, query hints, redaction and bounds proof, and receipt binding.",
       "package_surface": "dev/observability stack configs; observability schemas; command inventory; observe CLI; source audit check; red/green/tamper fixtures; observability receipt; package inventory; claim guards",
       "source": "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md Gate 92; docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md"

@@ -51,6 +51,45 @@ fn observability_package_audit_reports_config_receipt_and_registry_edges() {
 }
 
 #[test]
+fn package_digest_command_emits_observability_receipt_contract() {
+    let root = super::minimal_root("package-digest-observability");
+    let code = crate::command_run::run_with_exit_code(crate::Args {
+        root: root.clone(),
+        command: crate::Command::PackageDigest,
+    })
+    .expect("package digest command");
+    assert_eq!(code, 0);
+    let receipt_path = root.join("validation_artifacts/observability/package-digest.json");
+    let receipt = crate::json_boundary::read_json(&receipt_path).expect("package digest receipt");
+    let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    assert_eq!(
+        receipt["schema"],
+        crate::cli::observe::types::RECEIPT_SCHEMA
+    );
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["candidate_digest"], candidate);
+    assert_eq!(receipt["law_id"], crate::cli::observe::types::LAW_ID);
+    assert_eq!(receipt["check_id"], "package-digest-observability-binding");
+    assert_eq!(receipt["claim_id"], "source_package_digest");
+    assert_eq!(receipt["event"]["operation"], "package.digest");
+    assert!(
+        receipt["supported_claims"]
+            .as_array()
+            .expect("supported")
+            .iter()
+            .any(|item| item.as_str() == Some("source_package_digest"))
+    );
+    assert!(
+        receipt["blocked_claims"]
+            .as_array()
+            .expect("blocked")
+            .iter()
+            .any(|item| item.as_str() == Some("update_goal_eligibility"))
+    );
+    fs::remove_dir_all(root).expect("cleanup package digest observability");
+}
+
+#[test]
 fn observability_package_audit_rejects_private_path_spool_leak() {
     let root = super::minimal_root("observe-package-redaction");
     let spool = root.join("validation_artifacts/observability/spool/events.jsonl");

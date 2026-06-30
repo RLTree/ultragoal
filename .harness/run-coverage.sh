@@ -118,7 +118,13 @@ pkg = subprocess.run(
     stdout=subprocess.PIPE,
     stderr=subprocess.DEVNULL,
 )
-target_value = pkg.stdout.strip() if pkg.returncode == 0 else "unavailable"
+target_value = "unavailable"
+if pkg.returncode == 0:
+    for line in pkg.stdout.splitlines():
+        candidate = line.strip()
+        if candidate.startswith("sha256:") and len(candidate) == 71:
+            target_value = candidate
+            break
 
 dimensions = sorted({
     dim

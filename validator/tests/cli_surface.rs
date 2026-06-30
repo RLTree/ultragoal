@@ -141,6 +141,17 @@ fn cli_surface_commands_execute() {
         &["--root".into(), ".".into(), "package-digest".into()],
     );
     assert!(digest.status.success(), "package-digest failed: {digest:?}");
+    let digest_stdout = String::from_utf8_lossy(&digest.stdout);
+    assert!(
+        digest_stdout.lines().next().is_some_and(|line| {
+            line.starts_with("sha256:") && line.len() == "sha256:".len() + 64
+        }),
+        "package digest first line is not raw digest: {digest_stdout}"
+    );
+    assert!(
+        digest_stdout.contains("receipt=validation_artifacts/observability/package-digest.json")
+    );
+    assert!(digest_stdout.contains("run_id=run-"));
 
     let canonical_digest = run_ultragoal(
         &root,

@@ -42,11 +42,11 @@ fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
         proof["why_failed"]
             .as_str()
             .unwrap()
-            .contains("observability command inventory incomplete")
+            .contains("observability_command_inventory_missing")
     );
     assert_eq!(
         proof["next_repair"],
-        "fit every law-bearing command inventory row, then rerun observe prove"
+        "fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove"
     );
     fs::remove_dir_all(root).expect("cleanup root");
 }

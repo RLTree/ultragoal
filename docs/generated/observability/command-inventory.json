@@ -1,7 +1,7 @@
 {
-  "schema": "harness-ultragoal.observability-command-inventory.v2",
+  "schema": "harness-ultragoal.observability-command-inventory.v3",
   "law_id": "full-local-observability-stack-integration-non-opaque-failure",
-  "generated_from": "validator/src/lib.rs command parser, Gate 92 prompt requirements, and live command-fitting audit",
+  "generated_from": "validator/src/lib.rs command parser, Gate 92 prompt requirements, live command/surface/operating-loop fitting audit, and external observability/SRE/OTel research translated into repo-local mechanical invariants",
   "claim_impact": "any partial, unfitted, missing, stale, or row-shape-only fitting row blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility",
   "commands": [
     "package digest",
@@ -62,6 +62,18 @@
     "observe explain-check",
     "observe explain-law"
   ],
+  "surfaces": [
+    "cli command families",
+    "validator check families",
+    "schema parse boundaries",
+    "receipt proof artifacts",
+    "fixture report artifacts",
+    "package plugin resources",
+    "source install cache registry surfaces",
+    "claim guards update_goal eligibility",
+    "local spool live exporters",
+    "observability stack configs"
+  ],
   "row_requirements": {
     "log_instrumentation": true,
     "metric_instrumentation": true,
@@ -80,62 +92,1628 @@
     "unfitted"
   ],
   "fitting_inventory": {
-    "package digest": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "source audit": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "red fixture report": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "schema validation": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt dereference spans", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "mandatory-law validation": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "law/check spans", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "standards-gardener rebind": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "source-obligations check": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "law/check spans", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "foundational-trace check": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "law/check spans", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "coverage prove": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "coverage receipt observability binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/coverage/coverage-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "line-cap check": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "namespace check": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "product prove-fitness": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/harness/product-fitness-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "product prove-cohesion": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "product prove-journey": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/harness/plugin-product-journey-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "fit-repo prove": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/harness/fit-repo-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "review-round verify": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "review-target build": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/review/review-target-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "archive build": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["log", "metric", "trace", "stdout contract", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/review/candidate-archive-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "final-packet prove": {"fitting_status": "partially_fitted", "fitted_surfaces": ["stdout failure contract", "receipt observability binding", "structured event", "metric sample", "trace span", "local spool", "focused fail/green/tamper tests", "schema fields", "audit digest checks", "current live logs query", "current live metrics query", "current live traces query", "current explain-failure receipt"], "missing_surfaces": ["child spans for every dereferenced lower-level receipt", "full command-inventory fitted closure"], "validator_check_id": "final-packet-proof", "focused_tests": ["final_packet_receipt_builds_fail_closed_and_green_paths", "final_packet_proof_requires_same_candidate_dereferenced_packet"], "receipt_paths": ["validation_artifacts/review/final-packet-proof.json"], "live_query_proof_paths": ["validation_artifacts/observability/observe-logs-query.json", "validation_artifacts/observability/observe-metrics-query.json", "validation_artifacts/observability/observe-traces-query.json", "validation_artifacts/observability/observe-explain-failure.json"], "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted"},
-    "registry probe": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["live same-surface logs", "metrics", "traces", "query proof", "receipt binding"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"], "live_query_proof_paths": [], "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal"},
-    "install audit": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["surface-specific logs", "metrics", "traces", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/cli/install-audit-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal"},
-    "cache audit": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["surface-specific logs", "metrics", "traces", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/cli/cache-audit-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_cache_parity_readiness_release_completion_update_goal"},
-    "transaction finalize": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["transaction logs", "metrics", "traces", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/cli/transactional-finalization.json"], "live_query_proof_paths": [], "claim_impact": "blocks_transactional_finalization_readiness_release_completion_update_goal"},
-    "self law prove": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["self-law logs", "metrics", "traces", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/cli/self-law-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_cli_self_law_readiness_release_completion_update_goal"},
-    "self update-goal eligibility": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["eligibility logs", "metrics", "traces", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/cli/update-goal-eligibility.json"], "live_query_proof_paths": [], "claim_impact": "blocks_update_goal_eligibility"},
-    "rust toolchain verify": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/toolchain-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust fast": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/fast-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust standard": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/standard-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust release": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/release-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust clean-proof": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/clean-proof-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust watch": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["watch lifecycle telemetry", "shutdown proof", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust memory prove": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["Rust memory telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/memory-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust dependency audit": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["dependency telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/rust/dependency-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust coverage prove": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["coverage telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "rust workspace topology": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["topology telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "gc plan": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["GC command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/gc/plan-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "gc dry-run": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["GC command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/gc/dry-run-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "gc apply": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["GC command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/gc/apply-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "gc verify": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["GC command telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/gc/verify-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "session-log hardening": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["session log telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/harness/session-log-hardening-receipt.json"], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "target-repo audit": {"fitting_status": "unfitted", "fitted_surfaces": [], "missing_surfaces": ["target-surface telemetry", "receipt binding", "query proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": [], "live_query_proof_paths": [], "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"},
-    "observe stack up": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool", "live exporter attempt"], "missing_surfaces": ["same-candidate live query proof", "focused tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_stack_error_and_non_stack_edges_are_typed"], "receipt_paths": ["validation_artifacts/observability/observe-stack-up.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"},
-    "observe stack health": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool", "live exporter attempt", "health row parsing"], "missing_surfaces": ["same-candidate live query proof", "focused tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_package_audit_reports_config_receipt_and_registry_edges"], "receipt_paths": ["validation_artifacts/observability/observe-stack-health.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_health_only_until_fitted"},
-    "observe stack smoke": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool", "live exporter attempt", "smoke probes"], "missing_surfaces": ["same-candidate query proof in logs metrics traces", "focused tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_package_audit_reports_config_receipt_and_registry_edges"], "receipt_paths": ["validation_artifacts/observability/observe-stack-smoke.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_smoke_only_until_fitted"},
-    "observe stack down": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool", "live exporter attempt"], "missing_surfaces": ["same-candidate live query proof", "focused tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_stack_error_and_non_stack_edges_are_typed"], "receipt_paths": ["validation_artifacts/observability/observe-stack-down.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"},
-    "observe stack gc plan": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["same-candidate live query proof", "deletion-plan tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_stack_error_and_non_stack_edges_are_typed"], "receipt_paths": ["validation_artifacts/observability/observe-stack-gc-plan.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_gc_observation_only_until_fitted"},
-    "observe stack gc dry-run": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["same-candidate live query proof", "dry-run/apply separation tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_stack_error_and_non_stack_edges_are_typed"], "receipt_paths": ["validation_artifacts/observability/observe-stack-gc-dry-run.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_gc_observation_only_until_fitted"},
-    "observe stack gc apply": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["same-candidate live query proof", "plan-digest apply tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_stack_error_and_non_stack_edges_are_typed"], "receipt_paths": ["validation_artifacts/observability/observe-stack-gc-apply.json"], "live_query_proof_paths": [], "claim_impact": "supports_stack_gc_observation_only_until_fitted"},
-    "observe logs query": {"fitting_status": "partially_fitted", "fitted_surfaces": ["bounded query", "candidate mismatch rejection", "receipt shape", "local spool", "current final-packet failure query"], "missing_surfaces": ["current same-candidate query receipt for every law-bearing failure class"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"], "receipt_paths": ["validation_artifacts/observability/observe-logs-query.json"], "live_query_proof_paths": ["validation_artifacts/observability/observe-logs-query.json"], "claim_impact": "supports_query_observation_only_until_fitted"},
-    "observe metrics query": {"fitting_status": "partially_fitted", "fitted_surfaces": ["bounded query", "candidate mismatch rejection", "receipt shape", "local spool", "current final-packet failure query"], "missing_surfaces": ["current same-candidate metric query proof for every law-bearing failure class"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"], "receipt_paths": ["validation_artifacts/observability/observe-metrics-query.json"], "live_query_proof_paths": ["validation_artifacts/observability/observe-metrics-query.json"], "claim_impact": "supports_query_observation_only_until_fitted"},
-    "observe traces query": {"fitting_status": "partially_fitted", "fitted_surfaces": ["bounded query", "candidate mismatch rejection", "receipt shape", "local spool", "current final-packet failure query"], "missing_surfaces": ["current same-candidate trace query proof for every law-bearing failure class"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"], "receipt_paths": ["validation_artifacts/observability/observe-traces-query.json"], "live_query_proof_paths": ["validation_artifacts/observability/observe-traces-query.json"], "claim_impact": "supports_query_observation_only_until_fitted"},
-    "observe snapshot": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["snapshot contents query proof", "tamper proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/observability/observe-snapshot.json"], "live_query_proof_paths": [], "claim_impact": "supports_snapshot_observation_only_until_fitted"},
-    "observe prove": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "health/smoke currentness check", "local spool", "live exporter attempt"], "missing_surfaces": ["all law-bearing commands fitted", "same-candidate query proof for current blocker", "install/cache/app-surface separation proof"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["observability_package_audit_reports_config_receipt_and_registry_edges"], "receipt_paths": ["validation_artifacts/observability/observe-prove.json"], "live_query_proof_paths": [], "claim_impact": "supports_source_local_observability_stack_only_until_all_rows_fitted"},
-    "observe explain-failure": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "current final-packet/source-audit fallback", "local spool", "current final-packet failure explanation"], "missing_surfaces": ["live query reconciliation across logs metrics traces for every current blocker"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": ["explain_reports_current_failure_and_bad_root_errors"], "receipt_paths": ["validation_artifacts/observability/observe-explain-failure.json"], "live_query_proof_paths": ["validation_artifacts/observability/observe-explain-failure.json"], "claim_impact": "supports_failure_explanation_observation_only_until_fitted"},
-    "observe explain-claim": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["claim-specific live query reconciliation"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/observability/observe-explain-claim.json"], "live_query_proof_paths": [], "claim_impact": "supports_explanation_observation_only_until_fitted"},
-    "observe explain-check": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["check-specific live query reconciliation"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/observability/observe-explain-check.json"], "live_query_proof_paths": [], "claim_impact": "supports_explanation_observation_only_until_fitted"},
-    "observe explain-law": {"fitting_status": "partially_fitted", "fitted_surfaces": ["receipt shape", "stdout contract", "local spool"], "missing_surfaces": ["law-specific live query reconciliation"], "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure", "focused_tests": [], "receipt_paths": ["validation_artifacts/observability/observe-explain-law.json"], "live_query_proof_paths": [], "claim_impact": "supports_explanation_observation_only_until_fitted"}
+    "package digest": {
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "structured log event",
+        "metric sample",
+        "root trace span",
+        "pass stdout contract",
+        "observability receipt binding",
+        "same-candidate logs query proof",
+        "same-candidate metrics query proof",
+        "same-candidate traces query proof",
+        "focused receipt contract test"
+      ],
+      "missing_surfaces": [],
+      "validator_check_id": "package-digest-observability-binding",
+      "focused_tests": [
+        "package_digest_command_emits_observability_receipt_contract",
+        "cli_surface_commands_execute"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/package-digest.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/package-digest-logs-query.json",
+        "validation_artifacts/observability/package-digest-metrics-query.json",
+        "validation_artifacts/observability/package-digest-traces-query.json"
+      ],
+      "claim_impact": "supports_source_package_digest_only_no_readiness_release_completion_update_goal"
+    },
+    "source audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "stdout contract",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "red fixture report": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "stdout contract",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "schema validation": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt dereference spans",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "mandatory-law validation": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "law/check spans",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "standards-gardener rebind": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "source-obligations check": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "law/check spans",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "foundational-trace check": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "law/check spans",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "coverage prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "coverage receipt observability binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/coverage/coverage-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "line-cap check": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "namespace check": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "product prove-fitness": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/harness/product-fitness-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "product prove-cohesion": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "product prove-journey": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/harness/plugin-product-journey-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "fit-repo prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/harness/fit-repo-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "review-round verify": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "stdout contract",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "review-target build": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "stdout contract",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/review/review-target-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "archive build": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log",
+        "metric",
+        "trace",
+        "stdout contract",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/review/candidate-archive-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "final-packet prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "stdout failure contract",
+        "receipt observability binding",
+        "structured event",
+        "metric sample",
+        "trace span",
+        "local spool",
+        "focused fail/green/tamper tests",
+        "schema fields",
+        "audit digest checks",
+        "current live logs query",
+        "current live metrics query",
+        "current live traces query",
+        "current explain-failure receipt"
+      ],
+      "missing_surfaces": [
+        "child spans for every dereferenced lower-level receipt",
+        "full command-inventory fitted closure"
+      ],
+      "validator_check_id": "final-packet-proof",
+      "focused_tests": [
+        "final_packet_receipt_builds_fail_closed_and_green_paths",
+        "final_packet_proof_requires_same_candidate_dereferenced_packet"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/review/final-packet-proof.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-logs-query.json",
+        "validation_artifacts/observability/observe-metrics-query.json",
+        "validation_artifacts/observability/observe-traces-query.json",
+        "validation_artifacts/observability/observe-explain-failure.json"
+      ],
+      "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted"
+    },
+    "registry probe": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "live same-surface logs",
+        "metrics",
+        "traces",
+        "query proof",
+        "receipt binding"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal"
+    },
+    "install audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "surface-specific logs",
+        "metrics",
+        "traces",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/install-audit-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal"
+    },
+    "cache audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "surface-specific logs",
+        "metrics",
+        "traces",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/cache-audit-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_cache_parity_readiness_release_completion_update_goal"
+    },
+    "transaction finalize": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "transaction logs",
+        "metrics",
+        "traces",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/transactional-finalization.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_transactional_finalization_readiness_release_completion_update_goal"
+    },
+    "self law prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "self-law logs",
+        "metrics",
+        "traces",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/self-law-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_cli_self_law_readiness_release_completion_update_goal"
+    },
+    "self update-goal eligibility": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "eligibility logs",
+        "metrics",
+        "traces",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/update-goal-eligibility.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_update_goal_eligibility"
+    },
+    "rust toolchain verify": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/toolchain-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust fast": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/fast-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust standard": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/standard-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust release": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/release-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust clean-proof": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/clean-proof-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust watch": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "watch lifecycle telemetry",
+        "shutdown proof",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust memory prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "Rust memory telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/memory-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust dependency audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "dependency telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/rust/dependency-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust coverage prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "coverage telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "rust workspace topology": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "topology telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "gc plan": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "GC command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/gc/plan-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "gc dry-run": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "GC command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/gc/dry-run-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "gc apply": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "GC command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/gc/apply-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "gc verify": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "GC command telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/gc/verify-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "session-log hardening": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "session log telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/harness/session-log-hardening-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "target-repo audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "target-surface telemetry",
+        "receipt binding",
+        "query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
+    },
+    "observe stack up": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool",
+        "live exporter attempt"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "focused tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-up.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"
+    },
+    "observe stack health": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool",
+        "live exporter attempt",
+        "health row parsing"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "focused tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_package_audit_reports_config_receipt_and_registry_edges"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-health.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_health_only_until_fitted"
+    },
+    "observe stack smoke": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool",
+        "live exporter attempt",
+        "smoke probes"
+      ],
+      "missing_surfaces": [
+        "same-candidate query proof in logs metrics traces",
+        "focused tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_package_audit_reports_config_receipt_and_registry_edges"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-smoke.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_smoke_only_until_fitted"
+    },
+    "observe stack down": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool",
+        "live exporter attempt"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "focused tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-down.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_lifecycle_observation_only_until_fitted"
+    },
+    "observe stack gc plan": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "deletion-plan tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-gc-plan.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+    },
+    "observe stack gc dry-run": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "dry-run/apply separation tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-gc-dry-run.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+    },
+    "observe stack gc apply": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "same-candidate live query proof",
+        "plan-digest apply tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-gc-apply.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_stack_gc_observation_only_until_fitted"
+    },
+    "observe logs query": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "bounded query",
+        "candidate mismatch rejection",
+        "receipt shape",
+        "local spool",
+        "current final-packet failure query"
+      ],
+      "missing_surfaces": [
+        "current same-candidate query receipt for every law-bearing failure class"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-logs-query.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-logs-query.json"
+      ],
+      "claim_impact": "supports_query_observation_only_until_fitted"
+    },
+    "observe metrics query": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "bounded query",
+        "candidate mismatch rejection",
+        "receipt shape",
+        "local spool",
+        "current final-packet failure query"
+      ],
+      "missing_surfaces": [
+        "current same-candidate metric query proof for every law-bearing failure class"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-metrics-query.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-metrics-query.json"
+      ],
+      "claim_impact": "supports_query_observation_only_until_fitted"
+    },
+    "observe traces query": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "bounded query",
+        "candidate mismatch rejection",
+        "receipt shape",
+        "local spool",
+        "current final-packet failure query"
+      ],
+      "missing_surfaces": [
+        "current same-candidate trace query proof for every law-bearing failure class"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-traces-query.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-traces-query.json"
+      ],
+      "claim_impact": "supports_query_observation_only_until_fitted"
+    },
+    "observe snapshot": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "snapshot contents query proof",
+        "tamper proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-snapshot.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_snapshot_observation_only_until_fitted"
+    },
+    "observe prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "health/smoke currentness check",
+        "local spool",
+        "live exporter attempt"
+      ],
+      "missing_surfaces": [
+        "all law-bearing commands fitted",
+        "same-candidate query proof for current blocker",
+        "install/cache/app-surface separation proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_package_audit_reports_config_receipt_and_registry_edges"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-prove.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_source_local_observability_stack_only_until_all_rows_fitted"
+    },
+    "observe explain-failure": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "current final-packet/source-audit fallback",
+        "local spool",
+        "current final-packet failure explanation"
+      ],
+      "missing_surfaces": [
+        "live query reconciliation across logs metrics traces for every current blocker"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "explain_reports_current_failure_and_bad_root_errors"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-explain-failure.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-explain-failure.json"
+      ],
+      "claim_impact": "supports_failure_explanation_observation_only_until_fitted"
+    },
+    "observe explain-claim": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "claim-specific live query reconciliation"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-explain-claim.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_explanation_observation_only_until_fitted"
+    },
+    "observe explain-check": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "check-specific live query reconciliation"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-explain-check.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_explanation_observation_only_until_fitted"
+    },
+    "observe explain-law": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "receipt shape",
+        "stdout contract",
+        "local spool"
+      ],
+      "missing_surfaces": [
+        "law-specific live query reconciliation"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-explain-law.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_explanation_observation_only_until_fitted"
+    }
+  },
+  "surface_inventory": {
+    "cli command families": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "required command list",
+        "per-command fitting status",
+        "package digest fitted green proof"
+      ],
+      "missing_surfaces": [
+        "all remaining law-bearing command families fitted with current receipt and live query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_registry_accepts_fully_fitted_inventory",
+        "observe_green_prove_and_query_helpers_are_typed"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/package-digest.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/package-digest-logs-query.json",
+        "validation_artifacts/observability/package-digest-metrics-query.json",
+        "validation_artifacts/observability/package-digest-traces-query.json"
+      ],
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal_until_every_command_row_is_fitted"
+    },
+    "validator check families": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "per-check logs",
+        "per-check metrics",
+        "per-check child spans",
+        "per-check receipt/query binding",
+        "same-candidate green proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+    },
+    "schema parse boundaries": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "schema parse child spans",
+        "parse-failure logs",
+        "parse metrics",
+        "receipt dereference binding",
+        "same-candidate query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+    },
+    "receipt proof artifacts": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "all law-bearing receipts reference observability receipts",
+        "log stream digest",
+        "metric snapshot digest",
+        "trace bundle digest",
+        "query examples",
+        "redaction proof",
+        "retention bounds proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_final_packet_readiness_release_completion_update_goal"
+    },
+    "fixture report artifacts": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "red fixture telemetry",
+        "green fixture telemetry",
+        "tamper fixture telemetry",
+        "red report observability binding",
+        "same-candidate query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+    },
+    "package plugin resources": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "observability configs listed as package resources",
+        "observability schemas listed as package resources",
+        "command inventory listed as package resource"
+      ],
+      "missing_surfaces": [
+        "all telemetry source files and receipts package-inventory checked exactly once",
+        "installed/cache/app-surface observability separation proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_package_audit_reports_config_receipt_and_registry_edges"
+      ],
+      "receipt_paths": [
+        "plugin-manifest-draft.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_package_readiness_release_completion_update_goal"
+    },
+    "source install cache registry surfaces": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "surface-specific telemetry for source",
+        "surface-specific telemetry for install",
+        "surface-specific telemetry for cache",
+        "live same-surface registry/reviewer observation telemetry or fail-closed claim blocking proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/install-audit-receipt.json",
+        "validation_artifacts/cli/cache-audit-receipt.json",
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal"
+    },
+    "claim guards update_goal eligibility": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "claim-ceiling calculation spans",
+        "blocked-claim metrics",
+        "self-law receipt binding",
+        "update-goal eligibility receipt binding",
+        "same-candidate query proof"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [
+        "validation_artifacts/cli/self-law-receipt.json",
+        "validation_artifacts/cli/update-goal-eligibility.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_completion_update_goal_readiness_release"
+    },
+    "local spool live exporters": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "bounded local JSONL spool",
+        "live exporter attempts",
+        "redaction proof fields",
+        "stack health and smoke receipts"
+      ],
+      "missing_surfaces": [
+        "exporter retry/drop metrics for every command",
+        "no local-spool-only completion proof across all receipts",
+        "same-candidate live query proof for every law-bearing run"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_stack_error_and_non_stack_edges_are_typed",
+        "observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-health.json",
+        "validation_artifacts/observability/observe-stack-smoke.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_readiness_release_completion_update_goal"
+    },
+    "observability stack configs": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "repo-owned compose/config files",
+        "health receipt",
+        "smoke receipt",
+        "127.0.0.1 port binding checks"
+      ],
+      "missing_surfaces": [
+        "validator-enforced config coverage for every stack file",
+        "tamper proof for public ports/latest tags/unbounded retention across every config"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_package_audit_reports_config_receipt_and_registry_edges"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-stack-health.json",
+        "validation_artifacts/observability/observe-stack-smoke.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_source_local_stack_observation_only_until_fitted"
+    }
+  },
+  "operating_loop": {
+    "doctrine": {
+      "agent_legibility_local_stack": true,
+      "repair_validate_loop": true,
+      "trace_whole_workflow": true,
+      "freshness_prevents_false_conclusions": true,
+      "four_golden_signals_for_cli": true,
+      "wide_structured_events_with_bounded_context": true,
+      "semantic_naming_across_telemetry": true
+    },
+    "research_inputs": [
+      {
+        "source": "OpenAI Harness Engineering",
+        "url": "https://openai.com/index/harness-engineering/",
+        "repo_rule": "observability is an agent-legibility loop: local worktree-scoped logs, metrics, and traces must be queryable by Codex before broad repair claims"
+      },
+      {
+        "source": "OpenAI iterative repair loops cookbook",
+        "url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
+        "repo_rule": "validation feedback must feed review-repair-validate loops instead of ending in manual JSON spelunking"
+      },
+      {
+        "source": "OpenAI Agents observability/tracing",
+        "url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
+        "repo_rule": "workflow spans must connect tools, guardrails, custom work, and failures for debugging and later evals"
+      },
+      {
+        "source": "Google SRE monitoring guidance",
+        "url": "https://sre.google/workbook/monitoring/",
+        "repo_rule": "monitoring must support investigation, diagnosis, comparison, trend detection, and freshness checks"
+      },
+      {
+        "source": "Google SRE four golden signals",
+        "url": "https://sre.google/sre-book/monitoring-distributed-systems/",
+        "repo_rule": "CLI observability must map latency, traffic, errors, and saturation into bounded metrics"
+      },
+      {
+        "source": "Honeycomb structured events/high cardinality",
+        "url": "https://www.honeycomb.io/blog/opentelemetry-best-practices-naming",
+        "repo_rule": "events and spans must carry rich, consistent, bounded fields instead of dashboard-only summaries"
+      },
+      {
+        "source": "OpenTelemetry semantic conventions",
+        "url": "https://opentelemetry.io/docs/concepts/semantic-conventions/",
+        "repo_rule": "logs, metrics, and traces must share stable semantic names so correlation is mechanical"
+      }
+    ],
+    "control_loop_order": [
+      "current_digest_first",
+      "run_failing_command_once",
+      "query_logs_metrics_traces_by_run_id",
+      "explain_failure_before_manual_artifact_inspection",
+      "repair_smallest_root_cause",
+      "rerun_narrow_command",
+      "compare_before_after_telemetry",
+      "broad_audit_after_narrow_pass"
+    ],
+    "claim_guard": "a broad audit, readiness claim, final packet claim, release claim, completion claim, or update_goal claim is invalid unless the current failure has moved through the observable loop on the same candidate digest"
+  },
+  "operating_loop_inventory": {
+    "current_digest_first": {
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "package digest command",
+        "pass stdout contract",
+        "same-candidate receipt",
+        "logs query",
+        "metrics query",
+        "traces query"
+      ],
+      "missing_surfaces": [],
+      "operation": "package.digest",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "package_digest_command_emits_observability_receipt_contract"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/package-digest.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/package-digest-logs-query.json",
+        "validation_artifacts/observability/package-digest-metrics-query.json",
+        "validation_artifacts/observability/package-digest-traces-query.json"
+      ],
+      "claim_impact": "supports source package digest only; no readiness/release/completion/update_goal"
+    },
+    "run_failing_command_once": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "observe prove captures current fitting failure"
+      ],
+      "missing_surfaces": [
+        "source audit/final-packet/self-law/update-goal failing commands are not all fitted"
+      ],
+      "operation": "observe.prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-prove.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks broad audit and completion-adjacent claims until every high-authority failing command is observable"
+    },
+    "query_logs_metrics_traces_by_run_id": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "current observe prove run has logs/metrics/traces query receipts"
+      ],
+      "missing_surfaces": [
+        "law/check/claim-specific query matrix for every failure class"
+      ],
+      "operation": "observe.query.by_run_id",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_query_command_rejects_unreadable_empty_and_side_effect_scripts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-logs-query.json",
+        "validation_artifacts/observability/observe-metrics-query.json",
+        "validation_artifacts/observability/observe-traces-query.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-logs-query.json",
+        "validation_artifacts/observability/observe-metrics-query.json",
+        "validation_artifacts/observability/observe-traces-query.json"
+      ],
+      "claim_impact": "supports current run investigation only; no Gate 92 completion"
+    },
+    "explain_failure_before_manual_artifact_inspection": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "observe explain-failure receipt exists for current observe prove run"
+      ],
+      "missing_surfaces": [
+        "every failing command must emit non-generic why/where/next_repair before manual artifact inspection"
+      ],
+      "operation": "observe.explain-failure",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "explain_reports_current_failure_and_bad_root_errors"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/observe-explain-failure.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/observe-explain-failure.json"
+      ],
+      "claim_impact": "blocks repair-loop claims when why_failed is none, generic, stale, or wrong digest"
+    },
+    "repair_smallest_root_cause": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "typed smallest-repair command mapping for every failure class"
+      ],
+      "operation": "observe.repair.smallest_root_cause",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks broad audit churn and completion-adjacent claims"
+    },
+    "rerun_narrow_command": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "narrow rerun receipt linked to prior failing run for every repair class"
+      ],
+      "operation": "observe.repair.rerun_narrow",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks source-audit reruns as first repair step"
+    },
+    "compare_before_after_telemetry": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "before/after logs metrics traces comparison receipt for repaired check"
+      ],
+      "operation": "observe.repair.compare_before_after",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks claims that a repair changed behavior"
+    },
+    "broad_audit_after_narrow_pass": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "validator guard that broad source audit runs only after narrow observable repair proof"
+      ],
+      "operation": "source.audit.after_narrow_pass",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks audit churn and validator theater"
+    },
+    "stale_telemetry_blocks_claims": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "fitted rows dereference same-candidate receipts and query proof"
+      ],
+      "missing_surfaces": [
+        "all law-bearing receipts must reject stale telemetry binding"
+      ],
+      "operation": "observability.freshness.claim_guard",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "observability_registry_accepts_fully_fitted_inventory"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/package-digest.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/package-digest-logs-query.json",
+        "validation_artifacts/observability/package-digest-metrics-query.json",
+        "validation_artifacts/observability/package-digest-traces-query.json"
+      ],
+      "claim_impact": "stale telemetry blocks every dependent claim"
+    },
+    "structured_feedback_feeds_next_pass": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "validation failure converted into typed next repair input for every check"
+      ],
+      "operation": "observability.structured_feedback",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks opaque failure and manual JSON spelunking loops"
+    }
+  },
+  "signal_inventory": {
+    "latency": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "command duration metric names exist for observe/package paths"
+      ],
+      "missing_surfaces": [
+        "per-command/check/receipt/query latency across all law-bearing paths",
+        "before/after latency comparison"
+      ],
+      "operation": "metrics.latency",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports local latency observation only"
+    },
+    "traffic": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "command/check counters named in Gate 92"
+      ],
+      "missing_surfaces": [
+        "complete command/check/fixture/receipt count proof"
+      ],
+      "operation": "metrics.traffic",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks capacity and workflow-volume claims"
+    },
+    "errors": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "observe prove failure emits failure class and blocked claims"
+      ],
+      "missing_surfaces": [
+        "all check failures, stale receipts, digest mismatches, claim blocks, exporter errors"
+      ],
+      "operation": "metrics.errors",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks correctness and repair-loop claims"
+    },
+    "saturation": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "queue size",
+        "target/cache size",
+        "long-running process count",
+        "exporter drop/retry rates across all commands"
+      ],
+      "operation": "metrics.saturation",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks speed/resource/readiness claims"
+    },
+    "freshness": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "fitted rows require current candidate digest"
+      ],
+      "missing_surfaces": [
+        "all telemetry receipts and query rows reject older candidate digests"
+      ],
+      "operation": "telemetry.freshness",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "stale telemetry blocks every dependent claim"
+    },
+    "correlation": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "run_id/correlation_id required in fitted receipt/query proof"
+      ],
+      "missing_surfaces": [
+        "every command/check/span/log/metric row shares correlation across the full workflow"
+      ],
+      "operation": "telemetry.correlation",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "uncorrelated telemetry blocks Gate 92"
+    },
+    "redaction": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "redaction_status field exists in events/receipts"
+      ],
+      "missing_surfaces": [
+        "live logs metrics traces query outputs all leak-checked"
+      ],
+      "operation": "telemetry.redaction",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "unredacted telemetry blocks Gate 92 and package claims"
+    },
+    "boundedness": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "query commands expose limit/byte/timeout settings"
+      ],
+      "missing_surfaces": [
+        "all queries/exports/spools enforce row, byte, timeout, retention, and cardinality bounds"
+      ],
+      "operation": "telemetry.boundedness",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "unbounded telemetry blocks Gate 92"
+    }
   }
 }

@@ -1,6 +1,10 @@
 use super::*;
-use serde_json::{Map, Value, json};
+use serde_json::json;
 use std::fs;
+
+mod receipts;
+mod support;
+use support::*;
 
 #[test]
 fn observability_registry_accepts_fully_fitted_inventory() {
@@ -65,83 +69,59 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
             .iter()
             .any(|item| { item == "observability_command_fitting_row_shape_only:source audit" })
     );
-    fs::remove_dir_all(root).expect("cleanup fit registry");
-}
 
-fn write_registry_root(root: &std::path::Path, inventory: Value) {
-    fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
-    fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory");
-    fs::create_dir_all(root.join("docs")).expect("docs");
-    fs::create_dir_all(root.join("fixtures/mandatory-law-surfaces/valid")).expect("fixtures");
-    crate::json_boundary::write_json(
-        &root.join("templates/agent-standards/enforcement.json"),
-        &json!({"rows":[{"id": super::super::LAW}]}),
-    )
-    .expect("standards json");
-    crate::json_boundary::write_json(
-        &root.join("docs/source-obligation-matrix.json"),
-        &json!({"obligations":[{"obligation_id": super::super::LAW}]}),
-    )
-    .expect("obligation json");
-    crate::json_boundary::write_json(
-        &root.join("docs/foundational-law-traceability.json"),
-        &json!({"entries":[{"id": super::super::LAW}]}),
-    )
-    .expect("trace json");
-    write_inventory(root, inventory);
-}
-
-fn write_inventory(root: &std::path::Path, inventory: Value) {
-    crate::json_boundary::write_json(
-        &root.join("docs/generated/observability/command-inventory.json"),
-        &inventory,
-    )
-    .expect("inventory json");
-}
-
-fn write_valid_fixture(root: &std::path::Path) {
-    fs::write(
-        root.join(format!(
-            "fixtures/mandatory-law-surfaces/valid/{}.json",
-            super::super::LAW
-        )),
-        "{}",
-    )
-    .expect("valid fixture");
-}
-
-fn fitted_inventory() -> Value {
-    let mut rows = Map::new();
-    for command in fitting::REQUIRED_COMMANDS {
-        rows.insert((*command).to_string(), fitted_row());
-    }
-    json!({
-        "commands": fitting::REQUIRED_COMMANDS,
-        "row_requirements": {
-            "log_instrumentation": true,
-            "metric_instrumentation": true,
-            "trace_instrumentation": true,
-            "pass_output_contract": true,
-            "fail_output_contract": true,
-            "receipt_observability_binding": true,
-            "focused_tests": true,
-            "claim_impact_mapping": true,
-            "same_candidate_query_proof": true,
-            "validator_enforced": true
-        },
-        "fitting_inventory": rows
-    })
-}
-
-fn fitted_row() -> Value {
-    json!({
+    let mut surface_shape = fitted_inventory();
+    surface_shape["surface_inventory"]["validator check families"] = json!({
         "fitting_status": "fitted",
-        "fitted_surfaces": ["log", "metric", "trace", "stdout", "receipt"],
+        "fitted_surfaces": ["log"],
         "missing_surfaces": [],
         "validator_check_id": super::super::LAW,
-        "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": ["validation_artifacts/observability/observe-prove.json"],
-        "live_query_proof_paths": ["validation_artifacts/observability/observe-logs-query.json"],
-        "claim_impact": "supports_gate_92_when_same_candidate"
-    })
+        "focused_tests": [],
+        "receipt_paths": ["validation_artifacts/observability/fitting/surface-validator-check-families.json"],
+        "live_query_proof_paths": [],
+        "claim_impact": "claims_complete"
+    });
+    write_inventory(&root, surface_shape);
+    failures.clear();
+    check(&root, &mut failures);
+    assert!(failures.iter().any(|item| {
+        item == "observability_surface_fitting_row_shape_only:validator check families"
+    }));
+
+    let mut loop_shape = fitted_inventory();
+    loop_shape["operating_loop_inventory"]["query_logs_metrics_traces_by_run_id"] = json!({
+        "fitting_status": "fitted",
+        "fitted_surfaces": ["log"],
+        "missing_surfaces": [],
+        "validator_check_id": super::super::LAW,
+        "focused_tests": [],
+        "receipt_paths": ["validation_artifacts/observability/fitting/loop-query_logs_metrics_traces_by_run_id.json"],
+        "live_query_proof_paths": [],
+        "claim_impact": "claims_complete"
+    });
+    write_inventory(&root, loop_shape);
+    failures.clear();
+    check(&root, &mut failures);
+    assert!(failures.iter().any(|item| {
+        item == "observability_loop_fitting_row_shape_only:query_logs_metrics_traces_by_run_id"
+    }));
+
+    let mut signal_unfitted = fitted_inventory();
+    signal_unfitted["signal_inventory"]["saturation"] = json!({
+        "fitting_status": "partially_fitted",
+        "fitted_surfaces": ["metric names"],
+        "missing_surfaces": ["queue and cache saturation query proof"],
+        "validator_check_id": super::super::LAW,
+        "focused_tests": [],
+        "receipt_paths": [],
+        "live_query_proof_paths": [],
+        "claim_impact": "blocks_gate_92"
+    });
+    write_inventory(&root, signal_unfitted);
+    failures.clear();
+    check(&root, &mut failures);
+    assert!(failures.iter().any(|item| {
+        item == "observability_signal_fitting_unfitted:saturation:partially_fitted"
+    }));
+    fs::remove_dir_all(root).expect("cleanup fit registry");
 }

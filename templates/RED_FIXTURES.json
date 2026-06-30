@@ -11149,5 +11149,37 @@
     "id": "wrong-worktree-or-root",
     "packet_digest": "sha256:6d8cbb72d60b9e7dd6ab36e7580eb02ae4eb0dff86d5327553548b68b1d83aaf",
     "packet_path": "fixtures/red/wrong-worktree-or-root.json"
+  },
+  {
+    "id": "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof"
+    }
+  },
+  {
+    "id": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory"
+    }
+  },
+  {
+    "id": "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop"
+    }
+  },
+  {
+    "id": "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red",
+    "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+    "expected_failure": {
+      "check_id": "source-obligation-coverage",
+      "error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair"
+    }
   }
 ]
