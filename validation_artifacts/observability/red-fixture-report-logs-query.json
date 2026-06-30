@@ -1,0 +1,35 @@
+{
+  "blocked_claims": [
+    "completion",
+    "readiness",
+    "release",
+    "update_goal_eligibility"
+  ],
+  "byte_limit": 262144,
+  "candidate_digest": "sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b",
+  "cardinality_guard": "bounded",
+  "claim_impact": "query_observation_only",
+  "correlation_id": "corr-f7903a645d3f02273f8ef02af0f29818ba5787163bc6a5f28737474acc607323",
+  "failure": "",
+  "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
+  "query": "run_id:run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950",
+  "query_kind": "logs",
+  "result_digest": "sha256:2cf8b7afd060570a90df53073fdaa851874944027c6e34aadbc0a2b68c9005a1",
+  "retention_bound": "2d",
+  "row_limit": 100,
+  "rows": [
+    {
+      "body": "{\"_msg\":\"missing _msg field; see https://docs.victoriametrics.com/victorialogs/keyconcepts/#message-field\",\"_stream\":\"{candidate_digest=\\\"sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b\\\",check_id=\\\"red-fixture-report-observability-binding\\\",claim_id=\\\"red_fixture_report\\\",command=\\\"ultragoal source\\\",law_id=\\\"full-local-observability-stack-integration-non-opaque-failure\\\"}\",\"_stream_id\":\"00000000000000000051019f3eacdf9e2323f8defec80c4f\",\"_time\":\"2026-06-30T01:50:10Z\",\"artifact_path\":\"validation_artifacts/ultragoal-audit/red-fixture-report.json\",\"bounded_output_status\":\"pass\",\"candidate_digest\":\"sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b\",\"check_id\":\"red-fixture-report-observability-binding\",\"claim_id\":\"red_fixture_report\",\"claim_impact\":\"supports_red_fixture_report_source_local_only\",\"command\":\"ultragoal source\",\"correlation_id\":\"corr-fa16e123a2aee62ee63344cef8d56b5117a201f36c380196f3c9ab9fc2602890\",\"duration_ms\":\"0\",\"exporter\":\"victorialogs\",\"failure_class\":\"none\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"next_repair\":\"none\",\"operation\":\"red_fixture.report\",\"query_hint_logql\":\"run_id:run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950 operation:red_fixture.report\",\"query_hint_promql\":\"ultragoal_command_total{run_id=\\\"run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950\\\"}\",\"query_hint_traceql\":\"{\\\"run_id\\\":\\\"run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950\\\"}\",\"receipt_path\":\"validation_artifacts/observability/red-fixture-report.json\",\"redaction_status\":\"pass\",\"run_id\":\"run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950\",\"schema\":\"harness-ultragoal.observability-event.v1\",\"span_id\":\"span-a4a6abd25572b0e1e5022eb752826f8c45fd71a93da4c0d1f660e00848ac1273\",\"status\":\"pass\",\"subcommand\":\"audit --red-report\",\"surface\":\"source\",\"target_revision\":\"sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b\",\"trace_id\":\"trace-a79e4b3f96117e083da79837204d20cdf2d4dcb626bfd712a975ce68884a3e8a\",\"where_failed\":\"none\",\"why_failed\":\"none\"}\n"
+    }
+  ],
+  "run_id": "run-2061c3cf021390d849cd961598d61794517e8391ca6bcb813bb3d5a7628f8950",
+  "schema": "harness-ultragoal.observability-query-result.v1",
+  "status": "pass",
+  "supported_claims": [
+    "observability_query_observation"
+  ],
+  "timeout_ms": 30000,
+  "truncated": false,
+  "where_failed": "none",
+  "why_failed": "none"
+}

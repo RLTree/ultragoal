@@ -1,7 +1,6 @@
-use serde_json::Value;
 use std::path::{Path, PathBuf};
 
-const SOURCE_AUDIT_OBSERVABILITY: &str = "validation_artifacts/observability/source-audit.json";
+mod observability;
 
 pub(crate) struct RunArgs {
     pub(crate) root: PathBuf,
@@ -17,6 +16,7 @@ pub(crate) fn run(args: RunArgs) -> Result<i32, String> {
     let root = args.root.clone();
     let receipt = args.receipt.clone();
     let target_repo = args.target_repo.clone();
+    let red_report = args.red_report.clone();
     let options = crate::audit::AuditOptions {
         root: args.root,
         receipt: args.receipt,
@@ -30,143 +30,28 @@ pub(crate) fn run(args: RunArgs) -> Result<i32, String> {
     let result = crate::audit::run(options);
     match result {
         Ok(code) => {
-            write_observability(&root, &receipt, code, target_repo.is_some(), None)?;
+            observability::write_all(
+                &root,
+                &receipt,
+                red_report.as_deref(),
+                code,
+                target_repo.is_some(),
+                None,
+            )?;
             Ok(code)
         }
         Err(err) => {
-            let _ = write_observability(&root, &receipt, 1, target_repo.is_some(), Some(&err));
+            let _ = observability::write_all(
+                &root,
+                &receipt,
+                red_report.as_deref(),
+                1,
+                target_repo.is_some(),
+                Some(&err),
+            );
             Err(err)
         }
     }
-}
-
-fn write_observability(
-    root: &Path,
-    receipt: &Path,
-    code: i32,
-    target_repo: bool,
-    command_error: Option<&str>,
-) -> Result<(), String> {
-    let operation = if target_repo {
-        "target-repo.audit"
-    } else {
-        "source.audit"
-    };
-    let receipt_rel = if target_repo {
-        "validation_artifacts/observability/target-repo-audit.json"
-    } else {
-        SOURCE_AUDIT_OBSERVABILITY
-    };
-    let audit = crate::json_boundary::read_json(receipt).unwrap_or(Value::Null);
-    let failures = command_error
-        .map(|err| vec![err.to_string()])
-        .unwrap_or_else(|| failed_checks(&audit));
-    let status = if code == 0 { "pass" } else { "fail" };
-    let failure_class = if code == 0 {
-        "none"
-    } else {
-        "source_audit_check_failure"
-    };
-    let why_failed = if failures.is_empty() {
-        if code == 0 {
-            "none".to_string()
-        } else {
-            "source audit failed without check details".to_string()
-        }
-    } else {
-        format!("source audit failed checks: {}", failures.join("; "))
-    };
-    let value = crate::cli::observe::telemetry::command_receipt(
-        root,
-        crate::cli::observe::telemetry::CommandTelemetry {
-            command: "ultragoal source",
-            subcommand: "audit",
-            operation,
-            surface: if target_repo { "target_repo" } else { "source" },
-            law_id: crate::cli::observe::types::LAW_ID,
-            check_id: "source-audit-observability-binding",
-            claim_id: if target_repo {
-                "target_repo_audit"
-            } else {
-                "source_audit"
-            },
-            artifact_path: "validation_artifacts/ultragoal-audit",
-            receipt_path: receipt_rel,
-            status,
-            failure_class,
-            why_failed: &why_failed,
-            where_failed: if code == 0 { "none" } else { operation },
-            next_repair: next_repair(code),
-            claim_impact: claim_impact(code),
-            blocked_claims: blocked_claims(),
-            supported_claims: supported_claims(code),
-            emit: true,
-        },
-    )?;
-    crate::json_boundary::write_json(&root.join(receipt_rel), &value)?;
-    println!(
-        "ultragoal-audit-observe {status} operation={operation} receipt={receipt_rel} run_id={} correlation_id={} claim_impact={}",
-        value["run_id"].as_str().unwrap_or("<missing>"),
-        value["correlation_id"].as_str().unwrap_or("<missing>"),
-        value["claim_impact"].as_str().unwrap_or("<missing>")
-    );
-    Ok(())
-}
-
-fn failed_checks(audit: &Value) -> Vec<String> {
-    let mut checks = audit
-        .get("checks")
-        .and_then(Value::as_object)
-        .into_iter()
-        .flat_map(|rows| rows.iter())
-        .filter_map(|(check, row)| {
-            (row.get("status").and_then(Value::as_str) != Some("pass")).then(|| check.to_string())
-        })
-        .collect::<Vec<_>>();
-    checks.sort();
-    checks
-}
-
-fn next_repair(code: i32) -> &'static str {
-    if code == 0 {
-        "none"
-    } else {
-        "query this run through observe logs/metrics/traces, repair the named source-audit checks, then rerun source audit once"
-    }
-}
-
-fn claim_impact(code: i32) -> &'static str {
-    if code == 0 {
-        "supports_source_audit_pass_source_local_only"
-    } else {
-        "source_audit_failed_blocks_readiness_release_completion_update_goal"
-    }
-}
-
-fn supported_claims(code: i32) -> Vec<String> {
-    if code == 0 {
-        ["source_local_audit_checks", "red_fixture_report"]
-            .into_iter()
-            .map(ToString::to_string)
-            .collect()
-    } else {
-        Vec::new()
-    }
-}
-
-fn blocked_claims() -> Vec<String> {
-    [
-        "completion",
-        "readiness",
-        "release",
-        "reviewer_exposure",
-        "app_registry_exposure",
-        "final_packet_correctness",
-        "update_goal_eligibility",
-    ]
-    .into_iter()
-    .map(ToString::to_string)
-    .collect()
 }
 
 fn command_text(root: &Path) -> String {
@@ -203,9 +88,9 @@ mod tests {
             }),
         )
         .expect("audit receipt");
-        write_observability(&root, &receipt, 1, false, None).expect("observability");
-        let value =
-            crate::json_boundary::read_json(&root.join(SOURCE_AUDIT_OBSERVABILITY)).expect("obs");
+        observability::write_all(&root, &receipt, None, 1, false, None).expect("observability");
+        let value = crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT))
+            .expect("obs");
         assert_eq!(value["status"], "fail");
         assert_eq!(value["operation"], "source.audit");
         assert_eq!(value["claim_id"], "source_audit");

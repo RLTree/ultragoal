@@ -4028,6 +4028,8 @@
     "validator/src/cli/control/plane/evidence/status/mod.rs",
     "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
     "validator/src/cli/audit/mod.rs",
+    "validator/src/cli/audit/observability.rs",
+    "validator/src/cli/audit/observability/red.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/mod.rs",
     "validator/src/cli/control/plane/path.rs",

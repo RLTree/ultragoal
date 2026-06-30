@@ -146,20 +146,32 @@
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
     },
     "red fixture report": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "command-level observability receipt",
+        "red-report-only claim ceiling",
+        "claim-blocking fail receipt",
+        "local spool emission"
+      ],
       "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "stdout contract",
-        "receipt binding",
-        "query proof"
+        "current same-candidate logs query proof",
+        "current same-candidate metrics query proof",
+        "current same-candidate traces query proof",
+        "dedicated pass/fail stdout contract outside source audit wrapper",
+        "all red report producer paths instrumented"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
+      "focused_tests": [
+        "red_fixture_report_observability_receipt_supports_only_red_report"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/red-fixture-report.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/red-fixture-report-logs-query.json",
+        "validation_artifacts/observability/red-fixture-report-metrics-query.json",
+        "validation_artifacts/observability/red-fixture-report-traces-query.json"
+      ],
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal"
     },
     "schema validation": {

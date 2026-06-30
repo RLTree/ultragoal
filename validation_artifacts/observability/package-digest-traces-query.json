@@ -6,23 +6,23 @@
     "update_goal_eligibility"
   ],
   "byte_limit": 262144,
-  "candidate_digest": "sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794",
+  "candidate_digest": "sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b",
   "cardinality_guard": "bounded",
   "claim_impact": "query_observation_only",
-  "correlation_id": "corr-db6c1531b93482dd0d70c690ec19e5edb5844956a3161287ba825cd6e5dc7820",
+  "correlation_id": "corr-1b56bf9a012eee7049a745fc4399a703327c6819dd7023fdca872decdc5bc7a5",
   "failure": "",
   "next_repair": "keep receipt same-candidate and rerun source audit before any readiness claim",
-  "query": "{\"run_id\":\"run-db672a1bc8704170e3f0ffa7bb16bbd98facf912937085155434fcbedf6da9ff\"}",
+  "query": "{\"run_id\":\"run-f17bc6e31348c4c31b6f3f8b597696cd6a61a779a2ade6cff43398c12a3e308f\"}",
   "query_kind": "traces",
-  "result_digest": "sha256:3e25e7c69f81aae7fdf89c7936d7367cf196a0b10822db66f129412fc16578e5",
+  "result_digest": "sha256:2afa5293b1a5ea36362fdba405bd6c5c10671af541611f73060027450e9a7287",
   "retention_bound": "2d",
   "row_limit": 100,
   "rows": [
     {
-      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:a3c490513694fcb4c3507465d79485e70015a9d72091f17420b8b8ab8b183794\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-db672a1bc8704170e3f0ffa7bb16bbd98facf912937085155434fcbedf6da9ff\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"package.digest\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"ecdd7a3400699938\",\"startTime\":1782783321588713,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"package-digest-observability-binding\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"source_package_digest\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"supports_source_package_digest_only\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-0290f041d1ae7cddbd2ee01382568d8e3ffc583924aa0815c8d58758a39cbd58\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"package.digest\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-db672a1bc8704170e3f0ffa7bb16bbd98facf912937085155434fcbedf6da9ff\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"pass\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"0e002f6d3d19488f21b76872e66b5018\",\"warnings\":null}],\"traceID\":\"0e002f6d3d19488f21b76872e66b5018\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
+      "body": "{\"data\":[{\"processes\": {\"p1\":{\"serviceName\":\"ultragoal\",\"tags\": [{\"key\":\"candidate_digest\",\"type\":\"string\",\"value\":\"sha256:178206ea559bf71e8b8e82b2bc5165680978b53c03e758898515ee7dda67934b\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-f17bc6e31348c4c31b6f3f8b597696cd6a61a779a2ade6cff43398c12a3e308f\"}]}},\"spans\": [{\"duration\":1000,\"logs\":[],\"operationName\":\"package.digest\",\"processID\":\"p1\",\"references\": [],\"spanID\":\"ae6fd7a53c3fc892\",\"startTime\":1782783846030510,\"tags\": [{\"key\":\"span.kind\",\"type\":\"string\",\"value\":\"internal\"},{\"key\":\"otel.scope.name\",\"type\":\"string\",\"value\":\"ultragoal\"},{\"key\":\"check_id\",\"type\":\"string\",\"value\":\"package-digest-observability-binding\"},{\"key\":\"claim_id\",\"type\":\"string\",\"value\":\"source_package_digest\"},{\"key\":\"claim_impact\",\"type\":\"string\",\"value\":\"supports_source_package_digest_only\"},{\"key\":\"correlation_id\",\"type\":\"string\",\"value\":\"corr-2063029a8bcd328bba1e432cd79a8424379ba37e5316947f33ade46c6c3b1692\"},{\"key\":\"failure_class\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"law_id\",\"type\":\"string\",\"value\":\"full-local-observability-stack-integration-non-opaque-failure\"},{\"key\":\"next_repair\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"operation\",\"type\":\"string\",\"value\":\"package.digest\"},{\"key\":\"run_id\",\"type\":\"string\",\"value\":\"run-f17bc6e31348c4c31b6f3f8b597696cd6a61a779a2ade6cff43398c12a3e308f\"},{\"key\":\"status\",\"type\":\"string\",\"value\":\"pass\"},{\"key\":\"why_failed\",\"type\":\"string\",\"value\":\"none\"},{\"key\":\"error\",\"type\":\"string\",\"value\":\"unset\"}],\"traceID\":\"e462dd262a1f5ca6127ae79994492fb4\",\"warnings\":null}],\"traceID\":\"e462dd262a1f5ca6127ae79994492fb4\",\"warnings\": null}],\"errors\": null,\"limit\": 0,\"offset\": 0,\"total\":1}"
     }
   ],
-  "run_id": "run-db672a1bc8704170e3f0ffa7bb16bbd98facf912937085155434fcbedf6da9ff",
+  "run_id": "run-f17bc6e31348c4c31b6f3f8b597696cd6a61a779a2ade6cff43398c12a3e308f",
   "schema": "harness-ultragoal.observability-query-result.v1",
   "status": "pass",
   "supported_claims": [

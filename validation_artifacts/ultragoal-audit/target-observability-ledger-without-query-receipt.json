@@ -363,11 +363,11 @@
   },
   "command": {
     "command": "static-read scripts/check",
-    "completed_at": "2026-06-30T01:25:34Z",
+    "completed_at": "2026-06-30T01:49:57Z",
     "cwd": "fixtures/target-repo/red/observability-ledger-without-query",
     "exit": 0,
     "id": "target-repo-check",
-    "started_at": "2026-06-30T01:25:34Z",
+    "started_at": "2026-06-30T01:49:57Z",
     "stderr": {
       "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "path": "<inline:stderr>"
@@ -385,10 +385,10 @@
     "proof-root",
     "standards-enforcement"
   ],
-  "generated_at": "2026-06-30T01:25:34Z",
+  "generated_at": "2026-06-30T01:49:57Z",
   "invocation": "fixture init fixtures/target-repo/red/observability-ledger-without-query",
   "mode": "init",
-  "repo_fingerprint": "sha256:1b611f422dab090e677844a3962eb1e7aed275698c91b9804e228c96b9e7bcf6",
+  "repo_fingerprint": "sha256:b7d302bf42e336e9d47204abd2707caed206402905dd1b4c064a15f7d3e767bf",
   "requirements": {
     "observability_reason": "requested",
     "observability_required": true,
@@ -1096,8 +1096,16 @@
       "path": "validator/src/claim_semantics/semantic/receipt/text.rs"
     },
     {
-      "digest": "sha256:4ef3a584fd90ae419ab3c3cecef78d340e420c3129b9d943894b9afc7b2005f8",
+      "digest": "sha256:8a73d96914176778d15d905a36a6cc81b9e9dd9a83c2b75b8d6d4f79e8590f26",
       "path": "validator/src/cli/audit/mod.rs"
+    },
+    {
+      "digest": "sha256:17a2d34457e8a052aa402b6653defb4f825641f140d5c60ff837b490ac88cf62",
+      "path": "validator/src/cli/audit/observability.rs"
+    },
+    {
+      "digest": "sha256:e9de4ab31feec5ceb387f82e80fbf1ce7aa0a49e643f2dff3f6b8b7689956f8c",
+      "path": "validator/src/cli/audit/observability/red.rs"
     },
     {
       "digest": "sha256:c06268cd8b76c25f425e14b1d20ada6eacb6c6a638024ea845f086ae0bdf158d",
