@@ -210,5 +210,14 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
             .flatten()
             .any(|failure| failure.contains("docs/openai-key-policy.json"))
     );
+    let package_metric = results
+        .scheduler_metrics
+        .get(1)
+        .expect("package check scheduler metric");
+    assert_eq!(package_metric.task_class, "pure_read_parallel");
+    assert_eq!(package_metric.task_count, 8);
+    assert!(package_metric.worker_count <= 2);
+    assert!(package_metric.deterministic_ordering);
+    assert!(!package_metric.shared_validation_artifact_writes_allowed);
     std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
 }

@@ -1,11 +1,12 @@
 use crate::json_boundary;
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use crate::schema_catalog::{self, SchemaStore};
-use crate::target_fixtures;
 use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 use std::sync::Arc;
+
+mod scheduled;
 
 pub struct CheckResults {
     pub failures: BTreeMap<String, Vec<String>>,
@@ -42,31 +43,14 @@ pub fn checks_with_scheduler(
         .collect::<BTreeMap<_, _>>();
     let mut scheduler_metrics = Vec::new();
     scheduler_metrics.extend(mapped_schema_checks(root, store, scheduler, &mut failures));
-    inventory_checks(root, &mut failures);
-    crate::audit::red::catalog::check(root, store, &mut failures);
-    crate::audit::package::text_checks::run(root, store, check_ids, &mut failures);
-    crate::audit::review_history::check(root, &mut failures);
-    failures
-        .entry("research-source-authority-article-to-law-integration".to_string())
-        .or_default()
-        .extend(crate::audit::research::failures(root));
-    failures
-        .entry("harness-improvement-loop-trace-feedback-eval-codex-handoff".to_string())
-        .or_default()
-        .extend(crate::audit::improvement_loop::package_failures(root));
-    for failure in crate::review::round::fixture_failures(root) {
-        push(&mut failures, "validator-execution-provenance", failure);
-    }
-    for failure in crate::review::materiality::fixture_failures(root) {
-        push(&mut failures, "material-review-scope-gate", failure);
-    }
-    failures
-        .entry("target-repo-audit-capability".to_string())
-        .or_default()
-        .extend(target_fixtures::target_capability_failures(
-            root,
-            validator_artifacts,
-        ));
+    scheduler_metrics.extend(scheduled::package_checks(
+        root,
+        store,
+        check_ids,
+        validator_artifacts,
+        scheduler,
+        &mut failures,
+    ));
     CheckResults {
         failures,
         scheduler_metrics,
