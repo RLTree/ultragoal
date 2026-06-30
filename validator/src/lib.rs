@@ -3,6 +3,7 @@ mod audit;
 mod claim;
 mod claim_semantics;
 mod cli;
+mod command;
 mod command_run;
 mod contract_check_ids;
 mod digest;
@@ -18,66 +19,8 @@ mod semantic;
 mod skill_links;
 mod target_fixtures;
 mod target_repo;
+pub(crate) use command::{Args, Command};
 use std::path::PathBuf;
-#[derive(Debug)]
-pub(crate) struct Args {
-    root: PathBuf,
-    command: Command,
-}
-
-#[derive(Debug)]
-pub(crate) enum Command {
-    Audit {
-        receipt: PathBuf,
-        red_report: Option<PathBuf>,
-        target_repo: Option<PathBuf>,
-        mode: String,
-        require_observability: bool,
-        require_product_cohesion: bool,
-    },
-    ReviewTarget {
-        receipt: PathBuf,
-    },
-    Archive {
-        zip: PathBuf,
-        receipt: PathBuf,
-        zip_root: String,
-        archive_purpose: String,
-    },
-    ReviewRound {
-        receipt: PathBuf,
-        validator_receipt: PathBuf,
-        review_target_receipt: PathBuf,
-        archive_receipt: PathBuf,
-    },
-    SemanticReceipts {
-        input: PathBuf,
-        out_dir: PathBuf,
-        implementation_kind: String,
-        provider: Option<String>,
-        model: Option<String>,
-        contract_id: String,
-        contract_version: String,
-        prompt_contract_digest: Option<String>,
-        producer_actor_id: String,
-        classifier_actor_id: String,
-    },
-    FinalPacket(cli::final_packet::FinalPacketCommand),
-    Product(cli::product::ProductCommand),
-    Standards(cli::standards::StandardsCommand),
-    TransactionalFinalization {
-        receipt: PathBuf,
-    },
-    Control(cli::control::plane::ControlCommand),
-    Performance(cli::performance::PerformanceCommand),
-    Rust(cli::rust::RustCommand),
-    Garbage(cli::garbage::collection::GarbageCommand),
-    Observe(cli::observe::types::ObserveCommand),
-    OpenAi(cli::openai::OpenAiCommand),
-    Promptfoo(cli::promptfoo::PromptfooCommand),
-    Session(cli::session::SessionCommand),
-    PackageDigest,
-}
 
 pub fn main_entry() -> i32 {
     match parse_args().and_then(command_run::run) {
@@ -197,6 +140,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Rust(command)
             } else if let Some(command) = cli::garbage::collection::parse(raw)? {
                 Command::Garbage(command)
+            } else if let Some(command) = cli::halo::parse(raw)? {
+                Command::Halo(command)
             } else if let Some(command) = cli::observe::parse(raw)? {
                 Command::Observe(command)
             } else if let Some(command) = cli::openai::parse(raw)? {
@@ -246,5 +191,5 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 }
 
 fn usage() -> String {
-    "usage: ultragoal --root <root> source audit --receipt <path> | package digest | install audit --receipt <path> [--installed-root <path>] | cache audit --receipt <path> [--cache-root <path>] | review-target build --receipt <path> | archive build --zip <path> --receipt <path> | review-round verify --receipt <path> --validator-receipt <path> --review-target-receipt <path> --archive-receipt <path> | final-packet prove --receipt <path> | product prove-fitness --receipt-dir <dir> | standards-gardener rebind --receipt <path> | session-log hardening rebind --receipt <path> | transaction finalize --receipt <path> | rust <toolchain verify|fast|standard|release|clean-proof|watch|memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path> | gc <plan|dry-run|apply|verify> --receipt <path> | observe <stack|logs|metrics|traces|snapshot|prove|explain-*> ... | openai config prove --receipt <path> | openai call prove --receipt <path> [--mode no_network|offline_fixture|local_mock] | openai output prove --receipt <path> | promptfoo prove --receipt <path> | performance prove --receipt <path> | self update-goal eligibility --receipt <path>; ultragoal-validator compatibility commands remain routed through the same parser".to_string()
+    cli::usage::text().to_string()
 }

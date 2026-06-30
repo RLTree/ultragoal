@@ -104,6 +104,9 @@ fn control_and_observability(root: &Path, failures: &mut BTreeMap<String, Vec<St
             failure,
         );
     }
+    for failure in crate::audit::halo::package_failures(root) {
+        push(failures, "halo-ranked-harness-change-optimization", failure);
+    }
 }
 
 fn mandatory_surfaces(

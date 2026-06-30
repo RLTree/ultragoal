@@ -87,6 +87,10 @@
       "path": "schemas/goal-binding.schema.json"
     },
     {
+      "id": "https://harness-ultragoal.local/schemas/halo-capability-receipt.schema.json",
+      "path": "schemas/halo-capability-receipt.schema.json"
+    },
+    {
       "id": "https://harness-ultragoal.local/schemas/law-family-aliases.schema.json",
       "path": "schemas/law-family-aliases.schema.json"
     },

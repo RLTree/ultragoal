@@ -1,0 +1,74 @@
+{
+  "schema": "harness-ultragoal.halo-adapter-registry.v1",
+  "law_id": "halo-ranked-harness-change-optimization",
+  "modes": [
+    {
+      "id": "desktop_manual",
+      "authority_class": "manual_observation_only",
+      "allowed_claims": [
+        "halo_desktop_manual_capability_observed"
+      ],
+      "required_receipts": [
+        "validation_artifacts/halo/capability-receipt.json"
+      ],
+      "privacy_boundary": "category_only_inputs_no_raw_private_logs_or_secrets",
+      "uses_live_openai": false
+    },
+    {
+      "id": "cli",
+      "authority_class": "adapter_required_before_claims",
+      "allowed_claims": [],
+      "required_receipts": [
+        "halo-capability-receipt",
+        "halo-ranked-change-receipt",
+        "codex-handoff-receipt",
+        "validation-closure-receipt"
+      ],
+      "privacy_boundary": "redacted_typed_inputs_only",
+      "uses_live_openai": false
+    },
+    {
+      "id": "api",
+      "authority_class": "adapter_required_before_claims",
+      "allowed_claims": [],
+      "required_receipts": [
+        "halo-capability-receipt",
+        "halo-ranked-change-receipt",
+        "codex-handoff-receipt",
+        "validation-closure-receipt"
+      ],
+      "privacy_boundary": "redacted_typed_inputs_only",
+      "uses_live_openai": false
+    },
+    {
+      "id": "fixture",
+      "authority_class": "fixture_observation_only",
+      "allowed_claims": [
+        "halo_fixture_parser_boundary"
+      ],
+      "required_receipts": [
+        "halo-capability-receipt"
+      ],
+      "privacy_boundary": "fixture_inputs_only",
+      "uses_live_openai": false
+    },
+    {
+      "id": "unavailable",
+      "authority_class": "fail_closed",
+      "allowed_claims": [],
+      "required_receipts": [
+        "validation_artifacts/halo/capability-receipt.json"
+      ],
+      "privacy_boundary": "no_halo_data_transfer",
+      "uses_live_openai": false
+    }
+  ],
+  "forbidden_substitutions": [
+    "halo_manual_output_as_deterministic_authority",
+    "halo_desktop_presence_as_ranked_change_proof",
+    "halo_recommendation_as_readiness",
+    "halo_recommendation_as_update_goal",
+    "halo_ranking_without_codex_handoff",
+    "halo_ranking_without_validation_closure"
+  ]
+}

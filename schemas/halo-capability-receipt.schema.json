@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness-ultragoal.local/schemas/halo-capability-receipt.schema.json",
+  "title": "Harness Ultragoal HALO Capability Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate_digest",
+    "adapter_registry_path",
+    "adapter_registry_digest",
+    "invocation_mode",
+    "bundle_observed",
+    "bundle_path_class",
+    "bundle_identifier",
+    "bundle_version",
+    "cli_available",
+    "api_available",
+    "authority_class",
+    "privacy_boundary",
+    "raw_halo_authority",
+    "observability_receipt",
+    "supported_claims",
+    "blocked_claims",
+    "claim_impact",
+    "failures"
+  ],
+  "properties": {
+    "schema": {
+      "const": "harness-ultragoal.halo-capability-receipt.v1"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "adapter_registry_path": {
+      "const": "docs/halo-adapter-registry.json"
+    },
+    "adapter_registry_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "invocation_mode": {
+      "enum": [
+        "desktop_manual",
+        "cli",
+        "api",
+        "fixture",
+        "unavailable"
+      ]
+    },
+    "bundle_observed": {
+      "type": "boolean"
+    },
+    "bundle_path_class": {
+      "enum": [
+        "system_applications",
+        "configured_local_path"
+      ]
+    },
+    "bundle_identifier": {
+      "type": "string"
+    },
+    "bundle_version": {
+      "type": "string"
+    },
+    "cli_available": {
+      "type": "boolean"
+    },
+    "api_available": {
+      "type": "boolean"
+    },
+    "authority_class": {
+      "enum": [
+        "manual_observation_only",
+        "adapter_required_before_claims",
+        "fixture_observation_only",
+        "fail_closed"
+      ]
+    },
+    "privacy_boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_halo_authority": {
+      "const": "observation_only_until_cli_adapter_ranking_and_validation"
+    },
+    "observability_receipt": {
+      "type": "object"
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_claims": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

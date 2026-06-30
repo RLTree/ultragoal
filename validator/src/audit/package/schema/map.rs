@@ -73,6 +73,10 @@ pub fn base() -> BTreeMap<String, &'static str> {
             "promptfoo-adapter-receipt.schema.json",
         ),
         (
+            "validation_artifacts/halo/capability-receipt.json",
+            "halo-capability-receipt.schema.json",
+        ),
+        (
             "fixtures/namespace/valid/namespace-class-registry-valid.json",
             "namespace-class-registry.schema.json",
         ),

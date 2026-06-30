@@ -14,6 +14,7 @@
     "gc dry-run",
     "gc plan",
     "gc verify",
+    "halo capability prove",
     "install audit",
     "line-cap check",
     "mandatory-law validation",
@@ -38,6 +39,7 @@
     "openai config prove",
     "openai output prove",
     "package digest",
+    "promptfoo prove",
     "product prove-cohesion",
     "product prove-fitness",
     "product prove-journey",
@@ -101,9 +103,9 @@
     "status": "blocked",
     "families": {
       "commands": {
-        "total": 59,
+        "total": 61,
         "fitted": 1,
-        "partially_fitted": 21,
+        "partially_fitted": 23,
         "unfitted": 37
       },
       "surfaces": {
@@ -917,6 +919,35 @@
       "current_owner_surface": "command:gc verify",
       "next_unfitted_surface": "GC command telemetry"
     },
+    "halo capability prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "typed capability receipt producer",
+        "desktop/manual authority boundary",
+        "command-level observability receipt",
+        "package audit currentness check"
+      ],
+      "missing_surfaces": [
+        "same-candidate live logs query proof",
+        "same-candidate live metrics query proof",
+        "same-candidate live traces query proof",
+        "stable HALO CLI/API invocation adapter",
+        "typed ranked-change output parser",
+        "Codex handoff and validation-closure linkage"
+      ],
+      "validator_check_id": "halo-ranked-harness-change-optimization",
+      "focused_tests": [
+        "halo_desktop_capability_is_manual_only",
+        "halo_capability_rejects_overbroad_authority"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/halo/capability-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_halo_capability_detection_only_and_blocks_ranking_readiness_release_update_goal_claims",
+      "current_owner_surface": "command:halo capability prove",
+      "next_unfitted_surface": "same-candidate live log metric trace query proof for halo capability prove"
+    },
     "session-log hardening": {
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
@@ -1418,6 +1449,36 @@
       "claim_impact": "supports_typed_model_output_observation_only_and_blocks_model_output_completion_readiness_release_update_goal_claims",
       "current_owner_surface": "command:openai output prove",
       "next_unfitted_surface": "schema-specific parser adapters for feedback eval grader and ranking outputs"
+    },
+    "promptfoo prove": {
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "typed adapter receipt producer",
+        "provider separation registry",
+        "suite registry shape",
+        "command-level observability receipt",
+        "package audit currentness check"
+      ],
+      "missing_surfaces": [
+        "same-candidate live logs query proof",
+        "same-candidate live metrics query proof",
+        "same-candidate live traces query proof",
+        "offline fixture eval execution receipt",
+        "live OpenAI provider eval receipt",
+        "complete red/green/tamper eval result parser"
+      ],
+      "validator_check_id": "promptfoo-eval-red-team-provider-separation",
+      "focused_tests": [
+        "promptfoo_receipt_blocks_raw_eval_authority",
+        "promptfoo_receipt_rejects_wrong_candidate"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/promptfoo/adapter-receipt.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "supports_promptfoo_adapter_setup_boundary_only_and_blocks_eval_product_readiness_release_update_goal_claims",
+      "current_owner_surface": "command:promptfoo prove",
+      "next_unfitted_surface": "same-candidate live log metric trace query proof for promptfoo prove"
     }
   },
   "surface_inventory": {

@@ -2759,35 +2759,35 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 97 - HALO Ranked Harness Change Optimization
 
 - [ ] HALO desktop app or HALO CLI/API availability is detected and capability-receipted with invocation mode, version/build identity when available, privacy boundary, authority class, allowed claims, and required receipts.
-  - Evidence:
-  - Capability receipt:
-  - Invocation mode:
-  - Candidate digest:
-  - Status:
+  - Evidence: `/Applications/HALO.app` observed by `target/debug/ultragoal --root . halo capability prove --receipt validation_artifacts/halo/capability-receipt.json`; bundle id `net.inference.halo`, bundle version `0.1.17`, `cli_available = false`, `api_available = false`. `docs/halo-adapter-registry.json` declares `desktop_manual`, `cli`, `api`, `fixture`, and `unavailable` modes plus forbidden substitutions. `validator/src/cli/halo/*` and `validator/src/audit/halo/mod.rs` enforce same-candidate receipt status, adapter registry digest, observability binding, manual-only authority, and readiness/update_goal/product-success blockers.
+  - Capability receipt: `validation_artifacts/halo/capability-receipt.json` (`status = pass`, capability detection only).
+  - Invocation mode: `desktop_manual`; authority class `manual_observation_only`; supported claim `halo_desktop_manual_capability_observed`.
+  - Candidate digest: `sha256:483a45c9cc9fcf5fa643591b10e79034b1fb9b1543b56d94265bbedf08ef105b`; digest stayed stable after receipt write.
+  - Status: Partial, not checked. Capability detection and manual-only claim blocking are current, but stable CLI/API ranking, typed ranked-change records, Codex handoff linkage, validation closure, before/after telemetry, and improvement-loop promotion remain open.
 
 - [ ] HALO adapter consumes only CLI-generated typed inputs from failure clusters, eval results, trace summaries, product findings, cost/performance data, and claim impacts; raw private logs, secrets, unrestricted repo dumps, and unredacted local paths are forbidden.
-  - Evidence:
-  - Input schema:
-  - Redaction proof:
-  - Validator check:
-  - Candidate digest:
-  - Status:
+  - Evidence: `docs/halo-adapter-registry.json` privacy boundaries forbid raw private logs and secrets; `validation_artifacts/halo/capability-receipt.json` blocks HALO ranked-change authority until a CLI adapter exists.
+  - Input schema: Open; no typed HALO ranking input schema is complete yet.
+  - Redaction proof: Open beyond the capability receipt secret-shape guard in `validator/src/cli/halo/proof.rs`.
+  - Validator check: `halo-ranked-harness-change-optimization` currently enforces capability receipt and forbidden-substitution policy only.
+  - Candidate digest: `sha256:483a45c9cc9fcf5fa643591b10e79034b1fb9b1543b56d94265bbedf08ef105b`.
+  - Status: Partial, not checked. Input generation from typed failure clusters/evals/traces/product/cost data remains unimplemented.
 
 - [ ] HALO objectives are typed, explicit, and receipt-bound; HALO output is parsed into ranked-change records with rank, hypothesis, expected effect, evidence ids, affected laws/files/surfaces, cost/risk estimate, validation plan, forbidden shortcuts, and claim impact.
-  - Evidence:
-  - Objective schema:
-  - Ranking receipt:
-  - Parser tests:
-  - Candidate digest:
-  - Status:
+  - Evidence: Capability receipt forbids `halo_ranked_change_authority` and `halo_recommendation_readiness` claims until typed ranking and validation exist.
+  - Objective schema: Open.
+  - Ranking receipt: Open.
+  - Parser tests: Open; current focused tests cover capability green path and overbroad-authority bad path only via `cargo test --offline halo --lib --quiet`.
+  - Candidate digest: `sha256:483a45c9cc9fcf5fa643591b10e79034b1fb9b1543b56d94265bbedf08ef105b`.
+  - Status: Partial, not checked. No HALO ranked-output parser or objective-bound ranking receipt exists.
 
 - [ ] HALO recommendations are linked to Codex handoffs, implementation changes, validation receipts, before/after telemetry, and standards/fixture/schema promotion before any improvement claim can pass.
-  - Evidence:
-  - Handoff:
-  - Implementation link:
-  - Validation receipt:
-  - Candidate digest:
-  - Status:
+  - Evidence: `docs/halo-adapter-registry.json` and `validation_artifacts/halo/capability-receipt.json` block HALO recommendation, readiness, update_goal, Product Success, final-packet, registry/reviewer, and improvement-loop closure claims.
+  - Handoff: Open.
+  - Implementation link: Open.
+  - Validation receipt: Open.
+  - Candidate digest: `sha256:483a45c9cc9fcf5fa643591b10e79034b1fb9b1543b56d94265bbedf08ef105b`.
+  - Status: Partial, not checked. HALO recommendations cannot support improvement claims until handoff, implementation, validation, before/after telemetry, and standards/fixture/schema promotion are deterministic and current.
 
 ## Gate 98 - Self-Improving Domain-Agent Pattern And Tax-Agent Generalization
 
@@ -3321,7 +3321,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 109. HALO integration is governed by capability receipt, invocation mode, version/build identity when available, privacy boundary, typed objective, typed input/output digests, parsed ranked-change records, Codex handoff linkage, validation receipt, and deterministic claim guards. HALO output cannot satisfy completion, readiness, release, Product Success, final packet, or update_goal claims by itself.
 
-- [ ] Gate 97 evidence path:
+- [ ] Gate 97 evidence path: Partial source-local HALO capability boundary for package digest `sha256:483a45c9cc9fcf5fa643591b10e79034b1fb9b1543b56d94265bbedf08ef105b`. Evidence paths: `docs/halo-adapter-registry.json`, `schemas/halo-capability-receipt.schema.json`, `validator/src/cli/halo/`, `validator/src/audit/halo/mod.rs`, `validation_artifacts/halo/capability-receipt.json`, `docs/generated/observability/command-inventory.json`, and `plugin-manifest-draft.json`. Current proof detects `/Applications/HALO.app` version `0.1.17`, records `desktop_manual` and `manual_observation_only`, confirms no `halo` CLI/API authority, and blocks completion/readiness/release/Product Success/final-packet/registry/reviewer/update_goal/improvement-loop claims. Full stop condition 109 remains unchecked because typed objective/input/output schemas, parsed ranked-change records, Codex handoff linkage, validation closure, before/after telemetry, green/tamper ranking proof, and standards/fixture/schema promotion are not complete.
 
 110. Self-improving domain-agent pattern is enforced for plugin-activated repos with domain workflows using realistic task traces, expert feedback, rubrics, failure taxonomies, evals, ranked repairs, before/after validation, domain packs, privacy rules, and claim guards. Toy-only evals, mislabeled expertise, and eval-only product success fail.
 
