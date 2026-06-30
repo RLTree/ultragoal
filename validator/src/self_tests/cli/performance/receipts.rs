@@ -8,7 +8,7 @@ fn valid_fail() -> Value {
         "status": "fail",
         "claim_ceiling": "withheld_or_blocked",
         "command": {"argv": ["ultragoal", "performance", "prove"]},
-        "budget": {"class": "strict_local"},
+        "budget": strict_budget(),
         "digests": {"candidate": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
         "cache": {"mode": "disabled"},
         "concurrency": {"worker_count": 1},
@@ -34,7 +34,7 @@ fn strict_pass(candidate: &str) -> Value {
         "status": "pass",
         "claim_ceiling": "performance_proven",
         "command": {"argv": ["ultragoal", "performance", "prove"]},
-        "budget": {"class": "strict_local"},
+        "budget": strict_budget(),
         "digests": {"candidate": candidate},
         "cache": {"mode": "disabled", "no_cache_mode_result": "executed_without_cache"},
         "concurrency": {"worker_count": 1},
@@ -43,6 +43,17 @@ fn strict_pass(candidate: &str) -> Value {
         "failure": null,
         "blocked_claim_classes": [],
         "supported_claim_classes": ["routine_usability"]
+    })
+}
+
+fn strict_budget() -> Value {
+    json!({
+        "class": "strict_local",
+        "cold_p95_ms": 60_000,
+        "warm_p95_ms": null,
+        "target_ms": 60_000,
+        "hard_ceiling_ms": 180_000,
+        "threshold_ms": 60_000
     })
 }
 
@@ -102,6 +113,20 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
         surface_value_failures(&unsupported_fail)
             .contains(&"cli_performance_fail_without_blocked_claims".to_string())
     );
+
+    let mut legacy_budget = valid_pass();
+    legacy_budget["budget"]["class"] = json!("focused");
+    assert!(
+        surface_value_failures(&legacy_budget)
+            .iter()
+            .any(|failure| failure == "cli_performance_receipt_noncanonical_budget_class:focused")
+    );
+
+    let mut wrong_target = valid_pass();
+    wrong_target["budget"]["hard_ceiling_ms"] = json!(60_000);
+    assert!(surface_value_failures(&wrong_target).iter().any(|failure| {
+        failure == "cli_performance_receipt_budget_hard_ceiling_mismatch:strict_local"
+    }));
 }
 
 #[test]

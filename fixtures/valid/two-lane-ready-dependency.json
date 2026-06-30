@@ -4648,6 +4648,7 @@
       "validator/src/self_tests/cli/performance/mod.rs",
       "validator/src/self_tests/cli/performance/observability_edges.rs",
       "validator/src/self_tests/cli/performance/receipts.rs",
+    "validator/src/self_tests/cli/performance/runtime.rs",
       "validator/src/self_tests/cli/product.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/root.rs",
@@ -20301,7 +20302,7 @@
           "path": "validator/src/audit/mandatory/mod.rs"
         },
         {
-          "digest": "sha256:bf0926bf59912d65d39833c8e83c7622de7370124d2bd4dcbabc6dd8e66b2af9",
+          "digest": "sha256:51feacc586902fc546ed77f323abe3d49070c1f3977283b8b1e74467586ff542",
           "path": "validator/src/audit/mod.rs"
         },
         {
@@ -20817,15 +20818,15 @@
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:149d16e013c769b26910edd360866785378a6ed2e5ee4f421717b5f567f1c9ab",
+          "digest": "sha256:78fe079a00a6a43fad51ba96d8d59660417fb5b11dc44c9faac0219cb8f49856",
           "path": "validator/src/cli/performance/proof.rs"
         },
         {
-          "digest": "sha256:8eb3601b791be4ed8c4294cedc717cb27893109297ff8a16968a9ee91be1a942",
+          "digest": "sha256:628aa56bab0e11acc145a0d9c36b83367d3d217da3476385b66d7726c9ed21bd",
           "path": "validator/src/cli/performance/receipt.rs"
         },
         {
-          "digest": "sha256:3e4dab4a613ed2a4b5e584b8995a044eb4259bb01d1b935e81fb0ac1e618d2c0",
+          "digest": "sha256:c444a730bfad062a38a9965d716e99a43c97c2b6b557197f8e50cf1470d889d5",
           "path": "validator/src/cli/performance/types.rs"
         },
         {
@@ -20885,7 +20886,7 @@
           "path": "validator/src/json_boundary.rs"
         },
         {
-          "digest": "sha256:5218b13b13d74e7067538c81496005a9e6764a7582af18dbeade23468ce777f7",
+          "digest": "sha256:74d39f19a23af681166b5ea6e5f1d960ef3e1a88168599dc7d98406c65ad0bd5",
           "path": "validator/src/lib.rs"
         },
         {
@@ -21169,7 +21170,7 @@
           "path": "validator/src/self_tests/audit/final_packet/source_audit.rs"
         },
         {
-          "digest": "sha256:a8d46e4650830479bd4e8cbfdf8b91291154eb95cb873cfd945252a19a05ad02",
+          "digest": "sha256:90ef7fa6ce173b50b8ae6064e47dd3f79fdb5449ea00fb5cdb9d5dea4aad9f33",
           "path": "validator/src/self_tests/audit/final_packet/support/mod.rs"
         },
         {
@@ -21189,7 +21190,7 @@
           "path": "validator/src/self_tests/audit/red_identity_schema_edges.rs"
         },
         {
-          "digest": "sha256:5b2bcbf2aaa58d694c1d2aa7a497cdb767e43f4ba63359a1e3472c6c1d35f9c8",
+          "digest": "sha256:71a17fcb9705791f986efdc6468d52356c66695d60c8dc00b8f66885d51e871a",
           "path": "validator/src/self_tests/audit/run_guards.rs"
         },
         {
@@ -21401,7 +21402,7 @@
           "path": "validator/src/self_tests/cli/control/registry.rs"
         },
         {
-          "digest": "sha256:cb5430c2494551c9ba14a8a4b60fbc1c1a8d50d497cf9c2cf08ed0082e2be5fa",
+          "digest": "sha256:b4f4b3fd8ecd16e336a86af80984da7208efbec3e0ebad39085415e7cfbbfdd1",
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
         },
         {
@@ -21433,11 +21434,11 @@
           "path": "validator/src/self_tests/cli/performance/audit.rs"
         },
         {
-          "digest": "sha256:2797975beb9c9e2a580343094ccfc8d3ecfc3387c10ac02dcc957bdf197c6e25",
+          "digest": "sha256:f76f4798fed27d715b08fda941053da4fa8efe1e72c073add1063f6501676701",
           "path": "validator/src/self_tests/cli/performance/budgets.rs"
         },
         {
-          "digest": "sha256:4d196ffcbadcb5e5603401281cd9dfcc8c7b30f2bafb1358320ba86c9370ca04",
+          "digest": "sha256:e419d7f026dc534140ea65a63b72ba7075c9e480b38eb799b30894ed6d871025",
           "path": "validator/src/self_tests/cli/performance/mod.rs"
         },
         {
@@ -21447,6 +21448,10 @@
         {
           "digest": "sha256:16180d70913ab8482f9713b31c1312e2bc809ae522370914ba86ed20e883be86",
           "path": "validator/src/self_tests/cli/performance/receipts.rs"
+        },
+        {
+          "digest": "sha256:e2406df52200adc02ab8b9124ed594a10a09f182f594a1f1d4a6b0f3f41aa64f",
+          "path": "validator/src/self_tests/cli/performance/runtime.rs"
         },
         {
           "digest": "sha256:d7294fa94a996b7f74eb4856420a2ec9ea77b45a7e8b095cdaf63edc431694f0",
@@ -21465,7 +21470,7 @@
           "path": "validator/src/self_tests/cli/standards.rs"
         },
         {
-          "digest": "sha256:d86d0f2e6cd412763e242b79d5fed171689ea202b99fe0891d09b9cf5daefec4",
+          "digest": "sha256:c6c0b5d8f032b6018858f8efb3197cb0fad6165763010aea5ac57de4666aa0e8",
           "path": "validator/src/self_tests/command/dispatch.rs"
         },
         {

@@ -34,10 +34,9 @@ impl PerformanceOperation {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum BudgetClass {
-    Instant,
-    Interactive,
-    Focused,
-    RepairLoop,
+    HotEditCheck,
+    FocusedRepair,
+    StandardSourceLocal,
     StrictLocal,
     StrictFixtures,
     StrictCoverage,
@@ -48,10 +47,9 @@ pub(crate) enum BudgetClass {
 impl BudgetClass {
     pub(crate) fn id(self) -> &'static str {
         match self {
-            Self::Instant => "instant",
-            Self::Interactive => "interactive",
-            Self::Focused => "focused",
-            Self::RepairLoop => "repair_loop",
+            Self::HotEditCheck => "hot_edit_check",
+            Self::FocusedRepair => "focused_repair",
+            Self::StandardSourceLocal => "standard_source_local",
             Self::StrictLocal => "strict_local",
             Self::StrictFixtures => "strict_fixtures",
             Self::StrictCoverage => "strict_coverage",
@@ -62,10 +60,17 @@ impl BudgetClass {
 
     pub(crate) fn from_str(raw: &str) -> Option<Self> {
         match raw {
-            "instant" => Some(Self::Instant),
-            "interactive" => Some(Self::Interactive),
-            "focused" => Some(Self::Focused),
-            "repair_loop" | "repair-loop" => Some(Self::RepairLoop),
+            "hot" | "hot_edit_check" | "hot-edit-check" | "instant" | "interactive" => {
+                Some(Self::HotEditCheck)
+            }
+            "focused" | "focused_repair" | "focused-repair" => Some(Self::FocusedRepair),
+            "standard"
+            | "source-local"
+            | "source_local"
+            | "standard_source_local"
+            | "standard-source-local"
+            | "repair_loop"
+            | "repair-loop" => Some(Self::StandardSourceLocal),
             "strict_local" | "strict-local" => Some(Self::StrictLocal),
             "strict_fixtures" | "strict-fixtures" => Some(Self::StrictFixtures),
             "strict_coverage" | "strict-coverage" => Some(Self::StrictCoverage),
@@ -77,25 +82,35 @@ impl BudgetClass {
 
     pub(crate) fn cold_p95_ms(self) -> u64 {
         match self {
-            Self::Instant => 2_000,
-            Self::Interactive => 5_000,
-            Self::Focused => 15_000,
-            Self::RepairLoop => 30_000,
+            Self::HotEditCheck => 5_000,
+            Self::FocusedRepair => 15_000,
+            Self::StandardSourceLocal => 30_000,
             Self::StrictLocal => 60_000,
-            Self::StrictFixtures => 120_000,
-            Self::StrictCoverage => 300_000,
-            Self::StrictFinal => 600_000,
+            Self::StrictFixtures => 60_000,
+            Self::StrictCoverage => 60_000,
+            Self::StrictFinal => 60_000,
             Self::ExternalLive => 30_000,
         }
     }
 
     pub(crate) fn warm_p95_ms(self) -> Option<u64> {
         match self {
-            Self::Instant => Some(500),
-            Self::Interactive => Some(1_000),
-            Self::Focused => Some(5_000),
-            Self::RepairLoop => Some(10_000),
+            Self::HotEditCheck => Some(5_000),
+            Self::FocusedRepair => Some(5_000),
+            Self::StandardSourceLocal => Some(10_000),
             _ => None,
+        }
+    }
+
+    pub(crate) fn hard_ceiling_ms(self) -> u64 {
+        match self {
+            Self::HotEditCheck => 5_000,
+            Self::FocusedRepair => 15_000,
+            Self::StandardSourceLocal => 60_000,
+            Self::StrictLocal | Self::StrictFixtures | Self::StrictCoverage | Self::StrictFinal => {
+                180_000
+            }
+            Self::ExternalLive => 30_000,
         }
     }
 }

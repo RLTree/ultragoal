@@ -96,6 +96,8 @@ fn budget_value(class: BudgetClass) -> Value {
         "class": class.id(),
         "cold_p95_ms": class.cold_p95_ms(),
         "warm_p95_ms": class.warm_p95_ms(),
+        "target_ms": class.cold_p95_ms(),
+        "hard_ceiling_ms": class.hard_ceiling_ms(),
         "threshold_ms": class.cold_p95_ms()
     })
 }

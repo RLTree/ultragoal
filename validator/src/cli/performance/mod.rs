@@ -58,8 +58,8 @@ pub(crate) fn run(root: &Path, command: &PerformanceCommand) -> Result<i32, Stri
 
 fn default_class(operation: PerformanceOperation) -> BudgetClass {
     match operation {
-        PerformanceOperation::Budgets => BudgetClass::Instant,
-        PerformanceOperation::Verify => BudgetClass::Focused,
+        PerformanceOperation::Budgets => BudgetClass::HotEditCheck,
+        PerformanceOperation::Verify => BudgetClass::FocusedRepair,
         PerformanceOperation::Prove | PerformanceOperation::SelfProve => BudgetClass::StrictLocal,
     }
 }

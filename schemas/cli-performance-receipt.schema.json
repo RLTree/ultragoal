@@ -110,6 +110,8 @@
         "class",
         "cold_p95_ms",
         "warm_p95_ms",
+        "target_ms",
+        "hard_ceiling_ms",
         "threshold_ms"
       ],
       "properties": {
@@ -129,6 +131,16 @@
             "integer",
             "null"
           ],
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "target_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "hard_ceiling_ms": {
+          "type": "integer",
           "minimum": 1,
           "maximum": 600000
         },
@@ -471,10 +483,9 @@
     "budgetClass": {
       "enum": [
         "external_live",
-        "focused",
-        "instant",
-        "interactive",
-        "repair_loop",
+        "focused_repair",
+        "hot_edit_check",
+        "standard_source_local",
         "strict_coverage",
         "strict_final",
         "strict_fixtures",

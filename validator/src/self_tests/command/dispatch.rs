@@ -51,6 +51,20 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
     .collect::<Vec<_>>();
     let err = crate::parse_command(&bad).expect_err("non-numeric jobs rejected");
     assert!(err.contains("invalid numeric value for --jobs"), "{err}");
+
+    let bad_mode = [
+        "source",
+        "audit",
+        "--receipt",
+        "receipt.json",
+        "--mode",
+        "slow",
+    ]
+    .iter()
+    .map(|item| item.to_string())
+    .collect::<Vec<_>>();
+    let err = crate::parse_command(&bad_mode).expect_err("unknown audit mode rejected");
+    assert!(err.contains("invalid source audit --mode: slow"), "{err}");
 }
 
 #[test]
@@ -109,6 +123,9 @@ fn command_run_routes_audit_and_performance_variants() {
     .expect("performance command");
     assert_eq!(code, 0);
     assert!(performance_receipt.is_file());
+    let performance = crate::json_boundary::read_json(&performance_receipt).expect("performance");
+    assert_eq!(performance["budget"]["class"], "focused_repair");
+    assert_eq!(performance["budget"]["target_ms"], 15_000);
 
     for (label, raw, receipt) in [
         (

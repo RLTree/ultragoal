@@ -4384,6 +4384,7 @@
     "validator/src/self_tests/cli/performance/mod.rs",
     "validator/src/self_tests/cli/performance/observability_edges.rs",
     "validator/src/self_tests/cli/performance/receipts.rs",
+    "validator/src/self_tests/cli/performance/runtime.rs",
     "validator/src/self_tests/cli/product.rs",
     "validator/src/self_tests/cli/root.rs",
     "validator/src/self_tests/cli/session.rs",

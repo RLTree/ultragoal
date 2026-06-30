@@ -172,7 +172,7 @@ fn audit_schema_cli_and_target_edges() {
     let command = crate::cli::performance::PerformanceCommand {
         operation: crate::cli::performance::types::PerformanceOperation::Prove,
         receipt: Some(repo.join("Cargo.toml/not-a-receipt.json")),
-        class: crate::cli::performance::types::BudgetClass::Focused,
+        class: crate::cli::performance::types::BudgetClass::FocusedRepair,
     };
     let err = crate::cli::performance::run(&repo, &command).expect_err("receipt path under file");
     assert!(

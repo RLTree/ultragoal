@@ -112,7 +112,14 @@ fn performance_ref(root: &Path, candidate: &str) -> Value {
             "status":"pass",
             "claim_ceiling":"performance_proven",
             "command":{"argv":["ultragoal","performance","prove"]},
-            "budget":{"class":"strict_local"},
+            "budget":{
+                "class":"strict_local",
+                "cold_p95_ms":60000,
+                "warm_p95_ms":null,
+                "target_ms":60000,
+                "hard_ceiling_ms":180000,
+                "threshold_ms":60000
+            },
             "digests":{"candidate":candidate},
             "cache":{"mode":"disabled","no_cache_mode_result":"executed_without_cache"},
             "concurrency":{"worker_count":1},

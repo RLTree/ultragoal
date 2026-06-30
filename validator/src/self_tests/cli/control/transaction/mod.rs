@@ -53,7 +53,14 @@ fn performance_overclaim(current: &str) -> Value {
         "schema":"harness-ultragoal.cli-performance-receipt.v1",
         "status":"pass",
         "command":{"argv":["ultragoal"]},
-        "budget":{"class":"fast"},
+        "budget":{
+            "class":"strict_local",
+            "cold_p95_ms":60000,
+            "warm_p95_ms":null,
+            "target_ms":60000,
+            "hard_ceiling_ms":180000,
+            "threshold_ms":60000
+        },
         "digests":{"candidate":current},
         "cache":{"mode":"enabled","no_cache_mode_result":"used_cache"},
         "concurrency":{"worker_count":1},

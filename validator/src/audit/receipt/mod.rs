@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 
 mod generated;
 mod scheduler_execution;
-mod speed;
+pub(crate) mod speed;
 
 pub struct ReceiptInput {
     pub root: PathBuf,

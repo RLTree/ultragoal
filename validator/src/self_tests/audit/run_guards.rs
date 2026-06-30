@@ -22,6 +22,11 @@ fn audit_run_rejects_bad_red_report_basename_and_malformed_target_receipts() {
     let err = crate::audit::run(bad_report).expect_err("bad red report basename");
     assert!(err.contains("red-fixture-report.json"), "{err}");
 
+    let mut bad_mode = options(root.clone());
+    bad_mode.mode = "slow".to_string();
+    let err = crate::audit::run(bad_mode).expect_err("bad source audit mode");
+    assert!(err.contains("invalid source audit --mode: slow"), "{err}");
+
     let err = crate::audit::validate_target_receipt(&serde_json::json!({}))
         .expect_err("malformed target receipt");
     assert!(err.contains("missing target checks"), "{err}");

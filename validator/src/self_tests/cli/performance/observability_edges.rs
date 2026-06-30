@@ -81,7 +81,7 @@ fn branch_arms_close_last_gaps() {
     let command = crate::cli::performance::PerformanceCommand {
         operation: crate::cli::performance::types::PerformanceOperation::Prove,
         receipt: None,
-        class: crate::cli::performance::types::BudgetClass::Focused,
+        class: crate::cli::performance::types::BudgetClass::FocusedRepair,
     };
     let missing_perf = crate::self_tests::boundaries::support::temp_root(
         "cli_performance_observability-cli-run-missing",

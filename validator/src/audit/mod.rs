@@ -47,6 +47,9 @@ pub struct AuditOptions {
 }
 
 pub fn run(options: AuditOptions) -> Result<i32, String> {
+    if !receipt::speed::is_known_mode(&options.mode) {
+        return Err(format!("invalid source audit --mode: {}", options.mode));
+    }
     if let Some(target_repo) = &options.target_repo {
         return run_target_repo(&options, target_repo);
     }

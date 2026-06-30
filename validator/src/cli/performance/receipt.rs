@@ -1,4 +1,4 @@
-use crate::cli::performance::types::PERFORMANCE_RECEIPT_SCHEMA;
+use crate::cli::performance::types::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use serde_json::Value;
 
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
@@ -19,6 +19,7 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
             out.push(format!("cli_performance_receipt_missing:{ptr}"));
         }
     }
+    check_budget_authority(value, &mut out);
     if status == Some("fail") && value.pointer("/failure/check_id").is_none() {
         out.push("cli_performance_receipt_missing:/failure/check_id".to_string());
     }
@@ -43,6 +44,46 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
         out.push("cli_performance_fail_without_blocked_claims".to_string());
     }
     out
+}
+
+fn check_budget_authority(value: &Value, out: &mut Vec<String>) {
+    let Some(raw_class) = value.pointer("/budget/class").and_then(Value::as_str) else {
+        return;
+    };
+    let Some(class) = BudgetClass::from_str(raw_class).filter(|class| class.id() == raw_class)
+    else {
+        out.push(format!(
+            "cli_performance_receipt_noncanonical_budget_class:{raw_class}"
+        ));
+        return;
+    };
+    let fields = [
+        (
+            "/budget/cold_p95_ms",
+            class.cold_p95_ms(),
+            "cli_performance_receipt_budget_cold_p95_mismatch",
+        ),
+        (
+            "/budget/target_ms",
+            class.cold_p95_ms(),
+            "cli_performance_receipt_budget_target_mismatch",
+        ),
+        (
+            "/budget/threshold_ms",
+            class.cold_p95_ms(),
+            "cli_performance_receipt_budget_threshold_mismatch",
+        ),
+        (
+            "/budget/hard_ceiling_ms",
+            class.hard_ceiling_ms(),
+            "cli_performance_receipt_budget_hard_ceiling_mismatch",
+        ),
+    ];
+    for (ptr, expected, code) in fields {
+        if value.pointer(ptr).and_then(Value::as_u64) != Some(expected) {
+            out.push(format!("{code}:{raw_class}"));
+        }
+    }
 }
 
 pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &str) -> Vec<String> {

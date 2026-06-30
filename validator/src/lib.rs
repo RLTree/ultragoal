@@ -170,11 +170,15 @@ fn strip_build_or_verify(args: &[String]) -> &[String] {
 }
 
 fn parse_audit(args: &[String]) -> Result<Command, String> {
+    let mode = opt_string(args, "--mode").unwrap_or_else(|| "init".to_string());
+    if !audit::receipt::speed::is_known_mode(&mode) {
+        return Err(format!("invalid source audit --mode: {mode}"));
+    }
     Ok(Command::Audit {
         receipt: opt_path(args, "--receipt")?,
         red_report: opt_string(args, "--red-report").map(PathBuf::from),
         target_repo: opt_string(args, "--target-repo").map(PathBuf::from),
-        mode: opt_string(args, "--mode").unwrap_or_else(|| "init".to_string()),
+        mode,
         require_observability: args.iter().any(|a| a == "--require-observability"),
         require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),
         jobs: opt_usize(args, "--jobs")?,
