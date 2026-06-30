@@ -1,2 +1,0 @@
-Audience: Harness Ultragoal repo-fitting agent operators.
-Purpose: proves the receipt names the operator audience for Product Fitness enforcement.

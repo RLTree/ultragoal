@@ -1,1 +1,0 @@
-ultragoal-audit fail receipt=validation_artifacts/ultragoal-audit/validator-receipt.json

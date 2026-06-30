@@ -1,2 +1,0 @@
-Context of use: Codex app and local repository setup or retrofit sessions using Harness Ultragoal.
-Purpose: binds Product Fitness enforcement to the actual operator context.
