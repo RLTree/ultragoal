@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 pub(crate) mod budget;
 mod call;
 mod config;
+mod live;
 pub(crate) mod output;
 pub(crate) mod policy;
 

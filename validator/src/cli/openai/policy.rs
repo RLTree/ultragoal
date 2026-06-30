@@ -115,6 +115,17 @@ pub(crate) fn load(root: &Path, rel: &Path) -> PolicyState {
     }
 }
 
+pub(crate) fn api_key(root: &Path, rel: &Path) -> Result<String, String> {
+    let state = load(root, rel);
+    let failures = state.failures();
+    if !failures.is_empty() {
+        return Err("openai_key_policy_not_passing".to_string());
+    }
+    let path = root.join(&state.destination);
+    let text = std::fs::read_to_string(path).map_err(|_| "openai_key_read_failed".to_string())?;
+    parse_api_key(&text).ok_or_else(|| "openai_key_not_found".to_string())
+}
+
 pub(crate) fn contains_secret_shape(value: &Value) -> bool {
     let text = serde_json::to_string(value).unwrap_or_default();
     text.contains("sk-")
@@ -122,6 +133,32 @@ pub(crate) fn contains_secret_shape(value: &Value) -> bool {
         || text.contains("OPENAI_API_KEY=")
         || text.contains("Authorization:")
         || text.contains("Bearer ")
+}
+
+fn parse_api_key(text: &str) -> Option<String> {
+    for line in text.lines() {
+        let trimmed = line.trim();
+        let Some(value) = trimmed
+            .strip_prefix("export OPENAI_API_KEY=")
+            .or_else(|| trimmed.strip_prefix("OPENAI_API_KEY="))
+        else {
+            continue;
+        };
+        return Some(unquote(value.trim()).to_string());
+    }
+    None
+}
+
+fn unquote(value: &str) -> &str {
+    value
+        .strip_prefix('"')
+        .and_then(|inner| inner.strip_suffix('"'))
+        .or_else(|| {
+            value
+                .strip_prefix('\'')
+                .and_then(|inner| inner.strip_suffix('\''))
+        })
+        .unwrap_or(value)
 }
 
 fn inspect_env_file(path: &Path) -> EnvFileState {

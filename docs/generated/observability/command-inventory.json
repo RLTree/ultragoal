@@ -1398,14 +1398,14 @@
         "cost/rate-limit receipt object",
         "command-level observability receipt",
         "package audit currentness check",
-        "redacted model-output non-authority blockers"
+        "redacted model-output non-authority blockers",
+        "live OpenAI provider invocation receipt",
+        "live token/cost/rate-limit receipt capture"
       ],
       "missing_surfaces": [
         "same-candidate live logs query proof",
         "same-candidate live metrics query proof",
         "same-candidate live traces query proof",
-        "live OpenAI provider invocation receipt",
-        "live token/cost/rate-limit header capture",
         "promptfoo and improvement-loop call adapter binding"
       ],
       "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
