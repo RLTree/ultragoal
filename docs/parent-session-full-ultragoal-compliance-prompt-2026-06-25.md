@@ -1764,6 +1764,82 @@ The CLI must be product-fit as a tool:
 - Local no-network init/retrofit must complete within the declared `repair_loop` budget unless package installation or compilation is explicitly required and separately budgeted.
 - Manual multi-step setup, undocumented environment tinkering, hidden local state, and slow setup that causes agents to avoid fresh environments are product failures, not acceptable inconvenience.
 
+Mandatory Product Usage Fitness and CLI Discoverability:
+
+- Harness Ultragoal must be usable as a product for plugin-activated repositories,
+  not only as a self-audit tool for its own package.
+- The CLI must provide one obvious routine entrypoint for ordinary required local
+  validation, while preserving leaf commands for advanced/debug usage.
+- Top-level and subcommand help must be self-contained enough for an un-oriented
+  agent or user to discover what to run, when to run it, why it matters, which
+  proof surface it affects, and which claims it cannot support.
+- `fit-repo` must be visible as the first plugin-activated repository path from
+  the executable CLI surface, not only from plugin metadata, skill text, or docs.
+- Target-repo/plugin-activated usage must be visible from CLI help and routine
+  command flow, not hidden behind source-audit trivia or static fixture proof.
+- `scripts/check` must either delegate to the routine CLI validation path or
+  explicitly declare itself a narrow helper whose pass cannot satisfy routine,
+  product-readiness, readiness, release, final-packet, or update_goal claims.
+- Product/routine usability claims are blocked when required validation exists
+  only as scattered manual leaf commands, help output is a dense usage line
+  without command groups/examples/next-step guidance, `fit-repo` is clearer in
+  plugin metadata than in executable CLI surfaces, target-repo validation lacks
+  an obvious operator path, or focused checks/source audit/coverage/product
+  receipts/red reports can be substituted for final or routine proof without
+  explicit claim ceilings.
+- Add focused tests and red fixtures for missing routine entrypoint,
+  non-navigable help, leaf-only validation substitution, hidden fit-repo path,
+  omitted target-repo routine path, and `scripts/check` substituting for the
+  routine CLI path without a narrow-helper claim ceiling.
+
+Mandatory Control-Loop Discipline, Validation Budget, and Receipt Boundaries:
+
+- Receipts are claim-bound artifacts, not progress journal entries. Checklist
+  rows must use concise progress statuses only and must not become receipt
+  ledgers, progress logs, or stale checked boxes.
+- Receipt minting or refresh is allowed only at claim-bearing slice closure, a
+  phase gate requiring same-candidate evidence, final source-local proof
+  assembly, or package/install/cache/final-packet/update_goal proof that is
+  actually in scope.
+- During implementation, agents must prefer focused tests, direct source
+  inspection, stdout, logs, metrics, traces, and explain output over broad
+  receipt churn. Broad source audit, red report, coverage, Product/Fit/Journey,
+  Rust/GC, self-law, update_goal, and final-packet receipts must not be
+  regenerated after every small edit.
+- Inner-loop checks may be tool-driven: fmt/build, focused unit tests, line-cap,
+  package digest, schema validation, targeted receipts, and focused
+  red/green/tamper tests.
+- Slice-boundary closure requires current digest, focused tests, touched
+  red/green/tamper proof, current same-candidate receipts, claim guard, targeted
+  manual source/runtime inspection of the changed claim path, checklist status
+  updates only, and source-local/not-readiness commit when coherent.
+- Broad-boundary closure requires exact coverage, source audit, red fixture
+  report, standards, source-obligation, and foundational trace closure on the
+  same candidate.
+- Completion-boundary closure requires full E2E/manual dogfood, CLI self-law,
+  update_goal eligibility, final packet, install/cache/app-registry, and reviewer
+  surfaces. Full manual E2E is not required between deterministic inner-loop
+  checks.
+- Manual validation is mandatory only at claim-boundary points: gate completion,
+  new or changed validator/check/schema/claim guard, changed red/green/tamper
+  semantics, final packet/update_goal/readiness/install/cache/app-registry
+  surfaces, Product Fitness/Product Success claims, OpenAI/promptfoo/HALO
+  authority, and suspicious CLI passes. It must inspect real source/runtime
+  behavior and tune the validator rather than creating universal
+  manual-receipt theater.
+- Repeated broad audit loops are forbidden unless implementation or evidence
+  semantics changed. Use Gate 92 style repair: run the narrow failing command
+  once, query logs/metrics/traces by run_id/correlation_id/current digest,
+  explain the failure, repair the smallest production cause, rerun the narrow
+  command, verify changed telemetry, then run broad audit once.
+- Worktree lanes must not launch until the in-process validator/CLI parallelism,
+  observability timing, current scheduler slice, Product Usage Fitness slice, and
+  Phase 4 same-candidate source-local graph are closed and committed.
+- No install/cache refresh, version bump, final packet finalization,
+  registry/reviewer exposure claim, readiness/release/completion claim, or
+  update_goal is allowed until same-candidate source/install/cache/app-registry/
+  reviewer/final-packet/update_goal evidence supports that exact surface.
+
 The CLI must reject performance theater:
 
 - no performance budget;

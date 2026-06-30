@@ -191,9 +191,7 @@ mod tests {
         }
         let store = crate::schema_catalog::load(&root);
         let runtime_cache = BTreeMap::new();
-        let runtime_ids = Vec::new();
         let runtime_rows = json!({});
-        let runtime_inputs = Vec::new();
         let results = evaluate(EvaluateInput {
             root: &root,
             store: &store,
@@ -205,9 +203,9 @@ mod tests {
             ],
             target_digest: "sha256:test",
             runtime_digest_cache: &runtime_cache,
-            runtime_red_fixture_ids: &runtime_ids,
+            runtime_red_fixture_ids: &[],
             runtime_red_fixtures: &runtime_rows,
-            runtime_input_digests: &runtime_inputs,
+            runtime_input_digests: &[],
             scheduler: SchedulerConfig::from_jobs(Some(4)).expect("scheduler"),
         });
         assert_eq!(results.rows.len(), 3);
@@ -224,6 +222,29 @@ mod tests {
         }));
         assert!(!root.join("tmp/red-one.txt").exists());
         assert!(!root.join("tmp/red-two.txt").exists());
+        crate::json_boundary::write_json(
+            &root.join("plugin-manifest-draft.json"),
+            &json!({"resources":["fixtures/red/filesystem-one.json","../escape.json"]}),
+        )
+        .expect("invalid manifest path");
+        let failed_rows =
+            [json!({"id": "filesystem-one", "packet_path": "fixtures/red/filesystem-one.json"})];
+        let failed = evaluate(EvaluateInput {
+            root: &root,
+            store: &store,
+            validator_digests: &BTreeMap::new(),
+            items: &failed_rows,
+            target_digest: "sha256:test",
+            runtime_digest_cache: &runtime_cache,
+            runtime_red_fixture_ids: &[],
+            runtime_red_fixtures: &runtime_rows,
+            runtime_input_digests: &[],
+            scheduler: SchedulerConfig::from_jobs(Some(2)).expect("scheduler"),
+        });
+        let observed = failed.rows["filesystem-one"]["observed_error"]
+            .as_str()
+            .unwrap();
+        assert!(observed.contains("red_fixture_isolated_root_path_invalid"));
         fs::remove_dir_all(root).expect("cleanup");
     }
 }

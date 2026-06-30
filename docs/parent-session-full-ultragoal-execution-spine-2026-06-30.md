@@ -69,6 +69,44 @@ Do not trust older source-audit, red-report, coverage, Gate 92, Product/Fit,
 Rust/GC, OpenAI, promptfoo, HALO, final-packet, install/cache, or update_goal
 receipts until they are rebound or explicitly stale-marked.
 
+## Carry-Forward Control Loop Requirements
+
+The checklist is a progress surface, not a receipt ledger. Use only concise row
+statuses: `not started`, `in progress`, `implemented, pending validation`,
+`validated current`, and `stale due to source change`. Do not add progress-ledger
+sections or churn receipt paths/digests through checklist rows during active
+implementation.
+
+Receipts are minted or refreshed only when they support a claim boundary: slice
+closure, a phase gate requiring same-candidate evidence, final source-local proof
+assembly, or an in-scope package/install/cache/final-packet/update_goal proof.
+Otherwise use focused tests, stdout, direct source inspection, logs, metrics,
+traces, and explain output as inner-loop evidence.
+
+Validation is tiered:
+
+- Inner loop: fmt/build, focused unit tests, line-cap, package digest, schema
+  check, targeted receipt, and targeted red/green/tamper tests.
+- Slice boundary: current digest, focused tests, touched red/green/tamper proof,
+  same-candidate receipts, claim guard, targeted source/runtime inspection,
+  checklist status updates only, and a source-local/not-readiness commit when
+  coherent.
+- Broad boundary: exact coverage, source audit, red fixture report, standards,
+  source-obligation, and foundational trace closure.
+- Completion boundary: full E2E/manual dogfood, CLI self-law, update_goal
+  eligibility, final packet, install/cache/app-registry, and reviewer surfaces.
+
+Do not rerun broad source audit/red report loops unless implementation or
+evidence semantics changed. For repeated failures, run the narrow failing command
+once, query telemetry by run/correlation/current digest, explain the failure,
+repair the smallest production cause, rerun the narrow command, verify changed
+telemetry, and only then run broad audit once.
+
+Current dependency order is strict: close the red-fixture scheduler/
+parallelization slice; clean, stale-mark, or source-local commit dirty files from
+that slice; close Phase 3.5 Product Usage Fitness; rebind Phase 4 evidence once
+on one digest; launch worktree lanes only after Phase 4 is current and committed.
+
 ## Phase Order
 
 ### Phase 0 - Stabilize WIP And Candidate Boundary
@@ -109,11 +147,32 @@ observability binding, and claim guards.
 
 Exit requires focused tests and receipts for 93-97 source-local claims only.
 
+### Phase 3.5 - Product Usage Fitness And CLI Discoverability
+
+After the red-fixture scheduler/parallelization slice is source-local clean and
+committed, and before Phase 4 evidence rebinding, close one dependency-closed
+source-local product-usage slice.
+
+The CLI/plugin must be usable as a product for plugin-activated repositories, not
+only as a self-audit machine. Required validation paths must be obvious, simple,
+and hard to skip. Preserve individual advanced entrypoints, but provide one
+routine CLI entrypoint for ordinary required validation and self-contained help
+that tells an un-oriented agent or user what to run, when, why, which proof
+surface is affected, and which claims remain unsupported.
+
+Exit requires focused help/routine-path tests and red fixtures for missing
+routine entrypoint, non-navigable help, leaf-only validation substitution,
+hidden fit-repo path, omitted target-repo/plugin-activated path, and
+`scripts/check` failing to delegate or declare itself a narrow helper. Update
+checklist rows with progress statuses only, then commit as source-local/not
+readiness.
+
 ### Phase 4 - Rebind Gates 0-91 Acceptance Spine
 
-Rerun or stale-mark coverage, line caps, namespace/maximal factoring, typed
-boundaries, Product/Fit/Journey, Rust/GC, standards, source obligations,
-foundational trace, source audit, and red report on one digest.
+Only after Phase 3.5 closes or is explicitly source-local blocked, rerun or
+stale-mark coverage, line caps, namespace/maximal factoring, typed boundaries,
+Product/Fit/Journey, Rust/GC, standards, source obligations, foundational trace,
+source audit, and red report on one digest.
 
 Exit requires current source-local audit/red/coverage spine or named failures.
 
