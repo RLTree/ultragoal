@@ -33,10 +33,10 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
     .map(|item| item.to_string())
     .collect::<Vec<_>>();
     let parsed = crate::parse_command(&raw).expect("parse jobs");
-    match parsed {
-        crate::Command::Audit { jobs, .. } => assert_eq!(jobs, Some(4)),
-        other => panic!("expected audit command, got {other:?}"),
-    }
+    assert!(matches!(
+        parsed,
+        crate::Command::Audit { jobs: Some(4), .. }
+    ));
 
     let bad = [
         "source",

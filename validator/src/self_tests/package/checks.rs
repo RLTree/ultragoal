@@ -151,13 +151,34 @@ fn package_checks_report_missing_manifest_as_inventory_failure() {
 #[test]
 fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
     let root = crate::self_tests::boundaries::support::temp_root("package-checks-scheduler");
-    std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
+    std::fs::create_dir_all(root.join("docs")).expect("docs");
+    std::fs::create_dir_all(root.join("schemas")).expect("schemas");
+    write_json(
+        &root.join("schemas/schema-catalog.json"),
+        &json!({
+            "schema": "harness-ultragoal.schema-catalog.v1",
+            "resolver_contract": "local test catalog",
+            "schemas": [{
+                "id": "https://harness-ultragoal.local/schemas/openai-key-policy.schema.json",
+                "path": "schemas/openai-key-policy.schema.json"
+            }]
+        }),
+    );
+    write_json(
+        &root.join("schemas/openai-key-policy.schema.json"),
+        &json!({
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "https://harness-ultragoal.local/schemas/openai-key-policy.schema.json",
+            "type": "object",
+            "additionalProperties": true
+        }),
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
-    write_json(&root.join("fixtures/valid/good.json"), &json!({}));
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    write_json(&root.join("docs/openai-key-policy.json"), &json!({}));
+    let store = crate::schema_catalog::load(&root);
     let results = crate::audit::package::checks::checks_with_scheduler(
         &root,
         &store,
@@ -174,5 +195,13 @@ fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
     assert!(metric.worker_count <= 2);
     assert!(metric.deterministic_ordering);
     assert!(!metric.shared_validation_artifact_writes_allowed);
+    assert!(
+        !results
+            .failures
+            .get("schema-valid")
+            .into_iter()
+            .flatten()
+            .any(|failure| failure.contains("docs/openai-key-policy.json"))
+    );
     std::fs::remove_dir_all(root).expect("cleanup scheduler checks");
 }

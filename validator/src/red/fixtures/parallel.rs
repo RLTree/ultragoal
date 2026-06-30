@@ -122,10 +122,7 @@ fn row_allows_parallel(root: &Path, row: &Value) -> bool {
     if crate::package::inventory::package_path_error(root, packet_rel).is_some() {
         return true;
     }
-    let packet_path = match crate::package::inventory::resolve(root, packet_rel) {
-        Ok(path) => path,
-        Err(_) => return true,
-    };
+    let packet_path = root.join(packet_rel);
     let Ok(packet) = json_boundary::read_json(&packet_path) else {
         return true;
     };

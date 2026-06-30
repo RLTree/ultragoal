@@ -178,11 +178,8 @@ fn run_parallel<T: Send + 'static>(
     for handle in handles {
         handle.join().expect("scheduler worker");
     }
-    let results = match Arc::try_unwrap(results) {
-        Ok(results) => results,
-        Err(_) => panic!("scheduler results shared"),
-    };
-    results.into_inner().expect("scheduler results")
+    let mut results = results.lock().expect("scheduler results");
+    std::mem::take(&mut *results)
 }
 
 fn worker_count(config: SchedulerConfig, task_class: TaskClass, task_count: usize) -> usize {
