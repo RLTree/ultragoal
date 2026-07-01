@@ -52,6 +52,7 @@ memory-wiki-context-only	pass	scripts/check-agent-standards	sha256:8c3993ba47f50
 namespace-progressive-disclosure	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 non-e2e-claim-ceiling-confidence-bounds	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 offline-schema-catalog-resolver-portability	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
+openai-api-key-model-cost-external-ai-boundary	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 one-command-fresh-environment-bootstrap-concurrent-resource-allocation	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 orchestrator-state-machine	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only
 plugin-bundled-component-graph-hook-app-mcp-safety	pass	scripts/check-agent-standards	sha256:8c3993ba47f50f70e62116a486158eeb353c269800b589948c75cb73d6a960ff	2026-06-26T22:42:00Z	package_static_fixture_only

@@ -4160,7 +4160,7 @@
       "validator/src/audit/namespace/mod.rs",
       "validator/src/audit/namespace/source/mod.rs",
       "validator/src/audit/namespace/source/topology.rs",
-      "validator/src/audit/package/checks.rs",
+      "validator/src/audit/package/checks/mod.rs",
       "validator/src/audit/package/mod.rs",
       "validator/src/audit/package/outputs.rs",
       "validator/src/audit/package/run/mod.rs",
@@ -4440,7 +4440,7 @@
       "validator/src/self_tests/cli/performance/mod.rs",
       "validator/src/self_tests/cli/performance/observability_edges.rs",
       "validator/src/self_tests/cli/performance/receipts.rs",
-    "validator/src/self_tests/cli/performance/runtime.rs",
+      "validator/src/self_tests/cli/performance/runtime.rs",
       "validator/src/self_tests/cli/product.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/root.rs",
@@ -4477,7 +4477,7 @@
       "validator/src/self_tests/namespace/mod.rs",
       "validator/src/self_tests/namespace/red_fixtures.rs",
       "validator/src/self_tests/namespace/root_route_product_review.rs",
-      "validator/src/self_tests/package/checks.rs",
+      "validator/src/self_tests/package/checks/mod.rs",
       "validator/src/self_tests/package/inventory_schema_edges.rs",
       "validator/src/self_tests/package/mod.rs",
       "validator/src/self_tests/package/review_target.rs",
@@ -5052,6 +5052,10 @@
         "details": "pass",
         "status": "pass"
       },
+      "harness-improvement-loop-trace-feedback-eval-codex-handoff": {
+        "details": "pass",
+        "status": "pass"
+      },
       "historical-regression-corpus-session-review-signals": {
         "details": "pass",
         "status": "pass"
@@ -5121,6 +5125,10 @@
         "status": "pass"
       },
       "one-command-fresh-environment-bootstrap-concurrent-resource-allocation": {
+        "details": "pass",
+        "status": "pass"
+      },
+      "openai-api-key-model-cost-external-ai-boundary": {
         "details": "pass",
         "status": "pass"
       },
@@ -5233,6 +5241,10 @@
         "status": "pass"
       },
       "required-claim-closure": {
+        "details": "pass",
+        "status": "pass"
+      },
+      "research-source-authority-article-to-law-integration": {
         "details": "pass",
         "status": "pass"
       },
@@ -18326,6 +18338,136 @@
         "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
         "status": "pass",
         "validator_exit": 1
+      },
+      "harness-improvement-loop-hand-authored-receipt-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:6e0f8fc765e738a81270a916fd831ea18e7c5d0b260c1977f059aa28e2303343",
+        "packet_path": "fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-raw-halo-authority-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:b6d43d1dd945a70d79e6a3be653c0229bd0865d32ac9b862528667d62e3ebf77",
+        "packet_path": "fixtures/red/harness-improvement-loop-raw-halo-authority-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-trace-without-feedback-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:fd39404784cf6af6e6d961ffaec6f30982f4d865685f7dc52459cfc85e18230e",
+        "packet_path": "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-validation-skipped-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:5fef197eba664dd91f75896fe5d23415552cee5127fed1b3905351b00ab5f547",
+        "packet_path": "fixtures/red/harness-improvement-loop-validation-skipped-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:75770254fd0d904f2cd5267fb5ba1747abc474eda082b1a5ecb71aef72d98901",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:d0b7518dcc78f4f2ff26ecb641b1ce50eda71f6305d7f75c79c15af49dcad137",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-secret-serialized-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:8f03bfb85709e4d8a109d4760d6cd838f72bc6a716ffa2e769c36c41181af87a",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:206944f700d95c26d55f4bc9444402e5105f05a48f3e180393a85bcbb5c691cb",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-missing-claim-guard-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:50c52c2e07b955f22f50d834ea619146a40425c55a82201dbcf7849d618b51fa",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-package-omitted-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:2afbb68e8d5fe8e30bdeac094de77dc98e4916b6e3270fc198f3b7ee00acdd80",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-prose-only-map-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:66f48758a1eeab8855acb397bd1d16e8a3db981aa9d7de638a6bbb8e05540de0",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-unmapped-source-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:0dbd687369aa95db620c95f9f749122df4d445aa019921a4b0ae11e7e17acd26",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red": {
+        "expected_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
+        "expected_failing_check": "validator-theater-miswire-resistance",
+        "observed_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
+        "observed_failing_check": "validator-theater-miswire-resistance",
+        "packet_digest": "sha256:b201b1246441afb72764636227022030f58f2fce0a997d7306a588b7d0924c24",
+        "packet_path": "fixtures/red/validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red.json",
+        "status": "pass",
+        "validator_exit": 1
       }
     },
     "required_check_ids": [
@@ -18384,6 +18526,7 @@
       "goal-contract-amendment-authority-required-claim-id-mapping",
       "goal-tool-discovery-probe",
       "green-path-adequacy-satisfiable-strictness",
+      "harness-improvement-loop-trace-feedback-eval-codex-handoff",
       "guardrail-speed-isolation-cache-honesty",
       "historical-regression-corpus-session-review-signals",
       "human-audit-disposition-decomposition-judgment-claim-blocking",
@@ -18402,6 +18545,7 @@
       "non-e2e-claim-ceiling-confidence-bounds",
       "observability-claim-proof",
       "offline-schema-catalog-resolver-portability",
+      "openai-api-key-model-cost-external-ai-boundary",
       "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
       "orchestrator-state-machine",
       "parent-role-boundary",
@@ -18429,6 +18573,7 @@
       "raw-private-artifact-handling-category-only-evidence",
       "ready-receipt-provenance",
       "red-fixture-coverage",
+      "research-source-authority-article-to-law-integration",
       "repo-knowledge-index-core-beliefs",
       "required-claim-closure",
       "restartable-execplans",
@@ -18918,6 +19063,10 @@
       "guardrail-speed-isolation-cache-honesty-source-obligation-parity-red",
       "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
       "hand-written-ready-receipt",
+      "harness-improvement-loop-hand-authored-receipt-red",
+      "harness-improvement-loop-raw-halo-authority-red",
+      "harness-improvement-loop-trace-without-feedback-red",
+      "harness-improvement-loop-validation-skipped-red",
       "hidden-withheld-claim",
       "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
       "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red",
@@ -19067,6 +19216,10 @@
       "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-shared-job-queue-red",
       "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-slow-bootstrap-without-budget-red",
       "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-source-obligation-parity-red",
+      "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red",
+      "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red",
+      "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red",
+      "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red",
       "orchestrator-state-machine-bounded-concurrency-red",
       "orchestrator-state-machine-deterministic-workspaces-red",
       "orchestrator-state-machine-observability-events-red",
@@ -19371,6 +19524,10 @@
       "repo-knowledge-index-core-beliefs-owner-freshness-source-red",
       "repo-knowledge-index-core-beliefs-source-obligation-parity-red",
       "repo-knowledge-index-core-beliefs-validator-receipt-path-red",
+      "research-source-authority-article-to-law-integration-missing-claim-guard-red",
+      "research-source-authority-article-to-law-integration-package-omitted-red",
+      "research-source-authority-article-to-law-integration-prose-only-map-red",
+      "research-source-authority-article-to-law-integration-unmapped-source-red",
       "restartable-execplan-missing-purpose",
       "restartable-execplan-missing-validation-commands",
       "restartable-execplan-prose-only",
@@ -19695,6 +19852,7 @@
       "validator-commit-value-not-sha",
       "validator-package-digest-value-not-sha",
       "validator-theater-miswire-resistance-adjacent-law-misattribution-red",
+      "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
       "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
       "validator-theater-miswire-resistance-fixture-name-only-pass-red",
       "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
@@ -20014,7 +20172,7 @@
         },
         {
           "digest": "sha256:f3729023d1bb3989f1507f84c07d5a5a25ce126070270b34ec95c07e9e79bc8a",
-          "path": "validator/src/audit/package/checks.rs"
+          "path": "validator/src/audit/package/checks/mod.rs"
         },
         {
           "digest": "sha256:f7c1a4d89c872466b2a868f5ac0cd9387434f7173f3497e17b7358bb543dea1b",
@@ -21282,7 +21440,7 @@
         },
         {
           "digest": "sha256:a0eb760c446291115cb74fd3ed349b3cba848bb222ce2bfc390ccc9ae0974c49",
-          "path": "validator/src/self_tests/package/checks.rs"
+          "path": "validator/src/self_tests/package/checks/mod.rs"
         },
         {
           "digest": "sha256:420bd091d3390fe3fe38d9aa43586880efda511697764525c99db7c285bb7b4d",

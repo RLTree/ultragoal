@@ -127,6 +127,13 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
     )
     .is_none());
     assert!(observe::query::candidate_digest_failure(
+        &format!(
+            "{{\"candidate_digest\":\"{digest}\"}}\n{{\"nested\":\"{{\\\"candidate_digest\\\":\\\"{digest}\\\"}}\"}}"
+        ),
+        &digest,
+    )
+    .is_none());
+    assert!(observe::query::candidate_digest_failure(
         r#"{"candidate_digest":"sha256:short"}"#,
         &digest,
     )

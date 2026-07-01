@@ -14,7 +14,7 @@
       "artifacts": [
         {
           "path": "scripts/check",
-          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+          "digest": "sha256:6b20e52ef57bed8b40344dd4bb208e4903ed907004e8078bfa2aef8c0e16dfa9"
         }
       ]
     },
@@ -28,7 +28,7 @@
       "artifacts": [
         {
           "path": "scripts/check-coverage-fast",
-          "digest": "sha256:19fdc4d9a73f4213d37c3bf3be2dc973b2a3f972d0dd51b3079be002b4fb07ec"
+          "digest": "sha256:33a3a8dd69aa2278de86c9827797ad9e7b0e7f107836f43a91a575cdab2b1b81"
         }
       ]
     },
@@ -42,7 +42,7 @@
       "artifacts": [
         {
           "path": "scripts/check",
-          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+          "digest": "sha256:6b20e52ef57bed8b40344dd4bb208e4903ed907004e8078bfa2aef8c0e16dfa9"
         }
       ]
     },
@@ -56,7 +56,7 @@
       "artifacts": [
         {
           "path": "scripts/check",
-          "digest": "sha256:ae98b0bd8565d0fc35c2ffc2cecf7005ede228f48c5419124abbb6b9faf61af6"
+          "digest": "sha256:6b20e52ef57bed8b40344dd4bb208e4903ed907004e8078bfa2aef8c0e16dfa9"
         }
       ]
     }

@@ -118,10 +118,13 @@ once, query telemetry by run/correlation/current digest, explain the failure,
 repair the smallest production cause, rerun the narrow command, verify changed
 telemetry, and only then run broad audit once.
 
-Current dependency order is strict: close the red-fixture scheduler/
-parallelization slice; clean, stale-mark, or source-local commit dirty files from
-that slice; close Phase 3.5 Product Usage Fitness; rebind Phase 4 evidence once
-on one digest; launch worktree lanes only after Phase 4 is current and committed.
+Current dependency order is strict: if the red-fixture scheduler/
+parallelization slice is dirty, close it immediately with focused proof and a
+source-local/not-readiness commit, or explicitly stale-mark/shelve it without
+claiming closure. After the current dirty slice is no longer ambiguous, full
+research-rooted Gate 92 observability and agent legibility is the next broad
+slice. Product Usage Fitness, Phase 4 rebinding, final proof assembly, and
+worktree lanes wait until Gate 92 is fully fitted and committed.
 
 ## Phase Order
 
@@ -144,30 +147,55 @@ boundaries.
 Exit requires: focused package/namespace tests, no broad orphan inventory
 explosion, schema/catalog paths listed, current receipt, and claim guard.
 
-### Phase 2 - Gate 92 Repair-Loop Spine
+### Phase 2 - Research-Rooted Full Gate 92 Observability And Agent Legibility
 
-Make observability usable for the current highest-authority failing command.
-Required loop: digest -> run failing command once -> query logs/metrics/traces by
-run/correlation/digest -> explain failure through CLI -> repair smallest cause ->
-rerun narrow command -> compare telemetry -> only then broad audit.
+Gate 92 is now the top source-local priority after the current dirty slice is
+unambiguous. Do not treat it as a current-blocker-only rescue, a representative
+sample, or a later fitting backlog.
 
-Exit requires same-digest stdout/log/metric/trace/explain proof for source audit
-or final-packet proof. Full Gate 92 remains incomplete until Phase 7.
+First bind the observability work to the foundational papers and additional
+research already governed by Gate 93: OpenAI Harness Engineering, OpenAI Codex
+repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and
+four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry
+semantic conventions, OpenAI improvement-loop research, and the self-improving
+domain-agent article where it affects traces/evals/feedback loops. If any
+observability requirement is not mapped through the research-source registry,
+article-to-law trace, source obligations, foundational trace, standards rows,
+validators, fixtures, package inventory, claim guards, and setup/retrofit
+outputs, repair that mapping before claiming Gate 92 progress.
 
-### Phase 3 - Gates 93-97 Touched-Surface Closure
+Complete observability fitting for every CLI/plugin production path: every
+command and subcommand, validator check family, receipt/proof path,
+fixture/report path, package/plugin/setup/retrofit surface, operating-loop
+stage, signal class, long-running path, external/live path, and claim guard.
+No minimum-surface, sample-based, current-failure-only, or adjacent-surface
+substitution is allowed.
 
-Close research, improvement-loop, OpenAI, promptfoo, and HALO surfaces already
-touched by WIP. Fix schema enum drift, standards TSV/JSON drift, source
-obligations, red fixture schema/digests, valid fixtures, package inventory,
-observability binding, and claim guards.
+Required repair loop for every opaque failure encountered: digest -> run the
+failing command once -> query logs/metrics/traces by run/correlation/digest ->
+explain failure through CLI -> repair smallest cause -> rerun narrow command ->
+compare telemetry -> only then broad audit.
+
+Exit requires a passing fitting control board with every inventory row fitted on
+same-candidate query proof, every mandatory research requirement current and
+mapped to the Gate 92 law surface, full logs/metrics/traces/explain coverage for
+all law-bearing command families and plugin surfaces, focused tests, red/green/
+tamper fixtures, source inspection, current digest, concise checklist status
+updates, and a source-local/not-readiness commit.
+
+### Phase 3 - Gates 93-97 Remaining Touched-Surface Closure
+
+After full Gate 92 closure, close remaining research, improvement-loop, OpenAI,
+promptfoo, and HALO surfaces already touched by WIP. Fix schema enum drift,
+standards TSV/JSON drift, source obligations, red fixture schema/digests, valid
+fixtures, package inventory, observability binding, and claim guards.
 
 Exit requires focused tests and receipts for 93-97 source-local claims only.
 
 ### Phase 3.5 - Product Usage Fitness And CLI Discoverability
 
-After the red-fixture scheduler/parallelization slice is source-local clean and
-committed, and before Phase 4 evidence rebinding, close one dependency-closed
-source-local product-usage slice.
+After full Gate 92 closure and before Phase 4 evidence rebinding, close one
+dependency-closed source-local product-usage slice.
 
 The CLI/plugin must be usable as a product for plugin-activated repositories, not
 only as a self-audit machine. Required validation paths must be obvious, simple,
@@ -185,10 +213,10 @@ readiness.
 
 ### Phase 4 - Rebind Gates 0-91 Acceptance Spine
 
-Only after Phase 3.5 closes or is explicitly source-local blocked, rerun or
-stale-mark coverage, line caps, namespace/maximal factoring, typed boundaries,
-Product/Fit/Journey, Rust/GC, standards, source obligations, foundational trace,
-source audit, and red report on one digest.
+Only after Gate 92 is fully fitted and Phase 3.5 closes or is explicitly
+source-local blocked, rerun or stale-mark coverage, line caps, namespace/maximal
+factoring, typed boundaries, Product/Fit/Journey, Rust/GC, standards, source
+obligations, foundational trace, source audit, and red report on one digest.
 
 Exit requires current source-local audit/red/coverage spine or named failures.
 
@@ -206,13 +234,15 @@ DevX, privacy/data minimization, and surface separation.
 Worktrees may start only after Phase 4 is committed and parent owns all
 `validation_artifacts/**` writes.
 
-### Phase 7 - Full Gate 92 Fitting
+### Phase 7 - Gate 92 Regression And Propagation Guard
 
-Complete observability fitting for every law-bearing CLI command, validator
-check family, receipt/proof path, fixture/report path, package/plugin surface,
-operating-loop stage, and signal class.
+Full Gate 92 fitting is no longer deferred here. This phase only revalidates
+that later Gates 93-103 work did not regress any observability inventory row,
+research mapping, query proof, pass/fail output contract, trace parentage,
+metric/log binding, help discoverability, or setup/retrofit propagation.
 
-Exit requires fitting control board pass with same-candidate query proof.
+Exit requires the fitting control board to remain pass on same-candidate query
+proof after later source changes.
 
 ### Phase 8 - Gate 105 Measured Improvement
 

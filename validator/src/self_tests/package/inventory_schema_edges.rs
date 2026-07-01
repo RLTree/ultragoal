@@ -112,6 +112,39 @@ fn package_inventory_ignores_parent_session_contract_files() {
 }
 
 #[test]
+fn package_inventory_ignores_mutable_validation_artifacts_but_rejects_parent_contract_resources() {
+    let root = crate::self_tests::boundaries::support::temp_root("inventory-local-receipts");
+    std::fs::create_dir_all(root.join("docs")).expect("docs");
+    std::fs::create_dir_all(root.join("validation_artifacts/cli")).expect("receipts");
+    std::fs::write(root.join("README.md"), "package resource").expect("readme");
+    std::fs::write(
+        root.join("validation_artifacts/cli/generated-receipt.json"),
+        "{}",
+    )
+    .expect("generated receipt");
+    let parent = "docs/parent-session-full-ultragoal-execution-spine-2026-06-30.md";
+    std::fs::write(root.join(parent), "builder contract").expect("parent");
+
+    let ok = crate::package::inventory::closure::inventory_closure_failures(
+        &root,
+        &json!({"resources":["README.md"]}),
+    )
+    .join("\n");
+    assert!(!ok.contains("generated-receipt"), "{ok}");
+
+    let bad = crate::package::inventory::closure::inventory_closure_failures(
+        &root,
+        &json!({"resources":["README.md", parent]}),
+    )
+    .join("\n");
+    assert!(
+        bad.contains("parent-session contract is not a package resource"),
+        "{bad}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup inventory local receipts");
+}
+
+#[test]
 fn package_inventory_paths_ignore_untyped_rows_and_collect_typed_paths() {
     let paths = crate::package::inventory::inventory_paths(&json!({
         "skills":[{"path":"skills/a/SKILL.md"},{}],

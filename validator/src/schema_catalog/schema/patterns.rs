@@ -1,6 +1,7 @@
 pub(super) fn matches(pattern: &str, text: &str) -> bool {
     match pattern {
         "^sha256:[0-9a-f]{64}$" => sha(text, false),
+        "^sha256:[a-f0-9]{64}$" => sha(text, false),
         "^sha256:[a-fA-F0-9]{64}$" => sha(text, true),
         "^[a-fA-F0-9]{7,64}$" => hex_range(text, 7, 64),
         "^CLAIM-[0-9]{3,}$" => id_prefix(text, "CLAIM-", 3),
@@ -122,6 +123,10 @@ mod tests {
         assert!(!super::matches(
             "^sha256:[0-9a-f]{64}$",
             &format!("sha256:{}", "A".repeat(64))
+        ));
+        assert!(super::matches(
+            "^sha256:[a-f0-9]{64}$",
+            &format!("sha256:{}", "f".repeat(64))
         ));
         assert!(super::matches(
             "^sha256:[a-fA-F0-9]{64}$",

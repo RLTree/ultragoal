@@ -70,6 +70,9 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
         "help" | "--help" | "-h" => Command::Help,
         "audit" => parse_audit(&raw[1..])?,
         "source" if raw.get(1).map(String::as_str) == Some("audit") => parse_audit(&raw[2..])?,
+        "target-repo" if raw.get(1).map(String::as_str) == Some("audit") => {
+            parse_target_repo_audit(&raw[2..])?
+        }
         "review-target" => {
             let args = strip_build_or_verify(&raw[1..]);
             let receipt = opt_path(args, "--receipt")?;
@@ -187,6 +190,22 @@ fn parse_audit(args: &[String]) -> Result<Command, String> {
         receipt: opt_path(args, "--receipt")?,
         red_report: opt_string(args, "--red-report").map(PathBuf::from),
         target_repo: opt_string(args, "--target-repo").map(PathBuf::from),
+        mode,
+        require_observability: args.iter().any(|a| a == "--require-observability"),
+        require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),
+        jobs: opt_usize(args, "--jobs")?,
+    })
+}
+
+fn parse_target_repo_audit(args: &[String]) -> Result<Command, String> {
+    let mode = opt_string(args, "--mode").unwrap_or_else(|| "init".to_string());
+    if !audit::receipt::speed::is_known_mode(&mode) {
+        return Err(format!("invalid target-repo audit --mode: {mode}"));
+    }
+    Ok(Command::Audit {
+        receipt: opt_path(args, "--receipt")?,
+        red_report: None,
+        target_repo: Some(opt_path(args, "--surface-root")?),
         mode,
         require_observability: args.iter().any(|a| a == "--require-observability"),
         require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),

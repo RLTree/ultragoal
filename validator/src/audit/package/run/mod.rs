@@ -6,6 +6,7 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
+mod scope;
 mod semantic_valid;
 pub(crate) use semantic_valid::ready_artifacts;
 #[cfg(test)]
@@ -48,6 +49,7 @@ pub fn run(options: AuditOptions, red_report: PathBuf) -> Result<i32, String> {
         targets::collect(&options, &red_report, &validator_artifacts, &mut failures);
     targets::validate(&store, &mut failures, &target_artifacts);
     checks::final_hygiene_check(&options.root, &mut failures);
+    scope::defer_out_of_scope_claims(&options.mode, &mut failures);
     let status = outputs::package_status(&failures);
     let red_status = outputs::red_report_status(&red);
     outputs::write_red_report(&options.root, &red_report, red_status, &red)?;

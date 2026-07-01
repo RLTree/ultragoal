@@ -75,6 +75,8 @@ def resolve_repo_path(raw, code):
     return candidate
 
 def ignored(path):
+    if path.startswith("docs/parent-session-full-ultragoal-") and path.endswith(".md"):
+        return True
     if path in {
         ".harness/coverage-manifest.json",
         ".harness/coverage-command",

@@ -16,8 +16,18 @@ fn typed_candidate_digests(body: &str) -> Vec<String> {
     let mut out = Vec::new();
     if let Ok(value) = serde_json::from_str::<Value>(body) {
         collect_candidate_digests(&value, &mut out);
+    } else {
+        collect_line_candidate_digests(body, &mut out);
     }
     out
+}
+
+fn collect_line_candidate_digests(body: &str, out: &mut Vec<String>) {
+    for line in body.lines().map(str::trim).filter(|line| !line.is_empty()) {
+        if let Ok(value) = serde_json::from_str::<Value>(line) {
+            collect_candidate_digests(&value, out);
+        }
+    }
 }
 
 fn collect_candidate_digests(value: &Value, out: &mut Vec<String>) {

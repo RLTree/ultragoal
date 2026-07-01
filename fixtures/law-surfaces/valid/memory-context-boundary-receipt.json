@@ -10,7 +10,12 @@
       "path": "validator/src/audit/law/surface/receipts.rs"
     }
   ],
-  "memory_artifacts": [],
+  "memory_artifacts": [
+    {
+      "digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
+      "path": "docs/research-source-cards.json"
+    }
+  ],
   "memory_context_only": true,
   "schema": "harness-ultragoal.memory-context-boundary-receipt.v1",
   "substitutions_rejected": [

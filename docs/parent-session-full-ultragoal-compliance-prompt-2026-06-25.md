@@ -687,7 +687,7 @@ The CLI must implement a typed authority model. Authority may not be inferred fr
 
 The CLI must parse all external inputs into closed authority types before using them. Inputs that cannot be parsed into closed authority types must fail before validation logic runs.
 
-The required authority types include, at minimum:
+The required authority types include the full list below:
 
 - `GateId`
 - `LawId`
@@ -1580,7 +1580,7 @@ ultragoal self update-goal eligibility
 
 Command names may be refined during implementation, but equivalent self-law authority operations must exist. A generic source audit is insufficient unless it explicitly covers CLI self-law scope and emits a typed self-law receipt.
 
-Self-law scope must include, at minimum:
+Self-law scope must include the full list below:
 
 - CLI command parser and command dispatch;
 - CLI boundary parsers for JSON, TOML, Markdown, schemas, receipts, fixture catalogs, environment variables, paths, command output, package inventory, and runtime capability data;
@@ -2009,7 +2009,7 @@ Required validation:
 
 Required confidence calculation:
 
-- The final packet and final response must include an explicit confidence value for this repair, but the value must be calculated from evidence rather than asserted. Use a scored model at minimum:
+- The final packet and final response must include an explicit confidence value for this repair, but the value must be calculated from evidence rather than asserted. Use all listed scored components:
   - root cause observed directly: 25 points;
   - foundational/source-law alignment: 20 points;
   - direct enforcement path implemented: 20 points;
@@ -2322,6 +2322,10 @@ The Harness Ultragoal CLI and plugin must be a fully observability-instrumented 
 
 This gate cannot be satisfied by better error messages, optional diagnostics, local JSON fallback, docs-only setup, Grafana-only inspection, checklist prose, packet text, claim-ceiling language, shell wrappers, row-shape compliance, hidden network calls, stale telemetry, wrong-digest telemetry, uncorrelated telemetry, unredacted telemetry, unbounded telemetry, or opaque failure output.
 
+Gate 92 is rooted in the actual foundational and additional research sources, not in repo-derived summaries alone. The OpenAI Harness Engineering article makes local worktree-scoped logs, metrics, traces, queryability, and agent legibility part of the engineering substrate. The OpenAI Codex repair-loop and agent-improvement-loop research makes structured review/repair/validate records, traces, feedback, evals, ranked changes, handoffs, and before/after validation mandatory loop components. The OpenAI Agents tracing guidance makes full workflow traces, tool/model/guardrail/custom spans, span parentage, immediate export for long-running work, and sensitive-data controls mandatory for any agent-runtime authority. Google SRE monitoring guidance makes freshness, purpose-built metrics, log/metric consistency, four golden signals, saturation/resource signals, and monitoring tests mandatory. Structured-event and high-cardinality research requires wide, ordered, trace-aware raw events with enough context to ask new questions, not write-time aggregate theater. OpenTelemetry semantic conventions require one stable telemetry vocabulary across logs, metrics, traces, resources, schemas, receipts, command inventory, and claim guards.
+
+Therefore Gate 92 closure requires full research-to-law integration for every observability requirement, not a minimum set, sample set, or current-failure slice. Every requirement from every mandatory observability/improvement research source must be mapped through `docs/research-source-registry.json`, `docs/research-article-to-law-trace.json`, canonical law ids, standards rows, source obligations, foundational trace entries, schemas, validator check ids, red fixtures, green fixtures, tamper fixtures, receipt requirements, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers. Missing, stale, prose-only, alias-only, row-shape-only, checklist-only, package-omitted, fixture-incomplete, or setup/retrofit-omitted research mapping fails Gate 92 and Gate 93.
+
 Required observability stack:
 
 - Docker Compose is the default runtime. Use an existing Docker runtime if present. If Docker runtime is absent and Homebrew is available, install Colima, Docker CLI, and the Docker Compose plugin unless a real technical blocker prevents it. Docker Desktop is acceptable only if already installed or explicitly chosen by the user.
@@ -2342,6 +2346,7 @@ Typed telemetry model:
 
 - Every log event, metric sample, trace span, query result, and observability receipt must carry typed fields for schema, run_id, correlation_id, trace_id, span_id, parent_span_id, command, subcommand, operation, surface, law_id, check_id, claim_id, candidate_digest, target_revision, artifact_path, receipt_path, status, failure_class, why_failed, where_failed, next_repair, claim_impact, timestamp, duration_ms, exporter, redaction_status, bounded_output_status, query_hint_logql, query_hint_promql, and query_hint_traceql.
 - Unknown authority fields, freeform authority blobs, missing fields, wrong digest, wrong correlation id, unredacted secrets, and unbounded output fail.
+- Every command/check must emit a wide structured event carrying enough contextual dimensions to diagnose unknown failures without new instrumentation: command family, argument surface, task class, worker/task/queue state, cache key/mode/hit status, filesystem/package surface, receipt/schema/law graph digests, source/install/cache/app surface, retry/backoff state, resource saturation state, and before/after comparison anchors where a repair loop is in progress. Aggregated metrics may be derived from events, but aggregate-only telemetry cannot satisfy observability or repair-loop claims.
 - Every command and every check must emit structured logs to VictoriaLogs through the live stack and to a bounded local JSONL spool for fallback/forensics. Local JSONL fallback is transition evidence only and cannot complete Gate 92 without live VictoriaLogs ingestion and query proof.
 - Every command and check must emit VictoriaMetrics metrics for command totals/durations, check totals/failures, law failures, receipt dereferences, stale receipts, digest mismatches, claim blocks, red fixture totals/failures, proof graph cycles, registry unsupported events, observability emit failures, exporter retries/drops, stack health, and stack smoke. Labels must be bounded and may not leak secrets or unbounded paths.
 - Every CLI command opens a root span. Validator checks, schema parses, receipt dereferences, fixture runs, claim-ceiling calculations, final-packet dereferences, registry/install/cache probes, and exporter calls create child spans. Broken parentage fails Gate 92.
@@ -2376,6 +2381,7 @@ Fixtures and law surfaces:
 Required Gate 92 validation:
 
 - Run and record runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
+- Run and record research-source registry validation and article-to-law trace validation for every mandatory Gate 92 research source before claiming any Gate 92 progress. A Gate 92 receipt that lacks same-candidate research-source and article-to-law proof is incomplete even if stack health, smoke, and query commands pass.
 - Do not refresh install/cache, bump version, finalize packet, claim registry/reviewer exposure, claim readiness/release/completion, launch parallel lanes, or call update_goal until Gate 92 and all prior gates pass on the same candidate digest.
 
 ## Gate 93 - Research Source Authority And Article-To-Law Integration
@@ -2404,7 +2410,7 @@ Required implementation:
 - Every mapped requirement must name the standards row id, source-obligation id, foundational trace id, validator check id, red fixture id, valid fixture id or receipt requirement, package inventory path, setup/retrofit output path, and claim-ceiling guard.
 - Validator must fail research rows that are unmapped, mapped only to umbrella categories, mapped only to prose, mapped only to a checklist row, mapped only to a source-obligation row, mapped only to a trace row, missing fixtures, missing receipts, missing claim guards, missing setup/retrofit integration, stale against the research-source digest, or detached from canonical law ids.
 - Add red fixtures for missing research source, stale source digest, article requirement mapped only to prose, article requirement mapped only to a law-family alias, article requirement with no red fixture, article requirement with no green/valid path, article requirement with no setup/retrofit propagation, article requirement with no package inventory entry, article requirement with no claim-ceiling guard, and article requirement used to support readiness without same-candidate evidence.
-- Add green fixtures proving a complete research-to-law mapping for at least one observability source, one SRE source, one OpenTelemetry source, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article.
+- Add green fixtures proving complete research-to-law mapping for every mandatory source and every requirement class, including every observability source, every SRE source, OpenTelemetry semantic conventions, the OpenAI Codex repair-loop cookbook, the OpenAI agent-improvement-loop cookbook, the OpenAI self-improving tax-agent article, and every attached Rust/TypeScript guide requirement that affects observability, setup/retrofit, command loops, or claim authority.
 - Add tamper fixtures proving swapped URLs, stale source digests, altered article summaries, duplicate research ids, forged source-card digests, and omitted mandatory sources fail.
 
 Required claim ceiling:

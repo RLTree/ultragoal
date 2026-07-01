@@ -53,6 +53,8 @@ def digest_files(paths):
     return "sha256:" + h.hexdigest()
 
 def ignored(raw, manifest):
+    if raw.startswith("docs/parent-session-full-ultragoal-") and raw.endswith(".md"):
+        return True
     if raw in {
         ".harness/coverage-manifest.json",
         ".harness/coverage-command",

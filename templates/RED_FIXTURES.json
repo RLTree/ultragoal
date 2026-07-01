@@ -473,7 +473,7 @@
       "error": "agent_standards_required_row_missing:namespace-progressive-disclosure"
     },
     "id": "agent-standards-missing-namespace-row",
-    "packet_digest": "sha256:b015c945ace010b29fb4be1bc2e53504aaac36dc4b22599ca4f1c64a3c4bf371",
+    "packet_digest": "sha256:aa3540b196f9fd51a8c7686ddd723497c1df41cf939ac4271800930b3e3ce95e",
     "packet_path": "fixtures/red/agent-standards-missing-namespace-row.json"
   },
   {
@@ -3875,7 +3875,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt"
     },
     "id": "harness-improvement-loop-hand-authored-receipt-red",
-    "packet_digest": "sha256:7ff225468bc63ebef606937798ca6d749212c2438ef9e9d3b2b94eb95a5edbbe",
+    "packet_digest": "sha256:6e0f8fc765e738a81270a916fd831ea18e7c5d0b260c1977f059aa28e2303343",
     "packet_path": "fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json"
   },
   {
@@ -3884,7 +3884,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority"
     },
     "id": "harness-improvement-loop-raw-halo-authority-red",
-    "packet_digest": "sha256:26f9f05cc993ef6142828210ac5bdeb30887c001479d35695617bfb587d4c79b",
+    "packet_digest": "sha256:b6d43d1dd945a70d79e6a3be653c0229bd0865d32ac9b862528667d62e3ebf77",
     "packet_path": "fixtures/red/harness-improvement-loop-raw-halo-authority-red.json"
   },
   {
@@ -3893,7 +3893,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback"
     },
     "id": "harness-improvement-loop-trace-without-feedback-red",
-    "packet_digest": "sha256:5bd431eb29896ffdf9b63cebd646492c4ab68a1d8e98c2e11c56520b95c2d70e",
+    "packet_digest": "sha256:fd39404784cf6af6e6d961ffaec6f30982f4d865685f7dc52459cfc85e18230e",
     "packet_path": "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json"
   },
   {
@@ -3902,7 +3902,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped"
     },
     "id": "harness-improvement-loop-validation-skipped-red",
-    "packet_digest": "sha256:da7afe8fca25a46851f7db57f1700fd36a92428c51c874bfc1490cd71ff11dc8",
+    "packet_digest": "sha256:5fef197eba664dd91f75896fe5d23415552cee5127fed1b3905351b00ab5f547",
     "packet_path": "fixtures/red/harness-improvement-loop-validation-skipped-red.json"
   },
   {
@@ -4739,7 +4739,7 @@
       "error": "namespace_law_present_only_as_prose"
     },
     "id": "namespace-law-present-only-as-prose",
-    "packet_digest": "sha256:db8607509abeb95a885a480d04d0dceb15edd68dc1e2033d5e396ab3de1644cd",
+    "packet_digest": "sha256:c5902d5921c231c220cecbbadb6663006cce97d9331306994f8c7af11c1e6b90",
     "packet_path": "fixtures/red/namespace-law-present-only-as-prose.json"
   },
   {
@@ -8024,7 +8024,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard"
     },
     "id": "research-source-authority-article-to-law-integration-missing-claim-guard-red",
-    "packet_digest": "sha256:b5ce26dcfa5c4c6a867fcab863f4c6141889ef171f7dab6cc2efd7c9684dbb62",
+    "packet_digest": "sha256:50c52c2e07b955f22f50d834ea619146a40425c55a82201dbcf7849d618b51fa",
     "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json"
   },
   {
@@ -8033,7 +8033,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted"
     },
     "id": "research-source-authority-article-to-law-integration-package-omitted-red",
-    "packet_digest": "sha256:6766030b3c89ae61e02e45424a6a18b3bcfce808faab3fc672ac03cba146c618",
+    "packet_digest": "sha256:2afbb68e8d5fe8e30bdeac094de77dc98e4916b6e3270fc198f3b7ee00acdd80",
     "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json"
   },
   {
@@ -8042,7 +8042,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map"
     },
     "id": "research-source-authority-article-to-law-integration-prose-only-map-red",
-    "packet_digest": "sha256:6dd14c0908e8e401121603ecf91e6189b9393c059c3642b702d867cf8ffae856",
+    "packet_digest": "sha256:66f48758a1eeab8855acb397bd1d16e8a3db981aa9d7de638a6bbb8e05540de0",
     "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json"
   },
   {
@@ -8051,7 +8051,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source"
     },
     "id": "research-source-authority-article-to-law-integration-unmapped-source-red",
-    "packet_digest": "sha256:95e53980e2379f1d12c6d1970aad6f81a4549d7a0812c0c869bd874f82d6e078",
+    "packet_digest": "sha256:0dbd687369aa95db620c95f9f749122df4d445aa019921a4b0ae11e7e17acd26",
     "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json"
   },
   {
@@ -9887,7 +9887,7 @@
       "error": "source-installed-cache-alignment: source_obligation_missing_row"
     },
     "id": "source-obligation-missing-install-cache-alignment",
-    "packet_digest": "sha256:f5eb8e010d33623159f39ca54b0fe1bb26de727e4660a2dc13572b0a9c4c7dc2",
+    "packet_digest": "sha256:bb3ba12b50210c4af8dc59d1e38bc9a34d90abc8fb6375a0521ce63d7ca4abc6",
     "packet_path": "fixtures/red/source-obligation-missing-install-cache-alignment.json"
   },
   {
@@ -10130,7 +10130,7 @@
       "error": "standards_gardener_receipt_missing"
     },
     "id": "standards-gardener-missing-promotion-receipt",
-    "packet_digest": "sha256:234cde0782f8c17ade76f49496c76c078bc4ab4121baf40a93ec20a291d33207",
+    "packet_digest": "sha256:c8f04d860c824b45822de34e00801152ebd74ddabf77292d12204fd1c3130298",
     "packet_path": "fixtures/red/standards-gardener-missing-promotion-receipt.json"
   },
   {

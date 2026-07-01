@@ -30,4 +30,6 @@ fn command_dispatch_routes_product_receipt_minting() {
 fn command_parser_rejects_incomplete_product_command_without_fallback_authority() {
     let error = crate::parse_command(&["product".to_string()]).expect_err("usage error");
     assert!(error.contains("usage:"), "{error}");
+    let error = crate::parse_command(&["fit-repo".to_string()]).expect_err("usage error");
+    assert!(error.contains("usage:"), "{error}");
 }

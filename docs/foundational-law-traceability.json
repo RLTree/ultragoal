@@ -749,7 +749,7 @@
       "receipt_requirement": "OpenAI config receipt plus future same-candidate OpenAI call receipts before model/eval/feedback claims can be supported",
       "red_fixture_id": "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red",
       "source_artifact": {
-        "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8",
+        "digest": "sha256:19bf64672c03efce9c0db5f0d7dbbce5317d731fab354904fca8311b4274db1e",
         "path": "docs/openai-key-policy.json"
       },
       "standards_row_id": "openai-api-key-model-cost-external-ai-boundary",

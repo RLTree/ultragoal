@@ -9,15 +9,7 @@ const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     ".git/",
     "node_modules/",
     ".pnpm-store/",
-    "validation_artifacts/coverage/",
-    "validation_artifacts/rust/",
-    "validation_artifacts/gc/",
-    "validation_artifacts/observability/spool/",
-];
-const LOCAL_PROOF_PATHS: &[&str] = &[
-    "validation_artifacts/harness/fit-repo-command.stderr.txt",
-    "validation_artifacts/harness/fit-repo-command.stdout.txt",
-    "validation_artifacts/target-valid-init-debug-receipt.json",
+    "validation_artifacts/",
 ];
 
 pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
@@ -48,7 +40,6 @@ fn walk_package_entries(
 
 fn local_only(rel: &str) -> bool {
     crate::package::inventory::parent_session_contract_path(rel)
-        || LOCAL_PROOF_PATHS.contains(&rel)
         || LOCAL_BUILD_OUTPUT_PREFIXES
             .iter()
             .any(|prefix| rel.starts_with(prefix))
@@ -69,10 +60,15 @@ fn inventory_closure_failures_inner(
     root: &Path,
     listed: &[String],
 ) -> Result<Vec<String>, Vec<String>> {
+    let comparable = listed
+        .iter()
+        .filter(|rel| !listed_local_only(rel))
+        .cloned()
+        .collect::<Vec<_>>();
     let actual = scan_or_fail(actual_files(root))?;
     let symlinks = scan_or_fail(symlink_entries(root))?;
     let invalid = invalid_listed_paths(root, &listed);
-    let valid = valid_listed_paths(root, &listed);
+    let valid = valid_listed_paths(root, &comparable);
     let listed_set = valid.iter().cloned().collect::<BTreeSet<_>>();
     let actual_set = actual.iter().cloned().collect::<BTreeSet<_>>();
     let bytecode = bytecode_files(&actual);
@@ -82,7 +78,7 @@ fn inventory_closure_failures_inner(
         .cloned()
         .collect::<Vec<_>>();
     let nonexistent = nonexistent_listed_paths(root, &valid);
-    let duplicates = duplicate_listed_paths(&listed);
+    let duplicates = duplicate_listed_paths(&comparable);
     let mut failures = Vec::new();
     push_inventory_failures(
         &mut failures,
@@ -94,10 +90,14 @@ fn inventory_closure_failures_inner(
             duplicates: &duplicates,
             symlinks: &symlinks,
             actual_len: actual.len(),
-            listed_len: listed.len(),
+            listed_len: comparable.len(),
         },
     );
     Ok(failures)
+}
+
+fn listed_local_only(rel: &str) -> bool {
+    rel.starts_with("validation_artifacts/")
 }
 
 fn scan_or_fail(result: Result<Vec<String>, String>) -> Result<Vec<String>, Vec<String>> {

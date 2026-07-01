@@ -106,6 +106,8 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
     let code = crate::command_run::run(args(root.clone(), &["package-digest"]))
         .expect("package digest returns code");
     assert_eq!(code, 0);
+    let code = crate::command_run::run(args(root.clone(), &["help"])).expect("help returns code");
+    assert_eq!(code, 0);
     std::fs::remove_dir_all(root).expect("cleanup command run exit code");
 }
 

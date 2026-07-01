@@ -126,6 +126,22 @@ fn rebind_item_digest(root: &std::path::Path, item: &mut Value) {
 }
 
 #[test]
+fn plugin_product_journey_digest_rebind_skips_items_without_paths() {
+    let root = crate::self_tests::boundaries::support::temp_root("plugin-product-journey-rebind");
+    std::fs::create_dir_all(&root).expect("journey rebind root");
+    let value = with_current_evidence_digests(
+        &root,
+        json!({
+            "evidence": [{"digest": "unchanged"}],
+            "error_path_evidence": {"digest": "still-unchanged"}
+        }),
+    );
+    assert_eq!(value["evidence"][0]["digest"], "unchanged");
+    assert_eq!(value["error_path_evidence"]["digest"], "still-unchanged");
+    std::fs::remove_dir_all(root).expect("cleanup journey rebind");
+}
+
+#[test]
 fn plugin_product_journey_rejects_empty_and_malformed_fields() {
     let root = crate::self_tests::boundaries::support::temp_root("plugin-product-journey");
     std::fs::create_dir_all(&root).expect("root");

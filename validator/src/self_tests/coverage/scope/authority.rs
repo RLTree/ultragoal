@@ -171,6 +171,7 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
     let root = crate::self_tests::boundaries::support::temp_root("coverage-digest-ignore");
     for rel in [
         "src/lib.rs",
+        "src/exact-ignore.rs",
         "src/generated/out.rs",
         "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
         ".harness/coverage-command",
@@ -184,7 +185,7 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
     }
     let manifest = json!({
         "required_target_paths":["src", "docs", ".harness", "templates/.harness"],
-        "source_discovery_rules":{"ignore":["src/generated/**"]},
+        "source_discovery_rules":{"ignore":["src/generated/**", "src/exact-ignore.rs"]},
         "changed_file_coupling_policy":{"changed_files":["src/lib.rs"]}
     });
     let before = crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)
@@ -194,6 +195,8 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
         "ignored generated change",
     )
     .expect("generated change");
+    std::fs::write(root.join("src/exact-ignore.rs"), "ignored exact change")
+        .expect("exact ignored change");
     std::fs::write(
         root.join(".harness/coverage-command"),
         "ignored command change",

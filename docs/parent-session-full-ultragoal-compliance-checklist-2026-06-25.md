@@ -2376,6 +2376,22 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Claim impact:
   - Status:
 
+- [ ] Gate 92 implementation is rooted in the actual mandatory research sources, not only repo-derived summaries. OpenAI Harness Engineering, OpenAI Codex repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry semantic conventions, OpenAI agent-improvement loop, and self-improving domain-agent research are all current in the research-source registry and article-to-law trace before any Gate 92 progress is checked.
+  - Evidence:
+  - Research registry:
+  - Article-to-law trace:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
+- [ ] No Gate 92 row may be checked from a minimum surface, sample source, representative command, current-failure-only proof, stack-health-only proof, query-only proof, or adjacent fitted surface. Every command, validator check family, receipt/proof path, fixture/report path, package/plugin/setup/retrofit surface, operating-loop stage, signal class, long-running path, external/live path, and claim guard must be fitted or must explicitly block Gate 92 and all dependent claims.
+  - Evidence:
+  - Command inventory:
+  - Fitting control board:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
+
 - [ ] No law-bearing command, check, validator path, fixture path, receipt path, proof path, pass/fail output, metric, audit, package surface, claim guard, or update_goal eligibility path can run without complete logs, metrics, traces, correlation, diagnostics, queryability, redaction, boundedness, and receipt binding.
   - Evidence:
   - Command inventory:
@@ -2659,6 +2675,16 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Fixture ids: red fixtures `research-source-authority-article-to-law-integration-unmapped-source-red`, `research-source-authority-article-to-law-integration-prose-only-map-red`, `research-source-authority-article-to-law-integration-missing-claim-guard-red`, and `research-source-authority-article-to-law-integration-package-omitted-red`; green fixture `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
   - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
   - Status: in_progress. Claim impact: trace mapping is source-local only and does not satisfy full Gate 93 until tamper fixtures, complete claim guards, final-packet fields, and source-audit/red-report evidence are current.
+
+- [ ] Gate 93 green/tamper proof covers every mandatory research source and every requirement class. One mapped source, one mapped category, one green fixture, one source family, or one adjacent observability surface cannot satisfy any other source, category, fixture, law id, setup/retrofit implication, package surface, claim guard, final-packet field, or update_goal blocker.
+  - Evidence:
+  - Green fixtures:
+  - Tamper fixtures:
+  - Research registry:
+  - Article-to-law trace:
+  - Candidate digest:
+  - Claim impact:
+  - Status:
 
 - [ ] Validator fails unmapped, stale, prose-only, umbrella-only, law-family-alias-only, fixture-incomplete, receipt-missing, package-omitted, setup/retrofit-omitted, or claim-guard-omitted research requirements.
   - Evidence: Partial production validator and tests exist. `cargo test --offline research --lib --quiet` passed current-repo green path plus stale source-card digest, alias-only mapping, missing claim guard/package path, and missing mandatory source bad paths. Full `cargo test --offline --lib --quiet` passed 503/503 before this checklist update. This row remains unchecked until complete tamper fixtures and current source audit/red report prove the production path.
