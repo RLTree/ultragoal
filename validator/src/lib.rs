@@ -22,7 +22,6 @@ mod target_fixtures;
 mod target_repo;
 pub(crate) use command::{Args, Command};
 use std::path::PathBuf;
-
 pub fn main_entry() -> i32 {
     parse_args_from(std::env::args().skip(1).collect())
         .and_then(command_run::run)
@@ -76,7 +75,10 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
         "review-target" => {
             let args = strip_build_or_verify(&raw[1..]);
             let receipt = opt_path(args, "--receipt")?;
-            Command::ReviewTarget { receipt }
+            Command::ReviewTarget {
+                receipt,
+                observability_receipt: cli::review_target::observability_receipt(args)?,
+            }
         }
         "archive" => Command::Archive {
             zip: opt_path(strip_build_or_verify(&raw[1..]), "--zip")?,
@@ -191,7 +193,6 @@ fn strip_build_or_verify(args: &[String]) -> &[String] {
         _ => args,
     }
 }
-
 fn parse_audit(args: &[String]) -> Result<Command, String> {
     let mode = opt_string(args, "--mode").unwrap_or_else(|| "init".to_string());
     if !audit::receipt::speed::is_known_mode(&mode) {
@@ -207,7 +208,6 @@ fn parse_audit(args: &[String]) -> Result<Command, String> {
         jobs: opt_usize(args, "--jobs")?,
     })
 }
-
 fn parse_target_repo_audit(args: &[String]) -> Result<Command, String> {
     let mode = opt_string(args, "--mode").unwrap_or_else(|| "init".to_string());
     if !audit::receipt::speed::is_known_mode(&mode) {

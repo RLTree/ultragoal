@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 16,
+        "fitted": 17,
         "partially_fitted": 23,
-        "unfitted": 23
+        "unfitted": 22
       },
       "surfaces": {
         "total": 10,
@@ -171,7 +171,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "review-target build",
+      "id": "archive build",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -721,28 +721,38 @@
       "next_unfitted_surface": "none"
     },
     "review-target build": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "stdout contract",
-        "receipt binding",
-        "query proof",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "structured log event",
+        "bounded metric",
+        "root trace and child spans",
+        "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "same-candidate live query proof"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "review-target-build-observability-binding",
+      "focused_tests": [
+        "review_target_command_emits_pass_observability",
+        "review_target_command_emits_fail_closed_observability",
+        "command_dispatch_builds_review_archive_and_semantic_receipts",
+        "command_run_propagates_package_and_packet_builder_errors",
+        "command_run_propagates_output_and_generation_errors",
+        "logs_and_traces_can_select_run_and_correlation_without_metric_labels"
+      ],
       "receipt_paths": [
+        "validation_artifacts/observability/review-target-build.json",
         "validation_artifacts/review/review-target-receipt.json"
       ],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/review-target-build-logs-query.json",
+        "validation_artifacts/observability/review-target-build-metrics-query.json",
+        "validation_artifacts/observability/review-target-build-traces-query.json"
+      ],
+      "claim_impact": "supports_review_target_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:review-target build",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "archive build": {
       "fitting_status": "unfitted",

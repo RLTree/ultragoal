@@ -19,6 +19,7 @@ pub(crate) enum Command {
     },
     ReviewTarget {
         receipt: PathBuf,
+        observability_receipt: PathBuf,
     },
     Archive {
         zip: PathBuf,

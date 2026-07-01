@@ -130,7 +130,7 @@ fn command_run_propagates_package_and_packet_builder_errors() {
         &json!({"resources":["../escape.txt"]}),
     );
     let receipt = root.join("receipt.json");
-    let err = crate::command_run::run_with_exit_code(args(
+    let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "review-target",
@@ -139,8 +139,8 @@ fn command_run_propagates_package_and_packet_builder_errors() {
             receipt.to_str().expect("receipt path"),
         ],
     ))
-    .expect_err("invalid review target blocks command");
-    assert!(err.contains("review target is not closed"), "{err}");
+    .expect("invalid review target returns fail code");
+    assert_eq!(code, 1);
     std::fs::remove_dir_all(root).expect("cleanup command run errors");
 }
 
@@ -149,7 +149,7 @@ fn command_run_propagates_output_and_generation_errors() {
     let review_root = package_root("command-run-review-output-error");
     let blocked = review_root.join("blocked-parent");
     std::fs::write(&blocked, "not a directory").expect("blocked parent file");
-    let err = crate::command_run::run_with_exit_code(args(
+    let code = crate::command_run::run_with_exit_code(args(
         review_root.clone(),
         &[
             "review-target",
@@ -161,8 +161,8 @@ fn command_run_propagates_output_and_generation_errors() {
                 .expect("review target receipt"),
         ],
     ))
-    .expect_err("review-target receipt output failure propagates");
-    assert!(err.contains("create parent failed"), "{err}");
+    .expect("review-target receipt output returns fail code");
+    assert_eq!(code, 1);
     std::fs::remove_dir_all(review_root).expect("cleanup review output error");
 
     let archive_root = package_root("command-run-archive-errors");

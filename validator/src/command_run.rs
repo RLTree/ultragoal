@@ -25,7 +25,10 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             require_product_cohesion,
             jobs,
         }),
-        Command::ReviewTarget { receipt } => run_review_target(root, receipt),
+        Command::ReviewTarget {
+            receipt,
+            observability_receipt,
+        } => crate::cli::review_target::run(root, receipt, observability_receipt),
         Command::Archive {
             zip,
             receipt,
@@ -119,19 +122,6 @@ fn run_transactional_finalization(
     Ok(i32::from(
         value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
     ))
-}
-
-fn run_review_target(root: std::path::PathBuf, receipt: std::path::PathBuf) -> Result<i32, String> {
-    let receipt_value = crate::package::build_review_target_receipt(&root)?;
-    crate::json_boundary::write_json(&receipt, &receipt_value)?;
-    println!(
-        "review-target pass digest={} receipt={}",
-        receipt_value["review_target_digest"]
-            .as_str()
-            .unwrap_or("<missing>"),
-        receipt.display()
-    );
-    Ok(0)
 }
 
 fn run_archive(
