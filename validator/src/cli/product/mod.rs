@@ -14,6 +14,10 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
             ProductOperation::ProductProveFitness,
             &raw[2..],
         )?)),
+        [a, b, ..] if a == "product" && b == "prove-journey" => Ok(Some(command(
+            ProductOperation::ProductProveJourney,
+            &raw[2..],
+        )?)),
         [a, b, ..] if a == "fit-repo" && b == "prove" => {
             Ok(Some(command(ProductOperation::FitRepoProve, &raw[2..])?))
         }
@@ -28,9 +32,9 @@ pub(crate) fn run(root: &Path, command: &ProductCommand) -> Result<i32, String> 
             Ok(report) => telemetry::ProductOutcome::Report(report),
             Err(err) => telemetry::ProductOutcome::Failure(err),
         },
-        ProductOperation::ProductProveFitness | ProductOperation::FitRepoProve => {
-            run_minter(root, command)
-        }
+        ProductOperation::ProductProveFitness
+        | ProductOperation::ProductProveJourney
+        | ProductOperation::FitRepoProve => run_minter(root, command),
     };
     let status = outcome.status();
     let value = telemetry::emit(root, command, started, &outcome)?;
@@ -71,6 +75,9 @@ fn run_minter(root: &Path, command: &ProductCommand) -> telemetry::ProductOutcom
 fn receipt_dir(operation: ProductOperation, args: &[String]) -> Result<Option<PathBuf>, String> {
     match operation {
         ProductOperation::ProductProveCohesion => optional_path(args, "--receipt-dir"),
+        ProductOperation::ProductProveJourney => optional_path(args, "--receipt-dir").map(|path| {
+            Some(path.unwrap_or_else(|| PathBuf::from("validation_artifacts/harness")))
+        }),
         ProductOperation::ProductProveFitness | ProductOperation::FitRepoProve => {
             opt_path(args, "--receipt-dir").map(Some)
         }

@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
+mod edges;
+
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent).expect("parent");
@@ -92,11 +94,10 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 #[test]
 fn namespace_parser_routes_to_dedicated_command() {
     let raw = ["namespace", "check", "--strict", "--jobs", "2"];
-    let command = crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
-        .expect("namespace command");
-    let crate::Command::Namespace(command) = command else {
-        panic!("expected dedicated namespace command");
-    };
+    let command =
+        crate::cli::namespace::parse(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
+            .expect("namespace parse")
+            .expect("namespace command");
     assert_eq!(command.jobs, Some(2));
     assert_eq!(
         command.receipt,
@@ -106,6 +107,22 @@ fn namespace_parser_routes_to_dedicated_command() {
     let err = crate::parse_command(&missing.iter().map(|s| s.to_string()).collect::<Vec<_>>())
         .expect_err("strict flag required");
     assert!(err.contains("requires --strict"), "{err}");
+    let err = crate::parse_command(
+        &["namespace", "check", "--strict", "--receipt"]
+            .into_iter()
+            .map(str::to_string)
+            .collect::<Vec<_>>(),
+    )
+    .expect_err("missing receipt value");
+    assert!(err.contains("missing value for --receipt"), "{err}");
+    let err = crate::parse_command(
+        &["namespace", "check", "--strict", "--bogus"]
+            .into_iter()
+            .map(str::to_string)
+            .collect::<Vec<_>>(),
+    )
+    .expect_err("unknown argument");
+    assert!(err.contains("unknown namespace check argument"), "{err}");
 }
 
 #[test]
@@ -138,6 +155,20 @@ fn namespace_command_writes_pass_observability_receipt() {
             .iter()
             .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"])
     );
+    let absolute_receipt = root.join("target/absolute-namespace-check.json");
+    let code = crate::command_run::run_with_exit_code(args(
+        root.clone(),
+        &[
+            "namespace",
+            "check",
+            "--strict",
+            "--receipt",
+            absolute_receipt.to_str().expect("utf8 path"),
+        ],
+    ))
+    .expect("absolute namespace receipt");
+    assert_eq!(code, 0);
+    assert!(absolute_receipt.is_file());
     std::fs::remove_dir_all(root).expect("cleanup namespace pass");
 }
 

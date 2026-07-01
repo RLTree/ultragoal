@@ -281,7 +281,7 @@
       "validator/src/self_tests/cli/observe/query/mod.rs",
       "validator/src/self_tests/cli/parse_errors.rs",
       "validator/src/self_tests/cli/performance/audit.rs",
-      "validator/src/self_tests/cli/product.rs",
+      "validator/src/self_tests/cli/product/mod.rs",
       "validator/src/self_tests/cli/routine/mod.rs",
       "validator/src/self_tests/cli/routine/surface_edges.rs",
       "validator/src/self_tests/cli/session.rs",

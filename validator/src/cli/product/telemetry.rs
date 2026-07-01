@@ -219,3 +219,17 @@ fn csv(value: Option<&Value>) -> String {
         .filter(|items| !items.is_empty())
         .unwrap_or_else(|| "none".to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn failed_report_without_details_gets_actionable_fallback() {
+        let outcome = super::ProductOutcome::Report(json!({"status": "fail"}));
+        assert_eq!(
+            outcome.why_failed(),
+            "product report failed without details"
+        );
+    }
+}

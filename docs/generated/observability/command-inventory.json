@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 13,
+        "fitted": 14,
         "partially_fitted": 23,
-        "unfitted": 26
+        "unfitted": 25
       },
       "surfaces": {
         "total": 10,
@@ -129,7 +129,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "product prove-journey",
+      "id": "red fixture report",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -570,24 +570,32 @@
       "next_unfitted_surface": "none"
     },
     "product prove-journey": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "receipt binding",
-        "query proof"
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "structured log event",
+        "bounded metric",
+        "root trace and child spans",
+        "receipt observability binding",
+        "same-candidate live query proof"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "product-prove-journey-observability-binding",
+      "focused_tests": [
+        "product_parser_keeps_product_and_fit_repo_operations_distinct",
+        "product_journey_command_runs_default_minter_with_journey_telemetry"
+      ],
       "receipt_paths": [
+        "validation_artifacts/observability/product-prove-journey.json",
         "validation_artifacts/harness/plugin-product-journey-receipt.json"
       ],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/product-prove-journey-logs-query.json",
+        "validation_artifacts/observability/product-prove-journey-metrics-query.json",
+        "validation_artifacts/observability/product-prove-journey-traces-query.json"
+      ],
+      "claim_impact": "supports_plugin_product_journey_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-journey",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "fit-repo prove": {
       "fitting_status": "unfitted",

@@ -1448,7 +1448,7 @@
     "validator/src/self_tests/cli/control/transaction/reference.rs",
     "validator/src/self_tests/cli/control/transaction/required.rs",
     "validator/src/self_tests/cli/final_packet.rs",
-    "validator/src/self_tests/cli/product.rs",
+    "validator/src/self_tests/cli/product/mod.rs",
     "validator/src/self_tests/cli/standards.rs",
     "validator/src/self_tests/command/product.rs",
     "validator/src/self_tests/command/standards.rs",
@@ -1695,7 +1695,7 @@
       "reason": "Product receipt minting writes current package-bound Product Fitness receipt evidence"
     },
     {
-      "from": "validator/src/self_tests/cli/product.rs",
+      "from": "validator/src/self_tests/cli/product/mod.rs",
       "to": "validator/src/cli/product/receipts/mod.rs",
       "reason": "Focused tests prove product receipt minting rebases canonical digest-bound receipts"
     },

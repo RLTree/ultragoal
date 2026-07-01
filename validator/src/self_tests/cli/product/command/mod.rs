@@ -1,109 +1,6 @@
 use std::path::PathBuf;
 
-#[test]
-fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let rel = PathBuf::from(format!(
-        "target/ultragoal-product-receipts-{}",
-        std::process::id()
-    ));
-    let out = root.join(&rel);
-    let _ = std::fs::remove_dir_all(&out);
-
-    let report = crate::cli::product::receipts::mint_all(&root, &rel, &out).expect("mint");
-    assert_eq!(report["status"], "pass");
-    assert!(report["failures"].as_array().expect("failures").is_empty());
-
-    let current = crate::package::inventory::package_digest(&root).expect("digest");
-    let fit = crate::json_boundary::read_json(&out.join("fit-repo-receipt.json")).expect("fit");
-    let product =
-        crate::json_boundary::read_json(&out.join("product-fitness-receipt.json")).expect("pf");
-    let journey = crate::json_boundary::read_json(&out.join("plugin-product-journey-receipt.json"))
-        .expect("journey");
-
-    for value in [&fit, &product, &journey] {
-        assert_eq!(value["target_revision"]["value"], current);
-    }
-    assert_eq!(
-        fit["receipt_digest"],
-        crate::audit::fit_repo_receipt::canonical_digest(&fit)
-    );
-    assert_eq!(
-        product["receipt_digest"],
-        crate::audit::product::fitness::receipt::canonical_digest(&product)
-    );
-    assert_eq!(
-        journey["evidence"][0]["path"],
-        format!("{}/fit-repo-receipt.json", rel.display())
-    );
-
-    std::fs::remove_dir_all(out).expect("cleanup");
-}
-
-#[test]
-fn product_prove_fitness_requires_package_receipt_dir() {
-    let args = ["product", "prove-fitness", "--receipt", "control.json"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
-    let err = crate::cli::product::parse(&args).expect_err("missing receipt-dir");
-    assert!(err.contains("--receipt-dir"));
-}
-
-#[test]
-fn product_parser_keeps_product_and_fit_repo_operations_distinct() {
-    let cohesion = ["product", "prove-cohesion"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
-    let cohesion = crate::cli::product::parse(&cohesion)
-        .expect("cohesion parse")
-        .expect("cohesion command");
-    assert_eq!(
-        cohesion.operation,
-        crate::cli::product::ProductOperation::ProductProveCohesion
-    );
-
-    let product = ["product", "prove-fitness", "--receipt-dir", "receipts"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
-    let product = crate::cli::product::parse(&product)
-        .expect("product parse")
-        .expect("product command");
-    assert_eq!(
-        product.operation,
-        crate::cli::product::ProductOperation::ProductProveFitness
-    );
-
-    let fit_repo = ["fit-repo", "prove", "--receipt-dir", "receipts"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
-    let fit_repo = crate::cli::product::parse(&fit_repo)
-        .expect("fit repo parse")
-        .expect("fit repo command");
-    assert_eq!(
-        fit_repo.operation,
-        crate::cli::product::ProductOperation::FitRepoProve
-    );
-}
-
-#[test]
-fn product_parser_rejects_missing_observability_receipt_value() {
-    let args = [
-        "product",
-        "prove-fitness",
-        "--receipt-dir",
-        "receipts",
-        "--observability-receipt",
-    ]
-    .into_iter()
-    .map(str::to_string)
-    .collect::<Vec<_>>();
-    let err = crate::cli::product::parse(&args).expect_err("missing receipt path fails");
-    assert!(err.contains("--observability-receipt"), "{err}");
-}
+mod edges;
 
 #[test]
 fn product_command_rejects_unsafe_receipt_dirs() {
@@ -187,6 +84,124 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
 }
 
 #[test]
+fn product_command_emits_fail_closed_observability_for_missing_receipt_dir() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let obs = PathBuf::from(format!(
+        "target/product-missing-receipt-dir-{}.json",
+        std::process::id()
+    ));
+    let code = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveFitness,
+            receipt_dir: None,
+            observability_receipt: obs.clone(),
+        },
+    )
+    .expect("missing receipt dir emits telemetry");
+    assert_eq!(code, 1);
+    let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("missing required argument --receipt-dir")
+    );
+    std::fs::remove_file(root.join(obs)).expect("cleanup missing receipt dir");
+}
+
+#[test]
+fn product_command_reports_minter_write_failures_with_observability() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let rel = PathBuf::from(format!("target/product-output-file-{}", std::process::id()));
+    let output_file = root.join(&rel);
+    std::fs::write(&output_file, "not a directory").expect("output blocker");
+    let obs = PathBuf::from(format!(
+        "target/product-minter-failure-{}.json",
+        std::process::id()
+    ));
+    let code = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveFitness,
+            receipt_dir: Some(rel.clone()),
+            observability_receipt: obs.clone(),
+        },
+    )
+    .expect("minter write failure emits telemetry");
+    assert_eq!(code, 1);
+    let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("create parent failed")
+    );
+    std::fs::remove_file(output_file).expect("cleanup output blocker");
+    std::fs::remove_file(root.join(obs)).expect("cleanup minter failure");
+}
+
+#[test]
+fn product_command_reports_candidate_digest_errors_before_receipt_claim() {
+    let root = crate::self_tests::boundaries::support::temp_root("product-no-manifest");
+    std::fs::create_dir_all(&root).expect("temp root");
+    let err = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveCohesion,
+            receipt_dir: None,
+            observability_receipt: PathBuf::from(
+                "validation_artifacts/observability/product-prove-cohesion.json",
+            ),
+        },
+    )
+    .expect_err("missing manifest blocks product telemetry");
+    assert!(err.contains("plugin-manifest-draft.json"), "{err}");
+    std::fs::remove_dir_all(root).expect("cleanup no manifest");
+}
+
+#[test]
+fn product_journey_command_runs_default_minter_with_journey_telemetry() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let rel = PathBuf::from(format!(
+        "target/ultragoal-product-journey-command-{}",
+        std::process::id()
+    ));
+    let obs = rel.join("journey-observability.json");
+    let out = root.join(&rel);
+    let _ = std::fs::remove_dir_all(&out);
+    let code = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveJourney,
+            receipt_dir: Some(rel.clone()),
+            observability_receipt: obs.clone(),
+        },
+    )
+    .expect("journey run succeeds");
+    assert_eq!(code, 0);
+    assert!(out.join("plugin-product-journey-receipt.json").is_file());
+    let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["event"]["operation"], "product.prove-journey");
+    assert_eq!(
+        receipt["law_id"],
+        "plugin-flow-graph-package-dependency-closure-plugin-product-journey"
+    );
+    assert_eq!(
+        receipt["check_id"],
+        "product-prove-journey-observability-binding"
+    );
+    assert_eq!(receipt["claim_id"], "plugin_product_journey");
+    assert_eq!(receipt["event"]["task_count"], 3);
+    std::fs::remove_dir_all(out).expect("cleanup journey command");
+}
+
+#[test]
 fn product_cohesion_command_emits_fail_closed_observability_for_missing_artifacts() {
     let root = crate::self_tests::boundaries::support::temp_root("product-cohesion-command");
     std::fs::create_dir_all(&root).expect("temp root");
@@ -231,13 +246,4 @@ fn product_cohesion_command_emits_fail_closed_observability_for_missing_artifact
             .contains("product prove-cohesion")
     );
     std::fs::remove_dir_all(root).expect("cleanup cohesion command");
-}
-
-#[test]
-fn product_parse_returns_none_for_other_command_families() {
-    let args = ["registry", "probe"]
-        .into_iter()
-        .map(str::to_string)
-        .collect::<Vec<_>>();
-    assert!(crate::cli::product::parse(&args).expect("parse").is_none());
 }

@@ -10,6 +10,10 @@ pub(super) fn prove(root: &Path) -> Result<Value, String> {
         true,
         &mut checks,
     );
+    report(candidate, checks)
+}
+
+fn report(candidate: String, mut checks: serde_json::Map<String, Value>) -> Result<Value, String> {
     let row = checks
         .remove("product-cohesion")
         .ok_or_else(|| "product_cohesion_check_missing".to_string())?;
@@ -40,4 +44,14 @@ pub(super) fn prove(root: &Path) -> Result<Value, String> {
         "failures": failures,
         "claim_ceiling": "source_local_product_cohesion_only"
     }))
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn report_fails_when_checker_row_is_missing() {
+        let err = super::report("sha256:test".to_string(), serde_json::Map::new())
+            .expect_err("missing row fails");
+        assert_eq!(err, "product_cohesion_check_missing");
+    }
 }

@@ -4441,7 +4441,7 @@
       "validator/src/self_tests/cli/performance/observability_edges.rs",
       "validator/src/self_tests/cli/performance/receipts.rs",
       "validator/src/self_tests/cli/performance/runtime.rs",
-      "validator/src/self_tests/cli/product.rs",
+      "validator/src/self_tests/cli/product/mod.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/root.rs",
       "validator/src/self_tests/cli/standards.rs",
@@ -21296,7 +21296,7 @@
         },
         {
           "digest": "sha256:d7294fa94a996b7f74eb4856420a2ec9ea77b45a7e8b095cdaf63edc431694f0",
-          "path": "validator/src/self_tests/cli/product.rs"
+          "path": "validator/src/self_tests/cli/product/mod.rs"
         },
         {
           "digest": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
