@@ -1,5 +1,31 @@
 use serde_json::Value;
 
+pub(super) fn audit_failure_summary(
+    audit: &Value,
+    command_error: Option<&str>,
+    code: i32,
+) -> String {
+    if let Some(err) = command_error {
+        return format!("source audit command failed: first_failure={err}");
+    }
+    let failures = failed_check_details(audit);
+    if failures.is_empty() {
+        return if code == 0 {
+            "none".to_string()
+        } else {
+            "source audit failed without check details".to_string()
+        };
+    }
+    let (first_check, first_detail) = &failures[0];
+    format!(
+        "source audit failed checks: total_failures={} first_check={} root_group={} first_detail={}",
+        failures.len(),
+        first_check,
+        root_group(first_detail),
+        first_detail.split("; ").next().unwrap_or("no detail")
+    )
+}
+
 pub(super) fn contract(value: &Value) -> Vec<String> {
     let status = text(value, "status");
     let run_id = text(value, "run_id");
@@ -32,6 +58,45 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
         .get(field)
         .and_then(Value::as_str)
         .unwrap_or("<missing>")
+}
+
+fn failed_check_details(audit: &Value) -> Vec<(String, String)> {
+    let mut checks = audit
+        .get("checks")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flat_map(|rows| rows.iter())
+        .filter_map(|(check, row)| {
+            (row.get("status").and_then(Value::as_str) != Some("pass")).then(|| {
+                (
+                    check.to_string(),
+                    row.get("details")
+                        .and_then(Value::as_str)
+                        .filter(|details| !details.is_empty() && *details != "pass")
+                        .unwrap_or("no detail")
+                        .to_string(),
+                )
+            })
+        })
+        .collect::<Vec<_>>();
+    checks.sort();
+    checks
+}
+
+fn root_group(detail: &str) -> &'static str {
+    let stale = detail.contains("candidate_digest_mismatch")
+        || detail.contains("target_digest_mismatch")
+        || detail.contains("digest_mismatch")
+        || detail.contains("source_stale");
+    if stale {
+        "stale_or_wrong_digest_evidence"
+    } else if detail.contains("missing=[") || detail.contains("plugin_inventory") {
+        "package_inventory_mismatch"
+    } else if detail.contains("observability_") {
+        "observability_fitting_incomplete"
+    } else {
+        "source_audit_check_failure"
+    }
 }
 
 fn csv(value: Option<&Value>) -> String {

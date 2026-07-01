@@ -68,6 +68,8 @@ fn matching_query(
                     "status": value.get("status").cloned().unwrap_or(json!("unknown")),
                     "path": path,
                     "row_count": value.get("row_count").cloned().unwrap_or(json!(0)),
+                    "why_failed": value.get("why_failed").cloned().unwrap_or(json!("none")),
+                    "where_failed": value.get("where_failed").cloned().unwrap_or(json!("none")),
                     "observed_failure_class": value.get("observed_failure_class").cloned().unwrap_or(json!("none")),
                     "metric_failure_class": value.get("metric_failure_class").cloned().unwrap_or(json!("none")),
                     "metric_error_count": value.get("metric_error_count").cloned().unwrap_or(json!(0))
@@ -88,7 +90,6 @@ fn query_matches(
 ) -> bool {
     value.get("query_kind").and_then(Value::as_str) == Some(kind)
         && value.get("candidate_digest").and_then(Value::as_str) == Some(candidate)
-        && value.get("status").and_then(Value::as_str) == Some("pass")
         && (value.get("run_id").and_then(Value::as_str) == Some(run_id)
             || query_mentions(value, check_id)
             || query_mentions(value, operation))

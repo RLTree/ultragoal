@@ -142,6 +142,18 @@ fn explain_reports_current_failure_and_bad_root_errors() {
         command_receipt["explanation"]["known_current_failure"][0],
         "mandatory law validation failed"
     );
+    write_failed_metrics_query_receipt(&root, "run-1");
+    let failed_metrics_receipt = run(&root, &target_command).expect("explain failed metrics");
+    assert_eq!(
+        failed_metrics_receipt["explanation"]["query_evidence"]["metrics"]["status"],
+        "fail"
+    );
+    assert!(
+        failed_metrics_receipt["explanation"]["query_evidence"]["metrics"]["why_failed"]
+            .as_str()
+            .unwrap()
+            .contains("observability_metric_run_reconciliation_mismatch")
+    );
     fs::remove_file(root.join("validation_artifacts/observability/mandatory-law-validation.json"))
         .expect("remove command receipt event");
     let check_receipt = run(&root, &fallback_command).expect("explain checks without telemetry");

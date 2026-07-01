@@ -83,3 +83,26 @@ pub(super) fn write_query_receipt_event(root: &std::path::Path, run_id: &str) {
     )
     .expect("query receipt event");
 }
+
+pub(super) fn write_failed_metrics_query_receipt(root: &std::path::Path, run_id: &str) {
+    let dir = root.join("validation_artifacts/observability");
+    fs::create_dir_all(&dir).expect("observability dir");
+    let candidate = crate::package::inventory::package_digest(root).expect("digest");
+    crate::json_boundary::write_json(
+        &dir.join("metrics-query-failed.json"),
+        &json!({
+            "schema": crate::cli::observe::types::QUERY_SCHEMA,
+            "query_kind": "metrics",
+            "run_id": run_id,
+            "candidate_digest": candidate,
+            "status": "fail",
+            "row_count": 1,
+            "why_failed": "observability_metric_run_reconciliation_mismatch:duration_ms metric=930 target=128754",
+            "where_failed": "observe.metrics.query",
+            "metric_failure_class": "mandatory_law_validation_failure",
+            "metric_error_count": 1,
+            "query": "sum by (...)"
+        }),
+    )
+    .expect("failed metrics query receipt");
+}

@@ -172,7 +172,9 @@ fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
             .contains("failed_law=full-local-observability-stack-integration-non-opaque-failure")
     );
     assert!(fail_lines[1].contains("failed_check=source-audit-observability-binding"));
-    assert!(fail_lines[1].contains("why=source audit failed checks: coverage-receipt"));
+    assert!(fail_lines[1].contains("why=source audit failed checks: total_failures=1"));
+    assert!(fail_lines[1].contains("first_check=coverage-receipt"));
+    assert!(fail_lines[1].contains("root_group=source_audit_check_failure"));
     assert!(fail_lines[1].contains("where=source.audit"));
     let run_id = fail["run_id"].as_str().expect("run id");
     assert!(fail_lines[1].contains(&format!(

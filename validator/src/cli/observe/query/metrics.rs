@@ -51,7 +51,10 @@ pub(super) fn reconciliation_failure(
             "observability_metric_operation_mismatch:{metric_operation}!={target_operation}"
         ));
     }
-    failure_class_mismatch(event, &summary)
+    if let Some(failure) = failure_class_mismatch(event, &summary) {
+        return Some(failure);
+    }
+    target_signal_mismatch(event, &summary)
 }
 
 fn candidate_failure(event: &Value, candidate: &str) -> Option<String> {
@@ -84,6 +87,27 @@ fn failure_class_mismatch(event: &Value, summary: &Value) -> Option<String> {
         .unwrap_or(0)
         == 0)
         .then(|| format!("observability_metric_error_count_missing:{target_failure}"))
+}
+
+fn target_signal_mismatch(event: &Value, summary: &Value) -> Option<String> {
+    underreported_signal(event, summary, "duration_ms", "latency_ms")
+        .or_else(|| underreported_signal(event, summary, "task_count", "task_count"))
+        .or_else(|| underreported_signal(event, summary, "queue_depth", "queue_depth"))
+}
+
+fn underreported_signal(
+    event: &Value,
+    summary: &Value,
+    target_field: &str,
+    metric_field: &str,
+) -> Option<String> {
+    let target = event.get(target_field).and_then(Value::as_u64)?;
+    let metric = summary.get(metric_field).and_then(Value::as_u64)?;
+    (metric < target).then(|| {
+        format!(
+            "observability_metric_run_reconciliation_mismatch:{target_field} metric={metric} target={target}"
+        )
+    })
 }
 
 fn text_field<'a>(value: &'a Value, field: &str, fallback: &'a str) -> &'a str {

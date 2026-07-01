@@ -68,6 +68,9 @@ pub(super) fn result(
     });
     receipt["metric_operation"] = json!(metric_text(&metric_summary, "operation", "unknown"));
     receipt["metric_traffic_task_count"] = metric_summary["traffic_task_count"].clone();
+    receipt["metric_traffic_count"] = metric_summary["traffic_count"].clone();
+    receipt["metric_task_count"] = metric_summary["task_count"].clone();
+    receipt["metric_queue_depth"] = metric_summary["queue_depth"].clone();
     receipt["metric_latency_ms"] = metric_summary["latency_ms"].clone();
     receipt["metric_error_count"] = metric_summary["error_count"].clone();
     receipt["metric_failure_class"] = json!(metric_text(&metric_summary, "failure_class", "none"));
@@ -113,7 +116,13 @@ pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
         match metric_label(labels, "__name__", "ultragoal_command_total") {
             "ultragoal_command_duration_ms" => latency_ms = latency_ms.max(value),
             "ultragoal_command_task_count" => task_count += value,
-            "ultragoal_command_queue_depth" => queue_depth = queue_depth.max(value),
+            "ultragoal_command_queue_depth" => {
+                if value >= queue_depth {
+                    queue_depth = value;
+                    saturation_status =
+                        metric_label(labels, "saturation_status", "unknown").to_string();
+                }
+            }
             _ => {
                 traffic_count += value;
                 if metric_label(labels, "status", "pass") != "pass" || sample_failure != "none" {
@@ -125,9 +134,12 @@ pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
     json!({
         "operation": operation,
         "traffic_task_count": task_count.max(traffic_count),
+        "traffic_count": traffic_count,
+        "task_count": task_count,
         "latency_ms": latency_ms,
         "error_count": error_count,
         "failure_class": failure_class,
+        "queue_depth": queue_depth,
         "saturation_status": format!("{saturation_status};queue_depth={queue_depth}"),
         "high_cardinality_labels": high_cardinality_labels
     })

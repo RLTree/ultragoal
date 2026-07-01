@@ -129,18 +129,36 @@ fn query_summary(explanation: &Value) -> String {
     let evidence = explanation.get("query_evidence").unwrap_or(&Value::Null);
     ["logs", "metrics", "traces"]
         .into_iter()
-        .map(|key| {
-            format!(
-                "{key}:{}",
-                evidence
-                    .get(key)
-                    .and_then(|value| value.get("status"))
-                    .and_then(Value::as_str)
-                    .unwrap_or("missing")
-            )
-        })
+        .map(|key| format!("{key}:{}", query_status(evidence.get(key))))
         .collect::<Vec<_>>()
         .join(",")
+}
+
+fn query_status(value: Option<&Value>) -> String {
+    let Some(value) = value else {
+        return "missing".to_string();
+    };
+    let status = value
+        .get("status")
+        .and_then(Value::as_str)
+        .unwrap_or("missing");
+    if status == "pass" || status == "missing" {
+        return status.to_string();
+    }
+    let why = value
+        .get("why_failed")
+        .and_then(Value::as_str)
+        .filter(|text| !text.is_empty() && *text != "none")
+        .unwrap_or("query proof failed");
+    format!("{status}({})", clip(why, 120))
+}
+
+fn clip(value: &str, limit: usize) -> String {
+    if value.len() <= limit {
+        value.to_string()
+    } else {
+        format!("{}...", &value[..limit])
+    }
 }
 
 fn is_query(operation: ObserveOperation) -> bool {

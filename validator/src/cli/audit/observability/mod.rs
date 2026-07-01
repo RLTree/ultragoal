@@ -63,19 +63,8 @@ fn write_audit(
     };
     let audit = crate::json_boundary::read_json(receipt).unwrap_or(Value::Null);
     let runtime = runtime::telemetry(&audit, runtime);
-    let failures = command_error
-        .map(|err| vec![err.to_string()])
-        .unwrap_or_else(|| failed_checks(&audit));
     let status = if code == 0 { "pass" } else { "fail" };
-    let why_failed = if failures.is_empty() {
-        if code == 0 {
-            "none".to_string()
-        } else {
-            "source audit failed without check details".to_string()
-        }
-    } else {
-        format!("source audit failed checks: {}", failures.join("; "))
-    };
+    let why_failed = stdout::audit_failure_summary(&audit, command_error, code);
     emit_receipt(
         root,
         ReceiptFields {
@@ -159,20 +148,6 @@ pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<Val
     Ok(value)
 }
 
-fn failed_checks(audit: &Value) -> Vec<String> {
-    let mut checks = audit
-        .get("checks")
-        .and_then(Value::as_object)
-        .into_iter()
-        .flat_map(|rows| rows.iter())
-        .filter_map(|(check, row)| {
-            (row.get("status").and_then(Value::as_str) != Some("pass")).then(|| check.to_string())
-        })
-        .collect::<Vec<_>>();
-    checks.sort();
-    checks
-}
-
 #[cfg(test)]
 pub(crate) fn stdout_contract_for_test(value: &Value) -> Vec<String> {
     stdout::contract(value)
@@ -182,7 +157,7 @@ fn audit_next_repair(code: i32) -> &'static str {
     if code == 0 {
         "none"
     } else {
-        "query this run through observe logs/metrics/traces, repair the named source-audit checks, then rerun source audit once"
+        "query this run through observe logs/metrics/traces, repair the first_check/root_group named in why_failed, then rerun source audit once"
     }
 }
 
@@ -196,10 +171,10 @@ fn audit_claim_impact(code: i32) -> &'static str {
 
 fn audit_supported_claims(code: i32) -> Vec<String> {
     if code == 0 {
-        ["source_local_audit_checks", "red_fixture_report"]
-            .into_iter()
-            .map(ToString::to_string)
-            .collect()
+        vec![
+            "source_local_audit_checks".to_string(),
+            "red_fixture_report".to_string(),
+        ]
     } else {
         Vec::new()
     }
