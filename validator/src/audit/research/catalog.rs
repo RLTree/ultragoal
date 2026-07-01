@@ -109,7 +109,18 @@ pub(super) fn required_source_failures(registry: &BTreeMap<String, Value>) -> Ve
 fn source_evidence_failures_for(source: &Value) -> Vec<String> {
     let id = text(source, "source_id");
     let mut out = Vec::new();
+    let canonical_url = text(source, "canonical_url");
+    let requirement_ids = requirement_ids(source);
     let evidence_ids = evidence_ids(source);
+    if id.is_empty() {
+        out.push("research_source_card_id_missing".to_string());
+    }
+    if canonical_url.is_empty() {
+        out.push(format!("research_source_card_canonical_url_missing:{id}"));
+    }
+    if text(source, "source_kind").is_empty() {
+        out.push(format!("research_source_card_kind_missing:{id}"));
+    }
     if text(source, "source_artifact_digest").is_empty() {
         out.push(format!("research_source_card_artifact_digest_missing:{id}"));
     }
@@ -126,6 +137,14 @@ fn source_evidence_failures_for(source: &Value) -> Vec<String> {
         .flatten()
         .for_each(|requirement| {
             let requirement_id = text(requirement, "requirement_id");
+            if requirement_id.is_empty() {
+                out.push(format!("research_source_card_requirement_id_missing:{id}"));
+            }
+            if text(requirement, "summary").is_empty() {
+                out.push(format!(
+                    "research_source_card_requirement_summary_missing:{requirement_id}"
+                ));
+            }
             let anchors = array(requirement, "source_evidence_ids");
             if anchors.is_empty() {
                 out.push(format!(
@@ -140,6 +159,45 @@ fn source_evidence_failures_for(source: &Value) -> Vec<String> {
                 }
             }
         });
+    source
+        .get("evidence_anchors")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .for_each(|anchor| {
+            let evidence_id = text(anchor, "evidence_id");
+            if evidence_id.is_empty() {
+                out.push(format!("research_source_card_evidence_id_missing:{id}"));
+            }
+            let locator = text(anchor, "source_locator");
+            if locator.is_empty() {
+                out.push(format!(
+                    "research_source_card_evidence_locator_missing:{id}:{evidence_id}"
+                ));
+            } else if !canonical_url.is_empty() && !locator.starts_with(&canonical_url) {
+                out.push(format!(
+                    "research_source_card_evidence_locator_mismatch:{id}:{evidence_id}"
+                ));
+            }
+            if text(anchor, "source_signal").is_empty() {
+                out.push(format!(
+                    "research_source_card_evidence_signal_missing:{id}:{evidence_id}"
+                ));
+            }
+            let anchor_requirements = array(anchor, "requirement_ids");
+            if anchor_requirements.is_empty() {
+                out.push(format!(
+                    "research_source_card_evidence_requirement_missing:{id}:{evidence_id}"
+                ));
+            }
+            for requirement_id in anchor_requirements {
+                if !requirement_ids.contains(&requirement_id) {
+                    out.push(format!(
+                        "research_source_card_evidence_unknown_requirement:{id}:{evidence_id}:{requirement_id}"
+                    ));
+                }
+            }
+        });
     out
 }
 
@@ -150,6 +208,17 @@ fn evidence_ids(source: &Value) -> BTreeSet<String> {
         .into_iter()
         .flatten()
         .filter_map(|row| row.get("evidence_id").and_then(Value::as_str))
+        .map(str::to_string)
+        .collect()
+}
+
+fn requirement_ids(source: &Value) -> BTreeSet<String> {
+    source
+        .get("requirements")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|row| row.get("requirement_id").and_then(Value::as_str))
         .map(str::to_string)
         .collect()
 }
