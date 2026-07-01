@@ -7,7 +7,18 @@ const UPDATE_GOAL_BLOCKER: &str = "observability_gate_incomplete";
 
 pub(super) fn required_field_failures(id: &str, row: &Value) -> Vec<String> {
     [
+        "canonical_law_ids",
+        "standards_row_ids",
+        "source_obligation_ids",
+        "foundational_trace_ids",
+        "schemas",
+        "validator_check_ids",
+        "red_fixture_ids",
+        "tamper_fixture_ids",
+        "green_fixture_paths",
         "receipt_requirements",
+        "package_inventory_paths",
+        "setup_retrofit_outputs",
         "claim_guards",
         "final_packet_fields",
         "update_goal_blockers",

@@ -74,6 +74,41 @@ fn research_trace_rejects_missing_claim_guard_and_package_path() {
 }
 
 #[test]
+fn research_trace_rejects_missing_fixture_and_mapping_edges() {
+    let (_root, cards, registry, mut trace) = repo_values();
+    trace["entries"][0]["red_fixture_ids"] = json!([]);
+    trace["entries"][0]["tamper_fixture_ids"] = json!([]);
+    trace["entries"][0]["green_fixture_paths"] = json!([]);
+    trace["entries"][0]["setup_retrofit_outputs"] = json!([]);
+    let failures = failures(&cards, &registry, &trace);
+    for expected in [
+        "research_trace_missing_red_fixture_ids:openai-harness-agent-legible-repo",
+        "research_trace_missing_tamper_fixture_ids:openai-harness-agent-legible-repo",
+        "research_trace_missing_green_fixture_paths:openai-harness-agent-legible-repo",
+        "research_trace_missing_setup_retrofit_outputs:openai-harness-agent-legible-repo",
+    ] {
+        assert!(
+            failures.iter().any(|item| item == expected),
+            "{expected}\n{failures:#?}"
+        );
+    }
+}
+
+#[test]
+fn research_trace_rejects_unknown_tamper_fixture_id() {
+    let (_root, cards, registry, mut trace) = repo_values();
+    trace["entries"][0]["tamper_fixture_ids"] = json!(["not-a-real-tamper-fixture"]);
+    let failures = failures(&cards, &registry, &trace);
+    assert!(
+        failures.iter().any(|item| {
+            item
+                == "research_trace_unknown_tamper_fixture:openai-harness-agent-legible-repo:not-a-real-tamper-fixture"
+        }),
+        "{failures:#?}"
+    );
+}
+
+#[test]
 fn research_registry_rejects_missing_mandatory_source() {
     let (_root, cards, mut registry, trace) = repo_values();
     registry["sources"]

@@ -2377,7 +2377,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status: in progress
 
 - [ ] Gate 92 implementation is rooted in the actual mandatory research sources, not only repo-derived summaries. OpenAI Harness Engineering, OpenAI Codex repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry semantic conventions, OpenAI agent-improvement loop, and self-improving domain-agent research are all current in the research-source registry and article-to-law trace before any Gate 92 progress is checked.
-  - Status: validated current for Gate 92 research registry and article-to-law binding; full Gate 92 fitting inventory remains in progress.
+  - Status: validated current: source-local research registry, article-to-law trace, and tamper fixture binding; full Gate 92 fitting inventory remains in progress.
 
 - [ ] No Gate 92 row may be checked from a minimum surface, sample source, representative command, current-failure-only proof, stack-health-only proof, query-only proof, or adjacent fitted surface. Every command, validator check family, receipt/proof path, fixture/report path, package/plugin/setup/retrofit surface, operating-loop stage, signal class, long-running path, external/live path, and claim guard must be fitted or must explicitly block Gate 92 and all dependent claims.
   - Evidence:
@@ -2385,7 +2385,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Fitting control board:
   - Candidate digest:
   - Claim impact:
-  - Status:
+  - Status: in progress: research-source edge validated current; every Gate 92 production surface still requires fitting.
 
 - [ ] No law-bearing command, check, validator path, fixture path, receipt path, proof path, pass/fail output, metric, audit, package surface, claim guard, or update_goal eligibility path can run without complete logs, metrics, traces, correlation, diagnostics, queryability, redaction, boundedness, and receipt binding.
   - Evidence:
@@ -2626,10 +2626,10 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 93 - Research Source Authority And Article-To-Law Integration
 
 - [ ] Mandatory research-source registry includes the original nine observability/harness-engineering sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article with stable ids, URLs, source digests, retrieved/source-card evidence, affected canonical law ids, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
-  - Status: validated current for source-local Gate 92 research binding; full Gate 93 remains in progress.
+  - Status: validated current: source-local research registry binding; full Gate 93 remains in progress.
 
 - [ ] Article-to-law trace maps every source requirement to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim guards, and final-packet fields.
-  - Status: validated current for source-local Gate 92 research binding; full tamper/source-audit closure remains in progress.
+  - Status: validated current: source-local article-to-law trace includes tamper fixture binding; full tamper/source-audit closure remains in progress.
 
 - [ ] Gate 93 green/tamper proof covers every mandatory research source and every requirement class. One mapped source, one mapped category, one green fixture, one source family, or one adjacent observability surface cannot satisfy any other source, category, fixture, law id, setup/retrofit implication, package surface, claim guard, final-packet field, or update_goal blocker.
   - Evidence:
@@ -2642,7 +2642,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Validator fails unmapped, stale, prose-only, umbrella-only, law-family-alias-only, fixture-incomplete, receipt-missing, package-omitted, setup/retrofit-omitted, or claim-guard-omitted research requirements.
-  - Status: validated current for Gate 92 registry/trace fail-closed bindings; full tamper/source-audit closure remains in progress.
+  - Status: validated current: registry/trace fail-closed bindings; full tamper/source-audit closure remains in progress.
 
 - [ ] Claim guards block completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, and `update_goal()` when mandatory research mapping is incomplete.
   - Evidence: Partial guard strings and validator bad paths exist in `docs/research-article-to-law-trace.json`, `docs/mandatory-law-surfaces.json`, `templates/agent-standards/enforcement.json`, and `validator/src/audit/research/`. This row remains unchecked because final-packet/update_goal claim-guard closure and current source-audit proof have not been regenerated.

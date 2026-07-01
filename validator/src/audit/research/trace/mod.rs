@@ -112,6 +112,13 @@ fn row_failures_for(
         known.red,
         "unknown_red_fixture",
     ));
+    out.extend(check_ids(
+        id,
+        row,
+        "tamper_fixture_ids",
+        known.red,
+        "unknown_tamper_fixture",
+    ));
     out.extend(paths(
         root,
         id,

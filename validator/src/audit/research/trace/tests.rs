@@ -57,6 +57,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         "foundational_trace_ids":["missing-trace"],
         "validator_check_ids":["missing-check"],
         "red_fixture_ids":["missing-red"],
+        "tamper_fixture_ids":["missing-tamper"],
         "green_fixture_paths":["docs/missing-green.json"],
         "schemas":["docs/missing-schema.json"],
         "package_inventory_paths":["docs/not-in-package.json"],
@@ -74,6 +75,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         "foundational_trace_ids":["known-trace", "full-local-observability-stack-integration-non-opaque-failure"],
         "validator_check_ids":["agent-standards-enforcement", "full-local-observability-stack-integration-non-opaque-failure"],
         "red_fixture_ids":["known-red"],
+        "tamper_fixture_ids":["known-red"],
         "green_fixture_paths":["docs/present-schema.json"],
         "schemas":["schemas/observability-event.schema.json"],
         "package_inventory_paths":["schemas/observability-event.schema.json"],
@@ -101,6 +103,10 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
     assert!(
         failures
             .contains(&"research_trace_missing_schema:req-a:docs/missing-schema.json".to_string())
+    );
+    assert!(
+        failures
+            .contains(&"research_trace_unknown_tamper_fixture:req-a:missing-tamper".to_string())
     );
     assert!(failures.contains(
         &"research_trace_setup_retrofit_omitted:req-a:docs/not-in-package.json".to_string()
