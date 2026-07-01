@@ -14,7 +14,16 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["source_id", "title", "canonical_url", "source_kind", "requirements"],
+        "required": [
+          "source_id",
+          "title",
+          "canonical_url",
+          "source_kind",
+          "source_artifact_digest",
+          "source_artifact_method",
+          "evidence_anchors",
+          "requirements"
+        ],
         "properties": {
           "source_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
           "title": { "type": "string", "minLength": 1 },
@@ -23,21 +32,53 @@
             "type": "string",
             "enum": ["public_web", "attached_user_source_card"]
           },
+          "source_artifact_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "source_artifact_method": {
+            "type": "string",
+            "enum": [
+              "http_body_sha256",
+              "browser_verified_anchor_digest",
+              "attached_source_card_digest"
+            ]
+          },
+          "evidence_anchors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["evidence_id", "source_locator", "source_signal", "requirement_ids"],
+              "properties": {
+                "evidence_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+                "source_locator": { "type": "string", "minLength": 1 },
+                "source_signal": { "type": "string", "minLength": 20 },
+                "requirement_ids": { "$ref": "#/$defs/non_empty_strings" }
+              }
+            }
+          },
           "requirements": {
             "type": "array",
             "minItems": 1,
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["requirement_id", "summary"],
+              "required": ["requirement_id", "summary", "source_evidence_ids"],
               "properties": {
                 "requirement_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
-                "summary": { "type": "string", "minLength": 20 }
+                "summary": { "type": "string", "minLength": 20 },
+                "source_evidence_ids": { "$ref": "#/$defs/non_empty_strings" }
               }
             }
           }
         }
       }
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
     }
   }
 }

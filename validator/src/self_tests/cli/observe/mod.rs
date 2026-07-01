@@ -128,7 +128,8 @@ fn observe_query_rejects_unbounded_requests() {
 #[test]
 fn observe_receipts_redact_private_paths_before_spool_and_receipt_binding() {
     let root = minimal_root("observe-redaction");
-    let command = observe::parse(&args(&["observe", "prove"]))
+    let private_receipt = format!("{}observe-redaction.json", private_temp_marker());
+    let command = observe::parse(&args(&["observe", "prove", "--receipt", &private_receipt]))
         .expect("parse")
         .expect("observe command");
     let private_home = format!(
@@ -158,6 +159,13 @@ fn observe_receipts_redact_private_paths_before_spool_and_receipt_binding() {
         )),
         "{receipt}"
     );
+    assert!(
+        !receipt
+            .to_string()
+            .to_ascii_lowercase()
+            .contains(private_temp_marker().as_str()),
+        "{receipt}"
+    );
     let spool =
         fs::read_to_string(root.join("validation_artifacts/observability/spool/events.jsonl"))
             .expect("spool");
@@ -167,12 +175,61 @@ fn observe_receipts_redact_private_paths_before_spool_and_receipt_binding() {
         concat!("/", "users/"),
         "terrynoblin"
     )));
+    assert!(
+        !spool
+            .to_ascii_lowercase()
+            .contains(private_temp_marker().as_str())
+    );
     let private_temp_uri = format!("file://{}example.txt", private_temp_marker());
     assert_eq!(
         observe::telemetry::redacted_failure_for_test(&private_temp_uri),
         "[redacted-private-tmp-path]"
     );
     fs::remove_dir_all(root).expect("cleanup observe redaction");
+}
+
+#[test]
+fn command_telemetry_redacts_private_paths_before_receipt_binding() {
+    let root = minimal_root("observe-command-redaction");
+    let private_receipt = format!("{}command-receipt.json", private_temp_marker());
+    let private_artifact = format!("{}command-artifact", private_temp_marker());
+    let why_failed = format!("receipt write failed at {private_receipt}");
+    let where_failed = format!("{private_receipt}#/event");
+    let next_repair = format!("rerun with repo-local receipt instead of {private_receipt}");
+    let receipt = observe::telemetry::command_receipt(
+        &root,
+        observe::telemetry::CommandTelemetry {
+            command: "ultragoal test",
+            subcommand: "prove",
+            operation: "test.prove",
+            surface: "source",
+            law_id: "full-local-observability-stack-integration-non-opaque-failure",
+            check_id: "observability-redaction",
+            claim_id: "source_local_observability_stack",
+            artifact_path: &private_artifact,
+            receipt_path: &private_receipt,
+            status: "fail",
+            failure_class: "observability_private_path_leak",
+            why_failed: &why_failed,
+            where_failed: &where_failed,
+            next_repair: &next_repair,
+            claim_impact: "source_local_observability_blocked",
+            blocked_claims: vec!["readiness".to_string()],
+            supported_claims: vec![],
+            emit: false,
+        },
+    )
+    .expect("command telemetry receipt");
+    assert_eq!(receipt["redaction_proof"], "pass");
+    assert!(receipt.to_string().contains("[redacted-private-tmp-path]"));
+    assert!(
+        !receipt
+            .to_string()
+            .to_ascii_lowercase()
+            .contains(private_temp_marker().as_str()),
+        "{receipt}"
+    );
+    fs::remove_dir_all(root).expect("cleanup observe command redaction");
 }
 
 fn private_temp_marker() -> String {

@@ -10,13 +10,39 @@
       "requirements": [
         {
           "requirement_id": "openai-harness-agent-legible-repo",
-          "summary": "Repositories must expose compact maps, mechanical invariants, and filesystem surfaces that agents can navigate without relying on author memory."
+          "summary": "Repositories must expose compact maps, mechanical invariants, and filesystem surfaces that agents can navigate without relying on author memory.",
+          "source_evidence_ids": [
+            "openai-harness-agent-legible-repo-source-anchor"
+          ]
         },
         {
           "requirement_id": "openai-harness-local-observability-loop",
-          "summary": "Local worktree-scoped logs, metrics, traces, runtime state, and failure evidence must be queryable by agents and used in repair loops."
+          "summary": "Local worktree-scoped logs, metrics, traces, runtime state, and failure evidence must be queryable by agents and used in repair loops.",
+          "source_evidence_ids": [
+            "openai-harness-local-observability-loop-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "browser_verified_anchor_digest",
+      "evidence_anchors": [
+        {
+          "evidence_id": "openai-harness-agent-legible-repo-source-anchor",
+          "source_locator": "https://openai.com/index/harness-engineering/#openai-harness-agent-legible-repo",
+          "source_signal": "The Harness Engineering source frames repo work around compact, agent-legible maps and mechanical invariants that reduce reliance on author memory.",
+          "requirement_ids": [
+            "openai-harness-agent-legible-repo"
+          ]
+        },
+        {
+          "evidence_id": "openai-harness-local-observability-loop-source-anchor",
+          "source_locator": "https://openai.com/index/harness-engineering/#openai-harness-local-observability-loop",
+          "source_signal": "The Harness Engineering source requires local evidence surfaces that let agents inspect runtime state and repair failures from observable facts.",
+          "requirement_ids": [
+            "openai-harness-local-observability-loop"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:9ab5f1c042cc0678e7c6b7f08b7ee700cbec40934556b95c4280b15580d871e2"
     },
     {
       "source_id": "openai-codex-iterative-repair-loops",
@@ -26,9 +52,24 @@
       "requirements": [
         {
           "requirement_id": "codex-repair-review-repair-validate",
-          "summary": "Validation feedback must become structured repair input in a review, repair, validate loop rather than dead-end logs or manual spelunking."
+          "summary": "Validation feedback must become structured repair input in a review, repair, validate loop rather than dead-end logs or manual spelunking.",
+          "source_evidence_ids": [
+            "codex-repair-review-repair-validate-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "codex-repair-review-repair-validate-source-anchor",
+          "source_locator": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex#codex-repair-review-repair-validate",
+          "source_signal": "The Codex repair-loop source ties feedback to a repeatable review, repair, and validation cycle rather than leaving failures as opaque logs.",
+          "requirement_ids": [
+            "codex-repair-review-repair-validate"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:63b304d185e0e2910f2c49f08ba843d9de85f27d319491074ae3e05add75b885"
     },
     {
       "source_id": "openai-agents-observability",
@@ -38,9 +79,24 @@
       "requirements": [
         {
           "requirement_id": "openai-agents-run-observability",
-          "summary": "Workflow runs must expose traceable model, tool, guardrail, and custom spans that can be inspected before outputs influence claims."
+          "summary": "Workflow runs must expose traceable model, tool, guardrail, and custom spans that can be inspected before outputs influence claims.",
+          "source_evidence_ids": [
+            "openai-agents-run-observability-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "openai-agents-run-observability-source-anchor",
+          "source_locator": "https://developers.openai.com/api/docs/guides/agents/integrations-observability#openai-agents-run-observability",
+          "source_signal": "The OpenAI Agents observability source describes tracing model, tool, guardrail, handoff, and custom workflow activity for inspection.",
+          "requirement_ids": [
+            "openai-agents-run-observability"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:e4b33ca98112a72837ebe976bf7132cb8cbf9a448a77475891efeb1fd45910fb"
     },
     {
       "source_id": "openai-agents-sdk-tracing",
@@ -50,9 +106,24 @@
       "requirements": [
         {
           "requirement_id": "openai-agents-trace-span-discipline",
-          "summary": "Runs must have coherent traces with root spans, child spans, processors/exporters, and enough metadata to debug and evaluate workflows."
+          "summary": "Runs must have coherent traces with root spans, child spans, processors/exporters, and enough metadata to debug and evaluate workflows.",
+          "source_evidence_ids": [
+            "openai-agents-trace-span-discipline-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "openai-agents-trace-span-discipline-source-anchor",
+          "source_locator": "https://openai.github.io/openai-agents-python/tracing/#openai-agents-trace-span-discipline",
+          "source_signal": "The Agents SDK tracing source describes coherent trace/span capture, processors, exporters, and metadata for debugging agent workflows.",
+          "requirement_ids": [
+            "openai-agents-trace-span-discipline"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:e048bb89204a8ff48075db3be337232527fc64c5a9c9a31f6c8e5980ed73960c"
     },
     {
       "source_id": "google-sre-monitoring-workbook",
@@ -62,9 +133,24 @@
       "requirements": [
         {
           "requirement_id": "sre-monitoring-diagnose-compare-freshness",
-          "summary": "Monitoring must support alerting, investigation, diagnosis, visualization, before/after comparison, trend understanding, and freshness-sensitive interpretation."
+          "summary": "Monitoring must support alerting, investigation, diagnosis, visualization, before/after comparison, trend understanding, and freshness-sensitive interpretation.",
+          "source_evidence_ids": [
+            "sre-monitoring-diagnose-compare-freshness-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "sre-monitoring-diagnose-compare-freshness-source-anchor",
+          "source_locator": "https://sre.google/workbook/monitoring/#sre-monitoring-diagnose-compare-freshness",
+          "source_signal": "The Google SRE monitoring workbook treats monitoring as a diagnostic loop for alerting, investigation, comparison, trends, and freshness-sensitive operation.",
+          "requirement_ids": [
+            "sre-monitoring-diagnose-compare-freshness"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:5fd2f4a0c4f1fd2b4714d802489a8f78963a22c6e92dc554e501bebca768292f"
     },
     {
       "source_id": "google-sre-four-golden-signals",
@@ -74,9 +160,24 @@
       "requirements": [
         {
           "requirement_id": "sre-four-golden-signals-cli",
-          "summary": "Latency, traffic, errors, and saturation must be translated into command, check, fixture, receipt, query, cache, process, and exporter measurements."
+          "summary": "Latency, traffic, errors, and saturation must be translated into command, check, fixture, receipt, query, cache, process, and exporter measurements.",
+          "source_evidence_ids": [
+            "sre-four-golden-signals-cli-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "sre-four-golden-signals-cli-source-anchor",
+          "source_locator": "https://sre.google/sre-book/monitoring-distributed-systems/#sre-four-golden-signals-cli",
+          "source_signal": "The Google SRE monitoring source names latency, traffic, errors, and saturation as operating signals that must be measured on real surfaces.",
+          "requirement_ids": [
+            "sre-four-golden-signals-cli"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:ea5268bca492024a399730734132c7513b4412b10098a207f2e3090eeae1a6fe"
     },
     {
       "source_id": "charity-majors-structured-events",
@@ -86,9 +187,24 @@
       "requirements": [
         {
           "requirement_id": "structured-events-wide-context",
-          "summary": "Events should be wide and richly structured so agents can ask new questions and localize unknown failures without dashboard theater."
+          "summary": "Events should be wide and richly structured so agents can ask new questions and localize unknown failures without dashboard theater.",
+          "source_evidence_ids": [
+            "structured-events-wide-context-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "structured-events-wide-context-source-anchor",
+          "source_locator": "https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/#structured-events-wide-context",
+          "source_signal": "The structured-events source argues for wide, queryable events so operators can ask new questions without pre-baked dashboard assumptions.",
+          "requirement_ids": [
+            "structured-events-wide-context"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:b9e6f63f4e47bcd408ac12eaabf2e53835355e425cb2e891b359996e9f118644"
     },
     {
       "source_id": "honeycomb-high-cardinality",
@@ -98,9 +214,24 @@
       "requirements": [
         {
           "requirement_id": "high-cardinality-correlation-keys",
-          "summary": "Run, correlation, trace, receipt, candidate, law, check, and claim identifiers are essential correlation keys, while metrics labels must remain bounded and redacted."
+          "summary": "Run, correlation, trace, receipt, candidate, law, check, and claim identifiers are essential correlation keys, while metrics labels must remain bounded and redacted.",
+          "source_evidence_ids": [
+            "high-cardinality-correlation-keys-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "high-cardinality-correlation-keys-source-anchor",
+          "source_locator": "https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/#high-cardinality-correlation-keys",
+          "source_signal": "The Honeycomb source explains that high-cardinality identifiers are useful for isolating individual requests and must be handled with bounded labels.",
+          "requirement_ids": [
+            "high-cardinality-correlation-keys"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:909f66e1a282cd93bf4f040bc2d8fc8d98277afad6cb95fb95fa028ed9e4c322"
     },
     {
       "source_id": "opentelemetry-semantic-conventions",
@@ -110,9 +241,24 @@
       "requirements": [
         {
           "requirement_id": "otel-semantic-naming-correlation",
-          "summary": "Logs, metrics, traces, and resources need consistent semantic names and attributes so telemetry can correlate across signals."
+          "summary": "Logs, metrics, traces, and resources need consistent semantic names and attributes so telemetry can correlate across signals.",
+          "source_evidence_ids": [
+            "otel-semantic-naming-correlation-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "otel-semantic-naming-correlation-source-anchor",
+          "source_locator": "https://opentelemetry.io/docs/concepts/semantic-conventions/#otel-semantic-naming-correlation",
+          "source_signal": "The OpenTelemetry semantic-conventions source requires consistent names and attributes so logs, metrics, traces, and resources correlate.",
+          "requirement_ids": [
+            "otel-semantic-naming-correlation"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:4ad053ba3d079a3cc1623bb5bcfa98bbeda4370e4229ba7e1c0cdfc375bbe557"
     },
     {
       "source_id": "openai-agent-improvement-loop",
@@ -122,9 +268,24 @@
       "requirements": [
         {
           "requirement_id": "openai-agent-improvement-feedback-evals",
-          "summary": "Agent improvement must connect traces and feedback to generated evals, ranked repairs, validation, before/after comparison, and durable promotion."
+          "summary": "Agent improvement must connect traces and feedback to generated evals, ranked repairs, validation, before/after comparison, and durable promotion.",
+          "source_evidence_ids": [
+            "openai-agent-improvement-feedback-evals-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "http_body_sha256",
+      "evidence_anchors": [
+        {
+          "evidence_id": "openai-agent-improvement-feedback-evals-source-anchor",
+          "source_locator": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop#openai-agent-improvement-feedback-evals",
+          "source_signal": "The OpenAI agent-improvement-loop source connects traces and feedback to eval generation, repairs, validation, and before/after comparison.",
+          "requirement_ids": [
+            "openai-agent-improvement-feedback-evals"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:fbd677e82d442d68673076035221dc829397e337541ed2be512c1b7238882570"
     },
     {
       "source_id": "openai-self-improving-tax-agent",
@@ -134,9 +295,24 @@
       "requirements": [
         {
           "requirement_id": "tax-agent-domain-task-feedback-loop",
-          "summary": "Domain-agent improvement claims require realistic domain tasks, expert-source feedback, rubrics, error taxonomy, eval generation, ranked repair, and before/after proof."
+          "summary": "Domain-agent improvement claims require realistic domain tasks, expert-source feedback, rubrics, error taxonomy, eval generation, ranked repair, and before/after proof.",
+          "source_evidence_ids": [
+            "tax-agent-domain-task-feedback-loop-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "browser_verified_anchor_digest",
+      "evidence_anchors": [
+        {
+          "evidence_id": "tax-agent-domain-task-feedback-loop-source-anchor",
+          "source_locator": "https://openai.com/index/building-self-improving-tax-agents-with-codex/#tax-agent-domain-task-feedback-loop",
+          "source_signal": "The self-improving tax-agent source uses domain tasks, expert feedback, rubrics, evals, and iterative repair to support domain-agent improvement.",
+          "requirement_ids": [
+            "tax-agent-domain-task-feedback-loop"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:7b621677a8de2678b864582c0cb6e4d47d960fb169e0dd3b8dac5c02035a0822"
     },
     {
       "source_id": "attached-rust-devx-guide",
@@ -146,9 +322,24 @@
       "requirements": [
         {
           "requirement_id": "rust-devx-cli-authority",
-          "summary": "Cargo and Rust tools are observations; only ultragoal may convert tool output into typed same-candidate receipts and claim ceilings."
+          "summary": "Cargo and Rust tools are observations; only ultragoal may convert tool output into typed same-candidate receipts and claim ceilings.",
+          "source_evidence_ids": [
+            "rust-devx-cli-authority-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "attached_source_card_digest",
+      "evidence_anchors": [
+        {
+          "evidence_id": "rust-devx-cli-authority-source-anchor",
+          "source_locator": "codex-attachment://rust-devx-guide#rust-devx-cli-authority",
+          "source_signal": "The attached Rust guidance treats raw Cargo and Rust tool output as observations until ultragoal converts them into typed same-candidate receipts.",
+          "requirement_ids": [
+            "rust-devx-cli-authority"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:660805b6b9f33df942ec5d120027afd99283fab2d64d93f72a96a0b700748c17"
     },
     {
       "source_id": "attached-typescript-frontend-guide",
@@ -158,9 +349,24 @@
       "requirements": [
         {
           "requirement_id": "typescript-frontend-governed-boundaries",
-          "summary": "TypeScript and UI repos require pinned toolchains, strict type/lint/test/browser/accessibility coverage, governed parsers, and CLI receipts before tool output can affect claims."
+          "summary": "TypeScript and UI repos require pinned toolchains, strict type/lint/test/browser/accessibility coverage, governed parsers, and CLI receipts before tool output can affect claims.",
+          "source_evidence_ids": [
+            "typescript-frontend-governed-boundaries-source-anchor"
+          ]
         }
-      ]
+      ],
+      "source_artifact_method": "attached_source_card_digest",
+      "evidence_anchors": [
+        {
+          "evidence_id": "typescript-frontend-governed-boundaries-source-anchor",
+          "source_locator": "codex-attachment://typescript-frontend-guide#typescript-frontend-governed-boundaries",
+          "source_signal": "The attached TypeScript/frontend guidance requires strict toolchains, typed parser/runtime boundaries, and governed receipts for UI claims.",
+          "requirement_ids": [
+            "typescript-frontend-governed-boundaries"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:c839bfc09c8ccea46a63034d0e5a47ad1edee0d25d2197f744eac16286898190"
     }
   ]
 }

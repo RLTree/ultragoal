@@ -28,7 +28,17 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
     let candidate = crate::package::inventory::package_digest(root)?;
     let run_id = identity::id("run", input.operation, &candidate);
     let correlation_id = identity::id("corr", input.operation, &candidate);
-    let event = event(&input, &candidate, &run_id, &correlation_id, root);
+    let redacted_artifact_path = record::redact_sensitive_text(input.artifact_path);
+    let redacted_receipt_path = record::redact_sensitive_text(input.receipt_path);
+    let event = event(
+        &input,
+        &candidate,
+        &run_id,
+        &correlation_id,
+        root,
+        &redacted_artifact_path,
+        &redacted_receipt_path,
+    );
     let metric = metric(&event);
     let trace = trace(&event);
     if input.emit {
@@ -50,7 +60,7 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": "pass",
-        "receipt_path": input.receipt_path,
+        "receipt_path": redacted_receipt_path,
         "claim_impact": input.claim_impact,
         "claim_ceiling": if input.status == "pass" {
             "observability_binding_only"
@@ -64,7 +74,7 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         "claim_id": input.claim_id,
         "why_failed": event["why_failed"].as_str().unwrap_or(""),
         "where_failed": event["where_failed"].as_str().unwrap_or(""),
-        "next_repair": input.next_repair,
+        "next_repair": event["next_repair"].as_str().unwrap_or(""),
         "event": event,
         "metric": metric,
         "trace": trace
@@ -77,7 +87,12 @@ fn event(
     run_id: &str,
     correlation_id: &str,
     root: &Path,
+    artifact_path: &str,
+    receipt_path: &str,
 ) -> Value {
+    let why_failed = record::redact_sensitive_text(input.why_failed);
+    let where_failed = record::redact_sensitive_text(input.where_failed);
+    let next_repair = record::redact_sensitive_text(input.next_repair);
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,
         "run_id": run_id,
@@ -94,13 +109,13 @@ fn event(
         "claim_id": input.claim_id,
         "candidate_digest": candidate,
         "target_revision": candidate,
-        "artifact_path": input.artifact_path,
-        "receipt_path": input.receipt_path,
+        "artifact_path": artifact_path,
+        "receipt_path": receipt_path,
         "status": input.status,
         "failure_class": input.failure_class,
-        "why_failed": input.why_failed,
-        "where_failed": input.where_failed,
-        "next_repair": input.next_repair,
+        "why_failed": why_failed,
+        "where_failed": where_failed,
+        "next_repair": next_repair,
         "claim_impact": input.claim_impact,
         "timestamp": crate::audit::clock::now_iso(),
         "duration_ms": 0,

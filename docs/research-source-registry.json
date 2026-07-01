@@ -7,182 +7,434 @@
       "canonical_url": "https://openai.com/index/harness-engineering/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["claim-governance", "agent-legibility", "observability-loop"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "full-local-observability-stack-integration-non-opaque-failure", "repo-knowledge-index-core-beliefs"],
-      "required_plugin_surfaces": ["source audit", "observability command inventory", "setup retrofit outputs"],
-      "setup_retrofit_implications": ["install or fail-close repo-local maps and observability query surfaces"],
-      "tool_package_implications": ["package source cards, research registry, article-to-law trace, schemas, fixtures, and validators"],
-      "privacy_implications": ["source cards may summarize public content; raw private session artifacts stay category-only"],
-      "claim_ceiling_impact": "blocks research-backed claims unless mapped to canonical law ids and current same-candidate evidence"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "claim-governance",
+        "agent-legibility",
+        "observability-loop"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "repo-knowledge-index-core-beliefs"
+      ],
+      "required_plugin_surfaces": [
+        "source audit",
+        "observability command inventory",
+        "setup retrofit outputs"
+      ],
+      "setup_retrofit_implications": [
+        "install or fail-close repo-local maps and observability query surfaces"
+      ],
+      "tool_package_implications": [
+        "package source cards, research registry, article-to-law trace, schemas, fixtures, and validators"
+      ],
+      "privacy_implications": [
+        "source cards may summarize public content; raw private session artifacts stay category-only"
+      ],
+      "claim_ceiling_impact": "blocks research-backed claims unless mapped to canonical law ids and current same-candidate evidence",
+      "source_artifact_digest": "sha256:9ab5f1c042cc0678e7c6b7f08b7ee700cbec40934556b95c4280b15580d871e2",
+      "source_artifact_method": "browser_verified_anchor_digest"
     },
     {
       "source_id": "openai-codex-iterative-repair-loops",
       "canonical_url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["repair-loop", "agent-remediation"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "failure-remediation-quality-agent-actionable-output", "feedback-to-rule-promotion"],
-      "required_plugin_surfaces": ["validator output", "observability explain commands", "improvement-loop registry"],
-      "setup_retrofit_implications": ["setup and retrofit must install a repair loop or block improvement claims"],
-      "tool_package_implications": ["package eval, promptfoo, handoff, and before-after receipt schemas"],
-      "privacy_implications": ["feedback and traces must be redacted before durable use"],
-      "claim_ceiling_impact": "blocks self-improvement claims without closed repair-loop evidence"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "repair-loop",
+        "agent-remediation"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "failure-remediation-quality-agent-actionable-output",
+        "feedback-to-rule-promotion"
+      ],
+      "required_plugin_surfaces": [
+        "validator output",
+        "observability explain commands",
+        "improvement-loop registry"
+      ],
+      "setup_retrofit_implications": [
+        "setup and retrofit must install a repair loop or block improvement claims"
+      ],
+      "tool_package_implications": [
+        "package eval, promptfoo, handoff, and before-after receipt schemas"
+      ],
+      "privacy_implications": [
+        "feedback and traces must be redacted before durable use"
+      ],
+      "claim_ceiling_impact": "blocks self-improvement claims without closed repair-loop evidence",
+      "source_artifact_digest": "sha256:63b304d185e0e2910f2c49f08ba843d9de85f27d319491074ae3e05add75b885",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "openai-agents-observability",
       "canonical_url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["agent-tracing", "tool-guardrail-spans"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "full-local-observability-stack-integration-non-opaque-failure", "openai-api-key-model-cost-external-ai-boundary"],
-      "required_plugin_surfaces": ["OpenAI call receipts", "trace spans", "observability queries"],
-      "setup_retrofit_implications": ["OpenAI/provider use must be redacted and observation-only until parsed"],
-      "tool_package_implications": ["package OpenAI policy, call receipts, telemetry schemas, and red fixtures"],
-      "privacy_implications": ["keys, prompts, outputs, traces, and provider metadata must be redacted and bounded"],
-      "claim_ceiling_impact": "blocks model-output authority and completion claims without parsed same-candidate receipts"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "agent-tracing",
+        "tool-guardrail-spans"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "openai-api-key-model-cost-external-ai-boundary"
+      ],
+      "required_plugin_surfaces": [
+        "OpenAI call receipts",
+        "trace spans",
+        "observability queries"
+      ],
+      "setup_retrofit_implications": [
+        "OpenAI/provider use must be redacted and observation-only until parsed"
+      ],
+      "tool_package_implications": [
+        "package OpenAI policy, call receipts, telemetry schemas, and red fixtures"
+      ],
+      "privacy_implications": [
+        "keys, prompts, outputs, traces, and provider metadata must be redacted and bounded"
+      ],
+      "claim_ceiling_impact": "blocks model-output authority and completion claims without parsed same-candidate receipts",
+      "source_artifact_digest": "sha256:e4b33ca98112a72837ebe976bf7132cb8cbf9a448a77475891efeb1fd45910fb",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "openai-agents-sdk-tracing",
       "canonical_url": "https://openai.github.io/openai-agents-python/tracing/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["trace-topology", "span-parentage"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "full-local-observability-stack-integration-non-opaque-failure", "agent-session-telemetry-token-rate-limit"],
-      "required_plugin_surfaces": ["root spans", "child spans", "exporter receipts"],
-      "setup_retrofit_implications": ["setup must configure trace emission or block observability claims"],
-      "tool_package_implications": ["package trace schemas and red fixtures for broken span parentage"],
-      "privacy_implications": ["trace attributes must not leak secrets or private paths"],
-      "claim_ceiling_impact": "blocks observability claims when traces are missing, stale, or uncorrelated"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "trace-topology",
+        "span-parentage"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-session-telemetry-token-rate-limit"
+      ],
+      "required_plugin_surfaces": [
+        "root spans",
+        "child spans",
+        "exporter receipts"
+      ],
+      "setup_retrofit_implications": [
+        "setup must configure trace emission or block observability claims"
+      ],
+      "tool_package_implications": [
+        "package trace schemas and red fixtures for broken span parentage"
+      ],
+      "privacy_implications": [
+        "trace attributes must not leak secrets or private paths"
+      ],
+      "claim_ceiling_impact": "blocks observability claims when traces are missing, stale, or uncorrelated",
+      "source_artifact_digest": "sha256:e048bb89204a8ff48075db3be337232527fc64c5a9c9a31f6c8e5980ed73960c",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "google-sre-monitoring-workbook",
       "canonical_url": "https://sre.google/workbook/monitoring/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["monitoring-freshness", "diagnostic-loop"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "agent-queryable-observability", "schema-evolution-receipt-migration-stale-version-invalidation"],
-      "required_plugin_surfaces": ["logs queries", "metrics queries", "trace queries", "freshness checks"],
-      "setup_retrofit_implications": ["setup must expose stale telemetry as failure, not neutral history"],
-      "tool_package_implications": ["package freshness and query receipt checks"],
-      "privacy_implications": ["query output must be bounded and redacted"],
-      "claim_ceiling_impact": "blocks diagnosis and improvement claims from stale telemetry"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "monitoring-freshness",
+        "diagnostic-loop"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "agent-queryable-observability",
+        "schema-evolution-receipt-migration-stale-version-invalidation"
+      ],
+      "required_plugin_surfaces": [
+        "logs queries",
+        "metrics queries",
+        "trace queries",
+        "freshness checks"
+      ],
+      "setup_retrofit_implications": [
+        "setup must expose stale telemetry as failure, not neutral history"
+      ],
+      "tool_package_implications": [
+        "package freshness and query receipt checks"
+      ],
+      "privacy_implications": [
+        "query output must be bounded and redacted"
+      ],
+      "claim_ceiling_impact": "blocks diagnosis and improvement claims from stale telemetry",
+      "source_artifact_digest": "sha256:5fd2f4a0c4f1fd2b4714d802489a8f78963a22c6e92dc554e501bebca768292f",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "google-sre-four-golden-signals",
       "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["latency-traffic-errors-saturation"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "cli-performance-latency-speed-iteration-fitness", "rust-cache-no-cache-honesty"],
-      "required_plugin_surfaces": ["performance receipt", "observability metrics", "resource discipline receipts"],
-      "setup_retrofit_implications": ["setup must classify command latency, traffic, errors, and saturation"],
-      "tool_package_implications": ["package performance and metrics schemas"],
-      "privacy_implications": ["metric labels must be bounded and secret-free"],
-      "claim_ceiling_impact": "blocks speed and operational-fitness claims without same-surface metrics"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "latency-traffic-errors-saturation"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "cli-performance-latency-speed-iteration-fitness",
+        "rust-cache-no-cache-honesty"
+      ],
+      "required_plugin_surfaces": [
+        "performance receipt",
+        "observability metrics",
+        "resource discipline receipts"
+      ],
+      "setup_retrofit_implications": [
+        "setup must classify command latency, traffic, errors, and saturation"
+      ],
+      "tool_package_implications": [
+        "package performance and metrics schemas"
+      ],
+      "privacy_implications": [
+        "metric labels must be bounded and secret-free"
+      ],
+      "claim_ceiling_impact": "blocks speed and operational-fitness claims without same-surface metrics",
+      "source_artifact_digest": "sha256:ea5268bca492024a399730734132c7513b4412b10098a207f2e3090eeae1a6fe",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "charity-majors-structured-events",
       "canonical_url": "https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["wide-events", "no-dashboard-theater"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "full-local-observability-stack-integration-non-opaque-failure", "agent-queryable-observability"],
-      "required_plugin_surfaces": ["structured events", "failure explanations", "query hints"],
-      "setup_retrofit_implications": ["setup must make failures localizable by query, not manual inspection"],
-      "tool_package_implications": ["package event schema and opaque-output red fixtures"],
-      "privacy_implications": ["wide events must still apply redaction and bounded output rules"],
-      "claim_ceiling_impact": "blocks non-opaque-failure claims without wide structured events"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "wide-events",
+        "no-dashboard-theater"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability"
+      ],
+      "required_plugin_surfaces": [
+        "structured events",
+        "failure explanations",
+        "query hints"
+      ],
+      "setup_retrofit_implications": [
+        "setup must make failures localizable by query, not manual inspection"
+      ],
+      "tool_package_implications": [
+        "package event schema and opaque-output red fixtures"
+      ],
+      "privacy_implications": [
+        "wide events must still apply redaction and bounded output rules"
+      ],
+      "claim_ceiling_impact": "blocks non-opaque-failure claims without wide structured events",
+      "source_artifact_digest": "sha256:b9e6f63f4e47bcd408ac12eaabf2e53835355e425cb2e891b359996e9f118644",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "honeycomb-high-cardinality",
       "canonical_url": "https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["correlation-keys", "bounded-labels"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "agent-queryable-observability", "secret-token-boundaries"],
-      "required_plugin_surfaces": ["run ids", "correlation ids", "candidate digest labels", "redaction checks"],
-      "setup_retrofit_implications": ["setup must keep agent-queryable correlation keys while bounding label cardinality"],
-      "tool_package_implications": ["package query receipt schemas and secret-leak fixtures"],
-      "privacy_implications": ["never expose secrets or raw private paths as metric labels"],
-      "claim_ceiling_impact": "blocks observability claims when correlation keys are missing or labels leak"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "correlation-keys",
+        "bounded-labels"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "agent-queryable-observability",
+        "secret-token-boundaries"
+      ],
+      "required_plugin_surfaces": [
+        "run ids",
+        "correlation ids",
+        "candidate digest labels",
+        "redaction checks"
+      ],
+      "setup_retrofit_implications": [
+        "setup must keep agent-queryable correlation keys while bounding label cardinality"
+      ],
+      "tool_package_implications": [
+        "package query receipt schemas and secret-leak fixtures"
+      ],
+      "privacy_implications": [
+        "never expose secrets or raw private paths as metric labels"
+      ],
+      "claim_ceiling_impact": "blocks observability claims when correlation keys are missing or labels leak",
+      "source_artifact_digest": "sha256:909f66e1a282cd93bf4f040bc2d8fc8d98277afad6cb95fb95fa028ed9e4c322",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "opentelemetry-semantic-conventions",
       "canonical_url": "https://opentelemetry.io/docs/concepts/semantic-conventions/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["semantic-telemetry-names"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "stable-identifier-normalization-collision", "full-local-observability-stack-integration-non-opaque-failure"],
-      "required_plugin_surfaces": ["telemetry schemas", "command inventory", "trace and metric attributes"],
-      "setup_retrofit_implications": ["setup must use stable semantic names and reject unknown authority fields"],
-      "tool_package_implications": ["package telemetry schemas and validator checks"],
-      "privacy_implications": ["semantic attributes must be redacted and bounded"],
-      "claim_ceiling_impact": "blocks telemetry correlation claims without semantic naming"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "semantic-telemetry-names"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "stable-identifier-normalization-collision",
+        "full-local-observability-stack-integration-non-opaque-failure"
+      ],
+      "required_plugin_surfaces": [
+        "telemetry schemas",
+        "command inventory",
+        "trace and metric attributes"
+      ],
+      "setup_retrofit_implications": [
+        "setup must use stable semantic names and reject unknown authority fields"
+      ],
+      "tool_package_implications": [
+        "package telemetry schemas and validator checks"
+      ],
+      "privacy_implications": [
+        "semantic attributes must be redacted and bounded"
+      ],
+      "claim_ceiling_impact": "blocks telemetry correlation claims without semantic naming",
+      "source_artifact_digest": "sha256:4ad053ba3d079a3cc1623bb5bcfa98bbeda4370e4229ba7e1c0cdfc375bbe557",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "openai-agent-improvement-loop",
       "canonical_url": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["improvement-loop", "eval-promotion"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "feedback-to-rule-promotion", "standards-gardener-promotion"],
-      "required_plugin_surfaces": ["feedback receipts", "promptfoo eval receipts", "HALO ranking receipts", "before-after telemetry"],
-      "setup_retrofit_implications": ["setup must install or fail-close the improvement loop and eval promotion surfaces"],
-      "tool_package_implications": ["package improvement-loop, eval, handoff, and promotion schemas"],
-      "privacy_implications": ["feedback and model outputs must be redacted and parsed before durable use"],
-      "claim_ceiling_impact": "blocks self-improving claims without same-candidate loop closure"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "improvement-loop",
+        "eval-promotion"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "feedback-to-rule-promotion",
+        "standards-gardener-promotion"
+      ],
+      "required_plugin_surfaces": [
+        "feedback receipts",
+        "promptfoo eval receipts",
+        "HALO ranking receipts",
+        "before-after telemetry"
+      ],
+      "setup_retrofit_implications": [
+        "setup must install or fail-close the improvement loop and eval promotion surfaces"
+      ],
+      "tool_package_implications": [
+        "package improvement-loop, eval, handoff, and promotion schemas"
+      ],
+      "privacy_implications": [
+        "feedback and model outputs must be redacted and parsed before durable use"
+      ],
+      "claim_ceiling_impact": "blocks self-improving claims without same-candidate loop closure",
+      "source_artifact_digest": "sha256:fbd677e82d442d68673076035221dc829397e337541ed2be512c1b7238882570",
+      "source_artifact_method": "http_body_sha256"
     },
     {
       "source_id": "openai-self-improving-tax-agent",
       "canonical_url": "https://openai.com/index/building-self-improving-tax-agents-with-codex/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["domain-agent-improvement", "expert-feedback"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "product-strategy-positioning-research-eval-before-lane-planning", "value-adoption-continuance-business-mission-evidence-hierarchy"],
-      "required_plugin_surfaces": ["domain task schemas", "expert feedback schemas", "rubrics", "before-after validation"],
-      "setup_retrofit_implications": ["setup must install domain-pack templates or block domain-agent improvement claims"],
-      "tool_package_implications": ["package domain task, feedback, rubric, eval, and privacy schemas"],
-      "privacy_implications": ["domain cases and expert feedback must not expose raw private data"],
-      "claim_ceiling_impact": "blocks Product Success and expert-quality claims from eval-only evidence"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "domain-agent-improvement",
+        "expert-feedback"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "product-strategy-positioning-research-eval-before-lane-planning",
+        "value-adoption-continuance-business-mission-evidence-hierarchy"
+      ],
+      "required_plugin_surfaces": [
+        "domain task schemas",
+        "expert feedback schemas",
+        "rubrics",
+        "before-after validation"
+      ],
+      "setup_retrofit_implications": [
+        "setup must install domain-pack templates or block domain-agent improvement claims"
+      ],
+      "tool_package_implications": [
+        "package domain task, feedback, rubric, eval, and privacy schemas"
+      ],
+      "privacy_implications": [
+        "domain cases and expert feedback must not expose raw private data"
+      ],
+      "claim_ceiling_impact": "blocks Product Success and expert-quality claims from eval-only evidence",
+      "source_artifact_digest": "sha256:7b621677a8de2678b864582c0cb6e4d47d960fb169e0dd3b8dac5c02035a0822",
+      "source_artifact_method": "browser_verified_anchor_digest"
     },
     {
       "source_id": "attached-rust-devx-guide",
       "canonical_url": "codex-attachment://rust-devx-guide",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["rust-devx", "cli-authority"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "rust-developer-experience-authority", "rust-command-loop-authority"],
-      "required_plugin_surfaces": ["Rust receipts", "coverage proof", "cache/no-cache proof", "GC proof"],
-      "setup_retrofit_implications": ["Rust setup/retrofit must route raw Cargo output through CLI receipts"],
-      "tool_package_implications": ["package Rust toolchain, cache, coverage, memory, dependency, and GC schemas"],
-      "privacy_implications": ["tool output and paths must be category-safe in public artifacts"],
-      "claim_ceiling_impact": "blocks Rust DevX claims from raw cargo output"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "rust-devx",
+        "cli-authority"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "rust-developer-experience-authority",
+        "rust-command-loop-authority"
+      ],
+      "required_plugin_surfaces": [
+        "Rust receipts",
+        "coverage proof",
+        "cache/no-cache proof",
+        "GC proof"
+      ],
+      "setup_retrofit_implications": [
+        "Rust setup/retrofit must route raw Cargo output through CLI receipts"
+      ],
+      "tool_package_implications": [
+        "package Rust toolchain, cache, coverage, memory, dependency, and GC schemas"
+      ],
+      "privacy_implications": [
+        "tool output and paths must be category-safe in public artifacts"
+      ],
+      "claim_ceiling_impact": "blocks Rust DevX claims from raw cargo output",
+      "source_artifact_digest": "sha256:660805b6b9f33df942ec5d120027afd99283fab2d64d93f72a96a0b700748c17",
+      "source_artifact_method": "attached_source_card_digest"
     },
     {
       "source_id": "attached-typescript-frontend-guide",
       "canonical_url": "codex-attachment://typescript-frontend-guide",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
-      "law_family_aliases": ["typescript-devx", "frontend-runtime-boundaries"],
-      "canonical_law_ids_affected": ["research-source-authority-article-to-law-integration", "third-party-dependency-legibility-typed-adapters", "typed-records-over-prose"],
-      "required_plugin_surfaces": ["TypeScript tool inventory", "strict config receipts", "runtime parser receipts", "UI evidence receipts"],
-      "setup_retrofit_implications": ["TypeScript/UI setup must install or fail-close strict toolchain, parser, browser, accessibility, coverage, and memory surfaces"],
-      "tool_package_implications": ["package TypeScript DevX schemas and setup/retrofit templates"],
-      "privacy_implications": ["screenshots, traces, browser storage, and user data must be minimized and redacted"],
-      "claim_ceiling_impact": "blocks TypeScript/UI claims from raw pnpm, tsc, lint, test, or browser output"
+      "source_card_digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
+      "law_family_aliases": [
+        "typescript-devx",
+        "frontend-runtime-boundaries"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "third-party-dependency-legibility-typed-adapters",
+        "typed-records-over-prose"
+      ],
+      "required_plugin_surfaces": [
+        "TypeScript tool inventory",
+        "strict config receipts",
+        "runtime parser receipts",
+        "UI evidence receipts"
+      ],
+      "setup_retrofit_implications": [
+        "TypeScript/UI setup must install or fail-close strict toolchain, parser, browser, accessibility, coverage, and memory surfaces"
+      ],
+      "tool_package_implications": [
+        "package TypeScript DevX schemas and setup/retrofit templates"
+      ],
+      "privacy_implications": [
+        "screenshots, traces, browser storage, and user data must be minimized and redacted"
+      ],
+      "claim_ceiling_impact": "blocks TypeScript/UI claims from raw pnpm, tsc, lint, test, or browser output",
+      "source_artifact_digest": "sha256:c839bfc09c8ccea46a63034d0e5a47ad1edee0d25d2197f744eac16286898190",
+      "source_artifact_method": "attached_source_card_digest"
     }
   ]
 }

@@ -13,6 +13,7 @@ pub(super) fn event(
     failure: Option<&str>,
 ) -> Value {
     let failure = failure.map(redact_sensitive_text);
+    let receipt_path = redact_sensitive_text(&command.receipt_rel().to_string_lossy());
     let next_repair = claims::next_repair_for(command.operation, status, failure.as_deref());
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,
@@ -31,7 +32,7 @@ pub(super) fn event(
         "candidate_digest": candidate,
         "target_revision": candidate,
         "artifact_path": "dev/observability",
-        "receipt_path": command.receipt_rel().to_string_lossy(),
+        "receipt_path": receipt_path,
         "status": status,
         "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
         "why_failed": failure.as_deref().unwrap_or("none"),
@@ -155,7 +156,7 @@ fn sensitive_markers() -> Vec<String> {
     .into()
 }
 
-fn redact_sensitive_text(input: &str) -> String {
+pub(super) fn redact_sensitive_text(input: &str) -> String {
     let home = redact_path_marker(input, private_home_marker(), "[redacted-home-path]");
     let private_tmp =
         redact_path_marker(&home, private_tmp_marker(), "[redacted-private-tmp-path]");

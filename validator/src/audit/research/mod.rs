@@ -33,15 +33,18 @@ pub(crate) fn value_failures(
     trace: &Value,
 ) -> Vec<String> {
     let source_cards = catalog::source_cards(cards);
+    let source_artifacts = catalog::source_artifacts(cards);
     let registry_sources = catalog::registry_sources(registry);
     let requirements = catalog::card_requirements(cards);
     let trace_entries = catalog::trace_entries(trace);
     let mut out = Vec::new();
+    out.extend(catalog::source_evidence_failures(cards));
     out.extend(catalog::required_source_failures(&registry_sources));
     out.extend(registry_failures(
         root,
         cards,
         &source_cards,
+        &source_artifacts,
         &registry_sources,
     ));
     out.extend(trace::coverage_failures(&requirements, &trace_entries));
@@ -57,6 +60,7 @@ fn registry_failures(
     root: &Path,
     cards: &Value,
     source_cards: &BTreeSet<String>,
+    source_artifacts: &BTreeMap<String, (String, String)>,
     registry: &BTreeMap<String, Value>,
 ) -> Vec<String> {
     let cards_digest = digest::file(&root.join(CARDS_PATH)).unwrap_or_default();
@@ -72,6 +76,21 @@ fn registry_failures(
             }
             if text(row, "source_card_digest") != cards_digest {
                 out.push(format!("research_registry_source_card_digest_stale:{id}"));
+            }
+            match source_artifacts.get(id) {
+                Some((digest, method)) => {
+                    if text(row, "source_artifact_digest") != *digest {
+                        out.push(format!(
+                            "research_registry_source_artifact_digest_stale:{id}"
+                        ));
+                    }
+                    if text(row, "source_artifact_method") != *method {
+                        out.push(format!(
+                            "research_registry_source_artifact_method_stale:{id}"
+                        ));
+                    }
+                }
+                None => out.push(format!("research_registry_source_artifact_missing:{id}")),
             }
             if array(row, "canonical_law_ids_affected").is_empty() {
                 out.push(format!("research_registry_unmapped_source:{id}"));

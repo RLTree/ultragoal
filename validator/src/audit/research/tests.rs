@@ -16,7 +16,13 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
         &root.join(super::CARDS_PATH),
         &json!({
             "schema":"wrong",
-            "source_cards":[{"source_id":"source-a","requirements":[{"id":"req-a"}]}]
+            "sources":[{
+                "source_id":"source-a",
+                "requirements":[{
+                    "requirement_id":"req-a",
+                    "summary":"summary-only source card without anchors"
+                }]
+            }]
         }),
     )
     .expect("cards");
@@ -26,6 +32,8 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
             "source_id":"source-a",
             "source_card_path":"wrong",
             "source_card_digest":"sha256:bad",
+            "source_artifact_digest":"sha256:bad",
+            "source_artifact_method":"wrong",
             "canonical_law_ids_affected":[],
             "claim_ceiling_impact":""
         }]}),
@@ -35,7 +43,21 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
         .expect("trace");
     let failures = super::failures(&root);
     assert!(failures.contains(&"research_source_cards_wrong_schema".to_string()));
+    assert!(
+        failures.contains(&"research_source_card_artifact_digest_missing:source-a".to_string())
+    );
+    assert!(
+        failures.contains(&"research_source_card_artifact_method_missing:source-a".to_string())
+    );
+    assert!(failures.contains(&"research_source_card_evidence_missing:source-a".to_string()));
+    assert!(failures.contains(&"research_source_card_requirement_unanchored:req-a".to_string()));
     assert!(failures.contains(&"research_registry_source_card_path_invalid:source-a".to_string()));
+    assert!(
+        failures.contains(&"research_registry_source_artifact_digest_stale:source-a".to_string())
+    );
+    assert!(
+        failures.contains(&"research_registry_source_artifact_method_stale:source-a".to_string())
+    );
     assert!(failures.contains(&"research_registry_unmapped_source:source-a".to_string()));
     assert!(failures.contains(&"research_registry_missing_claim_ceiling:source-a".to_string()));
     std::fs::remove_dir_all(root).expect("cleanup");

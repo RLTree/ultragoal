@@ -20,6 +20,8 @@
           "retrieved_at",
           "source_card_path",
           "source_card_digest",
+          "source_artifact_digest",
+          "source_artifact_method",
           "law_family_aliases",
           "canonical_law_ids_affected",
           "required_plugin_surfaces",
@@ -34,6 +36,15 @@
           "retrieved_at": { "type": "string", "minLength": 1 },
           "source_card_path": { "type": "string", "minLength": 1 },
           "source_card_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "source_artifact_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "source_artifact_method": {
+            "type": "string",
+            "enum": [
+              "http_body_sha256",
+              "browser_verified_anchor_digest",
+              "attached_source_card_digest"
+            ]
+          },
           "law_family_aliases": { "$ref": "#/$defs/non_empty_strings" },
           "canonical_law_ids_affected": { "$ref": "#/$defs/non_empty_strings" },
           "required_plugin_surfaces": { "$ref": "#/$defs/non_empty_strings" },

@@ -2374,7 +2374,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Command:
   - Candidate digest:
   - Claim impact:
-  - Status:
+  - Status: in progress
 
 - [ ] Gate 92 implementation is rooted in the actual mandatory research sources, not only repo-derived summaries. OpenAI Harness Engineering, OpenAI Codex repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry semantic conventions, OpenAI agent-improvement loop, and self-improving domain-agent research are all current in the research-source registry and article-to-law trace before any Gate 92 progress is checked.
   - Evidence:
@@ -2382,7 +2382,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Article-to-law trace:
   - Candidate digest:
   - Claim impact:
-  - Status:
+  - Status: in progress
 
 - [ ] No Gate 92 row may be checked from a minimum surface, sample source, representative command, current-failure-only proof, stack-health-only proof, query-only proof, or adjacent fitted surface. Every command, validator check family, receipt/proof path, fixture/report path, package/plugin/setup/retrofit surface, operating-loop stage, signal class, long-running path, external/live path, and claim guard must be fitted or must explicitly block Gate 92 and all dependent claims.
   - Evidence:
@@ -2470,7 +2470,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Schemas:
   - Validator check:
   - Candidate digest:
-  - Status:
+  - Status: in progress
 
 - [ ] Unknown authority fields, freeform authority blobs, missing fields, wrong digest, wrong correlation id, unredacted secrets, and unbounded output fail validation.
   - Evidence:
@@ -2578,7 +2578,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Red fixtures:
   - Validator check:
   - Candidate digest:
-  - Status:
+  - Status: in progress
 
 - [ ] Every query has row limit, byte limit, timeout, retention bound, cardinality guard, truncation marker, and claim impact when truncated.
   - Evidence:
@@ -2655,7 +2655,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Commands:
   - Receipts:
   - Candidate digest:
-  - Status:
+  - Status: in progress
 
 ## Gate 93 - Research Source Authority And Article-To-Law Integration
 
@@ -2665,7 +2665,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Source digests: Registry binds source-card digest `sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d`.
   - Validator check: `research-source-authority-article-to-law-integration` implemented in `validator/src/audit/research/` and wired into source audit check ids/schema enums.
   - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383` from `target/debug/ultragoal --root . package digest`.
-  - Status: unchecked after current source-local edits; prior registry evidence targets `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`, while the current live package digest is `sha256:e2e422756f4404c5e0d3f363d1172c4ee5aba891cd1aff2a02d6c8fb4a9abd41`. Claim impact: source-local research registry authority only; no review readiness, package readiness, release readiness, final-packet correctness, registry/reviewer exposure, completion, or `update_goal()` claim.
+  - Status: in progress
 
 - [ ] Article-to-law trace maps every source requirement to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim guards, and final-packet fields.
   - Evidence: Partial source-local trace exists and focused green/bad-path tests passed: `cargo test --offline research --lib --quiet` 5/5, `cargo test --offline hu_family --lib --quiet` 5/5, `cargo test --offline schema_catalog --lib --quiet` 3/3. `jq -r '.entries | length' docs/research-article-to-law-trace.json` reports 14 mapped requirement rows. This row remains unchecked because complete tamper-fixture closure and full same-candidate source-audit proof are not yet present.
@@ -2674,7 +2674,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Source obligations: `docs/source-obligation-matrix.json` row `research-source-authority-article-to-law-integration`; foundational trace row in `docs/foundational-law-traceability.json`; mandatory-law row in `docs/mandatory-law-surfaces.json`.
   - Fixture ids: red fixtures `research-source-authority-article-to-law-integration-unmapped-source-red`, `research-source-authority-article-to-law-integration-prose-only-map-red`, `research-source-authority-article-to-law-integration-missing-claim-guard-red`, and `research-source-authority-article-to-law-integration-package-omitted-red`; green fixture `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
   - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
-  - Status: in_progress. Claim impact: trace mapping is source-local only and does not satisfy full Gate 93 until tamper fixtures, complete claim guards, final-packet fields, and source-audit/red-report evidence are current.
+  - Status: in progress
 
 - [ ] Gate 93 green/tamper proof covers every mandatory research source and every requirement class. One mapped source, one mapped category, one green fixture, one source family, or one adjacent observability surface cannot satisfy any other source, category, fixture, law id, setup/retrofit implication, package surface, claim guard, final-packet field, or update_goal blocker.
   - Evidence:
@@ -2692,14 +2692,14 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Green fixtures: `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
   - Tamper fixtures: Pending; no checked claim for tamper closure.
   - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
-  - Status: in_progress. Claim impact: source-local validator hardening only; broad research-law completion and completion-adjacent claims remain blocked.
+  - Status: in progress
 
 - [ ] Claim guards block completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, and `update_goal()` when mandatory research mapping is incomplete.
   - Evidence: Partial guard strings and validator bad paths exist in `docs/research-article-to-law-trace.json`, `docs/mandatory-law-surfaces.json`, `templates/agent-standards/enforcement.json`, and `validator/src/audit/research/`. This row remains unchecked because final-packet/update_goal claim-guard closure and current source-audit proof have not been regenerated.
   - Claim guards: `research_backed_claims_withheld_without_current_article_to_law_trace`; update_goal blocker `research_source_authority_incomplete`.
   - Receipt: No current same-candidate source-audit receipt yet for this Gate 93 checkpoint.
   - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
-  - Status: in_progress. Claim impact: all completion, readiness, release, registry/reviewer exposure, final-packet correctness, and `update_goal()` claims remain unsupported.
+  - Status: in progress
 
 ## Gate 94 - Harness Improvement Loop, Trace Feedback, Eval, And Codex Handoff
 

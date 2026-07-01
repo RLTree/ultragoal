@@ -15,6 +15,7 @@ pub(super) fn base(
         .clone()
         .unwrap_or_else(|| identity::id("run", command.operation.id(), &candidate));
     let correlation_id = identity::id("corr", command.operation.id(), &candidate);
+    let receipt_path = record::redact_sensitive_text(&command.receipt_rel().to_string_lossy());
     let event = record::event(
         root,
         command,
@@ -43,7 +44,7 @@ pub(super) fn base(
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": claims::bounds_status(command),
-        "receipt_path": command.receipt_rel().to_string_lossy(),
+        "receipt_path": receipt_path,
         "claim_ceiling": claims::claim_ceiling(command.operation, status),
         "blocked_claims": claims::blocked(command.operation, status),
         "supported_claims": claims::supported(command.operation, status),
