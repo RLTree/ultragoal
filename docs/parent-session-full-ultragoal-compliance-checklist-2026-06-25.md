@@ -3067,7 +3067,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run validator source namespace topology proof.
 - [ ] Run semantic repo-law source topology proof.
 - [ ] Run validator source namespace red, green, and tamper fixtures.
-- [ ] Run line-cap command. Evidence: Status: validated current for focused source-local command fitting; live query proof remains pending. Claim impact: line-cap observation only; broader line-cap law and readiness/release/completion/update_goal claims remain unchecked.
+- [ ] Run line-cap command. Evidence: Status: validated current for focused source-local command fitting and same-candidate live query proof. Claim impact: line-cap observation only; broader line-cap law and readiness/release/completion/update_goal claims remain unchecked.
 - [ ] Run runtime-tool identity proof and red fixtures.
 - [ ] Run product live-surface receipt proof and red fixtures.
 - [ ] Run transcript-quality receipt proof and red fixtures.
@@ -3307,7 +3307,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths include research registry/article-to-law Gate 92 binding, inventory/control-board row-accounting enforcement, line-cap command fitting, prior focused observability command fitting, and package-digest command/query proof. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, signal row, and live-stack query path is fitted with same-candidate proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
+- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths include research registry/article-to-law Gate 92 binding, inventory/control-board row-accounting enforcement, line-cap command/query fitting, prior focused observability command fitting, and package-digest command/query proof. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, signal row, and live-stack query path is fitted with same-candidate proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
@@ -3410,8 +3410,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; research binding, inventory row-accounting enforcement, line-cap command fitting, and prior focused command fitting are validated current.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; research binding, inventory/control-board enforcement, and line-cap command fitting are validated current while full fitting remains blocked.
+- [ ] Agent-queryable observability status: in progress; research binding, inventory row-accounting enforcement, line-cap command/query fitting, and prior focused command fitting are validated current.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; research binding, inventory/control-board enforcement, and line-cap command/query fitting are validated current while full fitting remains blocked.
 - [ ] Research source authority/article-to-law integration status: validated current for Gate 92 research binding; full Gate 93 remains in progress.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.
