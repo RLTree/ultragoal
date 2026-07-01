@@ -142,6 +142,23 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         &"observability_surface_fitting_missing_metadata:schema parse boundaries".to_string()
     ));
 
+    let mut surface_contract = super::super::support::fitted_inventory();
+    surface_contract["surface_inventory"]["schema parse boundaries"]["fitting_status"] =
+        json!("partially_fitted");
+    surface_contract["surface_inventory"]["schema parse boundaries"]["fitted_surfaces"] = json!([]);
+    surface_contract["surface_inventory"]["schema parse boundaries"]["missing_surfaces"] = json!([
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract"
+    ]);
+    failures.clear();
+    super::super::super::surfaces::check(&root, &surface_contract, &mut failures);
+    assert!(failures.contains(
+        &"observability_surface_fitting_missing_metadata:schema parse boundaries".to_string()
+    ));
+
     failures.clear();
     super::super::super::operating::check(&root, &json!({}), &mut failures);
     assert!(
@@ -168,6 +185,23 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
     );
     assert!(
         failures.contains(&"observability_signal_fitting_missing_metadata:latency".to_string())
+    );
+
+    let mut operating_contract = super::super::support::fitted_inventory();
+    operating_contract["operating_loop_inventory"]["current_digest_first"]["fitted_surfaces"] =
+        json!([
+            "log instrumentation",
+            "metric instrumentation",
+            "trace instrumentation",
+            "pass stdout contract",
+            "receipt observability binding"
+        ]);
+    failures.clear();
+    super::super::super::operating::check(&root, &operating_contract, &mut failures);
+    assert!(
+        failures.contains(
+            &"observability_loop_fitting_row_shape_only:current_digest_first".to_string()
+        )
     );
 
     let mut loop_edges = super::super::support::fitted_inventory();

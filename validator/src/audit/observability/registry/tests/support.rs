@@ -143,7 +143,14 @@ fn fitted_row(command: &str) -> Value {
     let slug = slug(command);
     json!({
         "fitting_status": "fitted",
-        "fitted_surfaces": ["log", "metric", "trace", "stdout", "receipt"],
+        "fitted_surfaces": [
+            "log instrumentation",
+            "metric instrumentation",
+            "trace instrumentation",
+            "pass stdout contract",
+            "fail stdout contract",
+            "receipt observability binding"
+        ],
         "missing_surfaces": [],
         "validator_check_id": crate::audit::observability::LAW,
         "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
@@ -163,7 +170,14 @@ fn fitted_surface_row(surface: &str) -> Value {
     let slug = slug(surface);
     json!({
         "fitting_status": "fitted",
-        "fitted_surfaces": ["log", "metric", "trace", "stdout", "receipt"],
+        "fitted_surfaces": [
+            "log instrumentation",
+            "metric instrumentation",
+            "trace instrumentation",
+            "pass stdout contract",
+            "fail stdout contract",
+            "receipt observability binding"
+        ],
         "missing_surfaces": [],
         "operation": surface_operation(surface),
         "validator_check_id": crate::audit::observability::LAW,
@@ -184,7 +198,14 @@ fn fitted_operating_row(kind: &str, name: &str) -> Value {
     let slug = slug(name);
     json!({
         "fitting_status": "fitted",
-        "fitted_surfaces": ["log", "metric", "trace", "stdout", "receipt"],
+        "fitted_surfaces": [
+            "log instrumentation",
+            "metric instrumentation",
+            "trace instrumentation",
+            "pass stdout contract",
+            "fail stdout contract",
+            "receipt observability binding"
+        ],
         "missing_surfaces": [],
         "operation": format!("observability.{kind}.{slug}"),
         "validator_check_id": crate::audit::observability::LAW,

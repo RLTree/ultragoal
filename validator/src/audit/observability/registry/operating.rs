@@ -122,6 +122,7 @@ fn require_unfitted_metadata(
     out: &mut Vec<String>,
 ) {
     if !typed_row_accounting(row)
+        || !super::row_contract::complete(row)
         || !non_empty_array(row, "missing_surfaces")
         || !non_empty_string(row, "claim_impact")
     {
@@ -160,6 +161,7 @@ fn require_fitted_evidence(
         non_empty_array(row, "receipt_paths"),
         non_empty_array(row, "live_query_proof_paths"),
         owner_tracking(row),
+        super::row_contract::complete(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {

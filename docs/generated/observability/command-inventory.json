@@ -104,8 +104,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 14,
-        "partially_fitted": 23,
+        "fitted": 9,
+        "partially_fitted": 28,
         "unfitted": 25
       },
       "surfaces": {
@@ -116,8 +116,8 @@
       },
       "operating_loop": {
         "total": 10,
-        "fitted": 1,
-        "partially_fitted": 4,
+        "fitted": 0,
+        "partially_fitted": 5,
         "unfitted": 5
       },
       "signals": {
@@ -129,15 +129,15 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "red fixture report",
-      "fitting_status": "unfitted",
-      "next_unfitted_surface": "log"
+      "id": "package digest",
+      "fitting_status": "partially_fitted",
+      "next_unfitted_surface": "fail stdout contract"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
   },
   "fitting_inventory": {
     "package digest": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "structured log event",
         "metric sample",
@@ -149,7 +149,9 @@
         "same-candidate traces query proof",
         "focused receipt contract test"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "fail stdout contract"
+      ],
       "validator_check_id": "package-digest-observability-binding",
       "focused_tests": [
         "package_digest_command_emits_observability_receipt_contract",
@@ -165,7 +167,7 @@
       ],
       "claim_impact": "supports_source_package_digest_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:package digest",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "fail stdout contract"
     },
     "source audit": {
       "fitting_status": "fitted",
@@ -485,7 +487,7 @@
       "next_unfitted_surface": "none"
     },
     "namespace check": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -493,7 +495,10 @@
         "receipt observability binding",
         "same-candidate live query proof"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "pass stdout contract",
+        "fail stdout contract"
+      ],
       "validator_check_id": "namespace-check-observability-binding",
       "focused_tests": [
         "namespace_parser_routes_to_dedicated_command",
@@ -510,10 +515,10 @@
       ],
       "claim_impact": "supports_namespace_check_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:namespace check --strict",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "pass stdout contract"
     },
     "product prove-fitness": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -521,7 +526,10 @@
         "receipt observability binding",
         "same-candidate live query proof"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "pass stdout contract",
+        "fail stdout contract"
+      ],
       "validator_check_id": "product-prove-fitness-observability-binding",
       "focused_tests": [
         "product_parser_keeps_product_and_fit_repo_operations_distinct",
@@ -540,10 +548,10 @@
       ],
       "claim_impact": "supports_product_fitness_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-fitness --receipt-dir validation_artifacts/harness",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "pass stdout contract"
     },
     "product prove-cohesion": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -551,7 +559,10 @@
         "receipt observability binding",
         "same-candidate live query proof"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "pass stdout contract",
+        "fail stdout contract"
+      ],
       "validator_check_id": "product-prove-cohesion-observability-binding",
       "focused_tests": [
         "product_parser_keeps_product_and_fit_repo_operations_distinct",
@@ -567,10 +578,10 @@
       ],
       "claim_impact": "observability_fitted_but_product_cohesion_artifacts_missing_blocks_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-cohesion",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "pass stdout contract"
     },
     "product prove-journey": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -578,7 +589,10 @@
         "receipt observability binding",
         "same-candidate live query proof"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "pass stdout contract",
+        "fail stdout contract"
+      ],
       "validator_check_id": "product-prove-journey-observability-binding",
       "focused_tests": [
         "product_parser_keeps_product_and_fit_repo_operations_distinct",
@@ -595,7 +609,7 @@
       ],
       "claim_impact": "supports_plugin_product_journey_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-journey",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "pass stdout contract"
     },
     "fit-repo prove": {
       "fitting_status": "unfitted",
@@ -605,7 +619,10 @@
         "metric",
         "trace",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -626,7 +643,10 @@
         "trace",
         "stdout contract",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -645,7 +665,10 @@
         "trace",
         "stdout contract",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -666,7 +689,10 @@
         "trace",
         "stdout contract",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -697,7 +723,8 @@
       ],
       "missing_surfaces": [
         "child spans for every dereferenced lower-level receipt",
-        "full command-inventory fitted closure"
+        "full command-inventory fitted closure",
+        "pass stdout contract"
       ],
       "validator_check_id": "final-packet-proof",
       "focused_tests": [
@@ -725,7 +752,10 @@
         "metrics",
         "traces",
         "query proof",
-        "receipt binding"
+        "receipt binding",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -745,7 +775,10 @@
         "metrics",
         "traces",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -765,7 +798,10 @@
         "metrics",
         "traces",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -785,7 +821,10 @@
         "metrics",
         "traces",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -805,7 +844,10 @@
         "metrics",
         "traces",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -825,7 +867,10 @@
         "metrics",
         "traces",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -843,7 +888,13 @@
       "missing_surfaces": [
         "Rust command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -861,7 +912,13 @@
       "missing_surfaces": [
         "Rust command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -879,7 +936,13 @@
       "missing_surfaces": [
         "Rust command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -897,7 +960,13 @@
       "missing_surfaces": [
         "Rust command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -915,7 +984,13 @@
       "missing_surfaces": [
         "Rust command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -933,7 +1008,13 @@
       "missing_surfaces": [
         "watch lifecycle telemetry",
         "shutdown proof",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -949,7 +1030,13 @@
       "missing_surfaces": [
         "Rust memory telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -967,7 +1054,13 @@
       "missing_surfaces": [
         "dependency telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -985,7 +1078,13 @@
       "missing_surfaces": [
         "coverage telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1001,7 +1100,12 @@
       "missing_surfaces": [
         "topology telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1017,7 +1121,13 @@
       "missing_surfaces": [
         "GC command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1035,7 +1145,13 @@
       "missing_surfaces": [
         "GC command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1053,7 +1169,13 @@
       "missing_surfaces": [
         "GC command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1071,7 +1193,13 @@
       "missing_surfaces": [
         "GC command telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1097,7 +1225,9 @@
         "same-candidate live traces query proof",
         "stable HALO CLI/API invocation adapter",
         "typed ranked-change output parser",
-        "Codex handoff and validation-closure linkage"
+        "Codex handoff and validation-closure linkage",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "halo-ranked-harness-change-optimization",
       "focused_tests": [
@@ -1118,7 +1248,12 @@
       "missing_surfaces": [
         "session log telemetry",
         "receipt binding",
-        "query proof"
+        "query proof",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1143,7 +1278,9 @@
         "target-surface pass telemetry",
         "target-surface audit failure telemetry after parser",
         "target-surface receipt binding for valid target repos",
-        "target-surface query proof for valid target repos"
+        "target-surface query proof for valid target repos",
+        "pass stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1171,7 +1308,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "focused tamper proof"
+        "focused tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1196,7 +1339,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "focused tamper proof"
+        "focused tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1221,7 +1370,10 @@
       ],
       "missing_surfaces": [
         "same-candidate query proof in logs metrics traces",
-        "focused tamper proof"
+        "focused tamper proof",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1245,7 +1397,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "focused tamper proof"
+        "focused tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1268,7 +1426,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "deletion-plan tamper proof"
+        "deletion-plan tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1291,7 +1455,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "dry-run/apply separation tamper proof"
+        "dry-run/apply separation tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1314,7 +1484,13 @@
       ],
       "missing_surfaces": [
         "same-candidate live query proof",
-        "plan-digest apply tamper proof"
+        "plan-digest apply tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1338,7 +1514,13 @@
         "current final-packet failure query"
       ],
       "missing_surfaces": [
-        "current same-candidate query receipt for every law-bearing failure class"
+        "current same-candidate query receipt for every law-bearing failure class",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1364,7 +1546,12 @@
         "current final-packet failure query"
       ],
       "missing_surfaces": [
-        "current same-candidate metric query proof for every law-bearing failure class"
+        "current same-candidate metric query proof for every law-bearing failure class",
+        "log instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1390,7 +1577,12 @@
         "current final-packet failure query"
       ],
       "missing_surfaces": [
-        "current same-candidate trace query proof for every law-bearing failure class"
+        "current same-candidate trace query proof for every law-bearing failure class",
+        "log instrumentation",
+        "metric instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1415,7 +1607,13 @@
       ],
       "missing_surfaces": [
         "snapshot contents query proof",
-        "tamper proof"
+        "tamper proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1439,7 +1637,13 @@
       "missing_surfaces": [
         "all law-bearing commands fitted",
         "same-candidate query proof for current blocker",
-        "install/cache/app-surface separation proof"
+        "install/cache/app-surface separation proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1463,7 +1667,10 @@
         "current final-packet failure explanation"
       ],
       "missing_surfaces": [
-        "live query reconciliation across logs metrics traces for every current blocker"
+        "live query reconciliation across logs metrics traces for every current blocker",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1487,7 +1694,13 @@
         "local spool"
       ],
       "missing_surfaces": [
-        "claim-specific live query reconciliation"
+        "claim-specific live query reconciliation",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1507,7 +1720,13 @@
         "local spool"
       ],
       "missing_surfaces": [
-        "check-specific live query reconciliation"
+        "check-specific live query reconciliation",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1527,7 +1746,13 @@
         "local spool"
       ],
       "missing_surfaces": [
-        "law-specific live query reconciliation"
+        "law-specific live query reconciliation",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1553,7 +1778,9 @@
         "same-candidate live traces query proof",
         "OpenAI live call receipt producer path",
         "offline fixture provider path",
-        "promptfoo and improvement-loop OpenAI call binding"
+        "promptfoo and improvement-loop OpenAI call binding",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
       "focused_tests": [
@@ -1585,7 +1812,9 @@
         "same-candidate live logs query proof",
         "same-candidate live metrics query proof",
         "same-candidate live traces query proof",
-        "promptfoo and improvement-loop call adapter binding"
+        "promptfoo and improvement-loop call adapter binding",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
       "focused_tests": [
@@ -1614,7 +1843,9 @@
         "same-candidate live metrics query proof",
         "same-candidate live traces query proof",
         "schema-specific parser adapters for feedback/eval/grader/ranking outputs",
-        "promptfoo and improvement-loop model-output binding"
+        "promptfoo and improvement-loop model-output binding",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "openai-api-key-model-cost-external-ai-boundary",
       "focused_tests": [
@@ -1644,7 +1875,9 @@
         "same-candidate live traces query proof",
         "offline fixture eval execution receipt",
         "live OpenAI provider eval receipt",
-        "complete red/green/tamper eval result parser"
+        "complete red/green/tamper eval result parser",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "promptfoo-eval-red-team-provider-separation",
       "focused_tests": [
@@ -1669,7 +1902,13 @@
         "package digest fitted green proof"
       ],
       "missing_surfaces": [
-        "all remaining law-bearing command families fitted with current receipt and live query proof"
+        "all remaining law-bearing command families fitted with current receipt and live query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1696,7 +1935,11 @@
         "per-check metrics",
         "per-check child spans",
         "per-check receipt/query binding",
-        "same-candidate green proof"
+        "same-candidate green proof",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1714,7 +1957,11 @@
         "parse-failure logs",
         "parse metrics",
         "receipt dereference binding",
-        "same-candidate query proof"
+        "same-candidate query proof",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1734,7 +1981,9 @@
         "trace bundle digest",
         "query examples",
         "redaction proof",
-        "retention bounds proof"
+        "retention bounds proof",
+        "pass stdout contract",
+        "fail stdout contract"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1752,7 +2001,13 @@
         "green fixture telemetry",
         "tamper fixture telemetry",
         "red report observability binding",
-        "same-candidate query proof"
+        "same-candidate query proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1773,7 +2028,13 @@
       ],
       "missing_surfaces": [
         "all telemetry source files and receipts package-inventory checked exactly once",
-        "installed/cache/app-surface observability separation proof"
+        "installed/cache/app-surface observability separation proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1794,7 +2055,13 @@
         "surface-specific telemetry for source",
         "surface-specific telemetry for install",
         "surface-specific telemetry for cache",
-        "live same-surface registry/reviewer observation telemetry or fail-closed claim blocking proof"
+        "live same-surface registry/reviewer observation telemetry or fail-closed claim blocking proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1816,7 +2083,12 @@
         "blocked-claim metrics",
         "self-law receipt binding",
         "update-goal eligibility receipt binding",
-        "same-candidate query proof"
+        "same-candidate query proof",
+        "log instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [],
@@ -1840,7 +2112,12 @@
       "missing_surfaces": [
         "exporter retry/drop metrics for every command",
         "no local-spool-only completion proof across all receipts",
-        "same-candidate live query proof for every law-bearing run"
+        "same-candidate live query proof for every law-bearing run",
+        "log instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1866,7 +2143,13 @@
       ],
       "missing_surfaces": [
         "validator-enforced config coverage for every stack file",
-        "tamper proof for public ports/latest tags/unbounded retention across every config"
+        "tamper proof for public ports/latest tags/unbounded retention across every config",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1943,7 +2226,7 @@
   },
   "operating_loop_inventory": {
     "current_digest_first": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "package digest command",
         "pass stdout contract",
@@ -1952,7 +2235,10 @@
         "metrics query",
         "traces query"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
       "operation": "package.digest",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
@@ -1968,7 +2254,7 @@
       ],
       "claim_impact": "supports source package digest only; no readiness/release/completion/update_goal",
       "current_owner_surface": "operating_loop:current_digest_first",
-      "next_unfitted_surface": "none"
+      "next_unfitted_surface": "fail stdout contract"
     },
     "run_failing_command_once": {
       "fitting_status": "partially_fitted",
@@ -1976,7 +2262,13 @@
         "observe prove captures current fitting failure"
       ],
       "missing_surfaces": [
-        "source audit/final-packet/self-law/update-goal failing commands are not all fitted"
+        "source audit/final-packet/self-law/update-goal failing commands are not all fitted",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.prove",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -1997,7 +2289,10 @@
         "current observe prove run has logs/metrics/traces query receipts"
       ],
       "missing_surfaces": [
-        "law/check/claim-specific query matrix for every failure class"
+        "law/check/claim-specific query matrix for every failure class",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.query.by_run_id",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2024,7 +2319,13 @@
         "observe explain-failure receipt exists for current observe prove run"
       ],
       "missing_surfaces": [
-        "every failing command must emit non-generic why/where/next_repair before manual artifact inspection"
+        "every failing command must emit non-generic why/where/next_repair before manual artifact inspection",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.explain-failure",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2045,7 +2346,13 @@
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
       "missing_surfaces": [
-        "typed smallest-repair command mapping for every failure class"
+        "typed smallest-repair command mapping for every failure class",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.repair.smallest_root_cause",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2060,7 +2367,13 @@
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
       "missing_surfaces": [
-        "narrow rerun receipt linked to prior failing run for every repair class"
+        "narrow rerun receipt linked to prior failing run for every repair class",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.repair.rerun_narrow",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2075,7 +2388,10 @@
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
       "missing_surfaces": [
-        "before/after logs metrics traces comparison receipt for repaired check"
+        "before/after logs metrics traces comparison receipt for repaired check",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observe.repair.compare_before_after",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2090,7 +2406,13 @@
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
       "missing_surfaces": [
-        "validator guard that broad source audit runs only after narrow observable repair proof"
+        "validator guard that broad source audit runs only after narrow observable repair proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "source.audit.after_narrow_pass",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2107,7 +2429,13 @@
         "fitted rows dereference same-candidate receipts and query proof"
       ],
       "missing_surfaces": [
-        "all law-bearing receipts must reject stale telemetry binding"
+        "all law-bearing receipts must reject stale telemetry binding",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observability.freshness.claim_guard",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2130,7 +2458,13 @@
       "fitting_status": "unfitted",
       "fitted_surfaces": [],
       "missing_surfaces": [
-        "validation failure converted into typed next repair input for every check"
+        "validation failure converted into typed next repair input for every check",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "observability.structured_feedback",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2150,7 +2484,12 @@
       ],
       "missing_surfaces": [
         "per-command/check/receipt/query latency across all law-bearing paths",
-        "before/after latency comparison"
+        "before/after latency comparison",
+        "log instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "metrics.latency",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2167,7 +2506,13 @@
         "command/check counters named in Gate 92"
       ],
       "missing_surfaces": [
-        "complete command/check/fixture/receipt count proof"
+        "complete command/check/fixture/receipt count proof",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "metrics.traffic",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2184,7 +2529,13 @@
         "observe prove failure emits failure class and blocked claims"
       ],
       "missing_surfaces": [
-        "all check failures, stale receipts, digest mismatches, claim blocks, exporter errors"
+        "all check failures, stale receipts, digest mismatches, claim blocks, exporter errors",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "metrics.errors",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2202,7 +2553,13 @@
         "queue size",
         "target/cache size",
         "long-running process count",
-        "exporter drop/retry rates across all commands"
+        "exporter drop/retry rates across all commands",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "metrics.saturation",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2219,7 +2576,13 @@
         "fitted rows require current candidate digest"
       ],
       "missing_surfaces": [
-        "all telemetry receipts and query rows reject older candidate digests"
+        "all telemetry receipts and query rows reject older candidate digests",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "telemetry.freshness",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2236,7 +2599,11 @@
         "run_id/correlation_id required in fitted receipt/query proof"
       ],
       "missing_surfaces": [
-        "every command/check/span/log/metric row shares correlation across the full workflow"
+        "every command/check/span/log/metric row shares correlation across the full workflow",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "telemetry.correlation",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2253,7 +2620,10 @@
         "redaction_status field exists in events/receipts"
       ],
       "missing_surfaces": [
-        "live logs metrics traces query outputs all leak-checked"
+        "live logs metrics traces query outputs all leak-checked",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "telemetry.redaction",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -2270,7 +2640,13 @@
         "query commands expose limit/byte/timeout settings"
       ],
       "missing_surfaces": [
-        "all queries/exports/spools enforce row, byte, timeout, retention, and cardinality bounds"
+        "all queries/exports/spools enforce row, byte, timeout, retention, and cardinality bounds",
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
       ],
       "operation": "telemetry.boundedness",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",

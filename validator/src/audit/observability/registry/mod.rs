@@ -6,6 +6,7 @@ mod fitting;
 mod metric;
 mod operating;
 mod proof;
+mod row_contract;
 mod surfaces;
 
 #[cfg(test)]

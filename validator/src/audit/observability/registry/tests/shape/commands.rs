@@ -59,6 +59,21 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         failures
             .contains(&"observability_command_fitting_missing_metadata:package digest".to_string())
     );
+
+    let mut row_contract = super::super::support::fitted_inventory();
+    row_contract["fitting_inventory"]["package digest"]["fitted_surfaces"] = json!([
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "receipt binding"
+    ]);
+    failures.clear();
+    super::super::super::fitting::check(&root, &row_contract, &mut failures);
+    assert!(
+        failures
+            .contains(&"observability_command_fitting_row_shape_only:package digest".to_string())
+    );
     let _ = std::fs::remove_dir_all(root);
 }
 
@@ -117,5 +132,32 @@ fn production_command_control_board_counts_match_inventory_rows() {
             board.get(key).and_then(serde_json::Value::as_u64),
             Some(count)
         );
+    }
+}
+
+#[test]
+fn production_inventory_rows_account_for_required_observability_contracts() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let inventory = crate::json_boundary::read_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+    )
+    .expect("production command inventory");
+    for (family, key) in [
+        ("commands", "fitting_inventory"),
+        ("surfaces", "surface_inventory"),
+        ("operating_loop", "operating_loop_inventory"),
+        ("signals", "signal_inventory"),
+    ] {
+        let rows = inventory
+            .get(key)
+            .and_then(serde_json::Value::as_object)
+            .expect("inventory rows");
+        for (id, row) in rows {
+            let object = row.as_object().expect("inventory row object");
+            assert!(
+                super::super::super::row_contract::complete(object),
+                "{family}:{id} must account for log, metric, trace, pass stdout, fail stdout, and receipt observability binding"
+            );
+        }
     }
 }
