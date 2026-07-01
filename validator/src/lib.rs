@@ -34,7 +34,11 @@ pub fn main_entry() -> i32 {
 }
 
 fn parse_args() -> Result<Args, String> {
-    let mut raw = std::env::args().skip(1).collect::<Vec<_>>();
+    parse_args_from(std::env::args().skip(1).collect())
+}
+
+fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
+    let started = std::time::Instant::now();
     if raw.is_empty() {
         return Err(usage());
     }
@@ -57,11 +61,13 @@ fn parse_args() -> Result<Args, String> {
     if raw.is_empty() {
         return Err(usage());
     }
-    let parsed_command = parse_command(&raw);
-    if parsed_command.is_err() {
-        return Err(parsed_command.err().expect("checked parser error"));
-    }
-    let command = parsed_command.ok().expect("checked parsed command");
+    let command = parse_command(&raw).map_err(|err| {
+        let elapsed_ms = u64::try_from(started.elapsed().as_millis())
+            .unwrap_or(u64::MAX)
+            .max(1);
+        let _ = cli::audit::emit_parse_error_observability(&root, &raw, &err, elapsed_ms);
+        err
+    })?;
     Ok(Args { root, command })
 }
 

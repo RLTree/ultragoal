@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 1,
+        "fitted": 2,
         "partially_fitted": 24,
-        "unfitted": 37
+        "unfitted": 36
       },
       "surfaces": {
         "total": 10,
@@ -129,9 +129,9 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "source audit",
+      "id": "red fixture report",
       "fitting_status": "partially_fitted",
-      "next_unfitted_surface": "parser-level source and target audit rejection telemetry"
+      "next_unfitted_surface": "dedicated pass/fail stdout contract outside source audit wrapper"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
   },
@@ -168,7 +168,7 @@
       "next_unfitted_surface": "none"
     },
     "source audit": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "claim-blocking fail receipt",
@@ -178,17 +178,21 @@
         "current same-candidate traces query proof",
         "red report paired command instrumentation",
         "pass and fail stdout contract across source-audit statuses",
-        "real runtime scheduler telemetry for source-audit normal and guard-error producer paths"
+        "real runtime scheduler telemetry for source-audit normal and guard-error producer paths",
+        "parser-level source audit rejection telemetry",
+        "parser-level target-repo audit rejection telemetry through shared audit parser hook",
+        "fail-closed command fitting accepts current blocked receipts without treating command failure as observability failure"
       ],
-      "missing_surfaces": [
-        "parser-level source and target audit rejection telemetry"
-      ],
+      "missing_surfaces": [],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
         "source_audit_observability_receipt_blocks_claims_on_failed_audit",
         "source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling",
         "source_audit_run_writes_observability_through_cli_boundary",
-        "source_audit_guard_error_writes_pre_scheduler_observability"
+        "source_audit_guard_error_writes_pre_scheduler_observability",
+        "source_audit_parse_rejection_writes_observability",
+        "target_repo_audit_parse_rejection_writes_target_observability",
+        "observability_command_fitting_accepts_only_fail_closed_command_receipts"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/source-audit.json"
@@ -200,7 +204,7 @@
       ],
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
       "current_owner_surface": "command:source audit",
-      "next_unfitted_surface": "parser-level source and target audit rejection telemetry"
+      "next_unfitted_surface": "none"
     },
     "red fixture report": {
       "fitting_status": "partially_fitted",
@@ -971,20 +975,35 @@
       "next_unfitted_surface": "session log telemetry"
     },
     "target-repo audit": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "parser-level target-repo audit rejection telemetry",
+        "fail-closed parse rejection stdout contract",
+        "same-candidate logs query proof for target-repo parse rejection",
+        "same-candidate metrics query proof for target-repo parse rejection",
+        "same-candidate traces query proof for target-repo parse rejection"
+      ],
       "missing_surfaces": [
-        "target-surface telemetry",
-        "receipt binding",
-        "query proof"
+        "target-surface pass telemetry",
+        "target-surface audit failure telemetry after parser",
+        "target-surface receipt binding for valid target repos",
+        "target-surface query proof for valid target repos"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
+      "focused_tests": [
+        "target_repo_audit_parse_rejection_writes_target_observability"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/target-repo-audit.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/target-repo-audit-logs-query.json",
+        "validation_artifacts/observability/target-repo-audit-metrics-query.json",
+        "validation_artifacts/observability/target-repo-audit-traces-query.json"
+      ],
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
       "current_owner_surface": "command:target-repo audit",
-      "next_unfitted_surface": "target-surface telemetry"
+      "next_unfitted_surface": "target-surface pass telemetry"
     },
     "observe stack up": {
       "fitting_status": "partially_fitted",

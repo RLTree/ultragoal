@@ -4,6 +4,8 @@ use std::path::{Path, PathBuf};
 mod edge_tests;
 mod observability;
 #[cfg(test)]
+mod parse_tests;
+#[cfg(test)]
 mod tests;
 
 pub(crate) struct RunArgs {
@@ -60,6 +62,94 @@ pub(crate) fn run(args: RunArgs) -> Result<i32, String> {
             );
             Err(err)
         }
+    }
+}
+
+pub(crate) fn emit_parse_error_observability(
+    root: &Path,
+    raw: &[String],
+    err: &str,
+    elapsed_ms: u64,
+) -> Result<(), String> {
+    let Some(target_repo) = audit_parse_target(raw) else {
+        return Ok(());
+    };
+    observability::emit_receipt(
+        root,
+        observability::ReceiptFields {
+            command: if target_repo {
+                "ultragoal target-repo"
+            } else {
+                "ultragoal source"
+            },
+            subcommand: "audit",
+            operation: if target_repo {
+                "target-repo.audit"
+            } else {
+                "source.audit"
+            },
+            surface: if target_repo { "target_repo" } else { "source" },
+            check_id: "source-audit-parser-rejection-observability",
+            claim_id: if target_repo {
+                "target_repo_audit"
+            } else {
+                "source_audit"
+            },
+            artifact_path: "validator/src/lib.rs",
+            receipt_path: if target_repo {
+                "validation_artifacts/observability/target-repo-audit.json"
+            } else {
+                observability::SOURCE_RECEIPT
+            },
+            status: "fail",
+            failure_class: "audit_parse_rejection",
+            why_failed: &format!("audit parser rejected command: {err}"),
+            where_failed: if target_repo {
+                "target-repo.audit.parse"
+            } else {
+                "source.audit.parse"
+            },
+            next_repair: parse_error_next_repair(target_repo),
+            claim_impact: "audit_parse_rejection_blocks_readiness_release_completion_update_goal",
+            supported_claims: Vec::new(),
+            runtime: parser_rejection_runtime(elapsed_ms),
+        },
+    )
+}
+
+fn audit_parse_target(raw: &[String]) -> Option<bool> {
+    match raw {
+        [first, ..] if first == "audit" => Some(false),
+        [first, second, ..] if first == "source" && second == "audit" => Some(false),
+        [first, second, ..] if first == "target-repo" && second == "audit" => Some(true),
+        _ => None,
+    }
+}
+
+fn parse_error_next_repair(target_repo: bool) -> &'static str {
+    if target_repo {
+        "repair target-repo audit arguments, rerun the narrow command, then query this run by run_id/correlation_id"
+    } else {
+        "repair source audit arguments, rerun the narrow command, then query this run by run_id/correlation_id"
+    }
+}
+
+fn parser_rejection_runtime(duration_ms: u64) -> crate::cli::observe::telemetry::RuntimeTelemetry {
+    crate::cli::observe::telemetry::RuntimeTelemetry {
+        duration_ms: duration_ms.max(1),
+        worker_count: 0,
+        task_count: 0,
+        queue_depth: 0,
+        cpu_ms: None,
+        memory_bytes: None,
+        io_bytes: None,
+        cache_mode: "parser_rejection_no_cache".to_string(),
+        resource_measurement_status: "parse_rejected_before_scheduler_metrics".to_string(),
+        retry_count: 0,
+        backoff_ms: 0,
+        saturation_status: "no_scheduler_tasks_started".to_string(),
+        repair_anchor_before: "audit_parse_start".to_string(),
+        repair_anchor_after: "audit_parse_rejection_telemetry_emit".to_string(),
     }
 }
 

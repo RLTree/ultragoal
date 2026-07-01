@@ -92,6 +92,44 @@ fn observability_surface_fitted_rows_require_same_surface_receipts() {
 }
 
 #[test]
+fn observability_command_fitting_accepts_only_fail_closed_command_receipts() {
+    let root = crate::self_tests::boundaries::support::temp_root("observe-proof-fail-closed");
+    write_registry_root(&root, fitted_inventory());
+    write_valid_fixture(&root);
+    let rel = "validation_artifacts/observability/fitting/source-audit.json";
+    let mut receipt = crate::json_boundary::read_json(&root.join(rel)).unwrap();
+    receipt["status"] = json!("fail");
+    receipt["claim_ceiling"] = json!("withheld_or_blocked");
+    receipt["claim_impact"] =
+        json!("source_audit_failed_blocks_readiness_release_completion_update_goal");
+    receipt["supported_claims"] = json!([]);
+    receipt["blocked_claims"] = json!([
+        "completion",
+        "readiness",
+        "release",
+        "final_packet_correctness",
+        "reviewer_exposure",
+        "update_goal_eligibility"
+    ]);
+    crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
+    let failures = super::super::fitting_failures(&root);
+    assert!(
+        !failures.iter().any(|item| item.contains("source audit")),
+        "{failures:?}"
+    );
+    receipt.as_object_mut().unwrap().remove("blocked_claims");
+    crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
+    let failures = super::super::fitting_failures(&root);
+    assert!(
+        failures.iter().any(|item| {
+            item.starts_with("observability_command_fitting_receipt_not_current:source audit:")
+        }),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
 fn observability_proof_reports_unavailable_candidates_and_missing_surface_operations() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-proof-no-candidate");
     let row = json!({"receipt_paths":[]});

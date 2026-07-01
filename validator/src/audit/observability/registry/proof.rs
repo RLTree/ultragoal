@@ -153,9 +153,46 @@ fn receipt_run(
 
 fn receipt_current(value: &Value, candidate: &str, operation: &str) -> bool {
     value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::types::RECEIPT_SCHEMA)
-        && value.get("status").and_then(Value::as_str) == Some("pass")
         && value.get("candidate_digest").and_then(Value::as_str) == Some(candidate)
         && value.get("operation").and_then(Value::as_str) == Some(operation)
+        && match value.get("status").and_then(Value::as_str) {
+            Some("pass") => true,
+            Some("fail") => fail_closed_observability_receipt(value),
+            _ => false,
+        }
+}
+
+fn fail_closed_observability_receipt(value: &Value) -> bool {
+    value.get("claim_ceiling").and_then(Value::as_str) == Some("withheld_or_blocked")
+        && value
+            .get("claim_impact")
+            .and_then(Value::as_str)
+            .is_some_and(|impact| impact.contains("block") || impact.contains("withheld"))
+        && value
+            .get("supported_claims")
+            .and_then(Value::as_array)
+            .is_some_and(Vec::is_empty)
+        && required_blocked_claims()
+            .into_iter()
+            .all(|claim| array_contains(value, "blocked_claims", claim))
+}
+
+fn required_blocked_claims() -> [&'static str; 6] {
+    [
+        "completion",
+        "readiness",
+        "release",
+        "final_packet_correctness",
+        "reviewer_exposure",
+        "update_goal_eligibility",
+    ]
+}
+
+fn array_contains(value: &Value, key: &str, expected: &str) -> bool {
+    value
+        .get(key)
+        .and_then(Value::as_array)
+        .is_some_and(|items| items.iter().any(|item| item.as_str() == Some(expected)))
 }
 
 fn required_text(
