@@ -64,6 +64,7 @@ pub(crate) enum Command {
     SchemaValidation(crate::cli::schema_validation::SchemaValidationCommand),
     Routine(crate::cli::routine::RoutineCommand),
     Session(crate::cli::session::SessionCommand),
+    SourceObligations(crate::cli::source_obligations::SourceObligationsCommand),
     PackageDigest,
     Help,
 }

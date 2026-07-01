@@ -90,6 +90,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::SchemaValidation(command) => crate::cli::schema_validation::run(&root, &command),
         Command::Routine(command) => crate::cli::routine::run(&root, &command),
         Command::Session(command) => crate::cli::session::run(&root, &command),
+        Command::SourceObligations(command) => crate::cli::source_obligations::run(&root, &command),
         Command::PackageDigest => crate::cli::package::digest::run(&root),
         Command::Help => {
             println!("{}", crate::cli::usage::text());

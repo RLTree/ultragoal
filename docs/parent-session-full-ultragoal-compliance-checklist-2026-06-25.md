@@ -3431,8 +3431,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; command fitting is validated current through standards-gardener rebind.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; source audit, red fixture report, schema validation, mandatory-law validation, and standards-gardener rebind command rows are fitted; source-obligations check is the next command blocker.
+- [ ] Agent-queryable observability status: in progress; command fitting is validated current through source-obligations check.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; source audit, red fixture report, schema validation, mandatory-law validation, standards-gardener rebind, and source-obligations check command rows are fitted; foundational-trace check is the next command blocker.
 - [ ] Research source authority/article-to-law integration status.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.

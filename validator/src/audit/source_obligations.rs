@@ -2,123 +2,7 @@ use crate::json_boundary;
 use serde_json::Value;
 use std::path::Path;
 
-const REQUIRED_OBLIGATIONS: &[&str] = &[
-    "active-setup-to-idle-orchestration-thread-bound-heartbeat",
-    "adversarial-packet-tampering-forged-proof-rejection",
-    "agent-authored-source-tooling-docs-provenance",
-    "agent-queryable-observability",
-    "agent-remediating-validator-failures",
-    "agent-session-telemetry-token-rate-limit",
-    "architecture-dependency-topology",
-    "authority-exhaustiveness-closed-enums-impossible-state-elimination",
-    "authority-source-binding",
-    "autonomy-loop-proof",
-    "batch-fanout-custom-agent-job-worker-result-discipline",
-    "behavior-example-coverage-coverage-anti-gaming",
-    "capability-gap-extraction-harness-capability-promotion",
-    "clean-checkout-command-discovery",
-    "clean-room-rebuild-author-memory-independence",
-    "cli-control-plane-authority",
-    "cli-performance-latency-speed-iteration-fitness",
-    "cli-self-law-compliance",
-    "compact-agents-routed-standards",
-    "conditional-observability-proof",
-    "config-precedence-defaults-env-indirection",
-    "connector-capability-discovery",
-    "cross-artifact-consistency-solver-authority-graph-closure",
-    "current-product-discovery-audit-quality-in-use-evidence",
-    "derived-authority-recomputation",
-    "derived-authority-recomputation-named-authority-fallback-refusal",
-    "distinct-proof-surfaces-claim-ceilings",
-    "distribution-sharing-surface-claim-separation",
-    "execplan-no-handback-prototype-promotion-discard",
-    "execplan-plain-language-expected-output-interface-completeness",
-    "failure-remediation-quality-agent-actionable-output",
-    "feedback-to-rule-promotion",
-    "forward-only-state-transition-integrity-silent-reopen-prevention",
-    "fresh-init-retrofit-mode-separation",
-    "fresh-retrofit-repo-shape",
-    "full-local-observability-stack-integration-non-opaque-failure",
-    "generated-proof-artifact-provenance-anti-fabrication",
-    "generated-ready-completion-receipts",
-    "goal-contract-amendment-authority-required-claim-id-mapping",
-    "green-path-adequacy-satisfiable-strictness",
-    "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-    "guardrail-speed-isolation-cache-honesty",
-    "historical-regression-corpus-session-review-signals",
-    "human-audit-disposition-decomposition-judgment-claim-blocking",
-    "instruction-precedence-nested-agents-routing",
-    "issue-tracker-lifecycle-eligibility-terminal-state",
-    "lane-worktree-isolation-cleanup",
-    "live-beneficial-e2e",
-    "memory-wiki-context-only",
-    "namespace-progressive-disclosure",
-    "validator-source-namespace-topology",
-    "non-e2e-claim-ceiling-confidence-bounds",
-    "offline-schema-catalog-resolver-portability",
-    "openai-api-key-model-cost-external-ai-boundary",
-    "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
-    "orchestrator-state-machine",
-    "plugin-bundled-component-graph-hook-app-mcp-safety",
-    "plugin-flow-graph-package-dependency-closure-plugin-product-journey",
-    "plugin-install-surface-metadata-cache-enable-state",
-    "portable-non-prescriptive-adapter-implementation-choice",
-    "privacy-raw-artifact-boundary",
-    "product-cohesion-product-claims",
-    "product-live-surface-receipts",
-    "product-proof-joins-substitution-blocking",
-    "product-strategy-positioning-research-eval-before-lane-planning",
-    "product-success-binding-goal-lane-execplan-authority",
-    "product-success-contract-initiation-authority",
-    "product-success-contract-review-packet-team-skill-routing",
-    "product-success-inspiration-source-provenance-disposition",
-    "product-success-lifecycle-transitions-no-late-afterthought",
-    "product-success-lineage-amendments-closed-product-claim-ids",
-    "purpose-backed-active-files",
-    "quality-score-taste-gates",
-    "raw-private-artifact-handling-category-only-evidence",
-    "research-source-authority-article-to-law-integration",
-    "repo-knowledge-index-core-beliefs",
-    "restartable-execplans",
-    "review-disagreement-override-judgment-boundary-governance",
-    "review-feedback-disposition-same-round-satisfaction",
-    "reviewer-to-gate-conversion",
-    "rust-cache-no-cache-honesty",
-    "rust-command-loop-authority",
-    "rust-developer-experience-authority",
-    "rust-memory-resource-discipline",
-    "rust-toolchain-substrate-authority",
-    "runtime-feasibility-cost-strict-gate-usability",
-    "runtime-tool-identity",
-    "scheduler-runner-tracker-boundaries",
-    "schema-evolution-receipt-migration-stale-version-invalidation",
-    "secret-token-boundaries",
-    "semantic-domain-type-naming",
-    "skill-catalog-context-budget-omission-warning",
-    "skill-local-reference-closure",
-    "skill-progressive-disclosure-metadata",
-    "source-card-freshness-ceiling",
-    "source-installed-cache-alignment",
-    "source-obligation-parity-anti-bundling",
-    "stable-identifier-normalization-collision",
-    "standards-gardener-promotion",
-    "subagent-custom-agent-sandbox-approval-inheritance",
-    "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-    "target-repo-audit-capability",
-    "targeted-refactor-debt-removal-standards-gardener-cadence",
-    "template-generation-governance-template-creator-boundary",
-    "third-party-dependency-legibility-typed-adapters",
-    "total-authority-types-impossible-state-elimination",
-    "transcript-quality-reuse-gates",
-    "trust-boundary-abuse-path-failure-path-coverage",
-    "typed-records-over-prose",
-    "validator-theater-miswire-resistance",
-    "value-adoption-continuance-business-mission-evidence-hierarchy",
-    "workflow-template-parsing-rendering-reload",
-    "workspace-artifact-cache-garbage-collection",
-    "workspace-command-confinement-lifecycle-cleanup",
-    "worktree-lane-owner-cost-policy",
-];
+mod required;
 
 const WEAK_DISPOSITION_TERMS: &[&str] = &[
     "manual audit",
@@ -156,7 +40,13 @@ pub fn value_failures(value: &Value) -> Vec<String> {
     let Some(rows) = value.get("obligations").and_then(Value::as_array) else {
         return vec!["source_obligation_matrix_missing_rows".to_string()];
     };
-    let mut failures = REQUIRED_OBLIGATIONS
+    let mut failures = required_obligation_failures(rows);
+    failures.extend(rows.iter().filter_map(row_failure));
+    failures
+}
+
+pub(crate) fn required_obligation_failures(rows: &[Value]) -> Vec<String> {
+    required::IDS
         .iter()
         .filter(|id| {
             !rows
@@ -170,12 +60,10 @@ pub fn value_failures(value: &Value) -> Vec<String> {
                 format!("{id}: source_obligation_missing_row")
             }
         })
-        .collect::<Vec<_>>();
-    failures.extend(rows.iter().filter_map(row_failure));
-    failures
+        .collect()
 }
 
-fn row_failure(row: &Value) -> Option<String> {
+pub(crate) fn row_failure(row: &Value) -> Option<String> {
     let id = row.get("id").and_then(Value::as_str).unwrap_or("unknown");
     let disposition = row
         .get("enforcement_disposition")

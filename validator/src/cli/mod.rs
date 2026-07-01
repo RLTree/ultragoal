@@ -16,5 +16,6 @@ pub(crate) mod routine;
 pub(crate) mod rust;
 pub(crate) mod schema_validation;
 pub(crate) mod session;
+pub(crate) mod source_obligations;
 pub(crate) mod standards;
 pub(crate) mod usage;
