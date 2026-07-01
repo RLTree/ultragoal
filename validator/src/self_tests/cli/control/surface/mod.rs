@@ -4,6 +4,7 @@ use crate::cli::control::plane::{ControlCommand, run};
 use serde_json::json;
 use std::path::Path;
 
+mod observability;
 mod target;
 
 fn write_json(path: &Path, value: &serde_json::Value) {
@@ -11,7 +12,7 @@ fn write_json(path: &Path, value: &serde_json::Value) {
     std::fs::write(path, serde_json::to_vec(value).expect("json")).expect("write json");
 }
 
-fn write_package(root: &Path, content: &str, version: &str) {
+pub(super) fn write_package(root: &Path, content: &str, version: &str) {
     std::fs::create_dir_all(root.join(".codex-plugin")).expect("plugin dir");
     std::fs::create_dir_all(root.join("docs")).expect("docs dir");
     write_json(
@@ -85,33 +86,6 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
         .any(|failure| failure
             == "package_surface_audit_fail_closed_missing_blocked_claim:completion")
     );
-
-    std::fs::remove_dir_all(root).expect("cleanup source");
-    std::fs::remove_dir_all(target).expect("cleanup target");
-}
-
-#[test]
-fn package_surface_run_writes_typed_cache_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-run-source");
-    let target = crate::self_tests::boundaries::support::temp_root("surface-run-target");
-    write_package(&root, "same", "0.0.test");
-    write_package(&target, "same", "0.0.test");
-    let path = root.join("validation_artifacts/cli/cache-audit-receipt.json");
-    let exit = run(
-        &root,
-        &ControlCommand {
-            operation: ControlOperation::CacheAudit,
-            receipt: Some(path.clone()),
-            surface_root: Some(target.clone()),
-        },
-    )
-    .expect("surface run");
-
-    assert_eq!(exit, 0);
-    let value = crate::json_boundary::read_json(&path).expect("written receipt");
-    assert_eq!(value["schema"], surface::SCHEMA);
-    assert_eq!(value["operation"], "cache_audit");
-    assert_eq!(value["target"]["surface"], "versioned_cache_package");
 
     std::fs::remove_dir_all(root).expect("cleanup source");
     std::fs::remove_dir_all(target).expect("cleanup target");

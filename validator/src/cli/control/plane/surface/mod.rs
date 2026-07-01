@@ -2,7 +2,9 @@ use crate::cli::control::plane::types::ControlOperation;
 use serde_json::{Value, json};
 use std::path::Path;
 
+pub(crate) mod stdout;
 pub(crate) mod target;
+mod telemetry;
 
 pub(crate) const SCHEMA: &str = "harness-ultragoal.package-surface-audit-receipt.v1";
 pub(crate) const SCHEMA_FILE: &str = "package-surface-audit-receipt.schema.json";
@@ -18,16 +20,13 @@ pub(crate) fn run(
     root: &Path,
     command: &crate::cli::control::plane::ControlCommand,
 ) -> Result<i32, String> {
-    let receipt = receipt(root, command)?;
+    let started = std::time::Instant::now();
+    let mut receipt = receipt(root, command)?;
+    telemetry::attach(root, command, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
     if let Some(path) = &command.receipt {
         crate::json_boundary::write_json(path, &receipt)?;
-        println!(
-            "ultragoal-surface-audit {} operation={} receipt={}",
-            receipt["status"],
-            command.operation.id(),
-            path.display()
-        );
+        stdout::print(path, &receipt);
     } else {
         println!("{receipt}");
     }

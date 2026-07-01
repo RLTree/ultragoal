@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 18,
+        "fitted": 19,
         "partially_fitted": 23,
-        "unfitted": 21
+        "unfitted": 20
       },
       "surfaces": {
         "total": 10,
@@ -875,27 +875,36 @@
       "next_unfitted_surface": "surface-specific logs"
     },
     "cache audit": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "surface-specific logs",
-        "metrics",
-        "traces",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "receipt binding",
-        "query proof",
+        "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "cache-audit-observability-binding",
+      "focused_tests": [
+        "package_surface_run_writes_typed_cache_observability",
+        "package_surface_run_emits_fail_closed_cache_observability"
+      ],
       "receipt_paths": [
         "validation_artifacts/cli/cache-audit-receipt.json"
       ],
-      "live_query_proof_paths": [],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/cache-audit-logs-query.json",
+        "validation_artifacts/observability/cache-audit-metrics-query.json",
+        "validation_artifacts/observability/cache-audit-traces-query.json",
+        "validation_artifacts/observability/cache-audit-explain-failure.json"
+      ],
       "claim_impact": "blocks_cache_parity_readiness_release_completion_update_goal",
       "current_owner_surface": "command:cache audit",
-      "next_unfitted_surface": "surface-specific logs"
+      "next_unfitted_surface": "none"
     },
     "transaction finalize": {
       "fitting_status": "unfitted",
