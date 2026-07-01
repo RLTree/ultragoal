@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 mod edges;
+mod fit_repo;
 mod journey;
 
 #[test]
