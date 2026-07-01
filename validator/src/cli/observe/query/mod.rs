@@ -7,9 +7,11 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 mod body;
+#[cfg(test)]
+mod tests;
 mod text;
 pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
-pub(crate) use text::{query_text, trace_tags};
+pub(crate) use text::{bounded_metric_query_for_operation, query_text, trace_tags};
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     if command.row_limit == 0 || command.byte_limit == 0 || command.timeout_ms == 0 {
@@ -37,7 +39,10 @@ pub(crate) fn result_from_output(
     let candidate = crate::package::inventory::package_digest(root)?;
     let (status, rows, failure) = match output {
         Ok(body) => {
-            let failure = candidate_digest_failure(&body, &candidate);
+            let failure = match command.operation {
+                ObserveOperation::MetricsQuery => None,
+                _ => candidate_digest_failure(&body, &candidate),
+            };
             let status = if failure.is_some() { "fail" } else { "pass" };
             (status, bounded_rows(body, command.byte_limit), failure)
         }

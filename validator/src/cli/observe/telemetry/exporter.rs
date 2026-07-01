@@ -64,7 +64,7 @@ fn metric_line(metric: &Value) -> String {
         .get("metric_name")
         .and_then(Value::as_str)
         .unwrap_or("ultragoal_command_total");
-    let mut labels = metric
+    let labels = metric
         .get("labels")
         .and_then(Value::as_object)
         .map(|items| {
@@ -74,11 +74,6 @@ fn metric_line(metric: &Value) -> String {
                 .collect::<Vec<_>>()
         })
         .unwrap_or_default();
-    for key in ["run_id", "correlation_id", "trace_id", "span_id"] {
-        if let Some(raw) = metric.get(key).and_then(Value::as_str) {
-            labels.push((key, raw));
-        }
-    }
     let labels = labels
         .into_iter()
         .map(|(key, raw)| format!("{key}=\"{}\"", label_value(raw)))

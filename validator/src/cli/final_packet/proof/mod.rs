@@ -104,8 +104,10 @@ fn print_failure(path: &Path, value: &Value) {
         .get("run_id")
         .and_then(Value::as_str)
         .unwrap_or("unknown");
+    let metric_query =
+        crate::cli::observe::query::bounded_metric_query_for_operation("final-packet.prove");
     println!(
-        "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
+        "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
         value
             .get("proof_check_id")
             .and_then(Value::as_str)
@@ -133,7 +135,7 @@ fn print_failure(path: &Path, value: &Value) {
             .and_then(Value::as_str)
             .unwrap_or("unknown"),
         run_id,
-        run_id,
+        metric_query,
         run_id
     );
 }

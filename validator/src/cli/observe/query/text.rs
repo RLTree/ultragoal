@@ -39,23 +39,29 @@ fn log_query_text(command: &ObserveCommand) -> String {
 
 fn metric_query_text(command: &ObserveCommand) -> String {
     command.query.clone().unwrap_or_else(|| {
-        metric_filter(command)
-            .map(|filter| format!("ultragoal_command_total{{{filter}}}"))
-            .unwrap_or_else(|| "ultragoal_command_total".to_string())
+        range_query(&format!(
+            "ultragoal_command_total{{{}}}",
+            metric_filter(command)
+        ))
     })
 }
 
-fn metric_filter(command: &ObserveCommand) -> Option<String> {
-    command
-        .run_id
+fn range_query(selector: &str) -> String {
+    format!("max_over_time({selector}[24h])")
+}
+
+pub(crate) fn bounded_metric_query_for_operation(operation: &str) -> String {
+    range_query(&format!(
+        "ultragoal_command_total{{{}}}",
+        metric_filter_with_primary(Some(metric_label("operation", operation)))
+    ))
+}
+
+fn metric_filter(command: &ObserveCommand) -> String {
+    let primary = command
+        .law_id
         .as_ref()
-        .map(|value| metric_label("run_id", value))
-        .or_else(|| {
-            command
-                .law_id
-                .as_ref()
-                .map(|value| metric_label("law_id", value))
-        })
+        .map(|value| metric_label("law_id", value))
         .or_else(|| {
             command
                 .check_id
@@ -67,7 +73,33 @@ fn metric_filter(command: &ObserveCommand) -> Option<String> {
                 .claim_id
                 .as_ref()
                 .map(|value| metric_label("claim_id", value))
-        })
+        });
+    metric_filter_with_primary(primary)
+}
+
+fn metric_filter_with_primary(primary: Option<String>) -> String {
+    let mut filters = Vec::new();
+    if let Some(primary) = primary {
+        filters.push(primary);
+    }
+    filters.extend(bounded_metric_absence_labels());
+    filters.join(",")
+}
+
+fn bounded_metric_absence_labels() -> impl Iterator<Item = String> {
+    [
+        "candidate_digest",
+        "run_id",
+        "correlation_id",
+        "trace_id",
+        "span_id",
+        "why_failed",
+        "where_failed",
+        "next_repair",
+        "claim_impact",
+    ]
+    .into_iter()
+    .map(|label| metric_label(label, ""))
 }
 
 fn metric_label(label: &str, value: &str) -> String {
@@ -105,5 +137,58 @@ pub(crate) fn trace_tags(command: &ObserveCommand) -> String {
         json!({"claim_id": claim_id}).to_string()
     } else {
         "{}".to_string()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+
+    fn command(operation: ObserveOperation) -> ObserveCommand {
+        ObserveCommand {
+            operation,
+            receipt: None,
+            query: None,
+            run_id: None,
+            claim_id: None,
+            check_id: None,
+            law_id: None,
+            row_limit: 100,
+            byte_limit: 1024,
+            timeout_ms: 1000,
+        }
+    }
+
+    #[test]
+    fn metrics_query_uses_bounded_historical_window() {
+        let mut command = command(ObserveOperation::MetricsQuery);
+        command.check_id = Some("coverage-prove-observability-binding".to_string());
+
+        let query = query_text(&command);
+        assert!(query.starts_with(
+            "max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\","
+        ));
+        assert!(query.contains("candidate_digest=\"\""));
+        assert!(query.contains("run_id=\"\""));
+        assert!(query.ends_with("}[24h])"));
+    }
+
+    #[test]
+    fn metrics_query_does_not_use_run_id_as_label() {
+        let mut command = command(ObserveOperation::MetricsQuery);
+        command.run_id = Some("run-abc".to_string());
+
+        let query = query_text(&command);
+        assert!(query.contains("run_id=\"\""));
+        assert!(!query.contains("run_id=\"run-abc\""));
+    }
+
+    #[test]
+    fn custom_metrics_query_is_preserved() {
+        let mut command = command(ObserveOperation::MetricsQuery);
+        command.query = Some("ultragoal_command_total".to_string());
+
+        assert_eq!(query_text(&command), "ultragoal_command_total");
     }
 }

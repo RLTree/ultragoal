@@ -87,8 +87,10 @@ fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Resu
         csv(value.get("blocked_claims"))
     );
     if status != "pass" {
+        let metric_query =
+            crate::cli::observe::query::bounded_metric_query_for_operation(command.operation.id());
         println!(
-            "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
+            "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
             value
                 .get("check_id")
                 .and_then(Value::as_str)
@@ -124,10 +126,7 @@ fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Resu
                 .get("run_id")
                 .and_then(Value::as_str)
                 .unwrap_or("unknown"),
-            value
-                .get("run_id")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown"),
+            metric_query,
             value
                 .get("run_id")
                 .and_then(Value::as_str)

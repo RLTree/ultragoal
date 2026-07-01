@@ -6,29 +6,31 @@ fn observe_metric_query_text_covers_all_authority_selectors() {
         (
             "--run-id",
             "run-abc",
-            r#"ultragoal_command_total{run_id="run-abc"}"#,
+            "max_over_time(ultragoal_command_total{",
         ),
         (
             "--law-id",
             "law-abc",
-            r#"ultragoal_command_total{law_id="law-abc"}"#,
+            r#"max_over_time(ultragoal_command_total{law_id="law-abc","#,
         ),
         (
             "--check-id",
             "check-abc",
-            r#"ultragoal_command_total{check_id="check-abc"}"#,
+            r#"max_over_time(ultragoal_command_total{check_id="check-abc","#,
         ),
         (
             "--claim-id",
             "claim-abc",
-            r#"ultragoal_command_total{claim_id="claim-abc"}"#,
+            r#"max_over_time(ultragoal_command_total{claim_id="claim-abc","#,
         ),
     ] {
-        assert_eq!(
-            observe::query::query_text(&super::command(&[
-                "observe", "metrics", "query", flag, value,
-            ])),
-            expected
-        );
+        let query = observe::query::query_text(&super::command(&[
+            "observe", "metrics", "query", flag, value,
+        ]));
+        assert!(query.starts_with(expected), "{query}");
+        assert!(query.contains("candidate_digest=\"\""), "{query}");
+        assert!(query.contains("run_id=\"\""), "{query}");
+        assert!(query.ends_with("}[24h])"), "{query}");
+        assert!(!query.contains("run_id=\"run-abc\""), "{query}");
     }
 }

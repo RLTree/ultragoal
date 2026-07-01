@@ -47,7 +47,7 @@ pub(super) fn base(
         "log_stream_digest": crate::digest::canonical_json(&event),
         "metric_snapshot_digest": crate::digest::canonical_json(&metric),
         "trace_bundle_digest": crate::digest::canonical_json(&trace),
-        "query_examples": query_examples(&run_id),
+        "query_examples": query_examples(&run_id, command.operation.id()),
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": claims::bounds_status(command),
@@ -71,10 +71,11 @@ pub(super) fn base(
     }))
 }
 
-fn query_examples(run: &str) -> Value {
+fn query_examples(run: &str, operation: &str) -> Value {
+    let metric_query = crate::cli::observe::query::bounded_metric_query_for_operation(operation);
     json!([
         format!("ultragoal observe logs query --run-id {run} --limit 100"),
-        format!("ultragoal observe metrics query --run-id {run} --limit 100"),
+        format!("ultragoal observe metrics query --query '{metric_query}' --limit 100"),
         format!("ultragoal observe traces query --run-id {run} --limit 100")
     ])
 }

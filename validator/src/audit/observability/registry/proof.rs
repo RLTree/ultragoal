@@ -97,11 +97,9 @@ fn require_query_receipts(
         if let Some(kind) = value.get("query_kind").and_then(Value::as_str) {
             kinds.insert(kind.to_string());
         }
-        let rows_text = value.get("rows").map(Value::to_string).unwrap_or_default();
-        if !rows_text.contains(correlation_id)
-            || !rows_text.contains(candidate)
-            || !rows_text.contains(operation)
-        {
+        let query_kind = value.get("query_kind").and_then(Value::as_str);
+        let rows = value.get("rows");
+        if !query_rows_match(query_kind, rows, candidate, correlation_id, operation) {
             out.push(format!(
                 "observability_{prefix}_fitting_query_not_same_run:{command}:{rel}"
             ));
@@ -113,6 +111,23 @@ fn require_query_receipts(
                 "observability_{prefix}_fitting_query_kind_missing:{command}:{kind}"
             ));
         }
+    }
+}
+
+fn query_rows_match(
+    query_kind: Option<&str>,
+    rows: Option<&Value>,
+    candidate: &str,
+    correlation_id: &str,
+    operation: &str,
+) -> bool {
+    if query_kind == Some("metrics") {
+        rows.is_some_and(|rows| super::metric::rows_match(rows, operation))
+    } else {
+        let rows_text = rows.map(Value::to_string).unwrap_or_default();
+        rows_text.contains(correlation_id)
+            && rows_text.contains(candidate)
+            && rows_text.contains(operation)
     }
 }
 

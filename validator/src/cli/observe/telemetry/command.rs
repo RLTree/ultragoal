@@ -64,7 +64,7 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         "log_stream_digest": crate::digest::canonical_json(&event),
         "metric_snapshot_digest": crate::digest::canonical_json(&metric),
         "trace_bundle_digest": crate::digest::canonical_json(&trace),
-        "query_examples": query_examples(&run_id),
+        "query_examples": query_examples(&run_id, input.operation),
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": "pass",
@@ -132,7 +132,7 @@ fn event(
         "redaction_status": "pass",
         "bounded_output_status": "pass",
         "query_hint_logql": format!("run_id:{run_id} operation:{}", input.operation),
-        "query_hint_promql": format!("ultragoal_command_total{{run_id=\"{run_id}\"}}"),
+        "query_hint_promql": crate::cli::observe::query::bounded_metric_query_for_operation(input.operation),
         "query_hint_traceql": format!("{{\"run_id\":\"{run_id}\"}}")
     });
     event["worker_count"] = json!(runtime.worker_count);
@@ -187,10 +187,11 @@ fn exporter(root: &Path, candidate: &str, status: &str, emit: bool) -> &'static 
     }
 }
 
-fn query_examples(run_id: &str) -> Value {
+fn query_examples(run_id: &str, operation: &str) -> Value {
+    let metric_query = crate::cli::observe::query::bounded_metric_query_for_operation(operation);
     json!([
         format!("ultragoal observe logs query --run-id {run_id} --limit 100"),
-        format!("ultragoal observe metrics query --run-id {run_id} --limit 100"),
+        format!("ultragoal observe metrics query --query '{metric_query}' --limit 100"),
         format!("ultragoal observe traces query --run-id {run_id} --limit 100")
     ])
 }

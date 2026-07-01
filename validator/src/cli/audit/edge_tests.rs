@@ -178,9 +178,14 @@ fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
     assert!(fail_lines[1].contains(&format!(
         "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
     )));
-    assert!(fail_lines[1].contains(&format!(
-        "query_metrics='ultragoal observe metrics query --run-id {run_id} --limit 100'"
-    )));
+    assert!(fail_lines[1].contains(
+        "query_metrics='ultragoal observe metrics query --query 'max_over_time(ultragoal_command_total{operation=\"source.audit\""
+    ));
+    let stale_metric_hint = format!(
+        "{}{}{}",
+        "query_metrics='ultragoal observe metrics query --", "run-id ", run_id
+    );
+    assert!(!fail_lines[1].contains(&stale_metric_hint));
     assert!(fail_lines[1].contains(&format!(
         "query_traces='ultragoal observe traces query --run-id {run_id} --limit 100'"
     )));

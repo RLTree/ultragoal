@@ -196,7 +196,7 @@ fn write_run_event(root: &std::path::Path, run_id: &str, why_failed: &str) {
                 "check_id": "full-local-observability-stack-integration-non-opaque-failure",
                 "claim_id": "gate-92-observability-control-plane",
                 "query_hint_logql": "_time:5m operation:observe.prove",
-                "query_hint_promql": "ultragoal_command_total{operation=\"observe.prove\"}",
+                "query_hint_promql": "max_over_time(ultragoal_command_total{operation=\"observe.prove\"}[24h])",
                 "query_hint_traceql": "{operation=\"observe.prove\"}"
             })
         ),

@@ -3,6 +3,7 @@ use std::path::Path;
 
 mod control;
 mod fitting;
+mod metric;
 mod operating;
 mod proof;
 mod surfaces;

@@ -82,6 +82,7 @@ fn write_receipt_set(
                 "query_kind": kind,
                 "rows": [{
                     "candidate_digest": candidate,
+                    "metric": {"__name__": "ultragoal_command_total"},
                     "operation": operation,
                     "correlation_id": corr
                 }]

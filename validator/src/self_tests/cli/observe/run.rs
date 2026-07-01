@@ -67,16 +67,18 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
             .is_none()
     );
     let metrics_run = command(&["observe", "metrics", "query", "--run-id", "run-abc"]);
-    assert_eq!(
-        observe::query::query_text(&metrics_run),
-        "ultragoal_command_total{run_id=\"run-abc\"}"
-    );
-    let escaped_metrics = command(&["observe", "metrics", "query", "--run-id", "run\\\"x\ny"]);
+    let metrics_query = observe::query::query_text(&metrics_run);
+    assert!(metrics_query.starts_with("max_over_time(ultragoal_command_total{"));
+    assert!(metrics_query.contains("run_id=\"\""));
+    assert!(!metrics_query.contains("run_id=\"run-abc\""));
+    let escaped_metrics = command(&["observe", "metrics", "query", "--check-id", "check\\\"x\ny"]);
     let escaped_query = observe::query::query_text(&escaped_metrics);
-    assert!(escaped_query.contains(r#"run\\"#));
+    assert!(escaped_query.contains(r#"check_id="check\\"#));
     assert!(escaped_query.contains(r#"\""#));
     assert!(escaped_query.contains(r#"\n"#));
     assert!(!escaped_query.contains('\n'));
+    assert!(escaped_query.contains("run_id=\"\""));
+    assert!(!escaped_query.contains("run_id=\"check"));
     let traces_run = command(&["observe", "traces", "query", "--run-id", "run-abc"]);
     assert_eq!(
         observe::query::query_text(&traces_run),
@@ -89,8 +91,9 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
         "run_id": "run-abc",
         "correlation_id": "corr-abc"
     }));
-    assert!(metric_line.contains("run_id=\"run-abc\""));
-    assert!(metric_line.contains("correlation_id=\"corr-abc\""));
+    assert!(metric_line.contains("operation=\"observe.stack.smoke\""));
+    assert!(!metric_line.contains("run_id=\"run-abc\""));
+    assert!(!metric_line.contains("correlation_id=\"corr-abc\""));
     assert!(observe::parse(&super::args(&["observe", "unknown"])).is_err());
     let default_receipt = observe::parse(&super::args(&["observe", "prove"]))
         .expect("parse")

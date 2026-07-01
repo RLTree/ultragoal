@@ -133,11 +133,6 @@
         "claim_id",
         "surface",
         "failure_class",
-        "why_failed",
-        "where_failed",
-        "next_repair",
-        "claim_impact",
-        "candidate_digest",
         "exporter"
       ],
       "properties": {
@@ -149,11 +144,6 @@
         "claim_id": { "type": "string" },
         "surface": { "type": "string" },
         "failure_class": { "type": "string" },
-        "why_failed": { "type": "string" },
-        "where_failed": { "type": "string" },
-        "next_repair": { "type": "string" },
-        "claim_impact": { "type": "string" },
-        "candidate_digest": { "type": "string" },
         "exporter": { "type": "string" }
       }
     }

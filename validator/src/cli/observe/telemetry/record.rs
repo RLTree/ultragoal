@@ -46,7 +46,7 @@ pub(super) fn event(
         "redaction_status": "pass",
         "bounded_output_status": claims::bounds_status(command),
         "query_hint_logql": format!("_time:5m operation:{}", command.operation.id()),
-        "query_hint_promql": format!("ultragoal_command_total{{operation=\"{}\"}}", command.operation.id()),
+        "query_hint_promql": crate::cli::observe::query::bounded_metric_query_for_operation(command.operation.id()),
         "query_hint_traceql": format!("{{operation=\"{}\"}}", command.operation.id())
     });
     event["worker_count"] = json!(runtime.worker_count);

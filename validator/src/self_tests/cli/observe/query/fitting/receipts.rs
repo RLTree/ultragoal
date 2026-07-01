@@ -99,6 +99,18 @@ fn write_query_receipts(
     operation: &str,
 ) {
     for kind in ["logs", "metrics", "traces"] {
+        let rows = if kind == "metrics" {
+            json!([{
+                "operation": operation,
+                "metric": {"__name__": "ultragoal_command_total"}
+            }])
+        } else {
+            json!([{
+                "candidate_digest": candidate,
+                "operation": operation,
+                "correlation_id": corr
+            }])
+        };
         crate::json_boundary::write_json(
             &dir.join(format!("{slug}-{kind}.json")),
             &json!({
@@ -108,11 +120,7 @@ fn write_query_receipts(
                 "run_id": run,
                 "correlation_id": corr,
                 "query_kind": kind,
-                "rows": [{
-                    "candidate_digest": candidate,
-                    "operation": operation,
-                    "correlation_id": corr
-                }]
+                "rows": rows
             }),
         )
         .expect("query receipt");
