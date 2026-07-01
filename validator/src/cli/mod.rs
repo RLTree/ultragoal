@@ -1,5 +1,6 @@
 pub(crate) mod audit;
 pub(crate) mod control;
+pub(crate) mod coverage;
 pub(crate) mod final_packet;
 pub(crate) mod foundational_trace;
 pub(crate) mod garbage;

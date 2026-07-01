@@ -1,3 +1,28 @@
+pub(super) fn assert_help(command: crate::Command) {
+    assert!(matches!(command, crate::Command::Help));
+}
+
+pub(super) fn assert_routine(command: crate::Command) {
+    assert!(matches!(command, crate::Command::Routine(_)));
+}
+
+pub(super) fn assert_product(command: crate::Command) {
+    assert!(matches!(command, crate::Command::Product(_)));
+}
+
+pub(super) fn audit_parts(
+    command: crate::Command,
+) -> (Option<std::path::PathBuf>, std::path::PathBuf) {
+    match command {
+        crate::Command::Audit {
+            target_repo,
+            receipt,
+            ..
+        } => (target_repo, receipt),
+        _ => panic!("target-repo audit must route to source-local target audit"),
+    }
+}
+
 #[test]
 fn routine_red_edges_reject_missing_help_and_script_surfaces() {
     let failures =
@@ -39,4 +64,16 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
             .iter()
             .any(|item| item == "routine_scripts_check_claim_ceiling_missing")
     );
+}
+
+#[test]
+fn routine_route_assertion_helpers_fail_closed_for_wrong_routes() {
+    for assertion in [
+        || assert_help(crate::Command::PackageDigest),
+        || assert_routine(crate::Command::PackageDigest),
+        || assert_product(crate::Command::PackageDigest),
+    ] {
+        assert!(std::panic::catch_unwind(assertion).is_err());
+    }
+    assert!(std::panic::catch_unwind(|| audit_parts(crate::Command::PackageDigest)).is_err());
 }

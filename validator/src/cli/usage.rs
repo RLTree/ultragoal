@@ -29,7 +29,7 @@ pub(crate) fn text() -> &'static str {
         "  ultragoal foundational-trace check --strict [--obligation <id>] [--jobs N]\n",
         "  ultragoal package digest\n",
         "  ultragoal package-digest\n",
-        "  ultragoal coverage prove --receipt <path>\n",
+        "  ultragoal coverage prove --receipt <path> [--jobs N] [--validate-existing]\n",
         "  ultragoal performance prove --receipt <path>\n",
         "  ultragoal rust <toolchain verify|fast|standard|release|clean-proof|watch|\n",
         "    memory prove|dependency audit|coverage prove --exact|workspace topology check> --receipt <path>\n",

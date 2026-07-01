@@ -89,3 +89,26 @@ fn research_registry_rejects_missing_mandatory_source() {
         "{failures:#?}"
     );
 }
+
+#[test]
+fn research_registry_rejects_unanchored_card_and_registry_orphan_edges() {
+    let (_root, mut cards, mut registry, trace) = repo_values();
+    cards["sources"][0]["requirements"][0]["source_evidence_ids"] = json!(["missing-anchor"]);
+    registry["sources"][0]["source_id"] = json!("orphan-source");
+    let failures = failures(&cards, &registry, &trace);
+    assert!(
+        failures
+            .iter()
+            .any(|item| { item.starts_with("research_source_card_requirement_unknown_anchor:") })
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| { item == "research_registry_source_card_missing:orphan-source" })
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|item| { item == "research_registry_source_artifact_missing:orphan-source" })
+    );
+}

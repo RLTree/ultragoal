@@ -2,6 +2,8 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
+mod edges;
+
 #[test]
 fn source_obligations_parse_requires_strict_and_supports_jobs() {
     assert!(

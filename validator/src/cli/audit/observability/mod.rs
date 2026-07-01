@@ -39,7 +39,7 @@ pub(crate) fn write_standalone_red_report(
     root: &Path,
     red_report: &Path,
     runtime: RuntimeFacts,
-) -> Result<(), String> {
+) -> Result<i32, String> {
     red::write_standalone(root, red_report, runtime)
 }
 
@@ -105,6 +105,7 @@ fn write_audit(
             runtime,
         },
     )
+    .map(|_| ())
 }
 
 pub(super) struct ReceiptFields<'a> {
@@ -126,7 +127,7 @@ pub(super) struct ReceiptFields<'a> {
     pub(super) runtime: crate::cli::observe::telemetry::RuntimeTelemetry,
 }
 
-pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<(), String> {
+pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<Value, String> {
     let value = crate::cli::observe::telemetry::command_receipt(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
@@ -155,7 +156,7 @@ pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<(),
     for line in stdout::contract(&value) {
         println!("{line}");
     }
-    Ok(())
+    Ok(value)
 }
 
 fn failed_checks(audit: &Value) -> Vec<String> {

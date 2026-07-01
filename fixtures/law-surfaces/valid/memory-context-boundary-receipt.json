@@ -2,7 +2,7 @@
   "claim_ceiling": "live_same_surface_evidence_required",
   "live_same_surface_evidence": [
     {
-      "digest": "sha256:7863a129ea9aa2c7f3428f1ea5f34ae1c1b9caee766afa68e5c486e2d36f991a",
+      "digest": "sha256:7b4f35d88c44e368586de215b030780ab277b1c2e909e272fca65c2bb4aee7ae",
       "path": "docs/source-obligation-matrix.json"
     },
     {
@@ -12,7 +12,7 @@
   ],
   "memory_artifacts": [
     {
-      "digest": "sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d",
+      "digest": "sha256:28880ab69ffb097d1f5ad77850e1e7a52dd1d8979e25ffeb32fbf714c335ccd1",
       "path": "docs/research-source-cards.json"
     }
   ],

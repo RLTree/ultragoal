@@ -65,6 +65,58 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
     .collect::<Vec<_>>();
     let err = crate::parse_command(&bad_mode).expect_err("unknown audit mode rejected");
     assert!(err.contains("invalid source audit --mode: slow"), "{err}");
+
+    let target = [
+        "target-repo",
+        "audit",
+        "--surface-root",
+        "target",
+        "--receipt",
+        "receipt.json",
+        "--mode",
+        "focused",
+        "--require-observability",
+        "--require-product-cohesion",
+        "--jobs",
+        "3",
+    ]
+    .iter()
+    .map(|item| item.to_string())
+    .collect::<Vec<_>>();
+    let parsed = crate::parse_command(&target).expect("target audit parse");
+    assert!(matches!(
+        parsed,
+        crate::Command::Audit {
+            jobs: Some(3),
+            require_observability: true,
+            require_product_cohesion: true,
+            ..
+        }
+    ));
+
+    let bad_target_mode = [
+        "target-repo",
+        "audit",
+        "--surface-root",
+        "target",
+        "--receipt",
+        "receipt.json",
+        "--mode",
+        "slow",
+    ]
+    .iter()
+    .map(|item| item.to_string())
+    .collect::<Vec<_>>();
+    let err = crate::parse_command(&bad_target_mode).expect_err("target mode rejected");
+    assert!(
+        err.contains("invalid target-repo audit --mode: slow"),
+        "{err}"
+    );
+
+    assert!(matches!(
+        crate::parse_command(&["package".to_string(), "digest".to_string()]).expect("package"),
+        crate::Command::PackageDigest
+    ));
 }
 
 #[test]

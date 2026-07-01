@@ -2,6 +2,8 @@ use super::*;
 use serde_json::{Value, json};
 use std::fs;
 
+mod edges;
+
 #[test]
 fn schema_validation_parse_supports_default_targeted_and_alias() {
     let default = parse(&["schema".into(), "validation".into()])

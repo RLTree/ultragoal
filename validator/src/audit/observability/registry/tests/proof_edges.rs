@@ -117,6 +117,13 @@ fn observability_command_fitting_accepts_only_fail_closed_command_receipts() {
         !failures.iter().any(|item| item.contains("source audit")),
         "{failures:?}"
     );
+    receipt["claim_impact"] = json!("source audit claim withheld until current repair proof");
+    crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
+    let failures = super::super::fitting_failures(&root);
+    assert!(
+        !failures.iter().any(|item| item.contains("source audit")),
+        "{failures:?}"
+    );
     receipt.as_object_mut().unwrap().remove("blocked_claims");
     crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
     let failures = super::super::fitting_failures(&root);
@@ -127,6 +134,51 @@ fn observability_command_fitting_accepts_only_fail_closed_command_receipts() {
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows() {
+    let root = crate::self_tests::boundaries::support::temp_root("observe-proof-direct");
+    let inventory = fitted_inventory();
+    write_registry_root(&root, inventory.clone());
+    write_valid_fixture(&root);
+    let row = inventory["fitting_inventory"]["package digest"]
+        .as_object()
+        .expect("package digest row");
+    let mut failures = Vec::new();
+    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    assert!(failures.is_empty(), "{failures:?}");
+
+    let empty = json!({}).as_object().unwrap().clone();
+    super::super::proof::require_current_receipts(&root, "package digest", &empty, &mut failures);
+    assert!(failures.is_empty(), "{failures:?}");
+
+    let rel = "validation_artifacts/observability/fitting/package-digest.json";
+    let mut receipt = crate::json_boundary::read_json(&root.join(rel)).unwrap();
+    receipt.as_object_mut().unwrap().remove("correlation_id");
+    crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
+    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    assert!(
+        failures.iter().any(|failure| {
+            failure.starts_with(
+                "observability_command_fitting_receipt_missing_correlation_id:package digest",
+            )
+        }),
+        "{failures:?}"
+    );
+
+    receipt["correlation_id"] = json!("corr-restored");
+    receipt["status"] = json!("pending");
+    crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
+    failures.clear();
+    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    assert!(
+        failures.iter().any(|failure| {
+            failure.starts_with("observability_command_fitting_receipt_not_current:package digest")
+        }),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup direct proof");
 }
 
 #[test]
@@ -157,6 +209,23 @@ fn observability_proof_reports_unavailable_candidates_and_missing_surface_operat
         &"observability_surface_fitting_operation_missing:cli command families".to_string()
     ));
     std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn observability_inventory_requires_owner_and_next_surface_tracking_together() {
+    assert_fitting_failure(
+        "observe-proof-owner-without-next",
+        |root| {
+            let path = root.join("docs/generated/observability/command-inventory.json");
+            let mut inventory = crate::json_boundary::read_json(&path).unwrap();
+            inventory["fitting_inventory"]["package digest"]
+                .as_object_mut()
+                .unwrap()
+                .remove("next_unfitted_surface");
+            crate::json_boundary::write_json(&path, &inventory).unwrap();
+        },
+        "observability_command_fitting_row_shape_only:package digest",
+    );
 }
 
 fn assert_fitting_failure(

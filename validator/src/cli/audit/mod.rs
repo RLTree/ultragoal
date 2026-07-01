@@ -67,16 +67,8 @@ pub(crate) fn run(args: RunArgs) -> Result<i32, String> {
 
 pub(crate) fn run_red_fixture_report(root: &Path, report: &Path) -> Result<i32, String> {
     let started = std::time::Instant::now();
-    observability::write_standalone_red_report(
-        root,
-        report,
-        observability::RuntimeFacts::from_elapsed_ms(elapsed_ms(started)),
-    )?;
-    let receipt = root.join("validation_artifacts/observability/red-fixture-report.json");
-    let value = crate::json_boundary::read_json(&receipt)?;
-    Ok(i32::from(
-        value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
-    ))
+    let runtime = observability::RuntimeFacts::from_elapsed_ms(elapsed_ms(started));
+    observability::write_standalone_red_report(root, report, runtime)
 }
 
 #[cfg(test)]
@@ -134,6 +126,7 @@ pub(crate) fn emit_parse_error_observability(
             runtime: parser_rejection_runtime(elapsed_ms),
         },
     )
+    .map(|_| ())
 }
 
 fn audit_parse_target(raw: &[String]) -> Option<bool> {

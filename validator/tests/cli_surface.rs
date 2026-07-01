@@ -42,6 +42,19 @@ fn run_bin(bin: &str, root: &Path, args: &[String]) -> std::process::Output {
         .expect("validator command runs")
 }
 
+fn package_digest_from_stdout(output: &std::process::Output) -> String {
+    assert!(
+        output.status.success(),
+        "package digest command failed: {output:?}"
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    stdout
+        .lines()
+        .find(|line| line.starts_with("sha256:") && line.len() == "sha256:".len() + 64)
+        .expect("raw package digest line")
+        .to_string()
+}
+
 #[test]
 fn cli_surface_commands_execute() {
     let root = repo_root();
@@ -222,11 +235,86 @@ fn cli_surface_commands_execute() {
         Some(2)
     );
 
+    let target_parse_root = temp.join("target-parse-observability");
+    std::fs::create_dir_all(&target_parse_root).expect("target parse root");
+    std::fs::write(
+        target_parse_root.join("plugin-manifest-draft.json"),
+        r#"{"resources":[]}"#,
+    )
+    .expect("target parse manifest");
+    let target_parse = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            target_parse_root.display().to_string(),
+            "target-repo".into(),
+            "audit".into(),
+            "--receipt".into(),
+            "validation_artifacts/ultragoal-audit/target-receipt.json".into(),
+        ],
+    );
+    assert_eq!(target_parse.status.code(), Some(2));
+    let target_parse_obs =
+        target_parse_root.join("validation_artifacts/observability/target-repo-audit.json");
+    let target_parse_value: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&target_parse_obs).expect("target parse obs"))
+            .expect("target parse obs json");
+    assert_eq!(target_parse_value["operation"], "target-repo.audit");
+    assert_eq!(
+        target_parse_value["event"]["where_failed"],
+        "target-repo.audit.parse"
+    );
+
     std::fs::write(
         temp.join("plugin-manifest-draft.json"),
         r#"{"version":"0.0.0-test","resources":[]}"#,
     )
     .expect("write temp manifest");
+
+    let temp_digest = package_digest_from_stdout(&run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            temp.display().to_string(),
+            "package".into(),
+            "digest".into(),
+        ],
+    ));
+    let red_report = temp.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
+    std::fs::create_dir_all(red_report.parent().expect("red report parent"))
+        .expect("red report dir");
+    std::fs::write(
+        &red_report,
+        format!(
+            r#"{{
+  "schema": "harness-ultragoal.red-fixture-report.v1",
+  "status": "pass",
+  "target_revision": {{"kind": "package_digest", "value": "{temp_digest}"}},
+  "red_fixtures": {{"red-one": {{"status": "pass"}}}}
+}}"#
+        ),
+    )
+    .expect("red report");
+    let red_report_run = run_ultragoal(
+        &root,
+        &[
+            "--root".into(),
+            temp.display().to_string(),
+            "red-fixture-report".into(),
+            "--report".into(),
+            red_report.display().to_string(),
+        ],
+    );
+    assert!(
+        red_report_run.status.success(),
+        "red fixture report failed: {red_report_run:?}"
+    );
+    let red_observe = temp.join("validation_artifacts/observability/red-fixture-report.json");
+    let red_value: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&red_observe).expect("red observe"))
+            .expect("red observe json");
+    assert_eq!(red_value["operation"], "red_fixture.report");
+    assert_eq!(red_value["event"]["command"], "ultragoal red");
 
     let performance_receipt = temp.join("validation_artifacts/cli/performance-receipt.json");
     let performance = run_ultragoal(

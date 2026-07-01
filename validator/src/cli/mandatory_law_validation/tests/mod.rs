@@ -2,6 +2,8 @@ use super::*;
 use serde_json::{Value, json};
 use std::fs;
 
+mod edges;
+
 #[test]
 fn mandatory_law_validation_parse_supports_default_targeted_and_alias() {
     let default = parse(&["mandatory-law".into(), "validation".into()])

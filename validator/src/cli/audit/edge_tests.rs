@@ -101,6 +101,23 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
     )
     .expect_err("missing package manifest blocks telemetry receipt");
     assert!(err.contains("plugin-manifest-draft.json"));
+
+    emit_parse_error_observability(
+        &root,
+        &[
+            "audit".to_string(),
+            "--mode".to_string(),
+            "bogus".to_string(),
+        ],
+        "invalid audit --mode: bogus",
+        4,
+    )
+    .expect("bare audit parse error observation");
+    let bare =
+        crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("bare");
+    assert_eq!(bare["operation"], "source.audit");
+    assert_eq!(bare["status"], "fail");
+    assert_eq!(bare["event"]["cache_mode"], "parser_rejection_no_cache");
     fs::remove_dir_all(root).expect("cleanup");
 }
 

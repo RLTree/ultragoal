@@ -72,6 +72,21 @@ mod tests {
                 .expect("other")
                 .is_none()
         );
+        assert!(
+            parse(&[
+                "red".into(),
+                "fixture".into(),
+                "report".into(),
+                "--report".into()
+            ])
+            .expect_err("missing report")
+            .contains("missing value for --report")
+        );
+        assert!(
+            parse(&["red-fixture-report".into(), "--bogus".into()])
+                .expect_err("unknown")
+                .contains("unknown red fixture report argument")
+        );
     }
 
     #[test]
@@ -119,6 +134,21 @@ mod tests {
         assert_eq!(pass_stdout.len(), 1);
         assert!(pass_stdout[0].contains("operation=red_fixture.report"));
 
+        let dispatch = crate::parse_command(&[
+            "red".to_string(),
+            "fixture".to_string(),
+            "report".to_string(),
+            "--report".to_string(),
+            report.display().to_string(),
+        ])
+        .expect("parse dispatch");
+        let code = crate::command_run::run_with_exit_code(crate::Args {
+            root: root.clone(),
+            command: dispatch,
+        })
+        .expect("dispatch run");
+        assert_eq!(code, 0);
+
         crate::json_boundary::write_json(
             &report,
             &json!({"status":"fail","red_fixtures":{"bad":{"status":"fail"}}}),
@@ -141,5 +171,16 @@ mod tests {
                 .any(|line| line.contains("failed_check=red-fixture-report-observability-binding"))
         );
         fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn red_fixture_report_command_propagates_observability_write_errors() {
+        let root = crate::self_tests::boundaries::support::temp_root("red-report-no-candidate");
+        let command = RedReportCommand {
+            report: PathBuf::from(DEFAULT_REPORT),
+        };
+        let err = run(&root, &command).expect_err("missing candidate blocks observation");
+        assert!(err.contains("plugin-manifest-draft.json"), "{err}");
+        let _ = fs::remove_dir_all(root);
     }
 }

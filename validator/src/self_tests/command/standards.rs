@@ -43,4 +43,17 @@ fn command_dispatch_routes_standards_gardener_rebind() {
 fn command_parser_rejects_incomplete_standards_gardener_command_without_fallback_authority() {
     let error = crate::parse_command(&["standards-gardener".to_string()]).expect_err("usage error");
     assert!(error.contains("usage:"), "{error}");
+
+    let error = crate::parse_command(&[
+        "standards-gardener".to_string(),
+        "rebind".to_string(),
+        "--receipt".to_string(),
+        "validation_artifacts/standards-gardener/current.json".to_string(),
+        "--observability-receipt".to_string(),
+    ])
+    .expect_err("missing observability receipt");
+    assert!(
+        error.contains("missing required argument --observability-receipt"),
+        "{error}"
+    );
 }

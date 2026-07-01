@@ -34,24 +34,19 @@ fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
     ] {
         assert!(help.contains(expected), "{expected}");
     }
-    assert!(matches!(
-        crate::parse_command(&raw(&["--help"])).expect("help"),
-        crate::Command::Help
-    ));
-    assert!(matches!(
+    surface_edges::assert_help(crate::parse_command(&raw(&["--help"])).expect("help"));
+    surface_edges::assert_routine(
         crate::parse_command(&raw(&["routine", "check"])).expect("routine"),
-        crate::Command::Routine(_)
-    ));
-    assert!(matches!(
+    );
+    surface_edges::assert_product(
         crate::parse_command(&raw(&[
             "fit-repo",
             "prove",
             "--receipt-dir",
-            "validation_artifacts/harness"
+            "validation_artifacts/harness",
         ]))
         .expect("fit-repo"),
-        crate::Command::Product(_)
-    ));
+    );
     let target = crate::parse_command(&raw(&[
         "target-repo",
         "audit",
@@ -61,14 +56,7 @@ fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
         "validation_artifacts/cli/target-repo-audit-receipt.json",
     ]))
     .expect("target");
-    let crate::Command::Audit {
-        target_repo,
-        receipt,
-        ..
-    } = target
-    else {
-        panic!("target-repo audit must route to source-local target audit");
-    };
+    let (target_repo, receipt) = surface_edges::audit_parts(target);
     assert_eq!(
         target_repo,
         Some(PathBuf::from("fixtures/target-repo/valid-init"))

@@ -24,17 +24,13 @@ pub(crate) use command::{Args, Command};
 use std::path::PathBuf;
 
 pub fn main_entry() -> i32 {
-    match parse_args().and_then(command_run::run) {
+    match parse_args_from(std::env::args().skip(1).collect()).and_then(command_run::run) {
         Ok(code) => code,
         Err(err) => {
             eprintln!("{err}");
             2
         }
     }
-}
-
-fn parse_args() -> Result<Args, String> {
-    parse_args_from(std::env::args().skip(1).collect())
 }
 
 fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
@@ -145,7 +141,9 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
             }
         }
         _ => {
-            if let Some(command) = cli::performance::parse(raw)? {
+            if let Some(command) = cli::coverage::parse(raw)? {
+                Command::Coverage(command)
+            } else if let Some(command) = cli::performance::parse(raw)? {
                 Command::Performance(command)
             } else if let Some(command) = cli::rust::parse(raw)? {
                 Command::Rust(command)

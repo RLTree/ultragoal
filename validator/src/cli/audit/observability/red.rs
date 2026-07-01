@@ -17,14 +17,16 @@ pub(super) fn write_report(
         runtime,
         ReportContext::source_audit(),
     )
+    .map(|_| ())
 }
 
 pub(super) fn write_standalone(
     root: &Path,
     red_report: &Path,
     runtime: RuntimeFacts,
-) -> Result<(), String> {
+) -> Result<i32, String> {
     write_with_context(root, red_report, None, runtime, ReportContext::standalone())
+        .map(red_report_exit_code)
 }
 
 fn write_with_context(
@@ -33,7 +35,7 @@ fn write_with_context(
     command_error: Option<&str>,
     runtime: RuntimeFacts,
     context: ReportContext<'_>,
-) -> Result<(), String> {
+) -> Result<Value, String> {
     let current = crate::package::inventory::package_digest(root)?;
     let report = crate::json_boundary::read_json(red_report).unwrap_or(Value::Null);
     let stale = stale_reason(&report, &current);
@@ -176,6 +178,10 @@ fn failure_reason(
             failures.join("; ")
         )
     }
+}
+
+fn red_report_exit_code(value: Value) -> i32 {
+    i32::from(value.get("status").and_then(Value::as_str) != Some("pass"))
 }
 
 fn failures(report: &Value) -> Vec<String> {
