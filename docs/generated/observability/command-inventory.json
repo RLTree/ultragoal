@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 8,
-        "partially_fitted": 39,
+        "fitted": 9,
+        "partially_fitted": 38,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "coverage prove",
+      "id": "line-cap check",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -714,7 +714,7 @@
       ]
     },
     "coverage prove": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "complete-coverage-only claim ceiling",
@@ -725,18 +725,27 @@
         "current same-candidate traces query proof",
         "pass and fail stdout contract",
         "coverage receipt observability binding",
-        "shared-authority-write serial scheduler telemetry"
-      ],
-      "missing_surfaces": [
+        "shared-authority-write serial scheduler telemetry",
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "explain-failure observed repair fields for coverage command receipt",
+        "emitted coverage observability receipt validates against observability schema"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "coverage-prove-observability-binding",
       "focused_tests": [
         "coverage_prove_parse_supports_receipt_jobs_and_validate_existing",
         "coverage_prove_command_writes_pass_and_fail_observability",
-        "coverage_prove_records_authoritative_command_failure"
+        "coverage_prove_records_authoritative_command_failure",
+        "coverage_parse_and_scheduler_edges_are_typed",
+        "coverage_dispatch_and_receipt_write_failures_are_observable",
+        "coverage_authoritative_script_and_package_mutation_are_observed",
+        "coverage_diagnostic_fallbacks_are_actionable_and_bounded",
+        "coverage_validation_rejects_scalar_completion_and_missing_receipts",
+        "coverage_validation_rejects_digest_report_and_manifest_edges",
+        "coverage_validation_handles_uncanonical_root_for_absolute_receipt",
+        "coverage_validation_accepts_absolute_receipts_and_template_fallbacks"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/coverage-prove.json"
@@ -746,9 +755,9 @@
         "validation_artifacts/observability/coverage-prove-metrics-query.json",
         "validation_artifacts/observability/coverage-prove-traces-query.json"
       ],
-      "claim_impact": "supports_complete_coverage_source_local_observability_only_no_readiness_release_completion_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_coverage_prove_observability_source_local_only_no_readiness_release_completion_update_goal; production_coverage_prove_still_fails_on_uncovered_code_and_stale_coverage_receipt_digests",
       "current_owner_surface": "command:coverage prove",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -760,9 +769,26 @@
         "validation_artifacts/observability/coverage-prove-metrics-query.json",
         "validation_artifacts/observability/coverage-prove-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "coverage_prove_records_authoritative_command_failure",
+        "coverage_parse_and_scheduler_edges_are_typed",
+        "coverage_dispatch_and_receipt_write_failures_are_observable",
+        "coverage_validation_rejects_scalar_completion_and_missing_receipts",
+        "coverage_validation_rejects_digest_report_and_manifest_edges"
+      ],
+      "green_fixtures": [
+        "coverage_prove_parse_supports_receipt_jobs_and_validate_existing",
+        "coverage_prove_command_writes_pass_and_fail_observability",
+        "coverage_authoritative_script_and_package_mutation_are_observed",
+        "coverage_validation_accepts_absolute_receipts_and_template_fallbacks"
+      ],
+      "tamper_fixtures": [
+        "coverage_dispatch_and_receipt_write_failures_are_observable",
+        "coverage_authoritative_script_and_package_mutation_are_observed",
+        "coverage_diagnostic_fallbacks_are_actionable_and_bounded",
+        "coverage_validation_handles_uncanonical_root_for_absolute_receipt",
+        "coverage_validation_rejects_digest_report_and_manifest_edges"
+      ]
     },
     "line-cap check": {
       "fitting_status": "partially_fitted",
