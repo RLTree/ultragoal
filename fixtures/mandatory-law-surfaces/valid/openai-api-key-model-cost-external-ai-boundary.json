@@ -29,7 +29,7 @@
   "evidence_artifacts": [
     {
       "path": "docs/openai-key-policy.json",
-      "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8"
+      "digest": "sha256:19bf64672c03efce9c0db5f0d7dbbce5317d731fab354904fca8311b4274db1e"
     }
   ]
 }

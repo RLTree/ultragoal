@@ -1418,7 +1418,7 @@
     "validator/src/cli/control/plane/registry/mod.rs",
     "validator/src/cli/control/plane/surface/mod.rs",
     "validator/src/cli/control/plane/surface/target.rs",
-    "validator/src/cli/control/plane/transactional.rs",
+    "validator/src/cli/control/plane/transactional/mod.rs",
     "validator/src/cli/control/plane/types.rs",
     "validator/src/cli/garbage/collection/mod.rs",
     "validator/src/cli/garbage/collection/receipt.rs",

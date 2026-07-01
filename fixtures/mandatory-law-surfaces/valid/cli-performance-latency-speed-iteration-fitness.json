@@ -27,23 +27,23 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:7863a129ea9aa2c7f3428f1ea5f34ae1c1b9caee766afa68e5c486e2d36f991a",
+      "digest": "sha256:7b4f35d88c44e368586de215b030780ab277b1c2e909e272fca65c2bb4aee7ae",
       "path": "docs/source-obligation-matrix.json"
     },
     {
-      "digest": "sha256:893e8fdb290f5222ca87601430048fb42aedda858295f928ad07f5dbf9a23a57",
+      "digest": "sha256:2ce4e604b4adb706e672cf2139abb663702823ed31bb2ccd3014f2191ed63c70",
       "path": "validator/src/audit/cli/performance.rs"
     },
     {
-      "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
+      "digest": "sha256:0d7fcc9fa2217e1a22bb7fb690919b6d0d012164c832036026208380f4fe5deb",
       "path": "validator/src/cli/performance/mod.rs"
     },
     {
-      "digest": "sha256:3e4dab4a613ed2a4b5e584b8995a044eb4259bb01d1b935e81fb0ac1e618d2c0",
+      "digest": "sha256:c444a730bfad062a38a9965d716e99a43c97c2b6b557197f8e50cf1470d889d5",
       "path": "validator/src/cli/performance/types.rs"
     },
     {
-      "digest": "sha256:e8c1908454bd2fbce600173b5262491d5fe0a9f6a5d4eefea63df1b6b1759204",
+      "digest": "sha256:7d63a1ff3b4a175e86b93376d7d6bf7df9fe49cc24437e4d89fe059b6a2d0114",
       "path": "schemas/cli-performance-receipt.schema.json"
     }
   ],

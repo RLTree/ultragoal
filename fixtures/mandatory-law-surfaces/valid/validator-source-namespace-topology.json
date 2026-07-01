@@ -10,7 +10,7 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:3b2e69b5feef3eeae31b9d4513d280ebead8bffe0ed77329cf6801e63b394042",
+      "digest": "sha256:07e91d6cd920667abcf8c3237785ec40d044ddc534e857f231b453136a149650",
       "path": "validator/src/audit/namespace/source/topology.rs"
     },
     {
@@ -18,11 +18,11 @@
       "path": "validator/src/audit/namespace/classes.rs"
     },
     {
-      "digest": "sha256:dc88f9d1f6a995677648291a2335e3b4ee5a3ffad75daea768fec75e4999ccfa",
+      "digest": "sha256:35d2f89e5f14a8624db9101d0594f896a18c565f5fc27411b55b7808ce996caf",
       "path": "validator/src/audit/namespace/law/mod.rs"
     },
     {
-      "digest": "sha256:8b6eeffa12538adc45655f1dbc6c71eceb6d7b06f3e6f6ddb829c600f96ad3cc",
+      "digest": "sha256:cce6c9611674e59b239e82981bbadbdb0cacc51160a4dbef1153c209485da8a5",
       "path": "validator/src/self_tests/namespace/red_fixtures.rs"
     },
     {

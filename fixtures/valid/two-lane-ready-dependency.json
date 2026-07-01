@@ -4401,7 +4401,8 @@
       "validator/src/audit/session/log/mod.rs",
       "validator/src/audit/session/log/hardening/mod.rs",
       "validator/src/audit/session/log/hardening/requirements.rs",
-      "validator/src/audit/source_obligations.rs",
+      "validator/src/audit/source_obligations/mod.rs",
+      "validator/src/audit/source_obligations/required.rs",
       "validator/src/audit/standards_gardening.rs",
       "validator/src/audit/template_integrity.rs",
       "validator/src/audit/text_guards/mod.rs",
@@ -4481,7 +4482,9 @@
       "validator/src/cli/control/plane/registry/mod.rs",
       "validator/src/cli/control/plane/registry/capability/gap.rs",
       "validator/src/cli/control/plane/registry/capability/mod.rs",
-      "validator/src/cli/control/plane/transactional.rs",
+      "validator/src/cli/control/plane/transactional/mod.rs",
+      "validator/src/cli/control/plane/transactional/stdout.rs",
+      "validator/src/cli/control/plane/transactional/telemetry.rs",
       "validator/src/cli/control/plane/types.rs",
       "validator/src/cli/final_packet/mod.rs",
       "validator/src/cli/garbage/collection/mod.rs",
@@ -4656,7 +4659,10 @@
       "validator/src/self_tests/command/dispatch.rs",
       "validator/src/self_tests/command/mod.rs",
       "validator/src/self_tests/command/product.rs",
-      "validator/src/self_tests/command/review_round.rs",
+      "validator/src/self_tests/command/review/mod.rs",
+      "validator/src/self_tests/command/review/round.rs",
+      "validator/src/self_tests/command/review/round_observability.rs",
+      "validator/src/self_tests/command/review/target_observability.rs",
       "validator/src/self_tests/command/round_receipts.rs",
       "validator/src/self_tests/command/run.rs",
       "validator/src/self_tests/command/standards.rs",
@@ -20631,8 +20637,8 @@
           "path": "validator/src/audit/session/log/hardening/requirements.rs"
         },
         {
-          "digest": "sha256:461e045650b39bf1585ac29c5d2b09476596fcae582974c25f785be7a095c789",
-          "path": "validator/src/audit/source_obligations.rs"
+          "digest": "sha256:ba384a20b39328943c6554de3e1abc4d0d76734e28dcc52cc3f42c3b7b33dd88",
+          "path": "validator/src/audit/source_obligations/mod.rs"
         },
         {
           "digest": "sha256:342449a5023d041186c165525b98dcbc03a8aafd8c838ef8bda3be95db93b87a",
@@ -20951,8 +20957,8 @@
           "path": "validator/src/cli/control/plane/registry/capability/mod.rs"
         },
         {
-          "digest": "sha256:d5d4b3e64df55d76b012a9cd4474678675d4b864f6312d252eb23537d4e344bc",
-          "path": "validator/src/cli/control/plane/transactional.rs"
+          "digest": "sha256:be8b46993d8a7a1fd7a2bb3b91e4952a508a46daa73cc23974ccd9794eeac1c7",
+          "path": "validator/src/cli/control/plane/transactional/mod.rs"
         },
         {
           "digest": "sha256:313fc4178d101806ed5772830d96bea3383d617fb5d6b1c39ed6620e1e8b2775",
@@ -21651,8 +21657,8 @@
           "path": "validator/src/self_tests/command/product.rs"
         },
         {
-          "digest": "sha256:5d4c9b4260eb31b83849e07b4c2e21347e54f26f3f10c4ac4a5216af9af06454",
-          "path": "validator/src/self_tests/command/review_round.rs"
+          "digest": "sha256:6833ee6c890d5e5ba24ab7d36fac0cabf6fde7716687c862b2e9deafd32fc4b2",
+          "path": "validator/src/self_tests/command/review/mod.rs"
         },
         {
           "digest": "sha256:66c6588a93c77a4d32cdffcc3a9b080f0d02d164a9da9ac91fbe4762b7f2ad40",

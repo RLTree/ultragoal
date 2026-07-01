@@ -667,7 +667,7 @@
           "path": "validator/src/cli/control/plane/types.rs"
         },
         {
-          "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21",
+          "digest": "sha256:eef4a26a120f7b15e1e9fc26e5b1444433802518353dcfac741e5e641dd9cbc3",
           "path": "validator/src/cli/control/plane/mod.rs"
         },
         {
@@ -699,8 +699,8 @@
           "path": "validator/src/cli/control/plane/proof/transaction.rs"
         },
         {
-          "digest": "sha256:1a3c50686e09720625929af6e3a206e5c14b217fb035305db4308f8f7b1f4480",
-          "path": "validator/src/cli/control/plane/transactional.rs"
+          "digest": "sha256:be8b46993d8a7a1fd7a2bb3b91e4952a508a46daa73cc23974ccd9794eeac1c7",
+          "path": "validator/src/cli/control/plane/transactional/mod.rs"
         },
         {
           "digest": "sha256:40aaf1c83f2e7eb60a8b5497512c6fbc45a680f1b7a69ce4b33c8e8c50ca4714",
@@ -723,11 +723,11 @@
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
         },
         {
-          "digest": "sha256:598a6ded58d36851e9e9bcd1b22bc460a6386e51c96f98a1bb43b6dd5c688fea",
+          "digest": "sha256:6068fb788eff7b77b5bf2a46c038d7ff141cbd29a99cd3ecf6457f0f645fc84a",
           "path": "validator/src/self_tests/cli/control/receipts.rs"
         },
         {
-          "digest": "sha256:f5ecc1ae3e0c56bead8396d75fea09dedb2658ea4d45b29bcda938f8b7d45aa1",
+          "digest": "sha256:1bc4d7bec891a9877a5f9f83ffdbc1fbd535606296efe7ce986bd91639b4d511",
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
         },
         {
@@ -743,11 +743,11 @@
           "path": "validator/src/self_tests/cli/parse_errors.rs"
         },
         {
-          "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
+          "digest": "sha256:ffd41753273f1342e055ec0ad2d440b08ced7554ea2e3009124959352200cbcc",
           "path": "schemas/cli-control-plane-receipt.schema.json"
         },
         {
-          "digest": "sha256:3324a7ccb119d3ac2707a1022b724ceff0c7d6470fae6e85e9904ff11f1321ba",
+          "digest": "sha256:a62e869636f6a0da558e7ea0524b1afeb85d2f9cd326610d53199fa3a8a45252",
           "path": "schemas/cli-transactional-finalization-receipt.schema.json"
         }
       ],
@@ -806,15 +806,15 @@
           "path": "validator/src/audit/cli/performance.rs"
         },
         {
-          "digest": "sha256:cfd2e9d8f4b847235af597c5702543f5f913b47b49c488a1ce2336ac8fd43298",
+          "digest": "sha256:0d7fcc9fa2217e1a22bb7fb690919b6d0d012164c832036026208380f4fe5deb",
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:3e4dab4a613ed2a4b5e584b8995a044eb4259bb01d1b935e81fb0ac1e618d2c0",
+          "digest": "sha256:c444a730bfad062a38a9965d716e99a43c97c2b6b557197f8e50cf1470d889d5",
           "path": "validator/src/cli/performance/types.rs"
         },
         {
-          "digest": "sha256:e8c1908454bd2fbce600173b5262491d5fe0a9f6a5d4eefea63df1b6b1759204",
+          "digest": "sha256:7d63a1ff3b4a175e86b93376d7d6bf7df9fe49cc24437e4d89fe059b6a2d0114",
           "path": "schemas/cli-performance-receipt.schema.json"
         }
       ],
@@ -896,7 +896,7 @@
           "path": "validator/src/cli/control/plane/types.rs"
         },
         {
-          "digest": "sha256:60034d9ec79a1c538ee8a8111466ae3671ce5ed54eb89ed3107bdbce24e19f21",
+          "digest": "sha256:eef4a26a120f7b15e1e9fc26e5b1444433802518353dcfac741e5e641dd9cbc3",
           "path": "validator/src/cli/control/plane/mod.rs"
         },
         {
@@ -928,8 +928,8 @@
           "path": "validator/src/cli/control/plane/proof/transaction.rs"
         },
         {
-          "digest": "sha256:1a3c50686e09720625929af6e3a206e5c14b217fb035305db4308f8f7b1f4480",
-          "path": "validator/src/cli/control/plane/transactional.rs"
+          "digest": "sha256:be8b46993d8a7a1fd7a2bb3b91e4952a508a46daa73cc23974ccd9794eeac1c7",
+          "path": "validator/src/cli/control/plane/transactional/mod.rs"
         },
         {
           "digest": "sha256:40aaf1c83f2e7eb60a8b5497512c6fbc45a680f1b7a69ce4b33c8e8c50ca4714",
@@ -952,11 +952,11 @@
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
         },
         {
-          "digest": "sha256:598a6ded58d36851e9e9bcd1b22bc460a6386e51c96f98a1bb43b6dd5c688fea",
+          "digest": "sha256:6068fb788eff7b77b5bf2a46c038d7ff141cbd29a99cd3ecf6457f0f645fc84a",
           "path": "validator/src/self_tests/cli/control/receipts.rs"
         },
         {
-          "digest": "sha256:f5ecc1ae3e0c56bead8396d75fea09dedb2658ea4d45b29bcda938f8b7d45aa1",
+          "digest": "sha256:1bc4d7bec891a9877a5f9f83ffdbc1fbd535606296efe7ce986bd91639b4d511",
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
         },
         {
@@ -972,11 +972,11 @@
           "path": "validator/src/self_tests/cli/parse_errors.rs"
         },
         {
-          "digest": "sha256:15cbad9f1fc313dc828ed2b5b6e633f875271d1013237bf89c9b4c5a2ca44fba",
+          "digest": "sha256:ffd41753273f1342e055ec0ad2d440b08ced7554ea2e3009124959352200cbcc",
           "path": "schemas/cli-control-plane-receipt.schema.json"
         },
         {
-          "digest": "sha256:3324a7ccb119d3ac2707a1022b724ceff0c7d6470fae6e85e9904ff11f1321ba",
+          "digest": "sha256:a62e869636f6a0da558e7ea0524b1afeb85d2f9cd326610d53199fa3a8a45252",
           "path": "schemas/cli-transactional-finalization-receipt.schema.json"
         }
       ],
@@ -2459,7 +2459,7 @@
       "enforcement_status": "deterministic_fail_closed",
       "evidence_artifacts": [
         {
-          "digest": "sha256:67e09c647c8f5136a9e18d8a752903b5dcf6c28b93214dcb648badb04f1a1ce8",
+          "digest": "sha256:19bf64672c03efce9c0db5f0d7dbbce5317d731fab354904fca8311b4274db1e",
           "path": "docs/openai-key-policy.json"
         }
       ],
@@ -3609,7 +3609,7 @@
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3653,7 +3653,7 @@
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3697,7 +3697,7 @@
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3741,7 +3741,7 @@
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3785,7 +3785,7 @@
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:99ade185d91c2ac5f15c1477def901508baf9cb70dd8cf31212cf6fd7c666fde",
+          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -4671,7 +4671,7 @@
       "enforcement_status": "deterministic_fail_closed",
       "evidence_artifacts": [
         {
-          "digest": "sha256:1a667d0274ef0062be14e3cc15cd0a1e2b3256cbad3d37e0d563172724da6971",
+          "digest": "sha256:07e91d6cd920667abcf8c3237785ec40d044ddc534e857f231b453136a149650",
           "path": "validator/src/audit/namespace/source/topology.rs"
         },
         {
@@ -4679,7 +4679,7 @@
           "path": "validator/src/audit/namespace/classes.rs"
         },
         {
-          "digest": "sha256:0ba725663a2482e58e7a47b45ac6a8b3f5f9c1f0792ae908694c0cec78ccc9e9",
+          "digest": "sha256:35d2f89e5f14a8624db9101d0594f896a18c565f5fc27411b55b7808ce996caf",
           "path": "validator/src/audit/namespace/law/mod.rs"
         },
         {

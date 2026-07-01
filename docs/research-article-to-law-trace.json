@@ -93,7 +93,7 @@
       "receipt_requirements": ["observability trace receipt with root and child span parentage"],
       "package_inventory_paths": ["schemas/observability-trace.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md"],
-      "claim_guards": ["broken_span_parentage_blocks_gate_92", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["broken_span_parentage_blocks_observability_gate", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["trace_parentage_status", "observability_status"],
       "update_goal_blockers": ["observability_trace_incomplete", "observability_gate_incomplete"]
     },
@@ -131,7 +131,7 @@
       "receipt_requirements": ["performance receipt with latency, traffic, errors, saturation class evidence, and observability metric binding"],
       "package_inventory_paths": ["validation_artifacts/cli/performance-receipt.json", "schemas/observability-metric.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md"],
-      "claim_guards": ["performance_proof_supports_performance_only_without_self_law", "observability_signal_class_missing_blocks_gate_92"],
+      "claim_guards": ["performance_proof_supports_performance_only_without_self_law", "observability_signal_class_missing_blocks_observability_gate"],
       "final_packet_fields": ["performance_signal_status", "observability_status"],
       "update_goal_blockers": ["performance_receipt_incomplete", "observability_gate_incomplete"]
     },
@@ -150,7 +150,7 @@
       "receipt_requirements": ["wide observability event receipt with failure class, next repair, and claim impact"],
       "package_inventory_paths": ["schemas/observability-event.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md"],
-      "claim_guards": ["opaque_failure_output_blocks_gate_92", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["opaque_failure_output_blocks_observability_gate", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["non_opaque_failure_status", "observability_status"],
       "update_goal_blockers": ["opaque_failure_present", "observability_gate_incomplete"]
     },
@@ -321,7 +321,7 @@
       "receipt_requirements": ["telemetry receipts with expanded envelope fields, bounded metric labels, redaction state, and high-cardinality values kept in logs events traces or eval records"],
       "package_inventory_paths": ["docs/generated/observability/command-inventory.json", "schemas/observability-event.schema.json", "schemas/observability-metric.schema.json", "schemas/observability-trace.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/harness-engineering/SKILL.md"],
-      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "unbounded_metric_labels_block_gate_92"],
+      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "unbounded_metric_labels_block_observability_gate"],
       "final_packet_fields": ["telemetry_envelope_status", "observability_status"],
       "update_goal_blockers": ["telemetry_envelope_incomplete", "observability_gate_incomplete"]
     },
@@ -340,7 +340,7 @@
       "receipt_requirements": ["same-candidate observability query and explain receipt that identifies root cause, where why next repair, affected claim, stale evidence, and narrow rerun"],
       "package_inventory_paths": ["docs/generated/observability/command-inventory.json", "schemas/observability-query-result.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/proof-gate/SKILL.md"],
-      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "opaque_failure_output_blocks_gate_92"],
+      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "opaque_failure_output_blocks_observability_gate"],
       "final_packet_fields": ["observe_query_explain_status", "observability_status"],
       "update_goal_blockers": ["observe_query_explain_incomplete", "observability_gate_incomplete"]
     },
@@ -549,7 +549,7 @@
       "receipt_requirements": ["telemetry receipts with expanded envelope fields, bounded metric labels, redaction state, and high-cardinality values kept in logs events traces or eval records", "telemetry semantic-name and stable-id validation receipt"],
       "package_inventory_paths": ["schemas/observability-event.schema.json", "schemas/observability-metric.schema.json", "docs/generated/observability/command-inventory.json", "artifacts/source-snapshots/gold-standard-stack-developer-experience-governance-2026-07-01.txt", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md", "skills/agent-runtime-legibility/SKILL.md"],
-      "claim_guards": ["semantic_name_mismatch_blocks_telemetry_claims", "unbounded_metric_labels_block_gate_92", "unredacted_or_uncorrelated_telemetry_blocks_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["semantic_name_mismatch_blocks_telemetry_claims", "unbounded_metric_labels_block_observability_gate", "unredacted_or_uncorrelated_telemetry_blocks_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["telemetry_envelope_status", "telemetry_semantic_name_status", "observability_status"],
       "update_goal_blockers": ["telemetry_envelope_incomplete", "telemetry_semantic_names_incomplete", "observability_gate_incomplete"]
     },
