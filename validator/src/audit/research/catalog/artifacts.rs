@@ -7,6 +7,9 @@ pub(in crate::audit::research) struct SourceArtifact {
     pub(in crate::audit::research) method: String,
     pub(in crate::audit::research) corpus_path: String,
     pub(in crate::audit::research) corpus_digest: String,
+    pub(in crate::audit::research) archive_path: String,
+    pub(in crate::audit::research) archive_digest: String,
+    pub(in crate::audit::research) archive_entries: BTreeMap<String, String>,
 }
 
 pub(in crate::audit::research) fn source_artifacts(
@@ -23,6 +26,9 @@ pub(in crate::audit::research) fn source_artifacts(
             let method = text(row, "source_artifact_method");
             let corpus_path = text(row, "source_corpus_path");
             let corpus_digest = text(row, "source_corpus_digest");
+            let archive_path = text(row, "source_archive_path");
+            let archive_digest = text(row, "source_archive_digest");
+            let archive_entries = archive_entries(row);
             (!id.is_empty()).then_some((
                 id,
                 SourceArtifact {
@@ -30,8 +36,23 @@ pub(in crate::audit::research) fn source_artifacts(
                     method,
                     corpus_path,
                     corpus_digest,
+                    archive_path,
+                    archive_digest,
+                    archive_entries,
                 },
             ))
+        })
+        .collect()
+}
+
+fn archive_entries(row: &Value) -> BTreeMap<String, String> {
+    row.get("source_archive_entries")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|entry| {
+            Some((text(entry, "entry_path"), text(entry, "entry_digest")))
+                .filter(|(path, digest)| !path.is_empty() && !digest.is_empty())
         })
         .collect()
 }

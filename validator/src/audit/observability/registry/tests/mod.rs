@@ -42,7 +42,7 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
         "focused_tests": [],
         "receipt_paths": [],
         "live_query_proof_paths": [],
-        "claim_impact": "blocks_gate_92"
+        "claim_impact": "blocks_observability_gate"
     });
     write_registry_root(&root, inventory);
     write_valid_fixture(&root);
@@ -119,7 +119,7 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
         "focused_tests": [],
         "receipt_paths": [],
         "live_query_proof_paths": [],
-        "claim_impact": "blocks_gate_92"
+        "claim_impact": "blocks_observability_gate"
     });
     write_inventory(&root, signal_unfitted);
     failures.clear();
@@ -144,7 +144,7 @@ fn observability_registry_rejects_pass_shaped_control_board() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:source audit",
         "next_unfitted_surface": "metrics",
-        "claim_impact": "blocks_gate_92"
+        "claim_impact": "blocks_observability_gate"
     });
     inventory["fitting_control_board"]["status"] = json!("fitted");
     inventory["fitting_control_board"]["families"]["commands"]["fitted"] =
@@ -182,7 +182,7 @@ fn observability_control_board_uses_required_command_order() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:source audit",
         "next_unfitted_surface": "pass/fail stdout contract",
-        "claim_impact": "blocks_gate_92"
+        "claim_impact": "blocks_observability_gate"
     });
     inventory["fitting_inventory"]["archive build"] = json!({
         "fitting_status": "unfitted",
@@ -194,7 +194,7 @@ fn observability_control_board_uses_required_command_order() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:archive build",
         "next_unfitted_surface": "log",
-        "claim_impact": "blocks_gate_92"
+        "claim_impact": "blocks_observability_gate"
     });
     inventory["fitting_control_board"]["status"] = json!("blocked");
     inventory["fitting_control_board"]["families"]["commands"]["fitted"] =

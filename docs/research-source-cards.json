@@ -408,10 +408,10 @@
           ]
         },
         {
-          "requirement_id": "gold-standard-gate92-sensory-system",
+          "requirement_id": "gold-standard-agent-sensory-system",
           "summary": "Gate 92 is the agent sensory system and must cover metrics, traces, wide events, logs, evals, product/system health, and agent quality.",
           "source_evidence_ids": [
-            "gold-standard-gate92-sensory-system-source-anchor"
+            "gold-standard-agent-sensory-system-source-anchor"
           ]
         },
         {
@@ -475,11 +475,11 @@
           ]
         },
         {
-          "evidence_id": "gold-standard-gate92-sensory-system-source-anchor",
-          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-gate92-sensory-system",
+          "evidence_id": "gold-standard-agent-sensory-system-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-agent-sensory-system",
           "source_signal": "The synthesis makes Gate 92 the agent sensory system with metrics, traces, wide events, logs, evals, system health, and agent quality planes.",
           "requirement_ids": [
-            "gold-standard-gate92-sensory-system"
+            "gold-standard-agent-sensory-system"
           ]
         },
         {
@@ -542,6 +542,65 @@
       "source_artifact_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9",
       "source_corpus_path": "artifacts/source-snapshots/agentic-gold-standard-stack-synthesis-2026-07-01.txt",
       "source_corpus_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9"
+    },
+    {
+      "source_id": "gold-standard-stack-developer-experience-governance-2026-07-01",
+      "title": "Gold-standard stack developer-experience and governance archive",
+      "canonical_url": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01",
+      "source_kind": "attached_user_source_card",
+      "requirements": [
+        { "requirement_id": "gold-stack-hu-stack-001-agent-first-harness", "summary": "The repository, runtime harness, validation system, observability stack, eval suite, and cleanup system are product surfaces; tool presence alone is not compliance.", "source_evidence_ids": ["gold-stack-hu-stack-001-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-002-cross-language-claim-authority", "summary": "Rust, TypeScript, Python, SQL, infrastructure, telemetry, and tools emit observations only; ultragoal converts observations into claims through typed same-surface evidence.", "source_evidence_ids": ["gold-stack-hu-stack-002-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-003-clean-checkout-discoverability", "summary": "A fresh agent must discover setup, validation, local runtime, evals, and release proof from repo files only; hidden local state cannot support claims.", "source_evidence_ids": ["gold-stack-hu-stack-003-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-004-same-surface-full-stack-proof", "summary": "Every source, package, install, runtime, browser, database, workflow, observability, and product claim must be proven on its same surface.", "source_evidence_ids": ["gold-stack-hu-stack-004-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-005-lockfile-sovereignty", "summary": "Cargo, Bun, uv, Nix, OpenTofu, and equivalent lockfiles are governed truth surfaces; lock drift blocks dependent build, package, release, and update_goal claims.", "source_evidence_ids": ["gold-stack-hu-stack-005-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-006-telemetry-schema", "summary": "No trace, metric, log, event, or eval record may introduce unregistered attributes; each attribute has type, owner, cardinality, privacy, and allowed surfaces.", "source_evidence_ids": ["gold-stack-hu-stack-006-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-007-agent-tool-boundary", "summary": "Every tool or MCP action requires typed schemas, risk class, approval policy, idempotency class, telemetry span, cleanup policy, and claim impact.", "source_evidence_ids": ["gold-stack-hu-stack-007-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-008-product-cockpit", "summary": "Agent work must be inspectable through a cockpit or equivalent runtime surface showing plans, diffs, validations, traces, evals, tool calls, artifacts, and claim ceilings.", "source_evidence_ids": ["gold-stack-hu-stack-008-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-009-full-stack-gc", "summary": "Every generated artifact, cache, package, install copy, database state, trace, media artifact, receipt, packet, lock, pid, port, and tempdir must be classed before cleanup.", "source_evidence_ids": ["gold-stack-hu-stack-009-source-anchor"] },
+        { "requirement_id": "gold-stack-hu-stack-010-update-goal-eligibility", "summary": "update_goal is forbidden unless the CLI verifies current goal state, active receipts, stack claim ceiling, product proof eligibility, and cleanup/protection status.", "source_evidence_ids": ["gold-stack-hu-stack-010-source-anchor"] },
+        { "requirement_id": "gold-stack-command-fast-loop", "summary": "ultragoal stack fast is the hot inner loop and supports only fast feedback plus changed-scope structural observations, not review, release, product, or update_goal claims.", "source_evidence_ids": ["gold-stack-command-fast-source-anchor"] },
+        { "requirement_id": "gold-stack-command-standard-loop", "summary": "ultragoal stack standard is the serious source-local repair proof loop covering language standards, migrations, observability semantics, tool inventory, fixtures, receipts, and claim ceiling.", "source_evidence_ids": ["gold-stack-command-standard-source-anchor"] },
+        { "requirement_id": "gold-stack-command-release-loop", "summary": "ultragoal stack release is the full release/product proof loop and supports release/product/final-packet claims only when every same-surface receipt is current.", "source_evidence_ids": ["gold-stack-command-release-source-anchor"] },
+        { "requirement_id": "gold-stack-command-clean-proof-loop", "summary": "ultragoal stack clean-proof --cache-mode none proves clean checkout and no hidden cache dependence through isolated caches, tool bootstrap, local services, and the standard loop.", "source_evidence_ids": ["gold-stack-command-clean-proof-source-anchor"] },
+        { "requirement_id": "gold-stack-command-watch-loop", "summary": "ultragoal stack watch emits observations only and cannot mint completion claims without current receipt verification and claim-ceiling computation.", "source_evidence_ids": ["gold-stack-command-watch-source-anchor"] },
+        { "requirement_id": "gold-stack-command-resources-prove-loop", "summary": "ultragoal stack resources prove must cover bounded memory, queues, processes, pools, browser artifacts, workflow backlog, and agent tool cleanup across the stack.", "source_evidence_ids": ["gold-stack-command-resources-source-anchor"] },
+        { "requirement_id": "gold-stack-command-gc-loop", "summary": "ultragoal gc plan, dry-run, apply, and verify govern cleanup; blind deletion and unclassified artifact removal cannot support claims.", "source_evidence_ids": ["gold-stack-command-gc-source-anchor"] },
+        { "requirement_id": "gold-stack-receipt-staleness-model", "summary": "Stack receipts must record command, goal, git and worktree state, toolchain identities, surface digests, component receipts, claim support/exclusions, issue time, expiry, and staleness triggers.", "source_evidence_ids": ["gold-stack-receipt-staleness-source-anchor"] },
+        { "requirement_id": "gold-stack-cache-no-cache-honesty", "summary": "Cache use is legal but cache concealment is illegal; warm-cache speed is not clean-checkout proof and cache proof supports only cache-surface claims unless a same-surface law allows more.", "source_evidence_ids": ["gold-stack-cache-no-cache-source-anchor"] }
+      ],
+      "source_artifact_method": "local_archive_sha256",
+      "evidence_anchors": [
+        { "evidence_id": "gold-stack-hu-stack-001-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-001-agent-first-harness", "source_signal": "The archive states the repository, runtime harness, validation system, observability stack, eval suite, and artifact cleanup are first-class product surfaces.", "requirement_ids": ["gold-stack-hu-stack-001-agent-first-harness"] },
+        { "evidence_id": "gold-stack-hu-stack-002-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-002-cross-language-claim-authority", "source_signal": "The archive states observations from languages, tools, infrastructure, and telemetry become claims only after ultragoal binds typed current same-surface evidence.", "requirement_ids": ["gold-stack-hu-stack-002-cross-language-claim-authority"] },
+        { "evidence_id": "gold-stack-hu-stack-003-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-003-clean-checkout-discoverability", "source_signal": "The archive requires setup, validation, local runtime, evals, and release proof to be discoverable from repo files without hidden author memory.", "requirement_ids": ["gold-stack-hu-stack-003-clean-checkout-discoverability"] },
+        { "evidence_id": "gold-stack-hu-stack-004-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-004-same-surface-full-stack-proof", "source_signal": "The archive maps each proof surface to its own evidence class and rejects package, rollout, trace, metric, or reviewer substitutes for product claims.", "requirement_ids": ["gold-stack-hu-stack-004-same-surface-full-stack-proof"] },
+        { "evidence_id": "gold-stack-hu-stack-005-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-005-lockfile-sovereignty", "source_signal": "The archive treats Cargo.lock, bun.lock, uv.lock, flake.lock, provider locks, and equivalent lock surfaces as governed truth that stale dependent claims when drifted.", "requirement_ids": ["gold-stack-hu-stack-005-lockfile-sovereignty"] },
+        { "evidence_id": "gold-stack-hu-stack-006-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-006-telemetry-schema", "source_signal": "The archive requires registered telemetry and eval attributes with type, owner, cardinality class, privacy class, and allowed surfaces.", "requirement_ids": ["gold-stack-hu-stack-006-telemetry-schema"] },
+        { "evidence_id": "gold-stack-hu-stack-007-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-007-agent-tool-boundary", "source_signal": "The archive requires each tool or MCP action to carry schemas, risk class, approval, idempotency, telemetry, cleanup, and claim impact.", "requirement_ids": ["gold-stack-hu-stack-007-agent-tool-boundary"] },
+        { "evidence_id": "gold-stack-hu-stack-008-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-008-product-cockpit", "source_signal": "The archive requires an inspectable runtime surface for agent work while preserving CLI receipts as claim authority.", "requirement_ids": ["gold-stack-hu-stack-008-product-cockpit"] },
+        { "evidence_id": "gold-stack-hu-stack-009-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-009-full-stack-gc", "source_signal": "The archive requires artifact/cache/state/media/receipt/packet/lock/pid/port/tempdir classification before cleanup and deletion receipts for apply.", "requirement_ids": ["gold-stack-hu-stack-009-full-stack-gc"] },
+        { "evidence_id": "gold-stack-hu-stack-010-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#hu-stack-010-update-goal-eligibility", "source_signal": "The archive requires update_goal to stay forbidden until current goal state, receipts, stack claim ceiling, product proof eligibility, and cleanup/protection status are verified.", "requirement_ids": ["gold-stack-hu-stack-010-update-goal-eligibility"] },
+        { "evidence_id": "gold-stack-command-fast-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-fast", "source_signal": "The archive defines stack fast as the fastest meaningful local feedback command with only fast-feedback and changed-scope structural claim support.", "requirement_ids": ["gold-stack-command-fast-loop"] },
+        { "evidence_id": "gold-stack-command-standard-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-standard", "source_signal": "The archive defines stack standard as serious source-local repair proof across language standards, DB checks, observability semantics, tool inventory, fixtures, receipts, and claim ceiling.", "requirement_ids": ["gold-stack-command-standard-loop"] },
+        { "evidence_id": "gold-stack-command-release-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-release", "source_signal": "The archive defines stack release as the full release/product proof loop and ties release/product/final-packet support to current same-surface receipts.", "requirement_ids": ["gold-stack-command-release-loop"] },
+        { "evidence_id": "gold-stack-command-clean-proof-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-clean-proof", "source_signal": "The archive defines clean proof as isolated-cache, fresh-checkout, no-hidden-state proof with full standard validation.", "requirement_ids": ["gold-stack-command-clean-proof-loop"] },
+        { "evidence_id": "gold-stack-command-watch-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-watch", "source_signal": "The archive defines watch as observations only, never completion authority without current receipt verification and claim ceiling computation.", "requirement_ids": ["gold-stack-command-watch-loop"] },
+        { "evidence_id": "gold-stack-command-resources-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-resources-prove", "source_signal": "The archive defines resources prove as bounded memory, queue, process, pool, browser artifact, workflow backlog, and tool cleanup proof across the stack.", "requirement_ids": ["gold-stack-command-resources-prove-loop"] },
+        { "evidence_id": "gold-stack-command-gc-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#gc-plan-dry-run-apply-verify", "source_signal": "The archive requires GC plan, dry-run, apply, and verify with artifact classification and no blind deletion.", "requirement_ids": ["gold-stack-command-gc-loop"] },
+        { "evidence_id": "gold-stack-receipt-staleness-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#stack-receipt-staleness-model", "source_signal": "The archive defines stack receipt fields, surface digests, claim support/exclusions, issue/expiry, and staleness triggers across locks, schemas, laws, fixtures, tool registries, package/install/runtime, and observability config.", "requirement_ids": ["gold-stack-receipt-staleness-model"] },
+        { "evidence_id": "gold-stack-cache-no-cache-source-anchor", "source_locator": "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01#cache-no-cache-honesty", "source_signal": "The archive states cache use is legal, cache concealment is illegal, warm-cache speed is not clean proof, and cache proof is cache-surface proof only.", "requirement_ids": ["gold-stack-cache-no-cache-honesty"] }
+      ],
+      "source_artifact_digest": "sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839",
+      "source_corpus_path": "artifacts/source-snapshots/gold-standard-stack-developer-experience-governance-2026-07-01.txt",
+      "source_corpus_digest": "sha256:daabe91b976da5a04816d71f313719864f9343c3033d4a8227ecefe752ed9ba2",
+      "source_archive_path": "/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip",
+      "source_archive_digest": "sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839",
+      "source_archive_entries": [
+        { "entry_path": "harness_ultragoal_gold_standard_stack_developer_experience.md", "entry_digest": "sha256:640956f025b58ce3667f8126d46d1bfaf84b720fff7838662215a9583374969b" },
+        { "entry_path": "AGENTS.md", "entry_digest": "sha256:96f92402bb16e46defd9c5a56687ce9620d0b392c0107788f0e0d34e48fc3a2e" },
+        { "entry_path": "harness_ultragoal_codex_gold_standard_stack_laws_AGENTS.md", "entry_digest": "sha256:96f92402bb16e46defd9c5a56687ce9620d0b392c0107788f0e0d34e48fc3a2e" }
+      ]
     }
   ]
 }

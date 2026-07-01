@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
-mod gate92;
+mod observability_binding;
 #[cfg(test)]
 mod tests;
 
@@ -144,8 +144,8 @@ fn row_failures_for(
         "setup_retrofit_omitted",
         Some(known.package_paths),
     ));
-    out.extend(gate92::required_field_failures(id, row));
-    out.extend(gate92::row_failures(id, row));
+    out.extend(observability_binding::required_field_failures(id, row));
+    out.extend(observability_binding::row_failures(id, row));
     if array(row, "canonical_law_ids")
         .iter()
         .all(|law| law.starts_with("HU-"))

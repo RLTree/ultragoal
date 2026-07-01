@@ -91,7 +91,7 @@ fn base_row(
         "tamper_fixtures": [format!("fixtures/tamper/observability/{fixture_slug}-tamper.json")],
         "current_owner_surface": owner,
         "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
+        "claim_impact": "supports_observability_gate_when_same_candidate"
     });
     if let Some(operation) = operation {
         row["operation"] = json!(operation);

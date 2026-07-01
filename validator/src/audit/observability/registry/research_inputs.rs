@@ -63,6 +63,10 @@ pub(super) const REQUIRED: &[RequiredInput] = &[
         source_id: "agentic-gold-standard-stack-synthesis-2026-07-01",
         url: "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01",
     },
+    RequiredInput {
+        source_id: "gold-standard-stack-developer-experience-governance-2026-07-01",
+        url: "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01",
+    },
 ];
 
 pub(super) fn check(value: &Value, out: &mut Vec<String>) {

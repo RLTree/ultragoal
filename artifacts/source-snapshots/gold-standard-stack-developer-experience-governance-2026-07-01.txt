@@ -1,0 +1,4991 @@
+# Gold-Standard Stack Developer Experience Governance Archive Snapshot
+
+Source archive path: /Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip
+Source archive digest: sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839
+
+This package-owned source snapshot was generated from the archive entries listed below. Exact external version/vendor claims remain snapshot candidates until primary-source verified.
+
+
+## Archive entry: harness_ultragoal_gold_standard_stack_developer_experience.md
+
+Entry digest: sha256:640956f025b58ce3667f8126d46d1bfaf84b720fff7838662215a9583374969b
+
+# Harness Ultragoal Gold-Standard Stack Developer Experience and Governance Proposal
+
+**Document type:** research-backed, stack-specific engineering law proposal  
+**Target system:** Harness Ultragoal and similar agentic software-governance products  
+**Date basis:** July 1, 2026  
+**Core thesis:** the harness is the product; the language stack exists to make the harness truthful, fast, observable, restartable, and mechanically governed.
+
+---
+
+# 0. Governing premise
+
+The gold-standard stack is not “frontend + backend + database.” The correct unit for agentic software is:
+
+```text
+agent-legible repository
++ isolated execution harnesses
++ deterministic validation
++ repair/eval loops
++ high-cardinality observability
++ mechanically enforced architecture
++ production SRE discipline
++ governed cleanup of every artifact surface
+```
+
+Harness Ultragoal must treat every stack component as a **governed proof surface**. Rust, TypeScript, Python, PostgreSQL, ClickHouse, OpenTelemetry, Nix, Bazel, OpenTofu, Kubernetes, Codex, Agents SDK, and MCP tools are not a pile of tools. They are a claim-governance substrate.
+
+The central law remains:
+
+> **No claim exists until the Harness Ultragoal CLI can bind it to typed, current, same-surface evidence.**
+
+A tool may observe. A package may build. A UI may render. A DB migration may run. A test may pass. None of those facts becomes a completion, product, release, or `update_goal` claim until `ultragoal` parses the result, binds it to the relevant proof surface and subject digests, verifies freshness, computes the claim ceiling, and emits a receipt.
+
+---
+
+# 1. Research anchors and verified stack snapshot
+
+This document uses the uploaded gold-standard stack thesis as the project-specific source of intent, then maps each selected component into Harness Ultragoal law language.
+
+| Area | Source anchor | Policy consequence |
+|---|---|---|
+| Agent-first harness engineering | OpenAI Harness Engineering: repository and runtime must be legible to agents; agents should be able to validate, review, repair, and use app/log/metric surfaces. <https://openai.com/index/harness-engineering/> | The repo, runtime, logs, metrics, traces, docs, evals, fixtures, and per-worktree harnesses are product surfaces. |
+| Restartable plans | Codex ExecPlans require self-contained plans that a fresh agent can follow with only the repo and the plan. <https://developers.openai.com/cookbook/articles/codex_exec_plans> | Long-running agent work must have checked-in restartable contracts. |
+| Agent improvement loop | OpenAI’s agent-improvement loop starts from traces, feedback, evals, and Codex-driven changes. <https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop> | Trace → feedback → eval → repair → validation becomes a governed product loop. |
+| Agents SDK tracing | Agents SDK tracing records LLM generations, tool calls, handoffs, guardrails, and custom events. <https://openai.github.io/openai-agents-python/tracing/> | Agent runs must be trace-addressable and eval-addressable. |
+| OpenTelemetry semantics | OpenTelemetry semantic conventions define common attributes, span names, instruments, and values; OTel graduated as a CNCF project in 2026. <https://opentelemetry.io/docs/specs/semconv/> <https://opentelemetry.io/blog/2026/otel-graduates/> | Telemetry schema is a governed API. |
+| SRE monitoring | Google SRE defines the four golden signals as latency, traffic, errors, and saturation. <https://sre.google/sre-book/monitoring-distributed-systems/> | Production gates must distinguish product health from agent-quality health. |
+| High-cardinality observability | Honeycomb emphasizes high-cardinality/high-dimensionality fields for isolating real failures. <https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality> | Run IDs, trace IDs, PRs, eval case IDs, and tool-call IDs belong in traces/events/logs, not noisy metric labels. |
+| Rust | Rust 1.96.1 is the verified stable line at the snapshot point. <https://blog.rust-lang.org/releases/latest/> | Rust remains REQUIRED for correctness-critical engine, CLI, validators, workers, and performance-sensitive services. |
+| TypeScript | TypeScript 6.0 is stable; TS 7 native is near but adapter-class until stable API/programmatic behavior is settled. <https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/> | TS 6 is REQUIRED for UI/frontend. TS 7 native is GOVERNED_ADAPTER. |
+| Node | Node 24 is LTS; Node 26 is Current with LTS scheduled later. <https://nodejs.org/en/about/previous-releases> | Node 24 LTS is REQUIRED compatibility baseline; Node 26 is compatibility lane. |
+| Bun | Bun 1.3.14 is current in snapshot; `bun install --frozen-lockfile` provides reproducible installs; security scanner API exists. <https://bun.com/blog/bun-v1.3.14> <https://bun.com/docs/pm/cli/install> <https://bun.com/docs/pm/security-scanner-api> | Bun is the TS package/script/test accelerator and must be receipt-bound. |
+| Svelte/SvelteKit | Svelte 5 is stable; SvelteKit latest line is 2.68. <https://svelte.dev/blog/svelte-5-is-alive> <https://www.npmjs.com/package/%40sveltejs/kit> | SvelteKit is REQUIRED product-UI framework for default product surfaces. |
+| SolidStart | SolidStart 1.3.2 is current and Vite-backed. <https://start.solidjs.com/> | SolidStart is DEFAULT_ON for agent cockpit/high-interactivity surfaces. |
+| Vite | Vite 8 is stable; npm package latest snapshot is 8.1.2. <https://vite.dev/blog/announcing-vite8> <https://www.npmjs.com/package/vite> | Vite is REQUIRED frontend build substrate. |
+| Tailwind | Tailwind CSS v4 requires modern browser baseline. <https://tailwindcss.com/blog/tailwindcss-v4> <https://tailwindcss.com/docs/compatibility> | Tailwind v4 is REQUIRED design-system substrate only when browser baseline is accepted. |
+| PostgreSQL | PostgreSQL is the durable relational truth baseline; snapshot thesis selects 18.4. <https://www.postgresql.org/> | Postgres is REQUIRED durable truth. |
+| pgvector/Qdrant | pgvector stores vectors with Postgres data; Qdrant is Rust-written vector search. <https://github.com/pgvector/pgvector> <https://qdrant.tech/> | pgvector first; Qdrant governed adapter for scale/specialized retrieval. |
+| ClickHouse/DuckDB | ClickHouse/ClickStack targets OTel logs/metrics/traces at scale; DuckDB is embedded/local analytical DB. <https://clickhouse.com/clickstack> <https://duckdb.org/> | ClickHouse is REQUIRED for self-hosted high-cardinality event/trace analytics; DuckDB is DEFAULT_ON local analytics. |
+| NATS JetStream | JetStream provides persisted/replayable streams and consumers with at-least-once delivery. <https://docs.nats.io/nats-concepts/jetstream> | NATS JetStream is REQUIRED event bus for workflow/event fanout. |
+| Restate/Temporal | Restate provides durable execution; Temporal Rust SDK was public preview in 2026. <https://docs.restate.dev/foundations/key-concepts> <https://temporal.io/changelog/rust-sdk-public-preview> | Restate first for Rust-native durable execution; Temporal adapter for org/platform maturity. |
+| Python/uv/Ruff | Python 3.14.6 is the verified snapshot; uv and Ruff are Rust-written Python package/lint/format tools. <https://www.python.org/downloads/release/python-3146/> <https://docs.astral.sh/uv/> <https://docs.astral.sh/ruff/> | Python is REQUIRED for AI/research/evals, not correctness-critical law engine. |
+| PyO3/maturin | PyO3/maturin is the standard Rust-to-Python packaging bridge. <https://pyo3.rs/> <https://github.com/pyo3/maturin> | Rust-backed Python extensions are GOVERNED_ADAPTER. |
+| Nix/Bazel/OpenTofu/Kubernetes | Nix 2.34, Bazel 9 LTS, OpenTofu 1.12, Kubernetes 1.34–1.36 supported branches. <https://nix.dev/manual/nix/latest/release-notes/rl-2.34> <https://blog.bazel.build/2026/01/20/bazel-9.html> <https://opentofu.org/blog/opentofu-1-12-0/> <https://kubernetes.io/releases/> | Reproducible dev shell, formal monorepo graph when justified, IaC, and production runtime are governed surfaces. |
+
+---
+
+# 2. Classification vocabulary
+
+Every tool, concept, and practice is classified exactly once.
+
+| Classification | Meaning |
+|---|---|
+| **REQUIRED** | Part of the Harness Ultragoal gold-standard stack. A repo using this stack must provide it, route it through the CLI, and bind its observations to receipts. |
+| **DEFAULT_ON** | Enabled by default when safe and available. Absence must be explicit. Can support limited claims only when receipt-bound. |
+| **GOVERNED_ADAPTER** | Supported and useful, but not canonical authority. Requires declared config, tool identity, input/output schemas, receipt fields, and claim-surface limits. |
+| **OPTIONAL_LOCAL** | Permitted for personal productivity only. Cannot support claims. |
+| **REJECT** | Should not be used for Harness Ultragoal work because it creates hidden state, weak proof, wrong abstraction, unnecessary risk, or product substitution. |
+
+---
+
+# 3. Executive decision table
+
+## 3.1 Languages, runtimes, frameworks
+
+| Component | Classification | Decision |
+|---|---:|---|
+| Rust 1.96.1 | **REQUIRED** | Correctness-critical engine, CLI, validators, workers, parsers, runtime services, performance-sensitive data paths. |
+| TypeScript 6.0 | **REQUIRED** | Browser/UI/frontend language; stable baseline for product UI and agent cockpit. |
+| TypeScript 7 native compiler | **GOVERNED_ADAPTER** | Evaluate for speed. Do not make canonical until stable API/tooling compatibility is proven. |
+| Python 3.14.6 | **REQUIRED** | AI, evals, notebooks, data science, trace analysis, research iteration. Not law-engine authority. |
+| Node 24 LTS | **REQUIRED** | Compatibility baseline for frontend frameworks and Node ecosystem tools. |
+| Node 26 Current | **GOVERNED_ADAPTER** | Compatibility lane only until LTS. |
+| Bun 1.3.14 | **REQUIRED** | TS package manager/script runner/test accelerator when compatible. Must be frozen-lockfile and cache-honest. |
+| SvelteKit + Svelte 5 | **REQUIRED** | Default product UI, docs-heavy surfaces, SSR, dashboards. |
+| SolidStart/SolidJS | **DEFAULT_ON** | Agent cockpit, trace explorers, graph editors, IDE-like/high-interactivity surfaces. |
+| Vite 8.1.x | **REQUIRED** | Frontend build/dev substrate behind SvelteKit/SolidStart. |
+| Tailwind CSS v4 | **REQUIRED** | Design-system utility layer if modern browser baseline is accepted. |
+| Zig | **GOVERNED_ADAPTER** | Low-level C ABI/cross-compilation/toolchain edge cases only. |
+
+## 3.2 Data, cache, messaging, workflows
+
+| Component | Classification | Decision |
+|---|---:|---|
+| PostgreSQL 18.4 policy baseline | **REQUIRED** | Durable truth, transactions, relational integrity, migrations, authz data, product state. |
+| pgvector | **DEFAULT_ON** | Vector search near relational truth until specialized scale requires external vector DB. |
+| Qdrant | **GOVERNED_ADAPTER** | Dedicated vector search when pgvector cannot meet scale/latency/index behavior. |
+| ClickHouse | **REQUIRED** | High-cardinality event store, trace/event warehouse, product analytics, observability backend when self-hosting. |
+| DuckDB | **DEFAULT_ON** | Local analytical investigations, eval reports, reproducible notebooks, artifact analysis. |
+| Valkey | **REQUIRED** | Conservative Redis-family open-source cache/ephemeral state default. |
+| Dragonfly | **GOVERNED_ADAPTER** | High-performance Redis-compatible adapter when performance/resource proof justifies it. |
+| NATS JetStream | **REQUIRED** | Lightweight event bus, persisted streams, pub/sub, fanout, workflow notifications. |
+| Restate | **REQUIRED** | Durable execution baseline for Rust-native agent/workflow/service reliability. |
+| Temporal | **GOVERNED_ADAPTER** | Use for broad org/platform workflow maturity; Rust SDK public-preview status limits canonicality. |
+| S3-compatible object storage | **REQUIRED** | Artifacts, screenshots, videos, traces, packets, release assets, large payloads. |
+
+## 3.3 Observability, agents, infra
+
+| Component | Classification | Decision |
+|---|---:|---|
+| OpenTelemetry APIs/SDKs/Collector | **REQUIRED** | Vendor-neutral traces/metrics/logs. |
+| OpenTelemetry semantic conventions | **REQUIRED** | Shared cross-language telemetry vocabulary. |
+| ClickHouse/Honeycomb-style event model | **REQUIRED** | High-cardinality agent/run/tool/eval investigation. |
+| Prometheus-compatible metrics | **REQUIRED** | SLO/golden-signal alerting. |
+| Grafana dashboards | **DEFAULT_ON** | Human/operator dashboards; not proof by itself. |
+| Loki/Tempo/Jaeger equivalents | **GOVERNED_ADAPTER** | Local/dev trace/log backend choices. |
+| Codex | **REQUIRED** | Agentic code editing/review/repair work executor. |
+| OpenAI Agents SDK | **REQUIRED** | Agent workflows, tools, handoffs, guardrails, tracing. |
+| MCP tools | **GOVERNED_ADAPTER** | Tool surfaces require risk classes, schemas, approval policy, telemetry. |
+| Nix 2.34 | **REQUIRED** | Clean-checkout reproducible dev shell/toolchain substrate. |
+| Bazel 9 LTS | **GOVERNED_ADAPTER** | Required only once monorepo scale/cross-language graph needs justify it. |
+| OpenTofu 1.12 | **REQUIRED** | IaC baseline for cloud/runtime infrastructure. |
+| Kubernetes supported 1.34–1.36 line | **GOVERNED_ADAPTER** | Production runtime only where orchestration complexity is justified. |
+| Docker/Compose local harness | **DEFAULT_ON** | Local ephemeral services and per-worktree harness. |
+| Devcontainers | **GOVERNED_ADAPTER** | Optional standardized dev environment; Nix remains stronger canonical substrate. |
+| direnv | **OPTIONAL_LOCAL** | Local convenience only; cannot support claims. |
+| undocumented shell scripts | **REJECT** | Hidden local magic. |
+| prose-only “validation” | **REJECT** | Validator theater. |
+
+---
+
+# 4. Required stack architecture
+
+## 4.1 Repository shape
+
+A gold-standard Harness Ultragoal repository should look like this:
+
+```text
+repo/
+├── AGENTS.md
+├── ARCHITECTURE.md
+├── README.md
+├── justfile
+├── flake.nix
+├── mise.toml
+├── rust-toolchain.toml
+├── package.json
+├── bun.lock
+├── pyproject.toml
+├── uv.lock
+├── Cargo.toml
+├── Cargo.lock
+│
+├── docs/
+│   ├── index.md
+│   ├── system/overview.md
+│   ├── architecture/layering.md
+│   ├── architecture/dependency-rules.md
+│   ├── product/specs/
+│   ├── product/user-journeys/
+│   ├── exec-plans/active/
+│   ├── exec-plans/completed/
+│   ├── evals/suites.md
+│   ├── evals/regression-cases/
+│   ├── telemetry/attribute-registry.yaml
+│   ├── telemetry/semconv.md
+│   ├── reliability/slos.md
+│   ├── reliability/golden-signals.md
+│   ├── security/threat-model.md
+│   ├── security/tool-permissions.md
+│   └── quality/anti-patterns.md
+│
+├── crates/
+│   ├── ultragoal-core/
+│   ├── ultragoal-law/
+│   ├── ultragoal-receipt/
+│   ├── ultragoal-claim/
+│   ├── ultragoal-namespace/
+│   ├── ultragoal-fixture/
+│   ├── ultragoal-package/
+│   ├── ultragoal-install/
+│   ├── ultragoal-cache/
+│   ├── ultragoal-product/
+│   ├── ultragoal-observability/
+│   ├── ultragoal-plugin/
+│   └── ultragoal-cli/
+│
+├── services/
+│   ├── api/
+│   ├── worker/
+│   ├── agent-harness/
+│   ├── eval-runner/
+│   ├── telemetry-ingest/
+│   └── workflow-host/
+│
+├── apps/
+│   ├── web/                 # SvelteKit product UI
+│   ├── agent-cockpit/       # SolidStart trace/eval/run cockpit
+│   ├── trace-explorer/
+│   └── docs/
+│
+├── python/
+│   ├── evals/
+│   ├── research/
+│   ├── notebooks/
+│   ├── model_tools/
+│   └── rust_ext/
+│
+├── database/
+│   ├── migrations/
+│   ├── seeds/
+│   ├── fixtures/
+│   ├── policies/
+│   └── sqlx/
+│
+├── telemetry/
+│   ├── otel-collector/
+│   ├── dashboards/
+│   ├── alerts/
+│   ├── semconv/
+│   └── sample-traces/
+│
+├── evals/
+│   ├── suites/
+│   ├── cases/
+│   ├── judges/
+│   ├── traces/
+│   └── baselines/
+│
+├── tests/
+│   ├── contract/
+│   ├── integration/
+│   ├── e2e/
+│   ├── golden/
+│   ├── red/
+│   ├── green/
+│   └── tamper/
+│
+├── tools/
+│   ├── structural-lints/
+│   ├── trace-checks/
+│   ├── schema-checks/
+│   ├── prompt-lints/
+│   ├── doc-gardener/
+│   └── repair-loop/
+│
+├── infra/
+│   ├── opentofu/
+│   ├── k8s/
+│   ├── docker-compose/
+│   ├── otel-collector/
+│   ├── clickhouse/
+│   ├── prometheus/
+│   ├── grafana/
+│   ├── nats/
+│   └── restate/
+│
+└── .github/workflows/
+```
+
+## 4.2 Repository law
+
+`AGENTS.md` is a routing table. It must tell agents where to look and which commands are claim-bearing. It must not become an encyclopedia.
+
+Required agent-readable sources of truth:
+
+```text
+AGENTS.md                       always-on work contract
+ARCHITECTURE.md                 architecture map
+docs/architecture/**            boundary law
+docs/exec-plans/**              restartable contracts
+docs/evals/**                   eval semantics
+docs/telemetry/**               telemetry schema
+docs/reliability/**             SLO and golden-signal law
+docs/security/**                tool/secret/supply-chain law
+.ultragoal/**                   law registry, receipt schemas, claim ceilings
+```
+
+Forbidden:
+
+```text
+hidden wiki-only architecture
+Slack-only decisions
+human memory as plan state
+prompt-only law definitions
+uncited model assumptions
+untracked local scripts
+```
+
+---
+
+# 5. Component-specific governance
+
+The following sections give the required fields for every REQUIRED, DEFAULT_ON, and GOVERNED_ADAPTER item: purpose, Harness reason, commands, config, bootstrap, clean-checkout behavior, offline behavior, machine-readable output, cache/resource behavior, cleanup, receipt fields, supported and unsupported claim surfaces, failure modes, remediation, and confidence.
+
+---
+
+## 5.1 Rust core/control-plane
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Correctness-critical core for the CLI/control-plane, validators, receipt binding, claim ceiling, package inventory, parsers, workers, services, and performance-sensitive agents.
+
+### Why it matters
+
+Rust is the authority language for the enforcement engine. It gives strong static typing, explicit ownership, memory safety without tracing GC, high-performance CLIs, and a strong package/test/lint ecosystem. It is the right place for laws that must not be bypassed.
+
+### Commands
+
+```bash
+ultragoal rust toolchain verify --emit-receipt
+ultragoal rust fast
+ultragoal rust standard
+ultragoal rust release
+ultragoal rust coverage prove --exact
+ultragoal rust memory prove
+ultragoal rust dependency audit
+```
+
+Underlying observations:
+
+```bash
+cargo metadata --format-version=1 --locked
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features --locked --message-format=json -- -D warnings
+cargo check --workspace --all-targets --all-features --locked --message-format=json
+cargo nextest run --workspace --locked --profile standard
+cargo llvm-cov --workspace --json --output-path target/llvm-cov.json
+cargo deny check
+cargo audit
+cargo vet
+```
+
+### Config files
+
+```text
+rust-toolchain.toml
+Cargo.toml
+Cargo.lock
+.cargo/config.toml
+.config/nextest.toml
+deny.toml
+supply-chain/audits.toml
+.ultragoal/rust-policy.toml
+```
+
+### Install/bootstrap
+
+```bash
+rustup toolchain install 1.96.1
+rustup component add rustfmt clippy llvm-tools-preview
+cargo install --locked cargo-nextest cargo-llvm-cov cargo-deny cargo-audit cargo-vet
+```
+
+### Clean-checkout behavior
+
+A fresh checkout must be able to run:
+
+```bash
+ultragoal bootstrap
+ultragoal rust standard
+```
+
+without editor state, warm target dir, global `RUSTC_WRAPPER`, local cargo aliases, or undocumented scripts.
+
+### Offline behavior
+
+Allowed only with declared cargo registry/git cache manifest and locked dependencies. Offline success supports **OfflineRustBuildObservation**, not release truth by itself.
+
+### Machine-readable output
+
+Use Cargo JSON messages, nextest JSON/JUnit, llvm-cov JSON, cargo metadata JSON, and Ultragoal receipt schemas.
+
+### Cache/resource behavior
+
+Incremental compilation and sccache are allowed for fast loops. Clean proof must isolate `CARGO_HOME`, `CARGO_TARGET_DIR`, and `RUSTC_WRAPPER`, and may set `CARGO_INCREMENTAL=0`.
+
+### Cleanup
+
+Rust artifacts must be classed:
+
+```text
+CargoTarget
+CargoRegistryCache
+CargoGitCache
+SccacheEntry
+NextestRecording
+CoverageArtifact
+RustBuildLog
+```
+
+Use:
+
+```bash
+ultragoal gc cargo-target --dry-run
+ultragoal gc cargo-cache --dry-run
+ultragoal gc nextest --dry-run
+```
+
+### Receipt fields
+
+```json
+{
+  "rustc_version": "1.96.1",
+  "cargo_version": "...",
+  "rust_toolchain_digest": "sha256:...",
+  "cargo_lock_digest": "sha256:...",
+  "cargo_metadata_digest": "sha256:...",
+  "feature_matrix_digest": "sha256:...",
+  "target_dir_class": "ultragoal-managed|isolated-clean",
+  "rustc_wrapper": "none|sccache",
+  "incremental": true,
+  "tool_outputs": []
+}
+```
+
+### Supports
+
+```text
+RustTypecheck
+RustBuild
+RustUnitTest
+RustCoverage
+RustSupplyChain
+RustMemoryResource
+RustReleaseArtifactInput
+```
+
+### Cannot support
+
+```text
+Frontend browser behavior
+Python eval correctness
+Database migration safety
+Runtime product success
+Install/cache/plugin claims unless same surface is checked
+```
+
+### Failure modes and remediation
+
+| Failure | Agent-remediating output |
+|---|---|
+| Typecheck failure | rustc JSON span, crate, feature set, target, repair class. |
+| Namespace violation | expected maximally factored path and move plan. |
+| Coverage hole | file, line, branch/classification, required test class. |
+| Stale receipt | changed digest and replacement command. |
+| Dependency advisory | crate, advisory, severity, allowed upgrade path. |
+
+### Confidence
+
+**97/100.** Rust remains the best enforcement-engine substrate. Risk is mostly integration complexity and treating Rust-only proof as product proof.
+
+---
+
+## 5.2 TypeScript UI/frontend
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Product UI, dashboards, docs-heavy UI, browser surfaces, agent cockpit, trace explorer, eval dashboard, and frontend tooling.
+
+### Why it matters
+
+TypeScript gives frontend static analysis, type-guided refactoring, editor/agent legibility, and package ecosystem compatibility. It differs from Rust because types are erased at runtime; runtime boundary parsing and browser-surface proof are mandatory.
+
+### Commands
+
+```bash
+ultragoal ts toolchain verify --emit-receipt
+ultragoal ts fast
+ultragoal ts standard
+ultragoal ts release
+ultragoal ts browser prove
+ultragoal ts accessibility prove
+ultragoal ts visual prove
+ultragoal ts bundle inventory
+```
+
+Underlying observations:
+
+```bash
+bun install --frozen-lockfile
+bun run typecheck
+bun run lint
+bun run format:check
+bun run test
+bun run build
+bunx playwright test --reporter=json
+bunx playwright test --project=chromium --reporter=json
+bunx eslint . --format json
+bunx tsc --noEmit --pretty false
+```
+
+### Config files
+
+```text
+package.json
+bun.lock
+bunfig.toml
+tsconfig.json
+tsconfig.strictest.json
+eslint.config.js
+prettier.config.js
+vite.config.ts
+svelte.config.js
+playwright.config.ts
+apps/web/src/**
+apps/agent-cockpit/src/**
+.ultragoal/typescript-policy.toml
+```
+
+### Install/bootstrap
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+bun install --frozen-lockfile
+bunx playwright install --with-deps chromium firefox webkit
+```
+
+Bootstrap must record Bun version, Node version, TypeScript version, framework versions, lockfile digest, and browser binary identities.
+
+### Clean-checkout behavior
+
+A clean checkout must not depend on global npm cache, editor TS server state, Vite warm cache, stale Playwright browsers, or local `.env` secrets. `bun install --frozen-lockfile` is required.
+
+### Offline behavior
+
+Allowed only with declared Bun package cache and Playwright browser cache manifest. Offline success is cache-surface proof, not network-independent release proof unless the release policy explicitly supports offline installation.
+
+### Machine-readable output
+
+Use `tsc --pretty false`, ESLint JSON, Playwright JSON, Vitest/Bun reporter outputs, Vite manifest/build metadata, generated bundle inventory, Lighthouse/Axe JSON when applicable.
+
+### Cache/resource behavior
+
+Frontend caches must be classed:
+
+```text
+BunInstallCache
+NodeModulesTree
+ViteCache
+SvelteKitOutput
+PlaywrightBrowserCache
+PlaywrightTraceArtifact
+BrowserStorageState
+ServiceWorkerCache
+```
+
+Browser tests must explicitly clear or declare:
+
+```text
+localStorage
+sessionStorage
+IndexedDB
+cookies
+service workers
+Cache Storage
+permissions
+browser context state
+```
+
+### Cleanup
+
+```bash
+ultragoal gc ts-node-modules --dry-run
+ultragoal gc vite-cache --dry-run
+ultragoal gc playwright --dry-run
+ultragoal gc browser-state --dry-run
+```
+
+### Receipt fields
+
+```json
+{
+  "bun_version": "1.3.14",
+  "node_version": "24.x LTS",
+  "typescript_version": "6.0.x",
+  "lockfile_digest": "sha256:...",
+  "tsconfig_digest": "sha256:...",
+  "eslint_config_digest": "sha256:...",
+  "vite_manifest_digest": "sha256:...",
+  "browser_matrix": ["chromium", "firefox", "webkit"],
+  "browser_state_policy": "fresh-context",
+  "bundle_inventory_digest": "sha256:..."
+}
+```
+
+### Supports
+
+```text
+FrontendTypecheck
+FrontendLint
+FrontendUnitTest
+FrontendBuild
+BrowserBehavior
+AccessibilityObservation
+VisualRegressionObservation
+BundleInventory
+```
+
+### Cannot support
+
+```text
+Backend correctness
+Database migration safety
+Product Success without same-surface journey proof
+Runtime install/cache/plugin claims
+```
+
+### Failure modes and remediation
+
+| Failure | Agent-remediating output |
+|---|---|
+| `any`/assertion escape | exact symbol/path and required parser/newtype replacement. |
+| Typecheck failure | file/span/diagnostic code/owning package. |
+| Browser failure | route, screenshot/video/trace path, selector, expected visible state. |
+| Visual diff | baseline digest, actual digest, threshold, component/story. |
+| A11y failure | rule ID, element selector, WCAG mapping, repair class. |
+| Bundle regression | chunk, old/new size, owner, import edge. |
+
+### Confidence
+
+**94/100.** TypeScript remains correct UI choice. Risk is type erasure and ecosystem volatility; mitigated by runtime parsing, browser proof, frozen lockfiles, and supply-chain policy.
+
+---
+
+## 5.3 SvelteKit product UI
+
+### Classification
+
+**REQUIRED** for product UI.
+
+### Purpose
+
+Default SSR/product frontend for dashboards, docs-heavy surfaces, product journeys, and agent-inspectable UI.
+
+### Why it matters
+
+SvelteKit provides a structured app framework with file routing, SSR, Vite integration, and a smaller/concrete component model that is relatively legible to coding agents.
+
+### Commands
+
+```bash
+cd apps/web
+bun run check
+bun run test
+bun run build
+bunx playwright test --config playwright.config.ts --project=chromium
+```
+
+Ultragoal wrappers:
+
+```bash
+ultragoal ui web fast
+ultragoal ui web standard
+ultragoal ui web product-journey prove
+```
+
+### Config files
+
+```text
+apps/web/svelte.config.js
+apps/web/vite.config.ts
+apps/web/tsconfig.json
+apps/web/src/routes/**
+apps/web/src/lib/components/**
+apps/web/src/lib/server/**
+```
+
+### Clean-checkout behavior
+
+Must build without local dev server state, stale `.svelte-kit`, global environment, or pre-existing browser sessions.
+
+### Offline behavior
+
+Allowed only after frozen dependency restore and browser cache proof. Route data that requires external services must be mocked or served by local harness with declared fixtures.
+
+### Machine-readable output
+
+Build manifest, Playwright JSON, custom route inventory JSON, accessibility JSON, bundle inventory.
+
+### Cache/resource behavior
+
+`.svelte-kit`, Vite cache, service worker cache, and browser state are separate surfaces and cannot support source claims.
+
+### Receipt fields
+
+```text
+svelte_version
+sveltekit_version
+vite_version
+route_inventory_digest
+server_load_inventory
+browser_matrix
+ssr_adapter
+bundle_manifest_digest
+```
+
+### Supports
+
+```text
+ProductUIBuild
+RouteInventory
+SSRBuild
+BrowserJourney
+VisualRegression
+```
+
+### Cannot support
+
+```text
+Agent cockpit high-density interactivity unless built in this app
+Backend correctness
+Database truth
+```
+
+### Failure modes
+
+```text
+hydration mismatch
+route load failure
+client/server boundary leak
+secret exposed to client bundle
+browser support mismatch with Tailwind v4 baseline
+```
+
+### Agent remediation
+
+Failures must identify route, load function, component, client/server boundary, and whether the repair belongs in `+page.svelte`, `+page.server.ts`, `+layout.ts`, or shared component state.
+
+### Confidence
+
+**90/100.** Strong default. Risk is SSR/client boundary mistakes and framework-specific generated artifacts; mitigate with route inventories and bundle secret scans.
+
+---
+
+## 5.4 SolidStart agent cockpit
+
+### Classification
+
+**DEFAULT_ON** for high-interactivity agent surfaces.
+
+### Purpose
+
+Agent cockpit, trace explorer, workflow graph, eval dashboard, run timeline, high-cardinality filtering, graph/canvas-heavy views.
+
+### Why it matters
+
+Solid’s fine-grained reactivity is well suited to dense stateful UIs where rendering cost and local reactive graph clarity matter.
+
+### Commands
+
+```bash
+cd apps/agent-cockpit
+bun run typecheck
+bun run test
+bun run build
+bunx playwright test --config playwright.config.ts
+```
+
+Ultragoal wrappers:
+
+```bash
+ultragoal ui cockpit fast
+ultragoal ui cockpit trace-journey prove
+ultragoal ui cockpit perf prove
+```
+
+### Config files
+
+```text
+apps/agent-cockpit/app.config.ts
+apps/agent-cockpit/vite.config.ts
+apps/agent-cockpit/src/routes/**
+apps/agent-cockpit/src/components/**
+```
+
+### Clean-checkout behavior
+
+Must run against local trace/eval fixtures, not production credentials.
+
+### Offline behavior
+
+Strong offline mode required with fixed trace fixtures and event snapshots.
+
+### Machine-readable output
+
+Playwright JSON, performance budget JSON, route inventory, trace fixture digest.
+
+### Cache/resource behavior
+
+Large trace datasets must be paginated/virtualized; memory budgets are required for browser tests.
+
+### Receipt fields
+
+```text
+solid_version
+solidstart_version
+trace_fixture_digest
+render_budget
+interaction_latency_budget
+browser_memory_budget
+```
+
+### Supports
+
+```text
+AgentCockpitBuild
+TraceExplorerJourney
+DenseUIPerformance
+```
+
+### Cannot support
+
+```text
+Product UI claims for Svelte app
+Backend trace ingestion correctness by itself
+```
+
+### Confidence
+
+**82/100.** Excellent fit for high-interactivity internal tools. Slightly higher ecosystem risk than SvelteKit default; therefore DEFAULT_ON rather than REQUIRED for all UI.
+
+---
+
+## 5.5 Bun package/script runner
+
+### Classification
+
+**REQUIRED** for this stack’s TypeScript work.
+
+### Purpose
+
+Fast dependency installation, script execution, tests where compatible, and Node-compatible local tooling.
+
+### Why it matters
+
+Agentic development is latency-sensitive. Bun reduces install/script/test loop time, but its global cache and runtime differences must be explicit.
+
+### Commands
+
+```bash
+bun --version
+bun install --frozen-lockfile
+bun run typecheck
+bun run lint
+bun run test
+bun run build
+bun audit
+```
+
+Ultragoal wrappers:
+
+```bash
+ultragoal ts deps verify
+ultragoal ts deps audit
+ultragoal ts cache stats
+```
+
+### Config files
+
+```text
+package.json
+bun.lock
+bunfig.toml
+.ultragoal/bun-policy.toml
+```
+
+Example policy:
+
+```toml
+[install]
+frozen_lockfile = true
+minimum_release_age_hours = 72
+security_scanner = "required"
+
+[cache]
+class = "BunInstallCache"
+claim_support = "cache-observation-only"
+```
+
+### Install/bootstrap
+
+Use pinned version in tool inventory. Bootstrap may install via official installer or Nix.
+
+### Clean-checkout behavior
+
+`bun install --frozen-lockfile` must fail if `package.json` and `bun.lock` disagree. That failure is a feature.
+
+### Offline behavior
+
+Offline installs require a cache manifest and cannot support fresh supply-chain claims.
+
+### Machine-readable output
+
+Bun output is not uniformly claim-sufficient. Ultragoal must wrap and normalize install/test/audit output to stable receipt schemas.
+
+### Cache/resource behavior
+
+Bun global cache and `node_modules` are distinct surfaces. `bun install --lockfile-only` may still populate metadata cache; treat it as cache mutation.
+
+### Cleanup
+
+```bash
+ultragoal gc bun-cache --dry-run
+ultragoal gc node-modules --dry-run
+```
+
+### Receipt fields
+
+```text
+bun_version
+bun_lock_digest
+package_json_digest
+bunfig_digest
+install_mode=frozen
+cache_dir_digest_or_class
+security_scanner_digest
+minimum_release_age_policy
+```
+
+### Supports
+
+```text
+TypeScriptDependencyInstall
+PackageScriptObservation
+FrontendDependencyAudit
+```
+
+### Cannot support
+
+```text
+Browser behavior
+Type correctness unless tsc/check ran
+Runtime product success
+```
+
+### Failure modes and remediation
+
+| Failure | Repair |
+|---|---|
+| frozen lockfile mismatch | run governed dependency update plan; commit lockfile. |
+| newly published package blocked | wait or explicitly waive with supply-chain receipt. |
+| Bun/Node incompatibility | run Node 24 compatibility lane and classify Bun as accelerator for that script. |
+
+### Confidence
+
+**86/100.** Strong speed value. Risk is Node compatibility and machine-readable output gaps; mitigated by wrappers and Node LTS lanes.
+
+---
+
+## 5.6 Node compatibility lane
+
+### Classification
+
+Node 24 LTS: **REQUIRED**  
+Node 26 Current: **GOVERNED_ADAPTER**
+
+### Purpose
+
+Ensure the TS/frontend stack works on conservative runtime infrastructure even when Bun is the local script runner.
+
+### Commands
+
+```bash
+node --version
+corepack --version
+npm --version
+node --test --test-reporter=json
+```
+
+Ultragoal wrappers:
+
+```bash
+ultragoal ts node-compat verify --version 24
+ultragoal ts node-compat verify --version 26 --adapter
+```
+
+### Config files
+
+```text
+.tool-versions or mise.toml
+package.json engines
+.ultragoal/node-policy.toml
+```
+
+### Machine-readable output
+
+Node test JSON where used; otherwise wrapper-normalized logs.
+
+### Claim surfaces
+
+Supports runtime compatibility observations. Cannot replace Bun install proof or browser proof.
+
+### Confidence
+
+**90/100** for Node 24 LTS, **75/100** for Node 26 adapter due to Current status.
+
+---
+
+## 5.7 Python AI/research/evals
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+AI evals, notebooks, trace analysis, model experiments, research scripts, statistical reports, and external AI ecosystem integration.
+
+### Why it matters
+
+Python remains the dominant AI/research/eval language. It should be used where it is structurally superior, but it must not become an untyped law-engine escape hatch.
+
+### Commands
+
+```bash
+ultragoal py toolchain verify --emit-receipt
+ultragoal py sync --frozen
+ultragoal py lint
+ultragoal py typecheck
+ultragoal py test
+ultragoal eval run --suite regression
+ultragoal eval report --format json
+```
+
+Underlying observations:
+
+```bash
+uv sync --frozen
+uv run ruff check . --output-format=json
+uv run ruff format --check .
+uv run pytest --json-report
+uv run pyright --outputjson
+```
+
+### Config files
+
+```text
+pyproject.toml
+uv.lock
+python/.python-version
+ruff.toml or [tool.ruff]
+pyrightconfig.json or mypy.ini
+pytest.ini
+python/evals/**
+```
+
+### Install/bootstrap
+
+```bash
+uv python install 3.14.6
+uv sync --frozen
+```
+
+### Clean-checkout behavior
+
+No global virtualenv, no user site packages, no notebook state, no `.env` secrets. `uv.lock` is mandatory for claim-bearing evals.
+
+### Offline behavior
+
+Allowed only with uv cache manifest and exact wheel/source cache inventory. Offline eval success cannot support dependency-freshness claims.
+
+### Machine-readable output
+
+Ruff JSON, Pyright JSON, pytest JSON report, eval JSON, trace-derived case manifests.
+
+### Cache/resource behavior
+
+Classify:
+
+```text
+UvCache
+VirtualEnv
+PytestCache
+NotebookCheckpoint
+EvalArtifact
+TraceDerivedFixture
+```
+
+### Cleanup
+
+```bash
+ultragoal gc uv-cache --dry-run
+ultragoal gc pytest-cache --dry-run
+ultragoal gc notebooks --stale-checkpoints --dry-run
+ultragoal gc eval-artifacts --expired --dry-run
+```
+
+### Receipt fields
+
+```text
+python_version
+uv_version
+uv_lock_digest
+pyproject_digest
+ruff_config_digest
+typechecker_config_digest
+pytest_config_digest
+eval_suite_digest
+trace_input_digest
+```
+
+### Supports
+
+```text
+EvalSuiteResult
+TraceAnalysis
+PythonLint
+PythonTypecheck
+PythonTest
+ResearchArtifactObservation
+```
+
+### Cannot support
+
+```text
+Rust law engine correctness
+Frontend browser behavior
+Database migration safety
+Product success unless eval is declared as a product proof surface
+```
+
+### Failure modes and remediation
+
+| Failure | Agent-remediating output |
+|---|---|
+| Lock drift | run `uv lock` through dependency update plan. |
+| Type hole | symbol/path/typechecker diagnostic and required annotation/model. |
+| Eval regression | case ID, baseline score, new score, trace link, failure class. |
+| Notebook-only result | require scriptized reproduction and output digest. |
+
+### Confidence
+
+**92/100.** Python is the right eval/research language. Risk is notebook/script entropy; governed lockfiles and eval schemas mitigate it.
+
+---
+
+## 5.8 Rust/Python bridge: PyO3 + maturin
+
+### Classification
+
+**GOVERNED_ADAPTER**
+
+### Purpose
+
+Expose Rust validators/parsers/kernels to Python eval/research tooling as wheels.
+
+### Commands
+
+```bash
+uv run maturin develop --locked
+uv run maturin build --release --locked
+uv run pytest python/rust_ext/tests
+```
+
+Ultragoal wrappers:
+
+```bash
+ultragoal py rust-ext build
+ultragoal py rust-ext verify
+ultragoal py rust-ext wheel-inventory
+```
+
+### Config files
+
+```text
+python/rust_ext/pyproject.toml
+python/rust_ext/Cargo.toml
+python/rust_ext/src/**
+```
+
+### Clean-checkout behavior
+
+Builds must not depend on preexisting local wheels.
+
+### Offline behavior
+
+Allowed with declared Rust/Python cache manifests.
+
+### Machine-readable output
+
+Wheel inventory, maturin output normalized by Ultragoal, pytest JSON.
+
+### Cache/resource behavior
+
+Wheels, build directories, and Python extension ABI outputs are package surfaces.
+
+### Receipt fields
+
+```text
+pyo3_version
+maturin_version
+rust_crate_digest
+python_package_digest
+wheel_digest
+python_abi
+platform_tag
+```
+
+### Supports
+
+```text
+RustBackedPythonExtensionBuild
+EvalKernelBridge
+WheelInventory
+```
+
+### Cannot support
+
+```text
+Core law correctness beyond the exact bridged API tests
+Release readiness of CLI unless separately packaged
+```
+
+### Confidence
+
+**84/100.** Strong bridge; adapter due to ABI/platform complexity.
+
+---
+
+## 5.9 PostgreSQL durable truth
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Authoritative durable product state: users, orgs, claims, goals, receipts, package inventory, agent runs, eval results, workflow state references, audit logs, and access-control state.
+
+### Why it matters
+
+PostgreSQL is the durable truth. ClickHouse, caches, event buses, and object storage do not replace it.
+
+### Commands
+
+```bash
+ultragoal db toolchain verify
+ultragoal db migrate verify --empty
+ultragoal db migrate verify --fixture baseline
+ultragoal db schema snapshot --emit-receipt
+ultragoal db query-plan check
+ultragoal db rls check
+ultragoal db backup-restore prove
+```
+
+Underlying observations:
+
+```bash
+sqlx migrate run
+sqlx migrate revert
+cargo sqlx prepare --workspace --check
+psql -v ON_ERROR_STOP=1 -f database/policies/verify.sql
+```
+
+### Config files
+
+```text
+database/migrations/**
+database/fixtures/**
+database/policies/**
+crates/storage/**
+.sqlx/**
+.ultragoal/database-policy.toml
+```
+
+### Install/bootstrap
+
+Local harness starts a per-worktree Postgres with isolated port, data directory, and credentials. No shared developer DB may support claims.
+
+### Clean-checkout behavior
+
+A fresh checkout must create an empty DB, run migrations, load fixture DB, run migration checks, and generate schema receipts.
+
+### Offline behavior
+
+Local Postgres runs offline. External managed DB claims require environment-specific receipts.
+
+### Machine-readable output
+
+Migration logs, schema snapshot JSON, query-plan JSON, SQLx metadata, RLS check reports.
+
+### Cache/resource behavior
+
+DB data directories are stateful surfaces. Test DBs must be disposable. Long-running DB state must never be silently reused as proof.
+
+### Cleanup
+
+```bash
+ultragoal gc db-test-instances --dry-run
+ultragoal gc db-fixtures --stale --dry-run
+ultragoal gc db-backups --retention-policy release --dry-run
+```
+
+### Receipt fields
+
+```text
+postgres_version
+migration_dir_digest
+schema_snapshot_digest
+sqlx_metadata_digest
+fixture_db_digest
+rls_policy_digest
+connection_policy
+backup_restore_artifact_digest
+```
+
+### Supports
+
+```text
+DatabaseMigrationSafety
+DatabaseSchemaTruth
+QueryCompatibility
+StorageLayerCorrectness
+RlsPolicyObservation
+BackupRestoreObservation
+```
+
+### Cannot support
+
+```text
+Frontend behavior
+Cache behavior
+ClickHouse analytics correctness
+Product success without app journey
+```
+
+### Failure modes and remediation
+
+| Failure | Repair |
+|---|---|
+| Migration fails on empty DB | identify migration file, SQL statement, expected schema. |
+| Migration fails on fixture DB | identify old state, constraint/data conflict, forward repair. |
+| SQLx offline drift | regenerate metadata through governed DB command. |
+| RLS gap | table/policy/role and required access rule. |
+| Slow query | query hash, plan, missing index candidate, budget class. |
+
+### Confidence
+
+**95/100.** Best durable truth default. Risk is migration discipline and connection/test DB sprawl.
+
+---
+
+## 5.10 pgvector and Qdrant retrieval
+
+### Classification
+
+pgvector: **DEFAULT_ON**  
+Qdrant: **GOVERNED_ADAPTER**
+
+### Purpose
+
+Embedding retrieval for docs, traces, eval cases, prior repairs, knowledge-base search, and agent context ranking.
+
+### Policy
+
+Use pgvector first because vectors live near relational truth and transactional metadata. Move to Qdrant only when retrieval scale, latency, filtering, index behavior, or operational isolation proves Postgres is not enough.
+
+### Commands
+
+```bash
+ultragoal retrieval pgvector verify
+ultragoal retrieval eval --suite semantic-search
+ultragoal retrieval qdrant verify --adapter
+```
+
+### Config files
+
+```text
+database/migrations/*pgvector*
+crates/retrieval/**
+evals/retrieval/**
+.ultragoal/retrieval-policy.toml
+```
+
+### Machine-readable output
+
+Recall/precision/MRR/nDCG reports, corpus digest, embedding model digest, index config digest.
+
+### Cache/resource behavior
+
+Embedding caches must be digest-addressed by source text, model, dimensions, normalization, and chunking policy.
+
+### Receipt fields
+
+```text
+corpus_digest
+embedding_model_alias
+embedding_model_resolved_id
+chunking_policy_digest
+index_type
+index_config_digest
+retrieval_eval_digest
+```
+
+### Supports
+
+```text
+RetrievalQualityObservation
+EmbeddingIndexInventory
+AgentContextSearchProof
+```
+
+### Cannot support
+
+```text
+Truth of retrieved content
+Product success by itself
+Legal/security authorization by itself
+```
+
+### Confidence
+
+pgvector **88/100**. Qdrant **82/100** when needed. Retrieval quality must be eval-bound.
+
+---
+
+## 5.11 ClickHouse high-cardinality event store
+
+### Classification
+
+**REQUIRED** for self-hosted high-cardinality observability/analytics.
+
+### Purpose
+
+Store and query high-cardinality agent, trace, tool-call, eval, product, validation, and release events.
+
+### Why it matters
+
+Agents need inspectable event histories. Aggregated metrics are not enough to debug bad repairs, tool misuse, flaky journeys, or eval regressions.
+
+### Commands
+
+```bash
+ultragoal obs clickhouse verify
+ultragoal obs event-schema check
+ultragoal obs ingest replay --fixture traces/sample.jsonl
+ultragoal obs query prove --query agent-run-failures
+```
+
+### Config files
+
+```text
+infra/clickhouse/**
+telemetry/schemas/events/**
+telemetry/queries/**
+.ultragoal/clickhouse-policy.toml
+```
+
+### Clean-checkout behavior
+
+Local ClickHouse must boot via Docker/Compose/Nix harness with schema migrations and fixture ingest.
+
+### Offline behavior
+
+Works locally with fixture data. Does not prove production observability ingestion.
+
+### Machine-readable output
+
+SQL result JSON, schema snapshots, ingest receipts, row-count/reconciliation reports.
+
+### Cache/resource behavior
+
+Retention, TTLs, partitions, materialized views, and compression are governance surfaces. High-cardinality event fields belong here, not necessarily in metric labels.
+
+### Cleanup
+
+```bash
+ultragoal gc clickhouse-local --dry-run
+ultragoal obs retention verify
+```
+
+### Receipt fields
+
+```text
+clickhouse_version
+schema_digest
+ingest_fixture_digest
+query_pack_digest
+retention_policy_digest
+row_count_reconciliation
+```
+
+### Supports
+
+```text
+HighCardinalityInvestigation
+TraceEventWarehouse
+EvalAnalytics
+AgentRunForensics
+```
+
+### Cannot support
+
+```text
+Durable product truth
+Exact transactional state
+SLO alerting by itself
+```
+
+### Confidence
+
+**90/100.** Strong fit for agent telemetry and observability data. Risk is schema drift and high-cardinality cost if not governed.
+
+---
+
+## 5.12 DuckDB local analytics
+
+### Classification
+
+**DEFAULT_ON**
+
+### Purpose
+
+Local analytical reports over CSV/JSON/Parquet/eval results/traces without requiring production analytics infrastructure.
+
+### Commands
+
+```bash
+ultragoal analytics duckdb verify
+ultragoal analytics report --input eval-results/*.json --out reports/eval.duckdb
+```
+
+### Config files
+
+```text
+tools/analytics/**
+reports/schemas/**
+.ultragoal/duckdb-policy.toml
+```
+
+### Clean-checkout behavior
+
+Can run against checked-in fixtures. Generated `.duckdb` files are artifacts, not source.
+
+### Offline behavior
+
+Strong offline behavior.
+
+### Machine-readable output
+
+JSON/CSV/Parquet reports and query result digests.
+
+### Cleanup
+
+```bash
+ultragoal gc duckdb-artifacts --dry-run
+```
+
+### Supports
+
+```text
+LocalEvalAnalysis
+TraceReport
+ArtifactInspection
+```
+
+### Cannot support
+
+```text
+Production truth
+Runtime product success
+```
+
+### Confidence
+
+**86/100.** Excellent local analytics adapter. Must avoid treating local reports as durable truth.
+
+---
+
+## 5.13 Valkey and Dragonfly cache/ephemeral state
+
+### Classification
+
+Valkey: **REQUIRED**  
+Dragonfly: **GOVERNED_ADAPTER**
+
+### Purpose
+
+Ephemeral cache, rate limits, sessions, dedup windows, short-lived locks, and high-throughput Redis-compatible use cases.
+
+### Policy
+
+Cache is not truth. Cache proof is cache-surface proof only.
+
+### Commands
+
+```bash
+ultragoal cache valkey verify
+ultragoal cache policy check
+ultragoal cache flush-test --namespace local
+ultragoal cache dragonfly verify --adapter
+```
+
+### Config files
+
+```text
+infra/valkey/**
+infra/dragonfly/**
+crates/cache/**
+.ultragoal/cache-policy.toml
+```
+
+### Clean-checkout behavior
+
+Local cache must start empty or from declared fixture. No shared user cache supports claims.
+
+### Offline behavior
+
+Local only.
+
+### Machine-readable output
+
+Key inventory, TTL policy check, memory budget, eviction stats.
+
+### Cache/resource behavior
+
+All keys require namespace, owner, TTL, max cardinality, and truth-substitution flag.
+
+Forbidden:
+
+```text
+cache without TTL or max size
+cache key that embeds secrets
+cache used as durable truth
+cache proof used for product success
+```
+
+### Cleanup
+
+```bash
+ultragoal gc cache-keys --dry-run
+ultragoal cache reset --scope local --receipt
+```
+
+### Receipt fields
+
+```text
+engine=valkey|dragonfly
+version
+keyspace_policy_digest
+ttl_policy_digest
+memory_budget
+eviction_policy
+fixture_state_digest
+```
+
+### Supports
+
+```text
+CacheBehavior
+EphemeralStatePolicy
+RateLimitObservation
+```
+
+### Cannot support
+
+```text
+Durable truth
+Database correctness
+Product success by itself
+```
+
+### Confidence
+
+Valkey **88/100**. Dragonfly **80/100** when performance proof justifies adapter use.
+
+---
+
+## 5.14 NATS JetStream messaging
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Lightweight event bus, persisted streams, request/reply, workflow notifications, fanout, agent run events, validation status events.
+
+### Commands
+
+```bash
+ultragoal nats verify
+ultragoal nats stream inventory
+ultragoal nats replay prove --stream agent.events
+ultragoal nats consumer-lag check
+```
+
+### Config files
+
+```text
+infra/nats/**
+crates/events/**
+telemetry/event-contracts/**
+.ultragoal/nats-policy.toml
+```
+
+### Clean-checkout behavior
+
+Local JetStream starts with declared streams/consumers. Test streams are isolated per worktree.
+
+### Offline behavior
+
+Local proof works offline.
+
+### Machine-readable output
+
+Stream/consumer inventory JSON, replay report, lag report, ack/retry report.
+
+### Resource behavior
+
+Every stream requires retention, max age, max bytes, subject namespace, consumer ownership, ack policy, replay policy.
+
+### Cleanup
+
+```bash
+ultragoal gc nats-streams --scope local --dry-run
+ultragoal nats reset --scope worktree --receipt
+```
+
+### Receipt fields
+
+```text
+nats_version
+jetstream_enabled
+stream_inventory_digest
+consumer_inventory_digest
+retention_policy_digest
+replay_fixture_digest
+```
+
+### Supports
+
+```text
+EventBusAvailability
+StreamReplay
+WorkflowNotification
+ConsumerLagObservation
+```
+
+### Cannot support
+
+```text
+Durable workflow completion by itself
+Exactly-once business semantics unless app-level idempotency is proven
+```
+
+### Confidence
+
+**89/100.** Excellent lightweight event substrate. Risk is overclaiming delivery semantics without idempotency proof.
+
+---
+
+## 5.15 Restate and Temporal durable workflows
+
+### Classification
+
+Restate: **REQUIRED**  
+Temporal: **GOVERNED_ADAPTER**
+
+### Purpose
+
+Durable execution for long-running repairs, eval pipelines, package/release workflows, artifact processing, background jobs, and agent orchestration.
+
+### Policy
+
+Use Restate first for Rust-native durable execution. Use Temporal when platform maturity, multi-language workers, or organizational standardization outweigh Rust SDK preview constraints.
+
+### Commands
+
+```bash
+ultragoal workflow restate verify
+ultragoal workflow restate scenario prove --scenario release-pipeline
+ultragoal workflow temporal verify --adapter
+```
+
+### Config files
+
+```text
+infra/restate/**
+services/workflow-host/**
+crates/workflow/**
+docs/workflows/**
+.ultragoal/workflow-policy.toml
+```
+
+### Clean-checkout behavior
+
+Local durable workflow host must boot with isolated state and replay fixtures.
+
+### Offline behavior
+
+Local scenarios work offline.
+
+### Machine-readable output
+
+Workflow execution transcript, replay report, idempotency proof, compensation proof, timeout/retry inventory.
+
+### Resource behavior
+
+All workflows require:
+
+```text
+workflow id
+deterministic inputs
+idempotency key
+retry policy
+timeout policy
+compensation/cancel policy
+trace correlation
+artifact retention policy
+```
+
+### Cleanup
+
+```bash
+ultragoal gc workflow-state --local --dry-run
+ultragoal workflow abandoned check
+```
+
+### Receipt fields
+
+```text
+workflow_engine
+engine_version
+workflow_definition_digest
+scenario_digest
+idempotency_policy_digest
+replay_result_digest
+state_store_digest_or_class
+```
+
+### Supports
+
+```text
+DurableWorkflowProof
+IdempotencyObservation
+ReleasePipelineExecution
+AgentRepairLoopOrchestration
+```
+
+### Cannot support
+
+```text
+Underlying business correctness without same-surface validation
+Product success without user journey
+```
+
+### Confidence
+
+Restate **86/100**. Temporal adapter **80/100**; platform maturity strong, Rust SDK public-preview status limits canonical status.
+
+---
+
+## 5.16 OpenTelemetry and observability
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Cross-language traces, metrics, logs, events, resource attributes, and agent-run observability.
+
+### Commands
+
+```bash
+ultragoal obs semconv check
+ultragoal obs collector validate
+ultragoal obs trace ingest-fixture
+ultragoal obs query prove --run-id <id>
+ultragoal obs golden-signals prove
+```
+
+### Config files
+
+```text
+telemetry/attribute-registry.yaml
+telemetry/semconv/*.yaml
+infra/otel-collector/config.yaml
+telemetry/dashboards/**
+telemetry/alerts/**
+crates/ultragoal-observability/**
+python/evals/telemetry/**
+apps/agent-cockpit/src/telemetry/**
+```
+
+### Clean-checkout behavior
+
+Local harness must emit traces/metrics/logs to local collector/backends and provide fixture query packs.
+
+### Offline behavior
+
+Local collector/backends can run offline with fixture data.
+
+### Machine-readable output
+
+OTLP payloads, collector validation reports, query JSON, dashboard lint reports, alert-rule lint reports.
+
+### Resource behavior
+
+Telemetry can leak secrets and create cardinality bombs. Every attribute must have type, owner, cardinality class, privacy class, and allowed surfaces.
+
+### Cleanup
+
+```bash
+ultragoal gc telemetry-local --dry-run
+ultragoal obs retention verify
+ultragoal obs pii scan
+```
+
+### Receipt fields
+
+```text
+otel_spec_version
+semconv_version
+attribute_registry_digest
+collector_config_digest
+backend_inventory_digest
+trace_fixture_digest
+query_pack_digest
+```
+
+### Supports
+
+```text
+RuntimeObservability
+AgentRunForensics
+GoldenSignalObservation
+TraceEvalCorrelation
+```
+
+### Cannot support
+
+```text
+Product success by itself
+Correctness without validation
+Security absence without scan/threat model
+```
+
+### Failure modes and remediation
+
+| Failure | Repair |
+|---|---|
+| Missing span attribute | add semantic attribute at source span. |
+| Cardinality violation | move field from metric label to trace/event/log attribute. |
+| Secret in telemetry | redact at source, rotate if leaked, add test. |
+| Collector config invalid | include config path and validation error. |
+
+### Confidence
+
+**94/100.** Vendor-neutral, production-mature, essential for agent systems. Risk is schema drift/cardinality/privacy; governance solves it.
+
+---
+
+## 5.17 Codex, Agents SDK, MCP, repair loops
+
+### Classification
+
+Codex: **REQUIRED**  
+OpenAI Agents SDK: **REQUIRED**  
+MCP tools: **GOVERNED_ADAPTER**
+
+### Purpose
+
+Agentic work execution, repair loops, trace/eval/improvement loops, tool orchestration, handoffs, guardrails, and human approval boundaries.
+
+### Commands
+
+```bash
+ultragoal agent tool-inventory verify
+ultragoal agent trace prove --run-id <id>
+ultragoal agent eval run --suite repair-regression
+ultragoal agent repair-loop run --task <task-id>
+ultragoal agent mcp policy check
+ultragoal update-goal eligible --goal <goal-id>
+```
+
+### Config files
+
+```text
+AGENTS.md
+.codex/**
+.agents/skills/**
+config/models.toml
+tools/mcp/**
+docs/exec-plans/**
+evals/agent/**
+telemetry/agent-semconv.yaml
+.ultragoal/agent-policy.toml
+```
+
+### Clean-checkout behavior
+
+Agent tooling must run from repo-local config. No hidden user memory, personal model aliases, local MCP servers, or undocumented credentials may support claims.
+
+### Offline behavior
+
+Offline agent proof is limited to local replay/eval. Live model behavior claims require live trace receipts.
+
+### Machine-readable output
+
+Trace JSON, eval JSON, tool-call audit logs, approval records, repair-loop status reports, final packet.
+
+### Resource behavior
+
+Agent tools are risk-bearing. Every tool requires risk class, input schema, output schema, approval policy, idempotency class, telemetry, and cleanup policy.
+
+### Cleanup
+
+```bash
+ultragoal gc agent-runs --dry-run
+ultragoal gc mcp-temp --dry-run
+ultragoal agent abandoned-runs check
+```
+
+### Receipt fields
+
+```text
+agent_run_id
+workflow_name
+model_alias_digest
+resolved_model_id
+instruction_digest
+tool_inventory_digest
+mcp_policy_digest
+trace_id
+trace_digest
+eval_suite_digest
+approval_log_digest
+```
+
+### Supports
+
+```text
+AgentRunProof
+RepairLoopProof
+EvalRegressionProof
+ToolPolicyProof
+UpdateGoalEligibilityInput
+```
+
+### Cannot support
+
+```text
+Code correctness without validation
+Product success without runtime journey
+Release readiness without full packet
+```
+
+### Failure modes and remediation
+
+| Failure | Repair |
+|---|---|
+| Tool without schema | add input/output schemas and tests. |
+| Tool risk mismatch | reclassify and add approval gate. |
+| Trace missing | rerun with tracing enabled; cannot claim run proof. |
+| Eval regression | include case IDs, score deltas, trace links. |
+| Prompt drift | update model config/AGENTS/skills with eval proof. |
+
+### Confidence
+
+**91/100.** Essential for the product. Risk is treating agent activity as proof; laws must force trace/eval/validation binding.
+
+---
+
+## 5.18 Nix reproducible development shell
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Provide clean-checkout, cross-language toolchain reproducibility and onboarding.
+
+### Commands
+
+```bash
+nix develop
+ultragoal env verify --nix
+ultragoal bootstrap --from nix
+```
+
+### Config files
+
+```text
+flake.nix
+flake.lock
+.nix/**
+.ultragoal/env-policy.toml
+```
+
+### Clean-checkout behavior
+
+`nix develop` must provide the declared versions of Rust, Bun/Node, Python/uv/Ruff, OpenTofu, kubectl, ClickHouse/NATS clients, and Ultragoal bootstrap tools.
+
+### Offline behavior
+
+Allowed only with substituter/cache manifest. If Nix fetches from network, offline claim is unsupported.
+
+### Machine-readable output
+
+Nix flake metadata, lockfile digest, derivation paths, store path inventories.
+
+### Cache/resource behavior
+
+Nix store is cache/artifact surface. It cannot support product claims by itself.
+
+### Cleanup
+
+```bash
+ultragoal gc nix --dry-run
+```
+
+Nix GC must protect active devshell/toolchain derivations supporting current receipts.
+
+### Receipt fields
+
+```text
+nix_version
+flake_digest
+flake_lock_digest
+devshell_derivation
+store_path_inventory_digest
+substituter_policy_digest
+```
+
+### Supports
+
+```text
+CleanCheckoutToolchain
+DevEnvironmentReproducibility
+```
+
+### Cannot support
+
+```text
+Code correctness
+Product success
+Release readiness by itself
+```
+
+### Confidence
+
+**88/100.** Strong reproducibility; complexity and platform friction require careful bootstrap design.
+
+---
+
+## 5.19 Bazel monorepo build graph
+
+### Classification
+
+**GOVERNED_ADAPTER**
+
+### Purpose
+
+Formal cross-language build graph, remote cache, hermetic actions, and large monorepo scaling.
+
+### Policy
+
+Do not introduce Bazel prematurely. Make it required only when Cargo+Bun+uv+Nix+Ultragoal wrappers cannot provide sufficient graph correctness or CI performance.
+
+### Commands
+
+```bash
+bazel mod tidy
+bazel test //...
+bazel build //...
+ultragoal bazel graph verify --adapter
+```
+
+### Config files
+
+```text
+MODULE.bazel
+.bazelrc
+BUILD.bazel
+.ultragoal/bazel-policy.toml
+```
+
+### Clean-checkout behavior
+
+Must run from pinned Bazel and locked modules.
+
+### Offline behavior
+
+Allowed with repository cache manifest.
+
+### Machine-readable output
+
+BEP build event protocol, action graph, test XML/JSON.
+
+### Cache/resource behavior
+
+Remote cache is a proof-sensitive surface. Cache hits support speed claims only, not correctness unless action inputs/outputs are verified.
+
+### Cleanup
+
+```bash
+ultragoal gc bazel --dry-run
+```
+
+### Receipt fields
+
+```text
+bazel_version
+module_digest
+bazelrc_digest
+action_graph_digest
+bep_digest
+remote_cache_policy_digest
+```
+
+### Supports
+
+```text
+MonorepoBuildGraph
+HermeticActionObservation
+LargeRepoCiAcceleration
+```
+
+### Cannot support
+
+```text
+Product success
+Language-specific static proof unless delegated validators ran
+```
+
+### Confidence
+
+**75/100.** Powerful at scale; high integration cost and agent complexity make adapter status correct.
+
+---
+
+## 5.20 OpenTofu infrastructure as code
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Cloud resources, managed databases, object storage, IAM, Kubernetes clusters, network, secrets manager, observability infrastructure.
+
+### Commands
+
+```bash
+ultragoal infra tofu fmt-check
+ultragoal infra tofu validate
+ultragoal infra tofu plan --env staging --out plan.json
+ultragoal infra tofu policy check --plan plan.json
+```
+
+Underlying:
+
+```bash
+tofu fmt -check -recursive
+tofu init -lockfile=readonly
+tofu validate
+tofu plan -out=tfplan
+tofu show -json tfplan
+```
+
+### Config files
+
+```text
+infra/opentofu/**
+infra/opentofu/.terraform.lock.hcl
+.ultragoal/infra-policy.toml
+```
+
+### Clean-checkout behavior
+
+`tofu init` must use locked providers and declared backend policy. No local state files support claims.
+
+### Offline behavior
+
+Offline validation possible with provider cache manifest. Plan against real cloud requires credentials and environment receipt.
+
+### Machine-readable output
+
+`tofu show -json` plan, validate output, policy checks.
+
+### Cache/resource behavior
+
+Provider plugin cache is cache surface. State files are sensitive artifacts.
+
+### Cleanup
+
+```bash
+ultragoal gc tofu-cache --dry-run
+ultragoal infra state audit
+```
+
+### Receipt fields
+
+```text
+opentofu_version
+provider_lock_digest
+module_digest
+backend_policy_digest
+plan_json_digest
+policy_result_digest
+environment_class
+```
+
+### Supports
+
+```text
+InfrastructurePlan
+IaCPolicyCompliance
+ProviderLockProof
+```
+
+### Cannot support
+
+```text
+Infrastructure applied successfully unless apply receipt exists
+Application health
+Product success
+```
+
+### Confidence
+
+**90/100.** Strong IaC baseline. Risk is state/credential handling.
+
+---
+
+## 5.21 Kubernetes runtime platform
+
+### Classification
+
+**GOVERNED_ADAPTER**
+
+### Purpose
+
+Production runtime orchestration when multi-service scaling, isolation, rollout, observability, and operational maturity justify it.
+
+### Policy
+
+Kubernetes is not the default local developer model and not a product proof. Use managed Kubernetes for production only when needed.
+
+### Commands
+
+```bash
+ultragoal k8s manifests validate
+ultragoal k8s policy check
+ultragoal k8s rollout prove --env staging
+ultragoal k8s smoke prove --env staging
+```
+
+Underlying observations:
+
+```bash
+kubectl version --output=json
+kubectl diff -f infra/k8s
+kubectl apply --server-side --dry-run=server -f infra/k8s
+kubeconform -summary infra/k8s/**/*.yaml
+```
+
+### Config files
+
+```text
+infra/k8s/**
+infra/helm/**
+infra/kustomize/**
+.ultragoal/k8s-policy.toml
+```
+
+### Clean-checkout behavior
+
+Local validation should not require a live cluster unless the command is explicitly cluster-surface.
+
+### Offline behavior
+
+Manifest validation can be offline. Runtime claims cannot.
+
+### Machine-readable output
+
+kubectl JSON, kubeconform JSON, policy reports, rollout status JSON.
+
+### Cache/resource behavior
+
+Cluster state is environment-specific. Kubeconfig and credentials are sensitive surfaces.
+
+### Cleanup
+
+```bash
+ultragoal k8s ephemeral cleanup --dry-run
+ultragoal gc k8s-local --dry-run
+```
+
+### Receipt fields
+
+```text
+kubernetes_version
+manifest_digest
+policy_digest
+cluster_identity
+environment
+rollout_revision
+image_digests
+```
+
+### Supports
+
+```text
+RuntimeDeploymentObservation
+ManifestPolicyCompliance
+RolloutProof
+```
+
+### Cannot support
+
+```text
+Source compliance
+Product success without same-surface journey
+SLO satisfaction without observability window
+```
+
+### Confidence
+
+**82/100.** Production-grade but complexity-heavy; adapter status prevents premature Kubernetes law theater.
+
+---
+
+# 6. Gold-standard command matrix
+
+All claim-bearing commands must run through `ultragoal`. Raw tools are allowed for investigation, not final claims.
+
+## 6.1 FAST loop
+
+### Goal
+
+Fastest meaningful local feedback for agent iteration.
+
+### Command
+
+```bash
+ultragoal stack fast
+```
+
+### Required steps
+
+```text
+toolchain quick verify
+workspace topology changed-scope check
+Rust fmt/check/focused tests where Rust changed
+TypeScript typecheck/lint/focused tests where UI changed
+Python ruff/pytest focused where evals changed
+schema/namespace/line-cap changed-scope checks
+DB migration syntax check if migrations changed
+trace/eval schema check if telemetry/evals changed
+```
+
+### Claim support
+
+```text
+FastFeedbackObservation
+ChangedScopeStructuralPass
+```
+
+Cannot support review-ready, release-ready, product-success, or update_goal.
+
+---
+
+## 6.2 STANDARD loop
+
+### Goal
+
+Serious local proof before claiming a repair.
+
+### Command
+
+```bash
+ultragoal stack standard
+```
+
+### Required steps
+
+```text
+ultragoal rust standard
+ultragoal ts standard
+ultragoal py standard
+ultragoal db migrate verify --empty --fixture baseline
+ultragoal obs semconv check
+ultragoal agent tool-inventory verify
+ultragoal fixtures run --required red,green,tamper
+ultragoal receipt verify --current
+ultragoal claim ceiling --goal current
+```
+
+### Claim support
+
+```text
+StandardRepairProof
+ReviewReadyCandidate
+```
+
+Cannot support release-ready unless release loop also passes.
+
+---
+
+## 6.3 RELEASE loop
+
+### Goal
+
+Full law proof for release readiness.
+
+### Command
+
+```bash
+ultragoal stack release
+```
+
+### Required steps
+
+```text
+standard loop
+Rust coverage/security/supply-chain/memory proof
+TypeScript coverage/browser/a11y/visual/bundle proof
+Python eval regression proof
+DB migration/backup/restore/query-plan/RLS proof
+ClickHouse ingest/query proof
+NATS stream/replay proof
+Restate workflow scenario proof
+OpenTelemetry local/prod config proof
+OpenTofu plan/policy proof
+Kubernetes manifest/rollout proof where applicable
+package inventory proof
+install proof
+cache separation proof
+product fitness proof
+product cohesion proof
+product success proof
+GC dry-run proof
+final packet build
+```
+
+### Claim support
+
+```text
+ReleaseReady
+ProductFitness
+ProductCohesion
+ProductSuccess
+FinalPacketEligible
+```
+
+only when all receipts are current.
+
+---
+
+## 6.4 COLD/CLEAN loop
+
+### Goal
+
+Prove clean checkout and no hidden local cache dependency.
+
+### Command
+
+```bash
+ultragoal stack clean-proof --cache-mode none
+```
+
+### Required properties
+
+```text
+fresh checkout or clean worktree snapshot
+isolated Cargo/Bun/uv caches
+isolated target/node_modules/.venv directories
+Nix devshell or recorded tool bootstrap
+no editor/watcher state
+no global env except allowlist
+local services boot from empty/fixture state
+full standard loop
+```
+
+---
+
+## 6.5 WATCH loop
+
+### Goal
+
+Continuous developer feedback.
+
+### Command
+
+```bash
+ultragoal stack watch
+```
+
+### Rule
+
+Watch emits observations only. It cannot mint completion claims unless followed by current receipt verification and claim-ceiling computation.
+
+---
+
+## 6.6 MEMORY/RESOURCE loop
+
+### Goal
+
+Bounded memory, no leaks, bounded queues, cleanup on cancellation/error, stable long-running control plane.
+
+### Command
+
+```bash
+ultragoal stack resources prove
+```
+
+### Required checks
+
+```text
+Rust long-running service memory
+Node/Bun frontend build memory budget
+Python eval memory budget
+Postgres connection pool limits
+ClickHouse retention/memory limits
+NATS consumer lag and stream limits
+Restate workflow backlog limits
+browser memory/trace artifact limits
+agent tool child process cleanup
+```
+
+---
+
+## 6.7 GARBAGE-COLLECTION/CLEANUP loop
+
+### Goal
+
+Plan and apply safe cleanup of stale artifacts.
+
+### Commands
+
+```bash
+ultragoal gc plan
+ultragoal gc dry-run
+ultragoal gc apply
+ultragoal gc verify
+```
+
+### Scope
+
+```text
+Cargo target dirs
+Bun node_modules/cache
+uv virtualenv/cache
+Nix store roots
+Bazel output base
+DB test data dirs
+ClickHouse local data
+NATS streams
+Restate state
+Playwright traces/videos/screenshots
+coverage artifacts
+receipts
+final packets
+worktrees
+locks/pids/ports
+```
+
+---
+
+# 7. Receipt model
+
+## 7.1 Stack receipt
+
+```json
+{
+  "schema_version": "ultragoal.stack_receipt.v1",
+  "receipt_id": "rcpt_...",
+  "command": ["ultragoal", "stack", "standard"],
+  "goal_id": "goal_...",
+  "git": {
+    "commit": "...",
+    "dirty": false,
+    "worktree_id": "wt_..."
+  },
+  "toolchains": {
+    "rust": { "version": "1.96.1", "digest": "sha256:..." },
+    "typescript": { "version": "6.0.x", "digest": "sha256:..." },
+    "python": { "version": "3.14.6", "digest": "sha256:..." },
+    "bun": { "version": "1.3.14", "digest": "sha256:..." },
+    "node": { "version": "24.x", "status": "LTS" }
+  },
+  "surfaces": {
+    "source": "sha256:...",
+    "package": "sha256:...",
+    "install": "sha256:...",
+    "cache": "sha256:...",
+    "runtime": "sha256:...",
+    "observability": "sha256:..."
+  },
+  "component_receipts": [
+    "rcpt_rust_standard_...",
+    "rcpt_ts_standard_...",
+    "rcpt_py_standard_...",
+    "rcpt_db_migration_...",
+    "rcpt_obs_semconv_..."
+  ],
+  "claim_support": ["StandardRepairProof"],
+  "claim_exclusions": ["ReleaseReady", "ProductSuccess"],
+  "issued_at": "2026-07-01T00:00:00Z",
+  "expires_at": "2026-07-02T00:00:00Z"
+}
+```
+
+## 7.2 Staleness triggers
+
+A stack receipt is stale if any of these change:
+
+```text
+git commit or dirty state
+Cargo.lock
+bun.lock
+uv.lock
+flake.lock
+schema registry
+law registry
+validator binary
+fixture suite
+migration files
+telemetry semconv registry
+model config
+MCP tool registry
+OpenTofu provider lock
+Kubernetes manifests
+package artifact digest
+install tree digest
+runtime config digest
+observability backend config
+```
+
+---
+
+# 8. Cache/no-cache honesty model
+
+## Cache classes
+
+```rust
+enum StackCacheClass {
+    CargoTarget,
+    CargoRegistry,
+    CargoGit,
+    Sccache,
+    BunInstallCache,
+    NodeModules,
+    ViteCache,
+    PlaywrightBrowserCache,
+    UvCache,
+    PythonVirtualEnv,
+    NixStore,
+    BazelOutputBase,
+    DockerLayerCache,
+    PostgresTestData,
+    ClickHouseLocalData,
+    NatsJetStreamData,
+    RestateState,
+    BrowserStorageState,
+    AgentRunCache,
+}
+```
+
+## Law
+
+```text
+Cache use is legal.
+Cache concealment is illegal.
+Warm-cache speed is not clean-checkout proof.
+Cache presence is not correctness proof.
+Cache proof supports only cache-surface claims unless same-surface law says otherwise.
+```
+
+---
+
+# 9. Memory/resource discipline across the stack
+
+## 9.1 Rust
+
+Use ownership, borrowing, RAII, bounded queues, cancellation tokens, structured tasks, `Drop` cleanup, and explicit memory budgets. Reject tracing GC as core.
+
+## 9.2 TypeScript/browser
+
+JavaScript engines have automatic GC, but frontend memory discipline is still required:
+
+```text
+abort fetches on navigation
+unsubscribe event listeners
+clear intervals/timeouts
+close WebSockets/EventSource
+bound in-memory stores
+virtualize large trace lists
+revoke object URLs
+clear service workers/caches in tests
+profile long-running cockpit sessions
+```
+
+## 9.3 Node/Bun server/tooling
+
+```text
+bounded worker pools
+bounded child processes
+explicit tempdir cleanup
+AbortController for cancellation
+stream large files
+no unbounded global maps
+heap snapshots for leaks
+```
+
+## 9.4 Python
+
+```text
+context managers for files/tempdirs/connections
+bounded dataframes
+stream large trace files
+pytest temp paths
+explicit notebook artifact cleanup
+tracemalloc/psutil where needed
+```
+
+## 9.5 Data systems
+
+```text
+Postgres connection pool limits
+query timeout policies
+ClickHouse TTL/retention and memory limits
+NATS stream retention/max bytes/max age
+Valkey key TTLs and max memory
+Restate/Temporal workflow timeout/backlog limits
+```
+
+---
+
+# 10. Workspace/artifact/cache garbage collection
+
+## 10.1 Artifact classes
+
+```rust
+enum ArtifactClass {
+    Source,
+    GeneratedSource,
+    CargoTarget,
+    NodeModules,
+    BunCache,
+    UvVirtualEnv,
+    UvCache,
+    NixStoreRoot,
+    BazelOutput,
+    DockerVolume,
+    PostgresDataDir,
+    ClickHouseDataDir,
+    NatsJetStreamData,
+    RestateState,
+    PlaywrightTrace,
+    PlaywrightVideo,
+    PlaywrightScreenshot,
+    CoverageReport,
+    EvalResult,
+    AgentTrace,
+    ReceiptCurrent,
+    ReceiptStale,
+    ReviewPacket,
+    FinalPacket,
+    ReleaseArtifact,
+    SBOM,
+    Provenance,
+    Signature,
+    LockFile,
+    PidFile,
+    PortReservation,
+    TempDir,
+}
+```
+
+## 10.2 Protected artifacts
+
+Never delete without replacement proof:
+
+```text
+current receipts supporting active claims
+current final packets
+release artifacts
+SBOMs
+provenance
+signatures
+lockfiles
+law/schema registries
+fixtures
+active eval baselines
+active performance baselines
+active trace exemplars
+Cargo.lock
+bun.lock
+uv.lock
+flake.lock
+OpenTofu provider locks
+```
+
+## 10.3 Commands
+
+```bash
+ultragoal gc plan --scope stack --emit .ultragoal/gc/plan.json
+ultragoal gc dry-run --plan .ultragoal/gc/plan.json
+ultragoal gc apply --plan .ultragoal/gc/plan.json --emit-deletion-receipt
+ultragoal gc verify --after .ultragoal/gc/deletion-receipt.json
+```
+
+---
+
+# 11. Product laws for the full stack
+
+## 11.1 Product Fitness
+
+A full-stack feature is Product Fitness compliant only if the intended user problem is proven on the correct runtime surface.
+
+Examples:
+
+```text
+API behavior proven through runtime API request/response
+UI behavior proven through browser journey
+agent cockpit behavior proven through trace/eval/run scenario
+DB behavior proven through migration + runtime persistence journey
+workflow behavior proven through durable replay/idempotency scenario
+observability behavior proven through emitted trace/log/metric query
+```
+
+Invalid substitutes:
+
+```text
+Rust tests pass
+TypeScript typecheck passes
+Bun build succeeds
+Postgres migration runs
+ClickHouse table exists
+Kubernetes rollout succeeded
+agent says it is done
+```
+
+## 11.2 Product Cohesion
+
+Product Cohesion requires the change to fit architecture, module boundaries, telemetry schema, DB truth model, UI framework boundaries, package surfaces, docs, and operational model.
+
+Violations:
+
+```text
+UI imports DB code
+Python eval mutates production DB
+cache used as truth
+ClickHouse used as transactional product state
+MCP tool bypasses approval policy
+agent trace lacks run_id
+new dependency lacks owner/threat note
+new prompt lacks eval coverage
+```
+
+## 11.3 Product Success
+
+Product Success requires same-surface proof that the actual user outcome works.
+
+For this stack, a Product Success packet usually needs:
+
+```text
+runtime API proof
+browser journey proof
+DB persistence proof
+workflow completion proof if async
+trace/event proof
+SLO/golden-signal non-regression observation
+accessibility proof for user-facing UI
+security/secret boundary proof
+```
+
+---
+
+# 12. Supply-chain and security baseline
+
+## Required controls
+
+```text
+Cargo.lock committed
+bun.lock committed
+uv.lock committed
+flake.lock committed
+OpenTofu provider locks committed
+frozen installs in CI
+minimum package age for JS where supported
+dependency review on PRs
+cargo-deny/audit/vet
+Bun security scanner/audit
+pip-audit or equivalent Python advisory scan as governed adapter
+SBOM generation for Rust, TS, Python, containers
+Sigstore/cosign signing for release artifacts
+container image digest pinning
+Kubernetes admission/policy validation
+secret scanning with gitleaks and optional TruffleHog
+```
+
+## Agent-specific prohibitions
+
+```text
+Agents cannot add production dependencies without dependency receipt.
+Agents cannot weaken CI to pass.
+Agents cannot disable tracing to hide failures.
+Agents cannot change approval policy without human review.
+Agents cannot modify secrets.
+Agents cannot deploy production without release gate.
+Agents cannot substitute package publication for product success.
+```
+
+---
+
+# 13. CI/local parity
+
+CI must run the same `ultragoal` commands available locally.
+
+Required lanes:
+
+```text
+stack-fast
+stack-standard
+stack-clean-proof
+rust-coverage
+frontend-browser
+python-evals
+migration-proof
+observability-proof
+security-supply-chain
+infra-plan
+release-dry-run
+memory-resource scheduled
+fuzz/property scheduled
+gc-dry-run scheduled
+```
+
+CI YAML is orchestration, not authority.
+
+Example:
+
+```yaml
+- run: ultragoal bootstrap --ci
+- run: ultragoal stack standard
+- run: ultragoal stack clean-proof --cache-mode none
+- run: ultragoal stack release --dry-run
+- run: ultragoal packet build --claim release-ready
+```
+
+---
+
+# 14. Agentic workflow recommendations
+
+## 14.1 Always use execution plans for multi-step work
+
+Every non-trivial task requires:
+
+```text
+docs/exec-plans/active/<task>.md
+```
+
+The plan must include:
+
+```text
+goal
+scope
+non-goals
+current state
+changed files
+commands run
+receipts minted
+surprises
+decision log
+remaining failures
+claim ceiling
+```
+
+## 14.2 Trace → eval → repair loop
+
+Every material agent failure should become one of:
+
+```text
+red fixture
+tamper fixture
+eval regression case
+structural lint rule
+telemetry schema rule
+AGENTS.md/doc update
+```
+
+## 14.3 Tool risk classes
+
+```text
+ReadOnly
+LocalWrite
+LocalExecution
+ExternalWrite
+Destructive
+Sensitive
+ProductionDeploy
+```
+
+Every MCP/tool action must have:
+
+```text
+input schema
+output schema
+risk class
+approval policy
+idempotency class
+telemetry span
+artifact cleanup policy
+```
+
+---
+
+# 15. Migration plan for an existing gold-stack repo
+
+## Phase 0 — Inventory
+
+```bash
+ultragoal stack inventory
+ultragoal rust workspace topology check --report-only
+ultragoal ts inventory --report-only
+ultragoal py inventory --report-only
+ultragoal db inventory --report-only
+ultragoal obs inventory --report-only
+ultragoal infra inventory --report-only
+```
+
+## Phase 1 — Toolchain and lockfiles
+
+Add and verify:
+
+```text
+rust-toolchain.toml
+Cargo.lock
+package.json + bun.lock
+pyproject.toml + uv.lock
+flake.nix + flake.lock
+OpenTofu provider locks
+```
+
+## Phase 2 — Command routing
+
+Introduce:
+
+```bash
+ultragoal stack fast
+ultragoal stack standard
+ultragoal stack clean-proof
+ultragoal stack release
+```
+
+Raw commands become implementation details.
+
+## Phase 3 — Architecture and namespace
+
+Refactor:
+
+```text
+Rust maximally factored module tree
+TypeScript feature/surface-based modules
+Python eval package structure
+DB migration naming
+telemetry attribute registry
+infra module boundaries
+```
+
+## Phase 4 — Typed boundaries
+
+Replace:
+
+```text
+serde_json::Value authority
+TypeScript any/unknown assertions without parser
+Python dict authority
+raw SQL strings without typed query boundary
+untyped telemetry attributes
+untyped MCP inputs/outputs
+```
+
+with typed parsers, schemas, newtypes, and receipt-bound validators.
+
+## Phase 5 — Red/green/tamper fixtures
+
+For every validator and law:
+
+```text
+red fixture
+green fixture
+tamper fixture
+expected failure schema
+receipt proof
+```
+
+## Phase 6 — Product proof
+
+Add browser/API/DB/workflow/observability journeys for Product Fitness, Cohesion, and Success.
+
+## Phase 7 — GC and release packets
+
+Classify artifacts, protect active proof, implement dry-run cleanup, and build final packets.
+
+---
+
+# 16. Final proposed law text: Gold-Standard Stack Developer Experience
+
+## HU-STACK-001: Agent-First Harness Law
+
+The repository, runtime harness, validation system, observability stack, eval suite, and artifact cleanup system are first-class product surfaces. Language tools serve the harness; they do not define compliance.
+
+## HU-STACK-002: Cross-Language Claim Authority Law
+
+Rust, TypeScript, Python, SQL, infrastructure, telemetry, and agent tools may emit observations. Only `ultragoal` may convert observations into claims.
+
+## HU-STACK-003: Clean-Checkout Discoverability Law
+
+A fresh agent must be able to discover setup, validation, local runtime, evals, and release proof from repo files only. Hidden local state cannot support claims.
+
+## HU-STACK-004: Same-Surface Full-Stack Proof Law
+
+A claim about a surface must be proven on that surface:
+
+```text
+source claim -> source scan/typecheck
+package claim -> package inventory
+install claim -> clean install tree
+runtime API claim -> runtime API proof
+browser claim -> browser journey
+DB claim -> database migration/query proof
+workflow claim -> workflow scenario/replay proof
+observability claim -> emitted/queryable telemetry proof
+product claim -> user outcome proof
+```
+
+## HU-STACK-005: Lockfile Sovereignty Law
+
+`Cargo.lock`, `bun.lock`, `uv.lock`, `flake.lock`, and provider locks are governed truth surfaces. Lock drift blocks dependency, build, package, release, and update_goal claims.
+
+## HU-STACK-006: Telemetry Schema Law
+
+No trace, metric, log, event, or eval record may introduce unregistered attributes. Every attribute has type, owner, cardinality class, privacy class, and allowed surfaces.
+
+## HU-STACK-007: Agent Tool Boundary Law
+
+Every tool/MCP action requires typed schemas, risk class, approval policy, idempotency class, telemetry, and cleanup. Tool use without policy cannot support claims.
+
+## HU-STACK-008: Product-Cockpit Law
+
+Agent work must be inspectable through an internal cockpit or equivalent runtime surface showing plans, diffs, validations, traces, evals, tool calls, approval records, artifacts, and claim ceilings.
+
+## HU-STACK-009: Full-Stack GC Law
+
+Every generated artifact, cache, package, install copy, DB data dir, trace, screenshot, video, receipt, packet, lock, pid, port, and tempdir must be classed before cleanup. Deletion requires dry-run plan and deletion receipt.
+
+## HU-STACK-010: Update Goal Eligibility Law
+
+`update_goal` is forbidden unless the CLI verifies current goal state, active receipts, stack claim ceiling, product proof eligibility, and cleanup/protection status.
+
+---
+
+# 17. Confidence table
+
+| Decision | Confidence | Rationale |
+|---|---:|---|
+| Rust as correctness-critical engine | 97 | Strong static guarantees and ecosystem; already aligned with prior Rust law. |
+| TypeScript 6 UI baseline | 94 | Stable frontend language; must compensate for type erasure with runtime proof. |
+| Bun as TS package/script runner | 86 | Large speed upside; requires Node compatibility and cache honesty. |
+| Node 24 LTS baseline | 90 | Conservative compatibility surface. |
+| SvelteKit default product UI | 90 | Strong SSR/product default and agent-legible structure. |
+| SolidStart for cockpit | 82 | Excellent dense UI fit; slightly higher ecosystem risk. |
+| PostgreSQL durable truth | 95 | Best relational truth baseline. |
+| pgvector first | 88 | Keeps retrieval near truth; scale may force adapter. |
+| Qdrant adapter | 82 | Strong vector DB; should be justified by retrieval evals. |
+| ClickHouse event store | 90 | Strong high-cardinality analytics/trace store. |
+| DuckDB local analytics | 86 | Excellent local reports; not truth. |
+| Valkey cache default | 88 | Conservative Redis-family OSS cache. |
+| Dragonfly adapter | 80 | Performance upside; needs workload proof. |
+| NATS JetStream | 89 | Lightweight persisted event bus; idempotency still required. |
+| Restate first durable execution | 86 | Strong Rust-aligned durable execution; still needs scenario proof. |
+| Temporal adapter | 80 | Mature platform but Rust SDK preview status limits canonical use. |
+| Python/uv/Ruff eval stack | 92 | Strong AI/eval/research fit; notebook entropy risk. |
+| PyO3/maturin adapter | 84 | Strong bridge; ABI/platform complexity. |
+| OpenTelemetry required | 94 | Essential vendor-neutral telemetry; graduated/mature. |
+| Nix required | 88 | Strong reproducibility; some onboarding complexity. |
+| Bazel adapter | 75 | Powerful but costly; only for scale. |
+| OpenTofu required | 90 | Strong open IaC baseline. |
+| Kubernetes adapter | 82 | Powerful runtime; avoid premature complexity. |
+| Full-stack artifact GC | 94 | Mandatory for claim hygiene; deletion safety is hard but necessary. |
+| Codex/Agents repair/eval loops | 91 | Central to harness mission; requires external validation. |
+
+
+---
+
+# 18. Operational addenda: components not allowed to hide behind larger buckets
+
+The following items are often treated as “part of the frontend,” “part of infra,” or “part of CI.” That is not sufficient for Harness Ultragoal. Each is a governed surface.
+
+## 18.1 Vite frontend build substrate
+
+### Classification
+
+**REQUIRED**
+
+### Purpose
+
+Vite is the development server and production build substrate for SvelteKit and SolidStart apps.
+
+### Commands
+
+```bash
+ultragoal ui build verify --app apps/web
+ultragoal ui build verify --app apps/agent-cockpit
+bunx vite build --mode production
+bunx vite --host 127.0.0.1
+```
+
+### Config files
+
+```text
+vite.config.ts
+svelte.config.js
+app.config.ts
+package.json
+bun.lock
+.ultragoal/vite-policy.toml
+```
+
+### Required receipts
+
+```text
+vite_version
+framework_adapter
+mode
+config_digest
+env_allowlist_digest
+bundle_manifest_digest
+chunk_inventory_digest
+source_map_policy
+```
+
+### Claim surfaces supported
+
+```text
+FrontendBuildArtifact
+BundleInventory
+DevServerObservation
+```
+
+### Claim surfaces not supported
+
+```text
+Browser behavior without browser journey
+Accessibility
+Product success
+Security absence without bundle/secret scan
+```
+
+### Failure modes
+
+```text
+client bundle includes server secret
+chunk size budget exceeded
+SSR/client boundary mismatch
+build depends on undeclared env var
+plugin changes output without inventory update
+```
+
+### Confidence
+
+**92/100.** Required because both selected frontend frameworks use Vite as the practical build/dev substrate. The risk is env/plugin/bundle opacity; the mitigation is bundle inventory and secret scanning.
+
+## 18.2 Tailwind CSS v4 design-system substrate
+
+### Classification
+
+**REQUIRED** when the product accepts Tailwind v4’s modern browser baseline; otherwise the project must explicitly choose a legacy CSS class.
+
+### Purpose
+
+Fast, consistent UI implementation and agent-legible styling conventions.
+
+### Commands
+
+```bash
+ultragoal ui style verify
+ultragoal ui visual prove
+ultragoal ui browser-baseline check
+```
+
+### Config files
+
+```text
+app.css
+postcss.config.js or Vite plugin config
+.ultragoal/browser-baseline.toml
+.ultragoal/design-system-policy.toml
+```
+
+### Required receipts
+
+```text
+tailwind_version
+browser_baseline
+css_entrypoints
+style_policy_digest
+visual_baseline_digest
+```
+
+### Claim surfaces supported
+
+```text
+DesignSystemBuild
+VisualRegressionObservation
+BrowserBaselinePolicy
+```
+
+### Claim surfaces not supported
+
+```text
+Accessibility by itself
+Product success
+Older browser support unless explicitly tested
+```
+
+### Failure modes
+
+```text
+unsupported browser baseline
+untracked global CSS override
+token drift
+visual regression
+style entropy through ad hoc component classes
+```
+
+### Confidence
+
+**86/100.** Strong productivity and consistency; browser support must be governed.
+
+## 18.3 OpenAI SDKs, model aliases, and eval-governed model updates
+
+### Classification
+
+OpenAI SDKs: **REQUIRED** where the product calls OpenAI APIs.  
+Model aliases: **REQUIRED**.  
+Hard-coded model names in arbitrary scripts: **REJECT**.
+
+### Purpose
+
+Centralize model/runtime policy so agents do not silently change behavior by editing scattered strings.
+
+### Commands
+
+```bash
+ultragoal ai models verify
+ultragoal ai models update-plan --alias repair
+ultragoal ai eval-gate --model-change
+```
+
+### Config files
+
+```text
+config/models.toml
+config/openai-policy.toml
+evals/model-change/**
+```
+
+### Required receipts
+
+```text
+model_alias_digest
+resolved_model_ids
+sdk_versions
+agent_instruction_digest
+eval_suite_digest
+before_after_eval_scores
+```
+
+### Claim surfaces supported
+
+```text
+ModelPolicyCompliance
+AgentEvalRegression
+```
+
+### Claim surfaces not supported
+
+```text
+Product success without runtime journey
+Tool safety without MCP/tool policy
+```
+
+### Failure modes
+
+```text
+unresolved alias
+model changed without eval
+prompt changed without trace/eval link
+SDK version drift
+sensitive trace capture enabled without policy
+```
+
+### Confidence
+
+**88/100.** Necessary for agentic products. Main risk is model volatility; eval gates and aliases are the mitigation.
+
+## 18.4 Supply-chain/security stack
+
+### Classification
+
+**REQUIRED**
+
+### Required tools/practices
+
+```text
+cargo-deny
+cargo-audit
+cargo-vet
+Bun security scanner / audit
+uv locked sync and Python advisory scanner as adapter
+Gitleaks
+TruffleHog as governed adapter
+SBOM generation for Rust/TS/Python/container artifacts
+Sigstore/cosign signing for release artifacts
+SLSA/provenance where CI provider supports it
+container image digest pinning
+minimum package age for JS dependencies where supported
+Renovate/Dependabot with eval-backed update PRs
+```
+
+### Commands
+
+```bash
+ultragoal security scan
+ultragoal dependency audit --all
+ultragoal sbom generate --all
+ultragoal release sign --artifact <path>
+ultragoal release provenance verify
+```
+
+### Config files
+
+```text
+deny.toml
+supply-chain/audits.toml
+bunfig.toml
+.ultragoal/security-policy.toml
+.ultragoal/sbom-policy.toml
+.github/dependabot.yml or renovate.json
+```
+
+### Required receipts
+
+```text
+lockfile_digests
+advisory_db_versions
+license_policy_digest
+secret_scan_digest
+sbom_digests
+signature_digests
+provenance_digest
+package_age_policy
+```
+
+### Claim surfaces supported
+
+```text
+DependencyLegibility
+LicensePolicy
+SecretScanObservation
+ReleaseArtifactIntegrity
+SupplyChainPolicy
+```
+
+### Claim surfaces not supported
+
+```text
+No vulnerabilities in the absolute sense
+Runtime exploit absence
+Product correctness
+```
+
+### Failure modes
+
+```text
+yanked package
+new advisory
+license violation
+secret detected
+unsigned artifact
+SBOM missing package surface
+dependency update without eval proof
+```
+
+### Confidence
+
+**91/100.** Mandatory for agent-modified stacks. Risk is advisory false negatives; mitigated by layered scanners and policy gates.
+
+## 18.5 Task runner and command discovery
+
+### Classification
+
+`ultragoal`: **REQUIRED**.  
+`just`: **DEFAULT_ON** as alias layer only.  
+Nix devshell: **REQUIRED**.  
+Raw shell scripts as authority: **REJECT**.
+
+### Purpose
+
+Give agents a small, discoverable command surface without letting aliases become untyped claim authority.
+
+### Commands
+
+```bash
+just bootstrap
+just fast
+just standard
+just release
+```
+
+Each `just` recipe must delegate to `ultragoal`.
+
+### Config files
+
+```text
+justfile
+flake.nix
+.ultragoal/command-registry.toml
+```
+
+### Required receipts
+
+```text
+command_registry_digest
+justfile_digest
+ultragoal_binary_digest
+nix_flake_digest
+```
+
+### Claim surfaces supported
+
+```text
+CommandDiscoverability
+CleanCheckoutOnboarding
+```
+
+### Claim surfaces not supported
+
+```text
+Any compliance claim by alias alone
+```
+
+### Failure modes
+
+```text
+just recipe bypasses ultragoal
+shell script runs raw validator without receipt
+command documented but missing
+command succeeds locally only because of hidden env
+```
+
+### Confidence
+
+**89/100.** Small command surfaces are agent-friendly. Strict delegation prevents task-runner theater.
+
+## 18.6 Optional local-only tools
+
+These are allowed but cannot support claims:
+
+```text
+editor test lenses
+editor-only TypeScript/rust-analyzer diagnostics
+local database GUI results
+manual ClickHouse exploratory queries
+local terminal aliases
+personal direnv
+ad hoc browser devtools inspection without artifact export
+manual profiler session without receipt
+notebook-only analysis
+```
+
+Agents may mention them as investigation aids only.
+
+## 18.7 Rejected practices
+
+```text
+raw tool output as final proof
+warm cache proof as clean proof
+package install as product success
+Kubernetes rollout as product success
+DB migration success as UI success
+trace existence as eval success
+metric presence as SLO compliance
+cache existence as durable truth
+unbounded cache/queue/workflow backlog
+unclassified generated artifacts
+untyped JSON authority
+hard-coded model IDs in scripts
+MCP tool without schema/risk/approval policy
+secret-bearing local config in repo
+blind rm -rf cleanup
+reviewer agreement as compliance
+```
+
+---
+
+# 19. Strictness test for the full stack
+
+A full-stack law is theater if it can be satisfied by any of the following:
+
+```text
+prose
+reviewer approval
+row presence
+stale receipts
+source-only proof for runtime claims
+package-only proof for install claims
+install/cache proof for product claims
+browser screenshot without route/action/assertion metadata
+DB migration output without schema digest
+trace existence without queryable span/event contract
+metric presence without SLO/golden-signal contract
+fixture names without execution
+red fixtures without green path
+green fixtures without tamper path
+warm cache timing as clean timing
+local notebook state
+editor diagnostics
+hidden environment variables
+untracked local services
+lowered claim ceiling alone
+```
+
+A full-stack law is real only if it has:
+
+```text
+law id
+typed input schema
+typed output schema
+deterministic validator or governed adapter
+same-surface proof rule
+receipt schema
+digest binding
+staleness triggers
+red fixtures
+green fixtures
+tamper fixtures
+claim impact
+repair class
+cleanup/retention policy
+self-law compliance
+```
+
+---
+
+# 18. Final doctrine
+
+Harness Ultragoal’s gold-standard stack is:
+
+```text
+Rust core
++ TypeScript UI/tooling
++ Python AI/evals/research
++ PostgreSQL durable truth
++ pgvector-first retrieval
++ ClickHouse high-cardinality observability/events
++ DuckDB local analytics
++ Valkey cache
++ NATS JetStream event bus
++ Restate durable execution
++ OpenTelemetry semantic telemetry
++ Codex/Agents SDK repair and eval loops
++ Nix reproducible devshell
++ OpenTofu infrastructure
++ Kubernetes where justified
++ governed artifact garbage collection
+```
+
+But the doctrine is stricter than the stack:
+
+> **The stack is not compliant because the tools are present. It is compliant only when each tool’s observations are routed through the Harness Ultragoal CLI, parsed into typed authority, bound to same-surface evidence and current digests, protected against stale proof, and capped by mechanically computed claim ceilings.**
+
+## Archive entry: AGENTS.md
+
+Entry digest: sha256:96f92402bb16e46defd9c5a56687ce9620d0b392c0107788f0e0d34e48fc3a2e
+
+# AGENTS.md — Harness Ultragoal Gold-Standard Stack Laws
+
+This file is the Codex-facing law contract for repos using the Harness Ultragoal gold-standard stack.
+
+These rules are not suggestions. They govern all Rust, TypeScript, Python, database, telemetry, agent, infrastructure, package, install, cache, runtime, product, release, and `update_goal` work.
+
+---
+
+# 1. Prime directive
+
+Harness Ultragoal is a claim-governance product.
+
+You may edit files. You may run tools. You may inspect logs. You may repair failures. You may not claim completion, review readiness, package readiness, install readiness, runtime success, product success, release readiness, or `update_goal` eligibility unless the `ultragoal` CLI verifies current same-surface evidence and emits/validates receipts.
+
+Raw tool output is observation. `ultragoal` receipts are claim evidence.
+
+---
+
+# 2. Required stack
+
+The governed stack is:
+
+```text
+Rust 1.96.1                 correctness-critical core, CLI, validators, services
+TypeScript 6.0              UI/frontend and agent cockpit
+Python 3.14.6               AI, evals, research, notebooks, trace analysis
+Bun 1.3.14                  TS package/scripts/tests when compatible
+Node 24 LTS                 conservative Node compatibility baseline
+SvelteKit/Svelte 5          default product UI
+SolidStart/SolidJS          agent cockpit/high-interactivity UI
+Vite 8.1.x                  frontend build substrate
+Tailwind CSS v4             design-system utility layer with modern browser baseline
+PostgreSQL 18.4 policy line durable relational truth
+pgvector                    vector search near durable truth
+Qdrant                      governed adapter for specialized vector search
+ClickHouse                  high-cardinality event/trace/eval analytics
+DuckDB                      local analytical reports
+Valkey                      cache/ephemeral state
+Dragonfly                   governed adapter for high-performance Redis-compatible cache
+NATS JetStream              persisted event bus
+Restate                     Rust-native durable execution
+Temporal                    governed adapter when org/platform maturity demands it
+OpenTelemetry               traces, metrics, logs, semantic conventions
+Codex + Agents SDK          repair loops, tool orchestration, traces, evals
+Nix                         clean-checkout reproducible dev shell
+OpenTofu                    infrastructure as code
+Kubernetes                  governed runtime adapter when justified
+```
+
+Do not replace a governed tool with a local favorite without updating policy and receipts.
+
+---
+
+# 3. Command authority
+
+Use these commands for claim-bearing work:
+
+```bash
+ultragoal bootstrap
+ultragoal stack fast
+ultragoal stack standard
+ultragoal stack release
+ultragoal stack clean-proof --cache-mode none
+ultragoal stack watch
+ultragoal stack resources prove
+ultragoal gc plan
+ultragoal gc dry-run
+ultragoal gc apply
+ultragoal gc verify
+ultragoal receipt verify --current
+ultragoal claim ceiling --goal current
+ultragoal packet build
+ultragoal update-goal eligible --goal <goal-id>
+```
+
+Raw commands such as `cargo test`, `bun run build`, `uv run pytest`, `sqlx migrate run`, `tofu plan`, `kubectl apply`, or `playwright test` may be used for investigation only. They do not authorize claims unless run through or verified by `ultragoal`.
+
+---
+
+# 4. Claim law
+
+Never say:
+
+```text
+done
+complete
+ready for review
+ready to package
+release ready
+product ready
+product success
+fixed
+implemented
+safe to update_goal
+```
+
+unless `ultragoal claim ceiling` permits that exact claim.
+
+Allowed lower-claim language:
+
+```text
+I changed the source and have not yet minted proof.
+The fast loop passed, but this does not support release readiness.
+The standard loop failed on HU-STACK-006; here is the repair class.
+The release claim is blocked by stale browser and database receipts.
+```
+
+---
+
+# 5. Same-surface proof law
+
+A claim about a surface must be proven on that same surface.
+
+| Claim | Required proof | Invalid substitute |
+|---|---|---|
+| Rust source compliant | Rust source/typecheck/law receipts | package exists |
+| UI works | browser journey/visual/a11y receipts | TypeScript typecheck |
+| DB migration safe | empty DB + fixture DB migration receipts | SQL file exists |
+| Cache works | cache-surface receipt | DB tests |
+| Event bus works | NATS stream/replay/consumer receipt | service unit tests |
+| Workflow works | Restate/Temporal scenario/replay receipt | worker compiled |
+| Observability works | emitted/queryable trace/log/metric receipt | code contains tracing calls |
+| Product Success | same-surface user journey receipt | tests pass |
+| Release Ready | full final packet | reviewer approval |
+
+---
+
+# 6. Rust laws
+
+Rust remains the authority language for correctness-critical code.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal rust fast
+ultragoal rust standard
+ultragoal rust release
+ultragoal rust coverage prove --exact
+ultragoal rust memory prove
+ultragoal rust dependency audit
+```
+
+Required rules:
+
+```text
+- Cargo is substrate; Ultragoal is authority.
+- rust-toolchain.toml and Cargo.lock are required.
+- rustfmt, clippy, cargo-nextest, cargo-llvm-cov, cargo-deny, cargo-audit, cargo-vet are governed.
+- Repo-owned Rust source must use a maximally factored module tree.
+- No residual prefix encoding.
+- No generic utils/common/shared/misc buckets unless a governed class makes them concrete.
+- No implementation-history filenames like wave82, temp, old, final2, hack.
+- No raw serde_json::Value authority.
+- Parse external input into typed authority.
+- Rust memory discipline uses ownership, RAII, bounded caches, bounded queues, cancellation, and cleanup. No tracing GC architecture.
+```
+
+---
+
+# 7. TypeScript/UI laws
+
+TypeScript is the authority language for UI/frontend, but TypeScript types erase at runtime. Runtime parsers and browser proof are mandatory.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal ts fast
+ultragoal ts standard
+ultragoal ts release
+ultragoal ts browser prove
+ultragoal ts accessibility prove
+ultragoal ts visual prove
+ultragoal ts bundle inventory
+```
+
+Required rules:
+
+```text
+- TypeScript 6.0 is stable baseline.
+- TypeScript 7 native is adapter-class until explicitly promoted.
+- Bun install must use --frozen-lockfile.
+- Node 24 LTS compatibility must be maintained.
+- SvelteKit is default product UI framework.
+- SolidStart is default-on for agent cockpit/high-interactivity surfaces.
+- Vite build output and manifests are package/build surfaces.
+- Browser behavior requires Playwright/browser receipts.
+- Accessibility requires axe/WCAG-style machine-readable proof where applicable.
+- Visual changes require screenshot/visual regression proof.
+- No unchecked any, unsafe type assertions, or JSON authority at boundaries.
+- No browser state leakage: clear localStorage, sessionStorage, IndexedDB, cookies, Cache Storage, and service workers in tests.
+```
+
+---
+
+# 8. Python/eval laws
+
+Python is for AI, evals, notebooks, research, trace analysis, and model experiments. Python is not the correctness-critical law engine.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal py sync --frozen
+ultragoal py lint
+ultragoal py typecheck
+ultragoal py test
+ultragoal eval run --suite regression
+ultragoal eval report --format json
+```
+
+Required rules:
+
+```text
+- Python 3.14.6 is the governed baseline.
+- uv.lock is required for claim-bearing Python work.
+- uv sync --frozen is required.
+- Ruff lint/format is required.
+- pytest/eval outputs must be machine-readable.
+- Notebooks cannot be the only proof; scriptized reproduction is required.
+- Eval cases must have IDs, source trace or spec, expected behavior, scoring, and artifacts.
+- Python dict/JSON blobs are not authority until parsed into typed models/schemas.
+```
+
+---
+
+# 9. Database laws
+
+PostgreSQL is durable truth.
+
+Required commands:
+
+```bash
+ultragoal db migrate verify --empty
+ultragoal db migrate verify --fixture baseline
+ultragoal db schema snapshot
+ultragoal db query-plan check
+ultragoal db rls check
+ultragoal db backup-restore prove
+```
+
+Rules:
+
+```text
+- Postgres is truth.
+- ClickHouse is observation/analytics.
+- Object storage is artifact storage.
+- NATS is movement.
+- Restate/Temporal is durable process.
+- Valkey/Dragonfly is ephemeral cache.
+- Cache is never truth.
+- Migrations must pass on empty DB and fixture DB.
+- SQLx/offline metadata must be current if used.
+- RLS/authz policy must be tested where relevant.
+- Query performance budgets require query-plan receipts.
+```
+
+---
+
+# 10. Retrieval laws
+
+Use pgvector first. Use Qdrant only as governed adapter.
+
+Rules:
+
+```text
+- Embedding corpus must be digest-bound.
+- Embedding model alias must resolve to a model ID/version.
+- Chunking policy must be digest-bound.
+- Retrieval quality must be eval-bound.
+- Retrieval result does not prove retrieved content is true.
+- Retrieval result does not bypass authz.
+```
+
+---
+
+# 11. Cache and ephemeral state laws
+
+Valkey is default cache. Dragonfly is governed adapter.
+
+Rules:
+
+```text
+- Every key has namespace, owner, TTL, max cardinality, and privacy class.
+- No unbounded cache.
+- No cache key containing secrets.
+- No cache proof supports database truth.
+- No cache proof supports Product Success.
+- Cache reset/cleanup requires receipt.
+```
+
+---
+
+# 12. Event bus and workflow laws
+
+NATS JetStream is required for event bus. Restate is required for Rust-native durable execution.
+
+Rules:
+
+```text
+- Every stream has retention, max bytes, max age, subjects, consumers, owners, and replay policy.
+- Every consumer has ack policy and lag budget.
+- At-least-once delivery requires idempotent handlers.
+- Every durable workflow has deterministic input, idempotency key, timeout, retry policy, cancellation policy, and trace correlation.
+- Workflow completion does not prove product success unless same-surface user outcome is proven.
+```
+
+---
+
+# 13. Observability laws
+
+OpenTelemetry is mandatory.
+
+Rules:
+
+```text
+- Every service emits traces, metrics, and structured logs through OTel-compatible instrumentation.
+- Every agent run has run_id, trace_id, workflow name, step index, model alias, tool calls, validation status, and artifact links.
+- Every telemetry attribute is registered with type, owner, cardinality class, privacy class, and allowed surfaces.
+- High-cardinality IDs belong in traces/events/logs, not alert metric labels unless approved.
+- Logs/traces must not leak secrets.
+- Observability code presence is not observability proof; emitted and queryable telemetry is proof.
+```
+
+Required commands:
+
+```bash
+ultragoal obs semconv check
+ultragoal obs collector validate
+ultragoal obs trace ingest-fixture
+ultragoal obs query prove
+ultragoal obs golden-signals prove
+```
+
+---
+
+# 14. Agent/Codex/MCP laws
+
+Agents execute. The harness governs.
+
+Rules:
+
+```text
+- AGENTS.md is a routing table, not the full knowledge base.
+- Multi-step work requires an ExecPlan/restartable plan.
+- Every tool/MCP action has input schema, output schema, risk class, approval policy, idempotency class, telemetry span, and cleanup policy.
+- Model aliases live in config, not scattered prompts/scripts.
+- Trace → feedback → eval → repair is the improvement loop.
+- Every material agent failure becomes a red fixture, tamper fixture, eval case, structural lint, telemetry rule, or doc update.
+- update_goal requires CLI eligibility proof.
+```
+
+Forbidden:
+
+```text
+agent says done without receipts
+agent disables tests/lints/tracing to pass
+agent adds dependency without policy
+agent uses production credentials in local proof
+agent bypasses approval policy
+agent relies on hidden memory or local MCP state
+```
+
+---
+
+# 15. Infrastructure laws
+
+Nix is required for clean-checkout devshell. OpenTofu is required for IaC. Kubernetes is adapter-class unless justified.
+
+Commands:
+
+```bash
+ultragoal env verify --nix
+ultragoal infra tofu fmt-check
+ultragoal infra tofu validate
+ultragoal infra tofu plan --env staging
+ultragoal infra tofu policy check
+ultragoal k8s manifests validate
+ultragoal k8s policy check
+ultragoal k8s rollout prove --env staging
+```
+
+Rules:
+
+```text
+- flake.lock is governed.
+- OpenTofu provider locks are governed.
+- Local state files are sensitive artifacts.
+- Kubernetes manifests can be validated offline; rollout/product claims require cluster/runtime proof.
+- Container image tags must resolve to digests for release claims.
+- Infrastructure plan is not infrastructure apply.
+- Infrastructure apply is not product success.
+```
+
+---
+
+# 16. Memory/resource laws
+
+Across Rust, TypeScript, Python, DBs, caches, event buses, workflows, browsers, and agents:
+
+```text
+- No unbounded queues.
+- No unbounded caches.
+- No spawn-and-forget tasks.
+- No child process without owner/kill/reap policy.
+- No tempdir without owner/drop/cleanup policy.
+- No browser session without cleanup policy.
+- No long-running worker without shutdown path.
+- No large file load without size bound or streaming justification.
+- No DB pool without max size and timeout.
+- No workflow without timeout/retry/cancel policy.
+```
+
+Required command:
+
+```bash
+ultragoal stack resources prove
+```
+
+---
+
+# 17. Garbage-collection laws
+
+Artifact cleanup is governed. Blind deletion is forbidden.
+
+Required flow:
+
+```bash
+ultragoal gc plan
+ultragoal gc dry-run
+ultragoal gc apply
+ultragoal gc verify
+```
+
+Classify before cleanup:
+
+```text
+Cargo target
+Bun cache
+node_modules
+Vite cache
+uv cache
+.venv
+Nix store root
+Bazel output
+Docker volume
+Postgres data dir
+ClickHouse data dir
+NATS JetStream data
+Restate state
+Playwright trace/video/screenshot
+coverage report
+eval result
+agent trace
+receipt
+review packet
+final packet
+release artifact
+SBOM
+provenance
+signature
+lock/pid/port/tempdir
+```
+
+Protected artifacts:
+
+```text
+current receipts
+current final packets
+active eval baselines
+active performance baselines
+release artifacts
+SBOMs
+signatures
+provenance
+lockfiles
+fixtures
+law registries
+schema registries
+```
+
+---
+
+# 18. Product laws
+
+## Product Fitness
+
+The delivered behavior addresses the specified user problem in the intended environment.
+
+Requires same-surface evidence.
+
+## Product Cohesion
+
+The change fits architecture, naming, telemetry, package boundaries, DB truth model, UI framework boundaries, docs, security, and operational model.
+
+## Product Success
+
+The intended user outcome actually succeeds on the runtime product surface.
+
+Invalid substitutes:
+
+```text
+Rust tests pass
+TypeScript builds
+Python eval passes
+DB migration runs
+NATS stream exists
+Kubernetes rollout succeeds
+package published
+reviewer approval
+agent says complete
+```
+
+---
+
+# 19. Failure output law
+
+Every failure must include:
+
+```text
+law id
+component
+surface
+path or resource id
+observed bad shape
+expected governed shape
+proof required
+claim impact
+repair class
+next command
+machine-readable JSON
+```
+
+Example:
+
+```text
+[HU-STACK-006] Telemetry Schema Law failed.
+
+Surface: RuntimeObservability
+Observed: metric label includes high-cardinality agent.run.id
+Expected: agent.run.id appears in trace/event/log attributes, not alert metric labels
+Proof required: fresh telemetry schema receipt and golden-signal query receipt
+Claim impact: blocks Product Cohesion, Release Ready, update_goal
+Repair class: MoveHighCardinalityFieldOutOfMetricLabel
+Next command: ultragoal obs semconv check && ultragoal obs golden-signals prove
+```
+
+---
+
+# 20. Final strictness test
+
+A law is theater if it can be satisfied by:
+
+```text
+prose
+reviewer agreement
+row presence
+stale evidence
+source-only proof for runtime claim
+package-only proof for install/runtime claim
+install/cache proof for product success
+fixture names without execution
+red-only impossible requirements
+green-only validators without tamper tests
+hidden local cache
+editor state
+warm watcher state
+lowered claim ceiling alone
+```
+
+A law is real only if it has:
+
+```text
+law id
+typed inputs
+typed outputs
+deterministic validator
+red fixtures
+green fixtures
+tamper fixtures
+same-surface proof rule
+receipt schema
+digest binding
+staleness policy
+claim impact
+repair class
+self-law compliance
+```
+
+## Archive entry: harness_ultragoal_codex_gold_standard_stack_laws_AGENTS.md
+
+Entry digest: sha256:96f92402bb16e46defd9c5a56687ce9620d0b392c0107788f0e0d34e48fc3a2e
+
+# AGENTS.md — Harness Ultragoal Gold-Standard Stack Laws
+
+This file is the Codex-facing law contract for repos using the Harness Ultragoal gold-standard stack.
+
+These rules are not suggestions. They govern all Rust, TypeScript, Python, database, telemetry, agent, infrastructure, package, install, cache, runtime, product, release, and `update_goal` work.
+
+---
+
+# 1. Prime directive
+
+Harness Ultragoal is a claim-governance product.
+
+You may edit files. You may run tools. You may inspect logs. You may repair failures. You may not claim completion, review readiness, package readiness, install readiness, runtime success, product success, release readiness, or `update_goal` eligibility unless the `ultragoal` CLI verifies current same-surface evidence and emits/validates receipts.
+
+Raw tool output is observation. `ultragoal` receipts are claim evidence.
+
+---
+
+# 2. Required stack
+
+The governed stack is:
+
+```text
+Rust 1.96.1                 correctness-critical core, CLI, validators, services
+TypeScript 6.0              UI/frontend and agent cockpit
+Python 3.14.6               AI, evals, research, notebooks, trace analysis
+Bun 1.3.14                  TS package/scripts/tests when compatible
+Node 24 LTS                 conservative Node compatibility baseline
+SvelteKit/Svelte 5          default product UI
+SolidStart/SolidJS          agent cockpit/high-interactivity UI
+Vite 8.1.x                  frontend build substrate
+Tailwind CSS v4             design-system utility layer with modern browser baseline
+PostgreSQL 18.4 policy line durable relational truth
+pgvector                    vector search near durable truth
+Qdrant                      governed adapter for specialized vector search
+ClickHouse                  high-cardinality event/trace/eval analytics
+DuckDB                      local analytical reports
+Valkey                      cache/ephemeral state
+Dragonfly                   governed adapter for high-performance Redis-compatible cache
+NATS JetStream              persisted event bus
+Restate                     Rust-native durable execution
+Temporal                    governed adapter when org/platform maturity demands it
+OpenTelemetry               traces, metrics, logs, semantic conventions
+Codex + Agents SDK          repair loops, tool orchestration, traces, evals
+Nix                         clean-checkout reproducible dev shell
+OpenTofu                    infrastructure as code
+Kubernetes                  governed runtime adapter when justified
+```
+
+Do not replace a governed tool with a local favorite without updating policy and receipts.
+
+---
+
+# 3. Command authority
+
+Use these commands for claim-bearing work:
+
+```bash
+ultragoal bootstrap
+ultragoal stack fast
+ultragoal stack standard
+ultragoal stack release
+ultragoal stack clean-proof --cache-mode none
+ultragoal stack watch
+ultragoal stack resources prove
+ultragoal gc plan
+ultragoal gc dry-run
+ultragoal gc apply
+ultragoal gc verify
+ultragoal receipt verify --current
+ultragoal claim ceiling --goal current
+ultragoal packet build
+ultragoal update-goal eligible --goal <goal-id>
+```
+
+Raw commands such as `cargo test`, `bun run build`, `uv run pytest`, `sqlx migrate run`, `tofu plan`, `kubectl apply`, or `playwright test` may be used for investigation only. They do not authorize claims unless run through or verified by `ultragoal`.
+
+---
+
+# 4. Claim law
+
+Never say:
+
+```text
+done
+complete
+ready for review
+ready to package
+release ready
+product ready
+product success
+fixed
+implemented
+safe to update_goal
+```
+
+unless `ultragoal claim ceiling` permits that exact claim.
+
+Allowed lower-claim language:
+
+```text
+I changed the source and have not yet minted proof.
+The fast loop passed, but this does not support release readiness.
+The standard loop failed on HU-STACK-006; here is the repair class.
+The release claim is blocked by stale browser and database receipts.
+```
+
+---
+
+# 5. Same-surface proof law
+
+A claim about a surface must be proven on that same surface.
+
+| Claim | Required proof | Invalid substitute |
+|---|---|---|
+| Rust source compliant | Rust source/typecheck/law receipts | package exists |
+| UI works | browser journey/visual/a11y receipts | TypeScript typecheck |
+| DB migration safe | empty DB + fixture DB migration receipts | SQL file exists |
+| Cache works | cache-surface receipt | DB tests |
+| Event bus works | NATS stream/replay/consumer receipt | service unit tests |
+| Workflow works | Restate/Temporal scenario/replay receipt | worker compiled |
+| Observability works | emitted/queryable trace/log/metric receipt | code contains tracing calls |
+| Product Success | same-surface user journey receipt | tests pass |
+| Release Ready | full final packet | reviewer approval |
+
+---
+
+# 6. Rust laws
+
+Rust remains the authority language for correctness-critical code.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal rust fast
+ultragoal rust standard
+ultragoal rust release
+ultragoal rust coverage prove --exact
+ultragoal rust memory prove
+ultragoal rust dependency audit
+```
+
+Required rules:
+
+```text
+- Cargo is substrate; Ultragoal is authority.
+- rust-toolchain.toml and Cargo.lock are required.
+- rustfmt, clippy, cargo-nextest, cargo-llvm-cov, cargo-deny, cargo-audit, cargo-vet are governed.
+- Repo-owned Rust source must use a maximally factored module tree.
+- No residual prefix encoding.
+- No generic utils/common/shared/misc buckets unless a governed class makes them concrete.
+- No implementation-history filenames like wave82, temp, old, final2, hack.
+- No raw serde_json::Value authority.
+- Parse external input into typed authority.
+- Rust memory discipline uses ownership, RAII, bounded caches, bounded queues, cancellation, and cleanup. No tracing GC architecture.
+```
+
+---
+
+# 7. TypeScript/UI laws
+
+TypeScript is the authority language for UI/frontend, but TypeScript types erase at runtime. Runtime parsers and browser proof are mandatory.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal ts fast
+ultragoal ts standard
+ultragoal ts release
+ultragoal ts browser prove
+ultragoal ts accessibility prove
+ultragoal ts visual prove
+ultragoal ts bundle inventory
+```
+
+Required rules:
+
+```text
+- TypeScript 6.0 is stable baseline.
+- TypeScript 7 native is adapter-class until explicitly promoted.
+- Bun install must use --frozen-lockfile.
+- Node 24 LTS compatibility must be maintained.
+- SvelteKit is default product UI framework.
+- SolidStart is default-on for agent cockpit/high-interactivity surfaces.
+- Vite build output and manifests are package/build surfaces.
+- Browser behavior requires Playwright/browser receipts.
+- Accessibility requires axe/WCAG-style machine-readable proof where applicable.
+- Visual changes require screenshot/visual regression proof.
+- No unchecked any, unsafe type assertions, or JSON authority at boundaries.
+- No browser state leakage: clear localStorage, sessionStorage, IndexedDB, cookies, Cache Storage, and service workers in tests.
+```
+
+---
+
+# 8. Python/eval laws
+
+Python is for AI, evals, notebooks, research, trace analysis, and model experiments. Python is not the correctness-critical law engine.
+
+Required commands through Ultragoal:
+
+```bash
+ultragoal py sync --frozen
+ultragoal py lint
+ultragoal py typecheck
+ultragoal py test
+ultragoal eval run --suite regression
+ultragoal eval report --format json
+```
+
+Required rules:
+
+```text
+- Python 3.14.6 is the governed baseline.
+- uv.lock is required for claim-bearing Python work.
+- uv sync --frozen is required.
+- Ruff lint/format is required.
+- pytest/eval outputs must be machine-readable.
+- Notebooks cannot be the only proof; scriptized reproduction is required.
+- Eval cases must have IDs, source trace or spec, expected behavior, scoring, and artifacts.
+- Python dict/JSON blobs are not authority until parsed into typed models/schemas.
+```
+
+---
+
+# 9. Database laws
+
+PostgreSQL is durable truth.
+
+Required commands:
+
+```bash
+ultragoal db migrate verify --empty
+ultragoal db migrate verify --fixture baseline
+ultragoal db schema snapshot
+ultragoal db query-plan check
+ultragoal db rls check
+ultragoal db backup-restore prove
+```
+
+Rules:
+
+```text
+- Postgres is truth.
+- ClickHouse is observation/analytics.
+- Object storage is artifact storage.
+- NATS is movement.
+- Restate/Temporal is durable process.
+- Valkey/Dragonfly is ephemeral cache.
+- Cache is never truth.
+- Migrations must pass on empty DB and fixture DB.
+- SQLx/offline metadata must be current if used.
+- RLS/authz policy must be tested where relevant.
+- Query performance budgets require query-plan receipts.
+```
+
+---
+
+# 10. Retrieval laws
+
+Use pgvector first. Use Qdrant only as governed adapter.
+
+Rules:
+
+```text
+- Embedding corpus must be digest-bound.
+- Embedding model alias must resolve to a model ID/version.
+- Chunking policy must be digest-bound.
+- Retrieval quality must be eval-bound.
+- Retrieval result does not prove retrieved content is true.
+- Retrieval result does not bypass authz.
+```
+
+---
+
+# 11. Cache and ephemeral state laws
+
+Valkey is default cache. Dragonfly is governed adapter.
+
+Rules:
+
+```text
+- Every key has namespace, owner, TTL, max cardinality, and privacy class.
+- No unbounded cache.
+- No cache key containing secrets.
+- No cache proof supports database truth.
+- No cache proof supports Product Success.
+- Cache reset/cleanup requires receipt.
+```
+
+---
+
+# 12. Event bus and workflow laws
+
+NATS JetStream is required for event bus. Restate is required for Rust-native durable execution.
+
+Rules:
+
+```text
+- Every stream has retention, max bytes, max age, subjects, consumers, owners, and replay policy.
+- Every consumer has ack policy and lag budget.
+- At-least-once delivery requires idempotent handlers.
+- Every durable workflow has deterministic input, idempotency key, timeout, retry policy, cancellation policy, and trace correlation.
+- Workflow completion does not prove product success unless same-surface user outcome is proven.
+```
+
+---
+
+# 13. Observability laws
+
+OpenTelemetry is mandatory.
+
+Rules:
+
+```text
+- Every service emits traces, metrics, and structured logs through OTel-compatible instrumentation.
+- Every agent run has run_id, trace_id, workflow name, step index, model alias, tool calls, validation status, and artifact links.
+- Every telemetry attribute is registered with type, owner, cardinality class, privacy class, and allowed surfaces.
+- High-cardinality IDs belong in traces/events/logs, not alert metric labels unless approved.
+- Logs/traces must not leak secrets.
+- Observability code presence is not observability proof; emitted and queryable telemetry is proof.
+```
+
+Required commands:
+
+```bash
+ultragoal obs semconv check
+ultragoal obs collector validate
+ultragoal obs trace ingest-fixture
+ultragoal obs query prove
+ultragoal obs golden-signals prove
+```
+
+---
+
+# 14. Agent/Codex/MCP laws
+
+Agents execute. The harness governs.
+
+Rules:
+
+```text
+- AGENTS.md is a routing table, not the full knowledge base.
+- Multi-step work requires an ExecPlan/restartable plan.
+- Every tool/MCP action has input schema, output schema, risk class, approval policy, idempotency class, telemetry span, and cleanup policy.
+- Model aliases live in config, not scattered prompts/scripts.
+- Trace → feedback → eval → repair is the improvement loop.
+- Every material agent failure becomes a red fixture, tamper fixture, eval case, structural lint, telemetry rule, or doc update.
+- update_goal requires CLI eligibility proof.
+```
+
+Forbidden:
+
+```text
+agent says done without receipts
+agent disables tests/lints/tracing to pass
+agent adds dependency without policy
+agent uses production credentials in local proof
+agent bypasses approval policy
+agent relies on hidden memory or local MCP state
+```
+
+---
+
+# 15. Infrastructure laws
+
+Nix is required for clean-checkout devshell. OpenTofu is required for IaC. Kubernetes is adapter-class unless justified.
+
+Commands:
+
+```bash
+ultragoal env verify --nix
+ultragoal infra tofu fmt-check
+ultragoal infra tofu validate
+ultragoal infra tofu plan --env staging
+ultragoal infra tofu policy check
+ultragoal k8s manifests validate
+ultragoal k8s policy check
+ultragoal k8s rollout prove --env staging
+```
+
+Rules:
+
+```text
+- flake.lock is governed.
+- OpenTofu provider locks are governed.
+- Local state files are sensitive artifacts.
+- Kubernetes manifests can be validated offline; rollout/product claims require cluster/runtime proof.
+- Container image tags must resolve to digests for release claims.
+- Infrastructure plan is not infrastructure apply.
+- Infrastructure apply is not product success.
+```
+
+---
+
+# 16. Memory/resource laws
+
+Across Rust, TypeScript, Python, DBs, caches, event buses, workflows, browsers, and agents:
+
+```text
+- No unbounded queues.
+- No unbounded caches.
+- No spawn-and-forget tasks.
+- No child process without owner/kill/reap policy.
+- No tempdir without owner/drop/cleanup policy.
+- No browser session without cleanup policy.
+- No long-running worker without shutdown path.
+- No large file load without size bound or streaming justification.
+- No DB pool without max size and timeout.
+- No workflow without timeout/retry/cancel policy.
+```
+
+Required command:
+
+```bash
+ultragoal stack resources prove
+```
+
+---
+
+# 17. Garbage-collection laws
+
+Artifact cleanup is governed. Blind deletion is forbidden.
+
+Required flow:
+
+```bash
+ultragoal gc plan
+ultragoal gc dry-run
+ultragoal gc apply
+ultragoal gc verify
+```
+
+Classify before cleanup:
+
+```text
+Cargo target
+Bun cache
+node_modules
+Vite cache
+uv cache
+.venv
+Nix store root
+Bazel output
+Docker volume
+Postgres data dir
+ClickHouse data dir
+NATS JetStream data
+Restate state
+Playwright trace/video/screenshot
+coverage report
+eval result
+agent trace
+receipt
+review packet
+final packet
+release artifact
+SBOM
+provenance
+signature
+lock/pid/port/tempdir
+```
+
+Protected artifacts:
+
+```text
+current receipts
+current final packets
+active eval baselines
+active performance baselines
+release artifacts
+SBOMs
+signatures
+provenance
+lockfiles
+fixtures
+law registries
+schema registries
+```
+
+---
+
+# 18. Product laws
+
+## Product Fitness
+
+The delivered behavior addresses the specified user problem in the intended environment.
+
+Requires same-surface evidence.
+
+## Product Cohesion
+
+The change fits architecture, naming, telemetry, package boundaries, DB truth model, UI framework boundaries, docs, security, and operational model.
+
+## Product Success
+
+The intended user outcome actually succeeds on the runtime product surface.
+
+Invalid substitutes:
+
+```text
+Rust tests pass
+TypeScript builds
+Python eval passes
+DB migration runs
+NATS stream exists
+Kubernetes rollout succeeds
+package published
+reviewer approval
+agent says complete
+```
+
+---
+
+# 19. Failure output law
+
+Every failure must include:
+
+```text
+law id
+component
+surface
+path or resource id
+observed bad shape
+expected governed shape
+proof required
+claim impact
+repair class
+next command
+machine-readable JSON
+```
+
+Example:
+
+```text
+[HU-STACK-006] Telemetry Schema Law failed.
+
+Surface: RuntimeObservability
+Observed: metric label includes high-cardinality agent.run.id
+Expected: agent.run.id appears in trace/event/log attributes, not alert metric labels
+Proof required: fresh telemetry schema receipt and golden-signal query receipt
+Claim impact: blocks Product Cohesion, Release Ready, update_goal
+Repair class: MoveHighCardinalityFieldOutOfMetricLabel
+Next command: ultragoal obs semconv check && ultragoal obs golden-signals prove
+```
+
+---
+
+# 20. Final strictness test
+
+A law is theater if it can be satisfied by:
+
+```text
+prose
+reviewer agreement
+row presence
+stale evidence
+source-only proof for runtime claim
+package-only proof for install/runtime claim
+install/cache proof for product success
+fixture names without execution
+red-only impossible requirements
+green-only validators without tamper tests
+hidden local cache
+editor state
+warm watcher state
+lowered claim ceiling alone
+```
+
+A law is real only if it has:
+
+```text
+law id
+typed inputs
+typed outputs
+deterministic validator
+red fixtures
+green fixtures
+tamper fixtures
+same-surface proof rule
+receipt schema
+digest binding
+staleness policy
+claim impact
+repair class
+self-law compliance
+```

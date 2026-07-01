@@ -12,7 +12,7 @@
   ],
   "memory_artifacts": [
     {
-      "digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
+      "digest": "sha256:ca9199e2635dfbc25fc065030f8677073b59b05754195098e67c715a1403499d",
       "path": "docs/research-source-cards.json"
     }
   ],

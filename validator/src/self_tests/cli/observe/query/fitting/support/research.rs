@@ -57,6 +57,10 @@ pub(super) fn inputs() -> serde_json::Value {
         row(
             "agentic-gold-standard-stack-synthesis-2026-07-01",
             "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01"
+        ),
+        row(
+            "gold-standard-stack-developer-experience-governance-2026-07-01",
+            "codex-attachment://gold-standard-stack-developer-experience-governance-2026-07-01"
         )
     ])
 }

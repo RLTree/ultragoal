@@ -106,7 +106,7 @@ pub(super) fn curl_ok(url: &str, timeout_ms: u64) -> bool {
 
 fn post_log(candidate: &str, timeout_ms: u64) -> bool {
     let payload = format!(
-        "{{\"stream\":\"ultragoal\",\"message\":\"gate92 smoke\",\"candidate_digest\":\"{candidate}\",\"timestamp\":\"{}\"}}",
+        "{{\"stream\":\"ultragoal\",\"message\":\"observability smoke\",\"candidate_digest\":\"{candidate}\",\"timestamp\":\"{}\"}}",
         crate::audit::clock::now_iso()
     );
     let seconds = timeout_arg(timeout_ms);

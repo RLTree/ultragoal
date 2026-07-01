@@ -20,6 +20,7 @@ const REQUIRED_SOURCES: &[&str] = &[
     "attached-rust-devx-guide",
     "attached-typescript-frontend-guide",
     "agentic-gold-standard-stack-synthesis-2026-07-01",
+    "gold-standard-stack-developer-experience-governance-2026-07-01",
 ];
 
 pub(super) fn source_cards(cards: &Value) -> BTreeSet<String> {

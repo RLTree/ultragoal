@@ -9,7 +9,8 @@ mod trace;
 const CARDS_PATH: &str = "docs/research-source-cards.json";
 const REGISTRY_PATH: &str = "docs/research-source-registry.json";
 const TRACE_PATH: &str = "docs/research-article-to-law-trace.json";
-const GATE_92_LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
+const OBSERVABILITY_LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
+const GOLD_STACK_SOURCE: &str = "gold-standard-stack-developer-experience-governance-2026-07-01";
 
 #[cfg(test)]
 mod tests;
@@ -97,6 +98,7 @@ fn registry_failures(
                     if text(row, "source_corpus_digest") != artifact.corpus_digest {
                         out.push(format!("research_registry_source_corpus_digest_stale:{id}"));
                     }
+                    out.extend(archive_metadata_failures(id, row, artifact));
                     out.extend(source_corpus_failures(
                         root,
                         id,
@@ -112,9 +114,9 @@ fn registry_failures(
             }
             if !array(row, "canonical_law_ids_affected")
                 .iter()
-                .any(|law| law == GATE_92_LAW)
+                .any(|law| law == OBSERVABILITY_LAW)
             {
-                out.push(format!("research_registry_gate92_law_missing:{id}"));
+                out.push(format!("research_registry_observability_law_missing:{id}"));
             }
             if text(row, "claim_ceiling_impact").is_empty() {
                 out.push(format!("research_registry_missing_claim_ceiling:{id}"));
@@ -127,6 +129,40 @@ fn registry_failures(
             out
         })
         .collect()
+}
+
+fn archive_metadata_failures(
+    id: &str,
+    row: &Value,
+    artifact: &catalog::SourceArtifact,
+) -> Vec<String> {
+    let mut out = Vec::new();
+    let row_entries = archive_entries(row);
+    if id == GOLD_STACK_SOURCE {
+        if artifact.archive_path.is_empty() {
+            out.push(format!("research_source_archive_path_missing:{id}"));
+        }
+        if artifact.archive_digest.is_empty() {
+            out.push(format!("research_source_archive_digest_missing:{id}"));
+        }
+        if artifact.archive_entries.is_empty() {
+            out.push(format!("research_source_archive_entries_missing:{id}"));
+        }
+    }
+    if text(row, "source_archive_path") != artifact.archive_path {
+        out.push(format!("research_registry_source_archive_path_stale:{id}"));
+    }
+    if text(row, "source_archive_digest") != artifact.archive_digest {
+        out.push(format!(
+            "research_registry_source_archive_digest_stale:{id}"
+        ));
+    }
+    if row_entries != artifact.archive_entries {
+        out.push(format!(
+            "research_registry_source_archive_entries_stale:{id}"
+        ));
+    }
+    out
 }
 
 fn package_inventory_paths(root: &Path) -> BTreeSet<String> {
@@ -184,6 +220,18 @@ fn array(row: &Value, key: &str) -> Vec<String> {
         .flatten()
         .filter_map(Value::as_str)
         .map(str::to_string)
+        .collect()
+}
+
+fn archive_entries(row: &Value) -> BTreeMap<String, String> {
+    row.get("source_archive_entries")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|entry| {
+            Some((text(entry, "entry_path"), text(entry, "entry_digest")))
+                .filter(|(path, digest)| !path.is_empty() && !digest.is_empty())
+        })
         .collect()
 }
 

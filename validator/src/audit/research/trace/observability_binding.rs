@@ -39,7 +39,9 @@ pub(super) fn row_failures(id: &str, row: &Value) -> Vec<String> {
         "validator_check_ids",
     ] {
         if !array(row, field).iter().any(|item| item == LAW) {
-            out.push(format!("research_trace_gate92_{field}_missing:{id}"));
+            out.push(format!(
+                "research_trace_observability_binding_{field}_missing:{id}"
+            ));
         }
     }
     if !array(row, "schemas")
@@ -47,7 +49,7 @@ pub(super) fn row_failures(id: &str, row: &Value) -> Vec<String> {
         .any(|path| path.starts_with("schemas/observability-"))
     {
         out.push(format!(
-            "research_trace_gate92_observability_schema_missing:{id}"
+            "research_trace_observability_binding_schema_missing:{id}"
         ));
     }
     if !array(row, "receipt_requirements")
@@ -55,27 +57,31 @@ pub(super) fn row_failures(id: &str, row: &Value) -> Vec<String> {
         .any(|item| item.contains("observability") || item.contains("telemetry"))
     {
         out.push(format!(
-            "research_trace_gate92_observability_receipt_missing:{id}"
+            "research_trace_observability_binding_receipt_missing:{id}"
         ));
     }
     if !array(row, "package_inventory_paths")
         .iter()
         .any(|path| path == COMMAND_INVENTORY || path.starts_with("schemas/observability-"))
     {
-        out.push(format!("research_trace_gate92_package_path_missing:{id}"));
+        out.push(format!(
+            "research_trace_observability_binding_package_path_missing:{id}"
+        ));
     }
     if !array(row, "claim_guards")
         .iter()
         .any(|guard| guard.contains("observability"))
     {
-        out.push(format!("research_trace_gate92_claim_guard_missing:{id}"));
+        out.push(format!(
+            "research_trace_observability_binding_claim_guard_missing:{id}"
+        ));
     }
     if !array(row, "final_packet_fields")
         .iter()
         .any(|field| field == FINAL_PACKET_FIELD)
     {
         out.push(format!(
-            "research_trace_gate92_final_packet_field_missing:{id}"
+            "research_trace_observability_binding_final_packet_field_missing:{id}"
         ));
     }
     if !array(row, "update_goal_blockers")
@@ -83,7 +89,7 @@ pub(super) fn row_failures(id: &str, row: &Value) -> Vec<String> {
         .any(|blocker| blocker == UPDATE_GOAL_BLOCKER)
     {
         out.push(format!(
-            "research_trace_gate92_update_goal_blocker_missing:{id}"
+            "research_trace_observability_binding_update_goal_blocker_missing:{id}"
         ));
     }
     out

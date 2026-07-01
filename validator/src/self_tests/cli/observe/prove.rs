@@ -29,7 +29,7 @@ fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
                 "observe prove": {
                     "fitting_status": "partially_fitted",
                     "missing_surfaces": ["all commands fitted"],
-                    "claim_impact": "blocks_gate_92"
+                    "claim_impact": "blocks_observability_gate"
                 }
             }
         }),

@@ -1,5 +1,9 @@
 use serde_json::{Value, json};
 
+mod archive;
+
+const GOLD_STACK_SOURCE: &str = "gold-standard-stack-developer-experience-governance-2026-07-01";
+
 fn repo_values() -> (std::path::PathBuf, Value, Value, Value) {
     let root = crate::self_tests::boundaries::support::repo_root();
     let cards = crate::json_boundary::read_json(&root.join("docs/research-source-cards.json"))
@@ -137,19 +141,25 @@ fn research_registry_rejects_missing_mandatory_source() {
         .as_array_mut()
         .expect("sources array")
         .retain(|row| {
-            row.get("source_id").and_then(Value::as_str)
-                != Some("agentic-gold-standard-stack-synthesis-2026-07-01")
+            !matches!(
+                row.get("source_id").and_then(Value::as_str),
+                Some("agentic-gold-standard-stack-synthesis-2026-07-01") | Some(GOLD_STACK_SOURCE)
+            )
         });
     let failures = failures(&cards, &registry, &trace);
-    assert!(
-        failures.iter().any(|item| item
-            == "research_registry_missing_required_source:agentic-gold-standard-stack-synthesis-2026-07-01"),
-        "{failures:#?}"
-    );
+    for expected in [
+        "research_registry_missing_required_source:agentic-gold-standard-stack-synthesis-2026-07-01",
+        "research_registry_missing_required_source:gold-standard-stack-developer-experience-governance-2026-07-01",
+    ] {
+        assert!(
+            failures.iter().any(|item| item == expected),
+            "{expected}\n{failures:#?}"
+        );
+    }
 }
 
 #[test]
-fn research_registry_rejects_required_source_without_gate92_law() {
+fn research_registry_rejects_required_source_without_observability_law() {
     let (_root, cards, mut registry, trace) = repo_values();
     registry["sources"][0]["canonical_law_ids_affected"] = json!([
         "research-source-authority-article-to-law-integration",
@@ -159,13 +169,14 @@ fn research_registry_rejects_required_source_without_gate92_law() {
     assert!(
         failures
             .iter()
-            .any(|item| item == "research_registry_gate92_law_missing:openai-harness-engineering"),
+            .any(|item| item
+                == "research_registry_observability_law_missing:openai-harness-engineering"),
         "{failures:#?}"
     );
 }
 
 #[test]
-fn research_trace_rejects_requirement_without_gate92_bindings() {
+fn research_trace_rejects_requirement_without_observability_bindings() {
     let (_root, cards, registry, mut trace) = repo_values();
     trace["entries"][0]["canonical_law_ids"] = json!([
         "research-source-authority-article-to-law-integration",
@@ -179,31 +190,31 @@ fn research_trace_rejects_requirement_without_gate92_bindings() {
     let failures = failures(&cards, &registry, &trace);
     assert!(
         failures.iter().any(|item| {
-            item == "research_trace_gate92_canonical_law_ids_missing:openai-harness-agent-legible-repo"
+            item == "research_trace_observability_binding_canonical_law_ids_missing:openai-harness-agent-legible-repo"
         }),
         "{failures:#?}"
     );
     assert!(
         failures.iter().any(|item| {
-            item == "research_trace_gate92_observability_schema_missing:openai-harness-agent-legible-repo"
+            item == "research_trace_observability_binding_schema_missing:openai-harness-agent-legible-repo"
         }),
         "{failures:#?}"
     );
     assert!(
         failures.iter().any(|item| {
-            item == "research_trace_gate92_claim_guard_missing:openai-harness-agent-legible-repo"
+            item == "research_trace_observability_binding_claim_guard_missing:openai-harness-agent-legible-repo"
         }),
         "{failures:#?}"
     );
     assert!(
         failures.iter().any(|item| {
-            item == "research_trace_gate92_final_packet_field_missing:openai-harness-agent-legible-repo"
+            item == "research_trace_observability_binding_final_packet_field_missing:openai-harness-agent-legible-repo"
         }),
         "{failures:#?}"
     );
     assert!(
         failures.iter().any(|item| {
-            item == "research_trace_gate92_update_goal_blocker_missing:openai-harness-agent-legible-repo"
+            item == "research_trace_observability_binding_update_goal_blocker_missing:openai-harness-agent-legible-repo"
         }),
         "{failures:#?}"
     );

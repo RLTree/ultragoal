@@ -89,7 +89,7 @@ fn fitted_control_board() -> serde_json::Value {
     json!({
         "status": "fitted",
         "families": families,
-        "claim_impact": "supports_gate_92_only_when_every_inventory_row_is_fitted_same_candidate"
+        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_fitted_same_candidate"
     })
 }
 

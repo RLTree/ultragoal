@@ -22,7 +22,7 @@ pub(super) fn fitted_row(command: &str) -> Value {
         "tamper_fixtures": [format!("fixtures/tamper/observability/{slug}-tamper.json")],
         "current_owner_surface": format!("command:{command}"),
         "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
+        "claim_impact": "supports_observability_gate_when_same_candidate"
     })
 }
 
@@ -50,7 +50,7 @@ pub(super) fn fitted_surface_row(surface: &str) -> Value {
         "tamper_fixtures": [format!("fixtures/tamper/observability/{receipt_slug}-tamper.json")],
         "current_owner_surface": format!("surface:{surface}"),
         "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
+        "claim_impact": "supports_observability_gate_when_same_candidate"
     })
 }
 
@@ -78,7 +78,7 @@ pub(super) fn fitted_operating_row(kind: &str, name: &str) -> Value {
         "tamper_fixtures": [format!("fixtures/tamper/observability/{receipt_slug}-tamper.json")],
         "current_owner_surface": format!("{kind}:{name}"),
         "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
+        "claim_impact": "supports_observability_gate_when_same_candidate"
     })
 }
 
