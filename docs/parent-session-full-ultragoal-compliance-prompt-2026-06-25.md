@@ -75,6 +75,365 @@ Required context loading before edits:
 
 Implementation requirements:
 
+Gold-Standard Harness Product Doctrine Integration:
+
+The attached GPT-5.5 Pro synthesis is now a required synthesis input for this
+parent contract. It is not primary factual authority for external product
+versions, pricing, or current vendor capabilities. Any exact external version
+pin, vendor capability claim, or hosted-service claim from that synthesis must be
+verified against the applicable official source before becoming a hard package
+or install/cache law. Its architectural doctrine, operating-loop structure,
+observability model, agent-legibility model, and downstream product implications
+are binding guidance for this contract unless a stronger live repo law conflicts.
+
+Core product thesis:
+
+- The Harness Ultragoal product is not "Rust plus TypeScript plus validators."
+  The product is an agent-legible repository harness with isolated execution,
+  deterministic validation, repair/eval loops, high-cardinality observability,
+  mechanically enforced architecture, and production SRE discipline.
+- For agentic engineering, the harness is the product. Languages, models,
+  plugins, MCP tools, eval tools, receipts, and dashboards serve the harness.
+- A compliance pass that does not make agents faster, less confused, more
+  repair-capable, and less likely to overclaim is not product completion.
+- The final product must let an agent and Tree diagnose, repair, harden, and
+  validate work from first principles without independent archaeology through
+  stale receipts, scattered markdown, raw logs, or hidden command knowledge.
+- The parent must preserve the existing claim ceiling: source-local proof does
+  not imply install/cache, app-registry, reviewer exposure, release, readiness,
+  completion, or update_goal eligibility.
+
+Mandatory integration objectives from the synthesis:
+
+1. Harness Product Doctrine
+   - Rule: Add and enforce the doctrine that Harness Ultragoal is a productized
+     agentic engineering harness, not a compliance checklist, validator bundle,
+     or receipt generator. Every law-bearing surface should improve agent
+     execution, verification, observability, repair, or product reliability.
+   - You know it is working when: a new agent can open a plugin-activated repo,
+     discover what to run, execute the routine validation path, observe a
+     failure, query/explain it, patch the smallest root cause, rerun narrowly,
+     compare before/after telemetry, and understand the remaining claim ceiling
+     without reading this parent prompt end to end.
+   - Downstream impact: Product Usage Fitness, Gate 92, Gate 94, Gate 99, Gate
+     100, Gate 105, final packet fields, and update_goal blockers must prove
+     product utility and agent legibility, not only file presence, schema shape,
+     command existence, or receipt generation.
+   - Evidence and confidence: Based on the synthesis thesis that the harness is
+     the product and on existing Gate 92/Gate 105 direction. Confidence 96%.
+
+2. Gate 92 As The Agent Sensory System
+   - Rule: Gate 92 is the agent sensory system for the entire CLI/plugin. It is
+     not stack health, query-only proof, current-failure rescue, or representative
+     command fitting. It must operationalize four channels: metrics for alerting,
+     traces and wide events for investigation, logs for local detail and forensic
+     reconstruction, and evals for behavioral quality.
+   - You know it is working when: every law-bearing command/check emits enough
+     structured data for `observe query` and `observe explain` to tell the agent
+     what failed, where it failed, why it failed, which law/claim is affected,
+     what to inspect next, what repair class is likely, and what narrow rerun
+     proves the repair.
+   - Downstream impact: command inventory, fitting control board, telemetry
+     schema, receipt schemas, red/green/tamper fixtures, final packet fields,
+     setup/retrofit outputs, active-repo rollout, and update_goal blockers must
+     distinguish local spool evidence from live stack ingestion/query proof.
+   - Evidence and confidence: Based on the synthesis observability architecture
+     and current Gate 92 command inventory. Confidence 93%.
+
+3. Two Observability Planes
+   - Rule: Observability must have two explicit planes. Plane A is product/system
+     health: latency, traffic, errors, saturation, freshness, retry/backoff,
+     cache state, resource pressure, and external/live probe health. Plane B is
+     agent quality: task completion, first-pass success, repair iterations,
+     validation failure class, human escalation, bad PR or bad packet rate,
+     post-merge regression, eval trend, tool misuse, docs drift, architecture
+     violations, and claim-theater escapes.
+   - You know it is working when: the CLI can answer both "is the system healthy"
+     and "is the agent getting better or worse" from current queryable records,
+     with same-candidate binding and bounded output.
+   - Downstream impact: Gate 105 measured-improvement proof must include both
+     planes. Worktree/lane launch should later use the same planes to prove
+     parallelism is increasing throughput without increasing bad repairs,
+     overclaims, stale evidence, or manual-spelunking burden.
+   - Evidence and confidence: Based on the synthesis SRE/agent-quality split and
+     current Gate 105 metrics. Confidence 91%.
+
+4. Expanded Telemetry Envelope
+   - Rule: The Gate 92 telemetry envelope must include agent, tool, repo, eval,
+     and claim attributes in addition to the existing command/check fields. At
+     minimum it must model agent system/workflow/step/role/model, tool
+     name/type/risk tier/approval/duration/status, repo name/branch/sha/worktree
+     or target mode, eval suite/case/score/judge/regression status, and claim
+     ids/claim impact.
+   - You know it is working when: a failed command can be grouped by agent
+     workflow stage, model/tool class, repo state, validator family, eval case,
+     failure class, and claim impact without manually joining unrelated files.
+   - Downstream impact: observability schemas, logs, spans, wide events, receipt
+     bindings, improvement-loop traces, OpenAI/promptfoo/HALO adapters, tool
+     contracts, setup/retrofit templates, final packet, and update_goal blockers
+     must carry or validate these attributes.
+   - Evidence and confidence: Based on the synthesis agent telemetry schema and
+     current typed telemetry model. Confidence 94%.
+
+5. Cardinality Doctrine
+   - Rule: High-cardinality values belong in traces, wide structured events,
+     logs, and eval records. They must not become unbounded metric labels.
+     Dangerous metric labels include raw run id, trace id, span id, user id,
+     prompt hash, full file path, full candidate digest, PR number, unbounded
+     branch name, raw artifact path, or raw private/local path.
+   - You know it is working when: agents can still query by run/correlation/digest
+     through events/spans/logs, while metrics stay bounded, aggregatable, and
+     safe for alerting and dashboards.
+   - Downstream impact: telemetry schemas, exporter code, redaction checks,
+     bounded-output checks, red fixtures, source audit, Gate 102 privacy, and
+     final packet observability sections must fail unbounded metric labels and
+     private high-cardinality leakage.
+   - Evidence and confidence: Based on the synthesis cardinality section and
+     structured-event/high-cardinality research already bound by Gate 92.
+     Confidence 95%.
+
+6. Trace To Feedback To Eval To Repair To Promotion Loop
+   - Rule: Gate 94 must be a real improvement loop. Failed traces, opaque
+     failures, human corrections, bad tool calls, slow workflows, incidents,
+     security near misses, wrong repairs, stale-evidence escapes, and claim
+     theater must become typed feedback records, eval cases, regression fixtures,
+     validator laws, or explicit claim blockers.
+   - You know it is working when: a repeated failure class is no longer solved by
+     memory or reviewer reminder. It is harvested from trace/eval evidence,
+     reproduced by a fixture or eval, repaired, validated narrowly, compared
+     before/after through telemetry, promoted into the standards/law surfaces,
+     and protected against recurrence.
+   - Downstream impact: improvement-loop registry, promptfoo suites, HALO ranked
+     change records, Codex handoff templates, standards-gardener cadence, red
+     fixtures, eval schemas, final packet, and update_goal blockers must all
+     represent this loop.
+   - Evidence and confidence: Based on the synthesis repair/eval loops and
+     current Gate 94. Confidence 90%.
+
+7. AGENTS.md As Routing Table
+   - Rule: Plugin setup/retrofit must treat AGENTS.md and equivalent repo-entry
+     docs as routing tables, not encyclopedias. They should point agents to
+     canonical docs, exec plans, command surfaces, evals, telemetry, architecture,
+     security, privacy, and quality gates without duplicating the whole law
+     system.
+   - You know it is working when: an un-oriented agent can find the routine
+     command, proof surfaces, claim ceiling, observability query/explain path,
+     and active work contract from concise routing docs without loading every
+     standard into the hot context.
+   - Downstream impact: Gate 99 setup/retrofit, Product Usage Fitness, repo
+     knowledge index/core-beliefs, instruction precedence/nested AGENTS routing,
+     active-repo rollout, and final packet discoverability fields must enforce
+     this routing shape.
+   - Evidence and confidence: Based on the synthesis repo architecture guidance
+     and current progressive-disclosure laws. Confidence 87%.
+
+8. Tool Contract And Risk Tier Law
+   - Rule: Every tool, MCP surface, plugin adapter, dynamic helper, model-call
+     adapter, live probe, setup/retrofit helper, and external writer must declare
+     owner, risk tier, idempotency, auth scope, input schema, output schema,
+     approval requirement, telemetry attributes, preconditions, postconditions,
+     failure semantics, and claim impact.
+   - Required risk tiers: read-only, local write, local execution,
+     external-live bounded, external write, destructive or mutating, and
+     sensitive/secret-bearing.
+   - You know it is working when: the CLI can explain why a tool was allowed,
+     blocked, serialized, approval-gated, redacted, retried, or excluded from
+     claim support.
+   - Downstream impact: MCP/plugin surfaces, OpenAI/promptfoo/HALO adapters,
+     setup/retrofit, worktree lanes, external/live proof, claim guards,
+     telemetry, and final packets must stop treating tools as generic commands.
+   - Evidence and confidence: Based on the synthesis MCP/tool boundary model and
+     existing subagent/custom-agent approval laws. Confidence 89%.
+
+9. Agent Cockpit Future Product Surface
+   - Rule: The final product direction should include an Agent Cockpit or
+     equivalent operational product surface, but it must not block the immediate
+     Gate 92 source-local closure unless explicitly scoped. The cockpit is a
+     future product multiplier, not a substitute for CLI proof.
+   - You know it is working when: a user can see active runs, repair-loop state,
+     plan, changed files, validation status, eval deltas, trace waterfall, tool
+     calls, approvals, screenshots/videos where applicable, logs by run id, PR
+     status, docs touched, architecture lints, cost, latency, and token summaries.
+   - Downstream impact: Gate 99/100/105, active-repo rollout, product usage,
+     future UI/plugin surfaces, and final packet should reserve a place for
+     cockpit capability status or an explicit fail-closed "not implemented"
+     product-surface blocker.
+   - Evidence and confidence: Based on the synthesis agent cockpit section.
+     Confidence 82% as future product requirement and 60% as immediate blocker.
+
+10. Concrete Routine Command Surface
+   - Rule: Product Usage Fitness must define a canonical routine command surface
+     for ordinary validation. Compatibility scripts, `just` recipes, shell
+     wrappers, or narrow helpers may exist only if they delegate to the canonical
+     CLI authority kernel and preserve telemetry, receipts, and claim ceilings.
+   - Required discoverable capabilities: fast validation, full source-local
+     validation, observability query, observability explain, repair-loop
+     execution, eval execution, architecture check, security check, setup, and
+     retrofit.
+   - You know it is working when: from a clean checkout or plugin-activated target
+     repo, the expected path is obvious, command help is self-contained, advanced
+     commands remain available, and helper scripts cannot pretend to be final
+     proof.
+   - Downstream impact: Phase 3.5 Product Usage Fitness, clean-checkout command
+     discovery, setup/retrofit, active-repo rollout, final packet, and update_goal
+     blockers must enforce command discoverability and delegation.
+   - Evidence and confidence: Based on the synthesis command-surface section and
+     current Product Usage Fitness slice. Confidence 88%.
+
+11. Entropy Cleanup Loop
+   - Rule: After core source-local closure, the harness must include an entropy
+     cleanup loop for docs drift, dead code, unused dependencies, missing tests,
+     duplicate abstractions, telemetry drift, architecture violations, stale
+     evals, flaky or slow tests, large files, uncited assumptions, and security
+     drift.
+   - You know it is working when: repeated drift is not rediscovered by human
+     frustration. It is scheduled, detected, promoted into standards or fixtures,
+     and claim-blocked when material.
+   - Downstream impact: standards-gardener, Gate 105, targeted refactor/debt
+     removal, active-repo rollout, final packet, and long-term maintenance must
+     treat entropy as a governed product risk.
+   - Evidence and confidence: Based on the synthesis entropy cleanup loop and
+     current standards-gardener/debt-removal law. Confidence 84%.
+
+12. Validation Gate Levels
+   - Rule: The product must separate local-fast, full source-local, merge/review,
+     and live distribution proof levels. Focused checks can support repair.
+     Broad source-local proof can support source-local claims. Install/cache,
+     app-registry, reviewer, release, completion, and update_goal claims require
+     same-surface proof.
+   - You know it is working when: command output, receipts, final packets, and
+     checklist statuses make it impossible to confuse a focused test, a broad
+     source audit, a clean-room proof, an installed-cache proof, and a live
+     external proof.
+   - Downstream impact: command help, validation modes, claim ceilings, final
+     packet, checklist statuses, worktree lane entry, and update_goal eligibility
+     must all preserve these proof levels.
+   - Evidence and confidence: Based on the synthesis validation gate model and
+     current source/install/cache/app-surface separation laws. Confidence 86%.
+
+13. Pedagogical Validator And Linter Output
+   - Rule: Validator, schema, fixture, architecture, package, source/install/cache,
+     and claim-ceiling failures must teach the agent how to repair. Opaque output
+     such as "Architecture violation" is non-compliant for law-bearing failures.
+   - Minimum useful failure output: law id, check id, failed invariant, observed
+     value, expected value, where failed, why failed, repair class, likely file
+     or surface, narrow rerun command, affected claims, severity, redaction
+     status, and bounded output status.
+   - You know it is working when: `observe explain` and normal failed command
+     stdout make the next repair step clear enough that manual source spelunking
+     is verification, not discovery.
+   - Downstream impact: Gate 89 remediation quality, Gate 92 explain, architecture
+     topology checks, red fixtures, final packet blockers, Product Usage Fitness,
+     and worktree lane autonomy must enforce agent-actionable output.
+   - Evidence and confidence: Based on the synthesis architecture/linter guidance
+     and current agent-remediating failure laws. Confidence 93%.
+
+14. Stack Policy As Portable Adapter Families
+   - Rule: Adopt the synthesis stack direction as portable adapter families, not
+     blind prescriptive pins. Rust is the core CLI/validator authority path.
+     TypeScript is the UI/tooling/plugin surface path where applicable. Python is
+     appropriate for AI/research/eval sidecars behind explicit interfaces.
+     PostgreSQL-style stores hold relational product truth, ClickHouse-style or
+     Honeycomb-style stores hold high-cardinality observability, OpenTelemetry is
+     the common telemetry protocol, and Nix/Bazel/OpenTofu/Kubernetes-class tools
+     are higher-maturity adapters where justified.
+   - You know it is working when: setup/retrofit can detect repo type, install or
+     fail-close appropriate adapters, and explain why an adapter is unsupported,
+     out of scope, or claim-blocking.
+   - Downstream impact: Gate 99, Gate 100, Gate 101, active-repo rollout,
+     product usage docs, setup templates, adapter schemas, and final packet
+     product-readiness sections must treat stack choices as explicit adapter
+     contracts.
+   - Evidence and confidence: Based on the synthesis stack sections. Confidence
+     80% for direction and 45-60% for exact external version pins until verified.
+
+15. Supply-Chain And Security Baseline
+   - Rule: The product must include frozen lockfiles where applicable, dependency
+     review, minimum package-age policy where supported, provenance/SBOM where
+     supported, signed artifacts where supported, audit equivalents for Rust and
+     JavaScript/TypeScript package managers, image digest pinning if containers
+     enter scope, and no agent-installed production dependency without
+     validation.
+   - You know it is working when: install/cache/readiness proof can show how
+     dependencies were selected, pinned, audited, bounded, and prevented from
+     becoming unreviewed agent convenience.
+   - Downstream impact: Gate 95 external-AI use, Gate 99 setup/retrofit, Gate 101
+     developer experience, Gate 102 privacy/data, install/cache proof, final
+     packet, and release/update_goal blockers must include supply-chain status.
+   - Evidence and confidence: Based on the synthesis supply-chain section and
+     existing security/dependency laws. Confidence 85%.
+
+16. Product Truth, Observability Truth, And Artifact Truth Separation
+   - Rule: Product truth, observability truth, and artifact truth are distinct.
+     Product truth lives in source/package/runtime behavior. Observability truth
+     lives in logs, metrics, traces, events, evals, and queryable records.
+     Artifact truth lives in receipts, manifests, reports, archives, and final
+     packets. They may cross-reference each other, but none may substitute for
+     another without an explicit law.
+   - You know it is working when: a local JSONL spool cannot complete Gate 92, a
+     receipt cannot replace runtime behavior, source proof cannot replace
+     install/cache proof, and a final packet cannot create authority that did not
+     exist before packet generation.
+   - Downstream impact: Gate 92, source/install/cache separation, final packet,
+     review target, archive, package inventory, app-registry proof, and
+     update_goal blockers must enforce non-substitution.
+   - Evidence and confidence: Based on the synthesis data/observability
+     architecture and current claim-ceiling doctrine. Confidence 92%.
+
+17. GPT-5.5 Pro Synthesis Source Card
+   - Rule: Create or update a Gate 93 research-source registry entry for the
+     synthesis as `agentic-gold-standard-stack-synthesis-2026-07-01` or an
+     equivalent stable id. It is a synthesis source. It may introduce doctrine,
+     architecture requirements, and operating-loop requirements, but its
+     external factual claims require primary-source verification before they
+     become hard law.
+   - You know it is working when: every adopted synthesis requirement maps through
+     research-source registry, article-to-law trace, canonical law ids, standards,
+     source obligations, foundational trace, schemas, validator ids, fixtures,
+     package inventory, setup/retrofit outputs, claim guards, final-packet
+     fields, and update_goal blockers.
+   - Downstream impact: Gate 93 and Gate 104 must treat these additions as
+     source-mapped law, not chat-only steer or prompt-only claims.
+   - Evidence and confidence: Based on the synthesis source list and current Gate
+     93 research mapping law. Confidence 91%.
+
+18. Final Packet Product Shape
+   - Rule: Final packet and final response surfaces must report product readiness
+     by proof surface, not compliance vibes. Add explicit sections for Harness
+     Product Doctrine, Observability Planes, Agent Quality Metrics, Trace to Eval
+     to Repair Loop, Tool Risk and Approval Surface, Data/Privacy Boundary,
+     Product Usage/CLI Surface, Active Repo Rollout, Stack Adapter Status,
+     Supply-Chain/Security Baseline, Agent Cockpit status or blocker, and
+     remaining unsupported live surfaces.
+   - You know it is working when: a reviewer can tell exactly which surfaces are
+     source-local, install/cache, app-registry, live reviewer, final-packet,
+     external/live, or update_goal-supported, and exactly which product claims
+     remain blocked.
+   - Downstream impact: final packet, review target, candidate archive, claim
+     ceiling, update_goal eligibility, Product Fitness, Product Success, and
+     completion response fields must include these product-shape sections.
+   - Evidence and confidence: Based on the synthesis final formulation and
+     current final-packet/claim-ceiling laws. Confidence 89%.
+
+Spine-level ordering implied by the synthesis:
+
+- Phase 2A: Complete Gate 92 operational observability, including command/check/
+  receipt/fixture/claim-guard fitting, logs/metrics/traces/evals channel model,
+  repair-loop execution, and useful query/explain output.
+- Phase 2B: Harden observability doctrine: cardinality rules, agent/tool/repo/
+  eval attributes, SRE plane, agent-quality plane, redaction, boundedness,
+  parent/child span integrity, and query/explain quality proof.
+- Phase 3: Close research doctrine integration, including the synthesis source
+  card and every adopted requirement mapped through all law surfaces.
+- Phase 3.5: Close Product Usage Fitness and CLI discoverability, including
+  routine command surface, AGENTS routing-table doctrine, clean-checkout command
+  discovery, and plugin-activated target-repo first-use path.
+- Phase 4: Rebind Gates 0-91 only after Gate 92 and Product Usage are
+  source-local coherent or explicitly blocked.
+- Later phases: close trace/eval/repair improvement, setup/retrofit,
+  active-repo rollout, Rust/TypeScript/Python/stack adapters, supply-chain,
+  privacy, Agent Cockpit status, entropy cleanup, and final live surfaces.
+
 Do not stop at a packet, issue list, blocker list, or claim ceiling downgrade. Implement deterministic enforcement until the plugin repo itself passes its laws.
 
 Concrete required repairs:
