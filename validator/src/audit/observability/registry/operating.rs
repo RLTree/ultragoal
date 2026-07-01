@@ -121,13 +121,27 @@ fn require_unfitted_metadata(
     row: &Map<String, Value>,
     out: &mut Vec<String>,
 ) {
-    if !non_empty_array(row, "missing_surfaces") || !non_empty_string(row, "claim_impact") {
+    if !typed_row_accounting(row)
+        || !non_empty_array(row, "missing_surfaces")
+        || !non_empty_string(row, "claim_impact")
+    {
         out.push(format!("{prefix}_fitting_missing_metadata:{name}"));
         return;
     }
     if !owner_tracking(row) {
         out.push(format!("{prefix}_fitting_missing_metadata:{name}"));
     }
+}
+
+fn typed_row_accounting(row: &Map<String, Value>) -> bool {
+    non_empty_string(row, "operation")
+        && non_empty_string(row, "validator_check_id")
+        && row.get("fitted_surfaces").is_some_and(Value::is_array)
+        && row.get("focused_tests").is_some_and(Value::is_array)
+        && row.get("receipt_paths").is_some_and(Value::is_array)
+        && row
+            .get("live_query_proof_paths")
+            .is_some_and(Value::is_array)
 }
 
 fn require_fitted_evidence(

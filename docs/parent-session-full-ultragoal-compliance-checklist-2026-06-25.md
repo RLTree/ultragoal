@@ -2508,8 +2508,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Machine-readable observability fitting inventory tracks every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, package surface, and plugin surface as `fitted`, `partially_fitted`, or `unfitted`, names the current owner surface and next unfitted surface for each row, includes a validator-recomputed `fitting_control_board`, and the validator fails every partial, unfitted, missing, stale, adjacent-surface-substituted, count-mismatched, pass-shaped-control-board, or row-shape-only fitting row.
-  - Status: in progress; package digest, source audit, red fixture report, schema validation, mandatory-law validation, and standards-gardener rebind command rows are validated current.
-  - Next blocker: source-obligations check is the first incomplete command row.
+  - Status: validated current for inventory/control-board row-accounting enforcement; full fitting remains in progress.
+  - Next blocker: command, surface, loop, and signal rows still have partial/unfitted statuses that block Gate 92.
   - Claim impact: partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
 
 - [ ] Machine-readable operating-loop and signal inventory tracks whether observability is actually usable as the repair loop: current digest first, failing command capture, logs/metrics/traces query by run id, CLI explanation before manual artifact inspection, smallest repair, narrow rerun, before/after telemetry comparison, broad-audit gating, freshness, and the CLI-translated latency/traffic/error/saturation/freshness/correlation/redaction/boundedness signal model.
@@ -3307,7 +3307,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths include research registry/article-to-law Gate 92 binding, focused observability command fitting already recorded, and package-digest command/query proof. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, signal row, and live-stack query path is fitted with same-candidate proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
+- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths include research registry/article-to-law Gate 92 binding, inventory/control-board row-accounting enforcement, focused observability command fitting already recorded, and package-digest command/query proof. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, signal row, and live-stack query path is fitted with same-candidate proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
@@ -3410,8 +3410,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; research binding and prior focused command fitting are validated current.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; research binding is validated current and full fitting inventory remains blocked.
+- [ ] Agent-queryable observability status: in progress; research binding, inventory row-accounting enforcement, and prior focused command fitting are validated current.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; research binding and inventory/control-board enforcement are validated current while full fitting remains blocked.
 - [ ] Research source authority/article-to-law integration status: validated current for Gate 92 research binding; full Gate 93 remains in progress.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.

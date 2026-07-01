@@ -97,6 +97,7 @@ fn require_surface_row(
 
 fn require_unfitted_metadata(surface: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
     if !owner_tracking(row)
+        || !typed_row_accounting(row)
         || !non_empty_array(row, "missing_surfaces")
         || !non_empty_string(row, "claim_impact")
     {
@@ -104,6 +105,16 @@ fn require_unfitted_metadata(surface: &str, row: &Map<String, Value>, out: &mut 
             "observability_surface_fitting_missing_metadata:{surface}"
         ));
     }
+}
+
+fn typed_row_accounting(row: &Map<String, Value>) -> bool {
+    row.get("fitted_surfaces").is_some_and(Value::is_array)
+        && non_empty_string(row, "validator_check_id")
+        && row.get("focused_tests").is_some_and(Value::is_array)
+        && row.get("receipt_paths").is_some_and(Value::is_array)
+        && row
+            .get("live_query_proof_paths")
+            .is_some_and(Value::is_array)
 }
 
 fn require_fitted_evidence(

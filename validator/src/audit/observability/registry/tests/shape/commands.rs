@@ -42,6 +42,23 @@ fn observability_command_inventory_shape_edges_are_explicit() {
             &"observability_command_fitting_status_missing:schema validation".to_string()
         )
     );
+
+    let mut partial_metadata = super::super::support::fitted_inventory();
+    partial_metadata["fitting_inventory"]["package digest"]["fitting_status"] =
+        json!("partially_fitted");
+    partial_metadata["fitting_inventory"]["package digest"]["missing_surfaces"] = json!(["trace"]);
+    partial_metadata["fitting_inventory"]["package digest"]["next_unfitted_surface"] =
+        json!("trace");
+    partial_metadata["fitting_inventory"]["package digest"]
+        .as_object_mut()
+        .unwrap()
+        .remove("focused_tests");
+    failures.clear();
+    super::super::super::fitting::check(&root, &partial_metadata, &mut failures);
+    assert!(
+        failures
+            .contains(&"observability_command_fitting_missing_metadata:package digest".to_string())
+    );
     let _ = std::fs::remove_dir_all(root);
 }
 
