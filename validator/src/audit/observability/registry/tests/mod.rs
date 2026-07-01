@@ -4,6 +4,7 @@ use std::fs;
 
 mod dimension_support;
 mod proof_edges;
+mod proof_nested;
 mod receipts;
 mod shape;
 mod support;
