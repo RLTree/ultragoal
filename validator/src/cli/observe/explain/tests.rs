@@ -77,6 +77,10 @@ fn explain_reports_current_failure_and_bad_root_errors() {
     assert_eq!(run_receipt["where_failed"], "observe.prove");
     assert_eq!(run_receipt["next_repair"], "fit every law-bearing command");
     assert_eq!(
+        run_receipt["observed_next_repair"],
+        "fit every law-bearing command"
+    );
+    assert_eq!(
         run_receipt["explanation"]["repair_guidance"],
         "fit every law-bearing command"
     );
@@ -101,6 +105,18 @@ fn explain_reports_current_failure_and_bad_root_errors() {
     );
     fs::remove_file(root.join("validation_artifacts/observability/spool/events.jsonl"))
         .expect("remove run telemetry");
+    write_command_receipt_event(&root, "run-1");
+    let command_receipt = run(&root, &command).expect("explain command receipt event");
+    assert_eq!(
+        command_receipt["observed_next_repair"],
+        "query logs metrics traces then repair the named law"
+    );
+    assert_eq!(
+        command_receipt["explanation"]["known_current_failure"][0],
+        "mandatory law validation failed"
+    );
+    fs::remove_file(root.join("validation_artifacts/observability/mandatory-law-validation.json"))
+        .expect("remove command receipt event");
     let check_receipt = run(&root, &command).expect("explain checks without telemetry");
     assert_eq!(
         check_receipt["explanation"]["known_current_failure"][0],
@@ -202,4 +218,29 @@ fn write_run_event(root: &std::path::Path, run_id: &str, why_failed: &str) {
         ),
     )
     .expect("spool event");
+}
+
+fn write_command_receipt_event(root: &std::path::Path, run_id: &str) {
+    let dir = root.join("validation_artifacts/observability");
+    fs::create_dir_all(&dir).expect("observability dir");
+    crate::json_boundary::write_json(
+        &dir.join("mandatory-law-validation.json"),
+        &json!({
+            "run_id": run_id,
+            "status": "fail",
+            "event": {
+                "run_id": run_id,
+                "status": "fail",
+                "failure_class": "mandatory_law_validation_failure",
+                "why_failed": "mandatory law validation failed",
+                "where_failed": "mandatory-law.validation",
+                "next_repair": "query logs metrics traces then repair the named law",
+                "claim_impact": "readiness_blocked",
+                "law_id": "full-local-observability-stack-integration-non-opaque-failure",
+                "check_id": "mandatory-law-validation-observability-binding",
+                "claim_id": "mandatory_law_validation"
+            }
+        }),
+    )
+    .expect("command receipt event");
 }

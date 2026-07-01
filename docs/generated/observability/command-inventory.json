@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 4,
-        "partially_fitted": 43,
+        "fitted": 5,
+        "partially_fitted": 42,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "mandatory-law validation",
+      "id": "standards-gardener rebind",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -425,7 +425,7 @@
       ]
     },
     "mandatory-law validation": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "mandatory-law-only claim ceiling",
@@ -438,20 +438,25 @@
         "law/check task fan-out",
         "real runtime scheduler telemetry for all mandatory-law rows",
         "bounded parallel pure-read scheduler over mandatory-law surface receipts",
-        "targeted --law helper for focused repair"
-      ],
-      "missing_surfaces": [
+        "targeted --law helper for focused repair",
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "explain-failure observed repair fields for command receipts"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "mandatory-law-validation-observability-binding",
       "focused_tests": [
         "mandatory_law_validation_parse_supports_default_targeted_and_alias",
         "mandatory_law_validation_command_writes_pass_and_fail_observability",
         "default_mandatory_law_validation_uses_parallel_scheduler",
         "mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries",
-        "mandatory_law_production_binding_rejects_row_shape_substitutes"
+        "mandatory_law_production_binding_rejects_row_shape_substitutes",
+        "mandatory_law_validation_parse_and_scheduler_edges_are_bounded",
+        "mandatory_law_validation_failure_edges_and_absolute_receipt_are_observable",
+        "mandatory_law_runtime_metrics_report_resource_and_saturation_states",
+        "mandatory_law_run_propagates_telemetry_and_receipt_write_errors",
+        "explain_reports_current_failure_and_bad_root_errors"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/mandatory-law-validation.json"
@@ -461,9 +466,9 @@
         "validation_artifacts/observability/mandatory-law-validation-metrics-query.json",
         "validation_artifacts/observability/mandatory-law-validation-traces-query.json"
       ],
-      "claim_impact": "mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_mandatory_law_validation_observability_source_local_only_no_readiness_release_completion_update_goal; production_mandatory_law_validation_still_fails_on_stale_dependency_receipts",
       "current_owner_surface": "command:mandatory-law validation",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -475,9 +480,22 @@
         "validation_artifacts/observability/mandatory-law-validation-metrics-query.json",
         "validation_artifacts/observability/mandatory-law-validation-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "mandatory_law_validation_command_writes_pass_and_fail_observability",
+        "mandatory_law_validation_failure_edges_and_absolute_receipt_are_observable",
+        "mandatory_law_run_propagates_telemetry_and_receipt_write_errors"
+      ],
+      "green_fixtures": [
+        "mandatory_law_validation_parse_supports_default_targeted_and_alias",
+        "default_mandatory_law_validation_uses_parallel_scheduler"
+      ],
+      "tamper_fixtures": [
+        "mandatory_law_validation_parse_and_scheduler_edges_are_bounded",
+        "mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries",
+        "mandatory_law_production_binding_rejects_row_shape_substitutes",
+        "mandatory_law_runtime_metrics_report_resource_and_saturation_states",
+        "explain_reports_current_failure_and_bad_root_errors"
+      ]
     },
     "standards-gardener rebind": {
       "fitting_status": "partially_fitted",

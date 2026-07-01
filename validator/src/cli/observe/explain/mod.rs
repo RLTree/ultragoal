@@ -45,10 +45,26 @@ fn repair_guidance(observed_run: Option<&Value>) -> String {
 }
 
 fn promote_observed_failure_fields(receipt: &mut Value, event: &Value) {
+    for (target, source) in [
+        ("observed_failure_class", "failure_class"),
+        ("observed_why_failed", "why_failed"),
+        ("observed_where_failed", "where_failed"),
+        ("observed_next_repair", "next_repair"),
+        ("observed_claim_impact", "claim_impact"),
+    ] {
+        if event
+            .get(source)
+            .and_then(Value::as_str)
+            .is_some_and(|text| !text.trim().is_empty() && text != "none")
+        {
+            receipt[target] = event[source].clone();
+        }
+    }
     for key in [
         "law_id",
         "check_id",
         "claim_id",
+        "failure_class",
         "where_failed",
         "next_repair",
         "claim_impact",
@@ -79,6 +95,10 @@ fn event_failure(event: &Value) -> Option<Value> {
 }
 
 fn run_event(root: &Path, run_id: &str) -> Option<Value> {
+    spool_event(root, run_id).or_else(|| receipt_event(root, run_id))
+}
+
+fn spool_event(root: &Path, run_id: &str) -> Option<Value> {
     let path = root.join("validation_artifacts/observability/spool/events.jsonl");
     let text = std::fs::read_to_string(path).ok()?;
     text.lines().rev().find_map(|line| {
@@ -86,6 +106,48 @@ fn run_event(root: &Path, run_id: &str) -> Option<Value> {
         (value.get("run_id").and_then(Value::as_str) == Some(run_id)
             && event_failure(&value).is_some())
         .then_some(value)
+    })
+}
+
+fn receipt_event(root: &Path, run_id: &str) -> Option<Value> {
+    let dir = root.join("validation_artifacts/observability");
+    let mut paths = std::fs::read_dir(dir)
+        .ok()?
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().and_then(|ext| ext.to_str()) == Some("json"))
+        .collect::<Vec<_>>();
+    paths.sort();
+    paths.into_iter().rev().find_map(|path| {
+        let value = crate::json_boundary::read_json(&path).ok()?;
+        let event = value
+            .get("event")
+            .and_then(|event| {
+                (event.get("run_id").and_then(Value::as_str) == Some(run_id)).then(|| event.clone())
+            })
+            .or_else(|| {
+                (value.get("run_id").and_then(Value::as_str) == Some(run_id))
+                    .then(|| fallback_event_from_receipt(&value))
+            })?;
+        event_failure(&event).is_some().then_some(event)
+    })
+}
+
+fn fallback_event_from_receipt(value: &Value) -> Value {
+    json!({
+        "run_id": value.get("run_id").cloned().unwrap_or(Value::Null),
+        "status": value.get("status").cloned().unwrap_or(Value::Null),
+        "failure_class": value.get("failure_class").cloned().unwrap_or(Value::Null),
+        "why_failed": value.get("why_failed").cloned().unwrap_or(Value::Null),
+        "where_failed": value.get("where_failed").cloned().unwrap_or(Value::Null),
+        "next_repair": value.get("next_repair").cloned().unwrap_or(Value::Null),
+        "claim_impact": value.get("claim_impact").cloned().unwrap_or(Value::Null),
+        "law_id": value.get("law_id").cloned().unwrap_or(Value::Null),
+        "check_id": value.get("check_id").cloned().unwrap_or(Value::Null),
+        "claim_id": value.get("claim_id").cloned().unwrap_or(Value::Null),
+        "query_hint_logql": value.get("query_hint_logql").cloned().unwrap_or(Value::Null),
+        "query_hint_promql": value.get("query_hint_promql").cloned().unwrap_or(Value::Null),
+        "query_hint_traceql": value.get("query_hint_traceql").cloned().unwrap_or(Value::Null)
     })
 }
 
