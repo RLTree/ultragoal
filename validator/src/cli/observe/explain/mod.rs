@@ -15,6 +15,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         .unwrap_or_else(|| current_failure(root));
     let failure_summary = failure_summary(&known_current_failure);
     let mut receipt = telemetry::base_receipt(root, command, "pass", failure_summary.as_deref())?;
+    let repair_guidance = repair_guidance(observed_run.as_ref());
     if let Some(event) = observed_run {
         promote_observed_failure_fields(&mut receipt, &event);
         receipt["observed_run"] = event;
@@ -27,9 +28,20 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         "current_source_audit_receipt": "validation_artifacts/ultragoal-audit/validator-receipt.json",
         "current_source_audit_digest": crate::digest::file(&audit).unwrap_or_else(|_| crate::digest::ZERO.to_string()),
         "known_current_failure": known_current_failure,
-        "repair_guidance": "Inspect final-packet proof/source-audit digest dereference, regenerate same-candidate lower-level receipts, and rerun source audit once after implementation changes."
+        "repair_guidance": repair_guidance
     });
     Ok(receipt)
+}
+
+fn repair_guidance(observed_run: Option<&Value>) -> String {
+    observed_run
+        .and_then(|event| event.get("next_repair"))
+        .and_then(Value::as_str)
+        .filter(|text| !text.trim().is_empty() && *text != "none")
+        .unwrap_or(
+            "Inspect final-packet proof/source-audit digest dereference, regenerate same-candidate lower-level receipts, and rerun source audit once after implementation changes.",
+        )
+        .to_string()
 }
 
 fn promote_observed_failure_fields(receipt: &mut Value, event: &Value) {

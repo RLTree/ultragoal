@@ -2,6 +2,7 @@ use crate::cli::observe::telemetry::{claims, exporter, identity, record, spool};
 use crate::cli::observe::types::{self, ObserveCommand};
 use serde_json::{Value, json};
 use std::path::Path;
+use std::time::Instant;
 
 pub(super) fn base(
     root: &Path,
@@ -9,6 +10,7 @@ pub(super) fn base(
     status: &str,
     failure: Option<&str>,
 ) -> Result<Value, String> {
+    let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
     let run_id = command
         .run_id
@@ -16,6 +18,10 @@ pub(super) fn base(
         .unwrap_or_else(|| identity::id("run", command.operation.id(), &candidate));
     let correlation_id = identity::id("corr", command.operation.id(), &candidate);
     let receipt_path = record::redact_sensitive_text(&command.receipt_rel().to_string_lossy());
+    let duration_ms = u64::try_from(started.elapsed().as_millis())
+        .unwrap_or(u64::MAX)
+        .max(1);
+    let runtime = record::runtime(command.operation, duration_ms);
     let event = record::event(
         root,
         command,
@@ -24,6 +30,7 @@ pub(super) fn base(
         &correlation_id,
         status,
         failure,
+        runtime,
     );
     let metric = record::metric(&event, command.operation, status);
     let trace = record::trace(&event, command.operation);
@@ -40,7 +47,7 @@ pub(super) fn base(
         "log_stream_digest": crate::digest::canonical_json(&event),
         "metric_snapshot_digest": crate::digest::canonical_json(&metric),
         "trace_bundle_digest": crate::digest::canonical_json(&trace),
-        "query_examples": query_examples(command),
+        "query_examples": query_examples(&run_id),
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": claims::bounds_status(command),
@@ -64,8 +71,7 @@ pub(super) fn base(
     }))
 }
 
-fn query_examples(command: &ObserveCommand) -> Value {
-    let run = command.run_id.as_deref().unwrap_or("<run-id>");
+fn query_examples(run: &str) -> Value {
     json!([
         format!("ultragoal observe logs query --run-id {run} --limit 100"),
         format!("ultragoal observe metrics query --run-id {run} --limit 100"),

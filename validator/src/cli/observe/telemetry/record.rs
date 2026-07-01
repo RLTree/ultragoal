@@ -1,4 +1,4 @@
-use crate::cli::observe::telemetry::{claims, identity};
+use crate::cli::observe::telemetry::{RuntimeTelemetry, claims, identity};
 use crate::cli::observe::types::{self, ObserveCommand, ObserveOperation};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -11,6 +11,7 @@ pub(super) fn event(
     correlation_id: &str,
     status: &str,
     failure: Option<&str>,
+    runtime: RuntimeTelemetry,
 ) -> Value {
     let failure = failure.map(redact_sensitive_text);
     let receipt_path = redact_sensitive_text(&command.receipt_rel().to_string_lossy());
@@ -40,7 +41,7 @@ pub(super) fn event(
         "next_repair": next_repair,
         "claim_impact": if status == "pass" { "observability_evidence_only" } else { "readiness_release_completion_update_goal_blocked" },
         "timestamp": crate::audit::clock::now_iso(),
-        "duration_ms": 0,
+        "duration_ms": runtime.duration_ms,
         "exporter": exporter(root, command.operation, candidate, status),
         "redaction_status": "pass",
         "bounded_output_status": claims::bounds_status(command),
@@ -48,6 +49,19 @@ pub(super) fn event(
         "query_hint_promql": format!("ultragoal_command_total{{operation=\"{}\"}}", command.operation.id()),
         "query_hint_traceql": format!("{{operation=\"{}\"}}", command.operation.id())
     });
+    event["worker_count"] = json!(runtime.worker_count);
+    event["task_count"] = json!(runtime.task_count);
+    event["queue_depth"] = json!(runtime.queue_depth);
+    event["cpu_ms"] = json!(runtime.cpu_ms);
+    event["memory_bytes"] = json!(runtime.memory_bytes);
+    event["io_bytes"] = json!(runtime.io_bytes);
+    event["cache_mode"] = json!(runtime.cache_mode);
+    event["resource_measurement_status"] = json!(runtime.resource_measurement_status);
+    event["retry_count"] = json!(runtime.retry_count);
+    event["backoff_ms"] = json!(runtime.backoff_ms);
+    event["saturation_status"] = json!(runtime.saturation_status);
+    event["repair_anchor_before"] = json!(runtime.repair_anchor_before);
+    event["repair_anchor_after"] = json!(runtime.repair_anchor_after);
     event["redaction_status"] = json!(redaction_status(&event));
     event
 }
@@ -73,56 +87,16 @@ fn exporter(
 }
 
 pub(super) fn metric(event: &Value, operation: ObserveOperation, status: &str) -> Value {
-    let metric_name = if matches!(operation, ObserveOperation::StackHealth) {
-        "ultragoal_stack_health_status"
-    } else {
-        "ultragoal_command_total"
-    };
-    json!({
-        "schema": "harness-ultragoal.observability-metric.v1",
-        "metric_name": metric_name,
-        "metric_value": if status == "pass" { 1 } else { 0 },
-        "labels": labels(event, operation, status),
-        "run_id": event["run_id"],
-        "correlation_id": event["correlation_id"],
-        "trace_id": event["trace_id"],
-        "span_id": identity::id("metric", operation.id(), event["candidate_digest"].as_str().unwrap_or("")),
-        "parent_span_id": event["span_id"],
-        "command": "ultragoal observe",
-        "subcommand": operation.subcommand(),
-        "operation": operation.id(),
-        "surface": "live_stack",
-        "law_id": types::LAW_ID,
-        "check_id": types::CHECK_ID,
-        "claim_id": types::CLAIM_ID,
-        "candidate_digest": event["candidate_digest"],
-        "target_revision": event["target_revision"],
-        "artifact_path": event["artifact_path"],
-        "receipt_path": event["receipt_path"],
-        "status": status,
-        "failure_class": event["failure_class"],
-        "why_failed": event["why_failed"],
-        "where_failed": event["where_failed"],
-        "next_repair": event["next_repair"],
-        "claim_impact": event["claim_impact"],
-        "timestamp": event["timestamp"],
-        "duration_ms": 0,
-        "exporter": "victoriametrics",
-        "redaction_status": event["redaction_status"],
-        "bounded_output_status": event["bounded_output_status"],
-        "query_hint_logql": event["query_hint_logql"],
-        "query_hint_promql": event["query_hint_promql"],
-        "query_hint_traceql": event["query_hint_traceql"]
-    })
+    let mut metric = super::metric::from_event(event);
+    if matches!(operation, ObserveOperation::StackHealth) {
+        metric["metric_name"] = json!("ultragoal_stack_health_status");
+    }
+    metric["metric_value"] = json!(if status == "pass" { 1 } else { 0 });
+    metric
 }
 
-pub(super) fn trace(event: &Value, operation: ObserveOperation) -> Value {
-    let mut span = event.clone();
-    span["schema"] = json!("harness-ultragoal.observability-trace.v1");
-    span["exporter"] = json!("victoriatraces");
-    span["span_kind"] = json!("root");
-    span["span_name"] = json!(operation.id());
-    span
+pub(super) fn trace(event: &Value, _operation: ObserveOperation) -> Value {
+    super::trace::from_event(event)
 }
 
 pub(super) fn redaction_status(event: &Value) -> &'static str {
@@ -203,21 +177,31 @@ pub(crate) fn redacted_failure_for_test(input: &str) -> String {
     redact_sensitive_text(input)
 }
 
-fn labels(event: &Value, operation: ObserveOperation, status: &str) -> Value {
-    json!({
-        "command": "observe",
-        "operation": operation.id(),
-        "status": status,
-        "law_id": types::LAW_ID,
-        "check_id": types::CHECK_ID,
-        "claim_id": types::CLAIM_ID,
-        "surface": "live_stack",
-        "failure_class": event["failure_class"].as_str().unwrap_or("none"),
-        "why_failed": event["why_failed"].as_str().unwrap_or("none"),
-        "where_failed": event["where_failed"].as_str().unwrap_or("none"),
-        "next_repair": event["next_repair"].as_str().unwrap_or("none"),
-        "claim_impact": event["claim_impact"].as_str().unwrap_or("none"),
-        "candidate_digest": event["candidate_digest"].as_str().unwrap_or(""),
-        "exporter": event["exporter"].as_str().unwrap_or("")
-    })
+pub(super) fn runtime(operation: ObserveOperation, duration_ms: u64) -> RuntimeTelemetry {
+    RuntimeTelemetry {
+        duration_ms,
+        worker_count: 1,
+        task_count: 1,
+        queue_depth: 0,
+        cpu_ms: None,
+        memory_bytes: None,
+        io_bytes: None,
+        cache_mode: cache_mode(operation).to_string(),
+        resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable".to_string(),
+        retry_count: 0,
+        backoff_ms: 0,
+        saturation_status: "serial_observe_command_typed".to_string(),
+        repair_anchor_before: "observe_command_start".to_string(),
+        repair_anchor_after: "observe_telemetry_emit".to_string(),
+    }
+}
+
+fn cache_mode(operation: ObserveOperation) -> &'static str {
+    match operation {
+        ObserveOperation::LogsQuery
+        | ObserveOperation::MetricsQuery
+        | ObserveOperation::TracesQuery => "observe_query_live_backend",
+        ObserveOperation::StackHealth | ObserveOperation::StackSmoke => "observe_live_stack_probe",
+        _ => "observe_command_no_cache",
+    }
 }

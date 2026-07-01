@@ -80,32 +80,6 @@ fn observe_parser_covers_required_command_inventory() {
 }
 
 #[test]
-fn observe_receipt_blocks_completion_when_live_stack_is_not_proven() {
-    let root = minimal_root("observe-receipt");
-    let command = observe::parse(&args(&["observe", "prove"]))
-        .expect("parse")
-        .expect("observe command");
-    let receipt = observe::telemetry::prove(&root, &command).expect("receipt");
-    assert_eq!(receipt["status"], "fail");
-    assert_eq!(
-        receipt["claim_ceiling"],
-        "observability_gate_failed_completion_readiness_release_update_goal_blocked"
-    );
-    assert!(
-        receipt["blocked_claims"]
-            .as_array()
-            .expect("blocked")
-            .iter()
-            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
-    );
-    assert!(
-        root.join("validation_artifacts/observability/spool/events.jsonl")
-            .is_file()
-    );
-    fs::remove_dir_all(root).expect("cleanup observe receipt");
-}
-
-#[test]
 fn observe_query_rejects_unbounded_requests() {
     let root = minimal_root("observe-query");
     let command = observe::parse(&args(&[

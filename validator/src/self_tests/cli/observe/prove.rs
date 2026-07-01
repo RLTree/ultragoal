@@ -51,6 +51,53 @@ fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
     fs::remove_dir_all(root).expect("cleanup root");
 }
 
+#[test]
+fn observe_receipt_blocks_completion_when_live_stack_is_not_proven() {
+    let root = super::minimal_root("observe-receipt");
+    let command = command(&["observe", "prove"]);
+    let receipt = observe::telemetry::prove(&root, &command).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        receipt["claim_ceiling"],
+        "observability_gate_failed_completion_readiness_release_update_goal_blocked"
+    );
+    assert!(receipt["event"]["duration_ms"].as_u64().unwrap() > 0);
+    assert_eq!(receipt["event"]["worker_count"], 1);
+    assert_eq!(receipt["event"]["task_count"], 1);
+    assert_eq!(receipt["event"]["queue_depth"], 0);
+    assert_eq!(receipt["event"]["cache_mode"], "observe_command_no_cache");
+    assert_eq!(
+        receipt["event"]["resource_measurement_status"],
+        "wall_time_only_cpu_memory_io_unavailable"
+    );
+    assert_eq!(
+        receipt["metric"]["duration_ms"],
+        receipt["event"]["duration_ms"]
+    );
+    assert_eq!(
+        receipt["trace"]["worker_count"],
+        receipt["event"]["worker_count"]
+    );
+    assert!(
+        receipt["query_examples"][0]
+            .as_str()
+            .unwrap()
+            .contains(receipt["run_id"].as_str().unwrap())
+    );
+    assert!(
+        receipt["blocked_claims"]
+            .as_array()
+            .expect("blocked")
+            .iter()
+            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+    );
+    assert!(
+        root.join("validation_artifacts/observability/spool/events.jsonl")
+            .is_file()
+    );
+    fs::remove_dir_all(root).expect("cleanup observe receipt");
+}
+
 fn command(raw: &[&str]) -> observe::types::ObserveCommand {
     observe::parse(&super::args(raw))
         .expect("parse")
