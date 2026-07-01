@@ -3,6 +3,7 @@ use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 use std::fs;
 
+mod exporter;
 mod package;
 mod prove;
 mod query;

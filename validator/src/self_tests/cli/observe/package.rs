@@ -89,6 +89,18 @@ fn package_digest_command_emits_observability_receipt_contract() {
         receipt["trace"]["worker_count"],
         receipt["event"]["worker_count"]
     );
+    let child_spans = receipt["trace"]["child_spans"]
+        .as_array()
+        .expect("trace child spans");
+    assert!(
+        child_spans
+            .iter()
+            .any(|span| span["span_kind"] == "validator_check")
+    );
+    assert!(child_spans.iter().all(|span| {
+        span["parent_span_id"] == receipt["trace"]["span_id"]
+            && span["trace_id"] == receipt["trace"]["trace_id"]
+    }));
     assert!(
         receipt["supported_claims"]
             .as_array()

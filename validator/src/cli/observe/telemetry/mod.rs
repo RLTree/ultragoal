@@ -115,6 +115,11 @@ pub(crate) fn exporter_metric_line_for_test(metric: &Value) -> String {
 }
 
 #[cfg(test)]
+pub(crate) fn exporter_trace_payload_for_test(trace: &Value) -> Value {
+    exporter::trace_payload_for_test(trace)
+}
+
+#[cfg(test)]
 pub(crate) fn query_receipt_text_for_test<'a>(
     telemetry: &'a Value,
     field: &str,
