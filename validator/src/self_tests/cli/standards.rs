@@ -123,6 +123,13 @@ fn standards_gardener_run_mints_receipt_through_cli_command() {
         observation["event"]["artifact_path"],
         "validation_artifacts/standards-gardener/current.json"
     );
+    let store = crate::schema_catalog::load(&root);
+    let errors = crate::schema_catalog::schema_errors(
+        &store,
+        "observability-receipt.schema.json",
+        &observation,
+    );
+    assert!(errors.is_empty(), "{errors:?}");
     std::fs::remove_dir_all(root).expect("cleanup standards run");
 }
 

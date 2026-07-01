@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 5,
-        "partially_fitted": 42,
+        "fitted": 6,
+        "partially_fitted": 41,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "standards-gardener rebind",
+      "id": "source-obligations check",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -498,7 +498,7 @@
       ]
     },
     "standards-gardener rebind": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "standards-gardener-only claim ceiling",
@@ -510,20 +510,25 @@
         "pass and fail stdout contract",
         "canonical standards-gardener receipt binding",
         "changed-artifact digest rebinding",
-        "typed shared-authority-write serial reason"
-      ],
-      "missing_surfaces": [
+        "typed shared-authority-write serial reason",
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "emitted observability receipt validates against observability schema"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "standards-gardener-rebind-observability-binding",
       "focused_tests": [
         "standards_gardener_parse_rejects_unknown_and_missing_receipt",
         "standards_gardener_rebind_mints_candidate_and_current_artifact_digest",
         "standards_gardener_run_mints_receipt_through_cli_command",
         "standards_gardener_run_writes_fail_observability_without_receipt_ledger_claim",
-        "command_dispatch_routes_standards_gardener_rebind"
+        "command_dispatch_routes_standards_gardener_rebind",
+        "standards_gardener_rebind_rejects_unsafe_receipt_paths",
+        "standards_gardener_rebind_rejects_empty_and_self_tracking_artifacts",
+        "standards_gardener_rebind_rejects_schema_invalid_rebound_receipt",
+        "source_obligation_and_standards_gardener_edges_fail_closed",
+        "standards_gardener_receipts_cover_semantic_and_root_edges"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/standards-gardener-rebind.json"
@@ -533,9 +538,9 @@
         "validation_artifacts/observability/standards-gardener-rebind-metrics-query.json",
         "validation_artifacts/observability/standards-gardener-rebind-traces-query.json"
       ],
-      "claim_impact": "supports_standards_gardener_rebind_source_local_observability_only; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_standards_gardener_rebind_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:standards-gardener rebind",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -547,9 +552,22 @@
         "validation_artifacts/observability/standards-gardener-rebind-metrics-query.json",
         "validation_artifacts/observability/standards-gardener-rebind-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "standards_gardener_parse_rejects_unknown_and_missing_receipt",
+        "standards_gardener_run_writes_fail_observability_without_receipt_ledger_claim",
+        "source_obligation_and_standards_gardener_edges_fail_closed"
+      ],
+      "green_fixtures": [
+        "standards_gardener_rebind_mints_candidate_and_current_artifact_digest",
+        "standards_gardener_run_mints_receipt_through_cli_command",
+        "command_dispatch_routes_standards_gardener_rebind"
+      ],
+      "tamper_fixtures": [
+        "standards_gardener_rebind_rejects_unsafe_receipt_paths",
+        "standards_gardener_rebind_rejects_empty_and_self_tracking_artifacts",
+        "standards_gardener_rebind_rejects_schema_invalid_rebound_receipt",
+        "standards_gardener_receipts_cover_semantic_and_root_edges"
+      ]
     },
     "source-obligations check": {
       "fitting_status": "partially_fitted",
