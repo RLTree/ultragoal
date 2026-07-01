@@ -790,6 +790,7 @@
     "final-packet prove": {
       "fitting_status": "partially_fitted",
       "fitted_surfaces": [
+        "pass stdout contract",
         "stdout failure contract",
         "receipt observability binding",
         "structured event",
@@ -806,11 +807,11 @@
         "current explain-failure receipt"
       ],
       "missing_surfaces": [
-        "pass stdout contract",
         "full command-inventory fitted closure"
       ],
       "validator_check_id": "final-packet-proof",
       "focused_tests": [
+        "final_packet_stdout_names_pass_and_fail_repair_contracts",
         "final_packet_receipt_builds_fail_closed_and_green_paths",
         "final_packet_proof_requires_same_candidate_dereferenced_packet"
       ],
@@ -818,14 +819,14 @@
         "validation_artifacts/review/final-packet-proof.json"
       ],
       "live_query_proof_paths": [
-        "validation_artifacts/observability/observe-logs-query.json",
-        "validation_artifacts/observability/observe-metrics-query.json",
-        "validation_artifacts/observability/observe-traces-query.json",
-        "validation_artifacts/observability/observe-explain-failure.json"
+        "validation_artifacts/observability/final-packet-prove-logs-query.json",
+        "validation_artifacts/observability/final-packet-prove-metrics-query.json",
+        "validation_artifacts/observability/final-packet-prove-traces-query.json",
+        "validation_artifacts/observability/final-packet-prove-explain-failure.json"
       ],
       "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted",
       "current_owner_surface": "command:final-packet prove",
-      "next_unfitted_surface": "pass stdout contract"
+      "next_unfitted_surface": "full command-inventory fitted closure"
     },
     "registry probe": {
       "fitting_status": "unfitted",

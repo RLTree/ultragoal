@@ -82,3 +82,31 @@ fn final_packet_observability_fails_when_package_digest_is_unavailable() {
         .expect_err("missing manifest blocks telemetry binding");
     assert!(err.contains("plugin-manifest-draft.json"));
 }
+
+#[test]
+fn final_packet_stdout_names_pass_and_fail_repair_contracts() {
+    let root = root("final-packet-proof-stdout-contract");
+    let receipt = root.join("validation_artifacts/review/final-packet-proof.json");
+
+    let mut pass = json!({"status":"pass","blocked_claim_classes":[]});
+    super::attach_for_evaluation(&root, &receipt, &mut pass).expect("pass attach");
+    let pass_lines = super::stdout::stdout_lines(&receipt, &pass);
+    assert_eq!(pass_lines.len(), 1);
+    assert!(pass_lines[0].contains("ultragoal-final-packet pass"));
+    assert!(pass_lines[0].contains("proven=final_packet_evidence_dereferenced"));
+    assert!(pass_lines[0].contains("supported_claims=final_packet_evidence_dereferenced"));
+    assert!(pass_lines[0].contains("unsupported_claims=none"));
+
+    let mut fail = failing("final_packet_proof_packet_absent");
+    super::attach_for_evaluation(&root, &receipt, &mut fail).expect("fail attach");
+    let fail_lines = super::stdout::stdout_lines(&receipt, &fail);
+    assert_eq!(fail_lines.len(), 2);
+    assert!(fail_lines[0].contains("ultragoal-final-packet fail"));
+    assert!(fail_lines[0].contains("proven=none"));
+    assert!(fail_lines[1].contains("failed_law=final-packet-proof"));
+    assert!(fail_lines[1].contains("failed_check=missing_receipt"));
+    assert!(fail_lines[1].contains("query_logs='ultragoal observe logs query"));
+    assert!(fail_lines[1].contains("query_metrics='ultragoal observe metrics query"));
+    assert!(fail_lines[1].contains("query_traces='ultragoal observe traces query"));
+    std::fs::remove_dir_all(root).expect("cleanup");
+}

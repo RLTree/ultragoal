@@ -2,8 +2,13 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 mod spans;
+mod stdout;
 #[cfg(test)]
 mod tests;
+
+pub(super) fn print_receipt(path: &Path, value: &Value) {
+    stdout::print_receipt(path, value);
+}
 
 pub(super) fn attach_observability(
     root: &Path,
@@ -70,76 +75,6 @@ fn attach(root: &Path, receipt_path: &Path, value: &mut Value, emit: bool) -> Re
     value["claim_impact"] = json!(claim_impact);
     value["observability"] = observability;
     Ok(())
-}
-
-pub(super) fn print_receipt(path: &Path, value: &Value) {
-    println!(
-        "ultragoal-final-packet {} operation=final-packet.prove candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
-        status(value),
-        value
-            .get("candidate_digest")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        path.display(),
-        value
-            .get("run_id")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        value
-            .get("correlation_id")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        value
-            .get("claim_impact")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        csv(&value["observability"]["supported_claims"]),
-        csv(&value["observability"]["blocked_claims"])
-    );
-    if status(value) != "pass" {
-        print_failure(path, value);
-    }
-}
-
-fn print_failure(path: &Path, value: &Value) {
-    let run_id = value
-        .get("run_id")
-        .and_then(Value::as_str)
-        .unwrap_or("unknown");
-    let metric_query =
-        crate::cli::observe::query::bounded_metric_query_for_operation("final-packet.prove");
-    println!(
-        "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
-        value
-            .get("proof_check_id")
-            .and_then(Value::as_str)
-            .unwrap_or("final-packet-proof"),
-        value
-            .get("why_failed")
-            .and_then(Value::as_str)
-            .unwrap_or("final packet proof failed"),
-        value
-            .get("where_failed")
-            .and_then(Value::as_str)
-            .unwrap_or("final-packet.prove"),
-        value
-            .get("claim_impact")
-            .and_then(Value::as_str)
-            .unwrap_or("readiness_release_completion_update_goal_blocked"),
-        value
-            .get("next_repair")
-            .and_then(Value::as_str)
-            .unwrap_or("inspect final-packet proof references"),
-        path.display(),
-        run_id,
-        value
-            .get("correlation_id")
-            .and_then(Value::as_str)
-            .unwrap_or("unknown"),
-        run_id,
-        metric_query,
-        run_id
-    );
 }
 
 pub(super) fn status(value: &Value) -> &str {
@@ -225,8 +160,4 @@ fn string_array(value: &Value) -> Vec<String> {
         .filter_map(Value::as_str)
         .map(ToOwned::to_owned)
         .collect()
-}
-
-fn csv(value: &Value) -> String {
-    string_array(value).join(",")
 }
