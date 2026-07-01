@@ -25,7 +25,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "install audit",
     "cache audit",
     "transaction finalize",
-    "self law prove",
+    "update-goal eligibility",
     "self update-goal eligibility",
     "rust toolchain verify",
     "rust fast",

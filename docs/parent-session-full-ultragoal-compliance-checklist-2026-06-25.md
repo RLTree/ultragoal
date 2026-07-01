@@ -2502,7 +2502,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Machine-readable observability fitting inventory tracks every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, package surface, and plugin surface as `fitted`, `partially_fitted`, or `unfitted`, names the current owner surface and next unfitted surface for each row, includes a validator-recomputed `fitting_control_board`, and the validator fails every partial, unfitted, missing, stale, adjacent-surface-substituted, count-mismatched, pass-shaped-control-board, or row-shape-only fitting row.
-  - Status: in progress; `final-packet prove` command-observability subpath is validated current. First incomplete command row is `self law prove`.
+  - Status: in progress; `final-packet prove` remains fitted, `update-goal eligibility` and `self update-goal eligibility` are partially fitted, and live trace query proof is still missing. First incomplete command row is `update-goal eligibility`.
   - Claim impact: partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
 
 - [ ] Machine-readable operating-loop and signal inventory tracks whether observability is actually usable as the repair loop: current digest first, failing command capture, logs/metrics/traces query by run id, CLI explanation before manual artifact inspection, smallest repair, narrow rerun, before/after telemetry comparison, broad-audit gating, freshness, and the CLI-translated latency/traffic/error/saturation/freshness/correlation/redaction/boundedness signal model.
@@ -2535,11 +2535,11 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Agent proof comes from CLI queries against VictoriaLogs, VictoriaMetrics, and VictoriaTraces; Grafana inspection is not claim authority.
-  - Status: in progress; current observe/prove failure is queryable through CLI logs, metrics, and traces.
+  - Status: in progress; current self update-goal failure is queryable through CLI logs, metrics, and explain output, but live trace query proof is missing.
   - Claim impact: source-local query observation only; no Grafana/manual proof is used, and full Gate 92 remains blocked by unfitted command, plugin surface, operating-loop, and signal inventory rows.
 
 - [ ] Required query proof covers failed run by run_id, failed law by law_id, failed check by check_id, blocked claim by claim_id, command duration metrics, stale receipt counters, full command trace, and current proof-graph failure across logs, metrics, and traces.
-  - Status: in progress; current-run query and explain proof exists, but the complete required query matrix across all law-bearing paths does not.
+  - Status: in progress; current-run logs, metrics, and explain proof exist, but trace query proof and the complete required query matrix across all law-bearing paths do not.
 
 ### Gate 92.7: Security, Redaction, Boundedness, And Resource Discipline
 
@@ -2605,8 +2605,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status: validated current for source-local stack smoke/query only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] The current proof-graph failure is visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, observe query commands, and `observe explain-failure --run-id`.
-  - Status: in progress; current cache-audit fail-closed surface failure is visible through stdout, logs, metrics, traces, and explain-failure.
-  - Next blocker: `self law prove` is the first incomplete command row; next unfitted surface is self-law logs.
+  - Status: in progress; current self update-goal failure is visible through stdout, logs, metrics, and explain-failure, but traces still have no live query row.
+  - Next blocker: `update-goal eligibility` is the first incomplete command row; next unfitted surface is same-candidate live query proof.
   - Claim impact: no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility claim.
 
 - [ ] Gate 92 validation commands run: runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.
@@ -3150,12 +3150,12 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run schema evolution/receipt migration/stale-version invalidation proof.
 - [ ] Run failure remediation quality/agent-actionable validator output proof.
 - [ ] Run review disagreement/override/judgment-boundary governance proof.
-- [ ] Run Gate 92 runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit. Evidence: Status: in progress; focused observability tests and current query proof passed for `final-packet prove`. Boundary source audit failed on the current digest and remains a blocker; exact coverage and live-stack closure remain pending.
+- [ ] Run Gate 92 runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit. Evidence: Status: in progress; focused observability/control tests pass for the self update-goal telemetry path. Live trace query proof, exact coverage, broad source audit, red report, and full live-stack closure remain pending.
 - [ ] Run source/install/cache digest comparison. Evidence: Status: stale due to source change. Install/cache parity has not been refreshed for this source-local checkpoint. Claim impact: no disk source/install/cache parity, no app-registry/reviewer exposure, no final-packet correctness, no readiness, no release, no completion, and no `update_goal()` claim.
 - [ ] Regenerate review-target receipt. Evidence: Status: stale due to source change for prior `review-target build` command/query fitting. Claim impact: detached review-target identity anchor only; no final packet correctness, reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Regenerate candidate archive receipt. Evidence: Status: stale due to source change for prior `archive build` command/query fitting. Claim impact: detached candidate archive identity anchor only; no upload, distribution, package-readiness, reviewer exposure, readiness, release, completion, or `update_goal()` proof.
 - [ ] Validate final packet/successor packet.
-- [ ] Evidence path: Status: in progress. Current source-local subpath: nested law-receipt observability binding is validator-enforced, and `final-packet prove` command observability is fitted. Full Gate 92 remains blocked by `self law prove`, exact coverage, full fitting, live-stack closure, source audit, red report, install/cache parity, final-packet correctness, and update_goal eligibility.
+- [ ] Evidence path: Status: in progress. Current source-local subpath: nested law-receipt observability binding is validator-enforced, `final-packet prove` command observability is fitted, and update-goal command inventory now rejects the phantom `self law prove` row. Full Gate 92 remains blocked by partial update-goal fitting, missing live trace query proof, exact coverage, full fitting, live-stack closure, source audit, red report, install/cache parity, final-packet correctness, and update_goal eligibility.
 
 ## `update_goal()` Is Forbidden Until All Are True
 
@@ -3300,7 +3300,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: Status: in progress. `final-packet prove` command observability is fitted with nested receipt binding and bounded low-card metrics proof. First incomplete command row is `self law prove`. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, install/cache parity, transactional finalization, or full Gate 92 proof.
+- [ ] Gate 92 evidence path: Status: in progress. `final-packet prove` command observability is fitted, update-goal command rows are partially fitted, and the first incomplete command row is `update-goal eligibility`. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, install/cache parity, transactional finalization, or full Gate 92 proof.
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
@@ -3403,8 +3403,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; nested law-receipt observability binding and `final-packet prove` command observability are source-local validated, while remaining command/surface rows are still partial or unfitted.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; exact coverage, full fitting, same-candidate command-query rebind, source-audit closure, and live-stack closure remain blocked.
+- [ ] Agent-queryable observability status: in progress; nested law-receipt observability binding, `final-packet prove`, and partial update-goal command telemetry are source-local validated, while remaining command/surface rows are still partial or unfitted.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; live trace query proof, exact coverage, full fitting, same-candidate command-query rebind, source-audit closure, and live-stack closure remain blocked.
 - [ ] Research source authority/article-to-law integration status: validated current for source-local research source-card anchors and operating-loop research-input guard; full Gate 93 remains in progress.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.

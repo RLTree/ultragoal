@@ -1,6 +1,7 @@
 pub(crate) mod audit;
 pub(crate) mod authority;
 pub(crate) mod graph;
+pub(crate) mod observable;
 pub(crate) mod output_paths;
 pub(crate) mod parse;
 pub(crate) mod production;
