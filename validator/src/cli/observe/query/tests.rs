@@ -3,6 +3,7 @@ use serde_json::json;
 use std::path::Path;
 
 mod metrics;
+mod metrics_freshness;
 
 fn prepare_root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::support::temp_root(label);

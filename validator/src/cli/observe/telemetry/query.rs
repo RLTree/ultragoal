@@ -73,6 +73,7 @@ pub(super) fn result(
     receipt["metric_queue_depth"] = metric_summary["queue_depth"].clone();
     receipt["metric_latency_ms"] = metric_summary["latency_ms"].clone();
     receipt["metric_error_count"] = metric_summary["error_count"].clone();
+    receipt["metric_latest_sample_unix"] = metric_summary["latest_sample_unix"].clone();
     receipt["metric_failure_class"] = json!(metric_text(&metric_summary, "failure_class", "none"));
     receipt["metric_saturation_status"] =
         json!(metric_text(&metric_summary, "saturation_status", "unknown"));
@@ -97,6 +98,7 @@ pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
     let mut latency_ms = 0_u64;
     let mut error_count = 0_u64;
     let mut queue_depth = 0_u64;
+    let mut latest_sample_unix = 0_i64;
     for sample in metric_samples(rows) {
         let labels = sample.get("metric").unwrap_or(&Value::Null);
         if operation == "unknown" {
@@ -112,6 +114,7 @@ pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
         if has_high_cardinality_label(labels) {
             high_cardinality_labels = "fail";
         }
+        latest_sample_unix = latest_sample_unix.max(prom_timestamp(&sample));
         let value = prom_value(&sample);
         match metric_label(labels, "__name__", "ultragoal_command_total") {
             "ultragoal_command_duration_ms" => latency_ms = latency_ms.max(value),
@@ -140,6 +143,7 @@ pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
         "error_count": error_count,
         "failure_class": failure_class,
         "queue_depth": queue_depth,
+        "latest_sample_unix": latest_sample_unix,
         "saturation_status": format!("{saturation_status};queue_depth={queue_depth}"),
         "high_cardinality_labels": high_cardinality_labels
     })
@@ -173,6 +177,21 @@ fn prom_value(sample: &Value) -> u64 {
         .and_then(Value::as_str)
         .and_then(|value| value.parse::<f64>().ok())
         .map(|value| value.max(0.0).round() as u64)
+        .unwrap_or(0)
+}
+
+fn prom_timestamp(sample: &Value) -> i64 {
+    sample
+        .get("value")
+        .and_then(Value::as_array)
+        .and_then(|items| items.first())
+        .and_then(|value| {
+            value
+                .as_i64()
+                .or_else(|| value.as_u64().and_then(|value| i64::try_from(value).ok()))
+                .or_else(|| value.as_f64().map(|value| value.round() as i64))
+                .or_else(|| value.as_str().and_then(|value| value.parse::<i64>().ok()))
+        })
         .unwrap_or(0)
 }
 

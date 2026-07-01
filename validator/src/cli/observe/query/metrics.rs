@@ -7,6 +7,8 @@ use super::{
     bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation, target,
 };
 
+const METRIC_QUERY_WINDOW_SECONDS: i64 = 300;
+
 pub(super) fn target_query(root: &Path, command: &ObserveCommand) -> Option<String> {
     if command.operation != ObserveOperation::MetricsQuery || command.query.is_some() {
         return None;
@@ -54,6 +56,9 @@ pub(super) fn reconciliation_failure(
     if let Some(failure) = failure_class_mismatch(event, &summary) {
         return Some(failure);
     }
+    if let Some(failure) = freshness_mismatch(event, &summary) {
+        return Some(failure);
+    }
     target_signal_mismatch(event, &summary)
 }
 
@@ -93,6 +98,21 @@ fn target_signal_mismatch(event: &Value, summary: &Value) -> Option<String> {
     underreported_signal(event, summary, "duration_ms", "latency_ms")
         .or_else(|| underreported_signal(event, summary, "task_count", "task_count"))
         .or_else(|| underreported_signal(event, summary, "queue_depth", "queue_depth"))
+}
+
+fn freshness_mismatch(event: &Value, summary: &Value) -> Option<String> {
+    let target_timestamp = event.get("timestamp").and_then(Value::as_str)?;
+    let target_unix = crate::audit::clock::parse_iso_seconds(target_timestamp)?;
+    let latest_sample = summary.get("latest_sample_unix").and_then(Value::as_i64)?;
+    if latest_sample == 0 || latest_sample <= target_unix + METRIC_QUERY_WINDOW_SECONDS {
+        return None;
+    }
+    Some(format!(
+        "observability_metric_target_outside_query_window:target_timestamp={} latest_metric_timestamp={} window_seconds={}",
+        target_timestamp,
+        crate::audit::clock::unix_to_iso(latest_sample),
+        METRIC_QUERY_WINDOW_SECONDS
+    ))
 }
 
 fn underreported_signal(
