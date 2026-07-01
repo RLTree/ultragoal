@@ -8,6 +8,7 @@ mod fitting;
 mod metric;
 mod operating;
 mod proof;
+mod research_inputs;
 mod row_contract;
 mod surfaces;
 

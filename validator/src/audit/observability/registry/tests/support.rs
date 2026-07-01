@@ -81,7 +81,8 @@ pub(super) fn fitted_inventory() -> Value {
                 "four_golden_signals_for_cli": true,
                 "wide_structured_events_with_bounded_context": true,
                 "semantic_naming_across_telemetry": true
-            }
+            },
+            "research_inputs": super::super::research_inputs::fixture_inputs()
         },
         "fitting_control_board": fitted_control_board(),
         "row_requirements": {

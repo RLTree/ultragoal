@@ -27,6 +27,7 @@ pub(crate) const REQUIRED_SIGNAL_CLASSES: &[&str] = &[
 
 pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {
     require_research_doctrine(value, out);
+    super::research_inputs::check(value, out);
     require_named_rows(
         root,
         value,

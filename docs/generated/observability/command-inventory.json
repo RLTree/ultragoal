@@ -2298,39 +2298,82 @@
     },
     "research_inputs": [
       {
+        "source_id": "openai-harness-engineering",
         "source": "OpenAI Harness Engineering",
         "url": "https://openai.com/index/harness-engineering/",
         "repo_rule": "observability is an agent-legibility loop: local worktree-scoped logs, metrics, and traces must be queryable by Codex before broad repair claims"
       },
       {
+        "source_id": "openai-codex-iterative-repair-loops",
         "source": "OpenAI iterative repair loops cookbook",
         "url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
         "repo_rule": "validation feedback must feed review-repair-validate loops instead of ending in manual JSON spelunking"
       },
       {
+        "source_id": "openai-agents-observability",
         "source": "OpenAI Agents observability/tracing",
         "url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
         "repo_rule": "workflow spans must connect tools, guardrails, custom work, and failures for debugging and later evals"
       },
       {
+        "source_id": "openai-agents-sdk-tracing",
+        "source": "OpenAI Agents SDK tracing",
+        "url": "https://openai.github.io/openai-agents-python/tracing/",
+        "repo_rule": "trace/span parentage must make command, validator, tool, guardrail, and exporter work explainable"
+      },
+      {
+        "source_id": "google-sre-monitoring-workbook",
         "source": "Google SRE monitoring guidance",
         "url": "https://sre.google/workbook/monitoring/",
         "repo_rule": "monitoring must support investigation, diagnosis, comparison, trend detection, and freshness checks"
       },
       {
+        "source_id": "google-sre-four-golden-signals",
         "source": "Google SRE four golden signals",
         "url": "https://sre.google/sre-book/monitoring-distributed-systems/",
         "repo_rule": "CLI observability must map latency, traffic, errors, and saturation into bounded metrics"
       },
       {
-        "source": "Honeycomb structured events/high cardinality",
-        "url": "https://www.honeycomb.io/blog/opentelemetry-best-practices-naming",
-        "repo_rule": "events and spans must carry rich, consistent, bounded fields instead of dashboard-only summaries"
+        "source_id": "charity-majors-structured-events",
+        "source": "Structured wide events",
+        "url": "https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/",
+        "repo_rule": "wide structured events must carry enough bounded context to answer new repair questions"
       },
       {
+        "source_id": "honeycomb-high-cardinality",
+        "source": "Honeycomb high-cardinality observability",
+        "url": "https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/",
+        "repo_rule": "high-cardinality repair identifiers stay in events and spans, while metric labels stay bounded"
+      },
+      {
+        "source_id": "opentelemetry-semantic-conventions",
         "source": "OpenTelemetry semantic conventions",
         "url": "https://opentelemetry.io/docs/concepts/semantic-conventions/",
         "repo_rule": "logs, metrics, and traces must share stable semantic names so correlation is mechanical"
+      },
+      {
+        "source_id": "openai-agent-improvement-loop",
+        "source": "OpenAI agent improvement loop",
+        "url": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop",
+        "repo_rule": "traces and feedback must feed eval generation, ranked repair, validation, before/after comparison, and durable promotion"
+      },
+      {
+        "source_id": "openai-self-improving-tax-agent",
+        "source": "OpenAI self-improving domain-agent loop",
+        "url": "https://openai.com/index/building-self-improving-tax-agents-with-codex/",
+        "repo_rule": "domain-agent improvement requires realistic tasks, expert-source feedback, rubrics, evals, repair ranking, and before/after proof"
+      },
+      {
+        "source_id": "attached-rust-devx-guide",
+        "source": "Attached Rust DevX guidance",
+        "url": "codex-attachment://rust-devx-guide",
+        "repo_rule": "Rust command loops must preserve typed diagnostics, fast feedback, package authority, and observable failure paths"
+      },
+      {
+        "source_id": "attached-typescript-frontend-guide",
+        "source": "Attached TypeScript guidance",
+        "url": "codex-attachment://typescript-frontend-guide",
+        "repo_rule": "TypeScript setup and runtime surfaces must preserve governed boundaries and observable plugin activation"
       }
     ],
     "control_loop_order": [
