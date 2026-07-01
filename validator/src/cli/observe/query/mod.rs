@@ -7,6 +7,8 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 mod body;
+mod metrics;
+mod target;
 #[cfg(test)]
 mod tests;
 mod text;
@@ -28,7 +30,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
             Some("unbounded observability query rejected"),
         );
     }
-    let query = query_text(command);
+    let query = metrics::target_query(root, command).unwrap_or_else(|| query_text(command));
     let output = query_with_retry(command, &query);
     result_from_output(root, command, query, output)
 }
@@ -43,7 +45,12 @@ pub(crate) fn result_from_output(
     let (status, rows, failure) = match output {
         Ok(body) => {
             let failure = match command.operation {
-                ObserveOperation::MetricsQuery => None,
+                ObserveOperation::MetricsQuery => metrics::reconciliation_failure(
+                    root,
+                    command,
+                    &bounded_rows(body.clone(), command.byte_limit),
+                    &candidate,
+                ),
                 _ => candidate_digest_failure(&body, &candidate),
             };
             let status = if failure.is_some() { "fail" } else { "pass" };

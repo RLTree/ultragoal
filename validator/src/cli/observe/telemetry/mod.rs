@@ -63,6 +63,10 @@ pub(crate) fn query_result(
     query::result(root, command, query_kind, query_text, rows, status, failure)
 }
 
+pub(crate) fn metric_summary(rows: &[Value]) -> Value {
+    query::metric_summary("metrics", rows)
+}
+
 pub(crate) fn command_receipt(
     root: &Path,
     input: command::CommandTelemetry<'_>,

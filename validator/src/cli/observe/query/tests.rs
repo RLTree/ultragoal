@@ -79,7 +79,8 @@ fn rejects_zero_byte_limit_and_timeout_as_unbounded_queries() {
 #[test]
 fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
     let root = prepare_root("query-metrics-no-candidate-row");
-    let command = metrics_command();
+    let mut command = metrics_command();
+    command.run_id = None;
     let body = json!({
         "status": "success",
         "data": {
@@ -105,6 +106,96 @@ fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
     assert_eq!(receipt["status"], "pass");
     assert_eq!(receipt["query_kind"], "metrics");
     std::fs::remove_dir_all(root).expect("cleanup metrics query");
+}
+
+#[test]
+fn metrics_query_rejects_unrelated_operation_for_requested_run() {
+    let root = prepare_root("query-metrics-operation-mismatch");
+    write_target_event(&root, "observe.prove", "observability_gate_failure");
+    let mut command = metrics_command();
+    command.correlation_id = Some("corr-query-bound".to_string());
+    let body = metric_body("archive.build", "archive_build_failure");
+
+    let receipt = super::result_from_output(
+        Path::new(&root),
+        &command,
+        "sum by (...)".to_string(),
+        Ok(body),
+    )
+    .expect("metrics mismatch receipt");
+
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        receipt["why_failed"],
+        "observability_metric_operation_mismatch:archive.build!=observe.prove"
+    );
+    assert_eq!(receipt["metric_operation"], "archive.build");
+    std::fs::remove_dir_all(root).expect("cleanup metrics mismatch");
+}
+
+#[test]
+fn metrics_query_accepts_target_operation_failure_signal() {
+    let root = prepare_root("query-metrics-operation-match");
+    write_target_event(&root, "observe.prove", "observability_gate_failure");
+    let mut command = metrics_command();
+    command.correlation_id = Some("corr-query-bound".to_string());
+    let body = metric_body("observe.prove", "observability_gate_failure");
+
+    let receipt = super::result_from_output(
+        Path::new(&root),
+        &command,
+        "sum by (...)".to_string(),
+        Ok(body),
+    )
+    .expect("metrics match receipt");
+
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["metric_operation"], "observe.prove");
+    assert_eq!(
+        receipt["metric_failure_class"],
+        "observability_gate_failure"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup metrics match");
+}
+
+fn write_target_event(root: &Path, operation: &str, failure_class: &str) {
+    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
+    let event = json!({
+        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "run_id": "run-query-bound",
+        "correlation_id": "corr-query-bound",
+        "candidate_digest": candidate,
+        "operation": operation,
+        "status": "fail",
+        "failure_class": failure_class,
+        "why_failed": "target command failed for a specific reason",
+        "where_failed": operation,
+        "next_repair": "repair the target operation and rerun narrowly",
+        "claim_impact": "readiness_release_completion_update_goal_blocked",
+        "law_id": crate::cli::observe::types::LAW_ID,
+        "check_id": crate::cli::observe::types::CHECK_ID,
+        "claim_id": crate::cli::observe::types::CLAIM_ID
+    });
+    crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
+}
+
+fn metric_body(operation: &str, failure_class: &str) -> String {
+    json!({
+        "status": "success",
+        "data": {
+            "result": [{
+                "metric": {
+                    "__name__": "ultragoal_command_total",
+                    "operation": operation,
+                    "status": "fail",
+                    "failure_class": failure_class,
+                    "saturation_status": "serial_command_typed"
+                },
+                "value": [1, "1"]
+            }]
+        }
+    })
+    .to_string()
 }
 
 #[test]

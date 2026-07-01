@@ -81,7 +81,7 @@ pub(super) fn result(
     Ok(receipt)
 }
 
-fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
+pub(super) fn metric_summary(query_kind: &str, rows: &[Value]) -> Value {
     if query_kind != "metrics" {
         return json!({});
     }

@@ -1,0 +1,99 @@
+use crate::cli::observe::telemetry;
+use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use serde_json::Value;
+use std::path::Path;
+
+use super::{
+    bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation, target,
+};
+
+pub(super) fn target_query(root: &Path, command: &ObserveCommand) -> Option<String> {
+    if command.operation != ObserveOperation::MetricsQuery || command.query.is_some() {
+        return None;
+    }
+    let event = target::event(root, command)?;
+    let operation = event.get("operation").and_then(Value::as_str)?;
+    if event.get("status").and_then(Value::as_str) == Some("fail") {
+        Some(bounded_failure_metric_query_for_operation(operation))
+    } else {
+        Some(bounded_metric_query_for_operation(operation))
+    }
+}
+
+pub(super) fn reconciliation_failure(
+    root: &Path,
+    command: &ObserveCommand,
+    rows: &[Value],
+    candidate: &str,
+) -> Option<String> {
+    let observed = target::event(root, command);
+    if observed.is_none() && (command.run_id.is_some() || command.correlation_id.is_some()) {
+        return Some(format!(
+            "observability_metric_target_unavailable:{}",
+            target::requested(command).unwrap_or_else(|| "run_or_correlation".to_string())
+        ));
+    }
+    let event = observed.as_ref()?;
+    if let Some(failure) = candidate_failure(event, candidate) {
+        return Some(failure);
+    }
+    let target_operation = event.get("operation").and_then(Value::as_str).unwrap_or("");
+    let summary = telemetry::metric_summary(rows);
+    let metric_operation = text_field(&summary, "operation", "unknown");
+    if target_operation.is_empty() || metric_operation == "unknown" {
+        return Some(format!(
+            "observability_metric_missing_for_target:{}",
+            target_operation_or_unknown(target_operation)
+        ));
+    }
+    if metric_operation != target_operation {
+        return Some(format!(
+            "observability_metric_operation_mismatch:{metric_operation}!={target_operation}"
+        ));
+    }
+    failure_class_mismatch(event, &summary)
+}
+
+fn candidate_failure(event: &Value, candidate: &str) -> Option<String> {
+    match event.get("candidate_digest").and_then(Value::as_str) {
+        Some(value) if value == candidate => None,
+        Some(value) => Some(format!(
+            "observability_metric_candidate_mismatch:{value}!={candidate}"
+        )),
+        None => Some("observability_metric_candidate_missing".to_string()),
+    }
+}
+
+fn failure_class_mismatch(event: &Value, summary: &Value) -> Option<String> {
+    let target_failure = event
+        .get("failure_class")
+        .and_then(Value::as_str)
+        .unwrap_or("none");
+    if target_failure == "none" {
+        return None;
+    }
+    let metric_failure = text_field(summary, "failure_class", "none");
+    if metric_failure != target_failure {
+        return Some(format!(
+            "observability_metric_failure_mismatch:{metric_failure}!={target_failure}"
+        ));
+    }
+    (summary
+        .get("error_count")
+        .and_then(Value::as_u64)
+        .unwrap_or(0)
+        == 0)
+        .then(|| format!("observability_metric_error_count_missing:{target_failure}"))
+}
+
+fn text_field<'a>(value: &'a Value, field: &str, fallback: &'a str) -> &'a str {
+    value.get(field).and_then(Value::as_str).unwrap_or(fallback)
+}
+
+fn target_operation_or_unknown(operation: &str) -> &str {
+    if operation.is_empty() {
+        "unknown"
+    } else {
+        operation
+    }
+}
