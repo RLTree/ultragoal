@@ -24,13 +24,12 @@ pub(crate) use command::{Args, Command};
 use std::path::PathBuf;
 
 pub fn main_entry() -> i32 {
-    match parse_args_from(std::env::args().skip(1).collect()).and_then(command_run::run) {
-        Ok(code) => code,
-        Err(err) => {
+    parse_args_from(std::env::args().skip(1).collect())
+        .and_then(command_run::run)
+        .unwrap_or_else(|err| {
             eprintln!("{err}");
             2
-        }
-    }
+        })
 }
 
 fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
@@ -88,15 +87,16 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 .or_else(|| opt_string(strip_build_or_verify(&raw[1..]), "--purpose"))
                 .unwrap_or_else(|| "candidate_review_anchor".to_string()),
         },
-        "review-round" => Command::ReviewRound {
-            receipt: opt_path(strip_build_or_verify(&raw[1..]), "--receipt")?,
-            validator_receipt: opt_path(strip_build_or_verify(&raw[1..]), "--validator-receipt")?,
-            review_target_receipt: opt_path(
-                strip_build_or_verify(&raw[1..]),
-                "--review-target-receipt",
-            )?,
-            archive_receipt: opt_path(strip_build_or_verify(&raw[1..]), "--archive-receipt")?,
-        },
+        "review-round" => {
+            let args = strip_build_or_verify(&raw[1..]);
+            Command::ReviewRound {
+                receipt: opt_path(args, "--receipt")?,
+                validator_receipt: opt_path(args, "--validator-receipt")?,
+                review_target_receipt: opt_path(args, "--review-target-receipt")?,
+                archive_receipt: opt_path(args, "--archive-receipt")?,
+                observability_receipt: cli::review_round::observability_receipt(args)?,
+            }
+        }
         "semantic-receipts" => Command::SemanticReceipts {
             input: opt_path(&raw[1..], "--input")?,
             out_dir: opt_path(&raw[1..], "--out-dir")?,

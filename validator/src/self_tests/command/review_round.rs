@@ -138,6 +138,7 @@ fn command_run_accepts_current_review_round_anchors() {
     }
     let receipt_path = out_dir.join("review-round-receipt.json");
     write_json(&receipt_path, &receipt);
+    let observability_receipt = rel(&root, &out_dir.join("review-round-observability.json"));
 
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -152,10 +153,24 @@ fn command_run_accepts_current_review_round_anchors() {
             review_target_path.to_str().expect("target"),
             "--archive-receipt",
             archive_path.to_str().expect("archive"),
+            "--observability-receipt",
+            &observability_receipt,
         ],
     ))
     .expect("review round command");
     assert_eq!(code, 0);
+    let observability =
+        crate::json_boundary::read_json(&root.join(&observability_receipt)).expect("observability");
+    assert_eq!(observability["status"], "pass");
+    assert_eq!(observability["operation"], "review-round.verify");
+    assert_eq!(
+        observability["check_id"],
+        "review-round-verify-observability-binding"
+    );
+    assert_eq!(
+        observability["claim_id"],
+        "review_round_source_local_observability"
+    );
     std::fs::remove_dir_all(out_dir).expect("cleanup review round command");
 }
 

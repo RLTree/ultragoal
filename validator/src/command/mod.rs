@@ -31,6 +31,7 @@ pub(crate) enum Command {
         validator_receipt: PathBuf,
         review_target_receipt: PathBuf,
         archive_receipt: PathBuf,
+        observability_receipt: PathBuf,
     },
     SemanticReceipts {
         input: PathBuf,

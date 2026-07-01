@@ -37,12 +37,14 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             validator_receipt,
             review_target_receipt,
             archive_receipt,
-        } => run_review_round(
+            observability_receipt,
+        } => crate::cli::review_round::run(
             root,
             receipt,
             validator_receipt,
             review_target_receipt,
             archive_receipt,
+            observability_receipt,
         ),
         Command::SemanticReceipts {
             input,
@@ -149,30 +151,6 @@ fn run_archive(
         receipt.display()
     );
     Ok(0)
-}
-
-fn run_review_round(
-    root: std::path::PathBuf,
-    receipt: std::path::PathBuf,
-    validator_receipt: std::path::PathBuf,
-    review_target_receipt: std::path::PathBuf,
-    archive_receipt: std::path::PathBuf,
-) -> Result<i32, String> {
-    let anchors = crate::review::round::AnchorPaths {
-        validator_receipt,
-        review_target_receipt,
-        archive_receipt,
-    };
-    match crate::review::round::validate_files(&root, &receipt, &anchors) {
-        Ok(()) => {
-            println!("review-round pass receipt={}", receipt.display());
-            Ok(0)
-        }
-        Err(err) => {
-            println!("review-round fail receipt={}: {err}", receipt.display());
-            Ok(1)
-        }
-    }
 }
 
 struct SemanticReceiptArgs {
