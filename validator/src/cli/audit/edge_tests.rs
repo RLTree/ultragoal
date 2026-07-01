@@ -79,6 +79,82 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
     fs::remove_dir_all(root).expect("cleanup");
 }
 
+#[test]
+fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
+    let root = crate::self_tests::boundaries::support::temp_root("source-audit-stdout-contract");
+    fs::create_dir_all(&root).expect("root");
+    fs::write(root.join("owned.txt"), "owned").expect("owned");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["owned.txt"]}),
+    )
+    .expect("manifest");
+    write_minimal_law_surfaces(&root);
+    let receipt = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
+    fs::create_dir_all(receipt.parent().unwrap()).expect("audit dir");
+    crate::json_boundary::write_json(
+        &receipt,
+        &json!({
+            "status":"fail",
+            "checks": {
+                "coverage-receipt": {"status":"fail"},
+                "schema-valid": {"status":"pass"}
+            }
+        }),
+    )
+    .expect("audit receipt");
+
+    observability::write_all(&root, &receipt, None, 1, false, None).expect("fail observe");
+    let fail =
+        crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("fail");
+    let fail_lines = observability::stdout_contract_for_test(&fail);
+    assert_eq!(fail_lines.len(), 2);
+    assert!(fail_lines[0].contains("ultragoal-audit-observe fail"));
+    assert!(fail_lines[0].contains("operation=source.audit"));
+    assert!(fail_lines[0].contains("candidate=sha256:"));
+    assert!(fail_lines[0].contains("supported_claims=none"));
+    assert!(fail_lines[0].contains(
+        "unsupported_claims=completion,readiness,release,reviewer_exposure,app_registry_exposure,final_packet_correctness,update_goal_eligibility"
+    ));
+    assert!(
+        fail_lines[1]
+            .contains("failed_law=full-local-observability-stack-integration-non-opaque-failure")
+    );
+    assert!(fail_lines[1].contains("failed_check=source-audit-observability-binding"));
+    assert!(fail_lines[1].contains("why=source audit failed checks: coverage-receipt"));
+    assert!(fail_lines[1].contains("where=source.audit"));
+    let run_id = fail["run_id"].as_str().expect("run id");
+    assert!(fail_lines[1].contains(&format!(
+        "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
+    )));
+    assert!(fail_lines[1].contains(&format!(
+        "query_metrics='ultragoal observe metrics query --run-id {run_id} --limit 100'"
+    )));
+    assert!(fail_lines[1].contains(&format!(
+        "query_traces='ultragoal observe traces query --run-id {run_id} --limit 100'"
+    )));
+
+    crate::json_boundary::write_json(
+        &receipt,
+        &json!({"status":"pass","checks":{"schema-valid":{"status":"pass"}}}),
+    )
+    .expect("pass receipt");
+    observability::write_all(&root, &receipt, None, 0, false, None).expect("pass observe");
+    let pass =
+        crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("pass");
+    let pass_lines = observability::stdout_contract_for_test(&pass);
+    assert_eq!(pass_lines.len(), 1);
+    assert!(pass_lines[0].contains("ultragoal-audit-observe pass"));
+    assert!(pass_lines[0].contains("operation=source.audit"));
+    assert!(
+        pass_lines[0].contains("supported_claims=source_local_audit_checks,red_fixture_report")
+    );
+    assert!(pass_lines[0].contains(
+        "unsupported_claims=completion,readiness,release,reviewer_exposure,app_registry_exposure,final_packet_correctness,update_goal_eligibility"
+    ));
+    fs::remove_dir_all(root).expect("cleanup");
+}
+
 fn write_minimal_law_surfaces(root: &std::path::Path) {
     fs::create_dir_all(root.join("examples/generated")).expect("generated dir");
     crate::json_boundary::write_json(&root.join("schemas/schema-catalog.json"), &json!([]))

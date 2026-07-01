@@ -131,7 +131,7 @@
       "family": "commands",
       "id": "source audit",
       "fitting_status": "partially_fitted",
-      "next_unfitted_surface": "pass and fail stdout contract across source-audit statuses"
+      "next_unfitted_surface": "all source audit producer paths instrumented"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
   },
@@ -176,15 +176,16 @@
         "current same-candidate logs query proof",
         "current same-candidate metrics query proof",
         "current same-candidate traces query proof",
-        "red report paired command instrumentation"
+        "red report paired command instrumentation",
+        "pass and fail stdout contract across source-audit statuses"
       ],
       "missing_surfaces": [
-        "pass and fail stdout contract across source-audit statuses",
         "all source audit producer paths instrumented"
       ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
-        "source_audit_observability_receipt_blocks_claims_on_failed_audit"
+        "source_audit_observability_receipt_blocks_claims_on_failed_audit",
+        "source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/source-audit.json"
@@ -196,7 +197,7 @@
       ],
       "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
       "current_owner_surface": "command:source audit",
-      "next_unfitted_surface": "pass and fail stdout contract across source-audit statuses"
+      "next_unfitted_surface": "all source audit producer paths instrumented"
     },
     "red fixture report": {
       "fitting_status": "partially_fitted",

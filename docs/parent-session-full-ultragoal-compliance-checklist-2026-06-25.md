@@ -3460,8 +3460,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status.
-- [ ] Full local observability stack integration and non-opaque failure status.
+- [ ] Agent-queryable observability status: in progress.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress.
 - [ ] Research source authority/article-to-law integration status.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.
