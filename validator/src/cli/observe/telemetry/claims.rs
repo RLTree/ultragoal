@@ -60,9 +60,21 @@ pub(super) fn next_repair_for(
     if status == "pass" {
         "keep receipt same-candidate and rerun source audit before any readiness claim"
     } else if failure.is_some_and(|text| {
+        text.contains("first_failure=observability_command_fitting_query_not_current")
+            || text.contains("first_failure=observability_surface_fitting_query_not_current")
+    }) {
+        "refresh the first same-candidate query proof named in why_failed: rerun the target command, query logs metrics traces for that run, then rerun observe prove"
+    } else if failure.is_some_and(|text| {
+        text.contains("first_failure=observability_command_fitting_receipt_not_current")
+            || text.contains("first_failure=observability_surface_fitting_receipt_not_current")
+            || text.contains("first_failure=observability_command_fitting_receipt_missing")
+            || text.contains("first_failure=observability_surface_fitting_receipt_missing")
+    }) {
+        "refresh the first command receipt named in why_failed on the current candidate, then query logs metrics traces and rerun observe prove"
+    } else if failure.is_some_and(|text| {
         text.contains("fitting inventory") || text.contains("command inventory")
     }) {
-        "fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove"
+        "repair the first_failure and control_board_first_incomplete named in why_failed, then rerun observe prove"
     } else if failure.is_some_and(|text| text.contains("requested telemetry target unavailable")) {
         "run target command once on the current candidate, query logs metrics traces, then rerun explain"
     } else if failure.is_some_and(|text| text.contains("observed telemetry candidate digest")) {

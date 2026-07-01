@@ -44,11 +44,59 @@ fn fitting_inventory_complete(root: &Path) -> Result<(), String> {
     if failures.is_empty() {
         Ok(())
     } else {
-        Err(format!(
-            "observability fitting inventory incomplete: {}",
-            failures.join("; ")
-        ))
+        Err(fitting_inventory_failure_summary(root, &failures))
     }
+}
+
+fn fitting_inventory_failure_summary(root: &Path, failures: &[String]) -> String {
+    let inventory = crate::json_boundary::read_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+    )
+    .unwrap_or(Value::Null);
+    let board = inventory
+        .get("fitting_control_board")
+        .unwrap_or(&Value::Null);
+    let first_incomplete = board.get("first_incomplete").unwrap_or(&Value::Null);
+    format!(
+        "observability fitting inventory incomplete: status={} total_failures={} first_failure={} control_board_first_family={} control_board_first_incomplete={} control_board_first_status={} next_unfitted_surface={} family_counts={}",
+        text_field(board, "status", "unknown"),
+        failures.len(),
+        failures.first().map(String::as_str).unwrap_or("none"),
+        text_field(first_incomplete, "family", "unknown"),
+        text_field(first_incomplete, "id", "unknown"),
+        text_field(first_incomplete, "fitting_status", "unknown"),
+        text_field(first_incomplete, "next_unfitted_surface", "unknown"),
+        family_counts(board)
+    )
+}
+
+fn family_counts(board: &Value) -> String {
+    let Some(families) = board.get("families").and_then(Value::as_object) else {
+        return "unavailable".to_string();
+    };
+    let mut rows = families
+        .iter()
+        .map(|(family, row)| {
+            format!(
+                "{}={}/{}/{}/{}",
+                family,
+                count_field(row, "total"),
+                count_field(row, "fitted"),
+                count_field(row, "partially_fitted"),
+                count_field(row, "unfitted")
+            )
+        })
+        .collect::<Vec<_>>();
+    rows.sort();
+    rows.join(",")
+}
+
+fn count_field(value: &Value, field: &str) -> u64 {
+    value.get(field).and_then(Value::as_u64).unwrap_or(0)
+}
+
+fn text_field<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
+    value.get(field).and_then(Value::as_str).unwrap_or(default)
 }
 
 pub(crate) fn query_result(

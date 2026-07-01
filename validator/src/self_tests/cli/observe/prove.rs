@@ -38,15 +38,14 @@ fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
     let proof =
         observe::telemetry::prove(&root, &command(&["observe", "prove"])).expect("prove receipt");
     assert_eq!(proof["status"], "fail");
-    assert!(
-        proof["why_failed"]
-            .as_str()
-            .unwrap()
-            .contains("observability_command_inventory_missing")
-    );
+    let why = proof["why_failed"].as_str().unwrap();
+    assert!(why.contains("total_failures="));
+    assert!(why.contains("first_failure=observability_fitting_control_board_missing"));
+    assert!(why.contains("control_board_first_incomplete=unknown"));
+    assert!(!why.contains("; observability_command_inventory_missing"));
     assert_eq!(
         proof["next_repair"],
-        "fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove"
+        "repair the first_failure and control_board_first_incomplete named in why_failed, then rerun observe prove"
     );
     fs::remove_dir_all(root).expect("cleanup root");
 }
