@@ -133,6 +133,24 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     assert_eq!(value["status"], "fail");
     assert_eq!(value["candidate_digest"], current);
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
+    assert_eq!(
+        value["check_id"],
+        "transaction-finalize-observability-binding"
+    );
+    assert_eq!(value["observability"]["operation"], "transaction_finalize");
+    assert_eq!(value["observability"]["surface"], "source_package");
+    assert_eq!(
+        value["receipt_observability_binding"]["command_receipt_path"],
+        RECEIPT
+    );
+    let run_id = value["run_id"].as_str().expect("run id");
+    let lines = crate::cli::control::plane::transactional_stdout::lines(&root, &receipt, &value);
+    assert_eq!(lines.len(), 2);
+    assert!(lines[0].contains("ultragoal-transaction-finalize fail"));
+    assert!(lines[1].contains("failed_check=transaction-finalize-observability-binding"));
+    assert!(lines[1].contains(&format!(
+        "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
+    )));
     assert!(
         value["failure"]["observed_failures"]
             .as_array()

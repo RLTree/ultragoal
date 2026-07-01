@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 21,
+        "fitted": 22,
         "partially_fitted": 23,
-        "unfitted": 18
+        "unfitted": 17
       },
       "surfaces": {
         "total": 10,
@@ -926,27 +926,36 @@
       "next_unfitted_surface": "none"
     },
     "transaction finalize": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "transaction logs",
-        "metrics",
-        "traces",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "receipt binding",
-        "query proof",
+        "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "transaction-finalize-observability-binding",
+      "focused_tests": [
+        "transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs",
+        "transaction_references_use_typed_receipt_status_not_file_existence"
+      ],
       "receipt_paths": [
-        "validation_artifacts/cli/transactional-finalization.json"
+        "validation_artifacts/cli/transactional-finalization-receipt.json"
       ],
-      "live_query_proof_paths": [],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/transaction-finalize-logs-query.json",
+        "validation_artifacts/observability/transaction-finalize-metrics-query.json",
+        "validation_artifacts/observability/transaction-finalize-traces-query.json",
+        "validation_artifacts/observability/transaction-finalize-explain-failure.json"
+      ],
       "claim_impact": "blocks_transactional_finalization_readiness_release_completion_update_goal",
       "current_owner_surface": "command:transaction finalize",
-      "next_unfitted_surface": "transaction logs"
+      "next_unfitted_surface": "none"
     },
     "self law prove": {
       "fitting_status": "unfitted",

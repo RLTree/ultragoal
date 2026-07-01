@@ -91,6 +91,78 @@
           }
         }
       ]
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "law_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "check_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "why_failed": {
+      "type": "string"
+    },
+    "where_failed": {
+      "type": "string"
+    },
+    "next_repair": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receipt_observability_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command_receipt_path",
+        "run_id",
+        "correlation_id",
+        "log_stream_digest",
+        "metric_snapshot_digest",
+        "trace_bundle_digest"
+      ],
+      "properties": {
+        "command_receipt_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "log_stream_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "metric_snapshot_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "trace_bundle_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        }
+      }
+    },
+    "observability": {
+      "$ref": "observability-receipt.schema.json"
     }
   },
   "$defs": {
