@@ -125,13 +125,7 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
             };
             Command::FinalPacket(command)
         }
-        "product" => {
-            let Some(command) = cli::product::parse(raw)? else {
-                return Err(usage());
-            };
-            Command::Product(command)
-        }
-        "fit-repo" => {
+        "product" | "fit-repo" => {
             let Some(command) = cli::product::parse(raw)? else {
                 return Err(usage());
             };
@@ -161,6 +155,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Halo(command)
             } else if let Some(command) = cli::improvement_loop::parse(raw)? {
                 Command::ImprovementLoop(command)
+            } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
+                Command::MandatoryLawValidation(command)
             } else if let Some(command) = cli::observe::parse(raw)? {
                 Command::Observe(command)
             } else if let Some(command) = cli::openai::parse(raw)? {

@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 4,
+        "fitted": 5,
         "partially_fitted": 23,
-        "unfitted": 35
+        "unfitted": 34
       },
       "surfaces": {
         "total": 10,
@@ -129,7 +129,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "mandatory-law validation",
+      "id": "standards-gardener rebind",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -273,22 +273,41 @@
       "next_unfitted_surface": "none"
     },
     "mandatory-law validation": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "law/check spans",
-        "query proof"
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "command-level observability receipt",
+        "mandatory-law-only claim ceiling",
+        "claim-blocking fail receipt",
+        "local spool emission",
+        "current same-candidate logs query proof",
+        "current same-candidate metrics query proof",
+        "current same-candidate traces query proof",
+        "pass and fail stdout contract",
+        "law/check task fan-out",
+        "real runtime scheduler telemetry for all mandatory-law rows",
+        "bounded parallel pure-read scheduler over mandatory-law surface receipts",
+        "targeted --law helper for focused repair"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "missing_surfaces": [],
+      "validator_check_id": "mandatory-law-validation-observability-binding",
+      "focused_tests": [
+        "mandatory_law_validation_parse_supports_default_targeted_and_alias",
+        "mandatory_law_validation_command_writes_pass_and_fail_observability",
+        "default_mandatory_law_validation_uses_parallel_scheduler",
+        "mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries",
+        "mandatory_law_production_binding_rejects_row_shape_substitutes"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/mandatory-law-validation.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/mandatory-law-validation-logs-query.json",
+        "validation_artifacts/observability/mandatory-law-validation-metrics-query.json",
+        "validation_artifacts/observability/mandatory-law-validation-traces-query.json"
+      ],
+      "claim_impact": "mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal",
       "current_owner_surface": "command:mandatory-law validation",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "standards-gardener rebind": {
       "fitting_status": "unfitted",

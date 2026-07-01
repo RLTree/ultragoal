@@ -12,7 +12,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
     );
     let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
     let law = "generated-proof-artifact-provenance-anti-fabrication";
-    let missing = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures_for_test(
+    let missing = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
         &root, &store, law,
     );
     for expected in [
@@ -40,10 +40,9 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
         "self-law-receipt",
         "self_update_goal_eligibility",
     );
-    let failures =
-        crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures_for_test(
-            &root, &store, law,
-        );
+    let failures = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+        &root, &store, law,
+    );
     assert!(failures.is_empty(), "{failures:?}");
 
     crate::self_tests::audit::final_packet::support::write_fail_closed_proof(&root, &current);
@@ -59,12 +58,11 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
         "self-law-receipt",
         "self_update_goal_eligibility",
     );
-    let fail_closed =
-        crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures_for_test(
-            &root,
-            &store,
-            "adversarial-packet-tampering-forged-proof-rejection",
-        );
+    let fail_closed = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+        &root,
+        &store,
+        "adversarial-packet-tampering-forged-proof-rejection",
+    );
     assert!(fail_closed.is_empty(), "{fail_closed:?}");
     std::fs::remove_dir_all(root).expect("cleanup anti-theater deps");
 }

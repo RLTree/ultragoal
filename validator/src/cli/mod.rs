@@ -4,6 +4,7 @@ pub(crate) mod final_packet;
 pub(crate) mod garbage;
 pub(crate) mod halo;
 pub(crate) mod improvement_loop;
+pub(crate) mod mandatory_law_validation;
 pub(crate) mod observe;
 pub(crate) mod openai;
 pub(crate) mod package;

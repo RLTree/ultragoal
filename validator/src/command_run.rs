@@ -80,6 +80,9 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::Garbage(command) => crate::cli::garbage::collection::run(&root, &command),
         Command::Halo(command) => crate::cli::halo::run(&root, &command),
         Command::ImprovementLoop(command) => crate::cli::improvement_loop::run(&root, &command),
+        Command::MandatoryLawValidation(command) => {
+            crate::cli::mandatory_law_validation::run(&root, &command)
+        }
         Command::Observe(command) => crate::cli::observe::run(&root, &command),
         Command::OpenAi(command) => crate::cli::openai::run(&root, &command),
         Command::Promptfoo(command) => crate::cli::promptfoo::run(&root, &command),

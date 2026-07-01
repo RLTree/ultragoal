@@ -74,8 +74,7 @@ pub(crate) fn current_check_failures_for_test(
     production::current_check_failures(value, law, failures)
 }
 
-#[cfg(test)]
-pub(crate) fn anti_theater_dependency_failures_for_test(
+pub(crate) fn anti_theater_dependency_failures(
     root: &Path,
     store: &crate::schema_catalog::SchemaStore,
     law: &str,
