@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 7,
-        "partially_fitted": 40,
+        "fitted": 8,
+        "partially_fitted": 39,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "foundational-trace check",
+      "id": "coverage prove",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -642,7 +642,7 @@
       ]
     },
     "foundational-trace check": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "foundational-trace-only claim ceiling",
@@ -656,18 +656,23 @@
         "source-obligation matrix and foundational trace read checks",
         "real runtime scheduler telemetry for all foundational trace rows",
         "bounded parallel pure-read scheduler over foundational trace rows",
-        "targeted --obligation helper for focused repair"
-      ],
-      "missing_surfaces": [
+        "targeted --obligation helper for focused repair",
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "explain-failure observed repair fields for foundational-trace command receipt"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "foundational-trace-check-observability-binding",
       "focused_tests": [
         "foundational_trace_parse_requires_strict_and_supports_jobs",
         "foundational_trace_command_writes_pass_and_fail_observability",
-        "default_foundational_trace_check_uses_parallel_scheduler"
+        "default_foundational_trace_check_uses_parallel_scheduler",
+        "foundational_trace_parse_rejects_argument_edges",
+        "foundational_trace_failure_edges_and_absolute_receipt_are_observable",
+        "foundational_trace_runtime_metrics_report_resource_and_saturation_states",
+        "foundational_trace_run_propagates_telemetry_and_receipt_write_errors",
+        "explain_reports_current_failure_and_bad_root_errors"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/foundational-trace-check.json"
@@ -677,9 +682,9 @@
         "validation_artifacts/observability/foundational-trace-check-metrics-query.json",
         "validation_artifacts/observability/foundational-trace-check-traces-query.json"
       ],
-      "claim_impact": "foundational_trace_failed_blocks_readiness_release_completion_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_foundational_trace_check_observability_source_local_only_no_readiness_release_completion_update_goal; production_foundational_trace_check_still_fails_on_stale_foundational_trace_source_bindings",
       "current_owner_surface": "command:foundational-trace check",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -691,9 +696,22 @@
         "validation_artifacts/observability/foundational-trace-check-metrics-query.json",
         "validation_artifacts/observability/foundational-trace-check-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "foundational_trace_parse_requires_strict_and_supports_jobs",
+        "foundational_trace_parse_rejects_argument_edges",
+        "foundational_trace_failure_edges_and_absolute_receipt_are_observable",
+        "foundational_trace_run_propagates_telemetry_and_receipt_write_errors"
+      ],
+      "green_fixtures": [
+        "foundational_trace_command_writes_pass_and_fail_observability",
+        "default_foundational_trace_check_uses_parallel_scheduler"
+      ],
+      "tamper_fixtures": [
+        "foundational_trace_parse_rejects_argument_edges",
+        "foundational_trace_runtime_metrics_report_resource_and_saturation_states",
+        "foundational_trace_run_propagates_telemetry_and_receipt_write_errors",
+        "explain_reports_current_failure_and_bad_root_errors"
+      ]
     },
     "coverage prove": {
       "fitting_status": "partially_fitted",
