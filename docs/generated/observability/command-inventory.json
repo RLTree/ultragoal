@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 3,
+        "fitted": 4,
         "partially_fitted": 23,
-        "unfitted": 36
+        "unfitted": 35
       },
       "surfaces": {
         "total": 10,
@@ -129,7 +129,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "schema validation",
+      "id": "mandatory-law validation",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -239,22 +239,38 @@
       "next_unfitted_surface": "none"
     },
     "schema validation": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "receipt dereference spans",
-        "query proof"
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "command-level observability receipt",
+        "schema-validation-only claim ceiling",
+        "claim-blocking fail receipt",
+        "local spool emission",
+        "current same-candidate logs query proof",
+        "current same-candidate metrics query proof",
+        "current same-candidate traces query proof",
+        "pass and fail stdout contract",
+        "real runtime scheduler telemetry for mapped schema validation",
+        "bounded parallel pure-read scheduler over package schema map",
+        "targeted schema/file helper guarded by package-path validation"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "missing_surfaces": [],
+      "validator_check_id": "schema-validation-observability-binding",
+      "focused_tests": [
+        "schema_validation_parse_supports_default_targeted_and_alias",
+        "schema_validation_command_writes_pass_and_fail_observability",
+        "default_schema_validation_uses_mapped_parallel_path"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/schema-validation.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/schema-validation-logs-query.json",
+        "validation_artifacts/observability/schema-validation-metrics-query.json",
+        "validation_artifacts/observability/schema-validation-traces-query.json"
+      ],
+      "claim_impact": "supports_schema_validation_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:schema validation",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "mandatory-law validation": {
       "fitting_status": "unfitted",

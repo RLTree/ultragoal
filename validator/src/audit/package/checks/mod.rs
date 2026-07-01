@@ -13,6 +13,11 @@ pub struct CheckResults {
     pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
 
+pub struct SchemaValidationResults {
+    pub failures: Vec<String>,
+    pub scheduler_metrics: Vec<crate::scheduler::Metrics>,
+}
+
 #[cfg(test)]
 pub fn checks(
     root: &Path,
@@ -64,6 +69,19 @@ pub fn final_hygiene_check(root: &Path, failures: &mut BTreeMap<String, Vec<Stri
             .entry("plugin-inventory-closure".to_string())
             .or_default()
             .extend(bytecode);
+    }
+}
+
+pub fn schema_validation_results(
+    root: &Path,
+    store: &SchemaStore,
+    scheduler: SchedulerConfig,
+) -> SchemaValidationResults {
+    let mut failures = BTreeMap::from([("schema-valid".to_string(), Vec::new())]);
+    let scheduler_metrics = mapped_schema_checks(root, store, scheduler, &mut failures);
+    SchemaValidationResults {
+        failures: failures.remove("schema-valid").unwrap_or_default(),
+        scheduler_metrics,
     }
 }
 

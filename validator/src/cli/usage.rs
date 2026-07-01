@@ -23,6 +23,7 @@ pub(crate) fn text() -> &'static str {
         "    [--mode hot|focused|standard|strict|strict_fixtures|strict_coverage|strict_final]\n",
         "    [--jobs N]\n",
         "  ultragoal red fixture report [--report <path>]\n",
+        "  ultragoal schema validation [--schema <id> --file <path>] [--jobs N]\n",
         "  ultragoal package digest\n",
         "  ultragoal package-digest\n",
         "  ultragoal coverage prove --receipt <path>\n",

@@ -60,6 +60,7 @@ pub(crate) enum Command {
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),
     RedReport(crate::cli::red_report::RedReportCommand),
+    SchemaValidation(crate::cli::schema_validation::SchemaValidationCommand),
     Routine(crate::cli::routine::RoutineCommand),
     Session(crate::cli::session::SessionCommand),
     PackageDigest,

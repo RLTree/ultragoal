@@ -13,6 +13,7 @@ pub(crate) mod promptfoo;
 pub(crate) mod red_report;
 pub(crate) mod routine;
 pub(crate) mod rust;
+pub(crate) mod schema_validation;
 pub(crate) mod session;
 pub(crate) mod standards;
 pub(crate) mod usage;
