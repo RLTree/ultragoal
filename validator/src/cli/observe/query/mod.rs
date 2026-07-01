@@ -2,9 +2,10 @@ use crate::cli::observe::telemetry;
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::Value;
 use std::path::Path;
-use std::process::Command;
 use std::thread;
 use std::time::{Duration, Instant};
+
+const NO_MATCHING_ROWS: &str = "observability query returned no matching rows";
 
 mod body;
 mod metrics;
@@ -12,11 +13,14 @@ mod target;
 #[cfg(test)]
 mod tests;
 mod text;
+mod transport;
 pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
 pub(crate) use text::{
     bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation, query_text,
     trace_tags,
 };
+#[cfg(test)]
+pub(crate) use transport::{curl_output_body, curl_result_body};
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     if command.row_limit == 0 || command.byte_limit == 0 || command.timeout_ms == 0 {
@@ -31,10 +35,12 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         );
     }
     let query = metrics::target_query(root, command).unwrap_or_else(|| query_text(command));
-    let output = query_with_retry(command, &query);
-    result_from_output(root, command, query, output)
+    let candidate = crate::package::inventory::package_digest(root)?;
+    let output = query_with_retry(root, command, &query, &candidate);
+    result_from_output_for_candidate(root, command, query, output, candidate)
 }
 
+#[cfg(test)]
 pub(crate) fn result_from_output(
     root: &Path,
     command: &ObserveCommand,
@@ -42,6 +48,16 @@ pub(crate) fn result_from_output(
     output: Result<String, String>,
 ) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
+    result_from_output_for_candidate(root, command, query, output, candidate)
+}
+
+fn result_from_output_for_candidate(
+    root: &Path,
+    command: &ObserveCommand,
+    query: String,
+    output: Result<String, String>,
+    candidate: String,
+) -> Result<Value, String> {
     let (status, rows, failure) = match output {
         Ok(body) => {
             let failure = match command.operation {
@@ -69,8 +85,17 @@ pub(crate) fn result_from_output(
     )
 }
 
-fn query_with_retry(command: &ObserveCommand, query: &str) -> Result<String, String> {
-    retry_until_match(command, || live_query(command, query))
+fn query_with_retry(
+    root: &Path,
+    command: &ObserveCommand,
+    query: &str,
+    candidate: &str,
+) -> Result<String, String> {
+    retry_until_reconciled(
+        command,
+        || live_query(command, query),
+        |body| live_result_failure(root, command, body, candidate),
+    )
 }
 
 #[cfg(test)]
@@ -86,34 +111,84 @@ pub(crate) fn retry_until_match_for_test(
     })
 }
 
-fn retry_until_match<F>(command: &ObserveCommand, mut fetch: F) -> Result<String, String>
+#[cfg(test)]
+fn retry_until_match<F>(command: &ObserveCommand, fetch: F) -> Result<String, String>
 where
     F: FnMut() -> Result<String, String>,
 {
+    retry_until_reconciled(command, fetch, |body| {
+        if has_matches(body, command.operation) {
+            None
+        } else {
+            Some(NO_MATCHING_ROWS.to_string())
+        }
+    })
+}
+
+fn retry_until_reconciled<F, V>(
+    command: &ObserveCommand,
+    mut fetch: F,
+    mut validate: V,
+) -> Result<String, String>
+where
+    F: FnMut() -> Result<String, String>,
+    V: FnMut(&str) -> Option<String>,
+{
     let deadline = Instant::now() + Duration::from_millis(command.timeout_ms.max(1));
+    let mut last_body_failure = None;
+    let mut last_error = None;
     loop {
-        let output = fetch();
-        let failure = match output {
-            Ok(body) if has_matches(&body, command.operation) => return Ok(body),
-            Ok(_) => "observability query returned no matching rows".to_string(),
-            Err(err) => err,
-        };
+        match fetch() {
+            Ok(body) => match validate(&body) {
+                None => return Ok(body),
+                Some(failure) => {
+                    last_body_failure = Some((body, failure));
+                }
+            },
+            Err(err) => {
+                last_error = Some(err);
+            }
+        }
         if Instant::now() >= deadline {
-            return Err(failure);
+            return match last_body_failure {
+                Some((body, failure)) if failure != NO_MATCHING_ROWS => Ok(body),
+                Some((_, failure)) => Err(last_error.unwrap_or(failure)),
+                None => Err(last_error.unwrap_or_else(|| NO_MATCHING_ROWS.to_string())),
+            };
         }
         thread::sleep(Duration::from_millis(250));
     }
 }
 
+fn live_result_failure(
+    root: &Path,
+    command: &ObserveCommand,
+    body: &str,
+    candidate: &str,
+) -> Option<String> {
+    if !has_matches(body, command.operation) {
+        return Some(NO_MATCHING_ROWS.to_string());
+    }
+    if command.operation != ObserveOperation::MetricsQuery {
+        return None;
+    }
+    metrics::reconciliation_failure(
+        root,
+        command,
+        &bounded_rows(body.to_string(), command.byte_limit),
+        candidate,
+    )
+}
+
 fn live_query(command: &ObserveCommand, query: &str) -> Result<String, String> {
     match command.operation {
         ObserveOperation::LogsQuery => {
-            curl("http://127.0.0.1:9428/select/logsql/query", query, command)
+            transport::curl("http://127.0.0.1:9428/select/logsql/query", query, command)
         }
         ObserveOperation::MetricsQuery => {
-            curl("http://127.0.0.1:8428/api/v1/query", query, command)
+            transport::curl("http://127.0.0.1:8428/api/v1/query", query, command)
         }
-        ObserveOperation::TracesQuery => curl_traces(command),
+        ObserveOperation::TracesQuery => transport::curl_traces(command),
         _ => Err("not an observability query".to_string()),
     }
 }
@@ -124,62 +199,5 @@ pub(crate) fn kind(operation: ObserveOperation) -> &'static str {
         ObserveOperation::MetricsQuery => "metrics",
         ObserveOperation::TracesQuery => "traces",
         _ => "logs",
-    }
-}
-
-fn curl(url: &str, query: &str, command: &ObserveCommand) -> Result<String, String> {
-    let seconds = (command.timeout_ms.max(1) as f64 / 1000.0).to_string();
-    let output = Command::new("curl")
-        .args([
-            "--fail",
-            "--silent",
-            "--show-error",
-            "--max-time",
-            &seconds,
-            "--get",
-            url,
-            "--data-urlencode",
-            &format!("query={query}"),
-        ])
-        .output();
-    curl_result_body(output)
-}
-
-fn curl_traces(command: &ObserveCommand) -> Result<String, String> {
-    let seconds = (command.timeout_ms.max(1) as f64 / 1000.0).to_string();
-    let tags = trace_tags(command);
-    let output = Command::new("curl")
-        .args([
-            "--fail",
-            "--silent",
-            "--show-error",
-            "--max-time",
-            &seconds,
-            "--get",
-            "http://127.0.0.1:10428/select/jaeger/api/traces",
-            "--data-urlencode",
-            "service=ultragoal",
-            "--data-urlencode",
-            &format!("tags={tags}"),
-        ])
-        .output();
-    curl_result_body(output)
-}
-
-pub(crate) fn curl_result_body(
-    output: Result<std::process::Output, std::io::Error>,
-) -> Result<String, String> {
-    let output = output.map_err(|err| format!("curl launch failed: {err}"))?;
-    curl_output_body(output)
-}
-
-pub(crate) fn curl_output_body(output: std::process::Output) -> Result<String, String> {
-    if output.status.success() {
-        Ok(String::from_utf8_lossy(&output.stdout).into_owned())
-    } else {
-        Err(format!(
-            "curl query failed: {}",
-            String::from_utf8_lossy(&output.stderr)
-        ))
     }
 }

@@ -2,6 +2,30 @@ use serde_json::json;
 use std::path::Path;
 
 #[test]
+fn metrics_query_retry_waits_for_reconciled_rows() {
+    let command = super::metrics_command();
+    let mut attempts = 0;
+
+    let body = super::super::retry_until_reconciled(
+        &command,
+        || {
+            attempts += 1;
+            Ok(format!("body-{attempts}"))
+        },
+        |body| {
+            (body == "body-1").then(|| {
+                "observability_metric_run_reconciliation_mismatch:duration_ms metric=1 target=2"
+                    .to_string()
+            })
+        },
+    )
+    .expect("retry reaches reconciled body");
+
+    assert_eq!(body, "body-2");
+    assert_eq!(attempts, 2);
+}
+
+#[test]
 fn metrics_query_reports_target_run_outside_bounded_window() {
     let root = super::prepare_root("query-metrics-stale-target-window");
     write_target_event(&root);
