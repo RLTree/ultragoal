@@ -75,6 +75,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             run_transactional_finalization(root, receipt)
         }
         Command::Control(command) => crate::cli::control::plane::run(&root, &command),
+        Command::FoundationalTrace(command) => crate::cli::foundational_trace::run(&root, &command),
         Command::Performance(command) => crate::cli::performance::run(&root, &command),
         Command::Rust(command) => crate::cli::rust::run(&root, &command),
         Command::Garbage(command) => crate::cli::garbage::collection::run(&root, &command),

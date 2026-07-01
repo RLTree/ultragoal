@@ -51,6 +51,7 @@ pub(crate) enum Command {
         receipt: PathBuf,
     },
     Control(crate::cli::control::plane::ControlCommand),
+    FoundationalTrace(crate::cli::foundational_trace::FoundationalTraceCommand),
     Performance(crate::cli::performance::PerformanceCommand),
     Rust(crate::cli::rust::RustCommand),
     Garbage(crate::cli::garbage::collection::GarbageCommand),

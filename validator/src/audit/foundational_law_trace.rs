@@ -14,19 +14,51 @@ pub fn failures(root: &Path, matrix: &Value) -> Vec<String> {
 }
 
 pub fn value_failures(root: &Path, matrix: &Value, trace: &Value) -> Vec<String> {
-    let Some(entries) = trace.get("entries").and_then(Value::as_array) else {
-        return vec!["foundational_law_trace_entries_missing".to_string()];
+    let entries = match trace_entries(trace) {
+        Ok(entries) => entries,
+        Err(failure) => return vec![failure],
     };
-    let required = matrix_obligation_ids(matrix);
-    let standards = standards_row_ids(root);
-    let checks = crate::audit::contract::CHECK_IDS
-        .iter()
-        .copied()
-        .collect::<BTreeSet<_>>();
-    let red = red_fixture_ids(root);
-    let mut seen = BTreeSet::new();
+    let context = trace_context(root, matrix);
     let mut out = Vec::new();
-    for id in &required {
+    out.extend(missing_required_failures(&entries, &context));
+    out.extend(entry_id_failures(&entries, &context));
+    for row in &entries {
+        out.extend(row_failures(root, row, &context));
+    }
+    out
+}
+
+#[derive(Clone)]
+pub(crate) struct TraceContext {
+    required: BTreeSet<String>,
+    standards: BTreeSet<String>,
+    checks: BTreeSet<&'static str>,
+    red: BTreeSet<String>,
+}
+
+pub(crate) fn trace_entries(trace: &Value) -> Result<Vec<Value>, String> {
+    trace
+        .get("entries")
+        .and_then(Value::as_array)
+        .cloned()
+        .ok_or_else(|| "foundational_law_trace_entries_missing".to_string())
+}
+
+pub(crate) fn trace_context(root: &Path, matrix: &Value) -> TraceContext {
+    TraceContext {
+        required: matrix_obligation_ids(matrix),
+        standards: standards_row_ids(root),
+        checks: crate::audit::contract::CHECK_IDS
+            .iter()
+            .copied()
+            .collect::<BTreeSet<_>>(),
+        red: red_fixture_ids(root),
+    }
+}
+
+pub(crate) fn missing_required_failures(entries: &[Value], context: &TraceContext) -> Vec<String> {
+    let mut out = Vec::new();
+    for id in &context.required {
         if !entries
             .iter()
             .any(|row| str_field(row, "obligation_id") == *id)
@@ -34,28 +66,27 @@ pub fn value_failures(root: &Path, matrix: &Value, trace: &Value) -> Vec<String>
             out.push(format!("foundational_law_trace_missing_obligation:{id}"));
         }
     }
+    out
+}
+
+pub(crate) fn entry_id_failures(entries: &[Value], context: &TraceContext) -> Vec<String> {
+    let mut seen = BTreeSet::new();
+    let mut out = Vec::new();
     for row in entries {
         let id = str_field(row, "obligation_id");
         if id.is_empty() {
             out.push("foundational_law_trace_missing_obligation_id".to_string());
-        } else if !required.contains(&id) {
+        } else if !context.required.contains(&id) {
             out.push(format!("foundational_law_trace_unknown_obligation:{id}"));
         }
         if !seen.insert(id.clone()) {
             out.push(format!("foundational_law_trace_duplicate_obligation:{id}"));
         }
-        out.extend(row_failures(root, row, &standards, &checks, &red));
     }
     out
 }
 
-fn row_failures(
-    root: &Path,
-    row: &Value,
-    standards: &BTreeSet<String>,
-    checks: &BTreeSet<&str>,
-    red: &BTreeSet<String>,
-) -> Vec<String> {
+pub(crate) fn row_failures(root: &Path, row: &Value, context: &TraceContext) -> Vec<String> {
     let id = str_field(row, "obligation_id");
     let mut out = Vec::new();
     if !source_artifact_valid(root, row) {
@@ -67,17 +98,17 @@ fn row_failures(
         }
     }
     let standard = str_field(row, "standards_row_id");
-    if !standards.contains(&standard) {
+    if !context.standards.contains(&standard) {
         out.push(format!(
             "foundational_law_trace_unknown_standard:{id}:{standard}"
         ));
     }
     let check = str_field(row, "validator_check_id");
-    if !checks.contains(check.as_str()) {
+    if !context.checks.contains(check.as_str()) {
         out.push(format!("foundational_law_trace_unknown_check:{id}:{check}"));
     }
     let red_id = str_field(row, "red_fixture_id");
-    if !red.contains(&red_id) {
+    if !context.red.contains(&red_id) {
         out.push(format!(
             "foundational_law_trace_unknown_red_fixture:{id}:{red_id}"
         ));

@@ -173,6 +173,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Session(command)
             } else if let Some(command) = cli::source_obligations::parse(raw)? {
                 Command::SourceObligations(command)
+            } else if let Some(command) = cli::foundational_trace::parse(raw)? {
+                Command::FoundationalTrace(command)
             } else if let Some(command) = cli::control::plane::parse(raw) {
                 Command::Control(command)
             } else {
