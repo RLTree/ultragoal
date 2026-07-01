@@ -43,6 +43,34 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         )
     );
 
+    let mut missing_command = super::super::support::fitted_inventory();
+    let commands = missing_command["commands"].as_array_mut().unwrap();
+    commands.insert(0, json!(42));
+    commands.retain(|row| row.as_str() != Some("package digest"));
+    failures.clear();
+    super::super::super::fitting::check(&root, &missing_command, &mut failures);
+    assert!(
+        failures.contains(&"observability_command_inventory_missing:package digest".to_string())
+    );
+
+    let mut malformed_containers = super::super::support::fitted_inventory();
+    malformed_containers["commands"] = json!("not an array");
+    malformed_containers["fitting_inventory"] = json!("not an object");
+    malformed_containers["row_requirements"] = json!({});
+    failures.clear();
+    super::super::super::fitting::check(&root, &malformed_containers, &mut failures);
+    assert!(
+        failures
+            .iter()
+            .any(|item| item.starts_with("observability_command_inventory_missing:"))
+    );
+    assert!(failures.contains(&"observability_command_fitting_inventory_missing".to_string()));
+    assert!(
+        failures.iter().any(|item| {
+            item.starts_with("observability_command_inventory_requirement_missing:")
+        })
+    );
+
     let mut partial_metadata = super::super::support::fitted_inventory();
     partial_metadata["fitting_inventory"]["package digest"]["fitting_status"] =
         json!("partially_fitted");

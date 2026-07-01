@@ -155,6 +155,11 @@ fn namespace_command_writes_pass_observability_receipt() {
             .iter()
             .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"])
     );
+    let stdout = crate::cli::namespace::stdout_contract_for_test(&receipt);
+    assert_eq!(stdout.len(), 1);
+    assert!(stdout[0].contains("ultragoal-namespace-check pass"));
+    assert!(stdout[0].contains("supported_claims=namespace_check"));
+    assert!(stdout[0].contains("unsupported_claims="));
     let absolute_receipt = root.join("target/absolute-namespace-check.json");
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -207,5 +212,12 @@ fn namespace_command_fails_bad_namespace_with_repair_fields() {
             .iter()
             .any(|item| item.as_str() == Some("update_goal_eligibility"))
     );
+    let stdout = crate::cli::namespace::stdout_contract_for_test(&receipt);
+    assert_eq!(stdout.len(), 2);
+    assert!(stdout[0].contains("ultragoal-namespace-check fail"));
+    assert!(stdout[0].contains("supported_claims=none"));
+    assert!(stdout[0].contains("unsupported_claims="));
+    assert!(stdout[1].contains("failed_check=namespace-check-observability-binding"));
+    assert!(stdout[1].contains("next_repair="));
     std::fs::remove_dir_all(root).expect("cleanup namespace fail");
 }

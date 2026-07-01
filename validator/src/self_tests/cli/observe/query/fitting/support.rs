@@ -94,7 +94,7 @@ fn insert_command_row(rows: &mut serde_json::Map<String, serde_json::Value>, com
         command.to_string(),
         json!({
             "fitting_status": "fitted",
-            "fitted_surfaces": ["log", "metric", "trace", "receipt", "query"],
+            "fitted_surfaces": ["log", "metric", "trace", "pass stdout contract", "fail stdout contract", "receipt observability binding", "query"],
             "missing_surfaces": [],
             "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
             "focused_tests": ["observe_green_prove_and_query_helpers_are_typed"],
@@ -117,7 +117,7 @@ fn insert_surface_row(rows: &mut serde_json::Map<String, serde_json::Value>, sur
         surface.to_string(),
         json!({
             "fitting_status": "fitted",
-            "fitted_surfaces": ["log", "metric", "trace", "receipt", "query"],
+            "fitted_surfaces": ["log", "metric", "trace", "pass stdout contract", "fail stdout contract", "receipt observability binding", "query"],
             "missing_surfaces": [],
             "operation": surface_operation(surface),
             "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -145,7 +145,7 @@ fn insert_operating_row(
         name.to_string(),
         json!({
             "fitting_status": "fitted",
-            "fitted_surfaces": ["log", "metric", "trace", "receipt", "query"],
+            "fitted_surfaces": ["log", "metric", "trace", "pass stdout contract", "fail stdout contract", "receipt observability binding", "query"],
             "missing_surfaces": [],
             "operation": format!("observability.{kind}.{slug}"),
             "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",

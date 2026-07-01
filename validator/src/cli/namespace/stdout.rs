@@ -6,7 +6,7 @@ pub(super) fn print(value: &Value) {
     }
 }
 
-fn contract(value: &Value) -> Vec<String> {
+pub(super) fn contract(value: &Value) -> Vec<String> {
     let status = text(value, "status");
     let run_id = text(value, "run_id");
     let receipt = text(value, "receipt_path");

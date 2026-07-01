@@ -99,3 +99,15 @@ fn package_digest_command_emits_fail_stdout_and_receipt_contract() {
     assert!(stdout[1].contains("next_repair="));
     fs::remove_dir_all(root).expect("cleanup package digest fail");
 }
+
+#[test]
+fn package_digest_command_propagates_observability_write_failures() {
+    let root = super::minimal_root("package-digest-write-fail");
+    fs::write(root.join("validation_artifacts"), "not a directory").expect("block artifacts dir");
+    let err = crate::cli::package::digest::run(&root).expect_err("receipt write should fail");
+    assert!(
+        err.contains("validation_artifacts") || err.contains("Not a directory"),
+        "{err}"
+    );
+    fs::remove_dir_all(root).expect("cleanup package digest write fail");
+}

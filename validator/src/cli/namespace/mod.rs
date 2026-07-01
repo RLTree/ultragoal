@@ -81,6 +81,11 @@ pub(crate) fn run(root: &Path, command: &NamespaceCommand) -> Result<i32, String
     Ok(i32::from(status != "pass"))
 }
 
+#[cfg(test)]
+pub(crate) fn stdout_contract_for_test(value: &Value) -> Vec<String> {
+    stdout::contract(value)
+}
+
 struct ValidationResult {
     failures: Vec<String>,
     scheduler_metrics: Vec<crate::scheduler::Metrics>,
