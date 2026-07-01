@@ -1,3 +1,6 @@
+pub(crate) mod stdout;
+pub(crate) mod telemetry;
+
 use serde_json::{Value, json};
 use std::path::Path;
 

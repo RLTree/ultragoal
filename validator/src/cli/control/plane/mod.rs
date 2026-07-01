@@ -183,8 +183,6 @@ pub(crate) mod receipt;
 pub(crate) mod registry;
 pub(crate) mod surface;
 pub(crate) mod transactional;
-pub(crate) mod transactional_stdout;
-pub(crate) mod transactional_telemetry;
 pub(crate) mod types;
 #[cfg(test)]
 pub(crate) use emit::receipt_from_evidence;

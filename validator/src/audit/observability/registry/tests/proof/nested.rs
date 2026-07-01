@@ -1,10 +1,11 @@
-use super::support::{write_registry_root, write_valid_fixture};
+use super::super::super::proof;
+use super::super::support::{write_registry_root, write_valid_fixture};
 use serde_json::json;
 
 #[test]
 fn command_fitting_accepts_nested_law_receipt_observability_binding() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-receipt");
-    write_registry_root(&root, super::support::fitted_inventory());
+    write_registry_root(&root, super::super::support::fitted_inventory());
     write_valid_fixture(&root);
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let run = "run-final-packet";
@@ -26,7 +27,7 @@ fn command_fitting_accepts_nested_law_receipt_observability_binding() {
         ]
     });
     let mut failures = Vec::new();
-    super::super::proof::require_current_receipts(
+    proof::require_current_receipts(
         &root,
         "final-packet prove",
         row.as_object().unwrap(),
@@ -37,7 +38,7 @@ fn command_fitting_accepts_nested_law_receipt_observability_binding() {
     let mut stale = crate::json_boundary::read_json(&root.join(receipt)).expect("receipt");
     stale["observability"]["blocked_claims"] = json!(["completion"]);
     crate::json_boundary::write_json(&root.join(receipt), &stale).expect("stale receipt");
-    super::super::proof::require_current_receipts(
+    proof::require_current_receipts(
         &root,
         "final-packet prove",
         row.as_object().unwrap(),
@@ -55,7 +56,7 @@ fn command_fitting_accepts_nested_law_receipt_observability_binding() {
 #[test]
 fn nested_command_fitting_rejects_high_cardinality_metric_labels() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-metric-labels");
-    write_registry_root(&root, super::support::fitted_inventory());
+    write_registry_root(&root, super::super::support::fitted_inventory());
     write_valid_fixture(&root);
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let run = "run-final-packet";
@@ -81,7 +82,7 @@ fn nested_command_fitting_rejects_high_cardinality_metric_labels() {
         ]
     });
     let mut failures = Vec::new();
-    super::super::proof::require_current_receipts(
+    proof::require_current_receipts(
         &root,
         "final-packet prove",
         row.as_object().unwrap(),

@@ -105,3 +105,21 @@ fn namespace_legacy_exception_surface_is_hard_failure() {
     }
     std::fs::remove_dir_all(root).expect("cleanup namespace legacy waiver");
 }
+
+#[test]
+fn namespace_topology_rejects_opaque_gate_number_names() {
+    let root = crate::self_tests::boundaries::support::temp_root("namespace-gate-number-name");
+    write_text(
+        &root.join("validator/src/audit/research/trace/gate92.rs"),
+        "pub(crate) fn marker() {}\n",
+    );
+    let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_opaque_gate_number_name"
+        ),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace gate number name");
+}

@@ -23,6 +23,7 @@ pub(crate) fn failures_with_repo_paths(
     out.extend(maximal_factoring_failures(&paths));
     out.extend(generic_leaf_name_failures(&paths));
     out.extend(history_name_failures(&paths));
+    out.extend(opaque_gate_number_failures(&paths));
     out
 }
 
@@ -169,6 +170,34 @@ fn history_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
             )
         })
         .collect()
+}
+
+fn opaque_gate_number_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    paths
+        .iter()
+        .filter(|path| {
+            path.strip_prefix("validator/")
+                .unwrap_or(path)
+                .split(['/', '_', '-', '.'])
+                .any(gate_number_token)
+        })
+        .map(|path| {
+            remediating_failure(
+                "namespace_validator_source_opaque_gate_number_name",
+                parent_dir(path),
+                first_token(path),
+                &[path.to_string()],
+                "rename_gate_number_source_to_the_domain_behavior_it_enforces",
+                false,
+            )
+        })
+        .collect()
+}
+
+fn gate_number_token(token: &str) -> bool {
+    token
+        .strip_prefix("gate")
+        .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
 }
 
 fn remediating_failure(

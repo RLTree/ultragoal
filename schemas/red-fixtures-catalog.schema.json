@@ -7342,6 +7342,20 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "namespace-opaque-gate-number-name"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "namespace-orphan-repo-file"
           }
         },
@@ -17492,8 +17506,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1258,
-  "minItems": 1258,
+  "maxItems": 1259,
+  "minItems": 1259,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

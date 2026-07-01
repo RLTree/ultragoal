@@ -1,33 +1,30 @@
 use serde_json::json;
 use std::{fs, path::Path};
 
-mod research;
-mod rows;
-
 pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &Path) {
     let mut rows = serde_json::Map::new();
     let mut surface_rows = serde_json::Map::new();
     let commands = crate::audit::observability::required_commands()
         .iter()
         .map(|command| {
-            rows::insert_command(&mut rows, command);
+            super::board_rows::insert_command(&mut rows, command);
             json!(command)
         })
         .collect::<Vec<_>>();
     let surfaces = crate::audit::observability::required_surfaces()
         .iter()
         .map(|surface| {
-            rows::insert_surface(&mut surface_rows, surface);
+            super::board_rows::insert_surface(&mut surface_rows, surface);
             json!(surface)
         })
         .collect::<Vec<_>>();
     let mut loop_rows = serde_json::Map::new();
     for stage in crate::audit::observability::required_loop_stages() {
-        rows::insert_operating(&mut loop_rows, "loop", stage);
+        super::board_rows::insert_operating(&mut loop_rows, "loop", stage);
     }
     let mut signal_rows = serde_json::Map::new();
     for signal in crate::audit::observability::required_signal_classes() {
-        rows::insert_operating(&mut signal_rows, "signal", signal);
+        super::board_rows::insert_operating(&mut signal_rows, "signal", signal);
     }
     let mut inventory = json!({
         "commands": commands,
@@ -42,7 +39,7 @@ pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &
                 "wide_structured_events_with_bounded_context": true,
                 "semantic_naming_across_telemetry": true
             },
-            "research_inputs": research::inputs()
+            "research_inputs": super::research_inputs::inputs()
         },
         "fitting_control_board": fitted_control_board(),
         "row_requirements": row_requirements(),
@@ -112,7 +109,7 @@ fn insert_dimension_inventory(inventory: &mut serde_json::Value) {
         inventory[list_key] = json!(ids);
         let mut rows = serde_json::Map::new();
         for id in ids {
-            rows::insert_dimension(&mut rows, board_key, id);
+            super::board_rows::insert_dimension(&mut rows, board_key, id);
         }
         inventory[inventory_key] = serde_json::Value::Object(rows);
     }

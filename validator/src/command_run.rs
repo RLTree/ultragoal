@@ -28,7 +28,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::ReviewTarget {
             receipt,
             observability_receipt,
-        } => crate::cli::review_target::run(root, receipt, observability_receipt),
+        } => crate::cli::review::target::run(root, receipt, observability_receipt),
         Command::Archive {
             zip,
             receipt,
@@ -49,7 +49,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
             review_target_receipt,
             archive_receipt,
             observability_receipt,
-        } => crate::cli::review_round::run(
+        } => crate::cli::review::round::run(
             root,
             receipt,
             validator_receipt,
@@ -122,11 +122,11 @@ fn run_transactional_finalization(
 ) -> Result<i32, String> {
     let started = std::time::Instant::now();
     let mut value = crate::cli::control::plane::transactional::receipt(&root)?;
-    crate::cli::control::plane::transactional_telemetry::attach(
+    crate::cli::control::plane::transactional::telemetry::attach(
         &root, &receipt, &mut value, started,
     )?;
     crate::json_boundary::write_json(&receipt, &value)?;
-    crate::cli::control::plane::transactional_stdout::print(&root, &receipt, &value);
+    crate::cli::control::plane::transactional::stdout::print(&root, &receipt, &value);
     Ok(i32::from(
         value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
     ))

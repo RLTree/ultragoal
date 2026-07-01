@@ -60,7 +60,7 @@ pub(crate) fn run(
         &why_failed,
     )?;
     crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)?;
-    super::review_round_stdout::print_summary(&observability);
+    super::round_stdout::print_summary(&observability);
     Ok(i32::from(status != "pass"))
 }
 

@@ -1,13 +1,17 @@
 use serde_json::Value;
 
-pub(super) fn print_summary(value: &Value) {
+pub(super) fn print_summary(value: &Value, review_target_digest: &str) {
     println!(
-        "ultragoal-review-round-verify {} operation={} candidate={} receipt={} review_round_receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
+        "ultragoal-review-target-build {} proven={} review_target_digest={} candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
         text(value, "status"),
-        text(value, "operation"),
+        if text(value, "status") == "pass" {
+            super::target::CLAIM_ID
+        } else {
+            "none"
+        },
+        review_target_digest,
         text(value, "candidate_digest"),
         text(value, "receipt_path"),
-        review_receipt(value),
         text(value, "run_id"),
         text(value, "correlation_id"),
         text(value, "claim_impact"),
@@ -21,9 +25,8 @@ pub(super) fn print_summary(value: &Value) {
 
 fn print_failure(value: &Value) {
     let run_id = text(value, "run_id");
-    let metric_query = crate::cli::observe::query::bounded_metric_query_for_operation(
-        super::review_round::OPERATION,
-    );
+    let metric_query =
+        crate::cli::observe::query::bounded_metric_query_for_operation(super::target::OPERATION);
     println!(
         "failed_law={} failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
         text(value, "law_id"),
@@ -39,15 +42,6 @@ fn print_failure(value: &Value) {
         metric_query,
         run_id
     );
-}
-
-fn review_receipt(value: &Value) -> &str {
-    value
-        .get("event")
-        .and_then(|event| event.get("artifact_path"))
-        .and_then(Value::as_str)
-        .and_then(|items| items.split(',').next())
-        .unwrap_or("<missing>")
 }
 
 fn text<'a>(value: &'a Value, field: &str) -> &'a str {

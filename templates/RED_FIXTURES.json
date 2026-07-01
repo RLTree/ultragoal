@@ -4754,6 +4754,15 @@
   {
     "expected_failure": {
       "check_id": "namespace-progressive-disclosure",
+      "error": "namespace_validator_source_opaque_gate_number_name"
+    },
+    "id": "namespace-opaque-gate-number-name",
+    "packet_digest": "sha256:53391fe05c6713bb16d50b31bdb20236532d2ae17d9cccc6a227091655287e2d",
+    "packet_path": "fixtures/red/namespace-opaque-gate-number-name.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "namespace-progressive-disclosure",
       "error": "namespace_orphan_repo_file"
     },
     "id": "namespace-orphan-repo-file",

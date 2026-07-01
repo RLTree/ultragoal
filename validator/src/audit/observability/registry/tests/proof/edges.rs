@@ -1,4 +1,5 @@
-use super::support::{fitted_inventory, write_registry_root, write_valid_fixture};
+use super::super::super::proof;
+use super::super::support::{fitted_inventory, write_registry_root, write_valid_fixture};
 use serde_json::json;
 
 #[test]
@@ -146,18 +147,18 @@ fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows(
         .as_object()
         .expect("package digest row");
     let mut failures = Vec::new();
-    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    proof::require_current_receipts(&root, "package digest", row, &mut failures);
     assert!(failures.is_empty(), "{failures:?}");
 
     let empty = json!({}).as_object().unwrap().clone();
-    super::super::proof::require_current_receipts(&root, "package digest", &empty, &mut failures);
+    proof::require_current_receipts(&root, "package digest", &empty, &mut failures);
     assert!(failures.is_empty(), "{failures:?}");
 
     let rel = "validation_artifacts/observability/fitting/package-digest.json";
     let mut receipt = crate::json_boundary::read_json(&root.join(rel)).unwrap();
     receipt.as_object_mut().unwrap().remove("correlation_id");
     crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
-    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    proof::require_current_receipts(&root, "package digest", row, &mut failures);
     assert!(
         failures.iter().any(|failure| {
             failure.starts_with(
@@ -171,7 +172,7 @@ fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows(
     receipt["status"] = json!("pending");
     crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
     failures.clear();
-    super::super::proof::require_current_receipts(&root, "package digest", row, &mut failures);
+    proof::require_current_receipts(&root, "package digest", row, &mut failures);
     assert!(
         failures.iter().any(|failure| {
             failure.starts_with("observability_command_fitting_receipt_not_current:package digest")
@@ -187,7 +188,7 @@ fn observability_proof_reports_unavailable_candidates_and_missing_surface_operat
     let row = json!({"receipt_paths":[]});
     let row = row.as_object().unwrap().clone();
     let mut failures = Vec::new();
-    super::super::proof::require_current_receipts(&root, "package digest", &row, &mut failures);
+    proof::require_current_receipts(&root, "package digest", &row, &mut failures);
     assert!(failures.iter().any(|item| {
         item.starts_with(
             "observability_command_fitting_candidate_digest_unavailable:package digest",
@@ -199,12 +200,7 @@ fn observability_proof_reports_unavailable_candidates_and_missing_surface_operat
     let row = json!({"receipt_paths":[]});
     let row = row.as_object().unwrap().clone();
     failures.clear();
-    super::super::proof::require_current_surface_receipts(
-        &root,
-        "cli command families",
-        &row,
-        &mut failures,
-    );
+    proof::require_current_surface_receipts(&root, "cli command families", &row, &mut failures);
     assert!(failures.contains(
         &"observability_surface_fitting_operation_missing:cli command families".to_string()
     ));

@@ -144,7 +144,7 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
         RECEIPT
     );
     let run_id = value["run_id"].as_str().expect("run id");
-    let lines = crate::cli::control::plane::transactional_stdout::lines(&root, &receipt, &value);
+    let lines = crate::cli::control::plane::transactional::stdout::lines(&root, &receipt, &value);
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("ultragoal-transaction-finalize fail"));
     assert!(lines[1].contains("failed_check=transaction-finalize-observability-binding"));

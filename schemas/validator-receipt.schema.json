@@ -738,7 +738,7 @@
                 }
               ]
             },
-            "maxProperties": 1258,
+            "maxProperties": 1259,
             "minProperties": 1195,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
@@ -1265,6 +1265,7 @@
               "namespace-junk-drawer-path",
               "namespace-law-present-only-as-prose",
               "namespace-mixed-domain-folder",
+              "namespace-opaque-gate-number-name",
               "namespace-orphan-repo-file",
               "namespace-progressive-disclosure-source-obligation-parity-red",
               "namespace-repeated-prefix-without-subdirectory",
@@ -2286,8 +2287,8 @@
       "additionalProperties": {
         "$ref": "#/$defs/redFixtureResult"
       },
-      "maxProperties": 1258,
-      "minProperties": 1258,
+      "maxProperties": 1259,
+      "minProperties": 1259,
       "propertyNames": {
         "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
       },
@@ -2820,6 +2821,7 @@
         "namespace-junk-drawer-path",
         "namespace-law-present-only-as-prose",
         "namespace-mixed-domain-folder",
+        "namespace-opaque-gate-number-name",
         "namespace-orphan-repo-file",
         "namespace-progressive-disclosure-source-obligation-parity-red",
         "namespace-repeated-prefix-without-subdirectory",
@@ -5950,6 +5952,11 @@
         {
           "contains": {
             "const": "namespace-mixed-domain-folder"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-opaque-gate-number-name"
           }
         },
         {
@@ -9299,6 +9306,7 @@
           "namespace-junk-drawer-path",
           "namespace-law-present-only-as-prose",
           "namespace-mixed-domain-folder",
+          "namespace-opaque-gate-number-name",
           "namespace-orphan-repo-file",
           "namespace-progressive-disclosure-source-obligation-parity-red",
           "namespace-repeated-prefix-without-subdirectory",
@@ -10031,8 +10039,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1258,
-      "minItems": 1258,
+      "maxItems": 1259,
+      "minItems": 1259,
       "type": "array",
       "uniqueItems": true
     },

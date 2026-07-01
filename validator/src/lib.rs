@@ -77,7 +77,7 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
             let receipt = opt_path(args, "--receipt")?;
             Command::ReviewTarget {
                 receipt,
-                observability_receipt: cli::review_target::observability_receipt(args)?,
+                observability_receipt: cli::review::target::observability_receipt(args)?,
             }
         }
         "archive" => cli::archive::parse(&raw[1..])?,
@@ -88,7 +88,7 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 validator_receipt: opt_path(args, "--validator-receipt")?,
                 review_target_receipt: opt_path(args, "--review-target-receipt")?,
                 archive_receipt: opt_path(args, "--archive-receipt")?,
-                observability_receipt: cli::review_round::observability_receipt(args)?,
+                observability_receipt: cli::review::round::observability_receipt(args)?,
             }
         }
         "semantic-receipts" => Command::SemanticReceipts {

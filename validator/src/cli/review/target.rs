@@ -39,7 +39,7 @@ pub(crate) fn run(
     let status = outcome.status();
     let observability = observability(&root, &receipt, &observability_receipt, started, &outcome)?;
     crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)?;
-    super::review_target_stdout::print_summary(&observability, outcome.review_target_digest());
+    super::target_stdout::print_summary(&observability, outcome.review_target_digest());
     Ok(i32::from(status != "pass"))
 }
 

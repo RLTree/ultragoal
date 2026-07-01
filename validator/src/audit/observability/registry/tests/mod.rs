@@ -3,8 +3,7 @@ use serde_json::json;
 use std::fs;
 
 mod dimension_support;
-mod proof_edges;
-mod proof_nested;
+mod proof;
 mod receipts;
 mod shape;
 mod support;
