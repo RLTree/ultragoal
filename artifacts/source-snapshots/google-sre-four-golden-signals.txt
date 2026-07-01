@@ -1,0 +1,12 @@
+Source ID: google-sre-four-golden-signals
+Title: Google SRE four golden signals
+URL: https://sre.google/sre-book/monitoring-distributed-systems/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- sre-four-golden-signals-cli
+Gate 92 corpus anchors:
+- Latency, traffic, errors, and saturation must be measured on the real operating surface, including failed-command latency and resource pressure.
+- Metrics need bounded labels while wide events and spans carry high-cardinality repair identifiers.
+Harness mapping:
+- Bind duration, task counts, failure class, worker/task/queue saturation, cache mode, and resource pressure into every expensive law-bearing command.

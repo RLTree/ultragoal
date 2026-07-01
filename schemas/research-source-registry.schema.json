@@ -22,6 +22,8 @@
           "source_card_digest",
           "source_artifact_digest",
           "source_artifact_method",
+          "source_corpus_path",
+          "source_corpus_digest",
           "law_family_aliases",
           "canonical_law_ids_affected",
           "required_plugin_surfaces",
@@ -45,6 +47,11 @@
               "attached_source_card_digest"
             ]
           },
+          "source_corpus_path": {
+            "type": "string",
+            "pattern": "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$"
+          },
+          "source_corpus_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
           "law_family_aliases": { "$ref": "#/$defs/non_empty_strings" },
           "canonical_law_ids_affected": { "$ref": "#/$defs/non_empty_strings" },
           "required_plugin_surfaces": { "$ref": "#/$defs/non_empty_strings" },

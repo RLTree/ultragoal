@@ -1,6 +1,10 @@
 use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 
+mod artifacts;
+
+pub(super) use artifacts::{SourceArtifact, source_artifacts};
+
 const REQUIRED_SOURCES: &[&str] = &[
     "openai-harness-engineering",
     "openai-codex-iterative-repair-loops",
@@ -61,21 +65,6 @@ pub(super) fn card_requirements(cards: &Value) -> BTreeMap<String, String> {
         .collect()
 }
 
-pub(super) fn source_artifacts(cards: &Value) -> BTreeMap<String, (String, String)> {
-    cards
-        .get("sources")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(|row| {
-            let id = text(row, "source_id");
-            let digest = text(row, "source_artifact_digest");
-            let method = text(row, "source_artifact_method");
-            (!id.is_empty()).then_some((id, (digest, method)))
-        })
-        .collect()
-}
-
 pub(super) fn source_evidence_failures(cards: &Value) -> Vec<String> {
     cards
         .get("sources")
@@ -126,6 +115,12 @@ fn source_evidence_failures_for(source: &Value) -> Vec<String> {
     }
     if text(source, "source_artifact_method").is_empty() {
         out.push(format!("research_source_card_artifact_method_missing:{id}"));
+    }
+    if text(source, "source_corpus_path").is_empty() {
+        out.push(format!("research_source_card_corpus_path_missing:{id}"));
+    }
+    if text(source, "source_corpus_digest").is_empty() {
+        out.push(format!("research_source_card_corpus_digest_missing:{id}"));
     }
     if evidence_ids.is_empty() {
         out.push(format!("research_source_card_evidence_missing:{id}"));

@@ -1,0 +1,12 @@
+Source ID: opentelemetry-semantic-conventions
+Title: OpenTelemetry semantic conventions and naming
+URL: https://opentelemetry.io/docs/concepts/semantic-conventions/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- otel-semantic-naming-correlation
+Gate 92 corpus anchors:
+- Logs, metrics, traces, resources, schemas, and exporters need stable semantic names and attribute vocabulary.
+- Mechanical correlation fails when telemetry fields drift across event, metric, trace, receipt, and query outputs.
+Harness mapping:
+- Bind one canonical telemetry envelope, stable operation names, semantic field names, schema checks, and collision/normalization guards across the CLI.

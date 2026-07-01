@@ -1,0 +1,12 @@
+Source ID: google-sre-monitoring-workbook
+Title: Google SRE Monitoring Workbook
+URL: https://sre.google/workbook/monitoring/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- sre-monitoring-diagnose-compare-freshness
+Gate 92 corpus anchors:
+- Monitoring exists to alert, investigate, diagnose, compare before/after behavior, visualize trends, and detect stale or misleading evidence.
+- Telemetry freshness matters because stale rows can create false confidence and wrong repair decisions.
+Harness mapping:
+- Bind stale-telemetry rejection, before/after comparison, query receipts, explain-failure output, and freshness claim blockers to the same candidate digest.

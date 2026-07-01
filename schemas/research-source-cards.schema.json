@@ -21,6 +21,8 @@
           "source_kind",
           "source_artifact_digest",
           "source_artifact_method",
+          "source_corpus_path",
+          "source_corpus_digest",
           "evidence_anchors",
           "requirements"
         ],
@@ -41,6 +43,11 @@
               "attached_source_card_digest"
             ]
           },
+          "source_corpus_path": {
+            "type": "string",
+            "pattern": "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$"
+          },
+          "source_corpus_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
           "evidence_anchors": {
             "type": "array",
             "minItems": 1,

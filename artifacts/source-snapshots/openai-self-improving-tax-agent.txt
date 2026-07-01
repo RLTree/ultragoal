@@ -1,0 +1,12 @@
+Source ID: openai-self-improving-tax-agent
+Title: OpenAI self-improving tax-agent pattern
+URL: https://openai.com/index/building-self-improving-tax-agents-with-codex/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- tax-agent-domain-task-feedback-loop
+Gate 92 corpus anchors:
+- Domain-agent improvement requires realistic domain tasks, expert-source feedback, rubrics, error taxonomy, eval generation, ranked repair, and before/after proof.
+- Internal eval success is not product success unless claim guards preserve the difference.
+Harness mapping:
+- Bind domain-task cases, privacy rules, expert/source feedback, eval/ranking records, product claim ceilings, and update_goal blockers to the source trace.

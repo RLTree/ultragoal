@@ -1,0 +1,12 @@
+Source ID: openai-codex-iterative-repair-loops
+Title: Build iterative repair loops with Codex
+URL: https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- codex-repair-review-repair-validate
+Gate 92 corpus anchors:
+- Repair work should run a focused failure path, inspect structured feedback, make the smallest production repair, rerun validation, and preserve useful handoff state.
+- Review, repair, and validation records need to be concrete enough for the next agent to continue without re-spelunking broad logs.
+Harness mapping:
+- Bind the narrow repair loop, before/after telemetry, focused validation, and broad-audit-after-repair rule into command inventory, receipts, claim guards, and update_goal blockers.

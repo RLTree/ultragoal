@@ -1,0 +1,12 @@
+Source ID: openai-agent-improvement-loop
+Title: OpenAI agent improvement loop cookbook
+URL: https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- openai-agent-improvement-feedback-evals
+Gate 92 corpus anchors:
+- Agent improvement requires traces, feedback, eval generation, ranked repairs, validation, and before/after comparison.
+- Improvement claims need durable promotion into standards, fixtures, schemas, receipts, and regression checks.
+Harness mapping:
+- Bind promptfoo, HALO, feedback-to-rule promotion, trace/eval records, before/after telemetry, and claim blockers into the source-local proof graph.

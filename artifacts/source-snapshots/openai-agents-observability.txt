@@ -1,0 +1,12 @@
+Source ID: openai-agents-observability
+Title: OpenAI Agents observability guidance
+URL: https://developers.openai.com/api/docs/guides/agents/integrations-observability
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- openai-agents-run-observability
+Gate 92 corpus anchors:
+- Agent runs need observable workflow records for model/tool/guardrail/custom activity so failures can be inspected and later evaluated.
+- Observability data must connect run identity, failures, tool activity, and claim-relevant outcomes instead of remaining stack-health-only proof.
+Harness mapping:
+- Bind OpenAI call receipts, trace outputs, redaction, and model-output claim ceilings to Gate 92 observability fields and source-local blockers.

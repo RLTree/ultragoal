@@ -1,0 +1,12 @@
+Source ID: openai-agents-sdk-tracing
+Title: OpenAI Agents SDK tracing
+URL: https://openai.github.io/openai-agents-python/tracing/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- openai-agents-trace-span-discipline
+Gate 92 corpus anchors:
+- Trace structure must preserve root and child spans for agent runs, tools, guardrails, handoffs, custom work, processors, exporters, and metadata.
+- Broken span parentage makes repair diagnostics untrustworthy even when events or receipts exist.
+Harness mapping:
+- Bind root command spans, child validator/probe/receipt spans, exporter spans, parent-span checks, and broken-parentage red fixtures to the observability gate.

@@ -1,0 +1,12 @@
+Source ID: charity-majors-structured-events
+Title: Live Your Best Life With Structured Events
+URL: https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- structured-events-wide-context
+Gate 92 corpus anchors:
+- Wide structured events should preserve enough contextual fields to ask new repair questions after the fact.
+- Aggregate-only dashboards or opaque pass/fail messages are not enough for agent diagnosis.
+Harness mapping:
+- Bind wide event fields, failure class, why/where/next repair, claim impact, redaction state, and bounded output into every law-bearing path.

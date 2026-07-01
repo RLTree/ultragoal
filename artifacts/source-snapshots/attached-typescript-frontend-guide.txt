@@ -1,0 +1,12 @@
+Source ID: attached-typescript-frontend-guide
+Title: Attached TypeScript/frontend developer guide
+URL: codex-attachment://typescript-frontend-guide
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: attached_user_source_card
+Requirements:
+- typescript-frontend-governed-boundaries
+Gate 92 corpus anchors:
+- TypeScript/UI setup needs pinned tooling, strict typing, lint/test/build/browser/accessibility coverage, runtime parsers, and governed receipts.
+- Raw pnpm, tsc, eslint, Vitest, Playwright, Vite, Storybook, or Lighthouse output cannot become Harness claim authority by itself.
+Harness mapping:
+- Bind TypeScript setup/retrofit outputs, typed parser boundaries, UI observability, memory/resource receipts, and raw-tool-output claim blockers.

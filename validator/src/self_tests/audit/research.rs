@@ -41,6 +41,28 @@ fn research_registry_rejects_stale_source_card_digest() {
 }
 
 #[test]
+fn research_registry_rejects_missing_stale_or_uninventoried_source_corpus() {
+    let (_root, mut cards, mut registry, trace) = repo_values();
+    cards["sources"][0]["source_corpus_path"] =
+        json!("artifacts/source-snapshots/missing-source-corpus.txt");
+    registry["sources"][0]["source_corpus_path"] =
+        json!("artifacts/source-snapshots/missing-source-corpus.txt");
+    registry["sources"][0]["source_corpus_digest"] =
+        json!(crate::self_tests::boundaries::support::sha('1'));
+    let failures = failures(&cards, &registry, &trace);
+    for expected in [
+        "research_registry_source_corpus_digest_stale:openai-harness-engineering",
+        "research_source_corpus_package_omitted:openai-harness-engineering:artifacts/source-snapshots/missing-source-corpus.txt",
+        "research_source_corpus_missing:openai-harness-engineering:artifacts/source-snapshots/missing-source-corpus.txt",
+    ] {
+        assert!(
+            failures.iter().any(|item| item == expected),
+            "{expected}\n{failures:#?}"
+        );
+    }
+}
+
+#[test]
 fn research_trace_rejects_alias_only_mapping() {
     let (_root, cards, registry, mut trace) = repo_values();
     trace["entries"][0]["canonical_law_ids"] = json!(["HU-001"]);

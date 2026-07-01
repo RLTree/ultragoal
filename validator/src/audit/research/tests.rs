@@ -27,10 +27,12 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
                 {
                     "source_id":"source-b",
                     "canonical_url":"https://example.test/source-b",
-                    "source_kind":"public_web",
-                    "source_artifact_digest":"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                    "source_artifact_method":"http_body_sha256",
-                    "requirements":[{
+                        "source_kind":"public_web",
+                        "source_artifact_digest":"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                        "source_artifact_method":"http_body_sha256",
+                        "source_corpus_path":"artifacts/source-snapshots/source-b.txt",
+                        "source_corpus_digest":"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                        "requirements":[{
                         "requirement_id":"req-b",
                         "summary":"",
                         "source_evidence_ids":["anchor-b"]
@@ -54,6 +56,8 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
             "source_card_digest":"sha256:bad",
             "source_artifact_digest":"sha256:bad",
             "source_artifact_method":"wrong",
+            "source_corpus_path":"wrong",
+            "source_corpus_digest":"sha256:bad",
             "canonical_law_ids_affected":[],
             "claim_ceiling_impact":""
         }]}),
@@ -71,6 +75,8 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
     assert!(
         failures.contains(&"research_source_card_artifact_method_missing:source-a".to_string())
     );
+    assert!(failures.contains(&"research_source_card_corpus_path_missing:source-a".to_string()));
+    assert!(failures.contains(&"research_source_card_corpus_digest_missing:source-a".to_string()));
     assert!(failures.contains(&"research_source_card_evidence_missing:source-a".to_string()));
     assert!(failures.contains(&"research_source_card_requirement_unanchored:req-a".to_string()));
     assert!(
@@ -99,6 +105,11 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
     assert!(
         failures.contains(&"research_registry_source_artifact_method_stale:source-a".to_string())
     );
+    assert!(failures.contains(&"research_registry_source_corpus_path_stale:source-a".to_string()));
+    assert!(
+        failures.contains(&"research_registry_source_corpus_digest_stale:source-a".to_string())
+    );
+    assert!(failures.contains(&"research_source_corpus_path_missing:source-a".to_string()));
     assert!(failures.contains(&"research_registry_unmapped_source:source-a".to_string()));
     assert!(failures.contains(&"research_registry_missing_claim_ceiling:source-a".to_string()));
     std::fs::remove_dir_all(root).expect("cleanup");

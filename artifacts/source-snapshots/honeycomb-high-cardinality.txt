@@ -1,0 +1,12 @@
+Source ID: honeycomb-high-cardinality
+Title: Honeycomb high-cardinality guidance
+URL: https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- high-cardinality-correlation-keys
+Gate 92 corpus anchors:
+- High-cardinality identifiers such as request, run, trace, receipt, law, check, and claim keys are useful for isolating one failure.
+- Metrics must avoid unbounded labels and keep high-cardinality dimensions in events, spans, and queryable records.
+Harness mapping:
+- Bind run_id, correlation_id, trace_id, span_id, candidate digest, receipt paths, and claim ids into events/spans while keeping metric labels bounded.

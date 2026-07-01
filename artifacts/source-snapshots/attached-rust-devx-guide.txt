@@ -1,0 +1,12 @@
+Source ID: attached-rust-devx-guide
+Title: Attached Rust Developer Experience Governance Proposal
+URL: codex-attachment://rust-devx-guide
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: attached_user_source_card
+Requirements:
+- rust-devx-cli-authority
+Gate 92 corpus anchors:
+- Rust tool output is observation-only until parsed by Ultragoal, bound to current package evidence, and routed through claim guards.
+- Rust command loops need typed diagnostics, fast feedback, bounded resources, cache honesty, observability, and cleanup proof.
+Harness mapping:
+- Bind Rust DevX receipts, performance evidence, cache/no-cache guards, memory/resource discipline, and raw-tool-output rejection to Gate 92 telemetry.

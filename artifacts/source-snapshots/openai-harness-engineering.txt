@@ -1,4 +1,13 @@
-Title: Harness engineering for AI agents
+Source ID: openai-harness-engineering
+Title: OpenAI Harness Engineering
 URL: https://openai.com/index/harness-engineering/
-Retrieved at: 2026-06-16T00:00:00Z
-Used for: repo-local system of record, agent legibility, mechanical invariant design
+Retrieved at: 2026-07-01T00:00:00Z
+Source kind: public_web
+Requirements:
+- openai-harness-agent-legible-repo
+- openai-harness-local-observability-loop
+Gate 92 corpus anchors:
+- Repositories must expose compact, navigable maps and mechanical invariants so an agent can work from current source instead of author memory.
+- Local worktree evidence needs logs, metrics, traces, runtime state, and failure records that an agent can query during repair.
+Harness mapping:
+- Bind repo knowledge, observability, setup/retrofit outputs, package inventory, claim guards, final packet fields, and update_goal blockers to the same source corpus record.

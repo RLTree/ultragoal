@@ -18,6 +18,7 @@ pub(super) fn matches(pattern: &str, text: &str) -> bool {
         }
         "^examples/generated/" => text.starts_with("examples/generated/"),
         "^custom-agents/harness-[a-z-]+\\.toml$" => harness_agent_toml(text),
+        "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$" => source_snapshot_path(text),
         "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$" => {
             artifact_json_under("validation_artifacts/review/", text)
         }
@@ -82,6 +83,12 @@ fn strict_kebab_token(text: &str) -> bool {
 
 fn harness_agent_toml(text: &str) -> bool {
     text.starts_with("custom-agents/harness-") && text.ends_with(".toml")
+}
+
+fn source_snapshot_path(text: &str) -> bool {
+    text.strip_prefix("artifacts/source-snapshots/")
+        .and_then(|tail| tail.strip_suffix(".txt"))
+        .is_some_and(strict_kebab_token)
 }
 
 fn artifact_json_under(prefix: &str, text: &str) -> bool {
@@ -161,6 +168,18 @@ mod tests {
         assert!(super::matches(
             "^custom-agents/harness-[a-z-]+\\.toml$",
             "custom-agents/harness-reviewer.toml"
+        ));
+        assert!(super::matches(
+            "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$",
+            "artifacts/source-snapshots/openai-harness-engineering.txt"
+        ));
+        assert!(!super::matches(
+            "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$",
+            "artifacts/source-snapshots/Bad.txt"
+        ));
+        assert!(!super::matches(
+            "^artifacts/source-snapshots/[a-z0-9][a-z0-9-]*\\.txt$",
+            "artifacts/source-snapshots/openai-harness-engineering.md"
         ));
         assert!(super::matches(
             "^validation_artifacts/review/[-A-Za-z0-9._/]+[.]json$",
