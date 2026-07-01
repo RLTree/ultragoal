@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 19,
+        "fitted": 20,
         "partially_fitted": 23,
-        "unfitted": 20
+        "unfitted": 19
       },
       "surfaces": {
         "total": 10,
@@ -152,9 +152,9 @@
       },
       "long_running": {
         "total": 17,
-        "fitted": 0,
+        "fitted": 1,
         "partially_fitted": 0,
-        "unfitted": 17
+        "unfitted": 16
       },
       "external_live": {
         "total": 12,
@@ -852,27 +852,36 @@
       "next_unfitted_surface": "live same-surface logs"
     },
     "install audit": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "surface-specific logs",
-        "metrics",
-        "traces",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "receipt binding",
-        "query proof",
+        "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "install-audit-observability-binding",
+      "focused_tests": [
+        "package_surface_run_writes_typed_install_observability",
+        "package_surface_run_emits_fail_closed_install_observability"
+      ],
       "receipt_paths": [
         "validation_artifacts/cli/install-audit-receipt.json"
       ],
-      "live_query_proof_paths": [],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/install-audit-logs-query.json",
+        "validation_artifacts/observability/install-audit-metrics-query.json",
+        "validation_artifacts/observability/install-audit-traces-query.json",
+        "validation_artifacts/observability/install-audit-explain-failure.json"
+      ],
       "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal",
       "current_owner_surface": "command:install audit",
-      "next_unfitted_surface": "surface-specific logs"
+      "next_unfitted_surface": "none"
     },
     "cache audit": {
       "fitting_status": "fitted",
@@ -4066,24 +4075,36 @@
       "next_unfitted_surface": "log instrumentation"
     },
     "install audit": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log instrumentation",
-        "metric instrumentation",
-        "trace instrumentation",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "receipt observability binding",
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
+      "missing_surfaces": [],
       "operation": "observability.long_running.install-audit",
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_until_long_running_install-audit_is_fitted_with_same_candidate_query_proof",
+      "validator_check_id": "install-audit-observability-binding",
+      "focused_tests": [
+        "package_surface_run_writes_typed_install_observability",
+        "package_surface_run_emits_fail_closed_install_observability"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/cli/install-audit-receipt.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/install-audit-logs-query.json",
+        "validation_artifacts/observability/install-audit-metrics-query.json",
+        "validation_artifacts/observability/install-audit-traces-query.json",
+        "validation_artifacts/observability/install-audit-explain-failure.json"
+      ],
+      "claim_impact": "blocks_install_parity_readiness_release_completion_update_goal",
       "current_owner_surface": "long_running:install audit",
-      "next_unfitted_surface": "log instrumentation"
+      "next_unfitted_surface": "none"
     },
     "cache audit": {
       "fitting_status": "unfitted",
