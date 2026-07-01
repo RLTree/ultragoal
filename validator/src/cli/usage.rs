@@ -47,6 +47,7 @@ pub(crate) fn text() -> &'static str {
         "  ultragoal self update-goal eligibility --receipt <path>\n",
         "\n",
         "Specialized proof surfaces:\n",
+        "  ultragoal product prove-cohesion\n",
         "  ultragoal product prove-fitness --receipt-dir <dir>\n",
         "  ultragoal standards-gardener rebind --receipt <path>\n",
         "  ultragoal session-log hardening rebind --receipt <path>\n",

@@ -4240,6 +4240,7 @@
     "validator/src/cli/performance/receipt.rs",
     "validator/src/cli/performance/types.rs",
     "validator/src/cli/product/mod.rs",
+    "validator/src/cli/product/cohesion.rs",
     "validator/src/cli/product/receipts/mod.rs",
     "validator/src/cli/product/receipts/tests.rs",
     "validator/src/cli/product/telemetry.rs",

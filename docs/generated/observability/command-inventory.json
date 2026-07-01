@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 12,
+        "fitted": 13,
         "partially_fitted": 23,
-        "unfitted": 27
+        "unfitted": 26
       },
       "surfaces": {
         "total": 10,
@@ -129,7 +129,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "product prove-cohesion",
+      "id": "product prove-journey",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -543,22 +543,31 @@
       "next_unfitted_surface": "none"
     },
     "product prove-cohesion": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "receipt binding",
-        "query proof"
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "structured log event",
+        "bounded metric",
+        "root trace and child spans",
+        "receipt observability binding",
+        "same-candidate live query proof"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "missing_surfaces": [],
+      "validator_check_id": "product-prove-cohesion-observability-binding",
+      "focused_tests": [
+        "product_parser_keeps_product_and_fit_repo_operations_distinct",
+        "product_cohesion_command_emits_fail_closed_observability_for_missing_artifacts"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/product-prove-cohesion.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/product-prove-cohesion-logs-query.json",
+        "validation_artifacts/observability/product-prove-cohesion-metrics-query.json",
+        "validation_artifacts/observability/product-prove-cohesion-traces-query.json"
+      ],
+      "claim_impact": "observability_fitted_but_product_cohesion_artifacts_missing_blocks_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-cohesion",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "product prove-journey": {
       "fitting_status": "unfitted",

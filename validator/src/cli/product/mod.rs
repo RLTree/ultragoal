@@ -6,6 +6,10 @@ pub(crate) use types::{ProductCommand, ProductOperation};
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
     match raw {
+        [a, b, ..] if a == "product" && b == "prove-cohesion" => Ok(Some(command(
+            ProductOperation::ProductProveCohesion,
+            &raw[2..],
+        )?)),
         [a, b, ..] if a == "product" && b == "prove-fitness" => Ok(Some(command(
             ProductOperation::ProductProveFitness,
             &raw[2..],
@@ -19,7 +23,15 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ProductCommand>, String> {
 
 pub(crate) fn run(root: &Path, command: &ProductCommand) -> Result<i32, String> {
     let started = Instant::now();
-    let outcome = run_minter(root, command);
+    let outcome = match command.operation {
+        ProductOperation::ProductProveCohesion => match cohesion::prove(root) {
+            Ok(report) => telemetry::ProductOutcome::Report(report),
+            Err(err) => telemetry::ProductOutcome::Failure(err),
+        },
+        ProductOperation::ProductProveFitness | ProductOperation::FitRepoProve => {
+            run_minter(root, command)
+        }
+    };
     let status = outcome.status();
     let value = telemetry::emit(root, command, started, &outcome)?;
     if let Some(report) = outcome.report() {
@@ -35,19 +47,33 @@ fn command(operation: ProductOperation, args: &[String]) -> Result<ProductComman
     validate_root_relative(&observability_receipt, "product observability receipt")?;
     Ok(ProductCommand {
         operation,
-        receipt_dir: opt_path(args, "--receipt-dir")?,
+        receipt_dir: receipt_dir(operation, args)?,
         observability_receipt,
     })
 }
 
 fn run_minter(root: &Path, command: &ProductCommand) -> telemetry::ProductOutcome {
-    let out_dir = match output_dir(root, &command.receipt_dir) {
+    let Some(receipt_dir) = command.receipt_dir.as_deref() else {
+        return telemetry::ProductOutcome::Failure(
+            "missing required argument --receipt-dir".into(),
+        );
+    };
+    let out_dir = match output_dir(root, receipt_dir) {
         Ok(path) => path,
         Err(err) => return telemetry::ProductOutcome::Failure(err),
     };
-    match receipts::mint_all(root, &command.receipt_dir, &out_dir) {
+    match receipts::mint_all(root, receipt_dir, &out_dir) {
         Ok(report) => telemetry::ProductOutcome::Report(report),
         Err(err) => telemetry::ProductOutcome::Failure(err),
+    }
+}
+
+fn receipt_dir(operation: ProductOperation, args: &[String]) -> Result<Option<PathBuf>, String> {
+    match operation {
+        ProductOperation::ProductProveCohesion => optional_path(args, "--receipt-dir"),
+        ProductOperation::ProductProveFitness | ProductOperation::FitRepoProve => {
+            opt_path(args, "--receipt-dir").map(Some)
+        }
     }
 }
 
@@ -88,6 +114,7 @@ pub(crate) fn receipt_row(path: &str, digest: &str, status: &str) -> Value {
     json!({"path": path, "digest": digest, "status": status})
 }
 
+mod cohesion;
 pub(crate) mod receipts;
 mod telemetry;
 mod types;

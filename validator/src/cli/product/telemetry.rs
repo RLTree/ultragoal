@@ -20,14 +20,14 @@ impl ProductOutcome {
         }
     }
 
-    fn failure_class(&self) -> &'static str {
+    fn failure_class(&self, operation: ProductOperation) -> &'static str {
         match self {
             Self::Report(report)
                 if report.get("status").and_then(Value::as_str) == Some("pass") =>
             {
                 "none"
             }
-            Self::Report(_) => "product_receipt_failure",
+            Self::Report(_) => operation.report_failure_class(),
             Self::Failure(_) => "product_command_failure",
         }
     }
@@ -50,24 +50,24 @@ impl ProductOutcome {
                         .join("; ")
                 })
                 .filter(|items| !items.is_empty())
-                .unwrap_or_else(|| "product receipt report failed without details".to_string()),
+                .unwrap_or_else(|| "product report failed without details".to_string()),
             Self::Failure(error) => error.clone(),
         }
     }
 
-    fn next_repair(&self) -> &'static str {
+    fn next_repair(&self, operation: ProductOperation) -> &'static str {
         if self.status() == "pass" {
             "none"
         } else {
-            "query this run through observe logs/metrics/traces, repair the named product receipt or receipt-dir failure, then rerun product prove-fitness"
+            operation.next_repair()
         }
     }
 
-    fn claim_impact(&self) -> &'static str {
+    fn claim_impact(&self, operation: ProductOperation) -> &'static str {
         if self.status() == "pass" {
-            "supports_product_fitness_source_local_observability_only"
+            operation.pass_claim_impact()
         } else {
-            "product_fitness_failed_blocks_readiness_release_completion_update_goal"
+            operation.fail_claim_impact()
         }
     }
 
@@ -103,21 +103,21 @@ pub(super) fn emit(
             subcommand: command.operation.subcommand(),
             operation: command.operation.telemetry_operation(),
             surface: "product",
-            law_id: "product-fitness-gate",
+            law_id: command.operation.law_id(),
             check_id: command.operation.check_id(),
             claim_id: command.operation.claim_id(),
-            artifact_path: "validation_artifacts/harness",
+            artifact_path: command.operation.artifact_path(),
             receipt_path: &receipt_path,
             status,
-            failure_class: outcome.failure_class(),
+            failure_class: outcome.failure_class(command.operation),
             why_failed: &why_failed,
             where_failed: if status == "pass" {
                 "none"
             } else {
                 command.operation.telemetry_operation()
             },
-            next_repair: outcome.next_repair(),
-            claim_impact: outcome.claim_impact(),
+            next_repair: outcome.next_repair(command.operation),
+            claim_impact: outcome.claim_impact(command.operation),
             blocked_claims: blocked_claims(),
             supported_claims: outcome.supported_claims(command.operation),
             runtime: Some(product_runtime(started, outcome)),

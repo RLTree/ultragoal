@@ -52,6 +52,18 @@ fn product_prove_fitness_requires_package_receipt_dir() {
 
 #[test]
 fn product_parser_keeps_product_and_fit_repo_operations_distinct() {
+    let cohesion = ["product", "prove-cohesion"]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+    let cohesion = crate::cli::product::parse(&cohesion)
+        .expect("cohesion parse")
+        .expect("cohesion command");
+    assert_eq!(
+        cohesion.operation,
+        crate::cli::product::ProductOperation::ProductProveCohesion
+    );
+
     let product = ["product", "prove-fitness", "--receipt-dir", "receipts"]
         .into_iter()
         .map(str::to_string)
@@ -109,7 +121,7 @@ fn product_command_rejects_unsafe_receipt_dirs() {
             &root,
             &crate::cli::product::ProductCommand {
                 operation: crate::cli::product::ProductOperation::ProductProveFitness,
-                receipt_dir,
+                receipt_dir: Some(receipt_dir),
                 observability_receipt: obs.clone(),
             },
         )
@@ -141,7 +153,7 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
         &root,
         &crate::cli::product::ProductCommand {
             operation: crate::cli::product::ProductOperation::ProductProveFitness,
-            receipt_dir: rel.clone(),
+            receipt_dir: Some(rel.clone()),
             observability_receipt: obs.clone(),
         },
     )
@@ -172,6 +184,53 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
             .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"])
     );
     std::fs::remove_dir_all(out).expect("cleanup product command");
+}
+
+#[test]
+fn product_cohesion_command_emits_fail_closed_observability_for_missing_artifacts() {
+    let root = crate::self_tests::boundaries::support::temp_root("product-cohesion-command");
+    std::fs::create_dir_all(&root).expect("temp root");
+    std::fs::write(
+        root.join("plugin-manifest-draft.json"),
+        r#"{"resources":[]}"#,
+    )
+    .expect("manifest");
+    let obs = PathBuf::from("validation_artifacts/observability/product-prove-cohesion.json");
+    let code = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveCohesion,
+            receipt_dir: None,
+            observability_receipt: obs.clone(),
+        },
+    )
+    .expect("cohesion command emits telemetry");
+    assert_eq!(code, 1);
+    let receipt = crate::json_boundary::read_json(&root.join(obs)).expect("receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(receipt["event"]["operation"], "product.prove-cohesion");
+    assert_eq!(
+        receipt["event"]["failure_class"],
+        "product_cohesion_failure"
+    );
+    assert_eq!(
+        receipt["check_id"],
+        "product-prove-cohesion-observability-binding"
+    );
+    assert_eq!(receipt["claim_id"], "product_cohesion");
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("requested product cohesion gate missing")
+    );
+    assert!(
+        receipt["next_repair"]
+            .as_str()
+            .expect("next repair")
+            .contains("product prove-cohesion")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup cohesion command");
 }
 
 #[test]
