@@ -173,7 +173,7 @@
       "family": "commands",
       "id": "final-packet prove",
       "fitting_status": "partially_fitted",
-      "next_unfitted_surface": "child spans for every dereferenced lower-level receipt"
+      "next_unfitted_surface": "full command-inventory fitted closure"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, validator-check family, receipt/proof path, fixture/report path, setup/retrofit surface, long-running path, external/live path, signal, operating-loop stage, and claim guard is fitted with same-candidate query proof"
   },

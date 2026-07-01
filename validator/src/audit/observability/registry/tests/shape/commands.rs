@@ -201,6 +201,18 @@ fn production_command_control_board_counts_match_inventory_rows() {
 }
 
 #[test]
+fn production_fitting_control_board_matches_inventory_rows() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let inventory = crate::json_boundary::read_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+    )
+    .expect("production command inventory");
+    let mut failures = Vec::new();
+    super::super::super::control::check(&inventory, &mut failures);
+    assert!(failures.is_empty(), "{failures:?}");
+}
+
+#[test]
 fn production_inventory_rows_account_for_required_observability_contracts() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
