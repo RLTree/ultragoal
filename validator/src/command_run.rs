@@ -86,6 +86,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::MandatoryLawValidation(command) => {
             crate::cli::mandatory_law_validation::run(&root, &command)
         }
+        Command::Namespace(command) => crate::cli::namespace::run(&root, &command),
         Command::Observe(command) => crate::cli::observe::run(&root, &command),
         Command::OpenAi(command) => crate::cli::openai::run(&root, &command),
         Command::Promptfoo(command) => crate::cli::promptfoo::run(&root, &command),

@@ -8,6 +8,7 @@ pub(crate) mod halo;
 pub(crate) mod improvement_loop;
 pub(crate) mod line_caps;
 pub(crate) mod mandatory_law_validation;
+pub(crate) mod namespace;
 pub(crate) mod observe;
 pub(crate) mod openai;
 pub(crate) mod package;

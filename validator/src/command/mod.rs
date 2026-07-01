@@ -60,6 +60,7 @@ pub(crate) enum Command {
     ImprovementLoop(crate::cli::improvement_loop::ImprovementLoopCommand),
     LineCaps(crate::cli::line_caps::LineCapsCommand),
     MandatoryLawValidation(crate::cli::mandatory_law_validation::MandatoryLawValidationCommand),
+    Namespace(crate::cli::namespace::NamespaceCommand),
     Observe(crate::cli::observe::types::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),

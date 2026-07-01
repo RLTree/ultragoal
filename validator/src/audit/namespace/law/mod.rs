@@ -152,7 +152,7 @@ fn orphan_file_failures_for_actual_files(
     }
 }
 
-fn binding_failures(root: &Path) -> Vec<String> {
+pub(crate) fn binding_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     if !standards_row_exists(root) {
         out.push("namespace_law_missing_standards_row".to_string());

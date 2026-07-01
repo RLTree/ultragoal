@@ -47,8 +47,7 @@ fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
                 if value_index >= raw.len() {
                     return Err("missing value for --root".to_string());
                 }
-                let value = raw[value_index].clone();
-                root = PathBuf::from(value);
+                root = PathBuf::from(raw[value_index].clone());
                 raw.drain(i..=i + 1);
             }
             _ => i += 1,
@@ -157,6 +156,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::LineCaps(command)
             } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
                 Command::MandatoryLawValidation(command)
+            } else if let Some(command) = cli::namespace::parse(raw)? {
+                Command::Namespace(command)
             } else if let Some(command) = cli::observe::parse(raw)? {
                 Command::Observe(command)
             } else if let Some(command) = cli::openai::parse(raw)? {
@@ -230,10 +231,9 @@ fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
 }
 
 fn opt_string(args: &[String], key: &str) -> Option<String> {
-    args.iter()
-        .position(|a| a == key)
-        .and_then(|i| args.get(i + 1))
-        .cloned()
+    args.windows(2)
+        .find(|window| window[0] == key)
+        .map(|window| window[1].clone())
 }
 
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
