@@ -69,7 +69,7 @@ pub(super) fn fitted_inventory() -> Value {
             fitted_operating_row("signal", signal),
         );
     }
-    json!({
+    let mut inventory = json!({
         "commands": super::super::fitting::REQUIRED_COMMANDS,
         "surfaces": super::super::surfaces::REQUIRED_SURFACES,
         "operating_loop": {
@@ -103,40 +103,51 @@ pub(super) fn fitted_inventory() -> Value {
         "surface_inventory": surface_rows,
         "operating_loop_inventory": loop_rows,
         "signal_inventory": signal_rows
-    })
+    });
+    super::dimension_support::insert_dimension_inventory(&mut inventory);
+    inventory
 }
 
 fn fitted_control_board() -> Value {
+    let mut families = Map::new();
+    insert_counts(
+        &mut families,
+        "commands",
+        super::super::fitting::REQUIRED_COMMANDS.len(),
+    );
+    insert_counts(
+        &mut families,
+        "surfaces",
+        super::super::surfaces::REQUIRED_SURFACES.len(),
+    );
+    insert_counts(
+        &mut families,
+        "operating_loop",
+        super::super::operating::REQUIRED_LOOP_STAGES.len(),
+    );
+    insert_counts(
+        &mut families,
+        "signals",
+        super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
+    );
+    super::dimension_support::insert_dimension_counts(&mut families);
     json!({
         "status": "fitted",
-        "families": {
-            "commands": {
-                "total": super::super::fitting::REQUIRED_COMMANDS.len(),
-                "fitted": super::super::fitting::REQUIRED_COMMANDS.len(),
-                "partially_fitted": 0,
-                "unfitted": 0
-            },
-            "surfaces": {
-                "total": super::super::surfaces::REQUIRED_SURFACES.len(),
-                "fitted": super::super::surfaces::REQUIRED_SURFACES.len(),
-                "partially_fitted": 0,
-                "unfitted": 0
-            },
-            "operating_loop": {
-                "total": super::super::operating::REQUIRED_LOOP_STAGES.len(),
-                "fitted": super::super::operating::REQUIRED_LOOP_STAGES.len(),
-                "partially_fitted": 0,
-                "unfitted": 0
-            },
-            "signals": {
-                "total": super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
-                "fitted": super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
-                "partially_fitted": 0,
-                "unfitted": 0
-            }
-        },
+        "families": families,
         "claim_impact": "supports_gate_92_only_when_every_inventory_row_is_fitted_same_candidate"
     })
+}
+
+pub(super) fn insert_counts(families: &mut Map<String, Value>, key: &str, len: usize) {
+    families.insert(
+        key.to_string(),
+        json!({
+            "total": len,
+            "fitted": len,
+            "partially_fitted": 0,
+            "unfitted": 0
+        }),
+    );
 }
 
 fn fitted_row(command: &str) -> Value {

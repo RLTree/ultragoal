@@ -9,6 +9,7 @@ pub(super) fn write_fitting_receipts(root: &Path) {
     write_surface_receipts(&dir, &candidate);
     write_loop_receipts(&dir, &candidate);
     write_signal_receipts(&dir, &candidate);
+    write_dimension_receipts(&dir, &candidate);
 }
 
 fn write_command_receipts(dir: &Path, candidate: &str) {
@@ -64,6 +65,22 @@ fn write_signal_receipts(dir: &Path, candidate: &str) {
             &format!("corr-signal-{slug}"),
             &format!("observability.signal.{slug}"),
         );
+    }
+}
+
+fn write_dimension_receipts(dir: &Path, candidate: &str) {
+    for (board_key, _, _, ids) in crate::audit::observability::required_dimension_families() {
+        for id in ids {
+            let slug = slug(id);
+            write_receipt_set(
+                dir,
+                candidate,
+                &format!("{board_key}-{slug}"),
+                &format!("run-{board_key}-{slug}"),
+                &format!("corr-{board_key}-{slug}"),
+                &format!("observability.{board_key}.{slug}"),
+            );
+        }
     }
 }
 

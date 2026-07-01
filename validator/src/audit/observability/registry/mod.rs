@@ -2,6 +2,8 @@ use serde_json::Value;
 use std::path::Path;
 
 mod control;
+mod dimension_ids;
+mod dimensions;
 mod fitting;
 mod metric;
 mod operating;
@@ -35,6 +37,26 @@ pub(crate) fn required_loop_stages() -> &'static [&'static str] {
 #[cfg(test)]
 pub(crate) fn required_signal_classes() -> &'static [&'static str] {
     operating::REQUIRED_SIGNAL_CLASSES
+}
+
+#[cfg(test)]
+pub(crate) fn required_dimension_families() -> Vec<(
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static [&'static str],
+)> {
+    dimension_ids::inventory_families()
+        .into_iter()
+        .map(|family| {
+            (
+                family.board_key,
+                family.list_key,
+                family.inventory_key,
+                family.ids,
+            )
+        })
+        .collect()
 }
 
 pub(crate) fn fitting_failures(root: &Path) -> Vec<String> {
@@ -77,6 +99,7 @@ fn require_command_inventory(root: &Path, out: &mut Vec<String>) {
     fitting::check(root, &value, out);
     surfaces::check(root, &value, out);
     operating::check(root, &value, out);
+    dimensions::check(root, &value, out);
 }
 
 fn has_law_id(root: &Path, rel: &str, key: &str) -> bool {

@@ -39,6 +39,16 @@ pub(crate) fn required_signal_classes() -> &'static [&'static str] {
     registry::required_signal_classes()
 }
 
+#[cfg(test)]
+pub(crate) fn required_dimension_families() -> Vec<(
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static [&'static str],
+)> {
+    registry::required_dimension_families()
+}
+
 pub(crate) fn command_fitting_failures(root: &Path) -> Vec<String> {
     registry::fitting_failures(root)
 }

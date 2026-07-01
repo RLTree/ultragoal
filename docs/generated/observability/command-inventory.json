@@ -125,6 +125,48 @@
         "fitted": 0,
         "partially_fitted": 7,
         "unfitted": 1
+      },
+      "validator_checks": {
+        "total": 16,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 16
+      },
+      "receipts": {
+        "total": 21,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 21
+      },
+      "fixtures": {
+        "total": 9,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 9
+      },
+      "package_setup": {
+        "total": 12,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 12
+      },
+      "long_running": {
+        "total": 17,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 17
+      },
+      "external_live": {
+        "total": 12,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 12
+      },
+      "claim_guards": {
+        "total": 13,
+        "fitted": 0,
+        "partially_fitted": 0,
+        "unfitted": 13
       }
     },
     "first_incomplete": {
@@ -133,7 +175,7 @@
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "pass stdout contract"
     },
-    "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
+    "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, validator-check family, receipt/proof path, fixture/report path, setup/retrofit surface, long-running path, external/live path, signal, operating-loop stage, and claim guard is fitted with same-candidate query proof"
   },
   "fitting_inventory": {
     "package digest": {
@@ -2654,6 +2696,2134 @@
       "claim_impact": "unbounded telemetry blocks Gate 92",
       "current_owner_surface": "signal:boundedness",
       "next_unfitted_surface": "all queries/exports/spools enforce row, byte, timeout, retention, and cardinality bounds"
+    }
+  },
+  "validator_check_families": [
+    "standards enforcement",
+    "source obligations",
+    "foundational trace",
+    "schema catalog",
+    "mandatory-law surfaces",
+    "package inventory",
+    "namespace",
+    "line caps",
+    "coverage",
+    "product proofs",
+    "review and packet proofs",
+    "red fixture evaluation",
+    "target repo audit",
+    "research trace",
+    "observability registry",
+    "claim guards"
+  ],
+  "validator_check_inventory": {
+    "standards enforcement": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.standards-enforcement",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_standards-enforcement_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:standards enforcement",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "source obligations": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.source-obligations",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_source-obligations_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:source obligations",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "foundational trace": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.foundational-trace",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_foundational-trace_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:foundational trace",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "schema catalog": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.schema-catalog",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_schema-catalog_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:schema catalog",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "mandatory-law surfaces": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.mandatory-law-surfaces",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_mandatory-law-surfaces_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:mandatory-law surfaces",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "package inventory": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.package-inventory",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_package-inventory_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:package inventory",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "namespace": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.namespace",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_namespace_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:namespace",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "line caps": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.line-caps",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_line-caps_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:line caps",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "coverage": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.coverage",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_coverage_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:coverage",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "product proofs": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.product-proofs",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_product-proofs_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:product proofs",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "review and packet proofs": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.review-and-packet-proofs",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_review-and-packet-proofs_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:review and packet proofs",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "red fixture evaluation": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.red-fixture-evaluation",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_red-fixture-evaluation_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:red fixture evaluation",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "target repo audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.target-repo-audit",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_target-repo-audit_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:target repo audit",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "research trace": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.research-trace",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_research-trace_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:research trace",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observability registry": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.observability-registry",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_observability-registry_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:observability registry",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "claim guards": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.validator_checks.claim-guards",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_validator_checks_claim-guards_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "validator_checks:claim guards",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "receipt_proof_paths": [
+    "package digest receipt",
+    "source audit receipt",
+    "red fixture report receipt",
+    "coverage receipt",
+    "product fitness receipt",
+    "product journey receipt",
+    "fit repo receipt",
+    "standards gardener receipt",
+    "review target receipt",
+    "archive receipt",
+    "final packet proof",
+    "self law receipt",
+    "update goal eligibility receipt",
+    "install audit receipt",
+    "cache audit receipt",
+    "registry exposure receipt",
+    "openai call receipt",
+    "promptfoo receipt",
+    "halo capability receipt",
+    "rust proof receipts",
+    "gc receipts"
+  ],
+  "receipt_proof_inventory": {
+    "package digest receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.package-digest-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_package-digest-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:package digest receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "source audit receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.source-audit-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_source-audit-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:source audit receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "red fixture report receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.red-fixture-report-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_red-fixture-report-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:red fixture report receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "coverage receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.coverage-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_coverage-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:coverage receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "product fitness receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.product-fitness-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_product-fitness-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:product fitness receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "product journey receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.product-journey-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_product-journey-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:product journey receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "fit repo receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.fit-repo-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_fit-repo-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:fit repo receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "standards gardener receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.standards-gardener-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_standards-gardener-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:standards gardener receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "review target receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.review-target-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_review-target-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:review target receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "archive receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.archive-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_archive-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:archive receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "final packet proof": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.final-packet-proof",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_final-packet-proof_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:final packet proof",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "self law receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.self-law-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_self-law-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:self law receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "update goal eligibility receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.update-goal-eligibility-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_update-goal-eligibility-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:update goal eligibility receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "install audit receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.install-audit-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_install-audit-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:install audit receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "cache audit receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.cache-audit-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_cache-audit-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:cache audit receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "registry exposure receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.registry-exposure-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_registry-exposure-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:registry exposure receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "openai call receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.openai-call-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_openai-call-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:openai call receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "promptfoo receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.promptfoo-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_promptfoo-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:promptfoo receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "halo capability receipt": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.halo-capability-receipt",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_halo-capability-receipt_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:halo capability receipt",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "rust proof receipts": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.rust-proof-receipts",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_rust-proof-receipts_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:rust proof receipts",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "gc receipts": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.receipts.gc-receipts",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_receipts_gc-receipts_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "receipts:gc receipts",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "fixture_report_paths": [
+    "red fixtures catalog",
+    "red fixture report",
+    "mandatory law valid fixtures",
+    "green fixture paths",
+    "tamper fixture paths",
+    "schema fixtures",
+    "review round fixtures",
+    "target repo valid fixtures",
+    "target repo red fixtures"
+  ],
+  "fixture_report_inventory": {
+    "red fixtures catalog": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.red-fixtures-catalog",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_red-fixtures-catalog_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:red fixtures catalog",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "red fixture report": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.red-fixture-report",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_red-fixture-report_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:red fixture report",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "mandatory law valid fixtures": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.mandatory-law-valid-fixtures",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_mandatory-law-valid-fixtures_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:mandatory law valid fixtures",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "green fixture paths": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.green-fixture-paths",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_green-fixture-paths_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:green fixture paths",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "tamper fixture paths": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.tamper-fixture-paths",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_tamper-fixture-paths_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:tamper fixture paths",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "schema fixtures": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.schema-fixtures",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_schema-fixtures_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:schema fixtures",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "review round fixtures": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.review-round-fixtures",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_review-round-fixtures_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:review round fixtures",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "target repo valid fixtures": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.target-repo-valid-fixtures",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_target-repo-valid-fixtures_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:target repo valid fixtures",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "target repo red fixtures": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.fixtures.target-repo-red-fixtures",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_fixtures_target-repo-red-fixtures_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "fixtures:target repo red fixtures",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "package_plugin_setup_retrofit_surfaces": [
+    "plugin manifest draft",
+    "codex plugin manifest",
+    "skills",
+    "templates",
+    "schemas",
+    "observability docs",
+    "package resource map",
+    "agent first repo init",
+    "agent first repo retrofit",
+    "fit repo setup",
+    "target repo audit setup",
+    "clean checkout command discovery"
+  ],
+  "package_plugin_setup_retrofit_inventory": {
+    "plugin manifest draft": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.plugin-manifest-draft",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_plugin-manifest-draft_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:plugin manifest draft",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "codex plugin manifest": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.codex-plugin-manifest",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_codex-plugin-manifest_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:codex plugin manifest",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "skills": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.skills",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_skills_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:skills",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "templates": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.templates",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_templates_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:templates",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "schemas": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.schemas",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_schemas_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:schemas",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observability docs": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.observability-docs",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_observability-docs_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:observability docs",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "package resource map": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.package-resource-map",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_package-resource-map_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:package resource map",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "agent first repo init": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.agent-first-repo-init",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_agent-first-repo-init_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:agent first repo init",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "agent first repo retrofit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.agent-first-repo-retrofit",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_agent-first-repo-retrofit_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:agent first repo retrofit",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "fit repo setup": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.fit-repo-setup",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_fit-repo-setup_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:fit repo setup",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "target repo audit setup": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.target-repo-audit-setup",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_target-repo-audit-setup_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:target repo audit setup",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "clean checkout command discovery": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.package_setup.clean-checkout-command-discovery",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_package_setup_clean-checkout-command-discovery_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "package_setup:clean checkout command discovery",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "long_running_paths": [
+    "source audit",
+    "red fixture report",
+    "coverage prove",
+    "install audit",
+    "cache audit",
+    "registry probe",
+    "review target build",
+    "archive build",
+    "rust release",
+    "rust coverage prove",
+    "rust watch",
+    "gc apply",
+    "observe stack up",
+    "observe stack smoke",
+    "openai call prove",
+    "promptfoo prove",
+    "halo capability prove"
+  ],
+  "long_running_path_inventory": {
+    "source audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.source-audit",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_source-audit_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:source audit",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "red fixture report": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.red-fixture-report",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_red-fixture-report_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:red fixture report",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "coverage prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.coverage-prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_coverage-prove_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:coverage prove",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "install audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.install-audit",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_install-audit_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:install audit",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "cache audit": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.cache-audit",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_cache-audit_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:cache audit",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "registry probe": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.registry-probe",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_registry-probe_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:registry probe",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "review target build": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.review-target-build",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_review-target-build_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:review target build",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "archive build": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.archive-build",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_archive-build_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:archive build",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "rust release": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.rust-release",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_rust-release_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:rust release",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "rust coverage prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.rust-coverage-prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_rust-coverage-prove_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:rust coverage prove",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "rust watch": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.rust-watch",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_rust-watch_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:rust watch",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "gc apply": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.gc-apply",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_gc-apply_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:gc apply",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observe stack up": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.observe-stack-up",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_observe-stack-up_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:observe stack up",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observe stack smoke": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.observe-stack-smoke",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_observe-stack-smoke_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:observe stack smoke",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "openai call prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.openai-call-prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_openai-call-prove_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:openai call prove",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "promptfoo prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.promptfoo-prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_promptfoo-prove_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:promptfoo prove",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "halo capability prove": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.long_running.halo-capability-prove",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_long_running_halo-capability-prove_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "long_running:halo capability prove",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "external_live_paths": [
+    "openai provider calls",
+    "promptfoo execution",
+    "halo adapter",
+    "install surface",
+    "cache surface",
+    "app registry surface",
+    "reviewer surface",
+    "observability live stack",
+    "trace exporter",
+    "metrics exporter",
+    "logs exporter",
+    "target repo runtime"
+  ],
+  "external_live_path_inventory": {
+    "openai provider calls": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.openai-provider-calls",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_openai-provider-calls_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:openai provider calls",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "promptfoo execution": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.promptfoo-execution",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_promptfoo-execution_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:promptfoo execution",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "halo adapter": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.halo-adapter",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_halo-adapter_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:halo adapter",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "install surface": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.install-surface",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_install-surface_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:install surface",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "cache surface": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.cache-surface",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_cache-surface_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:cache surface",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "app registry surface": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.app-registry-surface",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_app-registry-surface_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:app registry surface",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "reviewer surface": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.reviewer-surface",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_reviewer-surface_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:reviewer surface",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observability live stack": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.observability-live-stack",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_observability-live-stack_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:observability live stack",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "trace exporter": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.trace-exporter",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_trace-exporter_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:trace exporter",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "metrics exporter": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.metrics-exporter",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_metrics-exporter_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:metrics exporter",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "logs exporter": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.logs-exporter",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_logs-exporter_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:logs exporter",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "target repo runtime": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.external_live.target-repo-runtime",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_external_live_target-repo-runtime_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "external_live:target repo runtime",
+      "next_unfitted_surface": "log instrumentation"
+    }
+  },
+  "claim_guards": [
+    "completion",
+    "readiness",
+    "release",
+    "final packet correctness",
+    "update goal eligibility",
+    "reviewer exposure",
+    "app registry exposure",
+    "install parity",
+    "cache parity",
+    "product success",
+    "observability gate",
+    "local spool only proof",
+    "live stack query proof"
+  ],
+  "claim_guard_inventory": {
+    "completion": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.completion",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_completion_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:completion",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "readiness": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.readiness",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_readiness_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:readiness",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "release": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.release",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_release_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:release",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "final packet correctness": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.final-packet-correctness",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_final-packet-correctness_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:final packet correctness",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "update goal eligibility": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.update-goal-eligibility",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_update-goal-eligibility_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:update goal eligibility",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "reviewer exposure": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.reviewer-exposure",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_reviewer-exposure_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:reviewer exposure",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "app registry exposure": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.app-registry-exposure",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_app-registry-exposure_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:app registry exposure",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "install parity": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.install-parity",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_install-parity_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:install parity",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "cache parity": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.cache-parity",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_cache-parity_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:cache parity",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "product success": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.product-success",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_product-success_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:product success",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "observability gate": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.observability-gate",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_observability-gate_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:observability gate",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "local spool only proof": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.local-spool-only-proof",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_local-spool-only-proof_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:local spool only proof",
+      "next_unfitted_surface": "log instrumentation"
+    },
+    "live stack query proof": {
+      "fitting_status": "unfitted",
+      "fitted_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation",
+        "metric instrumentation",
+        "trace instrumentation",
+        "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding"
+      ],
+      "operation": "observability.claim_guards.live-stack-query-proof",
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [],
+      "receipt_paths": [],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_gate_92_until_claim_guards_live-stack-query-proof_is_fitted_with_same_candidate_query_proof",
+      "current_owner_surface": "claim_guards:live stack query proof",
+      "next_unfitted_surface": "log instrumentation"
     }
   }
 }

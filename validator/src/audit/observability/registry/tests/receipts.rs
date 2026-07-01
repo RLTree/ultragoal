@@ -48,6 +48,19 @@ pub(super) fn write_fitting_receipts(root: &Path) {
             &format!("observability.signal.{slug}"),
         );
     }
+    for family in super::super::dimension_ids::inventory_families() {
+        for id in family.ids {
+            let slug = slug(id);
+            write_receipt_set(
+                &dir,
+                &candidate,
+                &format!("{}-{slug}", family.board_key),
+                &format!("run-{}-{slug}", family.board_key),
+                &format!("corr-{}-{slug}", family.board_key),
+                &format!("observability.{}.{}", family.board_key, slug),
+            );
+        }
+    }
 }
 
 fn write_receipt_set(

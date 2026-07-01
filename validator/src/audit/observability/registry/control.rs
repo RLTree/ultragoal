@@ -9,11 +9,11 @@ pub(super) fn check(value: &Value, out: &mut Vec<String>) {
         return;
     };
     let mut incomplete = Vec::new();
-    for (family, inventory_key, required_ids) in families() {
-        let counts = Counts::from_inventory(value, inventory_key);
-        counts.require_board_family(board, family, out);
-        if let Some(first) = first_incomplete(value, inventory_key, required_ids) {
-            incomplete.push((family, first));
+    for family in families() {
+        let counts = Counts::from_inventory(value, family.inventory_key);
+        counts.require_board_family(board, family.board_key, out);
+        if let Some(first) = first_incomplete(value, family.inventory_key, family.ids) {
+            incomplete.push((family.board_key, first));
         }
     }
     let actual_status = if incomplete.is_empty() {
@@ -32,29 +32,45 @@ pub(super) fn check(value: &Value, out: &mut Vec<String>) {
     }
 }
 
-fn families() -> [(&'static str, &'static str, &'static [&'static str]); 4] {
-    [
-        (
-            "commands",
-            "fitting_inventory",
-            super::fitting::REQUIRED_COMMANDS,
-        ),
-        (
-            "surfaces",
-            "surface_inventory",
-            super::surfaces::REQUIRED_SURFACES,
-        ),
-        (
-            "operating_loop",
-            "operating_loop_inventory",
-            super::operating::REQUIRED_LOOP_STAGES,
-        ),
-        (
-            "signals",
-            "signal_inventory",
-            super::operating::REQUIRED_SIGNAL_CLASSES,
-        ),
-    ]
+struct ControlFamily {
+    board_key: &'static str,
+    inventory_key: &'static str,
+    ids: &'static [&'static str],
+}
+
+fn families() -> Vec<ControlFamily> {
+    let mut out = vec![
+        ControlFamily {
+            board_key: "commands",
+            inventory_key: "fitting_inventory",
+            ids: super::fitting::REQUIRED_COMMANDS,
+        },
+        ControlFamily {
+            board_key: "surfaces",
+            inventory_key: "surface_inventory",
+            ids: super::surfaces::REQUIRED_SURFACES,
+        },
+        ControlFamily {
+            board_key: "operating_loop",
+            inventory_key: "operating_loop_inventory",
+            ids: super::operating::REQUIRED_LOOP_STAGES,
+        },
+        ControlFamily {
+            board_key: "signals",
+            inventory_key: "signal_inventory",
+            ids: super::operating::REQUIRED_SIGNAL_CLASSES,
+        },
+    ];
+    out.extend(
+        super::dimension_ids::inventory_families()
+            .into_iter()
+            .map(|family| ControlFamily {
+                board_key: family.board_key,
+                inventory_key: family.inventory_key,
+                ids: family.ids,
+            }),
+    );
+    out
 }
 
 fn require_first_incomplete(

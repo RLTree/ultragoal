@@ -2,6 +2,7 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
+mod dimension_support;
 mod proof_edges;
 mod receipts;
 mod shape;

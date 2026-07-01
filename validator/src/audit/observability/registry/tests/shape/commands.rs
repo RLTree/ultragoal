@@ -106,6 +106,43 @@ fn observability_command_inventory_shape_edges_are_explicit() {
 }
 
 #[test]
+fn observability_dimension_inventories_are_required() {
+    let root = crate::self_tests::boundaries::support::temp_root("observe-dimension-shape");
+    let mut inventory = super::super::support::fitted_inventory();
+    inventory["validator_check_families"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|row| row.as_str() != Some("standards enforcement"));
+    inventory["validator_check_inventory"]
+        .as_object_mut()
+        .unwrap()
+        .remove("source obligations");
+    inventory["receipt_proof_inventory"]["coverage receipt"] = json!("bad");
+    inventory["claim_guard_inventory"]["completion"]
+        .as_object_mut()
+        .unwrap()
+        .remove("claim_impact");
+    let mut failures = Vec::new();
+    super::super::super::dimensions::check(&root, &inventory, &mut failures);
+    assert!(failures.contains(
+        &"observability_validator_check_inventory_missing:standards enforcement".to_string()
+    ));
+    assert!(
+        failures.contains(
+            &"observability_validator_check_fitting_missing:source obligations".to_string()
+        )
+    );
+    assert!(failures.contains(
+        &"observability_receipt_proof_fitting_row_not_object:coverage receipt".to_string()
+    ));
+    assert!(
+        failures
+            .contains(&"observability_claim_guard_fitting_row_shape_only:completion".to_string())
+    );
+    let _ = std::fs::remove_dir_all(root);
+}
+
+#[test]
 fn production_command_inventory_matches_required_command_authority() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
@@ -175,6 +212,13 @@ fn production_inventory_rows_account_for_required_observability_contracts() {
         ("surfaces", "surface_inventory"),
         ("operating_loop", "operating_loop_inventory"),
         ("signals", "signal_inventory"),
+        ("validator_checks", "validator_check_inventory"),
+        ("receipts", "receipt_proof_inventory"),
+        ("fixtures", "fixture_report_inventory"),
+        ("package_setup", "package_plugin_setup_retrofit_inventory"),
+        ("long_running", "long_running_path_inventory"),
+        ("external_live", "external_live_path_inventory"),
+        ("claim_guards", "claim_guard_inventory"),
     ] {
         let rows = inventory
             .get(key)
