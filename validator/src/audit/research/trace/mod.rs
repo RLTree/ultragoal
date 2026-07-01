@@ -3,6 +3,7 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+mod gate92;
 #[cfg(test)]
 mod tests;
 
@@ -136,7 +137,8 @@ fn row_failures_for(
         "setup_retrofit_omitted",
         Some(known.package_paths),
     ));
-    out.extend(required_field_failures(id, row));
+    out.extend(gate92::required_field_failures(id, row));
+    out.extend(gate92::row_failures(id, row));
     if array(row, "canonical_law_ids")
         .iter()
         .all(|law| law.starts_with("HU-"))
@@ -144,19 +146,6 @@ fn row_failures_for(
         out.push(format!("research_trace_alias_only:{id}"));
     }
     out
-}
-
-fn required_field_failures(id: &str, row: &Value) -> Vec<String> {
-    [
-        "receipt_requirements",
-        "claim_guards",
-        "final_packet_fields",
-        "update_goal_blockers",
-    ]
-    .into_iter()
-    .filter(|field| array(row, field).is_empty())
-    .map(|field| format!("research_trace_missing_{field}:{id}"))
-    .collect()
 }
 
 fn check_checks(id: &str, row: &Value, known: &BTreeSet<&str>) -> Vec<String> {

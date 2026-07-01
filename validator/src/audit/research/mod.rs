@@ -9,6 +9,7 @@ mod trace;
 const CARDS_PATH: &str = "docs/research-source-cards.json";
 const REGISTRY_PATH: &str = "docs/research-source-registry.json";
 const TRACE_PATH: &str = "docs/research-article-to-law-trace.json";
+const GATE_92_LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
 
 #[cfg(test)]
 mod tests;
@@ -94,6 +95,12 @@ fn registry_failures(
             }
             if array(row, "canonical_law_ids_affected").is_empty() {
                 out.push(format!("research_registry_unmapped_source:{id}"));
+            }
+            if !array(row, "canonical_law_ids_affected")
+                .iter()
+                .any(|law| law == GATE_92_LAW)
+            {
+                out.push(format!("research_registry_gate92_law_missing:{id}"));
             }
             if text(row, "claim_ceiling_impact").is_empty() {
                 out.push(format!("research_registry_missing_claim_ceiling:{id}"));

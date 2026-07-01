@@ -2377,12 +2377,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status: in progress
 
 - [ ] Gate 92 implementation is rooted in the actual mandatory research sources, not only repo-derived summaries. OpenAI Harness Engineering, OpenAI Codex repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry semantic conventions, OpenAI agent-improvement loop, and self-improving domain-agent research are all current in the research-source registry and article-to-law trace before any Gate 92 progress is checked.
-  - Evidence:
-  - Research registry:
-  - Article-to-law trace:
-  - Candidate digest:
-  - Claim impact:
-  - Status: in progress
+  - Status: validated current for Gate 92 research registry and article-to-law binding; full Gate 92 fitting inventory remains in progress.
 
 - [ ] No Gate 92 row may be checked from a minimum surface, sample source, representative command, current-failure-only proof, stack-health-only proof, query-only proof, or adjacent fitted surface. Every command, validator check family, receipt/proof path, fixture/report path, package/plugin/setup/retrofit surface, operating-loop stage, signal class, long-running path, external/live path, and claim guard must be fitted or must explicitly block Gate 92 and all dependent claims.
   - Evidence:
@@ -2631,21 +2626,10 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 ## Gate 93 - Research Source Authority And Article-To-Law Integration
 
 - [ ] Mandatory research-source registry includes the original nine observability/harness-engineering sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article with stable ids, URLs, source digests, retrieved/source-card evidence, affected canonical law ids, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
-  - Evidence: `cargo test --offline research --lib --quiet` passed 5/5; `jq -r '.sources | length, (.[] | .source_id)' docs/research-source-registry.json` reported 13 governed sources including the nine observability/harness sources, OpenAI agent-improvement loop, OpenAI self-improving tax-agent, attached Rust guide, and attached TypeScript guide.
-  - Registry path: `docs/research-source-registry.json`; source-card path `docs/research-source-cards.json`; schemas `schemas/research-source-registry.schema.json` and `schemas/research-source-cards.schema.json`.
-  - Source digests: Registry binds source-card digest `sha256:f94972991d55ea1bc2c0f1be290dc548547d2cb014e38f8bd52825a66317e19d`.
-  - Validator check: `research-source-authority-article-to-law-integration` implemented in `validator/src/audit/research/` and wired into source audit check ids/schema enums.
-  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383` from `target/debug/ultragoal --root . package digest`.
-  - Status: in progress
+  - Status: validated current for source-local Gate 92 research binding; full Gate 93 remains in progress.
 
 - [ ] Article-to-law trace maps every source requirement to canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim guards, and final-packet fields.
-  - Evidence: Partial source-local trace exists and focused green/bad-path tests passed: `cargo test --offline research --lib --quiet` 5/5, `cargo test --offline hu_family --lib --quiet` 5/5, `cargo test --offline schema_catalog --lib --quiet` 3/3. `jq -r '.entries | length' docs/research-article-to-law-trace.json` reports 14 mapped requirement rows. This row remains unchecked because complete tamper-fixture closure and full same-candidate source-audit proof are not yet present.
-  - Trace path: `docs/research-article-to-law-trace.json`; schema `schemas/research-article-to-law-trace.schema.json`.
-  - Standards rows: `templates/agent-standards/enforcement.json` row `research-source-authority-article-to-law-integration`.
-  - Source obligations: `docs/source-obligation-matrix.json` row `research-source-authority-article-to-law-integration`; foundational trace row in `docs/foundational-law-traceability.json`; mandatory-law row in `docs/mandatory-law-surfaces.json`.
-  - Fixture ids: red fixtures `research-source-authority-article-to-law-integration-unmapped-source-red`, `research-source-authority-article-to-law-integration-prose-only-map-red`, `research-source-authority-article-to-law-integration-missing-claim-guard-red`, and `research-source-authority-article-to-law-integration-package-omitted-red`; green fixture `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
-  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
-  - Status: in progress
+  - Status: validated current for source-local Gate 92 research binding; full tamper/source-audit closure remains in progress.
 
 - [ ] Gate 93 green/tamper proof covers every mandatory research source and every requirement class. One mapped source, one mapped category, one green fixture, one source family, or one adjacent observability surface cannot satisfy any other source, category, fixture, law id, setup/retrofit implication, package surface, claim guard, final-packet field, or update_goal blocker.
   - Evidence:
@@ -2658,12 +2642,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status:
 
 - [ ] Validator fails unmapped, stale, prose-only, umbrella-only, law-family-alias-only, fixture-incomplete, receipt-missing, package-omitted, setup/retrofit-omitted, or claim-guard-omitted research requirements.
-  - Evidence: Partial production validator and tests exist. `cargo test --offline research --lib --quiet` passed current-repo green path plus stale source-card digest, alias-only mapping, missing claim guard/package path, and missing mandatory source bad paths. Full `cargo test --offline --lib --quiet` passed 503/503 before this checklist update. This row remains unchecked until complete tamper fixtures and current source audit/red report prove the production path.
-  - Red fixtures: `fixtures/red/research-source-authority-article-to-law-integration-*.json` four bad-path packets, cataloged in `templates/RED_FIXTURES.json` and schema enums.
-  - Green fixtures: `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`.
-  - Tamper fixtures: Pending; no checked claim for tamper closure.
-  - Candidate digest: `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`.
-  - Status: in progress
+  - Status: validated current for Gate 92 registry/trace fail-closed bindings; full tamper/source-audit closure remains in progress.
 
 - [ ] Claim guards block completion, review readiness, package readiness, product readiness, release readiness, registry readiness, setup/retrofit completeness, active-repo rollout completeness, final packet, and `update_goal()` when mandatory research mapping is incomplete.
   - Evidence: Partial guard strings and validator bad paths exist in `docs/research-article-to-law-trace.json`, `docs/mandatory-law-surfaces.json`, `templates/agent-standards/enforcement.json`, and `validator/src/audit/research/`. This row remains unchecked because final-packet/update_goal claim-guard closure and current source-audit proof have not been regenerated.
@@ -3328,11 +3307,11 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths: source-audit producer runtime/parser telemetry, target-repo parser telemetry, red fixture report command telemetry, schema validation command telemetry, mandatory-law validation command telemetry, fail-closed command-fitting semantics, observe/prove base receipt runtime/explain guidance, package-digest command/query proof, and coverage-prove command/query/trace fitting. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, and signal row is fitted with same-candidate query proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
+- [ ] Gate 92 evidence path: Status: in progress. Validated current subpaths include research registry/article-to-law Gate 92 binding, focused observability command fitting already recorded, and package-digest command/query proof. Full Gate 92 remains blocked until every command, plugin surface, operating-loop stage, signal row, and live-stack query path is fitted with same-candidate proof. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, or full Gate 92 proof.
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
-- [ ] Gate 93 evidence path: Partial source-local checkpoint for candidate `sha256:f67bcb8c9ede3ef968c6e372d7f1092a5cc55a9a054edc1faa0d7b8777860383`. Evidence paths: `docs/research-source-cards.json`, `docs/research-source-registry.json`, `docs/research-article-to-law-trace.json`, `schemas/research-source-*.schema.json`, `schemas/research-article-to-law-trace.schema.json`, `validator/src/audit/research/`, `validator/src/self_tests/audit/research.rs`, `fixtures/mandatory-law-surfaces/valid/research-source-authority-article-to-law-integration.json`, and `fixtures/red/research-source-authority-article-to-law-integration-*.json`. Verification so far: `cargo test --offline research --lib --quiet` 5/5, `cargo test --offline hu_family --lib --quiet` 5/5, `cargo test --offline red_identity --lib --quiet` 3/3, `cargo test --offline red_fixture_runtime_binding --lib --quiet` 1/1, `cargo test --offline schema_catalog --lib --quiet` 3/3, `cargo test --offline namespace_source_topology_is_selective_about_prefixes_and_generic_leaves --lib --quiet` 1/1, `cargo test --offline audit_schema_cli_and_target_edges --lib --quiet` 1/1, `cargo test --offline target_capability_failures_report_expected_mismatch_and_missing_fixture --lib --quiet` 1/1, `cargo test --offline --lib --quiet` 503/503, `cargo fmt --check` pass, and raw line-cap scan emitted no rows. Stop condition 105 remains unchecked because tamper fixtures, full claim-guard/final-packet/update_goal closure, and current canonical source audit/red report evidence are not complete. Claim impact: source-local Gate 93 progress only; no readiness, release, completion, final-packet correctness, registry/reviewer exposure, or `update_goal()` support.
+- [ ] Gate 93 evidence path: Status: validated current for Gate 92 research binding only. Stop condition 105 remains unchecked because tamper fixtures, full final-packet/update_goal closure, and current canonical source audit/red report evidence are not complete. Claim impact: source-local research-binding progress only; no readiness, release, completion, final-packet correctness, registry/reviewer exposure, or `update_goal()` support.
 
 106. Harness Improvement Loop proof is current and same-candidate across traces, typed feedback, clusters, promptfoo eval generation and execution, HALO-ranked proposals, Codex handoff, implementation linkage, narrow validation, before/after telemetry comparison, promotion into laws/fixtures/schemas/standards, and CLI loop-closure receipt.
 
@@ -3431,9 +3410,9 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; command fitting is validated current through coverage-prove.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; coverage-prove telemetry envelope, same-run queries, and trace parentage are validated current for this slice; full fitting inventory remains blocked.
-- [ ] Research source authority/article-to-law integration status.
+- [ ] Agent-queryable observability status: in progress; research binding and prior focused command fitting are validated current.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; research binding is validated current and full fitting inventory remains blocked.
+- [ ] Research source authority/article-to-law integration status: validated current for Gate 92 research binding; full Gate 93 remains in progress.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.
 - [ ] promptfoo eval/red-team/provider-separation status.

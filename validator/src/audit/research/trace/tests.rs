@@ -8,23 +8,35 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
     std::fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
-        &json!({"resources":["docs/present-schema.json"]}),
+        &json!({"resources":["docs/present-schema.json", "schemas/observability-event.schema.json"]}),
     )
     .expect("manifest");
     std::fs::write(root.join("docs/present-schema.json"), "{}").expect("schema");
+    std::fs::create_dir_all(root.join("schemas")).expect("schemas");
+    std::fs::write(root.join("schemas/observability-event.schema.json"), "{}")
+        .expect("observability schema");
     crate::json_boundary::write_json(
         &root.join("templates/agent-standards/enforcement.json"),
-        &json!({"rows":[{"id":"known-standard"}]}),
+        &json!({"rows":[
+            {"id":"known-standard"},
+            {"id":"full-local-observability-stack-integration-non-opaque-failure"}
+        ]}),
     )
     .expect("standards");
     crate::json_boundary::write_json(
         &root.join("docs/source-obligation-matrix.json"),
-        &json!({"obligations":[{"id":"known-obligation"}]}),
+        &json!({"obligations":[
+            {"id":"known-obligation"},
+            {"id":"full-local-observability-stack-integration-non-opaque-failure"}
+        ]}),
     )
     .expect("obligations");
     crate::json_boundary::write_json(
         &root.join("docs/foundational-law-traceability.json"),
-        &json!({"entries":[{"obligation_id":"known-trace"}]}),
+        &json!({"entries":[
+            {"obligation_id":"known-trace"},
+            {"obligation_id":"full-local-observability-stack-integration-non-opaque-failure"}
+        ]}),
     )
     .expect("foundational");
     crate::json_boundary::write_json(
@@ -57,20 +69,20 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
     });
     let good_row = json!({
         "source_id":"source-good",
-        "standards_row_ids":["known-standard"],
-        "source_obligation_ids":["known-obligation"],
-        "foundational_trace_ids":["known-trace"],
-        "validator_check_ids":["agent-standards-enforcement"],
+        "standards_row_ids":["known-standard", "full-local-observability-stack-integration-non-opaque-failure"],
+        "source_obligation_ids":["known-obligation", "full-local-observability-stack-integration-non-opaque-failure"],
+        "foundational_trace_ids":["known-trace", "full-local-observability-stack-integration-non-opaque-failure"],
+        "validator_check_ids":["agent-standards-enforcement", "full-local-observability-stack-integration-non-opaque-failure"],
         "red_fixture_ids":["known-red"],
         "green_fixture_paths":["docs/present-schema.json"],
-        "schemas":["docs/present-schema.json"],
-        "package_inventory_paths":["docs/present-schema.json"],
+        "schemas":["schemas/observability-event.schema.json"],
+        "package_inventory_paths":["schemas/observability-event.schema.json"],
         "setup_retrofit_outputs":["docs/present-schema.json"],
-        "canonical_law_ids":["research-source-law"],
-        "receipt_requirements":["receipt"],
-        "claim_guards":["claim"],
-        "final_packet_fields":["field"],
-        "update_goal_blockers":["blocker"]
+        "canonical_law_ids":["research-source-law", "full-local-observability-stack-integration-non-opaque-failure"],
+        "receipt_requirements":["observability receipt"],
+        "claim_guards":["observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+        "final_packet_fields":["observability_status"],
+        "update_goal_blockers":["observability_gate_incomplete"]
     });
     let trace = BTreeMap::from([
         ("req-a".to_string(), row.clone()),

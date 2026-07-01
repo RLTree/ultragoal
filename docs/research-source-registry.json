@@ -48,6 +48,7 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
         "failure-remediation-quality-agent-actionable-output",
         "feedback-to-rule-promotion"
       ],
@@ -147,6 +148,7 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
         "agent-queryable-observability",
         "schema-evolution-receipt-migration-stale-version-invalidation"
       ],
@@ -180,6 +182,8 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
         "cli-performance-latency-speed-iteration-fitness",
         "rust-cache-no-cache-honesty"
       ],
@@ -246,6 +250,7 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
         "agent-queryable-observability",
         "secret-token-boundaries"
       ],
@@ -312,6 +317,8 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
         "feedback-to-rule-promotion",
         "standards-gardener-promotion"
       ],
@@ -346,6 +353,8 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
         "product-strategy-positioning-research-eval-before-lane-planning",
         "value-adoption-continuance-business-mission-evidence-hierarchy"
       ],
@@ -380,6 +389,8 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
         "rust-developer-experience-authority",
         "rust-command-loop-authority"
       ],
@@ -414,6 +425,8 @@
       ],
       "canonical_law_ids_affected": [
         "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
         "third-party-dependency-legibility-typed-adapters",
         "typed-records-over-prose"
       ],

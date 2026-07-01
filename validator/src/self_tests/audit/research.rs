@@ -91,6 +91,67 @@ fn research_registry_rejects_missing_mandatory_source() {
 }
 
 #[test]
+fn research_registry_rejects_required_source_without_gate92_law() {
+    let (_root, cards, mut registry, trace) = repo_values();
+    registry["sources"][0]["canonical_law_ids_affected"] = json!([
+        "research-source-authority-article-to-law-integration",
+        "repo-knowledge-index-core-beliefs"
+    ]);
+    let failures = failures(&cards, &registry, &trace);
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "research_registry_gate92_law_missing:openai-harness-engineering"),
+        "{failures:#?}"
+    );
+}
+
+#[test]
+fn research_trace_rejects_requirement_without_gate92_bindings() {
+    let (_root, cards, registry, mut trace) = repo_values();
+    trace["entries"][0]["canonical_law_ids"] = json!([
+        "research-source-authority-article-to-law-integration",
+        "repo-knowledge-index-core-beliefs"
+    ]);
+    trace["entries"][0]["schemas"] = json!(["schemas/research-article-to-law-trace.schema.json"]);
+    trace["entries"][0]["claim_guards"] =
+        json!(["research_backed_claims_withheld_without_current_article_to_law_trace"]);
+    trace["entries"][0]["final_packet_fields"] = json!(["research_source_authority_status"]);
+    trace["entries"][0]["update_goal_blockers"] = json!(["research_source_authority_incomplete"]);
+    let failures = failures(&cards, &registry, &trace);
+    assert!(
+        failures.iter().any(|item| {
+            item == "research_trace_gate92_canonical_law_ids_missing:openai-harness-agent-legible-repo"
+        }),
+        "{failures:#?}"
+    );
+    assert!(
+        failures.iter().any(|item| {
+            item == "research_trace_gate92_observability_schema_missing:openai-harness-agent-legible-repo"
+        }),
+        "{failures:#?}"
+    );
+    assert!(
+        failures.iter().any(|item| {
+            item == "research_trace_gate92_claim_guard_missing:openai-harness-agent-legible-repo"
+        }),
+        "{failures:#?}"
+    );
+    assert!(
+        failures.iter().any(|item| {
+            item == "research_trace_gate92_final_packet_field_missing:openai-harness-agent-legible-repo"
+        }),
+        "{failures:#?}"
+    );
+    assert!(
+        failures.iter().any(|item| {
+            item == "research_trace_gate92_update_goal_blocker_missing:openai-harness-agent-legible-repo"
+        }),
+        "{failures:#?}"
+    );
+}
+
+#[test]
 fn research_registry_rejects_unanchored_card_and_registry_orphan_edges() {
     let (_root, mut cards, mut registry, trace) = repo_values();
     cards["sources"][0]["requirements"][0]["source_evidence_ids"] = json!(["missing-anchor"]);
