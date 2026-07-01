@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 6,
-        "partially_fitted": 41,
+        "fitted": 7,
+        "partially_fitted": 40,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "source-obligations check",
+      "id": "foundational-trace check",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -570,7 +570,7 @@
       ]
     },
     "source-obligations check": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "source-obligations-only claim ceiling",
@@ -584,18 +584,23 @@
         "foundational trace and law-family alias read checks",
         "real runtime scheduler telemetry for all source-obligation rows",
         "bounded parallel pure-read scheduler over source-obligation matrix rows",
-        "targeted --obligation helper for focused repair"
-      ],
-      "missing_surfaces": [
+        "targeted --obligation helper for focused repair",
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "explain-failure observed repair fields for source-obligations command receipt"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "source-obligations-check-observability-binding",
       "focused_tests": [
         "source_obligations_parse_requires_strict_and_supports_jobs",
         "source_obligations_command_writes_pass_and_fail_observability",
-        "default_source_obligations_check_uses_parallel_scheduler"
+        "default_source_obligations_check_uses_parallel_scheduler",
+        "source_obligations_parse_rejects_argument_edges",
+        "source_obligations_failure_edges_and_absolute_receipt_are_observable",
+        "source_obligations_runtime_metrics_report_resource_and_saturation_states",
+        "source_obligations_run_propagates_telemetry_and_receipt_write_errors",
+        "explain_reports_current_failure_and_bad_root_errors"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/source-obligations-check.json"
@@ -605,9 +610,9 @@
         "validation_artifacts/observability/source-obligations-check-metrics-query.json",
         "validation_artifacts/observability/source-obligations-check-traces-query.json"
       ],
-      "claim_impact": "source_obligations_failed_blocks_readiness_release_completion_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_source_obligations_check_observability_source_local_only_no_readiness_release_completion_update_goal; production_source_obligations_check_still_fails_on_stale_foundational_trace_source_bindings",
       "current_owner_surface": "command:source-obligations check",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -619,9 +624,22 @@
         "validation_artifacts/observability/source-obligations-check-metrics-query.json",
         "validation_artifacts/observability/source-obligations-check-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "source_obligations_parse_requires_strict_and_supports_jobs",
+        "source_obligations_parse_rejects_argument_edges",
+        "source_obligations_failure_edges_and_absolute_receipt_are_observable",
+        "source_obligations_run_propagates_telemetry_and_receipt_write_errors"
+      ],
+      "green_fixtures": [
+        "source_obligations_command_writes_pass_and_fail_observability",
+        "default_source_obligations_check_uses_parallel_scheduler"
+      ],
+      "tamper_fixtures": [
+        "source_obligations_parse_rejects_argument_edges",
+        "source_obligations_runtime_metrics_report_resource_and_saturation_states",
+        "source_obligations_run_propagates_telemetry_and_receipt_write_errors",
+        "explain_reports_current_failure_and_bad_root_errors"
+      ]
     },
     "foundational-trace check": {
       "fitting_status": "partially_fitted",
