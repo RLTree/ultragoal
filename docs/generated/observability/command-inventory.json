@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 20,
+        "fitted": 21,
         "partially_fitted": 23,
-        "unfitted": 19
+        "unfitted": 18
       },
       "surfaces": {
         "total": 10,
@@ -152,9 +152,9 @@
       },
       "long_running": {
         "total": 17,
-        "fitted": 1,
+        "fitted": 2,
         "partially_fitted": 0,
-        "unfitted": 16
+        "unfitted": 15
       },
       "external_live": {
         "total": 12,
@@ -829,27 +829,37 @@
       "next_unfitted_surface": "full command-inventory fitted closure"
     },
     "registry probe": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "live same-surface logs",
-        "metrics",
-        "traces",
-        "query proof",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "receipt binding",
+        "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
+      "missing_surfaces": [],
+      "validator_check_id": "registry-probe-observability-binding",
+      "focused_tests": [
+        "registry_probe_reports_registry_surface_without_packet_circularity",
+        "registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids"
+      ],
       "receipt_paths": [
+        "validation_artifacts/cli/registry-probe-receipt.json",
         "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
       ],
-      "live_query_proof_paths": [],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/registry-probe-logs-query.json",
+        "validation_artifacts/observability/registry-probe-metrics-query.json",
+        "validation_artifacts/observability/registry-probe-traces-query.json",
+        "validation_artifacts/observability/registry-probe-explain-failure.json"
+      ],
       "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal",
       "current_owner_surface": "command:registry probe",
-      "next_unfitted_surface": "live same-surface logs"
+      "next_unfitted_surface": "none"
     },
     "install audit": {
       "fitting_status": "fitted",
@@ -4127,24 +4137,38 @@
       "next_unfitted_surface": "log instrumentation"
     },
     "registry probe": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log instrumentation",
-        "metric instrumentation",
-        "trace instrumentation",
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "surface-specific structured log event",
+        "bounded metric",
+        "root trace and child spans",
         "pass stdout contract",
         "fail stdout contract",
-        "receipt observability binding"
+        "receipt binding",
+        "receipt observability binding",
+        "same-candidate live query proof",
+        "same-candidate explain-failure receipt"
       ],
+      "missing_surfaces": [],
       "operation": "observability.long_running.registry-probe",
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_until_long_running_registry-probe_is_fitted_with_same_candidate_query_proof",
+      "validator_check_id": "registry-probe-observability-binding",
+      "focused_tests": [
+        "registry_probe_reports_registry_surface_without_packet_circularity",
+        "registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/cli/registry-probe-receipt.json",
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/registry-probe-logs-query.json",
+        "validation_artifacts/observability/registry-probe-metrics-query.json",
+        "validation_artifacts/observability/registry-probe-traces-query.json",
+        "validation_artifacts/observability/registry-probe-explain-failure.json"
+      ],
+      "claim_impact": "blocks_registry_reviewer_readiness_release_completion_update_goal",
       "current_owner_surface": "long_running:registry probe",
-      "next_unfitted_surface": "log instrumentation"
+      "next_unfitted_surface": "none"
     },
     "review target build": {
       "fitting_status": "unfitted",

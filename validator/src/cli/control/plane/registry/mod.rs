@@ -3,8 +3,10 @@ use serde_json::json;
 use std::path::{Path, PathBuf};
 
 mod capability;
+pub(crate) mod stdout;
+pub(crate) mod telemetry;
 
-const ACTIVE_RECEIPT: &str =
+pub(crate) const ACTIVE_RECEIPT: &str =
     "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json";
 const RAW_OBSERVATION: &str =
     "validation_artifacts/ultragoal-audit/active-registry-observation-current.json";

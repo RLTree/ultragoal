@@ -115,6 +115,7 @@ pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
 }
 
 pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> {
+    let started = std::time::Instant::now();
     if let Some(path) = &command.receipt {
         path::validate_receipt_path(root, path, command.operation)?;
     }
@@ -123,16 +124,23 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
     }
     let package_digest = crate::package::inventory::package_digest(root)?;
     registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
-    let receipt = receipt(root, command)?;
+    let mut receipt = receipt(root, command)?;
+    if registry::telemetry::supports(command.operation) {
+        registry::telemetry::attach(root, command, &mut receipt, started)?;
+    }
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
     if let Some(path) = &command.receipt {
         crate::json_boundary::write_json(path, &receipt)?;
-        println!(
-            "ultragoal-control {} operation={} receipt={}",
-            receipt["status"],
-            command.operation.id(),
-            path.display()
-        );
+        if registry::telemetry::supports(command.operation) {
+            registry::stdout::print(path, &receipt);
+        } else {
+            println!(
+                "ultragoal-control {} operation={} receipt={}",
+                receipt["status"],
+                command.operation.id(),
+                path.display()
+            );
+        }
     } else {
         println!("{receipt}");
     }

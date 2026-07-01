@@ -112,6 +112,37 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
     let command_receipt =
         crate::json_boundary::read_json(&receipt_path).expect("registry command receipt");
     assert_eq!(command_receipt["status"], "fail");
+    assert_eq!(
+        command_receipt["check_id"],
+        "registry-probe-observability-binding"
+    );
+    assert_eq!(
+        command_receipt["observability"]["operation"],
+        "registry_probe"
+    );
+    assert_eq!(
+        command_receipt["observability"]["surface"],
+        "codex_desktop_plugin_registry"
+    );
+    assert_eq!(
+        command_receipt["receipt_observability_binding"]["registry_receipt_path"],
+        "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"
+    );
+    assert_eq!(
+        command_receipt["receipt_observability_binding"]["command_receipt_path"],
+        "validation_artifacts/cli/registry-probe-receipt.json"
+    );
+    let run_id = command_receipt["run_id"].as_str().expect("run id");
+    let lines =
+        crate::cli::control::plane::registry::stdout::lines(&receipt_path, &command_receipt);
+    assert_eq!(lines.len(), 2);
+    assert!(lines[0].contains("ultragoal-registry-probe fail"));
+    assert!(lines[0].contains("proven=none"));
+    assert!(lines[0].contains("registry_receipt=validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"));
+    assert!(lines[1].contains("failed_check=registry-probe-observability-binding"));
+    assert!(lines[1].contains(&format!(
+        "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
+    )));
     assert!(
         command_receipt["failure"]["observed_value"]
             .as_str()
