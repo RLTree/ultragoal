@@ -204,6 +204,27 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     assert_eq!(written["status"], "pass");
     assert_eq!(written["observability"]["status"], "pass");
     assert_eq!(written["why_failed"], "none");
+    let child_spans = written["observability"]["trace"]["child_spans"]
+        .as_array()
+        .expect("child spans");
+    for label in [
+        "cli_performance",
+        "registry_exposure",
+        "source_audit",
+        "coverage",
+        "package_receipt_0",
+        "package_receipt_1",
+        "package_receipt_2",
+    ] {
+        assert!(
+            child_spans.iter().any(|span| {
+                span["span_kind"] == "receipt_deref"
+                    && span["dereferenced_receipt_label"] == label
+                    && span["parent_span_id"] == written["observability"]["trace"]["span_id"]
+            }),
+            "missing final-packet dereference span {label}: {child_spans:?}"
+        );
+    }
     assert_eq!(
         written["observability"]["supported_claims"][0],
         "final_packet_evidence_dereferenced"

@@ -1,6 +1,7 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+mod spans;
 #[cfg(test)]
 mod tests;
 
@@ -32,7 +33,7 @@ fn attach(root: &Path, receipt_path: &Path, value: &mut Value, emit: bool) -> Re
     let failure_class = failure_class(&why);
     let where_failed = where_failed(is_pass);
     let receipt_rel = receipt_display(root, receipt_path);
-    let observability = crate::cli::observe::telemetry::command_receipt(
+    let mut observability = crate::cli::observe::telemetry::command_receipt(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
             command: "ultragoal final-packet",
@@ -56,6 +57,7 @@ fn attach(root: &Path, receipt_path: &Path, value: &mut Value, emit: bool) -> Re
             emit,
         },
     )?;
+    spans::attach(value, &mut observability);
     value["candidate_digest"] = observability["candidate_digest"].clone();
     value["run_id"] = observability["run_id"].clone();
     value["correlation_id"] = observability["correlation_id"].clone();

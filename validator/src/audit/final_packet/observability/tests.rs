@@ -58,5 +58,47 @@ fn final_packet_observability_rejects_missing_wrong_and_empty_failure_receipts()
         .remove("event");
     let failures = super::failures(&root, &missing_subdoc);
     assert!(failures.contains(&"final_packet_proof_observability_missing:/event".to_string()));
+
+    let event = json!({
+        "run_id": "run-final-packet",
+        "correlation_id": "corr-final-packet",
+        "trace_id": "trace-final-packet",
+        "span_id": "span-final-packet",
+        "why_failed": "final_packet_proof_packet_absent",
+        "where_failed": "final-packet.prove",
+        "next_repair": "repair final packet dependency"
+    });
+    let metric = json!({"status":"fail"});
+    let trace = json!({
+        "trace_id": "trace-final-packet",
+        "span_id": "span-final-packet",
+        "child_spans": []
+    });
+    let missing_receipt_span = json!({
+        "status": "fail",
+        "cli_performance": {
+            "path": "validation_artifacts/cli/performance-receipt.json"
+        },
+        "observability": {
+            "schema": "harness-ultragoal.observability-receipt.v1",
+            "status": "fail",
+            "candidate_digest": crate::package::inventory::package_digest(&root).unwrap(),
+            "run_id": "run-final-packet",
+            "correlation_id": "corr-final-packet",
+            "why_failed": "final_packet_proof_packet_absent",
+            "where_failed": "final-packet.prove",
+            "next_repair": "repair final packet dependency",
+            "event": event,
+            "metric": metric,
+            "trace": trace,
+            "log_stream_digest": crate::digest::canonical_json(&event),
+            "metric_snapshot_digest": crate::digest::canonical_json(&metric),
+            "trace_bundle_digest": crate::digest::canonical_json(&trace)
+        }
+    });
+    let failures = super::failures(&root, &missing_receipt_span);
+    assert!(failures.iter().any(|failure| {
+        failure.starts_with("final_packet_proof_observability_receipt_span_missing:cli_performance")
+    }));
     std::fs::remove_dir_all(root).expect("cleanup");
 }

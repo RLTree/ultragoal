@@ -795,6 +795,7 @@
         "structured event",
         "metric sample",
         "trace span",
+        "child spans for every dereferenced lower-level receipt",
         "local spool",
         "focused fail/green/tamper tests",
         "schema fields",
@@ -805,9 +806,8 @@
         "current explain-failure receipt"
       ],
       "missing_surfaces": [
-        "child spans for every dereferenced lower-level receipt",
-        "full command-inventory fitted closure",
-        "pass stdout contract"
+        "pass stdout contract",
+        "full command-inventory fitted closure"
       ],
       "validator_check_id": "final-packet-proof",
       "focused_tests": [
@@ -825,7 +825,7 @@
       ],
       "claim_impact": "blocks_final_packet_correctness_readiness_release_completion_update_goal_until_fitted",
       "current_owner_surface": "command:final-packet prove",
-      "next_unfitted_surface": "child spans for every dereferenced lower-level receipt"
+      "next_unfitted_surface": "pass stdout contract"
     },
     "registry probe": {
       "fitting_status": "unfitted",
