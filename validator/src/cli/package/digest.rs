@@ -23,6 +23,7 @@ pub(crate) fn run(root: &Path) -> Result<i32, String> {
             claim_impact: "supports_source_package_digest_only",
             blocked_claims: blocked_claims(),
             supported_claims: vec!["source_package_digest".to_string()],
+            runtime: None,
             emit: true,
         },
     )?;

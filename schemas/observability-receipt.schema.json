@@ -40,7 +40,7 @@
     "candidate_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
     "run_id": { "type": "string", "minLength": 1 },
     "correlation_id": { "type": "string", "minLength": 1 },
-    "surface": { "enum": ["source", "installed", "cache", "app_registry", "reviewer", "live_stack", "target_repo"] },
+    "surface": { "enum": ["source", "source_package", "installed", "cache", "app_registry", "reviewer", "live_stack", "target_repo"] },
     "operation": { "type": "string", "minLength": 1 },
     "log_stream_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
     "metric_snapshot_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },

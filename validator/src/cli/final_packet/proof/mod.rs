@@ -52,6 +52,7 @@ fn attach(root: &Path, receipt_path: &Path, value: &mut Value, emit: bool) -> Re
             claim_impact,
             blocked_claims: string_array(&value["blocked_claim_classes"]),
             supported_claims: supported_claims(value),
+            runtime: None,
             emit,
         },
     )?;

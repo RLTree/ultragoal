@@ -127,6 +127,7 @@ pub(crate) fn build_call_receipt(root: &Path, command: &CallCommand) -> Result<V
             } else {
                 Vec::new()
             },
+            runtime: None,
             emit: true,
         },
     )?;

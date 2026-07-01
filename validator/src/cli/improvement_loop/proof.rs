@@ -107,6 +107,7 @@ fn observability(root: &Path, status: &str, why: &str, receipt: &str) -> Result<
             } else {
                 Vec::new()
             },
+            runtime: None,
             emit: true,
         },
     )

@@ -2,9 +2,13 @@ use serde_json::Value;
 use std::path::Path;
 
 mod red;
+mod runtime;
+mod stdout;
 
 pub(crate) const SOURCE_RECEIPT: &str = "validation_artifacts/observability/source-audit.json";
 const TARGET_RECEIPT: &str = "validation_artifacts/observability/target-repo-audit.json";
+
+pub(crate) use runtime::RuntimeFacts;
 
 pub(crate) fn write_all(
     root: &Path,
@@ -13,10 +17,18 @@ pub(crate) fn write_all(
     code: i32,
     target_repo: bool,
     command_error: Option<&str>,
+    runtime: RuntimeFacts,
 ) -> Result<(), String> {
-    write_audit(root, audit_receipt, code, target_repo, command_error)?;
+    write_audit(
+        root,
+        audit_receipt,
+        code,
+        target_repo,
+        command_error,
+        runtime,
+    )?;
     if let Some(path) = red_report {
-        red::write_report(root, path, command_error)?;
+        red::write_report(root, path, command_error, runtime)?;
     }
     Ok(())
 }
@@ -27,6 +39,7 @@ fn write_audit(
     code: i32,
     target_repo: bool,
     command_error: Option<&str>,
+    runtime: RuntimeFacts,
 ) -> Result<(), String> {
     let operation = if target_repo {
         "target-repo.audit"
@@ -39,6 +52,7 @@ fn write_audit(
         SOURCE_RECEIPT
     };
     let audit = crate::json_boundary::read_json(receipt).unwrap_or(Value::Null);
+    let runtime = runtime::telemetry(&audit, runtime);
     let failures = command_error
         .map(|err| vec![err.to_string()])
         .unwrap_or_else(|| failed_checks(&audit));
@@ -78,6 +92,7 @@ fn write_audit(
             next_repair: audit_next_repair(code),
             claim_impact: audit_claim_impact(code),
             supported_claims: audit_supported_claims(code),
+            runtime,
         },
     )
 }
@@ -98,6 +113,7 @@ pub(super) struct ReceiptFields<'a> {
     pub(super) next_repair: &'a str,
     pub(super) claim_impact: &'a str,
     pub(super) supported_claims: Vec<String>,
+    pub(super) runtime: crate::cli::observe::telemetry::RuntimeTelemetry,
 }
 
 pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<(), String> {
@@ -121,61 +137,15 @@ pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<(),
             claim_impact: fields.claim_impact,
             blocked_claims: blocked_claims(),
             supported_claims: fields.supported_claims,
+            runtime: Some(fields.runtime),
             emit: true,
         },
     )?;
     crate::json_boundary::write_json(&root.join(fields.receipt_path), &value)?;
-    for line in stdout_contract(&value) {
+    for line in stdout::contract(&value) {
         println!("{line}");
     }
     Ok(())
-}
-
-fn stdout_contract(value: &Value) -> Vec<String> {
-    let status = text(value, "status");
-    let run_id = text(value, "run_id");
-    let operation = text(value, "operation");
-    let receipt = text(value, "receipt_path");
-    let correlation_id = text(value, "correlation_id");
-    let claim_impact = text(value, "claim_impact");
-    let mut lines = vec![format!(
-        "ultragoal-audit-observe {status} operation={operation} candidate={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} claim_impact={claim_impact} supported_claims={} unsupported_claims={}",
-        text(value, "candidate_digest"),
-        csv(value.get("supported_claims")),
-        csv(value.get("blocked_claims"))
-    )];
-    if status != "pass" {
-        lines.push(format!(
-            "failed_law={} failed_check={} why={} where={} claim_impact={claim_impact} next_repair={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} query_logs='ultragoal observe logs query --run-id {run_id} --limit 100' query_metrics='ultragoal observe metrics query --run-id {run_id} --limit 100' query_traces='ultragoal observe traces query --run-id {run_id} --limit 100'",
-            text(value, "law_id"),
-            text(value, "check_id"),
-            text(value, "why_failed"),
-            text(value, "where_failed"),
-            text(value, "next_repair")
-        ));
-    }
-    lines
-}
-
-fn text<'a>(value: &'a Value, field: &str) -> &'a str {
-    value
-        .get(field)
-        .and_then(Value::as_str)
-        .unwrap_or("<missing>")
-}
-
-fn csv(value: Option<&Value>) -> String {
-    value
-        .and_then(Value::as_array)
-        .map(|items| {
-            items
-                .iter()
-                .filter_map(Value::as_str)
-                .collect::<Vec<_>>()
-                .join(",")
-        })
-        .filter(|items| !items.is_empty())
-        .unwrap_or_else(|| "none".to_string())
 }
 
 fn failed_checks(audit: &Value) -> Vec<String> {
@@ -194,7 +164,7 @@ fn failed_checks(audit: &Value) -> Vec<String> {
 
 #[cfg(test)]
 pub(crate) fn stdout_contract_for_test(value: &Value) -> Vec<String> {
-    stdout_contract(value)
+    stdout::contract(value)
 }
 
 fn audit_next_repair(code: i32) -> &'static str {

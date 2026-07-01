@@ -216,6 +216,7 @@ fn command_telemetry_redacts_private_paths_before_receipt_binding() {
             claim_impact: "source_local_observability_blocked",
             blocked_claims: vec!["readiness".to_string()],
             supported_claims: vec![],
+            runtime: None,
             emit: false,
         },
     )

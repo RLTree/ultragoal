@@ -6,10 +6,13 @@ mod claims;
 mod command;
 mod exporter;
 mod identity;
+mod metric;
 mod query;
 mod receipt;
 mod record;
+mod runtime;
 mod spool;
+mod trace;
 
 pub(crate) fn base_receipt(
     root: &Path,
@@ -68,6 +71,7 @@ pub(crate) fn command_receipt(
 }
 
 pub(crate) use command::CommandTelemetry;
+pub(crate) use runtime::RuntimeTelemetry;
 
 pub(crate) fn live_stack_receipts_current(root: &Path, candidate: &str) -> bool {
     live_receipt_current(

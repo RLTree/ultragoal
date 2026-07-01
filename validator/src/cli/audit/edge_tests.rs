@@ -45,7 +45,16 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
     let receipt = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
     crate::json_boundary::write_json(&receipt, &json!({"status":"pass","checks":{}}))
         .expect("receipt");
-    observability::write_all(&root, &receipt, None, 1, false, None).expect("observe");
+    observability::write_all(
+        &root,
+        &receipt,
+        None,
+        1,
+        false,
+        None,
+        observability::RuntimeFacts::from_elapsed_ms(3),
+    )
+    .expect("observe");
     let value =
         crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("source");
     assert_eq!(
@@ -72,6 +81,7 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
             next_repair: "create package manifest",
             claim_impact: "source_audit_failed_blocks_claims",
             supported_claims: Vec::new(),
+            runtime: crate::cli::observe::telemetry::RuntimeTelemetry::uninstrumented(),
         },
     )
     .expect_err("missing package manifest blocks telemetry receipt");
@@ -104,7 +114,16 @@ fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
     )
     .expect("audit receipt");
 
-    observability::write_all(&root, &receipt, None, 1, false, None).expect("fail observe");
+    observability::write_all(
+        &root,
+        &receipt,
+        None,
+        1,
+        false,
+        None,
+        observability::RuntimeFacts::from_elapsed_ms(4),
+    )
+    .expect("fail observe");
     let fail =
         crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("fail");
     let fail_lines = observability::stdout_contract_for_test(&fail);
@@ -139,7 +158,16 @@ fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
         &json!({"status":"pass","checks":{"schema-valid":{"status":"pass"}}}),
     )
     .expect("pass receipt");
-    observability::write_all(&root, &receipt, None, 0, false, None).expect("pass observe");
+    observability::write_all(
+        &root,
+        &receipt,
+        None,
+        0,
+        false,
+        None,
+        observability::RuntimeFacts::from_elapsed_ms(5),
+    )
+    .expect("pass observe");
     let pass =
         crate::json_boundary::read_json(&root.join(observability::SOURCE_RECEIPT)).expect("pass");
     let pass_lines = observability::stdout_contract_for_test(&pass);

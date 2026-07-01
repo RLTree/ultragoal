@@ -46,6 +46,7 @@ pub(super) fn attach(root: &Path, receipt: &mut Value, status: &str, why: &str) 
             } else {
                 vec![]
             },
+            runtime: None,
             emit: false,
         },
     )

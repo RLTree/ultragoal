@@ -71,6 +71,7 @@ pub(crate) fn build_config_receipt(root: &Path, command: &ConfigCommand) -> Resu
             } else {
                 Vec::new()
             },
+            runtime: None,
             emit: true,
         },
     )?;

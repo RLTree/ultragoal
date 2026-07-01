@@ -175,6 +175,7 @@ fn observability(
             } else {
                 Vec::new()
             },
+            runtime: None,
             emit: true,
         },
     )

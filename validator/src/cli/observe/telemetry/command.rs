@@ -1,4 +1,4 @@
-use crate::cli::observe::telemetry::{exporter, identity, record, spool};
+use crate::cli::observe::telemetry::{RuntimeTelemetry, exporter, identity, record, spool};
 use crate::cli::observe::types;
 use serde_json::{Value, json};
 use std::path::Path;
@@ -21,6 +21,7 @@ pub(crate) struct CommandTelemetry<'a> {
     pub(crate) claim_impact: &'a str,
     pub(crate) blocked_claims: Vec<String>,
     pub(crate) supported_claims: Vec<String>,
+    pub(crate) runtime: Option<RuntimeTelemetry>,
     pub(crate) emit: bool,
 }
 
@@ -39,8 +40,8 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         &redacted_artifact_path,
         &redacted_receipt_path,
     );
-    let metric = metric(&event);
-    let trace = trace(&event);
+    let metric = super::metric::from_event(&event);
+    let trace = super::trace::from_event(&event);
     if input.emit {
         spool::write(root, &event)?;
         exporter::emit(&event, &metric, &trace);
@@ -93,6 +94,10 @@ fn event(
     let why_failed = record::redact_sensitive_text(input.why_failed);
     let where_failed = record::redact_sensitive_text(input.where_failed);
     let next_repair = record::redact_sensitive_text(input.next_repair);
+    let runtime = input
+        .runtime
+        .clone()
+        .unwrap_or_else(RuntimeTelemetry::uninstrumented);
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,
         "run_id": run_id,
@@ -118,7 +123,7 @@ fn event(
         "next_repair": next_repair,
         "claim_impact": input.claim_impact,
         "timestamp": crate::audit::clock::now_iso(),
-        "duration_ms": 0,
+        "duration_ms": runtime.duration_ms,
         "exporter": exporter(root, candidate, input.status, input.emit),
         "redaction_status": "pass",
         "bounded_output_status": "pass",
@@ -126,84 +131,21 @@ fn event(
         "query_hint_promql": format!("ultragoal_command_total{{run_id=\"{run_id}\"}}"),
         "query_hint_traceql": format!("{{\"run_id\":\"{run_id}\"}}")
     });
+    event["worker_count"] = json!(runtime.worker_count);
+    event["task_count"] = json!(runtime.task_count);
+    event["queue_depth"] = json!(runtime.queue_depth);
+    event["cpu_ms"] = json!(runtime.cpu_ms);
+    event["memory_bytes"] = json!(runtime.memory_bytes);
+    event["io_bytes"] = json!(runtime.io_bytes);
+    event["cache_mode"] = json!(runtime.cache_mode);
+    event["resource_measurement_status"] = json!(runtime.resource_measurement_status);
+    event["retry_count"] = json!(runtime.retry_count);
+    event["backoff_ms"] = json!(runtime.backoff_ms);
+    event["saturation_status"] = json!(runtime.saturation_status);
+    event["repair_anchor_before"] = json!(runtime.repair_anchor_before);
+    event["repair_anchor_after"] = json!(runtime.repair_anchor_after);
     event["redaction_status"] = json!(record::redaction_status(&event));
     event
-}
-
-fn metric(event: &Value) -> Value {
-    let exporter = if event["exporter"].as_str() == Some("receipt") {
-        "receipt"
-    } else {
-        "victoriametrics"
-    };
-    json!({
-        "schema": "harness-ultragoal.observability-metric.v1",
-        "metric_name": "ultragoal_command_total",
-        "metric_value": if event["status"].as_str() == Some("pass") { 1 } else { 0 },
-        "labels": {
-            "command": event["command"],
-            "operation": event["operation"],
-            "status": event["status"],
-            "law_id": event["law_id"],
-            "check_id": event["check_id"],
-            "claim_id": event["claim_id"],
-            "surface": event["surface"],
-            "failure_class": event["failure_class"],
-            "why_failed": event["why_failed"],
-            "where_failed": event["where_failed"],
-            "next_repair": event["next_repair"],
-            "claim_impact": event["claim_impact"],
-            "candidate_digest": event["candidate_digest"],
-            "exporter": exporter
-        },
-        "run_id": event["run_id"],
-        "correlation_id": event["correlation_id"],
-        "trace_id": event["trace_id"],
-        "span_id": identity::id(
-            "metric",
-            event["operation"].as_str().unwrap_or("command"),
-            event["candidate_digest"].as_str().unwrap_or("")
-        ),
-        "parent_span_id": event["span_id"],
-        "command": event["command"],
-        "subcommand": event["subcommand"],
-        "operation": event["operation"],
-        "surface": event["surface"],
-        "law_id": event["law_id"],
-        "check_id": event["check_id"],
-        "claim_id": event["claim_id"],
-        "candidate_digest": event["candidate_digest"],
-        "target_revision": event["target_revision"],
-        "artifact_path": event["artifact_path"],
-        "receipt_path": event["receipt_path"],
-        "status": event["status"],
-        "failure_class": event["failure_class"],
-        "why_failed": event["why_failed"],
-        "where_failed": event["where_failed"],
-        "next_repair": event["next_repair"],
-        "claim_impact": event["claim_impact"],
-        "timestamp": event["timestamp"],
-        "duration_ms": 0,
-        "exporter": exporter,
-        "redaction_status": event["redaction_status"],
-        "bounded_output_status": event["bounded_output_status"],
-        "query_hint_logql": event["query_hint_logql"],
-        "query_hint_promql": event["query_hint_promql"],
-        "query_hint_traceql": event["query_hint_traceql"]
-    })
-}
-
-fn trace(event: &Value) -> Value {
-    let mut span = event.clone();
-    span["schema"] = json!("harness-ultragoal.observability-trace.v1");
-    span["exporter"] = if event["exporter"].as_str() == Some("receipt") {
-        json!("receipt")
-    } else {
-        json!("victoriatraces")
-    };
-    span["span_kind"] = json!("root");
-    span["span_name"] = event["operation"].clone();
-    span
 }
 
 fn exporter(root: &Path, candidate: &str, status: &str, emit: bool) -> &'static str {

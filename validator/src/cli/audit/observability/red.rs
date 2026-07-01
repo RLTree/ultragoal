@@ -1,4 +1,4 @@
-use super::{ReceiptFields, emit_receipt};
+use super::{ReceiptFields, RuntimeFacts, emit_receipt};
 use serde_json::Value;
 use std::path::Path;
 
@@ -8,6 +8,7 @@ pub(super) fn write_report(
     root: &Path,
     red_report: &Path,
     command_error: Option<&str>,
+    runtime: RuntimeFacts,
 ) -> Result<(), String> {
     let report = crate::json_boundary::read_json(red_report).unwrap_or(Value::Null);
     let status = if report.get("status").and_then(Value::as_str) == Some("pass") {
@@ -43,6 +44,22 @@ pub(super) fn write_report(
             next_repair: next_repair(status),
             claim_impact: claim_impact(status),
             supported_claims: supported_claims(status),
+            runtime: crate::cli::observe::telemetry::RuntimeTelemetry {
+                duration_ms: runtime.elapsed_ms(),
+                worker_count: 0,
+                task_count: 0,
+                queue_depth: 0,
+                cpu_ms: None,
+                memory_bytes: None,
+                io_bytes: None,
+                cache_mode: "red_report_read_after_source_audit".to_string(),
+                resource_measurement_status: "source_audit_runtime_wall_time_only".to_string(),
+                retry_count: 0,
+                backoff_ms: 0,
+                saturation_status: "red_report_no_scheduler_tasks_started".to_string(),
+                repair_anchor_before: "source_audit_red_report_requested".to_string(),
+                repair_anchor_after: "red_fixture_report_observability_emit".to_string(),
+            },
         },
     )
 }
@@ -121,7 +138,8 @@ mod tests {
             &json!({"status":"pass","red_fixtures":{"red-one":{"status":"pass"}}}),
         )
         .expect("red report");
-        write_report(&root, &report, None).expect("observability");
+        write_report(&root, &report, None, RuntimeFacts::from_elapsed_ms(5))
+            .expect("observability");
         let value = crate::json_boundary::read_json(&root.join(RECEIPT)).expect("red receipt");
         assert_eq!(value["status"], "pass");
         assert_eq!(value["operation"], "red_fixture.report");
@@ -146,7 +164,8 @@ mod tests {
             &json!({"status":"fail","red_fixtures":{"red-one":{"status":"pass"}}}),
         )
         .expect("empty failure red report");
-        write_report(&root, &report, None).expect("empty failure observe");
+        write_report(&root, &report, None, RuntimeFacts::from_elapsed_ms(6))
+            .expect("empty failure observe");
         let empty = crate::json_boundary::read_json(&root.join(RECEIPT)).expect("empty receipt");
         assert_eq!(
             empty["why_failed"],
