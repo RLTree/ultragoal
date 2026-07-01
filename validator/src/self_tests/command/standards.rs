@@ -1,3 +1,4 @@
+use serde_json::json;
 use std::path::PathBuf;
 
 fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
@@ -10,9 +11,11 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 
 #[test]
 fn command_dispatch_routes_standards_gardener_rebind() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let err = crate::command_run::run_with_exit_code(args(
-        root,
+    let root = crate::self_tests::boundaries::support::temp_root("standards-command-dispatch");
+    crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
+        .expect("manifest");
+    let code = crate::command_run::run_with_exit_code(args(
+        root.clone(),
         &[
             "standards-gardener",
             "rebind",
@@ -20,8 +23,20 @@ fn command_dispatch_routes_standards_gardener_rebind() {
             "target/not-standards.json",
         ],
     ))
-    .expect_err("standards command rejects non-governed receipt path");
-    assert!(err.contains("under validation_artifacts/standards-gardener"));
+    .expect("standards command fail-closes with receipt");
+    assert_eq!(code, 1);
+    let receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/observability/standards-gardener-rebind.json"),
+    )
+    .expect("observability receipt");
+    assert_eq!(receipt["status"], "fail");
+    assert!(
+        receipt["why_failed"]
+            .as_str()
+            .expect("why")
+            .contains("under validation_artifacts/standards-gardener")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup standards command dispatch");
 }
 
 #[test]

@@ -99,6 +99,9 @@ fn standards_gardener_run_mints_receipt_through_cli_command() {
     write_json(&root.join(&rel), &stale_receipt());
     let command = crate::cli::standards::StandardsCommand {
         receipt: rel.clone(),
+        observability_receipt: PathBuf::from(
+            "validation_artifacts/observability/standards-gardener-rebind.json",
+        ),
     };
     let code = crate::cli::standards::run(&root, &command).expect("run standards command");
     assert_eq!(code, 0);
@@ -107,6 +110,20 @@ fn standards_gardener_run_mints_receipt_through_cli_command() {
     assert_eq!(
         value["candidate_digest"],
         crate::package::inventory::package_digest(&root).expect("digest")
+    );
+    let observation = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/observability/standards-gardener-rebind.json"),
+    )
+    .expect("observability receipt");
+    assert_eq!(observation["status"], "pass");
+    assert_eq!(observation["operation"], "standards-gardener.rebind");
+    assert_eq!(
+        observation["event"]["saturation_status"],
+        "shared_authority_write_serial"
+    );
+    assert_eq!(
+        observation["event"]["artifact_path"],
+        "validation_artifacts/standards-gardener/current.json"
     );
     std::fs::remove_dir_all(root).expect("cleanup standards run");
 }

@@ -104,9 +104,9 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 5,
+        "fitted": 6,
         "partially_fitted": 23,
-        "unfitted": 34
+        "unfitted": 33
       },
       "surfaces": {
         "total": 10,
@@ -129,7 +129,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "standards-gardener rebind",
+      "id": "source-obligations check",
       "fitting_status": "unfitted",
       "next_unfitted_surface": "log"
     },
@@ -310,22 +310,40 @@
       "next_unfitted_surface": "none"
     },
     "standards-gardener rebind": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "receipt binding",
-        "query proof"
+      "fitting_status": "fitted",
+      "fitted_surfaces": [
+        "command-level observability receipt",
+        "standards-gardener-only claim ceiling",
+        "claim-blocking fail receipt",
+        "local spool emission",
+        "current same-candidate logs query proof",
+        "current same-candidate metrics query proof",
+        "current same-candidate traces query proof",
+        "pass and fail stdout contract",
+        "canonical standards-gardener receipt binding",
+        "changed-artifact digest rebinding",
+        "typed shared-authority-write serial reason"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
+      "missing_surfaces": [],
+      "validator_check_id": "standards-gardener-rebind-observability-binding",
+      "focused_tests": [
+        "standards_gardener_parse_rejects_unknown_and_missing_receipt",
+        "standards_gardener_rebind_mints_candidate_and_current_artifact_digest",
+        "standards_gardener_run_mints_receipt_through_cli_command",
+        "standards_gardener_run_writes_fail_observability_without_receipt_ledger_claim",
+        "command_dispatch_routes_standards_gardener_rebind"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/standards-gardener-rebind.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/standards-gardener-rebind-logs-query.json",
+        "validation_artifacts/observability/standards-gardener-rebind-metrics-query.json",
+        "validation_artifacts/observability/standards-gardener-rebind-traces-query.json"
+      ],
+      "claim_impact": "supports_standards_gardener_rebind_source_local_observability_only",
       "current_owner_surface": "command:standards-gardener rebind",
-      "next_unfitted_surface": "log"
+      "next_unfitted_surface": "none"
     },
     "source-obligations check": {
       "fitting_status": "unfitted",
