@@ -12,7 +12,7 @@ pub(super) fn write_fitting_receipts(root: &Path) {
             &slug(command),
             &format!("run-{}", slug(command)),
             &format!("corr-{}", slug(command)),
-            &command.replace(' ', "."),
+            &command_operation(command),
         );
     }
     for surface in super::super::surfaces::REQUIRED_SURFACES {
@@ -93,6 +93,13 @@ fn write_receipt_set(
 
 fn slug(command: &str) -> String {
     command.replace(' ', "-")
+}
+
+fn command_operation(command: &str) -> String {
+    match command {
+        "red fixture report" => "red_fixture.report".to_string(),
+        _ => command.replace(' ', "."),
+    }
 }
 
 fn surface_operation(surface: &str) -> String {

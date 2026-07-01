@@ -223,5 +223,8 @@ fn strings(row: &Map<String, Value>, key: &str) -> Vec<String> {
 }
 
 fn expected_operation(command: &str) -> String {
-    command.replace(' ', ".")
+    match command {
+        "red fixture report" => "red_fixture.report".to_string(),
+        _ => command.replace(' ', "."),
+    }
 }

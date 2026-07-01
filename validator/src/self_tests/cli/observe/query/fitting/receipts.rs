@@ -20,7 +20,7 @@ fn write_command_receipts(dir: &Path, candidate: &str) {
             &slug,
             &format!("run-{slug}"),
             &format!("corr-{slug}"),
-            &command.replace(' ', "."),
+            &command_operation(command),
         );
     }
 }
@@ -121,6 +121,13 @@ fn write_query_receipts(
 
 fn slug(value: &str) -> String {
     value.replace(' ', "-")
+}
+
+fn command_operation(command: &str) -> String {
+    match command {
+        "red fixture report" => "red_fixture.report".to_string(),
+        _ => command.replace(' ', "."),
+    }
 }
 
 fn surface_operation(surface: &str) -> String {

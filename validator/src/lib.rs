@@ -167,6 +167,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::OpenAi(command)
             } else if let Some(command) = cli::promptfoo::parse(raw)? {
                 Command::Promptfoo(command)
+            } else if let Some(command) = cli::red_report::parse(raw)? {
+                Command::RedReport(command)
             } else if let Some(command) = cli::routine::parse(raw)? {
                 Command::Routine(command)
             } else if let Some(command) = cli::session::parse(raw)? {

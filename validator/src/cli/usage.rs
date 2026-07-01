@@ -22,6 +22,7 @@ pub(crate) fn text() -> &'static str {
         "  ultragoal source audit --receipt <path> [--red-report <path>]\n",
         "    [--mode hot|focused|standard|strict|strict_fixtures|strict_coverage|strict_final]\n",
         "    [--jobs N]\n",
+        "  ultragoal red fixture report [--report <path>]\n",
         "  ultragoal package digest\n",
         "  ultragoal package-digest\n",
         "  ultragoal coverage prove --receipt <path>\n",

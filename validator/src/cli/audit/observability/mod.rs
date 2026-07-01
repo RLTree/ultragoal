@@ -2,6 +2,8 @@ use serde_json::Value;
 use std::path::Path;
 
 mod red;
+#[cfg(test)]
+mod red_tests;
 mod runtime;
 mod stdout;
 
@@ -31,6 +33,14 @@ pub(crate) fn write_all(
         red::write_report(root, path, command_error, runtime)?;
     }
     Ok(())
+}
+
+pub(crate) fn write_standalone_red_report(
+    root: &Path,
+    red_report: &Path,
+    runtime: RuntimeFacts,
+) -> Result<(), String> {
+    red::write_standalone(root, red_report, runtime)
 }
 
 fn write_audit(
