@@ -102,6 +102,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         failures
             .contains(&"observability_command_fitting_row_shape_only:package digest".to_string())
     );
+
     let _ = std::fs::remove_dir_all(root);
 }
 

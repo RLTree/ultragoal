@@ -3300,7 +3300,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
-- [ ] Gate 92 evidence path: Status: in progress. Research-corpus binding is source-local validated; fitting inventory rows now require explicit same-candidate query paths plus red/green/tamper fixture fields. Prior fitted command-row labels are stale due to fixture-proof debt; the first incomplete command row is `package digest`. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, install/cache parity, transactional finalization, or full Gate 92 proof.
+- [ ] Gate 92 evidence path: Status: in progress. `package digest` command fitting is validated current for source-local command-row proof; the first incomplete command row is `source audit`. Exact coverage remains stale due to source change and uncovered-code failure. Claim impact: no final packet correctness, review readiness, package readiness, release readiness, completion, `update_goal()` eligibility, registry exposure, reviewer exposure, install/cache parity, transactional finalization, or full Gate 92 proof.
 
 105. Research source authority and article-to-law integration are complete for the original nine research sources, the OpenAI agent-improvement loop cookbook, and the OpenAI self-improving tax-agent article across canonical law ids, standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
 
@@ -3403,8 +3403,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 - [ ] Review feedback disposition and same-round satisfaction status.
 - [ ] Behavior-example coverage and coverage anti-gaming status.
 - [ ] One-command fresh environment bootstrap/concurrency status.
-- [ ] Agent-queryable observability status: in progress; row-shape-only fitting is stale due to source change, and command/surface rows now require explicit same-candidate query and red/green/tamper fixture fields before fitted status.
-- [ ] Full local observability stack integration and non-opaque failure status: in progress; command-specific fixture proof, exact coverage, full fitting, same-candidate command-query rebind, source-audit closure, and live-stack closure remain blocked.
+- [ ] Agent-queryable observability status: in progress; `package digest` command-row fitting validated current, and fitted rows now reject unbound red/green/tamper labels. `source audit` is the next incomplete command row.
+- [ ] Full local observability stack integration and non-opaque failure status: in progress; exact coverage, full fitting, source-audit closure, remaining command/surface rows, and live-stack closure remain blocked.
 - [ ] Research source authority/article-to-law integration status: validated current for source-local research source-card/corpus anchors, registry corpus-digest guard, and operating-loop research-input guard; full Gate 93 remains in progress.
 - [ ] Harness Improvement Loop trace/feedback/eval/Codex handoff status.
 - [ ] OpenAI API/key/model/cost/privacy boundary status.
