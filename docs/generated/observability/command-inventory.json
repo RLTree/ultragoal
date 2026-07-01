@@ -104,8 +104,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 13,
-        "partially_fitted": 24,
+        "fitted": 14,
+        "partially_fitted": 23,
         "unfitted": 25
       },
       "surfaces": {
@@ -171,9 +171,9 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "product prove-journey",
-      "fitting_status": "partially_fitted",
-      "next_unfitted_surface": "pass stdout contract"
+      "id": "fit-repo prove",
+      "fitting_status": "unfitted",
+      "next_unfitted_surface": "log"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, validator-check family, receipt/proof path, fixture/report path, setup/retrofit surface, long-running path, external/live path, signal, operating-loop stage, and claim guard is fitted with same-candidate query proof"
   },
@@ -621,22 +621,24 @@
       "next_unfitted_surface": "none"
     },
     "product prove-journey": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
         "root trace and child spans",
         "receipt observability binding",
+        "pass stdout contract",
+        "fail stdout contract",
         "same-candidate live query proof"
       ],
-      "missing_surfaces": [
-        "pass stdout contract",
-        "fail stdout contract"
-      ],
+      "missing_surfaces": [],
       "validator_check_id": "product-prove-journey-observability-binding",
       "focused_tests": [
         "product_parser_keeps_product_and_fit_repo_operations_distinct",
-        "product_journey_command_runs_default_minter_with_journey_telemetry"
+        "product_operation_contracts_are_distinct_for_every_surface",
+        "product_journey_command_runs_default_minter_with_journey_telemetry",
+        "product_journey_command_emits_fail_closed_observability_for_invalid_receipt_dir",
+        "logs_and_traces_can_select_run_and_correlation_without_metric_labels"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/product-prove-journey.json",
@@ -649,7 +651,7 @@
       ],
       "claim_impact": "supports_plugin_product_journey_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-journey",
-      "next_unfitted_surface": "pass stdout contract"
+      "next_unfitted_surface": "none"
     },
     "fit-repo prove": {
       "fitting_status": "unfitted",

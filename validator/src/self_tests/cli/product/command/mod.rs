@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 mod edges;
+mod journey;
 
 #[test]
 fn product_command_rejects_unsafe_receipt_dirs() {
@@ -162,43 +163,6 @@ fn product_command_reports_candidate_digest_errors_before_receipt_claim() {
     .expect_err("missing manifest blocks product telemetry");
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
     std::fs::remove_dir_all(root).expect("cleanup no manifest");
-}
-
-#[test]
-fn product_journey_command_runs_default_minter_with_journey_telemetry() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let rel = PathBuf::from(format!(
-        "target/ultragoal-product-journey-command-{}",
-        std::process::id()
-    ));
-    let obs = rel.join("journey-observability.json");
-    let out = root.join(&rel);
-    let _ = std::fs::remove_dir_all(&out);
-    let code = crate::cli::product::run(
-        &root,
-        &crate::cli::product::ProductCommand {
-            operation: crate::cli::product::ProductOperation::ProductProveJourney,
-            receipt_dir: Some(rel.clone()),
-            observability_receipt: obs.clone(),
-        },
-    )
-    .expect("journey run succeeds");
-    assert_eq!(code, 0);
-    assert!(out.join("plugin-product-journey-receipt.json").is_file());
-    let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
-    assert_eq!(receipt["status"], "pass");
-    assert_eq!(receipt["event"]["operation"], "product.prove-journey");
-    assert_eq!(
-        receipt["law_id"],
-        "plugin-flow-graph-package-dependency-closure-plugin-product-journey"
-    );
-    assert_eq!(
-        receipt["check_id"],
-        "product-prove-journey-observability-binding"
-    );
-    assert_eq!(receipt["claim_id"], "plugin_product_journey");
-    assert_eq!(receipt["event"]["task_count"], 3);
-    std::fs::remove_dir_all(out).expect("cleanup journey command");
 }
 
 #[test]
