@@ -24,6 +24,7 @@ pub(crate) fn text() -> &'static str {
         "    [--jobs N]\n",
         "  ultragoal red fixture report [--report <path>]\n",
         "  ultragoal schema validation [--schema <id> --file <path>] [--jobs N]\n",
+        "  ultragoal line-caps check --strict [--jobs N]\n",
         "  ultragoal mandatory-law validation [--law <id>] [--jobs N]\n",
         "  ultragoal source-obligations check --strict [--obligation <id>] [--jobs N]\n",
         "  ultragoal foundational-trace check --strict [--obligation <id>] [--jobs N]\n",

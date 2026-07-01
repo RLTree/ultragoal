@@ -105,8 +105,8 @@
       "commands": {
         "total": 62,
         "fitted": 9,
-        "partially_fitted": 23,
-        "unfitted": 30
+        "partially_fitted": 24,
+        "unfitted": 29
       },
       "surfaces": {
         "total": 10,
@@ -130,8 +130,8 @@
     "first_incomplete": {
       "family": "commands",
       "id": "line-cap check",
-      "fitting_status": "unfitted",
-      "next_unfitted_surface": "log"
+      "fitting_status": "partially_fitted",
+      "next_unfitted_surface": "same-candidate logs query proof"
     },
     "claim_impact": "blocks Gate 92, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, loop stage, and signal row is fitted with same-candidate live query proof"
   },
@@ -451,22 +451,39 @@
       "next_unfitted_surface": "none"
     },
     "line-cap check": {
-      "fitting_status": "unfitted",
-      "fitted_surfaces": [],
-      "missing_surfaces": [
-        "log",
-        "metric",
-        "trace",
-        "receipt binding",
-        "query proof"
+      "fitting_status": "partially_fitted",
+      "fitted_surfaces": [
+        "structured log event",
+        "metric sample",
+        "root trace span",
+        "pass and fail stdout contract",
+        "observability receipt binding",
+        "bounded parallel pure-read scheduler over source files",
+        "focused pass receipt contract test",
+        "focused over-cap fail receipt contract test"
       ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [],
-      "receipt_paths": [],
-      "live_query_proof_paths": [],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal",
-      "current_owner_surface": "command:line-cap check",
-      "next_unfitted_surface": "log"
+      "missing_surfaces": [
+        "same-candidate logs query proof",
+        "same-candidate metrics query proof",
+        "same-candidate traces query proof"
+      ],
+      "validator_check_id": "line-caps-check-observability-binding",
+      "focused_tests": [
+        "line_caps_parser_routes_to_dedicated_command",
+        "line_caps_command_writes_pass_observability_receipt",
+        "line_caps_command_fails_over_cap_with_repair_fields"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/line-cap-check.json"
+      ],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/line-cap-check-logs-query.json",
+        "validation_artifacts/observability/line-cap-check-metrics-query.json",
+        "validation_artifacts/observability/line-cap-check-traces-query.json"
+      ],
+      "claim_impact": "supports_line_cap_source_local_observability_only_no_readiness_release_completion_update_goal",
+      "current_owner_surface": "command:line-caps check --strict",
+      "next_unfitted_surface": "same-candidate logs query proof"
     },
     "namespace check": {
       "fitting_status": "unfitted",

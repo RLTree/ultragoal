@@ -1,5 +1,6 @@
 pub(crate) mod control;
 pub(crate) mod final_packet;
+pub(crate) mod line_caps;
 pub(crate) mod observe;
 pub(crate) mod openai;
 pub(crate) mod parse_errors;

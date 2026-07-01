@@ -58,6 +58,7 @@ pub(crate) enum Command {
     Garbage(crate::cli::garbage::collection::GarbageCommand),
     Halo(crate::cli::halo::HaloCommand),
     ImprovementLoop(crate::cli::improvement_loop::ImprovementLoopCommand),
+    LineCaps(crate::cli::line_caps::LineCapsCommand),
     MandatoryLawValidation(crate::cli::mandatory_law_validation::MandatoryLawValidationCommand),
     Observe(crate::cli::observe::types::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),

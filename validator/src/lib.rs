@@ -153,6 +153,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::Halo(command)
             } else if let Some(command) = cli::improvement_loop::parse(raw)? {
                 Command::ImprovementLoop(command)
+            } else if let Some(command) = cli::line_caps::parse(raw)? {
+                Command::LineCaps(command)
             } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
                 Command::MandatoryLawValidation(command)
             } else if let Some(command) = cli::observe::parse(raw)? {

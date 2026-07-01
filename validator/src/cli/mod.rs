@@ -6,6 +6,7 @@ pub(crate) mod foundational_trace;
 pub(crate) mod garbage;
 pub(crate) mod halo;
 pub(crate) mod improvement_loop;
+pub(crate) mod line_caps;
 pub(crate) mod mandatory_law_validation;
 pub(crate) mod observe;
 pub(crate) mod openai;

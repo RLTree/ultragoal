@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::path::Path;
 
 const COVERAGE_RECEIPT: &str = "validation_artifacts/coverage/coverage-receipt.json";
-const MAX_SOURCE_LINES: usize = 250;
+pub(crate) const MAX_SOURCE_LINES: usize = 250;
 
 pub fn package_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<String> {
     let mut out = Vec::new();
@@ -85,21 +85,21 @@ fn coverage_failures(root: &Path, store: &schema_catalog::SchemaStore) -> Vec<St
 }
 
 fn line_cap_failures(root: &Path) -> Vec<String> {
-    let mut out = Vec::new();
-    for rel in source_paths(root) {
-        let Ok(text) = std::fs::read_to_string(root.join(&rel)) else {
-            out.push(format!("plugin_self_law_line_cap_unreadable:{rel}"));
-            continue;
-        };
-        let lines = text.lines().count();
-        if lines > MAX_SOURCE_LINES {
-            out.push(format!("plugin_self_law_line_cap_exceeded:{rel}:{lines}"));
-        }
-    }
-    out
+    line_cap_source_paths(root)
+        .into_iter()
+        .filter_map(|rel| line_cap_failure_for_path(root, &rel))
+        .collect()
 }
 
-fn source_paths(root: &Path) -> Vec<String> {
+pub(crate) fn line_cap_failure_for_path(root: &Path, rel: &str) -> Option<String> {
+    let Ok(text) = std::fs::read_to_string(root.join(rel)) else {
+        return Some(format!("plugin_self_law_line_cap_unreadable:{rel}"));
+    };
+    let lines = text.lines().count();
+    (lines > MAX_SOURCE_LINES).then(|| format!("plugin_self_law_line_cap_exceeded:{rel}:{lines}"))
+}
+
+pub(crate) fn line_cap_source_paths(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     collect(root, "validator/src", ".rs", &mut out);
     collect(root, ".harness", ".sh", &mut out);
