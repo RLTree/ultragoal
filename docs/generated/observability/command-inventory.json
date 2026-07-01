@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 3,
-        "partially_fitted": 44,
+        "fitted": 4,
+        "partially_fitted": 43,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "schema validation",
+      "id": "mandatory-law validation",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -361,7 +361,7 @@
       ]
     },
     "schema validation": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "schema-validation-only claim ceiling",
@@ -373,18 +373,21 @@
         "pass and fail stdout contract",
         "real runtime scheduler telemetry for mapped schema validation",
         "bounded parallel pure-read scheduler over package schema map",
-        "targeted schema/file helper guarded by package-path validation"
-      ],
-      "missing_surfaces": [
         "red fixture proof",
         "green fixture proof",
-        "tamper fixture proof"
+        "tamper fixture proof",
+        "targeted schema/file helper guarded by package-path validation"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "schema-validation-observability-binding",
       "focused_tests": [
         "schema_validation_parse_supports_default_targeted_and_alias",
         "schema_validation_command_writes_pass_and_fail_observability",
-        "default_schema_validation_uses_mapped_parallel_path"
+        "default_schema_validation_uses_mapped_parallel_path",
+        "schema_validation_parse_and_scheduler_edges_are_bounded",
+        "schema_validation_failure_edges_absolute_receipt_and_default_run_are_observable",
+        "schema_validation_runtime_metrics_report_resource_and_saturation_states",
+        "schema_validation_run_propagates_telemetry_and_receipt_write_errors"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/schema-validation.json"
@@ -394,9 +397,9 @@
         "validation_artifacts/observability/schema-validation-metrics-query.json",
         "validation_artifacts/observability/schema-validation-traces-query.json"
       ],
-      "claim_impact": "supports_schema_validation_source_local_observability_only_no_readiness_release_completion_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_schema_validation_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:schema validation",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -408,9 +411,18 @@
         "validation_artifacts/observability/schema-validation-metrics-query.json",
         "validation_artifacts/observability/schema-validation-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "schema_validation_command_writes_pass_and_fail_observability",
+        "schema_validation_failure_edges_absolute_receipt_and_default_run_are_observable"
+      ],
+      "green_fixtures": [
+        "schema_validation_parse_supports_default_targeted_and_alias",
+        "default_schema_validation_uses_mapped_parallel_path"
+      ],
+      "tamper_fixtures": [
+        "schema_validation_parse_and_scheduler_edges_are_bounded",
+        "schema_validation_run_propagates_telemetry_and_receipt_write_errors"
+      ]
     },
     "mandatory-law validation": {
       "fitting_status": "partially_fitted",

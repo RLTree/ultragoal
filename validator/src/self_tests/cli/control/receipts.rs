@@ -60,6 +60,35 @@ fn receipt_blocks_claims_and_records_required_evidence() {
 }
 
 #[test]
+fn control_plane_schema_accepts_emitted_observability_fields() {
+    let root = crate::self_tests::boundaries::support::temp_root("cli-control-schema-observe");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"version":"0.0.0-test","resources":[]}),
+    );
+    let path = root.join("validation_artifacts/cli/self-law-receipt.json");
+    let command = ControlCommand {
+        operation: ControlOperation::SelfUpdateGoalEligibility,
+        receipt: Some(path.clone()),
+        surface_root: None,
+    };
+    assert_eq!(run(&root, &command).expect("control run writes receipt"), 1);
+    let value = crate::json_boundary::read_json(&path).expect("control receipt");
+    assert!(value.get("cache_mode").is_some());
+    assert!(value.get("receipt_observability_binding").is_some());
+    assert!(value.get("observability").is_some());
+
+    let store = crate::schema_catalog::load(&repo_root());
+    let errors = crate::schema_catalog::schema_errors(
+        &store,
+        "cli-control-plane-receipt.schema.json",
+        &value,
+    );
+    assert!(errors.is_empty(), "{errors:?}");
+    std::fs::remove_dir_all(root).expect("cleanup control schema observe");
+}
+
+#[test]
 fn run_writes_and_prints_fail_closed_receipts() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-control-receipt-run");
     write_json(

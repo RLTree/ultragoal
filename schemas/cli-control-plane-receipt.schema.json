@@ -64,6 +64,81 @@
     "candidate_digest": {
       "$ref": "common-defs.schema.json#/$defs/sha256"
     },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "span_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_span_id": {
+      "type": "string"
+    },
+    "law_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "check_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failure_class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "why_failed": {
+      "type": "string",
+      "minLength": 1
+    },
+    "where_failed": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next_repair": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "worker_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "task_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "queue_depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cache_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "saturation_status": {
+      "type": "string",
+      "minLength": 1
+    },
     "operation": {
       "enum": [
         "app_surface_probe",
@@ -362,6 +437,53 @@
         "type": "string",
         "minLength": 1
       }
+    },
+    "receipt_observability_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_path",
+        "command_receipt_path",
+        "run_id",
+        "correlation_id",
+        "log_stream_digest",
+        "metric_snapshot_digest",
+        "trace_bundle_digest"
+      ],
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command_receipt_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_receipt_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "log_stream_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "metric_snapshot_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        },
+        "trace_bundle_digest": {
+          "$ref": "common-defs.schema.json#/$defs/sha256"
+        }
+      }
+    },
+    "observability": {
+      "$ref": "observability-receipt.schema.json"
     },
     "notes": {
       "minLength": 1,

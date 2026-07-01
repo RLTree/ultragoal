@@ -41,7 +41,24 @@
     "candidate_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
     "run_id": { "type": "string", "minLength": 1 },
     "correlation_id": { "type": "string", "minLength": 1 },
-    "surface": { "enum": ["source", "source_package", "installed", "cache", "app_registry", "reviewer", "live_stack", "target_repo"] },
+    "surface": {
+      "enum": [
+        "source",
+        "source_package",
+        "installed",
+        "cache",
+        "app_registry",
+        "reviewer",
+        "live_stack",
+        "target_repo",
+        "codex_desktop_app_surface",
+        "codex_desktop_plugin_registry",
+        "installed_package_surface",
+        "plugin_cache_surface",
+        "source_local_update_goal_control_plane",
+        "source_package_control_plane"
+      ]
+    },
     "operation": { "type": "string", "minLength": 1 },
     "log_stream_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
     "metric_snapshot_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
