@@ -415,6 +415,422 @@ Mandatory integration objectives from the synthesis:
    - Evidence and confidence: Based on the synthesis final formulation and
      current final-packet/claim-ceiling laws. Confidence 89%.
 
+Gold-Standard Stack Developer Experience Addendum:
+
+The zip archive
+`/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
+adds concrete developer-experience, stack, command-loop, receipt, cache,
+resource, garbage-collection, supply-chain, product, CI/local-parity, and
+HU-STACK law guidance. Treat it as an additional Gate 93 synthesis source,
+alongside the earlier GPT-5.5 Pro thesis. Use a stable source id such as
+`gold-standard-stack-developer-experience-governance-2026-07-01`. The archive
+contains:
+
+- `harness_ultragoal_gold_standard_stack_developer_experience.md`;
+- `AGENTS.md`;
+- `harness_ultragoal_codex_gold_standard_stack_laws_AGENTS.md`.
+
+The archive's exact external version claims are snapshot candidates, not
+unchecked package law. Rust, TypeScript, Python, Bun, Node, SvelteKit,
+SolidStart, Vite, Tailwind, PostgreSQL, NATS, Restate, Nix, Bazel, OpenTofu,
+Kubernetes, OpenTelemetry, and other external version pins must be verified
+against official sources before they support package, install/cache, release,
+readiness, or update_goal claims. Their roles, surface separations, command
+loops, receipt requirements, and law shapes are binding guidance now.
+
+Stack classification vocabulary:
+
+- `REQUIRED`: part of the gold-standard stack when the repo/app uses the
+  applicable surface. It must route through the CLI, produce receipts, and have
+  claim guards.
+- `DEFAULT_ON`: enabled by default when safe and available. Absence must be
+  explicit and claim-limited.
+- `GOVERNED_ADAPTER`: useful but not canonical authority. It requires declared
+  config, tool identity, schemas, receipts, and claim-surface limits.
+- `OPTIONAL_LOCAL`: allowed for local productivity only. It cannot support
+  claims.
+- `REJECT`: forbidden for claim-bearing work because it creates hidden state,
+  weak proof, wrong abstraction, unnecessary risk, or product substitution.
+
+Stack surface decisions to preserve:
+
+- Rust is the correctness-critical core/control-plane language for the CLI,
+  validators, parsers, receipt binding, claim ceiling, workers, services, and
+  performance-sensitive law paths. Raw Cargo output is observation only.
+- TypeScript is the UI/frontend and agent-cockpit language. Runtime parser proof,
+  browser proof, accessibility proof, visual proof where applicable, and bundle
+  inventory are mandatory because TypeScript types erase at runtime.
+- Python is for AI, evals, notebooks, research, trace analysis, and model
+  experiments. Python cannot become the correctness-critical law engine or claim
+  authority without an explicit governed adapter.
+- Bun/Node are TypeScript package/script/test and compatibility substrates.
+  Frozen lockfiles, cache honesty, package-manager identity, and security
+  scanning are required where those surfaces are used.
+- SvelteKit is the default product-UI framework for SSR/product dashboards and
+  docs-heavy surfaces when the repo has product UI. SolidStart/SolidJS is
+  default-on for agent cockpit, trace explorers, graph editors, and
+  high-interactivity surfaces. Vite is the frontend build substrate. Tailwind v4
+  is a governed design-system substrate only when its browser baseline is
+  accepted and tested.
+- PostgreSQL is durable relational truth. ClickHouse is high-cardinality
+  observation/analytics truth. DuckDB is local analytical investigation. Object
+  storage is artifact storage. NATS JetStream is movement/event fanout. Restate
+  is durable execution. Temporal is an adapter. Valkey/Dragonfly are cache/
+  ephemeral state. Cache is never durable truth.
+- OpenTelemetry APIs, collector, and semantic conventions are the cross-language
+  telemetry vocabulary. High-cardinality agent/run/tool/eval fields belong in
+  traces/events/logs/eval records, not unbounded alert metric labels.
+- Codex, OpenAI Agents SDK, and MCP tools are execution/orchestration surfaces.
+  Their output is observation until `ultragoal` parses, validates, and binds it.
+- Nix is the clean-checkout reproducible devshell substrate. Bazel is a governed
+  monorepo build-graph adapter only when scale justifies it. OpenTofu is
+  infrastructure-as-code baseline where infrastructure enters scope. Kubernetes
+  is a runtime adapter only when orchestration complexity is justified. Docker/
+  Compose is default-on for local ephemeral services and per-worktree harnesses.
+
+HU-STACK laws from the archive:
+
+1. `HU-STACK-001: Agent-First Harness Law`
+   - Rule: The repository, runtime harness, validation system, observability
+     stack, eval suite, and artifact cleanup system are product surfaces.
+     Language tools serve the harness; they do not define compliance.
+   - You know it is working when: stack-specific proof improves agent execution,
+     validation, repair, runtime inspection, or cleanup rather than merely
+     recording that a tool ran.
+   - Downstream impact: Gate 92, Gate 99, Gate 101, Product Usage Fitness,
+     Product Fitness, Product Cohesion, Product Success, and final packet must
+     report stack surfaces as governed product surfaces.
+
+2. `HU-STACK-002: Cross-Language Claim Authority Law`
+   - Rule: Rust, TypeScript, Python, SQL, infrastructure, telemetry, and agent
+     tools may emit observations. Only `ultragoal` may convert observations into
+     claims.
+   - You know it is working when: raw `cargo`, `bun`, `uv`, `pytest`, `sqlx`,
+     `tofu`, `kubectl`, `playwright`, promptfoo, OpenAI, HALO, or MCP output can
+     never raise a claim ceiling without CLI parsing, same-surface binding,
+     freshness checks, and receipt validation.
+   - Downstream impact: claim guards, receipt schemas, final packet, update_goal
+     eligibility, and all setup/retrofit templates must reject raw-tool proof.
+
+3. `HU-STACK-003: Clean-Checkout Discoverability Law`
+   - Rule: A fresh agent must discover setup, validation, local runtime, evals,
+     and release proof from repo files only. Hidden local state cannot support
+     claims.
+   - You know it is working when: a clean checkout or isolated worktree can reach
+     the documented fast/standard/clean/release command surface without author
+     memory, editor state, private aliases, or untracked scripts.
+   - Downstream impact: Product Usage Fitness, setup/retrofit, Nix/devshell,
+     command registry, AGENTS.md routing, CI/local parity, and worktree-lane
+     entry rules must enforce this.
+
+4. `HU-STACK-004: Same-Surface Full-Stack Proof Law`
+   - Rule: A claim about a surface must be proven on that same surface. Source
+     claims need source proof; package claims need package inventory; install
+     claims need install tree proof; runtime API claims need runtime API proof;
+     browser claims need browser journeys; database claims need migration/query
+     proof; workflow claims need scenario/replay proof; observability claims need
+     emitted/queryable telemetry; product claims need user-outcome proof.
+   - You know it is working when: package install cannot satisfy runtime success,
+     Kubernetes rollout cannot satisfy product success, trace existence cannot
+     satisfy eval success, and reviewer agreement cannot satisfy compliance.
+   - Downstream impact: final packet, Product Fitness, Product Cohesion, Product
+     Success, install/cache, app-registry, reviewer, active-repo rollout, and
+     update_goal blockers must stay surface-specific.
+
+5. `HU-STACK-005: Lockfile Sovereignty Law`
+   - Rule: `Cargo.lock`, `bun.lock`, `uv.lock`, `flake.lock`, OpenTofu provider
+     locks, and equivalent package/toolchain locks are governed truth surfaces.
+     Lock drift blocks dependency, build, package, release, and update_goal
+     claims until verified.
+   - You know it is working when: dependency/toolchain receipts name lockfile
+     digests, stale locks fail, frozen installs are enforced, and warm local
+     caches cannot masquerade as clean proof.
+   - Downstream impact: Gate 101, supply-chain/security, clean-checkout proof,
+     install/cache, final packet, and update_goal eligibility.
+
+6. `HU-STACK-006: Telemetry Schema Law`
+   - Rule: No trace, metric, log, event, or eval record may introduce
+     unregistered attributes. Every attribute has type, owner, cardinality class,
+     privacy class, and allowed surfaces.
+   - You know it is working when: telemetry schema drift fails before claims,
+     high-cardinality values stay out of alert metric labels, and query/explain
+     output can rely on stable attribute names.
+   - Downstream impact: Gate 92, Gate 102, command inventory, fitting control
+     board, source audit, red fixtures, final packet, and Agent Cockpit.
+
+7. `HU-STACK-007: Agent Tool Boundary Law`
+   - Rule: Every tool/MCP action requires typed schemas, risk class, approval
+     policy, idempotency class, telemetry span, and cleanup policy. Tool use
+     without policy cannot support claims.
+   - You know it is working when: the CLI can explain the allowed action, risk,
+     approval, inputs, outputs, idempotency, cleanup, trace, and claim impact for
+     every agent/tool operation.
+   - Downstream impact: OpenAI/Agents SDK/MCP integration, setup/retrofit,
+     external/live surfaces, worktree lanes, privacy, security, final packet, and
+     update_goal blockers.
+
+8. `HU-STACK-008: Product-Cockpit Law`
+   - Rule: Agent work must be inspectable through an internal cockpit or
+     equivalent runtime surface showing plans, diffs, validations, traces, evals,
+     tool calls, approval records, artifacts, and claim ceilings.
+   - You know it is working when: Tree or a future agent can inspect the state of
+     a run without spelunking raw files, and the cockpit remains observation
+     until CLI receipts bind claims.
+   - Downstream impact: future Agent Cockpit, Product Usage Fitness, Gate 100,
+     Gate 105, active-repo rollout, final packet, and live product UX.
+
+9. `HU-STACK-009: Full-Stack GC Law`
+   - Rule: Every generated artifact, cache, package, install copy, database data
+     directory, trace, screenshot, video, receipt, packet, lock, pid, port, and
+     tempdir must be classed before cleanup. Deletion requires dry-run plan and
+     deletion receipt.
+   - You know it is working when: cleanup can distinguish protected current
+     proof from stale junk, never deletes active baselines/receipts/signatures/
+     lockfiles, and records exactly what was removed or preserved.
+   - Downstream impact: Rust/GC, workspace/artifact/cache cleanup, worktrees,
+     install/cache, final packet, release artifacts, and update_goal blockers.
+
+10. `HU-STACK-010: Update Goal Eligibility Law`
+    - Rule: `update_goal` is forbidden unless the CLI verifies current goal
+      state, active receipts, stack claim ceiling, product proof eligibility, and
+      cleanup/protection status.
+    - You know it is working when: `update_goal` cannot pass with stale stack
+      receipts, hidden cache dependence, missing product proof, missing cleanup
+      protection, or unsupported live surfaces.
+    - Downstream impact: final source-local proof, release/distribution surfaces,
+      final packet, install/cache, app-registry, reviewer exposure, and
+      completion response.
+
+Gold-standard command matrix:
+
+- `ultragoal stack fast`
+  - Purpose: fastest meaningful local feedback for agent iteration.
+  - Required steps: quick toolchain verification, changed-scope workspace
+    topology, Rust fmt/check/focused tests when Rust changed, TypeScript
+    typecheck/lint/focused tests when UI changed, Python ruff/pytest focused
+    when evals changed, schema/namespace/line-cap changed-scope checks, DB
+    migration syntax when migrations changed, trace/eval schema check when
+    telemetry/evals changed.
+  - Claim support: `FastFeedbackObservation` and
+    `ChangedScopeStructuralPass` only.
+  - Cannot support: review-ready, release-ready, product-success, or
+    update_goal.
+
+- `ultragoal stack standard`
+  - Purpose: serious local proof before claiming a repair.
+  - Required steps: Rust standard, TypeScript standard, Python standard,
+    database empty/fixture migration verification, observability semantic
+    convention check, agent tool-inventory verification, required red/green/
+    tamper fixtures, current receipt verification, and claim-ceiling
+    computation.
+  - Claim support: `StandardRepairProof` and, only where explicitly allowed by
+    claim guards, `ReviewReadyCandidate`.
+  - Cannot support: release-ready unless release loop also passes.
+
+- `ultragoal stack release`
+  - Purpose: full law proof for release readiness.
+  - Required steps: standard loop, Rust coverage/security/supply-chain/memory,
+    TypeScript coverage/browser/accessibility/visual/bundle, Python eval
+    regression, database migration/backup/restore/query-plan/RLS, ClickHouse
+    ingest/query, NATS stream/replay, Restate workflow scenario, OpenTelemetry
+    local/prod config, OpenTofu plan/policy, Kubernetes manifest/rollout where
+    applicable, package inventory, install proof, cache separation, Product
+    Fitness, Product Cohesion, Product Success, GC dry-run, and final packet.
+  - Claim support: release/product/final-packet claims only when all same-surface
+    receipts are current and the existing strict claim ceiling permits them.
+
+- `ultragoal stack clean-proof --cache-mode none`
+  - Purpose: prove clean checkout and no hidden local cache dependency.
+  - Required properties: fresh checkout or clean worktree snapshot, isolated
+    Cargo/Bun/uv caches, isolated target/node_modules/.venv directories, Nix
+    devshell or recorded tool bootstrap, no editor/watcher state, no global env
+    except allowlist, local services boot from empty/fixture state, full standard
+    loop.
+
+- `ultragoal stack watch`
+  - Purpose: continuous developer feedback.
+  - Rule: watch emits observations only. It cannot mint completion claims unless
+    followed by current receipt verification and claim-ceiling computation.
+
+- `ultragoal stack resources prove`
+  - Purpose: prove bounded memory, no leaks, bounded queues, cleanup on
+    cancellation/error, and stable long-running control plane.
+  - Required checks: Rust long-running service memory, Node/Bun frontend build
+    memory budget, Python eval memory budget, Postgres pool limits, ClickHouse
+    retention/memory limits, NATS consumer lag/stream limits, Restate workflow
+    backlog limits, browser memory/trace artifact limits, and agent tool child
+    process cleanup.
+
+- `ultragoal gc plan`, `ultragoal gc dry-run`, `ultragoal gc apply`, and
+  `ultragoal gc verify`
+  - Purpose: safe cleanup of stale artifacts.
+  - Required scope: Cargo target dirs, Bun node_modules/cache, uv virtualenv/
+    cache, Nix store roots, Bazel output base, database test dirs, ClickHouse
+    local data, NATS streams, Restate state, Playwright traces/videos/
+    screenshots, coverage artifacts, receipts, final packets, worktrees, locks,
+    pids, ports, and tempdirs.
+
+Stack receipt and staleness model:
+
+- Stack receipts must record command, goal id, git commit/dirty/worktree id,
+  toolchain identities, source/package/install/cache/runtime/observability
+  surface digests, component receipts, claim support, claim exclusions, issued
+  time, and expiry.
+- Stack receipts stale on changes to git commit or dirty state, lockfiles,
+  schema registry, law registry, validator binary, fixture suite, migration
+  files, telemetry semantic-convention registry, model config, MCP tool
+  registry, OpenTofu provider lock, Kubernetes manifests, package artifact
+  digest, install tree digest, runtime config digest, or observability backend
+  config.
+- A stale stack receipt can support diagnosis only. It cannot support completion,
+  product, review, release, install/cache, final packet, or update_goal claims.
+
+Cache/no-cache honesty model:
+
+- Cache use is legal. Cache concealment is illegal.
+- Warm-cache speed is not clean-checkout proof.
+- Cache presence is not correctness proof.
+- Cache proof supports only cache-surface claims unless a same-surface law says
+  otherwise.
+- Governed cache classes include Cargo target/registry/git/sccache, Bun install
+  cache, node_modules, Vite cache, Playwright browser cache, uv cache, Python
+  virtualenv, Nix store, Bazel output base, Docker layer cache, Postgres test
+  data, ClickHouse local data, NATS JetStream data, Restate state, browser
+  storage state, and agent-run cache.
+
+Resource discipline and full-stack cleanup:
+
+- Across Rust, TypeScript/browser, Node/Bun tooling, Python, databases, caches,
+  event buses, workflows, and agents: no unbounded queues, no unbounded caches,
+  no spawn-and-forget tasks, no child process without owner/kill/reap policy, no
+  tempdir without cleanup policy, no browser session without cleanup policy, no
+  long-running worker without shutdown path, no large-file load without size
+  bound or streaming justification, no DB pool without max size and timeout, and
+  no workflow without timeout/retry/cancel policy.
+- Artifact classes must include source/generated source, build outputs,
+  node_modules/Bun/uv/Nix/Bazel/Docker caches, database/event/workflow state,
+  Playwright traces/videos/screenshots, coverage reports, eval results, agent
+  traces, current/stale receipts, review packets, final packets, release
+  artifacts, SBOMs, provenance, signatures, lockfiles, pid files, port
+  reservations, and tempdirs.
+- Protected artifacts must never be deleted without replacement proof: current
+  receipts supporting active claims, current final packets, release artifacts,
+  SBOMs, provenance, signatures, lockfiles, law/schema registries, fixtures,
+  active eval baselines, active performance baselines, active trace exemplars,
+  `Cargo.lock`, `bun.lock`, `uv.lock`, `flake.lock`, and OpenTofu provider
+  locks.
+
+Full-stack product laws:
+
+- Product Fitness requires the intended user problem to be proven on the correct
+  runtime surface. API behavior needs runtime API request/response proof. UI
+  behavior needs browser journey proof. Agent cockpit behavior needs trace/eval/
+  run scenario proof. Database behavior needs migration plus runtime persistence
+  journey. Workflow behavior needs durable replay/idempotency scenario.
+  Observability behavior needs emitted and queryable trace/log/metric proof.
+- Product Cohesion requires architecture, module boundaries, telemetry schema,
+  database truth model, UI framework boundaries, package surfaces, docs,
+  security, and operational model to fit together.
+- Product Success requires same-surface proof that the actual user outcome works.
+  For this stack, that usually means runtime API proof, browser journey proof,
+  database persistence proof, workflow completion proof where async, trace/event
+  proof, SLO/golden-signal non-regression observation, accessibility proof for
+  user-facing UI, and security/secret boundary proof.
+- Invalid substitutes include Rust tests pass, TypeScript builds, Python eval
+  passes, database migration runs, ClickHouse table exists, NATS stream exists,
+  Kubernetes rollout succeeds, package published, reviewer approval, or agent
+  says complete.
+
+Supply-chain and security baseline:
+
+- Required controls include committed lockfiles, frozen installs in CI,
+  dependency review, cargo-deny/audit/vet, Bun security scanner/audit,
+  Python advisory scan where Python exists, SBOM generation for Rust/TypeScript/
+  Python/container artifacts, Sigstore/cosign signing for release artifacts
+  where applicable, container image digest pinning, Kubernetes admission/policy
+  validation where applicable, Gitleaks and optional TruffleHog, minimum package
+  age for JavaScript where supported, and eval-backed dependency-update PRs.
+- Agent-specific prohibitions: agents cannot add production dependencies without
+  dependency receipt, weaken CI to pass, disable tracing to hide failures, change
+  approval policy without human review, modify secrets, deploy production
+  without release gate, or substitute package publication for product success.
+
+CI/local parity:
+
+- CI must run the same `ultragoal` commands available locally. CI YAML is
+  orchestration, not authority.
+- Required lanes include stack-fast, stack-standard, stack-clean-proof,
+  rust-coverage, frontend-browser, python-evals, migration-proof,
+  observability-proof, security-supply-chain, infra-plan, release-dry-run,
+  scheduled memory-resource, scheduled fuzz/property, and scheduled gc-dry-run
+  where those surfaces exist.
+
+Migration plan for existing gold-stack repos:
+
+- Phase 0 Inventory: stack, Rust, TypeScript, Python, database, observability,
+  and infrastructure inventory in report-only mode.
+- Phase 1 Toolchain and lockfiles: add/verify Rust toolchain/Cargo lock,
+  package manager lock, Python lock, Nix flake lock, and OpenTofu provider locks
+  where applicable.
+- Phase 2 Command routing: introduce fast, standard, clean-proof, and release
+  stack commands; raw tools become implementation details.
+- Phase 3 Architecture and namespace: refactor Rust module tree, TypeScript
+  feature/surface modules, Python eval package structure, DB migration naming,
+  telemetry attribute registry, and infra module boundaries.
+- Phase 4 Typed boundaries: replace raw `serde_json::Value`, unchecked
+  TypeScript `any`/`unknown`, Python dict authority, raw SQL authority, untyped
+  telemetry, and untyped MCP inputs/outputs with typed parsers, schemas,
+  newtypes, and receipt-bound validators.
+- Phase 5 Red/green/tamper fixtures: every validator and law gets red, green,
+  tamper, expected failure schema, and receipt proof.
+- Phase 6 Product proof: add browser/API/database/workflow/observability
+  journeys for Product Fitness, Cohesion, and Success.
+- Phase 7 GC and release packets: classify artifacts, protect active proof,
+  implement dry-run cleanup, and build final packets.
+
+Operational addenda that must not hide inside larger buckets:
+
+- Vite frontend build substrate is governed. Required receipts include version,
+  framework adapter, mode, config digest, env allowlist digest, bundle manifest,
+  chunk inventory, and source-map policy. Vite build does not prove browser
+  behavior, accessibility, product success, or security absence.
+- Tailwind/design-system substrate is governed when used. Required receipts
+  include version, browser baseline, CSS entrypoints, style policy, and visual
+  baseline. It does not prove accessibility, product success, or legacy browser
+  support without explicit tests.
+- OpenAI SDKs and model aliases are governed. Model aliases must live in config,
+  not scattered scripts/prompts. Model changes require eval gates, instruction
+  digests, SDK/version identity, before/after eval scores, and trace/eval links.
+- Task runner and command discovery are governed. `ultragoal` is required;
+  `just` may be default-on only as an alias layer; Nix devshell is required;
+  raw shell scripts as authority are rejected. Each recipe must delegate to
+  `ultragoal`.
+- Optional local-only tools such as editor lenses, editor-only diagnostics,
+  local DB GUIs, manual ClickHouse queries, terminal aliases, personal direnv,
+  ad hoc browser devtools, manual profilers, and notebook-only analysis may help
+  investigation but cannot support claims.
+- Rejected practices include raw tool output as final proof, warm cache proof as
+  clean proof, package install as product success, Kubernetes rollout as product
+  success, DB migration success as UI success, trace existence as eval success,
+  metric presence as SLO compliance, cache existence as durable truth,
+  unbounded cache/queue/workflow backlog, unclassified generated artifacts,
+  untyped JSON authority, hard-coded model ids in scripts, MCP tools without
+  schema/risk/approval policy, secret-bearing local config in repo, blind cleanup
+  deletion, and reviewer agreement as compliance.
+
+Final strictness test:
+
+- A full-stack law is theater if it can be satisfied by prose, reviewer
+  agreement, row presence, stale evidence, source-only proof for runtime claim,
+  package-only proof for install/runtime claim, install/cache proof for product
+  success, fixture names without execution, red-only impossible requirements,
+  green-only validators without tamper tests, hidden local cache, editor state,
+  warm watcher state, or lowered claim ceiling alone.
+- A full-stack law is real only if it has law id, typed inputs, typed outputs,
+  deterministic validator, red fixtures, green fixtures, tamper fixtures,
+  same-surface proof rule, receipt schema, digest binding, staleness policy,
+  claim impact, repair class, and self-law compliance.
+
 Spine-level ordering implied by the synthesis:
 
 - Phase 2A: Complete Gate 92 operational observability, including command/check/
@@ -2799,7 +3215,7 @@ Required Gate 92 validation:
 
 Gate 93 is additive to Gates 1-92. It does not replace, reduce, defer, satisfy, or weaken observability, CLI authority, source/install/cache/app-registry separation, Product Fitness, Product Cohesion, Product Success, coverage, namespace, line caps, typed parsing, final-packet proof, version sync, or any update_goal stop condition.
 
-The Harness Ultragoal plugin must convert the full research corpus into governed law surfaces. The research corpus includes the original nine observability and harness-engineering sources already introduced into Gate 92, the newer OpenAI agent-improvement loop cookbook, the OpenAI self-improving tax-agent article, and the attached GPT-5.5 Pro gold-standard stack synthesis as a synthesis source. Research is not authority by itself. Research becomes authority only when each requirement, practice, workflow shape, failure mode, tooling need, and claim boundary is mapped into canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, final-packet fields, and update_goal blockers.
+The Harness Ultragoal plugin must convert the full research corpus into governed law surfaces. The research corpus includes the original nine observability and harness-engineering sources already introduced into Gate 92, the newer OpenAI agent-improvement loop cookbook, the OpenAI self-improving tax-agent article, the attached GPT-5.5 Pro gold-standard stack synthesis as a synthesis source, and the attached gold-standard stack developer-experience/governance archive as a stack-law synthesis source. Research is not authority by itself. Research becomes authority only when each requirement, practice, workflow shape, failure mode, tooling need, and claim boundary is mapped into canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, final-packet fields, and update_goal blockers.
 
 Mandatory research sources:
 
@@ -2824,6 +3240,17 @@ Mandatory research sources:
   primary factual authority for exact external version pins, vendor availability,
   hosted service behavior, or current pricing. Those claims require official
   source verification before hard-law adoption.
+- Gold-standard stack developer-experience/governance archive: classification
+  vocabulary, required/default-on/governed-adapter/optional-local/reject
+  decisions, HU-STACK-001 through HU-STACK-010, stack fast/standard/release/
+  clean-proof/watch/resources/GC command loops, stack receipt model, staleness
+  triggers, cache/no-cache honesty model, memory/resource discipline, artifact
+  and cleanup classes, Product Fitness/Cohesion/Success full-stack proof
+  examples, supply-chain/security baseline, CI/local parity, migration phases,
+  operational addenda for Vite/Tailwind/OpenAI SDKs/model aliases/task runners,
+  optional local-only tools, rejected practices, and final strictness tests.
+  This source is also synthesis authority. Exact external version pins require
+  official-source verification before hard-law adoption.
 
 Required implementation:
 
@@ -2833,6 +3260,12 @@ Required implementation:
   artifact/digest, classify itself as synthesis authority, and mark
   version/vendor claims as requiring primary-source verification before they can
   support package, install/cache, release, readiness, or update_goal claims.
+- The gold-standard stack developer-experience archive row must use a stable id
+  such as `gold-standard-stack-developer-experience-governance-2026-07-01`,
+  record the zip path and per-entry digests, classify itself as stack-law
+  synthesis authority, and mark version/vendor claims as requiring
+  primary-source verification before they can support package, install/cache,
+  release, readiness, or update_goal claims.
 - Create or extend an article-to-law trace registry. Each research requirement must map to at least one existing canonical law id or a newly added canonical law id. HU-style aliases may be explanatory only and may not replace existing canonical law ids.
 - Every mapped requirement must name the standards row id, source-obligation id, foundational trace id, validator check id, red fixture id, valid fixture id or receipt requirement, package inventory path, setup/retrofit output path, and claim-ceiling guard.
 - Validator must fail research rows that are unmapped, mapped only to umbrella categories, mapped only to prose, mapped only to a checklist row, mapped only to a source-obligation row, mapped only to a trace row, missing fixtures, missing receipts, missing claim guards, missing setup/retrofit integration, stale against the research-source digest, or detached from canonical law ids.
@@ -3408,6 +3841,19 @@ Final response must include:
 - subagent orchestration explicitness/token-model-cost/reconciliation status
 - research source authority/article-to-law integration status
 - GPT-5.5 Pro synthesis source-card/article-to-law integration status
+- gold-standard stack developer-experience archive source-card/article-to-law
+  integration status
+- HU-STACK-001 through HU-STACK-010 law-surface integration status
+- stack fast/standard/release/clean-proof/watch/resources/GC command loop status
+- stack receipt and staleness model status
+- cache/no-cache honesty by cache class status
+- full-stack memory/resource discipline status
+- full-stack GC/protected artifact classification status
+- CI/local parity for stack commands status
+- full-stack migration phase status
+- operational addenda status for Vite, Tailwind/design-system substrate, OpenAI
+  SDK/model aliases, task runner/command discovery, optional local-only tools,
+  rejected practices, and strictness tests
 - Harness Improvement Loop trace/feedback/eval/Codex handoff status
 - trace-to-feedback-to-eval-to-repair-to-promotion loop status
 - OpenAI API/key/model/cost/privacy boundary status

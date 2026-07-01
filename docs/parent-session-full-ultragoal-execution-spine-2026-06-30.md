@@ -249,6 +249,97 @@ Operationalized objectives:
      install/cache, app-registry, live reviewer, final-packet, external/live, or
      update_goal-supported.
 
+## Gold-Standard Stack Developer Experience Addendum
+
+The archive
+`/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
+is a second synthesis input for execution planning. It is not primary authority
+for exact external version pins, but its HU-STACK laws, command loops,
+proof-surface separation, cache/resource/GC discipline, supply-chain baseline,
+CI/local parity, and migration plan are binding execution guidance.
+
+Use a Gate 93 source id such as
+`gold-standard-stack-developer-experience-governance-2026-07-01`. The source row
+must record the zip path and per-entry digests, and must mark external version
+and vendor claims as requiring official-source verification before package,
+install/cache, release, readiness, or update_goal support.
+
+Stack classifications:
+
+- `REQUIRED`: must exist for applicable repo surfaces and route through CLI
+  receipts.
+- `DEFAULT_ON`: enabled by default when safe; absence is explicit and
+  claim-limited.
+- `GOVERNED_ADAPTER`: supported but not canonical authority without declared
+  config, schemas, receipts, and claim limits.
+- `OPTIONAL_LOCAL`: local productivity only, no claim support.
+- `REJECT`: forbidden for claim-bearing work.
+
+HU-STACK law integration:
+
+- `HU-STACK-001 Agent-First Harness`: repo, runtime harness, validation,
+  observability, evals, and cleanup are product surfaces.
+- `HU-STACK-002 Cross-Language Claim Authority`: Rust, TypeScript, Python, SQL,
+  infrastructure, telemetry, and agent tools emit observations only; `ultragoal`
+  converts observations into claims.
+- `HU-STACK-003 Clean-Checkout Discoverability`: fresh agents discover setup,
+  validation, local runtime, evals, and release proof from repo files only.
+- `HU-STACK-004 Same-Surface Full-Stack Proof`: every surface claim is proven on
+  that same surface.
+- `HU-STACK-005 Lockfile Sovereignty`: lockfiles and provider locks are governed
+  truth surfaces; drift blocks dependent claims.
+- `HU-STACK-006 Telemetry Schema`: telemetry/eval attributes are registered with
+  type, owner, cardinality, privacy, and allowed surfaces.
+- `HU-STACK-007 Agent Tool Boundary`: every tool/MCP action has schemas, risk,
+  approval, idempotency, telemetry, and cleanup.
+- `HU-STACK-008 Product-Cockpit`: agent work becomes inspectable through a
+  cockpit or equivalent runtime surface, without replacing CLI proof.
+- `HU-STACK-009 Full-Stack GC`: every artifact/cache/state/receipt/packet/lock/
+  pid/port/tempdir is classed before cleanup; deletion requires dry-run plan and
+  receipt.
+- `HU-STACK-010 Update Goal Eligibility`: update_goal remains forbidden until
+  current goal state, active receipts, stack claim ceiling, product proof
+  eligibility, and cleanup/protection status are verified.
+
+Command loop implications:
+
+- `ultragoal stack fast` is the hot inner-loop command. It supports only fast
+  feedback and changed-scope structural observations.
+- `ultragoal stack standard` is the serious source-local repair proof loop.
+  It runs language standards, DB migration checks, observability semantic checks,
+  tool inventory, red/green/tamper fixtures, receipt verification, and claim
+  ceiling computation.
+- `ultragoal stack release` is the full release/product proof loop. It adds
+  Rust/TypeScript/Python/data/observability/workflow/infra/package/install/cache/
+  Product Fitness/Product Cohesion/Product Success/GC/final-packet proof where
+  applicable. It does not override the existing claim ceiling.
+- `ultragoal stack clean-proof --cache-mode none` proves clean checkout and no
+  hidden local cache dependence.
+- `ultragoal stack watch` emits observations only.
+- `ultragoal stack resources prove` proves memory, queues, processes, pools,
+  browser artifacts, workflow backlog, and agent tool cleanup are bounded.
+- `ultragoal gc plan/dry-run/apply/verify` governs cleanup. No blind cleanup,
+  broad deletion, or unclassified artifact removal can support claims.
+
+Stack proof discipline:
+
+- Stack receipts stale on dirty state, lockfile drift, schema/law/fixture/
+  migration/telemetry/model/MCP/provider/Kubernetes/package/install/runtime/
+  observability config changes.
+- Cache use is legal. Cache concealment is illegal. Warm-cache speed is not
+  clean-checkout proof. Cache presence is not correctness proof.
+- Product Fitness requires correct runtime-surface proof. Product Cohesion
+  requires architecture, telemetry, DB truth model, UI/framework boundaries,
+  package surfaces, docs, security, and operational model to fit. Product Success
+  requires the user outcome on the runtime product surface.
+- CI YAML is orchestration, not authority. CI must run the same `ultragoal`
+  command surfaces available locally.
+- Optional local tools can help investigation but cannot support claims.
+- A stack law is theater if prose, reviewer agreement, stale evidence,
+  source-only proof for runtime claims, package-only proof for install/runtime,
+  install/cache proof for product success, fixture names without execution, or a
+  lowered claim ceiling alone can satisfy it.
+
 ## Carry-Forward Control Loop Requirements
 
 The checklist is a progress surface, not a receipt ledger. Use only concise row
@@ -371,13 +462,14 @@ promptfoo, and HALO surfaces already touched by WIP. Fix schema enum drift,
 standards TSV/JSON drift, source obligations, red fixture schema/digests, valid
 fixtures, package inventory, observability binding, and claim guards.
 
-This phase must also integrate the GPT-5.5 Pro synthesis as a Gate 93 synthesis
-source card and decompose every adopted requirement into canonical law ids,
-standards rows, source obligations, foundational trace entries, schemas,
-validator check ids, red/green/tamper fixtures, receipt requirements, package
-inventory, setup/retrofit outputs, claim guards, final-packet fields, and
-update_goal blockers. Prompt-only, checklist-only, row-shape-only, or
-summary-only adoption fails this phase.
+This phase must also integrate the GPT-5.5 Pro synthesis and the gold-standard
+stack developer-experience archive as Gate 93 synthesis source cards. Decompose
+every adopted requirement into canonical law ids, standards rows, source
+obligations, foundational trace entries, schemas, validator check ids,
+red/green/tamper fixtures, receipt requirements, package inventory, setup/
+retrofit outputs, claim guards, final-packet fields, and update_goal blockers.
+Prompt-only, checklist-only, row-shape-only, or summary-only adoption fails this
+phase.
 
 Exit requires focused tests and receipts for 93-97 source-local claims only.
 
@@ -400,6 +492,14 @@ authority kernel, preserve telemetry and receipt binding, and declare whether
 they are narrow helpers or routine validation. Product Usage Fitness is not
 closed until the fit-repo first-use path and plugin-activated target-repo path
 are both visible.
+
+The routine surface should converge toward the stack command model:
+`ultragoal stack fast`, `ultragoal stack standard`,
+`ultragoal stack clean-proof --cache-mode none`, `ultragoal stack watch`,
+`ultragoal stack resources prove`, and `ultragoal gc plan/dry-run/apply/verify`.
+Only the source-local parts needed for the current claim boundary should be
+implemented here; release/install/cache/app-registry proof remains forbidden
+until later phases.
 
 Exit requires focused help/routine-path tests and red fixtures for missing
 routine entrypoint, non-navigable help, leaf-only validation substitution,
@@ -431,9 +531,10 @@ DevX, privacy/data minimization, and surface separation.
 This phase is where future product surfaces from the synthesis begin becoming
 implementation work: portable adapter stack status, supply-chain/security
 baseline, AGENTS routing templates, tool contract/risk tiers, active-repo
-rollout proof, and Agent Cockpit status or explicit blocker. Do not pull these
-forward to block Phase 2 unless the current Gate 92 implementation depends on
-them.
+rollout proof, HU-STACK laws, stack receipt/staleness model, cache/no-cache
+honesty, resource discipline, GC classification, CI/local parity, migration
+phases, and Agent Cockpit status or explicit blocker. Do not pull these forward
+to block Phase 2 unless the current Gate 92 implementation depends on them.
 
 Worktrees may start only after Phase 4 is committed and parent owns all
 `validation_artifacts/**` writes.
