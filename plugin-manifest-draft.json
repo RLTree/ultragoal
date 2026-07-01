@@ -4242,6 +4242,8 @@
     "validator/src/cli/product/mod.rs",
     "validator/src/cli/product/receipts/mod.rs",
     "validator/src/cli/product/receipts/tests.rs",
+    "validator/src/cli/product/telemetry.rs",
+    "validator/src/cli/product/types.rs",
     "validator/src/cli/promptfoo/mod.rs",
     "validator/src/cli/promptfoo/proof.rs",
     "validator/src/cli/promptfoo/registry.rs",

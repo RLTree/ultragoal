@@ -51,18 +51,78 @@ fn product_prove_fitness_requires_package_receipt_dir() {
 }
 
 #[test]
+fn product_parser_keeps_product_and_fit_repo_operations_distinct() {
+    let product = ["product", "prove-fitness", "--receipt-dir", "receipts"]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+    let product = crate::cli::product::parse(&product)
+        .expect("product parse")
+        .expect("product command");
+    assert_eq!(
+        product.operation,
+        crate::cli::product::ProductOperation::ProductProveFitness
+    );
+
+    let fit_repo = ["fit-repo", "prove", "--receipt-dir", "receipts"]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+    let fit_repo = crate::cli::product::parse(&fit_repo)
+        .expect("fit repo parse")
+        .expect("fit repo command");
+    assert_eq!(
+        fit_repo.operation,
+        crate::cli::product::ProductOperation::FitRepoProve
+    );
+}
+
+#[test]
+fn product_parser_rejects_missing_observability_receipt_value() {
+    let args = [
+        "product",
+        "prove-fitness",
+        "--receipt-dir",
+        "receipts",
+        "--observability-receipt",
+    ]
+    .into_iter()
+    .map(str::to_string)
+    .collect::<Vec<_>>();
+    let err = crate::cli::product::parse(&args).expect_err("missing receipt path fails");
+    assert!(err.contains("--observability-receipt"), "{err}");
+}
+
+#[test]
 fn product_command_rejects_unsafe_receipt_dirs() {
     let root = crate::self_tests::boundaries::support::repo_root();
     for receipt_dir in [
         root.join("target/product-absolute"),
         PathBuf::from("validation_artifacts/../harness"),
     ] {
-        let err =
-            crate::cli::product::run(&root, &crate::cli::product::ProductCommand { receipt_dir })
-                .expect_err("unsafe dir");
+        let obs = PathBuf::from(format!(
+            "target/product-observability-fail-{}-{}.json",
+            std::process::id(),
+            receipt_dir.to_string_lossy().len()
+        ));
+        let code = crate::cli::product::run(
+            &root,
+            &crate::cli::product::ProductCommand {
+                operation: crate::cli::product::ProductOperation::ProductProveFitness,
+                receipt_dir,
+                observability_receipt: obs.clone(),
+            },
+        )
+        .expect("unsafe dir emits fail-closed observability");
+        assert_eq!(code, 1);
+        let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
+        assert_eq!(receipt["status"], "fail");
+        assert_eq!(receipt["event"]["failure_class"], "product_command_failure");
         assert!(
-            err.contains("root-relative") || err.contains("escapes package root"),
-            "{err}"
+            receipt["why_failed"]
+                .as_str()
+                .expect("why")
+                .contains("product receipt directory")
         );
     }
 }
@@ -74,12 +134,15 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
         "target/ultragoal-product-command-{}",
         std::process::id()
     ));
+    let obs = rel.join("product-observability.json");
     let out = root.join(&rel);
     let _ = std::fs::remove_dir_all(&out);
     let code = crate::cli::product::run(
         &root,
         &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveFitness,
             receipt_dir: rel.clone(),
+            observability_receipt: obs.clone(),
         },
     )
     .expect("product run succeeds");
@@ -87,6 +150,27 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
     assert!(out.join("fit-repo-receipt.json").is_file());
     assert!(out.join("product-fitness-receipt.json").is_file());
     assert!(out.join("plugin-product-journey-receipt.json").is_file());
+    let receipt = crate::json_boundary::read_json(&root.join(&obs)).expect("receipt");
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["event"]["operation"], "product.prove-fitness");
+    assert_eq!(
+        receipt["check_id"],
+        "product-prove-fitness-observability-binding"
+    );
+    assert_eq!(receipt["claim_id"], "product_fitness");
+    assert_eq!(receipt["event"]["worker_count"], 1);
+    assert_eq!(receipt["event"]["task_count"], 3);
+    assert_eq!(
+        receipt["event"]["saturation_status"],
+        "shared_authority_write_serial_product_receipts"
+    );
+    assert!(
+        receipt["trace"]["child_spans"]
+            .as_array()
+            .expect("child spans")
+            .iter()
+            .all(|span| span["parent_span_id"] == receipt["trace"]["span_id"])
+    );
     std::fs::remove_dir_all(out).expect("cleanup product command");
 }
 
