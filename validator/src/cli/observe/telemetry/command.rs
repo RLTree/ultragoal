@@ -67,12 +67,13 @@ pub(crate) fn receipt_for_candidate(
         "candidate_digest": candidate,
         "run_id": run_id,
         "correlation_id": correlation_id,
+        "trace_id": event["trace_id"],
         "surface": input.surface,
         "operation": input.operation,
         "log_stream_digest": crate::digest::canonical_json(&event),
         "metric_snapshot_digest": crate::digest::canonical_json(&metric),
         "trace_bundle_digest": crate::digest::canonical_json(&trace),
-        "query_examples": query_examples(&run_id, input.operation),
+        "query_examples": query_examples(&run_id, &correlation_id, input.operation),
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": "pass",
@@ -196,11 +197,15 @@ fn exporter(root: &Path, candidate: &str, status: &str, emit: bool) -> &'static 
     }
 }
 
-fn query_examples(run_id: &str, operation: &str) -> Value {
+fn query_examples(run_id: &str, correlation_id: &str, operation: &str) -> Value {
     let metric_query = crate::cli::observe::query::bounded_metric_query_for_operation(operation);
     json!([
-        format!("ultragoal observe logs query --run-id {run_id} --limit 100"),
+        format!(
+            "ultragoal observe logs query --run-id {run_id} --correlation-id {correlation_id} --limit 100"
+        ),
         format!("ultragoal observe metrics query --query '{metric_query}' --limit 100"),
-        format!("ultragoal observe traces query --run-id {run_id} --limit 100")
+        format!(
+            "ultragoal observe traces query --run-id {run_id} --correlation-id {correlation_id} --limit 100"
+        )
     ])
 }

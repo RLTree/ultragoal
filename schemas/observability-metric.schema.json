@@ -51,7 +51,8 @@
     "query_hint_traceql",
     "metric_name",
     "metric_value",
-    "labels"
+    "labels",
+    "samples"
   ],
   "properties": {
     "schema": { "const": "harness-ultragoal.observability-metric.v1" },
@@ -131,6 +132,8 @@
       "enum": [
         "ultragoal_command_total",
         "ultragoal_command_duration_ms",
+        "ultragoal_command_task_count",
+        "ultragoal_command_queue_depth",
         "ultragoal_check_total",
         "ultragoal_check_failure_total",
         "ultragoal_law_failure_total",
@@ -162,7 +165,8 @@
         "claim_id",
         "surface",
         "failure_class",
-        "exporter"
+        "exporter",
+        "saturation_status"
       ],
       "properties": {
         "command": { "type": "string" },
@@ -173,7 +177,58 @@
         "claim_id": { "type": "string" },
         "surface": { "type": "string" },
         "failure_class": { "type": "string" },
-        "exporter": { "type": "string" }
+        "exporter": { "type": "string" },
+        "saturation_status": { "type": "string", "minLength": 1 }
+      }
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["metric_name", "metric_value", "labels"],
+        "properties": {
+          "metric_name": {
+            "enum": [
+              "ultragoal_command_total",
+              "ultragoal_command_duration_ms",
+              "ultragoal_command_task_count",
+              "ultragoal_command_queue_depth",
+              "ultragoal_stack_health_status",
+              "ultragoal_stack_smoke_status"
+            ]
+          },
+          "metric_value": { "type": "number" },
+          "labels": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "command",
+              "operation",
+              "status",
+              "law_id",
+              "check_id",
+              "claim_id",
+              "surface",
+              "failure_class",
+              "exporter",
+              "saturation_status"
+            ],
+            "properties": {
+              "command": { "type": "string" },
+              "operation": { "type": "string" },
+              "status": { "type": "string" },
+              "law_id": { "type": "string" },
+              "check_id": { "type": "string" },
+              "claim_id": { "type": "string" },
+              "surface": { "type": "string" },
+              "failure_class": { "type": "string" },
+              "exporter": { "type": "string" },
+              "saturation_status": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
       }
     }
   }

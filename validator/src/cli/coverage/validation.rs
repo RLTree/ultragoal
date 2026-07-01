@@ -178,12 +178,14 @@ fn completion_failures(receipt: &Value, out: &mut Vec<String>) {
     if receipt.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0) {
         out.push("coverage_claim_uncovered_code".to_string());
     }
-    if !receipt
+    let uncovered = receipt
         .get("uncovered_records")
         .and_then(Value::as_array)
-        .is_some_and(Vec::is_empty)
-    {
+        .cloned()
+        .unwrap_or_default();
+    if !uncovered.is_empty() {
         out.push("coverage_claim_uncovered_code".to_string());
+        out.push(uncovered_summary(&uncovered));
     }
     if support::string(receipt, "claim_ceiling") != "supports_complete_coverage_claim" {
         out.push("coverage_ratchet_presented_as_complete".to_string());
@@ -196,6 +198,25 @@ fn completion_failures(receipt: &Value, out: &mut Vec<String>) {
             out.push(format!("coverage_blocked_claim_missing:{claim}"));
         }
     }
+}
+
+fn uncovered_summary(records: &[Value]) -> String {
+    let first = records
+        .iter()
+        .take(5)
+        .map(|record| {
+            format!(
+                "{} ({})",
+                support::string(record, "path"),
+                support::string(record, "reason")
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(" | ");
+    format!(
+        "coverage_uncovered_records:total={} first={first}",
+        records.len()
+    )
 }
 
 fn compare_file_digest(path: &Path, expected: String, code: &str, out: &mut Vec<String>) {

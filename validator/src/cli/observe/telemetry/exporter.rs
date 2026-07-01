@@ -9,7 +9,7 @@ pub(super) fn emit(event: &Value, metric: &Value, trace: &Value) {
     );
     let _ = post_text(
         "http://127.0.0.1:8428/api/v1/import/prometheus",
-        &metric_line(metric),
+        &metric_lines(metric),
     );
     let _ = post_json(
         "http://127.0.0.1:10428/insert/opentelemetry/v1/traces",
@@ -57,6 +57,13 @@ fn post_output_result(output: Result<std::process::Output, std::io::Error>) -> R
             String::from_utf8_lossy(&output.stderr)
         ))
     }
+}
+
+fn metric_lines(metric: &Value) -> String {
+    if let Some(samples) = metric.get("samples").and_then(Value::as_array) {
+        return samples.iter().map(metric_line).collect::<String>();
+    }
+    metric_line(metric)
 }
 
 fn metric_line(metric: &Value) -> String {
@@ -201,7 +208,7 @@ pub(crate) fn failed_launch_message_for_test() -> String {
 
 #[cfg(test)]
 pub(crate) fn metric_line_for_test(metric: &Value) -> String {
-    metric_line(metric)
+    metric_lines(metric)
 }
 
 #[cfg(test)]

@@ -18,7 +18,7 @@ fn command_fitting_accepts_nested_law_receipt_observability_binding() {
 
     let row = json!({
         "receipt_paths": [receipt],
-        "live_query_proof_paths": [
+        "same_candidate_query_proof_paths": [
             "validation_artifacts/observability/final-packet-prove-logs-query.json",
             "validation_artifacts/observability/final-packet-prove-metrics-query.json",
             "validation_artifacts/observability/final-packet-prove-traces-query.json",
@@ -73,7 +73,7 @@ fn nested_command_fitting_rejects_high_cardinality_metric_labels() {
 
     let row = json!({
         "receipt_paths": [receipt],
-        "live_query_proof_paths": [
+        "same_candidate_query_proof_paths": [
             "validation_artifacts/observability/final-packet-prove-logs-query.json",
             metrics_rel,
             "validation_artifacts/observability/final-packet-prove-traces-query.json",

@@ -90,8 +90,8 @@ pub(super) fn metric(event: &Value, operation: ObserveOperation, status: &str) -
     let mut metric = super::metric::from_event(event);
     if matches!(operation, ObserveOperation::StackHealth) {
         metric["metric_name"] = json!("ultragoal_stack_health_status");
+        metric["metric_value"] = json!(if status == "pass" { 1 } else { 0 });
     }
-    metric["metric_value"] = json!(if status == "pass" { 1 } else { 0 });
     metric
 }
 

@@ -11,7 +11,10 @@ mod body;
 mod tests;
 mod text;
 pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
-pub(crate) use text::{bounded_metric_query_for_operation, query_text, trace_tags};
+pub(crate) use text::{
+    bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation, query_text,
+    trace_tags,
+};
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     if command.row_limit == 0 || command.byte_limit == 0 || command.timeout_ms == 0 {

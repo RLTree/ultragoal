@@ -2701,9 +2701,61 @@ Required CLI authority:
 - The command inventory must include explicit observability fitting inventory for every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, and package/plugin surface. Command fitting and surface fitting are both mandatory and distinct. Each row must state `fitting_status` as `fitted`, `partially_fitted`, or `unfitted`, name the fitted surfaces, missing surfaces, validator check id, focused test ids, same-candidate receipt paths, live query proof paths, current owner surface, next unfitted surface, and claim impact. The inventory must also include a validator-checked `fitting_control_board` that recomputes totals by command, surface, operating-loop, and signal family, names the first incomplete row, names its next unfitted surface, and blocks claims when any row is partial, unfitted, stale, or row-shape-only. This inventory plus control board is the Gate 92 tracking surface; mutable checklist prose, side ledgers, adjacent command coverage, or a fitted neighbor cannot stand in for it. Fitted rows must dereference current same-candidate observability receipts and logs/metrics/traces query proof; row shape alone fails. `partially_fitted`, `unfitted`, missing, stale, wrong-digest, local-spool-only, or row-shape-only fitting rows fail Gate 92 and block completion-adjacent claims. A few fitted commands cannot substitute for unfitted commands, validator checks, receipts, fixtures, package resources, plugin surfaces, or claim guards elsewhere in the CLI or plugin.
 - The command inventory must also include an observability operating-loop inventory and signal inventory. Gate 92 treats observability as the repair operating system, not a receipt family. The required loop is: current digest first; run the highest-authority failing command once; query logs, metrics, and traces by run id/correlation id; explain the failure through CLI output before manual artifact inspection; repair the smallest root cause; rerun the narrow command; compare before/after telemetry; and run broad source audit only after the narrow observable proof passes. The required signal classes are CLI-translated latency, traffic, errors, saturation, freshness, correlation, redaction, and boundedness. Each loop stage and signal class must have the same `fitting_status`, fitted/missing surfaces, validator check id, tests, current receipt paths, live query proof paths, and claim impact as command and surface rows. Fitted loop/signal rows must dereference same-candidate telemetry. Partial, unfitted, stale, wrong-digest, or row-shape-only loop/signal rows fail Gate 92 and block completion-adjacent claims.
 
+Gold-standard observability doctrine required by the synthesis:
+
+- Gate 92 must implement the four-channel model: metrics for alerting, traces
+  and wide events for investigation, logs for local detail and forensic
+  reconstruction, and evals for behavioral quality. A command can be partially
+  fitted without all four channels only when the row declares why a channel is
+  not applicable and the validator agrees. Channel absence without typed reason
+  fails the row.
+- Gate 92 must implement two observability planes. Plane A is product/system
+  health: latency, traffic, errors, saturation, freshness, retry/backoff, cache
+  state, external/live probe health, and resource pressure. Plane B is agent
+  quality: task completion, first-pass success, repair iterations, validation
+  failure class, human escalation, bad repair or bad packet rate, post-merge
+  regression, eval trend, tool misuse, docs drift, architecture violations, and
+  claim-theater escapes.
+- Every command/check row must identify which plane and which channel each event,
+  metric, log, span, eval, and receipt binding supports. Stack health alone is
+  environment proof. Agent quality alone is behavioral proof. Neither can
+  complete Gate 92 without per-command fitting and claim binding.
+- High-cardinality correlation fields such as run id, trace id, span id, full
+  candidate digest, artifact path, receipt path, file path, branch, PR number,
+  prompt hash, or user id may be queryable in traces, wide events, logs, and eval
+  records, but must not become unbounded metric labels. Metric labels must be
+  bounded, redacted, and purpose-built. Digest/path/run-cardinality metric
+  labels fail unless represented by a bounded class or hash category approved by
+  schema.
+- `observe query` and `observe explain` must be agent-legible. For failures they
+  must identify the law/check/claim, failed invariant, observed value, expected
+  value, where the failure occurred, why it matters, the repair class, the
+  smallest likely source surface, exact narrow rerun command, affected claims,
+  telemetry gaps, redaction/boundedness state, and before/after comparison path.
+  Generic health summaries, stack pings, opaque fail output, or raw log dumps are
+  not sufficient.
+- Product truth, observability truth, and artifact truth remain distinct.
+  Product truth is source/package/runtime behavior. Observability truth is logs,
+  metrics, traces, wide events, evals, and queryable records. Artifact truth is
+  receipts, manifests, reports, review targets, archives, and final packets.
+  These surfaces may cross-reference one another but may not substitute for one
+  another unless a law explicitly allows it.
+- Gate 92 is working when an agent can execute: digest -> run the failing command
+  once -> query logs/metrics/traces by run/correlation/digest -> explain the
+  failure through CLI output -> repair the smallest root cause -> rerun the
+  narrow command -> compare before/after telemetry -> run broad audit once.
+  Any step requiring unstated human archaeology is a fitting gap.
+
 Typed telemetry model:
 
 - Every log event, metric sample, trace span, query result, and observability receipt must carry typed fields for schema, run_id, correlation_id, trace_id, span_id, parent_span_id, command, subcommand, operation, surface, law_id, check_id, claim_id, candidate_digest, target_revision, artifact_path, receipt_path, status, failure_class, why_failed, where_failed, next_repair, claim_impact, timestamp, duration_ms, exporter, redaction_status, bounded_output_status, query_hint_logql, query_hint_promql, and query_hint_traceql.
+- Every log event, metric sample, trace span, query result, and observability
+  receipt must also carry applicable agent/tool/repo/eval attributes. Required
+  attributes include agent system/workflow/step/role/model where an agent or
+  automated flow is involved; tool name/type/risk tier/approval/duration/status
+  where a tool is invoked; repo name/branch/sha/worktree or target mode where a
+  repo surface is involved; and eval suite/case/score/judge/regression status
+  where behavioral quality or improvement claims are involved.
 - Unknown authority fields, freeform authority blobs, missing fields, wrong digest, wrong correlation id, unredacted secrets, and unbounded output fail.
 - Every command/check must emit a wide structured event carrying enough contextual dimensions to diagnose unknown failures without new instrumentation: command family, argument surface, task class, worker/task/queue state, cache key/mode/hit status, filesystem/package surface, receipt/schema/law graph digests, source/install/cache/app surface, retry/backoff state, resource saturation state, and before/after comparison anchors where a repair loop is in progress. Aggregated metrics may be derived from events, but aggregate-only telemetry cannot satisfy observability or repair-loop claims.
 - Every command and every check must emit structured logs to VictoriaLogs through the live stack and to a bounded local JSONL spool for fallback/forensics. Local JSONL fallback is transition evidence only and cannot complete Gate 92 without live VictoriaLogs ingestion and query proof.
@@ -2747,7 +2799,7 @@ Required Gate 92 validation:
 
 Gate 93 is additive to Gates 1-92. It does not replace, reduce, defer, satisfy, or weaken observability, CLI authority, source/install/cache/app-registry separation, Product Fitness, Product Cohesion, Product Success, coverage, namespace, line caps, typed parsing, final-packet proof, version sync, or any update_goal stop condition.
 
-The Harness Ultragoal plugin must convert the full research corpus into governed law surfaces. The research corpus includes the original nine observability and harness-engineering sources already introduced into Gate 92 plus the newer OpenAI agent-improvement loop cookbook and the OpenAI self-improving tax-agent article. Research is not authority by itself. Research becomes authority only when each requirement, practice, workflow shape, failure mode, tooling need, and claim boundary is mapped into canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, final-packet fields, and update_goal blockers.
+The Harness Ultragoal plugin must convert the full research corpus into governed law surfaces. The research corpus includes the original nine observability and harness-engineering sources already introduced into Gate 92, the newer OpenAI agent-improvement loop cookbook, the OpenAI self-improving tax-agent article, and the attached GPT-5.5 Pro gold-standard stack synthesis as a synthesis source. Research is not authority by itself. Research becomes authority only when each requirement, practice, workflow shape, failure mode, tooling need, and claim boundary is mapped into canonical law ids, standards rows, source obligations, foundational trace entries, schemas, typed check enums, validator checks, red fixtures, green fixtures, tamper fixtures, receipts, package inventory entries, setup/retrofit outputs, claim-ceiling guards, final-packet fields, and update_goal blockers.
 
 Mandatory research sources:
 
@@ -2761,10 +2813,26 @@ Mandatory research sources:
 - OpenTelemetry semantic conventions and naming guidance: one stable telemetry vocabulary across logs, metrics, traces, receipts, query outputs, schemas, command inventory, and claim guards.
 - OpenAI agent-improvement loop cookbook: traces, human/model feedback, generated evals, promptfoo eval suites, HALO-ranked improvement proposals, Codex handoff, implementation, validation, and durable loop closure.
 - OpenAI self-improving tax-agent article: production-style domain tasks, expert feedback, trace/eval-driven improvement, domain-specific failure taxonomy, ranked fixes, validation against realistic cases, and productized improvement loops.
+- GPT-5.5 Pro gold-standard stack synthesis: harness-as-product doctrine,
+  agent-legible repository architecture, four-channel observability, SRE plus
+  agent-quality planes, cardinality doctrine, trace-to-eval-to-repair loops,
+  AGENTS.md routing-table doctrine, tool contracts and risk tiers, routine
+  command surface, entropy cleanup, validation gate levels, pedagogical validator
+  output, portable adapter-stack direction, supply-chain/security baseline,
+  truth-surface separation, Agent Cockpit future product surface, and final
+  packet product-shape requirements. This source is a synthesis source, not
+  primary factual authority for exact external version pins, vendor availability,
+  hosted service behavior, or current pricing. Those claims require official
+  source verification before hard-law adoption.
 
 Required implementation:
 
 - Create or extend a machine-readable research-source registry. Each source row must include stable source id, canonical URL, retrieved_at or source_card digest, source artifact digest, applicable law-family aliases, canonical law ids affected, required plugin surfaces, setup/retrofit implications, tool/package implications, privacy implications, and claim-ceiling impact.
+- The GPT-5.5 Pro synthesis source row must use a stable id such as
+  `agentic-gold-standard-stack-synthesis-2026-07-01`, record the local source
+  artifact/digest, classify itself as synthesis authority, and mark
+  version/vendor claims as requiring primary-source verification before they can
+  support package, install/cache, release, readiness, or update_goal claims.
 - Create or extend an article-to-law trace registry. Each research requirement must map to at least one existing canonical law id or a newly added canonical law id. HU-style aliases may be explanatory only and may not replace existing canonical law ids.
 - Every mapped requirement must name the standards row id, source-obligation id, foundational trace id, validator check id, red fixture id, valid fixture id or receipt requirement, package inventory path, setup/retrofit output path, and claim-ceiling guard.
 - Validator must fail research rows that are unmapped, mapped only to umbrella categories, mapped only to prose, mapped only to a checklist row, mapped only to a source-obligation row, mapped only to a trace row, missing fixtures, missing receipts, missing claim guards, missing setup/retrofit integration, stale against the research-source digest, or detached from canonical law ids.
@@ -2791,6 +2859,21 @@ The Harness Ultragoal plugin must implement a first-class Harness Improvement Lo
 7. Implement the smallest real fix, rerun narrow proof, compare before/after telemetry, rerun affected evals/fixtures, then rerun broad validation only after narrow proof passes.
 8. Promote repeated fixes into standards rows, source obligations, schemas, validators, setup/retrofit templates, package inventory, and final-packet requirements.
 9. Mint an improvement-loop receipt that proves the loop closed without relying on prose, memory, checklist text, stale telemetry, or reviewer agreement.
+
+The loop must harvest real failure material. Required harvest sources include
+failed law-bearing runs, opaque command failures, failed source audits, failed
+red/green/tamper fixtures, stale or wrong-digest receipt escapes, bad tool calls,
+incorrect repairs, slow workflows, human corrections, reviewer findings, side
+thread corrections, incidents, security near misses, claim-theater escapes,
+Product Fitness substitution attempts, docs drift, architecture violations, and
+post-merge or post-lane regressions. A loop that generates evals only from
+handwritten happy paths is not productized improvement.
+
+Gate 94 is working when a repeated failure class is no longer solved by memory,
+reviewer nagging, or parent-thread vigilance. It must be trace-linked, clustered,
+turned into an eval/fixture/check or explicit claim blocker, repaired,
+validated narrowly, compared before/after through telemetry, and promoted into
+the law surfaces that prevent recurrence.
 
 Required plugin surfaces:
 
@@ -2915,17 +2998,33 @@ Required setup integration:
 - `agent-first-repo-init` must detect repo type: Rust backend, TypeScript frontend/UI, mixed Rust/TypeScript, CLI-only, plugin-only, app/service, docs-only, product-facing, review-only, or target-repo audit fixture. Detection must be typed and may not rely on prose.
 - Fresh setup must produce a setup receipt with installed surfaces, skipped surfaces, fail-closed blockers, setup commands, tool versions, key requirements, env destinations, package managers, cache locations, telemetry destinations, eval providers, privacy boundaries, and claim ceiling.
 - Fresh setup must include one-command bootstrap for local observability, OpenAI key redacted resolution, promptfoo offline fixture mode, HALO availability check, Rust DevX where Rust exists, TypeScript DevX where TS/UI exists, and target-repo rollout templates.
+- Fresh setup must install or generate concise routing documentation. AGENTS.md
+  and equivalent repo-entry docs are routing tables, not encyclopedias. They
+  must point to canonical commands, proof surfaces, observability query/explain
+  paths, evals, architecture, security, privacy, quality gates, active work
+  contracts, and claim-ceiling docs without duplicating the whole law system.
+- Fresh setup must expose the concrete routine command surface: fast validation,
+  full source-local validation, observe query, observe explain, repair loop,
+  eval, architecture check, security check, setup, and retrofit. Wrappers such
+  as scripts/check, just recipes, or shell helpers may remain only when they
+  delegate to the canonical CLI authority kernel, preserve telemetry/receipts,
+  and declare whether they are narrow helpers or routine validation.
 
 Required retrofit integration:
 
 - `agent-first-repo-retrofit` must audit existing repos for observability coverage, improvement-loop coverage, command inventory, law-bearing commands, opaque failures, receipt telemetry binding, promptfoo suites, HALO adapter status, OpenAI key policy, eval-to-law mapping, domain pack needs, Rust/TypeScript DevX gaps, package inventory gaps, and claim guard gaps.
 - Retrofit must produce a fitting inventory with `fitted`, `partially_fitted`, `unfitted`, and `not_applicable_with_typed_reason` rows for every required surface. `not_applicable` rows must block only claims that depend on the absent surface and must include typed rationale and red fixtures.
 - Retrofit must generate an implementation plan with exact files, validators, schemas, fixtures, receipts, commands, and validation steps. It may not terminate as documentation-only, checklist-only, or "follow-up needed."
+- Retrofit must audit whether repo-entry docs behave as routing tables or
+  overloaded encyclopedias, whether routine command help is self-contained, and
+  whether the fit-repo first-use path and plugin-activated target-repo path are
+  visible. Missing or hidden first-use paths must become Product Usage Fitness
+  blockers.
 
 Required enforcement:
 
 - Validator must fail setup/retrofit claims when templates are missing, outputs are not package-owned, generated docs are hand memory, OpenAI key setup is undocumented or insecure, promptfoo/HALO are absent without fail-closed receipts, TypeScript/Rust stacks are not detected correctly, observability is partial without claim blocking, or active-repo rollout omits setup/retrofit receipts.
-- Add red fixtures for init missing improvement loop, init missing OpenAI key policy, init missing promptfoo config, init missing HALO adapter policy, init missing TypeScript templates for UI repo, retrofit treating docs-only observability as fitted, retrofit ignoring opaque failures, retrofit omitting command inventory, retrofit omitting eval promotion, and setup receipt used as product success proof.
+- Add red fixtures for init missing improvement loop, init missing OpenAI key policy, init missing promptfoo config, init missing HALO adapter policy, init missing TypeScript templates for UI repo, init generating AGENTS.md as an encyclopedia instead of a routing table, missing routine command surface, helper bypassing canonical CLI authority, retrofit treating docs-only observability as fitted, retrofit ignoring opaque failures, retrofit omitting command inventory, retrofit omitting eval promotion, hidden fit-repo first-use path, hidden plugin-activated target-repo path, and setup receipt used as product success proof.
 - Add green fixtures for fresh Rust repo, fresh TypeScript UI repo, mixed Rust/TypeScript repo, CLI-only repo, and existing repo retrofit with explicit partial/fail-closed surfaces.
 
 Required claim ceiling:
@@ -2971,12 +3070,37 @@ Required TypeScript integration:
 - npm and Yarn are rejected as canonical package managers for Harness UI repos unless a typed legacy adapter blocks the affected claims and proves why migration is not in scope.
 - TypeScript runtime boundaries must parse external data from JSON, network, DOM, localStorage, URL params, postMessage, env vars, generated files, browser APIs, plugin messages, and third-party packages from `unknown` into typed authority. TypeScript typecheck alone cannot prove runtime authority.
 
+Portable adapter-stack extension from the synthesis:
+
+- Rust remains the core CLI/validator/control-plane authority path unless a
+  future explicit law changes that. TypeScript remains the UI/tooling/plugin
+  surface path where applicable. Python is allowed for AI/research/eval
+  sidecars only behind explicit typed interfaces, provenance, dependency,
+  runtime, data, privacy, and claim-ceiling boundaries. Python sidecars may not
+  silently become core product authority without an explicit adapter law.
+- Data stores must have separated authority roles. Product truth belongs in
+  source/package/runtime behavior and relational product stores where applicable.
+  Observability truth belongs in telemetry stores suited for logs, metrics,
+  traces, wide events, and eval records. Artifact truth belongs in receipts,
+  manifests, reports, review targets, archives, and final packets.
+- PostgreSQL-class relational stores, ClickHouse/Honeycomb-class
+  high-cardinality stores, OpenTelemetry collectors, local analytical sidecars
+  such as DuckDB where appropriate, queue/process adapters, and infra adapters
+  such as Nix/Bazel/OpenTofu/Kubernetes-class tools are portable adapter
+  families, not automatic requirements for every repo. Setup/retrofit must
+  detect applicability, install or fail-close required surfaces, and report
+  unsupported surfaces with claim impact.
+- Exact version pins or current vendor capability claims from the synthesis are
+  candidate guidance only. They require official-source verification before
+  becoming package law, install/cache proof, release proof, readiness proof, or
+  update_goal support.
+
 Required enforcement:
 
 - Add setup/retrofit language-detection schemas and receipts.
 - Add Rust/TypeScript tool-inventory schemas, toolchain receipts, cache receipts, coverage receipts, lint/typecheck/test/build/browser receipts, bundle budget receipts, accessibility receipts, memory/resource receipts, GC receipts, and package-publishing receipts where applicable.
 - Validator must fail raw Cargo, raw pnpm, raw tsc, raw eslint, raw vitest, raw Playwright, raw Vite, raw Storybook, raw Lighthouse, or raw package-manager output used as Harness claim authority.
-- Add red fixtures for TypeScript `any` authority leaks, unparsed JSON, eslint-disable without law id/expiry, Vite build used as product success, Storybook used as product success, Lighthouse score used as Product Success, warm pnpm store used as clean proof, Playwright smoke used as complete product journey, raw pnpm test used as completion, and TypeScript UI repo missing strict config.
+- Add red fixtures for TypeScript `any` authority leaks, unparsed JSON, eslint-disable without law id/expiry, Vite build used as product success, Storybook used as product success, Lighthouse score used as Product Success, warm pnpm store used as clean proof, Playwright smoke used as complete product journey, raw pnpm test used as completion, TypeScript UI repo missing strict config, Python sidecar output used as core authority without adapter receipt, product truth stored only in observability events, telemetry store used as product database proof, artifact receipt used as runtime behavior proof, unverified external version pin used as hard law, and setup/retrofit marking an unsupported adapter as fitted.
 - Add green fixtures for Rust CLI repo, TypeScript UI repo, and mixed Rust/TypeScript repo setup/retrofit.
 
 Required claim ceiling:
@@ -3220,7 +3344,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 116. Gates 93-105 are represented across all mandatory law surfaces: standards, source obligations, foundational trace, schemas, check enums, validators, red fixtures, green fixtures, tamper fixtures, valid fixtures or receipt requirements, package inventory, plugin cohesion manifest, setup/retrofit templates, command inventory, improvement-loop inventory, claim guards, final packet fields, CLI self-law, source audit, red fixture report, and update_goal eligibility. Prompt-only or checklist-only additions fail.
 
-117. Measured improvement and regression prevention are proven. Time-to-diagnosis, time-to-repair, rerun count, stale-receipt recurrence, wrong-digest recurrence, opaque-failure recurrence, claim-theater escape count, Product Fitness substitution recurrence, active-repo fitting percentage, eval trend, command latency, and manual-spelunking burden have baselines, current values, same-surface telemetry, receipts, regression protection, and standards-gardener promotion. No "self-improving", "improved", "faster", "more reliable", or "reduced theater" claim may pass from anecdotes, one successful run, stale baselines, or cherry-picked metrics.
+117. Measured improvement and regression prevention are proven. Gate 105 must use both observability planes. Plane A product/system health includes latency, traffic, errors, saturation, freshness, retry/backoff behavior, cache state, external/live probe health, and resource pressure. Plane B agent quality includes task completion, first-pass success, repair iterations, validation failure class, human escalation, bad repair or bad packet rate, post-merge regression, eval trend, tool misuse, docs drift, architecture violations, and claim-theater escapes. Time-to-diagnosis, time-to-repair, rerun count, stale-receipt recurrence, wrong-digest recurrence, opaque-failure recurrence, claim-theater escape count, Product Fitness substitution recurrence, active-repo fitting percentage, eval trend, command latency, manual-spelunking burden, and worktree/lane regression rate have baselines, current values, same-surface telemetry, receipts, regression protection, and standards-gardener promotion. Entropy cleanup must cover docs drift, dead code, unused dependencies, missing tests, duplicated abstractions, telemetry drift, stale evals, flaky or slow tests, large files, uncited assumptions, security drift, and architecture drift. No "self-improving", "improved", "faster", "more reliable", "more observable", "easier to repair", or "reduced theater" claim may pass from anecdotes, one successful run, stale baselines, wrong-surface comparisons, or cherry-picked metrics.
 
 Final response must include:
 - exact files changed
@@ -3270,20 +3394,46 @@ Final response must include:
 - behavior-example coverage and coverage anti-gaming status
 - one-command fresh environment bootstrap/concurrency status
 - agent-queryable observability status
+- Harness Product Doctrine status
+- observability channel model status: metrics for alerting, traces/events for
+  investigation, logs for forensic reconstruction, and evals for behavioral
+  quality
+- observability Plane A product/system health status
+- observability Plane B agent-quality status
+- expanded telemetry envelope status for agent/tool/repo/eval attributes
+- high-cardinality metric-label/cardinality doctrine status
+- `observe query` and `observe explain` agent-legibility status, including
+  whether output makes the smallest next repair obvious
+- product truth, observability truth, and artifact truth separation status
 - subagent orchestration explicitness/token-model-cost/reconciliation status
 - research source authority/article-to-law integration status
+- GPT-5.5 Pro synthesis source-card/article-to-law integration status
 - Harness Improvement Loop trace/feedback/eval/Codex handoff status
+- trace-to-feedback-to-eval-to-repair-to-promotion loop status
 - OpenAI API/key/model/cost/privacy boundary status
 - promptfoo eval/red-team/provider-separation status
 - HALO ranked-change optimization status
 - self-improving domain-agent/tax-agent-pattern status
 - setup/retrofit deep-integration status
+- AGENTS.md routing-table doctrine status
+- concrete routine command surface status
+- tool contract and risk-tier governance status
 - cross-repo active-repo rollout status
 - Rust and TypeScript Developer Experience integration status
+- portable adapter stack status, including explicit unverified external version
+  pin caveat where applicable
+- supply-chain/security baseline status
 - feedback/eval/telemetry privacy-retention status
 - improvement surface separation status
 - Gates 93-105 law-surface closure status
 - measured improvement/regression-prevention status
+- entropy cleanup loop status
+- Agent Cockpit status or explicit blocker
+- final packet product-shape status: Harness Product Doctrine, Observability
+  Planes, Agent Quality Metrics, Trace-to-Eval-to-Repair Loop, Tool Risk and
+  Approval Surface, Data/Privacy Boundary, Product Usage/CLI Surface, Active
+  Repo Rollout, Stack Adapter Status, Supply-Chain/Security Baseline, Agent
+  Cockpit, and unsupported live surfaces
 - skill catalog context-budget/omission-warning status
 - distribution and sharing-surface claim-separation status
 - total authority types and impossible-state elimination status

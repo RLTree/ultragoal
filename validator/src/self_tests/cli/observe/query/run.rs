@@ -106,7 +106,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     );
     assert_eq!(
         metric_observed_failure["observed_why_failed"],
-        "metric-or-trace-row omitted why_failed"
+        "bounded metric signal carries failure class only; query logs and traces for repair-specific why_failed"
     );
     let trace_observed_failure = observe::query::result_from_output(
         &root,

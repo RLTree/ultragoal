@@ -16,18 +16,20 @@ pub(super) fn write_and_print(
     crate::json_boundary::write_json(&absolute, value)?;
     let status = text(value, "status", "fail");
     println!(
-        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
+        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} trace_id={} failure_class={} claim_impact={} supported_claims={} unsupported_claims={}",
         command.operation.id(),
         text(value, "candidate_digest", "<missing>"),
         receipt.display(),
         text(value, "run_id", "<missing>"),
         text(value, "correlation_id", "<missing>"),
+        text(value, "trace_id", "<missing>"),
+        text(value, "failure_class", "none"),
         claim_impact(value),
         csv(value.get("supported_claims")),
         csv(value.get("blocked_claims"))
     );
     if is_query(command.operation) {
-        print_query(value);
+        print_query(command, value);
     }
     if is_explain(command.operation) {
         print_explain(value);
@@ -38,7 +40,11 @@ pub(super) fn write_and_print(
     Ok(i32::from(status != "pass"))
 }
 
-fn print_query(value: &Value) {
+fn print_query(command: &ObserveCommand, value: &Value) {
+    if command.operation == ObserveOperation::MetricsQuery {
+        print_metrics_query(value);
+        return;
+    }
     println!(
         "query_result kind={} matched={} row_count={} observed_failure_class={} observed_where_failed={} observed_why_failed={} observed_next_repair={} bounded_output={} redaction={} cardinality_guard={} claim_impact={}",
         text(value, "query_kind", "unknown"),
@@ -55,12 +61,32 @@ fn print_query(value: &Value) {
     );
 }
 
-fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::Path) {
-    let metric_query =
-        crate::cli::observe::query::bounded_metric_query_for_operation(command.operation.id());
+fn print_metrics_query(value: &Value) {
     println!(
-        "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
+        "query_result kind=metrics matched={} row_count={} operation={} traffic_task_count={} latency_ms={} error_count={} failure_class={} saturation={} labels_bounded={} high_cardinality_labels={} redaction={} claim_impact={}",
+        query_matched(value),
+        number_string(value, "row_count"),
+        text(value, "metric_operation", "unknown"),
+        number_string(value, "metric_traffic_task_count"),
+        number_string(value, "metric_latency_ms"),
+        number_string(value, "metric_error_count"),
+        text(value, "metric_failure_class", "none"),
+        text(value, "metric_saturation_status", "unknown"),
+        text(value, "cardinality_guard", "unknown"),
+        text(value, "metric_high_cardinality_labels", "unknown"),
+        text(value, "redaction_status", "unknown"),
+        claim_impact(value)
+    );
+}
+
+fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::Path) {
+    let metric_query = crate::cli::observe::query::bounded_failure_metric_query_for_operation(
+        command.operation.id(),
+    );
+    println!(
+        "failed_check={} failure_class={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} trace_id={} query_logs='ultragoal observe logs query --run-id {} --correlation-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --correlation-id {} --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --correlation-id {} --limit 100'",
         text(value, "check_id", types::CHECK_ID),
+        text(value, "failure_class", "none"),
         text(value, "why_failed", "observability proof failed"),
         text(value, "where_failed", "observe command"),
         claim_impact(value),
@@ -68,9 +94,14 @@ fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::P
         receipt.display(),
         text(value, "run_id", "unknown"),
         text(value, "correlation_id", "unknown"),
+        text(value, "trace_id", "unknown"),
         text(value, "run_id", "unknown"),
+        text(value, "correlation_id", "unknown"),
+        text(value, "run_id", "unknown"),
+        text(value, "correlation_id", "unknown"),
         metric_query,
-        text(value, "run_id", "unknown")
+        text(value, "run_id", "unknown"),
+        text(value, "correlation_id", "unknown")
     );
 }
 

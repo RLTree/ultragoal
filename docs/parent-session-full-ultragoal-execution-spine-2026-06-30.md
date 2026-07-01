@@ -335,6 +335,22 @@ stage, signal class, long-running path, external/live path, and claim guard.
 No minimum-surface, sample-based, current-failure-only, or adjacent-surface
 substitution is allowed.
 
+Phase 2 has two internal closures:
+
+- Phase 2A closes operational observability. It fits every command/check/
+  receipt/fixture/claim-guard row, proves the four-channel model of logs,
+  metrics, traces-or-wide-events, and evals where applicable, and makes the
+  repair loop executable through query and explain commands.
+- Phase 2B closes observability doctrine hardening. It proves the two-plane
+  SRE/agent-quality model, expanded agent/tool/repo/eval telemetry envelope,
+  high-cardinality metric-label limits, redaction, boundedness, span parentage,
+  resource saturation, before/after repair anchors, and query/explain usefulness.
+
+Phase 2A without Phase 2B is not Gate 92 closure. A command that emits records
+but cannot explain the failure in agent-actionable terms is only partially
+fitted. A stack-health pass without per-command and per-claim fitting is only
+environment telemetry. A fitted neighbor command cannot satisfy an unfitted row.
+
 Required repair loop for every opaque failure encountered: digest -> run the
 failing command once -> query logs/metrics/traces by run/correlation/digest ->
 explain failure through CLI -> repair smallest cause -> rerun narrow command ->
@@ -343,9 +359,10 @@ compare telemetry -> only then broad audit.
 Exit requires a passing fitting control board with every inventory row fitted on
 same-candidate query proof, every mandatory research requirement current and
 mapped to the Gate 92 law surface, full logs/metrics/traces/explain coverage for
-all law-bearing command families and plugin surfaces, focused tests, red/green/
-tamper fixtures, source inspection, current digest, concise checklist status
-updates, and a source-local/not-readiness commit.
+all law-bearing command families and plugin surfaces, both observability planes
+queryable, cardinality/redaction/boundedness enforced, focused tests,
+red/green/tamper fixtures, source inspection, current digest, concise checklist
+status updates, and a source-local/not-readiness commit.
 
 ### Phase 3 - Gates 93-97 Remaining Touched-Surface Closure
 
@@ -353,6 +370,14 @@ After full Gate 92 closure, close remaining research, improvement-loop, OpenAI,
 promptfoo, and HALO surfaces already touched by WIP. Fix schema enum drift,
 standards TSV/JSON drift, source obligations, red fixture schema/digests, valid
 fixtures, package inventory, observability binding, and claim guards.
+
+This phase must also integrate the GPT-5.5 Pro synthesis as a Gate 93 synthesis
+source card and decompose every adopted requirement into canonical law ids,
+standards rows, source obligations, foundational trace entries, schemas,
+validator check ids, red/green/tamper fixtures, receipt requirements, package
+inventory, setup/retrofit outputs, claim guards, final-packet fields, and
+update_goal blockers. Prompt-only, checklist-only, row-shape-only, or
+summary-only adoption fails this phase.
 
 Exit requires focused tests and receipts for 93-97 source-local claims only.
 
@@ -367,6 +392,14 @@ and hard to skip. Preserve individual advanced entrypoints, but provide one
 routine CLI entrypoint for ordinary required validation and self-contained help
 that tells an un-oriented agent or user what to run, when, why, which proof
 surface is affected, and which claims remain unsupported.
+
+This phase must apply the AGENTS.md-as-routing-table doctrine and the concrete
+routine command surface doctrine. Wrappers such as scripts/check, just recipes,
+or shell helpers may remain only when they delegate to the canonical CLI
+authority kernel, preserve telemetry and receipt binding, and declare whether
+they are narrow helpers or routine validation. Product Usage Fitness is not
+closed until the fit-repo first-use path and plugin-activated target-repo path
+are both visible.
 
 Exit requires focused help/routine-path tests and red fixtures for missing
 routine entrypoint, non-navigable help, leaf-only validation substitution,
@@ -395,6 +428,13 @@ Exit requires Gate 104 focused tests and source-audit coverage for Gates 93-97.
 Implement domain-agent pattern, setup/retrofit, active-repo rollout, TypeScript
 DevX, privacy/data minimization, and surface separation.
 
+This phase is where future product surfaces from the synthesis begin becoming
+implementation work: portable adapter stack status, supply-chain/security
+baseline, AGENTS routing templates, tool contract/risk tiers, active-repo
+rollout proof, and Agent Cockpit status or explicit blocker. Do not pull these
+forward to block Phase 2 unless the current Gate 92 implementation depends on
+them.
+
 Worktrees may start only after Phase 4 is committed and parent owns all
 `validation_artifacts/**` writes.
 
@@ -412,6 +452,11 @@ proof after later source changes.
 
 Add baselines, current values, regression guards, telemetry comparison,
 standards-gardener promotion, and claim guards for improvement claims.
+Gate 105 must use both observability planes: product/system health and agent
+quality. It must measure whether the harness reduces time-to-diagnosis,
+time-to-repair, rerun count, stale/wrong-digest recurrence, opaque-failure
+recurrence, claim-theater escape count, source-audit failure recurrence,
+manual-spelunking burden, and worktree/lane regression rates.
 
 ### Phase 9 - Final Source-Local Proof
 

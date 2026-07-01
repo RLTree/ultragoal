@@ -133,13 +133,14 @@ fn observed_failure_object(value: &Value) -> Value {
     json!({
         "status": semantic_text_field(value, "status").unwrap_or("fail"),
         "failure_class": semantic_text_field(value, "failure_class").unwrap_or("unknown_failure"),
-        "why_failed": semantic_text_field(value, "why_failed").unwrap_or("metric-or-trace-row omitted why_failed"),
+        "why_failed": semantic_text_field(value, "why_failed").unwrap_or("bounded metric signal carries failure class only; query logs and traces for repair-specific why_failed"),
         "where_failed": semantic_text_field(value, "where_failed").unwrap_or_else(|| semantic_text_field(value, "operation").unwrap_or("unknown surface")),
         "next_repair": semantic_text_field(value, "next_repair").unwrap_or("query logs and traces for the full repair hint"),
         "claim_impact": semantic_text_field(value, "claim_impact").unwrap_or("claim_blocked"),
         "law_id": semantic_text_field(value, "law_id").unwrap_or("unknown-law"),
         "check_id": semantic_text_field(value, "check_id").unwrap_or("unknown-check"),
         "claim_id": semantic_text_field(value, "claim_id").unwrap_or("unknown-claim"),
+        "operation": semantic_text_field(value, "operation").unwrap_or("unknown-operation"),
         "run_id": semantic_text_field(value, "run_id").unwrap_or("unknown-run"),
         "correlation_id": semantic_text_field(value, "correlation_id").unwrap_or("unknown-correlation"),
     })

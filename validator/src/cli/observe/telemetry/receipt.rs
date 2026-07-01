@@ -16,7 +16,10 @@ pub(super) fn base(
         .run_id
         .clone()
         .unwrap_or_else(|| identity::id("run", command.operation.id(), &candidate));
-    let correlation_id = identity::id("corr", command.operation.id(), &candidate);
+    let correlation_id = command
+        .correlation_id
+        .clone()
+        .unwrap_or_else(|| identity::id("corr", command.operation.id(), &candidate));
     let receipt_path = record::redact_sensitive_text(&command.receipt_rel().to_string_lossy());
     let duration_ms = u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
@@ -42,12 +45,14 @@ pub(super) fn base(
         "candidate_digest": candidate,
         "run_id": run_id,
         "correlation_id": correlation_id,
+        "trace_id": event["trace_id"],
+        "failure_class": event["failure_class"],
         "surface": "live_stack",
         "operation": command.operation.id(),
         "log_stream_digest": crate::digest::canonical_json(&event),
         "metric_snapshot_digest": crate::digest::canonical_json(&metric),
         "trace_bundle_digest": crate::digest::canonical_json(&trace),
-        "query_examples": query_examples(&run_id, command.operation.id()),
+        "query_examples": query_examples(&run_id, &correlation_id, command.operation.id()),
         "redaction_proof": record::redaction_status(&event),
         "retention_bounds_proof": "pass",
         "bounded_output_proof": claims::bounds_status(command),
@@ -71,11 +76,15 @@ pub(super) fn base(
     }))
 }
 
-fn query_examples(run: &str, operation: &str) -> Value {
+fn query_examples(run: &str, correlation: &str, operation: &str) -> Value {
     let metric_query = crate::cli::observe::query::bounded_metric_query_for_operation(operation);
     json!([
-        format!("ultragoal observe logs query --run-id {run} --limit 100"),
+        format!(
+            "ultragoal observe logs query --run-id {run} --correlation-id {correlation} --limit 100"
+        ),
         format!("ultragoal observe metrics query --query '{metric_query}' --limit 100"),
-        format!("ultragoal observe traces query --run-id {run} --limit 100")
+        format!(
+            "ultragoal observe traces query --run-id {run} --correlation-id {correlation} --limit 100"
+        )
     ])
 }

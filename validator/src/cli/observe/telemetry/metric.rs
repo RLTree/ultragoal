@@ -7,21 +7,18 @@ pub(crate) fn from_event(event: &Value) -> Value {
     } else {
         "victoriametrics"
     };
+    let labels = base_labels(event, exporter);
     let mut metric = json!({
         "schema": "harness-ultragoal.observability-metric.v1",
         "metric_name": "ultragoal_command_total",
-        "metric_value": if event["status"].as_str() == Some("pass") { 1 } else { 0 },
-        "labels": {
-            "command": event["command"],
-            "operation": event["operation"],
-            "status": event["status"],
-            "law_id": event["law_id"],
-            "check_id": event["check_id"],
-            "claim_id": event["claim_id"],
-            "surface": event["surface"],
-            "failure_class": event["failure_class"],
-            "exporter": exporter
-        },
+        "metric_value": 1,
+        "labels": labels,
+        "samples": [
+            sample("ultragoal_command_total", 1, event, exporter),
+            sample("ultragoal_command_duration_ms", number(event, "duration_ms"), event, exporter),
+            sample("ultragoal_command_task_count", number(event, "task_count"), event, exporter),
+            sample("ultragoal_command_queue_depth", number(event, "queue_depth"), event, exporter)
+        ],
         "run_id": event["run_id"],
         "correlation_id": event["correlation_id"],
         "trace_id": event["trace_id"],
@@ -75,4 +72,31 @@ pub(crate) fn from_event(event: &Value) -> Value {
         metric[key] = event[key].clone();
     }
     metric
+}
+
+fn sample(name: &str, value: u64, event: &Value, exporter: &str) -> Value {
+    json!({
+        "metric_name": name,
+        "metric_value": value,
+        "labels": base_labels(event, exporter)
+    })
+}
+
+fn base_labels(event: &Value, exporter: &str) -> Value {
+    json!({
+        "command": event["command"],
+        "operation": event["operation"],
+        "status": event["status"],
+        "law_id": event["law_id"],
+        "check_id": event["check_id"],
+        "claim_id": event["claim_id"],
+        "surface": event["surface"],
+        "failure_class": event["failure_class"],
+        "exporter": exporter,
+        "saturation_status": event["saturation_status"]
+    })
+}
+
+fn number(event: &Value, field: &str) -> u64 {
+    event.get(field).and_then(Value::as_u64).unwrap_or(0)
 }

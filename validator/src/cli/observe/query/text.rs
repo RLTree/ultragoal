@@ -42,25 +42,29 @@ fn log_query_text(command: &ObserveCommand) -> String {
 }
 
 fn metric_query_text(command: &ObserveCommand) -> String {
-    command.query.clone().unwrap_or_else(|| {
-        bounded_metric_query(&format!(
-            "ultragoal_command_total{{{}}}",
-            metric_filter(command)
-        ))
-    })
+    command
+        .query
+        .clone()
+        .unwrap_or_else(|| bounded_metric_query(&metric_selector(metric_filter(command))))
 }
 
 fn bounded_metric_query(selector: &str) -> String {
     format!(
-        "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time({selector}[5m]))"
+        "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (max_over_time({selector}[5m]))"
     )
 }
 
 pub(crate) fn bounded_metric_query_for_operation(operation: &str) -> String {
-    bounded_metric_query(&format!(
-        "ultragoal_command_total{{{}}}",
-        metric_filter_with_primary(Some(metric_label("operation", operation)))
-    ))
+    bounded_metric_query(&metric_selector(metric_filter_with_primary(vec![
+        metric_label("operation", operation),
+    ])))
+}
+
+pub(crate) fn bounded_failure_metric_query_for_operation(operation: &str) -> String {
+    bounded_metric_query(&metric_selector(metric_filter_with_primary(vec![
+        metric_label("operation", operation),
+        metric_label("status", "fail"),
+    ])))
 }
 
 fn metric_filter(command: &ObserveCommand) -> String {
@@ -80,11 +84,22 @@ fn metric_filter(command: &ObserveCommand) -> String {
                 .as_ref()
                 .map(|value| metric_label("claim_id", value))
         });
-    metric_filter_with_primary(primary)
+    metric_filter_with_primary(primary.into_iter().collect())
 }
 
-fn metric_filter_with_primary(primary: Option<String>) -> String {
-    primary.unwrap_or_default()
+fn metric_filter_with_primary(mut fields: Vec<String>) -> String {
+    fields.retain(|field| !field.is_empty());
+    fields.join(",")
+}
+
+fn metric_selector(filter: String) -> String {
+    let names = metric_label(
+        "__name__",
+        "~ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth",
+    );
+    let names = names.replacen("__name__=\"~", "__name__=~\"", 1);
+    let filter = metric_filter_with_primary(vec![names, filter]);
+    format!("{{{filter}}}")
 }
 
 fn metric_label(label: &str, value: &str) -> String {
@@ -173,7 +188,7 @@ mod tests {
         let query = query_text(&command);
         assert_eq!(
             query,
-            "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\"}[5m]))"
+            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (max_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\",check_id=\"coverage-prove-observability-binding\"}[5m]))"
         );
     }
 
@@ -208,7 +223,7 @@ mod tests {
         let query = query_text(&metrics);
         assert_eq!(
             query,
-            "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time(ultragoal_command_total{}[5m]))"
+            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (max_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\"}[5m]))"
         );
         assert!(!query.contains("run_id=\"run-abc\""));
         assert!(!query.contains("correlation_id=\"corr-abc\""));
