@@ -2522,7 +2522,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Control board: commands `1 fitted`, `19 partially_fitted`, `37 unfitted`; surfaces `0 fitted`, `4 partially_fitted`, `6 unfitted`; operating loop `1 fitted`, `4 partially_fitted`, `5 unfitted`; signals `0 fitted`, `7 partially_fitted`, `1 unfitted`; first incomplete row is command `source audit`, next unfitted surface `pass and fail stdout contract across source-audit statuses`. Full Gate 92 remains blocked.
   - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: complete tracking exists, but partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
-  - Status: unchecked; tracking/enforcement exists, completion does not.
+  - Status: in progress
 
 - [ ] Machine-readable operating-loop and signal inventory tracks whether observability is actually usable as the repair loop: current digest first, failing command capture, logs/metrics/traces query by run id, CLI explanation before manual artifact inspection, smallest repair, narrow rerun, before/after telemetry comparison, broad-audit gating, freshness, and the CLI-translated latency/traffic/error/saturation/freshness/correlation/redaction/boundedness signal model.
   - Evidence: `docs/generated/observability/command-inventory.json = sha256:0844b19aeed17fa77934cd69ed54678b00626c3a40fbe2d062a39a2958abaabf` now carries Gate 92 research doctrine, a 10-stage operating-loop inventory, and an 8-class signal inventory. Current row counts: loop `1 fitted`, `4 partially_fitted`, `5 unfitted`; signal `7 partially_fitted`, `1 unfitted`. Focused bad-path and green-path tests passed through `cargo test --offline observability_registry --lib --quiet`, `cargo test --offline control_board --lib --quiet`, and `cargo test --offline observe --lib --quiet`.
@@ -2530,7 +2530,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Validator check: `validator/src/audit/observability/registry/operating.rs`.
   - Candidate digest: `sha256:fef545df0140aa12ac80f1bbca5fbacae68bf4e2a679dbd1532290301c2f3912`.
   - Claim impact: partial/unfitted operating-loop or signal rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
-  - Status: unchecked; tracking/enforcement exists, completion does not.
+  - Status: in progress
 
 - [ ] Every pass stdout states what was proven, candidate digest, receipt path, observability run id, supported claims, and explicitly unsupported claims.
   - Evidence:

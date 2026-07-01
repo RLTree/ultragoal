@@ -103,9 +103,9 @@
     "status": "blocked",
     "families": {
       "commands": {
-        "total": 61,
+        "total": 62,
         "fitted": 1,
-        "partially_fitted": 23,
+        "partially_fitted": 24,
         "unfitted": 37
       },
       "surfaces": {

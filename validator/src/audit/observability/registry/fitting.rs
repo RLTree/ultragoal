@@ -41,6 +41,7 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "gc dry-run",
     "gc apply",
     "gc verify",
+    "halo capability prove",
     "session-log hardening",
     "target-repo audit",
     "observe stack up",
@@ -61,6 +62,8 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "observe explain-law",
     "openai call prove",
     "openai config prove",
+    "openai output prove",
+    "promptfoo prove",
 ];
 
 pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {

@@ -1,4 +1,5 @@
 use serde_json::json;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[test]
 fn observability_command_inventory_shape_edges_are_explicit() {
@@ -42,4 +43,62 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         )
     );
     let _ = std::fs::remove_dir_all(root);
+}
+
+#[test]
+fn production_command_inventory_matches_required_command_authority() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let inventory = crate::json_boundary::read_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+    )
+    .expect("production command inventory");
+    let listed = inventory
+        .get("commands")
+        .and_then(serde_json::Value::as_array)
+        .expect("commands array")
+        .iter()
+        .filter_map(serde_json::Value::as_str)
+        .collect::<BTreeSet<_>>();
+    let required = super::super::super::fitting::REQUIRED_COMMANDS
+        .iter()
+        .copied()
+        .collect::<BTreeSet<_>>();
+    assert_eq!(listed, required);
+}
+
+#[test]
+fn production_command_control_board_counts_match_inventory_rows() {
+    let root = crate::self_tests::boundaries::support::repo_root();
+    let inventory = crate::json_boundary::read_json(
+        &root.join("docs/generated/observability/command-inventory.json"),
+    )
+    .expect("production command inventory");
+    let fitting = inventory
+        .get("fitting_inventory")
+        .and_then(serde_json::Value::as_object)
+        .expect("fitting inventory");
+    let mut expected = BTreeMap::from([
+        ("total", fitting.len() as u64),
+        ("fitted", 0),
+        ("partially_fitted", 0),
+        ("unfitted", 0),
+    ]);
+    for row in fitting.values() {
+        if let Some(status) = row
+            .get("fitting_status")
+            .and_then(serde_json::Value::as_str)
+        {
+            *expected.entry(status).or_insert(0) += 1;
+        }
+    }
+    let board = inventory
+        .pointer("/fitting_control_board/families/commands")
+        .and_then(serde_json::Value::as_object)
+        .expect("command control-board counts");
+    for (key, count) in expected {
+        assert_eq!(
+            board.get(key).and_then(serde_json::Value::as_u64),
+            Some(count)
+        );
+    }
 }
