@@ -81,7 +81,22 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
             next_repair: "create package manifest",
             claim_impact: "source_audit_failed_blocks_claims",
             supported_claims: Vec::new(),
-            runtime: crate::cli::observe::telemetry::RuntimeTelemetry::uninstrumented(),
+            runtime: crate::cli::observe::telemetry::RuntimeTelemetry {
+                duration_ms: 3,
+                worker_count: 0,
+                task_count: 0,
+                queue_depth: 0,
+                cpu_ms: None,
+                memory_bytes: None,
+                io_bytes: None,
+                cache_mode: "pre_scheduler_guard_no_cache".to_string(),
+                resource_measurement_status: "pre_scheduler_guard_no_scheduler_metrics".to_string(),
+                retry_count: 0,
+                backoff_ms: 0,
+                saturation_status: "no_scheduler_tasks_started".to_string(),
+                repair_anchor_before: "source_audit_command_start".to_string(),
+                repair_anchor_after: "source_audit_observability_emit".to_string(),
+            },
         },
     )
     .expect_err("missing package manifest blocks telemetry receipt");

@@ -2,6 +2,7 @@ use crate::cli::observe::telemetry::{RuntimeTelemetry, exporter, identity, recor
 use crate::cli::observe::types;
 use serde_json::{Value, json};
 use std::path::Path;
+use std::time::Instant;
 
 pub(crate) struct CommandTelemetry<'a> {
     pub(crate) command: &'a str,
@@ -26,11 +27,16 @@ pub(crate) struct CommandTelemetry<'a> {
 }
 
 pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value, String> {
+    let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
     let run_id = identity::id("run", input.operation, &candidate);
     let correlation_id = identity::id("corr", input.operation, &candidate);
     let redacted_artifact_path = record::redact_sensitive_text(input.artifact_path);
     let redacted_receipt_path = record::redact_sensitive_text(input.receipt_path);
+    let runtime = input
+        .runtime
+        .clone()
+        .unwrap_or_else(|| default_runtime(elapsed_ms(started)));
     let event = event(
         &input,
         &candidate,
@@ -39,6 +45,7 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         root,
         &redacted_artifact_path,
         &redacted_receipt_path,
+        runtime,
     );
     let metric = super::metric::from_event(&event);
     let trace = super::trace::from_event(&event);
@@ -90,14 +97,11 @@ fn event(
     root: &Path,
     artifact_path: &str,
     receipt_path: &str,
+    runtime: RuntimeTelemetry,
 ) -> Value {
     let why_failed = record::redact_sensitive_text(input.why_failed);
     let where_failed = record::redact_sensitive_text(input.where_failed);
     let next_repair = record::redact_sensitive_text(input.next_repair);
-    let runtime = input
-        .runtime
-        .clone()
-        .unwrap_or_else(RuntimeTelemetry::uninstrumented);
     let mut event = json!({
         "schema": types::EVENT_SCHEMA,
         "run_id": run_id,
@@ -146,6 +150,31 @@ fn event(
     event["repair_anchor_after"] = json!(runtime.repair_anchor_after);
     event["redaction_status"] = json!(record::redaction_status(&event));
     event
+}
+
+fn elapsed_ms(started: Instant) -> u64 {
+    u64::try_from(started.elapsed().as_millis())
+        .unwrap_or(u64::MAX)
+        .max(1)
+}
+
+fn default_runtime(duration_ms: u64) -> RuntimeTelemetry {
+    RuntimeTelemetry {
+        duration_ms,
+        worker_count: 1,
+        task_count: 1,
+        queue_depth: 0,
+        cpu_ms: None,
+        memory_bytes: None,
+        io_bytes: None,
+        cache_mode: "command_receipt_no_cache".to_string(),
+        resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable".to_string(),
+        retry_count: 0,
+        backoff_ms: 0,
+        saturation_status: "serial_command_typed".to_string(),
+        repair_anchor_before: "command_receipt_start".to_string(),
+        repair_anchor_after: "command_telemetry_emit".to_string(),
+    }
 }
 
 fn exporter(root: &Path, candidate: &str, status: &str, emit: bool) -> &'static str {

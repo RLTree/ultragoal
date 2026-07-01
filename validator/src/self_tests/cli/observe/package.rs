@@ -72,6 +72,23 @@ fn package_digest_command_emits_observability_receipt_contract() {
     assert_eq!(receipt["check_id"], "package-digest-observability-binding");
     assert_eq!(receipt["claim_id"], "source_package_digest");
     assert_eq!(receipt["event"]["operation"], "package.digest");
+    assert!(receipt["event"]["duration_ms"].as_u64().unwrap() > 0);
+    assert_eq!(receipt["event"]["worker_count"], 1);
+    assert_eq!(receipt["event"]["task_count"], 1);
+    assert_eq!(receipt["event"]["queue_depth"], 0);
+    assert_eq!(receipt["event"]["cache_mode"], "command_receipt_no_cache");
+    assert_eq!(
+        receipt["event"]["resource_measurement_status"],
+        "wall_time_only_cpu_memory_io_unavailable"
+    );
+    assert_eq!(
+        receipt["metric"]["duration_ms"],
+        receipt["event"]["duration_ms"]
+    );
+    assert_eq!(
+        receipt["trace"]["worker_count"],
+        receipt["event"]["worker_count"]
+    );
     assert!(
         receipt["supported_claims"]
             .as_array()
