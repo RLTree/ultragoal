@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 1,
-        "partially_fitted": 46,
+        "fitted": 2,
+        "partially_fitted": 45,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "source audit",
+      "id": "red fixture report",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -240,7 +240,7 @@
       ]
     },
     "source audit": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "claim-blocking fail receipt",
@@ -253,19 +253,19 @@
         "real runtime scheduler telemetry for source-audit normal and guard-error producer paths",
         "parser-level source audit rejection telemetry",
         "parser-level target-repo audit rejection telemetry through shared audit parser hook",
-        "fail-closed command fitting accepts current blocked receipts without treating command failure as observability failure"
-      ],
-      "missing_surfaces": [
+        "fail-closed command fitting accepts current blocked receipts without treating command failure as observability failure",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
         "source_audit_observability_receipt_blocks_claims_on_failed_audit",
         "source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling",
         "source_audit_run_writes_observability_through_cli_boundary",
         "source_audit_guard_error_writes_pre_scheduler_observability",
+        "source_audit_run_reports_observability_write_failure",
         "source_audit_parse_rejection_writes_observability",
         "target_repo_audit_parse_rejection_writes_target_observability",
         "observability_command_fitting_accepts_only_fail_closed_command_receipts"
@@ -278,9 +278,9 @@
         "validation_artifacts/observability/source-audit-metrics-query.json",
         "validation_artifacts/observability/source-audit-traces-query.json"
       ],
-      "claim_impact": "blocks_gate_92_completion_readiness_release_update_goal; blocks_gate_92_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_source_audit_command_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:source audit",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -292,9 +292,16 @@
         "validation_artifacts/observability/source-audit-metrics-query.json",
         "validation_artifacts/observability/source-audit-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "source_audit_observability_receipt_blocks_claims_on_failed_audit"
+      ],
+      "green_fixtures": [
+        "source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling",
+        "source_audit_run_writes_observability_through_cli_boundary"
+      ],
+      "tamper_fixtures": [
+        "source_audit_run_reports_observability_write_failure"
+      ]
     },
     "red fixture report": {
       "fitting_status": "partially_fitted",
