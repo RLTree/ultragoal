@@ -1,6 +1,8 @@
 use serde_json::{Map, Value};
 use std::path::Path;
 
+mod requirements;
+
 pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "package digest",
     "source audit",
@@ -73,7 +75,7 @@ pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {
         }
     }
     reject_unknown_inventory_commands(value, out);
-    for key in row_requirement_keys() {
+    for key in requirements::row_requirement_keys() {
         if value.pointer(&format!("/row_requirements/{key}")) != Some(&Value::Bool(true)) {
             out.push(format!(
                 "observability_command_inventory_requirement_missing:{key}"
@@ -175,6 +177,12 @@ fn typed_row_accounting(row: &Map<String, Value>) -> bool {
         && row
             .get("live_query_proof_paths")
             .is_some_and(Value::is_array)
+        && row
+            .get("same_candidate_query_proof_paths")
+            .is_some_and(Value::is_array)
+        && row.get("red_fixtures").is_some_and(Value::is_array)
+        && row.get("green_fixtures").is_some_and(Value::is_array)
+        && row.get("tamper_fixtures").is_some_and(Value::is_array)
 }
 
 fn require_fitted_evidence(
@@ -190,8 +198,9 @@ fn require_fitted_evidence(
         non_empty_array(row, "focused_tests"),
         non_empty_array(row, "receipt_paths"),
         non_empty_array(row, "live_query_proof_paths"),
+        non_empty_array(row, "same_candidate_query_proof_paths"),
         owner_tracking(row),
-        super::row_contract::complete(row),
+        super::row_contract::fitted(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {
@@ -223,22 +232,4 @@ fn empty_array(row: &Map<String, Value>, key: &str) -> bool {
 
 fn owner_tracking(row: &Map<String, Value>) -> bool {
     non_empty_string(row, "current_owner_surface") && non_empty_string(row, "next_unfitted_surface")
-}
-
-fn row_requirement_keys() -> [&'static str; 13] {
-    [
-        "log_instrumentation",
-        "metric_instrumentation",
-        "trace_instrumentation",
-        "pass_output_contract",
-        "fail_output_contract",
-        "receipt_observability_binding",
-        "focused_tests",
-        "claim_impact_mapping",
-        "same_candidate_query_proof",
-        "validator_enforced",
-        "owner_surface_tracking",
-        "next_unfitted_surface_tracking",
-        "fitting_control_board",
-    ]
 }

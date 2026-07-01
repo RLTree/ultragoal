@@ -1,6 +1,8 @@
 use serde_json::{Map, Value, json};
 use std::{fs, path::Path};
 
+mod rows;
+
 pub(super) fn write_registry_root(root: &Path, inventory: Value) {
     fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
     fs::create_dir_all(root.join("docs/generated/observability")).expect("inventory");
@@ -52,21 +54,24 @@ pub(super) fn write_valid_fixture(root: &Path) {
 pub(super) fn fitted_inventory() -> Value {
     let mut rows = Map::new();
     for command in super::super::fitting::REQUIRED_COMMANDS {
-        rows.insert((*command).to_string(), fitted_row(command));
+        rows.insert((*command).to_string(), rows::fitted_row(command));
     }
     let mut surface_rows = Map::new();
     for surface in super::super::surfaces::REQUIRED_SURFACES {
-        surface_rows.insert((*surface).to_string(), fitted_surface_row(surface));
+        surface_rows.insert((*surface).to_string(), rows::fitted_surface_row(surface));
     }
     let mut loop_rows = Map::new();
     for stage in super::super::operating::REQUIRED_LOOP_STAGES {
-        loop_rows.insert((*stage).to_string(), fitted_operating_row("loop", stage));
+        loop_rows.insert(
+            (*stage).to_string(),
+            rows::fitted_operating_row("loop", stage),
+        );
     }
     let mut signal_rows = Map::new();
     for signal in super::super::operating::REQUIRED_SIGNAL_CLASSES {
         signal_rows.insert(
             (*signal).to_string(),
-            fitted_operating_row("signal", signal),
+            rows::fitted_operating_row("signal", signal),
         );
     }
     let mut inventory = json!({
@@ -93,8 +98,12 @@ pub(super) fn fitted_inventory() -> Value {
             "fail_output_contract": true,
             "receipt_observability_binding": true,
             "focused_tests": true,
+            "red_fixture_proof": true,
+            "green_fixture_proof": true,
+            "tamper_fixture_proof": true,
             "claim_impact_mapping": true,
             "same_candidate_query_proof": true,
+            "explicit_instrumentation_fields": true,
             "validator_enforced": true,
             "owner_surface_tracking": true,
             "next_unfitted_surface_tracking": true,
@@ -149,95 +158,4 @@ pub(super) fn insert_counts(families: &mut Map<String, Value>, key: &str, len: u
             "unfitted": 0
         }),
     );
-}
-
-fn fitted_row(command: &str) -> Value {
-    let slug = slug(command);
-    json!({
-        "fitting_status": "fitted",
-        "fitted_surfaces": [
-            "log instrumentation",
-            "metric instrumentation",
-            "trace instrumentation",
-            "pass stdout contract",
-            "fail stdout contract",
-            "receipt observability binding"
-        ],
-        "missing_surfaces": [],
-        "validator_check_id": crate::audit::observability::LAW,
-        "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{slug}.json")],
-        "live_query_proof_paths": [
-            format!("validation_artifacts/observability/fitting/{slug}-logs.json"),
-            format!("validation_artifacts/observability/fitting/{slug}-metrics.json"),
-            format!("validation_artifacts/observability/fitting/{slug}-traces.json")
-        ],
-        "current_owner_surface": format!("command:{command}"),
-        "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
-    })
-}
-
-fn fitted_surface_row(surface: &str) -> Value {
-    let slug = slug(surface);
-    json!({
-        "fitting_status": "fitted",
-        "fitted_surfaces": [
-            "log instrumentation",
-            "metric instrumentation",
-            "trace instrumentation",
-            "pass stdout contract",
-            "fail stdout contract",
-            "receipt observability binding"
-        ],
-        "missing_surfaces": [],
-        "operation": surface_operation(surface),
-        "validator_check_id": crate::audit::observability::LAW,
-        "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/surface-{slug}.json")],
-        "live_query_proof_paths": [
-            format!("validation_artifacts/observability/fitting/surface-{slug}-logs.json"),
-            format!("validation_artifacts/observability/fitting/surface-{slug}-metrics.json"),
-            format!("validation_artifacts/observability/fitting/surface-{slug}-traces.json")
-        ],
-        "current_owner_surface": format!("surface:{surface}"),
-        "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
-    })
-}
-
-fn fitted_operating_row(kind: &str, name: &str) -> Value {
-    let slug = slug(name);
-    json!({
-        "fitting_status": "fitted",
-        "fitted_surfaces": [
-            "log instrumentation",
-            "metric instrumentation",
-            "trace instrumentation",
-            "pass stdout contract",
-            "fail stdout contract",
-            "receipt observability binding"
-        ],
-        "missing_surfaces": [],
-        "operation": format!("observability.{kind}.{slug}"),
-        "validator_check_id": crate::audit::observability::LAW,
-        "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{kind}-{slug}.json")],
-        "live_query_proof_paths": [
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-logs.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-metrics.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-traces.json")
-        ],
-        "current_owner_surface": format!("{kind}:{name}"),
-        "next_unfitted_surface": "none",
-        "claim_impact": "supports_gate_92_when_same_candidate"
-    })
-}
-
-fn slug(command: &str) -> String {
-    command.replace(' ', "-")
-}
-
-fn surface_operation(surface: &str) -> String {
-    format!("surface.{}", surface.replace(' ', "."))
 }

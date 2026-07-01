@@ -144,6 +144,12 @@ fn typed_row_accounting(row: &Map<String, Value>) -> bool {
         && row
             .get("live_query_proof_paths")
             .is_some_and(Value::is_array)
+        && row
+            .get("same_candidate_query_proof_paths")
+            .is_some_and(Value::is_array)
+        && row.get("red_fixtures").is_some_and(Value::is_array)
+        && row.get("green_fixtures").is_some_and(Value::is_array)
+        && row.get("tamper_fixtures").is_some_and(Value::is_array)
 }
 
 fn require_fitted_evidence(
@@ -161,8 +167,9 @@ fn require_fitted_evidence(
         non_empty_array(row, "focused_tests"),
         non_empty_array(row, "receipt_paths"),
         non_empty_array(row, "live_query_proof_paths"),
+        non_empty_array(row, "same_candidate_query_proof_paths"),
         owner_tracking(row),
-        super::row_contract::complete(row),
+        super::row_contract::fitted(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {

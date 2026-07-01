@@ -1,0 +1,21 @@
+pub(super) fn row_requirement_keys() -> [&'static str; 17] {
+    [
+        "log_instrumentation",
+        "metric_instrumentation",
+        "trace_instrumentation",
+        "pass_output_contract",
+        "fail_output_contract",
+        "receipt_observability_binding",
+        "focused_tests",
+        "red_fixture_proof",
+        "green_fixture_proof",
+        "tamper_fixture_proof",
+        "claim_impact_mapping",
+        "same_candidate_query_proof",
+        "explicit_instrumentation_fields",
+        "validator_enforced",
+        "owner_surface_tracking",
+        "next_unfitted_surface_tracking",
+        "fitting_control_board",
+    ]
+}

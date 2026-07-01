@@ -81,7 +81,7 @@ fn require_query_receipts(
     out: &mut Vec<String>,
 ) {
     let mut kinds = BTreeSet::new();
-    for rel in strings(row, "live_query_proof_paths") {
+    for rel in strings(row, "same_candidate_query_proof_paths") {
         let Ok(value) = crate::json_boundary::read_json(&root.join(&rel)) else {
             out.push(format!(
                 "observability_{prefix}_fitting_query_missing:{command}:{rel}"
