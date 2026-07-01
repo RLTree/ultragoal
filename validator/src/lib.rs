@@ -80,15 +80,7 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 observability_receipt: cli::review_target::observability_receipt(args)?,
             }
         }
-        "archive" => Command::Archive {
-            zip: opt_path(strip_build_or_verify(&raw[1..]), "--zip")?,
-            receipt: opt_path(strip_build_or_verify(&raw[1..]), "--receipt")?,
-            zip_root: opt_string(strip_build_or_verify(&raw[1..]), "--zip-root")
-                .unwrap_or_else(|| "harness-ultragoal-plugin-proposal".to_string()),
-            archive_purpose: opt_string(strip_build_or_verify(&raw[1..]), "--archive-purpose")
-                .or_else(|| opt_string(strip_build_or_verify(&raw[1..]), "--purpose"))
-                .unwrap_or_else(|| "candidate_review_anchor".to_string()),
-        },
+        "archive" => cli::archive::parse(&raw[1..])?,
         "review-round" => {
             let args = strip_build_or_verify(&raw[1..]);
             Command::ReviewRound {

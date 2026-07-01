@@ -165,55 +165,6 @@ fn command_run_propagates_output_and_generation_errors() {
     assert_eq!(code, 1);
     std::fs::remove_dir_all(review_root).expect("cleanup review output error");
 
-    let archive_root = package_root("command-run-archive-errors");
-    let err = crate::command_run::run_with_exit_code(args(
-        archive_root.clone(),
-        &[
-            "archive",
-            "build",
-            "--zip",
-            archive_root
-                .join("candidate.zip")
-                .to_str()
-                .expect("archive zip"),
-            "--receipt",
-            archive_root
-                .join("archive.json")
-                .to_str()
-                .expect("archive receipt"),
-            "--archive-purpose",
-            "upload-ready",
-        ],
-    ))
-    .expect_err("archive purpose failure propagates");
-    assert!(
-        err.contains("archive purpose must be candidate_review_anchor"),
-        "{err}"
-    );
-
-    let blocked_archive_receipt = archive_root.join("archive-blocked");
-    std::fs::write(&blocked_archive_receipt, "not a directory").expect("blocked archive file");
-    let err = crate::command_run::run_with_exit_code(args(
-        archive_root.clone(),
-        &[
-            "archive",
-            "build",
-            "--zip",
-            archive_root
-                .join("candidate-ok.zip")
-                .to_str()
-                .expect("archive zip"),
-            "--receipt",
-            blocked_archive_receipt
-                .join("archive.json")
-                .to_str()
-                .expect("archive receipt"),
-        ],
-    ))
-    .expect_err("archive receipt output failure propagates");
-    assert!(err.contains("create parent failed"), "{err}");
-    std::fs::remove_dir_all(archive_root).expect("cleanup archive errors");
-
     let semantic_root = package_root("command-run-semantic-errors");
     write_json(
         &semantic_root.join("claims.json"),

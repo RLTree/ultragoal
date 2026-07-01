@@ -32,9 +32,17 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::Archive {
             zip,
             receipt,
+            observability_receipt,
             zip_root,
             archive_purpose,
-        } => run_archive(root, zip, receipt, zip_root, archive_purpose),
+        } => crate::cli::archive::run(
+            root,
+            zip,
+            receipt,
+            observability_receipt,
+            zip_root,
+            archive_purpose,
+        ),
         Command::ReviewRound {
             receipt,
             validator_receipt,
@@ -122,25 +130,6 @@ fn run_transactional_finalization(
     Ok(i32::from(
         value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
     ))
-}
-
-fn run_archive(
-    root: std::path::PathBuf,
-    zip: std::path::PathBuf,
-    receipt: std::path::PathBuf,
-    zip_root: String,
-    archive_purpose: String,
-) -> Result<i32, String> {
-    let receipt_value = crate::archive::build_archive(&root, &zip, &zip_root, &archive_purpose)?;
-    crate::json_boundary::write_json(&receipt, &receipt_value)?;
-    println!(
-        "archive pass digest={} receipt={}",
-        receipt_value["archive"]["digest"]
-            .as_str()
-            .unwrap_or("<missing>"),
-        receipt.display()
-    );
-    Ok(0)
 }
 
 struct SemanticReceiptArgs {

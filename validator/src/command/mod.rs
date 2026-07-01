@@ -24,6 +24,7 @@ pub(crate) enum Command {
     Archive {
         zip: PathBuf,
         receipt: PathBuf,
+        observability_receipt: PathBuf,
         zip_root: String,
         archive_purpose: String,
     },

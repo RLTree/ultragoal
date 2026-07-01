@@ -1,3 +1,4 @@
+mod archive_observability;
 pub(crate) mod dispatch;
 pub(crate) mod product;
 pub(crate) mod review_round;

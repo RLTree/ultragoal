@@ -1,3 +1,5 @@
+pub(crate) mod archive;
+mod archive_stdout;
 pub(crate) mod audit;
 pub(crate) mod control;
 pub(crate) mod coverage;
