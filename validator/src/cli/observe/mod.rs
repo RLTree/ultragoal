@@ -1,9 +1,9 @@
-use serde_json::Value;
 use std::path::{Path, PathBuf};
 
 pub(crate) mod explain;
 pub(crate) mod query;
 pub(crate) mod stack;
+mod stdout;
 pub(crate) mod telemetry;
 pub(crate) mod types;
 
@@ -47,94 +47,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         | ObserveOperation::ExplainCheck
         | ObserveOperation::ExplainLaw => explain::run(root, command)?,
     };
-    write_and_print(root, command, &value)
-}
-
-fn write_and_print(root: &Path, command: &ObserveCommand, value: &Value) -> Result<i32, String> {
-    let receipt = command.receipt_rel();
-    let absolute = if receipt.is_absolute() {
-        receipt.clone()
-    } else {
-        root.join(&receipt)
-    };
-    crate::json_boundary::write_json(&absolute, value)?;
-    let status = value
-        .get("status")
-        .and_then(Value::as_str)
-        .unwrap_or("fail");
-    println!(
-        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
-        command.operation.id(),
-        value
-            .get("candidate_digest")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        receipt.display(),
-        value
-            .get("run_id")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        value
-            .get("correlation_id")
-            .and_then(Value::as_str)
-            .unwrap_or("<missing>"),
-        value
-            .get("event")
-            .and_then(|event| event.get("claim_impact"))
-            .and_then(Value::as_str)
-            .or_else(|| value.get("claim_impact").and_then(Value::as_str))
-            .unwrap_or("<missing>"),
-        csv(value.get("supported_claims")),
-        csv(value.get("blocked_claims"))
-    );
-    if status != "pass" {
-        let metric_query =
-            crate::cli::observe::query::bounded_metric_query_for_operation(command.operation.id());
-        println!(
-            "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
-            value
-                .get("check_id")
-                .and_then(Value::as_str)
-                .unwrap_or(types::CHECK_ID),
-            value
-                .get("why_failed")
-                .and_then(Value::as_str)
-                .unwrap_or("observability proof failed"),
-            value
-                .get("where_failed")
-                .and_then(Value::as_str)
-                .unwrap_or("observe command"),
-            value
-                .get("event")
-                .and_then(|event| event.get("claim_impact"))
-                .and_then(Value::as_str)
-                .or_else(|| value.get("claim_impact").and_then(Value::as_str))
-                .unwrap_or("readiness_release_completion_update_goal_blocked"),
-            value
-                .get("next_repair")
-                .and_then(Value::as_str)
-                .unwrap_or("run observe stack health and smoke"),
-            receipt.display(),
-            value
-                .get("run_id")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown"),
-            value
-                .get("correlation_id")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown"),
-            value
-                .get("run_id")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown"),
-            metric_query,
-            value
-                .get("run_id")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown")
-        );
-    }
-    Ok(i32::from(status != "pass"))
+    stdout::write_and_print(root, command, &value)
 }
 
 fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
@@ -184,13 +97,14 @@ fn opt_u64(args: &[String], key: &str) -> Option<u64> {
     opt_string(args, key).and_then(|value| value.parse().ok())
 }
 
-fn csv(value: Option<&Value>) -> String {
+#[cfg(test)]
+fn csv(value: Option<&serde_json::Value>) -> String {
     value
-        .and_then(Value::as_array)
+        .and_then(serde_json::Value::as_array)
         .map(|items| {
             items
                 .iter()
-                .filter_map(Value::as_str)
+                .filter_map(serde_json::Value::as_str)
                 .collect::<Vec<_>>()
                 .join(",")
         })
@@ -198,6 +112,6 @@ fn csv(value: Option<&Value>) -> String {
 }
 
 #[cfg(test)]
-pub(crate) fn csv_for_test(value: &Value) -> String {
+pub(crate) fn csv_for_test(value: &serde_json::Value) -> String {
     csv(value.get("supported_claims"))
 }

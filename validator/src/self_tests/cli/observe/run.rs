@@ -33,19 +33,19 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
         ),
         (
             &["observe", "explain-failure", "--run-id", "run-test"][..],
-            Some(0),
+            Some(1),
         ),
         (
             &["observe", "explain-claim", "--claim-id", "claim-test"][..],
-            Some(0),
+            Some(1),
         ),
         (
             &["observe", "explain-check", "--check-id", "check-test"][..],
-            Some(0),
+            Some(1),
         ),
         (
             &["observe", "explain-law", "--law-id", "law-test"][..],
-            Some(0),
+            Some(1),
         ),
     ] {
         let receipt = receipts.join(format!("{}.json", raw.join("-")));
@@ -68,8 +68,8 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     );
     let metrics_run = command(&["observe", "metrics", "query", "--run-id", "run-abc"]);
     let metrics_query = observe::query::query_text(&metrics_run);
-    assert!(metrics_query.starts_with("max_over_time(ultragoal_command_total{"));
-    assert!(metrics_query.contains("run_id=\"\""));
+    assert!(metrics_query.starts_with("sum by (operation,status,check_id"));
+    assert!(metrics_query.contains("max_over_time(ultragoal_command_total{"));
     assert!(!metrics_query.contains("run_id=\"run-abc\""));
     let escaped_metrics = command(&["observe", "metrics", "query", "--check-id", "check\\\"x\ny"]);
     let escaped_query = observe::query::query_text(&escaped_metrics);
@@ -77,7 +77,6 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     assert!(escaped_query.contains(r#"\""#));
     assert!(escaped_query.contains(r#"\n"#));
     assert!(!escaped_query.contains('\n'));
-    assert!(escaped_query.contains("run_id=\"\""));
     assert!(!escaped_query.contains("run_id=\"check"));
     let traces_run = command(&["observe", "traces", "query", "--run-id", "run-abc"]);
     assert_eq!(

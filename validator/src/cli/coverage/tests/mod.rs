@@ -69,10 +69,17 @@ fn coverage_prove_command_writes_pass_and_fail_observability() {
     assert_eq!(fail["status"], "fail");
     assert_eq!(fail["event"]["failure_class"], "coverage_prove_failure");
     assert!(fail["supported_claims"].as_array().unwrap().is_empty());
+    let fail_lines = stdout::contract(&fail);
+    assert!(fail_lines[0].contains("trace_id=trace-"));
+    assert!(fail_lines[0].contains("failure_class=coverage_prove_failure"));
     assert!(
-        stdout::contract(&fail)
+        fail_lines
             .iter()
             .any(|line| line.contains("failed_check=coverage-prove-observability-binding"))
+    );
+    assert!(
+        fail_lines[1].contains("failure_class=coverage_prove_failure")
+            && fail_lines[1].contains("--correlation-id corr-")
     );
     fs::remove_dir_all(root).expect("cleanup");
 }

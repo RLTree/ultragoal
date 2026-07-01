@@ -43,19 +43,21 @@ fn log_query_text(command: &ObserveCommand) -> String {
 
 fn metric_query_text(command: &ObserveCommand) -> String {
     command.query.clone().unwrap_or_else(|| {
-        range_query(&format!(
+        bounded_metric_query(&format!(
             "ultragoal_command_total{{{}}}",
             metric_filter(command)
         ))
     })
 }
 
-fn range_query(selector: &str) -> String {
-    format!("max_over_time({selector}[24h])")
+fn bounded_metric_query(selector: &str) -> String {
+    format!(
+        "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time({selector}[5m]))"
+    )
 }
 
 pub(crate) fn bounded_metric_query_for_operation(operation: &str) -> String {
-    range_query(&format!(
+    bounded_metric_query(&format!(
         "ultragoal_command_total{{{}}}",
         metric_filter_with_primary(Some(metric_label("operation", operation)))
     ))
@@ -171,7 +173,7 @@ mod tests {
         let query = query_text(&command);
         assert_eq!(
             query,
-            "max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\"}[24h])"
+            "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\"}[5m]))"
         );
     }
 
@@ -204,7 +206,10 @@ mod tests {
         metrics.run_id = Some("run-abc".to_string());
         metrics.correlation_id = Some("corr-abc".to_string());
         let query = query_text(&metrics);
-        assert_eq!(query, "max_over_time(ultragoal_command_total{}[24h])");
+        assert_eq!(
+            query,
+            "sum by (operation,status,check_id,claim_id,surface,failure_class,exporter) (max_over_time(ultragoal_command_total{}[5m]))"
+        );
         assert!(!query.contains("run_id=\"run-abc\""));
         assert!(!query.contains("correlation_id=\"corr-abc\""));
     }

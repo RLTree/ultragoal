@@ -63,6 +63,12 @@ pub(super) fn next_repair_for(
         text.contains("fitting inventory") || text.contains("command inventory")
     }) {
         "fit every law-bearing command, plugin surface, operating-loop stage, and signal inventory row, then rerun observe prove"
+    } else if failure.is_some_and(|text| text.contains("requested telemetry target unavailable")) {
+        "run target command once on the current candidate, query logs metrics traces, then rerun explain"
+    } else if failure.is_some_and(|text| text.contains("observed telemetry candidate digest")) {
+        "rerun target command on the current candidate before claiming observability fit"
+    } else if failure.is_some_and(|text| text.contains("observed telemetry failure is opaque")) {
+        "repair target command stdout and telemetry fields: failure_class why_failed where_failed next_repair"
     } else {
         match operation {
             ObserveOperation::StackHealth => "run ultragoal observe stack up, then stack health",

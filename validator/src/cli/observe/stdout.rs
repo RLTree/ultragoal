@@ -1,0 +1,188 @@
+use crate::cli::observe::types::{self, ObserveCommand, ObserveOperation};
+use serde_json::Value;
+use std::path::Path;
+
+pub(super) fn write_and_print(
+    root: &Path,
+    command: &ObserveCommand,
+    value: &Value,
+) -> Result<i32, String> {
+    let receipt = command.receipt_rel();
+    let absolute = if receipt.is_absolute() {
+        receipt.clone()
+    } else {
+        root.join(&receipt)
+    };
+    crate::json_boundary::write_json(&absolute, value)?;
+    let status = text(value, "status", "fail");
+    println!(
+        "ultragoal-observe {status} operation={} candidate={} receipt={} run_id={} correlation_id={} claim_impact={} supported_claims={} unsupported_claims={}",
+        command.operation.id(),
+        text(value, "candidate_digest", "<missing>"),
+        receipt.display(),
+        text(value, "run_id", "<missing>"),
+        text(value, "correlation_id", "<missing>"),
+        claim_impact(value),
+        csv(value.get("supported_claims")),
+        csv(value.get("blocked_claims"))
+    );
+    if is_query(command.operation) {
+        print_query(value);
+    }
+    if is_explain(command.operation) {
+        print_explain(value);
+    }
+    if status != "pass" {
+        print_failure(command, value, &receipt);
+    }
+    Ok(i32::from(status != "pass"))
+}
+
+fn print_query(value: &Value) {
+    println!(
+        "query_result kind={} matched={} row_count={} observed_failure_class={} observed_where_failed={} observed_why_failed={} observed_next_repair={} bounded_output={} redaction={} cardinality_guard={} claim_impact={}",
+        text(value, "query_kind", "unknown"),
+        query_matched(value),
+        number_string(value, "row_count"),
+        text(value, "observed_failure_class", "none"),
+        text(value, "observed_where_failed", "none"),
+        text(value, "observed_why_failed", "none"),
+        text(value, "observed_next_repair", "none"),
+        text(value, "bounded_output_status", "unknown"),
+        text(value, "redaction_status", "unknown"),
+        text(value, "cardinality_guard", "unknown"),
+        claim_impact(value)
+    );
+}
+
+fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::Path) {
+    let metric_query =
+        crate::cli::observe::query::bounded_metric_query_for_operation(command.operation.id());
+    println!(
+        "failed_check={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} query_logs='ultragoal observe logs query --run-id {} --limit 100' query_metrics='ultragoal observe metrics query --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --limit 100'",
+        text(value, "check_id", types::CHECK_ID),
+        text(value, "why_failed", "observability proof failed"),
+        text(value, "where_failed", "observe command"),
+        claim_impact(value),
+        text(value, "next_repair", "run observe stack health and smoke"),
+        receipt.display(),
+        text(value, "run_id", "unknown"),
+        text(value, "correlation_id", "unknown"),
+        text(value, "run_id", "unknown"),
+        metric_query,
+        text(value, "run_id", "unknown")
+    );
+}
+
+fn print_explain(value: &Value) {
+    let explanation = value.get("explanation").unwrap_or(&Value::Null);
+    let target = value.get("explanation_target").unwrap_or(&Value::Null);
+    println!(
+        "explain_result requested_target={} fallback_used={} target_status={} root_cause={} where_failed={} why_failed={} implicated_paths={} smallest_repair={} narrow_rerun='{}' broad_rerun='{}' claim_ceiling='{}' query_evidence={}",
+        field_string(explanation, "requested_target", "none"),
+        field_string(explanation, "fallback_used", "unknown"),
+        field_string(target, "status", "unknown"),
+        field_string(explanation, "root_cause", "unknown"),
+        field_string(target, "where_failed", "unknown"),
+        field_string(target, "why_failed", "unknown"),
+        array_csv(explanation.get("implicated_paths")),
+        field_string(explanation, "smallest_repair", "unknown"),
+        field_string(explanation, "narrow_rerun", "unknown"),
+        field_string(explanation, "broad_rerun", "unknown"),
+        field_string(explanation, "claim_ceiling", "unknown"),
+        query_summary(explanation)
+    );
+}
+
+fn query_summary(explanation: &Value) -> String {
+    let evidence = explanation.get("query_evidence").unwrap_or(&Value::Null);
+    ["logs", "metrics", "traces"]
+        .into_iter()
+        .map(|key| {
+            format!(
+                "{key}:{}",
+                evidence
+                    .get(key)
+                    .and_then(|value| value.get("status"))
+                    .and_then(Value::as_str)
+                    .unwrap_or("missing")
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(",")
+}
+
+fn is_query(operation: ObserveOperation) -> bool {
+    matches!(
+        operation,
+        ObserveOperation::LogsQuery
+            | ObserveOperation::MetricsQuery
+            | ObserveOperation::TracesQuery
+    )
+}
+
+fn is_explain(operation: ObserveOperation) -> bool {
+    matches!(
+        operation,
+        ObserveOperation::ExplainFailure
+            | ObserveOperation::ExplainClaim
+            | ObserveOperation::ExplainCheck
+            | ObserveOperation::ExplainLaw
+    )
+}
+
+fn query_matched(value: &Value) -> bool {
+    text(value, "status", "fail") == "pass"
+        && value
+            .get("row_count")
+            .and_then(Value::as_u64)
+            .is_some_and(|count| count > 0)
+}
+
+fn claim_impact(value: &Value) -> &str {
+    value
+        .get("event")
+        .and_then(|event| event.get("claim_impact"))
+        .and_then(Value::as_str)
+        .or_else(|| value.get("claim_impact").and_then(Value::as_str))
+        .unwrap_or("<missing>")
+}
+
+fn number_string(value: &Value, key: &str) -> String {
+    value
+        .get(key)
+        .and_then(Value::as_u64)
+        .map(|number| number.to_string())
+        .unwrap_or_else(|| "0".to_string())
+}
+
+fn field_string(value: &Value, key: &str, default: &str) -> String {
+    match value.get(key) {
+        Some(Value::String(text)) => text.clone(),
+        Some(Value::Bool(flag)) => flag.to_string(),
+        Some(Value::Number(number)) => number.to_string(),
+        _ => default.to_string(),
+    }
+}
+
+fn text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
+    value.get(field).and_then(Value::as_str).unwrap_or(default)
+}
+
+fn array_csv(value: Option<&Value>) -> String {
+    value
+        .and_then(Value::as_array)
+        .map(|items| {
+            items
+                .iter()
+                .filter_map(Value::as_str)
+                .collect::<Vec<_>>()
+                .join(",")
+        })
+        .filter(|items| !items.is_empty())
+        .unwrap_or_else(|| "none".to_string())
+}
+
+fn csv(value: Option<&Value>) -> String {
+    array_csv(value)
+}

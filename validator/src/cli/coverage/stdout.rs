@@ -11,11 +11,13 @@ pub(super) fn contract(value: &Value) -> Vec<String> {
     let run_id = text(value, "run_id");
     let receipt = text(value, "receipt_path");
     let correlation_id = text(value, "correlation_id");
+    let trace_id = event_text(value, "trace_id");
+    let failure_class = text(value, "failure_class");
     let metric_query =
         crate::cli::observe::query::bounded_metric_query_for_operation(text(value, "operation"));
     let claim_impact = text(value, "claim_impact");
     let mut lines = vec![format!(
-        "ultragoal-coverage-prove {status} operation={} candidate={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} claim_impact={claim_impact} supported_claims={} unsupported_claims={}",
+        "ultragoal-coverage-prove {status} operation={} candidate={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} trace_id={trace_id} failure_class={failure_class} claim_impact={claim_impact} supported_claims={} unsupported_claims={}",
         text(value, "operation"),
         text(value, "candidate_digest"),
         csv(value.get("supported_claims")),
@@ -23,7 +25,7 @@ pub(super) fn contract(value: &Value) -> Vec<String> {
     )];
     if status != "pass" {
         lines.push(format!(
-            "failed_law={} failed_check={} why={} where={} claim_impact={claim_impact} next_repair={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} query_logs='ultragoal observe logs query --run-id {run_id} --limit 100' query_metrics='ultragoal observe metrics query --query '{metric_query}' --limit 100' query_traces='ultragoal observe traces query --run-id {run_id} --limit 100'",
+            "failed_law={} failed_check={} failure_class={failure_class} why={} where={} claim_impact={claim_impact} next_repair={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} trace_id={trace_id} query_logs='ultragoal observe logs query --run-id {run_id} --correlation-id {correlation_id} --limit 100' query_metrics='ultragoal observe metrics query --query '{metric_query}' --limit 100' query_traces='ultragoal observe traces query --run-id {run_id} --correlation-id {correlation_id} --limit 100'",
             text(value, "law_id"),
             text(value, "check_id"),
             text(value, "why_failed"),
@@ -37,6 +39,13 @@ pub(super) fn contract(value: &Value) -> Vec<String> {
 fn text<'a>(value: &'a Value, field: &str) -> &'a str {
     value
         .get(field)
+        .and_then(Value::as_str)
+        .unwrap_or("<missing>")
+}
+
+fn event_text<'a>(value: &'a Value, field: &str) -> &'a str {
+    value
+        .pointer(&format!("/event/{field}"))
         .and_then(Value::as_str)
         .unwrap_or("<missing>")
 }

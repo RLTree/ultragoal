@@ -27,6 +27,7 @@ pub(super) fn result(
     let observed_failure_class = observed_failure_text(&observed_failure, "failure_class");
     let observed_why_failed = observed_failure_text(&observed_failure, "why_failed");
     let observed_where_failed = observed_failure_text(&observed_failure, "where_failed");
+    let observed_next_repair = observed_failure_text(&observed_failure, "next_repair");
     let observed_claim_impact = observed_failure_text(&observed_failure, "claim_impact");
     Ok(json!({
         "schema": types::QUERY_SCHEMA,
@@ -55,6 +56,7 @@ pub(super) fn result(
         "observed_failure_class": observed_failure_class,
         "observed_why_failed": observed_why_failed,
         "observed_where_failed": observed_where_failed,
+        "observed_next_repair": observed_next_repair,
         "observed_claim_impact": observed_claim_impact,
         "rows": rows,
         "failure": failure.unwrap_or(""),

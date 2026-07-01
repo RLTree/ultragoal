@@ -84,6 +84,10 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     );
     assert_eq!(observed_failure["observed_where_failed"], "observe.prove");
     assert_eq!(
+        observed_failure["observed_next_repair"],
+        "run observe stack health"
+    );
+    assert_eq!(
         observed_failure["observed_claim_impact"],
         "update_goal_blocked"
     );

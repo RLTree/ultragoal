@@ -3098,7 +3098,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run review feedback disposition and same-round satisfaction proof and red fixtures.
 - [ ] Run behavior-example coverage and coverage anti-gaming proof and red fixtures.
 - [ ] Run one-command fresh environment bootstrap/concurrency proof and red fixtures.
-- [ ] Run agent-queryable observability proof and red fixtures. Evidence: Status: stale due to source change for prior coverage-prove query evidence; full Gate 92 remains blocked.
+- [ ] Run agent-queryable observability proof and red fixtures. Evidence: Status: in progress; coverage-prove command/query/explain production loop has current source-local proof, but full Gate 92 remains blocked by unfitted rows.
 - [ ] Run subagent orchestration explicitness/token-model-cost/reconciliation proof and red fixtures.
 - [ ] Run skill catalog context-budget/omission-warning proof and red fixtures.
 - [ ] Run distribution and sharing-surface claim-separation proof and red fixtures.
