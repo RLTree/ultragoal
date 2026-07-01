@@ -9,7 +9,7 @@ fn operating_loop_rejects_row_shape_research_inputs() {
         .unwrap()
         .retain(|row| {
             row.get("source_id").and_then(serde_json::Value::as_str)
-                != Some("openai-self-improving-tax-agent")
+                != Some("agentic-gold-standard-stack-synthesis-2026-07-01")
         });
     inventory["operating_loop"]["research_inputs"]
         .as_array_mut()
@@ -33,7 +33,7 @@ fn operating_loop_rejects_row_shape_research_inputs() {
     super::super::super::operating::check(&root, &inventory, &mut failures);
     assert!(
         failures.contains(
-            &"observability_operating_research_input_missing:openai-self-improving-tax-agent"
+            &"observability_operating_research_input_missing:agentic-gold-standard-stack-synthesis-2026-07-01"
                 .to_string()
         )
     );

@@ -1,0 +1,69 @@
+Source id: agentic-gold-standard-stack-synthesis-2026-07-01
+Source kind: attached synthesis source card
+Captured: 2026-07-01
+
+Authority boundary:
+This package-owned snapshot captures the adopted Harness Ultragoal product
+doctrine from the attached GPT-5.5 Pro gold-standard stack synthesis. It is
+synthesis authority for harness architecture, operating-loop shape,
+observability doctrine, agent legibility, eval and repair loops, product usage,
+claim-surface separation, and measured improvement requirements. It is not
+primary factual authority for exact external model versions, vendor features,
+hosted-service capabilities, pricing, or current third-party availability.
+Those claims require primary-source verification before they can support hard
+package, install/cache, release, readiness, or update_goal claims.
+
+Adopted requirements:
+1. Harness product doctrine: Harness Ultragoal is a productized agentic
+   engineering harness, not a validator bundle, checklist, or receipt generator.
+   Law-bearing surfaces must improve agent execution, verification,
+   observability, repair, product reliability, or claim integrity.
+2. Gate 92 sensory system: observability is the agent sensory system for every
+   CLI and plugin production path. It requires metrics for alerting, traces and
+   wide events for investigation, logs for reconstruction, and evals for
+   behavioral quality.
+3. Two observability planes: the system must measure product/system health and
+   agent quality separately. Product/system health includes latency, traffic,
+   errors, saturation, freshness, retry/backoff, cache state, resource pressure,
+   and external/live probe health. Agent quality includes completion,
+   first-pass success, repair iterations, failure classes, human escalation,
+   bad repair or packet rate, post-merge regressions, eval trend, tool misuse,
+   docs drift, architecture violations, and claim-theater escapes.
+4. Expanded telemetry envelope: law-bearing command and check telemetry must
+   carry run, correlation, trace, span, candidate, law, check, claim, artifact,
+   failure, repair, duration, worker, task, queue, cache, retry, saturation,
+   redaction, boundedness, before/after repair anchor, agent, tool, repo, eval,
+   and claim-impact attributes where applicable.
+5. Cardinality doctrine: high-cardinality values belong in logs, traces, wide
+   events, and eval records. Metrics must keep bounded labels and must not use
+   raw run ids, trace ids, span ids, user ids, prompt hashes, full file paths,
+   full digests, private paths, or other unbounded labels.
+6. Agent-legible query and explain: a real failed command must let an agent run
+   one query and explain sequence that identifies what failed, why, where,
+   which source, receipt, artifact, or claim is implicated, whether evidence is
+   stale or wrong-digest, the smallest repair, and the narrow rerun.
+7. Trace to feedback to eval to repair to promotion: failed traces, opaque
+   output, corrections, bad tool calls, slow workflows, security near misses,
+   stale-evidence escapes, claim theater, docs drift, architecture violations,
+   and lane regressions become typed feedback records, evals, fixtures, laws,
+   standards rows, or explicit claim blockers.
+8. AGENTS.md routing table and routine command surface: setup and retrofit
+   outputs must route agents to canonical commands, docs, telemetry, evals,
+   architecture, security, privacy, and quality gates without duplicating the
+   full law system. Helpers may exist only when they delegate to canonical CLI
+   authority.
+9. Tool contract and risk tiers: tools, adapters, live probes, setup helpers,
+   model-call adapters, and external writers declare owner, risk tier,
+   idempotency, auth scope, schemas, approval needs, telemetry, preconditions,
+   postconditions, failure semantics, and claim impact.
+10. Truth-surface separation and final packet product shape: product truth,
+    observability truth, and artifact truth are cross-linked but
+    non-substitutable. Receipts do not replace runtime behavior, local spool
+    files do not replace live observability, source proof does not replace
+    install/cache proof, and final packets do not mint authority.
+11. Measured improvement: Gate 105 must measure time-to-diagnosis,
+    time-to-repair, rerun count, stale or wrong-digest recurrence, opaque
+    failure recurrence, claim-theater escapes, Product Fitness substitution,
+    manual-spelunking burden, entropy cleanup, active-repo fitting, eval trend,
+    command latency, and worktree or lane regression rate on same-surface
+    telemetry.

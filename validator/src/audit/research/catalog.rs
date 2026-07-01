@@ -19,6 +19,7 @@ const REQUIRED_SOURCES: &[&str] = &[
     "openai-self-improving-tax-agent",
     "attached-rust-devx-guide",
     "attached-typescript-frontend-guide",
+    "agentic-gold-standard-stack-synthesis-2026-07-01",
 ];
 
 pub(super) fn source_cards(cards: &Value) -> BTreeSet<String> {

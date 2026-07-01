@@ -3608,6 +3608,7 @@
     "artifacts/plugin-scout/available-plugin-summary.txt",
     "artifacts/runtime/engine-input.md",
     "artifacts/runtime/engine-output.md",
+    "artifacts/source-snapshots/agentic-gold-standard-stack-synthesis-2026-07-01.txt",
     "artifacts/source-snapshots/ai-forcing-good-code.txt",
     "artifacts/source-snapshots/attached-rust-devx-guide.txt",
     "artifacts/source-snapshots/attached-typescript-frontend-guide.txt",

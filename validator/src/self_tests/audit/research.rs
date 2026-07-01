@@ -137,12 +137,13 @@ fn research_registry_rejects_missing_mandatory_source() {
         .as_array_mut()
         .expect("sources array")
         .retain(|row| {
-            row.get("source_id").and_then(Value::as_str) != Some("openai-self-improving-tax-agent")
+            row.get("source_id").and_then(Value::as_str)
+                != Some("agentic-gold-standard-stack-synthesis-2026-07-01")
         });
     let failures = failures(&cards, &registry, &trace);
     assert!(
         failures.iter().any(|item| item
-            == "research_registry_missing_required_source:openai-self-improving-tax-agent"),
+            == "research_registry_missing_required_source:agentic-gold-standard-stack-synthesis-2026-07-01"),
         "{failures:#?}"
     );
 }

@@ -3599,6 +3599,12 @@
         "source": "Attached TypeScript guidance",
         "url": "codex-attachment://typescript-frontend-guide",
         "repo_rule": "TypeScript setup and runtime surfaces must preserve governed boundaries and observable plugin activation"
+      },
+      {
+        "source_id": "agentic-gold-standard-stack-synthesis-2026-07-01",
+        "source": "GPT-5.5 Pro gold-standard harness product doctrine synthesis",
+        "url": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01",
+        "repo_rule": "Gate 92 must act as the agent sensory system across four channels, two planes, bounded cardinality, agent-legible query/explain output, eval linkage, and truth-surface separation"
       }
     ],
     "control_loop_order": [

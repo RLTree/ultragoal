@@ -7,7 +7,7 @@
       "canonical_url": "https://openai.com/index/harness-engineering/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "claim-governance",
         "agent-legibility",
@@ -43,7 +43,7 @@
       "canonical_url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "repair-loop",
         "agent-remediation"
@@ -79,7 +79,7 @@
       "canonical_url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "agent-tracing",
         "tool-guardrail-spans"
@@ -114,7 +114,7 @@
       "canonical_url": "https://openai.github.io/openai-agents-python/tracing/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "trace-topology",
         "span-parentage"
@@ -149,7 +149,7 @@
       "canonical_url": "https://sre.google/workbook/monitoring/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "monitoring-freshness",
         "diagnostic-loop"
@@ -186,7 +186,7 @@
       "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "latency-traffic-errors-saturation"
       ],
@@ -222,7 +222,7 @@
       "canonical_url": "https://charity.wtf/2022/08/15/live-your-best-life-with-structured-events/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "wide-events",
         "no-dashboard-theater"
@@ -257,7 +257,7 @@
       "canonical_url": "https://docs.honeycomb.io/get-started/observability/concepts/high-cardinality/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "correlation-keys",
         "bounded-labels"
@@ -294,7 +294,7 @@
       "canonical_url": "https://opentelemetry.io/docs/concepts/semantic-conventions/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "semantic-telemetry-names"
       ],
@@ -328,7 +328,7 @@
       "canonical_url": "https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "improvement-loop",
         "eval-promotion"
@@ -366,7 +366,7 @@
       "canonical_url": "https://openai.com/index/building-self-improving-tax-agents-with-codex/",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "domain-agent-improvement",
         "expert-feedback"
@@ -404,7 +404,7 @@
       "canonical_url": "codex-attachment://rust-devx-guide",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "rust-devx",
         "cli-authority"
@@ -442,7 +442,7 @@
       "canonical_url": "codex-attachment://typescript-frontend-guide",
       "retrieved_at": "2026-06-30T00:00:00Z",
       "source_card_path": "docs/research-source-cards.json",
-      "source_card_digest": "sha256:654118363d5def0521e997a0e1402e72056b11c1ceab540c79ed58febaf28488",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
       "law_family_aliases": [
         "typescript-devx",
         "frontend-runtime-boundaries"
@@ -474,6 +474,54 @@
       "source_artifact_method": "attached_source_card_digest",
       "source_corpus_path": "artifacts/source-snapshots/attached-typescript-frontend-guide.txt",
       "source_corpus_digest": "sha256:a116bdbc8357a1c900e205ea2cad0e54e256912ecc6730cb9ad9a8d34f3598a7"
+    },
+    {
+      "source_id": "agentic-gold-standard-stack-synthesis-2026-07-01",
+      "canonical_url": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01",
+      "retrieved_at": "2026-07-01T00:00:00Z",
+      "source_card_path": "docs/research-source-cards.json",
+      "source_card_digest": "sha256:f95035f7b0733c9d2444ba6dc4cba0770258423b8fe59537c11d96ebd53d7487",
+      "law_family_aliases": [
+        "harness-product-doctrine",
+        "agent-sensory-system",
+        "agent-quality-plane",
+        "truth-surface-separation"
+      ],
+      "canonical_law_ids_affected": [
+        "research-source-authority-article-to-law-integration",
+        "full-local-observability-stack-integration-non-opaque-failure",
+        "agent-queryable-observability",
+        "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "fresh-init-retrofit-mode-separation",
+        "product-cohesion-product-claims",
+        "product-proof-joins-substitution-blocking",
+        "distinct-proof-surfaces-claim-ceilings",
+        "targeted-refactor-debt-removal-standards-gardener-cadence",
+        "runtime-tool-identity",
+        "third-party-dependency-legibility-typed-adapters",
+        "quality-score-taste-gates"
+      ],
+      "required_plugin_surfaces": [
+        "observability command inventory",
+        "observe query and explain commands",
+        "improvement-loop registry",
+        "setup and retrofit outputs",
+        "final packet and update_goal blockers"
+      ],
+      "setup_retrofit_implications": [
+        "setup and retrofit must expose routine CLI routes, observability query and explain routes, eval hooks, tool risk boundaries, and claim ceilings without encyclopedia-style AGENTS.md content"
+      ],
+      "tool_package_implications": [
+        "package the synthesis source snapshot, research source cards, article-to-law trace, observability schemas, improvement-loop schemas, command inventory, setup/retrofit skills, and final-packet blockers"
+      ],
+      "privacy_implications": [
+        "the synthesis is local doctrine; exact external version, vendor capability, pricing, or hosted-service claims require primary-source verification and must remain redacted or claim-blocked until then"
+      ],
+      "claim_ceiling_impact": "blocks Gate 92, Gate 93, Gate 94, Product Usage, Gate 105, final-packet, readiness, release, completion, and update_goal claims when adopted synthesis requirements are missing, prompt-only, row-shape-only, stale, or substituted across truth surfaces",
+      "source_artifact_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9",
+      "source_artifact_method": "attached_source_card_digest",
+      "source_corpus_path": "artifacts/source-snapshots/agentic-gold-standard-stack-synthesis-2026-07-01.txt",
+      "source_corpus_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9"
     }
   ]
 }

@@ -393,6 +393,155 @@
       "source_artifact_digest": "sha256:c839bfc09c8ccea46a63034d0e5a47ad1edee0d25d2197f744eac16286898190",
       "source_corpus_path": "artifacts/source-snapshots/attached-typescript-frontend-guide.txt",
       "source_corpus_digest": "sha256:a116bdbc8357a1c900e205ea2cad0e54e256912ecc6730cb9ad9a8d34f3598a7"
+    },
+    {
+      "source_id": "agentic-gold-standard-stack-synthesis-2026-07-01",
+      "title": "GPT-5.5 Pro gold-standard harness product doctrine synthesis",
+      "canonical_url": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01",
+      "source_kind": "attached_user_source_card",
+      "requirements": [
+        {
+          "requirement_id": "gold-standard-harness-product-doctrine",
+          "summary": "Harness Ultragoal is a productized agentic engineering harness; law-bearing surfaces must improve execution, verification, observability, repair, reliability, or claim integrity.",
+          "source_evidence_ids": [
+            "gold-standard-harness-product-doctrine-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-gate92-sensory-system",
+          "summary": "Gate 92 is the agent sensory system and must cover metrics, traces, wide events, logs, evals, product/system health, and agent quality.",
+          "source_evidence_ids": [
+            "gold-standard-gate92-sensory-system-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-telemetry-envelope-cardinality",
+          "summary": "Telemetry must carry agent, tool, repo, eval, command, law, claim, repair, duration, worker, cache, saturation, redaction, and boundedness attributes while keeping metric labels bounded.",
+          "source_evidence_ids": [
+            "gold-standard-telemetry-envelope-cardinality-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-agent-legible-query-explain",
+          "summary": "Real command failures must support same-candidate query and explain output that tells an agent what failed, why, where, what claim is blocked, and the smallest repair.",
+          "source_evidence_ids": [
+            "gold-standard-agent-legible-query-explain-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-trace-feedback-eval-repair-promotion",
+          "summary": "Failed traces, opaque output, bad repairs, slow workflows, corrections, near misses, stale evidence, and claim theater must become feedback, evals, fixtures, laws, or blockers.",
+          "source_evidence_ids": [
+            "gold-standard-trace-feedback-eval-repair-promotion-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-agents-routing-routine-command-surface",
+          "summary": "AGENTS.md and setup or retrofit outputs must act as routing tables to canonical CLI commands, telemetry, evals, architecture, security, privacy, and quality gates.",
+          "source_evidence_ids": [
+            "gold-standard-agents-routing-routine-command-surface-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-tool-contract-risk-tiers",
+          "summary": "Tools, adapters, model calls, live probes, setup helpers, and external writers must declare risk tier, approval, schemas, telemetry, failure semantics, and claim impact.",
+          "source_evidence_ids": [
+            "gold-standard-tool-contract-risk-tiers-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-truth-surface-separation",
+          "summary": "Product truth, observability truth, and artifact truth must be cross-linked but non-substitutable across receipts, runtime behavior, live observability, source proof, install proof, and final packets.",
+          "source_evidence_ids": [
+            "gold-standard-truth-surface-separation-source-anchor"
+          ]
+        },
+        {
+          "requirement_id": "gold-standard-measured-improvement-agent-quality",
+          "summary": "Gate 105 must measure system health and agent quality using same-surface telemetry for diagnosis time, repair time, reruns, stale evidence recurrence, opaque failures, claim theater, manual spelunking, entropy cleanup, eval trend, latency, and lane regressions.",
+          "source_evidence_ids": [
+            "gold-standard-measured-improvement-agent-quality-source-anchor"
+          ]
+        }
+      ],
+      "source_artifact_method": "attached_source_card_digest",
+      "evidence_anchors": [
+        {
+          "evidence_id": "gold-standard-harness-product-doctrine-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-harness-product-doctrine",
+          "source_signal": "The synthesis defines Harness Ultragoal as a productized agentic engineering harness whose laws must improve agent work rather than only generate receipts.",
+          "requirement_ids": [
+            "gold-standard-harness-product-doctrine"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-gate92-sensory-system-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-gate92-sensory-system",
+          "source_signal": "The synthesis makes Gate 92 the agent sensory system with metrics, traces, wide events, logs, evals, system health, and agent quality planes.",
+          "requirement_ids": [
+            "gold-standard-gate92-sensory-system"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-telemetry-envelope-cardinality-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-telemetry-envelope-cardinality",
+          "source_signal": "The synthesis requires an expanded telemetry envelope and cardinality doctrine that keeps high-cardinality values queryable without unbounded metric labels.",
+          "requirement_ids": [
+            "gold-standard-telemetry-envelope-cardinality"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-agent-legible-query-explain-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-agent-legible-query-explain",
+          "source_signal": "The synthesis requires same-candidate query and explain output that identifies root cause, affected claims, implicated artifacts, and the narrow repair.",
+          "requirement_ids": [
+            "gold-standard-agent-legible-query-explain"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-trace-feedback-eval-repair-promotion-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-trace-feedback-eval-repair-promotion",
+          "source_signal": "The synthesis requires repeated failures and corrections to be harvested into feedback, evals, regression fixtures, standards rows, laws, or blockers.",
+          "requirement_ids": [
+            "gold-standard-trace-feedback-eval-repair-promotion"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-agents-routing-routine-command-surface-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-agents-routing-routine-command-surface",
+          "source_signal": "The synthesis treats AGENTS.md and setup outputs as routing tables to canonical command, telemetry, eval, architecture, security, privacy, and quality surfaces.",
+          "requirement_ids": [
+            "gold-standard-agents-routing-routine-command-surface"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-tool-contract-risk-tiers-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-tool-contract-risk-tiers",
+          "source_signal": "The synthesis requires every tool and adapter surface to declare risk tier, approval boundary, schemas, telemetry, failure semantics, and claim impact.",
+          "requirement_ids": [
+            "gold-standard-tool-contract-risk-tiers"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-truth-surface-separation-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-truth-surface-separation",
+          "source_signal": "The synthesis separates product truth, observability truth, and artifact truth so receipts, spool files, source proof, live behavior, and final packets cannot substitute for one another.",
+          "requirement_ids": [
+            "gold-standard-truth-surface-separation"
+          ]
+        },
+        {
+          "evidence_id": "gold-standard-measured-improvement-agent-quality-source-anchor",
+          "source_locator": "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01#gold-standard-measured-improvement-agent-quality",
+          "source_signal": "The synthesis requires Gate 105 to measure system health and agent quality with same-surface telemetry instead of anecdotes or cherry-picked runs.",
+          "requirement_ids": [
+            "gold-standard-measured-improvement-agent-quality"
+          ]
+        }
+      ],
+      "source_artifact_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9",
+      "source_corpus_path": "artifacts/source-snapshots/agentic-gold-standard-stack-synthesis-2026-07-01.txt",
+      "source_corpus_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9"
     }
   ]
 }

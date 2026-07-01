@@ -53,6 +53,10 @@ pub(super) fn inputs() -> serde_json::Value {
         row(
             "attached-typescript-frontend-guide",
             "codex-attachment://typescript-frontend-guide"
+        ),
+        row(
+            "agentic-gold-standard-stack-synthesis-2026-07-01",
+            "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01"
         )
     ])
 }

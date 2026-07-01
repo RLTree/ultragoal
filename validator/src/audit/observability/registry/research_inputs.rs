@@ -59,6 +59,10 @@ pub(super) const REQUIRED: &[RequiredInput] = &[
         source_id: "attached-typescript-frontend-guide",
         url: "codex-attachment://typescript-frontend-guide",
     },
+    RequiredInput {
+        source_id: "agentic-gold-standard-stack-synthesis-2026-07-01",
+        url: "codex-attachment://agentic-gold-standard-stack-synthesis-2026-07-01",
+    },
 ];
 
 pub(super) fn check(value: &Value, out: &mut Vec<String>) {
