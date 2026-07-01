@@ -593,8 +593,8 @@
       ],
       "source_artifact_digest": "sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839",
       "source_corpus_path": "artifacts/source-snapshots/gold-standard-stack-developer-experience-governance-2026-07-01.txt",
-      "source_corpus_digest": "sha256:daabe91b976da5a04816d71f313719864f9343c3033d4a8227ecefe752ed9ba2",
-      "source_archive_path": "/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip",
+      "source_corpus_digest": "sha256:81106f309ea6a98e4b927793ce79cbf9f7b1aac86a16fbe6e519510634a0efba",
+      "source_archive_path": "local-attachment://harness_ultragoal_gold_standard_stack_markdown_and_laws.zip",
       "source_archive_digest": "sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839",
       "source_archive_entries": [
         { "entry_path": "harness_ultragoal_gold_standard_stack_developer_experience.md", "entry_digest": "sha256:640956f025b58ce3667f8126d46d1bfaf84b720fff7838662215a9583374969b" },

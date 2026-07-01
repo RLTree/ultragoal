@@ -9479,6 +9479,16 @@
         "status": "pass",
         "validator_exit": 1
       },
+      "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
       "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broken_span_parentage",
         "expected_failing_check": "source-obligation-coverage",
@@ -9556,6 +9566,16 @@
         "observed_failing_check": "source-obligation-coverage",
         "packet_digest": "sha256:3b73a350c8e531c0b4178e28318c23770624badd33bca804c67765e4ee76f60d",
         "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -9649,6 +9669,16 @@
         "status": "pass",
         "validator_exit": 1
       },
+      "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
       "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:private_path_leak",
         "expected_failing_check": "source-obligation-coverage",
@@ -9679,6 +9709,16 @@
         "status": "pass",
         "validator_exit": 1
       },
+      "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
       "full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:stale_telemetry",
         "expected_failing_check": "source-obligation-coverage",
@@ -9686,6 +9726,26 @@
         "observed_failing_check": "source-obligation-coverage",
         "packet_digest": "sha256:843fa183b5abe6944afbe6f6d91a55fdfb86920327ec5d2669158194375e59a0",
         "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:38cd48d60233ab8ce424fc8e80c09f467be5278dceff1b90888b76d19abe06d2",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:dfe8ff8d3edd5a692ce9d4873561a71745ea713127786d1107c6fb3c40ba456c",
+        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -10127,6 +10187,46 @@
         "packet_digest": "sha256:202e311366664d9c95f0bfda626dedcac5101edd011279404f10d48622de6b13",
         "packet_path": "fixtures/red/hand-written-ready-receipt.json",
         "status": "fail",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-hand-authored-receipt-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:6e0f8fc765e738a81270a916fd831ea18e7c5d0b260c1977f059aa28e2303343",
+        "packet_path": "fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-raw-halo-authority-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:b6d43d1dd945a70d79e6a3be653c0229bd0865d32ac9b862528667d62e3ebf77",
+        "packet_path": "fixtures/red/harness-improvement-loop-raw-halo-authority-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-trace-without-feedback-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:fd39404784cf6af6e6d961ffaec6f30982f4d865685f7dc52459cfc85e18230e",
+        "packet_path": "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "harness-improvement-loop-validation-skipped-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
+        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
+        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
+        "packet_digest": "sha256:5fef197eba664dd91f75896fe5d23415552cee5127fed1b3905351b00ab5f547",
+        "packet_path": "fixtures/red/harness-improvement-loop-validation-skipped-red.json",
+        "status": "pass",
         "validator_exit": 1
       },
       "hidden-withheld-claim": {
@@ -11069,6 +11169,16 @@
         "status": "pass",
         "validator_exit": 1
       },
+      "namespace-opaque-gate-number-name": {
+        "expected_error": "namespace_validator_source_opaque_gate_number_name",
+        "expected_failing_check": "namespace-progressive-disclosure",
+        "observed_error": "namespace_validator_source_opaque_gate_number_name",
+        "observed_failing_check": "namespace-progressive-disclosure",
+        "packet_digest": "sha256:53391fe05c6713bb16d50b31bdb20236532d2ae17d9cccc6a227091655287e2d",
+        "packet_path": "fixtures/red/namespace-opaque-gate-number-name.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
       "namespace-orphan-repo-file": {
         "expected_error": "namespace_orphan_repo_file",
         "expected_failing_check": "namespace-progressive-disclosure",
@@ -11206,6 +11316,16 @@
         "observed_failing_check": "namespace-progressive-disclosure",
         "packet_digest": "sha256:de37a4a4185672a2820724c9291b19be8e86ed56ea65b15b85939fabd93b906a",
         "packet_path": "fixtures/red/namespace-validator-source-manifest-listing-cannot-bless-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "namespace-validator-source-partial-module-factoring-red": {
+        "expected_error": "namespace_validator_source_partial_module_factoring",
+        "expected_failing_check": "namespace-progressive-disclosure",
+        "observed_error": "namespace_validator_source_partial_module_factoring",
+        "observed_failing_check": "namespace-progressive-disclosure",
+        "packet_digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
+        "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -11606,6 +11726,46 @@
         "observed_failing_check": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation",
         "packet_digest": "sha256:01bad41da6490aef01138a543558574ca89b17f9252428cd3326a4127cca077a",
         "packet_path": "fixtures/red/one-command-fresh-environment-bootstrap-concurrent-resource-allocation-source-obligation-parity-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:75770254fd0d904f2cd5267fb5ba1747abc474eda082b1a5ecb71aef72d98901",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:d0b7518dcc78f4f2ff26ecb641b1ce50eda71f6305d7f75c79c15af49dcad137",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-secret-serialized-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:8f03bfb85709e4d8a109d4760d6cd838f72bc6a716ffa2e769c36c41181af87a",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
+        "expected_failing_check": "source-obligation-coverage",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
+        "observed_failing_check": "source-obligation-coverage",
+        "packet_digest": "sha256:206944f700d95c26d55f4bc9444402e5105f05a48f3e180393a85bcbb5c691cb",
+        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -14646,6 +14806,46 @@
         "observed_failing_check": "source-obligation-coverage",
         "packet_digest": "sha256:60eae732ab270fa68885362f356aee3a365e5869e70130bee397a6fd9fdaadb9",
         "packet_path": "fixtures/red/repo-knowledge-index-core-beliefs-validator-receipt-path-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-missing-claim-guard-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:50c52c2e07b955f22f50d834ea619146a40425c55a82201dbcf7849d618b51fa",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-package-omitted-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:2afbb68e8d5fe8e30bdeac094de77dc98e4916b6e3270fc198f3b7ee00acdd80",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-prose-only-map-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:66f48758a1eeab8855acb397bd1d16e8a3db981aa9d7de638a6bbb8e05540de0",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
+      "research-source-authority-article-to-law-integration-unmapped-source-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
+        "expected_failing_check": "research-source-authority-article-to-law-integration",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
+        "observed_failing_check": "research-source-authority-article-to-law-integration",
+        "packet_digest": "sha256:0dbd687369aa95db620c95f9f749122df4d445aa019921a4b0ae11e7e17acd26",
+        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -17889,6 +18089,16 @@
         "status": "pass",
         "validator_exit": 1
       },
+      "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red": {
+        "expected_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
+        "expected_failing_check": "validator-theater-miswire-resistance",
+        "observed_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
+        "observed_failing_check": "validator-theater-miswire-resistance",
+        "packet_digest": "sha256:b201b1246441afb72764636227022030f58f2fce0a997d7306a588b7d0924c24",
+        "packet_path": "fixtures/red/validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red.json",
+        "status": "pass",
+        "validator_exit": 1
+      },
       "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:completion_claim_with_only_validator_theater_evidence",
         "expected_failing_check": "validator-theater-miswire-resistance",
@@ -18267,206 +18477,6 @@
         "packet_digest": "sha256:6d8cbb72d60b9e7dd6ab36e7580eb02ae4eb0dff86d5327553548b68b1d83aaf",
         "packet_path": "fixtures/red/wrong-worktree-or-root.json",
         "status": "fail",
-        "validator_exit": 1
-      },
-      "namespace-validator-source-partial-module-factoring-red": {
-        "expected_error": "namespace_validator_source_partial_module_factoring",
-        "expected_failing_check": "namespace-progressive-disclosure",
-        "observed_error": "namespace_validator_source_partial_module_factoring",
-        "observed_failing_check": "namespace-progressive-disclosure",
-        "packet_digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
-        "packet_path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_inventory_row_without_instrumentation_proof",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:38cd48d60233ab8ce424fc8e80c09f467be5278dceff1b90888b76d19abe06d2",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:surface_missing_from_inventory",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:dfe8ff8d3edd5a692ce9d4873561a71745ea713127786d1107c6fb3c40ba456c",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:operating_loop_stage_without_query_proof",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:9f9060c6c56c0386e719713fcbcb50c6de17affbc7b2b2d7536f98a8fd1a2c96",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:signal_class_missing_from_inventory",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:c9cbb4fae05246f21d16c2f5e0b798b8b1c1a044f222e5a79016c871e10d128f",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:manual_json_spelunking_used_as_repair_loop",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:76602a41c1599b64f0fad76d2794af17fec5d5d954892f5d06461b98de6b9d94",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:full-local-observability-stack-integration-non-opaque-failure:broad_audit_before_narrow_observable_repair",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:2d25915b6c5d9b88aa1502371037bfdbc1151cadc1bba446607fb5af14e55fbb",
-        "packet_path": "fixtures/red/full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "harness-improvement-loop-hand-authored-receipt-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
-        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:hand_authored_receipt",
-        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "packet_digest": "sha256:6e0f8fc765e738a81270a916fd831ea18e7c5d0b260c1977f059aa28e2303343",
-        "packet_path": "fixtures/red/harness-improvement-loop-hand-authored-receipt-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "harness-improvement-loop-raw-halo-authority-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
-        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:raw_halo_authority",
-        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "packet_digest": "sha256:b6d43d1dd945a70d79e6a3be653c0229bd0865d32ac9b862528667d62e3ebf77",
-        "packet_path": "fixtures/red/harness-improvement-loop-raw-halo-authority-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "harness-improvement-loop-trace-without-feedback-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
-        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:trace_without_feedback",
-        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "packet_digest": "sha256:fd39404784cf6af6e6d961ffaec6f30982f4d865685f7dc52459cfc85e18230e",
-        "packet_path": "fixtures/red/harness-improvement-loop-trace-without-feedback-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "harness-improvement-loop-validation-skipped-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
-        "expected_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:harness-improvement-loop-trace-feedback-eval-codex-handoff:validation_skipped",
-        "observed_failing_check": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-        "packet_digest": "sha256:5fef197eba664dd91f75896fe5d23415552cee5127fed1b3905351b00ab5f547",
-        "packet_path": "fixtures/red/harness-improvement-loop-validation-skipped-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:model_output_authority_claim",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:75770254fd0d904f2cd5267fb5ba1747abc474eda082b1a5ecb71aef72d98901",
-        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:secret_serialized",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:d0b7518dcc78f4f2ff26ecb641b1ce50eda71f6305d7f75c79c15af49dcad137",
-        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-secret-serialized-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:unbounded_cost",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:8f03bfb85709e4d8a109d4760d6cd838f72bc6a716ffa2e769c36c41181af87a",
-        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
-        "expected_failing_check": "source-obligation-coverage",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:openai-api-key-model-cost-external-ai-boundary:wrong_candidate_digest",
-        "observed_failing_check": "source-obligation-coverage",
-        "packet_digest": "sha256:206944f700d95c26d55f4bc9444402e5105f05a48f3e180393a85bcbb5c691cb",
-        "packet_path": "fixtures/red/openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "research-source-authority-article-to-law-integration-missing-claim-guard-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
-        "expected_failing_check": "research-source-authority-article-to-law-integration",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:missing_claim_guard",
-        "observed_failing_check": "research-source-authority-article-to-law-integration",
-        "packet_digest": "sha256:50c52c2e07b955f22f50d834ea619146a40425c55a82201dbcf7849d618b51fa",
-        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-missing-claim-guard-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "research-source-authority-article-to-law-integration-package-omitted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
-        "expected_failing_check": "research-source-authority-article-to-law-integration",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:package_omitted",
-        "observed_failing_check": "research-source-authority-article-to-law-integration",
-        "packet_digest": "sha256:2afbb68e8d5fe8e30bdeac094de77dc98e4916b6e3270fc198f3b7ee00acdd80",
-        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-package-omitted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "research-source-authority-article-to-law-integration-prose-only-map-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
-        "expected_failing_check": "research-source-authority-article-to-law-integration",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:prose_only_map",
-        "observed_failing_check": "research-source-authority-article-to-law-integration",
-        "packet_digest": "sha256:66f48758a1eeab8855acb397bd1d16e8a3db981aa9d7de638a6bbb8e05540de0",
-        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-prose-only-map-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "research-source-authority-article-to-law-integration-unmapped-source-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
-        "expected_failing_check": "research-source-authority-article-to-law-integration",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:research-source-authority-article-to-law-integration:unmapped_source",
-        "observed_failing_check": "research-source-authority-article-to-law-integration",
-        "packet_digest": "sha256:0dbd687369aa95db620c95f9f749122df4d445aa019921a4b0ae11e7e17acd26",
-        "packet_path": "fixtures/red/research-source-authority-article-to-law-integration-unmapped-source-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red": {
-        "expected_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
-        "expected_failing_check": "validator-theater-miswire-resistance",
-        "observed_error": "mandatory_law_independent_verification_authority_invalid:validator-theater-miswire-resistance",
-        "observed_failing_check": "validator-theater-miswire-resistance",
-        "packet_digest": "sha256:b201b1246441afb72764636227022030f58f2fce0a997d7306a588b7d0924c24",
-        "packet_path": "fixtures/red/validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red.json",
-        "status": "pass",
         "validator_exit": 1
       }
     },
@@ -19161,6 +19171,7 @@
       "namespace-junk-drawer-path",
       "namespace-law-present-only-as-prose",
       "namespace-mixed-domain-folder",
+      "namespace-opaque-gate-number-name",
       "namespace-orphan-repo-file",
       "namespace-progressive-disclosure-source-obligation-parity-red",
       "namespace-repeated-prefix-without-subdirectory",

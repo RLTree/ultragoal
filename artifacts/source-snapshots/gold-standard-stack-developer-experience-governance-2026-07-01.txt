@@ -1,6 +1,6 @@
 # Gold-Standard Stack Developer Experience Governance Archive Snapshot
 
-Source archive path: /Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip
+Source archive path: local-attachment://harness_ultragoal_gold_standard_stack_markdown_and_laws.zip
 Source archive digest: sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839
 
 This package-owned source snapshot was generated from the archive entries listed below. Exact external version/vendor claims remain snapshot candidates until primary-source verified.
