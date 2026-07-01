@@ -104,8 +104,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 23,
-        "partially_fitted": 24,
+        "fitted": 24,
+        "partially_fitted": 23,
         "unfitted": 15
       },
       "surfaces": {
@@ -171,7 +171,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "update-goal eligibility",
+      "id": "self update-goal eligibility",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "same-candidate live query proof"
     },
@@ -956,30 +956,37 @@
       "next_unfitted_surface": "none"
     },
     "update-goal eligibility": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "structured log event",
         "metric sample",
         "root trace span",
-        "fail stdout contract",
-        "receipt observability binding"
-      ],
-      "missing_surfaces": [
         "pass stdout contract",
+        "fail stdout contract",
+        "receipt observability binding",
         "same-candidate live query proof",
         "live stack ingestion proof"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "update-goal-eligibility-observability-binding",
       "focused_tests": [
-        "production_update_goal_inventory_is_bound_to_real_control_parser"
+        "production_update_goal_inventory_is_bound_to_real_control_parser",
+        "metrics_query_uses_bounded_historical_window",
+        "metrics_query_does_not_use_run_id_as_label",
+        "nested_command_fitting_rejects_high_cardinality_metric_labels"
       ],
       "receipt_paths": [
         "validation_artifacts/cli/update-goal-eligibility.json"
       ],
-      "live_query_proof_paths": [],
+      "live_query_proof_paths": [
+        "validation_artifacts/observability/update-goal-eligibility-logs-query.json",
+        "validation_artifacts/observability/update-goal-eligibility-metrics-query.json",
+        "validation_artifacts/observability/update-goal-eligibility-traces-query.json",
+        "validation_artifacts/observability/update-goal-eligibility-explain-failure.json"
+      ],
       "claim_impact": "blocks_update_goal_readiness_release_completion",
       "current_owner_surface": "command:update-goal eligibility",
-      "next_unfitted_surface": "same-candidate live query proof"
+      "next_unfitted_surface": "none"
     },
     "self update-goal eligibility": {
       "fitting_status": "partially_fitted",

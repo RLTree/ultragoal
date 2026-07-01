@@ -162,6 +162,8 @@ fn strings(row: &Map<String, Value>, key: &str) -> Vec<String> {
 fn expected_operation(command: &str) -> String {
     match command {
         "red fixture report" => "red_fixture.report".to_string(),
+        "update-goal eligibility" => "update_goal_eligibility".to_string(),
+        "self update-goal eligibility" => "self_update_goal_eligibility".to_string(),
         _ => command.replace(' ', "."),
     }
 }

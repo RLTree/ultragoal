@@ -82,28 +82,7 @@ fn metric_filter(command: &ObserveCommand) -> String {
 }
 
 fn metric_filter_with_primary(primary: Option<String>) -> String {
-    let mut filters = Vec::new();
-    if let Some(primary) = primary {
-        filters.push(primary);
-    }
-    filters.extend(bounded_metric_absence_labels());
-    filters.join(",")
-}
-
-fn bounded_metric_absence_labels() -> impl Iterator<Item = String> {
-    [
-        "candidate_digest",
-        "run_id",
-        "correlation_id",
-        "trace_id",
-        "span_id",
-        "why_failed",
-        "where_failed",
-        "next_repair",
-        "claim_impact",
-    ]
-    .into_iter()
-    .map(|label| metric_label(label, ""))
+    primary.unwrap_or_default()
 }
 
 fn metric_label(label: &str, value: &str) -> String {
@@ -190,12 +169,10 @@ mod tests {
         command.check_id = Some("coverage-prove-observability-binding".to_string());
 
         let query = query_text(&command);
-        assert!(query.starts_with(
-            "max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\","
-        ));
-        assert!(query.contains("candidate_digest=\"\""));
-        assert!(query.contains("run_id=\"\""));
-        assert!(query.ends_with("}[24h])"));
+        assert_eq!(
+            query,
+            "max_over_time(ultragoal_command_total{check_id=\"coverage-prove-observability-binding\"}[24h])"
+        );
     }
 
     #[test]
@@ -204,8 +181,8 @@ mod tests {
         command.run_id = Some("run-abc".to_string());
 
         let query = query_text(&command);
-        assert!(query.contains("run_id=\"\""));
         assert!(!query.contains("run_id=\"run-abc\""));
+        assert!(!query.contains("run_id="));
     }
 
     #[test]
@@ -227,8 +204,7 @@ mod tests {
         metrics.run_id = Some("run-abc".to_string());
         metrics.correlation_id = Some("corr-abc".to_string());
         let query = query_text(&metrics);
-        assert!(query.contains("run_id=\"\""));
-        assert!(query.contains("correlation_id=\"\""));
+        assert_eq!(query, "max_over_time(ultragoal_command_total{}[24h])");
         assert!(!query.contains("run_id=\"run-abc\""));
         assert!(!query.contains("correlation_id=\"corr-abc\""));
     }
