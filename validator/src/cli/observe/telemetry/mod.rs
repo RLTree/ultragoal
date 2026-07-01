@@ -70,6 +70,14 @@ pub(crate) fn command_receipt(
     command::receipt(root, input)
 }
 
+pub(crate) fn command_receipt_for_candidate(
+    root: &Path,
+    input: command::CommandTelemetry<'_>,
+    candidate: String,
+) -> Result<Value, String> {
+    command::receipt_for_candidate(root, input, candidate)
+}
+
 pub(crate) use command::CommandTelemetry;
 pub(crate) use runtime::RuntimeTelemetry;
 

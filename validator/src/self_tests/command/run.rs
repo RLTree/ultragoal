@@ -114,9 +114,16 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
 #[test]
 fn command_run_propagates_package_and_packet_builder_errors() {
     let root = crate::self_tests::boundaries::support::temp_root("command-run-errors");
-    let err = crate::command_run::run_with_exit_code(args(root.clone(), &["package-digest"]))
-        .expect_err("missing manifest blocks package digest");
-    assert!(err.contains("json read failed"), "{err}");
+    let code = crate::command_run::run_with_exit_code(args(root.clone(), &["package-digest"]))
+        .expect("missing manifest returns package digest fail code");
+    assert_eq!(code, 1);
+    let receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/observability/package-digest.json"),
+    )
+    .expect("package digest fail receipt");
+    assert_eq!(receipt["status"], "fail");
+    let why_failed = receipt["why_failed"].as_str().unwrap();
+    assert!(why_failed.contains("json read failed"));
 
     write_json(
         &root.join("plugin-manifest-draft.json"),

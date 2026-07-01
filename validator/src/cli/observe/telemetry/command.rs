@@ -27,8 +27,16 @@ pub(crate) struct CommandTelemetry<'a> {
 }
 
 pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value, String> {
-    let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
+    receipt_for_candidate(root, input, candidate)
+}
+
+pub(crate) fn receipt_for_candidate(
+    root: &Path,
+    input: CommandTelemetry<'_>,
+    candidate: String,
+) -> Result<Value, String> {
+    let started = Instant::now();
     let run_id = identity::id("run", input.operation, &candidate);
     let correlation_id = identity::id("corr", input.operation, &candidate);
     let redacted_artifact_path = record::redact_sensitive_text(input.artifact_path);
@@ -70,6 +78,7 @@ pub(crate) fn receipt(root: &Path, input: CommandTelemetry<'_>) -> Result<Value,
         "bounded_output_proof": "pass",
         "receipt_path": redacted_receipt_path,
         "claim_impact": input.claim_impact,
+        "failure_class": input.failure_class,
         "claim_ceiling": if input.status == "pass" {
             "observability_binding_only"
         } else {

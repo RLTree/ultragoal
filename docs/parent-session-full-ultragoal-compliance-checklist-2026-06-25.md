@@ -2509,7 +2509,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 
 - [ ] Machine-readable observability fitting inventory tracks every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, package surface, and plugin surface as `fitted`, `partially_fitted`, or `unfitted`, names the current owner surface and next unfitted surface for each row, includes a validator-recomputed `fitting_control_board`, and the validator fails every partial, unfitted, missing, stale, adjacent-surface-substituted, count-mismatched, pass-shaped-control-board, or row-shape-only fitting row.
   - Status: validated current: row-contract accounting and control-board recomputation; full fitting remains in progress.
-  - Next blocker: first incomplete row is `package digest` fail stdout contract; other command, surface, loop, and signal rows remain partial or unfitted.
+  - Next blocker: first incomplete row is `namespace check` pass stdout contract; other command, surface, loop, and signal rows remain partial or unfitted.
   - Claim impact: partial/unfitted rows mechanically block Gate 92, readiness, release, completion, final-packet correctness, and `update_goal()` eligibility.
 
 - [ ] Machine-readable operating-loop and signal inventory tracks whether observability is actually usable as the repair loop: current digest first, failing command capture, logs/metrics/traces query by run id, CLI explanation before manual artifact inspection, smallest repair, narrow rerun, before/after telemetry comparison, broad-audit gating, freshness, and the CLI-translated latency/traffic/error/saturation/freshness/correlation/redaction/boundedness signal model.

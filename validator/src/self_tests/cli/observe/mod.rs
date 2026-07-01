@@ -5,6 +5,7 @@ use std::fs;
 
 mod exporter;
 mod package;
+mod package_digest;
 mod prove;
 mod query;
 mod run;
