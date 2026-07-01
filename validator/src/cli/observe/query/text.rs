@@ -11,16 +11,20 @@ pub(crate) fn query_text(command: &ObserveCommand) -> String {
 
 fn log_query_text(command: &ObserveCommand) -> String {
     command.query.clone().unwrap_or_else(|| {
+        let mut fields = Vec::new();
+        if let Some(value) = command.run_id.as_ref() {
+            fields.push(log_field("run_id", value));
+        }
+        if let Some(value) = command.correlation_id.as_ref() {
+            fields.push(log_field("correlation_id", value));
+        }
+        if !fields.is_empty() {
+            return fields.join(" ");
+        }
         command
-            .run_id
+            .law_id
             .as_ref()
-            .map(|value| log_field("run_id", value))
-            .or_else(|| {
-                command
-                    .law_id
-                    .as_ref()
-                    .map(|value| log_field("law_id", value))
-            })
+            .map(|value| log_field("law_id", value))
             .or_else(|| {
                 command
                     .check_id
@@ -126,17 +130,36 @@ fn log_escape(value: &str) -> String {
     value.replace('"', "").replace('\n', "")
 }
 
-pub(crate) fn trace_tags(command: &ObserveCommand) -> String {
+fn trace_tag_pairs(command: &ObserveCommand) -> Vec<(&'static str, &str)> {
+    let mut pairs = Vec::new();
     if let Some(run_id) = command.run_id.as_deref() {
-        json!({"run_id": run_id}).to_string()
-    } else if let Some(law_id) = command.law_id.as_deref() {
-        json!({"law_id": law_id}).to_string()
-    } else if let Some(check_id) = command.check_id.as_deref() {
-        json!({"check_id": check_id}).to_string()
-    } else if let Some(claim_id) = command.claim_id.as_deref() {
-        json!({"claim_id": claim_id}).to_string()
-    } else {
+        pairs.push(("run_id", run_id));
+    }
+    if let Some(correlation_id) = command.correlation_id.as_deref() {
+        pairs.push(("correlation_id", correlation_id));
+    }
+    if pairs.is_empty() {
+        if let Some(law_id) = command.law_id.as_deref() {
+            pairs.push(("law_id", law_id));
+        } else if let Some(check_id) = command.check_id.as_deref() {
+            pairs.push(("check_id", check_id));
+        } else if let Some(claim_id) = command.claim_id.as_deref() {
+            pairs.push(("claim_id", claim_id));
+        }
+    }
+    pairs
+}
+
+pub(crate) fn trace_tags(command: &ObserveCommand) -> String {
+    let pairs = trace_tag_pairs(command);
+    if pairs.is_empty() {
         "{}".to_string()
+    } else {
+        let mut tags = serde_json::Map::new();
+        for (key, value) in pairs {
+            tags.insert(key.to_string(), json!(value));
+        }
+        serde_json::Value::Object(tags).to_string()
     }
 }
 
@@ -151,6 +174,7 @@ mod tests {
             receipt: None,
             query: None,
             run_id: None,
+            correlation_id: None,
             claim_id: None,
             check_id: None,
             law_id: None,
@@ -182,6 +206,31 @@ mod tests {
         let query = query_text(&command);
         assert!(query.contains("run_id=\"\""));
         assert!(!query.contains("run_id=\"run-abc\""));
+    }
+
+    #[test]
+    fn logs_and_traces_can_select_run_and_correlation_without_metric_labels() {
+        let mut logs = command(ObserveOperation::LogsQuery);
+        logs.run_id = Some("run-abc".to_string());
+        logs.correlation_id = Some("corr-abc".to_string());
+        assert_eq!(query_text(&logs), "run_id:run-abc correlation_id:corr-abc");
+
+        let mut traces = command(ObserveOperation::TracesQuery);
+        traces.run_id = Some("run-abc".to_string());
+        traces.correlation_id = Some("corr-abc".to_string());
+        assert_eq!(
+            query_text(&traces),
+            json!({"correlation_id": "corr-abc", "run_id": "run-abc"}).to_string()
+        );
+
+        let mut metrics = command(ObserveOperation::MetricsQuery);
+        metrics.run_id = Some("run-abc".to_string());
+        metrics.correlation_id = Some("corr-abc".to_string());
+        let query = query_text(&metrics);
+        assert!(query.contains("run_id=\"\""));
+        assert!(query.contains("correlation_id=\"\""));
+        assert!(!query.contains("run_id=\"run-abc\""));
+        assert!(!query.contains("correlation_id=\"corr-abc\""));
     }
 
     #[test]

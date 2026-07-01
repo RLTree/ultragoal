@@ -77,6 +77,7 @@ pub(crate) struct ObserveCommand {
     pub(crate) receipt: Option<PathBuf>,
     pub(crate) query: Option<String>,
     pub(crate) run_id: Option<String>,
+    pub(crate) correlation_id: Option<String>,
     pub(crate) claim_id: Option<String>,
     pub(crate) check_id: Option<String>,
     pub(crate) law_id: Option<String>,

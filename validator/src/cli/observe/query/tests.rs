@@ -19,6 +19,7 @@ fn command() -> ObserveCommand {
         receipt: None,
         query: None,
         run_id: Some("run-query-bound".to_string()),
+        correlation_id: None,
         claim_id: None,
         check_id: None,
         law_id: None,

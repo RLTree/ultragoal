@@ -140,6 +140,7 @@ fn observability_stack_error_and_non_stack_edges_are_typed() {
             receipt: None,
             query: None,
             run_id: None,
+            correlation_id: None,
             claim_id: None,
             check_id: None,
             law_id: None,

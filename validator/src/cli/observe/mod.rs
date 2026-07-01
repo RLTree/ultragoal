@@ -19,6 +19,7 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ObserveCommand>, String> {
         receipt: opt_path(raw, "--receipt"),
         query: opt_string(raw, "--query"),
         run_id: opt_string(raw, "--run-id"),
+        correlation_id: opt_string(raw, "--correlation-id"),
         claim_id: opt_string(raw, "--claim-id"),
         check_id: opt_string(raw, "--check-id"),
         law_id: opt_string(raw, "--law-id"),

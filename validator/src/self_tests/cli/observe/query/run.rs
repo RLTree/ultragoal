@@ -13,6 +13,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
             receipt: None,
             query: None,
             run_id: None,
+            correlation_id: None,
             claim_id: None,
             check_id: None,
             law_id: None,
