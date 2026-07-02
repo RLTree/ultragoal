@@ -1,3 +1,8 @@
+const REVIEW_ROUND_PROOF: &str =
+    "validation_artifacts/observability/review-round-verify-production-proof.json";
+const REVIEW_ROUND_EXPLAIN: &str =
+    "validation_artifacts/observability/review-round-verify-explain-failure.json";
+
 #[test]
 fn source_audit_inventory_records_stable_production_proof() {
     let root = crate::self_tests::boundaries::support::repo_root();
@@ -32,12 +37,39 @@ fn source_audit_inventory_records_stable_production_proof() {
     let board = inventory
         .pointer("/fitting_control_board/first_incomplete")
         .expect("first incomplete");
-    assert_eq!(board["id"], "review-round verify");
+    assert_eq!(board["id"], "review-target build");
     assert_eq!(board["fitting_status"], "partially_fitted");
     assert_eq!(
         board["next_unfitted_surface"],
         "red/green/tamper fixture proof"
     );
+    let review_round = inventory
+        .pointer("/fitting_inventory/review-round verify")
+        .expect("review-round row");
+    assert_eq!(review_round["fitting_status"], "fitted");
+    assert_eq!(review_round["next_unfitted_surface"], "none");
+    assert_eq!(review_round["missing_surfaces"], serde_json::json!([]));
+    for (key, path) in [
+        ("receipt_paths", REVIEW_ROUND_PROOF),
+        ("same_candidate_query_proof_paths", REVIEW_ROUND_EXPLAIN),
+    ] {
+        assert!(
+            review_round[key]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|item| item.as_str() == Some(path)),
+            "{key}: {review_round}"
+        );
+    }
+    for key in ["red_fixtures", "green_fixtures", "tamper_fixtures"] {
+        assert!(
+            review_round[key]
+                .as_array()
+                .is_some_and(|items| !items.is_empty()),
+            "{key}: {review_round}"
+        );
+    }
 }
 
 #[test]

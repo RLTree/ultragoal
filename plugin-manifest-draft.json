@@ -4533,6 +4533,7 @@
     "validator/src/self_tests/cli/observe/package_digest.rs",
     "validator/src/self_tests/cli/observe/prove.rs",
     "validator/src/self_tests/cli/observe/snapshot/edges.rs",
+    "validator/src/self_tests/cli/observe/snapshot/explain_edges.rs",
     "validator/src/self_tests/cli/observe/snapshot/mod.rs",
     "validator/src/self_tests/cli/observe/snapshot/target_edges.rs",
     "validator/src/self_tests/cli/observe/query/fitting/mod.rs",

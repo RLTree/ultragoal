@@ -4,6 +4,7 @@ use serde_json::{Value, json};
 use std::fs;
 
 mod edges;
+mod explain_edges;
 mod target_edges;
 
 #[test]
@@ -217,12 +218,17 @@ pub(super) fn write_explain_receipt(
             "operation": "observe.explain-failure",
             "run_id": target.run_id,
             "correlation_id": target.correlation_id,
+            "observed_why_failed": "source audit failed checks: total_failures=1 first_check=agent-standards",
+            "observed_where_failed": "source.audit",
             "observed_run": {
                 "operation": "source.audit",
                 "status": "fail"
             },
             "explanation": {
+                "broad_rerun": "source audit once",
+                "claim_ceiling": "source-local only",
                 "fallback_used": fallback_used,
+                "implicated_paths": ["validation_artifacts/observability/source-audit.json"],
                 "root_cause": "stale fit-repo receipt blocks source audit",
                 "smallest_repair": "rebind fit-repo receipt for the current candidate",
                 "narrow_rerun": "source audit once after rebind"

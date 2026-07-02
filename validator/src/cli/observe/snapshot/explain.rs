@@ -32,12 +32,32 @@ pub(super) fn evidence(root: &Path, candidate: &str, event: &Value) -> Value {
                         .pointer("/explanation/root_cause")
                         .cloned()
                         .unwrap_or(json!("unknown")),
+                    "where_failed": value
+                        .get("observed_where_failed")
+                        .cloned()
+                        .unwrap_or(json!("unknown")),
+                    "why_failed": value
+                        .get("observed_why_failed")
+                        .cloned()
+                        .unwrap_or(json!("unknown")),
+                    "implicated_paths": value
+                        .pointer("/explanation/implicated_paths")
+                        .cloned()
+                        .unwrap_or_else(|| json!([])),
                     "smallest_repair": value
                         .pointer("/explanation/smallest_repair")
                         .cloned()
                         .unwrap_or(json!("unknown")),
                     "narrow_rerun": value
                         .pointer("/explanation/narrow_rerun")
+                        .cloned()
+                        .unwrap_or(json!("unknown")),
+                    "broad_rerun": value
+                        .pointer("/explanation/broad_rerun")
+                        .cloned()
+                        .unwrap_or(json!("unknown")),
+                    "claim_ceiling": value
+                        .pointer("/explanation/claim_ceiling")
                         .cloned()
                         .unwrap_or(json!("unknown"))
                 })

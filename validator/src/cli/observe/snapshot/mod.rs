@@ -154,6 +154,30 @@ fn validate_explain_evidence(explain_evidence: &Value, failures: &mut Vec<String
     {
         failures.push("explain_failure_used_fallback".to_string());
     }
+    for field in [
+        "root_cause",
+        "where_failed",
+        "why_failed",
+        "smallest_repair",
+        "narrow_rerun",
+        "broad_rerun",
+        "claim_ceiling",
+    ] {
+        let text = explain_evidence
+            .get(field)
+            .and_then(Value::as_str)
+            .unwrap_or("");
+        if text.is_empty() || text == "unknown" || text == "none" {
+            failures.push(format!("explain_failure_missing_{field}"));
+        }
+    }
+    if explain_evidence
+        .get("implicated_paths")
+        .and_then(Value::as_array)
+        .is_none_or(Vec::is_empty)
+    {
+        failures.push("explain_failure_missing_implicated_paths".to_string());
+    }
 }
 
 fn query_proof_paths(query_evidence: &Value, explain_evidence: &Value) -> Value {
