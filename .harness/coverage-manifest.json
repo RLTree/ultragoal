@@ -324,6 +324,7 @@
       "validator/src/self_tests/cli/namespace/mod.rs",
       "validator/src/self_tests/cli/observe/mod.rs",
       "validator/src/self_tests/cli/observe/query/fitting/receipts.rs",
+      "validator/src/self_tests/cli/observe/query/fitting/source_audit.rs",
       "validator/src/self_tests/cli/observe/query/matching.rs",
       "validator/src/self_tests/cli/observe/query/mod.rs",
       "validator/src/self_tests/cli/parse_errors.rs",
@@ -380,7 +381,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:7db1dce2aee6514b6a48bd472c94125143934d9137972168aad94fd6e2e68484",
+    "changed_files_digest": "sha256:3f5a71c8ea36fc1208408010cf69fb0549e847ebcc3493a478349b4875b9f497",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -428,7 +429,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:b2f515011e241774bb16f587377b2274c6f7ade0039ff7508b3ec5ac221fd017",
+  "repo_root_digest": "sha256:c2bdde3e51af7bd8b93a3f34e587ab963679ffdc260200fed0860cee51358caa",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

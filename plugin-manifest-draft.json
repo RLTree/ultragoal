@@ -4534,6 +4534,7 @@
     "validator/src/self_tests/cli/observe/query/fitting/support.rs",
     "validator/src/self_tests/cli/observe/query/fitting/research_inputs.rs",
     "validator/src/self_tests/cli/observe/query/fitting/board_rows.rs",
+    "validator/src/self_tests/cli/observe/query/fitting/source_audit.rs",
     "validator/src/self_tests/cli/observe/query/matching.rs",
     "validator/src/self_tests/cli/observe/query/mod.rs",
     "validator/src/self_tests/cli/observe/query/run.rs",

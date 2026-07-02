@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 11,
-        "partially_fitted": 36,
+        "fitted": 10,
+        "partially_fitted": 37,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,9 +175,9 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "product prove-fitness",
+      "id": "source audit",
       "fitting_status": "partially_fitted",
-      "next_unfitted_surface": "red/green/tamper fixture proof"
+      "next_unfitted_surface": "stable same-run production proof that is not overwritten by the validating source-audit run"
     },
     "claim_impact": "blocks the observability gate, readiness, release, completion, final-packet correctness, and update_goal eligibility until every command, surface, validator-check family, receipt/proof path, fixture/report path, setup/retrofit surface, long-running path, external/live path, signal, operating-loop stage, and claim guard is fitted with same-candidate query proof"
   },
@@ -240,7 +240,7 @@
       ]
     },
     "source audit": {
-      "fitting_status": "fitted",
+      "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "command-level observability receipt",
         "claim-blocking fail receipt",
@@ -258,7 +258,9 @@
         "green fixture proof",
         "tamper fixture proof"
       ],
-      "missing_surfaces": [],
+      "missing_surfaces": [
+        "stable same-run production proof that is not overwritten by the validating source-audit run"
+      ],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
         "source_audit_observability_receipt_blocks_claims_on_failed_audit",
@@ -278,9 +280,9 @@
         "validation_artifacts/observability/source-audit-metrics-query.json",
         "validation_artifacts/observability/source-audit-traces-query.json"
       ],
-      "claim_impact": "supports_source_audit_command_observability_only_no_readiness_release_completion_update_goal",
+      "claim_impact": "blocks_gate_92_until_source_audit_has_non_circular_same_run_production_proof; no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:source audit",
-      "next_unfitted_surface": "none",
+      "next_unfitted_surface": "stable same-run production proof that is not overwritten by the validating source-audit run",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
