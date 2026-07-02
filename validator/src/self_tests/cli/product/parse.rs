@@ -92,6 +92,26 @@ fn product_parser_rejects_missing_observability_receipt_value() {
 }
 
 #[test]
+fn product_parser_rejects_unsafe_product_cohesion_observability_receipts() {
+    for receipt in [
+        "/tmp/product-prove-cohesion.json",
+        "validation_artifacts/../product-prove-cohesion.json",
+    ] {
+        let args = [
+            "product",
+            "prove-cohesion",
+            "--observability-receipt",
+            receipt,
+        ]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+        let err = crate::cli::product::parse(&args).expect_err("unsafe receipt path fails");
+        assert!(err.contains("product observability receipt"), "{err}");
+    }
+}
+
+#[test]
 fn product_parse_returns_none_for_other_command_families() {
     let args = ["registry", "probe"]
         .into_iter()
