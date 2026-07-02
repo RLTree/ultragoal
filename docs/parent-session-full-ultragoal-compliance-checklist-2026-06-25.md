@@ -3150,12 +3150,12 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
 - [ ] Run schema evolution/receipt migration/stale-version invalidation proof.
 - [ ] Run failure remediation quality/agent-actionable validator output proof.
 - [ ] Run review disagreement/override/judgment-boundary governance proof.
-- [ ] Run Gate 92 runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit. Evidence: Status: in progress; focused observability/control tests and current production query/explain loops pass for touched source-local paths. Exact coverage and red fixture report are validated current; source audit remains red on downstream stale evidence, and full live-stack/eval fitting remains in progress.
+- [ ] Run Gate 92 runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit. Evidence: Status: in progress.
 - [ ] Run source/install/cache digest comparison. Evidence: Status: stale due to source change. Install/cache parity has not been refreshed for this source-local checkpoint. Claim impact: no disk source/install/cache parity, no app-registry/reviewer exposure, no final-packet correctness, no readiness, no release, no completion, and no `update_goal()` claim.
 - [ ] Regenerate review-target receipt. Evidence: Status: stale due to source change for prior `review-target build` command/query fitting. Claim impact: detached review-target identity anchor only; no final packet correctness, reviewer exposure, readiness, release, completion, or `update_goal()` claim.
 - [ ] Regenerate candidate archive receipt. Evidence: Status: stale due to source change for prior `archive build` command/query fitting. Claim impact: detached candidate archive identity anchor only; no upload, distribution, package-readiness, reviewer exposure, readiness, release, completion, or `update_goal()` proof.
 - [ ] Validate final packet/successor packet.
-- [ ] Evidence path: Status: in progress. Current source-local subpath: nested law-receipt observability binding is validator-enforced, `final-packet prove` and `update-goal eligibility` command observability are fitted, and update-goal command inventory rejects the phantom `self law prove` row. Full Gate 92 remains blocked by partial self update-goal fitting, full fitting, live-stack closure, source audit, install/cache parity, final-packet correctness, and update_goal eligibility.
+- [ ] Evidence path: Status: in progress.
 
 ## `update_goal()` Is Forbidden Until All Are True
 
