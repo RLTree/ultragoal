@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 10,
-        "partially_fitted": 37,
+        "fitted": 11,
+        "partially_fitted": 36,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "namespace check",
+      "id": "product prove-fitness",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -861,7 +861,7 @@
       ]
     },
     "namespace check": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -869,18 +869,18 @@
         "receipt observability binding",
         "same-candidate live query proof",
         "pass stdout contract",
-        "fail stdout contract"
-      ],
-      "missing_surfaces": [
+        "fail stdout contract",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "namespace-check-observability-binding",
       "focused_tests": [
         "namespace_parser_routes_to_dedicated_command",
         "namespace_command_writes_pass_observability_receipt",
-        "namespace_command_fails_bad_namespace_with_repair_fields"
+        "namespace_command_fails_bad_namespace_with_repair_fields",
+        "validator_source_namespace_red_packets_fail_for_intended_errors"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/namespace-check.json"
@@ -890,9 +890,9 @@
         "validation_artifacts/observability/namespace-check-pass-metrics-query.json",
         "validation_artifacts/observability/namespace-check-pass-traces-query.json"
       ],
-      "claim_impact": "supports_namespace_check_source_local_observability_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_namespace_check_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:namespace check --strict",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -904,9 +904,15 @@
         "validation_artifacts/observability/namespace-check-pass-metrics-query.json",
         "validation_artifacts/observability/namespace-check-pass-traces-query.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "namespace_command_fails_bad_namespace_with_repair_fields"
+      ],
+      "green_fixtures": [
+        "namespace_command_writes_pass_observability_receipt"
+      ],
+      "tamper_fixtures": [
+        "validator_source_namespace_red_packets_fail_for_intended_errors"
+      ]
     },
     "product prove-fitness": {
       "fitting_status": "partially_fitted",

@@ -41,6 +41,7 @@
       "custom-agents/harness-security-trust-boundary-falsifier.toml",
       "docs/exec-plans/active/mandatory-product-fitness-quality-in-use-enforcement.md",
       "docs/foundational-law-traceability.json",
+      "docs/generated/observability/command-inventory.json",
       "docs/law-family-aliases.json",
       "docs/mandatory-law-surfaces.json",
       "docs/namespace-class-registry.json",
@@ -319,6 +320,8 @@
       "validator/src/self_tests/cli/control/transaction/mod.rs",
       "validator/src/self_tests/cli/final_packet.rs",
       "validator/src/self_tests/cli/mod.rs",
+      "validator/src/self_tests/cli/namespace/inventory.rs",
+      "validator/src/self_tests/cli/namespace/mod.rs",
       "validator/src/self_tests/cli/observe/mod.rs",
       "validator/src/self_tests/cli/observe/query/fitting/receipts.rs",
       "validator/src/self_tests/cli/observe/query/matching.rs",
@@ -377,7 +380,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:c595f00f59148b2b368bdc0a2607d84337045c23b2759a32aa886857d1b4d295",
+    "changed_files_digest": "sha256:7db1dce2aee6514b6a48bd472c94125143934d9137972168aad94fd6e2e68484",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -425,7 +428,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:a2685c42718c05bee94e78e6e8feab2ca5cae6af70482dc128c1e33b0e22dfc2",
+  "repo_root_digest": "sha256:b2f515011e241774bb16f587377b2274c6f7ade0039ff7508b3ec5ac221fd017",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

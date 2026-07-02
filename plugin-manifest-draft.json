@@ -4523,6 +4523,7 @@
     "validator/src/self_tests/cli/mod.rs",
     "validator/src/self_tests/cli/namespace/mod.rs",
     "validator/src/self_tests/cli/namespace/edges.rs",
+    "validator/src/self_tests/cli/namespace/inventory.rs",
     "validator/src/self_tests/cli/observe/mod.rs",
     "validator/src/self_tests/cli/observe/exporter.rs",
     "validator/src/self_tests/cli/observe/package.rs",

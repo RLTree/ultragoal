@@ -2,6 +2,7 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 mod edges;
+mod inventory;
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
