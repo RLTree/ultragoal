@@ -1,6 +1,9 @@
 use super::{HaloCommand, proof};
 use serde_json::json;
 use std::path::{Path, PathBuf};
+use support::*;
+
+mod support;
 
 #[test]
 fn halo_desktop_capability_is_manual_only() {
@@ -65,6 +68,32 @@ fn halo_run_parse_detection_and_registry_edges_are_typed() {
     assert_eq!(super::run(&root, &command).expect("run halo"), 0);
     let receipt = crate::json_boundary::read_json(&receipt_path).expect("receipt");
     assert!(super::receipt_failures(&root, &receipt).is_empty());
+    let obs = receipt
+        .get("observability_receipt")
+        .and_then(serde_json::Value::as_object)
+        .expect("observability receipt");
+    for key in [
+        "run_id",
+        "correlation_id",
+        "trace_id",
+        "failure_class",
+        "claim_impact",
+    ] {
+        assert!(
+            obs.get(key)
+                .and_then(serde_json::Value::as_str)
+                .is_some_and(|value| !value.is_empty()),
+            "{key}: {receipt}"
+        );
+    }
+    assert!(
+        obs.get("trace")
+            .and_then(serde_json::Value::as_object)
+            .and_then(|trace| trace.get("span_id"))
+            .and_then(serde_json::Value::as_str)
+            .is_some_and(|value| !value.is_empty()),
+        "trace span_id: {receipt}"
+    );
 
     let missing_app = proof::build_receipt(
         &root,
@@ -184,64 +213,4 @@ fn halo_defaults_and_run_error_boundaries_are_typed() {
     };
     assert!(super::run(&root, &command).is_err());
     std::fs::remove_dir_all(root).expect("cleanup write error");
-}
-
-fn seed_root(root: &Path) {
-    std::fs::create_dir_all(root.join("docs")).expect("docs");
-    std::fs::write(
-        root.join("plugin-manifest-draft.json"),
-        serde_json::to_vec(&json!({"resources": ["docs/halo-adapter-registry.json"]}))
-            .expect("manifest"),
-    )
-    .expect("manifest");
-    crate::json_boundary::write_json(
-        &root.join(super::REGISTRY),
-        &json!({
-            "schema": "harness-ultragoal.halo-adapter-registry.v1",
-            "law_id": super::LAW_ID,
-            "modes": [
-                {"id": "desktop_manual"},
-                {"id": "cli"},
-                {"id": "api"},
-                {"id": "fixture"},
-                {"id": "unavailable"}
-            ],
-            "forbidden_substitutions": [
-                "halo_manual_output_as_deterministic_authority",
-                "halo_desktop_presence_as_ranked_change_proof",
-                "halo_recommendation_as_readiness",
-                "halo_recommendation_as_update_goal",
-                "halo_ranking_without_codex_handoff",
-                "halo_ranking_without_validation_closure"
-            ]
-        }),
-    )
-    .expect("registry");
-}
-
-fn root_without_registry() -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root("halo-bad-registry");
-    std::fs::create_dir_all(root.join("docs")).expect("docs");
-    crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
-        .expect("manifest");
-    crate::json_boundary::write_json(&root.join(super::REGISTRY), &json!({})).expect("registry");
-    root
-}
-
-fn fake_app(root: &Path, version: &str) -> PathBuf {
-    fake_app_with_identifier(root, "net.inference.halo", version)
-}
-
-fn fake_app_with_identifier(root: &Path, identifier: &str, version: &str) -> PathBuf {
-    let app = root.join("HALO.app");
-    let contents = app.join("Contents");
-    std::fs::create_dir_all(&contents).expect("contents");
-    std::fs::write(
-        contents.join("Info.plist"),
-        format!(
-            "<plist><dict><key>CFBundleIdentifier</key><string>{identifier}</string><key>CFBundleVersion</key><string>{version}</string></dict></plist>"
-        ),
-    )
-    .expect("plist");
-    app
 }

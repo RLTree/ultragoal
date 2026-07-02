@@ -6,6 +6,7 @@ use std::path::Path;
 
 mod observability;
 mod target;
+mod validation;
 
 fn write_json(path: &Path, value: &serde_json::Value) {
     std::fs::create_dir_all(path.parent().expect("json parent")).expect("json parent");
@@ -92,6 +93,55 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
 }
 
 #[test]
+fn package_cache_surface_audit_passes_only_for_same_candidate_target() {
+    let root = crate::self_tests::boundaries::support::temp_root("cache-surface-source");
+    let target = crate::self_tests::boundaries::support::temp_root("cache-surface-target");
+    write_package(&root, "same", "0.0.test");
+    write_package(&target, "same", "0.0.test");
+    let command = ControlCommand {
+        operation: ControlOperation::CacheAudit,
+        receipt: None,
+        surface_root: Some(target.clone()),
+    };
+    let value = surface::receipt(&root, &command).expect("cache surface receipt");
+    let digest = crate::package::inventory::package_digest(&root).expect("source digest");
+
+    assert_eq!(value["status"], "pass");
+    assert_eq!(value["operation"], "cache_audit");
+    assert_eq!(value["target"]["surface"], "versioned_cache_package");
+    assert_eq!(value["claim_ceiling"], "surface_package_digest_aligned");
+    assert_eq!(value["candidate_digest"], digest);
+    assert_eq!(value["target"]["package_digest"], digest);
+    assert!(value["target"].get("local_path").is_none());
+    assert!(
+        surface::same_candidate_pass_failures(&value, &digest, ControlOperation::CacheAudit)
+            .is_empty()
+    );
+
+    std::fs::write(target.join("docs/a.txt"), "different").expect("mutate cache target");
+    let stale = surface::receipt(&root, &command).expect("stale cache receipt");
+    assert_eq!(stale["status"], "fail");
+    assert!(
+        stale["failures"]
+            .as_array()
+            .expect("failures")
+            .iter()
+            .any(|failure| failure.as_str() == Some("package_surface_digest_mismatch"))
+    );
+    assert!(
+        !surface::same_candidate_pass_or_fail_closed_failures(
+            &stale,
+            &digest,
+            ControlOperation::CacheAudit
+        )
+        .contains(&"package_surface_audit_target_digest_mismatch".to_string())
+    );
+
+    std::fs::remove_dir_all(root).expect("cleanup cache source");
+    std::fs::remove_dir_all(target).expect("cleanup cache target");
+}
+
+#[test]
 fn package_surface_run_requires_receipt_and_reports_missing_target() {
     let root = crate::self_tests::boundaries::support::temp_root("surface-run-print");
     let missing = root.join("missing-target");
@@ -174,56 +224,4 @@ fn package_surface_receipt_uses_default_root_when_surface_root_is_omitted() {
     assert_eq!(value["target"]["surface"], "unsupported_surface");
     assert!(!surface::supports(ControlOperation::RegistryProbe));
     std::fs::remove_dir_all(root).expect("cleanup default root");
-}
-
-#[test]
-fn package_surface_validation_reports_malformed_and_weak_blockers() {
-    let candidate = crate::self_tests::boundaries::support::sha('a');
-    let mut malformed = json!({
-        "schema": "wrong",
-        "operation": "cache_audit",
-        "candidate_digest": crate::self_tests::boundaries::support::sha('b'),
-        "source": {"package_digest": crate::self_tests::boundaries::support::sha('c')},
-        "target": {"surface": "versioned_cache_package", "local_path": "redacted-local-proof-path"},
-        "status": "unknown",
-        "claim_ceiling": "surface_package_digest_aligned",
-        "same_candidate": true,
-        "failures": []
-    });
-    let failures = surface::same_candidate_pass_or_fail_closed_failures(
-        &malformed,
-        &candidate,
-        ControlOperation::InstallAudit,
-    );
-    for expected in [
-        "package_surface_audit_wrong_schema",
-        "package_surface_audit_wrong_operation",
-        "package_surface_audit_candidate_digest_mismatch",
-        "package_surface_audit_source_digest_mismatch",
-        "package_surface_audit_target_expected_digest_mismatch",
-        "package_surface_audit_target_surface_mismatch",
-        "package_surface_audit_private_local_path_present",
-        "package_surface_audit_status_not_pass_or_fail",
-        "package_surface_audit_fail_closed_claim_ceiling_not_blocking",
-        "package_surface_audit_fail_closed_same_candidate_not_false",
-        "package_surface_audit_fail_closed_missing_failures",
-    ] {
-        assert!(
-            failures.iter().any(|failure| failure == expected),
-            "{expected}: {failures:?}"
-        );
-    }
-
-    malformed["status"] = json!("pass");
-    malformed["claim_ceiling"] = json!("withheld_or_blocked");
-    let failures = surface::same_candidate_pass_or_fail_closed_failures(
-        &malformed,
-        &candidate,
-        ControlOperation::InstallAudit,
-    );
-    assert!(
-        failures
-            .iter()
-            .any(|failure| failure == "package_surface_audit_claim_ceiling_not_surface_aligned")
-    );
 }

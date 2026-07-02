@@ -1,7 +1,9 @@
 use crate::cli::garbage::collection::types::{GC_POLICY_VERSION, GarbageOperation};
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
+use std::time::Instant;
 
+mod observability;
 pub(crate) mod receipt;
 pub(crate) mod types;
 
@@ -33,7 +35,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<GarbageCommand>, String> {
 }
 
 pub(crate) fn run(root: &Path, command: &GarbageCommand) -> Result<i32, String> {
-    let receipt = receipt(root, command)?;
+    let started = Instant::now();
+    let mut receipt = receipt(root, command)?;
+    observability::attach(root, command, &mut receipt, started)?;
     run_with_receipt_value(command, &receipt)
 }
 
@@ -44,13 +48,31 @@ pub(crate) fn run_with_receipt_value(
     if let Some(path) = &command.receipt {
         crate::json_boundary::write_json(path, &receipt)?;
         println!(
-            "ultragoal-gc {} operation={} receipt={}",
+            "ultragoal-gc {} operation={} receipt={} run_id={} correlation_id={} trace_id={} failure_class={} claim_impact={}",
             receipt["status"],
             command.operation.id(),
-            path.display()
+            path.display(),
+            text(receipt, "run_id", "<missing>"),
+            text(receipt, "correlation_id", "<missing>"),
+            text(receipt, "trace_id", "<missing>"),
+            text(receipt, "failure_class", "<missing>"),
+            text(receipt, "claim_impact", "<missing>")
         );
     } else {
-        println!("{receipt}");
+        println!(
+            "ultragoal-gc {} operation={} candidate={} run_id={} correlation_id={} trace_id={} failure_class={} claim_impact={} next_repair={}",
+            receipt["status"],
+            command.operation.id(),
+            receipt["digests"]["candidate"]
+                .as_str()
+                .unwrap_or("<missing>"),
+            text(receipt, "run_id", "<missing>"),
+            text(receipt, "correlation_id", "<missing>"),
+            text(receipt, "trace_id", "<missing>"),
+            text(receipt, "failure_class", "<missing>"),
+            text(receipt, "claim_impact", "<missing>"),
+            text(receipt, "next_repair", "<missing>")
+        );
     }
     Ok(0)
 }
@@ -148,6 +170,10 @@ fn command_binding_failures(command: &GarbageCommand) -> (&'static str, Vec<Stri
     }
     let status = if failures.is_empty() { "pass" } else { "fail" };
     (status, failures)
+}
+
+fn text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
+    value.get(field).and_then(Value::as_str).unwrap_or(default)
 }
 
 fn digest(root: &Path, rel: &str) -> Result<String, String> {

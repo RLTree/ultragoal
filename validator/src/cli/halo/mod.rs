@@ -63,8 +63,24 @@ fn resolve(root: &Path, path: &Path) -> PathBuf {
 }
 
 fn print_receipt(receipt: &Path, value: &Value) {
+    let observability = value
+        .get("observability_receipt")
+        .and_then(Value::as_object);
+    let observed = |key: &str| {
+        observability
+            .and_then(|object| object.get(key))
+            .and_then(Value::as_str)
+            .or_else(|| {
+                observability
+                    .and_then(|object| object.get("trace"))
+                    .and_then(Value::as_object)
+                    .and_then(|trace| trace.get(key))
+                    .and_then(Value::as_str)
+            })
+            .unwrap_or("<missing>")
+    };
     println!(
-        "ultragoal-halo {} candidate={} receipt={} mode={} authority={} claim_impact={}",
+        "ultragoal-halo {} candidate={} receipt={} mode={} authority={} run_id={} correlation_id={} trace_id={} span_id={} failure_class={} claim_impact={}",
         value
             .get("status")
             .and_then(Value::as_str)
@@ -82,6 +98,11 @@ fn print_receipt(receipt: &Path, value: &Value) {
             .get("authority_class")
             .and_then(Value::as_str)
             .unwrap_or("<missing>"),
+        observed("run_id"),
+        observed("correlation_id"),
+        observed("trace_id"),
+        observed("span_id"),
+        observed("failure_class"),
         value
             .get("claim_impact")
             .and_then(Value::as_str)
