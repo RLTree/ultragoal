@@ -112,6 +112,26 @@ fn product_parser_rejects_unsafe_product_cohesion_observability_receipts() {
 }
 
 #[test]
+fn product_parser_rejects_unsafe_product_journey_observability_receipts() {
+    for receipt in [
+        "/tmp/product-prove-journey.json",
+        "validation_artifacts/../product-prove-journey.json",
+    ] {
+        let args = [
+            "product",
+            "prove-journey",
+            "--observability-receipt",
+            receipt,
+        ]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+        let err = crate::cli::product::parse(&args).expect_err("unsafe receipt path fails");
+        assert!(err.contains("product observability receipt"), "{err}");
+    }
+}
+
+#[test]
 fn product_parse_returns_none_for_other_command_families() {
     let args = ["registry", "probe"]
         .into_iter()
