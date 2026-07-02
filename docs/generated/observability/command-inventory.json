@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 11,
-        "partially_fitted": 36,
+        "fitted": 12,
+        "partially_fitted": 35,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "product prove-fitness",
+      "id": "product prove-cohesion",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -924,7 +924,7 @@
       ]
     },
     "product prove-fitness": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -932,32 +932,38 @@
         "pass stdout contract",
         "fail stdout contract",
         "receipt observability binding",
-        "same-candidate live query proof"
-      ],
-      "missing_surfaces": [
+        "same-candidate live query proof",
+        "useful explain-failure output bound to same-run query evidence",
+        "source-local production snapshot proof",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "product-prove-fitness-observability-binding",
       "focused_tests": [
         "product_parser_keeps_product_and_fit_repo_operations_distinct",
         "product_parser_rejects_missing_observability_receipt_value",
         "product_command_rejects_unsafe_receipt_dirs",
-        "product_command_runs_typed_receipt_minter_and_returns_pass_exit"
+        "product_command_emits_fail_closed_observability_for_missing_receipt_dir",
+        "product_command_reports_minter_write_failures_with_observability",
+        "product_command_runs_typed_receipt_minter_and_returns_pass_exit",
+        "product_receipt_minter_rebinds_canonical_source_local_receipts"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/product-prove-fitness.json",
-        "validation_artifacts/harness/product-fitness-receipt.json"
+        "validation_artifacts/harness/product-fitness-receipt.json",
+        "validation_artifacts/observability/product-prove-fitness-production-proof.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/product-prove-fitness-logs-query.json",
         "validation_artifacts/observability/product-prove-fitness-metrics-query.json",
-        "validation_artifacts/observability/product-prove-fitness-traces-query.json"
+        "validation_artifacts/observability/product-prove-fitness-traces-query.json",
+        "validation_artifacts/observability/product-prove-fitness-explain-failure.json"
       ],
-      "claim_impact": "supports_product_fitness_source_local_observability_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_product_fitness_source_local_observability_only_no_readiness_release_completion_update_goal",
       "current_owner_surface": "command:product prove-fitness --receipt-dir validation_artifacts/harness",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -967,11 +973,20 @@
       "same_candidate_query_proof_paths": [
         "validation_artifacts/observability/product-prove-fitness-logs-query.json",
         "validation_artifacts/observability/product-prove-fitness-metrics-query.json",
-        "validation_artifacts/observability/product-prove-fitness-traces-query.json"
+        "validation_artifacts/observability/product-prove-fitness-traces-query.json",
+        "validation_artifacts/observability/product-prove-fitness-explain-failure.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "product_command_rejects_unsafe_receipt_dirs",
+        "product_command_emits_fail_closed_observability_for_missing_receipt_dir"
+      ],
+      "green_fixtures": [
+        "product_command_runs_typed_receipt_minter_and_returns_pass_exit",
+        "product_receipt_minter_rebinds_canonical_source_local_receipts"
+      ],
+      "tamper_fixtures": [
+        "product_command_reports_minter_write_failures_with_observability"
+      ]
     },
     "product prove-cohesion": {
       "fitting_status": "partially_fitted",
