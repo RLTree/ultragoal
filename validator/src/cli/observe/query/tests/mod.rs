@@ -1,8 +1,10 @@
+use super::QueryKind;
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
 mod metrics;
+mod records;
 mod retry_edges;
 mod target;
 
@@ -39,22 +41,6 @@ fn metrics_command() -> ObserveCommand {
     command
 }
 
-fn metric_body(operation: &str) -> String {
-    json!({
-        "status": "success",
-        "data": {"result": [{
-            "metric": {
-                "__name__": "ultragoal_command_total",
-                "operation": operation,
-                "status": "pass",
-                "failure_class": "none"
-            },
-            "value": [1, "1"]
-        }]}
-    })
-    .to_string()
-}
-
 fn metric_body_with_signals(operation: &str) -> String {
     let labels = json!({
         "operation": operation,
@@ -86,7 +72,7 @@ fn rejects_zero_row_limit_as_unbounded_query() {
     let mut command = command();
     command.row_limit = 0;
 
-    let receipt = super::run(Path::new(&root), &command).expect("query receipt");
+    let receipt = super::run(Path::new(&root), &command, QueryKind::Logs).expect("query receipt");
 
     assert_eq!(receipt["status"], "fail");
     assert_eq!(
@@ -110,7 +96,8 @@ fn rejects_zero_byte_limit_and_timeout_as_unbounded_queries() {
             command.timeout_ms = 0;
         }
 
-        let receipt = super::run(Path::new(&root), &command).expect("query receipt");
+        let receipt =
+            super::run(Path::new(&root), &command, QueryKind::Logs).expect("query receipt");
 
         assert_eq!(receipt["status"], "fail");
         assert_eq!(
@@ -128,6 +115,7 @@ fn query_result_reports_package_digest_errors_before_claiming_rows() {
     let err = super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Logs,
         "run_id:run-query-bound".to_string(),
         Ok("{\"data\":[]}".to_string()),
     )
@@ -141,18 +129,37 @@ fn query_result_reports_package_digest_errors_before_claiming_rows() {
 fn live_result_failure_accepts_non_metric_rows_and_reports_empty_results() {
     let root = prepare_root("query-live-result");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    crate::cli::observe::telemetry::spool_write_for_test(
+        &root,
+        &json!({
+            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "run_id": "run-query-bound",
+            "candidate_digest": candidate,
+            "operation": "source.audit",
+            "status": "pass",
+            "failure_class": "none"
+        }),
+    )
+    .expect("target event");
 
     assert_eq!(
         super::live_result_failure(
             &root,
             &metrics_command(),
+            QueryKind::Metrics,
             "{\"data\":{\"result\":[]}}",
             &candidate
         ),
         Some("observability query returned no matching rows".to_string())
     );
     assert_eq!(
-        super::live_result_failure(&root, &command(), &metric_body("source.audit"), &candidate),
+        super::live_result_failure(
+            &root,
+            &command(),
+            QueryKind::Logs,
+            &json!({"candidate_digest": candidate, "operation": "source.audit"}).to_string(),
+            &candidate
+        ),
         None
     );
 
@@ -179,13 +186,15 @@ fn live_result_validator_reconciles_metric_rows_to_current_target() {
     )
     .expect("target event");
     let command = metrics_command();
-    let mut validate = super::live_result_validator_for_test(&root, &command, &candidate);
+    let mut validate =
+        super::live_result_validator_for_test(&root, &command, QueryKind::Metrics, &candidate);
 
     assert_eq!(validate(&metric_body_with_signals("source.audit")), None);
     assert_eq!(
         super::live_result_failure(
             &root,
             &command,
+            QueryKind::Metrics,
             &metric_body_with_signals("source.audit"),
             &candidate
         ),

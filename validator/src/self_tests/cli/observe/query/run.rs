@@ -1,31 +1,11 @@
 use crate::cli::observe;
-use crate::cli::observe::types::ObserveOperation;
+use crate::cli::observe::query::QueryKind;
 use std::fs;
 use std::process::Command;
 
 #[test]
 fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let root = super::super::minimal_root("observe-query-run");
-    let not_query = observe::query::run(
-        &root,
-        &observe::types::ObserveCommand {
-            operation: ObserveOperation::Prove,
-            receipt: None,
-            query: None,
-            run_id: None,
-            correlation_id: None,
-            claim_id: None,
-            check_id: None,
-            law_id: None,
-            row_limit: 1,
-            byte_limit: 10,
-            timeout_ms: 1,
-        },
-    )
-    .expect("not query");
-    assert_eq!(not_query["status"], "fail");
-    assert_eq!(not_query["failure"], "not an observability query");
-
     let command = super::command(&["observe", "logs", "query", "--timeout-ms", "1"]);
     let matched = observe::query::retry_until_match_for_test(
         &command,
@@ -44,6 +24,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let missing_candidate = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok("abcdef".to_string()),
     )
@@ -57,6 +38,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let same_candidate = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{current_candidate}\",\"echo\":\"{current_candidate}\",\"row\":1}}"
@@ -67,6 +49,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let observed_failure = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"why_failed\":\"live stack unhealthy\",\"where_failed\":\"observe.prove\",\"next_repair\":\"run observe stack health\",\"claim_impact\":\"update_goal_blocked\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"run_id\":\"run-observed\",\"correlation_id\":\"corr-observed\"}}"
@@ -94,6 +77,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let metric_observed_failure = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Metrics,
         "*".to_string(),
         Ok(format!(
             "{{\"status\":\"success\",\"data\":{{\"result\":[{{\"metric\":{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"operation\":\"observe.prove\",\"claim_impact\":\"update_goal_blocked\"}}}}]}}}}"
@@ -111,6 +95,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let trace_observed_failure = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Traces,
         "*".to_string(),
         Ok(format!(
             "{{\"data\":[{{\"processes\":{{\"p1\":{{\"tags\":[{{\"key\":\"candidate_digest\",\"value\":\"{current_candidate}\"}}]}}}},\"spans\":[{{\"tags\":[{{\"key\":\"status\",\"value\":\"fail\"}},{{\"key\":\"failure_class\",\"value\":\"observability_gate_failure\"}},{{\"key\":\"why_failed\",\"value\":\"live stack unhealthy\"}},{{\"key\":\"operation\",\"value\":\"observe.prove\"}},{{\"key\":\"claim_impact\",\"value\":\"update_goal_blocked\"}}]}}]}}]}}"
@@ -125,6 +110,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let explanatory_stale_digest = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{current_candidate}\",\"why_failed\":\"dependency was stale: {}\"}}",
@@ -136,6 +122,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let nested_row_candidate = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
             "{{\"rows\":[{{\"body\":\"{{\\\"candidate_digest\\\":\\\"{}\\\",\\\"why_failed\\\":\\\"old {}\\\"}}\"}}]}}",
@@ -148,6 +135,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let truncated_candidate = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok("{\"candidate_digest\":\"sha256:short\",\"row\":1}".to_string()),
     )
@@ -160,6 +148,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let stale_candidate = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{}\",\"row\":1}}",
@@ -177,6 +166,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
     let fail = observe::query::result_from_output(
         &root,
         &command,
+        QueryKind::Logs,
         "*".to_string(),
         Err("curl query failed".to_string()),
     )

@@ -1,3 +1,4 @@
+use crate::cli::observe::query::QueryKind;
 use serde_json::json;
 use std::path::Path;
 
@@ -27,6 +28,7 @@ fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
         &command,
+        QueryKind::Metrics,
         "max_over_time(ultragoal_command_total[24h])".to_string(),
         Ok(body),
     )
@@ -48,6 +50,7 @@ fn metrics_query_rejects_unrelated_operation_for_requested_run() {
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
         &command,
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(body),
     )
@@ -73,6 +76,7 @@ fn metrics_query_accepts_target_operation_failure_signal() {
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
         &command,
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(body),
     )
@@ -117,6 +121,7 @@ fn metrics_query_rejects_underreported_target_run_signals() {
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
         &command,
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(body),
     )

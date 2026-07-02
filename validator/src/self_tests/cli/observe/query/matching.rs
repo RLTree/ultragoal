@@ -57,14 +57,13 @@ fn observe_query_helpers_cover_matching_tags_and_bounds() {
         "custom"
     );
 
-    for (operation, kind, subcommand) in [
-        (ObserveOperation::LogsQuery, "logs", "logs"),
-        (ObserveOperation::MetricsQuery, "metrics", "metrics"),
-        (ObserveOperation::TracesQuery, "traces", "traces"),
-        (ObserveOperation::Snapshot, "logs", "snapshot"),
-        (ObserveOperation::Prove, "logs", "prove"),
+    for (operation, subcommand) in [
+        (ObserveOperation::LogsQuery, "logs"),
+        (ObserveOperation::MetricsQuery, "metrics"),
+        (ObserveOperation::TracesQuery, "traces"),
+        (ObserveOperation::Snapshot, "snapshot"),
+        (ObserveOperation::Prove, "prove"),
     ] {
-        assert_eq!(observe::query::kind(operation), kind);
         assert_eq!(operation.subcommand(), subcommand);
     }
     assert_eq!(ObserveOperation::Snapshot.id(), "observe.snapshot");

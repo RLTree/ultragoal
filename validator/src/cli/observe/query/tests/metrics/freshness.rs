@@ -1,3 +1,4 @@
+use crate::cli::observe::query::QueryKind;
 use serde_json::json;
 use std::path::Path;
 
@@ -35,6 +36,7 @@ fn metrics_query_reports_target_run_outside_bounded_window() {
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
         &command,
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body()),
     )

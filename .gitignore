@@ -1,4 +1,5 @@
 .codex-worktree/
+.ui-discipline/
 target/
 node_modules/
 .pnpm-store/

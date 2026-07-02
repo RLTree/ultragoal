@@ -1,3 +1,4 @@
+use crate::cli::observe::query::QueryKind;
 use std::path::Path;
 
 #[test]
@@ -22,6 +23,7 @@ fn query_result_records_transport_errors_as_fail_closed_receipts() {
     let receipt = super::super::result_from_output(
         Path::new(&root),
         &super::command(),
+        QueryKind::Logs,
         "run_id:run-query-bound".to_string(),
         Err("transport unavailable".to_string()),
     )

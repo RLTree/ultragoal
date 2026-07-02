@@ -1,21 +1,14 @@
+use crate::cli::observe::query::QueryKind;
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
 fn command() -> ObserveCommand {
-    ObserveCommand {
-        operation: ObserveOperation::MetricsQuery,
-        receipt: None,
-        query: None,
-        run_id: Some("run-metrics-edge".to_string()),
-        correlation_id: None,
-        claim_id: None,
-        check_id: None,
-        law_id: None,
-        row_limit: 100,
-        byte_limit: 4096,
-        timeout_ms: 100,
-    }
+    let mut command = super::super::metrics_command();
+    command.run_id = Some("run-metrics-edge".to_string());
+    command.byte_limit = 4096;
+    command.timeout_ms = 100;
+    command
 }
 
 #[test]
@@ -73,6 +66,7 @@ fn metrics_reconciliation_fails_for_missing_target_and_wrong_candidate() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("coverage.prove", "coverage_prove_failure")),
     )
@@ -96,6 +90,7 @@ fn metrics_reconciliation_fails_for_missing_target_and_wrong_candidate() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("coverage.prove", "coverage_prove_failure")),
     )
@@ -117,6 +112,7 @@ fn metrics_reconciliation_reports_missing_operation_and_error_count() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("", "coverage_prove_failure")),
     )
@@ -137,6 +133,7 @@ fn metrics_reconciliation_reports_missing_operation_and_error_count() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body_without_total(
             "coverage.prove",
@@ -170,6 +167,7 @@ fn metrics_reconciliation_ignores_unreported_optional_runtime_signals() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(pass_metric_body("coverage.prove")),
     )

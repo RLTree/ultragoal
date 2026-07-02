@@ -95,7 +95,17 @@ pub(crate) fn bounded_rows(body: String, byte_limit: usize) -> Vec<Value> {
 pub(crate) fn observed_failure(rows: &[Value]) -> Option<Value> {
     rows.iter()
         .filter_map(|row| row.get("body").and_then(Value::as_str))
-        .filter_map(|body| serde_json::from_str::<Value>(body).ok())
+        .find_map(observed_failure_in_body)
+}
+
+fn observed_failure_in_body(body: &str) -> Option<Value> {
+    if let Ok(value) = serde_json::from_str::<Value>(body) {
+        return first_observed_failure(&value);
+    }
+    body.lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .filter_map(|line| serde_json::from_str::<Value>(line).ok())
         .find_map(|value| first_observed_failure(&value))
 }
 

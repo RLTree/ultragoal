@@ -1,3 +1,4 @@
+use crate::cli::observe::query::QueryKind;
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
@@ -25,6 +26,7 @@ fn reports_candidate_missing_failure_mismatch_and_metric_absence() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("coverage.prove", "coverage_prove_failure")),
     )
@@ -39,6 +41,7 @@ fn reports_candidate_missing_failure_mismatch_and_metric_absence() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("coverage.prove", "source_audit_check_failure")),
     )
@@ -53,6 +56,7 @@ fn reports_candidate_missing_failure_mismatch_and_metric_absence() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body_without_operation()),
     )
@@ -71,6 +75,7 @@ fn accepts_same_window_pass_metrics() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body_with_timestamp("coverage.prove", 1_782_864_000)),
     )
@@ -94,6 +99,7 @@ fn pass_target_uses_pass_only_query_and_rejects_error_metrics() {
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
+        QueryKind::Metrics,
         "sum by (...)".to_string(),
         Ok(metric_body("line-caps.check", "line_cap_failure")),
     )

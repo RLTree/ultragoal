@@ -6,6 +6,7 @@ use walkdir::WalkDir;
 const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     "target/",
     ".codex-worktree/",
+    ".ui-discipline/",
     ".git/",
     "node_modules/",
     ".pnpm-store/",

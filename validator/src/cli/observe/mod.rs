@@ -38,9 +38,9 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         | ObserveOperation::StackGcPlan
         | ObserveOperation::StackGcDryRun
         | ObserveOperation::StackGcApply => stack::run(root, command)?,
-        ObserveOperation::LogsQuery
-        | ObserveOperation::MetricsQuery
-        | ObserveOperation::TracesQuery => query::run(root, command)?,
+        ObserveOperation::LogsQuery => query::run(root, command, query::QueryKind::Logs)?,
+        ObserveOperation::MetricsQuery => query::run(root, command, query::QueryKind::Metrics)?,
+        ObserveOperation::TracesQuery => query::run(root, command, query::QueryKind::Traces)?,
         ObserveOperation::Snapshot | ObserveOperation::Prove => telemetry::prove(root, command)?,
         ObserveOperation::ExplainFailure
         | ObserveOperation::ExplainClaim

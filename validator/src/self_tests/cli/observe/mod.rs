@@ -1,4 +1,5 @@
 use crate::cli::observe;
+use crate::cli::observe::query::QueryKind;
 use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 use std::fs;
@@ -96,7 +97,7 @@ fn observe_query_rejects_unbounded_requests() {
     ]))
     .expect("parse")
     .expect("observe command");
-    let result = observe::query::run(&root, &command).expect("query result");
+    let result = observe::query::run(&root, &command, QueryKind::Logs).expect("query result");
     assert_eq!(result["status"], "fail");
     assert_eq!(result["failure"], "unbounded observability query rejected");
     fs::remove_dir_all(root).expect("cleanup observe query");

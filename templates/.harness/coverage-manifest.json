@@ -245,12 +245,14 @@
       "validator/src/cli/observe/query/body.rs",
       "validator/src/cli/observe/query/metrics.rs",
       "validator/src/cli/observe/query/mod.rs",
+      "validator/src/cli/observe/query/records.rs",
       "validator/src/cli/observe/query/target.rs",
       "validator/src/cli/observe/query/tests/metrics/edges.rs",
       "validator/src/cli/observe/query/tests/metrics/freshness.rs",
       "validator/src/cli/observe/query/tests/metrics/mod.rs",
       "validator/src/cli/observe/query/tests/metrics/reconciliation.rs",
       "validator/src/cli/observe/query/tests/mod.rs",
+      "validator/src/cli/observe/query/tests/records.rs",
       "validator/src/cli/observe/query/tests/target.rs",
       "validator/src/cli/observe/stdout.rs",
       "validator/src/cli/observe/stdout_tests.rs",
@@ -375,7 +377,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:3e044eb8f8a00fbc1e7ef5d4ccc4ebbb7f5170f133096a01aece84640d59cbd0",
+    "changed_files_digest": "sha256:c595f00f59148b2b368bdc0a2607d84337045c23b2759a32aa886857d1b4d295",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -423,7 +425,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:ab6247cd7b2622db397f54bb24ee2dbf225052771bf7fa0f47c810fe0aa6da31",
+  "repo_root_digest": "sha256:a2685c42718c05bee94e78e6e8feab2ca5cae6af70482dc128c1e33b0e22dfc2",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,
