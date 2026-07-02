@@ -1,5 +1,5 @@
 #[test]
-fn source_audit_inventory_remains_partial_until_proof_is_non_circular() {
+fn source_audit_inventory_records_stable_production_proof() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -8,24 +8,34 @@ fn source_audit_inventory_remains_partial_until_proof_is_non_circular() {
     let row = inventory
         .pointer("/fitting_inventory/source audit")
         .expect("source audit row");
-    assert_eq!(row["fitting_status"], "partially_fitted");
-    assert_eq!(
-        row["next_unfitted_surface"],
-        "stable same-run production proof that is not overwritten by the validating source-audit run"
-    );
+    assert_eq!(row["fitting_status"], "fitted");
+    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
-        row["missing_surfaces"]
+        row["receipt_paths"]
             .as_array()
             .unwrap()
             .iter()
-            .any(|item| item
-                .as_str()
-                .is_some_and(|text| text.contains("not overwritten"))),
+            .any(|item| item.as_str().is_some_and(|text| text
+                == "validation_artifacts/observability/source-audit-production-proof.json")),
+        "{row}"
+    );
+    assert!(
+        row["same_candidate_query_proof_paths"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item.as_str().is_some_and(|text| text
+                == "validation_artifacts/observability/source-audit-explain-failure.json")),
         "{row}"
     );
     let board = inventory
         .pointer("/fitting_control_board/first_incomplete")
         .expect("first incomplete");
-    assert_eq!(board["id"], "source audit");
+    assert_eq!(board["id"], "product prove-fitness");
     assert_eq!(board["fitting_status"], "partially_fitted");
+    assert_eq!(
+        board["next_unfitted_surface"],
+        "red/green/tamper fixture proof"
+    );
 }

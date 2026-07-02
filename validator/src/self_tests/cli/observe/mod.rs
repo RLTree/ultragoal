@@ -10,6 +10,7 @@ mod package_digest;
 mod prove;
 mod query;
 mod run;
+mod snapshot;
 mod stdout_helpers;
 
 pub(super) fn args(values: &[&str]) -> Vec<String> {

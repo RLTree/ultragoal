@@ -14,9 +14,9 @@ pub(super) fn for_target(root: &Path, observed: Option<&Value>, candidate: &str)
         .unwrap_or("none");
     let receipts = query_receipts(root);
     json!({
-        "logs": matching_query(&receipts, "logs", candidate, run_id, check_id, operation, failure_class),
-        "metrics": matching_query(&receipts, "metrics", candidate, run_id, check_id, operation, failure_class),
-        "traces": matching_query(&receipts, "traces", candidate, run_id, check_id, operation, failure_class)
+        "logs": matching_query(root, &receipts, "logs", candidate, run_id, check_id, operation, failure_class),
+        "metrics": matching_query(root, &receipts, "metrics", candidate, run_id, check_id, operation, failure_class),
+        "traces": matching_query(root, &receipts, "traces", candidate, run_id, check_id, operation, failure_class)
     })
 }
 
@@ -50,6 +50,7 @@ fn query_receipts(root: &Path) -> Vec<(PathBuf, Value)> {
 }
 
 fn matching_query(
+    root: &Path,
     receipts: &[(PathBuf, Value)],
     kind: &str,
     candidate: &str,
@@ -62,14 +63,28 @@ fn matching_query(
         .iter()
         .rev()
         .find_map(|(path, value)| {
-            let path = path.to_string_lossy().to_string();
+            let path = path
+                .strip_prefix(root)
+                .unwrap_or(path)
+                .to_string_lossy()
+                .to_string();
             query_matches(value, kind, candidate, run_id, check_id, operation, failure_class).then(|| {
                 json!({
                     "status": value.get("status").cloned().unwrap_or(json!("unknown")),
                     "path": path,
                     "row_count": value.get("row_count").cloned().unwrap_or(json!(0)),
-                    "why_failed": value.get("why_failed").cloned().unwrap_or(json!("none")),
-                    "where_failed": value.get("where_failed").cloned().unwrap_or(json!("none")),
+                    "why_failed": value.get("observed_why_failed")
+                        .or_else(|| value.get("why_failed"))
+                        .cloned()
+                        .unwrap_or(json!("none")),
+                    "where_failed": value.get("observed_where_failed")
+                        .or_else(|| value.get("where_failed"))
+                        .cloned()
+                        .unwrap_or(json!("none")),
+                    "next_repair": value.get("observed_next_repair")
+                        .or_else(|| value.get("next_repair"))
+                        .cloned()
+                        .unwrap_or(json!("none")),
                     "observed_failure_class": value.get("observed_failure_class").cloned().unwrap_or(json!("none")),
                     "metric_failure_class": value.get("metric_failure_class").cloned().unwrap_or(json!("none")),
                     "metric_error_count": value.get("metric_error_count").cloned().unwrap_or(json!(0))

@@ -8,6 +8,14 @@ mod query_evidence;
 mod summary;
 mod target;
 
+pub(crate) fn query_evidence_for_target(
+    root: &Path,
+    observed: Option<&Value>,
+    candidate: &str,
+) -> Value {
+    query_evidence::for_target(root, observed, candidate)
+}
+
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
     let candidate = crate::package::inventory::package_digest(root)?;

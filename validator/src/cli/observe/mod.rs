@@ -2,6 +2,7 @@ use std::path::{Path, PathBuf};
 
 pub(crate) mod explain;
 pub(crate) mod query;
+mod snapshot;
 pub(crate) mod stack;
 mod stdout;
 pub(crate) mod telemetry;
@@ -41,7 +42,8 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         ObserveOperation::LogsQuery => query::run(root, command, query::QueryKind::Logs)?,
         ObserveOperation::MetricsQuery => query::run(root, command, query::QueryKind::Metrics)?,
         ObserveOperation::TracesQuery => query::run(root, command, query::QueryKind::Traces)?,
-        ObserveOperation::Snapshot | ObserveOperation::Prove => telemetry::prove(root, command)?,
+        ObserveOperation::Snapshot => snapshot::run(root, command)?,
+        ObserveOperation::Prove => telemetry::prove(root, command)?,
         ObserveOperation::ExplainFailure
         | ObserveOperation::ExplainClaim
         | ObserveOperation::ExplainCheck

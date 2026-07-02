@@ -243,6 +243,9 @@
       "validator/src/cli/observe/explain/tests/receipt_fallback.rs",
       "validator/src/cli/observe/explain/tests/support.rs",
       "validator/src/cli/observe/mod.rs",
+      "validator/src/cli/observe/snapshot/mod.rs",
+      "validator/src/cli/observe/snapshot/explain.rs",
+      "validator/src/cli/observe/snapshot/target.rs",
       "validator/src/cli/observe/query/body.rs",
       "validator/src/cli/observe/query/metrics.rs",
       "validator/src/cli/observe/query/mod.rs",
@@ -327,6 +330,9 @@
       "validator/src/self_tests/cli/observe/query/fitting/source_audit.rs",
       "validator/src/self_tests/cli/observe/query/matching.rs",
       "validator/src/self_tests/cli/observe/query/mod.rs",
+      "validator/src/self_tests/cli/observe/snapshot/edges.rs",
+      "validator/src/self_tests/cli/observe/snapshot/mod.rs",
+      "validator/src/self_tests/cli/observe/snapshot/target_edges.rs",
       "validator/src/self_tests/cli/parse_errors.rs",
       "validator/src/self_tests/cli/performance/audit.rs",
       "validator/src/self_tests/cli/product/mod.rs",
@@ -381,7 +387,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:3f5a71c8ea36fc1208408010cf69fb0549e847ebcc3493a478349b4875b9f497",
+    "changed_files_digest": "sha256:cee6acffff1faa0512a7f1af4bd7b75ef6694d05640c40bcfac0d9f70eed1471",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -429,7 +435,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:c2bdde3e51af7bd8b93a3f34e587ab963679ffdc260200fed0860cee51358caa",
+  "repo_root_digest": "sha256:0acc5b7cb226a332a907d4f54eecc69c57a3b8f7606a26cfed13dac907c9a683",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,
