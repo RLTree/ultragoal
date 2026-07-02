@@ -507,7 +507,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:a508884e4db19e64d80e7838e5777caf87eca293a355052affc78b65010f8240"
+          "digest": "sha256:9d0ee054a90b23f7fa22fee1241b903deda7bb02d10c78f730c5fac3e4070de3"
         }
       ],
       "material_blockers": [],
@@ -560,7 +560,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:a508884e4db19e64d80e7838e5777caf87eca293a355052affc78b65010f8240"
+          "digest": "sha256:9d0ee054a90b23f7fa22fee1241b903deda7bb02d10c78f730c5fac3e4070de3"
         }
       ],
       "claim_ceiling_assessment": {
@@ -695,7 +695,7 @@
         },
         {
           "path": "docs/source-obligation-matrix.md",
-          "digest": "sha256:3a244897aeec4cc36812921b480ed2a5e77d66cee8f6ea8fb17d0f62ccd93f31"
+          "digest": "sha256:287c36eee531f9721c747142edcfebdd1e64ca40f824bbbb789fd8924ea45b77"
         },
         {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
