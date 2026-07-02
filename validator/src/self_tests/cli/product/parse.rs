@@ -132,6 +132,28 @@ fn product_parser_rejects_unsafe_product_journey_observability_receipts() {
 }
 
 #[test]
+fn product_parser_rejects_unsafe_fit_repo_observability_receipts() {
+    for receipt in [
+        "/tmp/fit-repo-prove.json",
+        "validation_artifacts/../fit-repo-prove.json",
+    ] {
+        let args = [
+            "fit-repo",
+            "prove",
+            "--receipt-dir",
+            "validation_artifacts/harness",
+            "--observability-receipt",
+            receipt,
+        ]
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+        let err = crate::cli::product::parse(&args).expect_err("unsafe receipt path fails");
+        assert!(err.contains("product observability receipt"), "{err}");
+    }
+}
+
+#[test]
 fn product_parse_returns_none_for_other_command_families() {
     let args = ["registry", "probe"]
         .into_iter()
