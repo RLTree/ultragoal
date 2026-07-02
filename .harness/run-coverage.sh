@@ -55,6 +55,8 @@ def digest_files(paths):
 def ignored(raw, manifest):
     if raw.startswith("docs/parent-session-full-ultragoal-") and raw.endswith(".md"):
         return True
+    if raw.startswith("docs/ultragoal-contract-2026-07/"):
+        return True
     if raw in {
         ".harness/coverage-manifest.json",
         ".harness/coverage-command",

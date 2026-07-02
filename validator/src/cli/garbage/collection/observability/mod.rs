@@ -209,3 +209,6 @@ fn runtime(
 fn text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
     value.get(field).and_then(Value::as_str).unwrap_or(default)
 }
+
+#[cfg(test)]
+mod tests;

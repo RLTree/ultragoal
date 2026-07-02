@@ -2,16 +2,19 @@ use serde_json::Value;
 use std::path::Path;
 
 pub(crate) fn source_tree_digest(root: &Path, manifest: &Value) -> Result<String, String> {
+    let root = root
+        .canonicalize()
+        .map_err(|err| format!("coverage root canonicalize failed: {err}"))?;
     let mut files = Vec::new();
     for target in strings(manifest, "required_target_paths") {
-        let base = crate::package::inventory::resolve(root, &target)?;
+        let base = crate::package::inventory::resolve(&root, &target)?;
         if base.is_file() {
             files.push(target);
             continue;
         }
         for entry in walkdir::WalkDir::new(&base).into_iter().flatten() {
             if entry.file_type().is_file() {
-                let rel = source_rel_path(root, entry.path())?;
+                let rel = source_rel_path(&root, entry.path())?;
                 if !ignored(&rel, manifest) {
                     files.push(rel);
                 }
@@ -20,10 +23,13 @@ pub(crate) fn source_tree_digest(root: &Path, manifest: &Value) -> Result<String
     }
     files.sort();
     files.dedup();
-    digest_files(root, &files)
+    digest_files(&root, &files)
 }
 
 pub(crate) fn changed_files_digest(root: &Path, manifest: &Value) -> Result<String, String> {
+    let root = root
+        .canonicalize()
+        .map_err(|err| format!("coverage root canonicalize failed: {err}"))?;
     let mut files = manifest
         .pointer("/changed_file_coupling_policy/changed_files")
         .and_then(Value::as_array)
@@ -34,7 +40,7 @@ pub(crate) fn changed_files_digest(root: &Path, manifest: &Value) -> Result<Stri
         .collect::<Vec<_>>();
     files.sort();
     files.dedup();
-    digest_files(root, &files)
+    digest_files(&root, &files)
 }
 
 fn digest_files(root: &Path, files: &[String]) -> Result<String, String> {
@@ -141,5 +147,26 @@ mod tests {
         .expect("expected digest");
         assert_eq!(actual, expected);
         std::fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn coverage_digest_reports_unresolvable_root() {
+        let stamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("clock")
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!("ultragoal-coverage-missing-root-{stamp}"));
+        let manifest = json!({
+            "required_target_paths": ["validator"],
+            "changed_file_coupling_policy": {
+                "changed_files": ["validator/src/lib.rs"]
+            }
+        });
+        let source = super::source_tree_digest(&root, &manifest)
+            .expect_err("missing root blocks source digest");
+        assert!(source.contains("coverage root canonicalize failed"));
+        let changed = super::changed_files_digest(&root, &manifest)
+            .expect_err("missing root blocks changed-files digest");
+        assert!(changed.contains("coverage root canonicalize failed"));
     }
 }

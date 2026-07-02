@@ -174,6 +174,7 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
         "src/exact-ignore.rs",
         "src/generated/out.rs",
         "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
+        "docs/ultragoal-contract-2026-07/README.md",
         ".harness/coverage-command",
         ".harness/coverage-manifest.json",
         "templates/.harness/coverage-command",
@@ -212,6 +213,11 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
         "ignored progress update",
     )
     .expect("checklist change");
+    std::fs::write(
+        root.join("docs/ultragoal-contract-2026-07/README.md"),
+        "ignored modular contract update",
+    )
+    .expect("modular contract change");
     let after_ignored =
         crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)
             .expect("source digest after ignored");
