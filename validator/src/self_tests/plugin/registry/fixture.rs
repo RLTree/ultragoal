@@ -84,6 +84,7 @@ pub(crate) fn fail_closed_registry_receipt(current: &str, raw_digest: &str) -> V
                 "app_registry_or_reviewer_exposure",
                 "review_readiness",
                 "release_readiness",
+                "final_packet_correctness",
                 "completion",
                 "update_goal_eligibility"
             ]
@@ -148,6 +149,7 @@ fn capability_gap(raw_digest: &str) -> Value {
             "app_registry_or_reviewer_exposure",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "completion",
             "update_goal_eligibility"
         ],

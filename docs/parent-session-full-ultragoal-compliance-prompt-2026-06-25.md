@@ -249,7 +249,9 @@ Mandatory integration objectives from the synthesis:
    - Rule: The final product direction should include an Agent Cockpit or
      equivalent operational product surface, but it must not block the immediate
      Gate 92 source-local closure unless explicitly scoped. The cockpit is a
-     future product multiplier, not a substitute for CLI proof.
+     future product multiplier, not a substitute for CLI proof. The cockpit must
+     render CLI-governed state, receipts, telemetry, evals, and claim ceilings;
+     it may not invent status, hide blockers, or convert observations into claims.
    - You know it is working when: a user can see active runs, repair-loop state,
      plan, changed files, validation status, eval deltas, trace waterfall, tool
      calls, approvals, screenshots/videos where applicable, logs by run id, PR
@@ -270,13 +272,50 @@ Mandatory integration objectives from the synthesis:
      validation, observability query, observability explain, repair-loop
      execution, eval execution, architecture check, security check, setup, and
      retrofit.
+   - Required Agent State / Next Action Contract: Product Usage Fitness must add
+     a canonical CLI-governed next-action surface, `ultragoal next` and
+     `ultragoal next --json`, after full Gate 92 closure and before Phase 4
+     evidence rebinding. Optional aliases such as `ultragoal stack status` or
+     `ultragoal stack next` may exist only when they delegate to this authority
+     kernel and preserve telemetry, receipts, and claim ceilings.
+   - Rule: `ultragoal next` is not another status dump, dashboard, checklist
+     projection, or source-audit wrapper. It is the operator-facing synthesis of
+     current digest, dirty/stale state, active spine phase, strict claim ceiling,
+     first legal blocker, why that blocker comes first, dependency chain, stale
+     or wrong-digest evidence, exact next repair, exact narrow rerun, observe
+     logs/metrics/traces query commands when a run exists, observe explain
+     command when relevant, broad rerun only when allowed, forbidden actions,
+     Gate 92 fitting-board summary, Product Usage status, worktree eligibility,
+     and cockpit state. `--json` is the future Agent Cockpit feed; stdout is the
+     human/agent hot path and must remain bounded, redacted, and decisive.
    - You know it is working when: from a clean checkout or plugin-activated target
      repo, the expected path is obvious, command help is self-contained, advanced
      commands remain available, and helper scripts cannot pretend to be final
-     proof.
+     proof. Done feels like the harness can answer, "where am I, what is
+     blocked, why is it blocked, what exact command proves the next repair, and
+     what claims are still forbidden" without making an agent or Tree spelunk
+     parent prompts, stale checklist rows, command-inventory walls, raw receipts,
+     or source-audit dumps.
+   - Validation versus proof: parser tests, help tests, JSON schema checks,
+     redaction/bounds tests, and red fixtures prove feature mechanics only. They
+     do not prove product usefulness. Production proof requires running the real
+     `ultragoal next` command on the current candidate, verifying stdout and JSON
+     identify the real current blocker and correct narrow next repair, querying
+     logs/metrics/traces by the same run/correlation/current digest, reconciling
+     those records with the command receipt, running observe explain when blocked,
+     and inspecting source to confirm the command reads typed authority surfaces
+     rather than markdown, checklist prose, or last-command heuristics.
+   - Required fail-closed cases: missing `ultragoal next`, generic "inspect
+     receipts" output, no exact next command, missing claim ceiling, stale digest
+     accepted as current, checklist prose accepted as authority, broad audit
+     recommended before narrow observable repair, worktrees marked eligible while
+     Gate 92/Product Usage/Phase 4 are incomplete, readiness/update_goal implied
+     from source-local proof, cockpit/UI proof substituted for CLI proof, private
+     path leakage, and unbounded JSON output.
    - Downstream impact: Phase 3.5 Product Usage Fitness, clean-checkout command
-     discovery, setup/retrofit, active-repo rollout, final packet, and update_goal
-     blockers must enforce command discoverability and delegation.
+     discovery, setup/retrofit, active-repo rollout, Agent Cockpit, Gate 105,
+     final packet, and update_goal blockers must enforce command discoverability,
+     delegation, next-action usefulness, and proof-surface separation.
    - Evidence and confidence: Based on the synthesis command-surface section and
      current Product Usage Fitness slice. Confidence 88%.
 
@@ -3863,6 +3902,7 @@ Final response must include:
 - setup/retrofit deep-integration status
 - AGENTS.md routing-table doctrine status
 - concrete routine command surface status
+- Agent State / Next Action Contract status
 - tool contract and risk-tier governance status
 - cross-repo active-repo rollout status
 - Rust and TypeScript Developer Experience integration status
@@ -3877,9 +3917,9 @@ Final response must include:
 - Agent Cockpit status or explicit blocker
 - final packet product-shape status: Harness Product Doctrine, Observability
   Planes, Agent Quality Metrics, Trace-to-Eval-to-Repair Loop, Tool Risk and
-  Approval Surface, Data/Privacy Boundary, Product Usage/CLI Surface, Active
-  Repo Rollout, Stack Adapter Status, Supply-Chain/Security Baseline, Agent
-  Cockpit, and unsupported live surfaces
+  Approval Surface, Data/Privacy Boundary, Product Usage/CLI Surface, Agent
+  State / Next Action Contract, Active Repo Rollout, Stack Adapter Status,
+  Supply-Chain/Security Baseline, Agent Cockpit, and unsupported live surfaces
 - skill catalog context-budget/omission-warning status
 - distribution and sharing-surface claim-separation status
 - total authority types and impossible-state elimination status

@@ -152,6 +152,7 @@ fn command_operation(command: &str) -> String {
     match command {
         "line-cap check" => "line-caps.check".to_string(),
         "red fixture report" => "red_fixture.report".to_string(),
+        "registry probe" => "registry_probe".to_string(),
         "update-goal eligibility" => "update_goal_eligibility".to_string(),
         "self update-goal eligibility" => "self_update_goal_eligibility".to_string(),
         _ => command.replace(' ', "."),

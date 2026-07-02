@@ -501,12 +501,49 @@ Only the source-local parts needed for the current claim boundary should be
 implemented here; release/install/cache/app-registry proof remains forbidden
 until later phases.
 
-Exit requires focused help/routine-path tests and red fixtures for missing
-routine entrypoint, non-navigable help, leaf-only validation substitution,
-hidden fit-repo path, omitted target-repo/plugin-activated path, and
-`scripts/check` failing to delegate or declare itself a narrow helper. Update
-checklist rows with progress statuses only, then commit as source-local/not
-readiness.
+This phase must also add an Agent State / Next Action Contract. The canonical
+surface is `ultragoal next` plus `ultragoal next --json`; aliases such as
+`ultragoal stack status` or `ultragoal stack next` are permitted only when they
+delegate to the same CLI authority kernel. This command is the bridge between
+Gate 92 sensory proof and product usability. It consumes typed authority
+surfaces and tells an un-oriented agent or Tree the current candidate digest,
+dirty/stale state, active phase, strict claim ceiling, first legal blocker, why
+that blocker comes first, dependency chain, stale or wrong-digest evidence,
+exact next repair, exact narrow rerun, observe query and explain commands when
+available, broad rerun only when allowed, forbidden actions, Gate 92 fitting
+summary, Product Usage status, worktree eligibility, and Agent Cockpit state.
+`--json` is the future cockpit feed; stdout is the human/agent hot path and must
+be bounded, redacted, and decisive.
+
+Done means the harness can answer "where am I, what is blocked, why is it
+blocked, what exact command proves the next repair, and what claims remain
+forbidden" without forcing manual archaeology through parent prompts, stale
+checklist rows, raw receipts, command inventory walls, source-audit dumps, or
+hidden command knowledge. A generic "inspect receipts" answer, broad-audit-first
+answer, dashboard-only answer, or checklist-derived answer is not product
+fitness.
+
+Validation and proof are separate. Validation covers parser behavior,
+self-contained help, JSON schema shape, bounded output, redaction, dirty/stale
+state handling, forbidden-action guards, and fail-closed fixtures. Product proof
+requires a real `ultragoal next` run on the current candidate, stdout and JSON
+that identify the real current blocker and correct next narrow repair, receipt
+binding to the same candidate/run/correlation, logs/metrics/traces query proof
+for that run when telemetry exists, useful observe explain output when blocked,
+and source inspection proving the command reads typed evidence instead of
+markdown, checklist prose, or last-command heuristics.
+
+Exit requires focused help/routine-path/next-action tests and red fixtures for
+missing routine entrypoint, non-navigable help, leaf-only validation
+substitution, hidden fit-repo path, omitted target-repo/plugin-activated path,
+`scripts/check` failing to delegate or declare itself a narrow helper, missing
+`ultragoal next`, generic next-action output, no exact next command, stale digest
+accepted as current, checklist prose accepted as authority, broad audit
+recommended before narrow observable repair, worktrees marked eligible while
+Gate 92/Product Usage/Phase 4 are incomplete, readiness/update_goal implied from
+source-local proof, cockpit/UI proof substituted for CLI proof, private path
+leakage, and unbounded JSON output. Update checklist rows with progress statuses
+only, then commit as source-local/not readiness.
 
 ### Phase 4 - Rebind Gates 0-91 Acceptance Spine
 

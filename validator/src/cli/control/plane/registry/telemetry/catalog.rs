@@ -159,7 +159,7 @@ pub(crate) fn claim_impact(operation: ControlOperation, status: &str) -> String 
     }
     match operation {
         ControlOperation::RegistryProbe | ControlOperation::AppSurfaceProbe => {
-            "blocks_registry_reviewer_readiness_release_completion_update_goal"
+            "blocks_registry_reviewer_final_packet_readiness_release_completion_update_goal"
         }
         ControlOperation::UpdateGoalEligibility | ControlOperation::SelfUpdateGoalEligibility => {
             "blocks_update_goal_readiness_release_completion"

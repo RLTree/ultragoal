@@ -27,6 +27,7 @@ pub(crate) fn record(
             "app_registry_or_reviewer_exposure",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "completion",
             "update_goal_eligibility"
         ],

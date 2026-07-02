@@ -72,6 +72,7 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
             "package_readiness",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "update_goal_eligibility",
             "app_registry_or_reviewer_exposure"
         ],
@@ -202,6 +203,7 @@ fn fail_closed_registry_ref(root: &Path, current: &str) -> Value {
                     "app_registry_or_reviewer_exposure",
                     "review_readiness",
                     "release_readiness",
+                    "final_packet_correctness",
                     "completion",
                     "update_goal_eligibility"
                 ]

@@ -51,6 +51,7 @@ pub(crate) fn mint_fail_closed_if_needed(
             "reviewer_exposure",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "update_goal_eligibility"
         ]
     });
@@ -88,6 +89,7 @@ pub(crate) fn mint_fail_closed_if_needed(
                 "app_registry_or_reviewer_exposure",
                 "review_readiness",
                 "release_readiness",
+                "final_packet_correctness",
                 "completion",
                 "update_goal_eligibility"
             ]

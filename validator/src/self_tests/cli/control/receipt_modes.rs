@@ -35,6 +35,7 @@ fn constructor_empty_evidence_branch_is_not_production_green_proof() {
             "package_readiness",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "update_goal_eligibility"
         ])
     );
@@ -55,6 +56,7 @@ fn fail_closed_receipts_are_blockers_not_completion_green_paths() {
             "package_readiness",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "update_goal_eligibility"
         ],
         "failure": {

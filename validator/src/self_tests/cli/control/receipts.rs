@@ -41,6 +41,13 @@ fn receipt_blocks_claims_and_records_required_evidence() {
             .iter()
             .any(|claim| claim.as_str() == Some("app_registry_or_reviewer_exposure"))
     );
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("final_packet_correctness"))
+    );
     assert!(surface_value_failures(&value).is_empty());
 
     let update_goal = ControlCommand {

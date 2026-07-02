@@ -113,6 +113,7 @@ fn blocked_claims(operation: ControlOperation) -> Vec<&'static str> {
         "package_readiness",
         "review_readiness",
         "release_readiness",
+        "final_packet_correctness",
         "update_goal_eligibility",
     ];
     if matches!(

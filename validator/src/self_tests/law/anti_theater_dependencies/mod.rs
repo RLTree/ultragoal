@@ -123,6 +123,7 @@ fn write_cli_fail_closed(root: &std::path::Path, current: &str, name: &str, oper
                 "package_readiness",
                 "review_readiness",
                 "release_readiness",
+                "final_packet_correctness",
                 "update_goal_eligibility"
             ],
             "required_evidence":["current_final_packet_proof_pass"],

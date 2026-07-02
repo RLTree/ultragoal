@@ -20,6 +20,7 @@ pub(crate) fn record(raw_digest: &str) -> Value {
             "app_registry_or_reviewer_exposure",
             "review_readiness",
             "release_readiness",
+            "final_packet_correctness",
             "completion",
             "update_goal_eligibility"
         ],
