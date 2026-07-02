@@ -91,11 +91,25 @@ fn query_with_retry(
     query: &str,
     candidate: &str,
 ) -> Result<String, String> {
-    retry_until_reconciled(
-        command,
-        || live_query(command, query),
-        |body| live_result_failure(root, command, body, candidate),
-    )
+    let validate = live_result_validator(root, command, candidate);
+    retry_until_reconciled(command, || live_query(command, query), validate)
+}
+
+fn live_result_validator<'a>(
+    root: &'a Path,
+    command: &'a ObserveCommand,
+    candidate: &'a str,
+) -> impl FnMut(&str) -> Option<String> + 'a {
+    move |body| live_result_failure(root, command, body, candidate)
+}
+
+#[cfg(test)]
+pub(crate) fn live_result_validator_for_test<'a>(
+    root: &'a Path,
+    command: &'a ObserveCommand,
+    candidate: &'a str,
+) -> impl FnMut(&str) -> Option<String> + 'a {
+    live_result_validator(root, command, candidate)
 }
 
 #[cfg(test)]
@@ -136,7 +150,7 @@ where
 {
     let deadline = Instant::now() + Duration::from_millis(command.timeout_ms.max(1));
     let mut last_body_failure = None;
-    let mut last_error = None;
+    let mut last_error = NO_MATCHING_ROWS.to_string();
     loop {
         match fetch() {
             Ok(body) => match validate(&body) {
@@ -146,14 +160,14 @@ where
                 }
             },
             Err(err) => {
-                last_error = Some(err);
+                last_error = err;
             }
         }
         if Instant::now() >= deadline {
             return match last_body_failure {
                 Some((body, failure)) if failure != NO_MATCHING_ROWS => Ok(body),
-                Some((_, failure)) => Err(last_error.unwrap_or(failure)),
-                None => Err(last_error.unwrap_or_else(|| NO_MATCHING_ROWS.to_string())),
+                Some((_, failure)) if last_error == NO_MATCHING_ROWS => Err(failure),
+                Some(_) | None => Err(last_error),
             };
         }
         thread::sleep(Duration::from_millis(250));

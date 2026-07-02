@@ -185,3 +185,39 @@ fn blocked_claims() -> Vec<String> {
     .map(ToString::to_string)
     .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn run_propagates_observability_spool_write_errors() {
+        let root = crate::self_tests::boundaries::support::temp_root("review-round-spool-file");
+        std::fs::create_dir_all(&root).expect("root");
+        crate::json_boundary::write_json(
+            &root.join("plugin-manifest-draft.json"),
+            &json!({"resources":[]}),
+        )
+        .expect("manifest");
+        let spool_path = root.join("validation_artifacts/observability/spool");
+        std::fs::create_dir_all(spool_path.parent().expect("spool parent")).expect("spool parent");
+        std::fs::write(&spool_path, "not a directory").expect("spool file");
+
+        let err = run(
+            root.clone(),
+            root.join("missing-review-round.json"),
+            root.join("missing-validator.json"),
+            root.join("missing-review-target.json"),
+            root.join("missing-archive.json"),
+            "validation_artifacts/observability/review-round.json".into(),
+        )
+        .expect_err("spool file blocks review-round observability");
+
+        assert!(
+            err.contains("validation_artifacts/observability/spool"),
+            "{err}"
+        );
+        std::fs::remove_dir_all(root).expect("cleanup review round spool");
+    }
+}

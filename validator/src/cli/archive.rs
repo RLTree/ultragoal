@@ -6,6 +6,7 @@ pub(super) const OPERATION: &str = "archive.build";
 const CHECK_ID: &str = "archive-build-observability-binding";
 pub(super) const CLAIM_ID: &str = "archive_source_local_observability";
 const DEFAULT_RECEIPT: &str = "validation_artifacts/observability/archive-build.json";
+const BLOCKED_CLAIMS: &str = "completion,readiness,release,reviewer_exposure,app_registry_exposure,final_packet_correctness,update_goal_eligibility";
 
 pub(crate) fn parse(raw: &[String]) -> Result<crate::Command, String> {
     let args = strip_build_or_verify(raw);
@@ -71,6 +72,8 @@ pub(crate) fn run(
     archive_purpose: String,
 ) -> Result<i32, String> {
     let started = Instant::now();
+    let zip = rooted_output_path(&root, &zip);
+    let receipt = rooted_output_path(&root, &receipt);
     let outcome = build_and_write(&root, &zip, &receipt, &zip_root, &archive_purpose);
     let status = outcome.status();
     let observability = observability(
@@ -81,9 +84,18 @@ pub(crate) fn run(
         started,
         &outcome,
     )?;
-    crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)?;
+    crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)
+        .map_err(|err| crate::cli::observe::telemetry::redact_sensitive_text(&err))?;
     super::archive_stdout::print_summary(&observability, outcome.archive_digest());
     Ok(i32::from(status != "pass"))
+}
+
+fn rooted_output_path(root: &Path, path: &Path) -> PathBuf {
+    if path.is_absolute() {
+        path.to_path_buf()
+    } else {
+        root.join(path)
+    }
 }
 
 enum Outcome {
@@ -196,17 +208,15 @@ fn runtime(started: Instant) -> crate::cli::observe::telemetry::RuntimeTelemetry
 }
 
 fn failure_class(status: &str) -> &'static str {
-    match status {
-        "pass" => "none",
-        _ => "archive_build_failure",
+    if status == "pass" {
+        "none"
+    } else {
+        "archive_build_failure"
     }
 }
 
 fn where_failed(status: &str) -> &'static str {
-    match status {
-        "pass" => "none",
-        _ => OPERATION,
-    }
+    if status == "pass" { "none" } else { OPERATION }
 }
 
 fn next_repair(status: &str) -> &'static str {
@@ -218,9 +228,10 @@ fn next_repair(status: &str) -> &'static str {
 }
 
 fn claim_impact(status: &str) -> &'static str {
-    match status {
-        "pass" => "supports_archive_source_local_observability_only",
-        _ => "archive_build_failed_blocks_readiness_release_completion_update_goal",
+    if status == "pass" {
+        "supports_archive_source_local_observability_only"
+    } else {
+        "archive_build_failed_blocks_readiness_release_completion_update_goal"
     }
 }
 
@@ -233,16 +244,5 @@ fn supported_claims(status: &str) -> Vec<String> {
 }
 
 fn blocked_claims() -> Vec<String> {
-    [
-        "completion",
-        "readiness",
-        "release",
-        "reviewer_exposure",
-        "app_registry_exposure",
-        "final_packet_correctness",
-        "update_goal_eligibility",
-    ]
-    .into_iter()
-    .map(ToString::to_string)
-    .collect()
+    BLOCKED_CLAIMS.split(',').map(ToString::to_string).collect()
 }

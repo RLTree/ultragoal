@@ -30,9 +30,11 @@ pub(super) fn reconciliation_failure(
 ) -> Option<String> {
     let observed = target::event(root, command);
     if observed.is_none() && (command.run_id.is_some() || command.correlation_id.is_some()) {
+        let requested = target::requested(command)
+            .expect("missing target branch requires run or correlation selector");
         return Some(format!(
             "observability_metric_target_unavailable:{}",
-            target::requested(command).unwrap_or_else(|| "run_or_correlation".to_string())
+            requested
         ));
     }
     let event = observed.as_ref()?;

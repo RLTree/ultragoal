@@ -29,6 +29,19 @@ pub(super) fn repair_guidance(
         );
     }
     if let Some(failure) = opaque_observed {
+        if let Some(repair) = observed
+            .filter(|event| {
+                event
+                    .get("fallback_only")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(false)
+            })
+            .and_then(|event| event.get("next_repair"))
+            .and_then(Value::as_str)
+            .filter(|text| !text.trim().is_empty() && *text != "none")
+        {
+            return repair.to_string();
+        }
         return format!(
             "repair the target command stdout and telemetry envelope so failure_class why_failed where_failed and next_repair are specific: {failure}"
         );
@@ -47,7 +60,13 @@ pub(super) fn repair_guidance(
 }
 
 pub(super) fn explanation(root: &Path, audit_digest: String, ctx: ExplainContext<'_>) -> Value {
-    let fallback_used = ctx.observed.is_none();
+    let receipt_fallback = ctx.observed.is_some_and(|event| {
+        event
+            .get("fallback_only")
+            .and_then(Value::as_bool)
+            .unwrap_or(false)
+    });
+    let fallback_used = ctx.observed.is_none() || receipt_fallback;
     let query_evidence = super::query_evidence::for_target(root, ctx.observed, ctx.candidate);
     json!({
         "requested_target": ctx.target_requested,
@@ -55,7 +74,12 @@ pub(super) fn explanation(root: &Path, audit_digest: String, ctx: ExplainContext
         "current_source_audit_digest": audit_digest,
         "known_current_failure": ctx.known_current_failure,
         "root_cause": root_cause(&ctx),
-        "evidence_sources": evidence_sources(ctx.observed, &query_evidence, fallback_used),
+        "evidence_sources": evidence_sources(
+            ctx.observed,
+            &query_evidence,
+            fallback_used,
+            receipt_fallback
+        ),
         "implicated_paths": implicated_paths(ctx.observed),
         "smallest_repair": ctx.repair_guidance,
         "narrow_rerun": narrow_rerun(ctx.observed),
@@ -119,11 +143,16 @@ fn evidence_sources(
     observed: Option<&Value>,
     query_evidence: &Value,
     fallback_used: bool,
+    receipt_fallback: bool,
 ) -> Value {
     let mut sources = Vec::new();
     if observed.is_some() {
-        sources.push(json!("target telemetry event"));
-        sources.push(json!("target observability receipt"));
+        if receipt_fallback {
+            sources.push(json!("target observability receipt without event binding"));
+        } else {
+            sources.push(json!("target telemetry event"));
+            sources.push(json!("target observability receipt"));
+        }
     }
     for key in ["logs", "metrics", "traces"] {
         if query_evidence
@@ -135,7 +164,7 @@ fn evidence_sources(
             sources.push(json!(format!("{key} query receipt")));
         }
     }
-    if fallback_used {
+    if fallback_used && observed.is_none() {
         sources.push(json!("fallback source-audit/final-packet receipt"));
     }
     Value::Array(sources)
@@ -168,4 +197,46 @@ fn narrow_rerun(observed: Option<&Value>) -> String {
         .and_then(Value::as_str)
         .unwrap_or("");
     format!("{command} {subcommand}")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn root_cause_and_paths_cover_defensive_empty_failure_boundaries() {
+        let known = json!([]);
+        let ctx = ExplainContext {
+            candidate: "sha256:current",
+            target_requested: None,
+            observed: None,
+            stale_observed: None,
+            missing_observed: None,
+            opaque_observed: None,
+            known_current_failure: &known,
+            repair_guidance: "repair specific blocker",
+        };
+
+        assert_eq!(root_cause(&ctx), "no current failure identified");
+        assert_eq!(
+            narrow_rerun(None),
+            "run the requested target command once, then rerun explain"
+        );
+    }
+
+    #[test]
+    fn implicated_paths_include_artifact_and_receipt_when_present() {
+        let paths = implicated_paths(Some(&json!({
+            "artifact_path": "validation_artifacts/coverage",
+            "receipt_path": "validation_artifacts/coverage/coverage-receipt.json"
+        })));
+
+        assert_eq!(
+            paths,
+            json!([
+                "validation_artifacts/coverage",
+                "validation_artifacts/coverage/coverage-receipt.json"
+            ])
+        );
+    }
 }

@@ -60,7 +60,7 @@ fn proven(value: &Value) -> String {
         .and_then(Value::as_array)
         .and_then(|items| items.first())
         .and_then(Value::as_str)
-        .unwrap_or("transactional_finalization_same_candidate")
+        .unwrap_or("none")
         .to_string()
 }
 
@@ -107,3 +107,6 @@ fn csv(value: Option<&Value>) -> String {
         .filter(|text| !text.is_empty())
         .unwrap_or_else(|| "none".to_string())
 }
+
+#[cfg(test)]
+mod tests;

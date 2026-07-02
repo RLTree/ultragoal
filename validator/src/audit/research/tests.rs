@@ -1,4 +1,5 @@
 use serde_json::json;
+use std::collections::BTreeSet;
 
 #[test]
 fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
@@ -112,5 +113,84 @@ fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
     assert!(failures.contains(&"research_source_corpus_path_missing:source-a".to_string()));
     assert!(failures.contains(&"research_registry_unmapped_source:source-a".to_string()));
     assert!(failures.contains(&"research_registry_missing_claim_ceiling:source-a".to_string()));
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn research_source_cards_reject_missing_anchor_id_locator_and_requirement_edges() {
+    let cards = json!({
+        "sources":[{
+            "canonical_url":"https://example.test/source",
+            "source_kind":"public_web",
+            "source_artifact_digest":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_artifact_method":"http_body_sha256",
+            "source_corpus_path":"artifacts/source-snapshots/source.txt",
+            "source_corpus_digest":"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "requirements":[{
+                "summary":"missing requirement id",
+                "source_evidence_ids":[""]
+            }],
+            "evidence_anchors":[{
+                "source_signal":"article section",
+                "requirement_ids":[]
+            }]
+        }]
+    });
+
+    let failures = super::catalog::source_evidence_failures(&cards);
+
+    assert!(failures.contains(&"research_source_card_id_missing".to_string()));
+    assert!(failures.contains(&"research_source_card_requirement_id_missing:".to_string()));
+    assert!(failures.contains(&"research_source_card_evidence_id_missing:".to_string()));
+    assert!(failures.contains(&"research_source_card_evidence_locator_missing::".to_string()));
+    assert!(failures.contains(&"research_source_card_evidence_requirement_missing::".to_string()));
+}
+
+#[test]
+fn research_source_corpus_guards_reject_escape_stale_digest_and_nonfile_digest_errors() {
+    let root = crate::self_tests::boundaries::support::temp_root("audit-research-corpus");
+    let rel = "artifacts/source-snapshots/source.txt";
+    std::fs::create_dir_all(root.join("artifacts/source-snapshots")).expect("corpus dir");
+    std::fs::write(root.join(rel), b"source corpus").expect("corpus");
+    let mut package_paths = BTreeSet::new();
+    package_paths.insert(rel.to_string());
+
+    let stale = super::source_corpus_failures(
+        &root,
+        "source-a",
+        rel,
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        &package_paths,
+    );
+    assert!(stale.contains(&format!(
+        "research_source_corpus_digest_stale:source-a:{rel}"
+    )));
+
+    let invalid = super::source_corpus_failures(
+        &root,
+        "source-a",
+        "../outside.txt",
+        "sha256:unused",
+        &package_paths,
+    );
+    assert!(
+        invalid
+            .iter()
+            .any(|failure| failure.starts_with("research_source_corpus_path_invalid:source-a:")),
+        "{invalid:#?}"
+    );
+
+    let dir_rel = "artifacts/source-snapshots/not-a-file";
+    std::fs::create_dir_all(root.join(dir_rel)).expect("non-file corpus");
+    package_paths.insert(dir_rel.to_string());
+    let digest_error =
+        super::source_corpus_failures(&root, "source-a", dir_rel, "sha256:unused", &package_paths);
+    assert!(
+        digest_error
+            .iter()
+            .any(|failure| failure.starts_with("research_source_corpus_digest_error:source-a:")),
+        "{digest_error:#?}"
+    );
+
     std::fs::remove_dir_all(root).expect("cleanup");
 }

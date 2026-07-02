@@ -104,21 +104,6 @@ fn canonical_escape_error(root: &Path, full: &Path, rel: &str) -> Option<String>
     None
 }
 
-#[cfg(test)]
-mod canonical_tests {
-    use std::path::Path;
-
-    #[test]
-    fn canonical_escape_guard_reports_outside_package() {
-        let root = Path::new("/package/root");
-        assert!(super::canonical_escape_error(root, Path::new("/package/root/a"), "a").is_none());
-        assert_eq!(
-            super::canonical_escape_error(root, Path::new("/outside/a"), "a"),
-            Some("package path escapes package root: a".to_string())
-        );
-    }
-}
-
 pub fn package_digest_excluded(rel: &str) -> bool {
     PACKAGE_DIGEST_EXCLUDED_PATHS.contains(&rel)
         || PACKAGE_DIGEST_EXCLUDED_PREFIXES
@@ -157,6 +142,7 @@ pub fn package_digest(root: &Path) -> Result<String, String> {
 #[cfg(test)]
 mod tests {
     use serde_json::json;
+    use std::path::Path;
 
     fn write_manifest(root: &std::path::Path, resources: serde_json::Value) {
         std::fs::write(
@@ -164,6 +150,16 @@ mod tests {
             serde_json::to_vec(&json!({"resources": resources})).expect("manifest"),
         )
         .expect("write manifest");
+    }
+
+    #[test]
+    fn canonical_escape_guard_reports_outside_package() {
+        let root = Path::new("/package/root");
+        assert!(super::canonical_escape_error(root, Path::new("/package/root/a"), "a").is_none());
+        assert_eq!(
+            super::canonical_escape_error(root, Path::new("/outside/a"), "a"),
+            Some("package path escapes package root: a".to_string())
+        );
     }
 
     #[test]

@@ -328,10 +328,10 @@ that surface is required by the contract.
 - [ ] Gate 4: Every contract sub-requirement is satisfied.
 - [ ] Gate 4 evidence path: Source package digest is live at `sha256:fd5f598f0a70a1fc4128bf29eae3f73ced9d5ec0bdce3a8b0a144942549b3a90`, and installed plugin/versioned cache/app/registry receipts have not been refreshed for this digest. Existing install/cache/registry/app-surface receipts are stale and cannot support any parity or exposure claim. Claim impact: no app-registry/reviewer exposure, Plugins UI, marketplace, install-button, launcher runtime, readiness, release, completion, or `update_goal()` claim.
 
-- [ ] Gate 5 status: stale due to source change.
+- [ ] Gate 5 status: validated current.
 - [ ] Gate 5: Plugin self-law coverage is exactly 100% for declared repo-owned scope.
 - [ ] Gate 5: Every contract sub-requirement is satisfied for exact source-local coverage proof.
-- [ ] Gate 5 evidence path: Status: stale due to source change. Current live source package digest is `sha256:d0bb880cd7d99bf632c6ef302bfeb7764124b8f769f7019aa1580d3d56a76d02`; latest coverage observability pass receipt targets older digest `sha256:bea0384518393808491d79ceeb22d07c06e125b28ea91ff679b920d8830e6036`. Claim impact: no current exact-coverage claim until coverage is rerun for the live digest; no readiness, release, final packet, registry/reviewer exposure, completion, or `update_goal()` claim.
+- [ ] Gate 5 evidence path: Status: validated current. Claim impact: source-local exact-coverage claim only; no readiness, release, final packet, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] Gate 6 status: source-local stale receipt/red fixture propagation enforced.
 - [ ] Gate 6: Stale receipt and red fixture propagation is repaired and fails stale proof.

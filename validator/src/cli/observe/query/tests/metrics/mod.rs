@@ -1,6 +1,10 @@
 use serde_json::json;
 use std::path::Path;
 
+mod edges;
+mod freshness;
+mod reconciliation;
+
 #[test]
 fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
     let root = super::prepare_root("query-metrics-no-candidate-row");

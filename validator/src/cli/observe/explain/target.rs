@@ -3,53 +3,23 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 pub(super) fn requested(command: &ObserveCommand) -> Option<String> {
-    command
-        .run_id
-        .as_ref()
-        .map(|value| format!("run_id={value}"))
-        .or_else(|| {
-            command
-                .check_id
-                .as_ref()
-                .map(|value| format!("check_id={value}"))
-        })
-        .or_else(|| {
-            command
-                .claim_id
-                .as_ref()
-                .map(|value| format!("claim_id={value}"))
-        })
-        .or_else(|| {
-            command
-                .law_id
-                .as_ref()
-                .map(|value| format!("law_id={value}"))
-        })
+    selected(command).map(|(field, value)| format!("{field}={value}"))
 }
 
 pub(super) fn event(root: &Path, command: &ObserveCommand) -> Option<Value> {
-    if let Some(run_id) = command.run_id.as_deref() {
-        return spool_event(root, |event| {
-            event.get("run_id").and_then(Value::as_str) == Some(run_id)
-                && !is_observation_event(event)
-        })
-        .or_else(|| {
-            receipt_event(root, |event| {
-                event.get("run_id").and_then(Value::as_str) == Some(run_id)
-                    && !is_observation_event(event)
-            })
-        });
-    }
-    if let Some(check_id) = command.check_id.as_deref() {
-        return matching_event(root, "check_id", check_id);
-    }
-    if let Some(claim_id) = command.claim_id.as_deref() {
-        return matching_event(root, "claim_id", claim_id);
-    }
-    if let Some(law_id) = command.law_id.as_deref() {
-        return matching_event(root, "law_id", law_id);
-    }
-    None
+    let (field, expected) = selected(command)?;
+    matching_event(root, field, expected)
+}
+
+fn selected(command: &ObserveCommand) -> Option<(&'static str, &str)> {
+    [
+        ("run_id", command.run_id.as_deref()),
+        ("check_id", command.check_id.as_deref()),
+        ("claim_id", command.claim_id.as_deref()),
+        ("law_id", command.law_id.as_deref()),
+    ]
+    .into_iter()
+    .find_map(|(field, value)| value.map(|value| (field, value)))
 }
 
 pub(super) fn stale_failure(event: Option<&Value>, candidate: &str) -> Option<String> {
@@ -72,16 +42,32 @@ pub(super) fn stale_failure(event: Option<&Value>, candidate: &str) -> Option<St
 
 pub(super) fn opaque_failure(event: Option<&Value>) -> Option<String> {
     event
-        .filter(|event| event.get("status").and_then(Value::as_str) == Some("fail"))
-        .filter(|event| event_failure(event).is_none())
-        .map(|event| {
-            format!(
-                "observed telemetry failure is opaque:{}",
-                event
-                    .get("run_id")
-                    .and_then(Value::as_str)
-                    .unwrap_or("unknown")
-            )
+        .and_then(|event| {
+            event
+                .get("fallback_only")
+                .and_then(Value::as_bool)
+                .unwrap_or(false)
+                .then(|| {
+                    event
+                        .get("why_failed")
+                        .and_then(Value::as_str)
+                        .unwrap_or("observability receipt matched target without event binding")
+                        .to_string()
+                })
+        })
+        .or_else(|| {
+            event
+                .filter(|event| event.get("status").and_then(Value::as_str) == Some("fail"))
+                .filter(|event| event_failure(event).is_none())
+                .map(|event| {
+                    format!(
+                        "observed telemetry failure is opaque:{}",
+                        event
+                            .get("run_id")
+                            .and_then(Value::as_str)
+                            .unwrap_or("unknown")
+                    )
+                })
         })
 }
 
@@ -174,11 +160,12 @@ fn is_observation_event(event: &Value) -> bool {
 
 fn matching_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
     spool_event(root, |event| {
-        event.get(field).and_then(Value::as_str) == Some(expected)
+        event.get(field).and_then(Value::as_str) == Some(expected) && !is_observation_event(event)
     })
     .or_else(|| {
         receipt_event(root, |event| {
             event.get(field).and_then(Value::as_str) == Some(expected)
+                && !is_observation_event(event)
         })
     })
 }
@@ -231,20 +218,32 @@ fn is_observability_receipt(value: &Value) -> bool {
 }
 
 fn fallback_event_from_receipt(value: &Value) -> Value {
+    let get = |key: &str| value.get(key).cloned().unwrap_or(Value::Null);
+    let operation = value
+        .get("operation")
+        .and_then(Value::as_str)
+        .unwrap_or("unknown");
     json!({
-        "run_id": value.get("run_id").cloned().unwrap_or(Value::Null),
-        "candidate_digest": value.get("candidate_digest").cloned().unwrap_or(Value::Null),
-        "status": value.get("status").cloned().unwrap_or(Value::Null),
-        "failure_class": value.get("failure_class").cloned().unwrap_or(Value::Null),
-        "why_failed": value.get("why_failed").cloned().unwrap_or(Value::Null),
-        "where_failed": value.get("where_failed").cloned().unwrap_or(Value::Null),
-        "next_repair": value.get("next_repair").cloned().unwrap_or(Value::Null),
-        "claim_impact": value.get("claim_impact").cloned().unwrap_or(Value::Null),
-        "law_id": value.get("law_id").cloned().unwrap_or(Value::Null),
-        "check_id": value.get("check_id").cloned().unwrap_or(Value::Null),
-        "claim_id": value.get("claim_id").cloned().unwrap_or(Value::Null),
-        "query_hint_logql": value.get("query_hint_logql").cloned().unwrap_or(Value::Null),
-        "query_hint_promql": value.get("query_hint_promql").cloned().unwrap_or(Value::Null),
-        "query_hint_traceql": value.get("query_hint_traceql").cloned().unwrap_or(Value::Null)
+        "run_id": get("run_id"),
+        "candidate_digest": get("candidate_digest"),
+        "operation": get("operation"),
+        "status": "fail",
+        "failure_class": "receipt_without_observability_event",
+        "why_failed": format!(
+            "observability receipt for {operation} matched the target selector but has no event object"
+        ),
+        "where_failed": "observe.target.receipt_event_binding",
+        "next_repair": format!(
+            "rerun {operation} with real event emission, then query logs metrics traces by run/correlation/current digest"
+        ),
+        "claim_impact": "observability_fitting_blocked",
+        "observed_receipt_status": get("status"),
+        "fallback_only": true,
+        "law_id": get("law_id"),
+        "check_id": get("check_id"),
+        "claim_id": get("claim_id"),
+        "query_hint_logql": get("query_hint_logql"),
+        "query_hint_promql": get("query_hint_promql"),
+        "query_hint_traceql": get("query_hint_traceql")
     })
 }

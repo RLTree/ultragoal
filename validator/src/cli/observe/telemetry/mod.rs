@@ -12,6 +12,8 @@ mod receipt;
 mod record;
 mod runtime;
 mod spool;
+#[cfg(test)]
+mod tests;
 mod trace;
 
 pub(crate) fn base_receipt(
@@ -185,6 +187,10 @@ pub(crate) fn query_receipt_text_for_test<'a>(
     field: &str,
 ) -> Result<&'a str, String> {
     query::receipt_text_for_test(telemetry, field)
+}
+
+pub(crate) fn redact_sensitive_text(input: &str) -> String {
+    record::redact_sensitive_text(input)
 }
 
 #[cfg(test)]

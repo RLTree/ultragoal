@@ -1,4 +1,4 @@
-mod archive_observability;
+mod archive;
 pub(crate) mod dispatch;
 pub(crate) mod product;
 pub(crate) mod review;

@@ -4283,8 +4283,8 @@
       "validator/src/cli/control/plane/registry/capability/gap.rs",
       "validator/src/cli/control/plane/registry/capability/mod.rs",
       "validator/src/cli/control/plane/transactional/mod.rs",
-      "validator/src/cli/control/plane/transactional/stdout.rs",
-      "validator/src/cli/control/plane/transactional/telemetry.rs",
+      "validator/src/cli/control/plane/transactional/stdout/mod.rs",
+      "validator/src/cli/control/plane/transactional/telemetry/mod.rs",
       "validator/src/cli/control/plane/types.rs",
       "validator/src/cli/final_packet/mod.rs",
       "validator/src/cli/garbage/collection/mod.rs",
@@ -4519,7 +4519,7 @@
       "validator/src/self_tests/red/mod.rs",
       "validator/src/self_tests/red/registry_schema_target_edges.rs",
       "validator/src/self_tests/red/schema.rs",
-      "validator/src/self_tests/review/archive_materiality.rs",
+      "validator/src/self_tests/review/archive/materiality.rs",
       "validator/src/self_tests/review/claim_ceiling.rs",
       "validator/src/self_tests/review/materiality.rs",
       "validator/src/self_tests/review/mod.rs",
@@ -21577,7 +21577,7 @@
         },
         {
           "digest": "sha256:2bbcdc2e10a8a12fca40ddc6259e16591f00069c69f99e4c30161fb0e269d5d3",
-          "path": "validator/src/self_tests/review/archive_materiality.rs"
+          "path": "validator/src/self_tests/review/archive/materiality.rs"
         },
         {
           "digest": "sha256:fbe316b63a860f0db2b223a8a4c5cc8ab481a85a54fe7a280a206b5ac0d4946c",

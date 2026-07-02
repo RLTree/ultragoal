@@ -22,7 +22,7 @@ pub fn build_archive(
     let entries = archive_paths(&manifest);
     archive_inputs_closed(root, &entries)?;
     let mut rows = read_entries(root, &zip_root, &entries)?;
-    crate::archive::zip::write_zip(zip_path, &mut rows)?;
+    crate::archive::zip::write_zip(zip_path, &mut rows).map_err(redact_error)?;
     let entry_names = rows.iter().map(|row| row.name.clone()).collect::<Vec<_>>();
     let entry_digest = entry_list_digest(&entry_names);
     Ok(json!({
@@ -147,9 +147,14 @@ fn read_entries(
 ) -> Result<Vec<crate::archive::zip::Entry>, String> {
     let mut rows = Vec::new();
     for rel in entries {
-        let path = crate::package::inventory::resolve(root, rel)?;
-        let bytes = digest::read_file_bytes(&path)
-            .map_err(|err| format!("{}: archive read failed: {err}", path.display()))?;
+        let path = crate::package::inventory::resolve(root, rel).map_err(redact_error)?;
+        let bytes = digest::read_file_bytes(&path).map_err(|err| {
+            format!(
+                "{}: archive read failed: {}",
+                redact_path(&path),
+                redact_error(err)
+            )
+        })?;
         rows.push(crate::archive::zip::Entry {
             name: crate::archive::names::entry_name(zip_root, rel)?,
             crc32: crate::archive::zip::crc32(&bytes),
@@ -158,4 +163,12 @@ fn read_entries(
         });
     }
     Ok(rows)
+}
+
+fn redact_error(error: String) -> String {
+    crate::cli::observe::telemetry::redact_sensitive_text(&error)
+}
+
+fn redact_path(path: &Path) -> String {
+    crate::cli::observe::telemetry::redact_sensitive_text(&path.display().to_string())
 }

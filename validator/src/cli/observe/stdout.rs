@@ -235,3 +235,7 @@ fn array_csv(value: Option<&Value>) -> String {
 fn csv(value: Option<&Value>) -> String {
     array_csv(value)
 }
+
+#[cfg(test)]
+#[path = "stdout_tests.rs"]
+mod tests;

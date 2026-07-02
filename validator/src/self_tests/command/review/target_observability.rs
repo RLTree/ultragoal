@@ -101,3 +101,19 @@ fn review_target_command_emits_fail_closed_observability() {
     );
     std::fs::remove_dir_all(root).expect("cleanup review target fail");
 }
+
+#[test]
+fn review_target_observability_receipt_path_validation_is_fail_closed() {
+    for raw in [
+        vec!["--observability-receipt", ""],
+        vec!["--observability-receipt", "../outside.json"],
+    ] {
+        let args = raw.iter().map(|item| item.to_string()).collect::<Vec<_>>();
+        let error = crate::cli::review::target::observability_receipt(&args)
+            .expect_err("unsafe observability receipt rejected");
+        assert!(
+            error.contains("review target observability receipt"),
+            "{error}"
+        );
+    }
+}

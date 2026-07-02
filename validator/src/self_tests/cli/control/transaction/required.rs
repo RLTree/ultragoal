@@ -39,3 +39,25 @@ fn transaction_reports_digest_unavailable_before_receipt_theater() {
     );
     std::fs::remove_dir_all(root).expect("cleanup transaction no digest");
 }
+
+#[test]
+fn transaction_finalize_reports_observability_spool_write_failures() {
+    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-spool-file");
+    super::write_manifest(&root);
+    let spool_path = root.join("validation_artifacts/observability/spool");
+    std::fs::create_dir_all(spool_path.parent().expect("spool parent")).expect("spool parent");
+    std::fs::write(&spool_path, "not a directory").expect("spool file");
+    let err = crate::command_run::run_with_exit_code(crate::Args {
+        root: root.clone(),
+        command: crate::Command::TransactionalFinalization {
+            receipt: root.join(super::RECEIPT),
+        },
+    })
+    .expect_err("spool file blocks telemetry emission");
+
+    assert!(
+        err.contains("validation_artifacts/observability/spool"),
+        "{err}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup transaction spool file");
+}

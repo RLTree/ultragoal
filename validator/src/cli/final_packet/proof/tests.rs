@@ -110,3 +110,18 @@ fn final_packet_stdout_names_pass_and_fail_repair_contracts() {
     assert!(fail_lines[1].contains("query_traces='ultragoal observe traces query"));
     std::fs::remove_dir_all(root).expect("cleanup");
 }
+
+#[test]
+fn final_packet_span_attach_is_noop_for_malformed_trace_shape() {
+    let proof = json!({"coverage":{"path":"coverage.json","status":"pass","digest":"sha256:c"}});
+    let mut observability = json!({
+        "event": {"span_id": "span-root", "operation": "final-packet.prove"},
+        "trace": {"child_spans": "not-an-array"},
+        "trace_bundle_digest": "sha256:before"
+    });
+
+    super::spans::attach(&proof, &mut observability);
+
+    assert_eq!(observability["trace"]["child_spans"], "not-an-array");
+    assert_eq!(observability["trace_bundle_digest"], "sha256:before");
+}

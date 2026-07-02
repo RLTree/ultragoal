@@ -112,17 +112,27 @@ where
 }
 
 fn fallback_event_from_receipt(value: &Value) -> Value {
+    let operation = value
+        .get("operation")
+        .and_then(Value::as_str)
+        .unwrap_or("unknown");
     json!({
         "run_id": value.get("run_id").cloned().unwrap_or(Value::Null),
         "correlation_id": value.get("correlation_id").cloned().unwrap_or(Value::Null),
         "candidate_digest": value.get("candidate_digest").cloned().unwrap_or(Value::Null),
         "operation": value.get("operation").cloned().unwrap_or(Value::Null),
-        "status": value.get("status").cloned().unwrap_or(Value::Null),
-        "failure_class": value.get("failure_class").cloned().unwrap_or(Value::Null),
-        "why_failed": value.get("why_failed").cloned().unwrap_or(Value::Null),
-        "where_failed": value.get("where_failed").cloned().unwrap_or(Value::Null),
-        "next_repair": value.get("next_repair").cloned().unwrap_or(Value::Null),
-        "claim_impact": value.get("claim_impact").cloned().unwrap_or(Value::Null),
+        "status": "fail",
+        "failure_class": "receipt_without_observability_event",
+        "why_failed": format!(
+            "observability receipt for {operation} matched the target selector but has no event object"
+        ),
+        "where_failed": "observe.target.receipt_event_binding",
+        "next_repair": format!(
+            "rerun {operation} with real event emission, then query logs metrics traces by run/correlation/current digest"
+        ),
+        "claim_impact": "observability_fitting_blocked",
+        "observed_receipt_status": value.get("status").cloned().unwrap_or(Value::Null),
+        "fallback_only": true,
         "law_id": value.get("law_id").cloned().unwrap_or(Value::Null),
         "check_id": value.get("check_id").cloned().unwrap_or(Value::Null),
         "claim_id": value.get("claim_id").cloned().unwrap_or(Value::Null)

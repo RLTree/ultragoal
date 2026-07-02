@@ -24,7 +24,7 @@ pub(crate) fn source_tree_digest(root: &Path, manifest: &Value) -> Result<String
 }
 
 pub(crate) fn changed_files_digest(root: &Path, manifest: &Value) -> Result<String, String> {
-    let files = manifest
+    let mut files = manifest
         .pointer("/changed_file_coupling_policy/changed_files")
         .and_then(Value::as_array)
         .ok_or_else(|| "changed_files missing from coverage manifest".to_string())?
@@ -32,6 +32,8 @@ pub(crate) fn changed_files_digest(root: &Path, manifest: &Value) -> Result<Stri
         .filter_map(Value::as_str)
         .map(ToOwned::to_owned)
         .collect::<Vec<_>>();
+    files.sort();
+    files.dedup();
     digest_files(root, &files)
 }
 
@@ -101,4 +103,43 @@ pub(crate) fn digest_file_bytes(
     result: Result<Vec<u8>, String>,
 ) -> Result<Vec<u8>, String> {
     result.map_err(|err| format!("{rel}: coverage digest read failed: {err}"))
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    #[test]
+    fn changed_files_digest_matches_canonical_sorted_unique_script_order() {
+        let stamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("clock")
+            .as_nanos();
+        let root =
+            std::env::temp_dir().join(format!("ultragoal-coverage-changed-files-digest-{stamp}"));
+        std::fs::create_dir_all(root.join("validator/src")).expect("source dir");
+        std::fs::write(root.join("validator/src/a.rs"), "a").expect("a");
+        std::fs::write(root.join("validator/src/b.rs"), "b").expect("b");
+        let manifest = json!({
+            "changed_file_coupling_policy": {
+                "changed_files": [
+                    "validator/src/b.rs",
+                    "validator/src/a.rs",
+                    "validator/src/b.rs"
+                ]
+            }
+        });
+        let actual = super::changed_files_digest(&root, &manifest).expect("digest");
+        let expected = super::digest_files(
+            &root,
+            &[
+                "validator/src/a.rs".to_string(),
+                "validator/src/b.rs".to_string(),
+            ],
+        )
+        .expect("expected digest");
+        assert_eq!(actual, expected);
+        std::fs::remove_dir_all(root).expect("cleanup");
+    }
 }

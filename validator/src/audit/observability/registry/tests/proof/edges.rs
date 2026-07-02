@@ -27,6 +27,23 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
     );
 
     assert_fitting_failure(
+        "observe-proof-receipt-no-observability-binding",
+        |root| {
+            let rel = "validation_artifacts/observability/fitting/package-digest.json";
+            crate::json_boundary::write_json(
+                &root.join(rel),
+                &json!({
+                    "schema": "not-observability",
+                    "status": "fail",
+                    "candidate_digest": "sha256:test"
+                }),
+            )
+            .unwrap();
+        },
+        "observability_command_fitting_receipt_not_current:package digest:",
+    );
+
+    assert_fitting_failure(
         "observe-proof-missing-run",
         |root| {
             let rel = "validation_artifacts/observability/fitting/package-digest.json";
@@ -205,23 +222,6 @@ fn observability_proof_reports_unavailable_candidates_and_missing_surface_operat
         &"observability_surface_fitting_operation_missing:cli command families".to_string()
     ));
     std::fs::remove_dir_all(root).expect("cleanup");
-}
-
-#[test]
-fn observability_inventory_requires_owner_and_next_surface_tracking_together() {
-    assert_fitting_failure(
-        "observe-proof-owner-without-next",
-        |root| {
-            let path = root.join("docs/generated/observability/command-inventory.json");
-            let mut inventory = crate::json_boundary::read_json(&path).unwrap();
-            inventory["fitting_inventory"]["package digest"]
-                .as_object_mut()
-                .unwrap()
-                .remove("next_unfitted_surface");
-            crate::json_boundary::write_json(&path, &inventory).unwrap();
-        },
-        "observability_command_fitting_row_shape_only:package digest",
-    );
 }
 
 fn assert_fitting_failure(

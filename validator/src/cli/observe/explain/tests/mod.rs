@@ -2,7 +2,10 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
+mod observation_skip;
+mod receipt_fallback;
 mod support;
+mod target_edges;
 use support::*;
 
 #[test]

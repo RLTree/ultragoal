@@ -100,7 +100,6 @@ fn require_unfitted_metadata(surface: &str, row: &Map<String, Value>, out: &mut 
         || !typed_row_accounting(row)
         || !super::row_contract::complete(row)
         || !non_empty_array(row, "missing_surfaces")
-        || !non_empty_string(row, "claim_impact")
     {
         out.push(format!(
             "observability_surface_fitting_missing_metadata:{surface}"

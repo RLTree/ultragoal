@@ -3,10 +3,10 @@ use std::path::Path;
 
 #[test]
 fn metrics_query_retry_waits_for_reconciled_rows() {
-    let command = super::metrics_command();
+    let command = super::super::metrics_command();
     let mut attempts = 0;
 
-    let body = super::super::retry_until_reconciled(
+    let body = super::super::super::retry_until_reconciled(
         &command,
         || {
             attempts += 1;
@@ -27,9 +27,9 @@ fn metrics_query_retry_waits_for_reconciled_rows() {
 
 #[test]
 fn metrics_query_reports_target_run_outside_bounded_window() {
-    let root = super::prepare_root("query-metrics-stale-target-window");
+    let root = super::super::prepare_root("query-metrics-stale-target-window");
     write_target_event(&root);
-    let mut command = super::metrics_command();
+    let mut command = super::super::metrics_command();
     command.correlation_id = Some("corr-query-bound".to_string());
 
     let receipt = crate::cli::observe::query::result_from_output(

@@ -188,7 +188,6 @@ fn prom_timestamp(sample: &Value) -> i64 {
         .and_then(|value| {
             value
                 .as_i64()
-                .or_else(|| value.as_u64().and_then(|value| i64::try_from(value).ok()))
                 .or_else(|| value.as_f64().map(|value| value.round() as i64))
                 .or_else(|| value.as_str().and_then(|value| value.parse::<i64>().ok()))
         })

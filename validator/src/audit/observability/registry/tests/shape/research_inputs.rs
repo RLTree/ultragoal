@@ -28,6 +28,11 @@ fn operating_loop_rejects_row_shape_research_inputs() {
         .as_array_mut()
         .unwrap()
         .push(json!({"url":"https://example.test/missing-id"}));
+    let duplicate = inventory["operating_loop"]["research_inputs"][0].clone();
+    inventory["operating_loop"]["research_inputs"]
+        .as_array_mut()
+        .unwrap()
+        .push(duplicate);
 
     let mut failures = Vec::new();
     super::super::super::operating::check(&root, &inventory, &mut failures);
@@ -54,5 +59,8 @@ fn operating_loop_rejects_row_shape_research_inputs() {
     assert!(
         failures.contains(&"observability_operating_research_input_source_id_missing".to_string())
     );
+    assert!(failures.contains(
+        &"observability_operating_research_input_duplicate:openai-harness-engineering".to_string()
+    ));
     let _ = std::fs::remove_dir_all(root);
 }

@@ -125,22 +125,11 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
     let package_digest = crate::package::inventory::package_digest(root)?;
     registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
     let mut receipt = receipt(root, command)?;
-    if registry::telemetry::supports(command.operation) {
-        registry::telemetry::attach(root, command, &mut receipt, started)?;
-    }
+    registry::telemetry::attach(root, command, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
     if let Some(path) = &command.receipt {
         crate::json_boundary::write_json(path, &receipt)?;
-        if registry::telemetry::supports(command.operation) {
-            registry::stdout::print(path, &receipt);
-        } else {
-            println!(
-                "ultragoal-control {} operation={} receipt={}",
-                receipt["status"],
-                command.operation.id(),
-                path.display()
-            );
-        }
+        registry::stdout::print(path, &receipt);
     } else {
         println!("{receipt}");
     }

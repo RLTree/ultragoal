@@ -34,14 +34,8 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
 #[test]
 fn archive_command_emits_pass_observability() {
     let root = package_root("archive-observability-pass");
-    let zip = root
-        .join("receipts/candidate.zip")
-        .to_string_lossy()
-        .to_string();
-    let receipt = root
-        .join("receipts/archive.json")
-        .to_string_lossy()
-        .to_string();
+    let zip = "receipts/candidate.zip";
+    let receipt = "receipts/archive.json";
     let observability = "observability/archive-build.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -49,9 +43,9 @@ fn archive_command_emits_pass_observability() {
             "archive",
             "build",
             "--zip",
-            &zip,
+            zip,
             "--receipt",
-            &receipt,
+            receipt,
             "--observability-receipt",
             observability,
             "--zip-root",
@@ -109,4 +103,85 @@ fn archive_command_emits_fail_closed_observability() {
             .any(|claim| claim == "update_goal_eligibility")
     );
     std::fs::remove_dir_all(root).expect("cleanup archive fail");
+}
+
+#[test]
+fn archive_observability_receipt_path_validation_is_fail_closed() {
+    for raw in [
+        vec!["--observability-receipt", ""],
+        vec!["--observability-receipt", "../outside.json"],
+    ] {
+        let args = raw.iter().map(|item| item.to_string()).collect::<Vec<_>>();
+        let error = crate::cli::archive::observability_receipt(&args)
+            .expect_err("unsafe observability receipt rejected");
+        assert!(error.contains("observability receipt"), "{error}");
+    }
+}
+
+#[test]
+fn archive_command_records_archive_receipt_write_failures() {
+    let root = package_root("archive-observability-receipt-write-fail");
+    let receipt_dir = root.join("receipts/archive.json");
+    std::fs::create_dir_all(&receipt_dir).expect("receipt dir blocks file write");
+    let zip = root
+        .join("receipts/candidate.zip")
+        .to_string_lossy()
+        .to_string();
+    let observability = "observability/archive-build-write-fail.json";
+
+    let code = crate::command_run::run_with_exit_code(args(
+        root.clone(),
+        &[
+            "archive",
+            "build",
+            "--zip",
+            &zip,
+            "--receipt",
+            &receipt_dir.to_string_lossy(),
+            "--observability-receipt",
+            observability,
+            "--zip-root",
+            "harness-ultragoal",
+        ],
+    ))
+    .expect("archive command returns fail code");
+
+    assert_eq!(code, 1);
+    let obs = crate::json_boundary::read_json(&root.join(observability)).expect("observability");
+    assert_eq!(text(&obs, "status"), "fail");
+    assert!(
+        text(&obs, "why_failed").contains("json rename failed"),
+        "{obs}"
+    );
+    assert!(!text(&obs, "why_failed").contains(&root.to_string_lossy().to_string()));
+    std::fs::remove_dir_all(root).expect("cleanup archive write fail");
+}
+
+#[test]
+fn archive_command_propagates_observability_spool_write_errors() {
+    let root = package_root("archive-observability-spool-write-fail");
+    std::fs::write(root.join("validation_artifacts"), b"not a directory").expect("block spool");
+
+    let error = crate::command_run::run_with_exit_code(args(
+        root.clone(),
+        &[
+            "archive",
+            "build",
+            "--zip",
+            "receipts/candidate.zip",
+            "--receipt",
+            "receipts/archive.json",
+            "--observability-receipt",
+            "observability/archive-build.json",
+            "--zip-root",
+            "harness-ultragoal",
+        ],
+    ))
+    .expect_err("observability spool failure propagates");
+
+    assert!(
+        error.contains("validation_artifacts/observability/spool"),
+        "{error}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup archive spool fail");
 }

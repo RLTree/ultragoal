@@ -170,3 +170,6 @@ fn relative_receipt_path(root: &Path, receipt: &Path) -> Option<String> {
 fn text<'a>(value: &'a Value, key: &str, fallback: &'a str) -> &'a str {
     value.get(key).and_then(Value::as_str).unwrap_or(fallback)
 }
+
+#[cfg(test)]
+mod tests;

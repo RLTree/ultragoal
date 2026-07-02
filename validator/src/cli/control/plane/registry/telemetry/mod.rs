@@ -4,10 +4,10 @@ use std::path::Path;
 use std::time::Instant;
 
 mod catalog;
-
-pub(crate) fn supports(_operation: ControlOperation) -> bool {
-    true
-}
+#[cfg(test)]
+mod catalog_tests;
+#[cfg(test)]
+mod tests;
 
 pub(crate) fn attach(
     root: &Path,

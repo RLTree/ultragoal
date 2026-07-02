@@ -150,3 +150,20 @@ fn blocked_claims(receipt: &Value) -> Vec<String> {
         .map(ToOwned::to_owned)
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn malformed_trace_child_spans_leave_observability_bundle_unchanged() {
+        let mut obs = json!({
+            "event": {"span_id": "span-root"},
+            "trace": {"child_spans": "malformed"}
+        });
+        attach_spans(&json!({}), &mut obs);
+
+        assert_eq!(obs["trace"]["child_spans"], "malformed");
+        assert!(obs.get("trace_bundle_digest").is_none());
+    }
+}

@@ -112,3 +112,7 @@ fn csv(value: Option<&Value>) -> String {
         .filter(|items| !items.is_empty())
         .unwrap_or_else(|| "none".to_string())
 }
+
+#[cfg(test)]
+#[path = "stdout_tests.rs"]
+mod tests;

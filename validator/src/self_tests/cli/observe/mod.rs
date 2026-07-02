@@ -9,6 +9,7 @@ mod package_digest;
 mod prove;
 mod query;
 mod run;
+mod stdout_helpers;
 
 pub(super) fn args(values: &[&str]) -> Vec<String> {
     values.iter().map(|value| (*value).to_string()).collect()
