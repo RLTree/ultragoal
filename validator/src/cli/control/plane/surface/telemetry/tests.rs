@@ -7,11 +7,6 @@ use std::time::Instant;
 
 #[test]
 fn package_surface_telemetry_maps_operation_failure_and_claim_edges() {
-    let cache = command(ControlOperation::CacheAudit);
-    let generic = command(ControlOperation::RegistryProbe);
-
-    assert_eq!(operation(&cache), "cache-audit");
-    assert_eq!(operation(&generic), "package-surface-audit");
     assert_eq!(
         command_name(ControlOperation::InstallAudit),
         "ultragoal install"
@@ -65,9 +60,11 @@ fn package_surface_telemetry_propagates_spool_write_failures() {
         "blocked_claim_classes": ["completion"],
         "unsupported_claim_classes": ["release"]
     });
+    let receipt_path = PathBuf::from("validation_artifacts/cli/cache-audit-receipt.json");
     let err = attach(
         &root,
-        &command(ControlOperation::CacheAudit),
+        &command_with_receipt(ControlOperation::CacheAudit, &receipt_path),
+        &receipt_path,
         &mut value,
         Instant::now(),
     )
@@ -80,10 +77,10 @@ fn package_surface_telemetry_propagates_spool_write_failures() {
     fs::remove_dir_all(root).expect("cleanup telemetry write failure");
 }
 
-fn command(operation: ControlOperation) -> ControlCommand {
+fn command_with_receipt(operation: ControlOperation, receipt: &PathBuf) -> ControlCommand {
     ControlCommand {
         operation,
-        receipt: None,
+        receipt: Some(receipt.clone()),
         surface_root: None,
     }
 }

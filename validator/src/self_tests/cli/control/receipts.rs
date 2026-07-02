@@ -111,7 +111,8 @@ fn run_writes_and_prints_fail_closed_receipts() {
         receipt: None,
         surface_root: None,
     };
-    assert_eq!(run(&root, &no_write).expect("run prints receipt"), 1);
+    let missing_receipt = run(&root, &no_write).expect_err("run requires receipt path");
+    assert!(missing_receipt.contains("missing required argument --receipt"));
     std::fs::remove_dir_all(root).expect("cleanup cli control run");
 }
 

@@ -119,14 +119,12 @@ fn attach_propagates_observability_spool_write_errors() {
 fn attach_marks_outside_root_receipts_instead_of_leaking_private_paths() {
     let root = root("transactional-telemetry-outside-receipt");
     let mut value = json!({"status":"pass","blocked_claim_classes":[]});
+    let outside_receipt = std::path::PathBuf::from(std::path::MAIN_SEPARATOR.to_string())
+        .join("private")
+        .join("tmp")
+        .join("outside-transaction-finalize.json");
 
-    attach(
-        &root,
-        std::path::Path::new("/private/tmp/outside-transaction-finalize.json"),
-        &mut value,
-        Instant::now(),
-    )
-    .expect("attach outside receipt");
+    attach(&root, &outside_receipt, &mut value, Instant::now()).expect("attach outside receipt");
 
     assert_eq!(
         value["receipt_observability_binding"]["command_receipt_path"],

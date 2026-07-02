@@ -60,6 +60,13 @@ pub(crate) fn bounded_metric_query_for_operation(operation: &str) -> String {
     ])))
 }
 
+pub(crate) fn bounded_success_metric_query_for_operation(operation: &str) -> String {
+    bounded_metric_query(&metric_selector(metric_filter_with_primary(vec![
+        metric_label("operation", operation),
+        metric_label("status", "pass"),
+    ])))
+}
+
 pub(crate) fn bounded_failure_metric_query_for_operation(operation: &str) -> String {
     bounded_metric_query(&metric_selector(metric_filter_with_primary(vec![
         metric_label("operation", operation),

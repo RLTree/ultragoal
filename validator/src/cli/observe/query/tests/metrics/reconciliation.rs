@@ -81,6 +81,31 @@ fn accepts_same_window_pass_metrics() {
     std::fs::remove_dir_all(root).expect("cleanup fresh pass");
 }
 
+#[test]
+fn pass_target_uses_pass_only_query_and_rejects_error_metrics() {
+    let root = super::super::prepare_root("observe-metrics-pass-target-error-signal");
+    write_target_event(&root, "line-caps.check", "pass", "none");
+
+    let query = super::super::super::metrics::target_query(Path::new(&root), &command())
+        .expect("target query");
+    assert!(query.contains("operation=\"line-caps.check\""), "{query}");
+    assert!(query.contains("status=\"pass\""), "{query}");
+
+    let receipt = super::super::super::result_from_output(
+        Path::new(&root),
+        &command(),
+        "sum by (...)".to_string(),
+        Ok(metric_body("line-caps.check", "line_cap_failure")),
+    )
+    .expect("pass target rejects error metric");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        receipt["why_failed"],
+        "observability_metric_pass_target_has_error_signal:line_cap_failure:error_count=1"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup pass target error signal");
+}
+
 fn write_target_event(root: &Path, operation: &str, status: &str, failure_class: &str) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({

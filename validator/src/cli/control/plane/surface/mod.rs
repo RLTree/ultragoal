@@ -19,17 +19,14 @@ pub(crate) fn supports(operation: ControlOperation) -> bool {
 pub(crate) fn run(
     root: &Path,
     command: &crate::cli::control::plane::ControlCommand,
+    path: &Path,
 ) -> Result<i32, String> {
     let started = std::time::Instant::now();
     let mut receipt = receipt(root, command)?;
-    telemetry::attach(root, command, &mut receipt, started)?;
+    telemetry::attach(root, command, path, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
-    if let Some(path) = &command.receipt {
-        crate::json_boundary::write_json(path, &receipt)?;
-        stdout::print(path, &receipt);
-    } else {
-        println!("{receipt}");
-    }
+    crate::json_boundary::write_json(path, &receipt)?;
+    stdout::print(path, &receipt);
     Ok(exit)
 }
 

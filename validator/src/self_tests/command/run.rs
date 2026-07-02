@@ -100,9 +100,21 @@ fn command_dispatch_builds_review_archive_and_semantic_receipts() {
 #[test]
 fn command_run_returns_exit_codes_without_exiting_test_process() {
     let root = package_root("command-run-exit-code");
-    let code = crate::command_run::run(args(root.clone(), &["update-goal", "eligibility"]))
-        .expect("control command returns code");
+    let update_goal_receipt = root.join("validation_artifacts/cli/update-goal-eligibility.json");
+    let code = crate::command_run::run(args(
+        root.clone(),
+        &[
+            "update-goal",
+            "eligibility",
+            "--receipt",
+            update_goal_receipt
+                .to_str()
+                .expect("update goal receipt path"),
+        ],
+    ))
+    .expect("control command returns code");
     assert_eq!(code, 1);
+    assert!(update_goal_receipt.is_file());
     let code = crate::command_run::run(args(root.clone(), &["package-digest"]))
         .expect("package digest returns code");
     assert_eq!(code, 0);

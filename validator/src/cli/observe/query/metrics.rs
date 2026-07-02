@@ -4,7 +4,7 @@ use serde_json::Value;
 use std::path::Path;
 
 use super::{
-    bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation, target,
+    bounded_failure_metric_query_for_operation, bounded_success_metric_query_for_operation, target,
 };
 
 const METRIC_QUERY_WINDOW_SECONDS: i64 = 300;
@@ -18,7 +18,7 @@ pub(super) fn target_query(root: &Path, command: &ObserveCommand) -> Option<Stri
     if event.get("status").and_then(Value::as_str) == Some("fail") {
         Some(bounded_failure_metric_query_for_operation(operation))
     } else {
-        Some(bounded_metric_query_for_operation(operation))
+        Some(bounded_success_metric_query_for_operation(operation))
     }
 }
 
@@ -80,7 +80,16 @@ fn failure_class_mismatch(event: &Value, summary: &Value) -> Option<String> {
         .and_then(Value::as_str)
         .unwrap_or("none");
     if target_failure == "none" {
-        return None;
+        let metric_failure = text_field(summary, "failure_class", "none");
+        let error_count = summary
+            .get("error_count")
+            .and_then(Value::as_u64)
+            .unwrap_or(0);
+        return (metric_failure != "none" || error_count > 0).then(|| {
+            format!(
+                "observability_metric_pass_target_has_error_signal:{metric_failure}:error_count={error_count}"
+            )
+        });
     }
     let metric_failure = text_field(summary, "failure_class", "none");
     if metric_failure != target_failure {

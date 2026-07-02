@@ -92,20 +92,33 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
 }
 
 #[test]
-fn package_surface_run_prints_without_receipt_and_reports_missing_target() {
+fn package_surface_run_requires_receipt_and_reports_missing_target() {
     let root = crate::self_tests::boundaries::support::temp_root("surface-run-print");
     let missing = root.join("missing-target");
     write_package(&root, "same", "0.0.test");
-    let exit = run(
+    let without_receipt = run(
         &root,
         &ControlCommand {
             operation: ControlOperation::InstallAudit,
             receipt: None,
+            surface_root: Some(missing.clone()),
+        },
+    )
+    .expect_err("surface run requires receipt");
+    assert!(without_receipt.contains("missing required argument --receipt"));
+
+    let receipt = root.join("validation_artifacts/cli/install-audit-receipt.json");
+    let exit = run(
+        &root,
+        &ControlCommand {
+            operation: ControlOperation::InstallAudit,
+            receipt: Some(receipt.clone()),
             surface_root: Some(missing),
         },
     )
-    .expect("surface run without receipt");
+    .expect("surface run with receipt");
     assert_eq!(exit, 1);
+    assert!(receipt.exists());
     std::fs::remove_dir_all(root).expect("cleanup surface print");
 }
 
@@ -133,7 +146,7 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
         &missing_root,
         &ControlCommand {
             operation: ControlOperation::InstallAudit,
-            receipt: None,
+            receipt: Some(missing_root.join("validation_artifacts/cli/install-audit-receipt.json")),
             surface_root: Some(target.clone()),
         },
     )

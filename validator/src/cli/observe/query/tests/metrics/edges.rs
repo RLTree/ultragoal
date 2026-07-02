@@ -171,7 +171,7 @@ fn metrics_reconciliation_ignores_unreported_optional_runtime_signals() {
         Path::new(&root),
         &command(),
         "sum by (...)".to_string(),
-        Ok(metric_body("coverage.prove", "none")),
+        Ok(pass_metric_body("coverage.prove")),
     )
     .expect("optional runtime receipt");
 
@@ -205,13 +205,21 @@ fn write_target_event(
 }
 
 fn metric_body(operation: &str, failure_class: &str) -> String {
+    metric_body_with_status(operation, "fail", failure_class)
+}
+
+fn pass_metric_body(operation: &str) -> String {
+    metric_body_with_status(operation, "pass", "none")
+}
+
+fn metric_body_with_status(operation: &str, status: &str, failure_class: &str) -> String {
     json!({
         "status": "success",
         "data": {"result": [{
             "metric": {
                 "__name__": "ultragoal_command_total",
                 "operation": operation,
-                "status": "fail",
+                "status": status,
                 "failure_class": failure_class,
                 "saturation_status": "serial_command_typed"
             },

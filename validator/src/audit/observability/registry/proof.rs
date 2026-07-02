@@ -161,9 +161,29 @@ fn strings(row: &Map<String, Value>, key: &str) -> Vec<String> {
 
 fn expected_operation(command: &str) -> String {
     match command {
+        "line-cap check" => "line-caps.check".to_string(),
         "red fixture report" => "red_fixture.report".to_string(),
         "update-goal eligibility" => "update_goal_eligibility".to_string(),
         "self update-goal eligibility" => "self_update_goal_eligibility".to_string(),
         _ => command.replace(' ', "."),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn expected_operation_preserves_cli_command_ids_that_are_not_space_rewrites() {
+        assert_eq!(
+            super::expected_operation("line-cap check"),
+            "line-caps.check"
+        );
+        assert_eq!(
+            super::expected_operation("red fixture report"),
+            "red_fixture.report"
+        );
+        assert_eq!(
+            super::expected_operation("package digest"),
+            "package.digest"
+        );
     }
 }

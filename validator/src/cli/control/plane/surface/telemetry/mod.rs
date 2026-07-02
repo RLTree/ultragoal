@@ -6,19 +6,11 @@ use std::time::Instant;
 pub(super) fn attach(
     root: &Path,
     command: &crate::cli::control::plane::ControlCommand,
+    receipt_path: &Path,
     value: &mut Value,
     started: Instant,
 ) -> Result<(), String> {
-    let receipt_path = command
-        .receipt
-        .as_ref()
-        .map(|path| path.to_string_lossy().into_owned())
-        .unwrap_or_else(|| {
-            format!(
-                "validation_artifacts/cli/{}-receipt.json",
-                operation(command)
-            )
-        });
+    let receipt_path = receipt_path.to_string_lossy().into_owned();
     let why = why_failed(value);
     let status = text(value, "status", "fail").to_string();
     let obs = crate::cli::observe::telemetry::command_receipt(
@@ -76,14 +68,6 @@ fn runtime(started: Instant) -> crate::cli::observe::telemetry::RuntimeTelemetry
         saturation_status: "shared_authority_read_serial_package_surface_audit".to_string(),
         repair_anchor_before: "package_surface_audit_start".to_string(),
         repair_anchor_after: "package_surface_observability_emit".to_string(),
-    }
-}
-
-fn operation(command: &crate::cli::control::plane::ControlCommand) -> &'static str {
-    match command.operation {
-        ControlOperation::InstallAudit => "install-audit",
-        ControlOperation::CacheAudit => "cache-audit",
-        _ => "package-surface-audit",
     }
 }
 

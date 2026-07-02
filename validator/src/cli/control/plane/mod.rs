@@ -116,23 +116,20 @@ pub(crate) fn parse(raw: &[String]) -> Option<ControlCommand> {
 
 pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> {
     let started = std::time::Instant::now();
-    if let Some(path) = &command.receipt {
-        path::validate_receipt_path(root, path, command.operation)?;
-    }
+    let path = command.receipt.as_ref().ok_or_else(|| {
+        "missing required argument --receipt for control-plane telemetry stdout".to_string()
+    })?;
+    path::validate_receipt_path(root, path, command.operation)?;
     if surface::supports(command.operation) {
-        return surface::run(root, command);
+        return surface::run(root, command, path);
     }
     let package_digest = crate::package::inventory::package_digest(root)?;
     registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
     let mut receipt = receipt(root, command)?;
     registry::telemetry::attach(root, command, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
-    if let Some(path) = &command.receipt {
-        crate::json_boundary::write_json(path, &receipt)?;
-        registry::stdout::print(path, &receipt);
-    } else {
-        println!("{receipt}");
-    }
+    crate::json_boundary::write_json(path, &receipt)?;
+    registry::stdout::print(path, &receipt);
     Ok(exit)
 }
 
