@@ -3,6 +3,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 mod explain;
+mod explain_validation;
 mod target;
 
 use target::TargetReceipt;
@@ -33,7 +34,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         .as_ref()
         .map(|target| explain::evidence(root, &candidate, &target.event))
         .unwrap_or_else(|| json!({"status":"missing"}));
-    validate_explain_evidence(&explain_evidence, &mut failures);
+    explain_validation::validate(&explain_evidence, &mut failures);
     let failure_summary = failure_summary(&failures);
     let status = if failures.is_empty() { "pass" } else { "fail" };
     let snapshot_observability =
@@ -139,44 +140,6 @@ fn validate_query_evidence(query_evidence: &Value, failures: &mut Vec<String>) {
         if row.get("status").and_then(Value::as_str) != Some("pass") {
             failures.push(format!("same_candidate_{kind}_query_not_proven"));
         }
-    }
-}
-
-fn validate_explain_evidence(explain_evidence: &Value, failures: &mut Vec<String>) {
-    if explain_evidence.get("status").and_then(Value::as_str) != Some("pass") {
-        failures.push("same_candidate_explain_failure_not_proven".to_string());
-        return;
-    }
-    if explain_evidence
-        .get("fallback_used")
-        .and_then(Value::as_bool)
-        .unwrap_or(true)
-    {
-        failures.push("explain_failure_used_fallback".to_string());
-    }
-    for field in [
-        "root_cause",
-        "where_failed",
-        "why_failed",
-        "smallest_repair",
-        "narrow_rerun",
-        "broad_rerun",
-        "claim_ceiling",
-    ] {
-        let text = explain_evidence
-            .get(field)
-            .and_then(Value::as_str)
-            .unwrap_or("");
-        if text.is_empty() || text == "unknown" || text == "none" {
-            failures.push(format!("explain_failure_missing_{field}"));
-        }
-    }
-    if explain_evidence
-        .get("implicated_paths")
-        .and_then(Value::as_array)
-        .is_none_or(Vec::is_empty)
-    {
-        failures.push("explain_failure_missing_implicated_paths".to_string());
     }
 }
 

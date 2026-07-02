@@ -37,7 +37,7 @@ fn source_audit_inventory_records_stable_production_proof() {
     let board = inventory
         .pointer("/fitting_control_board/first_incomplete")
         .expect("first incomplete");
-    assert_eq!(board["id"], "review-target build");
+    assert_eq!(board["id"], "archive build");
     assert_eq!(board["fitting_status"], "partially_fitted");
     assert_eq!(
         board["next_unfitted_surface"],

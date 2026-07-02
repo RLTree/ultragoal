@@ -108,8 +108,8 @@
     "families": {
       "commands": {
         "total": 62,
-        "fitted": 16,
-        "partially_fitted": 31,
+        "fitted": 17,
+        "partially_fitted": 30,
         "unfitted": 15
       },
       "surfaces": {
@@ -175,7 +175,7 @@
     },
     "first_incomplete": {
       "family": "commands",
-      "id": "review-target build",
+      "id": "archive build",
       "fitting_status": "partially_fitted",
       "next_unfitted_surface": "red/green/tamper fixture proof"
     },
@@ -1240,7 +1240,7 @@
       ]
     },
     "review-target build": {
-      "fitting_status": "partially_fitted",
+      "fitting_status": "fitted",
       "fitted_surfaces": [
         "structured log event",
         "bounded metric",
@@ -1248,17 +1248,20 @@
         "receipt observability binding",
         "pass stdout contract",
         "fail stdout contract",
-        "same-candidate live query proof"
-      ],
-      "missing_surfaces": [
+        "same-candidate live query proof",
+        "same-candidate production snapshot proof",
+        "useful non-fallback explain output",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
       ],
+      "missing_surfaces": [],
       "validator_check_id": "review-target-build-observability-binding",
       "focused_tests": [
         "review_target_command_emits_pass_observability",
         "review_target_command_emits_fail_closed_observability",
+        "review_target_observability_receipt_path_validation_is_fail_closed",
+        "observe_snapshot_accepts_pass_target_explain_without_failure_where_why",
         "command_dispatch_builds_review_archive_and_semantic_receipts",
         "command_run_propagates_package_and_packet_builder_errors",
         "command_run_propagates_output_and_generation_errors",
@@ -1266,16 +1269,17 @@
       ],
       "receipt_paths": [
         "validation_artifacts/observability/review-target-build.json",
-        "validation_artifacts/review/review-target-receipt.json"
+        "validation_artifacts/review/review-target-receipt.json",
+        "validation_artifacts/observability/review-target-build-production-proof.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/review-target-build-logs-query.json",
         "validation_artifacts/observability/review-target-build-metrics-query.json",
         "validation_artifacts/observability/review-target-build-traces-query.json"
       ],
-      "claim_impact": "supports_review_target_source_local_observability_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_command_specific_red_green_tamper_fixture_proof",
+      "claim_impact": "supports_review_target_source_local_observability_only_no_readiness_release_completion_update_goal; Gate 92 remains blocked until every inventory row is fitted",
       "current_owner_surface": "command:review-target build",
-      "next_unfitted_surface": "red/green/tamper fixture proof",
+      "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
       "metric_instrumentation": "fitted metric instrumentation",
       "trace_instrumentation": "fitted trace instrumentation",
@@ -1285,11 +1289,18 @@
       "same_candidate_query_proof_paths": [
         "validation_artifacts/observability/review-target-build-logs-query.json",
         "validation_artifacts/observability/review-target-build-metrics-query.json",
-        "validation_artifacts/observability/review-target-build-traces-query.json"
+        "validation_artifacts/observability/review-target-build-traces-query.json",
+        "validation_artifacts/observability/review-target-build-explain-failure.json"
       ],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
+      "red_fixtures": [
+        "review_target_command_emits_fail_closed_observability"
+      ],
+      "green_fixtures": [
+        "review_target_command_emits_pass_observability"
+      ],
+      "tamper_fixtures": [
+        "review_target_observability_receipt_path_validation_is_fail_closed"
+      ]
     },
     "archive build": {
       "fitting_status": "partially_fitted",

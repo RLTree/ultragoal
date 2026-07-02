@@ -32,14 +32,20 @@ pub(super) fn evidence(root: &Path, candidate: &str, event: &Value) -> Value {
                         .pointer("/explanation/root_cause")
                         .cloned()
                         .unwrap_or(json!("unknown")),
-                    "where_failed": value
-                        .get("observed_where_failed")
+                    "target_status": value
+                        .pointer("/observed_run/status")
                         .cloned()
                         .unwrap_or(json!("unknown")),
-                    "why_failed": value
-                        .get("observed_why_failed")
-                        .cloned()
-                        .unwrap_or(json!("unknown")),
+                    "where_failed": observed_or_query(
+                        &value,
+                        "observed_where_failed",
+                        "/explanation/query_evidence/logs/where_failed",
+                    ),
+                    "why_failed": observed_or_query(
+                        &value,
+                        "observed_why_failed",
+                        "/explanation/query_evidence/logs/why_failed",
+                    ),
                     "implicated_paths": value
                         .pointer("/explanation/implicated_paths")
                         .cloned()
@@ -65,6 +71,14 @@ pub(super) fn evidence(root: &Path, candidate: &str, event: &Value) -> Value {
         })
         .next()
         .unwrap_or_else(|| json!({"status":"missing"}))
+}
+
+fn observed_or_query(value: &Value, observed_key: &str, query_pointer: &str) -> Value {
+    value
+        .get(observed_key)
+        .cloned()
+        .or_else(|| value.pointer(query_pointer).cloned())
+        .unwrap_or(json!("unknown"))
 }
 
 fn explain_matches(value: &Value, candidate: &str, run_id: &str, operation: &str) -> bool {
