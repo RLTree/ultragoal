@@ -426,6 +426,28 @@ stage, signal class, long-running path, external/live path, and claim guard.
 No minimum-surface, sample-based, current-failure-only, or adjacent-surface
 substitution is allowed.
 
+Gate 92 must also install the lower-level agent-legibility primitives that make
+the fitting board usable instead of merely visible:
+
+- Every law-bearing failure stdout must carry run_id, correlation_id,
+  trace/span ids where available, current candidate digest, failed law/check/
+  claim ids, where_failed, why_failed, failure_class, claim_impact, receipt
+  path, exact next_repair, exact narrow_rerun, and observe logs/metrics/traces
+  query hints.
+- `observe explain --next` must turn the fitting control board's first
+  incomplete row into a concrete repair plan: row id, owner surface, next
+  unfitted surface, missing proof class, implicated command/family, stale or
+  wrong-digest evidence, narrow command, query/explain commands, source or
+  fixture gap, claim ceiling, and forbidden actions. It is tactical Gate 92
+  repair guidance, not row fitting, readiness proof, or checklist projection.
+- A compact typed current-state read model must exist, preferably
+  `ultragoal current-state --json`, with an optional bounded
+  `validation_artifacts/current-state.json` snapshot. It is derived from real
+  receipts and typed authority surfaces: package digest, git dirty state,
+  fitting board, coverage status, source audit, red report, claim guards, and
+  stale-evidence checks. It is not proof by itself and must fail closed on stale
+  or wrong-digest inputs.
+
 Phase 2 has two internal closures:
 
 - Phase 2A closes operational observability. It fits every command/check/
@@ -493,6 +515,13 @@ they are narrow helpers or routine validation. Product Usage Fitness is not
 closed until the fit-repo first-use path and plugin-activated target-repo path
 are both visible.
 
+AGENTS.md and generated repo-entry docs must be routing tables in the literal
+operator sense: "If doing X, run Y, inspect Z, stop on W." They should route to
+canonical CLI commands, current-state, observe query/explain, evals, security,
+architecture, setup/retrofit, and claim-ceiling surfaces without duplicating the
+law corpus. Encyclopedia prose, stale checklist summaries, undocumented helper
+routes, or hidden author memory fail this phase.
+
 The routine surface should converge toward the stack command model:
 `ultragoal stack fast`, `ultragoal stack standard`,
 `ultragoal stack clean-proof --cache-mode none`, `ultragoal stack watch`,
@@ -506,14 +535,15 @@ surface is `ultragoal next` plus `ultragoal next --json`; aliases such as
 `ultragoal stack status` or `ultragoal stack next` are permitted only when they
 delegate to the same CLI authority kernel. This command is the bridge between
 Gate 92 sensory proof and product usability. It consumes typed authority
-surfaces and tells an un-oriented agent or Tree the current candidate digest,
-dirty/stale state, active phase, strict claim ceiling, first legal blocker, why
-that blocker comes first, dependency chain, stale or wrong-digest evidence,
-exact next repair, exact narrow rerun, observe query and explain commands when
-available, broad rerun only when allowed, forbidden actions, Gate 92 fitting
-summary, Product Usage status, worktree eligibility, and Agent Cockpit state.
-`--json` is the future cockpit feed; stdout is the human/agent hot path and must
-be bounded, redacted, and decisive.
+surfaces, including the current-state read model and `observe explain --next`
+when Gate 92 is the active blocker. It tells an un-oriented agent or Tree the
+current candidate digest, dirty/stale state, active phase, strict claim ceiling,
+first legal blocker, why that blocker comes first, dependency chain, stale or
+wrong-digest evidence, exact next repair, exact narrow rerun, observe query and
+explain commands when available, broad rerun only when allowed, forbidden
+actions, Gate 92 fitting summary, Product Usage status, worktree eligibility,
+and Agent Cockpit state. `--json` is the future cockpit feed; stdout is the
+human/agent hot path and must be bounded, redacted, and decisive.
 
 Done means the harness can answer "where am I, what is blocked, why is it
 blocked, what exact command proves the next repair, and what claims remain
@@ -529,21 +559,23 @@ state handling, forbidden-action guards, and fail-closed fixtures. Product proof
 requires a real `ultragoal next` run on the current candidate, stdout and JSON
 that identify the real current blocker and correct next narrow repair, receipt
 binding to the same candidate/run/correlation, logs/metrics/traces query proof
-for that run when telemetry exists, useful observe explain output when blocked,
-and source inspection proving the command reads typed evidence instead of
-markdown, checklist prose, or last-command heuristics.
+for that run when telemetry exists, useful `observe explain --next` or
+target-specific observe explain output when blocked, current-state reconciliation
+against its source receipts, and source inspection proving the command reads
+typed evidence instead of markdown, checklist prose, or last-command heuristics.
 
 Exit requires focused help/routine-path/next-action tests and red fixtures for
 missing routine entrypoint, non-navigable help, leaf-only validation
 substitution, hidden fit-repo path, omitted target-repo/plugin-activated path,
 `scripts/check` failing to delegate or declare itself a narrow helper, missing
 `ultragoal next`, generic next-action output, no exact next command, stale digest
-accepted as current, checklist prose accepted as authority, broad audit
-recommended before narrow observable repair, worktrees marked eligible while
-Gate 92/Product Usage/Phase 4 are incomplete, readiness/update_goal implied from
-source-local proof, cockpit/UI proof substituted for CLI proof, private path
-leakage, and unbounded JSON output. Update checklist rows with progress statuses
-only, then commit as source-local/not readiness.
+accepted as current, checklist prose accepted as authority, missing or stale
+current-state source binding, `observe explain --next` returning generic repair
+advice, broad audit recommended before narrow observable repair, worktrees marked
+eligible while Gate 92/Product Usage/Phase 4 are incomplete, readiness/
+update_goal implied from source-local proof, cockpit/UI proof substituted for CLI
+proof, private path leakage, and unbounded JSON output. Update checklist rows
+with progress statuses only, then commit as source-local/not readiness.
 
 ### Phase 4 - Rebind Gates 0-91 Acceptance Spine
 

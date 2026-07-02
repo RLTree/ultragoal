@@ -216,6 +216,15 @@ Mandatory integration objectives from the synthesis:
      canonical docs, exec plans, command surfaces, evals, telemetry, architecture,
      security, privacy, and quality gates without duplicating the whole law
      system.
+   - Required shape: routing entries must be actionable operator routes, not
+     essays. A fresh agent should see "If doing X, run Y, inspect Z, stop on W"
+     for setup, routine validation, Gate 92 diagnosis, current-state inspection,
+     eval promotion, security/privacy checks, architecture checks, source-local
+     proof, install/cache/live proof, and update_goal eligibility. The file
+     should route to canonical CLI authority, `observe` query/explain surfaces,
+     `ultragoal current-state --json`, `ultragoal next`, deeper docs, and active
+     ExecPlans; it must not duplicate the full law corpus or turn stale prose
+     into authority.
    - You know it is working when: an un-oriented agent can find the routine
      command, proof surfaces, claim ceiling, observability query/explain path,
      and active work contract from concise routing docs without loading every
@@ -272,6 +281,15 @@ Mandatory integration objectives from the synthesis:
      validation, observability query, observability explain, repair-loop
      execution, eval execution, architecture check, security check, setup, and
      retrofit.
+   - Required legibility stack: this feature is a layered product loop, not a
+     collection of disconnected tools. Failure stdout is the atomic command
+     diagnostic. `observe explain --next` is the Gate 92 tactical repair planner
+     for the fitting board's first incomplete row. `ultragoal current-state
+     --json` is the typed read model and optional bounded
+     `validation_artifacts/current-state.json` snapshot generated from real
+     receipts. `ultragoal next` is the top-level harness navigator that consumes
+     current-state and Gate 92 explain output. AGENTS.md routes agents to those
+     surfaces without becoming an encyclopedia.
    - Required Agent State / Next Action Contract: Product Usage Fitness must add
      a canonical CLI-governed next-action surface, `ultragoal next` and
      `ultragoal next --json`, after full Gate 92 closure and before Phase 4
@@ -284,10 +302,20 @@ Mandatory integration objectives from the synthesis:
      first legal blocker, why that blocker comes first, dependency chain, stale
      or wrong-digest evidence, exact next repair, exact narrow rerun, observe
      logs/metrics/traces query commands when a run exists, observe explain
-     command when relevant, broad rerun only when allowed, forbidden actions,
-     Gate 92 fitting-board summary, Product Usage status, worktree eligibility,
-     and cockpit state. `--json` is the future Agent Cockpit feed; stdout is the
-     human/agent hot path and must remain bounded, redacted, and decisive.
+     command when relevant, current-state source bindings, broad rerun only when
+     allowed, forbidden actions, Gate 92 fitting-board summary, Product Usage
+     status, worktree eligibility, and cockpit state. `--json` is the future
+     Agent Cockpit feed; stdout is the human/agent hot path and must remain
+     bounded, redacted, and decisive.
+   - Rule: `ultragoal current-state --json` and
+     `validation_artifacts/current-state.json` are read models, not claim proof.
+     They must list the typed source receipts and authority surfaces they read,
+     bind to the current candidate digest, report dirty/stale state, summarize
+     Gate 92 board status, coverage status, first blockers, and claim ceiling,
+     and fail closed when a source receipt is stale, wrong-digest, missing, or
+     checklist-derived. They may feed `ultragoal next` and the future cockpit,
+     but may not replace source audit, coverage, red report, production
+     telemetry, or same-surface proof.
    - You know it is working when: from a clean checkout or plugin-activated target
      repo, the expected path is obvious, command help is self-contained, advanced
      commands remain available, and helper scripts cannot pretend to be final
@@ -295,23 +323,30 @@ Mandatory integration objectives from the synthesis:
      blocked, why is it blocked, what exact command proves the next repair, and
      what claims are still forbidden" without making an agent or Tree spelunk
      parent prompts, stale checklist rows, command-inventory walls, raw receipts,
-     or source-audit dumps.
+     source-audit dumps, or hidden command knowledge. If done correctly, a fresh
+     agent should be able to enter a clean checkout, read the compact route, run
+     one next-action command, follow one exact narrow repair command, and know
+     which claims remain forbidden in under a minute of orientation.
    - Validation versus proof: parser tests, help tests, JSON schema checks,
      redaction/bounds tests, and red fixtures prove feature mechanics only. They
      do not prove product usefulness. Production proof requires running the real
      `ultragoal next` command on the current candidate, verifying stdout and JSON
      identify the real current blocker and correct narrow next repair, querying
      logs/metrics/traces by the same run/correlation/current digest, reconciling
-     those records with the command receipt, running observe explain when blocked,
-     and inspecting source to confirm the command reads typed authority surfaces
-     rather than markdown, checklist prose, or last-command heuristics.
+     those records with the command receipt, running `observe explain --next` or
+     the target-specific observe explain command when blocked, reconciling
+     current-state with its source receipts, and inspecting source to confirm the
+     command reads typed authority surfaces rather than markdown, checklist
+     prose, or last-command heuristics.
    - Required fail-closed cases: missing `ultragoal next`, generic "inspect
      receipts" output, no exact next command, missing claim ceiling, stale digest
-     accepted as current, checklist prose accepted as authority, broad audit
-     recommended before narrow observable repair, worktrees marked eligible while
-     Gate 92/Product Usage/Phase 4 are incomplete, readiness/update_goal implied
-     from source-local proof, cockpit/UI proof substituted for CLI proof, private
-     path leakage, and unbounded JSON output.
+     accepted as current, current-state snapshot treated as proof, current-state
+     generated from stale or checklist-derived inputs, checklist prose accepted as
+     authority, `observe explain --next` producing generic repair text, broad
+     audit recommended before narrow observable repair, worktrees marked eligible
+     while Gate 92/Product Usage/Phase 4 are incomplete, readiness/update_goal
+     implied from source-local proof, cockpit/UI proof substituted for CLI proof,
+     private path leakage, and unbounded JSON output.
    - Downstream impact: Phase 3.5 Product Usage Fitness, clean-checkout command
      discovery, setup/retrofit, active-repo rollout, Agent Cockpit, Gate 105,
      final packet, and update_goal blockers must enforce command discoverability,
@@ -3149,12 +3184,37 @@ Required observability stack:
 
 Required CLI authority:
 
-- Implement through `ultragoal`, not loose shell scripts as authority: `observe stack up`, `observe stack health`, `observe stack smoke`, `observe stack down`, `observe stack gc plan`, `observe stack gc dry-run`, `observe stack gc apply`, `observe logs query`, `observe metrics query`, `observe traces query`, `observe snapshot`, `observe prove`, `observe explain-failure --run-id`, `observe explain-claim --claim-id`, `observe explain-check --check-id`, and `observe explain-law --law-id`.
+- Implement through `ultragoal`, not loose shell scripts as authority: `observe stack up`, `observe stack health`, `observe stack smoke`, `observe stack down`, `observe stack gc plan`, `observe stack gc dry-run`, `observe stack gc apply`, `observe logs query`, `observe metrics query`, `observe traces query`, `observe snapshot`, `observe prove`, `observe explain --next`, `observe explain-failure --run-id`, `observe explain-claim --claim-id`, `observe explain-check --check-id`, and `observe explain-law --law-id`.
 - Shell scripts may exist only as implementation helpers. CLI receipts are the authority.
 - A machine-readable command inventory must cover every current and future `ultragoal` command family, including package digest, source audit, red fixture report, schema validation, mandatory-law validation, standards-gardener, source-obligation validation, foundational trace validation, coverage, line caps, namespace, Product Fitness/Cohesion/Journey, fit-repo, review-round, review-target, archive, final-packet proof, registry probe, install audit, cache audit, transactional finalization, CLI self-law, update-goal eligibility, Rust DevX, GC, session-log hardening, target-repo audit, and observability commands.
 - The validator must fail if any command inventory row lacks log instrumentation, metric instrumentation, trace instrumentation, pass output contract, fail output contract, receipt observability binding, focused tests, and claim impact mapping.
 - The command inventory must include explicit observability fitting inventory for every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, and package/plugin surface. Command fitting and surface fitting are both mandatory and distinct. Each row must state `fitting_status` as `fitted`, `partially_fitted`, or `unfitted`, name the fitted surfaces, missing surfaces, validator check id, focused test ids, same-candidate receipt paths, live query proof paths, current owner surface, next unfitted surface, and claim impact. The inventory must also include a validator-checked `fitting_control_board` that recomputes totals by command, surface, operating-loop, and signal family, names the first incomplete row, names its next unfitted surface, and blocks claims when any row is partial, unfitted, stale, or row-shape-only. This inventory plus control board is the Gate 92 tracking surface; mutable checklist prose, side ledgers, adjacent command coverage, or a fitted neighbor cannot stand in for it. Fitted rows must dereference current same-candidate observability receipts and logs/metrics/traces query proof; row shape alone fails. `partially_fitted`, `unfitted`, missing, stale, wrong-digest, local-spool-only, or row-shape-only fitting rows fail Gate 92 and block completion-adjacent claims. A few fitted commands cannot substitute for unfitted commands, validator checks, receipts, fixtures, package resources, plugin surfaces, or claim guards elsewhere in the CLI or plugin.
 - The command inventory must also include an observability operating-loop inventory and signal inventory. Gate 92 treats observability as the repair operating system, not a receipt family. The required loop is: current digest first; run the highest-authority failing command once; query logs, metrics, and traces by run id/correlation id; explain the failure through CLI output before manual artifact inspection; repair the smallest root cause; rerun the narrow command; compare before/after telemetry; and run broad source audit only after the narrow observable proof passes. The required signal classes are CLI-translated latency, traffic, errors, saturation, freshness, correlation, redaction, and boundedness. Each loop stage and signal class must have the same `fitting_status`, fitted/missing surfaces, validator check id, tests, current receipt paths, live query proof paths, and claim impact as command and surface rows. Fitted loop/signal rows must dereference same-candidate telemetry. Partial, unfitted, stale, wrong-digest, or row-shape-only loop/signal rows fail Gate 92 and block completion-adjacent claims.
+- Gate 92 must add `observe explain --next` as the tactical repair planner for
+  the fitting board. It reads the validator-owned fitting control board, selects
+  the first incomplete row by dependency order, and emits a concrete repair plan:
+  row id, owner surface, next unfitted surface, missing proof class, implicated
+  command or family, stale/wrong-digest evidence if present, exact narrow command
+  to run, required logs/metrics/traces query commands, required explain command,
+  fixture or source gap, claim impact, and forbidden broad/final actions. It may
+  not mark rows fitted, mint readiness, substitute for production proof, or use
+  checklist prose as authority.
+- Every law-bearing failure stdout is a first-class legibility surface. It must
+  include run_id, correlation_id, trace/span ids when available, candidate
+  digest, failed law/check/claim ids, where_failed, why_failed, failure_class,
+  next_repair, narrow_rerun, claim_impact, receipt path, and exact observe
+  logs/metrics/traces query hints. Generic "inspect receipts", "validation
+  failed", or wall-of-failures output without priority and narrow repair fails
+  Gate 92 even when the receipt shape is valid.
+- Gate 92 must expose a compact typed current-state read model. The canonical
+  surface should be `ultragoal current-state --json`; a bounded
+  `validation_artifacts/current-state.json` snapshot is allowed only as a
+  current-candidate read model generated from typed sources such as package
+  digest, git status, fitting board, coverage receipt, source audit, red report,
+  claim guards, and stale-evidence checks. Current-state output is not proof by
+  itself, must name its source receipts and candidate digest, must fail closed on
+  stale/wrong-digest inputs, and is the feed consumed by `ultragoal next` and the
+  future Agent Cockpit.
 
 Gold-standard observability doctrine required by the synthesis:
 
