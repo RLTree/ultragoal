@@ -58,7 +58,6 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
     for prose_or_api_string in [
         "serde_json::from_slice",
         "phase advancement",
-        "current phase:",
         "progress claim only",
         "run-fit",
         "corr-fit",
@@ -71,6 +70,23 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
             ),
             None,
             "{prose_or_api_string}"
+        );
+    }
+    for (session_label, expected) in [
+        ("worker thread:", "session_history_worker_thread"),
+        ("thread id:", "session_history_thread_id"),
+        ("current phase:", "session_history_current_phase"),
+        ("phase progress:", "session_history_phase_progress"),
+        ("backlog item:", "session_history_backlog_item"),
+        ("receipt status:", "session_history_receipt_status"),
+        ("completion claim:", "session_history_completion_claim"),
+    ] {
+        assert_eq!(
+            crate::audit::namespace::source::path_labels::product_opaque_goal_work_string_label(
+                session_label
+            ),
+            Some(expected),
+            "{session_label}"
         );
     }
     for (artifact_path, expected) in [

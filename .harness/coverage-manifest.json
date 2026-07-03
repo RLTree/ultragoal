@@ -159,6 +159,7 @@
       "validator/src/audit/law/family/aliases.rs",
       "validator/src/audit/law/family/mod.rs",
       "validator/src/audit/law/mod.rs",
+      "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
       "validator/src/audit/observability/registry/proof.rs",
       "validator/src/audit/observability/registry/tests/receipts.rs",
       "validator/src/audit/law/surface/receipt/requirements.rs",
@@ -169,6 +170,8 @@
       "validator/src/audit/namespace/law/mod.rs",
       "validator/src/audit/namespace/mod.rs",
       "validator/src/audit/namespace/source/mod.rs",
+      "validator/src/audit/namespace/source/path_labels.rs",
+      "validator/src/audit/namespace/source/string_labels.rs",
       "validator/src/audit/namespace/source/topology.rs",
       "validator/src/audit/package/checks/mod.rs",
       "validator/src/audit/package/run/scope.rs",
@@ -362,6 +365,7 @@
       "validator/src/self_tests/law/mod.rs",
       "validator/src/self_tests/law/traceability.rs",
       "validator/src/self_tests/namespace/binding/mod.rs",
+      "validator/src/self_tests/namespace/binding/path_label_edges.rs",
       "validator/src/self_tests/namespace/binding/semantic_names.rs",
       "validator/src/self_tests/namespace/binding/topology.rs",
       "validator/src/self_tests/namespace/mod.rs",
@@ -394,7 +398,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:5bc57f29eccbf9ecc6ec5f68fdb9c96d34761e935bcc47e69d2c6e0aa06f8c0a",
+    "changed_files_digest": "sha256:0d2354a7593bf67ee7330925b59dadc767dc635f60695f931bd2577ecf3df38b",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -442,7 +446,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:49832692d1e2bf5a3d11c6c072cb3402b224a43f29daf65627a18a959ae8218c",
+  "repo_root_digest": "sha256:64b04305c24c9e4455a5171f9202912c975935d9a0aceff77a8bf4d389e8561e",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

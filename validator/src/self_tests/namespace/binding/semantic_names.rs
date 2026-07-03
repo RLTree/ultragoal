@@ -80,6 +80,39 @@ fn namespace_semantic_names_reject_goal_work_identifier_names() {
 }
 
 #[test]
+fn namespace_semantic_names_reject_session_history_status_strings() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-session-label");
+    write_text(
+        &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
+        "pub(crate) const COMMAND_STATE_LABEL: &str = \"phase progress:\";\n",
+    );
+    let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_product_opaque_goal_work_string"
+        ),
+        "{failures:?}"
+    );
+    assert!(
+        contains(&failures, "label=session_history_phase_progress"),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace session label");
+}
+
+#[test]
+fn namespace_semantic_names_allow_template_rejection_catalog_owner() {
+    let failure = crate::audit::namespace::source::string_labels::failure(
+        "validator/src/audit/template_integrity.rs",
+        1,
+        "        \"phase progress:\",",
+    );
+    assert!(failure.is_none(), "{failure:?}");
+}
+
+#[test]
 fn namespace_semantic_names_accept_observability_product_names() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "namespace-observability-green",

@@ -54,14 +54,32 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "source",
         "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
     ),
+    package_authority_surface!("source", "validator/src/audit/namespace/classes.rs"),
+    package_authority_surface!("source", "validator/src/audit/namespace/law/mod.rs"),
+    package_authority_surface!("source", "validator/src/audit/namespace/law/path_rules.rs"),
+    package_authority_surface!("source", "validator/src/audit/namespace/mod.rs"),
+    package_authority_surface!(
+        "source",
+        "validator/src/audit/namespace/source/failure_text.rs",
+    ),
     package_authority_surface!(
         "source",
         "validator/src/audit/namespace/source/identifiers.rs",
     ),
+    package_authority_surface!("source", "validator/src/audit/namespace/source/mod.rs"),
     package_authority_surface!(
         "source",
         "validator/src/audit/namespace/source/path_labels.rs",
     ),
+    package_authority_surface!(
+        "source",
+        "validator/src/audit/namespace/source/semantic_tokens.rs",
+    ),
+    package_authority_surface!(
+        "source",
+        "validator/src/audit/namespace/source/string_labels.rs",
+    ),
+    package_authority_surface!("source", "validator/src/audit/namespace/source/topology.rs",),
     package_authority_surface!("schema", "schemas/mandatory-law-surfaces.schema.json"),
     package_authority_surface!("schema", "schemas/red-packet.schema.json"),
     package_authority_surface!("schema", "schemas/final-packet-proof.schema.json"),

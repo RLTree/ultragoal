@@ -104,6 +104,9 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
         .filter(|ch| ch.is_ascii_alphanumeric())
         .collect::<String>();
     let tokens = semantic_tokens(text);
+    if let Some(label) = session_history_status_label(&lower) {
+        return Some(label);
+    }
     if !authority_like_string(text) {
         return None;
     }
@@ -147,6 +150,18 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
     None
 }
 
+fn session_history_status_label(lower: &str) -> Option<&'static str> {
+    match lower.trim() {
+        "worker thread:" => Some("session_history_worker_thread"),
+        "thread id:" => Some("session_history_thread_id"),
+        "current phase:" => Some("session_history_current_phase"),
+        "phase progress:" => Some("session_history_phase_progress"),
+        "backlog item:" => Some("session_history_backlog_item"),
+        "receipt status:" => Some("session_history_receipt_status"),
+        "completion claim:" => Some("session_history_completion_claim"),
+        _ => None,
+    }
+}
 fn authority_like_string(text: &str) -> bool {
     let trimmed = text.trim();
     if telemetry_instance_literal(trimmed) {
