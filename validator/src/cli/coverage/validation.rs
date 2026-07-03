@@ -15,7 +15,10 @@ const REQUIRED_BLOCKED: &[&str] = &[
 ];
 
 pub(super) fn failures(root: &Path, receipt: &Path, candidate: &str) -> Vec<String> {
-    let path = receipt_fields::resolve_receipt(root, receipt);
+    let path = match receipt_fields::resolve_receipt(root, receipt) {
+        Ok(path) => path,
+        Err(err) => return vec![format!("coverage_receipt_path_invalid:{err}")],
+    };
     let receipt = match crate::json_boundary::read_json(&path) {
         Ok(value) => value,
         Err(err) => return vec![format!("coverage_receipt_missing_or_malformed:{err}")],

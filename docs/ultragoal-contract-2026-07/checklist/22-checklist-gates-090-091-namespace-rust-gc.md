@@ -327,7 +327,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] Green fixture: generated fixture catalogs may use repeated prefixes only when a generator/catalog route owns the family and the exception is narrow, typed, and claim-limited.
   - Evidence:
@@ -431,7 +431,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] Line-cap proof passes after topology repair.
   - Evidence:

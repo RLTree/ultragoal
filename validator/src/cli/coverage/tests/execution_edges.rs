@@ -46,6 +46,19 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
             .expect_err("bounded scheduler")
             .contains("scheduler jobs must be at least 1")
     );
+
+    let outside_receipt = root.with_extension("coverage-receipt.json");
+    let command = CoverageCommand {
+        receipt: outside_receipt,
+        jobs: Some(1),
+        validate_existing: false,
+    };
+    let err = run_with_executor(&root, &command, panic_executor)
+        .expect_err("absolute coverage receipt rejected before executor");
+    assert!(
+        err.contains("absolute outputs are external debug only and cannot support claims"),
+        "{err}"
+    );
     fs::remove_dir_all(root).expect("cleanup");
 }
 
@@ -174,4 +187,8 @@ fn mutating_executor(root: &Path, _receipt: &Path) -> CoverageExecution {
     )
     .expect("mutate manifest");
     CoverageExecution::validate_existing()
+}
+
+fn panic_executor(_root: &Path, _receipt: &Path) -> CoverageExecution {
+    panic!("coverage executor must not run for invalid receipt paths");
 }

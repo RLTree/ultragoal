@@ -45,6 +45,7 @@ fn run_with_executor(
 ) -> Result<i32, String> {
     let started = Instant::now();
     let scheduler = crate::scheduler::SchedulerConfig::from_jobs(command.jobs)?;
+    crate::output_path::claim_artifact_path(root, &command.receipt, "coverage receipt")?;
     let before = crate::package::inventory::package_digest(root)?;
     let execution = if command.validate_existing {
         CoverageExecution::validate_existing()

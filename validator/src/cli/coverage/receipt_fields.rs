@@ -19,12 +19,8 @@ pub(super) fn coverage_command_path(root: &Path) -> PathBuf {
     }
 }
 
-pub(super) fn resolve_receipt(root: &Path, receipt: &Path) -> PathBuf {
-    if receipt.is_absolute() {
-        receipt.to_path_buf()
-    } else {
-        root.join(receipt)
-    }
+pub(super) fn resolve_receipt(root: &Path, receipt: &Path) -> Result<PathBuf, String> {
+    crate::output_path::claim_artifact_path(root, receipt, "coverage receipt")
 }
 
 pub(super) fn string(value: &Value, key: &str) -> String {
