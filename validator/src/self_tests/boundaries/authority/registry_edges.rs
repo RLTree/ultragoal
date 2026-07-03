@@ -112,3 +112,47 @@ fn mandatory_law_registry_rejects_unpackaged_fixture_paths() {
     );
     std::fs::remove_dir_all(root).expect("cleanup unpackaged registry fixture");
 }
+
+#[test]
+fn proof_surface_law_requires_each_substitution_guard_red_fixture() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "proof-surface-guard-red-fixtures",
+    );
+    std::fs::create_dir_all(&root).expect("registry fixture root");
+    let valid = "fixtures/mandatory-law-surfaces/valid/distinct-proof-surfaces-claim-ceilings.json";
+    let inventory = std::iter::once(valid.to_string()).collect::<BTreeSet<_>>();
+    std::fs::create_dir_all(root.join("fixtures/mandatory-law-surfaces/valid"))
+        .expect("valid fixture dir");
+    std::fs::write(root.join(valid), "{}").expect("valid fixture");
+
+    let failures = crate::audit::law::authority_surfaces::registry_law_failures_for_test(
+        &root,
+        &json!({"laws":[{
+            "law_id":"distinct-proof-surfaces-claim-ceilings",
+            "validator_check_id":"distinct-proof-surfaces-claim-ceilings",
+            "valid_fixture_path": valid,
+            "law_specific":{
+                "source_local_proof_substituted_for_live_surface":true,
+                "tests_substituted_for_product_behavior":true,
+                "receipt_existence_substituted_for_behavior":true,
+                "wrong_proof_surface":true,
+                "source_obligation_parity":true
+            }
+        }]}),
+        &BTreeSet::new(),
+        &inventory,
+    );
+    for red_id in [
+        "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+        "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red",
+    ] {
+        assert!(
+            failures.iter().any(|(_, failure)| failure
+                .contains(&format!("authority_surface_red_fixture_missing:{red_id}"))),
+            "{red_id} must be a required proof-surface red fixture: {failures:?}"
+        );
+    }
+    std::fs::remove_dir_all(root).expect("cleanup proof surface guard fixture");
+}

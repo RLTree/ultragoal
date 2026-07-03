@@ -133,6 +133,26 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
         "one typed writer must not bless a sibling raw claim output path: {mixed_output:?}"
     );
 
+    let renamed_bypass = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+        "validator/src/cli/live_loop/mod.rs",
+        "let current_state_path = root.join(\"validation_artifacts/current-state.json\");\ncrate::json_boundary::write_json(&current_state_path, &value)?;",
+    );
+    assert!(
+        renamed_bypass
+            .iter()
+            .any(|failure| failure.contains("var=current_state_path")),
+        "raw root-relative claim output writes must fail even when the variable name is not receipt-shaped: {renamed_bypass:?}"
+    );
+
+    let typed_var_write = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+        "validator/src/cli/live_loop/mod.rs",
+        "let current_state_path = crate::output_path::literal_claim_artifact_path(root, \"validation_artifacts/current-state.json\", \"current state snapshot\");\ncrate::json_boundary::write_json(&current_state_path, &value)?;",
+    );
+    assert!(
+        typed_var_write.is_empty(),
+        "typed output-authority variables may be written: {typed_var_write:?}"
+    );
+
     let scanner_catalog = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
         "validator/src/audit/law/authority_surfaces/source/output.rs",
         "    \"root.join(&command.receipt)\",\n",
@@ -174,7 +194,6 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
         "constant receipt paths still need typed output authority: {constant_receipt_join:?}"
     );
 }
-
 #[test]
 fn raw_authority_classification_is_not_blessed_by_unrelated_json_projection() {
     let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(

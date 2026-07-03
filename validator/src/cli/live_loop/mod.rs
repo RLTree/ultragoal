@@ -44,7 +44,11 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
     let scheduled =
         crate::scheduler::run_ordered(config, TaskClass::PureReadParallel, context.tasks());
     let current_state = crate::cli::current_state::snapshot_for_candidate(root, candidate.clone());
-    let current_state_path = root.join("validation_artifacts/current-state.json");
+    let current_state_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        "validation_artifacts/current-state.json",
+        "current state snapshot",
+    );
     crate::json_boundary::write_json(&current_state_path, &current_state)?;
     let first_blocker = current_state["first_blocker"].clone();
     let status = if first_blocker.get("id").and_then(Value::as_str) == Some("none") {
