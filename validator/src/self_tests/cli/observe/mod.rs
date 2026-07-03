@@ -59,6 +59,7 @@ fn observe_parser_covers_required_command_inventory() {
         ),
         (&["observe", "snapshot"][..], ObserveOperation::Snapshot),
         (&["observe", "prove"][..], ObserveOperation::Prove),
+        (&["observe", "fit"][..], ObserveOperation::Fit),
         (
             &["observe", "explain-failure"][..],
             ObserveOperation::ExplainFailure,
@@ -82,6 +83,17 @@ fn observe_parser_covers_required_command_inventory() {
             .expect("observe command");
         assert_eq!(parsed.operation, operation);
     }
+}
+
+#[test]
+fn observe_run_routes_fit_without_substituting_unknown_specs() {
+    let root = minimal_root("observe-roundtrip-run-route");
+    let command = observe::parse(&args(&["observe", "fit", "--command", "install-audit"]))
+        .expect("parse")
+        .expect("observe fit command");
+    let err = observe::run(&root, &command).expect_err("unknown fit spec fails closed");
+    assert!(err.contains("unknown observability command spec"), "{err}");
+    fs::remove_dir_all(root).expect("cleanup observe fit route");
 }
 
 #[test]

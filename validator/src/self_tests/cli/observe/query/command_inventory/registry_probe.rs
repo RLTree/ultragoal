@@ -1,5 +1,5 @@
 #[test]
-fn registry_probe_inventory_records_production_proof_and_fixture_binding() {
+fn registry_probe_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),

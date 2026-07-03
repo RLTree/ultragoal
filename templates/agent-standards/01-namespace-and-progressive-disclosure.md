@@ -10,12 +10,44 @@ is opened.
   `utils`, `helpers`, `misc`, and vague `common` directories for domain logic.
 - Name surfaces by the operator or reader's domain task, not implementation
   accidents or historical shims.
+- Name source paths, modules, functions, helpers, tests, ids, receipts,
+  fixtures, and artifact path segments by product behavior or domain
+  responsibility, not by the goal work that caused the code to exist.
+  Non-compliant names include gate/slice/phase labels, progress/status labels,
+  evidence-purpose labels, session-history labels, and generic buckets when
+  they stand in for behavior.
 - Prefer small, well-scoped files. Large files degrade context quality and get
   truncated in agent context.
 - Repeated prefixes across more than two files usually mean a missing
   subdirectory with the prefix removed.
 - Compatibility exceptions must name the external contract that makes the
   less-ideal name worth keeping.
+
+### Product-Semantic Names
+
+Agents navigate by names before they read code. A name is compliant only when a
+fresh agent can infer the product purpose from it without knowing the current
+goal, phase, receipt, or parent-session history.
+
+- Bad: `observe/fitting`, `observe/production_proof`, `audit/gate92`,
+  `phase4_rebind`, `progress/checkpoint`, `helpers`, `utils`.
+- Better: `observe/command_roundtrip`,
+  `observe/telemetry_reconciliation`,
+  `audit/observability/command_inventory`,
+  `standards/reconciliation`,
+  `cache/invalidation`, `receipt/dereference`.
+- Function names follow the same law. Bad: `fit_command`, `fit_path`,
+  `production_proof`, `checkpoint_progress`. Better:
+  `run_command_roundtrip`, `roundtrip_path`, `reconcile_same_candidate`,
+  `write_command_inventory`, `query_trace_parentage`.
+- Product vocabulary is contextual. `fit-repo` is valid when it names the
+  user-facing fit-repo product command. The same root does not make `fitting`,
+  `fit_goal`, or `fit_slice` valid. `contract`, `closure`, and `proof` are
+  valid only when the code actually owns a product contract, dependency/package
+  closure, or proof-artifact/prove-command surface.
+- Compatibility aliases belong at parser or schema boundaries. The
+  implementation below an alias still needs product-semantic modules and
+  function names.
 
 ## Purpose Or Removal Law
 

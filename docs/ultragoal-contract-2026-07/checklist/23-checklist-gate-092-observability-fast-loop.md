@@ -12,7 +12,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status: in progress
 
 - [ ] Gate 92 implementation is rooted in the actual mandatory research sources, not only repo-derived summaries. OpenAI Harness Engineering, OpenAI Codex repair loops, OpenAI Agents observability/tracing, Google SRE monitoring and four golden signals, structured-event/high-cardinality doctrine, OpenTelemetry semantic conventions, OpenAI agent-improvement loop, and self-improving domain-agent research are all current in the research-source registry and article-to-law trace before any Gate 92 progress is checked.
-  - Status: validated current
+  - Status: not started
 
 - [ ] No Gate 92 row may be checked from a minimum surface, sample source, representative command, current-failure-only proof, stack-health-only proof, query-only proof, or adjacent fitted surface. Every command, validator check family, receipt/proof path, fixture/report path, package/plugin/setup/retrofit surface, operating-loop stage, signal class, long-running path, external/live path, and claim guard must be fitted or must explicitly block Gate 92 and all dependent claims.
   - Evidence:
@@ -177,29 +177,47 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Validation:
   - Production proof:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` exists as the parent-owned routine live repair command.
   - Working means one command computes the current candidate and package boundary, detects changed files, resolves affected law/check/schema/fixture/receipt/query nodes, runs only legally sufficient impacted work, emits stdout with run/correlation/trace ids and first blocker, queries same-candidate logs/metrics/traces when available, invokes or links the applicable explain command, emits current-state, and prints exact next repair, exact narrow rerun, broad-rerun allowance, forbidden actions, and claim ceiling.
   - Validation means parser/help/schema/cache-key/bounds/redaction/unit tests pass.
   - Production proof means a real current-candidate command run reconciles stdout, receipt, logs, metrics, traces, explain output, current-state, source inspection, and explicit source-local claim ceiling.
-  - Status: not started
+  - Status: implemented, pending validation
 
 - [ ] Live-loop performance proof demonstrates the 20x routine source-local speed target without confusing live repair with strict no-cache proof.
-  - Working means the command records duration_ms, worker_count, task_count, queue_depth, critical path, affected node count, skipped node count, cache mode, cache hit rate, invalidation reasons, cold/warm timing class, candidate digest, and claim impact. The known baseline is approximately 181 seconds scheduled audit work, so 20x routine live-loop target is approximately 9.1 seconds unless current receipts recompute a different baseline.
-  - Validation means timing fields and fail-closed timing classes are covered by focused tests and fixtures.
-  - Production proof means measured live command runs on current digest, not dry-run estimates, stale receipts, synthetic no-op paths, or workflow-engine output.
+  - Working means the command records duration_ms, worker_count, task_count, queue_depth, critical path, affected node count, skipped node count, cache mode, cache hit rate, invalidation reasons, cold/warm timing class, candidate digest, and claim impact. The known baseline is approximately 181 seconds scheduled audit work, so 20x routine live-loop target is approximately 9.1 seconds unless current receipts recompute a different baseline. The measured loop must include the routinely-run source-local validation surfaces, not merely a wrapper around current-state.
+  - Validation means timing fields, per-node baselines, per-node 20x thresholds, fail-closed timing classes, and slow-hidden-side-channel rejection are covered by focused tests and fixtures.
+  - Production proof means measured live command runs on current digest, includes all required high-frequency nodes, proves every included node is at least 20x faster than its canonical full-command baseline under verified-local cache, proves the whole loop completes at or below the current 9.1 second target, and does not use dry-run estimates, stale receipts, synthetic no-op paths, workflow-engine output, or warm-cache timing as clean proof.
+  - Status: implemented, pending validation
+
+- [ ] High-frequency validation surfaces are inside the verified incremental loop rather than slow side channels.
+  - Working means `scripts/check`, `scripts/check-coverage-full`, `scripts/check-coverage-fast`, `ultragoal coverage prove`, source audit, red fixture report, line caps, namespace, schema validation, mandatory-law validation, source-obligations, foundational trace, package inventory scans, focused Rust tests, fmt/build checks, and touched fixture/report paths are represented as typed query-graph nodes with affected-set resolution, cache/input-digest keys, worker/task/queue/cache telemetry, source-local claim impact, and exact narrow rerun commands.
+  - Validation means parser/unit/table tests and red fixtures fail closed when a routinely-run check is missing from the loop, left as an external slow helper without typed reason, has no baseline, has no 20x threshold, accepts stale/wrong-digest cache, hides serial execution, omits affected fixtures, substitutes coverage-fast for exact coverage, or reports wrapper-only timing.
+  - Production proof means a real current-candidate loop run executes or legally reuses same-candidate proof for every required high-frequency node, reconciles stdout/receipt/logs/metrics/traces/explain/current-state, and names any typed serial/destructive/external-live exception as a blocker rather than fitting the row.
+  - Status: not started
+
+- [ ] Exact coverage participates in the 20x routine-loop law.
+  - Working means `scripts/check-coverage-full` and `ultragoal coverage prove` have canonical full-command baselines, verified-local incremental/affected-set or cache-equivalent nodes, same-candidate equivalence to authoritative exact coverage, and measured node timing at least 20x faster than the full baseline while preserving 100 percent coverage and `uncovered_records=[]` as the only passing exact-coverage condition.
+  - Validation means tests/fixtures fail closed for missing coverage baseline, stale coverage cache, wrong package/source/changed-files digest, coverage-fast substituted for full exact coverage, generated-code/exclusion gaming, coverage timing without worker/task/queue/cache fields, and warm-cache proof presented as strict no-cache proof.
+  - Production proof means the current loop run includes the coverage node, emits/query-proves coverage latency and cache honesty, reconciles to the current exact coverage receipt, and keeps strict no-cache final coverage proof separate from routine verified-local speed proof.
   - Status: not started
 
 - [ ] Verified incremental audit query engine backs the routine loop.
-  - Working means a shared `AuditContext`, query-DAG check engine, verified content-addressed cache, decomposed package/text checks, grouped red fixtures with shared semantic indexes, minimal or copy-on-write isolated fixture roots, deterministic result ordering, and optional persistent validator daemon/worker state all verify current input digests before reuse.
-  - Fail-closed cases include stale or wrong-digest cache hit, cache hit without invalidation reason, warm-cache timing used as clean proof, hidden worker cap, hidden global serial lock, unbounded concurrency, nondeterministic result ordering, omitted affected fixture, and parallel worker writing shared `validation_artifacts/**`.
-  - Status: not started
+  - Working means a shared `AuditContext`, query-DAG check engine, verified content-addressed cache, decomposed package/text/coverage/check/audit nodes, grouped red fixtures with shared semantic indexes, minimal or copy-on-write isolated fixture roots, deterministic result ordering, and optional persistent validator daemon/worker state all verify current input digests before reuse.
+  - Fail-closed cases include stale or wrong-digest cache hit, cache hit without invalidation reason, warm-cache timing used as clean proof, hidden worker cap, hidden global serial lock, unbounded concurrency, nondeterministic result ordering, omitted affected fixture, omitted high-frequency check, slow helper hidden outside the loop, and parallel worker writing shared `validation_artifacts/**`.
+  - Status: implemented, pending validation
 
 - [ ] Gate 92 fitting compiler and runner replace hand-authored row churn.
   - Working means canonical `CommandObservabilitySpec` and `SurfaceObservabilitySpec` registries generate command inventory rows, fitting rows, stdout contracts, receipt expectations, logs/metrics/traces query paths, fixture packs, generated fitting tests, fitting control-board status, `observe explain --next`, current-state inputs, and `ultragoal next` inputs. A real runner such as `ultragoal observe fit --command <id>` and `ultragoal observe fit --family <family>` runs the production command/surface, captures stdout/receipt, queries telemetry, runs explain, reconciles same-candidate proof, and refuses fitted status without production proof.
   - Validation means generated table-driven tests and fixture semantics pass.
   - Production proof means at least one command family is fitted through the compiler/runner without manual generated-row edits, with same-candidate telemetry and explain reconciliation.
+  - Status: implemented, pending validation
+
+- [ ] Gate 92 command-roundtrip implementation obeys Gate 90 product-semantic namespace law.
+  - Working means any compatibility vocabulary such as `fitting_status`, `fitting_control_board`, or public `observe fit` remains contained at schema/parser/status boundaries, while source paths, modules, functions, helpers, tests, ids, and artifact path segments use product-behavior names such as command roundtrip, telemetry reconciliation, command inventory, receipt dereference, span parentage, cache invalidation, current state, or explain planning.
+  - Validation means namespace checks and red/green/tamper fixtures fail goal-work implementation names such as `observe/fitting`, `production_proof`, `fit_command`, `fit_path`, and `validation_artifacts/observability/fitting/...`, while allowing product vocabulary such as `fit-repo` and behavior names such as `command_roundtrip`.
+  - Production proof means the real `observe fit` compatibility command, if retained, routes into product-semantic implementation modules and emits product-legible stdout/receipt paths without goal-work artifact namespaces.
   - Status: not started
 
 - [ ] Workflow-engine use is explicitly bounded for Gate 92 acceleration work.

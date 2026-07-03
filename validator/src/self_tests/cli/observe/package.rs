@@ -144,6 +144,8 @@ fn observability_stack_error_and_non_stack_edges_are_typed() {
             claim_id: None,
             check_id: None,
             law_id: None,
+            target_command: None,
+            target_family: None,
             row_limit: 100,
             byte_limit: 262_144,
             timeout_ms: 5_000,

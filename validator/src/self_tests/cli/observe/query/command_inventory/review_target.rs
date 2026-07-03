@@ -1,10 +1,10 @@
-const PRODUCTION_PROOF: &str =
-    "validation_artifacts/observability/review-target-build-production-proof.json";
+const COMMAND_ROUNDTRIP: &str =
+    "validation_artifacts/observability/review-target-build-command-roundtrip.json";
 const EXPLAIN_FAILURE: &str =
     "validation_artifacts/observability/review-target-build-explain-failure.json";
 
 #[test]
-fn review_target_inventory_records_production_proof_and_fixture_binding() {
+fn review_target_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -16,7 +16,7 @@ fn review_target_inventory_records_production_proof_and_fixture_binding() {
     assert_eq!(row["fitting_status"], "fitted");
     assert_eq!(row["next_unfitted_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
-    assert_array_contains(row, "receipt_paths", PRODUCTION_PROOF);
+    assert_array_contains(row, "receipt_paths", COMMAND_ROUNDTRIP);
     assert_array_contains(row, "same_candidate_query_proof_paths", EXPLAIN_FAILURE);
     assert_array_contains(
         row,

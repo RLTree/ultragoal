@@ -9,12 +9,12 @@ const SOURCE_DIR: &str = "validation_artifacts/harness";
 pub(crate) fn mint_all(root: &Path, rel_dir: &Path, out_dir: &Path) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
     let generated_at = crate::audit::clock::now_iso();
-    let fit_path = out_dir.join(FIT);
+    let roundtrip_path = out_dir.join(FIT);
     let product_path = out_dir.join(PRODUCT);
     let journey_path = out_dir.join(JOURNEY);
 
     let fit = fit_receipt(root, &candidate, &generated_at)?;
-    crate::json_boundary::write_json(&fit_path, &fit)?;
+    crate::json_boundary::write_json(&roundtrip_path, &fit)?;
 
     let product = product_receipt(root, &candidate, &generated_at)?;
     crate::json_boundary::write_json(&product_path, &product)?;

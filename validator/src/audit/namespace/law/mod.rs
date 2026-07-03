@@ -71,6 +71,10 @@ pub(crate) fn value_failures_with_cache(
             &cache.repo_source_paths(root),
         ),
     );
+    out.extend(crate::audit::namespace::source::identifiers::failures(
+        root,
+        &cache.actual_files(root),
+    ));
     out.extend(crate::audit::namespace::classes::legacy_surface_failures(
         root, &listed,
     ));

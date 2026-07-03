@@ -123,3 +123,43 @@ fn namespace_topology_rejects_opaque_gate_number_names() {
     );
     std::fs::remove_dir_all(root).expect("cleanup namespace gate number name");
 }
+
+#[test]
+fn namespace_topology_rejects_product_opaque_goal_work_path_labels() {
+    let root = crate::self_tests::boundaries::support::temp_root("namespace-goal-work-label");
+    write_text(
+        &root.join("validator/src/cli/observe/fitting/mod.rs"),
+        "pub(crate) fn marker() {}\n",
+    );
+    write_text(
+        &root.join("validator/src/cli/observe/production_proof/mod.rs"),
+        "pub(crate) fn marker() {}\n",
+    );
+    let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_product_opaque_goal_work_label"
+        ),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace goal work label");
+}
+
+#[test]
+fn namespace_topology_rejects_product_opaque_goal_work_identifier_names() {
+    let root = crate::self_tests::boundaries::support::temp_root("namespace-goal-work-identifier");
+    write_text(
+        &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
+        "pub(crate) fn require_fitting_inventory() {}\npub(crate) fn run_command(production_proof: bool) {}\nlet production_proof = true;\nfitting_status: bool,\n",
+    );
+    let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_product_opaque_goal_work_identifier"
+        ),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace goal work identifier");
+}

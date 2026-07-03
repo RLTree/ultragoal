@@ -128,10 +128,10 @@ pub(crate) fn anchor_errors(value: &Value, anchors: &AnchorValues, out: &mut Vec
             "status",
         ));
     }
-    let round_phase = string(value, "/round_phase");
+    let review_stage = string(value, "/round_phase");
     let anchor_policy = string(value, "/anchor_policy");
     let full_anchor_required =
-        crate::review::round::config::full_anchor_required(&round_phase, &anchor_policy);
+        crate::review::round::config::full_anchor_required(&review_stage, &anchor_policy);
     let mut required = vec![("/validator_receipt/digest", &anchors.validator_digest)];
     let mut required_paths = vec![("/validator_receipt/path", &anchors.validator_path)];
     if full_anchor_required {

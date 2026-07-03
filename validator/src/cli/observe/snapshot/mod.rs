@@ -8,7 +8,7 @@ mod target;
 
 use target::TargetReceipt;
 
-const PROOF_SCHEMA: &str = "harness-ultragoal.observability-production-proof.v1";
+const PROOF_SCHEMA: &str = "harness-ultragoal.observability-command-roundtrip.v1";
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
@@ -69,7 +69,7 @@ fn proof_receipt(
     let target_run = target::text(target_event, "run_id", "unknown");
     let target_correlation = target::text(target_event, "correlation_id", "unknown");
     let target_operation = target::text(target_event, "operation", "unknown");
-    let query_paths = query_proof_paths(&query_evidence, &explain_evidence);
+    let query_paths = query_roundtrip_paths(&query_evidence, &explain_evidence);
     json!({
         "schema": PROOF_SCHEMA,
         "status": status,
@@ -88,22 +88,22 @@ fn proof_receipt(
         "failure_class": if status == "pass" {
             "none"
         } else {
-            "observability_production_proof_failure"
+            "observability_command_roundtrip_failure"
         },
         "why_failed": failure_summary.unwrap_or_else(|| "none".to_string()),
         "where_failed": if status == "pass" {
             "none"
         } else {
-            "observe.snapshot.production_proof"
+            "observe.snapshot.command_roundtrip"
         },
         "next_repair": next_repair(status, target_event, &query_evidence, &explain_evidence),
         "claim_impact": if status == "pass" {
-            "supports_source_local_observability_command_production_proof_only_no_readiness_release_completion_update_goal"
+            "supports_source_local_observability_command_command_roundtrip_only_no_readiness_release_completion_update_goal"
         } else {
-            "blocks_observability_command_production_proof_readiness_release_completion_update_goal"
+            "blocks_observability_command_command_roundtrip_readiness_release_completion_update_goal"
         },
         "supported_claims": if status == "pass" {
-            json!(["source_local_observability_command_production_proof"])
+            json!(["source_local_observability_command_command_roundtrip"])
         } else {
             json!([])
         },
@@ -143,7 +143,7 @@ fn validate_query_evidence(query_evidence: &Value, failures: &mut Vec<String>) {
     }
 }
 
-fn query_proof_paths(query_evidence: &Value, explain_evidence: &Value) -> Value {
+fn query_roundtrip_paths(query_evidence: &Value, explain_evidence: &Value) -> Value {
     let mut paths = ["logs", "metrics", "traces"]
         .into_iter()
         .filter_map(|kind| {
@@ -163,7 +163,7 @@ fn query_proof_paths(query_evidence: &Value, explain_evidence: &Value) -> Value 
 fn failure_summary(failures: &[String]) -> Option<String> {
     failures.first().map(|first| {
         format!(
-            "observability production proof incomplete: total_failures={} first_failure={first}",
+            "observability command telemetry roundtrip incomplete: total_failures={} first_failure={first}",
             failures.len()
         )
     })
@@ -176,7 +176,7 @@ fn next_repair(
     explain_evidence: &Value,
 ) -> &'static str {
     if status == "pass" {
-        return "keep production proof same-candidate and rerun source audit once before any broader claim";
+        return "keep command telemetry same-candidate and rerun source audit once before any broader claim";
     }
     if target.is_none() {
         return "run the target command once on the current candidate, then rerun observe snapshot with the target run_id";

@@ -151,7 +151,7 @@ fn package_checks_report_missing_manifest_as_inventory_failure() {
 }
 
 #[test]
-fn package_checks_emit_bounded_scheduler_metrics_for_schema_phase() {
+fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
     let root = crate::self_tests::boundaries::support::temp_root("package-checks-scheduler");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");

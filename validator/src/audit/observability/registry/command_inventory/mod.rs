@@ -82,7 +82,7 @@ pub(super) fn check(root: &Path, value: &Value, out: &mut Vec<String>) {
             ));
         }
     }
-    require_fitting_inventory(root, value, out);
+    require_command_inventory_rows(root, value, out);
 }
 
 fn commands_contain(value: &Value, command: &str) -> bool {
@@ -113,7 +113,7 @@ fn reject_unknown_inventory_commands(value: &Value, out: &mut Vec<String>) {
     }
 }
 
-fn require_fitting_inventory(root: &Path, value: &Value, out: &mut Vec<String>) {
+fn require_command_inventory_rows(root: &Path, value: &Value, out: &mut Vec<String>) {
     let Some(rows) = value.get("fitting_inventory").and_then(Value::as_object) else {
         out.push("observability_command_fitting_inventory_missing".to_string());
         return;
@@ -129,11 +129,11 @@ fn require_fitting_inventory(root: &Path, value: &Value, out: &mut Vec<String>) 
             ));
             continue;
         };
-        require_fitting_row(root, command, object, out);
+        require_command_inventory_row(root, command, object, out);
     }
 }
 
-fn require_fitting_row(
+fn require_command_inventory_row(
     root: &Path,
     command: &str,
     row: &Map<String, Value>,

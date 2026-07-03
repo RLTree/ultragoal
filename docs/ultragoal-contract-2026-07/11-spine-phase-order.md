@@ -16,8 +16,21 @@ Repair package/resource/classification failures before chasing receipts. Resolve
 closure, exact-once listing, namespace classes, and generated/proof artifact
 boundaries.
 
-Exit requires: focused package/namespace tests, no broad orphan inventory
-explosion, schema/catalog paths listed, current receipt, and claim guard.
+Semantic namespace repair is part of this phase, not a Gate 92 subtask. Before
+Gate 92 resumes, repo-owned product surfaces must not use goal-work, phase,
+slice, evidence-purpose, or session-history names in source paths, modules,
+functions, helper names, test names, ids, receipt/artifact path segments, or
+generated/package inventory paths. Names must identify product behavior or
+domain responsibility: for example command telemetry roundtrip, telemetry
+reconciliation, command inventory, namespace topology, cache invalidation, or
+receipt dereference. Names such as `fitting`, `production_proof`, `phase4`,
+`slice`, `workstream`, `checkpoint`, `progress`, `todo`, `wip`, and generic
+`helpers`/`utils`/`common` fail when they stand in for product behavior.
+
+Exit requires: focused package/namespace tests, product-semantic symbol checks,
+red/green/tamper fixtures for opaque path/module/function names, no broad orphan
+inventory explosion, schema/catalog paths listed, current receipt, and claim
+guard.
 
 ### Phase 2 - Research-Rooted Full Gate 92 Observability And Agent Legibility
 
@@ -47,9 +60,9 @@ surfaces. Workflow output, worker output, or generated plans cannot satisfy Gate
 eligibility, or update_goal claims.
 
 The acceleration slice is: Gate 92 Fast Loop, Verified Incremental Audit, And
-Fitting Compiler. It must produce one routine live-loop command and one
-spec-driven fitting path before the parent spends more cycles manually fitting
-individual rows:
+Command Telemetry Roundtrip/Reconciliation. It must produce one routine
+live-loop command and one spec-driven command telemetry roundtrip path before
+the parent spends more cycles manually proving individual rows:
 
 - `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` is the
   routine live source-local repair command. It computes the current candidate
@@ -75,12 +88,35 @@ individual rows:
   scheduled audit shape is about 181 seconds, so a 20x routine live-loop target
   is about 9.1 seconds. Recompute the baseline if current receipts differ. A
   strict no-cache final proof may be slower and must be reported separately.
+- The live-loop target applies to the validation work agents actually run, not
+  only to the wrapper command. `scripts/check`, `scripts/check-coverage-full`,
+  `scripts/check-coverage-fast`, `ultragoal coverage prove`, source audit, red
+  fixture report, line caps, namespace, schema validation, mandatory-law
+  validation, source-obligations, foundational trace, package inventory scans,
+  focused Rust tests, fmt/build checks, and touched fixture/report paths must be
+  routed into the verified incremental query graph as typed nodes before this
+  acceleration slice closes. Each node needs its own current full-command
+  baseline, current verified-local timing, affected-set equivalence proof,
+  cache/input-digest proof, worker/task/queue/cache telemetry, and claim impact.
+  A node that remains slow, serial, hidden outside the loop, or unmeasured blocks
+  the fast-loop slice unless it has a typed serial/destructive/external-live
+  reason and emits a fail-closed blocker.
+- Every high-frequency source-local node must be at least 20x faster than its
+  canonical full-command baseline in the verified-local routine loop, and the
+  whole routine loop including those nodes must complete within the current
+  whole-loop target of about 9.1 seconds unless the baseline is recomputed from
+  current receipts. Coverage is explicitly included: `check-coverage-full` and
+  `coverage prove` must either meet the 20x routine-loop law with same-candidate
+  equivalence to authoritative exact coverage, or block slice closure. A strict
+  `--cache-mode none` clean proof may be slower, but it cannot be used to excuse
+  the routine loop from the 20x verified-local requirement.
 - Add a canonical `CommandObservabilitySpec` and `SurfaceObservabilitySpec`
-  registry. Generated artifacts must derive command inventory rows, fitting
-  rows, stdout contracts, receipt expectations, query proof paths, fixture packs,
-  fitting tests, control-board status, `observe explain --next`, current-state
-  inputs, and `ultragoal next` inputs from those specs.
-- Add a fitting runner such as `ultragoal observe fit --command <id>` and
+  registry. Generated artifacts must derive command inventory rows, telemetry
+  reconciliation rows, stdout contracts, receipt expectations, query proof paths,
+  fixture packs, generated roundtrip tests, control-board status, `observe
+  explain --next`, current-state inputs, and `ultragoal next` inputs from those
+  specs.
+- Add a command telemetry roundtrip runner such as `ultragoal observe fit --command <id>` and
   `ultragoal observe fit --family rust|observe-query|gc|external-live|
   claim-guard|package|coverage|product|install-cache|final-control`. The runner
   must execute the real command or surface, capture stdout/receipt, query
@@ -90,15 +126,18 @@ individual rows:
   are temporary generated output with a source spec and validation.
 
 Fast-loop slice exit requires: current package digest, source inspection of the
-query-DAG/cache/fitting-spec path, focused tests, red/green/tamper fixtures for
-cache dishonesty, stale/wrong-digest hits, hidden worker caps, hidden serial
-locks, unbounded concurrency, nondeterministic ordering, omitted affected
-fixtures, workflow-output-as-proof, and tests-without-production-fitting;
-measured live-loop timing with worker/task/queue/cache metrics; current-state
-and explain output from a real run; concise checklist status updates only; and a
-source-local/not-readiness commit. This slice may close as acceleration/product
-infrastructure before every Gate 92 row is fitted, but it may not claim Gate 92
-closure by itself.
+query-DAG/cache/observability-spec/high-frequency-node path, focused tests, red/green/
+tamper fixtures for cache dishonesty, stale/wrong-digest hits, hidden worker
+caps, hidden serial locks, unbounded concurrency, nondeterministic ordering,
+omitted affected fixtures, omitted high-frequency checks, workflow-output-as-
+proof, tests-without-production-fitting, coverage-fast-substituted-for-exact-
+coverage, and slow-check-hidden-outside-loop; measured live-loop timing with
+worker/task/queue/cache metrics; per-node 20x proof for each routinely-run
+source-local check/audit; whole-loop timing at or below the current 9.1 second
+target; current-state and explain output from a real run; concise checklist
+status updates only; and a source-local/not-readiness commit. This slice may
+close as acceleration/product infrastructure before every Gate 92 row is fitted,
+but it may not claim Gate 92 closure by itself.
 
 Complete observability fitting for every CLI/plugin production path: every
 command and subcommand, validator check family, receipt/proof path,

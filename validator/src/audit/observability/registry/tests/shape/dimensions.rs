@@ -76,7 +76,7 @@ fn command_unfitted_metadata_checks_surfaces_and_claim_impact() {
         .unwrap()
         .remove("claim_impact");
     let mut failures = Vec::new();
-    super::super::super::fitting::check(&root, &inventory, &mut failures);
+    super::super::super::command_inventory::check(&root, &inventory, &mut failures);
     assert!(
         failures
             .contains(&"observability_command_fitting_missing_metadata:package digest".to_string())

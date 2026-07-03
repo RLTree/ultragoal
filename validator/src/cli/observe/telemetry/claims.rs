@@ -71,9 +71,7 @@ pub(super) fn next_repair_for(
             || text.contains("first_failure=observability_surface_fitting_receipt_missing")
     }) {
         "refresh the first command receipt named in why_failed on the current candidate, then query logs metrics traces and rerun observe prove"
-    } else if failure.is_some_and(|text| {
-        text.contains("fitting inventory") || text.contains("command inventory")
-    }) {
+    } else if failure.is_some_and(|text| text.contains("command inventory")) {
         "repair the first_failure and control_board_first_incomplete named in why_failed, then rerun observe prove"
     } else if failure.is_some_and(|text| text.contains("requested telemetry target unavailable")) {
         "run target command once on the current candidate, query logs metrics traces, then rerun explain"

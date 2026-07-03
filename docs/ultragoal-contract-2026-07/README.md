@@ -35,7 +35,8 @@ Prompt authority:
   Rust developer experience, runtime resource discipline, and GC law.
 - `03-prompt-gate-092-observability-fast-loop.md`: Gate 92 observability, the
   agent sensory system, `ultragoal loop run`, verified incremental audit,
-  fitting compiler/runner, telemetry, query/explain, and live-loop proof.
+  command telemetry roundtrip/reconciliation, telemetry, query/explain, and
+  live-loop proof.
 - `04-prompt-gates-093-105-research-product-evolution.md`: research authority,
   improvement loop, OpenAI/promptfoo/HALO, setup/retrofit, rollout, privacy,
   surface separation, and measured improvement laws.
@@ -94,9 +95,12 @@ Checklist tracking:
 
 The current next broad source-local priority is Gate 92 production
 observability and agent legibility, including the parent-owned fast-loop,
-verified incremental audit engine, and fitting compiler/runner. Do not launch
-worktrees, refresh install/cache, finalize packets, claim readiness/release/
-completion, or call `update_goal` before the applicable phase gates allow it.
+verified incremental audit engine, and command telemetry roundtrip/
+reconciliation surfaces. Before Gate 92 work continues, resolve any active
+Gate 90 semantic-namespace violations in paths, modules, functions, tests,
+helpers, ids, and artifact paths. Do not launch worktrees, refresh install/
+cache, finalize packets, claim readiness/release/completion, or call
+`update_goal` before the applicable phase gates allow it.
 
 ## Done Means
 

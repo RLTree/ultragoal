@@ -24,6 +24,17 @@ Required CLI authority:
 - A machine-readable command inventory must cover every current and future `ultragoal` command family, including package digest, source audit, red fixture report, schema validation, mandatory-law validation, standards-gardener, source-obligation validation, foundational trace validation, coverage, line caps, namespace, Product Fitness/Cohesion/Journey, fit-repo, review-round, review-target, archive, final-packet proof, registry probe, install audit, cache audit, transactional finalization, CLI self-law, update-goal eligibility, Rust DevX, GC, session-log hardening, target-repo audit, and observability commands.
 - The validator must fail if any command inventory row lacks log instrumentation, metric instrumentation, trace instrumentation, pass output contract, fail output contract, receipt observability binding, focused tests, and claim impact mapping.
 - The command inventory must include explicit observability fitting inventory for every law-bearing CLI command, validator check family, receipt/proof path, fixture/report path, and package/plugin surface. Command fitting and surface fitting are both mandatory and distinct. Each row must state `fitting_status` as `fitted`, `partially_fitted`, or `unfitted`, name the fitted surfaces, missing surfaces, validator check id, focused test ids, same-candidate receipt paths, live query proof paths, current owner surface, next unfitted surface, and claim impact. The inventory must also include a validator-checked `fitting_control_board` that recomputes totals by command, surface, operating-loop, and signal family, names the first incomplete row, names its next unfitted surface, and blocks claims when any row is partial, unfitted, stale, or row-shape-only. This inventory plus control board is the Gate 92 tracking surface; mutable checklist prose, side ledgers, adjacent command coverage, or a fitted neighbor cannot stand in for it. Fitted rows must dereference current same-candidate observability receipts and logs/metrics/traces query proof; row shape alone fails. `partially_fitted`, `unfitted`, missing, stale, wrong-digest, local-spool-only, or row-shape-only fitting rows fail Gate 92 and block completion-adjacent claims. A few fitted commands cannot substitute for unfitted commands, validator checks, receipts, fixtures, package resources, plugin surfaces, or claim guards elsewhere in the CLI or plugin.
+- Existing `fitting_status` and fitting-board vocabulary is compatibility/status
+  vocabulary for the Gate 92 inventory only. It must not justify source paths,
+  module names, function names, helper names, test names, ids, or artifact path
+  segments named `fitting`, `production_proof`, or equivalent goal/evidence
+  labels. Implementation namespaces must describe the product behavior they own,
+  such as command telemetry roundtrip, telemetry reconciliation, command
+  inventory, receipt dereference, span parentage, cache invalidation, current
+  state, or explain planning. New generated paths should use product-behavior
+  names; any retained compatibility schema field must be encapsulated at the
+  schema boundary and tracked as migration debt if it leaks into implementation
+  naming.
 - The command inventory must also include an observability operating-loop inventory and signal inventory. Gate 92 treats observability as the repair operating system, not a receipt family. The required loop is: current digest first; run the highest-authority failing command once; query logs, metrics, and traces by run id/correlation id; explain the failure through CLI output before manual artifact inspection; repair the smallest root cause; rerun the narrow command; compare before/after telemetry; and run broad source audit only after the narrow observable proof passes. The required signal classes are CLI-translated latency, traffic, errors, saturation, freshness, correlation, redaction, and boundedness. Each loop stage and signal class must have the same `fitting_status`, fitted/missing surfaces, validator check id, tests, current receipt paths, live query proof paths, and claim impact as command and surface rows. Fitted loop/signal rows must dereference same-candidate telemetry. Partial, unfitted, stale, wrong-digest, or row-shape-only loop/signal rows fail Gate 92 and block completion-adjacent claims.
 - Gate 92 must add `observe explain --next` as the tactical repair planner for
   the fitting board. It reads the validator-owned fitting control board, selects
@@ -69,18 +80,21 @@ Required CLI authority:
   only runs, and current-state snapshots cannot satisfy strict no-cache,
   readiness, release, final-packet, install/cache, app-registry, reviewer,
   completion, or update_goal claims.
-- Gate 92 fitting must be generated from canonical specs, not hand-authored row
-  churn. Add canonical `CommandObservabilitySpec` and
-  `SurfaceObservabilitySpec` registries that generate command inventory rows,
-  fitting rows, stdout contracts, receipt expectations, query proof paths,
-  fixture packs, generated fitting tests, control-board status, `observe explain
-  --next`, current-state inputs, and `ultragoal next` inputs. Add a real fitting
-  runner such as `ultragoal observe fit --command <id>` and
+- Gate 92 inventory and command telemetry roundtrip must be generated from
+  canonical specs, not hand-authored row churn. Add canonical
+  `CommandObservabilitySpec` and `SurfaceObservabilitySpec` registries that
+  generate command inventory rows, telemetry reconciliation rows, stdout
+  contracts, receipt expectations, query proof paths, fixture packs, generated
+  roundtrip tests, control-board status, `observe explain --next`,
+  current-state inputs, and `ultragoal next` inputs. Add a real command
+  telemetry roundtrip runner such as `ultragoal observe fit --command <id>` and
   `ultragoal observe fit --family <family>` that runs the production command or
   surface, captures stdout/receipt, queries logs/metrics/traces, runs explain,
   reconciles same-candidate proof, and refuses fitted status without production
-  proof. Row-specific manual edits are debt unless they are temporary generated
-  output with source specs and validation.
+  proof. The public `observe fit` spelling may remain as a compatibility command
+  only if its implementation routes into product-semantic modules and functions.
+  Row-specific manual edits to generated inventory are debt unless they are
+  temporary generated output with source specs and validation.
 - The live-loop/audit engine must be a verified incremental query graph. It must
   share per-run package digest, parsed JSON, schema catalog, package inventory,
   source-obligation indexes, foundational trace indexes, namespace file sets,
@@ -98,6 +112,34 @@ Required CLI authority:
   9.1 seconds. If that baseline changes, recompute it from current receipts. A
   run can claim the speedup only from live command execution with current digest,
   not dry-run estimates, stale receipts, or synthetic no-op paths.
+- The routine loop must absorb the checks and audits that agents actually run on
+  every repair path. It is non-compliant to make `ultragoal loop run` fast while
+  leaving `scripts/check`, `scripts/check-coverage-full`,
+  `scripts/check-coverage-fast`, `ultragoal coverage prove`, source audit, red
+  fixture report, line-cap check, namespace check, schema validation,
+  mandatory-law validation, source-obligations check, foundational-trace check,
+  package inventory scans, focused Rust tests, fmt/build checks, and touched
+  fixture/report paths as slow side channels. Each high-frequency validation
+  surface must be represented as a typed node in the verified incremental query
+  graph, with a canonical full-command baseline, current measured latency,
+  affected-set legality proof, cache/input-digest proof, worker/task/queue/cache
+  telemetry, and a same-candidate observability receipt. The fast-loop slice
+  cannot close while any routinely-run source-local check remains outside the
+  loop without a typed serial/destructive/external-live reason and a fail-closed
+  claim blocker.
+- Every routinely-run source-local check or audit node must meet the same speed
+  law as the loop: at least 20x faster than its current canonical full-command
+  baseline under `--cache-mode verified-local`, and the complete routine loop
+  containing all required high-frequency nodes must land at or below the current
+  20x whole-loop target, approximately 9.1 seconds unless recomputed from current
+  receipts. `scripts/check-coverage-full` and `ultragoal coverage prove` are not
+  exempt. If exact coverage cannot meet the threshold, the slice is blocked until
+  coverage is split, cached, daemonized, indexed, or otherwise re-architected
+  with honest same-candidate equivalence proof to the authoritative full coverage
+  command. Strict no-cache final proof may remain slower, but warm-cache,
+  affected-only, or verified-local timing may support only routine repair-loop
+  speed claims, never clean-proof, readiness, release, final-packet, install/
+  cache, app-registry, reviewer, completion, or update_goal claims.
 
 Gold-standard observability doctrine required by the synthesis:
 

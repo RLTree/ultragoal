@@ -3,7 +3,7 @@ use serde_json::{Value, json};
 use std::fs;
 
 #[test]
-fn observe_snapshot_refuses_semantically_empty_explain_proof() {
+fn observe_snapshot_refuses_semantically_empty_explain_roundtrip() {
     let root = super::super::minimal_root("observe-snapshot-empty-explain");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let target = super::write_source_audit_receipt(&root, &candidate);
@@ -16,7 +16,7 @@ fn observe_snapshot_refuses_semantically_empty_explain_proof() {
     remove_field(&mut explain, "/explanation/implicated_paths");
     crate::json_boundary::write_json(&explain_path, &explain).expect("write explain");
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let command = super::command(&[
         "observe",
         "snapshot",
@@ -49,7 +49,7 @@ fn observe_snapshot_accepts_pass_target_explain_without_failure_where_why() {
     write_pass_queries(&root, &candidate, &target);
     write_pass_explain(&root, &candidate, &target);
 
-    let proof_rel = "validation_artifacts/observability/review-target-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/review-target-command-roundtrip.json";
     let command = super::command(&[
         "observe",
         "snapshot",

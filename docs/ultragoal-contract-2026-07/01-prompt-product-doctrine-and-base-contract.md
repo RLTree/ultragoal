@@ -541,6 +541,16 @@ Mandatory integration objectives from the synthesis:
      source-local loop <= 30s p95; strict source-local proof target <= 60s and
      hard ceiling <= 180s. A strict no-cache final proof may be slower, but it
      must record why and must not be confused with the live hot loop.
+     The routine live loop must include the high-frequency validation work agents
+     repeatedly run during repair, including coverage, source audit, red fixture
+     report, line caps, namespace, schema validation, mandatory-law validation,
+     source-obligations, foundational trace, package inventory scans, focused
+     Rust tests, fmt/build checks, `scripts/check`, and coverage helper scripts.
+     Each such node must be at least 20x faster than its own canonical full
+     baseline under verified-local cache, and the whole routine loop containing
+     those nodes must still land under the current <=9.1s target. Coverage full
+     is not exempt; if exact coverage cannot meet the 20x routine-loop law while
+     preserving authoritative 100% proof semantics, fast-loop closure is blocked.
    - Required speed evidence: receipts and telemetry must report duration_ms,
      worker_count, task_count, queue_depth, critical path, affected node count,
      skipped node count, cache mode, cache hit rate, invalidation reasons,

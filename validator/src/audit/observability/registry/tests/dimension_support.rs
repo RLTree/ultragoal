@@ -42,16 +42,16 @@ fn fitted_dimension_row(kind: &str, name: &str) -> Value {
         "fail_stdout_contract": "fail stdout contract fitted",
         "receipt_observability_binding": "receipt observability binding fitted",
         "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{kind}-{slug}.json")],
+        "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}.json")],
         "live_query_proof_paths": [
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-logs.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-metrics.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-traces.json")
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-logs.json"),
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-metrics.json"),
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-traces.json")
         ],
         "same_candidate_query_proof_paths": [
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-logs.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-metrics.json"),
-            format!("validation_artifacts/observability/fitting/{kind}-{slug}-traces.json")
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-logs.json"),
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-metrics.json"),
+            format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-traces.json")
         ],
         "red_fixtures": [format!("fixtures/red/observability/{kind}-{slug}-red.json")],
         "green_fixtures": [format!("fixtures/green/observability/{kind}-{slug}-green.json")],

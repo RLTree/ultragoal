@@ -121,7 +121,7 @@ fn gc_plan_observability_fixtures_cover_red_green_and_tamper_paths() {
     assert!(red_failures.contains(&"workspace_gc_receipt_wrong_schema".to_string()));
 
     let mut tamper = green;
-    tamper["observation_failures"] = json!(["raw local spool is not production proof"]);
+    tamper["observation_failures"] = json!(["raw local spool is not live command telemetry"]);
     let tamper_failures = crate::cli::garbage::collection::receipt::surface_value_failures(&tamper);
     assert!(
         tamper_failures

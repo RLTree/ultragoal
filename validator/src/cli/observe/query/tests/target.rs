@@ -12,6 +12,8 @@ fn selector_command() -> ObserveCommand {
         claim_id: Some("claim-target".to_string()),
         check_id: Some("check-target".to_string()),
         law_id: Some("law-target".to_string()),
+        target_command: None,
+        target_family: None,
         row_limit: 100,
         byte_limit: 4096,
         timeout_ms: 100,

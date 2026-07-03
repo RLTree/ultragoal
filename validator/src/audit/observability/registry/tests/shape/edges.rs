@@ -37,7 +37,7 @@ fn observability_control_board_shape_edges_are_explicit() {
     mismatch["fitting_inventory"]["package digest"]["missing_surfaces"] = json!(["log"]);
     mismatch["fitting_control_board"]["status"] = json!("blocked");
     mismatch["fitting_control_board"]["families"]["commands"]["fitted"] =
-        json!(super::super::super::fitting::REQUIRED_COMMANDS.len() - 1);
+        json!(super::super::super::command_inventory::REQUIRED_COMMANDS.len() - 1);
     mismatch["fitting_control_board"]["families"]["commands"]["unfitted"] = json!(1);
     mismatch["fitting_control_board"]["first_incomplete"] = json!({
         "family": "commands",

@@ -1,10 +1,10 @@
 use serde_json::Value;
 use std::path::Path;
 
+mod command_inventory;
 mod control;
 mod dimension_ids;
 mod dimensions;
-mod fitting;
 mod metric;
 mod operating;
 mod proof;
@@ -23,7 +23,7 @@ pub(super) fn check(root: &Path, out: &mut Vec<String>) {
 
 #[cfg(test)]
 pub(crate) fn required_commands() -> &'static [&'static str] {
-    fitting::REQUIRED_COMMANDS
+    command_inventory::REQUIRED_COMMANDS
 }
 
 #[cfg(test)]
@@ -61,7 +61,7 @@ pub(crate) fn required_dimension_families() -> Vec<(
         .collect()
 }
 
-pub(crate) fn fitting_failures(root: &Path) -> Vec<String> {
+pub(crate) fn command_inventory_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     require_command_inventory(root, &mut out);
     out
@@ -98,7 +98,7 @@ fn require_law_rows(root: &Path, out: &mut Vec<String>) {
 fn require_command_inventory(root: &Path, out: &mut Vec<String>) {
     let value = super::read::json(root, "docs/generated/observability/command-inventory.json");
     control::check(&value, out);
-    fitting::check(root, &value, out);
+    command_inventory::check(root, &value, out);
     surfaces::check(root, &value, out);
     operating::check(root, &value, out);
     dimensions::check(root, &value, out);

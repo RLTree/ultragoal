@@ -12,6 +12,8 @@ fn command(operation: ObserveOperation) -> ObserveCommand {
         claim_id: None,
         check_id: None,
         law_id: None,
+        target_command: None,
+        target_family: None,
         row_limit: 100,
         byte_limit: 4096,
         timeout_ms: 1000,
@@ -19,7 +21,7 @@ fn command(operation: ObserveOperation) -> ObserveCommand {
 }
 
 #[test]
-fn fitting_inventory_summary_names_first_blocker_and_family_counts() {
+fn command_inventory_summary_names_first_blocker_and_family_counts() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-telemetry-summary");
     let inventory = root.join("docs/generated/observability");
     std::fs::create_dir_all(&inventory).expect("inventory dir");
@@ -43,7 +45,7 @@ fn fitting_inventory_summary_names_first_blocker_and_family_counts() {
     )
     .expect("inventory");
 
-    let summary = fitting_inventory_failure_summary(
+    let summary = command_inventory_failure_summary(
         &root,
         &["observability_command_fitting_query_not_current:coverage.prove".to_string()],
     );

@@ -35,22 +35,22 @@ pub(crate) fn prove(root: &Path, command: &ObserveCommand) -> Result<Value, Stri
             Some("live observability stack is not health-checked and smoke-proven"),
         );
     }
-    if let Err(failure) = fitting_inventory_complete(root) {
+    if let Err(failure) = command_inventory_complete(root) {
         return base_receipt(root, command, "fail", Some(&failure));
     }
     base_receipt(root, command, "pass", None)
 }
 
-fn fitting_inventory_complete(root: &Path) -> Result<(), String> {
-    let failures = crate::audit::observability::command_fitting_failures(root);
+fn command_inventory_complete(root: &Path) -> Result<(), String> {
+    let failures = crate::audit::observability::command_inventory_failures(root);
     if failures.is_empty() {
         Ok(())
     } else {
-        Err(fitting_inventory_failure_summary(root, &failures))
+        Err(command_inventory_failure_summary(root, &failures))
     }
 }
 
-fn fitting_inventory_failure_summary(root: &Path, failures: &[String]) -> String {
+fn command_inventory_failure_summary(root: &Path, failures: &[String]) -> String {
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )
@@ -60,7 +60,7 @@ fn fitting_inventory_failure_summary(root: &Path, failures: &[String]) -> String
         .unwrap_or(&Value::Null);
     let first_incomplete = board.get("first_incomplete").unwrap_or(&Value::Null);
     format!(
-        "observability fitting inventory incomplete: status={} total_failures={} first_failure={} control_board_first_family={} control_board_first_incomplete={} control_board_first_status={} next_unfitted_surface={} family_counts={}",
+        "observability command inventory incomplete: status={} total_failures={} first_failure={} control_board_first_family={} control_board_first_incomplete={} control_board_first_status={} next_unfitted_surface={} family_counts={}",
         text_field(board, "status", "unknown"),
         failures.len(),
         failures.first().map(String::as_str).unwrap_or("none"),

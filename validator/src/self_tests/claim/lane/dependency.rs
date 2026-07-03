@@ -1,7 +1,6 @@
 use crate::audit::contract::Failure;
 use serde_json::{Value, json};
-use std::collections::BTreeMap;
-use std::path::Path;
+use std::{collections::BTreeMap, path::Path};
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
@@ -51,7 +50,7 @@ fn dependency_fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value)
         "upstream_ready_receipt": {"path": "ready.json", "digest": ready_digest}
     });
     let post_digest = crate::self_tests::boundaries::support::sha('9');
-    let root_phases = json!({"post_merge_integration_gate": {
+    let root_verification_states = json!({"post_merge_integration_gate": {
         "status": "pass",
         "validated_at": "2026-06-25T00:30:00Z",
         "artifact_receipt": {"path": "post.json", "digest": post_digest}
@@ -74,7 +73,7 @@ fn dependency_fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value)
         "path": "ready/up.json",
         "digest": ready_file_digest
     }]}});
-    (lane, dep, upstream, ready, root_phases, bundle)
+    (lane, dep, upstream, ready, root_verification_states, bundle)
 }
 
 fn run_case(
@@ -82,7 +81,7 @@ fn run_case(
     dep: &Value,
     upstream: &Value,
     ready: &Value,
-    root_phases: &Value,
+    root_verification_states: &Value,
     bundle: &Value,
     root: &Path,
 ) -> Vec<String> {
@@ -96,7 +95,7 @@ fn run_case(
         dep,
         &lanes,
         &ready_index,
-        root_phases,
+        root_verification_states,
         bundle,
         root,
         &mut out,
@@ -107,8 +106,19 @@ fn run_case(
 #[test]
 fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
     let root = crate::self_tests::boundaries::support::temp_root("lane-dependency-edges");
-    let (lane, dep, upstream, ready, root_phases, bundle) = dependency_fixture(&root);
-    assert!(run_case(&lane, &dep, &upstream, &ready, &root_phases, &bundle, &root).is_empty());
+    let (lane, dep, upstream, ready, root_verification_states, bundle) = dependency_fixture(&root);
+    assert!(
+        run_case(
+            &lane,
+            &dep,
+            &upstream,
+            &ready,
+            &root_verification_states,
+            &bundle,
+            &root
+        )
+        .is_empty()
+    );
 
     let mut bad_commit = dep.clone();
     bad_commit["upstream_commit"] = json!("old-commit");
@@ -118,7 +128,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &bad_commit,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -133,7 +143,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &stale_dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -146,7 +156,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &json!({}),
             &root
         )
@@ -161,7 +171,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -178,7 +188,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -199,7 +209,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -214,7 +224,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -229,7 +239,7 @@ fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )

@@ -253,13 +253,13 @@
         "real runtime scheduler telemetry for source-audit normal and guard-error producer paths",
         "parser-level source audit rejection telemetry",
         "parser-level target-repo audit rejection telemetry through shared audit parser hook",
-        "fail-closed command fitting accepts current blocked receipts without treating command failure as observability failure",
-        "observe snapshot stable target production proof",
+        "fail-closed command observability accepts current blocked receipts without treating command failure as observability failure",
+        "observe snapshot stable target command telemetry roundtrip",
         "observe snapshot non-fallback explain guard",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof",
-        "stable same-run production proof that is not overwritten by the validating source-audit run"
+        "stable same-run command telemetry roundtrip that is not overwritten by the validating source-audit run"
       ],
       "missing_surfaces": [],
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
@@ -272,11 +272,11 @@
         "source_audit_parse_rejection_writes_observability",
         "target_repo_audit_parse_rejection_writes_target_observability",
         "observability_command_fitting_accepts_only_fail_closed_command_receipts",
-        "observe_snapshot_writes_stable_target_production_proof",
+        "observe_snapshot_writes_stable_target_command_roundtrip",
         "observe_snapshot_refuses_to_fit_without_non_fallback_explain"
       ],
       "receipt_paths": [
-        "validation_artifacts/observability/source-audit-production-proof.json",
+        "validation_artifacts/observability/source-audit-command-roundtrip.json",
         "validation_artifacts/observability/source-audit.json"
       ],
       "live_query_proof_paths": [
@@ -285,7 +285,7 @@
         "validation_artifacts/observability/source-audit-traces-query.json",
         "validation_artifacts/observability/source-audit-explain-failure.json"
       ],
-      "claim_impact": "supports_source_audit_observability_command_production_proof_source_local_only; blocks_readiness_release_completion_update_goal_until_all_gate_92_rows_fitted",
+      "claim_impact": "supports_source_audit_observability_command_command_roundtrip_source_local_only; blocks_readiness_release_completion_update_goal_until_all_gate_92_rows_fitted",
       "current_owner_surface": "command:source audit",
       "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
@@ -299,7 +299,7 @@
         "validation_artifacts/observability/source-audit-metrics-query.json",
         "validation_artifacts/observability/source-audit-traces-query.json",
         "validation_artifacts/observability/source-audit-explain-failure.json",
-        "validation_artifacts/observability/source-audit-production-proof.json"
+        "validation_artifacts/observability/source-audit-command-roundtrip.json"
       ],
       "red_fixtures": [
         "source_audit_observability_receipt_blocks_claims_on_failed_audit"
@@ -953,7 +953,7 @@
       "receipt_paths": [
         "validation_artifacts/observability/product-prove-fitness.json",
         "validation_artifacts/harness/product-fitness-receipt.json",
-        "validation_artifacts/observability/product-prove-fitness-production-proof.json"
+        "validation_artifacts/observability/product-prove-fitness-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/product-prove-fitness-logs-query.json",
@@ -999,7 +999,7 @@
         "fail stdout contract",
         "same-candidate live query proof",
         "non-fallback explain proof",
-        "stable same-run production proof",
+        "stable same-run command telemetry roundtrip",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
@@ -1012,11 +1012,11 @@
         "product_cohesion_command_emits_pass_observability_for_valid_artifacts",
         "product_cohesion_command_emits_fail_closed_observability_for_missing_artifacts",
         "logs_and_traces_can_select_run_and_correlation_without_metric_labels",
-        "product_cohesion_inventory_records_production_proof_and_fixture_binding"
+        "product_cohesion_inventory_records_command_roundtrip_and_fixture_binding"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/product-prove-cohesion.json",
-        "validation_artifacts/observability/product-prove-cohesion-production-proof.json"
+        "validation_artifacts/observability/product-prove-cohesion-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/product-prove-cohesion-logs-query.json",
@@ -1024,7 +1024,7 @@
         "validation_artifacts/observability/product-prove-cohesion-traces-query.json",
         "validation_artifacts/observability/product-prove-cohesion-explain-failure.json"
       ],
-      "claim_impact": "supports_product_cohesion_source_local_observability_command_production_proof_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
+      "claim_impact": "supports_product_cohesion_source_local_observability_command_command_roundtrip_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
       "current_owner_surface": "command:product prove-cohesion",
       "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
@@ -1060,7 +1060,7 @@
         "fail stdout contract",
         "same-candidate live query proof",
         "non-fallback explain proof",
-        "stable same-run production proof",
+        "stable same-run command telemetry roundtrip",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
@@ -1074,12 +1074,12 @@
         "product_journey_command_runs_default_minter_with_journey_telemetry",
         "product_journey_command_emits_fail_closed_observability_for_invalid_receipt_dir",
         "logs_and_traces_can_select_run_and_correlation_without_metric_labels",
-        "product_journey_inventory_records_production_proof_and_fixture_binding"
+        "product_journey_inventory_records_command_roundtrip_and_fixture_binding"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/product-prove-journey.json",
         "validation_artifacts/harness/plugin-product-journey-receipt.json",
-        "validation_artifacts/observability/product-prove-journey-production-proof.json"
+        "validation_artifacts/observability/product-prove-journey-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/product-prove-journey-logs-query.json",
@@ -1087,7 +1087,7 @@
         "validation_artifacts/observability/product-prove-journey-traces-query.json",
         "validation_artifacts/observability/product-prove-journey-explain-failure.json"
       ],
-      "claim_impact": "supports_plugin_product_journey_source_local_observability_command_production_proof_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
+      "claim_impact": "supports_plugin_product_journey_source_local_observability_command_command_roundtrip_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
       "current_owner_surface": "command:product prove-journey",
       "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
@@ -1123,7 +1123,7 @@
         "fail stdout contract",
         "same-candidate live query proof",
         "non-fallback explain proof",
-        "stable same-run production proof",
+        "stable same-run command telemetry roundtrip",
         "red fixture proof",
         "green fixture proof",
         "tamper fixture proof"
@@ -1137,12 +1137,12 @@
         "fit_repo_command_runs_minter_with_observability",
         "fit_repo_command_emits_fail_closed_observability_for_invalid_receipt_dir",
         "logs_and_traces_can_select_run_and_correlation_without_metric_labels",
-        "fit_repo_inventory_records_production_proof_and_fixture_binding"
+        "fit_repo_inventory_records_command_roundtrip_and_fixture_binding"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/fit-repo-prove.json",
         "validation_artifacts/harness/fit-repo-receipt.json",
-        "validation_artifacts/observability/fit-repo-prove-production-proof.json"
+        "validation_artifacts/observability/fit-repo-prove-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/fit-repo-prove-logs-query.json",
@@ -1150,7 +1150,7 @@
         "validation_artifacts/observability/fit-repo-prove-traces-query.json",
         "validation_artifacts/observability/fit-repo-prove-explain-failure.json"
       ],
-      "claim_impact": "supports_fit_repo_source_local_observability_command_production_proof_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
+      "claim_impact": "supports_fit_repo_source_local_observability_command_command_roundtrip_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
       "current_owner_surface": "command:fit-repo prove",
       "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
@@ -1197,13 +1197,13 @@
         "command_run_accepts_current_review_round_anchors",
         "review_round_command_emits_fail_closed_observability_for_stale_anchors",
         "review_round_observability_receipt_path_validation_is_fail_closed",
-        "review_round_inventory_records_production_proof_and_fixture_binding",
-        "observe_snapshot_writes_stable_target_production_proof",
+        "review_round_inventory_records_command_roundtrip_and_fixture_binding",
+        "observe_snapshot_writes_stable_target_command_roundtrip",
         "logs_and_traces_can_select_run_and_correlation_without_metric_labels"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/review-round-verify.json",
-        "validation_artifacts/observability/review-round-verify-production-proof.json",
+        "validation_artifacts/observability/review-round-verify-command-roundtrip.json",
         "fixtures/review-round/valid/review-round-receipt.json",
         "fixtures/review-round/anchors/validator-receipt.json",
         "fixtures/review-round/anchors/review-target-receipt.json",
@@ -1214,7 +1214,7 @@
         "validation_artifacts/observability/review-round-verify-metrics-query.json",
         "validation_artifacts/observability/review-round-verify-traces-query.json"
       ],
-      "claim_impact": "supports_review_round_source_local_observability_command_production_proof_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
+      "claim_impact": "supports_review_round_source_local_observability_command_command_roundtrip_only_no_readiness_release_completion_update_goal; blocks_observability_gate_until_all_gate_92_rows_fitted",
       "current_owner_surface": "command:review-round verify",
       "next_unfitted_surface": "none",
       "log_instrumentation": "fitted log instrumentation",
@@ -1270,7 +1270,7 @@
       "receipt_paths": [
         "validation_artifacts/observability/review-target-build.json",
         "validation_artifacts/review/review-target-receipt.json",
-        "validation_artifacts/observability/review-target-build-production-proof.json"
+        "validation_artifacts/observability/review-target-build-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/review-target-build-logs-query.json",
@@ -1331,7 +1331,7 @@
       "receipt_paths": [
         "validation_artifacts/observability/archive-build.json",
         "validation_artifacts/review/candidate-archive-receipt.json",
-        "validation_artifacts/observability/archive-build-production-proof.json"
+        "validation_artifacts/observability/archive-build-command-roundtrip.json"
       ],
       "live_query_proof_paths": [
         "validation_artifacts/observability/archive-build-logs-query.json",
@@ -1661,7 +1661,7 @@
         "production_update_goal_inventory_is_bound_to_real_control_parser",
         "metrics_query_uses_bounded_historical_window",
         "metrics_query_does_not_use_run_id_as_label",
-        "nested_command_fitting_rejects_high_cardinality_metric_labels"
+        "nested_command_inventory_rejects_high_cardinality_metric_labels"
       ],
       "receipt_paths": [
         "validation_artifacts/cli/update-goal-eligibility.json"
@@ -3240,7 +3240,7 @@
       "fitting_status": "partially_fitted",
       "fitted_surfaces": [
         "required command list",
-        "per-command fitting status",
+        "per-command observability status",
         "package digest fitted green proof"
       ],
       "missing_surfaces": [
@@ -3807,7 +3807,7 @@
     "run_failing_command_once": {
       "fitting_status": "partially_fitted",
       "fitted_surfaces": [
-        "observe prove captures current fitting failure"
+        "observe prove captures current command inventory failure"
       ],
       "missing_surfaces": [
         "source audit/final-packet/self-law/update-goal failing commands are not all fitted",
@@ -3824,7 +3824,7 @@
       "operation": "observe.prove",
       "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
       "focused_tests": [
-        "observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes"
+        "observe_prove_rejects_incomplete_command_inventory_after_stack_passes"
       ],
       "receipt_paths": [
         "validation_artifacts/observability/observe-prove.json"

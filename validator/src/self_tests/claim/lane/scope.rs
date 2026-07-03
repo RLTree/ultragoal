@@ -64,7 +64,7 @@ fn lane_scope_overlap_and_mutable_resources_fail_closed() {
 }
 
 #[test]
-fn root_phase_and_parent_changed_file_authority_fail_closed_and_pass() {
+fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
     let root = crate::self_tests::boundaries::support::temp_root("lane-root-scope");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let post = root.join("artifacts/post.json");
@@ -91,20 +91,25 @@ fn root_phase_and_parent_changed_file_authority_fail_closed_and_pass() {
         "current_commit":"commit-a",
         "target_branch":"main"
     })];
-    let phase = json!({
+    let post_merge_state = json!({
         "phase":"post_merge_integration_gate",
         "status":"pass",
         "validated_at":"2026-06-25T00:00:00Z",
         "command_receipt":{"id":"post-cmd","exit":0,"artifact_path":"artifacts/post.json","artifact_digest":digest},
         "artifact_receipt":{"path":"artifacts/post.json","digest":digest}
     });
-    let phases = json!({
+    let verification_states = json!({
         "pre_merge_lane_gate":{"status":"pending"},
-        "post_merge_integration_gate":phase,
+        "post_merge_integration_gate":post_merge_state,
         "final_all_lanes_gate":{"phase":"final_all_lanes_gate","status":"pass"}
     });
     let mut out = Vec::new();
-    crate::claim_semantics::lane::root::scope::root_phases(&phases, &lanes, &root, &mut out);
+    crate::claim_semantics::lane::root::scope::root_verification_states(
+        &verification_states,
+        &lanes,
+        &root,
+        &mut out,
+    );
     let got = errors(&out);
     for expected in [
         "post_merge_without_pre_merge_receipt",
@@ -123,7 +128,9 @@ fn root_phase_and_parent_changed_file_authority_fail_closed_and_pass() {
         "final_all_lanes_gate":{"phase":"final_all_lanes_gate","status":"pass"}
     });
     out.clear();
-    crate::claim_semantics::lane::root::scope::root_phases(&no_post, &lanes, &root, &mut out);
+    crate::claim_semantics::lane::root::scope::root_verification_states(
+        &no_post, &lanes, &root, &mut out,
+    );
     assert!(errors(&out).contains(&"final_gate_without_post_merge_receipt".to_string()));
 
     out.clear();

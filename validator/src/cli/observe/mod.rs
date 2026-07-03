@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+mod command_roundtrip;
 pub(crate) mod explain;
 pub(crate) mod query;
 mod snapshot;
@@ -24,6 +25,8 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ObserveCommand>, String> {
         claim_id: opt_string(raw, "--claim-id"),
         check_id: opt_string(raw, "--check-id"),
         law_id: opt_string(raw, "--law-id"),
+        target_command: opt_string(raw, "--command"),
+        target_family: opt_string(raw, "--family"),
         row_limit: opt_usize(raw, "--limit").unwrap_or(100),
         byte_limit: opt_usize(raw, "--byte-limit").unwrap_or(262_144),
         timeout_ms: opt_u64(raw, "--timeout-ms").unwrap_or(30_000),
@@ -44,6 +47,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         ObserveOperation::TracesQuery => query::run(root, command, query::QueryKind::Traces)?,
         ObserveOperation::Snapshot => snapshot::run(root, command)?,
         ObserveOperation::Prove => telemetry::prove(root, command)?,
+        ObserveOperation::Fit => command_roundtrip::run(root, command)?,
         ObserveOperation::ExplainFailure
         | ObserveOperation::ExplainClaim
         | ObserveOperation::ExplainCheck
@@ -72,6 +76,7 @@ fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
         [_, a, b, ..] if a == "traces" && b == "query" => Ok(ObserveOperation::TracesQuery),
         [_, a, ..] if a == "snapshot" => Ok(ObserveOperation::Snapshot),
         [_, a, ..] if a == "prove" => Ok(ObserveOperation::Prove),
+        [_, a, ..] if a == "fit" => Ok(ObserveOperation::Fit),
         [_, a, ..] if a == "explain-failure" => Ok(ObserveOperation::ExplainFailure),
         [_, a, ..] if a == "explain-claim" => Ok(ObserveOperation::ExplainClaim),
         [_, a, ..] if a == "explain-check" => Ok(ObserveOperation::ExplainCheck),

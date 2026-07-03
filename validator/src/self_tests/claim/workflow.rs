@@ -123,14 +123,14 @@ fn dogfood_receipts_reject_missing_invalid_and_semantically_weak_proof() {
 fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
     let lane = json!({"id":"down","dependency_release":{}});
     let dep = json!({"upstream_lane_id":"up","claim_id":"C","required_status":"merged"});
-    let root_phases = json!({"post_merge_integration_gate":{"status":"pass"}});
+    let root_verification_states = json!({"post_merge_integration_gate":{"status":"pass"}});
     let mut out = Vec::<Failure>::new();
     crate::claim_semantics::lane::dependency::check(
         &lane,
         &dep,
         &BTreeMap::new(),
         &BTreeMap::new(),
-        &root_phases,
+        &root_verification_states,
         &json!({}),
         &crate::self_tests::boundaries::support::repo_root(),
         &mut out,
@@ -159,7 +159,7 @@ fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
         &dep,
         &lanes,
         &BTreeMap::new(),
-        &root_phases,
+        &root_verification_states,
         &json!({}),
         &crate::self_tests::boundaries::support::repo_root(),
         &mut out,

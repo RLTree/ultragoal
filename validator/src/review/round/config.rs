@@ -41,16 +41,16 @@ pub(crate) fn persona_spec(persona: &str) -> Option<&'static PersonaSpec> {
     PERSONAS.iter().find(|spec| spec.persona == persona)
 }
 
-pub(crate) fn expected_model(round_phase: &str) -> &'static str {
-    let _ = round_phase;
+pub(crate) fn expected_model(review_stage: &str) -> &'static str {
+    let _ = review_stage;
     "gpt-5.5"
 }
 
-pub(crate) fn expected_verdict(round_phase: &str) -> &'static str {
-    let _ = round_phase;
+pub(crate) fn expected_verdict(review_stage: &str) -> &'static str {
+    let _ = review_stage;
     "SIGN_OFF"
 }
 
-pub(crate) fn full_anchor_required(round_phase: &str, anchor_policy: &str) -> bool {
-    round_phase == "sign_off" && anchor_policy == "validator_review_target_archive"
+pub(crate) fn full_anchor_required(review_stage: &str, anchor_policy: &str) -> bool {
+    review_stage == "sign_off" && anchor_policy == "validator_review_target_archive"
 }

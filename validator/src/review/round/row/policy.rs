@@ -8,14 +8,14 @@ pub(crate) fn row_policy_errors(
     persona: &str,
     out: &mut Vec<ReviewFailure>,
 ) {
-    let round_phase = receipt
+    let review_stage = receipt
         .get("round_phase")
         .and_then(Value::as_str)
         .unwrap_or("");
     freshness_errors(row, persona, out);
     scope_error(row, persona, out);
-    verdict_error(row, round_phase, persona, out);
-    runtime_config_errors(row, round_phase, persona, out);
+    verdict_error(row, review_stage, persona, out);
+    runtime_config_errors(row, review_stage, persona, out);
     anchor_digest_errors(row, receipt, anchors, persona, out);
 }
 
@@ -41,9 +41,9 @@ fn scope_error(row: &Value, persona: &str, out: &mut Vec<ReviewFailure>) {
     }
 }
 
-fn verdict_error(row: &Value, round_phase: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
+fn verdict_error(row: &Value, review_stage: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
     if row.get("verdict").and_then(Value::as_str)
-        != Some(crate::review::round::config::expected_verdict(round_phase))
+        != Some(crate::review::round::config::expected_verdict(review_stage))
     {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
@@ -55,14 +55,14 @@ fn verdict_error(row: &Value, round_phase: &str, persona: &str, out: &mut Vec<Re
 
 fn runtime_config_errors(
     row: &Value,
-    round_phase: &str,
+    review_stage: &str,
     persona: &str,
     out: &mut Vec<ReviewFailure>,
 ) {
     for (key, want, code) in [
         (
             "model",
-            crate::review::round::config::expected_model(round_phase),
+            crate::review::round::config::expected_model(review_stage),
             "review_round_model_mismatch",
         ),
         (
@@ -89,7 +89,7 @@ fn anchor_digest_errors(
     persona: &str,
     out: &mut Vec<ReviewFailure>,
 ) {
-    let round_phase = receipt
+    let review_stage = receipt
         .get("round_phase")
         .and_then(Value::as_str)
         .unwrap_or("");
@@ -98,7 +98,7 @@ fn anchor_digest_errors(
         .and_then(Value::as_str)
         .unwrap_or("");
     let mut required = vec![("validator_receipt_digest", &anchors.validator_digest)];
-    if crate::review::round::config::full_anchor_required(round_phase, anchor_policy) {
+    if crate::review::round::config::full_anchor_required(review_stage, anchor_policy) {
         required.push(("review_target_digest", &anchors.review_target_digest));
         required.push(("archive_digest", &anchors.archive_digest));
     }

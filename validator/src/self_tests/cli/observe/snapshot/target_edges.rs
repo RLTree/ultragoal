@@ -11,7 +11,7 @@ fn observe_snapshot_rejects_wrong_candidate_and_opaque_target_failures() {
     write_query_receipts(&root, &candidate, &target);
     write_explain_receipt(&root, &candidate, &target, false);
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let opaque_command = command(&[
         "observe",
         "snapshot",
@@ -76,7 +76,7 @@ fn observe_snapshot_rejects_receipts_without_event_binding() {
     write_query_receipts(&root, &candidate, &target);
     write_explain_receipt(&root, &candidate, &target, false);
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let command = command(&[
         "observe",
         "snapshot",
@@ -129,7 +129,7 @@ fn observe_snapshot_rejects_missing_candidate_and_nonmatching_receipts() {
     .expect("write missing candidate target");
     write_query_receipts(&root, &candidate, &target);
     write_explain_receipt(&root, &candidate, &target, false);
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let missing_candidate = command(&[
         "observe",
         "snapshot",

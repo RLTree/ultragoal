@@ -10,7 +10,7 @@ fn aggregate_errors_at(root: &Path, bundle: Value) -> Vec<String> {
 }
 
 #[test]
-fn aggregate_semantic_failures_cover_goal_receipt_and_root_phase_edges() {
+fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() {
     let root = crate::self_tests::boundaries::support::temp_root("aggregate-root-phase");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let post_receipt_path = root.join("artifacts/post-merge.json");

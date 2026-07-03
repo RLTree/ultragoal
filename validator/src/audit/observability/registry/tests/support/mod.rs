@@ -29,7 +29,7 @@ pub(super) fn write_registry_root(root: &Path, inventory: Value) {
     )
     .expect("trace json");
     write_inventory(root, inventory);
-    super::receipts::write_fitting_receipts(root);
+    super::receipts::write_command_roundtrip_receipts(root);
 }
 
 pub(super) fn write_inventory(root: &Path, inventory: Value) {
@@ -53,7 +53,7 @@ pub(super) fn write_valid_fixture(root: &Path) {
 
 pub(super) fn fitted_inventory() -> Value {
     let mut rows = Map::new();
-    for command in super::super::fitting::REQUIRED_COMMANDS {
+    for command in super::super::command_inventory::REQUIRED_COMMANDS {
         rows.insert((*command).to_string(), rows::fitted_row(command));
     }
     let mut surface_rows = Map::new();
@@ -75,7 +75,7 @@ pub(super) fn fitted_inventory() -> Value {
         );
     }
     let mut inventory = json!({
-        "commands": super::super::fitting::REQUIRED_COMMANDS,
+        "commands": super::super::command_inventory::REQUIRED_COMMANDS,
         "surfaces": super::super::surfaces::REQUIRED_SURFACES,
         "operating_loop": {
             "doctrine": {
@@ -102,7 +102,7 @@ pub(super) fn fitted_inventory() -> Value {
             "green_fixture_proof": true,
             "tamper_fixture_proof": true,
             "claim_impact_mapping": true,
-            "same_candidate_query_proof": true,
+            "same_candidate_query_roundtrip": true,
             "explicit_instrumentation_fields": true,
             "validator_enforced": true,
             "owner_surface_tracking": true,
@@ -123,7 +123,7 @@ fn fitted_control_board() -> Value {
     insert_counts(
         &mut families,
         "commands",
-        super::super::fitting::REQUIRED_COMMANDS.len(),
+        super::super::command_inventory::REQUIRED_COMMANDS.len(),
     );
     insert_counts(
         &mut families,

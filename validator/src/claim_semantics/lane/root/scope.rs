@@ -36,10 +36,15 @@ pub(crate) fn lane_overlap(lanes: &[Value], out: &mut Vec<Failure>) {
     }
 }
 
-pub(crate) fn root_phases(phases: &Value, lanes: &[Value], root: &Path, out: &mut Vec<Failure>) {
-    let pre = &phases["pre_merge_lane_gate"];
-    let post = &phases["post_merge_integration_gate"];
-    let final_phase = &phases["final_all_lanes_gate"];
+pub(crate) fn root_verification_states(
+    states: &Value,
+    lanes: &[Value],
+    root: &Path,
+    out: &mut Vec<Failure>,
+) {
+    let pre = &states["pre_merge_lane_gate"];
+    let post = &states["post_merge_integration_gate"];
+    let final_all_lanes_state = &states["final_all_lanes_gate"];
     if str_field(post, "status") == "pass" && str_field(pre, "status") != "pass" {
         out.push(Failure::new(
             "root-verification-phase-coverage",
@@ -47,20 +52,20 @@ pub(crate) fn root_phases(phases: &Value, lanes: &[Value], root: &Path, out: &mu
             "post gate",
         ));
     }
-    if str_field(final_phase, "status") == "pass" && str_field(post, "status") != "pass" {
+    if str_field(final_all_lanes_state, "status") == "pass" && str_field(post, "status") != "pass" {
         out.push(Failure::new(
             "root-verification-phase-coverage",
             "final_gate_without_post_merge_receipt",
             "final gate",
         ));
     }
-    final_phase_open_lanes(final_phase, lanes, out);
-    for phase in phases.as_object().into_iter().flat_map(|obj| obj.values()) {
-        if str_field(phase, "status") == "pass" && phase_proof_bad(root, phase) {
+    final_all_lanes_state_open_lanes(final_all_lanes_state, lanes, out);
+    for state in states.as_object().into_iter().flat_map(|obj| obj.values()) {
+        if str_field(state, "status") == "pass" && verification_receipt_bad(root, state) {
             out.push(Failure::new(
                 "root-verification-phase-coverage",
                 "root_phase_pass_without_successful_receipt",
-                str_field(phase, "phase"),
+                str_field(state, "phase"),
             ));
         }
     }
@@ -88,8 +93,12 @@ pub(crate) fn parent_changed_files_are_registered(
     }
 }
 
-fn final_phase_open_lanes(final_phase: &Value, lanes: &[Value], out: &mut Vec<Failure>) {
-    if str_field(final_phase, "status") != "pass" {
+fn final_all_lanes_state_open_lanes(
+    final_all_lanes_state: &Value,
+    lanes: &[Value],
+    out: &mut Vec<Failure>,
+) {
+    if str_field(final_all_lanes_state, "status") != "pass" {
         return;
     }
     let open = lanes
@@ -108,31 +117,31 @@ fn final_phase_open_lanes(final_phase: &Value, lanes: &[Value], out: &mut Vec<Fa
     }
 }
 
-fn phase_proof_bad(root: &Path, phase: &Value) -> bool {
-    let command = &phase["command_receipt"];
-    let artifact = &phase["artifact_receipt"];
+fn verification_receipt_bad(root: &Path, state: &Value) -> bool {
+    let command = &state["command_receipt"];
+    let artifact = &state["artifact_receipt"];
     let command_as_ref = json!({
         "path": command.pointer("/artifact_path").and_then(Value::as_str).unwrap_or(""),
         "digest": command.pointer("/artifact_digest").and_then(Value::as_str).unwrap_or("")
     });
-    phase
+    state
         .pointer("/command_receipt/exit")
         .and_then(Value::as_i64)
         != Some(0)
-        || phase
+        || state
             .pointer("/artifact_receipt/digest")
             .and_then(Value::as_str)
             .is_none_or(|d| d == digest::ZERO)
-        || phase
+        || state
             .pointer("/command_receipt/artifact_path")
             .and_then(Value::as_str)
-            != phase
+            != state
                 .pointer("/artifact_receipt/path")
                 .and_then(Value::as_str)
-        || phase
+        || state
             .pointer("/command_receipt/artifact_digest")
             .and_then(Value::as_str)
-            != phase
+            != state
                 .pointer("/artifact_receipt/digest")
                 .and_then(Value::as_str)
         || crate::package::artifact::refs::validate_object(root, artifact, "root phase artifact")
@@ -145,23 +154,23 @@ fn phase_proof_bad(root: &Path, phase: &Value) -> bool {
         .is_err()
 }
 
-fn post_merge_receipt_check(root: &Path, phase: &Value, lanes: &[Value], out: &mut Vec<Failure>) {
-    if str_field(phase, "status") != "pass" {
+fn post_merge_receipt_check(root: &Path, state: &Value, lanes: &[Value], out: &mut Vec<Failure>) {
+    if str_field(state, "status") != "pass" {
         return;
     }
-    let path = str_field(&phase["artifact_receipt"], "path");
+    let path = str_field(&state["artifact_receipt"], "path");
     let Ok(receipt) = crate::json_boundary::read_json(&root.join(path)) else {
         out.push(post_merge_failure("post_merge_receipt_not_lane_bound"));
         return;
     };
     let lane_id = str_field(&receipt, "upstream_lane_id");
     let lane = lanes.iter().find(|lane| str_field(lane, "id") == lane_id);
-    if post_merge_receipt_bad(phase, &receipt, lane) {
+    if post_merge_receipt_bad(state, &receipt, lane) {
         out.push(post_merge_failure("post_merge_receipt_not_lane_bound"));
     }
 }
 
-fn post_merge_receipt_bad(phase: &Value, receipt: &Value, lane: Option<&Value>) -> bool {
+fn post_merge_receipt_bad(state: &Value, receipt: &Value, lane: Option<&Value>) -> bool {
     let Some(lane) = lane else {
         return true;
     };
@@ -171,14 +180,14 @@ fn post_merge_receipt_bad(phase: &Value, receipt: &Value, lane: Option<&Value>) 
         .into_iter()
         .flatten()
         .any(|row| {
-            str_field(row, "id") == str_field(&phase["command_receipt"], "id")
+            str_field(row, "id") == str_field(&state["command_receipt"], "id")
                 && row.get("exit").and_then(Value::as_i64) == Some(0)
         });
     str_field(receipt, "schema") != "harness-ultragoal.root-phase-receipt.v1"
         || str_field(receipt, "phase") != "post_merge_integration_gate"
         || str_field(receipt, "upstream_commit") != str_field(lane, "current_commit")
         || str_field(receipt, "target_branch") != str_field(lane, "target_branch")
-        || str_field(receipt, "validated_at") != str_field(phase, "validated_at")
+        || str_field(receipt, "validated_at") != str_field(state, "validated_at")
         || receipt
             .pointer("/merge_reachability/upstream_commit_reachable")
             .and_then(Value::as_bool)

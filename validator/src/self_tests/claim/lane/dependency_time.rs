@@ -52,7 +52,7 @@ fn fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value) {
         "upstream_ready_receipt": {"path": "ready.json", "digest": ready_digest}
     });
     let post_digest = crate::self_tests::boundaries::support::sha('9');
-    let root_phases = json!({"post_merge_integration_gate": {
+    let root_verification_states = json!({"post_merge_integration_gate": {
         "status": "pass",
         "validated_at": "2026-06-25T00:30:00Z",
         "artifact_receipt": {"path": "post.json", "digest": post_digest}
@@ -74,7 +74,7 @@ fn fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value) {
         "path": "ready/up.json",
         "digest": ready_file_digest
     }]}});
-    (lane, dep, upstream, ready, root_phases, bundle)
+    (lane, dep, upstream, ready, root_verification_states, bundle)
 }
 
 fn run_case(
@@ -82,7 +82,7 @@ fn run_case(
     dep: &Value,
     upstream: &Value,
     ready: &Value,
-    root_phases: &Value,
+    root_verification_states: &Value,
     bundle: &Value,
     root: &Path,
 ) -> Vec<String> {
@@ -96,7 +96,7 @@ fn run_case(
         dep,
         &lanes,
         &ready_index,
-        root_phases,
+        root_verification_states,
         bundle,
         root,
         &mut out,
@@ -107,8 +107,19 @@ fn run_case(
 #[test]
 fn lane_dependency_time_and_release_edges_fail_closed() {
     let root = crate::self_tests::boundaries::support::temp_root("lane-dependency-time-edges");
-    let (lane, dep, upstream, ready, root_phases, bundle) = fixture(&root);
-    assert!(run_case(&lane, &dep, &upstream, &ready, &root_phases, &bundle, &root).is_empty());
+    let (lane, dep, upstream, ready, root_verification_states, bundle) = fixture(&root);
+    assert!(
+        run_case(
+            &lane,
+            &dep,
+            &upstream,
+            &ready,
+            &root_verification_states,
+            &bundle,
+            &root
+        )
+        .is_empty()
+    );
 
     let mut bad_dep_time = dep.clone();
     bad_dep_time["validated_at"] = json!("not-a-time");
@@ -118,7 +129,7 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
             &bad_dep_time,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -133,7 +144,7 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
             &dep,
             &bad_heartbeat,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -148,7 +159,7 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
             &dep,
             &upstream,
             &bad_ready_time,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )
@@ -159,11 +170,11 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
             &dep,
             &upstream,
             &bad_ready_time,
-            &root_phases
+            &root_verification_states
         )
     );
 
-    let mut bad_post_time = root_phases.clone();
+    let mut bad_post_time = root_verification_states.clone();
     bad_post_time["post_merge_integration_gate"]["validated_at"] = json!("not-a-time");
     assert!(
         run_case(
@@ -187,7 +198,7 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
             &dep,
             &upstream,
             &ready,
-            &root_phases,
+            &root_verification_states,
             &bundle,
             &root
         )

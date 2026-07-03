@@ -31,7 +31,7 @@ fn observability_registry_accepts_fully_fitted_inventory() {
 
 #[test]
 fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-fit-registry");
+    let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-registry");
     let mut inventory = fitted_inventory();
     inventory["fitting_inventory"]["package digest"] = json!({
         "fitting_status": "unfitted",
@@ -80,7 +80,7 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
         "missing_surfaces": [],
         "validator_check_id": super::super::LAW,
         "focused_tests": [],
-        "receipt_paths": ["validation_artifacts/observability/fitting/surface-validator-check-families.json"],
+        "receipt_paths": ["validation_artifacts/observability/command-roundtrip/surface-validator-check-families.json"],
         "live_query_proof_paths": [],
         "claim_impact": "claims_complete"
     });
@@ -98,7 +98,7 @@ fn observability_registry_rejects_unfitted_and_row_shape_inventory() {
         "missing_surfaces": [],
         "validator_check_id": super::super::LAW,
         "focused_tests": [],
-        "receipt_paths": ["validation_artifacts/observability/fitting/loop-query_logs_metrics_traces_by_run_id.json"],
+        "receipt_paths": ["validation_artifacts/observability/command-roundtrip/loop-query_logs_metrics_traces_by_run_id.json"],
         "live_query_proof_paths": [],
         "claim_impact": "claims_complete"
     });
@@ -147,7 +147,7 @@ fn observability_registry_rejects_pass_shaped_control_board() {
     });
     inventory["fitting_control_board"]["status"] = json!("fitted");
     inventory["fitting_control_board"]["families"]["commands"]["fitted"] =
-        json!(super::fitting::REQUIRED_COMMANDS.len());
+        json!(super::command_inventory::REQUIRED_COMMANDS.len());
     inventory["fitting_control_board"]["families"]["commands"]["partially_fitted"] = json!(0);
     write_registry_root(&root, inventory);
     write_valid_fixture(&root);
@@ -197,7 +197,7 @@ fn observability_control_board_uses_required_command_order() {
     });
     inventory["fitting_control_board"]["status"] = json!("blocked");
     inventory["fitting_control_board"]["families"]["commands"]["fitted"] =
-        json!(super::fitting::REQUIRED_COMMANDS.len() - 2);
+        json!(super::command_inventory::REQUIRED_COMMANDS.len() - 2);
     inventory["fitting_control_board"]["families"]["commands"]["partially_fitted"] = json!(1);
     inventory["fitting_control_board"]["families"]["commands"]["unfitted"] = json!(1);
     inventory["fitting_control_board"]["first_incomplete"] = json!({

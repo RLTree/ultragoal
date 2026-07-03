@@ -43,7 +43,7 @@ fn families() -> Vec<ControlFamily> {
         ControlFamily {
             board_key: "commands",
             inventory_key: "fitting_inventory",
-            ids: super::fitting::REQUIRED_COMMANDS,
+            ids: super::command_inventory::REQUIRED_COMMANDS,
         },
         ControlFamily {
             board_key: "surfaces",

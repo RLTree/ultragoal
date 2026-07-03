@@ -1288,6 +1288,58 @@ Required semantic domain-type naming changes:
 - Require semantic source modules to name the law, domain, authority, boundary, receipt, fixture, product surface, or workflow they govern. Domain directories must carry the repeated concept; filenames inside those directories must drop redundant prefixes.
 - Typed exceptions for generated code, local generic algorithms, or external compatibility contracts must be narrow, parsed, package-included, claim-limited, and independently red-fixtured.
 
+Required product-semantic path and symbol naming hardening:
+
+- Names must describe what the plugin product, CLI command, validator, runtime
+  surface, artifact, or domain object does. Names must not describe why the
+  current goal work exists, which gate/slice/phase discovered it, which receipt
+  it intends to satisfy, or which agent workflow produced it.
+- This law applies to directories, files, Rust modules, nested modules, public
+  and private functions, helper functions, test functions, type names, enum
+  variants, constants, generated artifact path segments, receipt path segments,
+  fixture ids, check ids, validator ids, schema ids, and package inventory
+  paths.
+- Names such as `fitting`, `production_proof`, `gate92`, `phase4`, `slice`,
+  `workstream`, `checkpoint`, `progress`, `todo`, `wip`, `scratch`, `helpers`,
+  `utils`, `common`, `misc`, and `shared` fail when they stand in for product
+  behavior. Equivalent synonyms fail when manual inspection shows they encode
+  goal progress, evidence ambition, implementation chronology, or agent task
+  state instead of domain responsibility.
+- A name like `observe/fitting` is non-compliant because it says the Gate 92
+  row is being fitted, not what the CLI code does. If the code runs a real
+  command, queries logs/metrics/traces, runs explain, and reconciles stdout,
+  receipt, and telemetry, the product-relative namespace is command telemetry
+  roundtrip, telemetry reconciliation, command diagnostics, command inventory,
+  or another exact behavior name.
+- A name like `production_proof` is still insufficient when it names evidence
+  purpose rather than product behavior. Use `command_roundtrip`,
+  `telemetry_reconciliation`, `receipt_dereference`, `span_parentage`,
+  `cache_invalidation`, `source_topology`, or an equivalent behavior name that
+  lets an agent predict the code's responsibility before reading it.
+- Product vocabulary remains allowed when it is actually product vocabulary.
+  `fit-repo` is allowed because it is a user-facing Harness Ultragoal product
+  command. `contract` is allowed only where the code owns a product/runtime/data
+  contract. `closure` is allowed only where the code computes package or
+  dependency closure. `proof` is allowed only where the product surface is
+  literally a `prove` command or the code validates proof artifacts; it is not
+  allowed as a vague substitute for command behavior.
+- Compatibility aliases are allowed only at parser or schema boundaries when an
+  existing external contract requires them. The implementation beneath the
+  alias must route into product-semantic modules/functions, and the alias must
+  not leak into new internal source topology. Existing external schema fields
+  such as `fitting_status` may remain only as compatibility debt with a planned
+  migration or encapsulation; new source paths, functions, modules, or helper
+  names must use product-behavior names.
+- The validator must not rely on a static banned-word list alone. It must
+  combine mechanical token checks with contextual allowlists and red/green/
+  tamper fixtures so product terms such as `fit-repo` pass while goal-work
+  terms such as `fitting` fail.
+- `ultragoal namespace check --strict` must report semantic-name failures in
+  agent-remediating form: offending path or symbol, offending segment, whether
+  the segment encodes goal work/history/evidence purpose/generic bucket, why it
+  blocks agent navigation, suggested product-behavior naming class, affected
+  claims, and whether any typed exception can ever be valid.
+
 Required red, green, and tamper fixtures:
 
 - Add red fixtures proving a top-level `validator/src/internal_coverage_wave99_tests.rs` style file fails namespace law.
@@ -1298,16 +1350,52 @@ Required red, green, and tamper fixtures:
 - Add red fixtures proving a generated/catalog exception cannot be used for hand-authored validator source.
 - Add red fixtures proving a package manifest listing cannot satisfy namespace compliance for a non-compliant source path.
 - Add red fixtures proving a renamed file that keeps coverage-wave history but moves directories still fails semantic repo-law when the name remains non-semantic.
+- Add red fixtures proving goal-work paths and modules fail, including
+  `validator/src/cli/observe/fitting/mod.rs`,
+  `validator/src/cli/observe/production_proof/mod.rs`,
+  `validator/src/audit/gate92/mod.rs`,
+  `validator/src/audit/phase4_rebind.rs`, and
+  `validator/src/cli/progress/checkpoint.rs`.
+- Add red fixtures proving goal-work symbols fail inside otherwise valid files,
+  including functions such as `fit_command`, `fit_path`,
+  `production_proof`, `phase4_rebind`, `checkpoint_progress`, `todo_repair`,
+  and helper modules named only `helpers`, `utils`, `common`, or `shared`.
+  The fixture must prove the validator inspects module/function/type/test names,
+  not only file paths.
+- Add red fixtures proving generated artifact or receipt paths such as
+  `validation_artifacts/observability/fitting/...` and
+  `validation_artifacts/observability/production-proof/...` fail unless a typed
+  compatibility schema contract exists and the product-semantic replacement is
+  present.
 - Add red fixtures proving namespace errors cannot be hidden by capped reporting, row presence, foundational trace presence, source-obligation presence, coverage pass, line-cap pass, package inventory pass, Product Fitness pass, reviewer approval, or lowered claim ceiling.
-- Add green fixtures proving semantically routed validator test directories pass with names such as `validator/src/self_tests/coverage/receipt_authority.rs` and `validator/src/self_tests/claim/evidence_boundaries.rs`.
+- Add green fixtures proving semantically routed validator test directories pass
+  with names such as `validator/src/self_tests/coverage/receipt_authority.rs`
+  and `validator/src/self_tests/claim/evidence_boundaries.rs`.
+- Add green fixtures proving product-semantic observability names pass, including
+  `validator/src/cli/observe/command_roundtrip/mod.rs`,
+  `validator/src/cli/observe/telemetry_reconciliation/mod.rs`,
+  `validator/src/audit/observability/command_inventory/mod.rs`, functions such
+  as `run_command_roundtrip`, `query_roundtrip`, `reconcile_same_candidate`,
+  `write_command_inventory`, and product command names such as `fit_repo` where
+  they represent the user-facing fit-repo product surface.
 - Add green fixtures proving generated fixture catalogs can still use repeated prefixes only when a generator/catalog route owns the family and the exception is narrow, typed, and claim-limited.
 - Add tamper fixtures proving that widening a narrow namespace exception after receipt generation invalidates the receipt and blocks completion/review/package/readiness/release claims.
+- Add tamper fixtures proving that a contextual allowlist entry cannot be reused
+  to bless goal-work names: `fit-repo` may pass as a product command, but
+  `fitting`, `fit_goal`, `fit_slice`, or `production_proof` must still fail when
+  used as source/module/function/artifact namespaces.
 
 Required standards, trace, source-obligation, and claim-ceiling integration:
 
 - Add or tighten agent-standards rows for validator source namespace topology and semantic repo-law enforcement. These may point to Gate 8 and Gate 24, but they must name this concrete source-topology law explicitly and must not rely on generic `namespace-progressive-disclosure` or `semantic-domain-type-naming` row presence alone.
+- Add or tighten plugin-activated repo standards so every activated or
+  retrofitted repository inherits this law without needing parent-session
+  context. The shipped standards must say that paths, modules, functions,
+  helpers, tests, ids, and artifact names describe product behavior, not goal
+  work, evidence purpose, phase/slice labels, session history, or generic
+  buckets.
 - Add foundational trace entries mapping filesystem-as-agent-interface and scoped-module article requirements to validator source topology enforcement, the new red fixtures, valid fixtures, receipt requirements, package inventory, and claim ceilings.
-- Add source-obligation parity entries so this law is not bundled under broad namespace, documentation freshness, architecture, line-cap, coverage, or semantic-domain rows without independent child-law failure proof.
+- Add source-obligation parity entries so this law is not bundled under broad namespace, documentation freshness, architecture, line-cap, coverage, observability, Gate 92 fitting, or semantic-domain rows without independent child-law failure proof.
 - Add claim-ceiling guards so completion, review, package, readiness, release, product-readiness, CLI self-law, source audit, final packet, and update_goal eligibility all fail while validator source topology violates namespace or semantic repo-law.
 - Add feedback-to-rule and historical regression corpus rows for the side-thread signal that found the `internal_*`/`internal_coverage_*` sprawl and the broad exception loophole. Include source artifact, timestamp/session id if available, observed failure, affected surfaces, implemented repair, red fixtures, valid fixtures, validator ids, receipt ids, claim ids, and claim impact.
 

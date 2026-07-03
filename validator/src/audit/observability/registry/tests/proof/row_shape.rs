@@ -14,7 +14,7 @@ fn inventory_requires_owner_and_next_surface_tracking_together() {
         .remove("next_unfitted_surface");
     crate::json_boundary::write_json(&path, &inventory).unwrap();
 
-    let failures = super::super::fitting_failures(&root);
+    let failures = super::super::command_inventory_failures(&root);
 
     assert!(
         failures

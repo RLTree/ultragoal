@@ -29,6 +29,8 @@ fn command() -> ObserveCommand {
         claim_id: None,
         check_id: None,
         law_id: None,
+        target_command: None,
+        target_family: None,
         row_limit: 100,
         byte_limit: 1024,
         timeout_ms: 1000,

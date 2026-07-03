@@ -8,7 +8,7 @@ fn fitted_rows_reject_unbound_fixture_labels() {
         json!(["unbound_red_fixture_label"]);
 
     let mut failures = Vec::new();
-    super::super::super::fitting::check(&root, &inventory, &mut failures);
+    super::super::super::command_inventory::check(&root, &inventory, &mut failures);
     assert!(
         failures
             .contains(&"observability_command_fitting_row_shape_only:package digest".to_string())

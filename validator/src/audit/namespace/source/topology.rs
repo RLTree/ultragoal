@@ -2,6 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 #[cfg(test)]
 use std::path::Path;
 
+use super::failure_text::remediating_failure;
+
 #[cfg(test)]
 pub(crate) fn failures(root: &Path, manifest_paths: &[String]) -> Vec<String> {
     failures_with_repo_paths(manifest_paths, &repo_source_paths(root))
@@ -24,6 +26,7 @@ pub(crate) fn failures_with_repo_paths(
     out.extend(generic_leaf_name_failures(&paths));
     out.extend(history_name_failures(&paths));
     out.extend(opaque_gate_number_failures(&paths));
+    out.extend(product_opaque_goal_work_label_failures(&paths));
     out
 }
 
@@ -194,30 +197,27 @@ fn opaque_gate_number_failures(paths: &BTreeSet<String>) -> Vec<String> {
         .collect()
 }
 
+fn product_opaque_goal_work_label_failures(paths: &BTreeSet<String>) -> Vec<String> {
+    paths
+        .iter()
+        .filter_map(|path| {
+            let label = super::path_labels::product_opaque_goal_work_label(path)?;
+            Some(remediating_failure(
+                "namespace_validator_source_product_opaque_goal_work_label",
+                parent_dir(path),
+                label,
+                &[path.to_string()],
+                "rename_source_path_by_cli_product_behavior_such_as_command_roundtrip_command_inventory_or_telemetry_reconciliation",
+                false,
+            ))
+        })
+        .collect()
+}
+
 fn gate_number_token(token: &str) -> bool {
     token
         .strip_prefix("gate")
         .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
-}
-
-fn remediating_failure(
-    code: &str,
-    directory: &str,
-    prefix: &str,
-    examples: &[String],
-    repair: &str,
-    exception_allowed: bool,
-) -> String {
-    let sample = examples
-        .iter()
-        .take(5)
-        .cloned()
-        .collect::<Vec<_>>()
-        .join(",");
-    format!(
-        "{code}:directory={directory};prefix={prefix};count={};examples={sample};why=prefix_or_history_name_is_standing_in_for_semantic_directory;repair={repair};claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed={exception_allowed}",
-        examples.len()
-    )
 }
 
 fn is_validator_rust_source(path: &str) -> bool {

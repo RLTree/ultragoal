@@ -1,10 +1,10 @@
 const REVIEW_ROUND_PROOF: &str =
-    "validation_artifacts/observability/review-round-verify-production-proof.json";
+    "validation_artifacts/observability/review-round-verify-command-roundtrip.json";
 const REVIEW_ROUND_EXPLAIN: &str =
     "validation_artifacts/observability/review-round-verify-explain-failure.json";
 
 #[test]
-fn source_audit_inventory_records_stable_production_proof() {
+fn source_audit_inventory_records_stable_command_roundtrip() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -22,7 +22,7 @@ fn source_audit_inventory_records_stable_production_proof() {
             .unwrap()
             .iter()
             .any(|item| item.as_str().is_some_and(|text| text
-                == "validation_artifacts/observability/source-audit-production-proof.json")),
+                == "validation_artifacts/observability/source-audit-command-roundtrip.json")),
         "{row}"
     );
     assert!(
@@ -73,7 +73,7 @@ fn source_audit_inventory_records_stable_production_proof() {
 }
 
 #[test]
-fn fit_repo_inventory_records_production_proof_and_fixture_binding() {
+fn fit_repo_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -88,7 +88,7 @@ fn fit_repo_inventory_records_production_proof_and_fixture_binding() {
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
             item.as_str().is_some_and(|text| {
-                text == "validation_artifacts/observability/fit-repo-prove-production-proof.json"
+                text == "validation_artifacts/observability/fit-repo-prove-command-roundtrip.json"
             })
         }),
         "{row}"
@@ -112,7 +112,7 @@ fn fit_repo_inventory_records_production_proof_and_fixture_binding() {
             .iter()
             .all(|item| item
                 .as_str()
-                .is_some_and(|text| !text.ends_with("-production-proof.json"))),
+                .is_some_and(|text| !text.ends_with("-command-roundtrip.json"))),
         "{row}"
     );
     for key in ["red_fixtures", "green_fixtures", "tamper_fixtures"] {
@@ -124,7 +124,7 @@ fn fit_repo_inventory_records_production_proof_and_fixture_binding() {
 }
 
 #[test]
-fn product_journey_inventory_records_production_proof_and_fixture_binding() {
+fn product_journey_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -139,7 +139,7 @@ fn product_journey_inventory_records_production_proof_and_fixture_binding() {
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
             item.as_str().is_some_and(|text| text
-                == "validation_artifacts/observability/product-prove-journey-production-proof.json")
+                == "validation_artifacts/observability/product-prove-journey-command-roundtrip.json")
         }),
         "{row}"
     );
@@ -161,7 +161,7 @@ fn product_journey_inventory_records_production_proof_and_fixture_binding() {
             .iter()
             .all(|item| item
                 .as_str()
-                .is_some_and(|text| !text.ends_with("-production-proof.json"))),
+                .is_some_and(|text| !text.ends_with("-command-roundtrip.json"))),
         "{row}"
     );
     for key in ["red_fixtures", "green_fixtures", "tamper_fixtures"] {
@@ -173,7 +173,7 @@ fn product_journey_inventory_records_production_proof_and_fixture_binding() {
 }
 
 #[test]
-fn product_cohesion_inventory_records_production_proof_and_fixture_binding() {
+fn product_cohesion_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -188,7 +188,7 @@ fn product_cohesion_inventory_records_production_proof_and_fixture_binding() {
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
             item.as_str().is_some_and(|text| text
-                == "validation_artifacts/observability/product-prove-cohesion-production-proof.json")
+                == "validation_artifacts/observability/product-prove-cohesion-command-roundtrip.json")
         }),
         "{row}"
     );
@@ -210,7 +210,7 @@ fn product_cohesion_inventory_records_production_proof_and_fixture_binding() {
             .iter()
             .all(|item| item
                 .as_str()
-                .is_some_and(|text| !text.ends_with("-production-proof.json"))),
+                .is_some_and(|text| !text.ends_with("-command-roundtrip.json"))),
         "{row}"
     );
     for key in ["red_fixtures", "green_fixtures", "tamper_fixtures"] {
@@ -222,7 +222,7 @@ fn product_cohesion_inventory_records_production_proof_and_fixture_binding() {
 }
 
 #[test]
-fn product_fitness_inventory_records_production_proof_and_fixture_binding() {
+fn product_fitness_inventory_records_command_roundtrip_and_fixture_binding() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
@@ -237,7 +237,7 @@ fn product_fitness_inventory_records_production_proof_and_fixture_binding() {
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
             item.as_str().is_some_and(|text| text
-                == "validation_artifacts/observability/product-prove-fitness-production-proof.json")
+                == "validation_artifacts/observability/product-prove-fitness-command-roundtrip.json")
         }),
         "{row}"
     );

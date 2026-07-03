@@ -62,7 +62,7 @@ pub fn check_lanes(
     }
     crate::claim_semantics::lane::root::scope::lane_overlap(&lanes, out);
     crate::claim_semantics::lane::isolation::mutable_resources(&lanes, out);
-    crate::claim_semantics::lane::root::scope::root_phases(
+    crate::claim_semantics::lane::root::scope::root_verification_states(
         &lr["root_verification_phases"],
         &lanes,
         root,
@@ -77,7 +77,7 @@ fn lane_check(
     lane: &Value,
     lane_index: &BTreeMap<String, &Value>,
     ready_index: &BTreeMap<String, &Value>,
-    root_phases: &Value,
+    root_verification_states: &Value,
     bundle: &Value,
     root: &std::path::Path,
     run_at: i64,
@@ -106,7 +106,7 @@ fn lane_check(
             dep,
             lane_index,
             ready_index,
-            root_phases,
+            root_verification_states,
             bundle,
             root,
             out,

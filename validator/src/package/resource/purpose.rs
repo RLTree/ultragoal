@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::path::Path;
 
 pub(crate) const STALE_PROOF_RESOURCE: &str = "stale_proof_resource_packaged";
-pub(crate) const ROOT_PHASE_PROOF_RESOURCE: &str = "root_phase_proof_resource_packaged";
+pub(crate) const ROOT_VERIFICATION_PROOF_RESOURCE: &str = "root_phase_proof_resource_packaged";
 pub(crate) const FIXTURE_SUPPORT_ACTIVE_ARTIFACT: &str =
     "fixture_support_resource_packaged_as_active_artifact";
 
@@ -42,7 +42,7 @@ fn path_failure(rel: &str) -> Option<ResourcePurposeFailure> {
     }
     if rel.starts_with("artifacts/root-phase-receipts/") && rel.ends_with(".json") {
         return Some(ResourcePurposeFailure {
-            code: ROOT_PHASE_PROOF_RESOURCE,
+            code: ROOT_VERIFICATION_PROOF_RESOURCE,
             detail: rel.to_string(),
         });
     }
@@ -83,10 +83,10 @@ mod tests {
     }
 
     #[test]
-    fn active_root_phase_receipt_path_is_rejected() {
+    fn active_root_verification_receipt_path_is_rejected() {
         let failure = path_failure("artifacts/root-phase-receipts/post-merge.json");
 
-        assert_eq!(failure.unwrap().code, ROOT_PHASE_PROOF_RESOURCE);
+        assert_eq!(failure.unwrap().code, ROOT_VERIFICATION_PROOF_RESOURCE);
     }
 
     #[test]

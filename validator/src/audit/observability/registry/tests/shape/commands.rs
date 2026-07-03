@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet};
 fn observability_command_inventory_shape_edges_are_explicit() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-command-shape");
     let mut failures = Vec::new();
-    super::super::super::fitting::check(&root, &json!({}), &mut failures);
+    super::super::super::command_inventory::check(&root, &json!({}), &mut failures);
     assert!(failures.contains(&"observability_command_fitting_inventory_missing".to_string()));
     assert!(
         failures
@@ -27,7 +27,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
     inventory["fitting_inventory"]["red fixture report"]["fitting_status"] = json!("invalid");
     inventory["fitting_inventory"]["schema validation"] = json!({});
     failures.clear();
-    super::super::super::fitting::check(&root, &inventory, &mut failures);
+    super::super::super::command_inventory::check(&root, &inventory, &mut failures);
     assert!(failures.contains(&"observability_command_inventory_unknown:unknown".to_string()));
     assert!(failures.contains(&"observability_command_fitting_unknown:unknown".to_string()));
     assert!(failures.contains(&"observability_command_fitting_missing:package digest".to_string()));
@@ -48,7 +48,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
     commands.insert(0, json!(42));
     commands.retain(|row| row.as_str() != Some("package digest"));
     failures.clear();
-    super::super::super::fitting::check(&root, &missing_command, &mut failures);
+    super::super::super::command_inventory::check(&root, &missing_command, &mut failures);
     assert!(
         failures.contains(&"observability_command_inventory_missing:package digest".to_string())
     );
@@ -58,7 +58,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
     malformed_containers["fitting_inventory"] = json!("not an object");
     malformed_containers["row_requirements"] = json!({});
     failures.clear();
-    super::super::super::fitting::check(&root, &malformed_containers, &mut failures);
+    super::super::super::command_inventory::check(&root, &malformed_containers, &mut failures);
     assert!(
         failures
             .iter()
@@ -82,7 +82,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         .unwrap()
         .remove("focused_tests");
     failures.clear();
-    super::super::super::fitting::check(&root, &partial_metadata, &mut failures);
+    super::super::super::command_inventory::check(&root, &partial_metadata, &mut failures);
     assert!(
         failures
             .contains(&"observability_command_fitting_missing_metadata:package digest".to_string())
@@ -97,7 +97,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         "receipt binding"
     ]);
     failures.clear();
-    super::super::super::fitting::check(&root, &row_contract, &mut failures);
+    super::super::super::command_inventory::check(&root, &row_contract, &mut failures);
     assert!(
         failures
             .contains(&"observability_command_fitting_row_shape_only:package digest".to_string())
@@ -157,7 +157,7 @@ fn production_command_inventory_matches_required_command_authority() {
         .iter()
         .filter_map(serde_json::Value::as_str)
         .collect::<BTreeSet<_>>();
-    let required = super::super::super::fitting::REQUIRED_COMMANDS
+    let required = super::super::super::command_inventory::REQUIRED_COMMANDS
         .iter()
         .copied()
         .collect::<BTreeSet<_>>();
@@ -171,17 +171,17 @@ fn production_command_control_board_counts_match_inventory_rows() {
         &root.join("docs/generated/observability/command-inventory.json"),
     )
     .expect("production command inventory");
-    let fitting = inventory
+    let command_rows = inventory
         .get("fitting_inventory")
         .and_then(serde_json::Value::as_object)
-        .expect("fitting inventory");
+        .expect("command inventory rows");
     let mut expected = BTreeMap::from([
-        ("total", fitting.len() as u64),
+        ("total", command_rows.len() as u64),
         ("fitted", 0),
         ("partially_fitted", 0),
         ("unfitted", 0),
     ]);
-    for row in fitting.values() {
+    for row in command_rows.values() {
         if let Some(status) = row
             .get("fitting_status")
             .and_then(serde_json::Value::as_str)
@@ -202,7 +202,7 @@ fn production_command_control_board_counts_match_inventory_rows() {
 }
 
 #[test]
-fn production_fitting_control_board_matches_inventory_rows() {
+fn control_board_matches_command_inventory_rows() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),

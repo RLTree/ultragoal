@@ -8,14 +8,14 @@ mod explain_edges;
 mod target_edges;
 
 #[test]
-fn observe_snapshot_writes_stable_target_production_proof() {
+fn observe_snapshot_writes_stable_target_command_roundtrip() {
     let root = super::minimal_root("observe-snapshot-source-audit-proof");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let target = write_source_audit_receipt(&root, &candidate);
     write_query_receipts(&root, &candidate, &target);
     write_explain_receipt(&root, &candidate, &target, false);
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let command = command(&[
         "observe",
         "snapshot",
@@ -29,7 +29,7 @@ fn observe_snapshot_writes_stable_target_production_proof() {
 
     assert_eq!(
         proof["schema"],
-        "harness-ultragoal.observability-production-proof.v1"
+        "harness-ultragoal.observability-command-roundtrip.v1"
     );
     assert_eq!(proof["status"], "pass");
     assert_eq!(proof["candidate_digest"], candidate);
@@ -74,7 +74,7 @@ fn observe_snapshot_refuses_to_fit_without_non_fallback_explain() {
     let target = write_source_audit_receipt(&root, &candidate);
     write_query_receipts(&root, &candidate, &target);
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let command = command(&[
         "observe",
         "snapshot",

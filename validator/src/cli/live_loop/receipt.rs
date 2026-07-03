@@ -1,0 +1,140 @@
+use crate::cli::live_loop::LiveLoopCommand;
+use crate::cli::live_loop::context::AuditContext;
+use serde_json::{Value, json};
+use std::path::Path;
+use std::time::Instant;
+
+pub(crate) fn loop_receipt(
+    root: &Path,
+    command: &LiveLoopCommand,
+    context: AuditContext,
+    scheduled: crate::scheduler::Scheduled<Value>,
+    current_state: Value,
+    status: &str,
+    started: Instant,
+) -> Result<Value, String> {
+    let blocker = current_state
+        .get("first_blocker")
+        .cloned()
+        .unwrap_or(Value::Null);
+    let why_failed =
+        (status != "pass").then(|| text(&blocker, "why_failed", "loop blocker").to_string());
+    let runtime = runtime(command, &scheduled, started);
+    let receipt_path = command.receipt.to_string_lossy();
+    let telemetry = crate::cli::observe::telemetry::CommandTelemetry {
+        command: "ultragoal loop",
+        subcommand: "run",
+        operation: "loop.run",
+        surface: "gate92_fast_loop",
+        law_id: crate::cli::observe::types::LAW_ID,
+        check_id: "gate92-fast-loop-verified-incremental-audit",
+        claim_id: "gate92-fast-loop-source-local-acceleration",
+        artifact_path: "validation_artifacts/current-state.json",
+        receipt_path: receipt_path.as_ref(),
+        status,
+        failure_class: failure_class(status),
+        why_failed: why_failed.as_deref().unwrap_or("none"),
+        where_failed: where_failed(status),
+        next_repair: text(&blocker, "next_repair", "none"),
+        claim_impact: "source_local_loop_only_not_gate92_closure",
+        blocked_claims: blocked_claims(),
+        supported_claims: vec!["gate92_fast_loop_source_local_increment".to_string()],
+        runtime: Some(runtime),
+        emit: true,
+    };
+    let observability_result = crate::cli::observe::telemetry::command_receipt_for_candidate(
+        root,
+        telemetry,
+        context.candidate_digest.clone(),
+    );
+    let observability = observability_result?;
+    Ok(json!({
+        "schema": "harness-ultragoal.loop-run-receipt.v1",
+        "status": status,
+        "candidate_digest": context.candidate_digest,
+        "tier": command.tier,
+        "cache_mode": command.cache_mode,
+        "audit_context": {
+            "changed_files_digest": context.changed_files_digest,
+            "input_digest": context.input_digest,
+            "typed_context": "AuditContext"
+        },
+        "duration_ms": observability["event"]["duration_ms"],
+        "worker_count": scheduled.metrics.worker_count,
+        "task_count": scheduled.metrics.task_count,
+        "queue_depth": scheduled.metrics.queue_depth,
+        "critical_path": "current_digest -> AuditContext -> observability_control_board -> current_state",
+        "nodes": scheduled.values,
+        "current_state": current_state,
+        "first_blocker": blocker,
+        "narrow_rerun": text(&blocker, "narrow_rerun", "none"),
+        "broad_rerun": text(&blocker, "broad_rerun", "source audit once after narrow proof"),
+        "forbidden_actions": ["worktrees", "install_cache_refresh", "final_packet_finalization", "readiness_release_completion_claim", "update_goal"],
+        "claim_ceiling": "source-local loop proof only",
+        "observability": observability
+    }))
+}
+
+fn runtime(
+    command: &LiveLoopCommand,
+    scheduled: &crate::scheduler::Scheduled<Value>,
+    started: Instant,
+) -> crate::cli::observe::telemetry::RuntimeTelemetry {
+    crate::cli::observe::telemetry::RuntimeTelemetry {
+        duration_ms: u64::try_from(started.elapsed().as_millis())
+            .unwrap_or(u64::MAX)
+            .max(1),
+        worker_count: scheduled.metrics.worker_count,
+        task_count: scheduled.metrics.task_count,
+        queue_depth: scheduled.metrics.queue_depth,
+        cpu_ms: None,
+        memory_bytes: None,
+        io_bytes: None,
+        cache_mode: command.cache_mode.clone(),
+        resource_measurement_status: "wall_time_only_cpu_memory_io_unavailable".to_string(),
+        retry_count: 0,
+        backoff_ms: 0,
+        saturation_status: format!(
+            "{};queue_depth={}",
+            scheduled.metrics.task_class, scheduled.metrics.queue_depth
+        ),
+        repair_anchor_before: "current_digest_and_audit_context".to_string(),
+        repair_anchor_after: "current_state_and_first_blocker".to_string(),
+    }
+}
+
+fn failure_class(status: &str) -> &'static str {
+    if status == "pass" {
+        "none"
+    } else {
+        "gate92_loop_first_blocker"
+    }
+}
+
+fn where_failed(status: &str) -> &'static str {
+    if status == "pass" {
+        "none"
+    } else {
+        "loop.run.current_state.first_blocker"
+    }
+}
+
+fn text<'a>(value: &'a Value, key: &str, default: &'a str) -> &'a str {
+    value.get(key).and_then(Value::as_str).unwrap_or(default)
+}
+
+fn blocked_claims() -> Vec<String> {
+    [
+        "gate92_closure",
+        "readiness",
+        "release",
+        "completion",
+        "final_packet_correctness",
+        "install_cache_parity",
+        "app_registry_or_reviewer_exposure",
+        "update_goal_eligibility",
+    ]
+    .into_iter()
+    .map(ToString::to_string)
+    .collect()
+}

@@ -83,7 +83,7 @@ fn base_row(
         "fail_stdout_contract": "fail stdout contract fitted",
         "receipt_observability_binding": "receipt observability binding fitted",
         "focused_tests": ["observe_green_prove_and_query_helpers_are_typed"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{receipt_slug}.json")],
+        "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{receipt_slug}.json")],
         "live_query_proof_paths": query_paths(receipt_slug),
         "same_candidate_query_proof_paths": query_paths(receipt_slug),
         "red_fixtures": [format!("fixtures/red/observability/{fixture_slug}-red.json")],
@@ -113,9 +113,9 @@ fn fitted_surfaces() -> [&'static str; 6] {
 
 fn query_paths(slug: &str) -> [String; 3] {
     [
-        format!("validation_artifacts/observability/fitting/{slug}-logs.json"),
-        format!("validation_artifacts/observability/fitting/{slug}-metrics.json"),
-        format!("validation_artifacts/observability/fitting/{slug}-traces.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-logs.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-metrics.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-traces.json"),
     ]
 }
 

@@ -1,10 +1,10 @@
 use serde_json::json;
 use std::{fs, path::Path};
 
-pub(super) fn write_fitting_receipts(root: &Path) {
+pub(super) fn write_command_roundtrip_receipts(root: &Path) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
-    let dir = root.join("validation_artifacts/observability/fitting");
-    fs::create_dir_all(&dir).expect("fitting dir");
+    let dir = root.join("validation_artifacts/observability/command-roundtrip");
+    fs::create_dir_all(&dir).expect("command roundtrip dir");
     write_command_receipts(&dir, &candidate);
     write_surface_receipts(&dir, &candidate);
     write_loop_receipts(&dir, &candidate);

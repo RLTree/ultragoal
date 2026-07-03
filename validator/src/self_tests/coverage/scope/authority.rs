@@ -145,14 +145,14 @@ fn coverage_scope_subchecks_reject_missing_changed_files_and_weak_scripts() {
     );
     assert!(completion_failures.contains(&"coverage_full_gate_missing".to_string()));
     assert!(completion_failures.contains(&"coverage_fast_gate_used_for_completion".to_string()));
-    let progress_failures = crate::audit::coverage::scope::scripts::failures(
+    let claim_context_failures = crate::audit::coverage::scope::scripts::failures(
         &root,
         "scripts/check-coverage-fast",
         "progress",
     );
     assert!(
-        !progress_failures.contains(&"coverage_claim_context_missing".to_string()),
-        "{progress_failures:?}"
+        !claim_context_failures.contains(&"coverage_claim_context_missing".to_string()),
+        "{claim_context_failures:?}"
     );
     std::fs::write(root.join("scripts/check-coverage-fast"), "no context\n").expect("script");
     assert!(

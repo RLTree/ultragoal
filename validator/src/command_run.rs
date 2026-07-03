@@ -89,6 +89,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         }
         Command::Control(command) => crate::cli::control::plane::run(&root, &command),
         Command::Coverage(command) => crate::cli::coverage::run(&root, &command),
+        Command::CurrentState(command) => crate::cli::current_state::run(&root, &command),
         Command::FoundationalTrace(command) => crate::cli::foundational_trace::run(&root, &command),
         Command::Performance(command) => crate::cli::performance::run(&root, &command),
         Command::Rust(command) => crate::cli::rust::run(&root, &command),
@@ -96,6 +97,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::Halo(command) => crate::cli::halo::run(&root, &command),
         Command::ImprovementLoop(command) => crate::cli::improvement_loop::run(&root, &command),
         Command::LineCaps(command) => crate::cli::line_caps::run(&root, &command),
+        Command::LiveLoop(command) => crate::cli::live_loop::run(&root, &command),
         Command::MandatoryLawValidation(command) => {
             crate::cli::mandatory_law_validation::run(&root, &command)
         }

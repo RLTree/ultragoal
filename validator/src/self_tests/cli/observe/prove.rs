@@ -3,8 +3,8 @@ use serde_json::json;
 use std::fs;
 
 #[test]
-fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
-    let root = super::minimal_root("observe-prove-fitting-incomplete");
+fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
+    let root = super::minimal_root("observe-prove-command-inventory-incomplete");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let health = command(&["observe", "stack", "health"]);
     let health_receipt = observe::stack::health_receipt(
@@ -34,7 +34,7 @@ fn observe_prove_rejects_incomplete_fitting_inventory_after_stack_passes() {
             }
         }),
     )
-    .expect("write incomplete fitting inventory");
+    .expect("write incomplete command inventory");
     let proof =
         observe::telemetry::prove(&root, &command(&["observe", "prove"])).expect("prove receipt");
     assert_eq!(proof["status"], "fail");

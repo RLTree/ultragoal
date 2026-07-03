@@ -148,6 +148,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::ImprovementLoop(command)
             } else if let Some(command) = cli::line_caps::parse(raw)? {
                 Command::LineCaps(command)
+            } else if let Some(command) = cli::live_loop::parse(raw)? {
+                Command::LiveLoop(command)
             } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
                 Command::MandatoryLawValidation(command)
             } else if let Some(command) = cli::namespace::parse(raw)? {
@@ -162,6 +164,8 @@ fn parse_command(raw: &[String]) -> Result<Command, String> {
                 Command::RedReport(command)
             } else if let Some(command) = cli::schema_validation::parse(raw)? {
                 Command::SchemaValidation(command)
+            } else if let Some(command) = cli::current_state::parse(raw)? {
+                Command::CurrentState(command)
             } else if let Some(command) = cli::routine::parse(raw)? {
                 Command::Routine(command)
             } else if let Some(command) = cli::session::parse(raw)? {

@@ -11,7 +11,7 @@ pub(super) fn row_requirement_keys() -> [&'static str; 17] {
         "green_fixture_proof",
         "tamper_fixture_proof",
         "claim_impact_mapping",
-        "same_candidate_query_proof",
+        "same_candidate_query_roundtrip",
         "explicit_instrumentation_fields",
         "validator_enforced",
         "owner_surface_tracking",

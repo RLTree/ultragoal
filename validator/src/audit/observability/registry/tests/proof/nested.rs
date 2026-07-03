@@ -3,7 +3,7 @@ use super::super::support::{write_registry_root, write_valid_fixture};
 use serde_json::json;
 
 #[test]
-fn command_fitting_accepts_nested_law_receipt_observability_binding() {
+fn command_inventory_accepts_nested_law_receipt_observability_binding() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-receipt");
     write_registry_root(&root, super::super::support::fitted_inventory());
     write_valid_fixture(&root);
@@ -54,7 +54,7 @@ fn command_fitting_accepts_nested_law_receipt_observability_binding() {
 }
 
 #[test]
-fn nested_command_fitting_rejects_high_cardinality_metric_labels() {
+fn nested_command_inventory_rejects_high_cardinality_metric_labels() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-metric-labels");
     write_registry_root(&root, super::super::support::fitted_inventory());
     write_valid_fixture(&root);

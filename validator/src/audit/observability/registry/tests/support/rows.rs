@@ -14,7 +14,7 @@ pub(super) fn fitted_row(command: &str) -> Value {
         "fail_stdout_contract": "fail stdout contract fitted",
         "receipt_observability_binding": "receipt observability binding fitted",
         "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{slug}.json")],
+        "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{slug}.json")],
         "live_query_proof_paths": query_paths(&slug),
         "same_candidate_query_proof_paths": query_paths(&slug),
         "red_fixtures": [format!("fixtures/red/observability/{slug}-red.json")],
@@ -42,7 +42,7 @@ pub(super) fn fitted_surface_row(surface: &str) -> Value {
         "fail_stdout_contract": "fail stdout contract fitted",
         "receipt_observability_binding": "receipt observability binding fitted",
         "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{receipt_slug}.json")],
+        "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{receipt_slug}.json")],
         "live_query_proof_paths": query_paths(&receipt_slug),
         "same_candidate_query_proof_paths": query_paths(&receipt_slug),
         "red_fixtures": [format!("fixtures/red/observability/{receipt_slug}-red.json")],
@@ -70,7 +70,7 @@ pub(super) fn fitted_operating_row(kind: &str, name: &str) -> Value {
         "fail_stdout_contract": "fail stdout contract fitted",
         "receipt_observability_binding": "receipt observability binding fitted",
         "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
-        "receipt_paths": [format!("validation_artifacts/observability/fitting/{receipt_slug}.json")],
+        "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{receipt_slug}.json")],
         "live_query_proof_paths": query_paths(&receipt_slug),
         "same_candidate_query_proof_paths": query_paths(&receipt_slug),
         "red_fixtures": [format!("fixtures/red/observability/{receipt_slug}-red.json")],
@@ -95,9 +95,9 @@ fn fitted_surfaces() -> [&'static str; 6] {
 
 fn query_paths(slug: &str) -> [String; 3] {
     [
-        format!("validation_artifacts/observability/fitting/{slug}-logs.json"),
-        format!("validation_artifacts/observability/fitting/{slug}-metrics.json"),
-        format!("validation_artifacts/observability/fitting/{slug}-traces.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-logs.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-metrics.json"),
+        format!("validation_artifacts/observability/command-roundtrip/{slug}-traces.json"),
     ]
 }
 

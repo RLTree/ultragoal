@@ -4,7 +4,7 @@ use std::fs;
 #[test]
 fn observe_snapshot_requires_selector_and_target_receipt() {
     let root = super::super::minimal_root("observe-snapshot-target-missing");
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let no_selector = command(&["observe", "snapshot", "--receipt", proof_rel]);
     assert_eq!(observe::run(&root, &no_selector).expect("snapshot"), 1);
     let missing_selector = crate::json_boundary::read_json(&root.join(proof_rel)).expect("proof");
@@ -41,13 +41,13 @@ fn observe_snapshot_requires_selector_and_target_receipt() {
 }
 
 #[test]
-fn observe_snapshot_reports_missing_query_proof_before_fitting() {
+fn observe_snapshot_reports_missing_query_roundtrip_before_command_inventory_completion() {
     let root = super::super::minimal_root("observe-snapshot-missing-query-proof");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let target = write_source_audit_receipt(&root, &candidate);
     write_explain_receipt(&root, &candidate, &target, false);
 
-    let proof_rel = "validation_artifacts/observability/source-audit-production-proof.json";
+    let proof_rel = "validation_artifacts/observability/source-audit-command-roundtrip.json";
     let stale_command = command(&[
         "observe",
         "snapshot",

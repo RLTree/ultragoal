@@ -10,7 +10,7 @@ pub(crate) fn check(
     dep: &Value,
     lane_index: &BTreeMap<String, &Value>,
     ready_index: &BTreeMap<String, &Value>,
-    root_phases: &Value,
+    root_verification_states: &Value,
     bundle: &Value,
     root: &Path,
     out: &mut Vec<Failure>,
@@ -19,7 +19,7 @@ pub(crate) fn check(
         push_failure(dep, out);
         return;
     };
-    if basic_dependency_bad(dep, upstream, root_phases) {
+    if basic_dependency_bad(dep, upstream, root_verification_states) {
         push_failure(dep, out);
         return;
     }
@@ -43,7 +43,9 @@ pub(crate) fn check(
         );
         return;
     }
-    if receipt.is_some_and(|ready| dependency_order_bad(dep, upstream, ready, root_phases)) {
+    if receipt
+        .is_some_and(|ready| dependency_order_bad(dep, upstream, ready, root_verification_states))
+    {
         push_ready_failure(dep, out);
         return;
     }
@@ -51,7 +53,7 @@ pub(crate) fn check(
         push_failure(dep, out);
         return;
     }
-    if dependency_release_bad(lane, dep, root_phases) {
+    if dependency_release_bad(lane, dep, root_verification_states) {
         out.push(Failure::new(
             "lane-dependency-gating",
             "dependency_release_missing",
@@ -60,8 +62,8 @@ pub(crate) fn check(
     }
 }
 
-fn basic_dependency_bad(dep: &Value, upstream: &Value, root_phases: &Value) -> bool {
-    !upstream_status_consumable(upstream, root_phases)
+fn basic_dependency_bad(dep: &Value, upstream: &Value, root_verification_states: &Value) -> bool {
+    !upstream_status_consumable(upstream, root_verification_states)
         || !array_strings(upstream, "claim_ids").contains(&str_field(dep, "claim_id"))
         || str_field(dep, "validated_status") != str_field(dep, "required_status")
         || registry_ref_bad(dep, upstream)
@@ -114,7 +116,7 @@ pub(crate) fn dependency_order_bad(
     dep: &Value,
     upstream: &Value,
     ready: &Value,
-    root_phases: &Value,
+    root_verification_states: &Value,
 ) -> bool {
     let Some(validated_at) =
         crate::audit::clock::parse_iso_seconds(&str_field(dep, "validated_at"))
@@ -131,7 +133,7 @@ pub(crate) fn dependency_order_bad(
         return true;
     };
     let Some(post_at) = crate::audit::clock::parse_iso_seconds(&str_field(
-        &root_phases["post_merge_integration_gate"],
+        &root_verification_states["post_merge_integration_gate"],
         "validated_at",
     )) else {
         return true;
@@ -143,15 +145,19 @@ pub(crate) fn dependency_order_bad(
         || post_at < ready_at
 }
 
-fn upstream_status_consumable(upstream: &Value, root_phases: &Value) -> bool {
+fn upstream_status_consumable(upstream: &Value, root_verification_states: &Value) -> bool {
     str_field(upstream, "status") == "merged"
-        && root_phases
+        && root_verification_states
             .pointer("/post_merge_integration_gate/status")
             .and_then(Value::as_str)
             == Some("pass")
 }
 
-pub(crate) fn dependency_release_bad(lane: &Value, dep: &Value, root_phases: &Value) -> bool {
+pub(crate) fn dependency_release_bad(
+    lane: &Value,
+    dep: &Value,
+    root_verification_states: &Value,
+) -> bool {
     let release = &lane["dependency_release"];
     if !release.is_object() {
         return true;
@@ -160,7 +166,7 @@ pub(crate) fn dependency_release_bad(lane: &Value, dep: &Value, root_phases: &Va
     if !["launch", "resume", "reblock"].contains(&action.as_str()) {
         return true;
     }
-    let post = &root_phases["post_merge_integration_gate"];
+    let post = &root_verification_states["post_merge_integration_gate"];
     let post_path = post
         .pointer("/artifact_receipt/path")
         .and_then(Value::as_str)

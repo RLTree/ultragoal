@@ -55,7 +55,7 @@ pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &
         &inventory,
     )
     .expect("write fitted inventory");
-    super::receipts::write_fitting_receipts(root);
+    super::receipts::write_command_roundtrip_receipts(root);
 }
 
 fn fitted_control_board() -> serde_json::Value {
@@ -125,7 +125,7 @@ fn row_requirements() -> serde_json::Value {
         "receipt_observability_binding": true,
         "focused_tests": true,
         "claim_impact_mapping": true,
-        "same_candidate_query_proof": true,
+        "same_candidate_query_roundtrip": true,
         "validator_enforced": true,
         "owner_surface_tracking": true,
         "next_unfitted_surface_tracking": true,
