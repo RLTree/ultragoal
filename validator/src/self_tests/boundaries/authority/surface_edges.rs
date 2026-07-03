@@ -32,6 +32,50 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
         "a broad CLI path prefix must not bless downstream raw JSON authority: {broad_cli_not_enough:?}"
     );
 
+    let raw_field_access_not_parser =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/domain/claim_core.rs",
+            "use serde_json::Value;\npub fn decide(v: Value) -> Value { v.get(\"status\").cloned().unwrap_or(Value::Null) }\n",
+        );
+    assert!(
+        raw_field_access_not_parser
+            .iter()
+            .any(|failure| failure.contains("raw_authority=raw_json")),
+        "raw JSON field access alone must not classify downstream law authority as a parser boundary: {raw_field_access_not_parser:?}"
+    );
+
+    let typed_failure_parser =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/audit/domain/claim_core.rs",
+            "use serde_json::Value;\npub fn failures(v: &Value) -> Vec<String> { let mut out = Vec::new(); if v.get(\"status\").and_then(Value::as_str).is_none() { out.push(\"missing_status\".to_string()); } out }\n",
+        );
+    assert!(
+        typed_failure_parser.is_empty(),
+        "raw receipt fields may be consumed only when converted into typed failures before law execution: {typed_failure_parser:?}"
+    );
+
+    let typed_record_projection =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/audit/domain/claim_projection.rs",
+            "use serde_json::Value;\npub struct ClaimState { pub status: String }\npub fn project(v: &Value) -> ClaimState { ClaimState { status: v.get(\"status\").and_then(Value::as_str).unwrap_or(\"\").to_string() } }\n",
+        );
+    assert!(
+        typed_record_projection.is_empty(),
+        "raw JSON fields may feed typed record projections before downstream law execution: {typed_record_projection:?}"
+    );
+
+    let result_value_passthrough =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/domain/claim_core.rs",
+            "use serde_json::Value;\npub fn wrap(v: Value) -> Result<Value, String> { Ok(v) }\n",
+        );
+    assert!(
+        result_value_passthrough
+            .iter()
+            .any(|failure| failure.contains("raw_authority=raw_json")),
+        "Result<Value, String> is still raw JSON authority unless it reads structured input or emits typed failures: {result_value_passthrough:?}"
+    );
+
     for (label, text) in [
         (
             "raw_path",
@@ -97,101 +141,4 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
             .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
         "absolute or caller-controlled claim outputs must route through typed output authority: {absolute_output:?}"
     );
-}
-
-#[test]
-fn authority_surface_generated_artifacts_require_row_provenance_and_reject_hand_edits() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("generated-row-provenance");
-    let rel = "docs/generated/observability/command-inventory.json";
-    std::fs::create_dir_all(root.join("docs/generated/observability")).expect("generated dir");
-    std::fs::write(
-        root.join(rel),
-        r#"{
-  "schema":"harness-ultragoal.observability-command-inventory.v3",
-  "generated_from":"test generator",
-  "command_observability_inventory":{
-    "package digest":{"observability_status":"observable"}
-  }
-}"#,
-    )
-    .expect("generated inventory without row provenance");
-    let inventory = std::iter::once(rel.to_string()).collect();
-    let failures = crate::audit::law::authority_surfaces::generated_boundary_failures_for_test(
-        &root, &inventory,
-    );
-    assert!(
-        failures.iter().any(|(_, failure)| failure.contains(
-            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:package digest"
-        )),
-        "{failures:?}"
-    );
-
-    std::fs::write(
-        root.join(rel),
-        r#"{
-  "schema":"harness-ultragoal.observability-command-inventory.v3",
-  "generated_from":"test generator",
-  "manual_edits_allowed":true,
-  "command_observability_inventory":{
-    "package digest":{
-      "current_owner_surface":"command:package digest",
-      "validator_check_id":"package-digest-observability-binding",
-      "hand_edited":true
-    }
-  }
-}"#,
-    )
-    .expect("generated inventory with hand edit");
-    let failures = crate::audit::law::authority_surfaces::generated_boundary_failures_for_test(
-        &root, &inventory,
-    );
-    assert!(
-        failures
-            .iter()
-            .any(|(_, failure)| failure.contains("generated_artifact_hand_edit_allowed")),
-        "{failures:?}"
-    );
-    assert!(
-        failures
-            .iter()
-            .any(|(_, failure)| failure.contains("generated_inventory_row_hand_edit_allowed")),
-        "{failures:?}"
-    );
-    std::fs::remove_dir_all(root).expect("cleanup generated row provenance");
-}
-
-#[test]
-fn authority_surface_generated_artifacts_reject_runtime_normalized_fixture_truth() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("runtime-normalized-fixture");
-    let rel = "docs/generated/observability/command-inventory.json";
-    std::fs::create_dir_all(root.join("docs/generated/observability")).expect("generated dir");
-    std::fs::write(
-        root.join(rel),
-        r#"{
-  "schema":"harness-ultragoal.observability-command-inventory.v3",
-  "generated_from":"test generator",
-  "runtime_normalized_fixture":{"artifact_truth":true},
-  "command_observability_inventory":{
-    "package digest":{
-      "current_owner_surface":"command:package digest",
-      "validator_check_id":"package-digest-observability-binding"
-    }
-  }
-}"#,
-    )
-    .expect("runtime normalized fixture truth");
-    let inventory = std::iter::once(rel.to_string()).collect();
-    let failures = crate::audit::law::authority_surfaces::generated_boundary_failures_for_test(
-        &root, &inventory,
-    );
-    assert!(
-        failures
-            .iter()
-            .any(|(_, failure)| failure
-                .contains("runtime_normalized_fixture_used_as_artifact_truth")),
-        "{failures:?}"
-    );
-    std::fs::remove_dir_all(root).expect("cleanup runtime normalized fixture truth");
 }

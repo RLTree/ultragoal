@@ -36,6 +36,7 @@ pub(super) fn generated_failures(
             );
         }
         out.extend(generated_row_provenance_failures(&rel, &value));
+        out.extend(generated_product_opaque_path_failures(&rel, &value));
         if runtime_fixture_claims_artifact_truth(&value) {
             push(
                 &mut out,
@@ -89,8 +90,8 @@ fn hand_edits_allowed(value: &Value) -> bool {
 
 fn generated_row_provenance_failures(rel: &str, value: &Value) -> Vec<(String, String)> {
     let mut out = Vec::new();
-    for key in INVENTORY_MAP_KEYS {
-        let Some(rows) = value.get(key).and_then(Value::as_object) else {
+    for key in inventory_map_keys(value) {
+        let Some(rows) = value.get(&key).and_then(Value::as_object) else {
             continue;
         };
         for (row_id, row) in rows {
@@ -124,7 +125,24 @@ const INVENTORY_MAP_KEYS: &[&str] = &[
     "long_running_path_inventory",
     "external_live_path_inventory",
     "claim_guard_inventory",
+    "surface_inventory",
 ];
+
+fn inventory_map_keys(value: &Value) -> BTreeSet<String> {
+    let mut keys = INVENTORY_MAP_KEYS
+        .iter()
+        .map(|key| (*key).to_string())
+        .collect::<BTreeSet<_>>();
+    if let Some(object) = value.as_object() {
+        keys.extend(
+            object
+                .iter()
+                .filter(|(key, row)| key.ends_with("_inventory") && row.is_object())
+                .map(|(key, _)| key.to_string()),
+        );
+    }
+    keys
+}
 
 fn has_row_provenance(row: &Value) -> bool {
     row.get("current_owner_surface")
@@ -136,6 +154,56 @@ fn has_row_provenance(row: &Value) -> bool {
             .get("validator_check_id")
             .and_then(Value::as_str)
             .is_some()
+}
+
+fn generated_product_opaque_path_failures(rel: &str, value: &Value) -> Vec<(String, String)> {
+    let mut out = Vec::new();
+    collect_product_opaque_path_failures(rel, "$", value, &mut out);
+    out
+}
+
+fn collect_product_opaque_path_failures(
+    rel: &str,
+    pointer: &str,
+    value: &Value,
+    out: &mut Vec<(String, String)>,
+) {
+    match value {
+        Value::Array(items) => {
+            for (index, item) in items.iter().enumerate() {
+                collect_product_opaque_path_failures(rel, &format!("{pointer}/{index}"), item, out);
+            }
+        }
+        Value::Object(map) => {
+            for (key, item) in map {
+                collect_product_opaque_path_failures(rel, &format!("{pointer}/{key}"), item, out);
+            }
+        }
+        Value::String(text) if looks_like_repo_or_artifact_path(text) => {
+            if let Some(label) =
+                crate::audit::namespace::source::path_labels::product_opaque_goal_work_string_label(
+                    text,
+                )
+            {
+                push(
+                    out,
+                    "generated-proof-artifact-provenance-anti-fabrication",
+                    format!(
+                        "generated_artifact_product_opaque_path_segment:{rel}:{pointer}:label={label}"
+                    ),
+                );
+            }
+        }
+        _ => {}
+    }
+}
+
+fn looks_like_repo_or_artifact_path(text: &str) -> bool {
+    text.contains('/')
+        || text.ends_with(".json")
+        || text.ends_with(".jsonl")
+        || text.ends_with(".rs")
+        || text.ends_with(".md")
 }
 
 fn generated_files(root: &Path) -> Vec<String> {

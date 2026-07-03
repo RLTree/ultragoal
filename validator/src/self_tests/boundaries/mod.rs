@@ -1,5 +1,8 @@
 pub(crate) mod artifact_refs;
-pub(crate) mod authority_surface_edges;
+pub(crate) mod authority {
+    pub(crate) mod generated_artifacts;
+    pub(crate) mod surface_edges;
+}
 pub(crate) mod filesystem;
 pub(crate) mod filesystem_inventory_law_edges;
 pub(crate) mod output_paths;

@@ -132,28 +132,75 @@ fn projection_boundary_text(text: &str) -> bool {
         || text.contains("metric.to_value(")
         || text.contains("FnOnce() -> Value")
         || text.contains("diagnostic::failure_value")
+        || text.contains("receipt_from_control_graph")
+        || text.contains("crate::json_boundary::write_json")
+        || typed_record_projection_text(text)
+}
+
+fn typed_record_projection_text(text: &str) -> bool {
+    if text.contains("-> Value")
+        || text.contains("-> Result<Value")
+        || text.contains("-> Option<Value")
+        || text.contains("Value) -> Value")
+    {
+        return false;
+    }
+    let returns_typed_record = text.contains("-> String")
+        || text.contains("-> &str")
+        || text.contains("-> bool")
+        || text.contains("-> Option<")
+        || text.contains("-> Vec<")
+        || (text.contains("-> BTreeMap<")
+            && !text.contains("BTreeMap<String, Value")
+            && !text.contains("HashMap<String, Value"))
+        || text.contains("-> crate::cli::observe::telemetry::RuntimeTelemetry")
+        || (text.contains("struct ") && text.contains("-> "));
+    returns_typed_record
+        && (text.contains("serde_json::Value")
+            || text.contains("use serde_json::Value")
+            || text.contains(": &Value")
+            || text.contains(": &[Value]"))
 }
 
 fn parser_boundary_text(text: &str) -> bool {
+    reads_structured_input(text)
+        || schema_catalog_boundary(text)
+        || typed_json_field_parser(text)
+        || validator_artifact_parser(text)
+}
+
+fn reads_structured_input(text: &str) -> bool {
     text.contains("json_boundary::read_json")
         || text.contains("crate::json_boundary::read_json")
         || text.contains("serde_json::from_str")
         || text.contains("serde_json::from_value")
         || text.contains("serde_json::from_slice")
-        || text.contains("schema_catalog::load")
-        || text.contains(".as_object()")
-        || text.contains(".as_array()")
-        || text.contains(".get(")
-        || text.contains(".pointer(")
-        || text.contains("Value::as_")
-        || text.contains("str_field(")
-        || text.contains("validator_artifacts: &[Value]")
+}
+
+fn schema_catalog_boundary(text: &str) -> bool {
+    text.contains("schema_catalog::load")
+}
+
+fn typed_json_field_parser(text: &str) -> bool {
+    typed_failure_boundary_text(text)
+        && (text.contains(".as_object()")
+            || text.contains(".as_array()")
+            || text.contains(".get(")
+            || text.contains(".pointer(")
+            || text.contains("Value::as_")
+            || text.contains("str_field("))
+}
+
+fn validator_artifact_parser(text: &str) -> bool {
+    text.contains("validator_artifacts: &[Value]") && typed_failure_boundary_text(text)
 }
 
 fn typed_failure_boundary_text(text: &str) -> bool {
     let returns_typed_failure = text.contains("-> Vec<String>")
         || text.contains("-> Result<")
         || text.contains("out: &mut Vec<")
+        || text.contains("failures: &mut Vec<")
+        || text.contains("type Failures = BTreeMap<String, Vec<String>>")
         || text.contains("Vec<Failure>")
         || text.contains("Vec<ResourcePurposeFailure>");
     returns_typed_failure
