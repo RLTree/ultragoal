@@ -31,6 +31,9 @@ fn source_and_standards(
     for failure in crate::audit::law::surface::receipts::package_failures(root) {
         push(failures, "source-obligation-coverage", failure);
     }
+    for (check, failure) in crate::audit::law::authority_surfaces::package_failures(root) {
+        push(failures, &check, failure);
+    }
     for failure in crate::audit::standards_gardening::failures(root, store) {
         push(failures, "standards-gardener-promotion", failure);
     }

@@ -57,6 +57,31 @@ pub fn write(path: &Path, bytes: impl AsRef<[u8]>, label: &str) -> Result<(), St
     finish_temp_file(&tmp, path, label)
 }
 
+pub(crate) fn claim_artifact_path(
+    root: &Path,
+    path: &Path,
+    label: &str,
+) -> Result<std::path::PathBuf, String> {
+    if path.is_absolute() {
+        return Err(format!(
+            "{}: {label} must be a root-relative claim artifact path; absolute outputs are external debug only and cannot support claims",
+            path.display()
+        ));
+    }
+    if path.components().any(|part| {
+        matches!(
+            part,
+            Component::ParentDir | Component::Prefix(_) | Component::RootDir
+        )
+    }) {
+        return Err(format!(
+            "{}: {label} must stay inside the package root",
+            path.display()
+        ));
+    }
+    Ok(root.join(path))
+}
+
 pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
     result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
 }

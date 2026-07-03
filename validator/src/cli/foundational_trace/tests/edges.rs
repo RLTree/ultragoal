@@ -49,7 +49,7 @@ fn foundational_trace_parse_rejects_argument_edges() {
 }
 
 #[test]
-fn foundational_trace_failure_edges_and_absolute_receipt_are_observable() {
+fn foundational_trace_failure_edges_and_external_claim_output_are_rejected() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-edges");
     super::write_minimal_root(&root, &["agent-queryable-observability"], true);
@@ -110,8 +110,9 @@ fn foundational_trace_failure_edges_and_absolute_receipt_are_observable() {
         receipt: receipt.clone(),
         jobs: Some(1),
     };
-    assert_eq!(run(&root, &command).expect("absolute receipt"), 0);
-    assert!(receipt.is_file());
+    let err = run(&root, &command).expect_err("absolute claim receipt rejected");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(!receipt.is_file());
 
     let zero_jobs = FoundationalTraceCommand {
         obligation: Some("agent-queryable-observability".to_string()),

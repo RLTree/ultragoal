@@ -31,7 +31,12 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<ImprovementLoopCommand>, St
 
 pub(crate) fn run(root: &Path, command: &ImprovementLoopCommand) -> Result<i32, String> {
     let receipt = proof::build_receipt(root, command)?;
-    crate::json_boundary::write_json(&resolve(root, &command.receipt), &receipt)?;
+    let path = crate::output_path::claim_artifact_path(
+        root,
+        &command.receipt,
+        "improvement loop receipt",
+    )?;
+    crate::json_boundary::write_json(&path, &receipt)?;
     print_receipt(&command.receipt, &receipt);
     Ok(i32::from(
         receipt.get("status").and_then(Value::as_str) != Some("pass"),
@@ -47,14 +52,6 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .position(|arg| arg == key)
         .and_then(|index| args.get(index + 1))
         .map(PathBuf::from)
-}
-
-fn resolve(root: &Path, path: &Path) -> PathBuf {
-    if path.is_absolute() {
-        path.to_path_buf()
-    } else {
-        root.join(path)
-    }
 }
 
 fn print_receipt(receipt: &Path, value: &Value) {

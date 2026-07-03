@@ -39,7 +39,7 @@ fn schema_validation_parse_and_scheduler_edges_are_bounded() {
 }
 
 #[test]
-fn schema_validation_failure_edges_absolute_receipt_and_default_run_are_observable() {
+fn schema_validation_failure_edges_external_claim_output_and_default_run_are_observable() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-edges");
     super::create_schema_package(&root, json!({"name": "Tree"}));
@@ -90,9 +90,21 @@ fn schema_validation_failure_edges_absolute_receipt_and_default_run_are_observab
         receipt: receipt.clone(),
         jobs: Some(1),
     };
+    let err = run(&root, &command).expect_err("absolute claim receipt rejected");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(!receipt.is_file());
+
+    super::create_schema_package(&root, json!({"name": "Tree"}));
+    let relative_receipt = PathBuf::from(RECEIPT_REL);
+    let command = SchemaValidationCommand {
+        schema: None,
+        file: None,
+        receipt: relative_receipt.clone(),
+        jobs: Some(1),
+    };
     assert_eq!(run(&root, &command).expect("default run"), 1);
-    assert!(receipt.is_file());
-    let observation = crate::json_boundary::read_json(&receipt).expect("receipt");
+    let observation =
+        crate::json_boundary::read_json(&root.join(relative_receipt)).expect("receipt");
     assert_eq!(observation["status"], "fail");
     assert_eq!(
         observation["event"]["repair_anchor_before"],

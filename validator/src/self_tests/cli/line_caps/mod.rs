@@ -119,7 +119,7 @@ fn line_caps_command_writes_pass_observability_receipt() {
             .any(|item| item.as_str() == Some("line_cap_check"))
     );
     let absolute_receipt = root.join("target/absolute-line-cap-check.json");
-    let code = crate::command_run::run_with_exit_code(args(
+    let absolute_error = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "line-caps",
@@ -129,9 +129,12 @@ fn line_caps_command_writes_pass_observability_receipt() {
             absolute_receipt.to_str().expect("utf8 path"),
         ],
     ))
-    .expect("absolute line caps receipt");
-    assert_eq!(code, 0);
-    assert!(absolute_receipt.is_file());
+    .expect_err("absolute line caps receipt rejected");
+    assert!(
+        absolute_error.contains("root-relative claim artifact path"),
+        "{absolute_error}"
+    );
+    assert!(!absolute_receipt.is_file());
     std::fs::remove_dir_all(root).expect("cleanup line caps pass");
 }
 

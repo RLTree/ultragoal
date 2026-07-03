@@ -7,7 +7,10 @@
     "generated_proof_artifact_provenance_anti_fabrication_stale_output_digest",
     "generated_proof_artifact_provenance_anti_fabrication_wrong_cwd",
     "generated_proof_artifact_provenance_anti_fabrication_wrong_candidate_version",
-    "generated_proof_artifact_provenance_anti_fabrication_manually_edited_generated_report"
+    "generated_proof_artifact_provenance_anti_fabrication_manually_edited_generated_report",
+    "generated_proof_artifact_provenance_anti_fabrication_builder_contract_excluded_from_package_evidence",
+    "generated_proof_artifact_provenance_anti_fabrication_runtime_normalized_fixture_not_artifact_truth",
+    "generated_proof_artifact_provenance_anti_fabrication_generated_rows_carry_provenance"
   ],
   "claim_ceiling_guard": "generated_proof_claims_withheld_without_reproducible_provenance",
   "enforcement_status": "deterministic_fail_closed",
@@ -27,7 +30,10 @@
     "missing_input_digest": true,
     "stale_output_digest": true,
     "wrong_candidate_version": true,
-    "wrong_cwd": true
+    "wrong_cwd": true,
+    "builder_contract_excluded_from_package_evidence": true,
+    "runtime_normalized_fixture_not_artifact_truth": true,
+    "generated_rows_carry_provenance": true
   },
   "red_fixture_ids": [
     "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
@@ -37,7 +43,10 @@
     "generated-proof-artifact-provenance-anti-fabrication-stale-output-digest-red",
     "generated-proof-artifact-provenance-anti-fabrication-wrong-cwd-red",
     "generated-proof-artifact-provenance-anti-fabrication-wrong-candidate-version-red",
-    "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red"
+    "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+    "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+    "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
+    "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "generated-proof-artifact-provenance-anti-fabrication",

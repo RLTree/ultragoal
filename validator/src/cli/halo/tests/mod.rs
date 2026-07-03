@@ -43,7 +43,8 @@ fn halo_run_parse_detection_and_registry_edges_are_typed() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-run");
     seed_root(&root);
     let app = fake_app(&root, "0.1.18");
-    let receipt_path = root.join("validation_artifacts/halo/run-receipt.json");
+    let receipt_rel = "validation_artifacts/halo/run-receipt.json";
+    let receipt_path = root.join(receipt_rel);
     let raw = [
         "halo",
         "capability",
@@ -51,7 +52,7 @@ fn halo_run_parse_detection_and_registry_edges_are_typed() {
         "--app-path",
         app.to_str().expect("app path"),
         "--receipt",
-        receipt_path.to_str().expect("receipt path"),
+        receipt_rel,
     ]
     .into_iter()
     .map(ToString::to_string)

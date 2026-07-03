@@ -38,7 +38,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<PromptfooCommand>, String> 
 
 pub(crate) fn run(root: &Path, command: &PromptfooCommand) -> Result<i32, String> {
     let receipt = proof::build_receipt(root, command)?;
-    crate::json_boundary::write_json(&resolve(root, &command.receipt), &receipt)?;
+    let path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "promptfoo receipt")?;
+    crate::json_boundary::write_json(&path, &receipt)?;
     print_receipt(&command.receipt, &receipt);
     Ok(i32::from(
         receipt.get("status").and_then(Value::as_str) != Some("pass"),

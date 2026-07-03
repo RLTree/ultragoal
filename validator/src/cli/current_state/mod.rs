@@ -24,7 +24,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<CurrentStateCommand>, Strin
 
 pub(crate) fn run(root: &Path, command: &CurrentStateCommand) -> Result<i32, String> {
     let state = snapshot(root)?;
-    crate::json_boundary::write_json(&root.join(&command.receipt), &state)?;
+    let receipt =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "current state receipt")?;
+    crate::json_boundary::write_json(&receipt, &state)?;
     if command.json {
         println!(
             "{}",

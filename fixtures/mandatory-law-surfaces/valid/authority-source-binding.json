@@ -1,6 +1,9 @@
 {
   "behavior_failure_modes": [
-    "authority_source_binding_source_obligation_parity"
+    "authority_source_binding_source_obligation_parity",
+    "authority_source_binding_parser_boundary_projection_or_catalog_classification",
+    "authority_source_binding_typed_downstream_records",
+    "authority_source_binding_stale_digest_rejected"
   ],
   "claim_ceiling_guard": "fallback_without_authority_receipt_claim_limits_or_withholds_named_authority_claims",
   "enforcement_status": "deterministic_fail_closed",
@@ -13,10 +16,16 @@
   "foundational_trace_id": "authority-source-binding",
   "law_id": "authority-source-binding",
   "law_specific": {
-    "source_obligation_parity": true
+    "source_obligation_parity": true,
+    "parser_boundary_projection_or_catalog_classification": true,
+    "typed_downstream_records": true,
+    "stale_digest_rejected": true
   },
   "red_fixture_ids": [
-    "authority-source-binding-source-obligation-parity-red"
+    "authority-source-binding-source-obligation-parity-red",
+    "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+    "authority-source-binding-typed-downstream-records-red",
+    "authority-source-binding-stale-digest-rejected-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "authority-source-binding",

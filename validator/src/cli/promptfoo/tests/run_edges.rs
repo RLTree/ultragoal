@@ -7,13 +7,14 @@ use std::path::PathBuf;
 fn promptfoo_run_parse_registry_and_tamper_edges_are_typed() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("promptfoo-run");
     seed_root(&root);
-    let receipt_path = root.join("validation_artifacts/promptfoo/run-receipt.json");
+    let receipt_rel = "validation_artifacts/promptfoo/run-receipt.json";
+    let receipt_path = root.join(receipt_rel);
     let bin = fake_promptfoo(&root);
     let command = parse_promptfoo(&[
         "promptfoo",
         "prove",
         "--receipt",
-        receipt_path.to_str().expect("receipt path"),
+        receipt_rel,
         "--promptfoo-bin",
         bin.to_str().expect("bin path"),
     ]);

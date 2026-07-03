@@ -28,11 +28,8 @@ pub(crate) fn parse(raw: &[String]) -> OutputCommand {
 
 pub(crate) fn run(root: &Path, command: &OutputCommand) -> Result<i32, String> {
     let receipt = build_output_receipt(root, command)?;
-    let path = if command.receipt.is_absolute() {
-        command.receipt.clone()
-    } else {
-        root.join(&command.receipt)
-    };
+    let path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "OpenAI output receipt")?;
     crate::json_boundary::write_json(&path, &receipt)?;
     print_receipt(&command.receipt, &receipt);
     Ok(i32::from(

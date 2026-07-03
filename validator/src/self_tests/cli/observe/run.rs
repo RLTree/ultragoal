@@ -48,9 +48,10 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
             Some(1),
         ),
     ] {
-        let receipt = receipts.join(format!("{}.json", raw.join("-")));
+        let receipt_rel = format!("receipts/{}.json", raw.join("-"));
+        let receipt = root.join(&receipt_rel);
         let mut raw_args = super::args(raw);
-        raw_args.extend(["--receipt".to_string(), receipt.display().to_string()]);
+        raw_args.extend(["--receipt".to_string(), receipt_rel]);
         let command = observe::parse(&raw_args)
             .expect("parse")
             .expect("observe command");
@@ -60,7 +61,6 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
         }
         assert!(receipt.is_file(), "missing {}", receipt.display());
     }
-
     assert!(
         observe::parse(&super::args(&["package", "digest"]))
             .unwrap()

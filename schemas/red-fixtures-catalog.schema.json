@@ -1028,6 +1028,48 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "authority-source-binding-parser-boundary-projection-or-catalog-classification-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "authority-source-binding-stale-digest-rejected-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "authority-source-binding-typed-downstream-records-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "automation-active-unresolved-placeholders"
           }
         },
@@ -3576,6 +3618,62 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red"
           }
         },
@@ -5522,6 +5620,48 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "generated-proof-artifact-provenance-anti-fabrication-missing-generator-command-red"
           }
         },
@@ -6013,6 +6153,62 @@
         "properties": {
           "id": {
             "const": "hand-written-ready-receipt"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "harness-improvement-loop-hand-authored-receipt-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "harness-improvement-loop-raw-halo-authority-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "harness-improvement-loop-trace-without-feedback-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "harness-improvement-loop-validation-skipped-red"
           }
         },
         "required": [
@@ -12438,6 +12634,62 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "research-source-authority-article-to-law-integration-missing-claim-guard-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "research-source-authority-article-to-law-integration-package-omitted-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "research-source-authority-article-to-law-integration-prose-only-map-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "research-source-authority-article-to-law-integration-unmapped-source-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "restartable-execplan-missing-purpose"
           }
         },
@@ -16470,6 +16722,76 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "total-authority-types-impossible-state-elimination-private-path-claim-output-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "total-authority-types-impossible-state-elimination-nullable-required-authority-red"
           }
         },
@@ -16750,6 +17072,62 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "typed-records-over-prose-raw-downstream-json-authority-rejected-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "typed-records-over-prose-raw-map-authority-rejected-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "typed-records-over-prose-raw-path-authority-rejected-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "typed-records-over-prose-raw-string-authority-rejected-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "ui-claim-without-product-cohesion-waiver"
           }
         },
@@ -16974,6 +17352,20 @@
       "contains": {
         "properties": {
           "id": {
+            "const": "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
             "const": "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red"
           }
         },
@@ -17017,6 +17409,34 @@
         "properties": {
           "id": {
             "const": "validator-theater-miswire-resistance-row-shape-only-mechanization-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "validator-theater-miswire-resistance-fallback-overclaim-red"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "maxContains": 1,
+      "minContains": 1
+    },
+    {
+      "contains": {
+        "properties": {
+          "id": {
+            "const": "validator-theater-miswire-resistance-generic-output-only-red"
           }
         },
         "required": [
@@ -17506,8 +17926,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1259,
-  "minItems": 1259,
+  "maxItems": 1280,
+  "minItems": 1280,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

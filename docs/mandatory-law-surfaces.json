@@ -363,7 +363,10 @@
     },
     {
       "behavior_failure_modes": [
-        "authority_source_binding_source_obligation_parity"
+        "authority_source_binding_source_obligation_parity",
+        "authority_source_binding_parser_boundary_projection_or_catalog_classification",
+        "authority_source_binding_typed_downstream_records",
+        "authority_source_binding_stale_digest_rejected"
       ],
       "claim_ceiling_guard": "fallback_without_authority_receipt_claim_limits_or_withholds_named_authority_claims",
       "enforcement_status": "deterministic_fail_closed",
@@ -376,10 +379,16 @@
       "foundational_trace_id": "authority-source-binding",
       "law_id": "authority-source-binding",
       "law_specific": {
-        "source_obligation_parity": true
+        "source_obligation_parity": true,
+        "parser_boundary_projection_or_catalog_classification": true,
+        "typed_downstream_records": true,
+        "stale_digest_rejected": true
       },
       "red_fixture_ids": [
-        "authority-source-binding-source-obligation-parity-red"
+        "authority-source-binding-source-obligation-parity-red",
+        "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+        "authority-source-binding-typed-downstream-records-red",
+        "authority-source-binding-stale-digest-rejected-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "authority-source-binding",
@@ -1316,7 +1325,11 @@
     },
     {
       "behavior_failure_modes": [
-        "distinct_proof_surfaces_claim_ceilings_source_obligation_parity"
+        "distinct_proof_surfaces_claim_ceilings_source_obligation_parity",
+        "distinct_proof_surfaces_claim_ceilings_source_local_proof_substituted_for_live_surface",
+        "distinct_proof_surfaces_claim_ceilings_tests_substituted_for_product_behavior",
+        "distinct_proof_surfaces_claim_ceilings_receipt_existence_substituted_for_behavior",
+        "distinct_proof_surfaces_claim_ceilings_wrong_proof_surface"
       ],
       "claim_ceiling_guard": "withholds_surface_substitution",
       "enforcement_status": "deterministic_fail_closed",
@@ -1329,10 +1342,18 @@
       "foundational_trace_id": "distinct-proof-surfaces-claim-ceilings",
       "law_id": "distinct-proof-surfaces-claim-ceilings",
       "law_specific": {
-        "source_obligation_parity": true
+        "source_obligation_parity": true,
+        "source_local_proof_substituted_for_live_surface": true,
+        "tests_substituted_for_product_behavior": true,
+        "receipt_existence_substituted_for_behavior": true,
+        "wrong_proof_surface": true
       },
       "red_fixture_ids": [
-        "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red"
+        "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+        "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+        "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "distinct-proof-surfaces-claim-ceilings",
@@ -1796,7 +1817,10 @@
         "generated_proof_artifact_provenance_anti_fabrication_stale_output_digest",
         "generated_proof_artifact_provenance_anti_fabrication_wrong_cwd",
         "generated_proof_artifact_provenance_anti_fabrication_wrong_candidate_version",
-        "generated_proof_artifact_provenance_anti_fabrication_manually_edited_generated_report"
+        "generated_proof_artifact_provenance_anti_fabrication_manually_edited_generated_report",
+        "generated_proof_artifact_provenance_anti_fabrication_builder_contract_excluded_from_package_evidence",
+        "generated_proof_artifact_provenance_anti_fabrication_runtime_normalized_fixture_not_artifact_truth",
+        "generated_proof_artifact_provenance_anti_fabrication_generated_rows_carry_provenance"
       ],
       "claim_ceiling_guard": "generated_proof_claims_withheld_without_reproducible_provenance",
       "enforcement_status": "deterministic_fail_closed",
@@ -1816,7 +1840,10 @@
         "missing_input_digest": true,
         "stale_output_digest": true,
         "wrong_candidate_version": true,
-        "wrong_cwd": true
+        "wrong_cwd": true,
+        "builder_contract_excluded_from_package_evidence": true,
+        "runtime_normalized_fixture_not_artifact_truth": true,
+        "generated_rows_carry_provenance": true
       },
       "red_fixture_ids": [
         "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
@@ -1826,7 +1853,10 @@
         "generated-proof-artifact-provenance-anti-fabrication-stale-output-digest-red",
         "generated-proof-artifact-provenance-anti-fabrication-wrong-cwd-red",
         "generated-proof-artifact-provenance-anti-fabrication-wrong-candidate-version-red",
-        "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red"
+        "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+        "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+        "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
+        "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "generated-proof-artifact-provenance-anti-fabrication",
@@ -4520,7 +4550,12 @@
         "total_authority_types_impossible_state_elimination_catch_all_claim_state",
         "total_authority_types_impossible_state_elimination_panic_on_malformed_authority_input",
         "total_authority_types_impossible_state_elimination_unchecked_unwrap_on_receipt_field",
-        "total_authority_types_impossible_state_elimination_impossible_state_represented_only_by_convention"
+        "total_authority_types_impossible_state_elimination_impossible_state_represented_only_by_convention",
+        "total_authority_types_impossible_state_elimination_absolute_receipt_write_without_output_authority",
+        "total_authority_types_impossible_state_elimination_private_path_claim_output",
+        "total_authority_types_impossible_state_elimination_broad_exception_without_owner",
+        "total_authority_types_impossible_state_elimination_generic_fallback_overclaim",
+        "total_authority_types_impossible_state_elimination_session_history_label_without_owner"
       ],
       "claim_ceiling_guard": "authority_claims_withheld_without_total_typed_impossible_state_elimination",
       "enforcement_status": "deterministic_fail_closed",
@@ -4539,7 +4574,12 @@
         "nullable_required_authority": true,
         "optional_candidate_digest": true,
         "panic_on_malformed_authority_input": true,
-        "unchecked_unwrap_on_receipt_field": true
+        "unchecked_unwrap_on_receipt_field": true,
+        "absolute_receipt_write_without_output_authority": true,
+        "private_path_claim_output": true,
+        "broad_exception_without_owner": true,
+        "generic_fallback_overclaim": true,
+        "session_history_label_without_owner": true
       },
       "red_fixture_ids": [
         "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
@@ -4548,7 +4588,12 @@
         "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
         "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
         "total-authority-types-impossible-state-elimination-unchecked-unwrap-on-receipt-field-red",
-        "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red"
+        "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+        "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+        "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+        "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+        "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+        "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "total-authority-types-impossible-state-elimination",
@@ -4634,7 +4679,11 @@
     },
     {
       "behavior_failure_modes": [
-        "typed_records_over_prose_source_obligation_parity"
+        "typed_records_over_prose_source_obligation_parity",
+        "typed_records_over_prose_raw_downstream_json_authority_rejected",
+        "typed_records_over_prose_raw_path_authority_rejected",
+        "typed_records_over_prose_raw_string_authority_rejected",
+        "typed_records_over_prose_raw_map_authority_rejected"
       ],
       "claim_ceiling_guard": "prose_is_not_proof",
       "enforcement_status": "deterministic_fail_closed",
@@ -4647,10 +4696,18 @@
       "foundational_trace_id": "typed-records-over-prose",
       "law_id": "typed-records-over-prose",
       "law_specific": {
-        "source_obligation_parity": true
+        "source_obligation_parity": true,
+        "raw_downstream_json_authority_rejected": true,
+        "raw_path_authority_rejected": true,
+        "raw_string_authority_rejected": true,
+        "raw_map_authority_rejected": true
       },
       "red_fixture_ids": [
-        "typed-records-over-prose-source-obligation-parity-red"
+        "typed-records-over-prose-source-obligation-parity-red",
+        "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+        "typed-records-over-prose-raw-path-authority-rejected-red",
+        "typed-records-over-prose-raw-string-authority-rejected-red",
+        "typed-records-over-prose-raw-map-authority-rejected-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "typed-records-over-prose",
@@ -4739,7 +4796,9 @@
         "validator_theater_miswire_resistance_red_fixture_fails_for_wrong_reason",
         "validator_theater_miswire_resistance_swallowed_validator_error",
         "validator_theater_miswire_resistance_completion_claim_with_only_validator_theater_evidence",
-        "validator_theater_miswire_resistance_cli_pass_without_parent_source_runtime_verification"
+        "validator_theater_miswire_resistance_cli_pass_without_parent_source_runtime_verification",
+        "validator_theater_miswire_resistance_generic_output_only",
+        "validator_theater_miswire_resistance_fallback_overclaim"
       ],
       "claim_ceiling_guard": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance",
       "enforcement_status": "deterministic_fail_closed",
@@ -4760,7 +4819,9 @@
         "stale_validator_receipt_accepted": true,
         "swallowed_validator_error": true,
         "validator_path_present_but_never_called": true,
-        "wrong_check_pass": true
+        "wrong_check_pass": true,
+        "generic_output_only": true,
+        "fallback_overclaim": true
       },
       "red_fixture_ids": [
         "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
@@ -4772,7 +4833,9 @@
         "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
         "validator-theater-miswire-resistance-swallowed-validator-error-red",
         "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
-        "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red"
+        "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
+        "validator-theater-miswire-resistance-generic-output-only-red",
+        "validator-theater-miswire-resistance-fallback-overclaim-red"
       ],
       "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
       "source_obligation_id": "validator-theater-miswire-resistance",

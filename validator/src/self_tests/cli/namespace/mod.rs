@@ -162,7 +162,7 @@ fn namespace_command_writes_pass_observability_receipt() {
     assert!(stdout[0].contains("supported_claims=namespace_check"));
     assert!(stdout[0].contains("unsupported_claims="));
     let absolute_receipt = root.join("target/absolute-namespace-check.json");
-    let code = crate::command_run::run_with_exit_code(args(
+    let absolute_error = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "namespace",
@@ -172,9 +172,12 @@ fn namespace_command_writes_pass_observability_receipt() {
             absolute_receipt.to_str().expect("utf8 path"),
         ],
     ))
-    .expect("absolute namespace receipt");
-    assert_eq!(code, 0);
-    assert!(absolute_receipt.is_file());
+    .expect_err("absolute namespace receipt rejected");
+    assert!(
+        absolute_error.contains("root-relative claim artifact path"),
+        "{absolute_error}"
+    );
+    assert!(!absolute_receipt.is_file());
     std::fs::remove_dir_all(root).expect("cleanup namespace pass");
 }
 

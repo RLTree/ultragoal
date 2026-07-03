@@ -193,11 +193,8 @@ fn run_source_obligation_tasks(
 }
 
 fn write_receipt(root: &Path, receipt: &Path, value: &Value) -> Result<(), String> {
-    let path = if receipt.is_absolute() {
-        receipt.to_path_buf()
-    } else {
-        root.join(receipt)
-    };
+    let path =
+        crate::output_path::claim_artifact_path(root, receipt, "source obligations receipt")?;
     crate::json_boundary::write_json(&path, value)
 }
 

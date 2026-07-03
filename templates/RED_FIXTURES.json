@@ -658,6 +658,33 @@
   },
   {
     "expected_failure": {
+      "check_id": "authority-source-binding",
+      "error": "mandatory_law_specific_guard_not_enforced:authority-source-binding:parser_boundary_projection_or_catalog_classification"
+    },
+    "id": "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+    "packet_digest": "sha256:28a6f1d16e4940e481ae1ef6c6aea6f6b9c6b2a3fb7a8610e97eaae9bff10ead",
+    "packet_path": "fixtures/red/authority-source-binding-parser-boundary-projection-or-catalog-classification-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "authority-source-binding",
+      "error": "mandatory_law_specific_guard_not_enforced:authority-source-binding:stale_digest_rejected"
+    },
+    "id": "authority-source-binding-stale-digest-rejected-red",
+    "packet_digest": "sha256:aaf0186cd7a92559d81c1000c5fb9ed147852036536336338bbd3d6852e07226",
+    "packet_path": "fixtures/red/authority-source-binding-stale-digest-rejected-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "authority-source-binding",
+      "error": "mandatory_law_specific_guard_not_enforced:authority-source-binding:typed_downstream_records"
+    },
+    "id": "authority-source-binding-typed-downstream-records-red",
+    "packet_digest": "sha256:86da354a2df6b72529b3e677e1d0afc75a026c43727d5e9294a58cd5b165e986",
+    "packet_path": "fixtures/red/authority-source-binding-typed-downstream-records-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "agent-standards-enforcement",
       "error": "automation_unresolved_placeholder_active"
     },
@@ -2296,6 +2323,42 @@
   },
   {
     "expected_failure": {
+      "check_id": "distinct-proof-surfaces-claim-ceilings",
+      "error": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:receipt_existence_substituted_for_behavior"
+    },
+    "id": "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+    "packet_digest": "sha256:971ad68b98235892d1dc4faf7b41fbe87edf195b2ff46d06a6f333028987987f",
+    "packet_path": "fixtures/red/distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "distinct-proof-surfaces-claim-ceilings",
+      "error": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:source_local_proof_substituted_for_live_surface"
+    },
+    "id": "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+    "packet_digest": "sha256:49cd5ba3384fd8b9d0c7f7d36c749e7395e2f27bac84ff51b854149d3c3e02d2",
+    "packet_path": "fixtures/red/distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "distinct-proof-surfaces-claim-ceilings",
+      "error": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:tests_substituted_for_product_behavior"
+    },
+    "id": "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+    "packet_digest": "sha256:caa3b0c3fa8e119362c1c015ec1a667c5c627fa55d88ab9553187e4c365cbea0",
+    "packet_path": "fixtures/red/distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "distinct-proof-surfaces-claim-ceilings",
+      "error": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:wrong_proof_surface"
+    },
+    "id": "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red",
+    "packet_digest": "sha256:0c6d0a0dc627b1e66db1b3baf9b86301a757439bec1955d8b79af98eca2e311a",
+    "packet_path": "fixtures/red/distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:distribution-sharing-surface-claim-separation:admin_disabled_sharing_overclaim"
     },
@@ -3544,6 +3607,33 @@
     "id": "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
     "packet_digest": "sha256:575cdf7e4f0197cf8cc915009d3a262f18625ee3db62560b01402e2f72a2d52c",
     "packet_path": "fixtures/red/generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "generated-proof-artifact-provenance-anti-fabrication",
+      "error": "mandatory_law_specific_guard_not_enforced:generated-proof-artifact-provenance-anti-fabrication:builder_contract_excluded_from_package_evidence"
+    },
+    "id": "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+    "packet_digest": "sha256:faaae82c6f0c88f64a27d68883425d0beac2c15d04f77e0210e8fdab4f0ad5f4",
+    "packet_path": "fixtures/red/generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "generated-proof-artifact-provenance-anti-fabrication",
+      "error": "mandatory_law_specific_guard_not_enforced:generated-proof-artifact-provenance-anti-fabrication:generated_rows_carry_provenance"
+    },
+    "id": "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red",
+    "packet_digest": "sha256:8e9daed62cb47cecce9c9420a24585ada6add864ed4f1ea8da156c67e3e09eb6",
+    "packet_path": "fixtures/red/generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "generated-proof-artifact-provenance-anti-fabrication",
+      "error": "mandatory_law_specific_guard_not_enforced:generated-proof-artifact-provenance-anti-fabrication:runtime_normalized_fixture_not_artifact_truth"
+    },
+    "id": "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
+    "packet_digest": "sha256:33b4a53bf1f9039ab6b71903960a325ba94b955f5f2d00d39877133fe810c09f",
+    "packet_path": "fixtures/red/generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red.json"
   },
   {
     "expected_failure": {
@@ -10657,6 +10747,51 @@
   },
   {
     "expected_failure": {
+      "check_id": "total-authority-types-impossible-state-elimination",
+      "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:absolute_receipt_write_without_output_authority"
+    },
+    "id": "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+    "packet_digest": "sha256:caef59876602c7e0e66dc5665a1c88605def39a07cb4272781049bb8c3e9ed7d",
+    "packet_path": "fixtures/red/total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "total-authority-types-impossible-state-elimination",
+      "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:broad_exception_without_owner"
+    },
+    "id": "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+    "packet_digest": "sha256:b8cfa9f840f5c4e483db1d0702797de2863e1946b61b02d3c20c427fe9a3f7db",
+    "packet_path": "fixtures/red/total-authority-types-impossible-state-elimination-broad-exception-without-owner-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "total-authority-types-impossible-state-elimination",
+      "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:generic_fallback_overclaim"
+    },
+    "id": "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+    "packet_digest": "sha256:ae1c3dee3d9bd14f8a479a688324c1ba7c2f14f3a495392e9038b9976e377ff1",
+    "packet_path": "fixtures/red/total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "total-authority-types-impossible-state-elimination",
+      "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:private_path_claim_output"
+    },
+    "id": "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+    "packet_digest": "sha256:492ed33b4b4da3b1d1f9ebdbcb516207a656a08af9ee768be5a56e928bf01077",
+    "packet_path": "fixtures/red/total-authority-types-impossible-state-elimination-private-path-claim-output-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "total-authority-types-impossible-state-elimination",
+      "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:session_history_label_without_owner"
+    },
+    "id": "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red",
+    "packet_digest": "sha256:1c3aaad65959ce4887000e8d9c311fa8c46fb9a4134c8fb289a35d73335dc5e9",
+    "packet_path": "fixtures/red/total-authority-types-impossible-state-elimination-session-history-label-without-owner-red.json"
+  },
+  {
+    "expected_failure": {
       "check_id": "source-obligation-coverage",
       "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:nullable_required_authority"
     },
@@ -10834,6 +10969,42 @@
     "id": "typed-records-over-prose-source-obligation-parity-red",
     "packet_digest": "sha256:4af98be405d2792966ba90309b8bde4c5b19ae600229aa2f5048b385d01d2698",
     "packet_path": "fixtures/red/typed-records-over-prose-source-obligation-parity-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "typed-records-over-prose",
+      "error": "mandatory_law_specific_guard_not_enforced:typed-records-over-prose:raw_downstream_json_authority_rejected"
+    },
+    "id": "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+    "packet_digest": "sha256:c9371d75ba5e57e87ad38f0429474f64211db9c022d33522aceb46f584aec24f",
+    "packet_path": "fixtures/red/typed-records-over-prose-raw-downstream-json-authority-rejected-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "typed-records-over-prose",
+      "error": "mandatory_law_specific_guard_not_enforced:typed-records-over-prose:raw_map_authority_rejected"
+    },
+    "id": "typed-records-over-prose-raw-map-authority-rejected-red",
+    "packet_digest": "sha256:201d91ed590639487a433d739c1a10c84868f47d9c0625d62d5f0b94572022e5",
+    "packet_path": "fixtures/red/typed-records-over-prose-raw-map-authority-rejected-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "typed-records-over-prose",
+      "error": "mandatory_law_specific_guard_not_enforced:typed-records-over-prose:raw_path_authority_rejected"
+    },
+    "id": "typed-records-over-prose-raw-path-authority-rejected-red",
+    "packet_digest": "sha256:fd0e3de46eae8f0f48f7ec2074e54b0678ed11ec37c1e33a9a9d1cccfab722a8",
+    "packet_path": "fixtures/red/typed-records-over-prose-raw-path-authority-rejected-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "typed-records-over-prose",
+      "error": "mandatory_law_specific_guard_not_enforced:typed-records-over-prose:raw_string_authority_rejected"
+    },
+    "id": "typed-records-over-prose-raw-string-authority-rejected-red",
+    "packet_digest": "sha256:d29442ef422ebc1273aaa136d6c94b9069bde1b642bc4df48d490f9372b76a4e",
+    "packet_path": "fixtures/red/typed-records-over-prose-raw-string-authority-rejected-red.json"
   },
   {
     "expected_failure": {
@@ -11023,6 +11194,24 @@
     "id": "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
     "packet_digest": "sha256:d2dff5548f023eb1838a09da74f2e74611b5270085dfc734616acd3d9fbee94c",
     "packet_path": "fixtures/red/validator-theater-miswire-resistance-row-shape-only-mechanization-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "validator-theater-miswire-resistance",
+      "error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:fallback_overclaim"
+    },
+    "id": "validator-theater-miswire-resistance-fallback-overclaim-red",
+    "packet_digest": "sha256:77c3009297162ee5b9d14ea7cfaa55299fb04199c2d5c8b069498ed65dae45f4",
+    "packet_path": "fixtures/red/validator-theater-miswire-resistance-fallback-overclaim-red.json"
+  },
+  {
+    "expected_failure": {
+      "check_id": "validator-theater-miswire-resistance",
+      "error": "mandatory_law_specific_guard_not_enforced:validator-theater-miswire-resistance:generic_output_only"
+    },
+    "id": "validator-theater-miswire-resistance-generic-output-only-red",
+    "packet_digest": "sha256:496902bbdc282e0eba652e8ce98c3543a105a32b3fdb541d1b3f3f91c924480a",
+    "packet_path": "fixtures/red/validator-theater-miswire-resistance-generic-output-only-red.json"
   },
   {
     "expected_failure": {

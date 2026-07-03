@@ -6,7 +6,12 @@
     "total_authority_types_impossible_state_elimination_catch_all_claim_state",
     "total_authority_types_impossible_state_elimination_panic_on_malformed_authority_input",
     "total_authority_types_impossible_state_elimination_unchecked_unwrap_on_receipt_field",
-    "total_authority_types_impossible_state_elimination_impossible_state_represented_only_by_convention"
+    "total_authority_types_impossible_state_elimination_impossible_state_represented_only_by_convention",
+    "total_authority_types_impossible_state_elimination_absolute_receipt_write_without_output_authority",
+    "total_authority_types_impossible_state_elimination_private_path_claim_output",
+    "total_authority_types_impossible_state_elimination_broad_exception_without_owner",
+    "total_authority_types_impossible_state_elimination_generic_fallback_overclaim",
+    "total_authority_types_impossible_state_elimination_session_history_label_without_owner"
   ],
   "claim_ceiling_guard": "authority_claims_withheld_without_total_typed_impossible_state_elimination",
   "enforcement_status": "deterministic_fail_closed",
@@ -25,7 +30,12 @@
     "nullable_required_authority": true,
     "optional_candidate_digest": true,
     "panic_on_malformed_authority_input": true,
-    "unchecked_unwrap_on_receipt_field": true
+    "unchecked_unwrap_on_receipt_field": true,
+    "absolute_receipt_write_without_output_authority": true,
+    "private_path_claim_output": true,
+    "broad_exception_without_owner": true,
+    "generic_fallback_overclaim": true,
+    "session_history_label_without_owner": true
   },
   "red_fixture_ids": [
     "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
@@ -34,7 +44,12 @@
     "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
     "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
     "total-authority-types-impossible-state-elimination-unchecked-unwrap-on-receipt-field-red",
-    "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red"
+    "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+    "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+    "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+    "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+    "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+    "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "total-authority-types-impossible-state-elimination",

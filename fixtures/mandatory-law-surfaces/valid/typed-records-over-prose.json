@@ -1,6 +1,10 @@
 {
   "behavior_failure_modes": [
-    "typed_records_over_prose_source_obligation_parity"
+    "typed_records_over_prose_source_obligation_parity",
+    "typed_records_over_prose_raw_downstream_json_authority_rejected",
+    "typed_records_over_prose_raw_path_authority_rejected",
+    "typed_records_over_prose_raw_string_authority_rejected",
+    "typed_records_over_prose_raw_map_authority_rejected"
   ],
   "claim_ceiling_guard": "prose_is_not_proof",
   "enforcement_status": "deterministic_fail_closed",
@@ -13,10 +17,18 @@
   "foundational_trace_id": "typed-records-over-prose",
   "law_id": "typed-records-over-prose",
   "law_specific": {
-    "source_obligation_parity": true
+    "source_obligation_parity": true,
+    "raw_downstream_json_authority_rejected": true,
+    "raw_path_authority_rejected": true,
+    "raw_string_authority_rejected": true,
+    "raw_map_authority_rejected": true
   },
   "red_fixture_ids": [
-    "typed-records-over-prose-source-obligation-parity-red"
+    "typed-records-over-prose-source-obligation-parity-red",
+    "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+    "typed-records-over-prose-raw-path-authority-rejected-red",
+    "typed-records-over-prose-raw-string-authority-rejected-red",
+    "typed-records-over-prose-raw-map-authority-rejected-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "typed-records-over-prose",

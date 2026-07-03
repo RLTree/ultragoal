@@ -62,7 +62,9 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
         started,
     );
     let receipt = receipt_result?;
-    crate::json_boundary::write_json(&root.join(&command.receipt), &receipt)?;
+    let path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "live loop receipt")?;
+    crate::json_boundary::write_json(&path, &receipt)?;
     print_summary(command, &receipt, &first_blocker);
     Ok(i32::from(status != "pass"))
 }

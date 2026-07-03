@@ -7,19 +7,15 @@ use std::path::PathBuf;
 fn improvement_loop_run_parse_and_receipt_tamper_edges_are_typed() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-run");
     seed_root(&root, "complete_same_candidate");
-    let receipt_path = root.join("validation_artifacts/improvement-loop/run-receipt.json");
+    let receipt_rel = "validation_artifacts/improvement-loop/run-receipt.json";
+    let receipt_path = root.join(receipt_rel);
     assert!(
         crate::cli::improvement_loop::parse(&["not-improvement-loop".to_string()])
             .expect("non improvement loop")
             .is_none()
     );
     assert!(crate::cli::improvement_loop::parse(&["improvement-loop".to_string()]).is_err());
-    let command = parse_loop(&[
-        "improvement-loop",
-        "prove",
-        "--receipt",
-        receipt_path.to_str().expect("receipt path"),
-    ]);
+    let command = parse_loop(&["improvement-loop", "prove", "--receipt", receipt_rel]);
     assert_eq!(
         crate::cli::improvement_loop::run(&root, &command).expect("run improvement loop"),
         0

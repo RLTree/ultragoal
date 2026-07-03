@@ -99,7 +99,7 @@ fn standards_gardener_run_mints_receipt_through_cli_command() {
     write_json(&root.join(&rel), &stale_receipt());
     let command = crate::cli::standards::StandardsCommand {
         receipt: rel.clone(),
-        observability_receipt: root.join("standards-gardener-rebind-observe.json"),
+        observability_receipt: PathBuf::from("standards-gardener-rebind-observe.json"),
     };
     let code = crate::cli::standards::run(&root, &command).expect("run standards command");
     assert_eq!(code, 0);

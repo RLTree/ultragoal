@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+  "expected_failure": {
+    "check_id": "distinct-proof-surfaces-claim-ceilings",
+    "error": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:source_local_proof_substituted_for_live_surface"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/distinct-proof-surfaces-claim-ceilings.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/source_local_proof_substituted_for_live_surface",
+      "value": false
+    }
+  ],
+  "notes": "distinct-proof-surfaces-claim-ceilings must fail when source_local_proof_substituted_for_live_surface is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/source_local_proof_substituted_for_live_surface",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/source_local_proof_substituted_for_live_surface",
+      "expectation": "mandatory_law_specific_guard_not_enforced:distinct-proof-surfaces-claim-ceilings:source_local_proof_substituted_for_live_surface"
+    }
+  ]
+}

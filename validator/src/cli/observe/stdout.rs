@@ -8,11 +8,7 @@ pub(super) fn write_and_print(
     value: &Value,
 ) -> Result<i32, String> {
     let receipt = command.receipt_rel();
-    let absolute = if receipt.is_absolute() {
-        receipt.clone()
-    } else {
-        root.join(&receipt)
-    };
+    let absolute = crate::output_path::claim_artifact_path(root, &receipt, "observe receipt")?;
     crate::json_boundary::write_json(&absolute, value)?;
     let status = text(value, "status", "fail");
     println!(

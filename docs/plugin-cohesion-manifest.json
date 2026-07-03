@@ -1436,7 +1436,7 @@
     "validator/src/cli/standards/gardener.rs",
     "validator/src/cli/standards/mod.rs",
     "validator/src/self_tests/audit/final_packet/references/package.rs",
-    "validator/src/self_tests/audit/final_packet/support/package_receipts.rs",
+    "validator/src/self_tests/audit/final_packet/receipt_fixtures/package_receipts.rs",
     "validator/src/self_tests/cli/control/audit.rs",
     "validator/src/self_tests/cli/control/graph.rs",
     "validator/src/self_tests/cli/control/output_paths.rs",
@@ -1619,8 +1619,8 @@
       "reason": "CLI control production green-path tests mint Standards, Rust, and GC receipts through routed helpers instead of over-cap inline fixture setup"
     },
     {
-      "from": "validator/src/self_tests/audit/final_packet/support/mod.rs",
-      "to": "validator/src/self_tests/audit/final_packet/support/package_receipts.rs",
+      "from": "validator/src/self_tests/audit/final_packet/receipt_fixtures/mod.rs",
+      "to": "validator/src/self_tests/audit/final_packet/receipt_fixtures/package_receipts.rs",
       "reason": "Final-packet proof fixtures must dereference typed Fit Repo, Product Fitness, and Product Journey package receipts"
     },
     {

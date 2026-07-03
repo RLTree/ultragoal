@@ -57,11 +57,8 @@ pub(crate) fn parse(raw: &[String]) -> Result<CallCommand, String> {
 
 pub(crate) fn run(root: &Path, command: &CallCommand) -> Result<i32, String> {
     let receipt = build_call_receipt(root, command)?;
-    let path = if command.receipt.is_absolute() {
-        command.receipt.clone()
-    } else {
-        root.join(&command.receipt)
-    };
+    let path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "OpenAI call receipt")?;
     crate::json_boundary::write_json(&path, &receipt)?;
     receipt::print_receipt(&command.receipt, &receipt);
     Ok(i32::from(

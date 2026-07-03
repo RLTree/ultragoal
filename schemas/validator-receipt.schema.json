@@ -738,8 +738,8 @@
                 }
               ]
             },
-            "maxProperties": 1259,
-            "minProperties": 1195,
+            "maxProperties": 1280,
+            "minProperties": 1280,
             "required": [
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
               "active-setup-to-idle-orchestration-thread-bound-heartbeat-detached-reminder-substituted-for-heartbeat-red",
@@ -814,6 +814,9 @@
               "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red",
               "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-target-mode-red",
               "authority-source-binding-source-obligation-parity-red",
+              "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+              "authority-source-binding-stale-digest-rejected-red",
+              "authority-source-binding-typed-downstream-records-red",
               "automation-active-unresolved-placeholders",
               "automation-generic-keep-working-reminder",
               "automation-missing-evidence-cursors",
@@ -996,6 +999,10 @@
               "dirty-self-reported-clean",
               "disguised-tiny-lane",
               "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+              "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+              "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+              "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+              "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red",
               "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
               "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
               "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
@@ -1135,6 +1142,9 @@
               "generated-proof-artifact-provenance-anti-fabrication-copied-package-proof-red",
               "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
               "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+              "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+              "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red",
+              "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
               "generated-proof-artifact-provenance-anti-fabrication-missing-generator-command-red",
               "generated-proof-artifact-provenance-anti-fabrication-missing-input-digest-red",
               "generated-proof-artifact-provenance-anti-fabrication-source-obligation-parity-red",
@@ -1171,6 +1181,10 @@
               "guardrail-speed-isolation-cache-honesty-source-obligation-parity-red",
               "guardrail-speed-isolation-cache-honesty-workspace-isolation-red",
               "hand-written-ready-receipt",
+              "harness-improvement-loop-hand-authored-receipt-red",
+              "harness-improvement-loop-raw-halo-authority-red",
+              "harness-improvement-loop-trace-without-feedback-red",
+              "harness-improvement-loop-validation-skipped-red",
               "hidden-withheld-claim",
               "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red",
               "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red",
@@ -1629,6 +1643,10 @@
               "repo-knowledge-index-core-beliefs-owner-freshness-source-red",
               "repo-knowledge-index-core-beliefs-source-obligation-parity-red",
               "repo-knowledge-index-core-beliefs-validator-receipt-path-red",
+              "research-source-authority-article-to-law-integration-missing-claim-guard-red",
+              "research-source-authority-article-to-law-integration-package-omitted-red",
+              "research-source-authority-article-to-law-integration-prose-only-map-red",
+              "research-source-authority-article-to-law-integration-unmapped-source-red",
               "restartable-execplan-missing-purpose",
               "restartable-execplan-missing-validation-commands",
               "restartable-execplan-prose-only",
@@ -1917,6 +1935,11 @@
               "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
               "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
               "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+              "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+              "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+              "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+              "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+              "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red",
               "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
               "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
               "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
@@ -1937,6 +1960,10 @@
               "trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red",
               "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
               "typed-records-over-prose-source-obligation-parity-red",
+              "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+              "typed-records-over-prose-raw-map-authority-rejected-red",
+              "typed-records-over-prose-raw-path-authority-rejected-red",
+              "typed-records-over-prose-raw-string-authority-rejected-red",
               "ui-claim-without-product-cohesion-waiver",
               "unsupported-install-publication-text-claim",
               "unsupported-market-place-release-text-claim",
@@ -1958,6 +1985,8 @@
               "validator-theater-miswire-resistance-fixture-name-only-pass-red",
               "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
               "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+              "validator-theater-miswire-resistance-fallback-overclaim-red",
+              "validator-theater-miswire-resistance-generic-output-only-red",
               "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
               "validator-theater-miswire-resistance-swallowed-validator-error-red",
               "validator-theater-miswire-resistance-validator-path-present-but-never-called-red",
@@ -2287,8 +2316,8 @@
       "additionalProperties": {
         "$ref": "#/$defs/redFixtureResult"
       },
-      "maxProperties": 1259,
-      "minProperties": 1259,
+      "maxProperties": 1280,
+      "minProperties": 1280,
       "propertyNames": {
         "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId"
       },
@@ -2366,6 +2395,9 @@
         "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red",
         "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-target-mode-red",
         "authority-source-binding-source-obligation-parity-red",
+        "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+        "authority-source-binding-stale-digest-rejected-red",
+        "authority-source-binding-typed-downstream-records-red",
         "automation-active-unresolved-placeholders",
         "automation-generic-keep-working-reminder",
         "automation-missing-evidence-cursors",
@@ -2548,6 +2580,10 @@
         "dirty-self-reported-clean",
         "disguised-tiny-lane",
         "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+        "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+        "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+        "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red",
         "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
         "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
         "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
@@ -2687,6 +2723,9 @@
         "generated-proof-artifact-provenance-anti-fabrication-copied-package-proof-red",
         "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
         "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+        "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+        "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red",
+        "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
         "generated-proof-artifact-provenance-anti-fabrication-missing-generator-command-red",
         "generated-proof-artifact-provenance-anti-fabrication-missing-input-digest-red",
         "generated-proof-artifact-provenance-anti-fabrication-source-obligation-parity-red",
@@ -3477,6 +3516,11 @@
         "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
         "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
         "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+        "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+        "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+        "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+        "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+        "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red",
         "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
         "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
         "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
@@ -3497,6 +3541,10 @@
         "trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red",
         "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
         "typed-records-over-prose-source-obligation-parity-red",
+        "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+        "typed-records-over-prose-raw-map-authority-rejected-red",
+        "typed-records-over-prose-raw-path-authority-rejected-red",
+        "typed-records-over-prose-raw-string-authority-rejected-red",
         "ui-claim-without-product-cohesion-waiver",
         "unsupported-install-publication-text-claim",
         "unsupported-market-place-release-text-claim",
@@ -3518,6 +3566,8 @@
         "validator-theater-miswire-resistance-fixture-name-only-pass-red",
         "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
         "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+        "validator-theater-miswire-resistance-fallback-overclaim-red",
+        "validator-theater-miswire-resistance-generic-output-only-red",
         "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
         "validator-theater-miswire-resistance-swallowed-validator-error-red",
         "validator-theater-miswire-resistance-validator-path-present-but-never-called-red",
@@ -4196,6 +4246,56 @@
         },
         {
           "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-altered-claim-ceiling-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-final-packet-claim-injected-after-validation-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-forged-validator-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-private-proof-path-inserted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-product-success-contract-removed-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-reviewer-disposition-flip-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-stale-active-registry-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-swapped-package-digest-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-wrong-cache-path-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "adversarial-packet-tampering-forged-proof-rejection-wrong-installed-path-red"
+          }
+        },
+        {
+          "contains": {
             "const": "agent-authored-source-tooling-docs-provenance-docs-only-compliance-claim-without-command-evidence-red"
           }
         },
@@ -4421,7 +4521,62 @@
         },
         {
           "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-catch-all-authority-map-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-final-packet-generated-from-freeform-authority-text-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-missing-review-disposition-variant-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-nullable-law-status-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unhandled-schema-enum-after-version-bump-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-claim-ceiling-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-target-mode-red"
+          }
+        },
+        {
+          "contains": {
             "const": "authority-source-binding-source-obligation-parity-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-source-binding-parser-boundary-projection-or-catalog-classification-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-source-binding-stale-digest-rejected-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "authority-source-binding-typed-downstream-records-red"
           }
         },
         {
@@ -4661,6 +4816,51 @@
         },
         {
           "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-claim-supported-non-goal-capability-gap-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-missing-adapter-but-generic-support-claim-emitted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-missing-capability-with-no-record-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-missing-context-fixed-by-prose-only-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-missing-runtime-legibility-while-live-surface-claim-stays-green-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-permission-app-capability-unavailable-but-reviewer-ready-claim-emitted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-repeated-tool-gap-with-no-promotion-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-stale-unowned-capability-gap-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "capability-gap-extraction-harness-capability-promotion-user-handback-treated-as-repair-red"
+          }
+        },
+        {
+          "contains": {
             "const": "clean-checkout-command-discovery-source-obligation-parity-red"
           }
         },
@@ -4696,7 +4896,182 @@
         },
         {
           "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-clean-room-receipt-omitted-from-final-packet-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-command-missing-from-clean-checkout-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-generated-artifact-not-reproducible-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-hidden-cache-dependency-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-private-path-dependency-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-source-only-rebuild-used-for-installed-cache-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "clean-room-rebuild-author-memory-independence-stale-artifact-surviving-rebuild-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-control-plane-authority-checklist-completion-without-cli-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-control-plane-authority-reviewer-agreement-bypass-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-control-plane-authority-source-audit-substituted-for-update-goal-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-cached-proof-substituted-for-no-cache-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-final-packet-omits-status-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-focused-substituted-for-final-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-hidden-cache-pass-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-budget-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-cache-key-telemetry-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-external-call-telemetry-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-fixture-count-telemetry-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-input-size-telemetry-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-live-probe-backoff-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-regression-baseline-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-missing-timeout-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-network-call-in-local-only-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-over-budget-without-claim-blocking-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-prose-only-budget-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-serial-global-lock-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-stale-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-unbounded-concurrency-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-wrong-candidate-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-wrong-cli-binary-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-performance-wrong-schema-law-fixture-digest-red"
+          }
+        },
+        {
+          "contains": {
             "const": "cli-proof-used-for-ui-claim"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-self-law-compliance-bootstrap-receipt-used-for-completion-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-self-law-compliance-cli-source-excluded-from-coverage-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cli-self-law-compliance-update-goal-without-self-law-red"
           }
         },
         {
@@ -4956,6 +5331,96 @@
         },
         {
           "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-child-law-hidden-under-umbrella-parent-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-duplicate-law-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-missing-receipt-edge-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-orphan-claim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-orphan-green-fixture-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-orphan-red-fixture-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-packet-claim-outside-graph-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-private-local-graph-edge-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-source-install-cache-graph-mismatch-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "cross-artifact-consistency-solver-authority-graph-closure-stale-graph-digest-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-accessibility-compliance-from-screenshots-alone-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-memory-summary-used-as-current-product-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-old-packet-used-as-live-product-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-product-audit-without-flow-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-product-fitness-passed-with-no-current-discovery-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-recommendation-with-no-claim-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-research-brief-without-observed-inferred-split-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "current-product-discovery-audit-quality-in-use-evidence-stale-screenshot-accepted-red"
+          }
+        },
+        {
+          "contains": {
             "const": "custom-agent-app-visible-name-missing"
           }
         },
@@ -5022,6 +5487,26 @@
         {
           "contains": {
             "const": "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red"
           }
         },
         {
@@ -5296,6 +5781,51 @@
         },
         {
           "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-failure-message-leaking-private-data-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-generic-validation-failed-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-missing-artifact-path-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-missing-claim-impact-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-missing-expected-observed-values-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-missing-law-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-missing-rerun-command-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-swallowed-io-schema-error-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "failure-remediation-quality-agent-actionable-output-wrong-repair-class-red"
+          }
+        },
+        {
+          "contains": {
             "const": "fake-generic-blocker-attempt"
           }
         },
@@ -5396,6 +5926,61 @@
         },
         {
           "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-approval-reentering-needs-review-without-reopen-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-automation-tick-resets-lane-state-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-final-packet-changes-blocked-to-fixed-by-prose-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-package-install-receipt-advances-stale-state-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-reopened-gate-still-green-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-reviewer-signoff-reused-after-reopen-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-status-string-says-verified-but-transition-missing-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-terminal-row-edited-back-to-active-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-actor-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-transition-event-missing-previous-hash-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "forward-only-state-transition-integrity-silent-reopen-prevention-update-goal-allowed-after-reopened-required-claim-unverified-red"
+          }
+        },
+        {
+          "contains": {
             "const": "foundational-law-trace-missing-red-fixture"
           }
         },
@@ -5446,6 +6031,161 @@
         },
         {
           "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-broad-audit-before-narrow-observable-repair-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-broken-span-parentage-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-command-inventory-row-without-instrumentation-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-command-missing-from-inventory-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-log-bundle-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-metric-bundle-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-forged-trace-bundle-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-hidden-network-endpoint-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-local-json-fallback-used-as-completion-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-manual-json-spelunking-used-as-repair-loop-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-metric-log-trace-digest-mismatch-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-mismatched-correlation-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-correlation-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-log-event-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-metric-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-repair-hint-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-missing-trace-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-opaque-fail-output-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-opaque-pass-output-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-operating-loop-stage-without-query-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-private-path-leak-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-public-port-binding-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-receipt-without-observability-binding-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-signal-class-missing-from-inventory-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-stale-telemetry-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-surface-inventory-row-without-instrumentation-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-surface-missing-from-inventory-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unbounded-query-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unbounded-retention-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-unredacted-secret-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "full-local-observability-stack-integration-non-opaque-failure-wrong-candidate-digest-red"
+          }
+        },
+        {
+          "contains": {
             "const": "future-actor-validation"
           }
         },
@@ -5462,6 +6202,21 @@
         {
           "contains": {
             "const": "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red"
           }
         },
         {
@@ -5506,7 +6261,97 @@
         },
         {
           "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-amendment-log-rewritten-instead-of-appended-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-broad-umbrella-claim-id-hiding-child-gates-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-checklist-gate-absent-from-required-claim-ids-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-duplicate-required-claim-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-final-packet-claim-absent-from-completion-manifest-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-markdown-prompt-treated-as-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-requirement-removal-without-claim-blocking-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-scope-changing-clarification-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-side-thread-requirement-without-amendment-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-stale-contract-bundle-hash-after-law-addition-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-stale-required-claim-id-hash-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "goal-contract-amendment-authority-required-claim-id-mapping-weakening-amendment-without-approval-red"
+          }
+        },
+        {
+          "contains": {
             "const": "goal-tools-unavailable-without-probe"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-full-compliance-claim-while-any-mandatory-law-lacks-realistic-green-path-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-green-fixture-accepted-despite-stale-digest-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-green-fixture-missing-claim-ceiling-projection-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-green-fixture-missing-package-inclusion-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-law-with-no-green-path-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "green-path-adequacy-satisfiable-strictness-law-with-only-toy-green-fixture-red"
           }
         },
         {
@@ -5556,7 +6401,97 @@
         },
         {
           "contains": {
+            "const": "harness-improvement-loop-hand-authored-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "harness-improvement-loop-raw-halo-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "harness-improvement-loop-trace-without-feedback-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "harness-improvement-loop-validation-skipped-red"
+          }
+        },
+        {
+          "contains": {
             "const": "hidden-withheld-claim"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-chronicle-finding-without-timestamp-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-final-packet-omitting-open-regression-claim-impact-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-historical-namespace-repeat-offender-without-fixture-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-reviewer-repeat-finding-closed-by-prose-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-session-log-finding-not-converted-to-regression-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-side-thread-requirement-not-amended-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "historical-regression-corpus-session-review-signals-stale-receipt-repeat-offender-without-fixture-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-full-compliance-claim-with-judgment-only-residue-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-human-audit-closing-mandatory-law-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-hybrid-disposition-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-judgment-review-without-deterministic-sibling-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-reviewer-signoff-used-as-validator-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-semantic-review-raising-claim-ceiling-without-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "human-audit-disposition-decomposition-judgment-claim-blocking-source-obligation-row-with-deterministic-with-human-audit-red"
           }
         },
         {
@@ -5996,12 +6931,97 @@
         },
         {
           "contains": {
+            "const": "namespace-validator-source-broad-glob-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-class-waiver-manifest-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-coverage-wave-history-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-error-not-hidden-by-other-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-generated-class-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-iinternal-typo-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-manifest-listing-cannot-bless-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-partial-module-factoring-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-top-level-internal-cluster-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-top-level-internal-coverage-wave-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "namespace-validator-source-widened-class-tamper-red"
+          }
+        },
+        {
+          "contains": {
             "const": "nested-overlapping-active-lanes"
           }
         },
         {
           "contains": {
             "const": "nested-temp-root-active-lanes"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-marketplace-ready-claim-without-marketplace-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-product-success-claimed-from-static-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "non-e2e-claim-ceiling-confidence-bounds-reviewer-ready-claim-without-current-reviewer-exposure-red"
           }
         },
         {
@@ -6147,6 +7167,26 @@
         {
           "contains": {
             "const": "one-command-fresh-environment-bootstrap-concurrent-resource-allocation-source-obligation-parity-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-model-output-authority-claim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-secret-serialized-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-unbounded-cost-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "openai-api-key-model-cost-external-ai-boundary-wrong-candidate-digest-red"
           }
         },
         {
@@ -6681,6 +7721,56 @@
         },
         {
           "contains": {
+            "const": "product-proof-joins-substitution-blocking-app-registry-existence-without-reviewer-exposure-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-dogfood-outside-declared-audience-context-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-happy-path-without-failure-recovery-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-install-success-used-as-product-success-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-package-publication-used-as-product-success-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-product-cohesion-alone-used-as-product-success-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-product-fitness-alone-without-contract-lineage-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-quality-score-as-product-outcome-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-reviewer-approval-used-as-product-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-proof-joins-substitution-blocking-smoke-test-used-as-product-fitness-red"
+          }
+        },
+        {
+          "contains": {
             "const": "product-runtime-only-bare-app-available-feature-claim"
           }
         },
@@ -7041,6 +8131,326 @@
         },
         {
           "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-continuance-signal-missing-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-deep-research-v2-precedent-cited-without-required-planning-artifacts-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-eval-protocol-without-negative-paths-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-feature-list-accepted-as-strategy-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-first-value-path-missing-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-generic-audience-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-positioning-route-without-proof-needed-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-product-lane-plan-without-strategy-artifact-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-research-notes-without-source-map-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-strategy-positioning-research-eval-before-lane-planning-vanity-metric-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-explicit-non-product-waiver-contradicted-by-claim-text-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-lane-ready-receipt-omitting-product-success-obligations-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-claim-consumed-outside-declared-goal-claim-ids-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-evidence-split-across-lanes-without-closed-claim-ids-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-goal-without-product-success-contract-binding-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-cohesion-owed-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-lane-ready-without-product-fitness-owed-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-binding-goal-lane-execplan-authority-product-lane-without-contract-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-markdown-only-product-success-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-missing-claim-ceiling-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-missing-critical-journey-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-missing-first-value-event-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-missing-quality-dimension-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-package-inventory-missing-product-success-contract-surfaces-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-placeholder-target-user-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-product-goal-without-product-success-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-product-lane-without-product-success-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-stale-product-success-contract-digest-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-wrong-claim-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-initiation-authority-wrong-goal-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-archive-omitting-product-contract-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-fit-repo-product-ready-without-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-missing-product-reviewer-disposition-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-package-inventory-missing-product-success-schema-template-fixtures-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-packet-with-stale-product-lineage-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-review-packet-missing-product-success-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-review-target-omitting-product-contract-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-review-team-lacking-typed-product-owner-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-contract-review-packet-team-skill-routing-skill-routing-omission-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-adopted-principle-with-no-validator-gate-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-chronicle-cited-without-timestamp-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-deep-research-v2-cited-without-artifact-path-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-generic-inspiration-summary-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-inaccessible-source-ignored-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-product-design-mentioned-but-not-dispositioned-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-sales-value-evidence-adopted-without-hierarchy-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-inspiration-source-provenance-disposition-template-creator-mentioned-but-treated-as-repo-dependency-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-final-packet-product-claim-with-lifecycle-gap-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-product-cohesion-packet-repair-accepted-as-lifecycle-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-product-critical-debt-left-in-docs-only-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-product-fitness-review-afterthought-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-product-obligation-not-decomposed-into-lane-task-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-product-success-contract-after-lane-launch-with-no-reopen-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lifecycle-transitions-no-late-afterthought-stale-product-receipt-after-amendment-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-broad-umbrella-product-claim-hiding-child-obligations-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-late-product-readiness-claim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-product-claim-duplicated-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-product-cohesion-orphan-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-product-fitness-orphan-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-product-packet-claim-unmapped-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-side-thread-product-requirement-not-amended-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-stale-product-success-contract-id-in-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-unknown-product-success-contract-id-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "product-success-lineage-amendments-closed-product-claim-ids-weakening-amendment-without-approval-red"
+          }
+        },
+        {
+          "contains": {
             "const": "product-ui-proof-not-joined-to-receipt"
           }
         },
@@ -7301,6 +8711,26 @@
         },
         {
           "contains": {
+            "const": "research-source-authority-article-to-law-integration-missing-claim-guard-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "research-source-authority-article-to-law-integration-package-omitted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "research-source-authority-article-to-law-integration-prose-only-map-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "research-source-authority-article-to-law-integration-unmapped-source-red"
+          }
+        },
+        {
+          "contains": {
             "const": "restartable-execplan-missing-purpose"
           }
         },
@@ -7327,6 +8757,41 @@
         {
           "contains": {
             "const": "retired-reviewer-prompt-packet-packaged"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-disagreement-marked-resolved-in-prose-only-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-final-packet-hiding-open-disagreement-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-human-approval-closing-mandatory-law-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-judgment-only-product-fitness-claim-counted-as-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-non-goal-without-claim-removal-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-reviewer-raising-confidence-above-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "review-disagreement-override-judgment-boundary-governance-reviewer-signoff-overriding-failing-validator-red"
           }
         },
         {
@@ -7716,6 +9181,46 @@
         },
         {
           "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-manual-sample-substituted-for-complete-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-no-cache-mismatch-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-runtime-over-budget-without-exception-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-stale-cache-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "runtime-feasibility-cost-strict-gate-usability-unbounded-concurrency-red"
+          }
+        },
+        {
+          "contains": {
             "const": "runtime-tool-identity-digest-mismatch"
           }
         },
@@ -7746,6 +9251,96 @@
         },
         {
           "contains": {
+            "const": "rust-devx-blind-cleanup-without-gc-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-cargo-lock-digest-tamper-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-cargo-test-overclaim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-dependency-audit-missing-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-gc-plan-digest-tamper-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-hidden-cache-no-cache-substitution-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-hidden-rustc-wrapper-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-makefile-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-missing-nextest-bootstrap-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-missing-toolchain-substrate-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-protected-artifact-delete-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-raw-tool-output-substitution-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-spawn-forget-child-process-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-toolchain-receipt-stale-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-tracing-gc-core-memory-model-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-unbounded-resource-discipline-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-warm-cache-as-cold-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "rust-devx-watch-observation-as-completion-red"
+          }
+        },
+        {
+          "contains": {
             "const": "scheduler-runner-tracker-boundaries-approval-proof-red"
           }
         },
@@ -7772,6 +9367,41 @@
         {
           "contains": {
             "const": "scheduler-runner-tracker-boundaries-typed-write-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-cache-package-old-schema-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-fixture-catalog-mismatch-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-installed-package-old-schema-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-migration-receipt-missing-affected-claim-ids-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-old-product-fitness-receipt-accepted-after-schema-change-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-stale-receipt-version-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "schema-evolution-receipt-migration-stale-version-invalidation-stale-schema-id-red"
           }
         },
         {
@@ -8421,6 +10051,51 @@
         },
         {
           "contains": {
+            "const": "template-generation-governance-template-creator-boundary-installed-cache-template-drift-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-missing-product-success-brief-template-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-package-inventory-omits-template-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-product-artifact-generated-from-untemplated-prose-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-product-template-with-tbd-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-render-parse-mismatch-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-template-creator-personal-skill-treated-as-repo-artifact-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-template-creator-used-with-no-receipt-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "template-generation-governance-template-creator-boundary-template-field-not-in-schema-red"
+          }
+        },
+        {
+          "contains": {
             "const": "terminal-cleanup-fake-nonmissing-receipt"
           }
         },
@@ -8492,6 +10167,31 @@
         {
           "contains": {
             "const": "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "total-authority-types-impossible-state-elimination-private-path-claim-output-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red"
           }
         },
         {
@@ -8596,6 +10296,26 @@
         },
         {
           "contains": {
+            "const": "typed-records-over-prose-raw-downstream-json-authority-rejected-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "typed-records-over-prose-raw-map-authority-rejected-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "typed-records-over-prose-raw-path-authority-rejected-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "typed-records-over-prose-raw-string-authority-rejected-red"
+          }
+        },
+        {
+          "contains": {
             "const": "ui-claim-without-product-cohesion-waiver"
           }
         },
@@ -8667,6 +10387,111 @@
         {
           "contains": {
             "const": "validator-package-digest-value-not-sha"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-adjacent-law-misattribution-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-fixture-name-only-pass-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-row-shape-only-mechanization-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-fallback-overclaim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-generic-output-only-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-swallowed-validator-error-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-validator-path-present-but-never-called-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "validator-theater-miswire-resistance-wrong-check-pass-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-claim-ceiling-not-lowered-when-value-evidence-missing-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-daily-driver-claim-without-repeat-use-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-install-success-used-as-adoption-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-invented-baseline-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-missing-confidence-label-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-one-time-first-use-used-as-continuance-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-public-research-used-as-product-value-proof-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-unlabeled-value-claim-red"
+          }
+        },
+        {
+          "contains": {
+            "const": "value-adoption-continuance-business-mission-evidence-hierarchy-value-bucket-outside-enum-red"
           }
         },
         {
@@ -8851,6 +10676,9 @@
           "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-proof-surface-red",
           "authority-exhaustiveness-closed-enums-impossible-state-elimination-unknown-target-mode-red",
           "authority-source-binding-source-obligation-parity-red",
+          "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+          "authority-source-binding-stale-digest-rejected-red",
+          "authority-source-binding-typed-downstream-records-red",
           "automation-active-unresolved-placeholders",
           "automation-generic-keep-working-reminder",
           "automation-missing-evidence-cursors",
@@ -9033,6 +10861,10 @@
           "dirty-self-reported-clean",
           "disguised-tiny-lane",
           "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+          "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+          "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+          "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+          "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red",
           "distribution-sharing-surface-claim-separation-admin-disabled-sharing-overclaim-red",
           "distribution-sharing-surface-claim-separation-local-proof-used-as-workspace-sharing-red",
           "distribution-sharing-surface-claim-separation-missing-workspace-account-id-red",
@@ -9172,6 +11004,9 @@
           "generated-proof-artifact-provenance-anti-fabrication-copied-package-proof-red",
           "generated-proof-artifact-provenance-anti-fabrication-fabricated-receipt-red",
           "generated-proof-artifact-provenance-anti-fabrication-manually-edited-generated-report-red",
+          "generated-proof-artifact-provenance-anti-fabrication-builder-contract-excluded-from-package-evidence-red",
+          "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red",
+          "generated-proof-artifact-provenance-anti-fabrication-runtime-normalized-fixture-not-artifact-truth-red",
           "generated-proof-artifact-provenance-anti-fabrication-missing-generator-command-red",
           "generated-proof-artifact-provenance-anti-fabrication-missing-input-digest-red",
           "generated-proof-artifact-provenance-anti-fabrication-source-obligation-parity-red",
@@ -9962,6 +11797,11 @@
           "total-authority-types-impossible-state-elimination-catch-all-claim-state-red",
           "total-authority-types-impossible-state-elimination-empty-list-accepted-then-rechecked-red",
           "total-authority-types-impossible-state-elimination-impossible-state-represented-only-by-convention-red",
+          "total-authority-types-impossible-state-elimination-absolute-receipt-write-without-output-authority-red",
+          "total-authority-types-impossible-state-elimination-broad-exception-without-owner-red",
+          "total-authority-types-impossible-state-elimination-generic-fallback-overclaim-red",
+          "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+          "total-authority-types-impossible-state-elimination-session-history-label-without-owner-red",
           "total-authority-types-impossible-state-elimination-nullable-required-authority-red",
           "total-authority-types-impossible-state-elimination-optional-candidate-digest-red",
           "total-authority-types-impossible-state-elimination-panic-on-malformed-authority-input-red",
@@ -9982,6 +11822,10 @@
           "trust-boundary-abuse-path-failure-path-coverage-stale-registry-proof-accepted-red",
           "trust-boundary-abuse-path-failure-path-coverage-trust-boundary-change-without-abuse-path-red",
           "typed-records-over-prose-source-obligation-parity-red",
+          "typed-records-over-prose-raw-downstream-json-authority-rejected-red",
+          "typed-records-over-prose-raw-map-authority-rejected-red",
+          "typed-records-over-prose-raw-path-authority-rejected-red",
+          "typed-records-over-prose-raw-string-authority-rejected-red",
           "ui-claim-without-product-cohesion-waiver",
           "unsupported-install-publication-text-claim",
           "unsupported-market-place-release-text-claim",
@@ -10003,6 +11847,8 @@
           "validator-theater-miswire-resistance-fixture-name-only-pass-red",
           "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
           "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
+          "validator-theater-miswire-resistance-fallback-overclaim-red",
+          "validator-theater-miswire-resistance-generic-output-only-red",
           "validator-theater-miswire-resistance-stale-validator-receipt-accepted-red",
           "validator-theater-miswire-resistance-swallowed-validator-error-red",
           "validator-theater-miswire-resistance-validator-path-present-but-never-called-red",
@@ -10039,8 +11885,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1259,
-      "minItems": 1259,
+      "maxItems": 1280,
+      "minItems": 1280,
       "type": "array",
       "uniqueItems": true
     },

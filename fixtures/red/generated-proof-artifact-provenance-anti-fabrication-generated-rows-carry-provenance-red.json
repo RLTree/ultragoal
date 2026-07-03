@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "generated-proof-artifact-provenance-anti-fabrication-generated-rows-carry-provenance-red",
+  "expected_failure": {
+    "check_id": "generated-proof-artifact-provenance-anti-fabrication",
+    "error": "mandatory_law_specific_guard_not_enforced:generated-proof-artifact-provenance-anti-fabrication:generated_rows_carry_provenance"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/generated-proof-artifact-provenance-anti-fabrication.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/generated_rows_carry_provenance",
+      "value": false
+    }
+  ],
+  "notes": "generated-proof-artifact-provenance-anti-fabrication must fail when generated_rows_carry_provenance is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/generated_rows_carry_provenance",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/generated_rows_carry_provenance",
+      "expectation": "mandatory_law_specific_guard_not_enforced:generated-proof-artifact-provenance-anti-fabrication:generated_rows_carry_provenance"
+    }
+  ]
+}

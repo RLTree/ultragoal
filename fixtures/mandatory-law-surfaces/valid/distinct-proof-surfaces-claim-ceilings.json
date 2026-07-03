@@ -1,6 +1,10 @@
 {
   "behavior_failure_modes": [
-    "distinct_proof_surfaces_claim_ceilings_source_obligation_parity"
+    "distinct_proof_surfaces_claim_ceilings_source_obligation_parity",
+    "distinct_proof_surfaces_claim_ceilings_source_local_proof_substituted_for_live_surface",
+    "distinct_proof_surfaces_claim_ceilings_tests_substituted_for_product_behavior",
+    "distinct_proof_surfaces_claim_ceilings_receipt_existence_substituted_for_behavior",
+    "distinct_proof_surfaces_claim_ceilings_wrong_proof_surface"
   ],
   "claim_ceiling_guard": "withholds_surface_substitution",
   "enforcement_status": "deterministic_fail_closed",
@@ -13,10 +17,18 @@
   "foundational_trace_id": "distinct-proof-surfaces-claim-ceilings",
   "law_id": "distinct-proof-surfaces-claim-ceilings",
   "law_specific": {
-    "source_obligation_parity": true
+    "source_obligation_parity": true,
+    "source_local_proof_substituted_for_live_surface": true,
+    "tests_substituted_for_product_behavior": true,
+    "receipt_existence_substituted_for_behavior": true,
+    "wrong_proof_surface": true
   },
   "red_fixture_ids": [
-    "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red"
+    "distinct-proof-surfaces-claim-ceilings-source-obligation-parity-red",
+    "distinct-proof-surfaces-claim-ceilings-source-local-proof-substituted-for-live-surface-red",
+    "distinct-proof-surfaces-claim-ceilings-tests-substituted-for-product-behavior-red",
+    "distinct-proof-surfaces-claim-ceilings-receipt-existence-substituted-for-behavior-red",
+    "distinct-proof-surfaces-claim-ceilings-wrong-proof-surface-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "distinct-proof-surfaces-claim-ceilings",

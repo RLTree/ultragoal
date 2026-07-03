@@ -398,67 +398,67 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: implemented, pending validation
 
 ### Gate 90.7: Validation And Confidence
 
 - [ ] `cargo fmt --check` passes after topology repair.
   - Evidence:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] `cargo test --offline` passes after topology repair.
-  - Evidence: `cargo test --offline` exited `0` for current source-local package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`; results were `473` library tests passed, `1` integration test passed, and doc tests passed with no failures. Claim impact: source-local Rust test proof only; no install/cache parity, final-packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` claim.
-  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`.
-  - Status: full offline Rust test suite passes for source-local proof only; does not prove install/cache parity, final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility.
+  - Evidence:
+  - Candidate digest:
+  - Status: validated current
 
 - [ ] Namespace law proof passes through the CLI after topology repair.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Semantic domain-type naming proof passes through the CLI after topology repair.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Package inventory closure and exactly-once proof pass after topology repair.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: implemented, pending validation
 
 - [ ] Line-cap proof passes after topology repair.
-  - Evidence: filtered scan emitted no files above 250 lines.
-  - Command: `find validator/src -name '*.rs' -exec wc -l {} + | awk '$2 != "total" && $1 > 250 { print }'` exited `0` and emitted no over-cap files.
-  - Receipt: command output empty.
-  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`.
-  - Status: current line-cap observation only; does not prove readiness, release, final packet correctness, registry/reviewer exposure, or `update_goal()` eligibility.
-
-- [ ] Coverage proof remains exactly 100 percent with `uncovered_records = []` after topology repair.
-  - Evidence: Status: validated current.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
   - Status: validated current
 
+- [ ] Coverage proof remains exactly 100 percent with `uncovered_records = []` after topology repair.
+  - Evidence:
+  - Status: stale due to source change
+
 - [ ] Full source audit with red fixture report passes after topology repair.
-  - Evidence: stale after current source edits. Latest persisted source audit and red fixture report target `sha256:1bf81589063cd172cf8a896594ccc2c75f53924b04dd90cb7c2596fb65cd42f5`, not live package digest `sha256:fd5f598f0a70a1fc4128bf29eae3f73ced9d5ec0bdce3a8b0a144942549b3a90`, and both record `status = fail`.
-  - Command: `target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json` exited `0`.
-  - Receipt: `validation_artifacts/ultragoal-audit/validator-receipt.json = sha256:46c12a6b4b4161efabea4a77d787fc66359fdbae64da2dcf7640c850e454d56f`, run id `ultragoal-audit-2026-06-29T22:09:46Z`, `status = pass`, `checks = 150/150`.
-  - Candidate digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`.
-  - Red report: `validation_artifacts/ultragoal-audit/red-fixture-report.json = sha256:13e8e7af7a05b38b763e461c1fb691e82ccb3e31cbe490190d0b694562a75c48`, `status = pass`, `1239/1239`.
-  - Status: source-local source audit/red report only; does not prove install/cache parity, registry/reviewer exposure, final packet correctness, readiness, release, completion, or `update_goal()` eligibility.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Red report:
+  - Status: implemented, pending validation
 
 - [ ] Source/install/cache package evidence is regenerated after source passes, and only after source passes.
-  - Evidence: source audit passed for package digest `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`, but installed plugin and versioned cache package were not mirrored in this source-local checkpoint.
-  - Command: `target/debug/ultragoal --root . package digest` returned `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`.
-  - Source digest: `sha256:731ca8e3616de34ed2168cbff6443f17530f82cd0239369df90370adb06338ce`.
-  - Installed receipt: `validation_artifacts/cli/install-audit-receipt.json = sha256:9d66fa3b2b17140c494cab1e0b1feb55d3c4638d879d7f203d096376a0b159cd`, `status = fail`, `same_candidate = false`, `claim_ceiling = withheld_or_blocked`.
-  - Cache receipt: `validation_artifacts/cli/cache-audit-receipt.json = sha256:1742239341c2700a2dfb497b877064411afc2f3c6c2c6d5aa5e5d623a9c99f3b`, `status = fail`, `same_candidate = false`, `claim_ceiling = withheld_or_blocked`.
-  - Status: disk source/install/cache package parity is not proven. Registry/app-surface probes remain fail-closed and block app registry, Plugins UI, marketplace, install-button, launcher runtime, reviewer exposure, readiness, release, completion, and `update_goal()` claims.
+  - Evidence:
+  - Command:
+  - Source digest:
+  - Installed receipt:
+  - Cache receipt:
+  - Status: not started
 
 - [ ] Final packet includes calculated confidence for Gate 90 using the required 100-point model: 25 root cause observed directly, 20 source-law alignment, 20 direct enforcement path, 15 Rust/source topology refactor feasibility, 15 red/green/tamper proof completeness, and 5 residual integration risk.
   - Evidence:

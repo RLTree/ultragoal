@@ -9,7 +9,9 @@
     "validator_theater_miswire_resistance_red_fixture_fails_for_wrong_reason",
     "validator_theater_miswire_resistance_swallowed_validator_error",
     "validator_theater_miswire_resistance_completion_claim_with_only_validator_theater_evidence",
-    "validator_theater_miswire_resistance_cli_pass_without_parent_source_runtime_verification"
+    "validator_theater_miswire_resistance_cli_pass_without_parent_source_runtime_verification",
+    "validator_theater_miswire_resistance_generic_output_only",
+    "validator_theater_miswire_resistance_fallback_overclaim"
   ],
   "claim_ceiling_guard": "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance",
   "enforcement_status": "deterministic_fail_closed",
@@ -30,7 +32,9 @@
     "stale_validator_receipt_accepted": true,
     "swallowed_validator_error": true,
     "validator_path_present_but_never_called": true,
-    "wrong_check_pass": true
+    "wrong_check_pass": true,
+    "generic_output_only": true,
+    "fallback_overclaim": true
   },
   "red_fixture_ids": [
     "validator-theater-miswire-resistance-row-shape-only-mechanization-red",
@@ -42,7 +46,9 @@
     "validator-theater-miswire-resistance-red-fixture-fails-for-wrong-reason-red",
     "validator-theater-miswire-resistance-swallowed-validator-error-red",
     "validator-theater-miswire-resistance-completion-claim-with-only-validator-theater-evidence-red",
-    "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red"
+    "validator-theater-miswire-resistance-cli-pass-without-parent-source-runtime-verification-red",
+    "validator-theater-miswire-resistance-generic-output-only-red",
+    "validator-theater-miswire-resistance-fallback-overclaim-red"
   ],
   "schema": "harness-ultragoal.mandatory-law-surface-receipt.v1",
   "source_obligation_id": "validator-theater-miswire-resistance",

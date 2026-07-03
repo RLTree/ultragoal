@@ -35,7 +35,7 @@ fn mandatory_law_validation_parse_and_scheduler_edges_are_bounded() {
 }
 
 #[test]
-fn mandatory_law_validation_failure_edges_and_absolute_receipt_are_observable() {
+fn mandatory_law_validation_failure_edges_and_external_claim_output_are_rejected() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-edges");
     super::create_law_package(&root);
     let missing = validate(
@@ -83,8 +83,9 @@ fn mandatory_law_validation_failure_edges_and_absolute_receipt_are_observable() 
         receipt: receipt.clone(),
         jobs: Some(1),
     };
-    assert_eq!(run(&root, &command).expect("absolute receipt"), 0);
-    assert!(receipt.is_file());
+    let err = run(&root, &command).expect_err("absolute claim receipt rejected");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(!receipt.is_file());
 
     let dispatch = crate::parse_command(&[
         "mandatory-law".to_string(),

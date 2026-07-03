@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "authority-source-binding-parser-boundary-projection-or-catalog-classification-red",
+  "expected_failure": {
+    "check_id": "authority-source-binding",
+    "error": "mandatory_law_specific_guard_not_enforced:authority-source-binding:parser_boundary_projection_or_catalog_classification"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/authority-source-binding.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/parser_boundary_projection_or_catalog_classification",
+      "value": false
+    }
+  ],
+  "notes": "authority-source-binding must fail when parser_boundary_projection_or_catalog_classification is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/parser_boundary_projection_or_catalog_classification",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/parser_boundary_projection_or_catalog_classification",
+      "expectation": "mandatory_law_specific_guard_not_enforced:authority-source-binding:parser_boundary_projection_or_catalog_classification"
+    }
+  ]
+}

@@ -4,17 +4,12 @@ use serde_json::json;
 #[test]
 fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
     let root = prepare_root("openai-run-paths");
-    let config_receipt = root.join("validation_artifacts/openai/config-run.json");
-    let config_args = [
-        "openai",
-        "config",
-        "prove",
-        "--receipt",
-        config_receipt.to_str().expect("config receipt path"),
-    ]
-    .into_iter()
-    .map(ToString::to_string)
-    .collect::<Vec<_>>();
+    let config_receipt_rel = "validation_artifacts/openai/config-run.json";
+    let config_receipt = root.join(config_receipt_rel);
+    let config_args = ["openai", "config", "prove", "--receipt", config_receipt_rel]
+        .into_iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
     let config = crate::cli::openai::parse(&config_args)
         .expect("parse config")
         .expect("config command");
@@ -58,16 +53,15 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "--policy",
         bad_policy.to_str().expect("policy path"),
         "--receipt",
-        root.join("validation_artifacts/openai/config-bad-run.json")
-            .to_str()
-            .expect("bad config receipt"),
+        "validation_artifacts/openai/config-bad-run.json",
     ]);
     assert_eq!(
         crate::cli::openai::run(&root, &bad_config).expect("run bad config"),
         1
     );
 
-    let call_receipt = root.join("validation_artifacts/openai/call-run.json");
+    let call_receipt_rel = "validation_artifacts/openai/call-run.json";
+    let call_receipt = root.join(call_receipt_rel);
     let call = parse_openai(&[
         "openai",
         "call",
@@ -77,14 +71,15 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "--output-digest",
         &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "--receipt",
-        call_receipt.to_str().expect("call receipt path"),
+        call_receipt_rel,
     ]);
     assert_eq!(crate::cli::openai::run(&root, &call).expect("run call"), 0);
     assert!(call_receipt.is_file());
 
     let canonical_call_receipt = root.join("validation_artifacts/openai/call-receipt.json");
     std::fs::copy(&call_receipt, &canonical_call_receipt).expect("copy call receipt");
-    let output_receipt = root.join("validation_artifacts/openai/output-run.json");
+    let output_receipt_rel = "validation_artifacts/openai/output-run.json";
+    let output_receipt = root.join(output_receipt_rel);
     let output = parse_openai(&[
         "openai",
         "output",
@@ -92,7 +87,7 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "--parsed-output-digest",
         &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "--receipt",
-        output_receipt.to_str().expect("output receipt path"),
+        output_receipt_rel,
     ]);
     assert_eq!(
         crate::cli::openai::run(&root, &output).expect("run output"),

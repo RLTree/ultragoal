@@ -1,0 +1,34 @@
+{
+  "schema": "harness-ultragoal.red-packet.v1",
+  "id": "total-authority-types-impossible-state-elimination-private-path-claim-output-red",
+  "expected_failure": {
+    "check_id": "total-authority-types-impossible-state-elimination",
+    "error": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:private_path_claim_output"
+  },
+  "base_fixture_path": "fixtures/mandatory-law-surfaces/valid/total-authority-types-impossible-state-elimination.json",
+  "json_patch": [
+    {
+      "op": "replace",
+      "path": "/law_specific/private_path_claim_output",
+      "value": false
+    }
+  ],
+  "notes": "total-authority-types-impossible-state-elimination must fail when private_path_claim_output is not enforced.",
+  "materialization": {
+    "expected_validation_layer": "package",
+    "post_patch_schema_valid": true,
+    "first_failure_must_match_expected": true
+  },
+  "preconditions": [
+    {
+      "path": "/law_specific/private_path_claim_output",
+      "exists": true
+    }
+  ],
+  "postconditions": [
+    {
+      "path": "/law_specific/private_path_claim_output",
+      "expectation": "mandatory_law_specific_guard_not_enforced:total-authority-types-impossible-state-elimination:private_path_claim_output"
+    }
+  ]
+}
