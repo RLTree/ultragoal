@@ -19,12 +19,18 @@ record the gap before acting.
 
 | Task shape | Load |
 | --- | --- |
-| File names, directories, codemap, routing, context budget | `agent-standards/01-namespace-and-progressive-disclosure.md` |
+| File names, directories, modules, functions, symbols, ids, artifact paths, codemap, routing, context budget | `agent-standards/01-namespace-and-progressive-disclosure.md` |
 | Tests, parsing, validators, mechanical checks, feedback loops | `agent-standards/02-boundaries-validation-and-enforcement.md` |
 | ExecPlans, macro-lanes, worktrees, parent orchestration | `agent-standards/03-execplans-worktrees-and-orchestration.md` |
 | Security, reliability, product surfaces, human attention | `agent-standards/04-security-reliability-and-product-cohesion.md` |
 | Review teams, proof, claim ceilings, completion reports | `agent-standards/05-review-and-completion.md` |
 | Recurring friction, standards gardening, self-improvement | `agent-standards/06-standards-gardening.md` |
+| CLI authority, receipts, coverage authority, source/install/cache/app proof separation | `agent-standards/07-cli-authority-and-proof-surfaces.md` |
+| Observability, current state, next action, repair loops, telemetry, evals | `agent-standards/08-observability-and-repair-loop.md` |
+| Product Success Contract, Product Fitness, Product Cohesion, quality-in-use | `agent-standards/09-product-success-and-quality-in-use.md` |
+| Plugin activation, retrofit, package inventory, distribution surfaces, clean-room proof | `agent-standards/10-plugin-activation-and-distribution-surfaces.md` |
+| Research sources, improvement loop, quality gates, capability gaps, authority graph | `agent-standards/11-research-improvement-and-quality-gates.md` |
+| Tool contracts, risk tiers, Rust/toolchain substrate, dependency and privacy boundaries | `agent-standards/12-tool-risk-and-runtime-substrates.md` |
 
 ## Non-Negotiable Entry Rules
 
@@ -33,26 +39,38 @@ record the gap before acting.
 - Parse external inputs at boundaries before acting on them.
 - Bind proof to fresh operation identity and artifact digests; metadata alone
   is not proof.
+- Harness law claims are computed or verified by the canonical CLI authority
+  kernel. Prose, checklist rows, reviewer agreement, copied receipts, packet
+  existence, source-only checks, install proof, or cache proof cannot close
+  another surface.
 - State transitions for queues, approvals, dependency release, and closure must
   be explicit and forward-safe.
 - Every active repo file needs a current operational purpose. If the purpose
   cannot be justified, remove the file instead of archiving it in the repo.
+- Names are part of the product interface. Paths, modules, functions, helpers,
+  tests, ids, receipts, fixtures, generated artifacts, and artifact path
+  segments must describe product behavior or domain responsibility, not the
+  goal, phase, slice, proof chore, or session that caused them to exist.
 - Use self-contained ExecPlans for long-running or multi-lane work.
-- Codex app worktree threads are preferred owners for substantial macro-lanes
-  that need visibility, resumability, or handoff.
+- Codex app worktree threads are preferred owners only when the active contract
+  permits worktree lanes. Phase gates and forbidden-action lists override this
+  preference.
 - Documentation freshness is a completion obligation. Load
   `agent-standards/01-namespace-and-progressive-disclosure.md` when work may
   affect repo-owned docs or generated docs.
-- Coverage proof is a completion obligation when a claim cites coverage, test
-  completeness, readiness, or production readiness. Load
-  `agent-standards/02-boundaries-validation-and-enforcement.md`.
+- Coverage proof is a completion obligation for material source claims. Load
+  `agent-standards/02-boundaries-validation-and-enforcement.md` and
+  `agent-standards/07-cli-authority-and-proof-surfaces.md`.
 - Future Codex app worktree lane owners default to `gpt-5.5` with `low`
   reasoning unless a lane contract justifies higher reasoning. Material
   reviewers still use `gpt-5.5` with `high`.
 - Branch first, worktree second. A missing branch ref is an orchestration
   failure.
-- Product-surface claims require Product Cohesion proof; engine proof alone is
-  not enough.
+- Product-surface claims require Product Success Contract lineage, Product
+  Fitness proof, Product Cohesion proof when journey coherence is claimed, and
+  same-surface proof at the declared evidence level. Engine proof, Product
+  Cohesion alone, Product Fitness alone, reviewer agreement, install success,
+  or smoke tests are forbidden substitutes.
 - Material review uses the four merged canonical personas with the required model,
   reasoning, full-scope, fresh-context cadence.
 - Do not claim done, ready, fixed, passing, complete, or production-ready

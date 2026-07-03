@@ -25,6 +25,8 @@ credentials, and mutable runtime state.
 - Codex app-managed worktree threads are the preferred owners for ExecPlan
   macro-lanes that should be visible, resumable, and independently operable in
   the Codex app.
+- This preference is conditional. If the active goal, spine, parent contract,
+  or phase order blocks worktrees, no standard here permits launching them.
 - Future Codex app worktree lane owners default to `gpt-5.5` with `low`
   reasoning to control cost. Raise reasoning only when the lane contract names
   a concrete risk that requires it. Material reviewers remain separate and use
@@ -74,6 +76,10 @@ Organize substantial work around deliverables and proof, not chat sessions.
 - If advancing a dependent worktree would overwrite dirty scoped work, create
   conflicts, or require semantic choices, classify it as lane-local
   reconciliation and steer the lane owner to resolve it in lane context.
+- `PLANS.md` is stable ExecPlan law, not active project state. Worker ids,
+  phase progress, backlog rows, receipt state, and completion claims belong in
+  active ExecPlans, lane registries, verification backlogs, receipts, or
+  completion manifests.
 
 ## Lane Completion Message
 

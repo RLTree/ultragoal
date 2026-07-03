@@ -15,6 +15,12 @@ agent-standards/03-execplans-worktrees-and-orchestration.md
 agent-standards/04-security-reliability-and-product-cohesion.md
 agent-standards/05-review-and-completion.md
 agent-standards/06-standards-gardening.md
+agent-standards/07-cli-authority-and-proof-surfaces.md
+agent-standards/08-observability-and-repair-loop.md
+agent-standards/09-product-success-and-quality-in-use.md
+agent-standards/10-plugin-activation-and-distribution-surfaces.md
+agent-standards/11-research-improvement-and-quality-gates.md
+agent-standards/12-tool-risk-and-runtime-substrates.md
 agent-standards/enforcement.json
 agent-standards/enforcement.tsv
 agent-standards/enforcement-audit.tsv

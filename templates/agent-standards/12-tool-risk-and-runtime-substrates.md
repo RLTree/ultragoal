@@ -1,0 +1,53 @@
+# Tool Risk And Runtime Substrates
+
+## Tool Contract
+
+Every tool and adapter is a governed product surface.
+
+- Each tool declares owner, risk tier, idempotency, auth scope, input schema,
+  output schema, approval need, telemetry, preconditions, postconditions,
+  failure semantics, timeout/retry/backoff policy, and claim impact.
+- Risk tiers include read-only, local write, local execution,
+  external-live bounded, external write, destructive or mutating, and
+  sensitive or secret-bearing.
+- Live external probes require bounded execution and explicit claim ceilings
+  when unavailable. Destructive or mutating actions require typed approval
+  boundaries.
+
+## Runtime Substrate
+
+Runtime claims bind to exact tools and environments.
+
+- Rust, TypeScript, shell, browser, app, model, and workflow claims name the
+  command surface, toolchain, versions, workspace, cache mode, target dirs,
+  lockfiles, generated artifacts, and claim ids they affect.
+- Raw Cargo, pnpm, tsc, eslint, vitest, Playwright, Docker, model, or workflow
+  output is observation until the CLI converts it into typed digest-bound proof
+  with claim ceiling.
+- Hidden caches, global config, warm-cache timing, stale target dirs, or
+  undeclared environment variables cannot support no-cache, clean-room,
+  performance, or release claims.
+
+## Supply Chain
+
+Dependencies are claims about maintenance and trust.
+
+- New dependencies need license, provenance, lockfile, package age or
+  maintenance signal, vulnerability or audit posture, runtime cost, build cost,
+  attack surface, and why an in-repo implementation is not better.
+- SBOM, signing, image pinning, package integrity, and registry/cache receipts
+  are required when the claim surface depends on them.
+- Agents may not add production dependencies or external services without a
+  validator-visible trust and rollback story.
+
+## Privacy And Retention
+
+Tools may observe sensitive data; they may not casually persist it.
+
+- Secrets, credentials, tokens, cookies, Authorization headers, database URLs,
+  private paths, raw traces, raw prompts, raw transcripts, screenshots, videos,
+  message bodies, and local session logs require redaction, minimization,
+  retention policy, deletion or GC path, and package-inclusion guard.
+- Model-call and external-tool evidence should use categories, digests, counts,
+  redacted snippets, and leak summaries unless the contract explicitly requires
+  bounded raw content.

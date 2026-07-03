@@ -7,7 +7,8 @@ CLI commands, and state roots must explain domain responsibility before a file
 is opened.
 
 - Paths answer "what does this do" by themselves. Avoid junk drawers such as
-  `utils`, `helpers`, `misc`, and vague `common` directories for domain logic.
+  `utils`, `helpers`, `misc`, `support`, `shared`, `lib`, and vague `common`
+  or `services` directories for domain logic.
 - Name surfaces by the operator or reader's domain task, not implementation
   accidents or historical shims.
 - Name source paths, modules, functions, helpers, tests, ids, receipts,
@@ -27,10 +28,21 @@ is opened.
 
 Agents navigate by names before they read code. A name is compliant only when a
 fresh agent can infer the product purpose from it without knowing the current
-goal, phase, receipt, or parent-session history.
+goal, phase, receipt, proof chore, reviewer finding, or parent-session history.
+
+This law applies to every agent-facing name, not just directories:
+
+- source roots, directories, filenames, generated roots, receipt roots, and
+  artifact path segments;
+- Rust, TypeScript, Python, shell, or other modules and nested modules;
+- public and private functions, helper functions, test functions, types, enum
+  variants, constants, and local authority identifiers;
+- CLI command ids, check ids, validator ids, fixture ids, schema ids, receipt
+  ids, generated inventory ids, and package inventory paths.
 
 - Bad: `observe/fitting`, `observe/production_proof`, `audit/gate92`,
-  `phase4_rebind`, `progress/checkpoint`, `helpers`, `utils`.
+  `phase4_rebind`, `progress/checkpoint`, `internal_coverage`,
+  `helpers`, `utils`, `lib`, `services`.
 - Better: `observe/command_roundtrip`,
   `observe/telemetry_reconciliation`,
   `audit/observability/command_inventory`,
@@ -48,6 +60,37 @@ goal, phase, receipt, or parent-session history.
 - Compatibility aliases belong at parser or schema boundaries. The
   implementation below an alias still needs product-semantic modules and
   function names.
+
+### Violation Definition
+
+A name violates the law when it primarily describes why the work exists in the
+goal process instead of what the product surface does.
+
+Violations include:
+
+- goal, gate, phase, slice, lane, workstream, checkpoint, backlog, progress,
+  TODO, WIP, reviewer, parent-session, or receipt-churn vocabulary used as a
+  source namespace;
+- evidence-purpose names such as `production_proof`, `claim_closure`,
+  `readiness_packet`, or `finalization_work` when the file actually performs a
+  product behavior like command execution, receipt dereference, trace query,
+  cache invalidation, or package inventory;
+- generic buckets such as `helpers`, `utils`, `common`, `misc`, `shared`, or
+  `support` for domain logic unless the parent namespace and file names make
+  the behavior specific. `lib`, `services`, `core`, and `internal_*` are also
+  violations when they hide mixed responsibilities, historical coverage waves,
+  or product behavior that should be named directly;
+- excessive nesting, root-level clutter, mixed-domain folders, and generated
+  or mechanical exceptions without generator provenance;
+- compatibility or public command vocabulary leaking inward from parser/schema
+  boundaries into implementation modules, helper functions, fixtures, or
+  artifact paths;
+- allowlists that bless bad names because they appear in a current goal,
+  checklist, receipt, or compatibility field.
+
+The repair is to rename toward product behavior or domain responsibility. If a
+non-semantic name is forced by an external contract, keep it at the boundary,
+name that contract, and route immediately into product-semantic code.
 
 ## Purpose Or Removal Law
 
@@ -114,3 +157,15 @@ plans, specs, check entry points, and proof locations.
   proof live in version control or in named generated artifacts.
 - What an agent cannot discover and load in context effectively does not
   exist.
+
+## Size And Shape
+
+File size is part of semantic legibility.
+
+- Prefer 100 to 200 lines for hand-authored source and standards modules.
+- Treat 250 lines as a hard review point for hand-authored files unless the
+  repo-specific contract defines a stricter limit.
+- Split by product behavior before adding comments that explain why a bloated
+  file is still navigable.
+- Generated files may exceed the cap only when the generator, source inputs,
+  and regeneration command are discoverable.

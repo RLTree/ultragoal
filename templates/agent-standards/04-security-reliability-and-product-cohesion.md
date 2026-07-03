@@ -9,6 +9,9 @@ Security rules apply to agent work even when the code path is "only local" or
   permission, financial, or production-impacting actions.
 - Do not commit raw prompts, transcripts, message bodies, secrets,
   credentials, or personal data into fixtures, logs, ledgers, or examples.
+- Do not leak private local paths, raw traces, screenshots, videos, model
+  prompts, session logs, API keys, tokens, cookies, Authorization headers,
+  database URLs, or unbounded query output into package-visible artifacts.
 - Validators, reviewers, and review prompts do not open, persist, or quote raw
   private transcript, audio, prompt, message, or event payloads as routine
   proof. They may use category-only status, counts, digests, redacted snippets,
@@ -51,6 +54,9 @@ is not enough.
 - Recording, replay, transcript, video-alignment, and live UI claims are
   product proof surfaces. CLI availability and fixture success may support
   setup confidence, but they do not prove those product surfaces.
+- Product Cohesion proves journey coherence. It does not prove product success
+  by itself. Product success claims need Product Success Contract lineage,
+  Product Fitness, required quality-in-use evidence, and same-surface proof.
 
 ## Plugin Cohesion Law
 

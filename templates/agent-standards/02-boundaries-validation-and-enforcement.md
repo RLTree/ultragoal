@@ -5,21 +5,23 @@
 Coverage is an accountability mechanism, not a badge.
 
 - Every behavior change needs executable evidence.
-- If the repo adopts 100 percent line, branch, function, region, UI-state, or
-  artifact coverage, that means exactly 100 percent. Uncovered records are work
-  owed now or mechanically documented tooling limits.
-- If the repo is below 100 percent, name the current floor, the ratchet rule,
-  owner, reason, blocker or tech-debt record, and the report that decides
-  whether the floor was met.
+- Material source claims require exact current coverage unless the claim
+  ceiling is explicitly withheld. Exact means 100 percent for each required
+  dimension and `uncovered_records = []` in the authoritative receipt.
+- Coverage scope is owned by the coverage manifest, repo walk, changed-file
+  coupling, receipt freshness, policy mutation checks, and fast/full gate
+  separation. Agents cannot narrow scope or copy proof to close a claim.
 - Lower-than-100 coverage cannot support complete, ready, done,
-  production-ready, or release claims. Use a withheld claim ceiling until the
-  ratchet debt is closed.
+  production-ready, release, material-signoff, or phase-advancement claims. Use
+  a withheld claim ceiling until the debt is closed.
 - Coverage receipts name the command, tool, target paths, measured dimensions,
   percentage, floor, uncovered records, timestamp, exclusions, and claim ceiling.
 - Generated, vendor, and external exclusions require a mechanical exclude list
   with rationale. Exclusions are not counted as covered.
 - Do not park "proven unreachable" code as a resting state. Delete it,
   restructure it out of existence, or add fault-injection coverage.
+- Do not add hit-only tests, generated-code relabeling, blanket exclusions, or
+  dead fallback tests to inflate coverage. Coverage proves behavior.
 - Unit tests, fixtures, mocks, generated examples, and smoke tests prove only
   the surface they execute. They do not prove live runtime, UI, external
   integration, or product usefulness.
@@ -96,6 +98,24 @@ or documented blockers. Prose is the fallback, not the mechanism.
 - Repeated generated-artifact integrity misses need domain validators that
   recompute behavior-affecting derived values from canonical inputs whenever
   that is practical.
+- Semantic namespace failures are deterministic enough to enforce. Validators
+  must inspect paths and in-file symbols, including modules, nested modules,
+  functions, helpers, tests, types, enum variants, constants, command ids,
+  check ids, validator ids, fixture ids, schema ids, receipt ids, generated
+  inventory ids, package inventory paths, and artifact path segments.
+- Namespace validators must combine token checks with contextual classification.
+  A static banned-word list is not enough, and a broad allowlist cannot bless
+  goal-work names such as `fitting`, `production_proof`, `gate92`,
+  `phase4_rebind`, `checkpoint_progress`, or `fit_slice` when they describe
+  current work instead of product behavior.
+- Red, green, and tamper fixtures must prove the distinction between product
+  vocabulary and goal vocabulary. For example, `fit-repo` can be valid as a
+  user-facing product command while `fit_command`, `fit_path`, `fit_goal`, and
+  `fit_slice` remain violations.
+- A namespace failure must be agent-remediating: report the offending path or
+  symbol, offending segment, why it is non-semantic, the product behavior class
+  it should name instead, whether a typed boundary exception is possible, and
+  the claims withheld until repair.
 
 ## State Transition Integrity
 

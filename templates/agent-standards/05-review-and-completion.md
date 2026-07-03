@@ -10,6 +10,9 @@ evidence.
 - No proof substitution: CLI proof does not prove UI behavior; mock proof does
   not prove live behavior; target fixtures do not prove external products; old
   receipts do not prove the current package.
+- Source proof, install proof, cache proof, app-registry proof, reviewer
+  exposure proof, final-packet proof, and update-goal proof are separate
+  surfaces. A pass on one surface cannot close another.
 - Missing receipts, stale digests, blocked approvals, dirty worktrees, absent
   required commands, or unreachable proof are `REVISE_BEFORE_NEXT_PHASE` or
   `BLOCKED`, not non-blocking notes.
@@ -74,6 +77,12 @@ coverage, missing deterministic checks, blocked review or approval, dirty
 worktrees, absent receipts, stale generated authorities, or insufficient live
 proof must be called `BLOCKED`, `REVISE_BEFORE_NEXT_PHASE`, or explicitly
 unsupported.
+
+Final packets, archives, review targets, transaction finalization, and
+update-goal eligibility must fail closed on stale evidence, forged proof,
+private proof paths, missing Product Success lineage, missing same-surface
+proof, circular dependencies, altered claim ceilings, or packet claims added
+outside required claim ids.
 
 Production-use proof is required before production-ready claims. A mechanic or
 product surface is not complete until it has produced useful output on a real,

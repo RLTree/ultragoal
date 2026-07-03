@@ -20,8 +20,17 @@ Act on high-signal friction immediately when it is likely to recur:
   routing, hook, or future-dated payloads into ordinary work;
 - durable repo hygiene drift where ephemeral worktree, cache, debug, or replay
   state appears in normal diffs;
+- semantic namespace drift where names describe current goal work, proof
+  chores, phases, slices, fitting status, reviewer history, or session context
+  instead of product behavior or domain responsibility;
+- agents repeatedly needing chat context to understand why a path, module,
+  function, helper, test, id, receipt, fixture, or artifact path segment exists;
 - repeated user micromanagement required for a plugin flow that should be
   agent-owned.
+- repeated opaque failures, stale or wrong-digest escapes, bad tool calls, bad
+  repairs, slow workflows, reviewer findings, security near misses, product
+  proof substitutions, docs drift, architecture violations, and lane
+  regressions that should become evals, fixtures, laws, or validators.
 
 Wait for repeated evidence before acting on low-signal friction:
 
@@ -57,6 +66,16 @@ Choose the smallest durable surface that solves the failure class:
 Memory, wiki, replay, and archive quality fixes should prefer retrieval
 thresholds, suppression rules, scrubbers, and quality receipts over always-on
 prompt hooks.
+
+Semantic namespace fixes should prefer product-behavior renames plus validator
+fixtures over explanatory comments. If the only way to understand a name is to
+read a goal document, receipt ledger, or parent-session steer, the name is not
+durable agent infrastructure yet.
+
+Improvement loops must close the chain from observed failure to durable law:
+trace, feedback, cluster, eval or fixture, validator or standard, repair,
+before/after telemetry, and promotion. Repeated friction cannot remain only in
+chat, memory, or a reviewer note.
 
 ## Output
 
