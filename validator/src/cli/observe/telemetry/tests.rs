@@ -81,7 +81,7 @@ fn claim_repairs_cover_current_failure_classes() {
             "fail",
             Some("observed telemetry candidate digest mismatch")
         ),
-        "rerun target command on the current candidate before claiming observability fit"
+        "rerun target command on the current candidate before claiming observability command telemetry"
     );
     assert_eq!(
         claims::next_repair_for(command(ObserveOperation::LogsQuery).operation, "pass", None),

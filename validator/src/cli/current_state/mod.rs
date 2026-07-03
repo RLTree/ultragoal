@@ -133,12 +133,13 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
             .cloned()
             .unwrap_or(Value::Null);
         let id = text(&incomplete, "id", "observability_control_board");
+        let (next_repair, narrow_rerun) = observability_repair(id);
         return json!({
             "id": id,
             "surface": text(&incomplete, "family", "observability"),
             "why_failed": format!("observability control board is {}", text(board, "status", "missing")),
-            "next_repair": format!("extend CommandObservabilitySpec or SurfaceObservabilitySpec for {id}, then run ultragoal observe fit --command \"{id}\" and inspect same-candidate query proof"),
-            "narrow_rerun": format!("ultragoal observe fit --command \"{id}\""),
+            "next_repair": next_repair,
+            "narrow_rerun": narrow_rerun,
             "broad_rerun": "source audit once after narrow observable proof passes"
         });
     }
@@ -165,6 +166,25 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
         }
     }
     json!({"id": "none", "next_repair": "none", "narrow_rerun": "none"})
+}
+
+fn observability_repair(id: &str) -> (String, String) {
+    let narrow_rerun = format!("ultragoal observe command-roundtrip --command \"{id}\"");
+    if crate::audit::observability::specs::command(id).is_some() {
+        (
+            format!(
+                "run {narrow_rerun} and inspect same-candidate logs metrics traces and explain proof"
+            ),
+            narrow_rerun,
+        )
+    } else {
+        (
+            format!(
+                "extend CommandObservabilitySpec or SurfaceObservabilitySpec for {id}, then run {narrow_rerun} and inspect same-candidate query proof"
+            ),
+            narrow_rerun,
+        )
+    }
 }
 
 fn git_status(root: &Path) -> Value {

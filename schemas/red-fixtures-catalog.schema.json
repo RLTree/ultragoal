@@ -8798,7 +8798,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "plugin-manifest-stale-active-proof-resource"
+            "const": "plugin-manifest-stale-active-artifact-resource"
           }
         },
         "required": [

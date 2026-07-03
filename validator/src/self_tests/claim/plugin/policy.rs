@@ -128,8 +128,8 @@ fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges(
     );
     let got = errors(&out);
     for expected in [
-        "stale_proof_resource_packaged",
-        "root_phase_proof_resource_packaged",
+        "stale_artifact_resource_packaged",
+        "root_verification_receipt_resource_packaged",
         "fixture_support_resource_packaged_as_active_artifact",
         "skill_local_reference_missing",
         "plugin_agent_path_missing",

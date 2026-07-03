@@ -32,7 +32,7 @@ span ids, user ids, candidate digests, receipt paths, private paths, or secrets.
 
 ## Query And Explain Contract
 
-A fitted observable surface requires production proof, not just tests.
+An observable command surface requires real command telemetry, not just tests.
 
 - Validation proves mechanics: parser, help, schema, field emission, redaction
   helper, fixture shape, and unit branches.

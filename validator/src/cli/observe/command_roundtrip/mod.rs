@@ -32,7 +32,7 @@ fn run_with_timeout(
 fn requested_specs(command: &ObserveCommand) -> Result<Vec<CommandObservabilitySpec>, String> {
     match (&command.target_command, &command.target_family) {
         (Some(_), Some(_)) => {
-            Err("observe fit accepts either --command or --family, not both".into())
+            Err("observe command-roundtrip accepts either --command or --family, not both".into())
         }
         (Some(id), None) => specs::command(id)
             .map(|spec| vec![spec])
@@ -42,7 +42,9 @@ fn requested_specs(command: &ObserveCommand) -> Result<Vec<CommandObservabilityS
                 .ok_or_else(|| format!("unknown observability family spec: {id}"))?;
             Ok(specs::family_commands(family))
         }
-        (None, None) => Err("observe fit requires --command <id> or --family <family>".into()),
+        (None, None) => {
+            Err("observe command-roundtrip requires --command <id> or --family <family>".into())
+        }
     }
 }
 

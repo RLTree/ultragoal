@@ -3,7 +3,7 @@
   "id": "duplicate-or-missing-root-receipt",
   "expected_failure": {
     "check_id": "root-verification-phase-coverage",
-    "error": "root_phase_missing_or_duplicate"
+    "error": "root_verification_stage_missing_or_duplicate"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
@@ -27,7 +27,7 @@
   "postconditions": [
     {
       "path": "/lane_registry/root_verification_phases/final_all_lanes_gate",
-      "expectation": "root_phase_missing_or_duplicate"
+      "expectation": "root_verification_stage_missing_or_duplicate"
     }
   ]
 }

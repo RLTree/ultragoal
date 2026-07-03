@@ -64,7 +64,7 @@ pub(crate) fn root_verification_states(
         if str_field(state, "status") == "pass" && verification_receipt_bad(root, state) {
             out.push(Failure::new(
                 "root-verification-phase-coverage",
-                "root_phase_pass_without_successful_receipt",
+                "root_verification_stage_pass_without_successful_receipt",
                 str_field(state, "phase"),
             ));
         }
@@ -144,8 +144,12 @@ fn verification_receipt_bad(root: &Path, state: &Value) -> bool {
             != state
                 .pointer("/artifact_receipt/digest")
                 .and_then(Value::as_str)
-        || crate::package::artifact::refs::validate_object(root, artifact, "root phase artifact")
-            .is_err()
+        || crate::package::artifact::refs::validate_object(
+            root,
+            artifact,
+            "root verification stage artifact",
+        )
+        .is_err()
         || crate::package::artifact::refs::validate_object(
             root,
             &command_as_ref,
@@ -183,7 +187,7 @@ fn post_merge_receipt_bad(state: &Value, receipt: &Value, lane: Option<&Value>) 
             str_field(row, "id") == str_field(&state["command_receipt"], "id")
                 && row.get("exit").and_then(Value::as_i64) == Some(0)
         });
-    str_field(receipt, "schema") != "harness-ultragoal.root-phase-receipt.v1"
+    str_field(receipt, "schema") != "harness-ultragoal.root-verification-receipt.v1"
         || str_field(receipt, "phase") != "post_merge_integration_gate"
         || str_field(receipt, "upstream_commit") != str_field(lane, "current_commit")
         || str_field(receipt, "target_branch") != str_field(lane, "target_branch")

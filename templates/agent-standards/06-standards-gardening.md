@@ -21,7 +21,7 @@ Act on high-signal friction immediately when it is likely to recur:
 - durable repo hygiene drift where ephemeral worktree, cache, debug, or replay
   state appears in normal diffs;
 - semantic namespace drift where names describe current goal work, proof
-  chores, phases, slices, fitting status, reviewer history, or session context
+  chores, phases, slices, goal-work status, reviewer history, or session context
   instead of product behavior or domain responsibility;
 - agents repeatedly needing chat context to understand why a path, module,
   function, helper, test, id, receipt, fixture, or artifact path segment exists;

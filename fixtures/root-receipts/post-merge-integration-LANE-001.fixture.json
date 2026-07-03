@@ -1,5 +1,5 @@
 {
-  "schema": "harness-ultragoal.root-phase-receipt.v1",
+  "schema": "harness-ultragoal.root-verification-receipt.v1",
   "fixture_purpose": "Valid fixture support only. This synthetic post-merge receipt is not active package proof authority.",
   "phase": "post_merge_integration_gate",
   "upstream_lane_id": "LANE-001",

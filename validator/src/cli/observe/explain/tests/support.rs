@@ -15,7 +15,7 @@ pub(super) fn write_run_event(root: &std::path::Path, run_id: &str, why_failed: 
                 "status": "fail",
                 "why_failed": why_failed,
                 "where_failed": "observe.prove",
-                "next_repair": "fit every law-bearing command",
+                "next_repair": "reconcile every law-bearing command",
                 "claim_impact": "update_goal_blocked",
                 "law_id": "full-local-observability-stack-integration-non-opaque-failure",
                 "check_id": "full-local-observability-stack-integration-non-opaque-failure",

@@ -22,7 +22,7 @@
     {
       "from": "harness-ultragoal:fit-repo",
       "to": "templates/.harness/coverage-manifest.json",
-      "reason": "repo fitting installs or verifies coverage scope authority"
+      "reason": "fit-repo activation installs or verifies coverage scope authority"
     },
     {
       "from": "harness-ultragoal:fit-repo",

@@ -1142,7 +1142,7 @@
       "fixtures/red/plugin-manifest-absolute-path.json",
       "fixtures/red/plugin-manifest-active-root-receipt-resource.json",
       "fixtures/red/plugin-manifest-parent-relative-path.json",
-      "fixtures/red/plugin-manifest-stale-active-proof-resource.json",
+      "fixtures/red/plugin-manifest-stale-active-artifact-resource.json",
       "fixtures/red/plugin-manifest-symlink-path.json",
       "fixtures/red/plugin-visible-entrypoint-omits-fit-repo.json",
       "fixtures/red/portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red.json",
@@ -4394,7 +4394,7 @@
       "validator/src/self_tests/claim/evidence/mod.rs",
       "validator/src/self_tests/claim/evidence/policy.rs",
       "validator/src/self_tests/claim/goal/mod.rs",
-      "validator/src/self_tests/claim/goal/root_phase.rs",
+      "validator/src/self_tests/claim/goal/root_verification.rs",
       "validator/src/self_tests/claim/lane/dependency.rs",
       "validator/src/self_tests/claim/lane/dependency_time.rs",
       "validator/src/self_tests/claim/lane/mod.rs",
@@ -8596,7 +8596,7 @@
         "validator_exit": 1
       },
       "downstream-dependency-post-merge-artifact-substitution": {
-        "expected_error": "root_phase_pass_without_successful_receipt",
+        "expected_error": "root_verification_stage_pass_without_successful_receipt",
         "expected_failing_check": "root-verification-phase-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
@@ -8796,9 +8796,9 @@
         "validator_exit": 1
       },
       "duplicate-or-missing-root-receipt": {
-        "expected_error": "root_phase_missing_or_duplicate",
+        "expected_error": "root_verification_stage_missing_or_duplicate",
         "expected_failing_check": "root-verification-phase-coverage",
-        "observed_error": "root_phase_missing_or_duplicate",
+        "observed_error": "root_verification_stage_missing_or_duplicate",
         "observed_failing_check": "root-verification-phase-coverage",
         "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
         "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json",
@@ -12196,7 +12196,7 @@
         "validator_exit": 1
       },
       "plugin-manifest-active-root-receipt-resource": {
-        "expected_error": "root_phase_proof_resource_packaged",
+        "expected_error": "root_verification_receipt_resource_packaged",
         "expected_failing_check": "plugin-inventory-closure",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
@@ -12215,13 +12215,13 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "plugin-manifest-stale-active-proof-resource": {
-        "expected_error": "stale_proof_resource_packaged",
+      "plugin-manifest-stale-active-artifact-resource": {
+        "expected_error": "stale_artifact_resource_packaged",
         "expected_failing_check": "plugin-inventory-closure",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:3fdce1cdae49491b8736e3592b0ba4bee371d278041bc7d1c1a49d14f98ef94a",
-        "packet_path": "fixtures/red/plugin-manifest-stale-active-proof-resource.json",
+        "packet_path": "fixtures/red/plugin-manifest-stale-active-artifact-resource.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -15746,7 +15746,7 @@
         "validator_exit": 1
       },
       "root-receipt-pass-failed-command": {
-        "expected_error": "root_phase_pass_without_successful_receipt",
+        "expected_error": "root_verification_stage_pass_without_successful_receipt",
         "expected_failing_check": "root-verification-phase-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
@@ -19281,7 +19281,7 @@
       "plugin-manifest-absolute-path",
       "plugin-manifest-active-root-receipt-resource",
       "plugin-manifest-parent-relative-path",
-      "plugin-manifest-stale-active-proof-resource",
+      "plugin-manifest-stale-active-artifact-resource",
       "plugin-manifest-symlink-path",
       "plugin-visible-entrypoint-omits-fit-repo",
       "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red",
@@ -21113,7 +21113,7 @@
         },
         {
           "digest": "sha256:7e9653fd5fd080b3209989b74d95b48d27b79817bccb6a2337b40bc8c05c501f",
-          "path": "validator/src/self_tests/claim/goal/root_phase.rs"
+          "path": "validator/src/self_tests/claim/goal/root_verification.rs"
         },
         {
           "digest": "sha256:8706d8601cbe40e15c5ae3c2e204b58ab59a0f01202d83d5a02201edfd4e0aff",

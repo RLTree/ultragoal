@@ -71,7 +71,7 @@ fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
     std::fs::write(
         &post,
         serde_json::to_vec(&json!({
-            "schema":"harness-ultragoal.root-phase-receipt.v1",
+            "schema":"harness-ultragoal.root-verification-receipt.v1",
             "phase":"post_merge_integration_gate",
             "upstream_lane_id":"lane-a",
             "upstream_commit":"commit-a",

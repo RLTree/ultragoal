@@ -1,9 +1,9 @@
 {
   "schema": "harness-ultragoal.red-packet.v1",
-  "id": "plugin-manifest-stale-active-proof-resource",
+  "id": "plugin-manifest-stale-active-artifact-resource",
   "expected_failure": {
     "check_id": "plugin-inventory-closure",
-    "error": "stale_proof_resource_packaged"
+    "error": "stale_artifact_resource_packaged"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
@@ -27,7 +27,7 @@
   "postconditions": [
     {
       "path": "/plugin_manifest/resources/-",
-      "expectation": "stale active proof resource is rejected before package use"
+      "expectation": "stale active artifact resource is rejected before package use"
     }
   ],
   "notes": "Stale proof used as red-fixture support must not be shipped under active artifacts as package authority."

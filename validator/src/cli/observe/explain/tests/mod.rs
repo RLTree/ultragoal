@@ -104,14 +104,17 @@ fn explain_reports_current_failure_and_bad_root_errors() {
     );
     assert_eq!(run_receipt["observed_run"]["where_failed"], "observe.prove");
     assert_eq!(run_receipt["where_failed"], "observe.prove");
-    assert_eq!(run_receipt["next_repair"], "fit every law-bearing command");
+    assert_eq!(
+        run_receipt["next_repair"],
+        "reconcile every law-bearing command"
+    );
     assert_eq!(
         run_receipt["observed_next_repair"],
-        "fit every law-bearing command"
+        "reconcile every law-bearing command"
     );
     assert_eq!(
         run_receipt["explanation"]["repair_guidance"],
-        "fit every law-bearing command"
+        "reconcile every law-bearing command"
     );
     assert_eq!(run_receipt["claim_impact"], "update_goal_blocked");
     fs::remove_file(root.join("validation_artifacts/review/final-packet-proof.json"))

@@ -83,7 +83,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Preserve exact 100 percent coverage after the topology repair.
   - Evidence:
@@ -208,7 +208,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] Semantic source modules name the law, domain, authority, boundary, receipt, fixture, product surface, or workflow they govern.
   - Evidence:

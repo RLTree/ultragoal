@@ -10,7 +10,7 @@ mod selection;
 
 fn command() -> ObserveCommand {
     ObserveCommand {
-        operation: ObserveOperation::Fit,
+        operation: ObserveOperation::CommandRoundtrip,
         receipt: None,
         query: None,
         run_id: None,

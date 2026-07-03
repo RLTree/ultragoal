@@ -2432,7 +2432,7 @@
   {
     "expected_failure": {
       "check_id": "root-verification-phase-coverage",
-      "error": "root_phase_pass_without_successful_receipt"
+      "error": "root_verification_stage_pass_without_successful_receipt"
     },
     "id": "downstream-dependency-post-merge-artifact-substitution",
     "packet_digest": "sha256:52ae82fbbfec8508606b471e981600ae7335b20abc70641a3f9a31b729711f24",
@@ -2612,7 +2612,7 @@
   {
     "expected_failure": {
       "check_id": "root-verification-phase-coverage",
-      "error": "root_phase_missing_or_duplicate"
+      "error": "root_verification_stage_missing_or_duplicate"
     },
     "id": "duplicate-or-missing-root-receipt",
     "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
@@ -5672,7 +5672,7 @@
   {
     "expected_failure": {
       "check_id": "plugin-inventory-closure",
-      "error": "root_phase_proof_resource_packaged"
+      "error": "root_verification_receipt_resource_packaged"
     },
     "id": "plugin-manifest-active-root-receipt-resource",
     "packet_digest": "sha256:53897b844a50f37350ba3b637e6c34786ae425e00feec53e09e30dadcfd0f5b1",
@@ -5690,11 +5690,11 @@
   {
     "expected_failure": {
       "check_id": "plugin-inventory-closure",
-      "error": "stale_proof_resource_packaged"
+      "error": "stale_artifact_resource_packaged"
     },
-    "id": "plugin-manifest-stale-active-proof-resource",
+    "id": "plugin-manifest-stale-active-artifact-resource",
     "packet_digest": "sha256:3fdce1cdae49491b8736e3592b0ba4bee371d278041bc7d1c1a49d14f98ef94a",
-    "packet_path": "fixtures/red/plugin-manifest-stale-active-proof-resource.json"
+    "packet_path": "fixtures/red/plugin-manifest-stale-active-artifact-resource.json"
   },
   {
     "expected_failure": {
@@ -8867,7 +8867,7 @@
   {
     "expected_failure": {
       "check_id": "root-verification-phase-coverage",
-      "error": "root_phase_pass_without_successful_receipt"
+      "error": "root_verification_stage_pass_without_successful_receipt"
     },
     "id": "root-receipt-pass-failed-command",
     "packet_digest": "sha256:dbbedc52bb9cd11a4b5620f8660f67234c5e561dd590369c56f821b7ee19b029",

@@ -3,7 +3,7 @@
   "id": "plugin-manifest-active-root-receipt-resource",
   "expected_failure": {
     "check_id": "plugin-inventory-closure",
-    "error": "root_phase_proof_resource_packaged"
+    "error": "root_verification_receipt_resource_packaged"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
@@ -27,8 +27,8 @@
   "postconditions": [
     {
       "path": "/plugin_manifest/resources/-",
-      "expectation": "markerless active root-phase proof resource is rejected before package use"
+      "expectation": "markerless active root verification receipt resource is rejected before package use"
     }
   ],
-  "notes": "Synthetic root-phase receipts used by fixtures must live under fixture support, not active artifact resources."
+  "notes": "Synthetic root verification receipts used by fixtures must live under fixture support, not active artifact resources."
 }

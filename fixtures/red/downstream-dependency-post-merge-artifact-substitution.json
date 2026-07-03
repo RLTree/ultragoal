@@ -3,7 +3,7 @@
   "id": "downstream-dependency-post-merge-artifact-substitution",
   "expected_failure": {
     "check_id": "root-verification-phase-coverage",
-    "error": "root_phase_pass_without_successful_receipt"
+    "error": "root_verification_stage_pass_without_successful_receipt"
   },
   "base_fixture_path": "fixtures/valid/two-lane-ready-dependency.json",
   "json_patch": [
@@ -55,5 +55,5 @@
       "expectation": "static artifact cannot substitute typed post-merge receipt"
     }
   ],
-  "notes": "Passing post-merge phase proof must point at a typed root-phase receipt, not any digest-matched static file."
+  "notes": "Passing post-merge integration receipt must point at a typed root verification receipt, not any digest-matched static file."
 }

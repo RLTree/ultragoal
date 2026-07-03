@@ -11,7 +11,7 @@
     "value": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
   },
   "target_audience": {
-    "name": "Harness Ultragoal repo-fitting agent operator",
+    "name": "Harness Ultragoal fit-repo activation operator",
     "evidence": {
       "path": "validation_artifacts/harness/product-fitness-audience.txt",
       "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -80,7 +80,7 @@
   ],
   "user_evidence": [
     {
-      "audience": "Harness Ultragoal repo-fitting agent operator",
+      "audience": "Harness Ultragoal fit-repo activation operator",
       "job": "Fit a repository with product proof rules without relying on memory",
       "context": "Codex app and local repo setup or retrofit session",
       "outcome": "Unsupported product success claims are withheld",

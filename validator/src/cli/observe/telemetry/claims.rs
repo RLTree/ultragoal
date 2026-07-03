@@ -76,7 +76,7 @@ pub(super) fn next_repair_for(
     } else if failure.is_some_and(|text| text.contains("requested telemetry target unavailable")) {
         "run target command once on the current candidate, query logs metrics traces, then rerun explain"
     } else if failure.is_some_and(|text| text.contains("observed telemetry candidate digest")) {
-        "rerun target command on the current candidate before claiming observability fit"
+        "rerun target command on the current candidate before claiming observability command telemetry"
     } else if failure.is_some_and(|text| text.contains("observed telemetry failure is opaque")) {
         "repair target command stdout and telemetry fields: failure_class why_failed where_failed next_repair"
     } else {

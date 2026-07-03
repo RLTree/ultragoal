@@ -11,13 +11,13 @@ fn aggregate_errors_at(root: &Path, bundle: Value) -> Vec<String> {
 
 #[test]
 fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("aggregate-root-phase");
+    let root = crate::self_tests::boundaries::support::temp_root("aggregate-root-verification");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let post_receipt_path = root.join("artifacts/post-merge.json");
     std::fs::write(
         &post_receipt_path,
         serde_json::to_vec(&json!({
-            "schema": "harness-ultragoal.root-phase-receipt.v1",
+            "schema": "harness-ultragoal.root-verification-receipt.v1",
             "phase": "post_merge_integration_gate",
             "upstream_lane_id": "missing-lane",
             "upstream_commit": "head",
@@ -105,5 +105,5 @@ fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() 
         errors.contains(&"goal_binding_receipt_stale_or_mismatched".to_string()),
         "{errors:?}"
     );
-    std::fs::remove_dir_all(root).expect("cleanup aggregate root phase");
+    std::fs::remove_dir_all(root).expect("cleanup aggregate root verification stage");
 }

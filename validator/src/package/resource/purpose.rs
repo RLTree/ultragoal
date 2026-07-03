@@ -2,8 +2,9 @@ use crate::json_boundary;
 use serde_json::Value;
 use std::path::Path;
 
-pub(crate) const STALE_PROOF_RESOURCE: &str = "stale_proof_resource_packaged";
-pub(crate) const ROOT_VERIFICATION_PROOF_RESOURCE: &str = "root_phase_proof_resource_packaged";
+pub(crate) const STALE_ARTIFACT_RESOURCE: &str = "stale_artifact_resource_packaged";
+pub(crate) const ROOT_VERIFICATION_RECEIPT_RESOURCE: &str =
+    "root_verification_receipt_resource_packaged";
 pub(crate) const FIXTURE_SUPPORT_ACTIVE_ARTIFACT: &str =
     "fixture_support_resource_packaged_as_active_artifact";
 
@@ -36,13 +37,13 @@ pub(crate) fn failures(root: &Path, manifest: &Value) -> Vec<ResourcePurposeFail
 fn path_failure(rel: &str) -> Option<ResourcePurposeFailure> {
     if rel.starts_with("artifacts/") && path_part_contains_stale(rel) {
         return Some(ResourcePurposeFailure {
-            code: STALE_PROOF_RESOURCE,
+            code: STALE_ARTIFACT_RESOURCE,
             detail: rel.to_string(),
         });
     }
     if rel.starts_with("artifacts/root-receipts/") && rel.ends_with(".json") {
         return Some(ResourcePurposeFailure {
-            code: ROOT_VERIFICATION_PROOF_RESOURCE,
+            code: ROOT_VERIFICATION_RECEIPT_RESOURCE,
             detail: rel.to_string(),
         });
     }
@@ -72,7 +73,7 @@ mod tests {
     fn stale_active_artifact_path_is_rejected() {
         let failure = path_failure("artifacts/root-receipts/stale-proof.json");
 
-        assert_eq!(failure.unwrap().code, STALE_PROOF_RESOURCE);
+        assert_eq!(failure.unwrap().code, STALE_ARTIFACT_RESOURCE);
     }
 
     #[test]
@@ -86,7 +87,7 @@ mod tests {
     fn active_root_verification_receipt_path_is_rejected() {
         let failure = path_failure("artifacts/root-receipts/post-merge.json");
 
-        assert_eq!(failure.unwrap().code, ROOT_VERIFICATION_PROOF_RESOURCE);
+        assert_eq!(failure.unwrap().code, ROOT_VERIFICATION_RECEIPT_RESOURCE);
     }
 
     #[test]

@@ -224,7 +224,7 @@ fn package_resource_purpose_rejects_invalid_active_fixture_paths() {
         failure.code != crate::package::resource::purpose::FIXTURE_SUPPORT_ACTIVE_ARTIFACT
     }));
     assert!(failures.iter().any(|failure| {
-        failure.code == crate::package::resource::purpose::STALE_PROOF_RESOURCE
+        failure.code == crate::package::resource::purpose::STALE_ARTIFACT_RESOURCE
     }));
     let _ = fs::remove_dir_all(root);
 }

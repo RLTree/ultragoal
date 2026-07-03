@@ -206,7 +206,7 @@
       "digest": "sha256:80ac19aeaf943a7fa9751a4dbd0c0b100521adb31e5102980a034baca32a74c9",
       "path": "validation_artifacts/harness/product-fitness-audience.txt"
     },
-    "name": "Harness Ultragoal repo-fitting agent operator"
+    "name": "Harness Ultragoal fit-repo activation operator"
   },
   "target_revision": {
     "kind": "package_digest",
@@ -214,7 +214,7 @@
   },
   "user_evidence": [
     {
-      "audience": "Harness Ultragoal repo-fitting agent operator",
+      "audience": "Harness Ultragoal fit-repo activation operator",
       "context": "Codex app and local repo setup or retrofit session",
       "evidence": {
         "digest": "sha256:f4055989dc7cc9e8bd69193eddc3661ad347abedcca6723815e4abb656fc8096",

@@ -22,7 +22,7 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
     std::fs::write(root.join("skills/demo/SKILL.md"), "`root-ref.md`\n").expect("skill");
     std::fs::write(root.join("__pycache__/x.pyc"), "bytecode").expect("bytecode");
     std::fs::write(root.join("artifacts/root-receipts/post-merge.json"), "{}")
-        .expect("root phase artifact");
+        .expect("root verification stage artifact");
     std::fs::write(
         root.join("README.md"),
         "Current digest sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n",
@@ -96,7 +96,7 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
     assert!(
         closure
             .iter()
-            .any(|item| item.contains("root_phase_proof_resource_packaged"))
+            .any(|item| item.contains("root_verification_receipt_resource_packaged"))
     );
     assert!(
         closure

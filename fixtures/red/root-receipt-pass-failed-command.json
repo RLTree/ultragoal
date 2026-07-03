@@ -3,7 +3,7 @@
   "id": "root-receipt-pass-failed-command",
   "expected_failure": {
     "check_id": "root-verification-phase-coverage",
-    "error": "root_phase_pass_without_successful_receipt"
+    "error": "root_verification_stage_pass_without_successful_receipt"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
@@ -48,13 +48,13 @@
       "op": "add",
       "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt",
       "value": {
-        "id": "cmd-root-phase-fail",
+        "id": "cmd-root-verification-fail",
         "command": "false",
         "cwd": "/repo",
         "exit": 1,
         "started_at": "2026-06-16T00:00:00Z",
         "completed_at": "2026-06-16T00:00:00Z",
-        "artifact_path": "validation_artifacts/root-phase.json",
+        "artifact_path": "validation_artifacts/root-verification.json",
         "artifact_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
       }
     },
@@ -62,7 +62,7 @@
       "op": "add",
       "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt",
       "value": {
-        "path": "validation_artifacts/root-phase.json",
+        "path": "validation_artifacts/root-verification.json",
         "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
       }
     },
@@ -86,8 +86,8 @@
   "postconditions": [
     {
       "path": "/lane_registry/lanes/0/status",
-      "expectation": "root_phase_pass_without_successful_receipt"
+      "expectation": "root_verification_stage_pass_without_successful_receipt"
     }
   ],
-  "notes": "root phase cannot pass with failed verification command"
+  "notes": "root verification stage cannot pass with failed verification command"
 }

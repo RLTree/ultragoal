@@ -61,7 +61,7 @@ fn schema_error_codes_cover_authority_specific_failure_classes() {
         ),
         (
             vec!["root_verification_phases.final_all_lanes_gate is required".to_string()],
-            "root_phase_missing_or_duplicate",
+            "root_verification_stage_missing_or_duplicate",
         ),
         (
             vec!["unrecognized validation failure".to_string()],

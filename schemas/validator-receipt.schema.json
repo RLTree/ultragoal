@@ -1369,7 +1369,7 @@
               "plugin-manifest-absolute-path",
               "plugin-manifest-active-root-receipt-resource",
               "plugin-manifest-parent-relative-path",
-              "plugin-manifest-stale-active-proof-resource",
+              "plugin-manifest-stale-active-artifact-resource",
               "plugin-manifest-symlink-path",
               "plugin-visible-entrypoint-omits-fit-repo",
               "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red",
@@ -2925,7 +2925,7 @@
         "plugin-manifest-absolute-path",
         "plugin-manifest-active-root-receipt-resource",
         "plugin-manifest-parent-relative-path",
-        "plugin-manifest-stale-active-proof-resource",
+        "plugin-manifest-stale-active-artifact-resource",
         "plugin-manifest-symlink-path",
         "plugin-visible-entrypoint-omits-fit-repo",
         "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red",
@@ -6371,7 +6371,7 @@
         },
         {
           "contains": {
-            "const": "plugin-manifest-stale-active-proof-resource"
+            "const": "plugin-manifest-stale-active-artifact-resource"
           }
         },
         {
@@ -9410,7 +9410,7 @@
           "plugin-manifest-absolute-path",
           "plugin-manifest-active-root-receipt-resource",
           "plugin-manifest-parent-relative-path",
-          "plugin-manifest-stale-active-proof-resource",
+          "plugin-manifest-stale-active-artifact-resource",
           "plugin-manifest-symlink-path",
           "plugin-visible-entrypoint-omits-fit-repo",
           "portable-non-prescriptive-adapter-implementation-choice-adapter-absence-still-allowing-dependent-claim-red",

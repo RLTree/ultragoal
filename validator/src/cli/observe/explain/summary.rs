@@ -20,7 +20,7 @@ pub(super) fn repair_guidance(
 ) -> String {
     if let Some(failure) = stale_observed {
         return format!(
-            "rerun the target command on the current candidate before claiming observability fit: {failure}"
+            "rerun the target command on the current candidate before claiming observability command telemetry: {failure}"
         );
     }
     if let Some(failure) = missing_observed {

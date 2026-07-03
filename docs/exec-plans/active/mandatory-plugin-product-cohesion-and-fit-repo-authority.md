@@ -50,7 +50,7 @@ prose-only completion path.
 
 ## Mandatory Fit-Repo Entry Contract
 
-The plugin must provide one visible top-level entrypoint for repo fitting. That
+The plugin must provide one visible top-level entrypoint for fit-repo activation. That
 entrypoint must run this sequence:
 
 1. Discover repo root, package root, installed plugin root, cache root, and app

@@ -47,7 +47,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         ObserveOperation::TracesQuery => query::run(root, command, query::QueryKind::Traces)?,
         ObserveOperation::Snapshot => snapshot::run(root, command)?,
         ObserveOperation::Prove => telemetry::prove(root, command)?,
-        ObserveOperation::Fit => command_roundtrip::run(root, command)?,
+        ObserveOperation::CommandRoundtrip => command_roundtrip::run(root, command)?,
         ObserveOperation::ExplainFailure
         | ObserveOperation::ExplainClaim
         | ObserveOperation::ExplainCheck
@@ -76,7 +76,9 @@ fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
         [_, a, b, ..] if a == "traces" && b == "query" => Ok(ObserveOperation::TracesQuery),
         [_, a, ..] if a == "snapshot" => Ok(ObserveOperation::Snapshot),
         [_, a, ..] if a == "prove" => Ok(ObserveOperation::Prove),
-        [_, a, ..] if a == "fit" => Ok(ObserveOperation::Fit),
+        [_, a, ..] if a == "command-roundtrip" || a == "fit" => {
+            Ok(ObserveOperation::CommandRoundtrip)
+        }
         [_, a, ..] if a == "explain-failure" => Ok(ObserveOperation::ExplainFailure),
         [_, a, ..] if a == "explain-claim" => Ok(ObserveOperation::ExplainClaim),
         [_, a, ..] if a == "explain-check" => Ok(ObserveOperation::ExplainCheck),

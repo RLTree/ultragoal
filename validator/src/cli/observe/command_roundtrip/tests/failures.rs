@@ -115,7 +115,7 @@ fn command_roundtrip_fails_closed_when_query_or_explain_receipts_cannot_write() 
 }
 
 #[test]
-fn observe_fit_receipt_fails_closed_when_base_observability_cannot_emit() {
+fn command_roundtrip_receipt_fails_closed_when_base_observability_cannot_emit() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-receipt-error");
     std::fs::create_dir_all(&root).expect("root");
     let err = receipt(

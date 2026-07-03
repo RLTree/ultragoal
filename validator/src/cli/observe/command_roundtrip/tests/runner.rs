@@ -28,10 +28,10 @@ fn command_roundtrip_refuses_to_fit_without_same_candidate_query_roundtrip() {
 }
 
 #[test]
-fn observe_fit_run_fails_closed_for_unknown_and_partial_targets() {
+fn observe_command_roundtrip_run_fails_closed_for_unknown_and_partial_targets() {
     let (root, _) = roundtrip_root("observe-roundtrip-run");
     let mut unknown = command();
-    unknown.target_command = Some("install audit".to_string());
+    unknown.target_command = Some("unknown command".to_string());
     assert!(
         run(&root, &unknown)
             .expect_err("unknown target")
@@ -57,7 +57,7 @@ fn observe_fit_run_fails_closed_for_unknown_and_partial_targets() {
 }
 
 #[test]
-fn observe_fit_receipt_keeps_source_local_claim_ceiling() {
+fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-receipt");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
