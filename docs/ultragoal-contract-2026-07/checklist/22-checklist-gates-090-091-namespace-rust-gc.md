@@ -355,7 +355,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] Plugin-activated and retrofitted repo standards carry product-semantic naming law without requiring parent-session context.
   - Working means shipped standards say paths, modules, functions, helpers, tests, ids, receipt/artifact paths, and generated/package paths describe product behavior or domain responsibility, not goal work, evidence purpose, phase/slice labels, session history, or generic buckets.
@@ -363,7 +363,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] Foundational trace maps filesystem-as-agent-interface and scoped-module article requirements to validator source topology enforcement, red fixtures, valid fixtures, receipts, package inventory, and claim ceilings.
   - Evidence:
@@ -391,7 +391,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 - [ ] `plugin-manifest-draft.json`, package inventory, component graph, review target, candidate archive, source/install/cache package surfaces, and any installed/cache sync references include moved files exactly once and contain no stale top-level internal paths.
   - Evidence:
