@@ -55,7 +55,7 @@ fn namespace_semantic_names_reject_goal_work_identifier_names() {
     );
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
-        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) mod support;\npub(crate) struct ProductionProof;\npub(crate) struct ProofStatus;\npub(crate) enum CommandState { FitCommand, ProofState, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) const ROOT_PHASE_ERROR: &str = \"root_phase_proof_resource_packaged\";\npub(crate) const FAILURE_ID: &str = \"final_packet_proof_status_not_pass\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn proof_status() {}\npub(crate) fn validation_proof() {}\npub(crate) fn production_evidence() {}\npub(crate) fn support() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool, proof_status: bool) {}\nlet production_proof = true;\nlet proof_status = true;\nobservability_status: bool,\n",
+        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) mod support;\npub(crate) struct ProductionProof;\npub(crate) struct ProofStatus;\npub(crate) enum CommandState { FitCommand, ProofState, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) const COMMAND_RUNNER_ENV: &str = \"ULTRAGOAL_FIT_EXE\";\npub(crate) const ROOT_PHASE_ERROR: &str = \"root_phase_proof_resource_packaged\";\npub(crate) const FAILURE_ID: &str = \"final_packet_proof_status_not_pass\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn proof_status() {}\npub(crate) fn validation_proof() {}\npub(crate) fn production_evidence() {}\npub(crate) fn support() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool, proof_status: bool) {}\nlet production_proof = true;\nlet proof_status = true;\nobservability_status: bool,\n",
     );
     let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
     assert!(
@@ -86,7 +86,7 @@ fn namespace_semantic_names_accept_observability_product_names() {
     );
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
-        "pub(crate) fn reconcile_command_telemetry() {}\npub(crate) fn bind_receipt_to_telemetry() {}\npub(crate) struct CommandTelemetryRoundtrip;\npub(crate) enum CommandTelemetryState { Reconciled, }\n",
+        "pub(crate) const FIT_REPO_RECEIPT: &str = \"harness-ultragoal:fit-repo\";\npub(crate) fn reconcile_command_telemetry() {}\npub(crate) fn bind_receipt_to_telemetry() {}\npub(crate) struct CommandTelemetryRoundtrip;\npub(crate) enum CommandTelemetryState { Reconciled, }\n",
     );
     write_text(
         &root.join("validator/src/audit/observability/command_inventory/mod.rs"),

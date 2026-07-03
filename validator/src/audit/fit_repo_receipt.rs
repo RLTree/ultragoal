@@ -1,7 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
-const FIT_ENTRYPOINT: &str = "harness-ultragoal:fit-repo";
+const FIT_REPO_ENTRYPOINT: &str = "harness-ultragoal:fit-repo";
 
 pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     let mut out = base_failures(root, receipt);
@@ -54,7 +54,7 @@ fn base_failures_with_candidate(
     if receipt
         .pointer("/entrypoint_contract/id")
         .and_then(Value::as_str)
-        != Some(FIT_ENTRYPOINT)
+        != Some(FIT_REPO_ENTRYPOINT)
     {
         out.push("plugin_flow_entrypoint_missing".to_string());
     }

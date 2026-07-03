@@ -37,12 +37,12 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
     ] {
         assert!(failures.iter().any(|item| item == expected), "{expected}");
     }
-    let fit_label_missing = crate::cli::routine::surface_failures(
+    let fit_repo_label_missing = crate::cli::routine::surface_failures(
         "Routine validation\nfit-repo prove\ntarget-repo audit\nTarget repo path\nunsupported claims\nroutine check\nline\nline\nline\nline\nline\nline",
         "routine check",
     );
     assert!(
-        fit_label_missing
+        fit_repo_label_missing
             .iter()
             .any(|item| item == "routine_fit_repo_hidden")
     );

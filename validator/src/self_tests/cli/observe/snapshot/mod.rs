@@ -68,7 +68,7 @@ fn observe_snapshot_writes_stable_target_command_roundtrip() {
 }
 
 #[test]
-fn observe_snapshot_refuses_to_fit_without_non_fallback_explain() {
+fn observe_snapshot_refuses_observable_status_without_non_fallback_explain() {
     let root = super::minimal_root("observe-snapshot-missing-explain");
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let target = write_source_audit_receipt(&root, &candidate);

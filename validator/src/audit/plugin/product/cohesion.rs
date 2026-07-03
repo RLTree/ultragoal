@@ -2,9 +2,9 @@ use serde_json::Value;
 use std::path::Path;
 
 const FLOW: &str = "docs/plugin-cohesion-manifest.json";
-const FIT_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
+const FIT_REPO_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
 const JOURNEY: &str = "validation_artifacts/harness/plugin-product-journey-receipt.json";
-const FIT_ENTRYPOINT: &str = "harness-ultragoal:fit-repo";
+const FIT_REPO_ENTRYPOINT: &str = "harness-ultragoal:fit-repo";
 
 pub fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
@@ -13,7 +13,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
         "schemas/fit-repo-receipt.schema.json",
         "schemas/plugin-cohesion-manifest.schema.json",
         FLOW,
-        FIT_RECEIPT,
+        FIT_REPO_RECEIPT,
         JOURNEY,
     ] {
         if !root.join(path).is_file() {
@@ -22,7 +22,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
     }
     out.extend(flow_failures(root));
     out.extend(visible_entry_failures(root));
-    out.extend(fit_receipt_failures(root));
+    out.extend(fit_repo_receipt_failures(root));
     out.extend(journey_failures(root));
     out
 }
@@ -41,7 +41,7 @@ pub fn flow_value_failures(root: &Path, flow: &Value) -> Vec<String> {
         out.push("plugin_flow_manifest_malformed:schema".to_string());
     }
     let entries = strings(&flow, "entrypoints");
-    if !entries.iter().any(|entry| entry == FIT_ENTRYPOINT) {
+    if !entries.iter().any(|entry| entry == FIT_REPO_ENTRYPOINT) {
         out.push("plugin_flow_entrypoint_missing".to_string());
     }
     if flow
@@ -138,11 +138,11 @@ fn visible_entry_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     let plugin =
         std::fs::read_to_string(root.join(".codex-plugin/plugin.json")).unwrap_or_default();
-    if !plugin.contains(FIT_ENTRYPOINT) {
+    if !plugin.contains(FIT_REPO_ENTRYPOINT) {
         out.push("plugin_flow_entrypoint_not_visible".to_string());
     }
     let map = std::fs::read_to_string(root.join("docs/plugin-resource-map.md")).unwrap_or_default();
-    let fit = map.find(FIT_ENTRYPOINT).unwrap_or(usize::MAX);
+    let fit_repo_entry = map.find(FIT_REPO_ENTRYPOINT).unwrap_or(usize::MAX);
     let legacy = [
         "`ultragoal`",
         "`harness-engineering`",
@@ -152,7 +152,7 @@ fn visible_entry_failures(root: &Path) -> Vec<String> {
     .filter_map(|needle| map.find(needle))
     .min()
     .unwrap_or(usize::MAX);
-    if fit == usize::MAX || legacy < fit {
+    if fit_repo_entry == usize::MAX || legacy < fit_repo_entry {
         out.push("plugin_flow_entrypoint_not_primary".to_string());
     }
     out
@@ -168,26 +168,26 @@ pub fn plugin_json_failures(value: &Value) -> Vec<String> {
         .filter_map(Value::as_str)
         .collect::<Vec<_>>()
         .join("\n");
-    if text.contains(FIT_ENTRYPOINT) {
+    if text.contains(FIT_REPO_ENTRYPOINT) {
         Vec::new()
     } else {
         vec!["plugin_flow_entrypoint_not_visible".to_string()]
     }
 }
 
-fn fit_receipt_failures(root: &Path) -> Vec<String> {
-    let receipt = match crate::json_boundary::read_json(&root.join(FIT_RECEIPT)) {
+fn fit_repo_receipt_failures(root: &Path) -> Vec<String> {
+    let receipt = match crate::json_boundary::read_json(&root.join(FIT_REPO_RECEIPT)) {
         Ok(value) => value,
         Err(err) => return vec![format!("fit_repo_receipt_missing:{err}")],
     };
-    fit_receipt_value_failures(root, &receipt)
+    fit_repo_receipt_value_failures(root, &receipt)
 }
 
-pub fn fit_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
+pub fn fit_repo_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
     crate::audit::fit_repo_receipt::failures(root, receipt)
 }
 
-pub fn fit_receipt_value_failures_with_candidate(
+pub fn fit_repo_receipt_value_failures_with_candidate(
     root: &Path,
     receipt: &Value,
     target_digest: &str,

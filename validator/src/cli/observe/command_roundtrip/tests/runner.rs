@@ -6,7 +6,7 @@ use serde_json::json;
 use std::time::Instant;
 
 #[test]
-fn command_roundtrip_refuses_to_fit_without_same_candidate_query_roundtrip() {
+fn command_roundtrip_refuses_observable_status_without_same_candidate_query_roundtrip() {
     let (root, candidate) = roundtrip_root("observe-roundtrip-partial");
     let spec = specs::command("package digest").expect("package spec");
 

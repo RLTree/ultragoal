@@ -1,7 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
-const FIT_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
+const FIT_REPO_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
 
 pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
     failures_with_digest(root, value, crate::package::inventory::package_digest(root))
@@ -48,7 +48,7 @@ fn evidence_count_failures(value: &Value) -> Vec<String> {
     if evidence.len() < 3
         || evidence
             .iter()
-            .filter(|item| str_field(item, "path") != FIT_RECEIPT)
+            .filter(|item| str_field(item, "path") != FIT_REPO_RECEIPT)
             .count()
             < 2
     {

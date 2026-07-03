@@ -1648,7 +1648,7 @@
       "fixtures/red/target-repo-audit-capability-target-classification-missing-red.json",
       "fixtures/red/target-repo-audit-capability-target-command-missing-success-emitted-red.json",
       "fixtures/red/target-repo-audit-capability-unknown-language-runtime-accepted-red.json",
-      "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-red.json",
+      "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red.json",
@@ -17423,13 +17423,13 @@
         "status": "pass",
         "validator_exit": 1
       },
-      "target-repo-audit-capability-unsupported-repo-marked-fit-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit",
+      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red": {
+        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
         "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit",
+        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
         "observed_failing_check": "target-repo-audit-capability",
         "packet_digest": "sha256:654ba5f53abca13eefdf5e768057ffbced8cfb3eed1f3eb66004ec5e44b04213",
-        "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-red.json",
+        "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -19809,7 +19809,7 @@
       "target-repo-audit-capability-target-classification-missing-red",
       "target-repo-audit-capability-target-command-missing-success-emitted-red",
       "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-      "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",

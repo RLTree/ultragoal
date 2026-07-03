@@ -86,7 +86,7 @@ pub(crate) fn observation_with_candidate_cached(
         "validation_artifacts/harness/fit-repo-receipt.json"
         | "templates/validation_artifacts/harness/fit-repo-receipt.json" => Some(from_failures(
             expected,
-            &crate::audit::plugin::product::cohesion::fit_receipt_value_failures_with_candidate(
+            &crate::audit::plugin::product::cohesion::fit_repo_receipt_value_failures_with_candidate(
                 root,
                 bad,
                 target_digest,

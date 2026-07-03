@@ -4332,7 +4332,7 @@
     },
     {
       "behavior_failure_modes": [
-        "target_repo_audit_capability_unsupported_repo_marked_fit",
+        "target_repo_audit_capability_unsupported_repo_marked_fit_repo_ready",
         "target_repo_audit_capability_target_classification_missing",
         "target_repo_audit_capability_target_command_missing_success_emitted",
         "target_repo_audit_capability_fixture_used_as_live_target",
@@ -4359,10 +4359,10 @@
         "target_classification_missing": true,
         "target_command_missing_success_emitted": true,
         "unknown_language_runtime_accepted": true,
-        "unsupported_repo_marked_fit": true
+        "unsupported_repo_marked_fit_repo_ready": true
       },
       "red_fixture_ids": [
-        "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+        "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
         "target-repo-audit-capability-target-classification-missing-red",
         "target-repo-audit-capability-target-command-missing-success-emitted-red",
         "target-repo-audit-capability-fixture-used-as-live-target-red",

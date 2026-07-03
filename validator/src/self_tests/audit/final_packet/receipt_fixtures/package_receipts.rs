@@ -13,12 +13,12 @@ fn fit_repo_ref(root: &Path, current: &str) -> Value {
     let stdout = super::ref_for(
         root,
         "validation_artifacts/harness/fit-repo-command.stdout.txt",
-        &json!("fit stdout"),
+        &json!("fit-repo stdout"),
     );
     let stderr = super::ref_for(
         root,
         "validation_artifacts/harness/fit-repo-command.stderr.txt",
-        &json!("fit stderr"),
+        &json!("fit-repo stderr"),
     );
     let mut receipt = json!({
         "schema":"harness-ultragoal.fit-repo-receipt.v1",
@@ -32,7 +32,7 @@ fn fit_repo_ref(root: &Path, current: &str) -> Value {
         "target_classification":"fresh_repo",
         "runtime_surface_classification":"none",
         "product_surface_classification":"developer_tool",
-        "checks":[{"id":"fit","command":"ultragoal fit-repo","exit":0,"stdout":stdout,"stderr":stderr}],
+        "checks":[{"id":"fit_repo","command":"ultragoal fit-repo","exit":0,"stdout":stdout,"stderr":stderr}],
         "claim_ceiling":"withheld_or_blocked",
         "blockers":[],
         "receipt_digest":crate::digest::ZERO
@@ -123,7 +123,7 @@ fn quality_metrics(evidence: &Value) -> Vec<Value> {
 }
 
 fn product_journey_ref(root: &Path, current: &str) -> Value {
-    let fit = fit_repo_ref(root, current);
+    let fit_repo_receipt = fit_repo_ref(root, current);
     let extra = evidence_ref(
         root,
         "validation_artifacts/harness/product-journey-proof.txt",
@@ -150,7 +150,7 @@ fn product_journey_ref(root: &Path, current: &str) -> Value {
             "block unsupported claims",
             "record evidence"
         ],
-        "evidence":[fit, extra.clone(), extra.clone()],
+        "evidence":[fit_repo_receipt, extra.clone(), extra.clone()],
         "error_path_evidence":error
     });
     receipt_ref(

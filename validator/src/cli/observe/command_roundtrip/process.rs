@@ -23,7 +23,7 @@ fn run_production_command_with_exe(
 
 fn current_exe() -> Result<PathBuf, String> {
     current_exe_with(
-        std::env::var("ULTRAGOAL_FIT_EXE").ok(),
+        std::env::var("ULTRAGOAL_COMMAND_ROUNDTRIP_EXE").ok(),
         std::env::current_exe,
     )
 }

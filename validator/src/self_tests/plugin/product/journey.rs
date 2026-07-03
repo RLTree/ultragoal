@@ -67,10 +67,10 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
     );
 
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let fit = crate::json_boundary::read_json(
+    let fit_repo_receipt = crate::json_boundary::read_json(
         &root.join("validation_artifacts/harness/fit-repo-receipt.json"),
     )
-    .expect("fit receipt");
+    .expect("fit-repo receipt");
     let journey = with_current_evidence_digests(
         &root,
         crate::json_boundary::read_json(
@@ -78,15 +78,17 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
         )
         .expect("journey receipt"),
     );
-    let target = fit
+    let target = fit_repo_receipt
         .pointer("/target_revision/value")
         .and_then(serde_json::Value::as_str)
-        .expect("fit target digest");
-    let fit_failures =
-        crate::audit::plugin::product::cohesion::fit_receipt_value_failures_with_candidate(
-            &root, &fit, target,
+        .expect("fit-repo target digest");
+    let fit_repo_failures =
+        crate::audit::plugin::product::cohesion::fit_repo_receipt_value_failures_with_candidate(
+            &root,
+            &fit_repo_receipt,
+            target,
         );
-    assert!(fit_failures.is_empty(), "{fit_failures:?}");
+    assert!(fit_repo_failures.is_empty(), "{fit_repo_failures:?}");
     let journey_target = journey
         .pointer("/target_revision/value")
         .and_then(serde_json::Value::as_str)

@@ -1,7 +1,7 @@
 use serde_json::json;
 
 #[test]
-fn plugin_product_package_failures_read_flow_fit_and_journey_surfaces() {
+fn plugin_product_package_failures_read_flow_fit_repo_and_journey_surfaces() {
     let empty =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-product-empty");
     std::fs::create_dir_all(&empty).expect("empty root");
@@ -92,7 +92,7 @@ fn plugin_product_package_failures_read_flow_fit_and_journey_surfaces() {
         root.join("validation_artifacts/harness/fit-repo-receipt.json"),
         "{}",
     )
-    .expect("fit receipt");
+    .expect("fit-repo receipt");
     std::fs::write(
         root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
         "{}",

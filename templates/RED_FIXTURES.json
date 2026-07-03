@@ -10370,11 +10370,11 @@
   {
     "expected_failure": {
       "check_id": "target-repo-audit-capability",
-      "error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit"
+      "error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready"
     },
-    "id": "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+    "id": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
     "packet_digest": "sha256:654ba5f53abca13eefdf5e768057ffbced8cfb3eed1f3eb66004ec5e44b04213",
-    "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-red.json"
+    "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json"
   },
   {
     "expected_failure": {

@@ -16022,7 +16022,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-red"
+            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red"
           }
         },
         "required": [

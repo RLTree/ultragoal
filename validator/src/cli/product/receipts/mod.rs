@@ -1,7 +1,7 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
-const FIT: &str = "fit-repo-receipt.json";
+const FIT_REPO_RECEIPT_FILE: &str = "fit-repo-receipt.json";
 const PRODUCT: &str = "product-fitness-receipt.json";
 const JOURNEY: &str = "plugin-product-journey-receipt.json";
 const SOURCE_DIR: &str = "validation_artifacts/harness";
@@ -9,12 +9,12 @@ const SOURCE_DIR: &str = "validation_artifacts/harness";
 pub(crate) fn mint_all(root: &Path, rel_dir: &Path, out_dir: &Path) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
     let generated_at = crate::audit::clock::now_iso();
-    let roundtrip_path = out_dir.join(FIT);
+    let fit_repo_path = out_dir.join(FIT_REPO_RECEIPT_FILE);
     let product_path = out_dir.join(PRODUCT);
     let journey_path = out_dir.join(JOURNEY);
 
-    let fit = fit_receipt(root, &candidate, &generated_at)?;
-    crate::json_boundary::write_json(&roundtrip_path, &fit)?;
+    let fit_repo = fit_repo_receipt(root, &candidate, &generated_at)?;
+    crate::json_boundary::write_json(&fit_repo_path, &fit_repo)?;
 
     let product = product_receipt(root, &candidate, &generated_at)?;
     crate::json_boundary::write_json(&product_path, &product)?;
@@ -22,11 +22,13 @@ pub(crate) fn mint_all(root: &Path, rel_dir: &Path, out_dir: &Path) -> Result<Va
     let journey = journey_receipt(root, rel_dir, &candidate, &generated_at)?;
     crate::json_boundary::write_json(&journey_path, &journey)?;
 
-    Ok(report(root, rel_dir, &candidate, &fit, &product, &journey))
+    Ok(report(
+        root, rel_dir, &candidate, &fit_repo, &product, &journey,
+    ))
 }
 
-fn fit_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value, String> {
-    let mut value = read_template(root, FIT)?;
+fn fit_repo_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value, String> {
+    let mut value = read_template(root, FIT_REPO_RECEIPT_FILE)?;
     set_receipt_revision_fields(&mut value, candidate, generated_at);
     set_plugin_version(root, &mut value)?;
     refresh_artifact_refs(root, &mut value)?;
@@ -54,14 +56,19 @@ fn journey_receipt(
     let mut value = read_template(root, JOURNEY)?;
     set_receipt_revision_fields(&mut value, candidate, generated_at);
     refresh_artifact_refs(root, &mut value)?;
-    let rel_fit = rel_dir.join(FIT).to_string_lossy().to_string();
+    let fit_repo_receipt_rel = rel_dir
+        .join(FIT_REPO_RECEIPT_FILE)
+        .to_string_lossy()
+        .to_string();
     let first = value
         .get_mut("evidence")
         .and_then(Value::as_array_mut)
         .and_then(|items| items.first_mut())
         .ok_or_else(|| "plugin_product_journey_receipt_missing_fit_evidence".to_string())?;
-    first["path"] = json!(rel_fit);
-    first["digest"] = json!(crate::digest::file(&root.join(rel_dir).join(FIT))?);
+    first["path"] = json!(fit_repo_receipt_rel);
+    first["digest"] = json!(crate::digest::file(
+        &root.join(rel_dir).join(FIT_REPO_RECEIPT_FILE)
+    )?);
     Ok(value)
 }
 
@@ -126,13 +133,13 @@ fn report(
     root: &Path,
     rel_dir: &Path,
     candidate: &str,
-    fit: &Value,
+    fit_repo: &Value,
     product: &Value,
     journey: &Value,
 ) -> Value {
     let mut failures = Vec::new();
     failures.extend(
-        crate::audit::fit_repo_receipt::failures_with_candidate(root, fit, candidate)
+        crate::audit::fit_repo_receipt::failures_with_candidate(root, fit_repo, candidate)
             .into_iter()
             .map(|item| format!("fit_repo:{item}")),
     );
@@ -159,7 +166,7 @@ fn report(
             "value": candidate
         },
         "receipts": [
-            row(root, rel_dir, FIT, fit, status),
+            row(root, rel_dir, FIT_REPO_RECEIPT_FILE, fit_repo, status),
             row(root, rel_dir, PRODUCT, product, status),
             row(root, rel_dir, JOURNEY, journey, status)
         ],

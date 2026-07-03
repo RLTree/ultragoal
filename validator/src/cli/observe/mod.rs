@@ -76,9 +76,7 @@ fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
         [_, a, b, ..] if a == "traces" && b == "query" => Ok(ObserveOperation::TracesQuery),
         [_, a, ..] if a == "snapshot" => Ok(ObserveOperation::Snapshot),
         [_, a, ..] if a == "prove" => Ok(ObserveOperation::Prove),
-        [_, a, ..] if a == "command-roundtrip" || a == "fit" => {
-            Ok(ObserveOperation::CommandRoundtrip)
-        }
+        [_, a, ..] if a == "command-roundtrip" => Ok(ObserveOperation::CommandRoundtrip),
         [_, a, ..] if a == "explain-failure" => Ok(ObserveOperation::ExplainFailure),
         [_, a, ..] if a == "explain-claim" => Ok(ObserveOperation::ExplainClaim),
         [_, a, ..] if a == "explain-check" => Ok(ObserveOperation::ExplainCheck),

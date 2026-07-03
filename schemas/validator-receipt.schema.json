@@ -1885,7 +1885,7 @@
               "target-repo-audit-capability-target-classification-missing-red",
               "target-repo-audit-capability-target-command-missing-success-emitted-red",
               "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-              "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+              "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -3445,7 +3445,7 @@
         "target-repo-audit-capability-target-classification-missing-red",
         "target-repo-audit-capability-target-command-missing-success-emitted-red",
         "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-        "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+        "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -8381,7 +8381,7 @@
         },
         {
           "contains": {
-            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-red"
+            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red"
           }
         },
         {
@@ -9930,7 +9930,7 @@
           "target-repo-audit-capability-target-classification-missing-red",
           "target-repo-audit-capability-target-command-missing-success-emitted-red",
           "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-          "target-repo-audit-capability-unsupported-repo-marked-fit-red",
+          "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",

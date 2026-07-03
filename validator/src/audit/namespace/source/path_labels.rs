@@ -1,5 +1,20 @@
 use super::semantic_tokens::semantic_tokens;
 
+const GOAL_WORK_PAIRS: &[(&str, &str, &str, &str)] = &[
+    ("fit", "command", "fitcommand", "fit_command"),
+    ("fit", "path", "fitpath", "fit_path"),
+    ("fit", "goal", "fitgoal", "fit_goal"),
+    ("fit", "slice", "fitslice", "fit_slice"),
+    ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
+    (
+        "checkpoint",
+        "progress",
+        "checkpointprogress",
+        "checkpoint_progress",
+    ),
+    ("todo", "repair", "todorepair", "todo_repair"),
+];
+
 pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str> {
     let tail = path.strip_prefix("validator/").unwrap_or(path);
     let lower = tail.to_ascii_lowercase();
@@ -9,6 +24,9 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
         .collect::<String>();
     let tokens = semantic_tokens(tail);
     if let Some(label) = source_name_violation_label(&tokens, &compact) {
+        return Some(label);
+    }
+    if let Some(label) = repo_entrypoint_context_label(&tokens) {
         return Some(label);
     }
     if lower.contains("production_proof")
@@ -25,20 +43,7 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
     {
         return Some("root_phase");
     }
-    for (first, second, compact_name, label) in [
-        ("fit", "command", "fitcommand", "fit_command"),
-        ("fit", "path", "fitpath", "fit_path"),
-        ("fit", "goal", "fitgoal", "fit_goal"),
-        ("fit", "slice", "fitslice", "fit_slice"),
-        ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
-        (
-            "checkpoint",
-            "progress",
-            "checkpointprogress",
-            "checkpoint_progress",
-        ),
-        ("todo", "repair", "todorepair", "todo_repair"),
-    ] {
+    for &(first, second, compact_name, label) in GOAL_WORK_PAIRS {
         if compact == compact_name || adjacent_tokens(&tokens, first, second) {
             return Some(label);
         }
@@ -102,6 +107,18 @@ fn source_name_violation_label(tokens: &[String], compact: &str) -> Option<&'sta
     None
 }
 
+fn repo_entrypoint_context_label(tokens: &[String]) -> Option<&'static str> {
+    let entrypoint_index = tokens.iter().position(|token| token == "fit")?;
+    let has_repo_neighbor = entrypoint_index
+        .checked_sub(1)
+        .and_then(|index| tokens.get(index))
+        .is_some_and(|token| token == "repo")
+        || tokens
+            .get(entrypoint_index + 1)
+            .is_some_and(|token| token == "repo");
+    if has_repo_neighbor { None } else { Some("fit") }
+}
+
 pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'static str> {
     let lower = identifier.to_ascii_lowercase();
     let tokens = semantic_tokens(identifier);
@@ -148,6 +165,11 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
     if let Some(label) = source_name_violation_label(&tokens, &compact) {
         return Some(label);
     }
+    if is_symbolic_name(text) {
+        if let Some(label) = repo_entrypoint_context_label(&tokens) {
+            return Some(label);
+        }
+    }
     if lower.contains("production_proof")
         || lower.contains("production-proof")
         || lower.contains("production proof")
@@ -167,20 +189,7 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
     if tokens.iter().any(|token| token == "fitting") {
         return Some("fitting");
     }
-    for (first, second, compact_name, label) in [
-        ("fit", "command", "fitcommand", "fit_command"),
-        ("fit", "path", "fitpath", "fit_path"),
-        ("fit", "goal", "fitgoal", "fit_goal"),
-        ("fit", "slice", "fitslice", "fit_slice"),
-        ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
-        (
-            "checkpoint",
-            "progress",
-            "checkpointprogress",
-            "checkpoint_progress",
-        ),
-        ("todo", "repair", "todorepair", "todo_repair"),
-    ] {
+    for &(first, second, compact_name, label) in GOAL_WORK_PAIRS {
         if compact.contains(compact_name) || adjacent_tokens(&tokens, first, second) {
             return Some(label);
         }
@@ -221,17 +230,20 @@ pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
 }
 
 fn adjacent_tokens(tokens: &[String], first: &str, second: &str) -> bool {
-    tokens.windows(2).any(|window| {
-        window.first().is_some_and(|token| token == first)
-            && window.get(1).is_some_and(|token| token == second)
-    })
+    tokens
+        .windows(2)
+        .any(|window| window[0] == first && window[1] == second)
+}
+
+fn is_symbolic_name(text: &str) -> bool {
+    text == "fit"
+        || text
+            .chars()
+            .all(|ch| matches!(ch, '_' | 'A'..='Z' | '0'..='9'))
 }
 
 fn adjacent_numbered_label(tokens: &[String], label: &str) -> bool {
-    tokens.windows(2).any(|window| {
-        window.first().is_some_and(|token| token == label)
-            && window
-                .get(1)
-                .is_some_and(|token| token.chars().all(|ch| ch.is_ascii_digit()))
-    })
+    tokens
+        .windows(2)
+        .any(|window| window[0] == label && window[1].chars().all(|ch| ch.is_ascii_digit()))
 }

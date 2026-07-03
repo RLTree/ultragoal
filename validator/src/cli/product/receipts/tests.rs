@@ -23,9 +23,10 @@ fn product_receipt_refresh_rejects_unsafe_artifact_paths() {
 }
 
 #[test]
-fn product_journey_receipt_requires_fit_evidence_slot() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-journey-missing-fit");
+fn product_journey_receipt_requires_fit_repo_evidence_slot() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product-journey-missing-fit-repo",
+    );
     let dir = harness(&root);
     std::fs::create_dir_all(&dir).expect("harness");
     std::fs::write(dir.join("error.txt"), b"error evidence").expect("error evidence");
@@ -48,15 +49,16 @@ fn product_journey_receipt_requires_fit_evidence_slot() {
         &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-28T00:00:00Z",
     )
-    .expect_err("missing fit evidence");
+    .expect_err("missing fit-repo evidence");
     assert!(error.contains("missing_fit_evidence"), "{error}");
-    std::fs::remove_dir_all(root).expect("cleanup journey missing fit");
+    std::fs::remove_dir_all(root).expect("cleanup journey missing fit-repo");
 }
 
 #[test]
-fn product_journey_receipt_requires_current_fit_digest() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-journey-fit-digest");
+fn product_journey_receipt_requires_current_fit_repo_digest() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product-journey-fit-repo-digest",
+    );
     let dir = harness(&root);
     std::fs::create_dir_all(&dir).expect("harness");
     std::fs::write(dir.join("error.txt"), b"error evidence").expect("error evidence");
@@ -79,17 +81,18 @@ fn product_journey_receipt_requires_current_fit_digest() {
         &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-28T00:00:00Z",
     )
-    .expect_err("missing fit receipt");
+    .expect_err("missing fit-repo receipt");
     assert!(error.contains("fit-repo-receipt.json"), "{error}");
-    std::fs::remove_dir_all(root).expect("cleanup journey fit digest");
+    std::fs::remove_dir_all(root).expect("cleanup journey fit-repo digest");
 }
 
 #[test]
-fn fit_receipt_requires_typed_plugin_version() {
-    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fit-version");
+fn fit_repo_receipt_requires_typed_plugin_version() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fit-repo-version");
     write_json(&root.join(".codex-plugin/plugin.json"), &json!({}));
     write_json(
-        &harness(&root).join(super::FIT),
+        &harness(&root).join(super::FIT_REPO_RECEIPT_FILE),
         &json!({
             "schema":"harness-ultragoal.fit-repo-receipt.v1",
             "status":"pass",
@@ -98,14 +101,14 @@ fn fit_receipt_requires_typed_plugin_version() {
             "receipt_digest":crate::digest::ZERO
         }),
     );
-    let error = super::fit_receipt(
+    let error = super::fit_repo_receipt(
         &root,
         &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "2026-06-28T00:00:00Z",
     )
     .expect_err("missing plugin version");
     assert!(error.contains("missing version"), "{error}");
-    std::fs::remove_dir_all(root).expect("cleanup product fit version");
+    std::fs::remove_dir_all(root).expect("cleanup product fit-repo version");
 }
 
 #[test]
