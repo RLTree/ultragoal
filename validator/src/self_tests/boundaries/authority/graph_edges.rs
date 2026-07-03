@@ -68,7 +68,7 @@ fn foundational_law_surface_inventory_accepts_complete_product_edges() {
         "fixtures/mandatory-law-surfaces/valid/typed-records-over-prose.json",
         "fixtures/red/typed-records-over-prose-raw-downstream-json-authority-rejected-red.json",
         "docs/source-obligation-matrix.json",
-        "validator/src/audit/law/authority_surfaces/source/raw.rs",
+        "validator/src/audit/law/authority_surfaces/source/raw/mod.rs",
     ];
     for rel in paths {
         let path = root.join(rel);
@@ -87,7 +87,7 @@ fn foundational_law_surface_inventory_accepts_complete_product_edges() {
             "valid_fixture_path":"fixtures/mandatory-law-surfaces/valid/typed-records-over-prose.json",
             "red_fixture_ids":["typed-records-over-prose-raw-downstream-json-authority-rejected-red"],
             "evidence_artifacts":[{
-                "path":"validator/src/audit/law/authority_surfaces/source/raw.rs"
+                "path":"validator/src/audit/law/authority_surfaces/source/raw/mod.rs"
             }]
         }]
     });
@@ -113,7 +113,7 @@ fn foundational_law_surface_inventory_accepts_complete_product_edges() {
         &json!({"obligations":[{"id":"typed-records-over-prose"}]}),
         &trace,
         &json!({"rows":[{"id":"typed-records-over-prose"}]}),
-        "typed-records-over-prose\tpass\tvalidator/src/audit/law/authority_surfaces/source/raw.rs\tsha256:test\t2026-07-02T00:00:00Z\tcompletion\n",
+        "typed-records-over-prose\tpass\tvalidator/src/audit/law/authority_surfaces/source/raw/mod.rs\tsha256:test\t2026-07-02T00:00:00Z\tcompletion\n",
         &red_ids,
     );
     assert!(failures.is_empty(), "{failures:?}");

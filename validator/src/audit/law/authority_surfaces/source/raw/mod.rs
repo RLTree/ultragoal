@@ -1,3 +1,9 @@
+mod classifiers;
+mod markers;
+
+use classifiers::{typed_cli_command_boundary_text, typed_law_check_boundary_text};
+use markers::raw_authority_marker;
+
 pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     let Some(marker) = raw_authority_marker(text) else {
         return Vec::new();
@@ -8,29 +14,6 @@ pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     vec![format!(
         "raw_downstream_authority_unclassified:path={rel};raw_authority={marker};classification_required=parser_boundary|projection|fixture_catalog_materialization|catalog_materialization;repair=route_raw_input_through_typed_record_or_typed_failure_before_law_execution"
     )]
-}
-
-fn raw_authority_marker(text: &str) -> Option<&'static str> {
-    if text.contains("serde_json::Map")
-        || text.contains("BTreeMap<String, Value")
-        || text.contains("HashMap<String, Value")
-        || text.contains("raw_map")
-    {
-        return Some("raw_map");
-    }
-    if text.contains("raw_path") {
-        return Some("raw_path");
-    }
-    if text.contains("raw_string") {
-        return Some("raw_string");
-    }
-    if contains_json_value_binding(text) {
-        return Some("raw_json");
-    }
-    if text.contains("\"raw_") || text.contains("raw_observation") {
-        return Some("raw_observation");
-    }
-    None
 }
 
 fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
@@ -98,7 +81,7 @@ fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
             "secret_material_serialized",
             "blocked_claims",
         ],
-        "validator/src/audit/law/authority_surfaces/surface_inventory.rs" => &[
+        "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs" => &[
             "AuthoritySurfaceInventoryRow",
             "harness-ultragoal.foundational-law-surface-inventory.v1",
             "surface_state",
@@ -185,6 +168,8 @@ fn typed_record_projection_text(text: &str) -> bool {
 fn parser_boundary_text(rel: &str, text: &str) -> bool {
     parser_boundary_path(rel)
         || reads_structured_input(text)
+        || typed_cli_command_boundary_text(rel, text)
+        || typed_law_check_boundary_text(text)
         || schema_catalog_boundary(text)
         || typed_json_field_parser(text)
         || validator_artifact_parser(text)
@@ -192,6 +177,7 @@ fn parser_boundary_text(rel: &str, text: &str) -> bool {
 
 fn parser_boundary_path(rel: &str) -> bool {
     rel.ends_with("json_boundary.rs")
+        || rel.contains("/authority_surfaces/source/raw")
         || rel.starts_with("validator/src/schema_catalog/")
         || rel == "validator/src/schema_catalog/mod.rs"
         || rel.contains("/schema/")
@@ -239,6 +225,7 @@ fn typed_failure_boundary_text(text: &str) -> bool {
             || text.contains("Failure::new")
             || text.contains("out.push(")
             || text.contains("Err(")
+            || text.contains("Some(format!(")
             || text.contains("Some(\""))
 }
 

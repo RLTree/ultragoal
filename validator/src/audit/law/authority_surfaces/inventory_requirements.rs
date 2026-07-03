@@ -36,7 +36,7 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package_authority_surface!(
         "source",
-        "validator/src/audit/law/authority_surfaces/surface_inventory.rs",
+        "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs",
     ),
     package_authority_surface!(
         "source",
@@ -48,7 +48,7 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package_authority_surface!(
         "source",
-        "validator/src/audit/law/authority_surfaces/source/raw.rs",
+        "validator/src/audit/law/authority_surfaces/source/raw/mod.rs",
     ),
     package_authority_surface!(
         "source",
@@ -124,8 +124,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "fixtures/mandatory-law-surfaces/valid/validator-theater-miswire-resistance.json",
     ),
     package_authority_surface!("red_fixture_catalog", "templates/RED_FIXTURES.json"),
+    package_authority_surface!("package_manifest", ".codex-plugin/plugin.json"),
     package_authority_surface!("package_inventory", "plugin-manifest-draft.json"),
     package_authority_surface!("package_inventory", "docs/plugin-cohesion-manifest.json"),
+    package_authority_surface!("setup_retrofit_output", ".codex/setup-worktree-env.sh"),
     package_authority_surface!(
         "generated_artifact",
         "docs/generated/observability/command-inventory.json",

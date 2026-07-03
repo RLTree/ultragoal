@@ -4,7 +4,7 @@ pub(crate) mod authority {
     pub(crate) mod graph_edges;
     pub(crate) mod inventory;
     pub(crate) mod output;
-    pub(crate) mod raw_classification_edges;
+    pub(crate) mod raw;
     pub(crate) mod registry_edges;
     pub(crate) mod surface_edges;
 }
