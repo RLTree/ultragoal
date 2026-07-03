@@ -32,6 +32,9 @@ fn authority_surface_inventory_reports_required_product_roles() {
     for role in [
         "source",
         "schema",
+        "law_registry",
+        "research_registry",
+        "research_trace",
         "valid_fixture",
         "red_fixture_catalog",
         "package_inventory",
@@ -57,6 +60,18 @@ fn authority_surface_inventory_reports_required_product_roles() {
             .iter()
             .any(|row| row.get("path").and_then(serde_json::Value::as_str)
                 == Some("validator/src/audit/law/authority_surfaces/surface_inventory.rs")
+                && row.get("surface_state").and_then(serde_json::Value::as_str)
+                    == Some("available")),
+        "{inventory}"
+    );
+    assert!(
+        inventory
+            .get("rows")
+            .and_then(serde_json::Value::as_array)
+            .expect("rows")
+            .iter()
+            .any(|row| row.get("path").and_then(serde_json::Value::as_str)
+                == Some("validator/src/audit/namespace/source/label_patterns.rs")
                 && row.get("surface_state").and_then(serde_json::Value::as_str)
                     == Some("available")),
         "{inventory}"

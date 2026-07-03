@@ -149,6 +149,7 @@
       "validator/src/audit/agent/standards/tsv/mod.rs",
       "validator/src/audit/cli/control_plane/authority/mod.rs",
       "validator/src/audit/cli/performance.rs",
+      "validator/src/audit/coverage/scope/builder_contract.rs",
       "validator/src/audit/coverage/scope/mod.rs",
       "validator/src/audit/final_packet/mod.rs",
       "validator/src/audit/final_packet/references/coverage.rs",
@@ -159,6 +160,7 @@
       "validator/src/audit/law/family/aliases.rs",
       "validator/src/audit/law/family/mod.rs",
       "validator/src/audit/law/mod.rs",
+      "validator/src/audit/law/authority_surfaces/authority_labels.rs",
       "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
       "validator/src/audit/observability/registry/proof.rs",
       "validator/src/audit/observability/registry/tests/receipts.rs",
@@ -170,6 +172,7 @@
       "validator/src/audit/namespace/law/mod.rs",
       "validator/src/audit/namespace/mod.rs",
       "validator/src/audit/namespace/source/mod.rs",
+      "validator/src/audit/namespace/source/label_patterns.rs",
       "validator/src/audit/namespace/source/path_labels.rs",
       "validator/src/audit/namespace/source/string_labels.rs",
       "validator/src/audit/namespace/source/topology.rs",
@@ -349,6 +352,7 @@
       "validator/src/self_tests/cli/routine/surface_edges.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/standards.rs",
+      "validator/src/self_tests/boundaries/authority/inventory/labels.rs",
       "validator/src/self_tests/command/mod.rs",
       "validator/src/self_tests/command/product.rs",
       "validator/src/self_tests/command/review/round.rs",
@@ -398,7 +402,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:d8d9df387be14cefcbc08de9f3a6df3b61eefca5528cdf25ac77d45bc8b873aa",
+    "changed_files_digest": "sha256:fe047ad3487f667db569fb8031f3eede598dedefb3105fc5475694ba40369841",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -446,7 +450,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:187503467e233dd36138de48b4ca03155a17f383c3105de141dd0fad6bc9b742",
+  "repo_root_digest": "sha256:b083a22b9191407e8dfec7c02c2f0622f36020a25f0bcbea03ab46cd3c8d0958",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

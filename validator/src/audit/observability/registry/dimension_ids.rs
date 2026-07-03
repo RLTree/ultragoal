@@ -123,7 +123,7 @@ const CLAIM_GUARDS: &[&str] = &[
     "install parity",
     "cache parity",
     "product success",
-    "observability gate",
+    "observability product closure",
     "local spool only proof",
     "live stack query proof",
 ];

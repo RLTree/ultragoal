@@ -7,7 +7,7 @@ pub(super) fn claim_ceiling(operation: ObserveOperation, status: &str) -> &'stat
     } else if status == "pass" {
         "observability_observation_only"
     } else {
-        "observability_gate_failed_completion_readiness_release_update_goal_blocked"
+        "observability_product_closure_failed_completion_readiness_release_update_goal_blocked"
     }
 }
 

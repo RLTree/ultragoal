@@ -97,7 +97,7 @@ fn package_inventory_ignores_local_dependency_caches_but_keeps_manifests() {
 }
 
 #[test]
-fn package_inventory_ignores_parent_session_contract_files() {
+fn package_inventory_ignores_builder_contract_files() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("inventory-parent-contract");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
@@ -119,7 +119,7 @@ fn package_inventory_ignores_parent_session_contract_files() {
 }
 
 #[test]
-fn package_inventory_ignores_mutable_validation_artifacts_but_rejects_parent_contract_resources() {
+fn package_inventory_ignores_mutable_validation_artifacts_but_rejects_builder_contract_resources() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("inventory-local-receipts");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
@@ -146,7 +146,7 @@ fn package_inventory_ignores_mutable_validation_artifacts_but_rejects_parent_con
     )
     .join("\n");
     assert!(
-        bad.contains("parent-session contract is not a package resource"),
+        bad.contains("builder contract resource is not a package resource"),
         "{bad}"
     );
     std::fs::remove_dir_all(root).expect("cleanup inventory local receipts");

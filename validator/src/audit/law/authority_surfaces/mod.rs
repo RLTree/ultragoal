@@ -2,6 +2,7 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+mod authority_labels;
 mod graph;
 mod graph_edges;
 mod inventory;
@@ -34,6 +35,9 @@ pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
         &inventory,
         &registry::red_catalog_ids(&red_catalog),
     ));
+    out.extend(authority_labels::package_json_label_failures(
+        root, &inventory,
+    ));
     out.extend(source::source_text_failures(root));
     out.extend(inventory::generated_failures(root, &inventory));
     out
@@ -61,6 +65,14 @@ pub(crate) fn output_authority_failures_for_test(rel: &str, text: &str) -> Vec<S
 #[cfg(test)]
 pub(crate) fn source_text_failures_for_test(root: &Path) -> Vec<(String, String)> {
     source::source_text_failures(root)
+}
+
+#[cfg(test)]
+pub(crate) fn package_json_label_failures_for_test(
+    root: &Path,
+    inventory: &BTreeSet<String>,
+) -> Vec<(String, String)> {
+    authority_labels::package_json_label_failures(root, inventory)
 }
 
 #[cfg(test)]

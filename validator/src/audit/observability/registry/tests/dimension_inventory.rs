@@ -58,7 +58,7 @@ fn observable_dimension_row(kind: &str, name: &str) -> Value {
         "tamper_fixtures": [format!("fixtures/tamper/observability/{kind}-{slug}-tamper.json")],
         "current_owner_surface": format!("{kind}:{name}"),
         "next_unobservable_surface": "none",
-        "claim_impact": "supports_observability_gate_when_same_candidate"
+        "claim_impact": "supports_observability_product_closure_when_same_candidate"
     })
 }
 

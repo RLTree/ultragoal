@@ -42,7 +42,7 @@ fn observability_registry_rejects_unobservable_and_row_shape_inventory() {
         "focused_tests": [],
         "receipt_paths": [],
         "live_query_proof_paths": [],
-        "claim_impact": "blocks_observability_gate"
+        "claim_impact": "blocks_observability_product_closure"
     });
     write_registry_root(&root, inventory);
     write_valid_fixture(&root);
@@ -117,7 +117,7 @@ fn observability_registry_rejects_unobservable_and_row_shape_inventory() {
         "focused_tests": [],
         "receipt_paths": [],
         "live_query_proof_paths": [],
-        "claim_impact": "blocks_observability_gate"
+        "claim_impact": "blocks_observability_product_closure"
     });
     write_inventory(&root, signal_unobservable);
     failures.clear();
@@ -143,7 +143,7 @@ fn observability_registry_rejects_pass_shaped_control_board() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:source audit",
         "next_unobservable_surface": "metrics",
-        "claim_impact": "blocks_observability_gate"
+        "claim_impact": "blocks_observability_product_closure"
     });
     inventory["observability_control_board"]["status"] = json!("observable");
     inventory["observability_control_board"]["families"]["commands"]["observable"] =
@@ -185,7 +185,7 @@ fn observability_control_board_uses_required_command_order() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:source audit",
         "next_unobservable_surface": "pass/fail stdout contract",
-        "claim_impact": "blocks_observability_gate"
+        "claim_impact": "blocks_observability_product_closure"
     });
     inventory["command_observability_inventory"]["archive build"] = json!({
         "observability_status": "unobservable",
@@ -197,7 +197,7 @@ fn observability_control_board_uses_required_command_order() {
         "live_query_proof_paths": [],
         "current_owner_surface": "command:archive build",
         "next_unobservable_surface": "log",
-        "claim_impact": "blocks_observability_gate"
+        "claim_impact": "blocks_observability_product_closure"
     });
     inventory["observability_control_board"]["status"] = json!("blocked");
     inventory["observability_control_board"]["families"]["commands"]["observable"] =

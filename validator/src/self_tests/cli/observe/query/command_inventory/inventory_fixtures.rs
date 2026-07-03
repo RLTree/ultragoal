@@ -86,7 +86,7 @@ fn observable_control_board() -> serde_json::Value {
     json!({
         "status": "observable",
         "families": families,
-        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_command_observable_same_candidate"
+        "claim_impact": "supports_observability_product_closure_only_when_every_inventory_row_is_command_observable_same_candidate"
     })
 }
 

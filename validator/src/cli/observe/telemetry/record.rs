@@ -35,7 +35,7 @@ pub(super) fn event(
         "artifact_path": "dev/observability",
         "receipt_path": receipt_path,
         "status": status,
-        "failure_class": if failure.is_some() { "observability_gate_failure" } else { "none" },
+        "failure_class": if failure.is_some() { "observability_product_closure_failure" } else { "none" },
         "why_failed": failure.as_deref().unwrap_or("none"),
         "where_failed": if failure.is_some() { command.operation.id() } else { "none" },
         "next_repair": next_repair,

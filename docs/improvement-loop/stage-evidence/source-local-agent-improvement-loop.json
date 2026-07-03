@@ -64,7 +64,7 @@
       "receipt_paths": ["validation_artifacts/promptfoo/adapter-receipt.json"],
       "command_ids": ["ultragoal promptfoo prove"],
       "forbidden_substitutions_rejected": ["raw_promptfoo_output_as_loop_closure"],
-      "claim_impact": "stage_only_promptfoo_eval_claims_remain_blocked_until_gate96_closure"
+      "claim_impact": "stage_only_promptfoo_eval_claims_remain_blocked_until_promptfoo_adapter_closure"
     },
     {
       "stage_id": "halo_ranking",
@@ -75,7 +75,7 @@
       "receipt_paths": ["validation_artifacts/halo/capability-receipt.json"],
       "command_ids": ["ultragoal halo capability prove"],
       "forbidden_substitutions_rejected": ["raw_halo_output_as_loop_closure"],
-      "claim_impact": "stage_only_halo_ranking_claims_remain_blocked_until_gate97_closure"
+      "claim_impact": "stage_only_halo_ranking_claims_remain_blocked_until_halo_capability_closure"
     },
     {
       "stage_id": "codex_handoff",
@@ -84,7 +84,7 @@
       "status": "pass",
       "source_paths": ["docs/improvement-loop-registry.json"],
       "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
-      "command_ids": ["parent-session-agent-improvement-loop-slice"],
+      "command_ids": ["ultragoal improvement-loop prove"],
       "forbidden_substitutions_rejected": ["checklist_prose_as_loop_closure"],
       "claim_impact": "stage_only"
     },

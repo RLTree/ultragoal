@@ -11,8 +11,8 @@ pub(crate) use payload::stable_package_payload;
 
 pub const PACKAGE_DIGEST_EXCLUDED_PREFIXES: &[&str] = &["validation_artifacts/"];
 pub const PACKAGE_DIGEST_EXCLUDED_PATHS: &[&str] = &[];
-const PARENT_SESSION_CONTRACT_PREFIX: &str = "docs/parent-session-full-ultragoal-";
-const PARENT_SESSION_CONTRACT_DIR: &str = "docs/ultragoal-contract-2026-07/";
+const BUILDER_CONTRACT_COMPAT_PREFIX: &str = "docs/parent-session-full-ultragoal-";
+const BUILDER_CONTRACT_MODULE_DIR: &str = "docs/ultragoal-contract-2026-07/";
 
 pub fn inventory_paths(manifest: &Value) -> Vec<String> {
     let mut out = Vec::new();
@@ -50,9 +50,9 @@ pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
     if rel.is_empty() {
         return Some("package path is not a non-empty string".to_string());
     }
-    if parent_session_contract_path(rel) {
+    if builder_contract_resource_path(rel) {
         return Some(format!(
-            "parent-session contract is not a package resource: {rel}"
+            "builder contract resource is not a package resource: {rel}"
         ));
     }
     if Path::new(rel).is_absolute() {
@@ -73,9 +73,9 @@ pub fn package_path_error(root: &Path, rel: &str) -> Option<String> {
     canonical_escape_error(&root_abs, &full, rel)
 }
 
-pub(crate) fn parent_session_contract_path(rel: &str) -> bool {
-    (rel.starts_with(PARENT_SESSION_CONTRACT_PREFIX) && rel.ends_with(".md"))
-        || rel.starts_with(PARENT_SESSION_CONTRACT_DIR)
+pub(crate) fn builder_contract_resource_path(rel: &str) -> bool {
+    (rel.starts_with(BUILDER_CONTRACT_COMPAT_PREFIX) && rel.ends_with(".md"))
+        || rel.starts_with(BUILDER_CONTRACT_MODULE_DIR)
 }
 
 pub fn resolve(root: &Path, rel: &str) -> Result<PathBuf, String> {

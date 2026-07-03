@@ -52,14 +52,14 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
-            "{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"why_failed\":\"live stack unhealthy\",\"where_failed\":\"observe.prove\",\"next_repair\":\"run observe stack health\",\"claim_impact\":\"update_goal_blocked\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"observability-control-plane\",\"run_id\":\"run-observed\",\"correlation_id\":\"corr-observed\"}}"
+            "{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_product_closure_failure\",\"why_failed\":\"live stack unhealthy\",\"where_failed\":\"observe.prove\",\"next_repair\":\"run observe stack health\",\"claim_impact\":\"update_goal_blocked\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"observability-control-plane\",\"run_id\":\"run-observed\",\"correlation_id\":\"corr-observed\"}}"
         )),
     )
     .expect("observed failure output");
     assert_eq!(observed_failure["status"], "pass");
     assert_eq!(
         observed_failure["observed_failure_class"],
-        "observability_gate_failure"
+        "observability_product_closure_failure"
     );
     assert_eq!(
         observed_failure["observed_why_failed"],
@@ -80,13 +80,13 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         QueryKind::Metrics,
         "*".to_string(),
         Ok(format!(
-            "{{\"status\":\"success\",\"data\":{{\"result\":[{{\"metric\":{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"operation\":\"observe.prove\",\"claim_impact\":\"update_goal_blocked\"}}}}]}}}}"
+            "{{\"status\":\"success\",\"data\":{{\"result\":[{{\"metric\":{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_product_closure_failure\",\"operation\":\"observe.prove\",\"claim_impact\":\"update_goal_blocked\"}}}}]}}}}"
         )),
     )
     .expect("metric observed failure output");
     assert_eq!(
         metric_observed_failure["observed_failure_class"],
-        "observability_gate_failure"
+        "observability_product_closure_failure"
     );
     assert_eq!(
         metric_observed_failure["observed_why_failed"],
@@ -98,7 +98,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         QueryKind::Traces,
         "*".to_string(),
         Ok(format!(
-            "{{\"data\":[{{\"processes\":{{\"p1\":{{\"tags\":[{{\"key\":\"candidate_digest\",\"value\":\"{current_candidate}\"}}]}}}},\"spans\":[{{\"tags\":[{{\"key\":\"status\",\"value\":\"fail\"}},{{\"key\":\"failure_class\",\"value\":\"observability_gate_failure\"}},{{\"key\":\"why_failed\",\"value\":\"live stack unhealthy\"}},{{\"key\":\"operation\",\"value\":\"observe.prove\"}},{{\"key\":\"claim_impact\",\"value\":\"update_goal_blocked\"}}]}}]}}]}}"
+            "{{\"data\":[{{\"processes\":{{\"p1\":{{\"tags\":[{{\"key\":\"candidate_digest\",\"value\":\"{current_candidate}\"}}]}}}},\"spans\":[{{\"tags\":[{{\"key\":\"status\",\"value\":\"fail\"}},{{\"key\":\"failure_class\",\"value\":\"observability_product_closure_failure\"}},{{\"key\":\"why_failed\",\"value\":\"live stack unhealthy\"}},{{\"key\":\"operation\",\"value\":\"observe.prove\"}},{{\"key\":\"claim_impact\",\"value\":\"update_goal_blocked\"}}]}}]}}]}}"
         )),
     )
     .expect("trace observed failure output");

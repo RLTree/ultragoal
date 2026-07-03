@@ -228,7 +228,7 @@ fn receipt(
     receipt["spec_command_ids"] = json!(specs::command_ids());
     receipt["results"] = json!(results);
     receipt["claim_ceiling"] = json!(
-        "source-local observability command roundtrip only; Gate 92 remains blocked until every row has same-candidate telemetry reconciliation"
+        "source-local observability command roundtrip only; observability product closure remains blocked until every row has same-candidate telemetry reconciliation"
     );
     receipt["claim_impact"] = json!(
         "supports one spec-driven command observability roundtrip increment only_not_readiness_release_completion_update_goal"

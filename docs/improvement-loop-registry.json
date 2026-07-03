@@ -17,9 +17,9 @@
       "loop_closure_status": "complete_same_candidate",
       "stage_evidence_path": "docs/improvement-loop/stage-evidence/source-local-agent-improvement-loop.json",
       "stage_evidence_schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
-      "stage_evidence_digest": "sha256:a8df8f2a23d19b7915d25f5e48c0c11f2f388bdc5f30097464b2b0c9cdccffad",
+      "stage_evidence_digest": "sha256:522fb380c1bcf1ab22398a4c08de4d6c9026cabaeedb0a4776d99c47581328e2",
       "trace_ids": [
-        "gate-92-current-failure-observability"
+        "observability-current-failure-diagnosis"
       ],
       "feedback_ids": [
         "ct-006-through-ct-011-control-loop-steers"
@@ -37,17 +37,17 @@
         "halo-capability-manual-observation-only"
       ],
       "codex_handoff_ids": [
-        "parent-session-source-local-repair-contract"
+        "source-local-repair-operating-contract"
       ],
       "implementation_change_ids": [
-        "gate-93-research-law-registry-checkpoint"
+        "research-law-registry-source-card-binding"
       ],
       "validation_receipt_ids": [
         "cargo-test-offline-research-lib-quiet",
         "cargo-test-offline-lib-quiet"
       ],
       "before_after_telemetry_ids": [
-        "gate-92-package-digest-only"
+        "package-digest-observability-roundtrip"
       ],
       "promotion_ids": [
         "research-source-authority-article-to-law-integration"

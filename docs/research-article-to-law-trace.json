@@ -19,7 +19,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["research_backed_claims_withheld_without_current_article_to_law_trace", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["research_source_authority_status", "observability_status"],
-      "update_goal_blockers": ["research_source_authority_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["research_source_authority_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "openai-harness-local-observability-loop",
@@ -38,7 +38,7 @@
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["observability_status", "research_source_authority_status"],
-      "update_goal_blockers": ["observability_gate_incomplete", "research_source_authority_incomplete"]
+      "update_goal_blockers": ["observability_product_closure_incomplete", "research_source_authority_incomplete"]
     },
     {
       "requirement_id": "codex-repair-review-repair-validate",
@@ -57,7 +57,7 @@
       "setup_retrofit_outputs": ["skills/standards-gardener/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["validator_claims_withheld_without_agent_remediating_failures", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["repair_loop_status", "observability_status"],
-      "update_goal_blockers": ["improvement_loop_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["improvement_loop_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "openai-agents-run-observability",
@@ -76,7 +76,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["model_output_cannot_support_claim_without_cli_schema_parse", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["openai_boundary_status", "observability_status"],
-      "update_goal_blockers": ["openai_boundary_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["openai_boundary_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "openai-agents-trace-span-discipline",
@@ -93,9 +93,9 @@
       "receipt_requirements": ["observability trace receipt with root and child span parentage"],
       "package_inventory_paths": ["schemas/observability-trace.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md"],
-      "claim_guards": ["broken_span_parentage_blocks_observability_gate", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["broken_span_parentage_blocks_observability_product_closure", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["trace_parentage_status", "observability_status"],
-      "update_goal_blockers": ["observability_trace_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["observability_trace_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "sre-monitoring-diagnose-compare-freshness",
@@ -114,7 +114,7 @@
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md"],
       "claim_guards": ["stale_telemetry_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["telemetry_freshness_status", "observability_status"],
-      "update_goal_blockers": ["stale_telemetry_present", "observability_gate_incomplete"]
+      "update_goal_blockers": ["stale_telemetry_present", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "sre-four-golden-signals-cli",
@@ -131,9 +131,9 @@
       "receipt_requirements": ["performance receipt with latency, traffic, errors, saturation class evidence, and observability metric binding"],
       "package_inventory_paths": ["validation_artifacts/cli/performance-receipt.json", "schemas/observability-metric.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md"],
-      "claim_guards": ["performance_proof_supports_performance_only_without_self_law", "observability_signal_class_missing_blocks_observability_gate"],
+      "claim_guards": ["performance_proof_supports_performance_only_without_self_law", "observability_signal_class_missing_blocks_observability_product_closure"],
       "final_packet_fields": ["performance_signal_status", "observability_status"],
-      "update_goal_blockers": ["performance_receipt_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["performance_receipt_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "structured-events-wide-context",
@@ -150,9 +150,9 @@
       "receipt_requirements": ["wide observability event receipt with failure class, next repair, and claim impact"],
       "package_inventory_paths": ["schemas/observability-event.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md"],
-      "claim_guards": ["opaque_failure_output_blocks_observability_gate", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["opaque_failure_output_blocks_observability_product_closure", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["non_opaque_failure_status", "observability_status"],
-      "update_goal_blockers": ["opaque_failure_present", "observability_gate_incomplete"]
+      "update_goal_blockers": ["opaque_failure_present", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "high-cardinality-correlation-keys",
@@ -171,7 +171,7 @@
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md"],
       "claim_guards": ["unredacted_or_uncorrelated_telemetry_blocks_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["correlation_and_redaction_status", "observability_status"],
-      "update_goal_blockers": ["telemetry_correlation_or_redaction_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["telemetry_correlation_or_redaction_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "otel-semantic-naming-correlation",
@@ -190,7 +190,7 @@
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md"],
       "claim_guards": ["semantic_name_mismatch_blocks_telemetry_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["telemetry_semantic_name_status", "observability_status"],
-      "update_goal_blockers": ["telemetry_semantic_names_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["telemetry_semantic_names_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "openai-agent-improvement-feedback-evals",
@@ -209,7 +209,7 @@
       "setup_retrofit_outputs": ["skills/standards-gardener/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["self_improving_claims_withheld_without_loop_closure", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["improvement_loop_status", "observability_status"],
-      "update_goal_blockers": ["improvement_loop_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["improvement_loop_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "tax-agent-domain-task-feedback-loop",
@@ -228,7 +228,7 @@
       "setup_retrofit_outputs": ["skills/product-fitness-gate/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["domain_eval_only_cannot_support_product_success", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["domain_agent_improvement_status", "observability_status"],
-      "update_goal_blockers": ["domain_agent_improvement_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["domain_agent_improvement_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "rust-devx-cli-authority",
@@ -247,7 +247,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-first-repo-init/SKILL.md"],
       "claim_guards": ["raw_cargo_output_cannot_support_harness_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "typescript-frontend-governed-boundaries",
@@ -266,7 +266,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["raw_typescript_tool_output_cannot_support_harness_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["typescript_devx_status", "observability_status"],
-      "update_goal_blockers": ["typescript_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["typescript_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-harness-product-doctrine",
@@ -285,7 +285,7 @@
       "setup_retrofit_outputs": ["skills/product-cohesion-gate/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["product_claims_withheld_without_product_truth", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["harness_product_doctrine_status", "observability_status"],
-      "update_goal_blockers": ["harness_product_doctrine_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["harness_product_doctrine_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-agent-sensory-system",
@@ -304,7 +304,7 @@
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["observability_status", "agent_quality_metrics_status"],
-      "update_goal_blockers": ["observability_gate_incomplete"]
+      "update_goal_blockers": ["observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-telemetry-envelope-cardinality",
@@ -321,9 +321,9 @@
       "receipt_requirements": ["telemetry receipts with expanded envelope fields, bounded metric labels, redaction state, and high-cardinality values kept in logs events traces or eval records"],
       "package_inventory_paths": ["docs/generated/observability/command-inventory.json", "schemas/observability-event.schema.json", "schemas/observability-metric.schema.json", "schemas/observability-trace.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/harness-engineering/SKILL.md"],
-      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "unbounded_metric_labels_block_observability_gate"],
+      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "unbounded_metric_labels_block_observability_product_closure"],
       "final_packet_fields": ["telemetry_envelope_status", "observability_status"],
-      "update_goal_blockers": ["telemetry_envelope_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["telemetry_envelope_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-agent-legible-query-explain",
@@ -340,9 +340,9 @@
       "receipt_requirements": ["same-candidate observability query and explain receipt that identifies root cause, where why next repair, affected claim, stale evidence, and narrow rerun"],
       "package_inventory_paths": ["docs/generated/observability/command-inventory.json", "schemas/observability-query-result.schema.json", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/proof-gate/SKILL.md"],
-      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "opaque_failure_output_blocks_observability_gate"],
+      "claim_guards": ["observability_claims_withheld_without_typed_queryable_correlated_receipt", "opaque_failure_output_blocks_observability_product_closure"],
       "final_packet_fields": ["observe_query_explain_status", "observability_status"],
-      "update_goal_blockers": ["observe_query_explain_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["observe_query_explain_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-trace-feedback-eval-repair-promotion",
@@ -361,7 +361,7 @@
       "setup_retrofit_outputs": ["skills/standards-gardener/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["self_improving_claims_withheld_without_loop_closure", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["improvement_loop_status", "observability_status"],
-      "update_goal_blockers": ["improvement_loop_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["improvement_loop_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-agents-routing-routine-command-surface",
@@ -380,7 +380,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["setup_claims_withheld_without_same_mode_receipt", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["product_usage_cli_surface_status", "observability_status"],
-      "update_goal_blockers": ["product_usage_cli_surface_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["product_usage_cli_surface_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-tool-contract-risk-tiers",
@@ -399,7 +399,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["tool_contract_claims_withheld_without_risk_tier_and_telemetry", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["tool_risk_and_approval_surface_status", "observability_status"],
-      "update_goal_blockers": ["tool_contracts_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["tool_contracts_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-truth-surface-separation",
@@ -418,7 +418,7 @@
       "setup_retrofit_outputs": ["skills/proof-gate/SKILL.md", "skills/fit-repo/SKILL.md"],
       "claim_guards": ["surface_substitution_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["truth_surface_separation_status", "observability_status"],
-      "update_goal_blockers": ["truth_surface_separation_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["truth_surface_separation_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-standard-measured-improvement-agent-quality",
@@ -437,7 +437,7 @@
       "setup_retrofit_outputs": ["skills/standards-gardener/SKILL.md", "skills/agent-runtime-legibility/SKILL.md"],
       "claim_guards": ["measured_improvement_claims_withheld_without_same_surface_agent_quality_metrics", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["agent_quality_metrics_status", "observability_status"],
-      "update_goal_blockers": ["measured_improvement_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["measured_improvement_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-001-agent-first-harness",
@@ -456,7 +456,7 @@
       "setup_retrofit_outputs": ["skills/product-cohesion-gate/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["product_claims_withheld_without_product_truth", "validator_enforcement_claims_withheld_without_theater_and_miswire_resistance", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["harness_product_doctrine_status", "observability_status"],
-      "update_goal_blockers": ["harness_product_doctrine_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["harness_product_doctrine_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-002-cross-language-claim-authority",
@@ -475,7 +475,7 @@
       "setup_retrofit_outputs": ["skills/proof-gate/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["harness_claims_withheld_without_cli_control_plane_authority", "raw_cargo_output_cannot_support_harness_claims", "raw_typescript_tool_output_cannot_support_harness_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["cross_language_claim_authority_status", "observability_status"],
-      "update_goal_blockers": ["cross_language_claim_authority_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["cross_language_claim_authority_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-003-clean-checkout-discoverability",
@@ -494,7 +494,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["install_setup_runtime_check_claims_withheld_without_clean_checkout_receipt", "reproducibility_claims_withheld_without_clean_room_rebuild_receipt", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["clean_checkout_discoverability_status", "observability_status"],
-      "update_goal_blockers": ["clean_checkout_discoverability_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["clean_checkout_discoverability_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-004-same-surface-full-stack-proof",
@@ -513,7 +513,7 @@
       "setup_retrofit_outputs": ["skills/proof-gate/SKILL.md", "skills/fit-repo/SKILL.md"],
       "claim_guards": ["surface_substitution_blocks_dependent_claims", "product_claims_withheld_without_product_truth", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["truth_surface_separation_status", "observability_status"],
-      "update_goal_blockers": ["truth_surface_separation_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["truth_surface_separation_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-005-lockfile-sovereignty",
@@ -532,7 +532,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["rust_claims_withheld_without_current_toolchain_substrate_receipt", "dependency_claims_withheld_without_typed_adapter_registry", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-006-telemetry-schema",
@@ -549,9 +549,9 @@
       "receipt_requirements": ["telemetry receipts with expanded envelope fields, bounded metric labels, redaction state, and high-cardinality values kept in logs events traces or eval records", "telemetry semantic-name and stable-id validation receipt"],
       "package_inventory_paths": ["schemas/observability-event.schema.json", "schemas/observability-metric.schema.json", "docs/generated/observability/command-inventory.json", "artifacts/source-snapshots/gold-standard-stack-developer-experience-governance-2026-07-01.txt", "docs/research-article-to-law-trace.json"],
       "setup_retrofit_outputs": ["skills/agent-observability-stack/SKILL.md", "skills/agent-runtime-legibility/SKILL.md"],
-      "claim_guards": ["semantic_name_mismatch_blocks_telemetry_claims", "unbounded_metric_labels_block_observability_gate", "unredacted_or_uncorrelated_telemetry_blocks_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
+      "claim_guards": ["semantic_name_mismatch_blocks_telemetry_claims", "unbounded_metric_labels_block_observability_product_closure", "unredacted_or_uncorrelated_telemetry_blocks_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["telemetry_envelope_status", "telemetry_semantic_name_status", "observability_status"],
-      "update_goal_blockers": ["telemetry_envelope_incomplete", "telemetry_semantic_names_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["telemetry_envelope_incomplete", "telemetry_semantic_names_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-007-agent-tool-boundary",
@@ -570,7 +570,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["tool_contract_claims_withheld_without_risk_tier_and_telemetry", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["tool_risk_and_approval_surface_status", "observability_status"],
-      "update_goal_blockers": ["tool_contracts_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["tool_contracts_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-008-product-cockpit",
@@ -589,7 +589,7 @@
       "setup_retrofit_outputs": ["skills/agent-runtime-legibility/SKILL.md", "skills/product-cohesion-gate/SKILL.md"],
       "claim_guards": ["live_product_recording_replay_parent_operation_claims_withheld_without_same_surface_live_receipt", "harness_claims_withheld_without_cli_control_plane_authority", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["product_cockpit_surface_status", "observability_status"],
-      "update_goal_blockers": ["product_cockpit_surface_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["product_cockpit_surface_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-009-full-stack-gc",
@@ -608,7 +608,7 @@
       "setup_retrofit_outputs": ["skills/orchestrator-reconciler/SKILL.md", "skills/standards-gardener/SKILL.md"],
       "claim_guards": ["workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["workspace_gc_status", "observability_status"],
-      "update_goal_blockers": ["workspace_gc_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["workspace_gc_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-hu-stack-010-update-goal-eligibility",
@@ -627,7 +627,7 @@
       "setup_retrofit_outputs": ["skills/ultragoal/SKILL.md", "skills/proof-gate/SKILL.md"],
       "claim_guards": ["update_goal_claims_withheld_without_live_stack_queryable_observability_receipt", "update_goal_eligibility_evidence_not_satisfied", "surface_substitution_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["update_goal_eligibility_status", "observability_status"],
-      "update_goal_blockers": ["observability_gate_incomplete", "update_goal_eligibility_incomplete"]
+      "update_goal_blockers": ["observability_product_closure_incomplete", "update_goal_eligibility_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-fast-loop",
@@ -646,7 +646,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-first-repo-init/SKILL.md"],
       "claim_guards": ["rust_command_loop_claims_withheld_without_cli_loop_receipts", "surface_substitution_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "performance_signal_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "performance_receipt_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "performance_receipt_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-standard-loop",
@@ -665,7 +665,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["rust_command_loop_claims_withheld_without_cli_loop_receipts", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-release-loop",
@@ -684,7 +684,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/proof-gate/SKILL.md"],
       "claim_guards": ["rust_command_loop_claims_withheld_without_cli_loop_receipts", "handwritten_ready_unsupported", "observability_claims_withheld_without_typed_queryable_correlated_receipt", "product_claims_withheld_without_product_truth"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-clean-proof-loop",
@@ -703,7 +703,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-init/SKILL.md", "skills/harness-engineering/SKILL.md"],
       "claim_guards": ["rust_no_cache_claims_withheld_without_cache_honesty_receipt", "setup_claims_withheld_without_same_mode_receipt", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-watch-loop",
@@ -722,7 +722,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-runtime-legibility/SKILL.md"],
       "claim_guards": ["raw_cargo_output_cannot_support_harness_claims", "handwritten_ready_unsupported", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-resources-prove-loop",
@@ -741,7 +741,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-observability-stack/SKILL.md"],
       "claim_guards": ["rust_runtime_claims_withheld_without_memory_resource_receipt", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-command-gc-loop",
@@ -760,7 +760,7 @@
       "setup_retrofit_outputs": ["skills/harness-engineering/SKILL.md", "skills/agent-first-repo-retrofit/SKILL.md"],
       "claim_guards": ["workspace_gc_claims_withheld_without_protected_plan_apply_verify_receipts", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-receipt-staleness-model",
@@ -779,7 +779,7 @@
       "setup_retrofit_outputs": ["skills/proof-gate/SKILL.md", "skills/orchestrator-reconciler/SKILL.md"],
       "claim_guards": ["stale_receipt_blocks_dependent_claims", "stale_telemetry_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["receipt_staleness_status", "telemetry_freshness_status", "observability_status"],
-      "update_goal_blockers": ["stale_receipt_present", "stale_telemetry_present", "observability_gate_incomplete"]
+      "update_goal_blockers": ["stale_receipt_present", "stale_telemetry_present", "observability_product_closure_incomplete"]
     },
     {
       "requirement_id": "gold-stack-cache-no-cache-honesty",
@@ -798,7 +798,7 @@
       "setup_retrofit_outputs": ["skills/agent-first-repo-retrofit/SKILL.md", "skills/harness-engineering/SKILL.md"],
       "claim_guards": ["rust_no_cache_claims_withheld_without_cache_honesty_receipt", "surface_substitution_blocks_dependent_claims", "observability_claims_withheld_without_typed_queryable_correlated_receipt"],
       "final_packet_fields": ["rust_devx_status", "truth_surface_separation_status", "observability_status"],
-      "update_goal_blockers": ["rust_devx_incomplete", "truth_surface_separation_incomplete", "observability_gate_incomplete"]
+      "update_goal_blockers": ["rust_devx_incomplete", "truth_surface_separation_incomplete", "observability_product_closure_incomplete"]
     }
   ]
 }

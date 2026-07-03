@@ -51,7 +51,7 @@ fn should_descend(root: &Path, entry: &DirEntry) -> bool {
 }
 
 fn local_only(rel: &str) -> bool {
-    crate::package::inventory::parent_session_contract_path(rel)
+    crate::package::inventory::builder_contract_resource_path(rel)
         || LOCAL_BUILD_OUTPUT_PREFIXES
             .iter()
             .any(|prefix| local_prefix_match(rel, prefix))

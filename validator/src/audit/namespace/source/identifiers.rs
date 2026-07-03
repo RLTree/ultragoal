@@ -30,6 +30,7 @@ pub(crate) fn failures(root: &Path, actual_files: &[String]) -> Vec<String> {
             ));
             update_enum_depth(line, &mut enum_depth, &mut brace_depth);
         }
+        out.extend(super::string_labels::raw_source_failures(rel, &source));
     }
     out
 }

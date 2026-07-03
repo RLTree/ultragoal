@@ -3,7 +3,7 @@ use serde_json::Value;
 const LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
 const COMMAND_INVENTORY: &str = "docs/generated/observability/command-inventory.json";
 const FINAL_PACKET_FIELD: &str = "observability_status";
-const UPDATE_GOAL_BLOCKER: &str = "observability_gate_incomplete";
+const UPDATE_GOAL_BLOCKER: &str = "observability_product_closure_incomplete";
 
 pub(super) fn required_field_failures(id: &str, row: &Value) -> Vec<String> {
     [

@@ -1,7 +1,7 @@
+mod builder_contract;
 pub(crate) mod changed_files;
 mod dimensions;
 pub(crate) mod exclusions;
-mod parent_session;
 pub(crate) mod roots;
 pub(crate) mod scripts;
 use serde_json::Value;
@@ -154,7 +154,7 @@ fn policy_section_failures(value: &Value) -> Vec<String> {
 
 fn scope_authority_failures(value: &Value, root: Option<&Path>) -> Vec<String> {
     let mut out = Vec::new();
-    out.extend(parent_session::manifest_dependency_failures(value));
+    out.extend(builder_contract::manifest_dependency_failures(value));
     if let Some(root) = root {
         match crate::claim_semantics::coverage::digests::source_tree_digest(root, value) {
             Ok(actual) if str_field(value, "repo_root_digest") == actual => {}

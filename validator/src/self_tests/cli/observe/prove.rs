@@ -29,7 +29,7 @@ fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
                 "observe prove": {
                     "observability_status": "partially_observable",
                     "missing_surfaces": ["all commands observable"],
-                    "claim_impact": "blocks_observability_gate"
+                    "claim_impact": "blocks_observability_product_closure"
                 }
             }
         }),
@@ -58,7 +58,7 @@ fn observe_receipt_blocks_completion_when_live_stack_is_not_proven() {
     assert_eq!(receipt["status"], "fail");
     assert_eq!(
         receipt["claim_ceiling"],
-        "observability_gate_failed_completion_readiness_release_update_goal_blocked"
+        "observability_product_closure_failed_completion_readiness_release_update_goal_blocked"
     );
     assert!(receipt["event"]["duration_ms"].as_u64().unwrap() > 0);
     assert_eq!(receipt["event"]["worker_count"], 1);

@@ -70,7 +70,7 @@ fn package_digest_excludes_mutable_final_packet_proof_receipt() {
 }
 
 #[test]
-fn package_digest_rejects_parent_session_contract_resources() {
+fn package_digest_rejects_builder_contract_resources() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("package-parent-contract");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
@@ -106,15 +106,15 @@ fn package_digest_rejects_parent_session_contract_resources() {
         &root,
         json!(["docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"]),
     );
-    let err = super::package_digest(&root).expect_err("parent contract listed");
+    let err = super::package_digest(&root).expect_err("builder contract listed");
     assert!(
-        err.contains("parent-session contract is not a package resource"),
+        err.contains("builder contract resource is not a package resource"),
         "{err}"
     );
     write_manifest(&root, json!(["docs/ultragoal-contract-2026-07/README.md"]));
     let err = super::package_digest(&root).expect_err("modular parent contract listed");
     assert!(
-        err.contains("parent-session contract is not a package resource"),
+        err.contains("builder contract resource is not a package resource"),
         "{err}"
     );
     std::fs::remove_dir_all(root).expect("cleanup parent contract digest");

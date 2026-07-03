@@ -28,7 +28,7 @@ fn fit_repo_ref(root: &Path, current: &str) -> Value {
         "installed_plugin_path":"codex-installed-plugin:harness-ultragoal",
         "cache_package_path":"local-harness-plugins/harness-ultragoal/0.0.0-test",
         "plugin_version":"0.0.0-test",
-        "producer_actor_id":"test-parent-session",
+        "producer_actor_id":"test-receipt-producer",
         "target_classification":"fresh_repo",
         "runtime_surface_classification":"none",
         "product_surface_classification":"developer_tool",

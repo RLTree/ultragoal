@@ -13,7 +13,7 @@ pub(super) fn require_path(
     package_required: bool,
     out: &mut Vec<(String, String)>,
 ) {
-    if crate::package::inventory::parent_session_contract_path(rel) {
+    if crate::package::inventory::builder_contract_resource_path(rel) {
         push(
             out,
             format!("builder_contract_path_used_as_law_surface:law={law};role={role};path={rel}"),

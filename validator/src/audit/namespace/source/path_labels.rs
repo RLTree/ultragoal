@@ -1,19 +1,10 @@
-use super::semantic_tokens::semantic_tokens;
-
-const GOAL_WORK_PAIRS: &[(&str, &str, &str, &str)] = &[
-    ("fit", "command", "fitcommand", "fit_command"),
-    ("fit", "path", "fitpath", "fit_path"),
-    ("fit", "goal", "fitgoal", "fit_goal"),
-    ("fit", "slice", "fitslice", "fit_slice"),
-    ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
-    (
-        "checkpoint",
-        "progress",
-        "checkpointprogress",
-        "checkpoint_progress",
-    ),
-    ("todo", "repair", "todorepair", "todo_repair"),
-];
+use super::{
+    label_patterns::{
+        GOAL_WORK_PAIRS, adjacent_numbered_label, adjacent_tokens, generic_bucket_label,
+        repo_entrypoint_context_label, source_name_violation_label,
+    },
+    semantic_tokens::semantic_tokens,
+};
 
 pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str> {
     let tail = path.strip_prefix("validator/").unwrap_or(path);
@@ -60,39 +51,6 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
     None
 }
 
-fn source_name_violation_label(tokens: &[String], compact: &str) -> Option<&'static str> {
-    for (first, second, compact_name, label) in [
-        ("proof", "status", "proofstatus", "proof_status"),
-        ("proof", "state", "proofstate", "proof_state"),
-        ("evidence", "status", "evidencestatus", "evidence_status"),
-        ("evidence", "posture", "evidenceposture", "evidence_posture"),
-        (
-            "production",
-            "evidence",
-            "productionevidence",
-            "production_evidence",
-        ),
-        ("validation", "proof", "validationproof", "validation_proof"),
-    ] {
-        if compact == compact_name || adjacent_tokens(tokens, first, second) {
-            return Some(label);
-        }
-    }
-    None
-}
-
-fn repo_entrypoint_context_label(tokens: &[String]) -> Option<&'static str> {
-    let entrypoint_index = tokens.iter().position(|token| token == "fit")?;
-    let has_repo_neighbor = entrypoint_index
-        .checked_sub(1)
-        .and_then(|index| tokens.get(index))
-        .is_some_and(|token| token == "repo")
-        || tokens
-            .get(entrypoint_index + 1)
-            .is_some_and(|token| token == "repo");
-    if has_repo_neighbor { None } else { Some("fit") }
-}
-
 pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'static str> {
     generic_bucket_label(identifier, false)
 }
@@ -104,8 +62,20 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
         .filter(|ch| ch.is_ascii_alphanumeric())
         .collect::<String>();
     let tokens = semantic_tokens(text);
+    if lower.contains("parent-session")
+        || lower.contains("parent_session")
+        || compact.contains("parentsession")
+    {
+        return Some("session_history_builder_contract");
+    }
     if let Some(label) = session_history_status_label(&lower) {
         return Some(label);
+    }
+    if adjacent_numbered_label(&tokens, "gate") {
+        return Some("gate_number");
+    }
+    if adjacent_tokens(&tokens, "observability", "gate") {
+        return Some("observability_product_closure");
     }
     if !authority_like_string(text) {
         return None;
@@ -137,9 +107,6 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
     }
     if let Some(label) = repo_entrypoint_context_label(&tokens) {
         return Some(label);
-    }
-    if adjacent_numbered_label(&tokens, "gate") {
-        return Some("gate_number");
     }
     if adjacent_numbered_label(&tokens, "phase") {
         return Some("phase_number");
@@ -206,45 +173,4 @@ fn standalone_goal_work_token_label(tokens: &[String]) -> Option<&'static str> {
 
 pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
     generic_bucket_label(stem, true)
-}
-
-fn generic_bucket_label(value: &str, source_leaf: bool) -> Option<&'static str> {
-    let lower = value.to_ascii_lowercase();
-    let tokens = semantic_tokens(value);
-    if tokens.iter().any(|token| token == "support") {
-        return Some("support");
-    }
-    if tokens
-        .iter()
-        .any(|token| matches!(token.as_str(), "helper" | "helpers"))
-    {
-        return Some("helper");
-    }
-    if tokens
-        .iter()
-        .any(|token| matches!(token.as_str(), "utils" | "utility" | "utilities"))
-    {
-        return Some("utils");
-    }
-    for &(exact, label) in &[("common", "common"), ("shared", "shared"), ("misc", "misc")] {
-        if lower == exact || (exact == "common" && tokens.iter().any(|token| token == exact)) {
-            return Some(label);
-        }
-    }
-    if source_leaf && lower == "nodes" {
-        return Some("nodes");
-    }
-    None
-}
-
-fn adjacent_tokens(tokens: &[String], first: &str, second: &str) -> bool {
-    tokens
-        .windows(2)
-        .any(|window| window[0] == first && window[1] == second)
-}
-
-fn adjacent_numbered_label(tokens: &[String], label: &str) -> bool {
-    tokens
-        .windows(2)
-        .any(|window| window[0] == label && window[1].chars().all(|ch| ch.is_ascii_digit()))
 }

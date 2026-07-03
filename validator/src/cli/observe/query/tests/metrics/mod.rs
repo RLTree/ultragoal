@@ -6,6 +6,8 @@ mod edges;
 mod freshness;
 mod reconciliation;
 
+const OBSERVABILITY_CLOSURE_FAILURE: &str = "observability_product_closure_failure";
+
 #[test]
 fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
     let root = super::prepare_root("query-metrics-no-candidate-row");
@@ -42,7 +44,7 @@ fn metrics_query_result_does_not_require_candidate_digest_in_rows() {
 #[test]
 fn metrics_query_rejects_unrelated_operation_for_requested_run() {
     let root = super::prepare_root("query-metrics-operation-mismatch");
-    write_target_event(&root, "observe.prove", "observability_gate_failure");
+    write_target_event(&root, "observe.prove", OBSERVABILITY_CLOSURE_FAILURE);
     let mut command = super::metrics_command();
     command.correlation_id = Some("corr-query-bound".to_string());
     let body = metric_body("archive.build", "archive_build_failure");
@@ -68,10 +70,10 @@ fn metrics_query_rejects_unrelated_operation_for_requested_run() {
 #[test]
 fn metrics_query_accepts_target_operation_failure_signal() {
     let root = super::prepare_root("query-metrics-operation-match");
-    write_target_event(&root, "observe.prove", "observability_gate_failure");
+    write_target_event(&root, "observe.prove", OBSERVABILITY_CLOSURE_FAILURE);
     let mut command = super::metrics_command();
     command.correlation_id = Some("corr-query-bound".to_string());
-    let body = metric_body("observe.prove", "observability_gate_failure");
+    let body = metric_body("observe.prove", OBSERVABILITY_CLOSURE_FAILURE);
 
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
@@ -86,7 +88,7 @@ fn metrics_query_accepts_target_operation_failure_signal() {
     assert_eq!(receipt["metric_operation"], "observe.prove");
     assert_eq!(
         receipt["metric_failure_class"],
-        "observability_gate_failure"
+        OBSERVABILITY_CLOSURE_FAILURE
     );
     std::fs::remove_dir_all(root).expect("cleanup metrics match");
 }

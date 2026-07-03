@@ -176,3 +176,61 @@ enum CommandSurface {{
     );
     std::fs::remove_dir_all(root).expect("cleanup namespace identifier edges");
 }
+
+#[test]
+fn namespace_identifier_scanner_rejects_raw_string_goal_work_artifact_segments() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-raw-string");
+    let rel = "validator/src/cli/observe/command_roundtrip/mod.rs";
+    write_text(
+        &root.join(rel),
+        r##"pub(crate) const COMMAND_DIAGNOSTIC_RECEIPT: &str = r#"
+{
+  "receipt": "validation_artifacts/observability/fitting/source-audit.json"
+}
+"#;
+"##,
+    );
+
+    let failures =
+        crate::audit::namespace::source::identifiers::failures(&root, &[rel.to_string()]);
+    assert!(
+        failures.iter().any(|item| item.contains("label=fitting")),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace raw string");
+}
+
+#[test]
+fn namespace_raw_string_scanner_keeps_negative_fixture_boundary_narrow() {
+    let source = r##"pub(crate) const NEGATIVE_EXAMPLES: &str = r#"
+{
+  "bad_path": "validator/src/cli/observe/fitting/mod.rs"
+}
+"#;
+"##;
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/self_tests/boundaries/authority/inventory/labels.rs",
+        source,
+    );
+    assert!(
+        failures.is_empty(),
+        "negative fixture literals should stay isolated to their owner: {failures:?}"
+    );
+}
+
+#[test]
+fn namespace_raw_string_scanner_flags_dirty_source_before_parse_success() {
+    let source = r##"pub(crate) const DIRTY_RECEIPT: &str =
+    r#"validation_artifacts/observability/fitting/source-audit.json;
+"##;
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/cli/observe/command_roundtrip/mod.rs",
+        source,
+    );
+    assert!(
+        failures.iter().any(|item| item.contains("label=fitting")),
+        "{failures:?}"
+    );
+}

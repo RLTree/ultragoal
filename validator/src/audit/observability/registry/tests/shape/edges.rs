@@ -218,7 +218,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
     loop_edges["operating_loop_inventory"]["repair_smallest_root_cause"]["missing_surfaces"] =
         json!(["trace"]);
     loop_edges["operating_loop_inventory"]["repair_smallest_root_cause"]["claim_impact"] =
-        json!("blocks_observability_gate");
+        json!("blocks_observability_product_closure");
     loop_edges["operating_loop_inventory"]["repair_smallest_root_cause"]
         .as_object_mut()
         .unwrap()

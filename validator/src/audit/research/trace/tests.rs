@@ -84,7 +84,7 @@ fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
         "receipt_requirements":["observability receipt"],
         "claim_guards":["observability_claims_withheld_without_typed_queryable_correlated_receipt"],
         "final_packet_fields":["observability_status"],
-        "update_goal_blockers":["observability_gate_incomplete"]
+        "update_goal_blockers":["observability_product_closure_incomplete"]
     });
     let trace = BTreeMap::from([
         ("req-a".to_string(), row.clone()),

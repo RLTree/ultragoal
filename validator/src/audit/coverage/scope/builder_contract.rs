@@ -23,8 +23,8 @@ pub(super) fn manifest_dependency_failures(value: &Value) -> Vec<String> {
 }
 
 fn push_if_parent_contract(rel: &str, out: &mut Vec<String>) {
-    if crate::package::inventory::parent_session_contract_path(rel) {
-        out.push("coverage_parent_session_contract_dependency".to_string());
+    if crate::package::inventory::builder_contract_resource_path(rel) {
+        out.push("coverage_builder_contract_resource_dependency".to_string());
     }
 }
 

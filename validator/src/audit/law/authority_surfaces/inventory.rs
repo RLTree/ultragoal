@@ -2,23 +2,13 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
-const BUILDER_CONTRACT_PREFIXES: &[&str] = &[
-    "docs/ultragoal-contract-2026-07/",
-    "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md",
-    "docs/parent-session-full-ultragoal-compliance-checklist-2026-06-25.md",
-    "docs/parent-session-full-ultragoal-execution-spine-2026-06-30.md",
-];
-
 pub(super) fn generated_failures(
     root: &Path,
     inventory: &BTreeSet<String>,
 ) -> Vec<(String, String)> {
     let mut out = Vec::new();
     for rel in inventory {
-        if BUILDER_CONTRACT_PREFIXES
-            .iter()
-            .any(|prefix| rel.starts_with(prefix))
-        {
+        if crate::package::inventory::builder_contract_resource_path(rel) {
             push(
                 &mut out,
                 "generated-proof-artifact-provenance-anti-fabrication",

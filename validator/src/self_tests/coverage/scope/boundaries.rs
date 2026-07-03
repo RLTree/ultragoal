@@ -82,7 +82,7 @@ fn coverage_scope_package_failures_report_malformed_manifest_before_substitution
 }
 
 #[test]
-fn coverage_manifest_rejects_parent_session_contract_dependencies() {
+fn coverage_manifest_rejects_builder_contract_resource_dependencies() {
     let manifest = json!({
         "schema": "harness-ultragoal.coverage-manifest.v1",
         "coverage_command_path": ".harness/coverage-command",
@@ -109,7 +109,7 @@ fn coverage_manifest_rejects_parent_session_contract_dependencies() {
     assert!(
         failures
             .iter()
-            .any(|item| item == "coverage_parent_session_contract_dependency"),
+            .any(|item| item == "coverage_builder_contract_resource_dependency"),
         "{failures:?}"
     );
 }

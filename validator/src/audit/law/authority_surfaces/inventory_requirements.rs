@@ -52,6 +52,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package_authority_surface!(
         "source",
+        "validator/src/audit/law/authority_surfaces/authority_labels.rs",
+    ),
+    package_authority_surface!(
+        "source",
         "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
     ),
     package_authority_surface!("source", "validator/src/audit/namespace/classes.rs"),
@@ -73,6 +77,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package_authority_surface!(
         "source",
+        "validator/src/audit/namespace/source/label_patterns.rs",
+    ),
+    package_authority_surface!(
+        "source",
         "validator/src/audit/namespace/source/semantic_tokens.rs",
     ),
     package_authority_surface!(
@@ -88,6 +96,9 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "schema",
         "schemas/research-article-to-law-trace.schema.json",
     ),
+    package_authority_surface!("law_registry", "docs/mandatory-law-surfaces.json"),
+    package_authority_surface!("research_registry", "docs/research-source-registry.json"),
+    package_authority_surface!("research_trace", "docs/research-article-to-law-trace.json"),
     package_authority_surface!(
         "valid_fixture",
         "fixtures/mandatory-law-surfaces/valid/authority-source-binding.json",
@@ -132,6 +143,7 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "validation_artifacts/coverage/coverage-receipt.json",
     ),
     package_authority_surface!("standards", "templates/agent-standards/enforcement.json"),
+    package_authority_surface!("standards", "templates/agent-standards/enforcement.tsv"),
     package_authority_surface!(
         "standards",
         "templates/agent-standards/enforcement-audit.tsv",

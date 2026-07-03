@@ -517,7 +517,7 @@
       "privacy_implications": [
         "the synthesis is local doctrine; exact external version, vendor capability, pricing, or hosted-service claims require primary-source verification and must remain redacted or claim-blocked until then"
       ],
-      "claim_ceiling_impact": "blocks Gate 92, Gate 93, Gate 94, Product Usage, Gate 105, final-packet, readiness, release, completion, and update_goal claims when adopted synthesis requirements are missing, prompt-only, row-shape-only, stale, or substituted across truth surfaces",
+      "claim_ceiling_impact": "blocks observability product closure, research law integration, improvement-loop hardening, Product Usage, measured improvement, final-packet, readiness, release, completion, and update_goal claims when adopted synthesis requirements are missing, prompt-only, row-shape-only, stale, or substituted across truth surfaces",
       "source_artifact_digest": "sha256:e0d1bbf811e940430c9875476fc4b7bba86265df1a3c0dabd18e5deba7200bb9",
       "source_artifact_method": "attached_source_card_digest",
       "source_corpus_path": "artifacts/source-snapshots/agentic-gold-standard-stack-synthesis-2026-07-01.txt",
@@ -570,7 +570,7 @@
       "privacy_implications": [
         "the archive is local stack-law doctrine; exact external version pins and vendor capability claims require primary-source verification and must remain claim-blocked for package, install/cache, release, readiness, and update_goal surfaces until then"
       ],
-      "claim_ceiling_impact": "stack-law synthesis authority only; blocks Gate 92, Gate 93, Product Usage, final-packet, readiness, release, completion, and update_goal claims when adopted HU-STACK or stack-command requirements are missing, prompt-only, alias-only, row-shape-only, stale, or substituted across truth surfaces; external version and vendor claims support no claims until primary-source verified",
+      "claim_ceiling_impact": "stack-law synthesis authority only; blocks observability product closure, research law integration, Product Usage, final-packet, readiness, release, completion, and update_goal claims when adopted HU-STACK or stack-command requirements are missing, prompt-only, alias-only, row-shape-only, stale, or substituted across truth surfaces; external version and vendor claims support no claims until primary-source verified",
       "source_artifact_digest": "sha256:fa9de013f569aace3e6c4b6755c19e33f9667e49b864909c7711e6aaaf36d839",
       "source_artifact_method": "local_archive_sha256",
       "source_corpus_path": "artifacts/source-snapshots/gold-standard-stack-developer-experience-governance-2026-07-01.txt",
