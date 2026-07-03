@@ -18,25 +18,25 @@ fn promo_receipt(claim_id: &str, target: &str, package: &str) -> Value {
         "status": "pass",
         "promotion_target": target,
         "claim_id": claim_id,
-        "validator_receipt": {"path":"v.json","digest":crate::self_tests::boundaries::support::sha('1'),"run_id":"run","package_digest":package},
-        "review_target": {"path":"r.json","digest":crate::self_tests::boundaries::support::sha('2'),"review_target_digest":crate::self_tests::boundaries::support::sha('3'),"package_digest":package},
-        "candidate_archive": {"path":"a.zip","digest":crate::self_tests::boundaries::support::sha('4'),"archive_purpose":"candidate_review_anchor","package_digest":package},
-        "sign_off_review": {"path":"s.json","digest":crate::self_tests::boundaries::support::sha('5'),"status":"pass","round_phase":"sign_off","validator_run_id":"run","review_target_digest":crate::self_tests::boundaries::support::sha('3'),"archive_digest":crate::self_tests::boundaries::support::sha('4')},
+        "validator_receipt": {"path":"v.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),"run_id":"run","package_digest":package},
+        "review_target": {"path":"r.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('2'),"review_target_digest":crate::self_tests::boundaries::workspace_fixtures::sha('3'),"package_digest":package},
+        "candidate_archive": {"path":"a.zip","digest":crate::self_tests::boundaries::workspace_fixtures::sha('4'),"archive_purpose":"candidate_review_anchor","package_digest":package},
+        "sign_off_review": {"path":"s.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('5'),"status":"pass","round_phase":"sign_off","validator_run_id":"run","review_target_digest":crate::self_tests::boundaries::workspace_fixtures::sha('3'),"archive_digest":crate::self_tests::boundaries::workspace_fixtures::sha('4')},
         "decision": {"approved": true, "promoted_at": "2026-06-25T00:00:00Z", "approver_actor_id": "approver"}
     })
 }
 
 #[test]
 fn promotion_receipts_cover_valid_invalid_and_target_matching() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let temp = crate::self_tests::boundaries::support::temp_root("promotion-name");
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let temp = crate::self_tests::boundaries::workspace_fixtures::temp_root("promotion-name");
     let unique = temp
         .file_name()
         .and_then(|name| name.to_str())
         .expect("temp name");
     let rel = format!("validation_artifacts/{unique}.promotion.json");
     let path = root.join(&rel);
-    let package = crate::self_tests::boundaries::support::sha('a');
+    let package = crate::self_tests::boundaries::workspace_fixtures::sha('a');
     std::fs::write(
         &path,
         serde_json::to_vec(&promo_receipt("CLAIM-1", "install_visibility", &package))
@@ -123,9 +123,9 @@ fn promotion_receipts_cover_valid_invalid_and_target_matching() {
                 "promotion_target": "install_visibility",
                 "claim_id": "CLAIM-4",
                 "validator_receipt": {"run_id":"run","package_digest":package},
-                "review_target": {"review_target_digest":crate::self_tests::boundaries::support::sha('3'),"package_digest":package},
-                "candidate_archive": {"digest":crate::self_tests::boundaries::support::sha('4'),"package_digest":package},
-                "sign_off_review": {"status":"pass","round_phase":"sign_off","validator_run_id":"different","review_target_digest":crate::self_tests::boundaries::support::sha('3'),"archive_digest":crate::self_tests::boundaries::support::sha('4')},
+                "review_target": {"review_target_digest":crate::self_tests::boundaries::workspace_fixtures::sha('3'),"package_digest":package},
+                "candidate_archive": {"digest":crate::self_tests::boundaries::workspace_fixtures::sha('4'),"package_digest":package},
+                "sign_off_review": {"status":"pass","round_phase":"sign_off","validator_run_id":"different","review_target_digest":crate::self_tests::boundaries::workspace_fixtures::sha('3'),"archive_digest":crate::self_tests::boundaries::workspace_fixtures::sha('4')},
                 "decision": {"approved": true, "promoted_at": "2026-06-25T00:00:00Z", "approver_actor_id": "approver"}
             }))
             .expect("json"),

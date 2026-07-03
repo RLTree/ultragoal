@@ -4,7 +4,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 fn prepare_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

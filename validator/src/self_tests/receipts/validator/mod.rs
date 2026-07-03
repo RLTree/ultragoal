@@ -7,7 +7,7 @@ mod generated;
 
 #[test]
 fn validator_receipt_identity_and_artifact_set_digest_cover_package_surfaces() {
-    let root = crate::self_tests::boundaries::support::temp_root("receipt-identity");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("receipt-identity");
     let installed = root.join(".codex/plugins/harness-ultragoal");
     let cache = root.join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.11");
     let other = root.join("other-package");
@@ -49,7 +49,7 @@ fn validator_receipt_identity_and_artifact_set_digest_cover_package_surfaces() {
 
 #[test]
 fn validator_receipt_builds_execution_and_generated_artifacts() {
-    let root = crate::self_tests::boundaries::support::temp_root("receipt-build");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("receipt-build");
     for dir in [
         "schemas",
         "templates",
@@ -96,11 +96,11 @@ fn validator_receipt_builds_execution_and_generated_artifacts() {
         target_artifacts: vec![json!({
             "artifact_type":"target_repo_receipt",
             "path":root.join("target.json").to_string_lossy(),
-            "digest":crate::self_tests::boundaries::support::sha('a')
+            "digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
         })],
         start: "2026-06-26T00:00:00Z".to_string(),
         status: "pass".to_string(),
-        validator_artifacts: vec![json!({"path":"validator/src/main.rs","digest":crate::self_tests::boundaries::support::sha('b')})],
+        validator_artifacts: vec![json!({"path":"validator/src/main.rs","digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')})],
         command_text: "cargo run -- source audit".to_string(),
         mode: "strict".to_string(),
         scheduler_metrics: vec![crate::scheduler::Metrics {

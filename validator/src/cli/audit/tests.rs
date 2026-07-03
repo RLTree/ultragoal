@@ -4,7 +4,7 @@ use std::fs;
 
 #[test]
 fn source_audit_observability_receipt_blocks_claims_on_failed_audit() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-audit-observe");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("source-audit-observe");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -59,7 +59,8 @@ fn source_audit_observability_receipt_blocks_claims_on_failed_audit() {
 
 #[test]
 fn source_audit_run_writes_observability_through_cli_boundary() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-audit-run-observe");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("source-audit-run-observe");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -116,7 +117,8 @@ fn source_audit_run_writes_observability_through_cli_boundary() {
 
 #[test]
 fn source_audit_guard_error_writes_pre_scheduler_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-audit-guard-observe");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("source-audit-guard-observe");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -164,7 +166,8 @@ fn source_audit_guard_error_writes_pre_scheduler_observability() {
 
 #[test]
 fn audit_observability_records_target_pass_and_red_report_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-observe-pass-red");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-observe-pass-red");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

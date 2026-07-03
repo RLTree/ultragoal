@@ -44,7 +44,9 @@ fn claim_schema_and_materiality_edges() {
             .any(|item| item == "materiality_blocked_without_repair")
     );
 
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let errors = crate::schema_catalog::schema_errors(
         &store,
         "fixture-bundle.schema.json",
@@ -57,8 +59,9 @@ fn claim_schema_and_materiality_edges() {
 
 #[test]
 fn inventory_nonexistent_only_hits_right_side_branches() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("inventory_schema-empty-inventory");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "inventory_schema-empty-inventory",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let failures = crate::package::inventory::closure::inventory_closure_failures(
         &root,
@@ -72,7 +75,7 @@ fn inventory_nonexistent_only_hits_right_side_branches() {
 
 #[test]
 fn package_inventory_ignores_local_dependency_caches_but_keeps_manifests() {
-    let root = crate::self_tests::boundaries::support::temp_root("inventory-local-deps");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("inventory-local-deps");
     std::fs::create_dir_all(root.join("node_modules/.bin")).expect("node modules");
     std::fs::create_dir_all(root.join(".pnpm-store/v3")).expect("pnpm store");
     std::fs::create_dir_all(root.join(".ui-discipline")).expect("ui discipline state");
@@ -95,7 +98,8 @@ fn package_inventory_ignores_local_dependency_caches_but_keeps_manifests() {
 
 #[test]
 fn package_inventory_ignores_parent_session_contract_files() {
-    let root = crate::self_tests::boundaries::support::temp_root("inventory-parent-contract");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("inventory-parent-contract");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
     std::fs::write(
@@ -116,7 +120,8 @@ fn package_inventory_ignores_parent_session_contract_files() {
 
 #[test]
 fn package_inventory_ignores_mutable_validation_artifacts_but_rejects_parent_contract_resources() {
-    let root = crate::self_tests::boundaries::support::temp_root("inventory-local-receipts");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("inventory-local-receipts");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("validation_artifacts/cli")).expect("receipts");
     std::fs::write(root.join("README.md"), "package resource").expect("readme");
@@ -192,7 +197,8 @@ fn package_digest_valid_fixture_canonicalization_rejects_malformed_json() {
 
 #[test]
 fn package_digest_rejects_malformed_valid_fixture_through_digest_path() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-digest-bad-valid");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-digest-bad-valid");
     std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
     std::fs::write(
         root.join("plugin-manifest-draft.json"),

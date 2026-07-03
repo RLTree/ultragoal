@@ -18,8 +18,9 @@ fn write_text(path: &Path, text: &str) {
 
 #[test]
 fn red_registry_and_semantic_boundaries() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("target_boundary-red-registry-semantic");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target_boundary-red-registry-semantic",
+    );
     write_text(
         &root.join("fixtures/valid/minimal-goal-run.json"),
         "{bad-json",
@@ -46,7 +47,9 @@ fn red_registry_and_semantic_boundaries() {
             }
         }]),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let results = crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new());
     assert_eq!(
         results["bad-base"]["observed_error"],
@@ -92,8 +95,10 @@ fn red_registry_and_semantic_boundaries() {
 
 #[test]
 fn audit_schema_cli_and_target_edges() {
-    let repo = crate::self_tests::boundaries::support::repo_root();
-    let out = crate::self_tests::boundaries::support::temp_root("target_boundary-target-audit");
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let out = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target_boundary-target-audit",
+    );
     let receipt = out.join("target-receipt.json");
     let code = crate::audit::run(crate::audit::AuditOptions {
         root: repo.clone(),
@@ -112,7 +117,8 @@ fn audit_schema_cli_and_target_edges() {
     crate::audit::validate_target_receipt(&target_receipt).expect("target receipt shape");
     std::fs::remove_dir_all(&out).expect("cleanup target audit");
 
-    let schemas = crate::self_tests::boundaries::support::temp_root("target_boundary-schemas");
+    let schemas =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-schemas");
     write_json(
         &schemas.join("schemas/schema-catalog.json"),
         &json!({
@@ -180,7 +186,8 @@ fn audit_schema_cli_and_target_edges() {
         "{err}"
     );
 
-    let missing = crate::self_tests::boundaries::support::temp_root("target_boundary-cli-missing");
+    let missing =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-cli-missing");
     let err = crate::cli::performance::receipt(&missing, &command, 1)
         .expect_err("missing manifest blocks performance receipt");
     assert!(

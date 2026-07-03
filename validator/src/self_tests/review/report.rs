@@ -14,7 +14,7 @@ fn has_fail(failures: &[crate::review::round::ReviewFailure], error: &str) -> bo
 
 #[test]
 fn review_round_report_rejects_invalid_paths_authority_prose_and_hollow_evidence() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-report");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("review-report");
     let anchors = crate::review::round::anchor::values::fixture_anchor_values(&root);
     let receipt = json!({
         "validator_receipt":{"path":"evidence/validator.json"},
@@ -83,7 +83,8 @@ fn review_round_report_rejects_invalid_paths_authority_prose_and_hollow_evidence
 
 #[test]
 fn review_round_report_requires_bound_artifacts_for_required_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-report-required");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-report-required");
     let anchors = crate::review::round::anchor::values::fixture_anchor_values(&root);
     let disclaimer = "This fixture report is a narrative attachment only. It is not an authority for verdicts, blockers, counterexample coverage, proof anchors, claim ceilings, or next-phase routing. Those obligations live in the typed review-round receipt and are validated by Rust.";
     let report = write_artifact(&root, "reports/disclaimer.md", disclaimer);

@@ -12,7 +12,8 @@ fn write_json(path: &Path, value: &serde_json::Value) {
 
 #[test]
 fn self_update_goal_failures_emit_observable_repair_contract() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-self-update-observable");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-self-update-observable");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),

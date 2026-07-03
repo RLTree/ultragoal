@@ -5,7 +5,7 @@ use std::path::Path;
 
 #[test]
 fn coverage_validation_handles_uncanonical_root_for_absolute_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-rootless");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-rootless");
     super::write_coverage_root(&root, 100.0, json!([]));
     let saved = root.with_extension("coverage-receipt.json");
     fs::copy(root.join(COVERAGE_RECEIPT_REL), &saved).expect("save receipt");
@@ -24,7 +24,8 @@ fn coverage_validation_handles_uncanonical_root_for_absolute_receipt() {
 
 #[test]
 fn coverage_validation_accepts_absolute_receipts_and_template_fallbacks() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-template-fallback");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-template-fallback");
     super::write_coverage_root(&root, 100.0, json!([]));
     fs::create_dir_all(root.join("templates/.harness")).expect("template dir");
     fs::rename(

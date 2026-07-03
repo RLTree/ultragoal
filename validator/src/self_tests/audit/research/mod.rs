@@ -5,7 +5,7 @@ mod archive;
 const GOLD_STACK_SOURCE: &str = "gold-standard-stack-developer-experience-governance-2026-07-01";
 
 fn repo_values() -> (std::path::PathBuf, Value, Value, Value) {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let cards = crate::json_boundary::read_json(&root.join("docs/research-source-cards.json"))
         .expect("research source cards");
     let registry =
@@ -18,7 +18,7 @@ fn repo_values() -> (std::path::PathBuf, Value, Value, Value) {
 }
 
 fn failures(cards: &Value, registry: &Value, trace: &Value) -> Vec<String> {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     crate::audit::research::value_failures(&root, cards, registry, trace)
 }
 
@@ -33,7 +33,7 @@ fn research_registry_and_trace_accept_current_repo_mapping() {
 fn research_registry_rejects_stale_source_card_digest() {
     let (_root, cards, mut registry, trace) = repo_values();
     registry["sources"][0]["source_card_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('1'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('1'));
     let failures = failures(&cards, &registry, &trace);
     assert!(
         failures
@@ -52,7 +52,7 @@ fn research_registry_rejects_missing_stale_or_uninventoried_source_corpus() {
     registry["sources"][0]["source_corpus_path"] =
         json!("artifacts/source-snapshots/missing-source-corpus.txt");
     registry["sources"][0]["source_corpus_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('1'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('1'));
     let failures = failures(&cards, &registry, &trace);
     for expected in [
         "research_registry_source_corpus_digest_stale:openai-harness-engineering",

@@ -27,7 +27,7 @@ fn command() -> ObserveCommand {
 }
 
 fn roundtrip_root(label: &str) -> (PathBuf, String) {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),

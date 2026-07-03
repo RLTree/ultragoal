@@ -10,7 +10,7 @@ fn write_text(path: &Path, text: &str) {
 
 #[test]
 fn red_filesystem_fixtures_cover_file_symlink_and_path_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-filesystem");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-filesystem");
     assert!(crate::red::filesystem::fixtures::materialize(&root, &json!({})).is_ok());
     for (packet, expected) in [
         (
@@ -122,7 +122,8 @@ fn red_filesystem_fixtures_cover_file_symlink_and_path_failures() {
 fn red_filesystem_reports_permission_denied_write_and_symlink_failures() {
     use std::os::unix::fs::PermissionsExt;
 
-    let root = crate::self_tests::boundaries::support::temp_root("red-filesystem-denied");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-filesystem-denied");
     std::fs::create_dir_all(root.join("locked")).expect("locked dir");
     std::fs::write(root.join("target.txt"), "target").expect("target");
     let locked = root.join("locked");

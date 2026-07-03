@@ -28,7 +28,8 @@ fn write_text(path: &std::path::Path, text: &str) {
 
 #[test]
 fn agent_standards_value_failures_cover_status_and_gate_branches() {
-    let root = crate::self_tests::boundaries::support::temp_root("agent-standards-branches");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("agent-standards-branches");
     std::fs::create_dir_all(root.join("templates/scripts")).expect("scripts");
     std::fs::write(
         root.join("templates/scripts/check-agent-standards"),
@@ -110,7 +111,9 @@ fn agent_standards_value_failures_cover_status_and_gate_branches() {
 
 #[test]
 fn agent_standards_tsv_checks_cover_parse_and_script_evidence_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("agent-standards-tsv-branches");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "agent-standards-tsv-branches",
+    );
     let failures = crate::audit::agent::standards::tsv::checks::failures(
         &root,
         "missing.tsv",
@@ -180,7 +183,9 @@ fn agent_standards_tsv_checks_cover_parse_and_script_evidence_paths() {
 
 #[test]
 fn agent_standards_tsv_checks_reject_bad_rows_and_stale_audits() {
-    let root = crate::self_tests::boundaries::support::temp_root("agent-standards-tsv-failures");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "agent-standards-tsv-failures",
+    );
     write_text(
         &root.join("standards.tsv"),
         "id\tsource_law\trequired_behavior\tenforcement_status\tgate_or_fixture_path\towner_lane\tclaim_ids_affected\tcurrent_status\tblocker_or_repair_action\trequired_execplan_refs\nshort\trow\n",

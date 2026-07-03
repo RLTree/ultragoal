@@ -26,8 +26,10 @@ fn collect_files(root: &Path, rel: &Path, out: &mut Vec<String>) {
 }
 
 fn copied_valid_cohesion_fixture() -> PathBuf {
-    let repo = crate::self_tests::boundaries::support::repo_root();
-    let target = crate::self_tests::boundaries::support::temp_root("product-cohesion-pass-command");
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product-cohesion-pass-command",
+    );
     copy_dir(
         &repo.join("fixtures/target-repo/valid-product-cohesion"),
         &target,

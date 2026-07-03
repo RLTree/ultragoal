@@ -22,7 +22,7 @@ fn contains(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn mandatory_law_surfaces_and_tsv_evidence_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-audit");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-audit");
     write_json(&root.join("templates/RED_FIXTURES.json"), &json!([]));
     let registry = json!({"laws":[{
         "schema": "wrong",
@@ -37,7 +37,7 @@ fn mandatory_law_surfaces_and_tsv_evidence_fail_closed() {
         "red_fixture_ids": ["missing-red"],
         "behavior_failure_modes": [],
         "law_specific": {"guard": false},
-        "evidence_artifacts": [{}, {"path":"missing.txt","digest":crate::self_tests::boundaries::support::sha('1')}]
+        "evidence_artifacts": [{}, {"path":"missing.txt","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}]
     }]});
     let failures = crate::audit::mandatory::law::surfaces::value_failures(&root, &registry);
     assert!(contains(
@@ -112,7 +112,7 @@ fn mandatory_law_surfaces_and_tsv_evidence_fail_closed() {
     }
     let audit_row = crate::audit::agent::standards::tsv::checks::audit_row_failures(
         &root,
-        &json!({"standard_id":"row1","audit_status":"pass","evidence_path":"missing.txt","evidence_digest":crate::self_tests::boundaries::support::sha('2')}),
+        &json!({"standard_id":"row1","audit_status":"pass","evidence_path":"missing.txt","evidence_digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')}),
     );
     assert!(contains(
         &audit_row,
@@ -123,7 +123,7 @@ fn mandatory_law_surfaces_and_tsv_evidence_fail_closed() {
 
 #[test]
 fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-self-laws");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-self-laws");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"1.0.0"}),
@@ -149,7 +149,7 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
             "captured_at":"2026-06-24T00:00:00Z",
             "status":"fail",
             "source":"disk",
-            "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('b')},
+            "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('b')},
             "claim_ceiling":"withheld_or_blocked",
             "session_id":"session",
             "round_id":"round",
@@ -157,7 +157,9 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
         }),
     );
     write_text(&root.join("validator/src/too_long.rs"), &"x\n".repeat(251));
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let failures = crate::audit::plugin::laws::package_failures(&root, &store);
     for expected in [
         "plugin_self_law_version_mismatch",
@@ -180,8 +182,10 @@ fn plugin_self_laws_reject_stale_registry_coverage_and_line_cap() {
 
 #[test]
 fn red_fixture_results_report_catalog_packet_and_base_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-fixture-results");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-results");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     assert!(crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new()).is_empty());
     write_json(&root.join("templates/RED_FIXTURES.json"), &json!({}));
     assert!(crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new()).is_empty());

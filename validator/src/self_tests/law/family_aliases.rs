@@ -6,13 +6,13 @@ fn has(items: &[String], needle: &str) -> bool {
 }
 
 fn live_value() -> Value {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     crate::json_boundary::read_json(&root.join("docs/law-family-aliases.json"))
         .expect("law family aliases")
 }
 
 fn live_ids(path: &str, array_key: &str, id_key: &str) -> BTreeSet<String> {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     crate::json_boundary::read_json(&root.join(path))
         .expect("registry")
         .get(array_key)
@@ -124,7 +124,7 @@ fn hu_family_aliases_fail_unknown_and_unmapped_canonical_laws() {
 
 #[test]
 fn hu_family_aliases_package_entrypoint_and_shape_edges_fail_closed() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     assert_eq!(
         crate::audit::law::family::aliases::failures(&root),
         Vec::<String>::new()

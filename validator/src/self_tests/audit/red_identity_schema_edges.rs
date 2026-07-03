@@ -18,14 +18,14 @@ fn write_text(path: &Path, text: &str) {
 
 #[test]
 fn law_surface_red_identity_and_package_check_routing_cover_green_edges() {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let package_failures = crate::audit::law::surface::receipts::package_failures(&repo);
     assert!(
         package_failures.is_empty(),
         "valid law-surface fixtures should stay green: {package_failures:?}"
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("red-identity-green");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-identity-green");
     write_json(
         &root.join("schemas/schema-catalog.json"),
         &json!({"schemas":[
@@ -93,7 +93,7 @@ fn law_surface_red_identity_and_package_check_routing_cover_green_edges() {
 
 #[test]
 fn source_obligation_text_guard_and_session_edges_cover_current_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-current-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-current-edges");
     let source_cards = json!([{
         "id":"fresh",
         "retrieval_receipt":{"status":"refreshed"},
@@ -133,7 +133,9 @@ fn source_obligation_text_guard_and_session_edges_cover_current_paths() {
         &root.join(".codex-plugin/plugin.json"),
         "{\"version\":\"0.0.10\"}",
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     write_json(
         &root.join("validation_artifacts/harness/session-log-hardening-receipt.json"),
         &crate::self_tests::session::hardening::complete_receipt(),
@@ -150,7 +152,7 @@ fn source_obligation_text_guard_and_session_edges_cover_current_paths() {
 
 #[test]
 fn schema_max_items_and_symlink_parent_creation_are_exercised() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-symlink-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-symlink-edges");
     write_json(
         &root.join("schemas/schema-catalog.json"),
         &json!({"schemas":[{"id":"max.schema.json","path":"schemas/max.schema.json"}]}),

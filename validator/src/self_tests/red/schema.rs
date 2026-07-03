@@ -2,7 +2,7 @@ use serde_json::json;
 
 #[test]
 fn red_fixture_schema_routing_rejects_schema_layer_and_unknown_patch_roots() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let bad = json!({"completion_manifest":null});
 
@@ -33,7 +33,7 @@ fn red_fixture_schema_routing_rejects_schema_layer_and_unknown_patch_roots() {
 
 #[test]
 fn red_fixture_schema_routes_every_typed_patch_root_fail_closed() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let cases = [
         (

@@ -35,7 +35,8 @@ fn digest_fields_cover_known_receipt_shapes() {
 
 #[test]
 fn receipt_state_reports_current_status_detail_and_missing_digest() {
-    let root = crate::self_tests::boundaries::support::temp_root("current-state-receipt-state");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-receipt-state");
     std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("receipt dir");
     crate::json_boundary::write_json(
         &root.join("validation_artifacts/coverage/coverage-receipt.json"),
@@ -73,7 +74,9 @@ fn receipt_state_reports_current_status_detail_and_missing_digest() {
 
 #[test]
 fn git_status_reports_command_failure_as_dirty() {
-    let root = crate::self_tests::boundaries::support::temp_root("current-state-missing-git-root");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "current-state-missing-git-root",
+    );
     let status = git_status(&root);
     assert_eq!(status["dirty"], true);
     assert!(status["error"].as_str().unwrap().contains("No such file"));
@@ -104,7 +107,7 @@ fn first_blocker_prefers_observability_board_then_stale_receipt() {
 
 #[test]
 fn current_state_run_writes_json_and_summary_modes() {
-    let root = crate::self_tests::boundaries::support::temp_root("current-state-run");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-run");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),

@@ -2,7 +2,8 @@ use serde_json::json;
 
 #[test]
 fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-registry-guard-proof");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-registry-guard-proof");
     super::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -13,7 +14,9 @@ fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
     super::write_json(&raw_path, &json!({"status":"fail","candidate":current}));
     let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
     let receipt = super::fail_closed_registry_receipt(&current, &raw_digest);
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
 
     let failures =
         crate::audit::plugin::registry::value_claim_guard_failures(&root, &store, &receipt);
@@ -55,7 +58,9 @@ fn active_registry_claim_guard_accepts_only_cli_fail_closed_receipts() {
 
 #[test]
 fn active_registry_claim_guard_requires_typed_capability_gap_record() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-registry-capability-gap");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "plugin-registry-capability-gap",
+    );
     super::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -66,7 +71,9 @@ fn active_registry_claim_guard_requires_typed_capability_gap_record() {
     super::write_json(&raw_path, &json!({"status":"fail","candidate":current}));
     let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
     let receipt = super::fail_closed_registry_receipt(&current, &raw_digest);
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
 
     let mut missing_gap = receipt.clone();
     missing_gap
@@ -84,7 +91,7 @@ fn active_registry_claim_guard_requires_typed_capability_gap_record() {
 
     let mut weak_gap = receipt.clone();
     weak_gap["capability_gap"]["source_artifact"]["digest"] =
-        json!(crate::self_tests::boundaries::support::sha('9'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('9'));
     weak_gap["capability_gap"]["affected_law_ids"] =
         json!(["distribution-sharing-surface-claim-separation"]);
     weak_gap["capability_gap"]["affected_claim_ids"] = json!(["review_readiness"]);

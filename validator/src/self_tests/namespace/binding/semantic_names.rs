@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn namespace_semantic_names_reject_opaque_gate_number_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-gate-number-name");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-gate-number-name");
     write_text(
         &root.join("validator/src/audit/research/trace/gate92.rs"),
         "pub(crate) fn marker() {}\n",
@@ -21,7 +22,8 @@ fn namespace_semantic_names_reject_opaque_gate_number_paths() {
 
 #[test]
 fn namespace_semantic_names_reject_goal_work_path_labels() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-goal-work-label");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-goal-work-label");
     for path in [
         "validator/src/cli/observe/fitting/mod.rs",
         "validator/src/cli/observe/production_proof/mod.rs",
@@ -31,6 +33,7 @@ fn namespace_semantic_names_reject_goal_work_path_labels() {
         "validator/src/audit/gate92/mod.rs",
         "validator/src/audit/phase4_rebind.rs",
         "validator/src/cli/progress/checkpoint.rs",
+        "validator/src/audit/observability/registry/tests/support/mod.rs",
     ] {
         write_text(&root.join(path), "pub(crate) fn marker() {}\n");
     }
@@ -47,10 +50,12 @@ fn namespace_semantic_names_reject_goal_work_path_labels() {
 
 #[test]
 fn namespace_semantic_names_reject_goal_work_identifier_names() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-goal-work-identifier");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-goal-work-identifier",
+    );
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
-        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) struct ProductionProof;\npub(crate) struct ProofStatus;\npub(crate) enum CommandState { FitCommand, ProofState, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) const ROOT_PHASE_ERROR: &str = \"root_phase_proof_resource_packaged\";\npub(crate) const FAILURE_ID: &str = \"final_packet_proof_status_not_pass\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn proof_status() {}\npub(crate) fn validation_proof() {}\npub(crate) fn production_evidence() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool, proof_status: bool) {}\nlet production_proof = true;\nlet proof_status = true;\nobservability_status: bool,\n",
+        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) mod support;\npub(crate) struct ProductionProof;\npub(crate) struct ProofStatus;\npub(crate) enum CommandState { FitCommand, ProofState, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) const ROOT_PHASE_ERROR: &str = \"root_phase_proof_resource_packaged\";\npub(crate) const FAILURE_ID: &str = \"final_packet_proof_status_not_pass\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn proof_status() {}\npub(crate) fn validation_proof() {}\npub(crate) fn production_evidence() {}\npub(crate) fn support() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool, proof_status: bool) {}\nlet production_proof = true;\nlet proof_status = true;\nobservability_status: bool,\n",
     );
     let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
     assert!(
@@ -76,7 +81,9 @@ fn namespace_semantic_names_reject_goal_work_identifier_names() {
 
 #[test]
 fn namespace_semantic_names_accept_observability_product_names() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-observability-green");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-observability-green",
+    );
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
         "pub(crate) fn reconcile_command_telemetry() {}\npub(crate) fn bind_receipt_to_telemetry() {}\npub(crate) struct CommandTelemetryRoundtrip;\npub(crate) enum CommandTelemetryState { Reconciled, }\n",
@@ -102,7 +109,8 @@ fn namespace_semantic_names_accept_observability_product_names() {
 
 #[test]
 fn namespace_semantic_names_reject_goal_work_artifact_path_segments() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-artifact-segment");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-artifact-segment");
     std::fs::create_dir_all(&root).expect("namespace artifact segment root");
     let failures = crate::audit::namespace::law::value_failures(
         &root,
@@ -120,7 +128,8 @@ fn namespace_semantic_names_reject_goal_work_artifact_path_segments() {
 
 #[test]
 fn namespace_semantic_names_reject_generic_schema_authority_names() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-schema-authority");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-schema-authority");
     std::fs::create_dir_all(&root).expect("namespace schema authority root");
     let failures = crate::audit::namespace::law::value_failures(
         &root,
@@ -143,7 +152,8 @@ fn namespace_semantic_names_reject_generic_schema_authority_names() {
 
 #[test]
 fn namespace_semantic_names_tamper_from_product_name_to_goal_name_fails() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-tamper-name");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-tamper-name");
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
         "pub(crate) fn command_telemetry_roundtrip() {}\n",

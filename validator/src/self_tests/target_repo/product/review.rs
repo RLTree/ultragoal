@@ -10,7 +10,8 @@ fn write_json_artifact(root: &Path, rel: &str, value: &Value) -> Value {
 
 #[test]
 fn target_repo_product_review_rejects_actor_authority_and_payload_mismatch() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-product-review");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-product-review");
     assert!(
         crate::target_repo::product::review::review_error(
             &root,
@@ -76,7 +77,9 @@ fn target_repo_product_review_rejects_actor_authority_and_payload_mismatch() {
 
 #[test]
 fn target_repo_product_review_rejects_bad_evidence_payloads() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-product-review-payloads");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target-product-review-payloads",
+    );
     std::fs::create_dir_all(&root).expect("target product review root");
     let base_receipt = |evidence: Value| {
         json!({
@@ -93,7 +96,7 @@ fn target_repo_product_review_rejects_bad_evidence_payloads() {
     };
     let missing = crate::target_repo::product::review::review_error(
         &root,
-        &base_receipt(json!({"path":"missing.json","digest":crate::self_tests::boundaries::support::sha('a')})),
+        &base_receipt(json!({"path":"missing.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')})),
     )
     .expect("missing evidence");
     assert!(missing.contains("artifact missing"));

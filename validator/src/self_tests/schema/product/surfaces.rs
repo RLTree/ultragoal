@@ -2,7 +2,7 @@ use serde_json::json;
 
 #[test]
 fn completion_manifest_accepts_canonical_product_law_surfaces() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let manifest = json!({
         "schema":"harness-ultragoal.completion-manifest.v1",

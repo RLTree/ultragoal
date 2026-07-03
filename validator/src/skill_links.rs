@@ -112,7 +112,8 @@ mod tests {
             Path::new("/definitely/missing/root"),
             Path::new("/definitely/missing/root/file.md")
         ));
-        let root = crate::self_tests::boundaries::support::temp_root("skill-link-resolve");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("skill-link-resolve");
         std::fs::create_dir_all(&root).expect("root");
         assert!(!super::resolves_inside(&root, &root.join("missing.md")));
         std::fs::remove_dir_all(root).expect("cleanup skill link resolve");

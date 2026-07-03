@@ -9,7 +9,7 @@ fn review_round_core_reports_schema_and_unreadable_fixture_boundaries() {
         "fixtures/review-round/red/review-round-receipt.json",
     ));
 
-    let root = crate::self_tests::boundaries::support::temp_root("review-round-core");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("review-round-core");
     let fixture_errors = crate::review::round::fixture_failures(&root);
     assert!(
         fixture_errors
@@ -18,7 +18,7 @@ fn review_round_core_reports_schema_and_unreadable_fixture_boundaries() {
         "{fixture_errors:?}"
     );
 
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&repo);
     let anchors = crate::review::round::anchor::values::fixture_anchor_values(&repo);
     let failures = crate::review::round::red_errors_with_anchors(
@@ -37,7 +37,8 @@ fn review_round_core_reports_schema_and_unreadable_fixture_boundaries() {
 
 #[test]
 fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-round-validate-files");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-round-validate-files");
     std::fs::create_dir_all(root.join("anchors")).expect("anchors");
     let receipt = root.join("receipt.json");
     std::fs::write(&receipt, "{}").expect("receipt");
@@ -48,7 +49,7 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
         &validator,
         serde_json::to_vec(&json!({
             "run_id": "run",
-            "target_revision": {"value": crate::self_tests::boundaries::support::sha('a')}
+            "target_revision": {"value": crate::self_tests::boundaries::workspace_fixtures::sha('a')}
         }))
         .expect("validator json"),
     )
@@ -56,7 +57,7 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
     std::fs::write(
         &review_target,
         serde_json::to_vec(
-            &json!({"review_target_digest": crate::self_tests::boundaries::support::sha('b')}),
+            &json!({"review_target_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b')}),
         )
         .expect("target json"),
     )
@@ -64,7 +65,7 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
     std::fs::write(
         &archive,
         serde_json::to_vec(
-            &json!({"archive": {"digest": crate::self_tests::boundaries::support::sha('c')}}),
+            &json!({"archive": {"digest": crate::self_tests::boundaries::workspace_fixtures::sha('c')}}),
         )
         .expect("archive json"),
     )
@@ -96,18 +97,18 @@ fn review_round_validate_files_reads_all_anchor_paths_fail_closed() {
 fn review_round_anchor_sources_reject_invalid_sha_fields() {
     let mut failures = Vec::new();
     crate::review::round::anchor::sources::validate_anchor_sources(
-        &crate::self_tests::boundaries::support::sha('a'),
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         None,
         &json!({
             "status":"pass",
-            "package_digest":crate::self_tests::boundaries::support::sha('b'),
-            "validator_receipt":{"digest":crate::self_tests::boundaries::support::sha('a')},
+            "package_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b'),
+            "validator_receipt":{"digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')},
             "review_target_digest":"not-sha"
         }),
         &json!({
             "status":"pass",
-            "source":{"package_digest":crate::self_tests::boundaries::support::sha('b')},
+            "source":{"package_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')},
             "archive":{"digest":"sha256:ABC"}
         }),
         &mut failures,

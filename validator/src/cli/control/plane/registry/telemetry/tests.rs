@@ -4,7 +4,7 @@ use serde_json::json;
 use std::time::Instant;
 
 fn root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),

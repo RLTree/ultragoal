@@ -1,5 +1,5 @@
 use super::*;
-use crate::self_tests::boundaries::support::sha;
+use crate::self_tests::boundaries::workspace_fixtures::sha;
 use serde_json::json;
 
 #[test]

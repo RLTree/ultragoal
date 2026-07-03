@@ -1,5 +1,5 @@
-pub(crate) mod support;
-use crate::audit::namespace::law::support::{mixed_domain_folder, root_route_allowed};
+pub(crate) mod path_rules;
+use crate::audit::namespace::law::path_rules::{mixed_domain_folder, root_route_allowed};
 use crate::json_boundary;
 use serde_json::Value;
 use std::collections::BTreeSet;

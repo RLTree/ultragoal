@@ -15,7 +15,7 @@ pub(super) fn failure_cases(current: &str) -> Vec<(Value, &'static str)> {
         ),
         (
             json!({"status":"fail","target_revision":{"kind":"package_digest",
-                "value":crate::self_tests::boundaries::support::sha('d')},
+                "value":crate::self_tests::boundaries::workspace_fixtures::sha('d')},
                 "claim_ceiling":"withheld_or_blocked","supported_claim_classes":[],
                 "blocked_claim_classes":blocked_claims()}),
             "final_packet_proof_source_audit_target_digest_mismatch",
@@ -68,7 +68,7 @@ pub(super) fn assert_stale_and_malformed_source_failures(
         json!({"status":"pending","target_revision":{"kind":"package_digest","value":current}}),
         json!({"status":"pass","target_revision":{"kind":"package_digest","value":"sha256:wrong"}}),
     ] {
-        super::super::super::support::write_json(&root.join(source_path), &source);
+        super::super::super::receipt_fixtures::write_json(&root.join(source_path), &source);
         super::assert_guard_failure(
             root,
             store,

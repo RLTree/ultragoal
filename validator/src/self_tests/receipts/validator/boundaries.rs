@@ -2,7 +2,7 @@ use serde_json::json;
 use std::collections::BTreeMap;
 
 fn receipt_root(name: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(name);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(name);
     for dir in [
         "examples/generated",
         "fixtures/valid",
@@ -53,7 +53,7 @@ fn validator_receipt_reports_unknown_external_path_labels() {
     input.target_artifacts = vec![json!({
         "artifact_type": "target_repo_receipt",
         "path": "/",
-        "digest": crate::self_tests::boundaries::support::sha('e')
+        "digest": crate::self_tests::boundaries::workspace_fixtures::sha('e')
     })];
     let receipt = crate::audit::receipt::build(input).expect("receipt");
     let artifacts = receipt["generated_artifacts"]

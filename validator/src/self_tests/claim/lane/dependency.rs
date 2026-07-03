@@ -1,4 +1,4 @@
-use crate::audit::contract::Failure;
+use crate::{audit::contract::Failure, self_tests::boundaries::workspace_fixtures};
 use serde_json::{Value, json};
 use std::{collections::BTreeMap, path::Path};
 
@@ -49,7 +49,7 @@ fn dependency_fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value)
         "evidence_digest": ready_digest,
         "upstream_ready_receipt": {"path": "ready.json", "digest": ready_digest}
     });
-    let post_digest = crate::self_tests::boundaries::support::sha('9');
+    let post_digest = workspace_fixtures::sha('9');
     let root_verification_states = json!({"post_merge_integration_gate": {
         "status": "pass",
         "validated_at": "2026-06-25T00:30:00Z",
@@ -105,7 +105,7 @@ fn run_case(
 
 #[test]
 fn lane_dependency_reports_order_output_commit_and_reblock_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-dependency-edges");
+    let root = workspace_fixtures::temp_root("lane-dependency-edges");
     let (lane, dep, upstream, ready, root_verification_states, bundle) = dependency_fixture(&root);
     assert!(
         run_case(

@@ -15,7 +15,8 @@ fn policy_parser_handles_ignored_quoted_missing_and_malformed_env() {
     assert_eq!(super::unquote("'single-quoted'"), "single-quoted");
     assert!(super::parse_api_key("not a key").is_none());
 
-    let root = crate::self_tests::boundaries::support::temp_root("openai-policy-invalid-env");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("openai-policy-invalid-env");
     let path = root.join(".codex-worktree/env.sh");
     std::fs::create_dir_all(path.parent().unwrap()).expect("env dir");
     std::fs::write(&path, [0xff]).expect("invalid utf8");

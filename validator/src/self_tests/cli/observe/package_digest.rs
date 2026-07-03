@@ -70,7 +70,7 @@ fn package_digest_command_emits_observability_receipt_contract() {
 
 #[test]
 fn package_digest_command_emits_fail_stdout_and_receipt_contract() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-digest-fail");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("package-digest-fail");
     let code = crate::command_run::run_with_exit_code(crate::Args {
         root: root.clone(),
         command: crate::Command::PackageDigest,

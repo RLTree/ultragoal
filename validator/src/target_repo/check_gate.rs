@@ -177,8 +177,9 @@ fn allowed_marker(line: &str) -> bool {
 mod tests {
     #[test]
     fn assertion_matches_rejects_unknown_assertion_kind() {
-        let root =
-            crate::self_tests::boundaries::support::temp_root("target-check-gate-unknown-kind");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "target-check-gate-unknown-kind",
+        );
         std::fs::create_dir_all(&root).expect("target check gate root");
         std::fs::write(root.join("file.txt"), "ok").expect("file");
         assert!(!super::assertion_matches(&root, "socket", "file.txt"));

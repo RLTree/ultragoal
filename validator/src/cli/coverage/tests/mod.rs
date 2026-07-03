@@ -34,7 +34,8 @@ fn coverage_prove_parse_supports_receipt_jobs_and_validate_existing() {
 
 #[test]
 fn coverage_prove_command_writes_pass_and_fail_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-prove-command");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-prove-command");
     write_coverage_root(&root, 100.0, json!([]));
     let command = CoverageCommand {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
@@ -86,7 +87,8 @@ fn coverage_prove_command_writes_pass_and_fail_observability() {
 
 #[test]
 fn coverage_prove_records_authoritative_command_failure() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-prove-executor");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-prove-executor");
     write_coverage_root(&root, 100.0, json!([]));
     let command = CoverageCommand {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),

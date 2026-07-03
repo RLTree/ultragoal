@@ -7,8 +7,9 @@ fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
 
 #[test]
 fn semantic_review_and_red_observation_edges_cover_success_paths() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("session_and_review-semantic-review-red");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "session_and_review-semantic-review-red",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let title = "Backend runtime verifier";
     let description = "CLI backend runtime proof.";
@@ -30,7 +31,7 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
         "ambiguity": false,
         "classifier_evidence": {
             "evidence_type":"human_review_attestation",
-            "digest":crate::self_tests::boundaries::support::sha('h'),
+            "digest":crate::self_tests::boundaries::workspace_fixtures::sha('h'),
             "summary":"human reviewer attestation"
         },
         "required_proof_gates": [],
@@ -58,7 +59,7 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
         "{semantic:?}"
     );
 
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&repo);
     let packet =
         json!({"json_patch":[{"op":"replace","path":"/verification_backlog/rows","value":[]}]});
@@ -67,7 +68,7 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
             "id":"CLAIM-RED",
             "status":"proven_static",
             "claim_ceiling_effect":"included",
-            "evidence":[{"kind":"test_pass","surface":"ci","digest":crate::self_tests::boundaries::support::sha('r')}]
+            "evidence":[{"kind":"test_pass","surface":"ci","digest":crate::self_tests::boundaries::workspace_fixtures::sha('r')}]
         }]},
         "lane_registry":{"lanes":[{
             "id":"LANE-RED",
@@ -103,7 +104,7 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
         },
         "verification_backlog":{
             "schema":"harness-ultragoal.verification-backlog.v1",
-            "manifest_digest":crate::self_tests::boundaries::support::sha('a'),
+            "manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
             "generated_at":"2026-06-25T00:00:00Z",
             "rows":[]
         },

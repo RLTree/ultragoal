@@ -15,7 +15,8 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn active_registry_exposure_requires_live_same_surface_observation_provenance() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-registry-live-proof");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-registry-live-proof");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -25,7 +26,9 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
     write_json(&raw_path, &raw_observation(&current));
     let raw_digest = crate::digest::file(&raw_path).expect("raw digest");
     let receipt = live_registry_receipt(&current, &raw_digest);
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     assert!(crate::audit::plugin::registry::value_failures(&root, &store, &receipt).is_empty());
 
     write_json(
@@ -55,7 +58,8 @@ fn active_registry_exposure_requires_live_same_surface_observation_provenance() 
     write_json(&raw_path, &raw_observation(&current));
 
     let mut forged = receipt.clone();
-    forged["raw_observation"]["digest"] = json!(crate::self_tests::boundaries::support::sha('f'));
+    forged["raw_observation"]["digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('f'));
     let failures = crate::audit::plugin::registry::value_failures(&root, &store, &forged);
     assert!(
         failures

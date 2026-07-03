@@ -22,7 +22,8 @@ fn command(operation: ObserveOperation) -> ObserveCommand {
 
 #[test]
 fn command_inventory_summary_names_first_blocker_and_family_counts() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-telemetry-summary");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-telemetry-summary");
     let inventory = root.join("docs/generated/observability");
     std::fs::create_dir_all(&inventory).expect("inventory dir");
     crate::json_boundary::write_json(

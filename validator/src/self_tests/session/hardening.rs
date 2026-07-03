@@ -2,7 +2,7 @@ use serde_json::json;
 
 #[test]
 fn session_log_hardening_reports_missing_and_unresolved_inventory() {
-    let temp = crate::self_tests::boundaries::support::temp_root("session-hardening");
+    let temp = crate::self_tests::boundaries::workspace_fixtures::temp_root("session-hardening");
     std::fs::create_dir_all(temp.join("validation_artifacts/harness")).expect("harness dir");
     std::fs::create_dir_all(temp.join(".codex-plugin")).expect("plugin dir");
     std::fs::write(
@@ -15,7 +15,9 @@ fn session_log_hardening_reports_missing_and_unresolved_inventory() {
         "{\"version\":\"0.0.11\"}",
     )
     .expect("plugin");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
 
     let missing = crate::audit::session_log_hardening::package_failures(&temp, &store);
     assert!(missing[0].starts_with("session_log_hardening_receipt_missing"));
@@ -64,10 +66,13 @@ fn session_log_hardening_reports_missing_and_unresolved_inventory() {
 
 #[test]
 fn session_log_hardening_covers_schema_version_and_fixed_validator_paths() {
-    let temp = crate::self_tests::boundaries::support::temp_root("session-hardening-branches");
+    let temp =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("session-hardening-branches");
     std::fs::create_dir_all(temp.join("validation_artifacts/harness")).expect("harness dir");
     std::fs::create_dir_all(temp.join(".codex-plugin")).expect("plugin dir");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     std::fs::write(
         temp.join("validation_artifacts/harness/session-log-hardening-receipt.json"),
         "{}",
@@ -146,7 +151,7 @@ pub(crate) fn complete_receipt_for_root(root: &std::path::Path) -> serde_json::V
 }
 
 pub(crate) fn complete_receipt() -> serde_json::Value {
-    complete_receipt_for_digest(&crate::self_tests::boundaries::support::sha('c'))
+    complete_receipt_for_digest(&crate::self_tests::boundaries::workspace_fixtures::sha('c'))
 }
 
 fn complete_receipt_for_digest(package_digest: &str) -> serde_json::Value {
@@ -178,7 +183,7 @@ fn complete_receipt_for_digest(package_digest: &str) -> serde_json::Value {
             "claim_ceiling_impact":"impact",
             "artifact_types":["validator"],
             "implementation_status":"fixed",
-            "evidence_digest": crate::self_tests::boundaries::support::sha('d')
+            "evidence_digest": crate::self_tests::boundaries::workspace_fixtures::sha('d')
         }],
         "packet_successor": {"path":"validation_artifacts/harness/session-packet.json","purpose":"implemented_findings_and_remaining_blockers"},
         "active_registry_current_proof": "not_produced",

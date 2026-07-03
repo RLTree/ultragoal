@@ -33,7 +33,7 @@ fn copy_flat_dir(root: &Path, repo: &Path, rel: &str) {
 }
 
 fn write_registry_probe_root(root: &Path) {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     copy_flat_dir(root, &repo, "schemas");
     write_json(
         &root.join(".codex-plugin/plugin.json"),
@@ -52,7 +52,8 @@ fn write_registry_probe_root(root: &Path) {
 
 #[test]
 fn registry_probe_reports_registry_surface_without_packet_circularity() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-probe-specific");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-registry-probe-specific");
     write_registry_probe_root(&root);
     let command = ControlCommand {
         operation: ControlOperation::RegistryProbe,

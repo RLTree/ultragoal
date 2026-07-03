@@ -2,7 +2,8 @@ use serde_json::json;
 
 #[test]
 fn plugin_product_package_failures_read_flow_fit_and_journey_surfaces() {
-    let empty = crate::self_tests::boundaries::support::temp_root("plugin-product-empty");
+    let empty =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-product-empty");
     std::fs::create_dir_all(&empty).expect("empty root");
     let missing = crate::audit::plugin::product::cohesion::package_failures(&empty);
     assert!(
@@ -19,7 +20,8 @@ fn plugin_product_package_failures_read_flow_fit_and_journey_surfaces() {
     );
     std::fs::remove_dir_all(empty).expect("cleanup empty product root");
 
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-product-package");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-product-package");
     for dir in [
         "skills/fit-repo",
         "schemas",

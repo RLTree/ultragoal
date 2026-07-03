@@ -10,7 +10,7 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 
 #[test]
 fn command_dispatch_routes_product_receipt_minting() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = format!("target/ultragoal-command-product-{}", std::process::id());
     let out = root.join(&rel);
     let _ = std::fs::remove_dir_all(&out);

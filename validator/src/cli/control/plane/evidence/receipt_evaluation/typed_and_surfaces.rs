@@ -15,7 +15,7 @@ fn fail_closed_surface_receipt(candidate: &str, operation: &str, surface: &str) 
         "candidate_digest": candidate,
         "source": {
             "package_digest": candidate,
-            "plugin_manifest_digest": crate::self_tests::boundaries::support::sha('f'),
+            "plugin_manifest_digest": crate::self_tests::boundaries::workspace_fixtures::sha('f'),
             "plugin_name": "harness-ultragoal",
             "plugin_version": "0.0.test"
         },
@@ -24,9 +24,9 @@ fn fail_closed_surface_receipt(candidate: &str, operation: &str, surface: &str) 
             "logical_path": "codex-plugin-install-harness-ultragoal",
             "path_authority": "cli_or_default_local_root_redacted",
             "exists": true,
-            "package_digest": crate::self_tests::boundaries::support::sha('e'),
+            "package_digest": crate::self_tests::boundaries::workspace_fixtures::sha('e'),
             "package_error": null,
-            "plugin_manifest_digest": crate::self_tests::boundaries::support::sha('f'),
+            "plugin_manifest_digest": crate::self_tests::boundaries::workspace_fixtures::sha('f'),
             "plugin_name": "harness-ultragoal",
             "plugin_version": "0.0.test",
             "expected_package_digest": candidate,
@@ -60,8 +60,8 @@ fn fail_closed_surface_receipt(candidate: &str, operation: &str, surface: &str) 
 
 #[test]
 fn typed_status_and_package_surface_edges_are_explicit() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let candidate = crate::self_tests::boundaries::support::sha('d');
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('d');
     let red_fixture_report = json!({
         "status":"pass",
         "target_revision":{"kind":"package_digest","value":candidate}
@@ -87,7 +87,7 @@ fn typed_status_and_package_surface_edges_are_explicit() {
     );
     let mut wrong_expected_install = fail_closed_install.clone();
     wrong_expected_install["target"]["expected_package_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('e'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('e'));
     assert!(
         super::label_failures(&root, "install_audit", &wrong_expected_install, &candidate)
             .iter()

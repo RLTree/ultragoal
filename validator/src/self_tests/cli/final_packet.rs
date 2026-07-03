@@ -10,7 +10,7 @@ fn write_json(path: &Path, value: &Value) {
 }
 
 fn copy_schema_catalog(root: &Path) {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let src = repo.join("schemas");
     let dst = root.join("schemas");
     std::fs::create_dir_all(&dst).expect("schema dst");
@@ -37,13 +37,14 @@ fn write_final_packet_green_inputs(root: &Path) -> String {
     copy_schema_catalog(root);
     write_manifest(root);
     let current = crate::package::inventory::package_digest(root).expect("digest");
-    crate::self_tests::audit::final_packet::support::write_green_proof(root, &current);
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_green_proof(root, &current);
     current
 }
 
 #[test]
 fn final_packet_receipt_builds_fail_closed_and_green_paths() {
-    let blocked = crate::self_tests::boundaries::support::temp_root("final-packet-cli-blocked");
+    let blocked =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-cli-blocked");
     copy_schema_catalog(&blocked);
     write_manifest(&blocked);
     let missing_source_audit = receipt(&blocked).expect("missing source audit receipt");
@@ -150,8 +151,9 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     assert!(missing_arg.contains("missing required argument --receipt"));
     std::fs::remove_dir_all(blocked).expect("cleanup blocked final packet root");
 
-    let fail_closed =
-        crate::self_tests::boundaries::support::temp_root("final-packet-cli-fail-closed-source");
+    let fail_closed = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "final-packet-cli-fail-closed-source",
+    );
     let current = write_final_packet_green_inputs(&fail_closed);
     write_json(
         &fail_closed
@@ -175,7 +177,8 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
     );
     std::fs::remove_dir_all(fail_closed).expect("cleanup fail-closed final packet root");
 
-    let green = crate::self_tests::boundaries::support::temp_root("final-packet-cli-green");
+    let green =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-cli-green");
     let current = write_final_packet_green_inputs(&green);
     let value = receipt(&green).expect("green receipt");
     assert_eq!(value["status"], "pass", "{value}");

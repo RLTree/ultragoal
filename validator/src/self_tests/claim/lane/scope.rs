@@ -65,7 +65,7 @@ fn lane_scope_overlap_and_mutable_resources_fail_closed() {
 
 #[test]
 fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-root-scope");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("lane-root-scope");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let post = root.join("artifacts/post.json");
     std::fs::write(

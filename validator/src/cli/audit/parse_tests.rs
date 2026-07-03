@@ -77,7 +77,7 @@ fn assert_parse_rejection(value: &serde_json::Value, operation: &str, where_fail
 }
 
 fn audit_parse_root(name: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(name);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(name);
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

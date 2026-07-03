@@ -15,7 +15,7 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn coverage_receipt_authority_rejects_scalar_digest_and_report_substitutes() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-authority");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-authority");
     std::fs::create_dir_all(root.join(".harness")).expect("harness");
     std::fs::create_dir_all(root.join("src")).expect("src");
     std::fs::write(root.join("src/lib.rs"), "fn main() {}\n").expect("src");
@@ -37,11 +37,11 @@ fn coverage_receipt_authority_rejects_scalar_digest_and_report_substitutes() {
             "command_exit":1,
             "generated_by":"human",
             "percent_source":"prose",
-            "source_tree_digest":crate::self_tests::boundaries::support::sha('1'),
-            "coverage_manifest_digest":crate::self_tests::boundaries::support::sha('2'),
-            "coverage_command_digest":crate::self_tests::boundaries::support::sha('3'),
-            "changed_files_digest":crate::self_tests::boundaries::support::sha('4'),
-            "machine_readable_report":{"path":"../escape.json","digest":crate::self_tests::boundaries::support::sha('5')}
+            "source_tree_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+            "coverage_manifest_digest":crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+            "coverage_command_digest":crate::self_tests::boundaries::workspace_fixtures::sha('3'),
+            "changed_files_digest":crate::self_tests::boundaries::workspace_fixtures::sha('4'),
+            "machine_readable_report":{"path":"../escape.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('5')}
         }),
         &root,
         &mut out,
@@ -82,7 +82,8 @@ fn coverage_receipt_authority_rejects_scalar_digest_and_report_substitutes() {
 
 #[test]
 fn coverage_receipt_authority_reports_missing_mismatch_and_template_fallbacks() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-report-branches");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-report-branches");
     std::fs::create_dir_all(root.join(".harness")).expect("harness");
     std::fs::create_dir_all(root.join("src")).expect("src");
     std::fs::write(root.join("src/lib.rs"), "fn main() {}\n").expect("src");
@@ -105,7 +106,7 @@ fn coverage_receipt_authority_reports_missing_mismatch_and_template_fallbacks() 
             "command_exit":0,
             "generated_by":"coverage-command",
             "percent_source":"machine_readable_report",
-            "machine_readable_report":{"path":"missing.json","digest":crate::self_tests::boundaries::support::sha('0')}
+            "machine_readable_report":{"path":"missing.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}
         }),
         &root,
         &mut out,
@@ -123,7 +124,7 @@ fn coverage_receipt_authority_reports_missing_mismatch_and_template_fallbacks() 
             "command_exit":0,
             "generated_by":"coverage-command",
             "percent_source":"machine_readable_report",
-            "machine_readable_report":{"path":"report.json","digest":crate::self_tests::boundaries::support::sha('1')}
+            "machine_readable_report":{"path":"report.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}
         }),
         &root,
         &mut out,
@@ -131,7 +132,8 @@ fn coverage_receipt_authority_reports_missing_mismatch_and_template_fallbacks() 
     assert!(errors(&out).contains(&"coverage_report_digest_mismatch"));
     std::fs::remove_dir_all(root).expect("cleanup coverage report");
 
-    let fallback = crate::self_tests::boundaries::support::temp_root("coverage-template-fallback");
+    let fallback =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-template-fallback");
     std::fs::create_dir_all(fallback.join("templates/.harness")).expect("templates harness");
     std::fs::create_dir_all(fallback.join("src")).expect("fallback src");
     std::fs::write(fallback.join("src/lib.rs"), "fn fallback() {}\n").expect("src");
@@ -177,7 +179,7 @@ fn coverage_receipt_authority_reports_missing_mismatch_and_template_fallbacks() 
 
 #[test]
 fn coverage_digests_include_direct_file_targets() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-direct-file");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-direct-file");
     std::fs::create_dir_all(root.join("src")).expect("src");
     std::fs::write(root.join("src/lib.rs"), "fn direct() {}\n").expect("src file");
     let manifest = json!({
@@ -196,7 +198,7 @@ fn coverage_digests_include_direct_file_targets() {
 
 #[test]
 fn coverage_receipt_exclusions_reject_owned_unreviewed_counted_and_unrationaled_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-exclusions");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-exclusions");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let receipt_path = root.join("receipts/coverage.json");
     write_json(

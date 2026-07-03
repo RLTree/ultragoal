@@ -24,7 +24,7 @@ fn gardener_receipt(action: &str, severity: &str, artifact: Value) -> Value {
         "schema": "harness-ultragoal.standards-gardening-receipt.v1",
         "status": "pass",
         "generated_at": "2026-06-25T00:00:00Z",
-        "candidate_digest": crate::self_tests::boundaries::support::sha('c'),
+        "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "trigger_signal": {
             "signal_id": "sig",
             "severity": severity,
@@ -41,7 +41,7 @@ fn gardener_receipt(action: &str, severity: &str, artifact: Value) -> Value {
 
 #[test]
 fn foundational_law_trace_rejects_missing_unknown_stale_and_unbound_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("law-trace");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("law-trace");
     write_text(&root.join("source.md"), "source");
     write_json(
         &root.join("templates/agent-standards/enforcement.json"),
@@ -57,7 +57,7 @@ fn foundational_law_trace_rejects_missing_unknown_stale_and_unbound_rows() {
         {},
         {
             "obligation_id":"law1",
-            "source_artifact":{"path":"source.md","digest":crate::self_tests::boundaries::support::sha('1')},
+            "source_artifact":{"path":"source.md","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},
             "standards_row_id":"missing-standard",
             "validator_check_id":"missing-check",
             "red_fixture_id":"missing-red",
@@ -100,7 +100,8 @@ fn foundational_law_trace_rejects_missing_unknown_stale_and_unbound_rows() {
 
 #[test]
 fn foundational_law_trace_rejects_missing_entries_and_untyped_sources() {
-    let root = crate::self_tests::boundaries::support::temp_root("law-trace-missing-entries");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("law-trace-missing-entries");
     write_json(
         &root.join("templates/agent-standards/enforcement.json"),
         &json!({"rows":[]}),
@@ -133,8 +134,10 @@ fn foundational_law_trace_rejects_missing_entries_and_untyped_sources() {
 
 #[test]
 fn standards_gardener_receipts_reject_missing_artifacts_semantics_and_stale_changes() {
-    let root = crate::self_tests::boundaries::support::temp_root("standards-gardener");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("standards-gardener");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -165,7 +168,7 @@ fn standards_gardener_receipts_reject_missing_artifacts_semantics_and_stale_chan
     );
     let artifact = json!({
         "path":"changed.json",
-        "digest":crate::self_tests::boundaries::support::sha('2')
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')
     });
     let low = gardener_receipt("validator_check", "low", artifact.clone());
     assert_eq!(
@@ -190,7 +193,7 @@ fn standards_gardener_receipts_reject_missing_artifacts_semantics_and_stale_chan
     let missing = gardener_receipt(
         "validator_check",
         "severe",
-        json!({"path":"missing.json","digest":crate::self_tests::boundaries::support::sha('3')}),
+        json!({"path":"missing.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('3')}),
     );
     assert!(contains(
         &crate::audit::standards_gardening::receipt_root_failures(&root, &missing),

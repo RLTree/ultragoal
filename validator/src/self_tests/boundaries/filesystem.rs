@@ -5,7 +5,7 @@ use std::path::Path;
 #[cfg(unix)]
 #[test]
 fn output_path_rejects_symlinks_and_preserves_existing_files() {
-    let base = crate::self_tests::boundaries::support::temp_root("output-path-unix");
+    let base = crate::self_tests::boundaries::workspace_fixtures::temp_root("output-path-unix");
     let _ = fs::remove_dir_all(&base);
     let real = base.join("real");
     let link = base.join("link");
@@ -40,7 +40,7 @@ fn output_path_rejects_symlinks_and_preserves_existing_files() {
 #[cfg(unix)]
 #[test]
 fn output_path_atomic_write_does_not_truncate_hard_linked_destination() {
-    let base = crate::self_tests::boundaries::support::temp_root("output-path-hardlink");
+    let base = crate::self_tests::boundaries::workspace_fixtures::temp_root("output-path-hardlink");
     let _ = fs::remove_dir_all(&base);
     fs::create_dir_all(&base).expect("create base");
     let outside = base.join("outside.json");
@@ -109,7 +109,7 @@ fn output_path_rejects_unsafe_paths_and_cwd_failures() {
         .contains("receipt sync failed")
     );
 
-    let base = crate::self_tests::boundaries::support::temp_root("output-path-rename");
+    let base = crate::self_tests::boundaries::workspace_fixtures::temp_root("output-path-rename");
     fs::create_dir_all(&base).expect("base");
     let err = crate::output_path::finish_temp_file(
         &base.join("missing.tmp"),
@@ -123,7 +123,7 @@ fn output_path_rejects_unsafe_paths_and_cwd_failures() {
 
 #[test]
 fn skill_links_cover_missing_invalid_local_and_markdown_references() {
-    let root = crate::self_tests::boundaries::support::temp_root("skill-links");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("skill-links");
     fs::create_dir_all(root.join("skills/demo")).expect("skill dir");
     fs::write(root.join("root-ref.md"), "root").expect("root ref");
     fs::write(root.join("skills/demo/local.md"), "local").expect("local ref");
@@ -149,7 +149,7 @@ fn skill_links_cover_missing_invalid_local_and_markdown_references() {
 
 #[test]
 fn package_artifact_refs_reject_boundary_substitutes() {
-    let root = crate::self_tests::boundaries::support::temp_root("artifact-refs");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("artifact-refs");
     fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     fs::write(root.join("artifacts/proof.json"), "{}").expect("proof");
     let digest = crate::digest::file(&root.join("artifacts/proof.json")).expect("digest");
@@ -169,7 +169,7 @@ fn package_artifact_refs_reject_boundary_substitutes() {
         ("artifacts", &digest, "not a regular file"),
         (
             "artifacts/proof.json",
-            &crate::self_tests::boundaries::support::sha('9'),
+            &crate::self_tests::boundaries::workspace_fixtures::sha('9'),
             "digest mismatch",
         ),
     ] {
@@ -203,7 +203,7 @@ fn package_artifact_refs_reject_boundary_substitutes() {
         let err = crate::package::artifact::refs::validate_path_digest(
             &root,
             "artifacts/hard.json",
-            &crate::self_tests::boundaries::support::sha('b'),
+            &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
             "proof",
         )
         .expect_err("hard-linked artifact rejected");
@@ -214,14 +214,15 @@ fn package_artifact_refs_reject_boundary_substitutes() {
 
 #[test]
 fn package_resource_purpose_rejects_invalid_active_fixture_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("resource-purpose-invalid");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("resource-purpose-invalid");
     fs::create_dir_all(&root).expect("resource root");
     let failures = crate::package::resource::purpose::failures(
         &root,
         &json!({"resources":["artifacts/stale-proof.json"]}),
     );
     assert!(failures.iter().all(|failure| {
-        failure.code != crate::package::resource::purpose::FIXTURE_SUPPORT_ACTIVE_ARTIFACT
+        failure.code != crate::package::resource::purpose::FIXTURE_ONLY_ACTIVE_ARTIFACT
     }));
     assert!(failures.iter().any(|failure| {
         failure.code == crate::package::resource::purpose::STALE_ARTIFACT_RESOURCE

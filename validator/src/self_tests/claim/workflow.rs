@@ -42,7 +42,7 @@ fn backlog_policy_reports_duplicate_missing_mismatch_and_fake_attempts() {
 
 #[test]
 fn dogfood_receipts_reject_missing_invalid_and_semantically_weak_proof() {
-    let root = crate::self_tests::boundaries::support::temp_root("dogfood-claims");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("dogfood-claims");
     let claim = json!({
         "id":"DOG",
         "title":"Real multi-lane dogfood is complete",
@@ -67,7 +67,7 @@ fn dogfood_receipts_reject_missing_invalid_and_semantically_weak_proof() {
         "kind":"dogfood_receipt",
         "surface":"root_integration",
         "path":"../dogfood.json",
-        "digest":crate::self_tests::boundaries::support::sha('1')
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')
     }]);
     out.clear();
     crate::claim_semantics::dogfood_receipt::check(&with_bad_ref, &root, &mut out);
@@ -132,7 +132,7 @@ fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
         &BTreeMap::new(),
         &root_verification_states,
         &json!({}),
-        &crate::self_tests::boundaries::support::repo_root(),
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
         &mut out,
     );
     assert!(errors(&out).contains(&"dependency_claim_not_proven"));
@@ -141,7 +141,7 @@ fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
         "id":"up",
         "status":"merged",
         "claim_ids":["C"],
-        "ready_receipt":{"path":"ready.json","digest":crate::self_tests::boundaries::support::sha('1')}
+        "ready_receipt":{"path":"ready.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}
     });
     let mut lanes = BTreeMap::new();
     lanes.insert("up".to_string(), &upstream);
@@ -150,8 +150,8 @@ fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
         "claim_id":"C",
         "required_status":"merged",
         "validated_status":"merged",
-        "evidence_digest":crate::self_tests::boundaries::support::sha('1'),
-        "upstream_ready_receipt":{"path":"ready.json","digest":crate::self_tests::boundaries::support::sha('1')}
+        "evidence_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        "upstream_ready_receipt":{"path":"ready.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}
     });
     out.clear();
     crate::claim_semantics::lane::dependency::check(
@@ -161,7 +161,7 @@ fn lane_dependency_reports_missing_upstream_bad_ready_and_release_gaps() {
         &BTreeMap::new(),
         &root_verification_states,
         &json!({}),
-        &crate::self_tests::boundaries::support::repo_root(),
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
         &mut out,
     );
     assert!(errors(&out).contains(&"ready_receipt_not_lane_bound"));

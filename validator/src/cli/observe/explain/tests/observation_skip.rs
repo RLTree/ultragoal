@@ -3,7 +3,7 @@ use std::fs;
 
 #[test]
 fn explain_skips_observe_explain_events_when_selecting_target_run() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-explain-skip");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-explain-skip");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

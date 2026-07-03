@@ -23,7 +23,8 @@ fn included_claim(id: &str, title: &str) -> Value {
 
 #[test]
 fn product_fitness_rejects_substitutes_and_stale_receipt_bindings() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-fitness-claim");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fitness-claim");
     let mut claim = included_claim(
         "PF",
         "Product success via reviewer approved install success smoke test tests passed package publication first use feature delivered",
@@ -50,7 +51,7 @@ fn product_fitness_rejects_substitutes_and_stale_receipt_bindings() {
         "kind":"product::fitness::receipt",
         "surface":"product::fitness",
         "path":"../escape.json",
-        "digest":crate::self_tests::boundaries::support::sha('0')
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')
     }]);
     out.clear();
     crate::claim_semantics::product::fitness::check(&claim, &root, &mut out);

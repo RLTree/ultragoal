@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn namespace_binding_failures_cover_missing_standards_trace_and_red_fixture() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-binding-failures");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-binding-failures");
     write_json(
         &root.join("docs/namespace-class-registry.json"),
         &json!({"schema":"harness-ultragoal.namespace-class-registry.v1","classes":[]}),
@@ -21,7 +22,7 @@ fn namespace_binding_failures_cover_missing_standards_trace_and_red_fixture() {
 
 #[test]
 fn namespace_value_failures_accepts_fully_listed_files_without_orphans() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-no-orphans");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-no-orphans");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/routed.txt"), "routed").expect("routed file");
     let failures = crate::audit::namespace::law::value_failures(
@@ -37,7 +38,8 @@ fn namespace_value_failures_accepts_fully_listed_files_without_orphans() {
 
 #[test]
 fn namespace_value_cache_reuses_repo_source_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-value-cache");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-value-cache");
     std::fs::create_dir_all(root.join("validator/src/domain")).expect("validator src");
     std::fs::write(root.join("validator/src/domain/leaf.rs"), "fn leaf() {}\n")
         .expect("source leaf");
@@ -53,7 +55,8 @@ fn namespace_value_cache_reuses_repo_source_paths() {
 
 #[test]
 fn namespace_law_detects_mixed_domains_and_accepts_current_red_binding() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-mixed-domain");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-mixed-domain");
     std::fs::create_dir_all(root.join("runtime-product")).expect("mixed domain dir");
     std::fs::write(root.join("runtime-product/flow.rs"), "flow").expect("mixed domain file");
     write_json(

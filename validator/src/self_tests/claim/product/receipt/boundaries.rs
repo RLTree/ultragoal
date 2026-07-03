@@ -18,21 +18,21 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"live_beneficial_e2e",
                 "surface":"ui_browser",
                 "path":"validation_artifacts/product/ui-live.json",
-                "digest":crate::self_tests::boundaries::support::sha('a')
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
             },
             {
                 "id":"harness-path",
                 "kind":"harness_receipt",
                 "surface":"harness",
                 "path":"validation_artifacts/product/harness-path.json",
-                "digest":crate::self_tests::boundaries::support::sha('b')
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')
             },
             {
                 "id":"exception-path",
                 "kind":"human_review_queue_exception",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/exception.json",
-                "digest":crate::self_tests::boundaries::support::sha('c')
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')
             },
             {
                 "id":"mock-product",
@@ -52,7 +52,7 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"product_cohesion_receipt",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/product-receipt.json",
-                "digest":crate::self_tests::boundaries::support::sha('d'),
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('d'),
                 "product_cohesion_task":{
                     "primary_journey_id":"current journey",
                     "ui_evidence_paths":["validation_artifacts/product/missing-ui.json"],
@@ -65,7 +65,7 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"product_cohesion_receipt",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/product-receipt.json",
-                "digest":crate::self_tests::boundaries::support::sha('e'),
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('e'),
                 "product_cohesion_task":{
                     "primary_journey_id":"current journey",
                     "ui_evidence_paths":["validation_artifacts/product/ui-live.json"],
@@ -81,7 +81,7 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"product_cohesion_receipt",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/product-receipt.json",
-                "digest":crate::self_tests::boundaries::support::sha('f'),
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('f'),
                 "product_cohesion_task":{
                     "primary_journey_id":"current journey",
                     "ui_evidence_paths":["validation_artifacts/product/ui-live.json"],
@@ -94,7 +94,7 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"product_cohesion_receipt",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/product-receipt.json",
-                "digest":crate::self_tests::boundaries::support::sha('0'),
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('0'),
                 "product_cohesion_task":{
                     "primary_journey_id":"current journey",
                     "ui_evidence_paths":["validation_artifacts/product/ui-live.json"],
@@ -107,7 +107,7 @@ fn product_cohesion_receipt_policy_rejects_substitutes_and_missing_bindings() {
                 "kind":"product_cohesion_receipt",
                 "surface":"product::cohesion",
                 "path":"validation_artifacts/product/product-receipt.json",
-                "digest":crate::self_tests::boundaries::support::sha('1'),
+                "digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
                 "product_cohesion_task":{
                     "primary_journey_id":"current journey",
                     "ui_evidence_paths":["validation_artifacts/product/ui-live.json"],

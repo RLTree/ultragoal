@@ -6,7 +6,7 @@ mod run_edges;
 
 #[test]
 fn promptfoo_receipt_blocks_raw_eval_authority() {
-    let root = crate::self_tests::boundaries::support::temp_root("promptfoo-receipt");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("promptfoo-receipt");
     seed_root(&root);
     let command = PromptfooCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),
@@ -26,7 +26,8 @@ fn promptfoo_receipt_blocks_raw_eval_authority() {
 
 #[test]
 fn promptfoo_receipt_rejects_wrong_candidate() {
-    let root = crate::self_tests::boundaries::support::temp_root("promptfoo-wrong-candidate");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("promptfoo-wrong-candidate");
     seed_root(&root);
     let command = PromptfooCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),
@@ -60,7 +61,8 @@ fn promptfoo_defaults_version_errors_and_run_boundaries_are_typed() {
     let _ = std::fs::remove_dir_all(&missing_root);
     assert!(super::run(&missing_root, &default).is_err());
 
-    let root = crate::self_tests::boundaries::support::temp_root("promptfoo-version-errors");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("promptfoo-version-errors");
     seed_root(&root);
     let failing = PromptfooCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),

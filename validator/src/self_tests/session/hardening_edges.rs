@@ -2,7 +2,9 @@ use serde_json::{Value, json};
 
 #[test]
 fn session_log_hardening_reports_digest_and_cross_link_edges() {
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let digest_root = temp_root("session-hardening-digest-error");
     write_versions(&digest_root, json!(["missing.rs"]));
     write_receipt(
@@ -72,7 +74,7 @@ fn session_log_hardening_reports_digest_and_cross_link_edges() {
 }
 
 fn temp_root(name: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(name);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(name);
     std::fs::create_dir_all(root.join(".codex-plugin")).expect("plugin dir");
     std::fs::create_dir_all(root.join("validation_artifacts/harness")).expect("harness dir");
     root

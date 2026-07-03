@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 
 #[test]
 fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let validator_digests = validator_artifact_digest(&root);
     let provenance_packet = crate::json_boundary::read_json(
@@ -87,8 +87,9 @@ fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
 
 #[test]
 fn generated_artifacts_fail_closed_when_runtime_inputs_are_missing() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("runtime-generated-artifacts-missing");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "runtime-generated-artifacts-missing",
+    );
     std::fs::create_dir_all(&root).expect("temp root");
 
     assert_eq!(
@@ -104,8 +105,9 @@ fn generated_artifacts_fail_closed_when_runtime_inputs_are_missing() {
 
 #[test]
 fn generated_artifacts_classify_schema_required_leaf_paths() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("runtime-generated-artifacts-schema");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "runtime-generated-artifacts-schema",
+    );
     std::fs::create_dir_all(root.join("schemas")).expect("schema root");
     std::fs::write(
         root.join("schemas/validator-receipt.schema.json"),
@@ -137,12 +139,13 @@ fn generated_artifacts_classify_schema_required_leaf_paths() {
 #[cfg(unix)]
 #[test]
 fn runtime_bound_receipt_falls_back_when_input_refs_are_unreadable() {
-    let root = crate::self_tests::boundaries::support::temp_root("runtime-input-ref-fallback");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("runtime-input-ref-fallback");
     std::fs::create_dir_all(&root).expect("temp root");
     std::os::unix::fs::symlink("missing-target", root.join("plugin-manifest-draft.json"))
         .expect("manifest symlink");
     let validator_digests =
-        validator_artifact_digest(&crate::self_tests::boundaries::support::repo_root());
+        validator_artifact_digest(&crate::self_tests::boundaries::workspace_fixtures::repo_root());
     let bundle = serde_json::json!({"schema": "harness-ultragoal.fixture-bundle.v1"});
 
     let bound = crate::red::fixture::runtime::receipt::bind(&root, &bundle, &validator_digests);
@@ -157,7 +160,8 @@ fn runtime_bound_receipt_falls_back_when_input_refs_are_unreadable() {
 #[cfg(unix)]
 #[test]
 fn runtime_input_digest_falls_back_for_unsafe_file_refs() {
-    let root = crate::self_tests::boundaries::support::temp_root("runtime-input-digest-zero");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("runtime-input-digest-zero");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");
     std::fs::create_dir_all(root.join("templates")).expect("templates");
     std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");

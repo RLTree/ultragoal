@@ -4,7 +4,7 @@ use std::path::PathBuf;
 #[test]
 fn namespace_command_reports_missing_manifest_and_registry_edges() {
     let missing_manifest =
-        crate::self_tests::boundaries::support::temp_root("namespace-no-manifest");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-no-manifest");
     std::fs::create_dir_all(&missing_manifest).expect("temp root");
     let err = crate::cli::namespace::run(
         &missing_manifest,
@@ -18,7 +18,7 @@ fn namespace_command_reports_missing_manifest_and_registry_edges() {
     std::fs::remove_dir_all(missing_manifest).expect("cleanup missing manifest");
 
     let missing_registry =
-        crate::self_tests::boundaries::support::temp_root("namespace-no-registry");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-no-registry");
     super::write_file(
         &missing_registry.join("validator/src/domain/leaf.rs"),
         "pub fn leaf() {}\n",

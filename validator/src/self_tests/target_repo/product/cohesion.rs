@@ -16,8 +16,8 @@ fn copy_dir(from: &Path, to: &Path) {
 }
 
 fn copied_fixture(label: &str, fixture: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let target = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     copy_dir(&root.join(fixture), &target);
     target
 }
@@ -77,7 +77,7 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 
 #[test]
 fn product_cohesion_audit_reports_missing_marker_and_malformed_receipt() {
-    let empty = crate::self_tests::boundaries::support::temp_root("product-empty");
+    let empty = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-empty");
     std::fs::create_dir_all(&empty).expect("empty target");
     let optional = audit_product(&empty, false);
     assert_eq!(optional["status"], "not_applicable");
@@ -178,8 +178,9 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
 
 #[test]
 fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let control_root = crate::self_tests::boundaries::support::temp_root("control-dispatch");
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let control_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("control-dispatch");
     std::fs::create_dir_all(&control_root).expect("control dir");
     std::fs::write(
         control_root.join("plugin-manifest-draft.json"),
@@ -205,7 +206,8 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
         "fail"
     );
 
-    let control_dir = crate::self_tests::boundaries::support::temp_root("performance-dispatch");
+    let control_dir =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("performance-dispatch");
     std::fs::create_dir_all(&control_dir).expect("performance dir");
     let performance_receipt = control_dir.join("performance.json");
     let performance_code = crate::command_run::run_with_exit_code(args(

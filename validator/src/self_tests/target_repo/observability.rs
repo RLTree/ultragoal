@@ -16,8 +16,8 @@ fn copy_dir(from: &Path, to: &Path) {
 }
 
 fn copied_fixture(label: &str, fixture: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let target = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     copy_dir(&root.join(fixture), &target);
     target
 }

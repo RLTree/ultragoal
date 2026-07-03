@@ -91,9 +91,9 @@ fn openai_call_receipt_blocks_live_model_claims() {
         "call",
         "prove",
         "--input-digest",
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "--output-digest",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     ]
     .into_iter()
     .map(ToString::to_string)
@@ -132,7 +132,7 @@ fn openai_call_receipt_rejects_missing_digest_authority() {
         "--input-digest",
         "not-a-digest",
         "--output-digest",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     ]
     .into_iter()
     .map(ToString::to_string)
@@ -161,7 +161,7 @@ fn openai_output_receipt_dereferences_current_call_and_blocks_claims() {
         "output",
         "prove",
         "--parsed-output-digest",
-        &crate::self_tests::boundaries::support::sha('c'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
     ]
     .into_iter()
     .map(ToString::to_string)
@@ -191,9 +191,9 @@ fn write_call_receipt(root: &std::path::Path) {
         "call",
         "prove",
         "--input-digest",
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "--output-digest",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     ]
     .into_iter()
     .map(ToString::to_string)

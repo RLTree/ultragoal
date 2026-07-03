@@ -102,7 +102,8 @@ fn archive_zip_sync_result_is_testable() {
 
 #[test]
 fn audit_artifact_digest_zero_is_testable() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-artifact-digest-zero");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-artifact-digest-zero");
     std::fs::create_dir_all(root.join("dir")).expect("dir");
     std::fs::write(root.join("file.txt"), "content").expect("file");
     assert_eq!(

@@ -5,12 +5,14 @@ mod evidence;
 
 #[test]
 fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
-    let root = crate::self_tests::boundaries::support::temp_root("anti-theater-deps");
-    crate::self_tests::audit::final_packet::support::write_json(
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("anti-theater-deps");
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let law = "generated-proof-artifact-provenance-anti-fabrication";
     let missing = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
         &root, &store, law,
@@ -27,7 +29,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
     }
 
     let current = crate::package::inventory::package_digest(&root).expect("digest");
-    crate::self_tests::audit::final_packet::support::write_green_proof(&root, &current);
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_green_proof(&root, &current);
     write_cli_pass(
         &root,
         &current,
@@ -45,7 +47,9 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
     );
     assert!(failures.is_empty(), "{failures:?}");
 
-    crate::self_tests::audit::final_packet::support::write_fail_closed_proof(&root, &current);
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_fail_closed_proof(
+        &root, &current,
+    );
     write_cli_fail_closed(
         &root,
         &current,
@@ -69,7 +73,7 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
 
 fn write_cli_pass(root: &std::path::Path, current: &str, name: &str, operation: &str) {
     let path = root.join(format!("validation_artifacts/cli/{name}.json"));
-    crate::self_tests::audit::final_packet::support::write_json(
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
         &path,
         &json!({
             "schema":"harness-ultragoal.cli-control-plane-receipt.v1",
@@ -106,7 +110,7 @@ fn write_cli_pass(root: &std::path::Path, current: &str, name: &str, operation: 
 
 fn write_cli_fail_closed(root: &std::path::Path, current: &str, name: &str, operation: &str) {
     let path = root.join(format!("validation_artifacts/cli/{name}.json"));
-    crate::self_tests::audit::final_packet::support::write_json(
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
         &path,
         &json!({
             "schema":"harness-ultragoal.cli-control-plane-receipt.v1",

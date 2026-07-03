@@ -44,7 +44,7 @@ fn receipt(id: &str, title: &str, description: &str, kind: &str, classes: Value)
 }
 
 fn semantic_errors(claim: &Value) -> Vec<String> {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-boundary");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-boundary");
     std::fs::create_dir_all(&root).expect("semantic boundary root");
     let ready = json!({"ready":true,"claim_ids":[claim["id"].as_str().unwrap_or_default()]});
     let mut out = Vec::new();
@@ -85,10 +85,10 @@ fn semantic_receipt_provenance_rejects_model_human_and_deterministic_substitutes
     model_missing["provider_model"] =
         json!({"provider":"test","model":"semantic-falsifier","version":"1"});
     model_missing["prompt_contract_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('a'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('a'));
     model_missing["classifier_evidence"] = json!({
         "evidence_type":"external_model_output",
-        "digest":crate::self_tests::boundaries::support::sha('b'),
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "summary":"external model output attestation"
     });
     let model_ok = with_receipt_digest(model_missing);
@@ -126,7 +126,7 @@ fn semantic_receipt_provenance_rejects_model_human_and_deterministic_substitutes
     );
     deterministic_bad["classifier_evidence"] = json!({
         "evidence_type":"external_model_output",
-        "digest":crate::self_tests::boundaries::support::sha('c'),
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "summary":"external evidence cannot belong to deterministic backstop"
     });
     let errors = semantic_errors(&semantic_claim(id, title, description, deterministic_bad));
@@ -201,7 +201,8 @@ fn semantic_receipt_policy_rejects_typed_malformed_and_stale_text_digest() {
         "deterministic_backstop",
         json!(["runtime_cli_backend_only_engine_only"]),
     );
-    stale["canonical_text_digest"] = json!(crate::self_tests::boundaries::support::sha('d'));
+    stale["canonical_text_digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('d'));
     let stale = with_receipt_digest(stale);
     let errors = semantic_errors(&semantic_claim(stale_id, title, description, stale));
     assert!(

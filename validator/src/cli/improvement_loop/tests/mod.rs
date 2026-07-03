@@ -6,7 +6,8 @@ mod edges;
 
 #[test]
 fn improvement_loop_receipt_fails_closed_for_partial_loop() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-partial");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-partial");
     seed_root(&root, "partial");
     let command = ImprovementLoopCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),
@@ -30,7 +31,8 @@ fn improvement_loop_receipt_fails_closed_for_partial_loop() {
 
 #[test]
 fn improvement_loop_receipt_has_possible_green_path() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-green");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-green");
     seed_root(&root, "complete_same_candidate");
     let command = ImprovementLoopCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),
@@ -42,7 +44,9 @@ fn improvement_loop_receipt_has_possible_green_path() {
 
 #[test]
 fn improvement_loop_receipt_rejects_missing_stage_evidence() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-no-evidence");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "improvement-loop-no-evidence",
+    );
     seed_root(&root, "complete_same_candidate");
     let mut registry_doc = crate::json_boundary::read_json(&root.join(super::REGISTRY)).unwrap();
     registry_doc["loops"][0]
@@ -63,7 +67,8 @@ fn improvement_loop_receipt_rejects_missing_stage_evidence() {
 
 #[test]
 fn improvement_loop_receipt_rejects_hand_authored_green() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-tamper");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-tamper");
     seed_root(&root, "partial");
     let mut receipt = json!({
         "schema": super::RECEIPT_SCHEMA,
@@ -100,7 +105,9 @@ fn improvement_loop_defaults_and_run_error_boundaries_are_typed() {
     let _ = std::fs::remove_dir_all(&missing_root);
     assert!(super::run(&missing_root, &default).is_err());
 
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-write-error");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "improvement-loop-write-error",
+    );
     seed_root(&root, "partial");
     std::fs::remove_dir_all(root.join("validation_artifacts")).expect("remove artifacts dir");
     std::fs::write(root.join("validation_artifacts"), "not a directory").expect("blocker");

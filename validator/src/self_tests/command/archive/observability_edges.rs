@@ -17,7 +17,7 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 }
 
 fn package_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "package payload\n").expect("file");
     write_json(
@@ -64,8 +64,9 @@ fn archive_parse_defaults_and_rejects_package_escaping_observability_receipts() 
 
 #[test]
 fn archive_command_records_missing_manifest_as_fail_closed_observability() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("archive-observability-no-manifest");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "archive-observability-no-manifest",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let observability = "observability/archive-build-missing-manifest.json";
 

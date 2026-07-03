@@ -87,7 +87,8 @@ fn text_guards_reject_stale_review_phrases_and_manifest_owned_private_paths() {
         "{stale:?}"
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("text-guard-private-paths");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("text-guard-private-paths");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("fixtures/red")).expect("red fixtures");
     std::fs::write(

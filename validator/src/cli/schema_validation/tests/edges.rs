@@ -22,7 +22,7 @@ fn schema_validation_parse_and_scheduler_edges_are_bounded() {
         .contains("invalid numeric value for --jobs")
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("schema-jobs-zero");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-jobs-zero");
     super::create_schema_package(&root, json!({"name": "Tree"}));
     let command = SchemaValidationCommand {
         schema: Some("test.schema.json".to_string()),
@@ -40,7 +40,8 @@ fn schema_validation_parse_and_scheduler_edges_are_bounded() {
 
 #[test]
 fn schema_validation_failure_edges_absolute_receipt_and_default_run_are_observable() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-validation-edges");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-edges");
     super::create_schema_package(&root, json!({"name": "Tree"}));
     let store = crate::schema_catalog::load(&root);
     let escaped = validate_one(
@@ -149,8 +150,9 @@ fn schema_validation_runtime_metrics_report_resource_and_saturation_states() {
 
 #[test]
 fn schema_validation_run_propagates_telemetry_and_receipt_write_errors() {
-    let no_manifest =
-        crate::self_tests::boundaries::support::temp_root("schema-validation-no-manifest");
+    let no_manifest = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "schema-validation-no-manifest",
+    );
     super::create_schema_package(&no_manifest, json!({"name": "Tree"}));
     fs::remove_file(no_manifest.join("plugin-manifest-draft.json")).expect("remove manifest");
     let command = SchemaValidationCommand {
@@ -163,7 +165,8 @@ fn schema_validation_run_propagates_telemetry_and_receipt_write_errors() {
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
     fs::remove_dir_all(no_manifest).expect("cleanup no manifest");
 
-    let blocked = crate::self_tests::boundaries::support::temp_root("schema-validation-blocked");
+    let blocked =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-blocked");
     super::create_schema_package(&blocked, json!({"name": "Tree"}));
     fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
     let blocked_command = SchemaValidationCommand {

@@ -34,7 +34,7 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
         .contains("invalid numeric value for --jobs")
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-jobs-zero");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-jobs-zero");
     super::write_coverage_root(&root, 100.0, json!([]));
     let command = CoverageCommand {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
@@ -51,7 +51,7 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
 
 #[test]
 fn coverage_dispatch_and_receipt_write_failures_are_observable() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-dispatch");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-dispatch");
     super::write_coverage_root(&root, 100.0, json!([]));
     let raw = [
         "coverage",
@@ -73,7 +73,7 @@ fn coverage_dispatch_and_receipt_write_failures_are_observable() {
     assert!(root.join(OBSERVABILITY_RECEIPT_REL).is_file());
 
     let write_error_root =
-        crate::self_tests::boundaries::support::temp_root("coverage-write-error");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-write-error");
     super::write_coverage_root(&write_error_root, 100.0, json!([]));
     fs::create_dir_all(write_error_root.join("validation_artifacts")).expect("artifact dir");
     fs::write(
@@ -99,7 +99,8 @@ fn coverage_dispatch_and_receipt_write_failures_are_observable() {
 
 #[test]
 fn coverage_authoritative_script_and_package_mutation_are_observed() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-authoritative");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-authoritative");
     super::write_coverage_root(&root, 100.0, json!([]));
     fs::create_dir_all(root.join("scripts")).expect("scripts");
     fs::write(root.join("scripts/check-coverage-full"), "exit 0\n").expect("script");
@@ -111,7 +112,7 @@ fn coverage_authoritative_script_and_package_mutation_are_observed() {
     assert_eq!(run(&root, &command).expect("authoritative pass"), 0);
 
     let mutation_root =
-        crate::self_tests::boundaries::support::temp_root("coverage-package-mutation");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-package-mutation");
     super::write_coverage_root(&mutation_root, 100.0, json!([]));
     let mutation_command = CoverageCommand {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),

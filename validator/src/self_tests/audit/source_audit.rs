@@ -9,7 +9,7 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn semantic_receipt_loader_covers_inline_path_and_digest_boundaries() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-boundaries");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-boundaries");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let inline = json!({"claim_id":"C"});
     let loaded = crate::claim_semantics::semantic::receipt::loader::load(&root, &inline)
@@ -30,7 +30,7 @@ fn semantic_receipt_loader_covers_inline_path_and_digest_boundaries() {
 
     let err = crate::claim_semantics::semantic::receipt::loader::load(
         &root,
-        &json!({"path":"receipts/ok.json","digest":crate::self_tests::boundaries::support::sha('0')}),
+        &json!({"path":"receipts/ok.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}),
     )
     .err()
     .expect("digest mismatch rejected");
@@ -40,11 +40,13 @@ fn semantic_receipt_loader_covers_inline_path_and_digest_boundaries() {
 
 #[test]
 fn red_catalog_and_row_boundaries_report_typed_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-catalog");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-catalog");
     std::fs::create_dir_all(root.join("templates")).expect("templates");
     std::fs::create_dir_all(root.join("fixtures/red")).expect("red dir");
     std::fs::write(root.join("templates/RED_FIXTURES.json"), "{}").expect("catalog");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let mut failures = BTreeMap::new();
     crate::audit::red::catalog::check(&root, &store, &mut failures);
     assert!(
@@ -63,7 +65,7 @@ fn red_catalog_and_row_boundaries_report_typed_failures() {
         &json!([{
             "id":"p",
             "packet_path":"fixtures/red/p.json",
-            "packet_digest":crate::self_tests::boundaries::support::sha('1'),
+            "packet_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
             "expected_failure":{"check_id":"schema-valid","error":"other"}
         }]),
     );
@@ -101,7 +103,9 @@ fn review_round_and_cli_parsers_reject_bad_boundaries() {
     ));
     assert!(!crate::review::round::is_review_round_fixture("other.json"));
 
-    let temp = crate::self_tests::boundaries::support::temp_root("review-round-fixture-failure");
+    let temp = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "review-round-fixture-failure",
+    );
     write_json(
         &temp.join("fixtures/review-round/valid/review-round-receipt.json"),
         &json!({"schema":"bad-review-round","status":"fail"}),
@@ -142,7 +146,8 @@ fn review_round_and_cli_parsers_reject_bad_boundaries() {
 
 #[test]
 fn incomplete_package_audit_collects_fail_closed_package_branches() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-missing-package");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-missing-package");
     for dir in [
         "examples/generated",
         "fixtures",
@@ -204,7 +209,7 @@ fn incomplete_package_audit_collects_fail_closed_package_branches() {
 
 #[test]
 fn review_round_validate_files_reports_anchor_failures() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let err = crate::review::round::validate_files(
         &root,
         &root.join("fixtures/review-round/valid/review-round-receipt.json"),

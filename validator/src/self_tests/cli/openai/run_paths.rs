@@ -73,9 +73,9 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "call",
         "prove",
         "--input-digest",
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "--output-digest",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "--receipt",
         call_receipt.to_str().expect("call receipt path"),
     ]);
@@ -90,7 +90,7 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "output",
         "prove",
         "--parsed-output-digest",
-        &crate::self_tests::boundaries::support::sha('c'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "--receipt",
         output_receipt.to_str().expect("output receipt path"),
     ]);
@@ -127,7 +127,7 @@ fn openai_cli_run_paths_and_output_tamper_edges_are_exercised() {
         "--parser-schema-id",
         "",
         "--parsed-output-digest",
-        &crate::self_tests::boundaries::support::sha('d'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('d'),
         "--receipt",
         "validation_artifacts/openai/output-relative.json",
     ]);

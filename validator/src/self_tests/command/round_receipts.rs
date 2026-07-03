@@ -81,7 +81,7 @@ fn digest(root: &Path, path: &str) -> String {
 
 #[test]
 fn round_receipt_reference_sync_skips_missing_unknown_and_unowned_rows() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let mut missing_persona = json!({});
     sync_persona_refs(&root, &mut missing_persona);
     assert!(missing_persona.get("persona_prompt_path").is_none());

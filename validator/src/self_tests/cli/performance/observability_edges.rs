@@ -23,8 +23,9 @@ fn copy_dir(from: &Path, to: &Path) {
 
 #[test]
 fn branch_arms_close_last_gaps() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("cli_performance_observability-lanes");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli_performance_observability-lanes",
+    );
     let digest_map = crate::audit::artifacts::digest_map(&[
         json!({}),
         json!({"path": 5, "digest": 7}),
@@ -75,15 +76,16 @@ fn branch_arms_close_last_gaps() {
         3
     );
 
-    let perf =
-        crate::self_tests::boundaries::support::temp_root("cli_performance_observability-cli-perf");
+    let perf = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli_performance_observability-cli-perf",
+    );
     write_json(&perf.join("plugin-manifest-draft.json"), &json!({}));
     let command = crate::cli::performance::PerformanceCommand {
         operation: crate::cli::performance::types::PerformanceOperation::Prove,
         receipt: None,
         class: crate::cli::performance::types::BudgetClass::FocusedRepair,
     };
-    let missing_perf = crate::self_tests::boundaries::support::temp_root(
+    let missing_perf = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "cli_performance_observability-cli-run-missing",
     );
     let err = crate::cli::performance::run(&missing_perf, &command)
@@ -130,8 +132,9 @@ fn branch_arms_close_last_gaps() {
         }
     }
 
-    let schemas =
-        crate::self_tests::boundaries::support::temp_root("cli_performance_observability-schemas");
+    let schemas = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli_performance_observability-schemas",
+    );
     write_json(
         &schemas.join("schemas/schema-catalog.json"),
         &json!({"schemas": [
@@ -164,8 +167,9 @@ fn branch_arms_close_last_gaps() {
             .any(|err| err.contains("unresolved schema ref"))
     );
 
-    let semantic =
-        crate::self_tests::boundaries::support::temp_root("cli_performance_observability-semantic");
+    let semantic = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli_performance_observability-semantic",
+    );
     write_json(
         &semantic.join("claims.json"),
         &json!({"claims":[{"id":"CLAIM-OK_value","title":"CLI claim"}]}),
@@ -190,8 +194,8 @@ fn branch_arms_close_last_gaps() {
             .is_file()
     );
 
-    let repo = crate::self_tests::boundaries::support::repo_root();
-    let target_repo = crate::self_tests::boundaries::support::temp_root(
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let target_repo = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "cli_performance_observability-observe-sh",
     );
     copy_dir(

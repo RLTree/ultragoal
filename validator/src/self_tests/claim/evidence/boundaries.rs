@@ -7,7 +7,8 @@ fn has_fail(failures: &[Failure], error: &str) -> bool {
 
 #[test]
 fn live_e2e_and_included_claims_require_real_current_command_evidence() {
-    let root = crate::self_tests::boundaries::support::temp_root("claim-evidence-boundary");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("claim-evidence-boundary");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let proof = root.join("artifacts/live.json");
     std::fs::write(&proof, br#"{"ok":true}"#).expect("proof");

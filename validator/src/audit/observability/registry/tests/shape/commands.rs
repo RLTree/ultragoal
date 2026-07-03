@@ -3,7 +3,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 #[test]
 fn observability_command_inventory_shape_edges_are_explicit() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-command-shape");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-command-shape");
     let mut failures = Vec::new();
     super::super::super::command_inventory::check(&root, &json!({}), &mut failures);
     assert!(
@@ -15,7 +16,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
             .any(|item| item.starts_with("observability_command_inventory_missing:"))
     );
 
-    let mut inventory = super::super::support::observable_inventory();
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["commands"]
         .as_array_mut()
         .unwrap()
@@ -47,7 +48,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         &"observability_command_observability_status_missing:schema validation".to_string()
     ));
 
-    let mut missing_command = super::super::support::observable_inventory();
+    let mut missing_command = super::super::inventory_fixtures::observable_inventory();
     let commands = missing_command["commands"].as_array_mut().unwrap();
     commands.insert(0, json!(42));
     commands.retain(|row| row.as_str() != Some("package digest"));
@@ -57,7 +58,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         failures.contains(&"observability_command_inventory_missing:package digest".to_string())
     );
 
-    let mut malformed_containers = super::super::support::observable_inventory();
+    let mut malformed_containers = super::super::inventory_fixtures::observable_inventory();
     malformed_containers["commands"] = json!("not an array");
     malformed_containers["command_observability_inventory"] = json!("not an object");
     malformed_containers["row_requirements"] = json!({});
@@ -77,7 +78,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         })
     );
 
-    let mut partial_metadata = super::super::support::observable_inventory();
+    let mut partial_metadata = super::super::inventory_fixtures::observable_inventory();
     partial_metadata["command_observability_inventory"]["package digest"]["observability_status"] =
         json!("partially_observable");
     partial_metadata["command_observability_inventory"]["package digest"]["missing_surfaces"] =
@@ -96,7 +97,7 @@ fn observability_command_inventory_shape_edges_are_explicit() {
         )
     );
 
-    let mut row_contract = super::super::support::observable_inventory();
+    let mut row_contract = super::super::inventory_fixtures::observable_inventory();
     row_contract["command_observability_inventory"]["package digest"]["observed_surfaces"] =
         json!([
             "log instrumentation",
@@ -117,8 +118,9 @@ fn observability_command_inventory_shape_edges_are_explicit() {
 
 #[test]
 fn observability_dimension_inventories_are_required() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-dimension-shape");
-    let mut inventory = super::super::support::observable_inventory();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-dimension-shape");
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["validator_check_families"]
         .as_array_mut()
         .unwrap()
@@ -152,7 +154,7 @@ fn observability_dimension_inventories_are_required() {
 
 #[test]
 fn production_command_inventory_matches_required_command_authority() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )
@@ -173,7 +175,7 @@ fn production_command_inventory_matches_required_command_authority() {
 
 #[test]
 fn production_command_control_board_counts_match_inventory_rows() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )
@@ -210,7 +212,7 @@ fn production_command_control_board_counts_match_inventory_rows() {
 
 #[test]
 fn control_board_matches_command_inventory_rows() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )

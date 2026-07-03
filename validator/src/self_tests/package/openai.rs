@@ -38,9 +38,9 @@ fn write_config_and_call_receipts(root: &Path) {
         "call",
         "prove",
         "--input-digest",
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "--output-digest",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     ]
     .into_iter()
     .map(ToString::to_string)
@@ -59,7 +59,7 @@ fn write_config_and_call_receipts(root: &Path) {
         "output",
         "prove",
         "--parsed-output-digest",
-        &crate::self_tests::boundaries::support::sha('c'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
     ]
     .into_iter()
     .map(ToString::to_string)
@@ -106,7 +106,8 @@ fn openai_package_audit_rejects_wrong_candidate_receipt() {
         &root.join("validation_artifacts/openai/config-receipt.json"),
     )
     .expect("receipt");
-    receipt["candidate_digest"] = json!(crate::self_tests::boundaries::support::sha('b'));
+    receipt["candidate_digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('b'));
     write_json(
         &root.join("validation_artifacts/openai/config-receipt.json"),
         &receipt,
@@ -128,7 +129,8 @@ fn openai_package_audit_rejects_wrong_call_candidate() {
         &root.join("validation_artifacts/openai/call-receipt.json"),
     )
     .expect("receipt");
-    receipt["candidate_digest"] = json!(crate::self_tests::boundaries::support::sha('c'));
+    receipt["candidate_digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('c'));
     write_json(
         &root.join("validation_artifacts/openai/call-receipt.json"),
         &receipt,
@@ -172,7 +174,8 @@ fn openai_package_audit_rejects_provider_policy_digest_mismatch() {
         &root.join("validation_artifacts/openai/call-receipt.json"),
     )
     .expect("receipt");
-    receipt["provider_policy_digest"] = json!(crate::self_tests::boundaries::support::sha('d'));
+    receipt["provider_policy_digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('d'));
     write_json(
         &root.join("validation_artifacts/openai/call-receipt.json"),
         &receipt,

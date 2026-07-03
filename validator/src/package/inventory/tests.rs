@@ -21,7 +21,8 @@ fn canonical_escape_guard_reports_outside_package() {
 
 #[test]
 fn package_digest_rejects_missing_directories_and_invalid_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-inventory-digest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-inventory-digest");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "ok").expect("file");
 
@@ -70,7 +71,8 @@ fn package_digest_excludes_mutable_final_packet_proof_receipt() {
 
 #[test]
 fn package_digest_rejects_parent_session_contract_resources() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-parent-contract");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-parent-contract");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
     std::fs::write(

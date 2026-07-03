@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn namespace_class_registry_has_no_repeated_prefix_allowance() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-class-no-waiver");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-class-no-waiver");
     std::fs::create_dir_all(&root).expect("namespace class root");
     let registry_failures =
         crate::audit::namespace::law::class_registry_value_failures(&root, &json!({}));
@@ -65,7 +66,8 @@ fn namespace_class_registry_requires_exactly_one_class_for_each_path() {
 
 #[test]
 fn namespace_class_registry_accepts_one_class_and_rejects_remaining_loopholes() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-class-edge-forms");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-class-edge-forms");
     write_text(&root.join("authority.json"), "{}");
     let registry = json!({
         "schema":"harness-ultragoal.namespace-class-registry.v1",
@@ -121,7 +123,8 @@ fn namespace_class_registry_accepts_one_class_and_rejects_remaining_loopholes() 
 
 #[test]
 fn namespace_class_registry_rejects_waiver_and_source_loopholes() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-source-class");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-source-class");
     write_text(&root.join("plugin-manifest-draft.json"), "{}");
     let value = json!({
       "schema":"harness-ultragoal.namespace-class-registry.v1",

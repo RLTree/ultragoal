@@ -116,7 +116,7 @@ fn observe_query_matching_covers_tags_and_bounds() {
     assert!(!private_body.contains(&tmp_marker));
     assert!(private_body.contains("[redacted-home-path]"));
     assert!(private_body.contains("[redacted-private-tmp-path]"));
-    let digest = crate::self_tests::boundaries::support::sha('a');
+    let digest = crate::self_tests::boundaries::workspace_fixtures::sha('a');
     assert!(observe::query::candidate_digest_failure("not json", &digest).is_some());
     assert!(observe::query::candidate_digest_failure(
         &format!(

@@ -44,7 +44,7 @@ fn args(parts: &[&str]) -> Vec<String> {
 
 #[test]
 fn command_run_routes_rust_and_gc_without_bypass() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rust_code = crate::command_run::run_with_exit_code(crate::Args {
         root: root.clone(),
         command: crate::Command::Rust(RustCommand {
@@ -76,7 +76,7 @@ fn rust_observations_cover_tool_failures_and_policy_edges() {
     assert_eq!(missing["available"], false);
     assert_eq!(missing["success"], false);
 
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     for operation in [
         RustOperation::Standard,
         RustOperation::Release,
@@ -208,7 +208,7 @@ fn rust_receipt_construction_rejects_missing_digest_inputs() {
 
 #[test]
 fn rust_run_rejects_missing_package_manifest_before_receipt_claim() {
-    let root = crate::self_tests::boundaries::support::temp_root("rust-run-no-manifest");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("rust-run-no-manifest");
     std::fs::create_dir_all(&root).expect("root");
     let err = crate::cli::rust::run(
         &root,
@@ -223,7 +223,7 @@ fn rust_run_rejects_missing_package_manifest_before_receipt_claim() {
 }
 
 fn rust_receipt_root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     for dir in [".cargo", "schemas", "docs", "templates/agent-standards"] {
         std::fs::create_dir_all(root.join(dir)).expect("receipt dirs");
     }

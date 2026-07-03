@@ -32,7 +32,8 @@ fn source_obligations_parse_requires_strict_and_supports_jobs() {
 
 #[test]
 fn source_obligations_command_writes_pass_and_fail_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-obligations-command");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("source-obligations-command");
     write_minimal_root(&root, true);
     let command = SourceObligationsCommand {
         obligation: Some("agent-queryable-observability".to_string()),
@@ -68,7 +69,8 @@ fn source_obligations_command_writes_pass_and_fail_observability() {
 
 #[test]
 fn default_source_obligations_check_uses_parallel_scheduler() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-obligations-parallel");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("source-obligations-parallel");
     write_parallel_fixture(&root);
     let scheduler = SchedulerConfig::from_jobs(Some(4)).expect("scheduler");
     let result = validate(&root, None, scheduler);

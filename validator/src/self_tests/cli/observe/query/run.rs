@@ -114,7 +114,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{current_candidate}\",\"why_failed\":\"dependency was stale: {}\"}}",
-            crate::self_tests::boundaries::support::sha('e')
+            crate::self_tests::boundaries::workspace_fixtures::sha('e')
         )),
     )
     .expect("explanatory stale digest");
@@ -127,7 +127,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         Ok(format!(
             "{{\"rows\":[{{\"body\":\"{{\\\"candidate_digest\\\":\\\"{}\\\",\\\"why_failed\\\":\\\"old {}\\\"}}\"}}]}}",
             current_candidate,
-            crate::self_tests::boundaries::support::sha('d')
+            crate::self_tests::boundaries::workspace_fixtures::sha('d')
         )),
     )
     .expect("nested row candidate");
@@ -152,7 +152,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         "*".to_string(),
         Ok(format!(
             "{{\"candidate_digest\":\"{}\",\"row\":1}}",
-            crate::self_tests::boundaries::support::sha('f')
+            crate::self_tests::boundaries::workspace_fixtures::sha('f')
         )),
     )
     .expect("stale candidate output");

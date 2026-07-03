@@ -1,7 +1,7 @@
 use serde_json::{Map, Value, json};
 use std::{fs, path::Path};
 
-mod rows;
+mod row_templates;
 
 pub(super) fn write_registry_root(root: &Path, inventory: Value) {
     fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
@@ -54,27 +54,30 @@ pub(super) fn write_valid_fixture(root: &Path) {
 pub(super) fn observable_inventory() -> Value {
     let mut rows = Map::new();
     for command in super::super::command_inventory::REQUIRED_COMMANDS {
-        rows.insert((*command).to_string(), rows::observable_row(command));
+        rows.insert(
+            (*command).to_string(),
+            row_templates::observable_row(command),
+        );
     }
     let mut surface_rows = Map::new();
     for surface in super::super::surfaces::REQUIRED_SURFACES {
         surface_rows.insert(
             (*surface).to_string(),
-            rows::observable_surface_row(surface),
+            row_templates::observable_surface_row(surface),
         );
     }
     let mut loop_rows = Map::new();
     for stage in super::super::operating::REQUIRED_LOOP_STAGES {
         loop_rows.insert(
             (*stage).to_string(),
-            rows::observable_operating_row("loop", stage),
+            row_templates::observable_operating_row("loop", stage),
         );
     }
     let mut signal_rows = Map::new();
     for signal in super::super::operating::REQUIRED_SIGNAL_CLASSES {
         signal_rows.insert(
             (*signal).to_string(),
-            rows::observable_operating_row("signal", signal),
+            row_templates::observable_operating_row("signal", signal),
         );
     }
     let mut inventory = json!({
@@ -117,7 +120,7 @@ pub(super) fn observable_inventory() -> Value {
         "operating_loop_inventory": loop_rows,
         "signal_inventory": signal_rows
     });
-    super::dimension_support::insert_dimension_inventory(&mut inventory);
+    super::dimension_inventory::insert_dimension_inventory(&mut inventory);
     inventory
 }
 
@@ -143,7 +146,7 @@ fn observable_control_board() -> Value {
         "signals",
         super::super::operating::REQUIRED_SIGNAL_CLASSES.len(),
     );
-    super::dimension_support::insert_dimension_counts(&mut families);
+    super::dimension_inventory::insert_dimension_counts(&mut families);
     json!({
         "status": "observable",
         "families": families,

@@ -5,7 +5,7 @@ use std::path::PathBuf;
 
 #[test]
 fn improvement_loop_run_parse_and_receipt_tamper_edges_are_typed() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-run");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-run");
     seed_root(&root, "complete_same_candidate");
     let receipt_path = root.join("validation_artifacts/improvement-loop/run-receipt.json");
     assert!(
@@ -70,7 +70,8 @@ fn improvement_loop_run_parse_and_receipt_tamper_edges_are_typed() {
 
 #[test]
 fn improvement_loop_registry_failures_cover_empty_and_partial_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-registry");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("improvement-loop-registry");
     seed_root(&root, "complete_same_candidate");
     let empty_failures = registry::registry_failures(&root, &json!({}));
     assert!(empty_failures.contains(&"improvement_loop_field_mismatch:schema".to_string()));
@@ -192,7 +193,9 @@ fn improvement_loop_stage_evidence_failures_are_actionable() {
 
 #[test]
 fn improvement_loop_missing_json_dependency_is_explicit() {
-    let root = crate::self_tests::boundaries::support::temp_root("improvement-loop-missing-json");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "improvement-loop-missing-json",
+    );
     super::seed_root(&root, "complete_same_candidate");
     std::fs::write(root.join(super::super::REGISTRY), "{").expect("malformed registry");
     let command = ImprovementLoopCommand {
@@ -228,7 +231,7 @@ fn assert_stage_failure(
     mutate: impl FnOnce(&std::path::Path, &mut serde_json::Value),
     expected_prefix: &str,
 ) {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     seed_root(&root, "complete_same_candidate");
     let mut doc = crate::json_boundary::read_json(&root.join(super::super::REGISTRY)).unwrap();
     mutate(&root, &mut doc);

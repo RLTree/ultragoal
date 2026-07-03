@@ -18,7 +18,7 @@ fn write_file(path: &Path, body: &str) {
     std::fs::write(path, body).expect("write file");
 }
 
-fn support_files(root: &Path) -> Vec<String> {
+fn namespace_surface_files(root: &Path) -> Vec<String> {
     write_file(
         &root.join("validator/src/domain/leaf.rs"),
         "pub fn leaf() {}\n",
@@ -69,8 +69,8 @@ fn class(id: &str, kind: &str, globs: Value, authority_path: &str) -> Value {
 }
 
 fn package_root(label: &str, extra_files: &[(&str, &str)]) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
-    let mut resources = support_files(&root);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
+    let mut resources = namespace_surface_files(&root);
     for (rel, body) in extra_files {
         write_file(&root.join(rel), body);
         resources.push((*rel).to_string());

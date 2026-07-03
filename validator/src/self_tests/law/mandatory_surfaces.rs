@@ -10,7 +10,7 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-laws");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-laws");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     write_json(
         &root.join("templates/RED_FIXTURES.json"),
@@ -90,7 +90,7 @@ fn mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries() {
         "red_fixture_ids":[],
         "behavior_failure_modes":[],
         "law_specific": {"guard": false},
-        "evidence_artifacts":[{}, {"path":"docs/evidence.md"}, {"path":"docs/evidence.md","digest":crate::self_tests::boundaries::support::sha('0')}]
+        "evidence_artifacts":[{}, {"path":"docs/evidence.md"}, {"path":"docs/evidence.md","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}]
     });
     let receipt_failures =
         crate::audit::mandatory::law::surfaces::receipt_value_failures(&root, &receipt);
@@ -130,7 +130,8 @@ fn mandatory_law_surfaces_fail_missing_weak_and_digest_boundaries() {
 
 #[test]
 fn mandatory_law_package_entrypoint_reads_registry_and_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-package");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-package");
     let missing = crate::audit::mandatory::law::surfaces::package_failures(&root);
     assert!(
         missing

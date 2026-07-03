@@ -2,8 +2,9 @@ use serde_json::json;
 
 #[test]
 fn observable_rows_reject_unbound_fixture_labels() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-fixture-binding");
-    let mut inventory = super::super::support::observable_inventory();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-fixture-binding");
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["command_observability_inventory"]["package digest"]["red_fixtures"] =
         json!(["unbound_red_fixture_label"]);
 

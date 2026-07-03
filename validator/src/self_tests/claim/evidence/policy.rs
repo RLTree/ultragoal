@@ -15,7 +15,7 @@ fn has_fail(failures: &[Failure], error: &str) -> bool {
 
 #[test]
 fn claim_evidence_reports_live_missing_stale_workspace_and_command_mismatch() {
-    let root = crate::self_tests::boundaries::support::temp_root("claim-evidence");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("claim-evidence");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let proof = root.join("artifacts/proof.json");
     std::fs::write(&proof, "{}").expect("proof");
@@ -88,8 +88,9 @@ fn claim_evidence_reports_live_missing_stale_workspace_and_command_mismatch() {
 
 #[test]
 fn claim_evidence_reaches_command_artifact_integrity_branches() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("claim-evidence-command-artifacts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "claim-evidence-command-artifacts",
+    );
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let proof = root.join("artifacts/proof.json");
     std::fs::write(&proof, "{}").expect("proof");
@@ -147,7 +148,7 @@ fn claim_evidence_reaches_command_artifact_integrity_branches() {
 
 #[test]
 fn coverage_policy_rejects_missing_malformed_and_unresolvable_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-policy");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-policy");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let mut failures = Vec::new();
     crate::claim_semantics::coverage::policy::check(
@@ -165,7 +166,7 @@ fn coverage_policy_rejects_missing_malformed_and_unresolvable_receipts() {
         &json!({
             "id":"COV-ESCAPE",
             "title":"Coverage complete",
-            "evidence":[{"id":"cov","kind":"coverage_receipt","path":"../escape.json","digest":crate::self_tests::boundaries::support::sha('1')}]
+            "evidence":[{"id":"cov","kind":"coverage_receipt","path":"../escape.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}]
         }),
         &root,
         &mut failures,
@@ -194,7 +195,8 @@ fn coverage_policy_rejects_missing_malformed_and_unresolvable_receipts() {
 
 #[test]
 fn coverage_policy_rejects_ratchet_completion_and_missing_behavior_dimensions() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-policy-dimensions");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-policy-dimensions");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     write_json(
         &root.join("receipts/ratchet.json"),

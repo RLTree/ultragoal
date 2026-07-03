@@ -65,7 +65,8 @@ mod tests {
 
     #[test]
     fn coverage_ready_join_reports_missing_fallback_and_unmeasured_changes() {
-        let root = crate::self_tests::boundaries::support::temp_root("coverage-ready-join");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-ready-join");
         let ready = json!({"changed_files":["src/lib.rs"]});
         let mut out = Vec::<Failure>::new();
         super::check(&root, &ready, &mut out);

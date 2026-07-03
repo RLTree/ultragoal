@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 
 #[test]
 fn archive_writer_and_archive_builder_cover_production_zip_path() {
-    let root = crate::self_tests::boundaries::support::temp_root("archive-edge");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("archive-edge");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "archive payload").expect("payload");
     std::fs::write(
@@ -47,7 +47,7 @@ fn archive_writer_and_archive_builder_cover_production_zip_path() {
 
 #[test]
 fn audit_artifact_schema_edges_cover_enum_and_red_fallbacks() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let check_ids = crate::audit::artifacts::check_ids(&store);
     assert!(check_ids.iter().any(|id| id == "schema-valid"));
@@ -57,7 +57,7 @@ fn audit_artifact_schema_edges_cover_enum_and_red_fallbacks() {
             .any(|id| id == "cli-performance-latency-speed-iteration-fitness")
     );
 
-    let temp = crate::self_tests::boundaries::support::temp_root("artifact-fallback");
+    let temp = crate::self_tests::boundaries::workspace_fixtures::temp_root("artifact-fallback");
     std::fs::create_dir_all(&temp).expect("temp");
     assert_eq!(
         crate::audit::artifacts::safe_red_ids(&temp),
@@ -68,7 +68,8 @@ fn audit_artifact_schema_edges_cover_enum_and_red_fallbacks() {
 
 #[test]
 fn coverage_scope_package_success_path_reads_manifest_and_scripts() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-scope-success");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-scope-success");
     for dir in ["templates/.harness", "templates/scripts"] {
         std::fs::create_dir_all(root.join(dir)).expect("dir");
     }
@@ -140,7 +141,7 @@ fn coverage_scope_package_success_path_reads_manifest_and_scripts() {
 
 #[test]
 fn plugin_self_law_line_scan_recurses_and_reports_over_cap_source() {
-    let root = crate::self_tests::boundaries::support::temp_root("self-law-lines");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("self-law-lines");
     for dir in [
         "validator/src/nested",
         ".harness/nested",
@@ -185,12 +186,14 @@ fn plugin_self_law_line_scan_recurses_and_reports_over_cap_source() {
                 "update_goal_eligibility",
                 "app_registry_or_reviewer_exposure"
             ],
-            "target_revision":{"value":crate::self_tests::boundaries::support::sha('a')}
+            "target_revision":{"value":crate::self_tests::boundaries::workspace_fixtures::sha('a')}
         })
         .to_string(),
     )
     .expect("coverage");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let failures = crate::audit::plugin::laws::package_failures(&root, &store);
     assert!(
         failures.iter().any(|failure| failure
@@ -202,7 +205,7 @@ fn plugin_self_law_line_scan_recurses_and_reports_over_cap_source() {
 
 #[test]
 fn red_fixture_observation_uses_package_and_nonfirst_semantic_routes() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let package = crate::red::fixture::observation::observe_materialized(
         &root,

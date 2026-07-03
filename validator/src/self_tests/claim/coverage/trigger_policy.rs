@@ -7,7 +7,8 @@ fn has_error(out: &[Failure], error: &str) -> bool {
 
 #[test]
 fn coverage_policy_rejects_check_and_test_substitutions_only_for_completion_claims() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-trigger-policy");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-trigger-policy");
     let mut out = Vec::new();
     crate::claim_semantics::coverage::policy::check(
         &json!({

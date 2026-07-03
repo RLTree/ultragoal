@@ -35,7 +35,8 @@ impl Write for AlwaysFailWrite {
 
 #[test]
 fn boundary_failures_are_behavioral() {
-    let root = crate::self_tests::boundaries::support::temp_root("typed_authority-boundaries");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("typed_authority-boundaries");
     std::fs::create_dir_all(&root).expect("root");
 
     let encode_err = crate::json_boundary::write_json(&root.join("bad.json"), &BadSerialize)
@@ -74,8 +75,7 @@ fn boundary_failures_are_behavioral() {
     assert!(read_err.contains("metadata failed"));
 
     let missing_root = root.join("missing-root");
-    let item =
-        json!({"path":"proof.json","digest":crate::self_tests::boundaries::support::sha('a')});
+    let item = json!({"path":"proof.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')});
     let package_err =
         crate::package::artifact::refs::validate_object(&missing_root, &item, "proof")
             .expect_err("missing package root is rejected");
@@ -90,7 +90,7 @@ fn boundary_failures_are_behavioral() {
 
 #[test]
 fn law_and_text_boundaries_hit_negative_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("typed_authority-law");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("typed_authority-law");
     std::fs::create_dir_all(root.join("fixtures/law-surfaces/valid")).expect("fixtures");
     write_text(
         &root.join("fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json"),
@@ -147,13 +147,15 @@ fn law_and_text_boundaries_hit_negative_edges() {
 
 #[test]
 fn cli_law_and_audit_default_paths_are_exercised() {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let cli_failures = crate::audit::cli::control_plane::authority::package_failures(&repo);
     let cli_failure_text = cli_failures.join("\n");
     assert!(!cli_failure_text.contains("missing_standards_row"));
     assert!(!cli_failure_text.contains("missing_foundational_trace"));
 
-    let root = crate::self_tests::boundaries::support::temp_root("typed_authority-audit-default");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "typed_authority-audit-default",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let receipt = root.join("out/validator-receipt.json");
     let result = crate::audit::run(crate::audit::AuditOptions {
@@ -173,8 +175,9 @@ fn cli_law_and_audit_default_paths_are_exercised() {
 
 #[test]
 fn remaining_typed_boundary_edges_are_enforced() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("typed_authority-remaining-boundaries");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "typed_authority-remaining-boundaries",
+    );
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");
     write_text(
         &root.join("schemas/one.schema.json"),

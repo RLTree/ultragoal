@@ -1,6 +1,8 @@
 use serde_json::{Value, json};
 use std::path::Path;
 
+use crate::self_tests::boundaries::workspace_fixtures;
+
 const RECEIPT: &str = "validation_artifacts/cli/transactional-finalization-receipt.json";
 const SCHEMA: &str = "harness-ultragoal.cli-transactional-finalization-receipt.v1";
 
@@ -116,7 +118,7 @@ fn ref_row(root: &Path, rel: &str) -> Value {
 
 #[test]
 fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
-    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-fail");
+    let root = workspace_fixtures::temp_root("transaction-command-fail");
     write_manifest(&root);
     let receipt = root.join(RECEIPT);
     let code = crate::command_run::run_with_exit_code(crate::Args {
@@ -133,10 +135,8 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     assert_eq!(value["status"], "fail");
     assert_eq!(value["candidate_digest"], current);
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
-    assert_eq!(
-        value["check_id"],
-        "transaction-finalize-observability-binding"
-    );
+    let check_id = "transaction-finalize-observability-binding";
+    assert_eq!(value["check_id"], check_id);
     assert_eq!(value["observability"]["operation"], "transaction_finalize");
     assert_eq!(value["observability"]["surface"], "source_package");
     assert_eq!(
@@ -147,7 +147,7 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     let lines = crate::cli::control::plane::transactional::stdout::lines(&root, &receipt, &value);
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("ultragoal-transaction-finalize fail"));
-    assert!(lines[1].contains("failed_check=transaction-finalize-observability-binding"));
+    assert!(lines[1].contains(&format!("failed_check={check_id}")));
     assert!(lines[1].contains(&format!(
         "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
     )));
@@ -182,7 +182,7 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
 
 #[test]
 fn transaction_references_use_typed_receipt_status_not_file_existence() {
-    let root = crate::self_tests::boundaries::support::temp_root("transaction-typed-refs");
+    let root = workspace_fixtures::temp_root("transaction-typed-refs");
     write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     write_json(

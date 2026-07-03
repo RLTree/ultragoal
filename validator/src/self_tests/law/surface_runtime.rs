@@ -14,13 +14,13 @@ fn has(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn runtime_live_transcript_and_workflow_receipts_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("law-surface-receipts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("law-surface-receipts");
     write_text(&root.join("artifact.txt"), "artifact");
     let runtime = json!({
         "schema": "wrong",
         "tool_identity": {"version": "stale"},
         "workspace": "/tmp/other",
-        "artifact_digests": [{}, {"path": "artifact.txt"}, {"path": "missing.txt", "digest": crate::self_tests::boundaries::support::sha('1')}],
+        "artifact_digests": [{}, {"path": "artifact.txt"}, {"path": "missing.txt", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('1')}],
         "claim_ceiling": "broad"
     });
     let runtime_failures =

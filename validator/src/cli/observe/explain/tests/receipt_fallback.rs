@@ -3,8 +3,9 @@ use std::fs;
 
 #[test]
 fn explain_fails_closed_when_matching_receipt_has_no_event_binding() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("observe-explain-receipt-fallback");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "observe-explain-receipt-fallback",
+    );
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

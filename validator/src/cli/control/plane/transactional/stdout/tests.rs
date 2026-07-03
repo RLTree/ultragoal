@@ -4,7 +4,8 @@ use std::path::Path;
 
 #[test]
 fn pass_summary_uses_explicit_supported_claims_only() {
-    let root = crate::self_tests::boundaries::support::temp_root("transactional-stdout-pass");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("transactional-stdout-pass");
     std::fs::create_dir_all(&root).expect("root");
     let receipt = root
         .canonicalize()
@@ -78,7 +79,9 @@ fn failure_output_contains_query_hints_and_bound_receipt_path() {
 
 #[test]
 fn fallback_receipt_path_accepts_relative_receipt_inside_root() {
-    let root = crate::self_tests::boundaries::support::temp_root("transactional-stdout-relative");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "transactional-stdout-relative",
+    );
     std::fs::create_dir_all(root.join("validation_artifacts/cli")).expect("receipt dir");
     let receipt = std::path::Path::new("validation_artifacts/cli/transaction-finalize.json");
     let value = json!({

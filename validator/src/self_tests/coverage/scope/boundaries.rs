@@ -6,13 +6,13 @@ fn coverage_scope_rootless_valid_digests_do_not_create_stale_receipt_failures() 
         &json!({
             "schema": "harness-ultragoal.coverage-manifest.v1",
             "coverage_command_path": ".harness/coverage-command",
-            "repo_root_digest": crate::self_tests::boundaries::support::sha('a'),
+            "repo_root_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a'),
             "required_target_paths": ["src", "scripts", "validator", "schemas", "templates"],
             "repo_owned_source_roots": ["src", "scripts", "validator", "schemas", "templates"],
             "changed_file_coupling_policy": {
                 "required": true,
                 "changed_files": ["src/lib.rs"],
-                "changed_files_digest": crate::self_tests::boundaries::support::sha('b')
+                "changed_files_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b')
             },
             "required_measured_dimensions_per_root": [{
                 "root": "src",
@@ -56,8 +56,9 @@ fn coverage_scope_rootless_valid_digests_do_not_create_stale_receipt_failures() 
 
 #[test]
 fn coverage_scope_package_failures_report_malformed_manifest_before_substitution() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("coverage-scope-package-malformed");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "coverage-scope-package-malformed",
+    );
     for rel in [
         "templates/.harness/coverage-command",
         "templates/scripts/check-coverage-fast",
@@ -97,7 +98,7 @@ fn coverage_manifest_rejects_parent_session_contract_dependencies() {
             "changed_files": [
                 "docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"
             ],
-            "changed_files_digest": crate::self_tests::boundaries::support::sha('1')
+            "changed_files_digest": crate::self_tests::boundaries::workspace_fixtures::sha('1')
         },
         "required_measured_dimensions_per_root": [{
             "root": "src",

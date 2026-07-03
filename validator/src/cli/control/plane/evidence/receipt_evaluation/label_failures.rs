@@ -14,8 +14,8 @@ fn blocked_claims() -> serde_json::Value {
 
 #[test]
 fn label_failures_cover_unknown_rust_and_gc_status_edges() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let candidate = crate::self_tests::boundaries::support::sha('d');
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('d');
     assert_eq!(
         super::label_failures(&root, "unknown", &json!({}), &candidate),
         vec!["unknown_evidence_label:unknown"]
@@ -81,7 +81,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
     );
     let source_audit_wrong_target = json!({
         "status":"pass",
-        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('c')},
+        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('c')},
         "claim_ceiling":"source_audit_pass_source_local_only",
         "supported_claim_classes":["source_local_audit_checks", "red_fixture_report"],
         "blocked_claim_classes": blocked_claims()
@@ -97,7 +97,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         .any(|failure| failure == "source_audit_target_digest_mismatch")
     );
     let coverage_wrong_target = json!({
-        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('e')},
+        "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('e')},
         "coverage":{"percent":100.0},
         "uncovered_records":[],
         "claim_ceiling":"supports_complete_coverage_claim",
@@ -196,7 +196,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "schema":"harness-ultragoal.rust-devx-receipt.v1",
         "law_id":"rust-command-loop-authority",
         "status":"pass",
-        "digests":{"candidate":crate::self_tests::boundaries::support::sha('e')},
+        "digests":{"candidate":crate::self_tests::boundaries::workspace_fixtures::sha('e')},
         "observations":[],
         "observation_failures":[],
         "claim_ceiling":"rust_devx_observation_bound"
@@ -210,7 +210,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "schema":"harness-ultragoal.workspace-gc-receipt.v1",
         "law_id":"workspace-artifact-cache-garbage-collection",
         "status":"pass",
-        "digests":{"candidate":crate::self_tests::boundaries::support::sha('e')},
+        "digests":{"candidate":crate::self_tests::boundaries::workspace_fixtures::sha('e')},
         "plan":{"id":"plan"},
         "observations":[],
         "observation_failures":[],

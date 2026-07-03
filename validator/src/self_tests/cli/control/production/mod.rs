@@ -43,7 +43,7 @@ fn copy_flat_dir(root: &Path, repo: &Path, rel: &str) {
 }
 
 fn write_control_green_root(root: &Path) -> String {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     copy_flat_dir(root, &repo, "schemas");
     for rel in [
         "templates/RED_FIXTURES.json",
@@ -101,7 +101,7 @@ fn write_control_green_root(root: &Path) -> String {
             crate::cli::control::plane::surface::receipt(root, &command).expect("surface receipt");
         write_json(&root.join(rel), &receipt);
     }
-    crate::self_tests::audit::final_packet::support::write_green_proof(root, &current);
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_green_proof(root, &current);
     receipts::write_standards_rust_gc(root, &current);
     write_json(
         &root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json"),
@@ -120,7 +120,7 @@ fn write_control_green_root(root: &Path) -> String {
 
 #[test]
 fn production_control_plane_stays_transition_only_without_transactional_finalization() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-production-green");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-production-green");
     let current = write_control_green_root(&root);
     let command = ControlCommand {
         operation: ControlOperation::UpdateGoalEligibility,

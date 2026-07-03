@@ -10,7 +10,8 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn performance_audit_binds_rows_inventory_catalog_and_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-performance-audit");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-performance-audit");
     for rel in [
         "validator/src/cli/performance/mod.rs",
         "validator/src/cli/performance/types.rs",

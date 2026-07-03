@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 #[test]
 fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = PathBuf::from(format!(
         "target/ultragoal-product-receipts-{}",
         std::process::id()

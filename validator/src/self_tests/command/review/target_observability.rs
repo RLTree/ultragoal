@@ -17,7 +17,7 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 }
 
 fn package_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "package payload\n").expect("file");
     write_json(

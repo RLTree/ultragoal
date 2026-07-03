@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 
 #[test]
 fn validator_receipt_reports_missing_generated_dir_and_external_artifacts() {
-    let root = crate::self_tests::boundaries::support::temp_root("receipt-errors");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("receipt-errors");
     for dir in [
         "fixtures/valid",
         "templates",
@@ -56,11 +56,11 @@ fn validator_receipt_reports_missing_generated_dir_and_external_artifacts() {
         failures: BTreeMap::new(),
         red: BTreeMap::new(),
         target_artifacts: vec![
-            json!({"artifact_type":"target_repo_receipt","digest":crate::self_tests::boundaries::support::sha('c')}),
+            json!({"artifact_type":"target_repo_receipt","digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')}),
             json!({
                 "artifact_type":"target_repo_receipt",
                 "path": outside.to_string_lossy(),
-                "digest": crate::self_tests::boundaries::support::sha('d')
+                "digest": crate::self_tests::boundaries::workspace_fixtures::sha('d')
             }),
         ],
         start: "2026-06-26T00:00:03Z".to_string(),

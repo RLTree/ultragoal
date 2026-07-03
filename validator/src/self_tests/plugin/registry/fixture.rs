@@ -10,7 +10,7 @@ pub(crate) fn live_registry_receipt(current: &str, raw_digest: &str) -> Value {
         "tool_call": {
             "name": "multi_agent_v1.tool_registry",
             "call_id": "call-1",
-            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+            "arguments_digest": crate::self_tests::boundaries::workspace_fixtures::sha('1')
         },
         "capture_method": "live_tool_registry_query",
         "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
@@ -36,7 +36,7 @@ pub(crate) fn raw_observation(current: &str) -> Value {
         "tool_call": {
             "name": "multi_agent_v1.tool_registry",
             "call_id": "call-1",
-            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+            "arguments_digest": crate::self_tests::boundaries::workspace_fixtures::sha('1')
         },
         "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
         "source": "multi_agent_v1.tool_registry",

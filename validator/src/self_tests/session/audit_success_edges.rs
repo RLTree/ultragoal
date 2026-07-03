@@ -14,8 +14,9 @@ fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
 
 #[test]
 fn audit_paths_cover_matching_session_and_namespace_success() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("session_and_review-audit-success");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "session_and_review-audit-success",
+    );
     std::fs::create_dir_all(root.join(".codex-plugin")).expect("plugin dir");
     std::fs::create_dir_all(root.join("validation_artifacts/harness")).expect("harness dir");
     std::fs::write(
@@ -36,7 +37,9 @@ fn audit_paths_cover_matching_session_and_namespace_success() {
         &root.join("validation_artifacts/harness/session-log-hardening-receipt.json"),
         &crate::self_tests::session::hardening::complete_receipt_for_root(&root),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let session = crate::audit::session_log_hardening::package_failures(&root, &store);
     let session_text = session.join("\n");
     assert!(!session_text.contains("candidate_version_mismatch"));
@@ -61,8 +64,9 @@ fn audit_paths_cover_matching_session_and_namespace_success() {
 
 #[test]
 fn claim_paths_cover_dogfood_lane_and_package_boundaries() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("session_and_review-claim-boundaries");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "session_and_review-claim-boundaries",
+    );
     write_json(
         &root.join("schemas/schema-catalog.json"),
         &json!({"schemas":[{"id":"dogfood-receipt.schema.json","path":"schemas/dogfood-receipt.schema.json"}]}),
@@ -122,8 +126,9 @@ fn claim_paths_cover_dogfood_lane_and_package_boundaries() {
 
 #[test]
 fn target_symlink_parent_creation_is_explicit() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("session_and_review-symlink-parent");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "session_and_review-symlink-parent",
+    );
     write_json(
         &root.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
         &json!({

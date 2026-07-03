@@ -6,7 +6,7 @@ const RECEIPT: &str = "validation_artifacts/observability/red-fixture-report.jso
 
 #[test]
 fn red_fixture_report_observability_receipt_supports_only_red_report() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-report-observe");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-report-observe");
     fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit")).expect("audit dir");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -62,7 +62,7 @@ fn red_fixture_report_observability_receipt_supports_only_red_report() {
         &report,
         &json!({
             "status":"pass",
-            "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('f')},
+            "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('f')},
             "red_fixtures":{"red-one":{"status":"pass"}}
         }),
     )
@@ -111,7 +111,8 @@ fn red_fixture_report_observability_receipt_supports_only_red_report() {
 
 #[test]
 fn red_fixture_report_observability_requires_package_candidate() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-report-no-candidate");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-report-no-candidate");
     let report = root.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
     fs::create_dir_all(report.parent().unwrap()).expect("report dir");
     crate::json_boundary::write_json(&report, &json!({"status":"pass"})).expect("report");
@@ -123,7 +124,8 @@ fn red_fixture_report_observability_requires_package_candidate() {
 
 #[test]
 fn source_audit_red_report_observability_write_error_is_propagated() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-report-write-error");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-report-write-error");
     fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit")).expect("audit dir");
     fs::create_dir_all(root.join("validation_artifacts/observability/red-fixture-report.json"))
         .expect("receipt path blocker");

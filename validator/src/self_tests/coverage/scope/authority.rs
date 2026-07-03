@@ -74,7 +74,8 @@ fn valid_manifest(root: &std::path::Path) -> Value {
 
 #[test]
 fn coverage_scope_accepts_current_digest_authority_and_rejects_empty_sets() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-scope-current");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-scope-current");
     let manifest = valid_manifest(&root);
     let failures = crate::audit::coverage::scope::value_failures_with_root(&manifest, Some(&root));
     let failure_text = failures.join("\n");
@@ -99,7 +100,8 @@ fn coverage_scope_accepts_current_digest_authority_and_rejects_empty_sets() {
 
 #[test]
 fn coverage_scope_subchecks_reject_missing_changed_files_and_weak_scripts() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-scope-subchecks");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-scope-subchecks");
     std::fs::create_dir_all(&root).expect("coverage root");
     let no_root_failures = crate::audit::coverage::scope::changed_files::failures(
         None,
@@ -168,7 +170,8 @@ fn coverage_scope_subchecks_reject_missing_changed_files_and_weak_scripts() {
 
 #[test]
 fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-digest-ignore");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-digest-ignore");
     for rel in [
         "src/lib.rs",
         "src/exact-ignore.rs",

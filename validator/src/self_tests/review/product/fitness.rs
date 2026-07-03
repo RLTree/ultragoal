@@ -83,7 +83,8 @@ fn pf_errors(root: &Path, row: &Value) -> Vec<String> {
 
 #[test]
 fn product_fitness_receipt_staleness_paths_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-pf-stale-paths");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-pf-stale-paths");
     assert!(
         pf_errors(&root, &row("../escape.json", &crate::digest::ZERO, ""))
             .contains(&"review_round_product_fitness_disposition_stale".to_string())
@@ -121,7 +122,7 @@ fn product_fitness_receipt_staleness_paths_fail_closed() {
     );
 
     stale_row["product_fitness_receipt_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('9'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('9'));
     assert!(
         pf_errors(&root, &stale_row)
             .contains(&"review_round_product_fitness_disposition_stale".to_string())
@@ -143,7 +144,8 @@ fn product_fitness_receipt_staleness_paths_fail_closed() {
 
 #[test]
 fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-pf-disposition");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-pf-disposition");
     std::fs::create_dir_all(&root).expect("pf disposition root");
     let empty = json!({});
     let got = pf_errors(&root, &empty);
@@ -158,7 +160,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
 
     let mut unowned = row(
         "validation_artifacts/harness/product-fitness-receipt.json",
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-26T00:00:00Z",
     );
     unowned["agent_type"] = json!("wrong_agent");
@@ -170,7 +172,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
 
     let mut unbound = row(
         "validation_artifacts/harness/product-fitness-receipt.json",
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "2026-06-26T00:00:00Z",
     );
     unbound["product_fitness_claim_ids"] = json!(["production_readiness"]);
@@ -180,7 +182,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
 
     let mut substituted = row(
         "validation_artifacts/harness/product-fitness-receipt.json",
-        &crate::self_tests::boundaries::support::sha('c'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "2026-06-26T00:00:00Z",
     );
     substituted["substitution_rejections_reviewed"] =
@@ -196,7 +198,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
 
     let ignored = row(
         "validation_artifacts/harness/product-fitness-receipt.json",
-        &crate::self_tests::boundaries::support::sha('d'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('d'),
         "2026-06-26T00:00:00Z",
     );
     let mut out = Vec::new();
@@ -213,7 +215,7 @@ fn product_fitness_review_disposition_rejects_missing_unowned_and_substituted_pa
 
 #[test]
 fn review_round_artifact_binding_rejects_shallow_or_duplicate_evidence() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let mut failures = Vec::new();
     crate::review::round::artifacts::artifact_binding_errors(
         &root,

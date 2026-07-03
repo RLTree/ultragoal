@@ -57,8 +57,9 @@ fn command_roundtrip_fails_closed_when_production_command_cannot_run() {
 
 #[test]
 fn command_roundtrip_fails_closed_for_missing_or_malformed_command_receipts() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("observe-roundtrip-missing-receipt");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "observe-roundtrip-missing-receipt",
+    );
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -116,7 +117,9 @@ fn command_roundtrip_fails_closed_when_query_or_explain_receipts_cannot_write() 
 
 #[test]
 fn command_roundtrip_receipt_fails_closed_when_base_observability_cannot_emit() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-receipt-error");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "observe-roundtrip-receipt-error",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let err = receipt(
         &root,

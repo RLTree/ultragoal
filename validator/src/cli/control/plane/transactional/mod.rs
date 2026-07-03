@@ -113,8 +113,9 @@ mod tests {
 
     #[test]
     fn transactional_status_accepts_exact_coverage_receipt_without_status_field() {
-        let root =
-            crate::self_tests::boundaries::support::temp_root("transactional-coverage-status");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "transactional-coverage-status",
+        );
         let rel = "validation_artifacts/coverage/coverage-receipt.json";
         crate::json_boundary::write_json(
             &root.join(rel),
@@ -135,7 +136,9 @@ mod tests {
 
     #[test]
     fn transactional_status_rejects_below_floor_coverage_receipt() {
-        let root = crate::self_tests::boundaries::support::temp_root("transactional-coverage-low");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "transactional-coverage-low",
+        );
         let rel = "validation_artifacts/coverage/coverage-receipt.json";
         crate::json_boundary::write_json(
             &root.join(rel),
@@ -155,7 +158,9 @@ mod tests {
 
     #[test]
     fn transactional_receipt_requires_package_digest_authority() {
-        let root = crate::self_tests::boundaries::support::temp_root("transactional-no-manifest");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "transactional-no-manifest",
+        );
         let error = super::receipt(&root).expect_err("missing package digest");
         assert!(error.contains("plugin-manifest-draft.json"), "{error}");
         let _ = std::fs::remove_dir_all(root);

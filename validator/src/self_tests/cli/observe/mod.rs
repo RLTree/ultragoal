@@ -238,7 +238,7 @@ fn private_temp_marker() -> String {
 }
 
 pub(super) fn minimal_root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     let manifest = json!({"resources":["owned.txt"]});

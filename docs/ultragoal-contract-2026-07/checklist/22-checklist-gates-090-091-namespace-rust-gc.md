@@ -149,7 +149,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status:
 
-- [ ] Namespace validation rejects implementation-history names such as `internal`, `wave`, `coverage_wave`, `tmp`, `old`, `misc`, `helpers`, `utils`, `common`, `shared`, `lib`, `services`, and typo variants when used as source authority.
+- [ ] Namespace validation rejects implementation-history names such as `internal`, `wave`, `coverage_wave`, `tmp`, `old`, `misc`, `helpers`, `utils`, `common`, `shared`, `support`, `lib`, `services`, and typo variants when used as source authority.
   - Evidence:
   - Command:
   - Receipt:
@@ -187,7 +187,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Status: validated current
 
 - [ ] Goal-work, evidence-purpose, phase/slice, session-history, and progress labels fail when used as source paths, module names, function names, helper names, test names, ids, or artifact path segments instead of product behavior.
-  - Working examples that must fail unless a typed external compatibility boundary applies: `fitting`, `production_proof`, `gate92`, `phase4`, `slice`, `workstream`, `checkpoint`, `progress`, `todo`, `wip`, `scratch`, `helpers`, `utils`, `common`, `misc`, and `shared`.
+  - Working examples that must fail unless a typed external compatibility boundary applies: `fitting`, `production_proof`, `gate92`, `phase4`, `slice`, `workstream`, `checkpoint`, `progress`, `todo`, `wip`, `scratch`, `helpers`, `utils`, `common`, `misc`, `shared`, and `support`.
   - Evidence:
   - Command:
   - Receipt:
@@ -291,7 +291,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Status: validated current
 
 - [ ] Red fixture: functions and helpers named for goal work fail even when the file path is otherwise semantic.
-  - Required examples: `fit_command`, `fit_path`, `production_proof`, `phase4_rebind`, `checkpoint_progress`, `todo_repair`, and modules named only `helpers`, `utils`, `common`, or `shared`.
+  - Required examples: `fit_command`, `fit_path`, `production_proof`, `phase4_rebind`, `checkpoint_progress`, `todo_repair`, and modules named only `helpers`, `utils`, `common`, `shared`, or `support`.
   - Evidence:
   - Fixture:
   - Candidate digest:

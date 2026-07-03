@@ -14,7 +14,7 @@ fn harness(root: &Path) -> std::path::PathBuf {
 
 #[test]
 fn product_receipt_refresh_rejects_unsafe_artifact_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-refresh-path");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-refresh-path");
     std::fs::create_dir_all(&root).expect("root");
     let mut value = json!({"path":"../escape.txt","digest":crate::digest::ZERO});
     let error = super::refresh_artifact_refs(&root, &mut value).expect_err("unsafe path");
@@ -24,7 +24,8 @@ fn product_receipt_refresh_rejects_unsafe_artifact_paths() {
 
 #[test]
 fn product_journey_receipt_requires_fit_evidence_slot() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-journey-missing-fit");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-journey-missing-fit");
     let dir = harness(&root);
     std::fs::create_dir_all(&dir).expect("harness");
     std::fs::write(dir.join("error.txt"), b"error evidence").expect("error evidence");
@@ -44,7 +45,7 @@ fn product_journey_receipt_requires_fit_evidence_slot() {
     let error = super::journey_receipt(
         &root,
         Path::new("validation_artifacts/harness"),
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-28T00:00:00Z",
     )
     .expect_err("missing fit evidence");
@@ -54,7 +55,8 @@ fn product_journey_receipt_requires_fit_evidence_slot() {
 
 #[test]
 fn product_journey_receipt_requires_current_fit_digest() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-journey-fit-digest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-journey-fit-digest");
     let dir = harness(&root);
     std::fs::create_dir_all(&dir).expect("harness");
     std::fs::write(dir.join("error.txt"), b"error evidence").expect("error evidence");
@@ -74,7 +76,7 @@ fn product_journey_receipt_requires_current_fit_digest() {
     let error = super::journey_receipt(
         &root,
         Path::new("validation_artifacts/harness"),
-        &crate::self_tests::boundaries::support::sha('a'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         "2026-06-28T00:00:00Z",
     )
     .expect_err("missing fit receipt");
@@ -84,7 +86,7 @@ fn product_journey_receipt_requires_current_fit_digest() {
 
 #[test]
 fn fit_receipt_requires_typed_plugin_version() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-fit-version");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fit-version");
     write_json(&root.join(".codex-plugin/plugin.json"), &json!({}));
     write_json(
         &harness(&root).join(super::FIT),
@@ -98,7 +100,7 @@ fn fit_receipt_requires_typed_plugin_version() {
     );
     let error = super::fit_receipt(
         &root,
-        &crate::self_tests::boundaries::support::sha('b'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('b'),
         "2026-06-28T00:00:00Z",
     )
     .expect_err("missing plugin version");
@@ -108,13 +110,13 @@ fn fit_receipt_requires_typed_plugin_version() {
 
 #[test]
 fn product_receipt_report_is_fail_closed_when_receipts_are_invalid_or_missing() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-report-fail");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-report-fail");
     std::fs::create_dir_all(&root).expect("root");
     let rel = Path::new("validation_artifacts/harness");
     let report = super::report(
         &root,
         rel,
-        &crate::self_tests::boundaries::support::sha('c'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         &json!({}),
         &json!({}),
         &json!({}),
@@ -145,7 +147,8 @@ fn product_receipt_report_is_fail_closed_when_receipts_are_invalid_or_missing() 
 
 #[test]
 fn product_receipt_minting_requires_package_digest_authority() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-mint-no-manifest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-mint-no-manifest");
     let out = root.join("receipts");
     std::fs::create_dir_all(&out).expect("out");
     let error = super::mint_all(&root, Path::new("receipts"), &out).expect_err("no package digest");

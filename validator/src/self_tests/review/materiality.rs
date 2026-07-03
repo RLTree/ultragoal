@@ -115,7 +115,8 @@ fn materiality_claim_ceiling_is_required_for_valid_decisions() {
 
 #[test]
 fn materiality_fixture_reader_and_ceiling_shape_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("materiality-fixture-reader");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("materiality-fixture-reader");
     let dir = root.join("fixtures/review-materiality/valid");
     std::fs::create_dir_all(&dir).expect("materiality dir");
     std::fs::write(dir.join("bad.json"), "{").expect("bad fixture");
@@ -140,8 +141,9 @@ fn materiality_fixture_reader_and_ceiling_shape_fail_closed() {
 
 #[test]
 fn materiality_review_round_signoff_and_valid_fixture_reader_fail_closed() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("materiality-valid-fixture-reader");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "materiality-valid-fixture-reader",
+    );
     let dir = root.join("fixtures/review-materiality/valid");
     std::fs::create_dir_all(&dir).expect("materiality dir");
     std::fs::write(

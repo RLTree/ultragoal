@@ -14,7 +14,7 @@ fn has(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn execplan_memory_product_fitness_and_journey_branches_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-law-receipts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-law-receipts");
     write_text(&root.join("live.txt"), "live");
     let execplan =
         json!({"schema":"wrong", "required_sections": {}, "stale": true, "prose_only": true});
@@ -39,7 +39,7 @@ fn execplan_memory_product_fitness_and_journey_branches_fail_closed() {
         "memory_context_only": false,
         "substitutions_rejected": ["memory_only"],
         "memory_artifacts": [{}],
-        "live_same_surface_evidence": [{"path":"live.txt", "digest": crate::self_tests::boundaries::support::sha('2')}],
+        "live_same_surface_evidence": [{"path":"live.txt", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('2')}],
         "claim_ceiling": "summary"
     });
     let memory_failures =
@@ -66,9 +66,9 @@ fn execplan_memory_product_fitness_and_journey_branches_fail_closed() {
         &json!({
             "bad": {"evidence": []},
             "empty": {"evidence": {}},
-            "escape": {"evidence": {"path":"../escape", "digest": crate::self_tests::boundaries::support::sha('3')}},
-            "missing": {"evidence": {"path":"missing.txt", "digest": crate::self_tests::boundaries::support::sha('4')}},
-            "mismatch": {"evidence": {"path":"live.txt", "digest": crate::self_tests::boundaries::support::sha('5')}}
+            "escape": {"evidence": {"path":"../escape", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('3')}},
+            "missing": {"evidence": {"path":"missing.txt", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('4')}},
+            "mismatch": {"evidence": {"path":"live.txt", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('5')}}
         }),
         "",
         &mut evidence_failures,
@@ -115,8 +115,8 @@ fn execplan_memory_product_fitness_and_journey_branches_fail_closed() {
         "journey": [0,1,2,3,4,5,6,7,8,9],
         "generated_at": "2026-06-24T00:00:00Z",
         "claim_ceiling": "wide",
-        "evidence": [{"path":"../escape", "digest": crate::self_tests::boundaries::support::sha('6')}],
-        "error_path_evidence": {"path":"missing.txt", "digest": crate::self_tests::boundaries::support::sha('7')}
+        "evidence": [{"path":"../escape", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('6')}],
+        "error_path_evidence": {"path":"missing.txt", "digest": crate::self_tests::boundaries::workspace_fixtures::sha('7')}
     });
     let journey_failures = crate::audit::plugin::product::journey::failures(&root, &journey);
     for expected in [

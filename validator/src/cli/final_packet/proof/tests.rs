@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 use std::path::PathBuf;
 
 fn root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -75,7 +75,8 @@ fn final_packet_observability_classifies_repair_paths() {
 
 #[test]
 fn final_packet_observability_fails_when_package_digest_is_unavailable() {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-no-manifest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-no-manifest");
     let receipt = root.join("validation_artifacts/review/final-packet-proof.json");
     let mut proof = failing("final_packet_proof_packet_absent");
     let err = super::attach_for_evaluation(&root, &receipt, &mut proof)

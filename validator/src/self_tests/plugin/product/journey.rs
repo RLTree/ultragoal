@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 
 #[test]
 fn plugin_product_flow_reports_missing_schema_entry_edges_and_categories() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-product-flow");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-product-flow");
     std::fs::create_dir_all(&root).expect("root");
     std::fs::write(
         root.join("plugin-manifest-draft.json"),
@@ -66,7 +66,7 @@ fn plugin_product_visible_entry_and_receipt_adapters_are_typed() {
         vec!["plugin_flow_entrypoint_not_visible".to_string()]
     );
 
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let fit = crate::json_boundary::read_json(
         &root.join("validation_artifacts/harness/fit-repo-receipt.json"),
     )
@@ -127,7 +127,9 @@ fn rebind_item_digest(root: &std::path::Path, item: &mut Value) {
 
 #[test]
 fn plugin_product_journey_digest_rebind_skips_items_without_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-product-journey-rebind");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "plugin-product-journey-rebind",
+    );
     std::fs::create_dir_all(&root).expect("journey rebind root");
     let value = with_current_evidence_digests(
         &root,
@@ -143,7 +145,8 @@ fn plugin_product_journey_digest_rebind_skips_items_without_paths() {
 
 #[test]
 fn plugin_product_journey_rejects_empty_and_malformed_fields() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-product-journey");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-product-journey");
     std::fs::create_dir_all(&root).expect("root");
     let failures =
         crate::audit::plugin::product::cohesion::journey_value_failures(&root, &Value::Null);
@@ -153,7 +156,7 @@ fn plugin_product_journey_rejects_empty_and_malformed_fields() {
 
 #[test]
 fn plugin_product_journey_requires_same_candidate_typed_authority() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let current = crate::package::inventory::package_digest(&root).expect("package digest");
     let mut journey = crate::json_boundary::read_json(
         &root.join("validation_artifacts/harness/plugin-product-journey-receipt.json"),
@@ -183,8 +186,7 @@ fn plugin_product_journey_requires_same_candidate_typed_authority() {
     );
 
     journey["status"] = json!("pass");
-    journey["target_revision"] =
-        json!({"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('9')});
+    journey["target_revision"] = json!({"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('9')});
     let failures = crate::audit::plugin::product::cohesion::journey_value_failures(&root, &journey);
     assert!(failures.contains(&"plugin_product_journey_target_digest_mismatch".to_string()));
 }

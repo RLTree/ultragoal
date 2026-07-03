@@ -2,8 +2,9 @@ use serde_json::json;
 
 #[test]
 fn dimension_inventory_shape_edges_cover_unknown_status_and_partial_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-dimension-branches");
-    let mut inventory = super::super::support::observable_inventory();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-dimension-branches");
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["validator_check_families"]
         .as_array_mut()
         .unwrap()
@@ -63,8 +64,9 @@ fn dimension_inventory_shape_edges_cover_unknown_status_and_partial_rows() {
 
 #[test]
 fn command_unobservable_metadata_checks_surfaces_and_claim_impact() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-command-metadata");
-    let mut inventory = super::super::support::observable_inventory();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-command-metadata");
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["command_observability_inventory"]["package digest"]["observability_status"] =
         json!("unobservable");
     inventory["command_observability_inventory"]["package digest"]["missing_surfaces"] = json!([]);

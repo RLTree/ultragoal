@@ -2,16 +2,16 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
-mod dimension_support;
+mod dimension_inventory;
+mod inventory_fixtures;
 mod proof;
 mod receipts;
 mod shape;
-mod support;
-use support::*;
+use inventory_fixtures::*;
 
 #[test]
 fn observability_registry_accepts_fully_observable_inventory() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-registry");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-registry");
     write_registry_root(&root, observable_inventory());
     let mut failures = Vec::new();
     check(&root, &mut failures);
@@ -31,7 +31,8 @@ fn observability_registry_accepts_fully_observable_inventory() {
 
 #[test]
 fn observability_registry_rejects_unobservable_and_row_shape_inventory() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-registry");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-roundtrip-registry");
     let mut inventory = observable_inventory();
     inventory["command_observability_inventory"]["package digest"] = json!({
         "observability_status": "unobservable",
@@ -129,7 +130,8 @@ fn observability_registry_rejects_unobservable_and_row_shape_inventory() {
 
 #[test]
 fn observability_registry_rejects_pass_shaped_control_board() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-control-board");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-control-board");
     let mut inventory = observable_inventory();
     inventory["command_observability_inventory"]["source audit"] = json!({
         "observability_status": "partially_observable",
@@ -170,7 +172,8 @@ fn observability_registry_rejects_pass_shaped_control_board() {
 
 #[test]
 fn observability_control_board_uses_required_command_order() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-control-board-order");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-control-board-order");
     let mut inventory = observable_inventory();
     inventory["command_observability_inventory"]["source audit"] = json!({
         "observability_status": "partially_observable",

@@ -4,12 +4,12 @@ use serde_json::json;
 
 #[test]
 fn package_surface_validation_reports_malformed_and_weak_blockers() {
-    let candidate = crate::self_tests::boundaries::support::sha('a');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
     let mut malformed = json!({
         "schema": "wrong",
         "operation": "cache_audit",
-        "candidate_digest": crate::self_tests::boundaries::support::sha('b'),
-        "source": {"package_digest": crate::self_tests::boundaries::support::sha('c')},
+        "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b'),
+        "source": {"package_digest": crate::self_tests::boundaries::workspace_fixtures::sha('c')},
         "target": {"surface": "versioned_cache_package", "local_path": "redacted-local-proof-path"},
         "status": "unknown",
         "claim_ceiling": "surface_package_digest_aligned",
@@ -39,12 +39,12 @@ fn package_surface_validation_reports_malformed_and_weak_blockers() {
 
 #[test]
 fn package_cache_surface_validation_reports_malformed_and_weak_blockers() {
-    let candidate = crate::self_tests::boundaries::support::sha('a');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
     let mut malformed = json!({
         "schema": "wrong",
         "operation": "install_audit",
-        "candidate_digest": crate::self_tests::boundaries::support::sha('b'),
-        "source": {"package_digest": crate::self_tests::boundaries::support::sha('c')},
+        "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b'),
+        "source": {"package_digest": crate::self_tests::boundaries::workspace_fixtures::sha('c')},
         "target": {"surface": "installed_plugin", "local_path": "redacted-local-proof-path"},
         "status": "unknown",
         "claim_ceiling": "surface_package_digest_aligned",

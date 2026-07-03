@@ -71,7 +71,7 @@ fn lane_target_and_worktree_status_fail_closed() {
 
 #[test]
 fn lane_teardown_validates_cleanup_receipts_and_digests() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-runtime");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("lane-runtime");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let receipt = root.join("receipts/cleanup.json");
     let audit = root.join("receipts/post-clean.json");
@@ -95,7 +95,7 @@ fn lane_teardown_validates_cleanup_receipts_and_digests() {
 
     lane["teardown"]["status"] = json!("complete");
     lane["teardown"]["cleanup_receipts"][0]["receipt"]["digest"] =
-        json!(crate::self_tests::boundaries::support::sha('0'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('0'));
     out.clear();
     crate::claim_semantics::lane::runtime::state::teardown(&lane, &root, &mut out);
     assert_eq!(errors(&out), vec!["terminal_cleanup_without_receipt"]);
@@ -121,7 +121,7 @@ fn lane_teardown_validates_cleanup_receipts_and_digests() {
 
 #[test]
 fn lane_runtime_accepts_current_target_status_and_cleanup_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-runtime-current");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("lane-runtime-current");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let receipt = root.join("receipts/cleanup.json");
     let audit = root.join("receipts/post-clean.json");

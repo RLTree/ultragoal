@@ -12,7 +12,7 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-checks");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("package-checks");
     std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
     std::fs::create_dir_all(root.join("skills/demo")).expect("skill dir");
     std::fs::create_dir_all(root.join("__pycache__")).expect("bytecode dir");
@@ -51,7 +51,9 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
             ]
         }),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let check_ids = [
         "schema-valid",
         "plugin-inventory-exactly-once",
@@ -135,9 +137,12 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
 
 #[test]
 fn package_checks_report_missing_manifest_as_inventory_failure() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-checks-no-manifest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-checks-no-manifest");
     std::fs::create_dir_all(&root).expect("root");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let failures = crate::audit::package::checks::checks(&root, &store, &[], &[]);
     assert!(
         failures
@@ -149,7 +154,8 @@ fn package_checks_report_missing_manifest_as_inventory_failure() {
 
 #[test]
 fn package_checks_emit_bounded_scheduler_metrics_for_schema_validation() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-checks-scheduler");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-checks-scheduler");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");
     write_json(

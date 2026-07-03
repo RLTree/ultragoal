@@ -32,7 +32,7 @@ fn stale_review_json_recurses_and_namespace_root_routes_allow_known_files() {
         "{stale:?}"
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-root-route");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-root-route");
     write_text(&root.join("README.md"), "readme");
     write_text(&root.join("rust-toolchain.toml"), "toolchain");
     let allowed = crate::audit::namespace::law::value_failures(
@@ -56,7 +56,7 @@ fn stale_review_json_recurses_and_namespace_root_routes_allow_known_files() {
 
 #[test]
 fn product_fitness_review_requires_receipt_claim_subset_and_current_digest() {
-    let root = crate::self_tests::boundaries::support::temp_root("pf-review-subset");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("pf-review-subset");
     let receipt_path = root.join("validation_artifacts/harness/product-fitness-receipt.json");
     write_json(
         &receipt_path,

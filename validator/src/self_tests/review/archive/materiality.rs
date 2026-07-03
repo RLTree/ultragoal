@@ -44,7 +44,7 @@ fn gate(decision: &str) -> Value {
 
 #[test]
 fn archive_receipts_and_hygiene_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("archive-branches");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("archive-branches");
     manifest(&root, &["docs/file.txt"]);
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "ok").expect("file");
@@ -106,7 +106,8 @@ fn archive_receipts_and_hygiene_fail_closed() {
 
 #[test]
 fn archive_hygiene_rejects_unowned_filesystem_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("archive-filesystem-edges");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("archive-filesystem-edges");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "ok").expect("file");
     manifest(&root, &["docs/binary.bin"]);
@@ -189,7 +190,9 @@ fn archive_hygiene_rejects_unowned_filesystem_edges() {
 fn materiality_scope_variants_reject_overclaim_and_missing_evidence() {
     assert_eq!(
         crate::review::materiality::fixture_failures(
-            &crate::self_tests::boundaries::support::temp_root("no-materiality-fixtures")
+            &crate::self_tests::boundaries::workspace_fixtures::temp_root(
+                "no-materiality-fixtures"
+            )
         ),
         vec!["review_materiality_fixture_dir_missing".to_string()]
     );

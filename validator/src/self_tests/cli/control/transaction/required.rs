@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn update_goal_requires_transactional_finalization_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-missing");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-missing");
     super::write_manifest(&root);
     let observed = proof::failures(&root, ControlOperation::UpdateGoalEligibility);
     assert!(
@@ -25,7 +26,8 @@ fn update_goal_requires_transactional_finalization_receipt() {
 
 #[test]
 fn transaction_reports_digest_unavailable_before_receipt_theater() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-no-digest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-no-digest");
     super::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["missing.txt"]}),
@@ -42,7 +44,9 @@ fn transaction_reports_digest_unavailable_before_receipt_theater() {
 
 #[test]
 fn transaction_finalize_reports_observability_spool_write_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("transaction-command-spool-file");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "transaction-command-spool-file",
+    );
     super::write_manifest(&root);
     let spool_path = root.join("validation_artifacts/observability/spool");
     std::fs::create_dir_all(spool_path.parent().expect("spool parent")).expect("spool parent");

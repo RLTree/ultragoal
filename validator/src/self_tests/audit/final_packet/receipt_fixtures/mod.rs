@@ -143,7 +143,7 @@ fn registry_ref(root: &Path, current: &str, raw: &Value) -> Value {
             "captured_at":"2026-06-27T00:00:00Z",
             "status":"pass",
             "issuer":{"tool":"multi_agent_v1","authority":"tool_registry"},
-            "tool_call":{"name":"multi_agent_v1.tool_registry","call_id":"call","arguments_digest":crate::self_tests::boundaries::support::sha('1')},
+            "tool_call":{"name":"multi_agent_v1.tool_registry","call_id":"call","arguments_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},
             "capture_method":"live_tool_registry_query",
             "boundary":{"account_id":"acct","workspace_id":"workspace","session_id":"session"},
             "source":"multi_agent_v1.tool_registry",
@@ -163,7 +163,7 @@ fn registry_raw_observation(current: &str) -> Value {
         "candidate_digest": current,
         "captured_at": "2026-06-27T00:00:00Z",
         "issuer":{"tool":"multi_agent_v1","authority":"tool_registry"},
-        "tool_call":{"name":"multi_agent_v1.tool_registry","call_id":"call","arguments_digest":crate::self_tests::boundaries::support::sha('1')},
+        "tool_call":{"name":"multi_agent_v1.tool_registry","call_id":"call","arguments_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},
         "boundary":{"account_id":"acct","workspace_id":"workspace","session_id":"session"},
         "source":"multi_agent_v1.tool_registry",
         "registry_rows": agent_types()

@@ -3,7 +3,7 @@ use serde_json::json;
 #[cfg(unix)]
 #[test]
 fn target_artifact_refs_reject_missing_placeholder_directory_symlink_and_bad_json() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-artifacts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("target-artifacts");
     let artifacts = root.join("artifacts");
     std::fs::create_dir_all(&artifacts).expect("artifacts");
     std::fs::write(artifacts.join("ok.json"), "{\"ok\":true}").expect("ok");
@@ -25,23 +25,23 @@ fn target_artifact_refs_reject_missing_placeholder_directory_symlink_and_bad_jso
     for (item, expected) in [
         (json!({}), "lacks non-zero"),
         (
-            json!({"path":"artifacts/placeholder.json","digest":crate::self_tests::boundaries::support::sha('1')}),
+            json!({"path":"artifacts/placeholder.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}),
             "placeholder",
         ),
         (
-            json!({"path":"artifacts","digest":crate::self_tests::boundaries::support::sha('1')}),
+            json!({"path":"artifacts","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}),
             "not a regular file",
         ),
         (
-            json!({"path":"artifacts/link.json","digest":crate::self_tests::boundaries::support::sha('1')}),
+            json!({"path":"artifacts/link.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}),
             "symlink",
         ),
         (
-            json!({"path":"artifacts/missing.json","digest":crate::self_tests::boundaries::support::sha('1')}),
+            json!({"path":"artifacts/missing.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}),
             "missing",
         ),
         (
-            json!({"path":"artifacts/ok.json","digest":crate::self_tests::boundaries::support::sha('1')}),
+            json!({"path":"artifacts/ok.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}),
             "digest mismatch",
         ),
     ] {
@@ -65,7 +65,7 @@ fn target_artifact_refs_reject_missing_placeholder_directory_symlink_and_bad_jso
     std::fs::hard_link(&hard_source, &hard_link).expect("hard link");
     let hard = json!({
         "path":"artifacts/hard.json",
-        "digest":crate::self_tests::boundaries::support::sha('h')
+        "digest":crate::self_tests::boundaries::workspace_fixtures::sha('h')
     });
     let err = crate::target_repo::artifact_refs::artifact_ref_error(&root, &hard, "artifact")
         .expect("hard-linked artifact rejected");

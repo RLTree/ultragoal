@@ -3,7 +3,7 @@ use serde_json::json;
 
 #[test]
 fn lane_policy_validates_clock_size_and_dependency_dispatch() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-policy-dispatch");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("lane-policy-dispatch");
     let mut failures = Vec::<Failure>::new();
     let run_at = crate::claim_semantics::lane::policy::validation_clock(
         &json!({"automation_tick_receipt":{"checked_at":"2026-06-25T00:10:00Z"}}),
@@ -33,8 +33,8 @@ fn lane_policy_validates_clock_size_and_dependency_dispatch() {
                     "validated_status":"merged",
                     "validated_at":"2026-06-25T00:09:00Z",
                     "upstream_commit":"wrong-head",
-                    "evidence_digest":crate::self_tests::boundaries::support::sha('1'),
-                    "upstream_ready_receipt":{"path":"ready/up.json","digest":crate::self_tests::boundaries::support::sha('2')}
+                    "evidence_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+                    "upstream_ready_receipt":{"path":"ready/up.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')}
                 }]
             },
             {

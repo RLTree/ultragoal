@@ -34,7 +34,7 @@ fn openai_output_defaults_and_error_boundaries_are_typed() {
         "output",
         "prove",
         "--parsed-output-digest",
-        &crate::self_tests::boundaries::support::sha('e'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('e'),
         "--receipt",
         "validation_artifacts/openai/write-error.json",
     ]);

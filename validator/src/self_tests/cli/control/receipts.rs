@@ -68,7 +68,8 @@ fn receipt_blocks_claims_and_records_required_evidence() {
 
 #[test]
 fn control_plane_schema_accepts_emitted_observability_fields() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-control-schema-observe");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-control-schema-observe");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
@@ -97,7 +98,8 @@ fn control_plane_schema_accepts_emitted_observability_fields() {
 
 #[test]
 fn run_writes_and_prints_fail_closed_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-control-receipt-run");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-control-receipt-run");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
@@ -125,12 +127,13 @@ fn run_writes_and_prints_fail_closed_receipts() {
 
 #[test]
 fn control_graph_constructor_does_not_pass_without_green_graph() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-production-no-green");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-production-no-green");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
     );
-    let candidate = crate::self_tests::boundaries::support::sha('c');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('c');
     let value = crate::cli::control::plane::emit::receipt_from_control_graph(
         &root,
         candidate.clone(),
@@ -197,8 +200,8 @@ fn surface_validation_rejects_missing_authority_fields() {
 
 #[test]
 fn strict_surface_validation_rejects_transition_only_or_wrong_candidate_receipts() {
-    let stale_candidate = crate::self_tests::boundaries::support::sha('a');
-    let current_candidate = crate::self_tests::boundaries::support::sha('b');
+    let stale_candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+    let current_candidate = crate::self_tests::boundaries::workspace_fixtures::sha('b');
     let transition = json!({
         "schema": RECEIPT_SCHEMA,
         "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},

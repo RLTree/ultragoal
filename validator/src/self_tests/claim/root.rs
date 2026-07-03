@@ -4,10 +4,9 @@ use std::path::PathBuf;
 
 #[test]
 fn semantic_loader_and_automation_tick_reject_bad_boundaries() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-loader");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-loader");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
-    let receipt =
-        json!({"path":"../escape.json","digest":crate::self_tests::boundaries::support::sha('f')});
+    let receipt = json!({"path":"../escape.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('f')});
     let err = crate::claim_semantics::semantic::receipt::loader::load(&root, &receipt)
         .err()
         .expect("path escape rejected");

@@ -54,7 +54,7 @@ pub(super) fn write_standards_rust_gc(root: &Path, current: &str) {
 }
 
 fn copy_digest_inputs(root: &Path) {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     for rel in [
         "rust-toolchain.toml",
         "Cargo.lock",

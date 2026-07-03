@@ -30,7 +30,8 @@ fn current_agent_types() -> Vec<Value> {
 
 #[test]
 fn live_registry_exposure_rejects_stale_malformed_and_shape_substitutes() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-registry-branches");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry-branches");
     std::fs::create_dir_all(root.join("validation_artifacts")).expect("registry dir");
     let exposure_path = root.join("validation_artifacts/exposure.json");
     let agent_types = crate::review::round::config::PERSONAS
@@ -91,7 +92,7 @@ fn live_registry_exposure_rejects_stale_malformed_and_shape_substitutes() {
     out.clear();
     crate::review::round::registry::exposure_errors(
         &root,
-        &json!({"live_registry_exposure":{"path":"validation_artifacts/exposure.json","digest":crate::self_tests::boundaries::support::sha('0')}}),
+        &json!({"live_registry_exposure":{"path":"validation_artifacts/exposure.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}}),
         &mut out,
     );
     assert_eq!(out[0].error, "review_round_live_registry_artifact_mismatch");
@@ -113,7 +114,8 @@ fn live_registry_exposure_rejects_stale_malformed_and_shape_substitutes() {
 
 #[test]
 fn live_registry_exposure_uses_typed_current_run_freshness_window() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-registry-freshness");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry-freshness");
     std::fs::create_dir_all(root.join("validation_artifacts")).expect("registry dir");
     let exposure_path = root.join("validation_artifacts/exposure.json");
     let base_receipt = json!({

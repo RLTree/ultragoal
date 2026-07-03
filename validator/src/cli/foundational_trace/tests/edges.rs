@@ -50,7 +50,8 @@ fn foundational_trace_parse_rejects_argument_edges() {
 
 #[test]
 fn foundational_trace_failure_edges_and_absolute_receipt_are_observable() {
-    let root = crate::self_tests::boundaries::support::temp_root("foundational-trace-edges");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-edges");
     super::write_minimal_root(&root, &["agent-queryable-observability"], true);
     let missing = validate(
         &root,
@@ -170,8 +171,9 @@ fn foundational_trace_runtime_metrics_report_resource_and_saturation_states() {
 
 #[test]
 fn foundational_trace_run_propagates_telemetry_and_receipt_write_errors() {
-    let no_manifest =
-        crate::self_tests::boundaries::support::temp_root("foundational-trace-no-manifest");
+    let no_manifest = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "foundational-trace-no-manifest",
+    );
     super::write_minimal_root(&no_manifest, &["agent-queryable-observability"], true);
     fs::remove_file(no_manifest.join("plugin-manifest-draft.json")).expect("remove manifest");
     let command = FoundationalTraceCommand {
@@ -183,7 +185,8 @@ fn foundational_trace_run_propagates_telemetry_and_receipt_write_errors() {
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
     fs::remove_dir_all(no_manifest).expect("cleanup no manifest");
 
-    let blocked = crate::self_tests::boundaries::support::temp_root("foundational-trace-blocked");
+    let blocked =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-blocked");
     super::write_minimal_root(&blocked, &["agent-queryable-observability"], true);
     fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
     let blocked_command = FoundationalTraceCommand {

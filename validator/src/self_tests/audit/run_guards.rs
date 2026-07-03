@@ -16,7 +16,7 @@ fn options(root: PathBuf) -> crate::audit::AuditOptions {
 
 #[test]
 fn audit_run_rejects_bad_red_report_basename_and_malformed_target_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-run-guards");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-run-guards");
     let mut bad_report = options(root.clone());
     bad_report.red_report = Some(root.join("validation_artifacts/ultragoal-audit/not-red.json"));
     let err = crate::audit::run(bad_report).expect_err("bad red report basename");

@@ -2,15 +2,15 @@ use super::*;
 use serde_json::json;
 use std::fs;
 
+mod explanation_fixtures;
 mod observation_skip;
 mod receipt_fallback;
-mod support;
 mod target_edges;
-use support::*;
+use explanation_fixtures::*;
 
 #[test]
 fn explain_reports_current_failure_and_bad_root_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-explain");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-explain");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -228,7 +228,8 @@ fn explain_reports_current_failure_and_bad_root_errors() {
         missing_receipt["explanation"]["known_current_failure"][0],
         "source audit receipt unavailable"
     );
-    let bad_root = crate::self_tests::boundaries::support::temp_root("observe-explain-bad");
+    let bad_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-explain-bad");
     fs::create_dir_all(&bad_root).expect("bad root");
     assert!(
         run(&bad_root, &fallback_command)

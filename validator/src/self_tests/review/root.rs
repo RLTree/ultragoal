@@ -14,11 +14,11 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
         validator_path: "validation_artifacts/ultragoal-audit/validator-receipt.json".into(),
         review_target_path: "validation_artifacts/review-target.json".into(),
         archive_path: "validation_artifacts/archive.json".into(),
-        validator_digest: crate::self_tests::boundaries::support::sha('1'),
-        review_target_digest: crate::self_tests::boundaries::support::sha('2'),
-        archive_digest: crate::self_tests::boundaries::support::sha('3'),
+        validator_digest: crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        review_target_digest: crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+        archive_digest: crate::self_tests::boundaries::workspace_fixtures::sha('3'),
         validator_run_id: "run-1".into(),
-        package_digest: crate::self_tests::boundaries::support::sha('4'),
+        package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: vec!["archive source mismatch".into()],
     };
     let mut failures = Vec::new();
@@ -27,7 +27,7 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
             "status":"fail",
             "round_phase":"sign_off",
             "anchor_policy":"validator_review_target_archive",
-            "validator_receipt":{"path":"wrong","digest":crate::self_tests::boundaries::support::sha('9'),"run_id":"run-2","package_digest":crate::self_tests::boundaries::support::sha('8')}
+            "validator_receipt":{"path":"wrong","digest":crate::self_tests::boundaries::workspace_fixtures::sha('9'),"run_id":"run-2","package_digest":crate::self_tests::boundaries::workspace_fixtures::sha('8')}
         }),
         &anchors,
         &mut failures,
@@ -44,7 +44,7 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
     assert!(errors.contains(&"review_round_stale_validator_run"));
     assert!(errors.contains(&"review_round_stale_package_digest"));
 
-    let root = crate::self_tests::boundaries::support::temp_root("review-registry");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry");
     std::fs::create_dir_all(root.join("validation_artifacts")).expect("registry dir");
     failures.clear();
     crate::review::round::registry::exposure_errors(&root, &json!({}), &mut failures);
@@ -55,7 +55,7 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
     failures.clear();
     crate::review::round::registry::exposure_errors(
         &root,
-        &json!({"live_registry_exposure":{"path":"../escape.json","digest":crate::self_tests::boundaries::support::sha('0')}}),
+        &json!({"live_registry_exposure":{"path":"../escape.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('0')}}),
         &mut failures,
     );
     assert_eq!(
@@ -107,7 +107,7 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
 
 #[test]
 fn review_round_anchor_reader_binds_paths_digests_and_zero_fallback() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-anchor-reader");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("review-anchor-reader");
     std::fs::create_dir_all(root.join("anchors")).expect("anchors");
     let validator = root.join("anchors/validator.json");
     let target = root.join("anchors/review-target.json");
@@ -119,21 +119,21 @@ fn review_round_anchor_reader_binds_paths_digests_and_zero_fallback() {
             "run_id": "run-1",
             "target_revision": {
                 "kind": "package_digest",
-                "value": crate::self_tests::boundaries::support::sha('a')
+                "value": crate::self_tests::boundaries::workspace_fixtures::sha('a')
             }
         }),
     );
     write_json(
         &target,
         &json!({
-            "review_target_digest": crate::self_tests::boundaries::support::sha('b')
+            "review_target_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b')
         }),
     );
     write_json(
         &archive,
         &json!({
-            "archive": {"digest": crate::self_tests::boundaries::support::sha('c')},
-            "source": {"package_digest": crate::self_tests::boundaries::support::sha('a')}
+            "archive": {"digest": crate::self_tests::boundaries::workspace_fixtures::sha('c')},
+            "source": {"package_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a')}
         }),
     );
     let anchors = crate::review::round::anchor::values::AnchorValues::read(
@@ -153,15 +153,15 @@ fn review_round_anchor_reader_binds_paths_digests_and_zero_fallback() {
     assert_eq!(anchors.validator_run_id, "run-1");
     assert_eq!(
         anchors.package_digest,
-        crate::self_tests::boundaries::support::sha('a')
+        crate::self_tests::boundaries::workspace_fixtures::sha('a')
     );
     assert_eq!(
         anchors.review_target_digest,
-        crate::self_tests::boundaries::support::sha('b')
+        crate::self_tests::boundaries::workspace_fixtures::sha('b')
     );
     assert_eq!(
         anchors.archive_digest,
-        crate::self_tests::boundaries::support::sha('c')
+        crate::self_tests::boundaries::workspace_fixtures::sha('c')
     );
 
     let zero = crate::review::round::anchor::values::fixture_anchor_values_for(
@@ -177,7 +177,7 @@ fn review_round_anchor_reader_binds_paths_digests_and_zero_fallback() {
 
 #[test]
 fn product_fitness_and_target_fixture_boundaries_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-fitness");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-fitness");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("templates")).expect("templates");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");

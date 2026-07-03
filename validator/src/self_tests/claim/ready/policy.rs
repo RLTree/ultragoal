@@ -121,7 +121,7 @@ fn ready_join_reports_readiness_lane_and_claim_binding_failures() {
 
 #[test]
 fn ready_receipt_runtime_and_generated_artifact_checks_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("ready-receipt");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("ready-receipt");
     let mut out = Vec::<Failure>::new();
     let bundle = json!({
         "validator_receipt": {
@@ -129,7 +129,7 @@ fn ready_receipt_runtime_and_generated_artifact_checks_fail_closed() {
             "run_id":"run",
             "validator_execution": {
                 "command":{"command":"ultragoal source audit"},
-                "validator_artifacts":[{"path":"validator","digest":crate::self_tests::boundaries::support::sha('a')}]
+                "validator_artifacts":[{"path":"validator","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}]
             },
             "generated_artifacts":[]
         }
@@ -144,11 +144,11 @@ fn ready_receipt_runtime_and_generated_artifact_checks_fail_closed() {
     let mut expected = BTreeMap::new();
     expected.insert(
         "validator".to_string(),
-        crate::self_tests::boundaries::support::sha('b'),
+        crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     );
     expected.insert(
         "missing".to_string(),
-        crate::self_tests::boundaries::support::sha('c'),
+        crate::self_tests::boundaries::workspace_fixtures::sha('c'),
     );
     crate::claim_semantics::ready::receipt::check_validator_receipt(
         &bundle, &bad_ready, &expected, &mut out,

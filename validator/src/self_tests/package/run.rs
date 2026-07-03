@@ -10,7 +10,7 @@ fn write_json(path: &std::path::Path, value: &serde_json::Value) {
 
 #[test]
 fn package_run_valid_fixture_loader_reports_malformed_json_and_skips_non_json() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-fixtures");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-fixtures");
     std::fs::create_dir_all(root.join("fixtures/valid")).expect("valid fixtures");
     std::fs::write(root.join("fixtures/valid/notes.txt"), "not json").expect("text fixture");
     std::fs::write(root.join("fixtures/valid/bad.json"), "{").expect("bad json");
@@ -54,7 +54,8 @@ fn package_run_valid_fixture_loader_reports_malformed_json_and_skips_non_json() 
 
 #[test]
 fn package_run_entrypoint_writes_fail_closed_receipts_for_incomplete_package() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-entrypoint");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-entrypoint");
     for dir in [
         "examples/generated",
         "fixtures/valid",
@@ -143,7 +144,7 @@ fn red_report_status_is_independent_from_package_audit_status() {
 
 #[test]
 fn package_run_semantic_fixture_reports_absolute_outside_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-outside");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-outside");
     let outside = root.with_file_name("package-run-outside-valid.json");
     std::fs::write(&outside, "{").expect("outside json");
     let mut failures = BTreeMap::new();
@@ -164,7 +165,8 @@ fn package_run_semantic_fixture_reports_absolute_outside_paths() {
 
 #[test]
 fn package_run_ready_artifacts_are_digest_bound_and_filtered() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-ready-artifacts");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-ready-artifacts");
     std::fs::create_dir_all(root.join("examples/generated")).expect("generated");
     write_json(
         &root.join("examples/generated/READY_FOR_MERGE-b.json"),
@@ -204,7 +206,9 @@ fn package_run_ready_artifacts_are_digest_bound_and_filtered() {
 
 #[test]
 fn package_run_ready_artifacts_missing_directory_is_empty() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-no-ready-artifacts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "package-run-no-ready-artifacts",
+    );
     std::fs::create_dir_all(&root).expect("root");
     assert!(crate::audit::package::run::ready_artifacts(&root, "run").is_empty());
     std::fs::remove_dir_all(root).expect("cleanup no ready artifacts");

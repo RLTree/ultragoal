@@ -2,7 +2,9 @@ use serde_json::json;
 
 #[test]
 fn package_checks_preserve_current_check_context_inside_parallel_text_task() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-checks-current-context");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "package-checks-current-context",
+    );
     super::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),

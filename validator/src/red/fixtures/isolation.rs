@@ -165,7 +165,8 @@ mod tests {
 
     #[test]
     fn isolated_root_copies_package_files_and_removes_worker_writes() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-fixture-isolation");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-isolation");
         std::fs::create_dir_all(root.join("docs")).expect("docs");
         std::fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit"))
             .expect("artifact dir");
@@ -186,7 +187,9 @@ mod tests {
 
     #[test]
     fn isolated_root_edges_reject_invalid_paths_and_map_copy_errors() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-fixture-isolation-edges");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "red-fixture-isolation-edges",
+        );
         std::fs::create_dir_all(root.join("docs")).expect("docs");
         write_manifest(&root);
         std::fs::write(root.join("docs/source.md"), "ok").expect("source");
@@ -215,7 +218,8 @@ mod tests {
         let copy_error = super::copy_file(&root.join("docs/source.md"), Path::new(""))
             .expect_err("empty destination fails");
         assert!(copy_error.contains("red_fixture_isolated_root_copy_failed"));
-        let blocked = crate::self_tests::boundaries::support::temp_root("red-fixture-blocked");
+        let blocked =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-blocked");
         std::fs::create_dir_all(&blocked).expect("blocked root");
         std::fs::write(blocked.join("target"), "not a dir").expect("target file");
         let ce = with_isolated_root(&blocked, "blocked", &[], |_| ()).expect_err("blocked target");

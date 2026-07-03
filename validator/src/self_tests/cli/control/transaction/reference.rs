@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn pass_shaped_transaction_still_dereferences_current_evidence() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-deref");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-deref");
     super::write_manifest(&root);
     let expected = crate::package::inventory::package_digest(&root).expect("digest");
     super::write_json(
@@ -38,7 +39,8 @@ fn pass_shaped_transaction_still_dereferences_current_evidence() {
 
 #[test]
 fn matching_reference_digests_still_require_receipt_semantics() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-semantics");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-semantics");
     super::write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     super::write_receipt_set(&root, &current);
@@ -67,7 +69,8 @@ fn matching_reference_digests_still_require_receipt_semantics() {
 
 #[test]
 fn transaction_rejects_bad_top_level_fields_missing_refs_and_stale_refs() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-fields");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-fields");
     super::write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     super::write_receipt_set(&root, &current);
@@ -77,7 +80,7 @@ fn transaction_rejects_bad_top_level_fields_missing_refs_and_stale_refs() {
             "schema": "wrong",
             "generated_at": "2026-06-27T00:00:00Z",
             "status": "fail",
-            "candidate_digest": crate::self_tests::boundaries::support::sha('d'),
+            "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('d'),
             "claim_ceiling": "withheld_or_blocked",
             "transaction_mode": "manual",
             "blocked_claim_classes": ["completion"],
@@ -108,7 +111,8 @@ fn transaction_rejects_bad_top_level_fields_missing_refs_and_stale_refs() {
 #[cfg(unix)]
 #[test]
 fn transaction_rejects_symlinked_canonical_reference_surface() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-symlink");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-symlink");
     super::write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     std::fs::create_dir_all(root.join("actual-review")).expect("actual review");
@@ -131,17 +135,18 @@ fn transaction_rejects_symlinked_canonical_reference_surface() {
 
 #[test]
 fn transaction_rejects_uncovered_coverage_ref_without_source_audit_circularity() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-transaction-stale-refs");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-transaction-stale-refs");
     super::write_manifest(&root);
     let current = crate::package::inventory::package_digest(&root).expect("digest");
     super::write_receipt_set(&root, &current);
     super::write_json(
         &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
-        &json!({"schema":"harness-ultragoal.validator-receipt.v1","status":"pass","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('e')},"checks":{}}),
+        &json!({"schema":"harness-ultragoal.validator-receipt.v1","status":"pass","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('e')},"checks":{}}),
     );
     super::write_json(
         &root.join("validation_artifacts/coverage/coverage-receipt.json"),
-        &json!({"schema":"harness-ultragoal.coverage-receipt.v1","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('f')},"coverage":{"percent":100.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
+        &json!({"schema":"harness-ultragoal.coverage-receipt.v1","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('f')},"coverage":{"percent":100.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
     );
     super::write_transaction(&root, &current);
     let mut tx = crate::json_boundary::read_json(&root.join(super::RECEIPT)).expect("tx");
@@ -169,7 +174,8 @@ fn transaction_rejects_uncovered_coverage_ref_without_source_audit_circularity()
 
 #[test]
 fn transaction_unknown_reference_label_fails_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("transaction-ref-unknown");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("transaction-ref-unknown");
     let failures = proof::transaction::unknown_ref_value_failures_for_test(&root);
     assert_eq!(
         failures,

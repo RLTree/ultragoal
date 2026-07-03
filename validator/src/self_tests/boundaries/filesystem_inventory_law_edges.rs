@@ -17,7 +17,9 @@ fn write_json(path: &std::path::Path, value: &serde_json::Value) {
 
 #[test]
 fn filesystem_inventory_and_target_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("filesystem_inventory-filesystem");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "filesystem_inventory-filesystem",
+    );
     std::fs::create_dir_all(root.join("dir")).expect("dir");
     {
         let _guard = crate::red::filesystem::fixtures::materialize(
@@ -32,8 +34,9 @@ fn filesystem_inventory_and_target_edges() {
     }
     assert!(!root.join("dir/current.txt").exists());
 
-    let inventory_root =
-        crate::self_tests::boundaries::support::temp_root("filesystem_inventory-inventory");
+    let inventory_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "filesystem_inventory-inventory",
+    );
     write_text(&inventory_root.join("keep.txt"), "keep");
     write_text(&inventory_root.join("__pycache__/stale.pyc"), "bytecode");
     write_text(&inventory_root.join("target.txt"), "target");
@@ -60,8 +63,9 @@ fn filesystem_inventory_and_target_edges() {
             .any(|item| item.contains("__pycache__"))
     );
 
-    let target =
-        crate::self_tests::boundaries::support::temp_root("filesystem_inventory-target-fixture");
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "filesystem_inventory-target-fixture",
+    );
     write_text(&target.join("target.txt"), "target");
     write_json(
         &target.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
@@ -84,7 +88,8 @@ fn filesystem_inventory_and_target_edges() {
 
 #[test]
 fn artifact_audit_and_receipt_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("filesystem_inventory-audit");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("filesystem_inventory-audit");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     write_text(&root.join("artifacts/proof.json"), "{\"ok\":true}");
     write_text(&root.join("artifacts/not-json.json"), "not-json");
@@ -104,7 +109,7 @@ fn artifact_audit_and_receipt_edges() {
         json!({"path":"","digest":crate::digest::ZERO}),
         json!({"path":"artifacts/fixture-proof.json","digest":proof["digest"]}),
         json!({"path":"../escape.json","digest":proof["digest"]}),
-        json!({"path":"artifacts/proof.json","digest":crate::self_tests::boundaries::support::sha('e')}),
+        json!({"path":"artifacts/proof.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('e')}),
     ] {
         assert!(
             crate::target_repo::artifact_refs::artifact_ref_error(&root, &item, "proof").is_some()
@@ -180,7 +185,9 @@ fn artifact_audit_and_receipt_edges() {
         )
     );
 
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let registry =
         root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json");
     write_json(

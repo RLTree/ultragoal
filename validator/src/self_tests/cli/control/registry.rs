@@ -1,4 +1,5 @@
 use crate::cli::control::plane::types::ControlOperation;
+use crate::self_tests::boundaries::workspace_fixtures;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -10,7 +11,7 @@ fn write_json(path: &Path, value: &Value) {
 }
 
 fn copy_schema_catalog(root: &Path) {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = workspace_fixtures::repo_root();
     let dst = root.join("schemas");
     std::fs::create_dir_all(&dst).expect("schema dst");
     for entry in std::fs::read_dir(repo.join("schemas")).expect("schemas") {
@@ -23,7 +24,7 @@ fn copy_schema_catalog(root: &Path) {
 
 #[test]
 fn registry_probe_preserves_existing_live_same_surface_pass() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-preserve-pass");
+    let root = workspace_fixtures::temp_root("cli-registry-preserve-pass");
     copy_schema_catalog(&root);
     write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -80,7 +81,7 @@ fn registry_fail_closed_boundary_normalizes_runtime_values() {
 
 #[test]
 fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-runtime-boundary");
+    let root = workspace_fixtures::temp_root("cli-registry-runtime-boundary");
     copy_schema_catalog(&root);
     write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -127,7 +128,7 @@ fn registry_probe_fail_closed_receipt_uses_runtime_session_and_candidate_ids() {
 
 #[test]
 fn registry_probe_fail_closed_rows_report_local_disk_and_global_truth() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-registry-local-truth");
+    let root = workspace_fixtures::temp_root("cli-registry-local-truth");
     let home = root.join("home");
     write_json(
         &root.join(".codex-plugin/plugin.json"),
@@ -172,7 +173,7 @@ fn live_registry_receipt(current: &str, raw_rel: &str, raw_digest: &str) -> Valu
         "tool_call": {
             "name": "multi_agent_v1.tool_registry",
             "call_id": "call-1",
-            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+            "arguments_digest": workspace_fixtures::sha('1')
         },
         "capture_method": "live_tool_registry_query",
         "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
@@ -195,7 +196,7 @@ fn raw_observation(current: &str) -> Value {
         "tool_call": {
             "name": "multi_agent_v1.tool_registry",
             "call_id": "call-1",
-            "arguments_digest": crate::self_tests::boundaries::support::sha('1')
+            "arguments_digest": workspace_fixtures::sha('1')
         },
         "boundary": {"account_id": "acct", "workspace_id": "workspace", "session_id": "session"},
         "source": "multi_agent_v1.tool_registry",

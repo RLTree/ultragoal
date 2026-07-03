@@ -1,6 +1,6 @@
 #[test]
 fn production_inventory_rows_account_for_required_observability_contracts() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )

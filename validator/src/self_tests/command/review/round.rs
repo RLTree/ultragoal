@@ -33,7 +33,7 @@ fn rel(root: &Path, path: &Path) -> String {
 
 #[test]
 fn command_run_accepts_current_review_round_anchors() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let out_dir = root
         .join("target")
         .join(format!("review-round-command-{}", stamp()));
@@ -51,7 +51,7 @@ fn command_run_accepts_current_review_round_anchors() {
     );
     let validator_digest = crate::digest::file(&validator_path).expect("validator digest");
     let review_target_path = out_dir.join("review-target-receipt.json");
-    let review_target_digest = crate::self_tests::boundaries::support::sha('b');
+    let review_target_digest = crate::self_tests::boundaries::workspace_fixtures::sha('b');
     write_json(
         &review_target_path,
         &json!({
@@ -62,7 +62,7 @@ fn command_run_accepts_current_review_round_anchors() {
         }),
     );
     let archive_path = out_dir.join("archive-receipt.json");
-    let archive_digest = crate::self_tests::boundaries::support::sha('c');
+    let archive_digest = crate::self_tests::boundaries::workspace_fixtures::sha('c');
     write_json(
         &archive_path,
         &json!({
@@ -218,7 +218,7 @@ fn same_anchor_file(value: &Value, path: &str) -> bool {
 
 #[test]
 fn review_round_artifact_refresh_skips_malformed_refs_and_updates_current_paths() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let mut row = json!({
         "refs":[
             {},

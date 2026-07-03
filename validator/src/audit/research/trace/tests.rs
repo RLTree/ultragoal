@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 
 #[test]
 fn trace_row_failures_cover_unknowns_missing_paths_and_fields() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-research-trace");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-research-trace");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("templates/agent-standards")).expect("standards");
     crate::json_boundary::write_json(

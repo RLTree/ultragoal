@@ -13,7 +13,7 @@ fn receipt(
     SemanticClassificationReceipt {
         schema: "harness-ultragoal.semantic-classification-receipt.v1".to_string(),
         claim_id: "CLAIM-GATE".to_string(),
-        canonical_text_digest: crate::self_tests::boundaries::support::sha('a'),
+        canonical_text_digest: crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         classifier_contract_id: "semantic-classifier".to_string(),
         classifier_contract_version: "1".to_string(),
         classifier_implementation_kind: kind,
@@ -30,7 +30,7 @@ fn receipt(
         ambiguity: false,
         required_proof_gates: gates,
         claim_ceiling_recommendation: "withheld_or_blocked".to_string(),
-        receipt_digest: crate::self_tests::boundaries::support::sha('b'),
+        receipt_digest: crate::self_tests::boundaries::workspace_fixtures::sha('b'),
     }
 }
 
@@ -69,7 +69,7 @@ fn semantic_gate_check_accepts_every_supported_gate_shape() {
     ];
     let reviewer_evidence = ClassifierEvidence {
         evidence_type: "reviewer_report".to_string(),
-        digest: crate::self_tests::boundaries::support::sha('c'),
+        digest: crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         summary: "human reviewer classified ambiguous surface".to_string(),
     };
     let mut failures = Vec::new();

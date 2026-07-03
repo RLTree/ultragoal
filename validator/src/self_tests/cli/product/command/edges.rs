@@ -2,7 +2,8 @@ use std::path::PathBuf;
 
 #[test]
 fn product_command_reports_observability_receipt_write_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-observability-write");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("product-observability-write");
     std::fs::create_dir_all(root.join("target")).expect("target dir");
     std::fs::write(
         root.join("plugin-manifest-draft.json"),

@@ -5,8 +5,8 @@ use std::path::Path;
 pub(crate) const STALE_ARTIFACT_RESOURCE: &str = "stale_artifact_resource_packaged";
 pub(crate) const ROOT_VERIFICATION_RECEIPT_RESOURCE: &str =
     "root_verification_receipt_resource_packaged";
-pub(crate) const FIXTURE_SUPPORT_ACTIVE_ARTIFACT: &str =
-    "fixture_support_resource_packaged_as_active_artifact";
+pub(crate) const FIXTURE_ONLY_ACTIVE_ARTIFACT: &str =
+    "fixture_only_resource_packaged_as_active_artifact";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct ResourcePurposeFailure {
@@ -23,10 +23,10 @@ pub(crate) fn failures(root: &Path, manifest: &Value) -> Vec<ResourcePurposeFail
         }
         if rel.starts_with("artifacts/")
             && rel.ends_with(".json")
-            && active_artifact_is_fixture_support(root, &rel)
+            && active_artifact_is_fixture_only(root, &rel)
         {
             out.push(ResourcePurposeFailure {
-                code: FIXTURE_SUPPORT_ACTIVE_ARTIFACT,
+                code: FIXTURE_ONLY_ACTIVE_ARTIFACT,
                 detail: rel,
             });
         }
@@ -55,7 +55,7 @@ fn path_part_contains_stale(rel: &str) -> bool {
         .any(|part| part.to_ascii_lowercase().contains("stale"))
 }
 
-fn active_artifact_is_fixture_support(root: &Path, rel: &str) -> bool {
+fn active_artifact_is_fixture_only(root: &Path, rel: &str) -> bool {
     let Ok(path) = crate::package::inventory::resolve(root, rel) else {
         return false;
     };
@@ -77,7 +77,7 @@ mod tests {
     }
 
     #[test]
-    fn fixture_support_path_is_not_active_artifact() {
+    fn fixture_only_path_is_not_active_artifact() {
         let failure = path_failure("fixtures/root-receipts/stale-proof.fixture.json");
 
         assert!(failure.is_none());
@@ -91,9 +91,10 @@ mod tests {
     }
 
     #[test]
-    fn active_artifact_fixture_support_is_rejected_but_missing_or_malformed_is_not_substituted() {
-        let root =
-            crate::self_tests::boundaries::support::temp_root("resource-purpose-active-artifact");
+    fn active_artifact_fixture_only_is_rejected_but_missing_or_malformed_is_not_substituted() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "resource-purpose-active-artifact",
+        );
         std::fs::create_dir_all(root.join("artifacts")).expect("artifacts dir");
         std::fs::write(
             root.join("artifacts/fixture.json"),
@@ -111,7 +112,7 @@ mod tests {
         });
         let failures = failures(&root, &manifest);
         assert_eq!(failures.len(), 1, "{failures:?}");
-        assert_eq!(failures[0].code, FIXTURE_SUPPORT_ACTIVE_ARTIFACT);
+        assert_eq!(failures[0].code, FIXTURE_ONLY_ACTIVE_ARTIFACT);
         assert_eq!(failures[0].detail, "artifacts/fixture.json");
         std::fs::remove_dir_all(root).expect("cleanup resource purpose");
     }

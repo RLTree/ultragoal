@@ -5,11 +5,11 @@ pub(crate) fn anchors() -> crate::review::round::anchor::values::AnchorValues {
         validator_path: "validator.json".into(),
         review_target_path: "review-target.json".into(),
         archive_path: "archive.json".into(),
-        validator_digest: crate::self_tests::boundaries::support::sha('1'),
-        review_target_digest: crate::self_tests::boundaries::support::sha('2'),
-        archive_digest: crate::self_tests::boundaries::support::sha('3'),
+        validator_digest: crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        review_target_digest: crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+        archive_digest: crate::self_tests::boundaries::workspace_fixtures::sha('3'),
         validator_run_id: "run".into(),
-        package_digest: crate::self_tests::boundaries::support::sha('4'),
+        package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: Vec::new(),
     }
 }
@@ -33,7 +33,7 @@ pub(crate) fn receipt() -> serde_json::Value {
 
 #[test]
 fn review_round_claim_ceiling_rejects_substitutes_and_mismatches() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let anchors = anchors();
     let mut out = Vec::new();
     crate::review::round::claim::ceiling::row_authority_errors(
@@ -42,11 +42,11 @@ fn review_round_claim_ceiling_rejects_substitutes_and_mismatches() {
         &anchors,
         &json!({
             "counterexamples_attempted":[
-                {"probe_id":"p","counterexample":"same","evidence":{"path":"missing","digest":crate::self_tests::boundaries::support::sha('a')}},
-                {"probe_id":"p","counterexample":"same","evidence":{"path":"missing","digest":crate::self_tests::boundaries::support::sha('a')}},
-                {"probe_id":"q","counterexample":"other","evidence":{"path":"missing","digest":crate::self_tests::boundaries::support::sha('a')}}
+                {"probe_id":"p","counterexample":"same","evidence":{"path":"missing","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}},
+                {"probe_id":"p","counterexample":"same","evidence":{"path":"missing","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}},
+                {"probe_id":"q","counterexample":"other","evidence":{"path":"missing","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}}
             ],
-            "proof_anchors_checked":[{"digest":crate::self_tests::boundaries::support::sha('1')},{"path":"validator.json"}],
+            "proof_anchors_checked":[{"digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},{"path":"validator.json"}],
             "required_next_repairs":[],
             "claim_ceiling_assessment":{"supported":[{"claim_id":"package_static_fixture_proof"}],"unsupported":[]}
         }),
@@ -94,7 +94,7 @@ fn review_round_claim_ceiling_rejects_substitutes_and_mismatches() {
 
 #[test]
 fn review_round_claim_ceiling_covers_anchor_shape_duplicates_and_mismatch() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let anchors = anchors();
     let mut out = Vec::new();
     crate::review::round::claim::ceiling::row_authority_errors(
@@ -103,18 +103,18 @@ fn review_round_claim_ceiling_covers_anchor_shape_duplicates_and_mismatch() {
         &anchors,
         &json!({
             "counterexamples_attempted":[
-                {"probe_id":"a","counterexample":"one","evidence":{"path":"missing-a","digest":crate::self_tests::boundaries::support::sha('a')}},
-                {"probe_id":"b","counterexample":"two","evidence":{"path":"missing-b","digest":crate::self_tests::boundaries::support::sha('b')}},
-                {"probe_id":"c","counterexample":"three","evidence":{"path":"missing-c","digest":crate::self_tests::boundaries::support::sha('c')}}
+                {"probe_id":"a","counterexample":"one","evidence":{"path":"missing-a","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}},
+                {"probe_id":"b","counterexample":"two","evidence":{"path":"missing-b","digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')}},
+                {"probe_id":"c","counterexample":"three","evidence":{"path":"missing-c","digest":crate::self_tests::boundaries::workspace_fixtures::sha('c')}}
             ],
             "proof_anchors_checked":[
-                {"digest":crate::self_tests::boundaries::support::sha('1')},
+                {"digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},
                 {"path":"validator.json"},
                 {"path":"agents/contract-claim-falsifier.md","digest":crate::digest::file(&root.join("agents/contract-claim-falsifier.md")).unwrap()},
                 {"path":"custom-agents/harness-contract-claim-falsifier.toml","digest":crate::digest::file(&root.join("custom-agents/harness-contract-claim-falsifier.toml")).unwrap()},
                 {"path":"docs/hypercritical-review-law.md","digest":crate::digest::file(&root.join("docs/hypercritical-review-law.md")).unwrap()}
             ],
-            "required_next_repairs":[{"evidence":{"path":"missing-repair","digest":crate::self_tests::boundaries::support::sha('d')}}]
+            "required_next_repairs":[{"evidence":{"path":"missing-repair","digest":crate::self_tests::boundaries::workspace_fixtures::sha('d')}}]
         }),
         "contract_claim_falsifier",
         &mut out,

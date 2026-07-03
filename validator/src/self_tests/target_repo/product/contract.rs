@@ -16,8 +16,8 @@ fn copy_dir(from: &Path, to: &Path) {
 }
 
 fn copied_product(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let target = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     copy_dir(
         &root.join("fixtures/target-repo/valid-product-cohesion"),
         &target,
@@ -101,7 +101,7 @@ fn target_product_cohesion_exception_artifacts_fail_and_pass_on_same_surface() {
     let mut journey = read_journey(&missing);
     journey["human_attention_policy"]["expected_interruption_rate"] = json!("frequent");
     journey["human_attention_policy"]["human_review_queue_exception"] = json!({
-        "evidence":{"path":"validation_artifacts/product-cohesion/missing-exception.json","digest":crate::self_tests::boundaries::support::sha('a')}
+        "evidence":{"path":"validation_artifacts/product-cohesion/missing-exception.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')}
     });
     write_journey(&missing, &journey);
     let missing_row = audit(&missing, true);

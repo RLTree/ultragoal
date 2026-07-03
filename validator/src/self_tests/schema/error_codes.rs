@@ -79,7 +79,7 @@ fn schema_error_codes_cover_authority_specific_failure_classes() {
 
 #[test]
 fn schema_dispatch_reaches_product_cohesion_rules() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let errors = crate::schema_catalog::schema_errors(
         &store,

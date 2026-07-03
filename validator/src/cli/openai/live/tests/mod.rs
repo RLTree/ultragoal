@@ -1,6 +1,6 @@
 use super::*;
 use crate::cli::openai::call;
-use crate::self_tests::boundaries::support::sha;
+use crate::self_tests::boundaries::workspace_fixtures::sha;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 

@@ -29,8 +29,8 @@ pub(super) fn write_package(root: &Path, content: &str, version: &str) {
 
 #[test]
 fn package_surface_audit_passes_only_for_same_candidate_target() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-source");
-    let target = crate::self_tests::boundaries::support::temp_root("surface-target");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-source");
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-target");
     write_package(&root, "same", "0.0.test");
     write_package(&target, "same", "0.0.test");
     let command = ControlCommand {
@@ -94,8 +94,9 @@ fn package_surface_audit_passes_only_for_same_candidate_target() {
 
 #[test]
 fn package_cache_surface_audit_passes_only_for_same_candidate_target() {
-    let root = crate::self_tests::boundaries::support::temp_root("cache-surface-source");
-    let target = crate::self_tests::boundaries::support::temp_root("cache-surface-target");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("cache-surface-source");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cache-surface-target");
     write_package(&root, "same", "0.0.test");
     write_package(&target, "same", "0.0.test");
     let command = ControlCommand {
@@ -143,7 +144,7 @@ fn package_cache_surface_audit_passes_only_for_same_candidate_target() {
 
 #[test]
 fn package_surface_run_requires_receipt_and_reports_missing_target() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-run-print");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-run-print");
     let missing = root.join("missing-target");
     write_package(&root, "same", "0.0.test");
     let without_receipt = run(
@@ -174,8 +175,9 @@ fn package_surface_run_requires_receipt_and_reports_missing_target() {
 
 #[test]
 fn package_surface_run_reports_receipt_source_and_write_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-run-errors");
-    let target = crate::self_tests::boundaries::support::temp_root("surface-write-target");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-run-errors");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-write-target");
     write_package(&root, "same", "0.0.test");
     write_package(&target, "same", "0.0.test");
     let receipt_dir = root.join("validation_artifacts/cli/install-audit-receipt.json");
@@ -191,7 +193,8 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
     .expect_err("directory receipt path must fail");
     assert!(!write_error.is_empty());
 
-    let missing_root = crate::self_tests::boundaries::support::temp_root("surface-missing-source");
+    let missing_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-missing-source");
     let source_error = run(
         &missing_root,
         &ControlCommand {
@@ -209,7 +212,7 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
 
 #[test]
 fn package_surface_receipt_uses_default_root_when_surface_root_is_omitted() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-default-root");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-default-root");
     write_package(&root, "same", "0.0.test");
     let value = surface::receipt(
         &root,

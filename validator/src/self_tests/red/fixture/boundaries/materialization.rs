@@ -3,7 +3,8 @@ use std::collections::BTreeMap;
 
 #[test]
 fn red_fixture_materialization_and_mandatory_law_observations_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-fixture-materialization");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-materialization");
     std::fs::create_dir_all(root.join("templates")).expect("templates");
     std::fs::create_dir_all(root.join("fixtures/red")).expect("red fixtures");
 
@@ -46,7 +47,9 @@ fn red_fixture_materialization_and_mandatory_law_observations_fail_closed() {
             }
         }]),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let results = crate::red::fixtures::red_fixture_results(&root, &store, &BTreeMap::new());
     assert_eq!(
         results["filesystem-kind"]["observed_error"],

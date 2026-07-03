@@ -1,8 +1,8 @@
 use serde_json::Value;
 use std::path::Path;
 
-#[path = "validation_support.rs"]
-mod support;
+#[path = "receipt_fields.rs"]
+mod receipt_fields;
 
 const REQUIRED_BLOCKED: &[&str] = &[
     "completion",
@@ -15,7 +15,7 @@ const REQUIRED_BLOCKED: &[&str] = &[
 ];
 
 pub(super) fn failures(root: &Path, receipt: &Path, candidate: &str) -> Vec<String> {
-    let path = support::resolve_receipt(root, receipt);
+    let path = receipt_fields::resolve_receipt(root, receipt);
     let receipt = match crate::json_boundary::read_json(&path) {
         Ok(value) => value,
         Err(err) => return vec![format!("coverage_receipt_missing_or_malformed:{err}")],
@@ -31,27 +31,27 @@ pub(super) fn failures(root: &Path, receipt: &Path, candidate: &str) -> Vec<Stri
 fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<String>) {
     for (bad, code) in [
         (
-            support::string(receipt, "schema") != "harness-ultragoal.coverage-receipt.v1",
+            receipt_fields::string(receipt, "schema") != "harness-ultragoal.coverage-receipt.v1",
             "coverage_receipt_malformed",
         ),
         (
-            support::string(receipt, "command").is_empty(),
+            receipt_fields::string(receipt, "command").is_empty(),
             "coverage_command_missing",
         ),
         (
-            support::string(receipt, "tool").is_empty(),
+            receipt_fields::string(receipt, "tool").is_empty(),
             "coverage_tool_missing",
         ),
         (
-            support::string(receipt, "tool_version").is_empty(),
+            receipt_fields::string(receipt, "tool_version").is_empty(),
             "coverage_receipt_tool_version_missing",
         ),
         (
-            support::string(receipt, "generated_by") != "coverage-command",
+            receipt_fields::string(receipt, "generated_by") != "coverage-command",
             "coverage_receipt_not_tool_generated",
         ),
         (
-            support::string(receipt, "percent_source") != "machine_readable_report",
+            receipt_fields::string(receipt, "percent_source") != "machine_readable_report",
             "coverage_percent_from_prose",
         ),
         (
@@ -63,7 +63,7 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
             out.push(code.to_string());
         }
     }
-    let workspace = support::string(receipt, "workspace_root");
+    let workspace = receipt_fields::string(receipt, "workspace_root");
     let root_string = root
         .canonicalize()
         .unwrap_or_else(|_| root.to_path_buf())
@@ -73,26 +73,26 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
         out.push("coverage_receipt_workspace_mismatch".to_string());
     }
     let target = receipt.get("target_revision").unwrap_or(&Value::Null);
-    if support::string(target, "kind") != "package_digest" {
+    if receipt_fields::string(target, "kind") != "package_digest" {
         out.push("coverage_receipt_target_kind_mismatch".to_string());
     }
-    if support::string(target, "value") != candidate {
+    if receipt_fields::string(target, "value") != candidate {
         out.push(format!(
             "coverage_receipt_target_digest_mismatch:expected={candidate} actual={}",
-            support::string(target, "value")
+            receipt_fields::string(target, "value")
         ));
     }
-    if support::array_strings(receipt, "target_paths").is_empty() {
+    if receipt_fields::array_strings(receipt, "target_paths").is_empty() {
         out.push("coverage_claim_missing_target_paths".to_string());
     }
-    if support::array_strings(receipt, "measured_dimensions").is_empty() {
+    if receipt_fields::array_strings(receipt, "measured_dimensions").is_empty() {
         out.push("coverage_claim_missing_dimensions".to_string());
     }
 }
 
 fn digest_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
-    let manifest_path = support::coverage_manifest_path(root);
-    let command_path = support::coverage_command_path(root);
+    let manifest_path = receipt_fields::coverage_manifest_path(root);
+    let command_path = receipt_fields::coverage_command_path(root);
     let manifest = match crate::json_boundary::read_json(&manifest_path) {
         Ok(value) => value,
         Err(err) => {
@@ -102,31 +102,31 @@ fn digest_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
     };
     compare_file_digest(
         &manifest_path,
-        support::string(receipt, "coverage_manifest_digest"),
+        receipt_fields::string(receipt, "coverage_manifest_digest"),
         "coverage_receipt_manifest_digest_mismatch",
         out,
     );
     compare_file_digest(
         &command_path,
-        support::string(receipt, "coverage_command_digest"),
+        receipt_fields::string(receipt, "coverage_command_digest"),
         "coverage_receipt_command_digest_mismatch",
         out,
     );
     compare_result(
         crate::claim_semantics::coverage::digests::source_tree_digest(root, &manifest),
-        support::string(receipt, "source_tree_digest"),
+        receipt_fields::string(receipt, "source_tree_digest"),
         "coverage_receipt_source_digest_mismatch",
         out,
     );
     compare_result(
         crate::claim_semantics::coverage::digests::changed_files_digest(root, &manifest),
-        support::string(receipt, "changed_files_digest"),
+        receipt_fields::string(receipt, "changed_files_digest"),
         "coverage_receipt_changed_files_digest_mismatch",
         out,
     );
-    let manifest_targets = support::array_strings(&manifest, "required_target_paths");
-    if support::sorted(support::array_strings(receipt, "target_paths"))
-        != support::sorted(manifest_targets)
+    let manifest_targets = receipt_fields::array_strings(&manifest, "required_target_paths");
+    if receipt_fields::sorted(receipt_fields::array_strings(receipt, "target_paths"))
+        != receipt_fields::sorted(manifest_targets)
     {
         out.push("coverage_manifest_target_gap".to_string());
     }
@@ -135,10 +135,12 @@ fn digest_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
-        .flat_map(|row| support::array_strings(row, "dimensions"))
+        .flat_map(|row| receipt_fields::array_strings(row, "dimensions"))
         .collect::<Vec<_>>();
-    if support::sorted(support::array_strings(receipt, "measured_dimensions"))
-        != support::sorted(manifest_dims)
+    if receipt_fields::sorted(receipt_fields::array_strings(
+        receipt,
+        "measured_dimensions",
+    )) != receipt_fields::sorted(manifest_dims)
     {
         out.push("coverage_required_dimension_missing".to_string());
     }
@@ -148,7 +150,7 @@ fn report_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
     let report = receipt
         .get("machine_readable_report")
         .unwrap_or(&Value::Null);
-    let report_path = support::string(report, "path");
+    let report_path = receipt_fields::string(report, "path");
     if report_path.is_empty() {
         out.push("coverage_report_missing".to_string());
         return;
@@ -165,7 +167,7 @@ fn report_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
     }
     compare_file_digest(
         &resolved,
-        support::string(report, "digest"),
+        receipt_fields::string(report, "digest"),
         "coverage_report_digest_mismatch",
         out,
     );
@@ -187,14 +189,14 @@ fn completion_failures(receipt: &Value, out: &mut Vec<String>) {
         out.push("coverage_claim_uncovered_code".to_string());
         out.push(uncovered_summary(&uncovered));
     }
-    if support::string(receipt, "claim_ceiling") != "supports_complete_coverage_claim" {
+    if receipt_fields::string(receipt, "claim_ceiling") != "supports_complete_coverage_claim" {
         out.push("coverage_ratchet_presented_as_complete".to_string());
     }
-    if !support::array_contains(receipt, "supported_claim_classes", "complete_coverage") {
+    if !receipt_fields::array_contains(receipt, "supported_claim_classes", "complete_coverage") {
         out.push("coverage_ratchet_presented_as_complete".to_string());
     }
     for claim in REQUIRED_BLOCKED {
-        if !support::array_contains(receipt, "blocked_claim_classes", claim) {
+        if !receipt_fields::array_contains(receipt, "blocked_claim_classes", claim) {
             out.push(format!("coverage_blocked_claim_missing:{claim}"));
         }
     }
@@ -207,8 +209,8 @@ fn uncovered_summary(records: &[Value]) -> String {
         .map(|record| {
             format!(
                 "{} ({})",
-                support::string(record, "path"),
-                support::string(record, "reason")
+                receipt_fields::string(record, "path"),
+                receipt_fields::string(record, "reason")
             )
         })
         .collect::<Vec<_>>()

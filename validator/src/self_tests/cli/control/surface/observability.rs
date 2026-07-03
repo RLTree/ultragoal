@@ -3,8 +3,8 @@ use crate::cli::control::plane::{ControlCommand, run, surface};
 
 #[test]
 fn package_surface_run_writes_typed_cache_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-run-source");
-    let target = crate::self_tests::boundaries::support::temp_root("surface-run-target");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-run-source");
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-run-target");
     super::write_package(&root, "same", "0.0.test");
     super::write_package(&target, "same", "0.0.test");
     let path = root.join("validation_artifacts/cli/cache-audit-receipt.json");
@@ -41,8 +41,10 @@ fn package_surface_run_writes_typed_cache_observability() {
 
 #[test]
 fn package_surface_run_writes_typed_install_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-install-source");
-    let target = crate::self_tests::boundaries::support::temp_root("surface-install-target");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-install-source");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-install-target");
     super::write_package(&root, "same", "0.0.test");
     super::write_package(&target, "same", "0.0.test");
     let path = root.join("validation_artifacts/cli/install-audit-receipt.json");
@@ -75,7 +77,8 @@ fn package_surface_run_writes_typed_install_observability() {
 
 #[test]
 fn package_surface_run_emits_fail_closed_cache_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-cache-fail-source");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-cache-fail-source");
     let missing = root.join("missing-cache-target");
     super::write_package(&root, "same", "0.0.test");
     let path = root.join("validation_artifacts/cli/cache-audit-receipt.json");
@@ -113,7 +116,8 @@ fn package_surface_run_emits_fail_closed_cache_observability() {
 
 #[test]
 fn package_surface_run_emits_fail_closed_install_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-install-fail-source");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-install-fail-source");
     let missing = root.join("missing-install-target");
     super::write_package(&root, "same", "0.0.test");
     let path = root.join("validation_artifacts/cli/install-audit-receipt.json");

@@ -8,7 +8,7 @@ fn write_json(path: &std::path::Path, value: &serde_json::Value) {
 }
 
 fn minimal_root(name: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(name);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(name);
     for dir in [
         "examples/generated",
         "fixtures/valid",

@@ -22,7 +22,7 @@ fn errors(out: &[ReviewFailure]) -> Vec<&str> {
 
 #[test]
 fn schema_catalog_reports_catalog_rows_refs_and_missing_schema() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-catalog");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog");
     let missing = crate::schema_catalog::load(&root);
     assert!(
         missing
@@ -80,7 +80,7 @@ fn schema_catalog_reports_catalog_rows_refs_and_missing_schema() {
 
 #[test]
 fn namespace_law_reports_paths_exceptions_bindings_and_orphans() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-law");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-law");
     write_text(&root.join("orphan.txt"), "orphan");
     let manifest = json!({
         "resources": [
@@ -153,7 +153,8 @@ fn namespace_law_reports_paths_exceptions_bindings_and_orphans() {
 
 #[test]
 fn namespace_law_reports_large_orphan_sets_as_counted_samples() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-law-many-orphans");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-law-many-orphans");
     for index in 0..21 {
         write_text(&root.join(format!("docs/orphan-{index}.txt")), "orphan");
     }
@@ -167,7 +168,7 @@ fn namespace_law_reports_large_orphan_sets_as_counted_samples() {
 
 #[test]
 fn review_target_and_registry_exposure_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-registry");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("review-registry");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["docs/a.txt","validation_artifacts/harness/excluded.json"]}),

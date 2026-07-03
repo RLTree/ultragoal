@@ -22,7 +22,7 @@ fn contains(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn template_integrity_reads_files_and_rejects_stateful_placeholders() {
-    let root = crate::self_tests::boundaries::support::temp_root("template-integrity");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("template-integrity");
     let missing = crate::audit::template_integrity::package_failures(&root);
     assert!(contains(&missing, "template_missing:templates/PLANS.md"));
 
@@ -66,7 +66,7 @@ fn template_integrity_reads_files_and_rejects_stateful_placeholders() {
 
 #[test]
 fn package_run_records_nonpassing_red_fixture_results() {
-    let root = crate::self_tests::boundaries::support::temp_root("package-run-red-fail");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("package-run-red-fail");
     for dir in [
         "fixtures/valid",
         "schemas",
@@ -129,10 +129,10 @@ fn package_run_records_nonpassing_red_fixture_results() {
 
 #[test]
 fn semantic_claim_ids_and_text_surface_fallbacks_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-text-extra");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-text-extra");
     std::fs::create_dir_all(&root).expect("root");
     let mut bundle = crate::json_boundary::read_json(
-        &crate::self_tests::boundaries::support::repo_root()
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root()
             .join("fixtures/valid/minimal-goal-run.json"),
     )
     .expect("minimal fixture");
@@ -157,8 +157,10 @@ fn semantic_claim_ids_and_text_surface_fallbacks_fail_closed() {
 
 #[test]
 fn standards_trace_and_audit_receipt_edges_cover_current_artifacts() {
-    let root = crate::self_tests::boundaries::support::temp_root("trace-audit-edges");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("trace-audit-edges");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     write_json(
         &root.join("templates/agent-standards/enforcement.json"),
         &json!({"rows":[{"id":"law1"}]}),

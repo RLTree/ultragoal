@@ -3,7 +3,8 @@ use serde_json::json;
 
 #[test]
 fn namespace_topology_inspects_validator_source_even_when_unlisted() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-source-topology");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-source-topology");
     write_text(
         &root.join("validator/src/internal_claim_tests.rs"),
         "#[test]\nfn hidden() {}\n",
@@ -24,7 +25,8 @@ fn namespace_topology_inspects_validator_source_even_when_unlisted() {
 
 #[test]
 fn namespace_topology_rejects_history_names_after_directory_move() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-history-name");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-history-name");
     write_text(
         &root.join("validator/src/self_tests/coverage/coverage_wave99_tests.rs"),
         "#[test]\nfn still_history() {}\n",
@@ -39,7 +41,9 @@ fn namespace_topology_rejects_history_names_after_directory_move() {
 
 #[test]
 fn namespace_topology_rejects_partially_factored_module_roots() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-partial-module-root");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "namespace-partial-module-root",
+    );
     write_text(
         &root.join("validator/src/claim_semantics.rs"),
         "pub(crate) mod product;\n",
@@ -61,7 +65,8 @@ fn namespace_topology_rejects_partially_factored_module_roots() {
 
 #[test]
 fn namespace_topology_accepts_semantic_validator_self_test_routes() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-semantic-green");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-semantic-green");
     write_text(
         &root.join("validator/src/self_tests/claim/evidence/boundaries.rs"),
         "#[test]\nfn semantic() {}\n",
@@ -88,7 +93,8 @@ fn namespace_topology_accepts_semantic_validator_self_test_routes() {
 
 #[test]
 fn namespace_legacy_exception_surface_is_hard_failure() {
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-legacy-waiver");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-legacy-waiver");
     write_json(
         &root.join("docs/namespace-law-exceptions.json"),
         &json!({"schema":"harness-ultragoal.namespace-law-exceptions.v1","exceptions":[]}),

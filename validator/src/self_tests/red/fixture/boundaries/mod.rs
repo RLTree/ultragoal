@@ -13,7 +13,8 @@ fn write_json(path: &std::path::Path, value: &Value) {
 
 #[test]
 fn red_fixture_observation_and_rows_fail_closed_on_no_failure_and_mismatch() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-fixture-boundaries");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-boundaries");
     let observation = crate::red::fixture::package::observation(
         &root,
         &json!({"check_id":"source-card-freshness","error":"missing-error"}),
@@ -56,7 +57,7 @@ fn red_fixture_no_failure_diagnostics_are_explicit() {
 
 #[test]
 fn red_fixture_package_observation_routes_all_package_surfaces() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let expected = json!({"check_id":"route-probe","error":"route-probe-error"});
     let bad = json!({});
     let package_paths = [
@@ -98,7 +99,7 @@ fn red_fixture_package_observation_routes_all_package_surfaces() {
 
 #[test]
 fn red_fixture_observation_routes_review_round_and_schema_layers() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
 
     let review_observation = crate::red::fixture::observation::observe_materialized(
@@ -165,7 +166,7 @@ fn red_fixture_observation_routes_review_round_and_schema_layers() {
                 "evidence":[{
                     "kind":"test_pass",
                     "surface":"ci",
-                    "digest":crate::self_tests::boundaries::support::sha('a')
+                    "digest":crate::self_tests::boundaries::workspace_fixtures::sha('a')
                 }]
             }]
         }),

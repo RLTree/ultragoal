@@ -14,8 +14,9 @@ fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
 
 #[test]
 fn source_obligation_toml_and_symlink_edges() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("source_obligation_fallthrough-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "source_obligation_fallthrough-edges",
+    );
 
     let obligation_failures = crate::audit::source_obligations::value_failures(&json!({
         "obligations": [{
@@ -68,7 +69,7 @@ developer_instructions = "not enough"
         "{plugin:?}"
     );
 
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let mut matrix =
         crate::json_boundary::read_json(&repo.join("docs/source-obligation-matrix.json"))
             .expect("source obligation matrix");

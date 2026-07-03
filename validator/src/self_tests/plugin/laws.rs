@@ -9,13 +9,16 @@ fn write_json(path: &Path, value: &Value) {
 }
 
 fn failures_for(root: &Path) -> Vec<String> {
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     crate::audit::plugin::laws::package_failures(root, &store)
 }
 
 #[test]
 fn plugin_self_laws_report_missing_versions_and_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-self-law-missing");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-self-law-missing");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":""}),
@@ -40,7 +43,8 @@ fn plugin_self_laws_report_missing_versions_and_receipts() {
 
 #[test]
 fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-self-law-registry");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-self-law-registry");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"1.0.0"}),
@@ -65,7 +69,7 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
                 "update_goal_eligibility",
                 "app_registry_or_reviewer_exposure"
             ],
-            "target_revision": {"value": crate::self_tests::boundaries::support::sha('a')}
+            "target_revision": {"value": crate::self_tests::boundaries::workspace_fixtures::sha('a')}
         }),
     );
     write_json(
@@ -78,7 +82,7 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
             "source": "multi_agent_v1.tool_registry",
             "target_revision": {
                 "kind": "package_digest",
-                "value": crate::self_tests::boundaries::support::sha('b')
+                "value": crate::self_tests::boundaries::workspace_fixtures::sha('b')
             },
             "claim_ceiling": "withheld_or_blocked",
             "session_id": "session",
@@ -94,7 +98,9 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
         }),
     );
     let failures = failures_for(&root);
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let registry = crate::json_boundary::read_json(
         &root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
     )
@@ -176,7 +182,8 @@ fn plugin_self_laws_report_registry_mismatch_and_not_current_fields() {
 
 #[test]
 fn plugin_self_laws_report_unreadable_source_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-self-law-unreadable");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-self-law-unreadable");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"1.0.0"}),

@@ -7,7 +7,7 @@ fn errors(out: &[Failure]) -> Vec<&str> {
 
 #[test]
 fn plugin_policy_rejects_custom_agent_boundary_and_runtime_drift() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-policy");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-policy");
     std::fs::create_dir_all(root.join("custom-agents")).expect("custom agents");
     std::fs::write(root.join("custom-agents/unreadable.toml"), [0xff]).expect("bad utf8");
     std::fs::write(
@@ -94,7 +94,8 @@ developer_instructions = ""
 
 #[test]
 fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-policy-purpose");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-policy-purpose");
     std::fs::create_dir_all(root.join("skills/bad")).expect("skill dir");
     std::fs::create_dir_all(root.join("references")).expect("root references");
     std::fs::create_dir_all(root.join("artifacts/root-receipts")).expect("artifacts dir");
@@ -130,7 +131,7 @@ fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges(
     for expected in [
         "stale_artifact_resource_packaged",
         "root_verification_receipt_resource_packaged",
-        "fixture_support_resource_packaged_as_active_artifact",
+        "fixture_only_resource_packaged_as_active_artifact",
         "skill_local_reference_missing",
         "plugin_agent_path_missing",
     ] {

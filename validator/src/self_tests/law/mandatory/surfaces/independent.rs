@@ -1,4 +1,4 @@
-use super::support::{
+use super::surface_fixtures::{
     expect_failure, production_law, validator_theater_law, with_independent_verification,
     write_json, write_manual_verification, write_specific_red_fixture,
 };
@@ -6,7 +6,8 @@ use serde_json::{Value, json};
 
 #[test]
 fn independent_verification_rejects_missing_and_unsafe_receipt_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-independent-paths");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-independent-paths");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -44,7 +45,8 @@ fn independent_verification_rejects_missing_and_unsafe_receipt_paths() {
 
 #[test]
 fn independent_verification_rejects_shape_substitutes() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-independent-shape");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-independent-shape");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -89,7 +91,9 @@ fn independent_verification_rejects_shape_substitutes() {
 
 #[test]
 fn independent_verification_rejects_safe_but_missing_receipt_file() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-independent-missing");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "mandatory-independent-missing",
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -105,7 +109,9 @@ fn independent_verification_rejects_safe_but_missing_receipt_file() {
 
 #[test]
 fn independent_verification_rejects_pass_shaped_manual_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-independent-receipt");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "mandatory-independent-receipt",
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -117,7 +123,7 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
         json!({
             "schema": "wrong",
             "status": "stale",
-            "candidate_digest": crate::self_tests::boundaries::support::sha('9'),
+            "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('9'),
             "law_ids": ["schema-valid"],
             "cli_pass_alone_rejected": false,
             "source_paths": [],
@@ -195,7 +201,9 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
 
 #[test]
 fn independent_verification_is_targeted_not_universal() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-independent-targeted");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "mandatory-independent-targeted",
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),

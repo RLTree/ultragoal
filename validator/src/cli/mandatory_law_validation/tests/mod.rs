@@ -29,7 +29,8 @@ fn mandatory_law_validation_parse_supports_default_targeted_and_alias() {
 
 #[test]
 fn mandatory_law_validation_command_writes_pass_and_fail_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-command");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-command");
     create_law_package(&root);
     let command = MandatoryLawValidationCommand {
         law: Some("schema-valid".to_string()),
@@ -65,7 +66,7 @@ fn mandatory_law_validation_command_writes_pass_and_fail_observability() {
 
 #[test]
 fn default_mandatory_law_validation_uses_parallel_scheduler() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let scheduler = SchedulerConfig::from_jobs(Some(4)).expect("scheduler");
     let result = validate(&root, None, scheduler);
     let metrics = result.scheduler_metrics.first().expect("metrics");

@@ -10,7 +10,8 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn schema_keywords_reject_unresolved_refs_recursion_and_type_mismatch() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-keyword-branches");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-keyword-branches");
     write_json(
         &root.join("schemas/missing-ref.schema.json"),
         &json!({"$id":"missing-ref.schema.json","$ref":"absent.schema.json"}),
@@ -68,7 +69,8 @@ fn schema_keywords_reject_unresolved_refs_recursion_and_type_mismatch() {
 
 #[test]
 fn schema_keywords_cover_scalar_object_branch_and_contains_boundaries() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-keyword-boundaries");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-keyword-boundaries");
     write_json(
         &root.join("schemas/keywords.schema.json"),
         &json!({

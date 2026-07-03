@@ -21,7 +21,8 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 
 #[test]
 fn command_run_routes_current_state_and_live_loop_variants() {
-    let root = crate::self_tests::boundaries::support::temp_root("command-dispatch-state-loop");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("command-dispatch-state-loop");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["plugin-manifest-draft.json"]}),

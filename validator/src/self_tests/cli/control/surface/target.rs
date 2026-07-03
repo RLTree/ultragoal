@@ -24,7 +24,8 @@ fn write_package(root: &Path) {
 
 #[test]
 fn package_surface_target_defaults_cover_unavailable_targets() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-target-contracts");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-target-contracts");
     write_package(&root);
     let plugin = surface::target::plugin_metadata(&root);
     let install_root =
@@ -45,7 +46,7 @@ fn package_surface_target_defaults_cover_unavailable_targets() {
     let missing_state = surface::target::state(
         Path::new("relative-missing-surface"),
         ControlOperation::RegistryProbe,
-        &crate::self_tests::boundaries::support::sha('d'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('d'),
         &plugin,
     );
     assert_eq!(missing_state["surface"], "unsupported_surface");
@@ -56,7 +57,7 @@ fn package_surface_target_defaults_cover_unavailable_targets() {
     let cache_state = surface::target::state(
         Path::new("relative-missing-surface"),
         ControlOperation::CacheAudit,
-        &crate::self_tests::boundaries::support::sha('d'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('d'),
         &surface::target::PluginMetadata {
             name: "harness-ultragoal".to_string(),
             version: "0..test".to_string(),
@@ -69,7 +70,7 @@ fn package_surface_target_defaults_cover_unavailable_targets() {
 
     let failures = surface::value_failures_for_target(
         ControlOperation::InstallAudit,
-        &crate::self_tests::boundaries::support::sha('e'),
+        &crate::self_tests::boundaries::workspace_fixtures::sha('e'),
         &missing_state,
     );
     for expected in [

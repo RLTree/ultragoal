@@ -17,7 +17,7 @@ fn gardener_receipt(action: &str) -> Value {
         "schema":"harness-ultragoal.standards-gardening-receipt.v1",
         "status":"pass",
         "generated_at":"2026-06-26T00:00:00Z",
-        "candidate_digest":crate::self_tests::boundaries::support::sha('c'),
+        "candidate_digest":crate::self_tests::boundaries::workspace_fixtures::sha('c'),
         "trigger_signal":{
             "signal_id":"sig",
             "severity":"moderate",
@@ -26,7 +26,7 @@ fn gardener_receipt(action: &str) -> Value {
             "source":"session-log"
         },
         "decision":{"accepted":true,"action":action,"rationale":"Promote to deterministic guard"},
-        "changed_artifacts":[{"path":"docs/law.json","digest":crate::self_tests::boundaries::support::sha('1')}],
+        "changed_artifacts":[{"path":"docs/law.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}],
         "safeguards":{"deterministic_first":true,"no_hook_by_default":true},
         "claim_ceiling":"package_static_fixture_only"
     })
@@ -34,8 +34,10 @@ fn gardener_receipt(action: &str) -> Value {
 
 #[test]
 fn source_obligation_and_standards_gardener_edges_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("obligation-gardener");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("obligation-gardener");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     assert_eq!(
         crate::audit::source_obligations::value_failures(&json!({})),
         vec!["source_obligation_matrix_missing_rows"]
@@ -93,8 +95,11 @@ fn source_obligation_and_standards_gardener_edges_fail_closed() {
 
 #[test]
 fn standards_gardener_receipts_cover_semantic_and_root_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("standards-gardener-edges");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("standards-gardener-edges");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let mut low = gardener_receipt("validator_check");
     low["trigger_signal"]["severity"] = json!("low");
     assert_eq!(
@@ -127,7 +132,7 @@ fn standards_gardener_receipts_cover_semantic_and_root_edges() {
         "standards_gardener_changed_artifact_after_receipt"
     ));
     receipt["changed_artifacts"][0]["digest"] =
-        json!(crate::self_tests::boundaries::support::sha('0'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('0'));
     let root_failures = crate::audit::standards_gardening::receipt_root_failures(&root, &receipt);
     assert!(has(
         &root_failures,
@@ -206,7 +211,8 @@ fn source_obligation_rows_reject_weak_dispositions_and_missing_law_tokens() {
         "{failures:?}"
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("source-obligation-root");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("source-obligation-root");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     write_json(&root.join("docs/source-obligation-matrix.json"), &matrix);
     let root_failures = crate::audit::source_obligations::failures(&root);

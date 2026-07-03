@@ -105,6 +105,9 @@ fn source_name_violation_label(tokens: &[String], compact: &str) -> Option<&'sta
 pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'static str> {
     let lower = identifier.to_ascii_lowercase();
     let tokens = semantic_tokens(identifier);
+    if lower == "support" || tokens.iter().any(|token| token == "support") {
+        return Some("support");
+    }
     if matches!(lower.as_str(), "helper" | "helpers")
         || tokens
             .iter()
@@ -187,6 +190,9 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
 
 pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
     let tokens = semantic_tokens(stem);
+    if tokens.iter().any(|token| token == "support") {
+        return Some("support");
+    }
     if tokens
         .iter()
         .any(|token| matches!(token.as_str(), "helper" | "helpers"))

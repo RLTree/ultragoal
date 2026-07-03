@@ -1,7 +1,8 @@
 use serde_json::json;
 
 fn root() -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-observability");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-observability");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),

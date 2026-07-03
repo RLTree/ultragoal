@@ -1,7 +1,7 @@
 use serde_json::json;
 
 fn root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("validation_artifacts/improvement-loop"))
         .expect("improvement loop dir");
     crate::json_boundary::write_json(

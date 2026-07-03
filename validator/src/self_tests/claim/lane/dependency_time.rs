@@ -51,7 +51,7 @@ fn fixture(root: &Path) -> (Value, Value, Value, Value, Value, Value) {
         "evidence_digest": ready_digest,
         "upstream_ready_receipt": {"path": "ready.json", "digest": ready_digest}
     });
-    let post_digest = crate::self_tests::boundaries::support::sha('9');
+    let post_digest = crate::self_tests::boundaries::workspace_fixtures::sha('9');
     let root_verification_states = json!({"post_merge_integration_gate": {
         "status": "pass",
         "validated_at": "2026-06-25T00:30:00Z",
@@ -106,7 +106,8 @@ fn run_case(
 
 #[test]
 fn lane_dependency_time_and_release_edges_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("lane-dependency-time-edges");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("lane-dependency-time-edges");
     let (lane, dep, upstream, ready, root_verification_states, bundle) = fixture(&root);
     assert!(
         run_case(
@@ -191,7 +192,7 @@ fn lane_dependency_time_and_release_edges_fail_closed() {
 
     let mut bad_release = lane.clone();
     bad_release["dependency_release"]["post_merge_receipt"]["digest"] =
-        json!(crate::self_tests::boundaries::support::sha('8'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('8'));
     assert!(
         run_case(
             &bad_release,

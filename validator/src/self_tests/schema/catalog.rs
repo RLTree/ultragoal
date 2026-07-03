@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 
 #[test]
 fn catalog_refs_report_duplicates_missing_extra_and_offline_ref_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-catalog-refs");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-refs");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas dir");
     std::fs::write(root.join("schemas/present.schema.json"), "{}").expect("schema");
     std::fs::write(
@@ -57,7 +57,7 @@ fn catalog_refs_report_duplicates_missing_extra_and_offline_ref_failures() {
 
 #[test]
 fn catalog_refs_accept_empty_schema_surface_when_manifest_unreadable() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-catalog-empty");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-empty");
     std::fs::create_dir_all(&root).expect("root");
     let errors = crate::schema_catalog::catalog_refs::catalog_completeness_errors(&root, &[]);
     assert!(errors.is_empty(), "{errors:?}");

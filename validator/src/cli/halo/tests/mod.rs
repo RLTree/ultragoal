@@ -1,13 +1,13 @@
 use super::{HaloCommand, proof};
+use command_fixtures::*;
 use serde_json::json;
 use std::path::{Path, PathBuf};
-use support::*;
 
-mod support;
+mod command_fixtures;
 
 #[test]
 fn halo_desktop_capability_is_manual_only() {
-    let root = crate::self_tests::boundaries::support::temp_root("halo-capability");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-capability");
     seed_root(&root);
     let app = fake_app(&root, "0.1.17");
     let command = HaloCommand {
@@ -23,7 +23,7 @@ fn halo_desktop_capability_is_manual_only() {
 
 #[test]
 fn halo_capability_rejects_overbroad_authority() {
-    let root = crate::self_tests::boundaries::support::temp_root("halo-overbroad");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-overbroad");
     seed_root(&root);
     let command = HaloCommand {
         receipt: PathBuf::from(super::DEFAULT_RECEIPT),
@@ -40,7 +40,7 @@ fn halo_capability_rejects_overbroad_authority() {
 
 #[test]
 fn halo_run_parse_detection_and_registry_edges_are_typed() {
-    let root = crate::self_tests::boundaries::support::temp_root("halo-run");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-run");
     seed_root(&root);
     let app = fake_app(&root, "0.1.18");
     let receipt_path = root.join("validation_artifacts/halo/run-receipt.json");
@@ -203,7 +203,7 @@ fn halo_defaults_and_run_error_boundaries_are_typed() {
     let _ = std::fs::remove_dir_all(&missing_root);
     assert!(super::run(&missing_root, &default).is_err());
 
-    let root = crate::self_tests::boundaries::support::temp_root("halo-write-error");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-write-error");
     seed_root(&root);
     std::fs::create_dir_all(root.join("validation_artifacts")).expect("artifacts");
     std::fs::write(root.join("validation_artifacts/halo"), "not a directory").expect("blocker");

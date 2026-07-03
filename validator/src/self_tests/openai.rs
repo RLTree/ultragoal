@@ -2,7 +2,7 @@ use serde_json::json;
 use std::path::Path;
 
 pub(crate) fn prepare_root(label: &str, manifest_resources: &[&str]) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join(".codex-worktree")).expect("worktree env dir");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join(".gitignore"), ".codex-worktree/\n").expect("gitignore");

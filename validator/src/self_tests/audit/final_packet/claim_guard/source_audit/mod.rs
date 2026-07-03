@@ -1,4 +1,4 @@
-use super::super::support;
+use super::super::receipt_fixtures;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -7,18 +7,22 @@ mod registry;
 
 #[test]
 fn final_packet_claim_guard_dereferences_failed_registry_and_source_audit() {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-claim-guard-refs");
-    support::write_json(
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "final-packet-claim-guard-refs",
+    );
+    receipt_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
-    let receipt = support::write_fail_closed_proof(&root, &current);
+    let receipt = receipt_fixtures::write_fail_closed_proof(&root, &current);
 
     registry::assert_bad_registry(&root, &store, &receipt, &current);
 
-    let receipt = support::write_fail_closed_proof(&root, &current);
+    let receipt = receipt_fixtures::write_fail_closed_proof(&root, &current);
     let failed_source = assert_fail_closed_source_audit_ref(&root, &store, &receipt, &current);
     assert_source_audit_pass_self_write_is_not_circular_failure(&root, &store, &receipt, &current);
     assert_source_audit_self_rewrite_is_not_circular_failure(
@@ -62,7 +66,7 @@ fn assert_fail_closed_source_audit_ref(
             "blocked_claim_classes":cases::blocked_claims()
         }),
     );
-    support::write_proof(root, &failed_source);
+    receipt_fixtures::write_proof(root, &failed_source);
     let source_failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(source_failures.is_empty(), "{source_failures:?}");
     failed_source
@@ -74,7 +78,7 @@ fn assert_source_audit_pass_self_write_is_not_circular_failure(
     proof: &Value,
     current: &str,
 ) {
-    support::write_json(
+    receipt_fixtures::write_json(
         &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
         &json!({
             "status":"pass",
@@ -85,7 +89,7 @@ fn assert_source_audit_pass_self_write_is_not_circular_failure(
             "blocked_claim_classes":cases::blocked_claims()
         }),
     );
-    support::write_proof(root, proof);
+    receipt_fixtures::write_proof(root, proof);
     let failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(failures.is_empty(), "{failures:?}");
 }
@@ -96,7 +100,7 @@ fn assert_source_audit_self_rewrite_is_not_circular_failure(
     proof: &Value,
     current: &str,
 ) {
-    support::write_json(
+    receipt_fixtures::write_json(
         &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
         &json!({
             "status":"fail",
@@ -110,7 +114,7 @@ fn assert_source_audit_self_rewrite_is_not_circular_failure(
     let mut proof = proof.clone();
     proof["source_audit"]["self_rewriting_authority"] =
         json!("source_audit_command_writes_validator_receipt");
-    support::write_proof(root, &proof);
+    receipt_fixtures::write_proof(root, &proof);
     let failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(failures.is_empty(), "{failures:?}");
 }
@@ -199,7 +203,7 @@ pub(super) fn mutate(value: &Value, edit: impl FnOnce(&mut Value)) -> Value {
 }
 
 pub(super) fn rewrite_ref(root: &Path, proof: &mut Value, key: &str, path: &str, value: &Value) {
-    support::write_json(&root.join(path), value);
+    receipt_fixtures::write_json(&root.join(path), value);
     proof[key]["path"] = json!(path);
     proof[key]["digest"] = json!(crate::digest::file(&root.join(path)).expect("ref digest"));
     proof[key]["status"] = value["status"].clone();
@@ -211,7 +215,7 @@ pub(super) fn assert_guard_failure(
     value: Value,
     expected: &str,
 ) {
-    support::write_proof(root, &value);
+    receipt_fixtures::write_proof(root, &value);
     let failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(
         failures.iter().any(|failure| failure.contains(expected)),

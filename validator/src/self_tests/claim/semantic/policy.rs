@@ -6,7 +6,7 @@ fn semantic_receipt(claim_id: &str, title: &str, description: &str) -> Value {
     let mut receipt = json!({
         "schema": "wrong.schema",
         "claim_id": format!("{claim_id}-other"),
-        "canonical_text_digest": crate::self_tests::boundaries::support::sha('9'),
+        "canonical_text_digest": crate::self_tests::boundaries::workspace_fixtures::sha('9'),
         "classifier_contract_id": "wrong-contract",
         "classifier_contract_version": "v0",
         "classifier_implementation_kind": "deterministic_backstop",
@@ -24,7 +24,7 @@ fn semantic_receipt(claim_id: &str, title: &str, description: &str) -> Value {
     });
     receipt["classifier_evidence"] = json!({
         "evidence_type": "unexpected_external_output",
-        "digest": crate::self_tests::boundaries::support::sha('8'),
+        "digest": crate::self_tests::boundaries::workspace_fixtures::sha('8'),
         "summary": "deterministic backstops cannot carry external evidence"
     });
     receipt["canonical_text_digest"] = json!(crate::digest::bytes(text.as_bytes()));
@@ -63,7 +63,7 @@ fn valid_runtime_receipt(claim_id: &str, title: &str, description: &str) -> Valu
 
 #[test]
 fn semantic_receipt_policy_rejects_missing_malformed_and_conflicting_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-policy");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-policy");
     std::fs::create_dir_all(&root).expect("semantic root");
     let ready = json!({});
     let title = "Product dashboard release readiness";
@@ -86,7 +86,7 @@ fn semantic_receipt_policy_rejects_missing_malformed_and_conflicting_receipts() 
     );
 
     let mut malformed = base.clone();
-    malformed["semantic_classification_receipts"] = json!([{"path":"../escape.json","digest":crate::self_tests::boundaries::support::sha('1')}]);
+    malformed["semantic_classification_receipts"] = json!([{"path":"../escape.json","digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')}]);
     out.clear();
     crate::claim_semantics::semantic::receipt::policy::check_semantic_receipts(
         &malformed, &ready, &root, &mut out,
@@ -123,7 +123,8 @@ fn semantic_receipt_policy_rejects_missing_malformed_and_conflicting_receipts() 
 
 #[test]
 fn semantic_receipt_policy_accepts_file_backed_current_receipt_and_rejects_tamper() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-policy-valid");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-policy-valid");
     std::fs::create_dir_all(root.join("receipts")).expect("receipts");
     let ready = json!({"ready": true, "claim_ids": ["CLAIM-SEM-VALID"]});
     let title = "Runtime verifier";

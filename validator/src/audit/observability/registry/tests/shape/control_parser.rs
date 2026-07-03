@@ -6,7 +6,7 @@ fn args(command: &str) -> Vec<String> {
 
 #[test]
 fn production_update_goal_inventory_is_bound_to_real_control_parser() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let inventory = crate::json_boundary::read_json(
         &root.join("docs/generated/observability/command-inventory.json"),
     )

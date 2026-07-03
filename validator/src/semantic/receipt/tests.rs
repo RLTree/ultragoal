@@ -127,7 +127,7 @@ fn classifier_maps_visible_product_surfaces_to_required_proof_gates() {
 
 #[test]
 fn generator_handles_absolute_inputs_missing_claims_unknown_kind_and_sanitized_outputs() {
-    let root = crate::self_tests::boundaries::support::temp_root("semantic-generator");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("semantic-generator");
     std::fs::create_dir_all(&root).expect("root");
     let input = root.join("claims.json");
     std::fs::write(&input, "{}").expect("missing claims manifest");

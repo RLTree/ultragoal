@@ -18,10 +18,10 @@ fn ready() -> Value {
 fn ready_integrity_normalizes_dependency_receipt_digests() {
     let lane_with_dependency = json!({
         "id":"lane-1",
-        "ready_receipt":{"digest":crate::self_tests::boundaries::support::sha('1')},
+        "ready_receipt":{"digest":crate::self_tests::boundaries::workspace_fixtures::sha('1')},
         "dependencies":[{
-            "evidence_digest":crate::self_tests::boundaries::support::sha('2'),
-            "upstream_ready_receipt":{"digest":crate::self_tests::boundaries::support::sha('3')}
+            "evidence_digest":crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+            "upstream_ready_receipt":{"digest":crate::self_tests::boundaries::workspace_fixtures::sha('3')}
         }]
     });
     let mut out = Vec::new();

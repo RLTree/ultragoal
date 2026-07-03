@@ -2,7 +2,7 @@ use serde_json::json;
 
 #[test]
 fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
 
     let red_packet_errors =
@@ -88,7 +88,8 @@ fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
 
 #[test]
 fn schema_catalog_loader_reports_invalid_rows_and_catalog_path_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-catalog-loader");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-loader");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas");
     std::fs::write(
         root.join("schemas/schema-catalog.json"),
@@ -109,9 +110,11 @@ fn schema_catalog_loader_reports_invalid_rows_and_catalog_path_errors() {
 
     #[cfg(unix)]
     {
-        let root = crate::self_tests::boundaries::support::temp_root("schema-catalog-symlink");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-symlink");
         std::fs::create_dir_all(&root).expect("root");
-        let outside = crate::self_tests::boundaries::support::temp_root("schema-catalog-outside");
+        let outside =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-catalog-outside");
         std::fs::create_dir_all(&outside).expect("outside");
         std::os::unix::fs::symlink(&outside, root.join("schemas")).expect("schemas symlink");
         let store = crate::schema_catalog::load(&root);

@@ -5,7 +5,8 @@ use std::path::Path;
 
 #[test]
 fn coverage_validation_rejects_scalar_completion_and_missing_receipts() {
-    let missing_root = crate::self_tests::boundaries::support::temp_root("coverage-missing");
+    let missing_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-missing");
     let missing = validation_failures(
         &missing_root,
         Path::new(COVERAGE_RECEIPT_REL),
@@ -210,7 +211,8 @@ fn mutated_failures(mut mutate: impl FnMut(&mut Value)) -> Vec<String> {
 }
 
 fn mutated_root_failures(mut mutate: impl FnMut(&Path, &mut Value)) -> Vec<String> {
-    let root = crate::self_tests::boundaries::support::temp_root("coverage-validation-edge");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-validation-edge");
     super::write_coverage_root(&root, 100.0, json!([]));
     let path = root.join(COVERAGE_RECEIPT_REL);
     let mut receipt = crate::json_boundary::read_json(&path).expect("receipt");

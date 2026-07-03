@@ -80,7 +80,9 @@ fn current_receipt(root: &Path, claim_id: &str) -> Value {
 
 #[test]
 fn product_fitness_accepts_current_typed_receipt_and_rejects_malformed_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("product-fitness-valid-receipt");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product-fitness-valid-receipt",
+    );
     let receipt = current_receipt(&root, "PF-GREEN");
     let receipt_path = root.join("receipts/product-fitness.json");
     write_json(&receipt_path, &receipt);
@@ -100,7 +102,8 @@ fn product_fitness_accepts_current_typed_receipt_and_rejects_malformed_receipts(
     assert!(out.is_empty(), "{out:?}");
 
     claim["evidence"][0]["path"] = json!("receipts/missing.json");
-    claim["evidence"][0]["digest"] = json!(crate::self_tests::boundaries::support::sha('1'));
+    claim["evidence"][0]["digest"] =
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('1'));
     crate::claim_semantics::product::fitness::check(&claim, &root, &mut out);
     assert!(
         out.iter()

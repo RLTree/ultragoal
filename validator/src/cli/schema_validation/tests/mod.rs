@@ -42,7 +42,8 @@ fn schema_validation_parse_supports_default_targeted_and_alias() {
 
 #[test]
 fn schema_validation_command_writes_pass_and_fail_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-validation-command");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-command");
     create_schema_package(&root, json!({"name": "Tree"}));
     let command = SchemaValidationCommand {
         schema: Some("test.schema.json".to_string()),
@@ -76,7 +77,7 @@ fn schema_validation_command_writes_pass_and_fail_observability() {
 
 #[test]
 fn default_schema_validation_uses_mapped_parallel_path() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let scheduler = SchedulerConfig::from_jobs(Some(4)).expect("scheduler");
     let result = mapped(&root, &store, scheduler);

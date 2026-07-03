@@ -10,7 +10,8 @@ fn write_json(path: &Path, value: &serde_json::Value) {
 
 #[test]
 fn standards_gardener_run_writes_fail_observability_without_receipt_ledger_claim() {
-    let root = crate::self_tests::boundaries::support::temp_root("standards-gardener-fail");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("standards-gardener-fail");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),

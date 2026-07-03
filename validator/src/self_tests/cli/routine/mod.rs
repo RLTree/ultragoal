@@ -8,7 +8,7 @@ fn raw(values: &[&str]) -> Vec<String> {
 }
 
 fn root(label: &str, script: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("scripts")).expect("scripts");
     std::fs::write(root.join("scripts/check"), script).expect("script");
     crate::json_boundary::write_json(
@@ -69,7 +69,7 @@ fn routine_help_fit_repo_and_target_repo_paths_are_discoverable() {
 
 #[test]
 fn routine_command_writes_source_local_claim_ceiling_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("routine-command");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("routine-command");
     std::fs::create_dir_all(root.join("scripts")).expect("scripts");
     std::fs::write(
         root.join("scripts/check"),
@@ -167,7 +167,8 @@ fn routine_run_covers_fail_status_and_error_paths() {
     assert_eq!(fail_code, 1);
     std::fs::remove_dir_all(fail_root).expect("cleanup fail");
 
-    let missing_manifest = crate::self_tests::boundaries::support::temp_root("routine-no-manifest");
+    let missing_manifest =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("routine-no-manifest");
     std::fs::create_dir_all(missing_manifest.join("scripts")).expect("scripts");
     std::fs::write(missing_manifest.join("scripts/check"), "routine check").expect("script");
     let receipt_error = crate::cli::routine::run(

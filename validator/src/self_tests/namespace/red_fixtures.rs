@@ -25,8 +25,9 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn validator_source_namespace_red_packets_fail_for_intended_errors() {
-    let repo = crate::self_tests::boundaries::support::repo_root();
-    let root = crate::self_tests::boundaries::support::temp_root("namespace-red-packets");
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-red-packets");
     std::fs::create_dir_all(root.join("validator/src/self_tests/coverage"))
         .expect("validator source dirs");
     write_json(
@@ -76,7 +77,7 @@ fn validator_source_namespace_red_packets_fail_for_intended_errors() {
 
 #[test]
 fn namespace_source_topology_is_selective_about_prefixes_and_generic_leaves() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let manifest_paths = vec![
         "validator/src/a_b.rs".to_string(),
         "validator/src/self_tests/domain/helpers.rs".to_string(),
@@ -98,7 +99,7 @@ fn namespace_source_topology_is_selective_about_prefixes_and_generic_leaves() {
 
 #[test]
 fn namespace_class_registry_rejects_invalid_surface_globs() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let failures = crate::audit::namespace::law::class_registry_value_failures(
         &root,
         &json!({

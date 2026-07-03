@@ -7,7 +7,7 @@ use serde_json::json;
 
 #[test]
 fn constructor_empty_evidence_branch_is_not_production_green_proof() {
-    let candidate = crate::self_tests::boundaries::support::sha('c');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('c');
     let value = receipt_from_evidence(
         candidate.clone(),
         ControlOperation::UpdateGoalEligibility,
@@ -43,7 +43,7 @@ fn constructor_empty_evidence_branch_is_not_production_green_proof() {
 
 #[test]
 fn fail_closed_receipts_are_blockers_not_completion_green_paths() {
-    let candidate = crate::self_tests::boundaries::support::sha('b');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('b');
     let fail_closed = json!({
         "schema": RECEIPT_SCHEMA,
         "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},
@@ -96,7 +96,7 @@ fn fail_closed_receipts_are_blockers_not_completion_green_paths() {
 
 #[test]
 fn receipt_mode_validators_reject_wrong_operation_and_weak_failure_ids() {
-    let candidate = crate::self_tests::boundaries::support::sha('d');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('d');
     let wrong_operation = json!({
         "schema": RECEIPT_SCHEMA,
         "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
@@ -148,7 +148,7 @@ fn receipt_mode_validators_reject_wrong_operation_and_weak_failure_ids() {
 
 #[test]
 fn receipt_surface_rejects_malformed_or_mismatched_evidence_graphs() {
-    let candidate = crate::self_tests::boundaries::support::sha('e');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('e');
     let base = json!({
         "schema": RECEIPT_SCHEMA,
         "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
@@ -172,7 +172,7 @@ fn receipt_surface_rejects_malformed_or_mismatched_evidence_graphs() {
 
     let mut wrong_candidate = base.clone();
     wrong_candidate["evidence_graph"]["candidate_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('f'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('f'));
     let failures = surface_value_failures(&wrong_candidate);
     assert!(failures
         .iter()
@@ -200,7 +200,7 @@ fn receipt_surface_rejects_malformed_or_mismatched_evidence_graphs() {
 
 #[test]
 fn pass_receipts_require_every_production_graph_label() {
-    let candidate = crate::self_tests::boundaries::support::sha('f');
+    let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('f');
     let mut value = json!({
         "schema": RECEIPT_SCHEMA,
         "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},

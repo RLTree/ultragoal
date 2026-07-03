@@ -22,8 +22,8 @@ fn copy_dir(from: &Path, to: &Path) {
 }
 
 fn temp_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     copy_dir(&repo.join("schemas"), &root.join("schemas"));
     write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -51,7 +51,7 @@ fn stale_receipt() -> Value {
         "decision": {"accepted": true, "action": "validator_check", "rationale": "test"},
         "changed_artifacts": [{
             "path":"docs/tracked.json",
-            "digest": crate::self_tests::boundaries::support::sha('0')
+            "digest": crate::self_tests::boundaries::workspace_fixtures::sha('0')
         }],
         "safeguards": {"deterministic_first": true, "no_hook_by_default": true},
         "claim_ceiling": "package_static_fixture_only"
@@ -235,7 +235,8 @@ fn standards_gardener_rebind_rejects_schema_invalid_rebound_receipt() {
 
 #[test]
 fn standards_gardener_copy_dir_preserves_nested_inputs() {
-    let root = crate::self_tests::boundaries::support::temp_root("standards-copy-nested");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("standards-copy-nested");
     let from = root.join("from");
     let to = root.join("to");
     std::fs::create_dir_all(from.join("nested")).expect("nested input");

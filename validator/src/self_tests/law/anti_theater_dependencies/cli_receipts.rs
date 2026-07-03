@@ -2,14 +2,20 @@ use serde_json::json;
 
 #[test]
 fn anti_theater_rejects_cli_receipt_that_is_neither_pass_nor_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("anti-theater-bad-cli-receipt");
-    crate::self_tests::audit::final_packet::support::write_json(
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "anti-theater-bad-cli-receipt",
+    );
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
-    crate::self_tests::audit::final_packet::support::write_fail_closed_proof(&root, &current);
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_fail_closed_proof(
+        &root, &current,
+    );
     write_bad_cli_receipt(
         &root,
         &current,
@@ -38,7 +44,7 @@ fn anti_theater_rejects_cli_receipt_that_is_neither_pass_nor_fail_closed() {
 }
 
 fn write_bad_cli_receipt(root: &std::path::Path, current: &str, name: &str, operation: &str) {
-    crate::self_tests::audit::final_packet::support::write_json(
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
         &root.join(format!("validation_artifacts/cli/{name}.json")),
         &json!({
             "schema":"harness-ultragoal.cli-control-plane-receipt.v1",

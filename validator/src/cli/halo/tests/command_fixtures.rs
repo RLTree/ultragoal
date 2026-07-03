@@ -35,7 +35,7 @@ pub(super) fn seed_root(root: &Path) {
 }
 
 pub(super) fn root_without_registry() -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root("halo-bad-registry");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("halo-bad-registry");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
         .expect("manifest");

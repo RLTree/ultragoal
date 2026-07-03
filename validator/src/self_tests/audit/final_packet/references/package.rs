@@ -1,17 +1,20 @@
-use super::{expect_failure, rewrite_ref, support};
+use super::{expect_failure, receipt_fixtures, rewrite_ref};
 use serde_json::json;
 
 #[test]
 fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-package-refs");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
-    support::write_json(
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-package-refs");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
+    receipt_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
 
-    let mut missing_packages = support::write_green_proof(&root, &current);
+    let mut missing_packages = receipt_fixtures::write_green_proof(&root, &current);
     missing_packages
         .as_object_mut()
         .expect("proof object")
@@ -23,7 +26,7 @@ fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
         "final_packet_proof_package_receipts_missing",
     );
 
-    let mut missing_product_fitness = support::write_green_proof(&root, &current);
+    let mut missing_product_fitness = receipt_fixtures::write_green_proof(&root, &current);
     missing_product_fitness["package_receipts"]
         .as_array_mut()
         .expect("package refs")
@@ -35,13 +38,13 @@ fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
         "final_packet_proof_package_receipt_missing:validation_artifacts/harness/product-fitness-receipt.json",
     );
 
-    let mut bad_package = support::write_green_proof(&root, &current);
+    let mut bad_package = receipt_fixtures::write_green_proof(&root, &current);
     rewrite_ref(
         &root,
         &mut bad_package,
         "package_receipts/0",
         "validation_artifacts/harness/package-receipt.json",
-        &json!({"status":"pass","target_revision":{"value":crate::self_tests::boundaries::support::sha('5')}}),
+        &json!({"status":"pass","target_revision":{"value":crate::self_tests::boundaries::workspace_fixtures::sha('5')}}),
     );
     expect_failure(
         &root,
@@ -50,7 +53,7 @@ fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
         "final_packet_proof_package_target_digest_mismatch",
     );
 
-    let mut bad_fit_repo = support::write_green_proof(&root, &current);
+    let mut bad_fit_repo = receipt_fixtures::write_green_proof(&root, &current);
     rewrite_ref(
         &root,
         &mut bad_fit_repo,
@@ -65,7 +68,7 @@ fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
         "final_packet_proof_fit_repo_ref",
     );
 
-    let mut bad_product_fitness = support::write_green_proof(&root, &current);
+    let mut bad_product_fitness = receipt_fixtures::write_green_proof(&root, &current);
     rewrite_ref(
         &root,
         &mut bad_product_fitness,
@@ -83,7 +86,7 @@ fn final_packet_package_receipts_are_dereferenced_by_concrete_receipt_type() {
         "final_packet_proof_product_fitness_ref",
     );
 
-    let mut bad_product_journey = support::write_green_proof(&root, &current);
+    let mut bad_product_journey = receipt_fixtures::write_green_proof(&root, &current);
     rewrite_ref(
         &root,
         &mut bad_product_journey,

@@ -14,12 +14,12 @@ fn has(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn fit_repo_receipt_reports_malformed_missing_and_unavailable_surfaces() {
-    let root = crate::self_tests::boundaries::support::temp_root("fit-repo-missing");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("fit-repo-missing");
     std::fs::create_dir_all(&root).expect("root");
     let failures = crate::audit::fit_repo_receipt::failures(
         &root,
         &json!({
-            "target_revision":{"value":crate::self_tests::boundaries::support::sha('0')},
+            "target_revision":{"value":crate::self_tests::boundaries::workspace_fixtures::sha('0')},
             "checks":[],
             "receipt_digest":crate::digest::ZERO
         }),
@@ -42,7 +42,7 @@ fn fit_repo_receipt_reports_malformed_missing_and_unavailable_surfaces() {
 
 #[test]
 fn fit_repo_receipt_binds_version_cache_artifacts_and_canonical_digest() {
-    let root = crate::self_tests::boundaries::support::temp_root("fit-repo-bound");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("fit-repo-bound");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"1.0.0","resources":[]}),
@@ -60,20 +60,20 @@ fn fit_repo_receipt_binds_version_cache_artifacts_and_canonical_digest() {
     let mut receipt = json!({
         "schema":"harness-ultragoal.fit-repo-receipt.v1",
         "entrypoint_contract":{"id":"harness-ultragoal:fit-repo"},
-        "target_revision":{"value":crate::self_tests::boundaries::support::sha('9')},
+        "target_revision":{"value":crate::self_tests::boundaries::workspace_fixtures::sha('9')},
         "plugin_source_path":"source",
         "installed_plugin_path":"installed",
         "cache_package_path":"wrong-cache",
         "plugin_version":"0.9.0",
         "producer_actor_id":"fixture-author",
-        "receipt_digest":crate::self_tests::boundaries::support::sha('1'),
+        "receipt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
         "target_classification":"blocked_unclassified_repo",
         "runtime_surface_classification":"",
         "product_surface_classification":"ambiguous_requires_blocker",
         "claim_ceiling":"",
         "checks":[{
-            "stdout":{"path":"bad/stdout","digest":crate::self_tests::boundaries::support::sha('2')},
-            "stderr":{"path":"validation_artifacts/harness/fit-repo-command.stdout","digest":crate::self_tests::boundaries::support::sha('3')}
+            "stdout":{"path":"bad/stdout","digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')},
+            "stderr":{"path":"validation_artifacts/harness/fit-repo-command.stdout","digest":crate::self_tests::boundaries::workspace_fixtures::sha('3')}
         }],
         "blockers":[{}]
     });

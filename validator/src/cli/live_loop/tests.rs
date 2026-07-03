@@ -36,7 +36,7 @@ fn parser_accepts_auto_jobs_and_rejects_invalid_jobs() {
 
 #[test]
 fn live_loop_run_writes_source_local_blocker_receipt() {
-    let root = crate::self_tests::boundaries::support::temp_root("live-loop-run");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-run");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -60,7 +60,8 @@ fn live_loop_run_writes_source_local_blocker_receipt() {
 
 #[test]
 fn live_loop_run_fails_closed_before_work_for_bad_roots_and_jobs() {
-    let missing_manifest = crate::self_tests::boundaries::support::temp_root("live-loop-missing");
+    let missing_manifest =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-missing");
     std::fs::create_dir_all(&missing_manifest).expect("root");
     let command = LiveLoopCommand {
         tier: "hot".to_string(),
@@ -71,7 +72,8 @@ fn live_loop_run_fails_closed_before_work_for_bad_roots_and_jobs() {
     let err = run(&missing_manifest, &command).expect_err("missing manifest");
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
 
-    let invalid_jobs = crate::self_tests::boundaries::support::temp_root("live-loop-jobs");
+    let invalid_jobs =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-jobs");
     std::fs::create_dir_all(&invalid_jobs).expect("root");
     crate::json_boundary::write_json(
         &invalid_jobs.join("plugin-manifest-draft.json"),
@@ -88,8 +90,9 @@ fn live_loop_run_fails_closed_before_work_for_bad_roots_and_jobs() {
 
 #[test]
 fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
-    let current_state_root =
-        crate::self_tests::boundaries::support::temp_root("live-loop-current-state-write");
+    let current_state_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "live-loop-current-state-write",
+    );
     std::fs::create_dir_all(&current_state_root).expect("root");
     crate::json_boundary::write_json(
         &current_state_root.join("plugin-manifest-draft.json"),
@@ -106,7 +109,8 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
     let err = run(&current_state_root, &command).expect_err("current-state write fails");
     assert!(err.contains("validation_artifacts"), "{err}");
 
-    let receipt_root = crate::self_tests::boundaries::support::temp_root("live-loop-receipt-write");
+    let receipt_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-receipt-write");
     std::fs::create_dir_all(&receipt_root).expect("root");
     crate::json_boundary::write_json(
         &receipt_root.join("plugin-manifest-draft.json"),
@@ -120,8 +124,9 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
     let err = run(&receipt_root, &bad_receipt).expect_err("loop receipt write fails");
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
 
-    let observability_root =
-        crate::self_tests::boundaries::support::temp_root("live-loop-observability-write");
+    let observability_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "live-loop-observability-write",
+    );
     std::fs::create_dir_all(observability_root.join("validation_artifacts")).expect("root");
     crate::json_boundary::write_json(
         &observability_root.join("plugin-manifest-draft.json"),
@@ -145,7 +150,7 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
 
 #[test]
 fn live_loop_run_can_pass_when_current_state_has_no_blocker() {
-    let root = crate::self_tests::boundaries::support::temp_root("live-loop-pass");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-pass");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),

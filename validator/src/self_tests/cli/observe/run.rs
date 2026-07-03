@@ -183,7 +183,7 @@ fn observe_run_covers_stack_query_explain_and_receipt_outputs() {
     assert_eq!(smoke_fail["status"], "fail");
     assert!(smoke_fail["why_failed"].as_str().unwrap().contains("smoke"));
     let missing_manifest_root =
-        crate::self_tests::boundaries::support::temp_root("observe-bad-root");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-bad-root");
     fs::create_dir_all(&missing_manifest_root).expect("missing manifest root");
     assert!(
         observe::stack::health_receipt(&missing_manifest_root, &health_command, vec![])

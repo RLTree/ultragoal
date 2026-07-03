@@ -17,7 +17,7 @@ fn write_json(path: &Path, value: &Value) {
 }
 
 fn write_session_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join(".codex-plugin")).expect("plugin dir");
     std::fs::create_dir_all(root.join("schemas")).expect("schemas dir");
     write_json(
@@ -29,13 +29,13 @@ fn write_session_root(label: &str) -> PathBuf {
         &json!({"version":"0.0.11"}),
     );
     std::fs::copy(
-        crate::self_tests::boundaries::support::repo_root()
+        crate::self_tests::boundaries::workspace_fixtures::repo_root()
             .join("schemas/schema-authority-primitives.schema.json"),
         root.join("schemas/schema-authority-primitives.schema.json"),
     )
     .expect("common schema");
     std::fs::copy(
-        crate::self_tests::boundaries::support::repo_root()
+        crate::self_tests::boundaries::workspace_fixtures::repo_root()
             .join("schemas/session-log-hardening-receipt.schema.json"),
         root.join("schemas/session-log-hardening-receipt.schema.json"),
     )

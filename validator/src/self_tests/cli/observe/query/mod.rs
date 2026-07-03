@@ -9,7 +9,7 @@ mod matching;
 mod run;
 mod spool;
 mod text;
-use command_inventory::support::write_observable_inventory;
+use command_inventory::inventory_fixtures::write_observable_inventory;
 
 #[test]
 fn observe_green_prove_and_query_contracts_are_typed() {

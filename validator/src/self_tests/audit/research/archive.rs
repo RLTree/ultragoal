@@ -17,10 +17,10 @@ fn research_registry_rejects_stale_archive_metadata() {
     let row = source_row_index(&registry, GOLD_STACK_SOURCE);
     registry["sources"][row]["source_archive_path"] = json!("/tmp/wrong-archive.zip");
     registry["sources"][row]["source_archive_digest"] =
-        json!(crate::self_tests::boundaries::support::sha('1'));
+        json!(crate::self_tests::boundaries::workspace_fixtures::sha('1'));
     registry["sources"][row]["source_archive_entries"] = json!([{
         "entry_path": "wrong-entry.md",
-        "entry_digest": crate::self_tests::boundaries::support::sha('2'),
+        "entry_digest": crate::self_tests::boundaries::workspace_fixtures::sha('2'),
     }]);
     let failures = failures(&cards, &registry, &trace);
     for expected in [

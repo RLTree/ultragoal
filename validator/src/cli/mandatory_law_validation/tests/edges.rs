@@ -18,7 +18,8 @@ fn mandatory_law_validation_parse_and_scheduler_edges_are_bounded() {
         .contains("invalid numeric value for --jobs")
     );
 
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-jobs-zero");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-jobs-zero");
     super::create_law_package(&root);
     let command = MandatoryLawValidationCommand {
         law: Some("schema-valid".to_string()),
@@ -35,7 +36,7 @@ fn mandatory_law_validation_parse_and_scheduler_edges_are_bounded() {
 
 #[test]
 fn mandatory_law_validation_failure_edges_and_absolute_receipt_are_observable() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-edges");
     super::create_law_package(&root);
     let missing = validate(
         &root,
@@ -143,7 +144,7 @@ fn mandatory_law_runtime_metrics_report_resource_and_saturation_states() {
 #[test]
 fn mandatory_law_run_propagates_telemetry_and_receipt_write_errors() {
     let no_manifest =
-        crate::self_tests::boundaries::support::temp_root("mandatory-law-no-manifest");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-no-manifest");
     super::create_law_package(&no_manifest);
     fs::remove_file(no_manifest.join("plugin-manifest-draft.json")).expect("remove manifest");
     let command = MandatoryLawValidationCommand {
@@ -155,7 +156,8 @@ fn mandatory_law_run_propagates_telemetry_and_receipt_write_errors() {
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
     fs::remove_dir_all(no_manifest).expect("cleanup no manifest");
 
-    let blocked = crate::self_tests::boundaries::support::temp_root("mandatory-law-blocked");
+    let blocked =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-blocked");
     super::create_law_package(&blocked);
     fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
     let blocked_command = MandatoryLawValidationCommand {

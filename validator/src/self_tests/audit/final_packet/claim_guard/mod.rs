@@ -1,4 +1,4 @@
-use super::support;
+use super::receipt_fixtures;
 use serde_json::{Value, json};
 use std::path::Path;
 
@@ -6,14 +6,17 @@ mod source_audit;
 
 #[test]
 fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
-    let root = crate::self_tests::boundaries::support::temp_root("final-packet-claim-guard");
-    support::write_json(
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("final-packet-claim-guard");
+    receipt_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     );
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     let current = crate::package::inventory::package_digest(&root).expect("digest");
-    let receipt = support::write_fail_closed_proof(&root, &current);
+    let receipt = receipt_fixtures::write_fail_closed_proof(&root, &current);
 
     let failures = crate::audit::final_packet::claim_guard_failures(&root, &store);
     assert!(failures.is_empty(), "{failures:?}");
@@ -23,7 +26,7 @@ fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
         &store,
         mutate(&receipt, |value| {
             value["target_revision"]["value"] =
-                json!(crate::self_tests::boundaries::support::sha('b'));
+                json!(crate::self_tests::boundaries::workspace_fixtures::sha('b'));
         }),
         "final_packet_proof_target_digest_mismatch",
     );
@@ -78,7 +81,8 @@ fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
         &store,
         mutate(&receipt, |value| {
             value["packet"]["exists"] = json!(false);
-            value["packet"]["digest"] = json!(crate::self_tests::boundaries::support::sha('c'));
+            value["packet"]["digest"] =
+                json!(crate::self_tests::boundaries::workspace_fixtures::sha('c'));
         }),
         "final_packet_proof_packet_absent_digest_not_null",
     );
@@ -98,7 +102,7 @@ fn assert_guard_failure(
     value: Value,
     expected: &str,
 ) {
-    support::write_proof(root, &value);
+    receipt_fixtures::write_proof(root, &value);
     let failures = crate::audit::final_packet::claim_guard_failures(root, store);
     assert!(
         failures.iter().any(|failure| failure.contains(expected)),

@@ -19,7 +19,7 @@ fn fixture_anchors() -> Value {
 
 #[test]
 fn review_round_red_fixture_observation_uses_anchor_overrides_and_first_failure() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let store = crate::schema_catalog::load(&root);
     let observation = crate::red::fixture::review::round::observation(
         &root,
@@ -38,8 +38,11 @@ fn review_round_red_fixture_observation_uses_anchor_overrides_and_first_failure(
 
 #[test]
 fn red_fixture_results_cover_patch_missing_invalid_and_materialized_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-fixture-result-branches");
-    let store = crate::schema_catalog::load(&crate::self_tests::boundaries::support::repo_root());
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("red-fixture-result-branches");
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
     write_json(
         &root.join("fixtures/valid/minimal-goal-run.json"),
         &json!({
@@ -50,7 +53,7 @@ fn red_fixture_results_cover_patch_missing_invalid_and_materialized_rows() {
                 "evidence":[{
                     "kind":"test_pass",
                     "surface":"ci",
-                    "digest":crate::self_tests::boundaries::support::sha('d')
+                    "digest":crate::self_tests::boundaries::workspace_fixtures::sha('d')
                 }]
             }]
         }),
@@ -138,16 +141,16 @@ fn red_fixture_results_cover_patch_missing_invalid_and_materialized_rows() {
 
 #[test]
 fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitutes() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let anchors = crate::review::round::anchor::values::AnchorValues {
         validator_path: "validator.json".into(),
         review_target_path: "target.json".into(),
         archive_path: "archive.json".into(),
-        validator_digest: crate::self_tests::boundaries::support::sha('1'),
-        review_target_digest: crate::self_tests::boundaries::support::sha('2'),
-        archive_digest: crate::self_tests::boundaries::support::sha('3'),
+        validator_digest: crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        review_target_digest: crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+        archive_digest: crate::self_tests::boundaries::workspace_fixtures::sha('3'),
         validator_run_id: "run".into(),
-        package_digest: crate::self_tests::boundaries::support::sha('4'),
+        package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: Vec::new(),
     };
     let receipt = json!({
@@ -157,17 +160,17 @@ fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitute
                 "persona":"contract_claim_falsifier",
                 "reviewer_agent_id":"dupe-agent",
                 "persona_prompt_path":"wrong.md",
-                "persona_prompt_digest":crate::self_tests::boundaries::support::sha('a'),
+                "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
                 "custom_agent_path":"wrong.toml",
-                "custom_agent_digest":crate::self_tests::boundaries::support::sha('b')
+                "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')
             },
             {
                 "persona":"contract_claim_falsifier",
                 "reviewer_agent_id":"dupe-agent",
                 "persona_prompt_path":"wrong.md",
-                "persona_prompt_digest":crate::self_tests::boundaries::support::sha('c'),
+                "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('c'),
                 "custom_agent_path":"wrong.toml",
-                "custom_agent_digest":crate::self_tests::boundaries::support::sha('d')
+                "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('d')
             },
             {"persona":"unknown_persona","reviewer_agent_id":"prior-agent"}
         ]
@@ -192,17 +195,19 @@ fn review_round_personas_reject_reuse_duplicates_unknown_and_identity_substitute
 
 #[test]
 fn review_round_personas_reject_missing_prompt_and_agent_files() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-persona-missing-files");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "review-persona-missing-files",
+    );
     std::fs::create_dir_all(&root).expect("root");
     let anchors = crate::review::round::anchor::values::AnchorValues {
         validator_path: "validator.json".into(),
         review_target_path: "target.json".into(),
         archive_path: "archive.json".into(),
-        validator_digest: crate::self_tests::boundaries::support::sha('1'),
-        review_target_digest: crate::self_tests::boundaries::support::sha('2'),
-        archive_digest: crate::self_tests::boundaries::support::sha('3'),
+        validator_digest: crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        review_target_digest: crate::self_tests::boundaries::workspace_fixtures::sha('2'),
+        archive_digest: crate::self_tests::boundaries::workspace_fixtures::sha('3'),
         validator_run_id: "run".into(),
-        package_digest: crate::self_tests::boundaries::support::sha('4'),
+        package_digest: crate::self_tests::boundaries::workspace_fixtures::sha('4'),
         source_errors: Vec::new(),
     };
     let receipt = json!({
@@ -211,9 +216,9 @@ fn review_round_personas_reject_missing_prompt_and_agent_files() {
             "persona":"contract_claim_falsifier",
             "reviewer_agent_id":"fresh-agent",
             "persona_prompt_path":"agents/contract-claim-falsifier.md",
-            "persona_prompt_digest":crate::self_tests::boundaries::support::sha('a'),
+            "persona_prompt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('a'),
             "custom_agent_path":"custom-agents/harness-contract-claim-falsifier.toml",
-            "custom_agent_digest":crate::self_tests::boundaries::support::sha('b')
+            "custom_agent_digest":crate::self_tests::boundaries::workspace_fixtures::sha('b')
         }]
     });
     let mut out = Vec::new();

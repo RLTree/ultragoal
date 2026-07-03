@@ -10,7 +10,7 @@ use serde_json::json;
 
 #[test]
 fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let out = root.join("target/self-tests/rust-run-receipt.json");
     let code = rust_run(
         &root,
@@ -85,8 +85,8 @@ fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
 }
 
 #[test]
-fn rust_observation_failures_are_not_claim_support() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+fn rust_observation_failures_do_not_advance_claims() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let observed = observations::collect_from_probes(
         &root,
         RustOperation::Fast,
@@ -102,7 +102,8 @@ fn rust_observation_failures_are_not_claim_support() {
             .contains(&"rust_devx_required_tool_probe_failed:missing-test-probe".to_string())
     );
 
-    let missing_root = crate::self_tests::boundaries::support::temp_root("rust-missing-substrate");
+    let missing_root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("rust-missing-substrate");
     std::fs::create_dir_all(&missing_root).expect("root");
     let substrate = observations::collect_from_probes(&missing_root, RustOperation::Fast, vec![]);
     assert!(

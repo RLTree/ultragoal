@@ -163,7 +163,7 @@ mod tests {
 
     #[test]
     fn evaluator_records_parallel_and_isolated_scheduler_metrics() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-fixture-metrics");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-metrics");
         fs::create_dir_all(root.join("fixtures/red")).expect("fixtures");
         fs::create_dir_all(root.join("tmp")).expect("tmp");
         crate::json_boundary::write_json(

@@ -2,8 +2,9 @@ use serde_json::json;
 
 #[test]
 fn operating_loop_rejects_row_shape_research_inputs() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-research-inputs");
-    let mut inventory = super::super::support::observable_inventory();
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-research-inputs");
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["operating_loop"]["research_inputs"]
         .as_array_mut()
         .unwrap()

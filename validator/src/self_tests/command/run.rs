@@ -17,7 +17,7 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 }
 
 fn package_root(label: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/file.txt"), "package payload\n").expect("file");
     write_json(
@@ -125,7 +125,7 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
 
 #[test]
 fn command_run_propagates_package_and_packet_builder_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("command-run-errors");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("command-run-errors");
     let code = crate::command_run::run_with_exit_code(args(root.clone(), &["package-digest"]))
         .expect("missing manifest returns package digest fail code");
     assert_eq!(code, 1);

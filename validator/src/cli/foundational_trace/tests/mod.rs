@@ -32,7 +32,8 @@ fn foundational_trace_parse_requires_strict_and_supports_jobs() {
 
 #[test]
 fn foundational_trace_command_writes_pass_and_fail_observability() {
-    let root = crate::self_tests::boundaries::support::temp_root("foundational-trace-command");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-command");
     write_minimal_root(&root, &["agent-queryable-observability"], true);
     let command = FoundationalTraceCommand {
         obligation: Some("agent-queryable-observability".to_string()),
@@ -68,7 +69,8 @@ fn foundational_trace_command_writes_pass_and_fail_observability() {
 
 #[test]
 fn default_foundational_trace_check_uses_parallel_scheduler() {
-    let root = crate::self_tests::boundaries::support::temp_root("foundational-trace-parallel");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-parallel");
     write_minimal_root(
         &root,
         &[

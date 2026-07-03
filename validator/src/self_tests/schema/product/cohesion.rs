@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 
 fn fixture_receipt() -> Value {
     crate::json_boundary::read_json(
-        &crate::self_tests::boundaries::support::repo_root()
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root()
             .join("fixtures/target-repo/valid-product-cohesion/validation_artifacts/product-cohesion/journey-receipt.json"),
     )
     .expect("product cohesion fixture")

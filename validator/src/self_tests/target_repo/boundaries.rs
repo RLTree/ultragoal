@@ -2,7 +2,7 @@ use serde_json::json;
 
 #[test]
 fn target_repo_safe_fs_rejects_escape_symlink_directory_and_bad_utf8_boundaries() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-safe-fs");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("target-safe-fs");
     std::fs::create_dir_all(root.join("dir")).expect("dir");
     std::fs::write(root.join("file.txt"), "ok").expect("file");
     std::fs::write(root.join("bad.bin"), [0xff, 0xfe]).expect("bad utf8");
@@ -27,7 +27,8 @@ fn target_repo_safe_fs_rejects_escape_symlink_directory_and_bad_utf8_boundaries(
 
 #[test]
 fn target_repo_receipt_gate_and_runtime_legibility_edges_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-repo-gate-runtime");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-repo-gate-runtime");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("Cargo.toml"), "[package]\nname=\"demo\"\n").expect("cargo");
     std::fs::write(root.join("docs/runtime.md"), "runtime receipt").expect("runtime");

@@ -69,13 +69,14 @@ fn candidate_digest(value: &Value) -> Option<String> {
 mod tests {
     #[test]
     fn evidence_item_records_unsafe_package_paths() {
-        let root = crate::self_tests::boundaries::support::temp_root("cli-evidence-item-path");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-evidence-item-path");
         std::fs::create_dir_all(&root).expect("root");
         let value = super::value(
             &root,
             "unsafe_receipt",
             "../outside-receipt.json",
-            &crate::self_tests::boundaries::support::sha('a'),
+            &crate::self_tests::boundaries::workspace_fixtures::sha('a'),
         );
         let failures = value["failures"].as_array().expect("failures");
         assert!(
@@ -90,9 +91,11 @@ mod tests {
 
     #[test]
     fn evidence_item_infers_exact_coverage_receipt_status() {
-        let root = crate::self_tests::boundaries::support::temp_root("cli-evidence-item-coverage");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "cli-evidence-item-coverage",
+        );
         std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("coverage dir");
-        let candidate = crate::self_tests::boundaries::support::sha('c');
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('c');
         let rel = "validation_artifacts/coverage/coverage-receipt.json";
         crate::json_boundary::write_json(
             &root.join(rel),
@@ -124,9 +127,11 @@ mod tests {
 
     #[test]
     fn evidence_item_refuses_status_inference_for_nonpassing_typed_receipts() {
-        let root = crate::self_tests::boundaries::support::temp_root("cli-evidence-item-no-status");
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "cli-evidence-item-no-status",
+        );
         std::fs::create_dir_all(root.join("validation_artifacts/coverage")).expect("coverage dir");
-        let candidate = crate::self_tests::boundaries::support::sha('d');
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('d');
         let rel = "validation_artifacts/coverage/coverage-receipt.json";
         crate::json_boundary::write_json(
             &root.join(rel),

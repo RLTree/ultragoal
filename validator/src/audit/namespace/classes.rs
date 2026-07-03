@@ -1,4 +1,4 @@
-use crate::audit::namespace::law::support::str_field;
+use crate::audit::namespace::law::path_rules::str_field;
 use serde_json::Value;
 use std::path::Path;
 

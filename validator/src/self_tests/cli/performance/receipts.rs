@@ -160,8 +160,8 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
 
 #[test]
 fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
-    let stale = crate::self_tests::boundaries::support::sha('a');
-    let current = crate::self_tests::boundaries::support::sha('b');
+    let stale = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+    let current = crate::self_tests::boundaries::workspace_fixtures::sha('b');
     let mut receipt = strict_pass(&stale);
     receipt["telemetry"]["wall_clock_ms"] = json!(0);
     receipt["performance_regression"]["status"] = json!("missing_baseline");

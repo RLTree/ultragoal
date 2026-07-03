@@ -10,7 +10,9 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn symlink_lane_observability_and_inventory_edges() {
-    let target = crate::self_tests::boundaries::support::temp_root("target_boundary-symlink-long");
+    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target_boundary-symlink-long",
+    );
     write_json(
         &target.join("validation_artifacts/product-cohesion/symlink-fixture.json"),
         &json!({
@@ -25,7 +27,8 @@ fn symlink_lane_observability_and_inventory_edges() {
     std::fs::remove_dir_all(target).expect("cleanup symlink");
 
     let mut failures = Vec::new();
-    let root = crate::self_tests::boundaries::support::temp_root("target_boundary-lane-size");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-lane-size");
     crate::claim_semantics::lane::policy::check_lanes(
         &json!({}),
         &json!({"lanes":[{
@@ -50,7 +53,7 @@ fn symlink_lane_observability_and_inventory_edges() {
             .any(|failure| failure.error == "lane_too_small_or_overlapping")
     );
 
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let target_repo = repo.join("fixtures/target-repo/valid-observability");
     let (receipt, _) = crate::target_repo::audit_target_repo(
         &target_repo,
@@ -67,8 +70,9 @@ fn symlink_lane_observability_and_inventory_edges() {
         "agent observability event ledger and query surface complete"
     );
 
-    let inventory =
-        crate::self_tests::boundaries::support::temp_root("target_boundary-unreadable-inventory");
+    let inventory = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "target_boundary-unreadable-inventory",
+    );
     std::fs::create_dir_all(inventory.join("denied")).expect("denied dir");
     #[cfg(unix)]
     {

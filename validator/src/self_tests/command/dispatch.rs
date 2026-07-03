@@ -121,7 +121,8 @@ fn source_audit_parser_accepts_bounded_jobs_and_rejects_non_numeric_jobs() {
 
 #[test]
 fn command_run_routes_audit_and_performance_variants() {
-    let root = crate::self_tests::boundaries::support::temp_root("command-dispatch-routes");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("command-dispatch-routes");
     let empty_path_write = std::panic::catch_unwind(|| write_json(Path::new(""), &json!({})));
     assert!(empty_path_write.is_err());
     let leaf = std::path::Path::new("command-dispatch-leaf.json");

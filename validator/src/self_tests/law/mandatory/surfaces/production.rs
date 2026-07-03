@@ -1,10 +1,14 @@
-use super::support::{expect_failure, production_law, write_json, write_specific_red_fixture};
+use super::surface_fixtures::{
+    expect_failure, production_law, write_json, write_specific_red_fixture,
+};
 use serde_json::json;
 use std::collections::BTreeMap;
 
 #[test]
 fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
-    let root = crate::self_tests::boundaries::support::temp_root("mandatory-law-production-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "mandatory-law-production-edges",
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),

@@ -8,7 +8,7 @@ use serde_json::json;
 
 #[test]
 fn gc_run_without_receipt_and_rust_audit_receipt_ok_path_are_covered() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let gc_code = gc_run(
         &root,
         &GarbageCommand {
@@ -101,7 +101,7 @@ fn gc_run_without_receipt_and_rust_audit_receipt_ok_path_are_covered() {
 
 #[test]
 fn gc_plan_observability_fixtures_cover_red_green_and_tamper_paths() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let green = gc_receipt(
         &root,
         &GarbageCommand {
@@ -131,7 +131,7 @@ fn gc_plan_observability_fixtures_cover_red_green_and_tamper_paths() {
 
 #[test]
 fn gc_apply_observability_fixtures_cover_red_green_and_tamper_paths() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let red = gc_receipt(
         &root,
         &GarbageCommand {
@@ -173,7 +173,7 @@ fn gc_apply_observability_fixtures_cover_red_green_and_tamper_paths() {
 
 #[test]
 fn gc_dry_run_observability_fixtures_cover_red_green_and_tamper_paths() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let red = gc_receipt(
         &root,
         &GarbageCommand {

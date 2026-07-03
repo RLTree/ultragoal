@@ -11,7 +11,8 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 
 #[test]
 fn command_dispatch_routes_standards_gardener_rebind() {
-    let root = crate::self_tests::boundaries::support::temp_root("standards-command-dispatch");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("standards-command-dispatch");
     crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
         .expect("manifest");
     let code = crate::command_run::run_with_exit_code(args(

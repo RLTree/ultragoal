@@ -9,7 +9,7 @@ mod retry_edges;
 mod target;
 
 fn prepare_root(label: &str) -> std::path::PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(&root).expect("query temp root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -112,7 +112,8 @@ fn rejects_zero_byte_limit_and_timeout_as_unbounded_queries() {
 
 #[test]
 fn query_result_reports_package_digest_errors_before_claiming_rows() {
-    let root = crate::self_tests::boundaries::support::temp_root("query-missing-manifest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("query-missing-manifest");
     std::fs::create_dir_all(&root).expect("query missing manifest root");
     let err = super::result_from_output(
         Path::new(&root),

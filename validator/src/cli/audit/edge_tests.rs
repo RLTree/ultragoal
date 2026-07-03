@@ -1,10 +1,11 @@
 use super::*;
+use crate::self_tests::boundaries::workspace_fixtures;
 use serde_json::json;
 use std::fs;
 
 #[test]
 fn source_audit_run_reports_observability_write_failure() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-audit-run-observe-error");
+    let root = workspace_fixtures::temp_root("source-audit-run-observe-error");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -34,7 +35,7 @@ fn source_audit_run_reports_observability_write_failure() {
 
 #[test]
 fn audit_observability_reports_empty_failure_and_emit_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-observe-edges");
+    let root = workspace_fixtures::temp_root("audit-observe-edges");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(
@@ -62,7 +63,7 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
         "source audit failed without check details"
     );
 
-    let bad_root = crate::self_tests::boundaries::support::temp_root("audit-observe-no-root");
+    let bad_root = workspace_fixtures::temp_root("audit-observe-no-root");
     let err = observability::emit_receipt(
         &bad_root,
         observability::ReceiptFields {
@@ -123,7 +124,7 @@ fn audit_observability_reports_empty_failure_and_emit_errors() {
 
 #[test]
 fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
-    let root = crate::self_tests::boundaries::support::temp_root("source-audit-stdout-contract");
+    let root = workspace_fixtures::temp_root("source-audit-stdout-contract");
     fs::create_dir_all(&root).expect("root");
     fs::write(root.join("owned.txt"), "owned").expect("owned");
     crate::json_boundary::write_json(

@@ -18,8 +18,8 @@ fn symlink_meta(link_path: &str, target_path: &str) -> Value {
 
 #[test]
 fn target_receipt_generation_records_all_fixture_outputs() {
-    let root = crate::self_tests::boundaries::support::repo_root();
-    let out = crate::self_tests::boundaries::support::temp_root("target-receipts");
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let out = crate::self_tests::boundaries::workspace_fixtures::temp_root("target-receipts");
     let generated =
         crate::target_fixtures::write_target_receipts(&root, &out, &[]).expect("target receipts");
     assert!(!generated.is_empty());
@@ -37,7 +37,7 @@ fn target_receipt_generation_records_all_fixture_outputs() {
 
 #[test]
 fn target_capability_failures_report_expected_mismatch_and_missing_fixture() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let specs = [
         crate::target_fixtures::TargetSpec {
             name: "valid-init-as-red.json",
@@ -77,7 +77,8 @@ fn target_capability_failures_report_expected_mismatch_and_missing_fixture() {
 
 #[test]
 fn symlink_fixture_materialization_fails_closed_and_cleans_up() {
-    let target = crate::self_tests::boundaries::support::temp_root("target-symlink-fixture");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-symlink-fixture");
     let meta = target.join("validation_artifacts/product-cohesion/symlink-fixture.json");
     write_json(&meta, &json!({"schema": "wrong"}));
     let err = crate::target_fixtures::materialize_symlink_fixture(&target).expect_err("bad schema");
@@ -107,7 +108,8 @@ fn symlink_fixture_materialization_fails_closed_and_cleans_up() {
 
 #[test]
 fn symlink_fixture_existing_and_cleanup_edges_fail_closed() {
-    let target = crate::self_tests::boundaries::support::temp_root("target-symlink-existing");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-symlink-existing");
     let meta = target.join("validation_artifacts/product-cohesion/symlink-fixture.json");
     write_json(&meta, &symlink_meta("links/check", "target.txt"));
     std::fs::create_dir_all(target.join("links")).expect("links");
@@ -134,7 +136,8 @@ fn symlink_fixture_existing_and_cleanup_edges_fail_closed() {
 
 #[test]
 fn symlink_fixture_rejects_malformed_meta_and_parent_file() {
-    let target = crate::self_tests::boundaries::support::temp_root("target-symlink-bad-parent");
+    let target =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-symlink-bad-parent");
     let meta = target.join("validation_artifacts/product-cohesion/symlink-fixture.json");
     if let Some(parent) = meta.parent() {
         std::fs::create_dir_all(parent).expect("meta parent");
@@ -157,7 +160,8 @@ fn symlink_fixture_rejects_malformed_meta_and_parent_file() {
 
 #[test]
 fn target_fixture_audit_reports_materialization_and_cleanup_failures() {
-    let root = crate::self_tests::boundaries::support::temp_root("target-fixture-audit-errors");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("target-fixture-audit-errors");
     let target = root.join("fixture");
     write_json(
         &target.join("validation_artifacts/product-cohesion/symlink-fixture.json"),

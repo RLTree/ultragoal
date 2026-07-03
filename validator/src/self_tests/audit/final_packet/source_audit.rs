@@ -3,7 +3,7 @@ use std::path::Path;
 
 pub(crate) fn ref_for(root: &Path, current: &str) -> Value {
     let receipt = schema_shaped_receipt(current);
-    super::support::write_json(
+    super::receipt_fixtures::write_json(
         &root.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
         &receipt,
     );
@@ -18,7 +18,7 @@ pub(crate) fn ref_for(root: &Path, current: &str) -> Value {
 }
 
 fn schema_shaped_receipt(current: &str) -> Value {
-    let repo = crate::self_tests::boundaries::support::repo_root();
+    let repo = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let mut receipt = crate::json_boundary::read_json(
         &repo.join("validation_artifacts/ultragoal-audit/validator-receipt.json"),
     )

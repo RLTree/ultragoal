@@ -16,7 +16,7 @@ pub(super) fn insert_dimension_inventory(inventory: &mut Value) {
 
 pub(super) fn insert_dimension_counts(families: &mut Map<String, Value>) {
     for family in super::super::dimension_ids::inventory_families() {
-        super::support::insert_counts(families, family.board_key, family.ids.len());
+        super::inventory_fixtures::insert_counts(families, family.board_key, family.ids.len());
     }
 }
 

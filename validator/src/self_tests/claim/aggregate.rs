@@ -11,14 +11,14 @@ fn aggregate_errors_at(root: &Path, bundle: Value) -> Vec<String> {
 
 #[test]
 fn aggregate_semantic_failures_cover_contract_claim_goal_and_amendments() {
-    let root = crate::self_tests::boundaries::support::temp_root("aggregate-semantic");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("aggregate-semantic");
     std::fs::create_dir_all(&root).expect("aggregate root");
     let errors = aggregate_errors_at(
         &root,
         json!({
             "completion_manifest": {
                 "root": ".",
-                "contract_bundle_hash": crate::self_tests::boundaries::support::sha('1'),
+                "contract_bundle_hash": crate::self_tests::boundaries::workspace_fixtures::sha('1'),
                 "required_claim_ids": ["CLAIM-MISSING", "CLAIM-OPTIONAL"],
                 "claims": [{
                     "id": "CLAIM-OPTIONAL",
@@ -84,7 +84,7 @@ fn aggregate_semantic_failures_cover_contract_claim_goal_and_amendments() {
             "ready_for_merge": {
                 "lane_id": "LANE-X",
                 "ready": false,
-                "contract_bundle_digest": crate::self_tests::boundaries::support::sha('2'),
+                "contract_bundle_digest": crate::self_tests::boundaries::workspace_fixtures::sha('2'),
                 "changed_files": ["validator/src/unmeasured.rs"]
             },
             "ready_for_merge_receipts": [],
@@ -133,15 +133,16 @@ fn aggregate_semantic_failures_cover_contract_claim_goal_and_amendments() {
 
 #[test]
 fn aggregate_semantic_failures_cover_text_surface_overclaims() {
-    let root = crate::self_tests::boundaries::support::temp_root("aggregate-text-overclaims");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("aggregate-text-overclaims");
     std::fs::create_dir_all(&root).expect("aggregate text root");
     let errors = aggregate_errors_at(
         &root,
         json!({
             "completion_manifest": {
                 "root": ".",
-                "contract_bundle_hash": crate::self_tests::boundaries::support::sha('0'),
-                "contract_bundle_hash_actual": crate::self_tests::boundaries::support::sha('0'),
+                "contract_bundle_hash": crate::self_tests::boundaries::workspace_fixtures::sha('0'),
+                "contract_bundle_hash_actual": crate::self_tests::boundaries::workspace_fixtures::sha('0'),
                 "required_claim_ids": [],
                 "claims": [{
                     "id": "",

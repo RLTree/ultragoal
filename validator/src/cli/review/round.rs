@@ -193,7 +193,8 @@ mod tests {
 
     #[test]
     fn run_propagates_observability_spool_write_errors() {
-        let root = crate::self_tests::boundaries::support::temp_root("review-round-spool-file");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("review-round-spool-file");
         std::fs::create_dir_all(&root).expect("root");
         crate::json_boundary::write_json(
             &root.join("plugin-manifest-draft.json"),

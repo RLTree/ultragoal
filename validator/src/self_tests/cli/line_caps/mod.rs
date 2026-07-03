@@ -18,7 +18,7 @@ fn write_file(path: &Path, body: &str) {
 }
 
 fn package_root(label: &str, files: &[(&str, String)]) -> PathBuf {
-    let root = crate::self_tests::boundaries::support::temp_root(label);
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     let resources = files
         .iter()
         .map(|(rel, body)| {
@@ -207,7 +207,8 @@ fn line_caps_command_fails_when_no_source_paths_exist() {
 
 #[test]
 fn line_caps_command_reports_candidate_digest_errors_before_receipt_claim() {
-    let root = crate::self_tests::boundaries::support::temp_root("line-caps-no-manifest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("line-caps-no-manifest");
     std::fs::create_dir_all(&root).expect("temp root");
     let err = crate::cli::line_caps::run(
         &root,

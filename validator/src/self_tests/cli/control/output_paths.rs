@@ -108,7 +108,7 @@ fn control_receipt_path_accepts_absolute_path_under_missing_root() {
 
 #[test]
 fn run_refuses_law_specific_proof_paths_without_overwrite() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-path-overwrite");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-path-overwrite");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
@@ -149,7 +149,8 @@ fn run_refuses_law_specific_proof_paths_without_overwrite() {
 
 #[test]
 fn wrong_control_receipt_path_fails_before_package_digest() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-path-before-digest");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-path-before-digest");
     std::fs::create_dir_all(&root).expect("create cli path before digest root");
     let command = ControlCommand {
         operation: ControlOperation::RegistryProbe,

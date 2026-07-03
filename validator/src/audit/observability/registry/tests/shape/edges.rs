@@ -6,7 +6,7 @@ fn observability_control_board_shape_edges_are_explicit() {
     super::super::super::control::check(&json!({}), &mut failures);
     assert!(failures.contains(&"observability_control_board_missing".to_string()));
 
-    let mut observable = super::super::support::observable_inventory();
+    let mut observable = super::super::inventory_fixtures::observable_inventory();
     observable["observability_control_board"]["first_incomplete"] = json!({
         "family": "commands",
         "id": "stale",
@@ -29,7 +29,7 @@ fn observability_control_board_shape_edges_are_explicit() {
             .any(|item| item == "observability_control_board_family_missing:signals")
     );
 
-    let mut mismatch = super::super::support::observable_inventory();
+    let mut mismatch = super::super::inventory_fixtures::observable_inventory();
     mismatch["command_observability_inventory"]["package digest"]["observability_status"] =
         json!("unobservable");
     mismatch["command_observability_inventory"]["package digest"]["missing_surfaces"] =
@@ -50,14 +50,14 @@ fn observability_control_board_shape_edges_are_explicit() {
         item == "observability_control_board_first_incomplete_mismatch:commands:package digest"
     }));
 
-    let mut claim = super::super::support::observable_inventory();
+    let mut claim = super::super::inventory_fixtures::observable_inventory();
     claim["observability_control_board"]["claim_impact"] = json!("");
     claim["signal_inventory"]["latency"]["observability_status"] = json!("unknown");
     failures.clear();
     super::super::super::control::check(&claim, &mut failures);
     assert!(failures.contains(&"observability_control_board_claim_impact_missing".to_string()));
 
-    let mut missing_inventory = super::super::support::observable_inventory();
+    let mut missing_inventory = super::super::inventory_fixtures::observable_inventory();
     missing_inventory
         .as_object_mut()
         .unwrap()
@@ -73,7 +73,7 @@ fn observability_control_board_shape_edges_are_explicit() {
 
 #[test]
 fn observability_surface_and_operating_shape_edges_are_explicit() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-shape-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-shape-edges");
     let mut failures = Vec::new();
     super::super::super::surfaces::check(&root, &json!({}), &mut failures);
     assert!(
@@ -86,7 +86,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
             .any(|item| item.starts_with("observability_surface_inventory_missing:"))
     );
 
-    let mut inventory = super::super::support::observable_inventory();
+    let mut inventory = super::super::inventory_fixtures::observable_inventory();
     inventory["surfaces"]
         .as_array_mut()
         .unwrap()
@@ -101,7 +101,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         item == "observability_surface_telemetry_row_not_object:schema parse boundaries"
     }));
 
-    let mut surface_rows = super::super::support::observable_inventory();
+    let mut surface_rows = super::super::inventory_fixtures::observable_inventory();
     surface_rows["surface_inventory"]
         .as_object_mut()
         .unwrap()
@@ -128,7 +128,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         item == "observability_surface_observability_status_missing:receipt proof artifacts"
     }));
 
-    let mut missing_claim = super::super::support::observable_inventory();
+    let mut missing_claim = super::super::inventory_fixtures::observable_inventory();
     missing_claim["surface_inventory"]["schema parse boundaries"]["observability_status"] =
         json!("partially_observable");
     missing_claim["surface_inventory"]["schema parse boundaries"]["missing_surfaces"] =
@@ -144,7 +144,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         &"observability_surface_telemetry_missing_metadata:schema parse boundaries".to_string()
     ));
 
-    let mut surface_contract = super::super::support::observable_inventory();
+    let mut surface_contract = super::super::inventory_fixtures::observable_inventory();
     surface_contract["surface_inventory"]["schema parse boundaries"]["observability_status"] =
         json!("partially_observable");
     surface_contract["surface_inventory"]["schema parse boundaries"]["observed_surfaces"] =
@@ -172,7 +172,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
     assert!(failures.contains(&"observability_loop_inventory_missing".to_string()));
     assert!(failures.contains(&"observability_signal_inventory_missing".to_string()));
 
-    let mut loop_inventory = super::super::support::observable_inventory();
+    let mut loop_inventory = super::super::inventory_fixtures::observable_inventory();
     loop_inventory["operating_loop_inventory"]["current_digest_first"] = json!({});
     loop_inventory["signal_inventory"]["latency"] = json!({
         "observability_status": "unobservable",
@@ -188,7 +188,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         failures.contains(&"observability_signal_telemetry_missing_metadata:latency".to_string())
     );
 
-    let mut operating_contract = super::super::support::observable_inventory();
+    let mut operating_contract = super::super::inventory_fixtures::observable_inventory();
     operating_contract["operating_loop_inventory"]["current_digest_first"]["observed_surfaces"] =
         json!([
             "log instrumentation",
@@ -205,7 +205,7 @@ fn observability_surface_and_operating_shape_edges_are_explicit() {
         )
     );
 
-    let mut loop_edges = super::super::support::observable_inventory();
+    let mut loop_edges = super::super::inventory_fixtures::observable_inventory();
     loop_edges["operating_loop_inventory"]
         .as_object_mut()
         .unwrap()

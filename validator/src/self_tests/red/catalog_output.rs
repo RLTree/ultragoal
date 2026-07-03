@@ -15,7 +15,7 @@ fn has(items: &[String], needle: &str) -> bool {
 
 #[test]
 fn red_catalog_and_audit_outputs_fail_closed() {
-    let root = crate::self_tests::boundaries::support::temp_root("red-catalog-output");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("red-catalog-output");
     let store = crate::schema_catalog::load(&root);
     let mut failures = BTreeMap::new();
     write_json(
@@ -39,13 +39,13 @@ fn red_catalog_and_audit_outputs_fail_closed() {
             {
                 "id":"red-one",
                 "packet_path":"fixtures/red/packet.json",
-                "packet_digest":crate::self_tests::boundaries::support::sha('1'),
+                "packet_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
                 "expected_failure":"new"
             },
             {
                 "id":"red-one",
                 "packet_path":"../escape.json",
-                "packet_digest":crate::self_tests::boundaries::support::sha('2'),
+                "packet_digest":crate::self_tests::boundaries::workspace_fixtures::sha('2'),
                 "expected_failure":"escape"
             }
         ]),

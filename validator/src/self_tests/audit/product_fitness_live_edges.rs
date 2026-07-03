@@ -14,8 +14,9 @@ fn errors(out: &[crate::audit::contract::Failure]) -> Vec<&str> {
 
 #[test]
 fn audit_catalog_and_receipt_edges() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("product_fitness_live-audit-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product_fitness_live-audit-edges",
+    );
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
@@ -109,8 +110,9 @@ fn audit_catalog_and_receipt_edges() {
 
 #[test]
 fn claim_and_materiality_edges() {
-    let root =
-        crate::self_tests::boundaries::support::temp_root("product_fitness_live-claim-edges");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product_fitness_live-claim-edges",
+    );
     let mut out = Vec::new();
     crate::claim_semantics::claim::evidence::live_e2e_check(
         &json!({"id":"CLAIM","evidence":[{

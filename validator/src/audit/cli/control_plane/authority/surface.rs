@@ -33,8 +33,8 @@ mod tests {
 
     #[test]
     fn receipt_failures_prefix_schema_errors() {
-        let root = crate::self_tests::boundaries::support::repo_root();
-        let candidate = crate::self_tests::boundaries::support::sha('a');
+        let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
         let failures = super::receipt_failures(
             &root,
             &json!({"schema":"wrong"}),

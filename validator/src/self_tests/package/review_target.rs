@@ -42,7 +42,8 @@ fn review_target_normalization_removes_detached_proof_surfaces() {
 
 #[test]
 fn review_payload_rejects_missing_manifest_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-payload-missing");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-payload-missing");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     assert!(
         crate::package::review_payload(&root, "docs/missing.md")
@@ -54,7 +55,8 @@ fn review_payload_rejects_missing_manifest_paths() {
 
 #[test]
 fn review_payload_normalizes_plugin_manifest_and_reads_regular_files() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-payload-normalize");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-payload-normalize");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/visible.md"), "visible").expect("visible");
     std::fs::write(
@@ -88,7 +90,8 @@ fn review_payload_normalizes_plugin_manifest_and_reads_regular_files() {
 #[cfg(unix)]
 #[test]
 fn review_payload_rejects_hard_linked_manifest_entries() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-payload-hardlink");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-payload-hardlink");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/source.md"), "source").expect("source");
     std::fs::hard_link(root.join("docs/source.md"), root.join("docs/hard.md")).expect("hard link");
@@ -101,7 +104,8 @@ fn review_payload_rejects_hard_linked_manifest_entries() {
 
 #[test]
 fn build_review_target_receipt_hashes_included_paths_and_validator_anchor() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-target-receipt");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-target-receipt");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::create_dir_all(root.join("validation_artifacts/ultragoal-audit"))
         .expect("audit artifacts");
@@ -148,7 +152,8 @@ fn build_review_target_receipt_hashes_included_paths_and_validator_anchor() {
 
 #[test]
 fn build_review_target_receipt_rejects_unclosed_manifest_paths() {
-    let root = crate::self_tests::boundaries::support::temp_root("review-target-unclosed");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("review-target-unclosed");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(
         root.join("plugin-manifest-draft.json"),

@@ -17,7 +17,8 @@ fn write_text(path: &Path, text: &str) {
 
 #[test]
 fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-control-plane-audit");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-control-plane-audit");
     write_text(
         &root.join("validator/Cargo.toml"),
         "[[bin]]\nname = \"ultragoal\"\n[[bin]]\nname = \"ultragoal-validator\"\n",

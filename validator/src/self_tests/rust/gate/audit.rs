@@ -81,14 +81,15 @@ fn rust_devx_audit_receipt_edges_are_typed() {
 #[test]
 fn rust_devx_audit_law_id_lookup_accepts_obligation_id_rows() {
     let rust_law = &crate::audit::rust::developer::LAWS[0];
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     assert!(crate::audit::rust::developer::has_law_id(
         &root,
         "docs/source-obligation-matrix.json",
         "obligations",
         rust_law.id
     ));
-    let temp = crate::self_tests::boundaries::support::temp_root("rust-law-obligation-id");
+    let temp =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("rust-law-obligation-id");
     std::fs::create_dir_all(temp.join("docs")).expect("docs");
     std::fs::write(
         temp.join("docs/laws.json"),
@@ -107,7 +108,7 @@ fn rust_devx_audit_law_id_lookup_accepts_obligation_id_rows() {
 
 #[test]
 fn rust_devx_audit_live_root_covers_current_surface_presence() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let failures = crate::audit::rust::developer::package_failures(&root);
     for missing_prefix in [
         "rust_devx_missing_artifact:",
@@ -139,7 +140,7 @@ fn rust_devx_missing_prefix_detection_covers_present_and_absent_rows() {
 
 #[test]
 fn rust_devx_audit_law_id_lookup_fails_closed_for_missing_rows() {
-    let temp = crate::self_tests::boundaries::support::temp_root("rust-law-id-missing");
+    let temp = crate::self_tests::boundaries::workspace_fixtures::temp_root("rust-law-id-missing");
     std::fs::create_dir_all(temp.join("docs")).expect("docs");
     std::fs::write(temp.join("docs/empty.json"), br#"{"rows":[]}"#).expect("empty rows");
     let wrong_rows = br#"{"rows":[{"id":"other-law"},{"obligation_id":"other-obligation"}]}"#;

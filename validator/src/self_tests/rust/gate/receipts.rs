@@ -55,7 +55,7 @@ fn rust_command_usage_matches_developer_workflow_surface() {
 
 #[test]
 fn rust_devx_receipt_binds_cli_authority_and_rejects_wrong_law() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let command = RustCommand {
         operation: RustOperation::ToolchainVerify,
         receipt: None,
@@ -128,7 +128,7 @@ fn users_marker() -> &'static str {
 
 #[test]
 fn workspace_gc_receipt_binds_plan_and_rejects_missing_law() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let command = GarbageCommand {
         operation: GarbageOperation::Verify,
         receipt: None,
@@ -190,7 +190,7 @@ fn workspace_gc_receipt_binds_plan_and_rejects_missing_law() {
 
 #[test]
 fn rust_devx_audit_fails_closed_when_surfaces_are_absent() {
-    let root = crate::self_tests::boundaries::support::temp_root("rust-devx-audit");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("rust-devx-audit");
     std::fs::create_dir_all(&root).expect("root");
     let failures = crate::audit::rust::developer::package_failures(&root);
     assert!(failures.iter().any(|(law, failure)| {

@@ -11,7 +11,8 @@ fn aggregate_errors_at(root: &Path, bundle: Value) -> Vec<String> {
 
 #[test]
 fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("aggregate-root-verification");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("aggregate-root-verification");
     std::fs::create_dir_all(root.join("artifacts")).expect("artifacts");
     let post_receipt_path = root.join("artifacts/post-merge.json");
     std::fs::write(
@@ -34,8 +35,8 @@ fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() 
     let base = json!({
         "completion_manifest": {
             "root": root_str,
-            "contract_bundle_hash": crate::self_tests::boundaries::support::sha('0'),
-            "contract_bundle_hash_actual": crate::self_tests::boundaries::support::sha('0'),
+            "contract_bundle_hash": crate::self_tests::boundaries::workspace_fixtures::sha('0'),
+            "contract_bundle_hash_actual": crate::self_tests::boundaries::workspace_fixtures::sha('0'),
             "required_claim_ids": [],
             "claims": [],
             "goal_binding": {

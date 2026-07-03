@@ -196,7 +196,7 @@ mod tests {
             &json!({
                 "schema":"harness-ultragoal.red-fixture-report.v1",
                 "status":"pass",
-                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('a')},
+                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('a')},
                 "generated_at":"2026-06-27T00:00:00Z",
                 "red_fixtures":{
                     "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}
@@ -222,7 +222,7 @@ mod tests {
             &json!({
                 "schema":"harness-ultragoal.red-fixture-report.v1",
                 "status":"pass",
-                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::support::sha('a')},
+                "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('a')},
                 "generated_at":"2026-06-27T00:00:00Z",
                 "red_fixtures":{
                     "row":{"status":"pass","packet_path":"fixtures/red/row.json","packet_digest":crate::digest::ZERO}

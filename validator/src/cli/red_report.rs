@@ -91,7 +91,8 @@ mod tests {
 
     #[test]
     fn red_fixture_report_command_writes_dedicated_observability() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-report-command");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("red-report-command");
         let audit_dir = root.join("validation_artifacts/ultragoal-audit");
         fs::create_dir_all(&audit_dir).expect("audit dir");
         crate::json_boundary::write_json(
@@ -175,7 +176,8 @@ mod tests {
 
     #[test]
     fn red_fixture_report_command_propagates_observability_write_errors() {
-        let root = crate::self_tests::boundaries::support::temp_root("red-report-no-candidate");
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("red-report-no-candidate");
         let command = RedReportCommand {
             report: PathBuf::from(DEFAULT_REPORT),
         };

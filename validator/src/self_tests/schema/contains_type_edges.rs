@@ -10,7 +10,9 @@ fn write_json(path: &Path, value: &Value) {
 
 #[test]
 fn schema_keywords_cover_type_arrays_and_contains_fast_path_fallbacks() {
-    let root = crate::self_tests::boundaries::support::temp_root("schema-keyword-extra-boundaries");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "schema-keyword-extra-boundaries",
+    );
     write_json(
         &root.join("schemas/extra.schema.json"),
         &json!({

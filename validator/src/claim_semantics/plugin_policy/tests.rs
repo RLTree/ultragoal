@@ -17,7 +17,7 @@ fn toml_string_field_reads_quoted_multiline_and_missing_values() {
 
 #[test]
 fn plugin_policy_cache_reuses_manifest_failure_sets() {
-    let root = crate::self_tests::boundaries::support::temp_root("plugin-policy-cache");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("plugin-policy-cache");
     std::fs::create_dir_all(&root).expect("plugin policy cache root");
     let bundle = json!({"plugin_manifest":{"resources":["missing.txt"]}});
     let mut cache = BTreeMap::new();

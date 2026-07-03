@@ -12,7 +12,8 @@ fn write_json(path: &Path, value: &serde_json::Value) {
 
 #[test]
 fn control_plane_receipt_failure_is_evidence_derived() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-control-authority");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-control-authority");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
@@ -51,7 +52,8 @@ fn control_plane_receipt_failure_is_evidence_derived() {
 
 #[test]
 fn production_control_plane_does_not_use_source_audit_as_green_path() {
-    let root = crate::self_tests::boundaries::support::temp_root("cli-no-source-audit-loop");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-no-source-audit-loop");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),

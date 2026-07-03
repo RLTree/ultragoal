@@ -58,7 +58,8 @@ fn observe_command_roundtrip_run_fails_closed_for_unknown_and_partial_targets() 
 
 #[test]
 fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
-    let root = crate::self_tests::boundaries::support::temp_root("observe-roundtrip-receipt");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("observe-roundtrip-receipt");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),

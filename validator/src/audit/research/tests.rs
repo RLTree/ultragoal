@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 
 #[test]
 fn research_audit_reports_missing_docs_and_registry_row_shape_edges() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-research");
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-research");
     let missing = super::failures(&root);
     assert!(
         missing
@@ -148,7 +148,8 @@ fn research_source_cards_reject_missing_anchor_id_locator_and_requirement_edges(
 
 #[test]
 fn research_source_corpus_guards_reject_escape_stale_digest_and_nonfile_digest_errors() {
-    let root = crate::self_tests::boundaries::support::temp_root("audit-research-corpus");
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-research-corpus");
     let rel = "artifacts/source-snapshots/source.txt";
     std::fs::create_dir_all(root.join("artifacts/source-snapshots")).expect("corpus dir");
     std::fs::write(root.join(rel), b"source corpus").expect("corpus");

@@ -14,7 +14,7 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
 
 #[test]
 fn review_round_command_emits_fail_closed_observability_for_stale_anchors() {
-    let root = crate::self_tests::boundaries::support::repo_root();
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let observability_receipt = format!(
         "target/review-round-stale-anchor-observability-{}.json",
         std::process::id()
