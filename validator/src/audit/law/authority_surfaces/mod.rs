@@ -2,10 +2,13 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+mod graph;
+mod graph_edges;
 mod inventory;
+mod inventory_requirements;
+mod paths;
 mod registry;
 mod source;
-mod surface_registry;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
@@ -18,12 +21,17 @@ pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let red_catalog = crate::json_boundary::read_json(&root.join("templates/RED_FIXTURES.json"))
         .unwrap_or(Value::Null);
     let mut out = Vec::new();
-    out.extend(surface_registry::failures(root, &inventory));
+    out.extend(inventory_requirements::failures(root, &inventory));
     out.extend(registry::law_registry_failures(
         root,
         &laws,
         &registry::red_catalog_ids(&red_catalog),
         &inventory,
+    ));
+    out.extend(graph::failures(
+        root,
+        &inventory,
+        &registry::red_catalog_ids(&red_catalog),
     ));
     out.extend(source::source_text_failures(root));
     out.extend(inventory::generated_failures(root, &inventory));
@@ -46,4 +54,27 @@ pub(crate) fn generated_boundary_failures_for_test(
     inventory: &BTreeSet<String>,
 ) -> Vec<(String, String)> {
     inventory::generated_failures(root, inventory)
+}
+
+#[cfg(test)]
+pub(crate) fn authority_graph_failures_for_test(
+    root: &Path,
+    inventory: &BTreeSet<String>,
+    mandatory: &Value,
+    obligations: &Value,
+    trace: &Value,
+    standards: &Value,
+    standards_audit: &str,
+    red_ids: &BTreeSet<String>,
+) -> Vec<(String, String)> {
+    graph::authority_graph_failures(
+        root,
+        inventory,
+        mandatory,
+        obligations,
+        trace,
+        standards,
+        standards_audit,
+        red_ids,
+    )
 }

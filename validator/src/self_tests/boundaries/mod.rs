@@ -1,6 +1,7 @@
 pub(crate) mod artifact_refs;
 pub(crate) mod authority {
     pub(crate) mod generated_artifacts;
+    pub(crate) mod graph_edges;
     pub(crate) mod surface_edges;
 }
 pub(crate) mod filesystem;

@@ -20,7 +20,7 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     surface(
         "source",
-        "validator/src/audit/law/authority_surfaces/surface_registry.rs",
+        "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
     ),
     surface(
         "source",

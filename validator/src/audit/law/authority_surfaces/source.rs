@@ -44,7 +44,7 @@ fn output_authority_failures_for_text(rel: &str, text: &str) -> Vec<String> {
     {
         return Vec::new();
     }
-    if allowed_direct_receipt_path(rel) || text.contains("claim_artifact_path") {
+    if allowed_direct_receipt_path(rel) {
         return Vec::new();
     }
     [
@@ -57,13 +57,21 @@ fn output_authority_failures_for_text(rel: &str, text: &str) -> Vec<String> {
         "PathBuf::from(receipt)",
     ]
     .into_iter()
-    .filter(|pattern| text.contains(pattern))
+    .filter(|pattern| text.lines().any(|line| output_pattern_line(line, pattern)))
     .map(|pattern| {
         format!(
             "claim_artifact_output_without_typed_authority:path={rel};pattern={pattern};repair=use_output_path_claim_artifact_path_or_mark_external_debug_no_claim"
         )
     })
     .collect()
+}
+
+fn output_pattern_line(line: &str, pattern: &str) -> bool {
+    let trimmed = line.trim_start();
+    if trimmed.starts_with('"') || trimmed.starts_with("//") {
+        return false;
+    }
+    line.contains(pattern)
 }
 
 fn raw_authority_marker(text: &str) -> Option<&'static str> {

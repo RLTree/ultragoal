@@ -122,6 +122,26 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
         "typed claim-artifact authority should satisfy output path enforcement: {typed_output:?}"
     );
 
+    let mixed_output = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+        "validator/src/cli/current_state/mod.rs",
+        "let safe_path = crate::output_path::claim_artifact_path(root, &command.receipt, \"receipt\")?;\nlet unsafe_path = root.join(&command.receipt);\ncrate::json_boundary::write_json(&unsafe_path, &value)?;",
+    );
+    assert!(
+        mixed_output
+            .iter()
+            .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
+        "one typed writer must not bless a sibling raw claim output path: {mixed_output:?}"
+    );
+
+    let scanner_catalog = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+        "validator/src/audit/law/authority_surfaces/source.rs",
+        "    \"root.join(&command.receipt)\",\n",
+    );
+    assert!(
+        scanner_catalog.is_empty(),
+        "the scanner pattern catalog is not a claim writer: {scanner_catalog:?}"
+    );
+
     let fixture_text = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
         "validator/src/cli/current_state/tests.rs",
         "let path = root.join(&command.receipt);",
