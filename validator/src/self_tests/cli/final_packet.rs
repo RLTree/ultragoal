@@ -61,16 +61,17 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
             "failure":{"blocked_claim_classes":["custom_registry_block"]}
         }),
     );
-    let blocked_receipt = blocked.join("validation_artifacts/review/final-packet-proof.json");
+    let blocked_receipt = Path::new("validation_artifacts/review/final-packet-proof.json");
     let code = crate::command_run::run_with_exit_code(crate::Args {
         root: blocked.clone(),
         command: crate::Command::FinalPacket(FinalPacketCommand {
-            receipt: blocked_receipt.clone(),
+            receipt: blocked_receipt.to_path_buf(),
         }),
     })
     .expect("final packet command");
     assert_eq!(code, 1);
-    let value = crate::json_boundary::read_json(&blocked_receipt).expect("blocked receipt");
+    let value =
+        crate::json_boundary::read_json(&blocked.join(blocked_receipt)).expect("blocked receipt");
     assert_eq!(value["status"], "fail");
     assert_eq!(value["observability"]["status"], "fail");
     assert_eq!(value["observability"]["operation"], "final-packet.prove");
@@ -192,18 +193,19 @@ fn final_packet_receipt_builds_fail_closed_and_green_paths() {
         3
     );
 
-    let output = green.join("validation_artifacts/review/final-packet-proof.json");
+    let output = Path::new("validation_artifacts/review/final-packet-proof.json");
     assert_eq!(
         run(
             &green,
             &FinalPacketCommand {
-                receipt: output.clone()
+                receipt: output.to_path_buf()
             }
         )
         .expect("green run"),
         0
     );
-    let written = crate::json_boundary::read_json(&output).expect("written green receipt");
+    let written =
+        crate::json_boundary::read_json(&green.join(output)).expect("written green receipt");
     assert_eq!(written["status"], "pass");
     assert_eq!(written["observability"]["status"], "pass");
     assert_eq!(written["why_failed"], "none");

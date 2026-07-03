@@ -34,10 +34,7 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
 #[test]
 fn review_target_command_emits_pass_observability() {
     let root = package_root("review-target-observability-pass");
-    let receipt = root
-        .join("receipts/review-target.json")
-        .to_string_lossy()
-        .to_string();
+    let receipt = "receipts/review-target.json";
     let observability = "observability/review-target-build.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -45,7 +42,7 @@ fn review_target_command_emits_pass_observability() {
             "review-target",
             "build",
             "--receipt",
-            &receipt,
+            receipt,
             "--observability-receipt",
             observability,
         ],

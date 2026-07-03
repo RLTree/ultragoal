@@ -59,7 +59,12 @@ pub(crate) fn run(
         status,
         &why_failed,
     )?;
-    crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)?;
+    let observability_path = crate::output_path::claim_artifact_path(
+        &root,
+        &observability_receipt,
+        "review round observability receipt",
+    )?;
+    crate::json_boundary::write_json(&observability_path, &observability)?;
     super::round_stdout::print_summary(&observability);
     Ok(i32::from(status != "pass"))
 }

@@ -7,7 +7,7 @@ fn package_surface_run_writes_typed_cache_observability() {
     let target = crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-run-target");
     super::write_package(&root, "same", "0.0.test");
     super::write_package(&target, "same", "0.0.test");
-    let path = root.join("validation_artifacts/cli/cache-audit-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/cache-audit-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -19,7 +19,8 @@ fn package_surface_run_writes_typed_cache_observability() {
     .expect("surface run");
 
     assert_eq!(exit, 0);
-    let value = crate::json_boundary::read_json(&path).expect("written receipt");
+    let receipt_path = root.join(&path);
+    let value = crate::json_boundary::read_json(&receipt_path).expect("written receipt");
     assert_eq!(value["schema"], surface::SCHEMA);
     assert_eq!(value["operation"], "cache_audit");
     assert_eq!(value["target"]["surface"], "versioned_cache_package");
@@ -29,7 +30,7 @@ fn package_surface_run_writes_typed_cache_observability() {
         value["observability"]["event"]["cache_mode"],
         "package_surface_audit_no_refresh"
     );
-    let lines = surface::stdout::lines(&path, &value);
+    let lines = surface::stdout::lines(&receipt_path, &value);
     assert_eq!(lines.len(), 1);
     assert!(lines[0].contains("ultragoal-surface-audit pass"));
     assert!(lines[0].contains("proven=cache_surface_digest_alignment"));
@@ -47,7 +48,7 @@ fn package_surface_run_writes_typed_install_observability() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-install-target");
     super::write_package(&root, "same", "0.0.test");
     super::write_package(&target, "same", "0.0.test");
-    let path = root.join("validation_artifacts/cli/install-audit-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/install-audit-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -59,13 +60,14 @@ fn package_surface_run_writes_typed_install_observability() {
     .expect("surface run");
 
     assert_eq!(exit, 0);
-    let value = crate::json_boundary::read_json(&path).expect("written receipt");
+    let receipt_path = root.join(&path);
+    let value = crate::json_boundary::read_json(&receipt_path).expect("written receipt");
     assert_eq!(value["schema"], surface::SCHEMA);
     assert_eq!(value["operation"], "install_audit");
     assert_eq!(value["target"]["surface"], "installed_plugin");
     assert_eq!(value["check_id"], "install-audit-observability-binding");
     assert_eq!(value["observability"]["operation"], "install_audit");
-    let lines = surface::stdout::lines(&path, &value);
+    let lines = surface::stdout::lines(&receipt_path, &value);
     assert_eq!(lines.len(), 1);
     assert!(lines[0].contains("ultragoal-surface-audit pass"));
     assert!(lines[0].contains("proven=install_surface_digest_alignment"));
@@ -81,7 +83,7 @@ fn package_surface_run_emits_fail_closed_cache_observability() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-cache-fail-source");
     let missing = root.join("missing-cache-target");
     super::write_package(&root, "same", "0.0.test");
-    let path = root.join("validation_artifacts/cli/cache-audit-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/cache-audit-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -93,7 +95,8 @@ fn package_surface_run_emits_fail_closed_cache_observability() {
     .expect("surface run");
 
     assert_eq!(exit, 1);
-    let value = crate::json_boundary::read_json(&path).expect("written receipt");
+    let receipt_path = root.join(&path);
+    let value = crate::json_boundary::read_json(&receipt_path).expect("written receipt");
     assert_eq!(value["status"], "fail");
     assert_eq!(value["check_id"], "cache-audit-observability-binding");
     assert_eq!(value["why_failed"], "package_surface_target_missing");
@@ -101,7 +104,7 @@ fn package_surface_run_emits_fail_closed_cache_observability() {
         value["claim_impact"],
         "blocks_install_cache_parity_readiness_release_completion_update_goal"
     );
-    let lines = surface::stdout::lines(&path, &value);
+    let lines = surface::stdout::lines(&receipt_path, &value);
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("ultragoal-surface-audit fail"));
     assert!(lines[0].contains("proven=none"));
@@ -120,7 +123,7 @@ fn package_surface_run_emits_fail_closed_install_observability() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-install-fail-source");
     let missing = root.join("missing-install-target");
     super::write_package(&root, "same", "0.0.test");
-    let path = root.join("validation_artifacts/cli/install-audit-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/install-audit-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -132,7 +135,8 @@ fn package_surface_run_emits_fail_closed_install_observability() {
     .expect("surface run");
 
     assert_eq!(exit, 1);
-    let value = crate::json_boundary::read_json(&path).expect("written receipt");
+    let receipt_path = root.join(&path);
+    let value = crate::json_boundary::read_json(&receipt_path).expect("written receipt");
     assert_eq!(value["status"], "fail");
     assert_eq!(value["check_id"], "install-audit-observability-binding");
     assert_eq!(value["why_failed"], "package_surface_target_missing");
@@ -140,7 +144,7 @@ fn package_surface_run_emits_fail_closed_install_observability() {
         value["claim_impact"],
         "blocks_install_cache_parity_readiness_release_completion_update_goal"
     );
-    let lines = surface::stdout::lines(&path, &value);
+    let lines = surface::stdout::lines(&receipt_path, &value);
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("ultragoal-surface-audit fail"));
     assert!(lines[0].contains("proven=none"));

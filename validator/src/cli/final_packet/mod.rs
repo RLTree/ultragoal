@@ -35,7 +35,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<FinalPacketCommand>, String
 
 pub(crate) fn run(root: &Path, command: &FinalPacketCommand) -> Result<i32, String> {
     let receipt = receipt_for_path(root, &command.receipt)?;
-    crate::json_boundary::write_json(&command.receipt, &receipt)?;
+    let receipt_path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "final packet receipt")?;
+    crate::json_boundary::write_json(&receipt_path, &receipt)?;
     proof::print_receipt(&command.receipt, &receipt);
     Ok(i32::from(proof::status(&receipt) != "pass"))
 }

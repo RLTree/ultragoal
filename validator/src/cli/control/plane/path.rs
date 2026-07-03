@@ -36,16 +36,12 @@ fn expected_receipt_file(operation: ControlOperation) -> String {
     }
 }
 
-fn relative_receipt_path(root: &Path, path: &Path) -> Result<PathBuf, String> {
+fn relative_receipt_path(_root: &Path, path: &Path) -> Result<PathBuf, String> {
     if path.is_absolute() {
-        let root_abs = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
-        let relative = path.strip_prefix(&root_abs).map_err(|_| {
-            format!(
-                "cli_control_plane_receipt_path_outside_root:{}",
-                path.display()
-            )
-        })?;
-        normalize_relative_path(relative)
+        Err(format!(
+            "cli_control_plane_receipt_path_absolute_claim_output:{}",
+            path.display()
+        ))
     } else {
         normalize_relative_path(path)
     }

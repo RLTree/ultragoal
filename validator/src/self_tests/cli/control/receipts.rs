@@ -74,14 +74,14 @@ fn control_plane_schema_accepts_emitted_observability_fields() {
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
     );
-    let path = root.join("validation_artifacts/cli/self-law-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/self-law-receipt.json");
     let command = ControlCommand {
         operation: ControlOperation::SelfUpdateGoalEligibility,
         receipt: Some(path.clone()),
         surface_root: None,
     };
     assert_eq!(run(&root, &command).expect("control run writes receipt"), 1);
-    let value = crate::json_boundary::read_json(&path).expect("control receipt");
+    let value = crate::json_boundary::read_json(&root.join(&path)).expect("control receipt");
     assert!(value.get("cache_mode").is_some());
     assert!(value.get("receipt_observability_binding").is_some());
     assert!(value.get("observability").is_some());
@@ -104,14 +104,14 @@ fn run_writes_and_prints_fail_closed_receipts() {
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
     );
-    let path = root.join("validation_artifacts/cli/packet-verify-receipt.json");
+    let path = std::path::PathBuf::from("validation_artifacts/cli/packet-verify-receipt.json");
     let command = ControlCommand {
         operation: ControlOperation::PacketVerify,
         receipt: Some(path.clone()),
         surface_root: None,
     };
     assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
-    let value = crate::json_boundary::read_json(&path).expect("read receipt");
+    let value = crate::json_boundary::read_json(&root.join(&path)).expect("read receipt");
     assert_eq!(value["operation"], "packet_verify");
     assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
 

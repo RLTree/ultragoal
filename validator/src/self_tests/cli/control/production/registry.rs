@@ -79,7 +79,8 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
     assert!(observed.contains("registry_surface:plugin_self_law_json_missing_or_malformed"));
     assert!(!observed.contains("final_packet"), "{observed}");
 
-    let receipt_path = root.join("validation_artifacts/cli/registry-probe-receipt.json");
+    let receipt_path =
+        std::path::PathBuf::from("validation_artifacts/cli/registry-probe-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -110,8 +111,8 @@ fn registry_probe_reports_registry_surface_without_packet_circularity() {
         .is_empty(),
         "{active}"
     );
-    let command_receipt =
-        crate::json_boundary::read_json(&receipt_path).expect("registry command receipt");
+    let command_receipt = crate::json_boundary::read_json(&root.join(&receipt_path))
+        .expect("registry command receipt");
     assert_eq!(command_receipt["status"], "fail");
     assert_eq!(
         command_receipt["check_id"],

@@ -158,7 +158,7 @@ fn package_surface_run_requires_receipt_and_reports_missing_target() {
     .expect_err("surface run requires receipt");
     assert!(without_receipt.contains("missing required argument --receipt"));
 
-    let receipt = root.join("validation_artifacts/cli/install-audit-receipt.json");
+    let receipt = std::path::PathBuf::from("validation_artifacts/cli/install-audit-receipt.json");
     let exit = run(
         &root,
         &ControlCommand {
@@ -169,7 +169,7 @@ fn package_surface_run_requires_receipt_and_reports_missing_target() {
     )
     .expect("surface run with receipt");
     assert_eq!(exit, 1);
-    assert!(receipt.exists());
+    assert!(root.join(&receipt).exists());
     std::fs::remove_dir_all(root).expect("cleanup surface print");
 }
 
@@ -180,8 +180,9 @@ fn package_surface_run_reports_receipt_source_and_write_errors() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("surface-write-target");
     write_package(&root, "same", "0.0.test");
     write_package(&target, "same", "0.0.test");
-    let receipt_dir = root.join("validation_artifacts/cli/install-audit-receipt.json");
-    std::fs::create_dir_all(&receipt_dir).expect("receipt dir");
+    let receipt_dir =
+        std::path::PathBuf::from("validation_artifacts/cli/install-audit-receipt.json");
+    std::fs::create_dir_all(root.join(&receipt_dir)).expect("receipt dir");
     let write_error = run(
         &root,
         &ControlCommand {

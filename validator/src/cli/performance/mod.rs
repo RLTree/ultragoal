@@ -42,7 +42,9 @@ pub(crate) fn run(root: &Path, command: &PerformanceCommand) -> Result<i32, Stri
         start.elapsed().as_millis() as u64,
     );
     if let Some(path) = &command.receipt {
-        crate::json_boundary::write_json(path, &receipt)?;
+        let claim_receipt_path =
+            crate::output_path::claim_artifact_path(root, path, "performance receipt")?;
+        crate::json_boundary::write_json(&claim_receipt_path, &receipt)?;
         println!(
             "ultragoal-performance {} operation={} class={} receipt={}",
             receipt["status"],

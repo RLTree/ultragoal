@@ -16,7 +16,15 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     surface(
         "source",
-        "validator/src/audit/law/authority_surfaces/source.rs",
+        "validator/src/audit/law/authority_surfaces/source/mod.rs",
+    ),
+    surface(
+        "source",
+        "validator/src/audit/law/authority_surfaces/source/output.rs",
+    ),
+    surface(
+        "source",
+        "validator/src/audit/law/authority_surfaces/source/raw.rs",
     ),
     surface(
         "source",
@@ -162,6 +170,20 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
         }
     }
     out
+}
+
+#[cfg(test)]
+pub(crate) fn required_surfaces_for_test() -> Vec<(&'static str, &'static str, bool)> {
+    REQUIRED_SURFACES
+        .iter()
+        .map(|surface| {
+            (
+                surface.role,
+                surface.rel,
+                surface.package_inventory_required,
+            )
+        })
+        .collect()
 }
 
 fn push(out: &mut Vec<(String, String)>, check: &str, detail: String) {

@@ -18,16 +18,17 @@ fn self_update_goal_failures_emit_observable_repair_contract() {
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
     );
-    let path = root.join("validation_artifacts/cli/self-law-receipt.json");
+    let path = Path::new("validation_artifacts/cli/self-law-receipt.json");
     let command = ControlCommand {
         operation: ControlOperation::SelfUpdateGoalEligibility,
-        receipt: Some(path.clone()),
+        receipt: Some(path.to_path_buf()),
         surface_root: None,
     };
 
     assert_eq!(run(&root, &command).expect("run writes receipt"), 1);
 
-    let value = crate::json_boundary::read_json(&path).expect("read self-law receipt");
+    let receipt_path = root.join(path);
+    let value = crate::json_boundary::read_json(&receipt_path).expect("read self-law receipt");
     assert_eq!(value["operation"], "self_update_goal_eligibility");
     assert_eq!(
         value["check_id"],
@@ -65,7 +66,7 @@ fn self_update_goal_failures_emit_observable_repair_contract() {
         "{value}"
     );
     let run_id = value["run_id"].as_str().expect("run id");
-    let lines = crate::cli::control::plane::registry::stdout::lines(&path, &value);
+    let lines = crate::cli::control::plane::registry::stdout::lines(&receipt_path, &value);
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("ultragoal-control fail"));
     assert!(lines[0].contains("operation=self_update_goal_eligibility"));

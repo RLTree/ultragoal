@@ -32,12 +32,13 @@ pub(crate) fn run(root: &Path, command: &SessionCommand) -> Result<i32, String> 
 
 pub(crate) fn rebind(root: &Path, receipt: &Path) -> Result<Value, String> {
     validate_receipt_path(root, receipt)?;
-    let path = root.join(receipt);
-    let mut value = crate::json_boundary::read_json(&path)?;
+    let claim_receipt_path =
+        crate::output_path::claim_artifact_path(root, receipt, "session-log hardening receipt")?;
+    let mut value = crate::json_boundary::read_json(&claim_receipt_path)?;
     value["generated_at"] = json!(crate::audit::clock::now_iso());
     value["candidate_version"] = json!(current_manifest_version(root)?);
     value["package_digest"] = json!(crate::package::inventory::package_digest(root)?);
-    crate::json_boundary::write_json(&path, &value)?;
+    crate::json_boundary::write_json(&claim_receipt_path, &value)?;
     validate_rebound(root)?;
     Ok(value)
 }
@@ -57,7 +58,7 @@ fn validate_rebound(root: &Path) -> Result<(), String> {
 
 fn validate_receipt_path(root: &Path, receipt: &Path) -> Result<(), String> {
     let text = receipt.to_string_lossy();
-    if receipt.is_absolute() || text != RECEIPT {
+    if text != RECEIPT {
         return Err(format!("session-log hardening receipt must be {RECEIPT}"));
     }
     if crate::package::inventory::package_path_error(root, &text).is_some() {

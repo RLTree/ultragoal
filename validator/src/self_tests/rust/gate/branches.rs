@@ -7,16 +7,18 @@ use crate::cli::rust::{
     run_with_receipt_value as rust_run_receipt,
 };
 use serde_json::json;
+use std::path::PathBuf;
 
 #[test]
 fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let out = root.join("target/self-tests/rust-run-receipt.json");
+    let out_rel = PathBuf::from("target/self-tests/rust-run-receipt.json");
+    let out = root.join(&out_rel);
     let code = rust_run(
         &root,
         &RustCommand {
             operation: RustOperation::Fast,
-            receipt: Some(out.clone()),
+            receipt: Some(out_rel),
         },
     )
     .expect("rust run");
@@ -25,6 +27,7 @@ fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
     let parent_file = root.join("target/self-tests/rust-parent-file");
     std::fs::write(&parent_file, "not a directory").expect("parent file");
     let write_failure = rust_run_receipt(
+        &root,
         &RustCommand {
             operation: RustOperation::Fast,
             receipt: Some(parent_file.join("receipt.json")),
@@ -50,6 +53,7 @@ fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
     assert_eq!(fail["claim_ceiling"], "withheld_or_blocked");
     assert_eq!(
         rust_run_receipt(
+            &root,
             &RustCommand {
                 operation: RustOperation::CleanProof,
                 receipt: None,

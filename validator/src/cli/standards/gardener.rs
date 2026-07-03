@@ -8,20 +8,21 @@ const RUNTIME_ARTIFACT_PREFIX: &str = "validation_artifacts/";
 
 pub(crate) fn rebind(root: &Path, receipt: &Path) -> Result<Value, String> {
     validate_receipt_path(root, receipt)?;
-    let receipt_path = root.join(receipt);
-    let mut value = crate::json_boundary::read_json(&receipt_path)?;
+    let claim_receipt_path =
+        crate::output_path::claim_artifact_path(root, receipt, "standards-gardener receipt")?;
+    let mut value = crate::json_boundary::read_json(&claim_receipt_path)?;
     let candidate = crate::package::inventory::package_digest(root)?;
     value["generated_at"] = json!(crate::audit::clock::now_iso());
     value["candidate_digest"] = json!(candidate);
     rebind_changed_artifacts(root, &mut value)?;
     validate_receipt(root, &value)?;
-    crate::json_boundary::write_json(&receipt_path, &value)?;
+    crate::json_boundary::write_json(&claim_receipt_path, &value)?;
     Ok(value)
 }
 
 fn validate_receipt_path(root: &Path, receipt: &Path) -> Result<(), String> {
     let text = receipt.to_string_lossy();
-    if receipt.is_absolute() || !text.starts_with(RECEIPT_DIR) {
+    if !text.starts_with(RECEIPT_DIR) {
         return Err("standards-gardener receipt must be root-relative under validation_artifacts/standards-gardener".into());
     }
     if crate::package::inventory::package_path_error(root, &text).is_some() {

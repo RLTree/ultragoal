@@ -134,7 +134,7 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
     );
 
     let scanner_catalog = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
-        "validator/src/audit/law/authority_surfaces/source.rs",
+        "validator/src/audit/law/authority_surfaces/source/output.rs",
         "    \"root.join(&command.receipt)\",\n",
     );
     assert!(
@@ -160,5 +160,75 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
             .iter()
             .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
         "absolute or caller-controlled claim outputs must route through typed output authority: {absolute_output:?}"
+    );
+}
+
+#[test]
+fn raw_authority_classification_is_not_blessed_by_unrelated_json_projection() {
+    let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/domain/claim_core.rs",
+        "use serde_json::{Value, json};\npub fn decide(v: Value) -> Value { let _receipt = json!({\"status\":\"pass\"}); v }\n",
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+        "json projection text elsewhere in a file must not classify raw downstream authority: {failures:?}"
+    );
+}
+
+#[test]
+fn output_authority_rejects_observability_and_roundtrip_receipt_bypasses() {
+    for (label, source) in [
+        (
+            "observability_receipt_join",
+            "let path = root.join(&observability_receipt);\ncrate::json_boundary::write_json(&path, &value)?;",
+        ),
+        (
+            "command_observability_receipt_join",
+            "let path = root.join(&command.observability_receipt);\ncrate::json_boundary::write_json(&path, &value)?;",
+        ),
+        (
+            "command_receipt_rel_join",
+            "crate::json_boundary::write_json(&root.join(command.receipt_rel()), &value)?;",
+        ),
+        (
+            "direct_receipt_write",
+            "crate::json_boundary::write_json(receipt, &value)?;",
+        ),
+    ] {
+        let failures = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+            "validator/src/cli/observe/command_roundtrip/mod.rs",
+            source,
+        );
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
+            "{label} should be rejected as claim output without typed authority: {failures:?}"
+        );
+    }
+}
+
+#[test]
+fn raw_authority_projection_classification_is_closed_to_named_product_roles() {
+    let product_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/observe/explain/summary.rs",
+        "use serde_json::{Value, json};\nstruct ExplainContext<'a>{ observed: Option<&'a Value> }\npub fn explanation(ctx: ExplainContext<'_>) -> Value { json!({\"smallest_repair\":\"repair\",\"query_evidence\":ctx.observed}) }\n",
+    );
+    assert!(
+        product_projection.is_empty(),
+        "named product projection boundary should be classified: {product_projection:?}"
+    );
+
+    let generic_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/observe/explain/summary.rs",
+        "use serde_json::{Value, json};\npub fn explanation(v: Value) -> Value { json!({\"status\":\"pass\",\"raw\":v}) }\n",
+    );
+    assert!(
+        generic_projection
+            .iter()
+            .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+        "projection path alone must not bless generic raw JSON passthrough: {generic_projection:?}"
     );
 }

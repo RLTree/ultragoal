@@ -63,6 +63,7 @@ fn gc_run_without_receipt_and_rust_audit_receipt_ok_path_are_covered() {
     let parent_file = root.join("target/self-tests/gc-parent-file");
     std::fs::write(&parent_file, "not a directory").expect("gc parent file");
     let write_failure = gc_run_receipt(
+        &root,
         &GarbageCommand {
             operation: GarbageOperation::Plan,
             receipt: Some(parent_file.join("receipt.json")),

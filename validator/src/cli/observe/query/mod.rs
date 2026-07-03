@@ -9,6 +9,7 @@ const NO_MATCHING_ROWS: &str = "observability query returned no matching rows";
 
 mod body;
 mod metrics;
+mod record_projection;
 mod records;
 mod target;
 #[cfg(test)]
@@ -16,6 +17,7 @@ mod tests;
 mod text;
 mod transport;
 pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
+pub(crate) use record_projection::observed_telemetry_record;
 pub(crate) use text::{
     bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation,
     bounded_success_metric_query_for_operation, query_text, trace_tags,

@@ -72,8 +72,8 @@ pub(crate) fn run(
     archive_purpose: String,
 ) -> Result<i32, String> {
     let started = Instant::now();
-    let zip = rooted_output_path(&root, &zip);
-    let receipt = rooted_output_path(&root, &receipt);
+    let zip = crate::output_path::claim_artifact_path(&root, &zip, "archive zip")?;
+    let receipt = crate::output_path::claim_artifact_path(&root, &receipt, "archive receipt")?;
     let outcome = build_and_write(&root, &zip, &receipt, &zip_root, &archive_purpose);
     let status = outcome.status();
     let observability = observability(
@@ -84,18 +84,15 @@ pub(crate) fn run(
         started,
         &outcome,
     )?;
-    crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)
+    let observability_path = crate::output_path::claim_artifact_path(
+        &root,
+        &observability_receipt,
+        "archive observability receipt",
+    )?;
+    crate::json_boundary::write_json(&observability_path, &observability)
         .map_err(|err| crate::cli::observe::telemetry::redact_sensitive_text(&err))?;
     super::archive_stdout::print_summary(&observability, outcome.archive_digest());
     Ok(i32::from(status != "pass"))
-}
-
-fn rooted_output_path(root: &Path, path: &Path) -> PathBuf {
-    if path.is_absolute() {
-        path.to_path_buf()
-    } else {
-        root.join(path)
-    }
 }
 
 enum Outcome {
@@ -129,7 +126,7 @@ impl Outcome {
 fn build_and_write(
     root: &Path,
     zip: &Path,
-    receipt: &Path,
+    claim_receipt_path: &Path,
     zip_root: &str,
     archive_purpose: &str,
 ) -> Outcome {
@@ -137,7 +134,7 @@ fn build_and_write(
         Ok(value) => value,
         Err(err) => return Outcome::Fail(err),
     };
-    match crate::json_boundary::write_json(receipt, &value) {
+    match crate::json_boundary::write_json(claim_receipt_path, &value) {
         Ok(()) => Outcome::Pass(value),
         Err(err) => Outcome::Fail(err),
     }
@@ -208,10 +205,9 @@ fn runtime(started: Instant) -> crate::cli::observe::telemetry::RuntimeTelemetry
 }
 
 fn failure_class(status: &str) -> &'static str {
-    if status == "pass" {
-        "none"
-    } else {
-        "archive_build_failure"
+    match status {
+        "pass" => "none",
+        _ => "archive_build_failure",
     }
 }
 
@@ -228,18 +224,16 @@ fn next_repair(status: &str) -> &'static str {
 }
 
 fn claim_impact(status: &str) -> &'static str {
-    if status == "pass" {
-        "supports_archive_source_local_observability_only"
-    } else {
-        "archive_build_failed_blocks_readiness_release_completion_update_goal"
+    match status {
+        "pass" => "supports_archive_source_local_observability_only",
+        _ => "archive_build_failed_blocks_readiness_release_completion_update_goal",
     }
 }
 
 fn supported_claims(status: &str) -> Vec<String> {
-    if status == "pass" {
-        vec![CLAIM_ID.to_string()]
-    } else {
-        Vec::new()
+    match status {
+        "pass" => vec![CLAIM_ID.to_string()],
+        _ => Vec::new(),
     }
 }
 

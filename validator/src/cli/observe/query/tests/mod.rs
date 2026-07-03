@@ -4,6 +4,7 @@ use serde_json::json;
 use std::path::Path;
 
 mod metrics;
+mod record_projection;
 mod records;
 mod retry_edges;
 mod target;

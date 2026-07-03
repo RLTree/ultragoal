@@ -57,6 +57,11 @@ pub(crate) fn generated_boundary_failures_for_test(
 }
 
 #[cfg(test)]
+pub(crate) fn required_surfaces_for_test() -> Vec<(&'static str, &'static str, bool)> {
+    inventory_requirements::required_surfaces_for_test()
+}
+
+#[cfg(test)]
 pub(crate) fn authority_graph_failures_for_test(
     root: &Path,
     inventory: &BTreeSet<String>,

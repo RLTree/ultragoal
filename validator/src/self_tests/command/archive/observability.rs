@@ -123,10 +123,6 @@ fn archive_command_records_archive_receipt_write_failures() {
     let root = package_root("archive-observability-receipt-write-fail");
     let receipt_dir = root.join("receipts/archive.json");
     std::fs::create_dir_all(&receipt_dir).expect("receipt dir blocks file write");
-    let zip = root
-        .join("receipts/candidate.zip")
-        .to_string_lossy()
-        .to_string();
     let observability = "observability/archive-build-write-fail.json";
 
     let code = crate::command_run::run_with_exit_code(args(
@@ -135,9 +131,9 @@ fn archive_command_records_archive_receipt_write_failures() {
             "archive",
             "build",
             "--zip",
-            &zip,
+            "receipts/candidate.zip",
             "--receipt",
-            &receipt_dir.to_string_lossy(),
+            "receipts/archive.json",
             "--observability-receipt",
             observability,
             "--zip-root",

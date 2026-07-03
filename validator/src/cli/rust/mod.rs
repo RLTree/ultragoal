@@ -52,10 +52,11 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<RustCommand>, String> {
 pub(crate) fn run(root: &Path, command: &RustCommand) -> Result<i32, String> {
     let start = Instant::now();
     let receipt = receipt(root, command, start.elapsed().as_millis() as u64)?;
-    run_with_receipt_value(command, &receipt)
+    run_with_receipt_value(root, command, &receipt)
 }
 
 pub(crate) fn run_with_receipt_value(
+    root: &Path,
     command: &RustCommand,
     receipt: &Value,
 ) -> Result<i32, String> {
@@ -64,7 +65,9 @@ pub(crate) fn run_with_receipt_value(
         .and_then(Value::as_str)
         .unwrap_or("fail");
     if let Some(path) = &command.receipt {
-        crate::json_boundary::write_json(path, &receipt)?;
+        let claim_receipt_path =
+            crate::output_path::claim_artifact_path(root, path, "Rust command receipt")?;
+        crate::json_boundary::write_json(&claim_receipt_path, &receipt)?;
         println!(
             "ultragoal-rust {} operation={} receipt={}",
             receipt["status"],

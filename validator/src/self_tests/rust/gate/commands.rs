@@ -55,12 +55,13 @@ fn command_run_routes_rust_and_gc_without_bypass() {
     .expect("rust run");
     assert_eq!(rust_code, 0);
 
-    let out = root.join("target/self-tests/gc-run-receipt.json");
+    let out_rel = std::path::PathBuf::from("target/self-tests/gc-run-receipt.json");
+    let out = root.join(&out_rel);
     let gc_code = crate::command_run::run_with_exit_code(crate::Args {
         root,
         command: crate::Command::Garbage(GarbageCommand {
             operation: crate::cli::garbage::collection::types::GarbageOperation::Plan,
-            receipt: Some(out.clone()),
+            receipt: Some(out_rel),
             plan_digest: Some("sha256:test-plan".to_string()),
             apply_receipt_digest: None,
         }),

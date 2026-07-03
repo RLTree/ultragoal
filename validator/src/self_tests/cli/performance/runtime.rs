@@ -12,13 +12,12 @@ fn repo_root() -> PathBuf {
         .to_path_buf()
 }
 
-fn temp_receipt(root: &Path) -> PathBuf {
+fn temp_receipt(_root: &Path) -> PathBuf {
     let stamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    root.join("target")
-        .join(format!("cli-performance-test-{stamp}.json"))
+    PathBuf::from("target").join(format!("cli-performance-test-{stamp}.json"))
 }
 
 #[test]
@@ -101,7 +100,7 @@ fn run_writes_receipt_and_returns_typed_exit_code() {
         class: BudgetClass::FocusedRepair,
     };
     assert_eq!(run(&root, &command).expect("run succeeds"), 0);
-    let value = crate::json_boundary::read_json(&path).expect("read written receipt");
+    let value = crate::json_boundary::read_json(&root.join(&path)).expect("read written receipt");
     assert_eq!(value["command"]["name"], "performance_prove");
     assert_eq!(value["budget"]["class"], "focused_repair");
     assert_eq!(value["output_size_metrics"]["receipt_count_written"], 1);

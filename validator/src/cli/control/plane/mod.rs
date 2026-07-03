@@ -120,16 +120,18 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
         "missing required argument --receipt for control-plane telemetry stdout".to_string()
     })?;
     path::validate_receipt_path(root, path, command.operation)?;
+    let claim_receipt_path =
+        crate::output_path::claim_artifact_path(root, path, "control-plane receipt")?;
     if surface::supports(command.operation) {
-        return surface::run(root, command, path);
+        return surface::run(root, command, &claim_receipt_path);
     }
     let package_digest = crate::package::inventory::package_digest(root)?;
     registry::mint_fail_closed_if_needed(root, command.operation, &package_digest)?;
     let mut receipt = receipt(root, command)?;
     registry::telemetry::attach(root, command, &mut receipt, started)?;
     let exit = i32::from(receipt.get("status").and_then(Value::as_str) != Some("pass"));
-    crate::json_boundary::write_json(path, &receipt)?;
-    registry::stdout::print(path, &receipt);
+    crate::json_boundary::write_json(&claim_receipt_path, &receipt)?;
+    registry::stdout::print(&claim_receipt_path, &receipt);
     Ok(exit)
 }
 

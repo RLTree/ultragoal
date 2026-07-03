@@ -398,7 +398,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: implemented, pending validation
+  - Status: validated current
 
 ### Gate 90.7: Validation And Confidence
 

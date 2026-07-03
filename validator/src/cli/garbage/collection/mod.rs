@@ -38,15 +38,18 @@ pub(crate) fn run(root: &Path, command: &GarbageCommand) -> Result<i32, String> 
     let started = Instant::now();
     let mut receipt = receipt(root, command)?;
     observability::attach(root, command, &mut receipt, started)?;
-    run_with_receipt_value(command, &receipt)
+    run_with_receipt_value(root, command, &receipt)
 }
 
 pub(crate) fn run_with_receipt_value(
+    root: &Path,
     command: &GarbageCommand,
     receipt: &Value,
 ) -> Result<i32, String> {
     if let Some(path) = &command.receipt {
-        crate::json_boundary::write_json(path, &receipt)?;
+        let claim_receipt_path =
+            crate::output_path::claim_artifact_path(root, path, "GC command receipt")?;
+        crate::json_boundary::write_json(&claim_receipt_path, &receipt)?;
         println!(
             "ultragoal-gc {} operation={} receipt={} run_id={} correlation_id={} trace_id={} failure_class={} claim_impact={}",
             receipt["status"],

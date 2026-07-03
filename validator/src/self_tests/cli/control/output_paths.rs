@@ -52,8 +52,8 @@ fn control_receipt_paths_are_operation_owned_cli_surfaces() {
     assert!(
         validate_receipt_path(
             &root,
-            &root.join("validation_artifacts/cli/packet-verify-receipt.json"),
-            ControlOperation::PacketVerify,
+            Path::new("validation_artifacts/cli/packet-verify-receipt.json"),
+            ControlOperation::PacketVerify
         )
         .is_ok()
     );
@@ -99,11 +99,13 @@ fn control_receipt_paths_reject_outside_root_and_empty_paths() {
 }
 
 #[test]
-fn control_receipt_path_accepts_absolute_path_under_missing_root() {
+fn control_receipt_path_rejects_absolute_path_under_missing_root() {
     let root = repo_root().join("target/missing-cli-control-root");
     let receipt = root.join("validation_artifacts/cli/registry-probe-receipt.json");
 
-    assert!(validate_receipt_path(&root, &receipt, ControlOperation::RegistryProbe).is_ok());
+    let err = validate_receipt_path(&root, &receipt, ControlOperation::RegistryProbe)
+        .expect_err("absolute path rejected");
+    assert!(err.contains("cli_control_plane_receipt_path_absolute_claim_output"));
 }
 
 #[test]
@@ -122,8 +124,14 @@ fn run_refuses_law_specific_proof_paths_without_overwrite() {
     std::fs::write(&packet_path, b"packet-sentinel").expect("packet sentinel");
 
     for (operation, path) in [
-        (ControlOperation::RegistryProbe, registry_path.as_path()),
-        (ControlOperation::PacketVerify, packet_path.as_path()),
+        (
+            ControlOperation::RegistryProbe,
+            Path::new("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
+        ),
+        (
+            ControlOperation::PacketVerify,
+            Path::new("validation_artifacts/review/final-packet-proof.json"),
+        ),
     ] {
         let command = ControlCommand {
             operation,
@@ -154,9 +162,9 @@ fn wrong_control_receipt_path_fails_before_package_digest() {
     std::fs::create_dir_all(&root).expect("create cli path before digest root");
     let command = ControlCommand {
         operation: ControlOperation::RegistryProbe,
-        receipt: Some(
-            root.join("validation_artifacts/ultragoal-audit/active-registry-exposure-current.json"),
-        ),
+        receipt: Some(PathBuf::from(
+            "validation_artifacts/ultragoal-audit/active-registry-exposure-current.json",
+        )),
         surface_root: None,
     };
 

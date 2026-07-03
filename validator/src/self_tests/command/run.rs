@@ -30,41 +30,37 @@ fn package_root(label: &str) -> PathBuf {
 #[test]
 fn command_dispatch_builds_review_archive_and_semantic_receipts() {
     let root = package_root("command-dispatch-success");
-    let receipt_dir = root.join("receipts");
-    let review_receipt = receipt_dir.join("review-target.json");
+    let review_receipt = "receipts/review-target.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
-        &[
-            "review-target",
-            "build",
-            "--receipt",
-            review_receipt.to_str().expect("review receipt"),
-        ],
+        &["review-target", "build", "--receipt", review_receipt],
     ))
     .expect("review-target command");
     assert_eq!(code, 0);
-    let review = crate::json_boundary::read_json(&review_receipt).expect("review receipt json");
+    let review =
+        crate::json_boundary::read_json(&root.join(review_receipt)).expect("review receipt json");
     assert_eq!(review["status"], "pass");
 
-    let archive_receipt = receipt_dir.join("archive.json");
-    let archive_zip = receipt_dir.join("candidate.zip");
+    let archive_receipt = "receipts/archive.json";
+    let archive_zip = "receipts/candidate.zip";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "archive",
             "build",
             "--zip",
-            archive_zip.to_str().expect("zip path"),
+            archive_zip,
             "--receipt",
-            archive_receipt.to_str().expect("archive receipt"),
+            archive_receipt,
             "--zip-root",
             "harness-ultragoal",
         ],
     ))
     .expect("archive command");
     assert_eq!(code, 0);
-    assert!(archive_zip.is_file());
-    let archive = crate::json_boundary::read_json(&archive_receipt).expect("archive receipt json");
+    assert!(root.join(archive_zip).is_file());
+    let archive =
+        crate::json_boundary::read_json(&root.join(archive_receipt)).expect("archive receipt json");
     assert_eq!(archive["status"], "pass");
 
     write_json(
@@ -100,7 +96,8 @@ fn command_dispatch_builds_review_archive_and_semantic_receipts() {
 #[test]
 fn command_run_returns_exit_codes_without_exiting_test_process() {
     let root = package_root("command-run-exit-code");
-    let update_goal_receipt = root.join("validation_artifacts/cli/update-goal-eligibility.json");
+    let update_goal_receipt =
+        std::path::PathBuf::from("validation_artifacts/cli/update-goal-eligibility.json");
     let code = crate::command_run::run(args(
         root.clone(),
         &[
@@ -114,7 +111,7 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
     ))
     .expect("control command returns code");
     assert_eq!(code, 1);
-    assert!(update_goal_receipt.is_file());
+    assert!(root.join(&update_goal_receipt).is_file());
     let code = crate::command_run::run(args(root.clone(), &["package-digest"]))
         .expect("package digest returns code");
     assert_eq!(code, 0);
@@ -141,15 +138,9 @@ fn command_run_propagates_package_and_packet_builder_errors() {
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["../escape.txt"]}),
     );
-    let receipt = root.join("receipt.json");
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
-        &[
-            "review-target",
-            "build",
-            "--receipt",
-            receipt.to_str().expect("receipt path"),
-        ],
+        &["review-target", "build", "--receipt", "receipt.json"],
     ))
     .expect("invalid review target returns fail code");
     assert_eq!(code, 1);
@@ -167,10 +158,7 @@ fn command_run_propagates_output_and_generation_errors() {
             "review-target",
             "build",
             "--receipt",
-            blocked
-                .join("review-target.json")
-                .to_str()
-                .expect("review target receipt"),
+            "blocked-parent/review-target.json",
         ],
     ))
     .expect("review-target receipt output returns fail code");

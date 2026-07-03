@@ -124,7 +124,12 @@ pub(super) fn emit(
             emit: true,
         },
     )?;
-    crate::json_boundary::write_json(&root.join(&command.observability_receipt), &value)?;
+    let output_path = crate::output_path::claim_artifact_path(
+        root,
+        &command.observability_receipt,
+        "product observability receipt",
+    )?;
+    crate::json_boundary::write_json(&output_path, &value)?;
     Ok(value)
 }
 

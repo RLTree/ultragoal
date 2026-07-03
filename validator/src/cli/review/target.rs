@@ -35,10 +35,17 @@ pub(crate) fn run(
     observability_receipt: PathBuf,
 ) -> Result<i32, String> {
     let started = Instant::now();
-    let outcome = build_and_write(&root, &receipt);
+    let receipt_path =
+        crate::output_path::claim_artifact_path(&root, &receipt, "review target receipt")?;
+    let outcome = build_and_write(&root, &receipt_path);
     let status = outcome.status();
     let observability = observability(&root, &receipt, &observability_receipt, started, &outcome)?;
-    crate::json_boundary::write_json(&root.join(&observability_receipt), &observability)?;
+    let observability_path = crate::output_path::claim_artifact_path(
+        &root,
+        &observability_receipt,
+        "review target observability receipt",
+    )?;
+    crate::json_boundary::write_json(&observability_path, &observability)?;
     super::target_stdout::print_summary(&observability, outcome.review_target_digest());
     Ok(i32::from(status != "pass"))
 }
@@ -73,12 +80,12 @@ impl Outcome {
     }
 }
 
-fn build_and_write(root: &Path, receipt: &Path) -> Outcome {
+fn build_and_write(root: &Path, claim_receipt_path: &Path) -> Outcome {
     let value = match crate::package::build_review_target_receipt(root) {
         Ok(value) => value,
         Err(err) => return Outcome::Fail(err),
     };
-    match crate::json_boundary::write_json(receipt, &value) {
+    match crate::json_boundary::write_json(claim_receipt_path, &value) {
         Ok(()) => Outcome::Pass(value),
         Err(err) => Outcome::Fail(err),
     }

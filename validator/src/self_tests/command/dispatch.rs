@@ -146,14 +146,13 @@ fn command_run_routes_audit_and_performance_variants() {
         &json!({"rows":[]}),
     );
     write_json(&root.join("templates/RED_FIXTURES.json"), &json!([]));
-    let receipt = root.join("receipt.json");
     let err = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "source",
             "audit",
             "--receipt",
-            receipt.to_str().expect("receipt"),
+            "receipt.json",
             "--red-report",
             "not-red-report.json",
         ],
@@ -161,7 +160,6 @@ fn command_run_routes_audit_and_performance_variants() {
     .expect_err("bad red-report basename rejected");
     assert!(err.contains("red-fixture-report.json"), "{err}");
 
-    let performance_receipt = root.join("performance.json");
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
@@ -170,11 +168,12 @@ fn command_run_routes_audit_and_performance_variants() {
             "--class",
             "focused",
             "--receipt",
-            performance_receipt.to_str().expect("performance receipt"),
+            "performance.json",
         ],
     ))
     .expect("performance command");
     assert_eq!(code, 0);
+    let performance_receipt = root.join("performance.json");
     assert!(performance_receipt.is_file());
     let performance = crate::json_boundary::read_json(&performance_receipt).expect("performance");
     assert_eq!(performance["budget"]["class"], "focused_repair");

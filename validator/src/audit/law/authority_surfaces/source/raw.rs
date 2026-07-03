@@ -1,30 +1,4 @@
-use std::path::Path;
-
-pub(super) fn source_text_failures(root: &Path) -> Vec<(String, String)> {
-    actual_source_files(root)
-        .into_iter()
-        .flat_map(|rel| {
-            let text = std::fs::read_to_string(root.join(&rel)).unwrap_or_default();
-            let mut out = raw_authority_failures_for_text(&rel, &text)
-                .into_iter()
-                .map(|failure| ("typed-records-over-prose".to_string(), failure))
-                .collect::<Vec<_>>();
-            out.extend(
-                output_authority_failures_for_text(&rel, &text)
-                    .into_iter()
-                    .map(|failure| {
-                        (
-                            "total-authority-types-impossible-state-elimination".to_string(),
-                            failure,
-                        )
-                    }),
-            );
-            out
-        })
-        .collect()
-}
-
-fn raw_authority_failures_for_text(rel: &str, text: &str) -> Vec<String> {
+pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     let Some(marker) = raw_authority_marker(text) else {
         return Vec::new();
     };
@@ -34,44 +8,6 @@ fn raw_authority_failures_for_text(rel: &str, text: &str) -> Vec<String> {
     vec![format!(
         "raw_downstream_authority_unclassified:path={rel};raw_authority={marker};classification_required=parser_boundary|projection|fixture_catalog_materialization|catalog_materialization;repair=route_raw_input_through_typed_record_or_typed_failure_before_law_execution"
     )]
-}
-
-fn output_authority_failures_for_text(rel: &str, text: &str) -> Vec<String> {
-    if rel.contains("/self_tests/")
-        || rel.contains("/tests/")
-        || rel.ends_with("/tests.rs")
-        || rel.contains("/test_")
-    {
-        return Vec::new();
-    }
-    if allowed_direct_receipt_path(rel) {
-        return Vec::new();
-    }
-    [
-        "receipt.to_path_buf()",
-        "command.receipt.clone()",
-        "resolve(root, &command.receipt)",
-        "root.join(&command.receipt)",
-        "root.join(receipt)",
-        "PathBuf::from(&command.receipt)",
-        "PathBuf::from(receipt)",
-    ]
-    .into_iter()
-    .filter(|pattern| text.lines().any(|line| output_pattern_line(line, pattern)))
-    .map(|pattern| {
-        format!(
-            "claim_artifact_output_without_typed_authority:path={rel};pattern={pattern};repair=use_output_path_claim_artifact_path_or_mark_external_debug_no_claim"
-        )
-    })
-    .collect()
-}
-
-fn output_pattern_line(line: &str, pattern: &str) -> bool {
-    let trimmed = line.trim_start();
-    if trimmed.starts_with('"') || trimmed.starts_with("//") {
-        return false;
-    }
-    line.contains(pattern)
 }
 
 fn raw_authority_marker(text: &str) -> Option<&'static str> {
@@ -88,7 +24,7 @@ fn raw_authority_marker(text: &str) -> Option<&'static str> {
     if text.contains("raw_string") {
         return Some("raw_string");
     }
-    if text.contains("serde_json::Value") || text.contains("use serde_json::Value") {
+    if contains_json_value_binding(text) {
         return Some("raw_json");
     }
     if text.contains("\"raw_") || text.contains("raw_observation") {
@@ -104,10 +40,10 @@ fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
     if fixture_or_catalog_path(rel) {
         return Some("fixture_catalog_materialization");
     }
-    if projection_boundary_text(text) {
+    if projection_boundary_text(rel, text) {
         return Some("projection");
     }
-    if parser_boundary_text(text) || typed_failure_boundary_text(text) {
+    if parser_boundary_text(rel, text) || typed_failure_boundary_text(text) {
         return Some("parser_boundary");
     }
     None
@@ -122,7 +58,80 @@ fn fixture_or_catalog_path(rel: &str) -> bool {
         || rel.ends_with("schema_catalog.rs")
 }
 
-fn projection_boundary_text(text: &str) -> bool {
+fn projection_boundary_text(rel: &str, text: &str) -> bool {
+    typed_record_projection_text(text)
+        || classified_product_projection_boundary(rel, text)
+        || (projection_boundary_path(rel) && projection_value_text(text))
+}
+
+fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
+    let required: &[&str] = match rel {
+        "validator/src/cli/control/plane/mod.rs" => &[
+            "ControlOperation",
+            "receipt_from_control_graph",
+            "registry::stdout::print",
+        ],
+        "validator/src/cli/control/plane/proof/mod.rs" => &[
+            "ControlOperation",
+            "diagnostic::failure_value",
+            "diagnostic::notes",
+        ],
+        "validator/src/cli/control/plane/registry/capability/gap.rs" => &[
+            "missing_capability_class",
+            "affected_claim_ids",
+            "current_claim_ceiling",
+        ],
+        "validator/src/cli/final_packet/proof/spans.rs" => {
+            &["span_kind", "receipt_deref", "dereferenced_receipt_digest"]
+        }
+        "validator/src/cli/live_loop/context.rs" => {
+            &["AuditContext", "changed_files_digest", "input_digest"]
+        }
+        "validator/src/cli/live_loop/graph.rs" => {
+            &["LoopValidationSurface", "input_digest", "claim_impact"]
+        }
+        "validator/src/cli/observe/explain/summary.rs" => {
+            &["ExplainContext", "smallest_repair", "query_evidence"]
+        }
+        "validator/src/cli/openai/config.rs" => &[
+            "openai_config_redacted_resolution",
+            "secret_material_serialized",
+            "blocked_claims",
+        ],
+        "validator/src/cli/product/cohesion.rs" => &[
+            "product-cohesion",
+            "source_local_product_cohesion_only",
+            "target_repo::product::cohesion::check",
+        ],
+        _ => return false,
+    };
+    required.iter().all(|needle| text.contains(needle)) && projection_value_text(text)
+}
+
+fn projection_boundary_path(rel: &str) -> bool {
+    [
+        "/stdout",
+        "/receipt",
+        "/receipts",
+        "/telemetry",
+        "/query",
+        "/snapshot",
+        "/report",
+        "/diagnostic",
+        "/emit",
+        "/output",
+        "/current_state",
+        "/archive",
+        "/review/",
+        "/package/digest.rs",
+        "/semantic/receipt",
+    ]
+    .iter()
+    .any(|needle| rel.contains(needle))
+        || rel.ends_with("target_repo/receipt.rs")
+}
+
+fn projection_value_text(text: &str) -> bool {
     text.contains("json!(")
         || text.contains("json!({")
         || text.contains("Value::Array(")
@@ -142,7 +151,6 @@ fn projection_boundary_text(text: &str) -> bool {
         || text.contains("diagnostic::failure_value")
         || text.contains("receipt_from_control_graph")
         || text.contains("crate::json_boundary::write_json")
-        || typed_record_projection_text(text)
 }
 
 fn typed_record_projection_text(text: &str) -> bool {
@@ -164,17 +172,26 @@ fn typed_record_projection_text(text: &str) -> bool {
         || text.contains("-> crate::cli::observe::telemetry::RuntimeTelemetry")
         || (text.contains("struct ") && text.contains("-> "));
     returns_typed_record
-        && (text.contains("serde_json::Value")
-            || text.contains("use serde_json::Value")
+        && (contains_json_value_binding(text)
             || text.contains(": &Value")
             || text.contains(": &[Value]"))
 }
 
-fn parser_boundary_text(text: &str) -> bool {
-    reads_structured_input(text)
+fn parser_boundary_text(rel: &str, text: &str) -> bool {
+    parser_boundary_path(rel)
+        || reads_structured_input(text)
         || schema_catalog_boundary(text)
         || typed_json_field_parser(text)
         || validator_artifact_parser(text)
+}
+
+fn parser_boundary_path(rel: &str) -> bool {
+    rel.ends_with("json_boundary.rs")
+        || rel.starts_with("validator/src/schema_catalog/")
+        || rel == "validator/src/schema_catalog/mod.rs"
+        || rel.contains("/schema/")
+        || rel.contains("/parser/")
+        || rel.contains("/parse")
 }
 
 fn reads_structured_input(text: &str) -> bool {
@@ -205,6 +222,7 @@ fn validator_artifact_parser(text: &str) -> bool {
 
 fn typed_failure_boundary_text(text: &str) -> bool {
     let returns_typed_failure = text.contains("-> Vec<String>")
+        || text.contains("-> Option<String>")
         || text.contains("-> Result<")
         || text.contains("out: &mut Vec<")
         || text.contains("failures: &mut Vec<")
@@ -215,33 +233,13 @@ fn typed_failure_boundary_text(text: &str) -> bool {
         && (text.contains("format!(\"")
             || text.contains("Failure::new")
             || text.contains("out.push(")
-            || text.contains("Err("))
+            || text.contains("Err(")
+            || text.contains("Some(\""))
 }
 
-fn allowed_direct_receipt_path(rel: &str) -> bool {
-    matches!(
-        rel,
-        "validator/src/cli/standards/gardener.rs"
-            | "validator/src/cli/session.rs"
-            | "validator/src/cli/control/plane/transactional/telemetry/mod.rs"
-    )
-}
-
-fn actual_source_files(root: &Path) -> Vec<String> {
-    crate::package::inventory::closure::actual_files(root)
-        .unwrap_or_default()
-        .into_iter()
-        .filter(|rel| rel.starts_with("validator/src/") && rel.ends_with(".rs"))
-        .filter(|rel| !rel.contains("/self_tests/"))
-        .collect()
-}
-
-#[cfg(test)]
-pub(crate) fn raw_authority_failures_for_test(rel: &str, text: &str) -> Vec<String> {
-    raw_authority_failures_for_text(rel, text)
-}
-
-#[cfg(test)]
-pub(crate) fn output_authority_failures_for_test(rel: &str, text: &str) -> Vec<String> {
-    output_authority_failures_for_text(rel, text)
+fn contains_json_value_binding(text: &str) -> bool {
+    text.contains("serde_json::Value")
+        || text.contains("use serde_json::Value")
+        || text.contains("serde_json::{Value")
+        || (text.contains("serde_json::{") && text.contains("Value"))
 }

@@ -189,7 +189,7 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     )
     .expect("write control manifest");
     let control_receipt =
-        control_root.join("validation_artifacts/cli/update-goal-eligibility.json");
+        std::path::PathBuf::from("validation_artifacts/cli/update-goal-eligibility.json");
     let control_code = crate::command_run::run_with_exit_code(args(
         control_root.clone(),
         &[
@@ -202,14 +202,13 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     .expect("control command");
     assert_eq!(control_code, 1);
     assert_eq!(
-        crate::json_boundary::read_json(&control_receipt).expect("control receipt")["status"],
+        crate::json_boundary::read_json(&control_root.join(&control_receipt))
+            .expect("control receipt")["status"],
         "fail"
     );
 
-    let control_dir =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("performance-dispatch");
-    std::fs::create_dir_all(&control_dir).expect("performance dir");
-    let performance_receipt = control_dir.join("performance.json");
+    let performance_receipt =
+        std::path::PathBuf::from("target/self-tests/performance-dispatch/performance.json");
     let performance_code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
@@ -222,7 +221,8 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     .expect("performance command");
     assert_eq!(performance_code, 0);
     assert_eq!(
-        crate::json_boundary::read_json(&performance_receipt).expect("performance receipt")["status"],
+        crate::json_boundary::read_json(&root.join(&performance_receipt))
+            .expect("performance receipt")["status"],
         "pass"
     );
 
@@ -244,5 +244,5 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     .expect("review command");
     assert_eq!(review_code, 1);
     std::fs::remove_dir_all(control_root).expect("cleanup control dispatch root");
-    std::fs::remove_dir_all(control_dir).expect("cleanup command receipts");
+    let _ = std::fs::remove_file(root.join(&performance_receipt));
 }

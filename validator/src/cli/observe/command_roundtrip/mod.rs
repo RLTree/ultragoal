@@ -159,7 +159,13 @@ fn query_roundtrip(
         timeout_ms,
     };
     let value = query::run(root, &command, kind)?;
-    crate::json_boundary::write_json(&root.join(command.receipt_rel()), &value)?;
+    let receipt_rel = command.receipt_rel();
+    let receipt_path = crate::output_path::claim_artifact_path(
+        root,
+        &receipt_rel,
+        "observe query roundtrip receipt",
+    )?;
+    crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
 }
 
@@ -186,7 +192,13 @@ fn explain_roundtrip(
         timeout_ms,
     };
     let value = super::explain::run(root, &command)?;
-    crate::json_boundary::write_json(&root.join(command.receipt_rel()), &value)?;
+    let receipt_rel = command.receipt_rel();
+    let receipt_path = crate::output_path::claim_artifact_path(
+        root,
+        &receipt_rel,
+        "observe explain roundtrip receipt",
+    )?;
+    crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
 }
 
