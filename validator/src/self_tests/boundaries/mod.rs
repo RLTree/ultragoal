@@ -2,7 +2,7 @@ pub(crate) mod artifact_refs;
 pub(crate) mod authority {
     pub(crate) mod generated_artifacts;
     pub(crate) mod graph_edges;
-    pub(crate) mod inventory_roles;
+    pub(crate) mod inventory;
     pub(crate) mod output_projection_edges;
     pub(crate) mod raw_classification_edges;
     pub(crate) mod registry_edges;

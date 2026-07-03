@@ -442,7 +442,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
 
 - [ ] Coverage proof remains exactly 100 percent with `uncovered_records = []` after topology repair.
   - Evidence:
-  - Status: validated current
+  - Status: stale due to source change
 
 - [ ] Full source audit with red fixture report passes after topology repair.
   - Evidence:

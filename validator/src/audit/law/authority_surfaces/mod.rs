@@ -9,6 +9,7 @@ mod inventory_requirements;
 mod paths;
 mod registry;
 mod source;
+mod surface_inventory;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
@@ -36,6 +37,15 @@ pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     out.extend(source::source_text_failures(root));
     out.extend(inventory::generated_failures(root, &inventory));
     out
+}
+
+pub(crate) fn foundational_surface_inventory(root: &Path) -> Value {
+    let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
+        .unwrap_or(Value::Null);
+    let inventory = crate::package::inventory::inventory_paths(&manifest)
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+    surface_inventory::value(root, &inventory)
 }
 
 #[cfg(test)]

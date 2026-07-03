@@ -36,6 +36,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package_authority_surface!(
         "source",
+        "validator/src/audit/law/authority_surfaces/surface_inventory.rs",
+    ),
+    package_authority_surface!(
+        "source",
         "validator/src/audit/law/authority_surfaces/source/mod.rs",
     ),
     package_authority_surface!(
@@ -143,37 +147,41 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
 ];
 
 #[derive(Clone, Copy)]
-struct RequiredSurface {
-    role: &'static str,
-    rel: &'static str,
-    package_inventory_required: bool,
+pub(super) struct RequiredSurface {
+    pub(super) role: &'static str,
+    pub(super) rel: &'static str,
+    pub(super) package_inventory_required: bool,
 }
 
 pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String, String)> {
     let mut out = Vec::new();
-    for surface in REQUIRED_SURFACES {
-        if !root.join(surface.rel).is_file() {
+    for surface in super::surface_inventory::rows(root, inventory) {
+        if !surface.exists_on_disk {
             push(
                 &mut out,
                 "authority-source-binding",
                 format!(
                     "authority_surface_missing:role={}:path={}",
-                    surface.role, surface.rel
+                    surface.role, surface.path
                 ),
             );
         }
-        if surface.package_inventory_required && !inventory.contains(surface.rel) {
+        if surface.package_inventory_required && !surface.listed_in_package_inventory {
             push(
                 &mut out,
                 "authority-source-binding",
                 format!(
                     "authority_surface_not_in_package_inventory:role={}:path={}",
-                    surface.role, surface.rel
+                    surface.role, surface.path
                 ),
             );
         }
     }
     out
+}
+
+pub(super) fn required_surfaces() -> &'static [RequiredSurface] {
+    REQUIRED_SURFACES
 }
 
 #[cfg(test)]

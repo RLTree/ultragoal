@@ -45,7 +45,7 @@ pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, 
     };
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
-    let value = crate::cli::observe::telemetry::command_receipt(
+    let mut value = crate::cli::observe::telemetry::command_receipt(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
             command: "ultragoal typed-boundaries",
@@ -80,6 +80,10 @@ pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, 
             emit: true,
         },
     )?;
+    value["foundational_law_surface_inventory"] =
+        crate::audit::law::authority_surfaces::foundational_surface_inventory(root);
+    value["event"]["foundational_law_surface_inventory"] =
+        value["foundational_law_surface_inventory"].clone();
     write_receipt(root, &command.receipt, &value)?;
     stdout::print(&value);
     Ok(i32::from(status != "pass"))

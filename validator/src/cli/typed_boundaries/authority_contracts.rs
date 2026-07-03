@@ -47,8 +47,17 @@ fn typed_boundaries_claim_and_stdout_contracts_are_agent_legible() {
         "where_failed": "typed-boundaries.check",
         "next_repair": "repair the named parser boundary"
     });
+    let mut value = value;
+    value["foundational_law_surface_inventory"] = json!({
+        "surface_count": 39,
+        "missing_surface_count": 2,
+        "package_inventory_missing_count": 1
+    });
     let lines = super::stdout::contract(&value);
     assert!(lines[0].contains("ultragoal-typed-boundaries-check fail"));
+    assert!(lines[0].contains("authority_surface_count=39"));
+    assert!(lines[0].contains("missing_surfaces=2"));
+    assert!(lines[0].contains("package_inventory_missing=1"));
     assert!(lines[1].contains("why=typed boundary check failed: raw JSON authority"));
     assert!(lines[1].contains("query_traces='ultragoal observe traces query --run-id run-typed"));
 }

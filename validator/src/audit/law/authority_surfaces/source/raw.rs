@@ -98,6 +98,11 @@ fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
             "secret_material_serialized",
             "blocked_claims",
         ],
+        "validator/src/audit/law/authority_surfaces/surface_inventory.rs" => &[
+            "AuthoritySurfaceInventoryRow",
+            "harness-ultragoal.foundational-law-surface-inventory.v1",
+            "surface_state",
+        ],
         "validator/src/cli/product/cohesion.rs" => &[
             "product-cohesion",
             "source_local_product_cohesion_only",

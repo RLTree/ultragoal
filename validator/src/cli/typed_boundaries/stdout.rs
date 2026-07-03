@@ -14,8 +14,14 @@ pub(super) fn contract(value: &Value) -> Vec<String> {
     let metric_query =
         crate::cli::observe::query::bounded_metric_query_for_operation(text(value, "operation"));
     let claim_impact = text(value, "claim_impact");
+    let inventory = value
+        .get("foundational_law_surface_inventory")
+        .unwrap_or(&Value::Null);
+    let surface_count = count(inventory, "surface_count");
+    let missing_surface_count = count(inventory, "missing_surface_count");
+    let package_inventory_missing_count = count(inventory, "package_inventory_missing_count");
     let mut lines = vec![format!(
-        "ultragoal-typed-boundaries-check {status} operation={} candidate={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} claim_impact={claim_impact} supported_claims={} unsupported_claims={}",
+        "ultragoal-typed-boundaries-check {status} operation={} candidate={} receipt={receipt} run_id={run_id} correlation_id={correlation_id} claim_impact={claim_impact} authority_surface_count={surface_count} missing_surfaces={missing_surface_count} package_inventory_missing={package_inventory_missing_count} supported_claims={} unsupported_claims={}",
         text(value, "operation"),
         text(value, "candidate_digest"),
         csv(value.get("supported_claims")),
@@ -53,4 +59,8 @@ fn csv(value: Option<&Value>) -> String {
         })
         .filter(|items| !items.is_empty())
         .unwrap_or_else(|| "none".to_string())
+}
+
+fn count(value: &Value, field: &str) -> u64 {
+    value.get(field).and_then(Value::as_u64).unwrap_or(0)
 }
