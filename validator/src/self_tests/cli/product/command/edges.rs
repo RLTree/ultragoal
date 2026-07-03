@@ -26,3 +26,29 @@ fn product_command_reports_observability_receipt_write_failures() {
     assert!(err.contains("create parent failed"), "{err}");
     std::fs::remove_dir_all(root).expect("cleanup observability write");
 }
+
+#[test]
+fn product_command_rejects_absolute_observability_claim_artifact() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "product-observability-absolute",
+    );
+    std::fs::create_dir_all(&root).expect("product root");
+    std::fs::write(
+        root.join("plugin-manifest-draft.json"),
+        r#"{"resources":[]}"#,
+    )
+    .expect("manifest");
+    let err = crate::cli::product::run(
+        &root,
+        &crate::cli::product::ProductCommand {
+            operation: crate::cli::product::ProductOperation::ProductProveCohesion,
+            receipt_dir: None,
+            observability_receipt: root.join("absolute-product-observability.json"),
+        },
+    )
+    .expect_err("absolute observability receipt rejected");
+    assert!(err.contains("product observability receipt"), "{err}");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(err.contains("external debug only"), "{err}");
+    std::fs::remove_dir_all(root).expect("cleanup observability absolute");
+}

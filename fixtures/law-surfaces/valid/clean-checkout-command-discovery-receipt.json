@@ -28,7 +28,7 @@
       "artifacts": [
         {
           "path": "scripts/check-coverage-fast",
-          "digest": "sha256:92e42c15c5a3f70625e755105003d2e4aa46c1b090f5b6c9ced3d536ad6e5e2b"
+          "digest": "sha256:b73f389ace73ff995aa4dbfca2671594a71fd2961e0187934a42e8c6b89da4c8"
         }
       ]
     },

@@ -71,6 +71,41 @@ fn anti_theater_laws_join_to_final_packet_registry_and_cli_authority() {
     std::fs::remove_dir_all(root).expect("cleanup anti-theater deps");
 }
 
+#[test]
+fn current_fail_closed_control_blockers_satisfy_source_local_anti_theater_dependency() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "anti-theater-current-control-blockers",
+    );
+    crate::self_tests::audit::final_packet::receipt_fixtures::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    write_cli_fail_closed(
+        &root,
+        &current,
+        "update-goal-eligibility",
+        "update_goal_eligibility",
+    );
+    write_cli_fail_closed(
+        &root,
+        &current,
+        "self-law-receipt",
+        "self_update_goal_eligibility",
+    );
+
+    let failures = crate::audit::mandatory::law::surfaces::anti_theater_dependency_failures(
+        &root,
+        &store,
+        "generated-proof-artifact-provenance-anti-fabrication",
+    );
+    assert!(failures.is_empty(), "{failures:?}");
+    std::fs::remove_dir_all(root).expect("cleanup anti-theater current control blockers");
+}
+
 fn write_cli_pass(root: &std::path::Path, current: &str, name: &str, operation: &str) {
     let path = root.join(format!("validation_artifacts/cli/{name}.json"));
     crate::self_tests::audit::final_packet::receipt_fixtures::write_json(

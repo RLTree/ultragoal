@@ -69,7 +69,7 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
     let workspace = receipt_fields::string(receipt, "workspace_root");
     let root_string = root
         .canonicalize()
-        .unwrap_or_else(|_| root.to_path_buf())
+        .expect("coverage validation root resolves after receipt read")
         .to_string_lossy()
         .to_string();
     if workspace != "/repo" && workspace != root_string {

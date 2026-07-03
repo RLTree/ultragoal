@@ -13,7 +13,7 @@ fn active_lanes() -> Vec<Value> {
             "owned_paths":["src"],
             "workspace":"work/lane",
             "state_roots":["state/shared"],
-            "scratch_roots":["scratch/a"],
+            "temporary_state_roots":["temporary-state/a"],
             "tool_cache_roots":["cache/a"],
             "browser_profile_roots":["browser/a"],
             "artifact_root":"artifacts/shared",
@@ -28,7 +28,7 @@ fn active_lanes() -> Vec<Value> {
             "owned_paths":["src/app"],
             "workspace":"work/lane/sub",
             "state_roots":["state/shared/sub"],
-            "scratch_roots":["scratch/a/sub"],
+            "temporary_state_roots":["temporary-state/a/sub"],
             "tool_cache_roots":["cache/a/sub"],
             "browser_profile_roots":["browser/a/sub"],
             "artifact_root":"artifacts/shared/sub",
@@ -72,7 +72,7 @@ fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
         &post,
         serde_json::to_vec(&json!({
             "schema":"harness-ultragoal.root-verification-receipt.v1",
-            "phase":"post_merge_integration_gate",
+            "stage":"post_merge_integration_gate",
             "upstream_lane_id":"lane-a",
             "upstream_commit":"commit-a",
             "target_branch":"main",
@@ -92,7 +92,7 @@ fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
         "target_branch":"main"
     })];
     let post_merge_state = json!({
-        "phase":"post_merge_integration_gate",
+        "stage":"post_merge_integration_gate",
         "status":"pass",
         "validated_at":"2026-06-25T00:00:00Z",
         "command_receipt":{"id":"post-cmd","exit":0,"artifact_path":"artifacts/post.json","artifact_digest":digest},
@@ -101,7 +101,7 @@ fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
     let verification_states = json!({
         "pre_merge_lane_gate":{"status":"pending"},
         "post_merge_integration_gate":post_merge_state,
-        "final_all_lanes_gate":{"phase":"final_all_lanes_gate","status":"pass"}
+        "final_all_lanes_gate":{"stage":"final_all_lanes_gate","status":"pass"}
     });
     let mut out = Vec::new();
     crate::claim_semantics::lane::root::scope::root_verification_states(
@@ -125,7 +125,7 @@ fn root_verification_and_parent_changed_file_authority_fail_closed_and_pass() {
     let no_post = json!({
         "pre_merge_lane_gate":{"status":"pass"},
         "post_merge_integration_gate":{"status":"pending"},
-        "final_all_lanes_gate":{"phase":"final_all_lanes_gate","status":"pass"}
+        "final_all_lanes_gate":{"stage":"final_all_lanes_gate","status":"pass"}
     });
     out.clear();
     crate::claim_semantics::lane::root::scope::root_verification_states(

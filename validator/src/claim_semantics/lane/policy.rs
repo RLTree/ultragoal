@@ -53,7 +53,7 @@ pub fn check_lanes(
             lane,
             &lane_index,
             &ready_index,
-            &lr["root_verification_phases"],
+            &lr["root_verification_stages"],
             bundle,
             root,
             run_at,
@@ -63,7 +63,7 @@ pub fn check_lanes(
     crate::claim_semantics::lane::root::scope::lane_overlap(&lanes, out);
     crate::claim_semantics::lane::isolation::mutable_resources(&lanes, out);
     crate::claim_semantics::lane::root::scope::root_verification_states(
-        &lr["root_verification_phases"],
+        &lr["root_verification_stages"],
         &lanes,
         root,
         out,

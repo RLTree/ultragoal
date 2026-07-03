@@ -152,3 +152,26 @@ fn claim_artifact_path_rejects_external_claim_outputs() {
 
     let _ = fs::remove_dir_all(root);
 }
+
+#[test]
+fn literal_claim_artifact_path_accepts_product_owned_constants() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("literal-claim-output");
+    fs::create_dir_all(&root).expect("root");
+
+    let path = crate::output_path::literal_claim_artifact_path(
+        &root,
+        "validation_artifacts/observability/static-receipt.json",
+        "static receipt",
+    );
+    assert_eq!(
+        path,
+        root.join("validation_artifacts/observability/static-receipt.json")
+    );
+
+    let invalid = std::panic::catch_unwind(|| {
+        crate::output_path::literal_claim_artifact_path(&root, "/tmp/receipt.json", "bad receipt");
+    });
+    assert!(invalid.is_err());
+
+    let _ = fs::remove_dir_all(root);
+}

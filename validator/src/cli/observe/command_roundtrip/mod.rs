@@ -2,7 +2,7 @@ use crate::audit::observability::specs::{self, CommandObservabilitySpec};
 use crate::cli::observe::query::{self, QueryKind};
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::{Value, json};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 mod checks;
@@ -160,11 +160,8 @@ fn query_roundtrip(
     };
     let value = query::run(root, &command, kind)?;
     let receipt_rel = command.receipt_rel();
-    let receipt_path = crate::output_path::claim_artifact_path(
-        root,
-        &receipt_rel,
-        "observe query roundtrip receipt",
-    )?;
+    let receipt_path =
+        fixed_roundtrip_artifact_path(root, receipt_rel, "observe query roundtrip receipt");
     crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
 }
@@ -193,13 +190,15 @@ fn explain_roundtrip(
     };
     let value = super::explain::run(root, &command)?;
     let receipt_rel = command.receipt_rel();
-    let receipt_path = crate::output_path::claim_artifact_path(
-        root,
-        &receipt_rel,
-        "observe explain roundtrip receipt",
-    )?;
+    let receipt_path =
+        fixed_roundtrip_artifact_path(root, receipt_rel, "observe explain roundtrip receipt");
     crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
+}
+
+fn fixed_roundtrip_artifact_path(root: &Path, rel: PathBuf, label: &str) -> PathBuf {
+    crate::output_path::claim_artifact_path(root, &rel, label)
+        .expect("command roundtrip spec owns root-relative artifact paths")
 }
 
 fn receipt(

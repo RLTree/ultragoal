@@ -160,7 +160,7 @@
           "type": "object",
           "required": [
             "status",
-            "round_phase",
+            "review_stage",
             "validator_run_id",
             "review_target_digest",
             "archive_digest"
@@ -169,7 +169,7 @@
             "status": {
               "const": "pass"
             },
-            "round_phase": {
+            "review_stage": {
               "const": "sign_off"
             },
             "validator_run_id": {

@@ -52,7 +52,7 @@ fn observe_query_run_covers_pass_retry_and_failure_paths() {
         QueryKind::Logs,
         "*".to_string(),
         Ok(format!(
-            "{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"why_failed\":\"live stack unhealthy\",\"where_failed\":\"observe.prove\",\"next_repair\":\"run observe stack health\",\"claim_impact\":\"update_goal_blocked\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"gate-92-observability-control-plane\",\"run_id\":\"run-observed\",\"correlation_id\":\"corr-observed\"}}"
+            "{{\"candidate_digest\":\"{current_candidate}\",\"status\":\"fail\",\"failure_class\":\"observability_gate_failure\",\"why_failed\":\"live stack unhealthy\",\"where_failed\":\"observe.prove\",\"next_repair\":\"run observe stack health\",\"claim_impact\":\"update_goal_blocked\",\"law_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"check_id\":\"full-local-observability-stack-integration-non-opaque-failure\",\"claim_id\":\"observability-control-plane\",\"run_id\":\"run-observed\",\"correlation_id\":\"corr-observed\"}}"
         )),
     )
     .expect("observed failure output");

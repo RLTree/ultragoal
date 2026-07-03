@@ -80,7 +80,7 @@ fn aggregate_semantic_failures_cover_contract_claim_goal_and_amendments() {
                     }
                 }
             },
-            "lane_registry": {"lanes": [], "root_verification_phases": []},
+            "lane_registry": {"lanes": [], "root_verification_stages": []},
             "ready_for_merge": {
                 "lane_id": "LANE-X",
                 "ready": false,
@@ -185,7 +185,7 @@ fn aggregate_semantic_failures_cover_text_surface_overclaims() {
                     "evidence": []
                 }]
             },
-            "lane_registry": {"lanes": [], "root_verification_phases": []},
+            "lane_registry": {"lanes": [], "root_verification_stages": []},
             "ready_for_merge": {"changed_files": []},
             "ready_for_merge_receipts": [],
             "verification_backlog": {"rows": []},

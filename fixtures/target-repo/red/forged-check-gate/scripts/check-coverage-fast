@@ -27,7 +27,7 @@ bash -lc "$coverage_cmd" || {
   exit 2
 }
 
-python3 - "$manifest" "$command_path" "$receipt" "$root" progress <<'PY'
+python3 - "$manifest" "$command_path" "$receipt" "$root" source_local_iteration <<'PY'
 import hashlib
 import json
 import sys
@@ -171,6 +171,6 @@ if not resolved_report.is_file():
 load_json(resolved_report, "coverage_report_not_machine_readable")
 if report.get("digest") != sha256_file(resolved_report):
     fail("coverage_report_digest_mismatch")
-if claim_context != "progress" and receipt.get("coverage", {}).get("policy") != "100_percent_required":
+if claim_context != "source_local_iteration" and receipt.get("coverage", {}).get("policy") != "100_percent_required":
     fail("coverage_fast_gate_used_for_completion")
 PY

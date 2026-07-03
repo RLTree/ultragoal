@@ -7,7 +7,7 @@
   "required": [
     "schema",
     "round_id",
-    "round_phase",
+    "review_stage",
     "anchor_policy",
     "status",
     "generated_at",
@@ -27,7 +27,7 @@
       "type": "string",
       "minLength": 1
     },
-    "round_phase": {
+    "review_stage": {
       "const": "sign_off"
     },
     "anchor_policy": {

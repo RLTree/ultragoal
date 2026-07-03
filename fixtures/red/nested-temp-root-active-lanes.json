@@ -79,8 +79,8 @@
           "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
           "path": "READY_FOR_MERGE-2.json"
         },
-        "scratch_roots": [
-          ".scratch/fixture/nested"
+        "temporary_state_roots": [
+          ".temporary-state/fixture/nested"
         ],
         "state_roots": [
           ".state/fixture"
@@ -151,7 +151,7 @@
     "first_failure_must_match_expected": true,
     "post_patch_schema_valid": true
   },
-  "notes": "adds second active lane with nested scratch_roots under another active lane",
+  "notes": "adds second active lane with nested temporary_state_roots under another active lane",
   "postconditions": [
     {
       "expectation": "active_lane_mutable_resource_overlap",

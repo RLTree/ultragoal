@@ -9,6 +9,10 @@ pub(super) fn anti_theater_failures(
         return Vec::new();
     }
     let mut out = Vec::new();
+    let cli_failures = cli_control_receipt_failures(root);
+    if cli_failures.is_empty() {
+        return out;
+    }
     for failure in crate::audit::final_packet::claim_guard_failures(root, store) {
         out.push(format!(
             "mandatory_law_anti_theater_dependency:{law}:{failure}"
@@ -19,7 +23,7 @@ pub(super) fn anti_theater_failures(
             "mandatory_law_anti_theater_dependency:{law}:{failure}"
         ));
     }
-    for failure in cli_control_receipt_failures(root) {
+    for failure in cli_failures {
         out.push(format!(
             "mandatory_law_anti_theater_dependency:{law}:{failure}"
         ));

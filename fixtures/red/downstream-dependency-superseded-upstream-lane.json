@@ -124,8 +124,8 @@
           "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
           "path": "READY_FOR_MERGE-2.json"
         },
-        "scratch_roots": [
-          ".scratch/downstream"
+        "temporary_state_roots": [
+          ".temporary-state/downstream"
         ],
         "state_roots": [
           ".state/downstream"

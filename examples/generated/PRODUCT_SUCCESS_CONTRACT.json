@@ -1,5 +1,14 @@
 {
   "schema": "harness-ultragoal.product-success-contract.v1",
+  "source_spec": {
+    "generated_from": "templates/PRODUCT_SUCCESS_CONTRACT.md",
+    "generator_command": "ultragoal product success contract static example generation",
+    "input_artifacts": [
+      "templates/PRODUCT_SUCCESS_CONTRACT.md",
+      "schemas/product-success-contract.schema.json"
+    ],
+    "claim_ceiling": "package_static_fixture_only_until_live_e2e"
+  },
   "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-STATIC-001",
   "contract_version": "1.0.0",
   "goal_id": "harness-ultragoal-june-25-candidate",
@@ -11,7 +20,7 @@
     "CLAIM-001"
   ],
   "product_surface_classification": "developer_tool_plugin_package_static",
-  "target_user_or_operator": "Harness Ultragoal repo-fitting agent operator",
+  "target_user_or_operator": "Harness Ultragoal plugin-activated repository operator",
   "job_to_be_done": "Fit a repository without letting unsupported proof become completion claims",
   "context_of_use": "Codex local repo setup or retrofit session",
   "desired_user_outcome": "The agent receives clear gates and cannot claim unsupported product success",

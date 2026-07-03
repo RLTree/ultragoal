@@ -113,7 +113,7 @@ pub const CHECK_IDS: &[&str] = &[
     "rust-developer-experience-authority",
     "rust-memory-resource-discipline",
     "rust-toolchain-substrate-authority",
-    "root-verification-phase-coverage",
+    "root-verification-stage-coverage",
     "runtime-feasibility-cost-strict-gate-usability",
     "runtime-tool-identity",
     "scheduler-runner-tracker-boundaries",

@@ -210,11 +210,11 @@
         "owner": "fixture-agent",
         "port_allocations": [],
         "ready_receipt": {
-          "digest": "sha256:122cba544d035fc62bed1196d353f5c40a4eb8eb3b963c6729038d56dff48364",
+          "digest": "sha256:a741bb8b985f6a358495160324b44c84a69de6ca0fdb8d69a24ae5a30a50da21",
           "path": "examples/generated/READY_FOR_MERGE-non-product-engineering-language.json"
         },
-        "scratch_roots": [
-          ".scratch/fixture"
+        "temporary_state_roots": [
+          ".temporary-state/fixture"
         ],
         "state_roots": [
           ".state/fixture"
@@ -279,12 +279,12 @@
         }
       }
     ],
-    "root_verification_phases": {
+    "root_verification_stages": {
       "final_all_lanes_gate": {
         "blocking": true,
         "claim_ceiling_impact": "required before final claim",
         "owner": "orchestrator",
-        "phase": "final_all_lanes_gate",
+        "stage": "final_all_lanes_gate",
         "required_inputs": [
           "merge evidence"
         ],
@@ -295,7 +295,7 @@
         "blocking": true,
         "claim_ceiling_impact": "required before integration claim",
         "owner": "orchestrator",
-        "phase": "post_merge_integration_gate",
+        "stage": "post_merge_integration_gate",
         "required_inputs": [
           "merge evidence"
         ],
@@ -306,7 +306,7 @@
         "blocking": true,
         "claim_ceiling_impact": "required before merge",
         "owner": "lane",
-        "phase": "pre_merge_lane_gate",
+        "stage": "pre_merge_lane_gate",
         "required_inputs": [
           "lane evidence"
         ],
@@ -4058,7 +4058,7 @@
       "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
       "validation_artifacts/ultragoal-audit/ready-LANE-001-receipt.json",
       "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "validation_artifacts/ultragoal-audit/root-receipt-post-merge-integration-LANE-001.json",
+      "fixtures/root-receipts/post-merge-integration-LANE-001.fixture.json",
       "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
       "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
       "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
@@ -4308,7 +4308,8 @@
       "validator/src/package/artifact/mod.rs",
       "validator/src/package/artifact/refs.rs",
       "validator/src/package/inventory/mod.rs",
-      "validator/src/package/inventory/closure.rs",
+      "validator/src/package/inventory/closure/mod.rs",
+      "validator/src/package/inventory/closure/package_entries.rs",
       "validator/src/package/resource/mod.rs",
       "validator/src/package/resource/purpose.rs",
       "validator/src/red/filesystem/fixtures.rs",
@@ -4801,7 +4802,7 @@
     "generated_by": "ultragoal-audit",
     "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
     "lane_id": "LANE-001",
-    "lane_registry_digest": "sha256:7d52172c65d369580ed71bc18d331a24d1076bb7a6e90e673d5e4622a88c3d21",
+    "lane_registry_digest": "sha256:54c76119fa802d742965b1ae5d282228096bc90708e107527f69fea4c78e7a02",
     "live_target_head_at_generation": "abcdef0",
     "merge_base": "abcdef0",
     "provenance": {
@@ -5269,7 +5270,7 @@
         "details": "pass",
         "status": "pass"
       },
-      "root-verification-phase-coverage": {
+      "root-verification-stage-coverage": {
         "details": "pass",
         "status": "pass"
       },
@@ -8666,7 +8667,7 @@
       },
       "downstream-dependency-post-merge-artifact-substitution": {
         "expected_error": "root_verification_stage_pass_without_successful_receipt",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:52ae82fbbfec8508606b471e981600ae7335b20abc70641a3f9a31b729711f24",
@@ -8866,9 +8867,9 @@
       },
       "duplicate-or-missing-root-receipt": {
         "expected_error": "root_verification_stage_missing_or_duplicate",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "root_verification_stage_missing_or_duplicate",
-        "observed_failing_check": "root-verification-phase-coverage",
+        "observed_failing_check": "root-verification-stage-coverage",
         "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
         "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json",
         "status": "pass",
@@ -9236,9 +9237,9 @@
       },
       "final-gate-with-complete-unmerged-lane": {
         "expected_error": "final_gate_with_nonterminal_lanes",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "final_gate_with_nonterminal_lanes",
-        "observed_failing_check": "root-verification-phase-coverage",
+        "observed_failing_check": "root-verification-stage-coverage",
         "packet_digest": "sha256:5d44298cfbd323656dc713750ac17eb2422aad9475898374c92d76273fc42e9a",
         "packet_path": "fixtures/red/final-gate-with-complete-unmerged-lane.json",
         "status": "pass",
@@ -9246,7 +9247,7 @@
       },
       "final-gate-with-nonterminal-lane": {
         "expected_error": "final_gate_with_nonterminal_lanes",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:2107e89ab276d40d9cd7b8b9f2c47a8f4f88637fea1f6acdfcccd1e6fcc74d48",
@@ -9256,7 +9257,7 @@
       },
       "final-without-post-merge-receipt": {
         "expected_error": "final_gate_without_post_merge_receipt",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:3efb711c8d9c0ad65d98905089675d48b3461096c38cc6a50f761e2ee1690ec3",
@@ -12426,7 +12427,7 @@
       },
       "post-merge-before-pre-merge": {
         "expected_error": "post_merge_without_pre_merge_receipt",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:83491de33893c47bf24e17f5292c5fba8c4d14e5a888c6966cb53708595b63dd",
@@ -15846,7 +15847,7 @@
       },
       "root-receipt-pass-failed-command": {
         "expected_error": "root_verification_stage_pass_without_successful_receipt",
-        "expected_failing_check": "root-verification-phase-coverage",
+        "expected_failing_check": "root-verification-stage-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:dbbedc52bb9cd11a4b5620f8660f67234c5e561dd590369c56f821b7ee19b029",
@@ -18810,7 +18811,7 @@
       "rust-developer-experience-authority",
       "rust-memory-resource-discipline",
       "rust-toolchain-substrate-authority",
-      "root-verification-phase-coverage",
+      "root-verification-stage-coverage",
       "runtime-feasibility-cost-strict-gate-usability",
       "runtime-tool-identity",
       "scheduler-runner-tracker-boundaries",
@@ -20998,8 +20999,12 @@
           "path": "validator/src/package/inventory/mod.rs"
         },
         {
-          "digest": "sha256:51efd17f39f3f6c009aadb0ef102b3594231a5b8771d3a1ecae43c7735347e4b",
-          "path": "validator/src/package/inventory/closure.rs"
+          "digest": "sha256:32cdf167a80217d230c7a89656533eb166fe76c4f773d683da762997cf195467",
+          "path": "validator/src/package/inventory/closure/mod.rs"
+        },
+        {
+          "digest": "sha256:ddcd896cc9f1f0690ee2c2039d461d5067b1c6dd70daf3360b6d64a5116fbc2c",
+          "path": "validator/src/package/inventory/closure/package_entries.rs"
         },
         {
           "digest": "sha256:c6dd8772ec961d9b98f0410d9c8343b143bfc56edf750c6b4223779455f75609",

@@ -4728,19 +4728,19 @@
       "enforcement_status": "deterministic_fail_closed",
       "evidence_artifacts": [
         {
-          "digest": "sha256:07e91d6cd920667abcf8c3237785ec40d044ddc534e857f231b453136a149650",
+          "digest": "sha256:b579c4f8a541af8428efa5f5a401146f9c80b6a416e276855ba991ad1f1cee8e",
           "path": "validator/src/audit/namespace/source/topology.rs"
         },
         {
-          "digest": "sha256:7160c81964c5e79bd9ce5da7bdb90768b44dc8a56be39a7860466dab80c7f643",
+          "digest": "sha256:72f1bcbd0f499b3a77477ce9ecaa8b7607de1e5eeffa389b74855f978f4b1c48",
           "path": "validator/src/audit/namespace/classes.rs"
         },
         {
-          "digest": "sha256:35d2f89e5f14a8624db9101d0594f896a18c565f5fc27411b55b7808ce996caf",
+          "digest": "sha256:05b9f9749153b8540543b6129697687b6dc6dc0582e124e71354699c1f4179b3",
           "path": "validator/src/audit/namespace/law/mod.rs"
         },
         {
-          "digest": "sha256:cce6c9611674e59b239e82981bbadbdb0cacc51160a4dbef1153c209485da8a5",
+          "digest": "sha256:565b1ba7e54545c405afb857f76cb85f98ee544502f1cfeb11dba20ba50c315d",
           "path": "validator/src/self_tests/namespace/red_fixtures.rs"
         },
         {

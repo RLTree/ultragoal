@@ -31,7 +31,7 @@
         "purpose",
         "user_outcome",
         "steps",
-        "progress",
+        "current_state",
         "discoveries",
         "decisions",
         "validation_commands",
@@ -49,7 +49,7 @@
         "steps": {
           "const": true
         },
-        "progress": {
+        "current_state": {
           "const": true
         },
         "discoveries": {

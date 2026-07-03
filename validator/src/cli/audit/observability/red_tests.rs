@@ -1,4 +1,4 @@
-use super::{RuntimeFacts, red, runtime, write_all};
+use super::{ReceiptFields, RuntimeFacts, emit_receipt, red, write_all};
 use serde_json::json;
 use std::fs;
 
@@ -164,50 +164,54 @@ fn source_audit_red_report_observability_write_error_is_propagated() {
 }
 
 #[test]
-fn audit_runtime_telemetry_reports_scheduler_resource_edges() {
-    let mixed = runtime::telemetry(
-        &json!({
-            "scheduler_execution": [
-                {
-                    "worker_count": 0,
-                    "task_count": 1,
-                    "queue_depth": 0,
-                    "cpu_ms": 5,
-                    "memory_bytes": 50,
-                    "io_bytes": 500,
-                    "cache_mode": "a",
-                    "resource_measurement_status": "ra"
-                },
-                {
-                    "worker_count": 2,
-                    "task_count": 1,
-                    "queue_depth": 1,
-                    "cpu_ms": 7,
-                    "memory_bytes": 70,
-                    "io_bytes": 700,
-                    "cache_mode": "b",
-                    "resource_measurement_status": "rb"
-                }
-            ]
-        }),
-        RuntimeFacts::from_elapsed_ms(9),
-    );
-    assert_eq!(mixed.cpu_ms, Some(12));
-    assert_eq!(mixed.memory_bytes, Some(120));
-    assert_eq!(mixed.io_bytes, Some(1200));
-    assert_eq!(mixed.cache_mode, "mixed_cache_mode");
-    assert_eq!(
-        mixed.resource_measurement_status,
-        "mixed_resource_measurement_status"
-    );
-    assert_eq!(mixed.saturation_status, "within_worker_capacity");
-
-    let missing_worker = runtime::telemetry(
-        &json!({"scheduler_execution":[{"task_count":1,"queue_depth":0}]}),
-        RuntimeFacts::from_elapsed_ms(10),
-    );
-    assert_eq!(
-        missing_worker.saturation_status,
-        "scheduler_worker_count_missing"
-    );
+fn audit_observability_rejects_absolute_receipt_path() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("audit-absolute-observe");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    )
+    .expect("manifest");
+    let absolute = root.join("target/audit-observability.json");
+    let absolute_text = absolute.to_string_lossy().to_string();
+    let err = emit_receipt(
+        &root,
+        ReceiptFields {
+            command: "ultragoal source",
+            subcommand: "audit",
+            operation: "source.audit",
+            surface: "source",
+            check_id: "source-audit-observability-binding",
+            claim_id: "source_audit",
+            artifact_path: "validation_artifacts/ultragoal-audit",
+            receipt_path: &absolute_text,
+            status: "fail",
+            failure_class: "source_audit_check_failure",
+            why_failed: "audit failed",
+            where_failed: "source.audit",
+            next_repair: "rerun source audit after repairing the blocker",
+            claim_impact: "source_audit_failed_blocks_claims",
+            supported_claims: Vec::new(),
+            runtime: crate::cli::observe::telemetry::RuntimeTelemetry {
+                duration_ms: 1,
+                worker_count: 1,
+                task_count: 1,
+                queue_depth: 0,
+                cpu_ms: None,
+                memory_bytes: None,
+                io_bytes: None,
+                cache_mode: "audit_observability_test".to_string(),
+                resource_measurement_status: "test_only".to_string(),
+                retry_count: 0,
+                backoff_ms: 0,
+                saturation_status: "serial_test".to_string(),
+                repair_anchor_before: "audit_test_start".to_string(),
+                repair_anchor_after: "audit_test_failure".to_string(),
+            },
+        },
+    )
+    .expect_err("absolute audit observability receipt rejected");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(!absolute.exists());
+    fs::remove_dir_all(root).expect("cleanup absolute audit observe");
 }

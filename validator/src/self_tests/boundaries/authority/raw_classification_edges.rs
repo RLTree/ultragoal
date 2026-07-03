@@ -1,0 +1,134 @@
+#[test]
+fn raw_authority_scanner_allows_files_without_raw_authority_markers() {
+    let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/domain/claim_core.rs",
+        "pub(crate) fn typed_claim_status() -> bool { true }\n",
+    );
+    assert!(failures.is_empty(), "{failures:?}");
+}
+
+#[test]
+fn raw_authority_scanner_rejects_raw_observation_without_classification() {
+    let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/domain/claim_core.rs",
+        "pub(crate) fn decide(raw_observation: &str) -> &str { raw_observation }\n",
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("raw_authority=raw_observation")),
+        "{failures:?}"
+    );
+}
+
+#[test]
+fn raw_authority_scanner_allows_fixture_and_catalog_materialization_paths() {
+    for rel in [
+        "fixtures/red/authority-source-binding-red.json",
+        "validator/src/self_tests/fixtures/authority.rs",
+        "validator/src/audit/fixture/materialization.rs",
+        "validator/src/schema_catalog/generated.rs",
+        "validator/src/package/schema/catalog.rs",
+        "validator/src/cli/schema_catalog.rs",
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            rel,
+            "use serde_json::Value;\npub(crate) fn materialize(value: Value) -> Value { value }\n",
+        );
+        assert!(failures.is_empty(), "{rel}: {failures:?}");
+    }
+}
+
+#[test]
+fn raw_authority_scanner_allows_named_product_projection_boundaries() {
+    for (rel, text) in [
+        (
+            "validator/src/cli/control/plane/mod.rs",
+            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = receipt_from_control_graph(); let _ = registry::stdout::print(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/control/plane/proof/mod.rs",
+            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = diagnostic::failure_value(); let _ = diagnostic::notes(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/control/plane/registry/capability/gap.rs",
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = missing_capability_class(); let _ = affected_claim_ids(); let _ = current_claim_ceiling(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/final_packet/proof/spans.rs",
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = span_kind(); let _ = receipt_deref(); let _ = dereferenced_receipt_digest(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/live_loop/context.rs",
+            "use serde_json::{json, Value};\nstruct AuditContext;\npub(crate) fn project(value: &Value) -> Value { let _ = changed_files_digest(); let _ = input_digest(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/live_loop/graph.rs",
+            "use serde_json::{json, Value};\nstruct LoopValidationSurface;\npub(crate) fn project(value: &Value) -> Value { let _ = input_digest(); let _ = claim_impact(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/openai/config.rs",
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = openai_config_redacted_resolution(); let _ = secret_material_serialized(); let _ = blocked_claims(); json!({\"value\":value}) }\n",
+        ),
+        (
+            "validator/src/cli/product/cohesion.rs",
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"product-cohesion\"; let _ = \"source_local_product_cohesion_only\"; let _ = \"target_repo::product::cohesion::check\"; json!({\"value\":value}) }\n",
+        ),
+    ] {
+        let failures =
+            crate::audit::law::authority_surfaces::raw_authority_failures_for_test(rel, text);
+        assert!(failures.is_empty(), "{rel}: {failures:?}");
+    }
+}
+
+#[test]
+fn raw_authority_scanner_allows_typed_map_projection_and_field_parsers() {
+    let typed_map = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/domain/claim_projection.rs",
+        "use serde_json::Value;\nuse std::collections::BTreeMap;\npub(crate) fn project(value: &Value) -> BTreeMap<&'static str, String> { let mut out = BTreeMap::new(); out.insert(\"status\", value.to_string()); out }\n",
+    );
+    assert!(typed_map.is_empty(), "{typed_map:?}");
+
+    for parser_text in [
+        "use serde_json::Value;\npub(crate) fn failures(value: &Value, out: &mut Vec<String>) { if value.as_object().is_none() { out.push(format!(\"missing object\")); } }\n",
+        "use serde_json::Value;\npub(crate) fn failures(value: &Value, out: &mut Vec<String>) { if value.as_array().is_none() { out.push(format!(\"missing array\")); } }\n",
+        "use serde_json::Value;\npub(crate) fn failures(value: &Value, out: &mut Vec<String>) { if value.get(\"status\").is_none() { out.push(format!(\"missing status\")); } }\n",
+        "use serde_json::Value;\npub(crate) fn failures(value: &Value, out: &mut Vec<String>) { if value.pointer(\"/status\").is_none() { out.push(format!(\"missing status\")); } }\n",
+        "use serde_json::Value;\npub(crate) fn failures(value: &Value, out: &mut Vec<String>) { if Value::as_str(value).is_none() { out.push(format!(\"missing str\")); } }\n",
+        "use serde_json::Value;\npub(crate) fn str_field(value: &Value, out: &mut Vec<String>) { if str_field_name(value).is_empty() { out.push(format!(\"missing field\")); } }\npub(crate) fn str_field_name(_: &Value) -> &'static str { \"\" }\n",
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/audit/domain/claim_parser.rs",
+            parser_text,
+        );
+        assert!(failures.is_empty(), "{failures:?}");
+    }
+}
+
+#[test]
+fn source_text_scanner_routes_raw_and_output_authority_failures() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("authority-source-scanner");
+    std::fs::create_dir_all(root.join("validator/src/domain")).expect("source dir");
+    std::fs::write(
+        root.join("validator/src/domain/claim_core.rs"),
+        "use serde_json::Value;\npub(crate) fn decide(value: Value) -> Value { let receipt = root.join(&command.receipt); crate::json_boundary::write_json(&receipt, &value).unwrap(); value }\n",
+    )
+    .expect("raw source");
+    let failures = crate::audit::law::authority_surfaces::source_text_failures_for_test(&root);
+    assert!(
+        failures.iter().any(|(check, failure)| {
+            check == "typed-records-over-prose"
+                && failure.contains("raw_downstream_authority_unclassified")
+        }),
+        "{failures:?}"
+    );
+    assert!(
+        failures.iter().any(|(check, failure)| {
+            check == "total-authority-types-impossible-state-elimination"
+                && failure.contains("claim_artifact_output_without_typed_authority")
+        }),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup source scanner");
+}

@@ -9,7 +9,7 @@ pub(crate) fn row_policy_errors(
     out: &mut Vec<ReviewFailure>,
 ) {
     let review_stage = receipt
-        .get("round_phase")
+        .get("review_stage")
         .and_then(Value::as_str)
         .unwrap_or("");
     freshness_errors(row, persona, out);
@@ -47,7 +47,7 @@ fn verdict_error(row: &Value, review_stage: &str, persona: &str, out: &mut Vec<R
     {
         out.push(ReviewFailure::new(
             "validator-execution-provenance",
-            "review_round_wrong_phase_verdict",
+            "review_round_wrong_review_stage_verdict",
             persona,
         ));
     }
@@ -90,7 +90,7 @@ fn anchor_digest_errors(
     out: &mut Vec<ReviewFailure>,
 ) {
     let review_stage = receipt
-        .get("round_phase")
+        .get("review_stage")
         .and_then(Value::as_str)
         .unwrap_or("");
     let anchor_policy = receipt

@@ -9,7 +9,7 @@
   "json_patch": [
     {
       "op": "replace",
-      "path": "/round_phase",
+      "path": "/review_stage",
       "value": "sign_off"
     },
     {

@@ -92,7 +92,7 @@ fn resource_paths(lane: &Value) -> Vec<(String, String)> {
     }
     for key in [
         "state_roots",
-        "scratch_roots",
+        "temporary_state_roots",
         "tool_cache_roots",
         "browser_profile_roots",
     ] {

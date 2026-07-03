@@ -41,3 +41,35 @@ fn foundational_inventory_declares_required_authority_roles() {
         "builder-contract docs must not be package evidence surfaces: {surfaces:?}"
     );
 }
+
+#[test]
+fn foundational_inventory_rejects_missing_and_unpackaged_required_surfaces() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("authority-required-surfaces");
+    std::fs::create_dir_all(&root).expect("required surfaces fixture root");
+    let failures = crate::audit::law::authority_surfaces::required_surface_failures_for_test(
+        &root,
+        &std::collections::BTreeSet::new(),
+    );
+    assert!(
+        failures
+            .iter()
+            .any(|(_, failure)| failure.contains("authority_surface_missing:role=source")),
+        "{failures:?}"
+    );
+    assert!(
+        failures.iter().any(|(_, failure)| {
+            failure.contains("authority_surface_not_in_package_inventory:role=source")
+        }),
+        "{failures:?}"
+    );
+    assert!(
+        !failures.iter().any(|(_, failure)| {
+            failure.contains(
+                "authority_surface_not_in_package_inventory:role=receipt:path=validation_artifacts/coverage/coverage-receipt.json"
+            )
+        }),
+        "runtime coverage receipt is required at proof time but must not become package inventory: {failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup required authority surfaces");
+}

@@ -27,4 +27,5 @@ pub(crate) mod schema_validation;
 pub(crate) mod session;
 pub(crate) mod source_obligations;
 pub(crate) mod standards;
+pub(crate) mod typed_boundaries;
 pub(crate) mod usage;

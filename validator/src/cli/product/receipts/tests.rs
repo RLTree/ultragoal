@@ -50,7 +50,7 @@ fn product_journey_receipt_requires_fit_repo_evidence_slot() {
         "2026-06-28T00:00:00Z",
     )
     .expect_err("missing fit-repo evidence");
-    assert!(error.contains("missing_fit_evidence"), "{error}");
+    assert!(error.contains("missing_fit_repo_evidence"), "{error}");
     std::fs::remove_dir_all(root).expect("cleanup journey missing fit-repo");
 }
 

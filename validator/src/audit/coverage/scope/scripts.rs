@@ -8,10 +8,10 @@ pub(crate) fn failures(root: &Path, path: &str, kind: &str) -> Vec<String> {
     if kind == "completion" && !text.contains("100_percent_required") {
         out.push("coverage_full_gate_missing".to_string());
     }
-    if kind == "completion" && text.contains("progress claim only") {
+    if kind == "completion" && text.contains("source_local_iteration") {
         out.push("coverage_fast_gate_used_for_completion".to_string());
     }
-    if kind == "progress" && !text.contains("progress") {
+    if kind == "source_local_iteration" && !text.contains("source_local_iteration") {
         out.push("coverage_claim_context_missing".to_string());
     }
     out

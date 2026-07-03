@@ -1,4 +1,5 @@
 use serde_json::Value;
+use std::path::PathBuf;
 
 fn args(root: std::path::PathBuf, raw: &[&str]) -> crate::Args {
     crate::Args {
@@ -98,4 +99,27 @@ fn review_round_observability_receipt_path_validation_is_fail_closed() {
             "{error}"
         );
     }
+}
+
+#[test]
+fn review_round_run_rejects_absolute_observability_claim_artifact() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let error = crate::cli::review::round::run(
+        root.clone(),
+        PathBuf::from("fixtures/review-round/valid/review-round-receipt.json"),
+        PathBuf::from("fixtures/review-round/anchors/validator-receipt.json"),
+        PathBuf::from("fixtures/review-round/anchors/review-target-receipt.json"),
+        PathBuf::from("fixtures/review-round/anchors/archive-receipt.json"),
+        root.join("absolute-review-round-observability.json"),
+    )
+    .expect_err("absolute observability receipt rejected by runner");
+    assert!(
+        error.contains("review round observability receipt"),
+        "{error}"
+    );
+    assert!(
+        error.contains("root-relative claim artifact path"),
+        "{error}"
+    );
+    assert!(error.contains("external debug only"), "{error}");
 }

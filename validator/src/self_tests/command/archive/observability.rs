@@ -119,6 +119,27 @@ fn archive_observability_receipt_path_validation_is_fail_closed() {
 }
 
 #[test]
+fn archive_run_rejects_absolute_observability_claim_artifact() {
+    let root = package_root("archive-observability-absolute-run");
+    let error = crate::cli::archive::run(
+        root.clone(),
+        PathBuf::from("receipts/candidate.zip"),
+        PathBuf::from("receipts/archive.json"),
+        root.join("absolute-archive-observability.json"),
+        "harness-ultragoal".to_string(),
+        "candidate_review_anchor".to_string(),
+    )
+    .expect_err("absolute observability receipt rejected by runner");
+    assert!(error.contains("archive observability receipt"), "{error}");
+    assert!(
+        error.contains("root-relative claim artifact path"),
+        "{error}"
+    );
+    assert!(error.contains("external debug only"), "{error}");
+    std::fs::remove_dir_all(root).expect("cleanup archive absolute run");
+}
+
+#[test]
 fn archive_command_records_archive_receipt_write_failures() {
     let root = package_root("archive-observability-receipt-write-fail");
     let receipt_dir = root.join("receipts/archive.json");

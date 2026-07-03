@@ -14,20 +14,20 @@
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/status",
       "value": "pending"
     },
     {
       "op": "remove",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt"
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt"
     },
     {
       "op": "remove",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt"
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/artifact_receipt"
     },
     {
       "op": "remove",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at"
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/validated_at"
     }
   ],
   "materialization": {

@@ -1,4 +1,5 @@
 pub(crate) mod changed_files;
+mod dimensions;
 pub(crate) mod exclusions;
 mod parent_session;
 pub(crate) mod roots;
@@ -10,7 +11,6 @@ const MANIFEST: &str = "templates/.harness/coverage-manifest.json";
 const COMMAND: &str = "templates/.harness/coverage-command";
 const FAST: &str = "templates/scripts/check-coverage-fast";
 const FULL: &str = "templates/scripts/check-coverage-full";
-const REQUIRED_DIMENSIONS: &[&str] = &["line", "branch", "function", "artifact", "ui_state"];
 
 pub fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
@@ -34,7 +34,9 @@ pub fn package_failures(root: &Path) -> Vec<String> {
     };
     out.extend(value_failures_with_root(&manifest, Some(root)));
     out.extend(crate::audit::coverage::scope::scripts::failures(
-        root, FAST, "progress",
+        root,
+        FAST,
+        "source_local_iteration",
     ));
     out.extend(crate::audit::coverage::scope::scripts::failures(
         root,
@@ -192,41 +194,7 @@ fn scope_authority_failures(value: &Value, root: Option<&Path>) -> Vec<String> {
     } else if !str_field(policy, "changed_files_digest").starts_with("sha256:") {
         out.push("coverage_receipt_changed_files_digest_mismatch".to_string());
     }
-    out.extend(dimension_authority_failures(value));
-    out
-}
-
-fn dimension_authority_failures(value: &Value) -> Vec<String> {
-    let mut seen = std::collections::BTreeSet::new();
-    for row in value
-        .get("required_measured_dimensions_per_root")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-    {
-        for dim in row
-            .get("dimensions")
-            .and_then(Value::as_array)
-            .into_iter()
-            .flatten()
-            .filter_map(Value::as_str)
-        {
-            seen.insert(dim.to_string());
-        }
-    }
-    let mut out = Vec::new();
-    for dim in REQUIRED_DIMENSIONS {
-        if !seen.contains(*dim) {
-            out.push(
-                match *dim {
-                    "ui_state" => "coverage_ui_state_missing_for_product_surface",
-                    "artifact" => "coverage_artifact_dimension_missing_for_generated_authority",
-                    _ => "coverage_behavior_dimension_missing",
-                }
-                .to_string(),
-            );
-        }
-    }
+    out.extend(dimensions::failures(value));
     out
 }
 

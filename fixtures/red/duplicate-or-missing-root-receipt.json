@@ -2,14 +2,14 @@
   "schema": "harness-ultragoal.red-packet.v1",
   "id": "duplicate-or-missing-root-receipt",
   "expected_failure": {
-    "check_id": "root-verification-phase-coverage",
+    "check_id": "root-verification-stage-coverage",
     "error": "root_verification_stage_missing_or_duplicate"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
     {
       "op": "remove",
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate"
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate"
     }
   ],
   "notes": "remove final root verification phase",
@@ -26,7 +26,7 @@
   ],
   "postconditions": [
     {
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate",
       "expectation": "root_verification_stage_missing_or_duplicate"
     }
   ]

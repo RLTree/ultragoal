@@ -9,32 +9,32 @@
   "json_patch": [
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/completed_at",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt/completed_at",
       "value": "2026-06-15T23:59:59Z"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/artifact_path",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt/artifact_path",
       "value": "fixtures/root-receipts/post-merge-integration-LANE-001-stale.fixture.json"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/artifact_digest",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt/artifact_digest",
       "value": "sha256:3a20a71699c23a1ec38b7f9678841cca488c7509745330abb899e0c921ac8484"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/path",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/artifact_receipt/path",
       "value": "fixtures/root-receipts/post-merge-integration-LANE-001-stale.fixture.json"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/digest",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/artifact_receipt/digest",
       "value": "sha256:3a20a71699c23a1ec38b7f9678841cca488c7509745330abb899e0c921ac8484"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/validated_at",
       "value": "2026-06-15T23:59:59Z"
     }
   ],
@@ -51,7 +51,7 @@
   ],
   "postconditions": [
     {
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/validated_at",
       "expectation": "stale post-merge proof cannot unblock downstream dependency"
     }
   ],

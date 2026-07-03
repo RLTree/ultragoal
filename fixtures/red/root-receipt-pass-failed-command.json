@@ -2,19 +2,19 @@
   "schema": "harness-ultragoal.red-packet.v1",
   "id": "root-receipt-pass-failed-command",
   "expected_failure": {
-    "check_id": "root-verification-phase-coverage",
+    "check_id": "root-verification-stage-coverage",
     "error": "root_verification_stage_pass_without_successful_receipt"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/status",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate/status",
       "value": "pass"
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/command_receipt",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate/command_receipt",
       "value": {
         "id": "cmd-pre-gate",
         "command": "validate pre merge lane gate",
@@ -28,7 +28,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/artifact_receipt",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate/artifact_receipt",
       "value": {
         "path": "validation_artifacts/pre.json",
         "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
@@ -36,17 +36,17 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate/validated_at",
       "value": "2026-06-16T00:00:00Z"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/status",
       "value": "pass"
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt",
       "value": {
         "id": "cmd-root-verification-fail",
         "command": "false",
@@ -60,7 +60,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/artifact_receipt",
       "value": {
         "path": "validation_artifacts/root-verification.json",
         "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
@@ -68,7 +68,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/validated_at",
       "value": "2026-06-16T00:00:00Z"
     }
   ],

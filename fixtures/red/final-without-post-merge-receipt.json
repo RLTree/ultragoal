@@ -2,19 +2,19 @@
   "schema": "harness-ultragoal.red-packet.v1",
   "id": "final-without-post-merge-receipt",
   "expected_failure": {
-    "check_id": "root-verification-phase-coverage",
+    "check_id": "root-verification-stage-coverage",
     "error": "final_gate_without_post_merge_receipt"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/status",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate/status",
       "value": "pass"
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/command_receipt",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate/command_receipt",
       "value": {
         "id": "cmd-final",
         "command": "echo forged final",
@@ -26,7 +26,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/artifact_receipt",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate/artifact_receipt",
       "value": {
         "path": "missing-post-merge.json",
         "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -34,7 +34,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate/validated_at",
       "value": "2026-06-16T00:00:00Z"
     }
   ],
@@ -52,7 +52,7 @@
   ],
   "postconditions": [
     {
-      "path": "/lane_registry/root_verification_phases/final_all_lanes_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/final_all_lanes_gate/validated_at",
       "expectation": "final_gate_without_post_merge_receipt"
     }
   ]

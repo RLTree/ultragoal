@@ -86,6 +86,22 @@ fn red_fixture_runtime_binding_exposes_intended_semantic_failure() {
 }
 
 #[test]
+fn runtime_bound_two_lane_dependency_base_preserves_dependency_authority() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let validator_digests = validator_artifact_digest(&root);
+    let base = crate::json_boundary::read_json(
+        &root.join("fixtures/valid/two-lane-ready-dependency.json"),
+    )
+    .expect("two lane dependency fixture");
+    let bound = crate::red::fixture::runtime::receipt::bind(&root, &base, &validator_digests);
+    let failures = crate::claim_semantics::semantic_failures(&bound, &root, &validator_digests);
+    assert!(
+        failures.is_empty(),
+        "runtime-bound base must stay semantically clean: {failures:?}"
+    );
+}
+
+#[test]
 fn generated_artifacts_fail_closed_when_runtime_inputs_are_missing() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "runtime-generated-artifacts-missing",

@@ -17,7 +17,7 @@ pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
         .collect()
 }
 
-fn claim_output_patterns() -> [&'static str; 16] {
+fn claim_output_patterns() -> [&'static str; 23] {
     [
         "command.receipt.clone()",
         "command.observability_receipt.clone()",
@@ -27,6 +27,12 @@ fn claim_output_patterns() -> [&'static str; 16] {
         "root.join(&observability_receipt)",
         "root.join(command.receipt_rel())",
         "root.join(receipt)",
+        "root.join(RECEIPT_REL)",
+        "root.join(OBSERVABILITY_RECEIPT_REL)",
+        "root.join(observability_path)",
+        "root.join(fields.receipt_path)",
+        "root.join(ACTIVE_RECEIPT)",
+        "root.join(RAW_OBSERVATION)",
         "PathBuf::from(&command.receipt)",
         "PathBuf::from(&command.observability_receipt)",
         "PathBuf::from(receipt)",
@@ -35,6 +41,7 @@ fn claim_output_patterns() -> [&'static str; 16] {
         "json_boundary::write_json(&command.receipt,",
         "json_boundary::write_json(&root.join(&observability_receipt)",
         "json_boundary::write_json(&root.join(command.receipt_rel())",
+        "json_boundary::write_json(&root.join(OBSERVABILITY_RECEIPT_REL)",
     ]
 }
 

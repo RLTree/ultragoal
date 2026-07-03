@@ -97,8 +97,8 @@
           "path": "READY_FOR_MERGE-BLOCKED.json",
           "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
         },
-        "scratch_roots": [
-          ".scratch/blocked"
+        "temporary_state_roots": [
+          ".temporary-state/blocked"
         ],
         "state_roots": [
           ".state/fixture"

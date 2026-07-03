@@ -1031,7 +1031,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-artifact-root-overlap",
-    "packet_digest": "sha256:29ee6b16321445c671218f5be467554855a29dc06382d260208ca91ad482a881",
+    "packet_digest": "sha256:8d884b5f19ca7a451313ba525ef41ed271c3ac4ea56f1b0e0bc5633ce322e961",
     "packet_path": "fixtures/red/blocked-lane-artifact-root-overlap.json"
   },
   {
@@ -1040,7 +1040,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-branch-overlap",
-    "packet_digest": "sha256:644499b825adb354f488d659a0946cfad64efac78ca327fdb5663c8dc47a1098",
+    "packet_digest": "sha256:9de9ce2b5bad554feae34afc5d7b10106227527a3e2fbed37bd4e0f05ec7ee15",
     "packet_path": "fixtures/red/blocked-lane-branch-overlap.json"
   },
   {
@@ -1049,7 +1049,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-browser-profile-root-overlap",
-    "packet_digest": "sha256:1d7215f6e8c2d59e37de62664afc6d41fb35681d63c986b7855b6b2c694a1b51",
+    "packet_digest": "sha256:aa5f226ac619250b0633eed3a9ae0ac6bb6335d74282938db45034168f9a6e40",
     "packet_path": "fixtures/red/blocked-lane-browser-profile-root-overlap.json"
   },
   {
@@ -1058,7 +1058,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-port-overlap",
-    "packet_digest": "sha256:f8f65e4401fe188a82fe2154292563fc16fca4c6db7e70bb23fff4d9988523d7",
+    "packet_digest": "sha256:c37e8ac983710802f426b44aa1be898ab938af0a8e44aee414ca93aaceff07ef",
     "packet_path": "fixtures/red/blocked-lane-port-overlap.json"
   },
   {
@@ -1067,7 +1067,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-temp-root-overlap",
-    "packet_digest": "sha256:fb888035b693ad73fc78fe28c9081e12eab0d8f55569ccc9f903760033c8c253",
+    "packet_digest": "sha256:97eb3677d21dc18cef8962609080bc36247a1b591f5013c3252e220b728bdc0e",
     "packet_path": "fixtures/red/blocked-lane-temp-root-overlap.json"
   },
   {
@@ -1076,7 +1076,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-state-root-overlap",
-    "packet_digest": "sha256:dfa91f52955bf4bc6b5b5938bca6f5c0ea7a7a44c44dcf1abc1cad1af1a2cc50",
+    "packet_digest": "sha256:ac38250af8bdb12a2a0852244d5b9d781547fca72080a3fd1c39da641dbe162a",
     "packet_path": "fixtures/red/blocked-lane-state-root-overlap.json"
   },
   {
@@ -1085,7 +1085,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-tool-cache-root-overlap",
-    "packet_digest": "sha256:9306e96509249f4391a29360f9bc81cd3f8b10c68dc78af30d87ad8608a86b22",
+    "packet_digest": "sha256:98e5a25e847a3dcc77e60e24a5b851a22da22bb638379209a5d3b84823aba0c5",
     "packet_path": "fixtures/red/blocked-lane-tool-cache-root-overlap.json"
   },
   {
@@ -1094,7 +1094,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "blocked-lane-workspace-overlap",
-    "packet_digest": "sha256:7525793e3efb00f037b1962fe1474343558262f6e6127ab2501206226261cf16",
+    "packet_digest": "sha256:7299104ab746f9649bca64474bdbbb00382a6e12e37fb9028a939c624508c54c",
     "packet_path": "fixtures/red/blocked-lane-workspace-overlap.json"
   },
   {
@@ -2462,7 +2462,7 @@
       "error": "dependency_claim_not_proven"
     },
     "id": "downstream-dependency-abandoned-upstream-lane",
-    "packet_digest": "sha256:a2f8be250c8d8601961dd342ce8b7db1230d63f9c3475db02cad8b97435af66a",
+    "packet_digest": "sha256:780c0758d08bae333567addfeb13603eefbef53cd61335e1ce01192e41e1e8ad",
     "packet_path": "fixtures/red/downstream-dependency-abandoned-upstream-lane.json"
   },
   {
@@ -2494,11 +2494,11 @@
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "root_verification_stage_pass_without_successful_receipt"
     },
     "id": "downstream-dependency-post-merge-artifact-substitution",
-    "packet_digest": "sha256:52ae82fbbfec8508606b471e981600ae7335b20abc70641a3f9a31b729711f24",
+    "packet_digest": "sha256:a6ba843ae53b46026be90b363bbb69d1377f6820092ab996a0a9bfc2ecca9bf1",
     "packet_path": "fixtures/red/downstream-dependency-post-merge-artifact-substitution.json"
   },
   {
@@ -2507,7 +2507,7 @@
       "error": "dependency_claim_not_proven"
     },
     "id": "downstream-dependency-post-merge-gate-not-passed",
-    "packet_digest": "sha256:2562aa9352882615f50ad7aaa672706fe0999dcf9c1aed32949f387415e8b4eb",
+    "packet_digest": "sha256:9adf85dfced3271fbe190af2dda680fdfc6b332f8c2d7bbc53bbd62669b52f0b",
     "packet_path": "fixtures/red/downstream-dependency-post-merge-gate-not-passed.json"
   },
   {
@@ -2516,7 +2516,7 @@
       "error": "ready_receipt_not_lane_bound"
     },
     "id": "downstream-dependency-post-merge-receipt-stale",
-    "packet_digest": "sha256:fbf3e6371e4b60b06701baadc404c0b927d96faa4f24303c1c8e2ae94bb7dff7",
+    "packet_digest": "sha256:b293fbd52fc3b47c5701286c52e7344e2f077ada5995749fe12af4f8d328a4ec",
     "packet_path": "fixtures/red/downstream-dependency-post-merge-receipt-stale.json"
   },
   {
@@ -2570,7 +2570,7 @@
       "error": "dependency_claim_not_proven"
     },
     "id": "downstream-dependency-ready-only-before-root-verification",
-    "packet_digest": "sha256:fe7af4d59ca370d4b5196255d0f0293375adf2559f02d47c6b57ac2bc6dbe15e",
+    "packet_digest": "sha256:0528ae8a4c400166f2af82b7ae8b8b0874e36885d0c7b830249705f4c557ed3d",
     "packet_path": "fixtures/red/downstream-dependency-ready-only-before-root-verification.json"
   },
   {
@@ -2615,7 +2615,7 @@
       "error": "dependency_claim_not_proven"
     },
     "id": "downstream-dependency-superseded-upstream-lane",
-    "packet_digest": "sha256:477356e5f8dad62ec694bbfce63eb837ba7beb7d2ef3355164edffaadee28758",
+    "packet_digest": "sha256:468589ccc3add44a2eff844f05165cc353acbaef2f5286e17353d19520f48ac7",
     "packet_path": "fixtures/red/downstream-dependency-superseded-upstream-lane.json"
   },
   {
@@ -2674,11 +2674,11 @@
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "root_verification_stage_missing_or_duplicate"
     },
     "id": "duplicate-or-missing-root-receipt",
-    "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
+    "packet_digest": "sha256:5630d456ab43040fca551aca96f128fb827e5aa73b998745c02a5c748dc8fdc4",
     "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json"
   },
   {
@@ -3007,29 +3007,29 @@
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "final_gate_with_nonterminal_lanes"
     },
     "id": "final-gate-with-complete-unmerged-lane",
-    "packet_digest": "sha256:5d44298cfbd323656dc713750ac17eb2422aad9475898374c92d76273fc42e9a",
+    "packet_digest": "sha256:40a0115ab0952ed6a58c2f4838379df9a6c5b324d1d2bb89c9bd047f39f93db0",
     "packet_path": "fixtures/red/final-gate-with-complete-unmerged-lane.json"
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "final_gate_with_nonterminal_lanes"
     },
     "id": "final-gate-with-nonterminal-lane",
-    "packet_digest": "sha256:2107e89ab276d40d9cd7b8b9f2c47a8f4f88637fea1f6acdfcccd1e6fcc74d48",
+    "packet_digest": "sha256:fe8e0ecb7de767e88939d1ae713b4d9e200c6fc9fe5598780d126c40e6365b22",
     "packet_path": "fixtures/red/final-gate-with-nonterminal-lane.json"
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "final_gate_without_post_merge_receipt"
     },
     "id": "final-without-post-merge-receipt",
-    "packet_digest": "sha256:3efb711c8d9c0ad65d98905089675d48b3461096c38cc6a50f761e2ee1690ec3",
+    "packet_digest": "sha256:8ba0f4ea2f7b5b50a0e385609d8f3509d5922500dee25511fe6f641134482bd4",
     "packet_path": "fixtures/red/final-without-post-merge-receipt.json"
   },
   {
@@ -4478,7 +4478,7 @@
       "error": "invalid_lane_resource_path"
     },
     "id": "lane-temp-root-dot-segment",
-    "packet_digest": "sha256:f4e5c0d077a837a0d9d145b5bdd9a5cb5f123c391652ea7124185c130f85ba14",
+    "packet_digest": "sha256:fcd9ab43b0258cdc62ad87aba169d4467aa92983d221fdb87d8819a8a75efec6",
     "packet_path": "fixtures/red/lane-temp-root-dot-segment.json"
   },
   {
@@ -5018,7 +5018,7 @@
       "error": "active_lane_owned_path_overlap"
     },
     "id": "nested-overlapping-active-lanes",
-    "packet_digest": "sha256:7e31f4d079ee8a7bf4a405bad5065411f54103583cd9a838db06b20757aed718",
+    "packet_digest": "sha256:3ecfe81f793695fbcfd07f6d99b45cbf8dee929f04e1a7c173fe84a896302ec5",
     "packet_path": "fixtures/red/nested-overlapping-active-lanes.json"
   },
   {
@@ -5027,7 +5027,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "nested-temp-root-active-lanes",
-    "packet_digest": "sha256:f518dffd8b78f9ed63107621988d59ad348b511cfbabd1d9ad3a7b325b25e99d",
+    "packet_digest": "sha256:f8f1be5b53ea076966db2cfeb53ac057199ce04e5bc6c0dbc01892a10f4ca7c2",
     "packet_path": "fixtures/red/nested-temp-root-active-lanes.json"
   },
   {
@@ -5459,7 +5459,7 @@
       "error": "active_lane_owned_path_overlap"
     },
     "id": "overlapping-active-lanes",
-    "packet_digest": "sha256:df0b0d972a4f6c15738657eb104eb70cf0a21abe9023b731fe3937782a4bb21d",
+    "packet_digest": "sha256:51090cbb54753cf2af95958665dad1fef17b7a7c471c4e6420327a868b8a8aa0",
     "packet_path": "fixtures/red/overlapping-active-lanes.json"
   },
   {
@@ -5765,7 +5765,7 @@
       "error": "root_verification_receipt_resource_packaged"
     },
     "id": "plugin-manifest-active-root-receipt-resource",
-    "packet_digest": "sha256:53897b844a50f37350ba3b637e6c34786ae425e00feec53e09e30dadcfd0f5b1",
+    "packet_digest": "sha256:9d9e09b86e1345577c27e07b965719b10654b2f08063268ea59bdfbd123ba5fa",
     "packet_path": "fixtures/red/plugin-manifest-active-root-receipt-resource.json"
   },
   {
@@ -5783,7 +5783,7 @@
       "error": "stale_artifact_resource_packaged"
     },
     "id": "plugin-manifest-stale-active-artifact-resource",
-    "packet_digest": "sha256:3fdce1cdae49491b8736e3592b0ba4bee371d278041bc7d1c1a49d14f98ef94a",
+    "packet_digest": "sha256:03ce49fe223eba584646b98c73e67d3cab9f06653b4eb6cfc2bc00311ef6fdfa",
     "packet_path": "fixtures/red/plugin-manifest-stale-active-artifact-resource.json"
   },
   {
@@ -5878,11 +5878,11 @@
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "post_merge_without_pre_merge_receipt"
     },
     "id": "post-merge-before-pre-merge",
-    "packet_digest": "sha256:83491de33893c47bf24e17f5292c5fba8c4d14e5a888c6966cb53708595b63dd",
+    "packet_digest": "sha256:5b99fe2fbc7ee1fa3a300481888bc646b91e9342819bee9cf82608a076b79c0d",
     "packet_path": "fixtures/red/post-merge-before-pre-merge.json"
   },
   {
@@ -8528,7 +8528,7 @@
       "error": "schema_validation_failed"
     },
     "id": "review-round-non-gpt55-model-mismatch",
-    "packet_digest": "sha256:d5462b960d4c1a5edcedf61c09c61c5e433a00524c75526b7de47d8542ef3d66",
+    "packet_digest": "sha256:85bf9297f48e6a25c22286071ea591068368d78e68a337366c26554684f7d3ef",
     "packet_path": "fixtures/red/review-round-non-gpt55-model-mismatch.json"
   },
   {
@@ -8537,7 +8537,7 @@
       "error": "schema_validation_failed"
     },
     "id": "review-round-non-signoff-verdict",
-    "packet_digest": "sha256:aa0bc13591f0d8c2c00b5496f54a86356936070221610b4bbfd9380c1e735183",
+    "packet_digest": "sha256:266117457b0bcba8d4cce7be1a0db1d33947a829e874c90d805196da04db74bc",
     "packet_path": "fixtures/red/review-round-non-signoff-verdict.json"
   },
   {
@@ -8956,11 +8956,11 @@
   },
   {
     "expected_failure": {
-      "check_id": "root-verification-phase-coverage",
+      "check_id": "root-verification-stage-coverage",
       "error": "root_verification_stage_pass_without_successful_receipt"
     },
     "id": "root-receipt-pass-failed-command",
-    "packet_digest": "sha256:dbbedc52bb9cd11a4b5620f8660f67234c5e561dd590369c56f821b7ee19b029",
+    "packet_digest": "sha256:b8662b6c1d2614352ad99db3912264321cd5c2850a0ffb9811f9c3e57a16386c",
     "packet_path": "fixtures/red/root-receipt-pass-failed-command.json"
   },
   {
@@ -9716,7 +9716,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-artifact-root-active-lanes",
-    "packet_digest": "sha256:e9b6f1316c0e027896890bf421fc0ea0385fcedfa97b91cfcfe38fdd364e09ec",
+    "packet_digest": "sha256:d5710ea6ad3f37aed9d2e071c3c0c3f96dcd9a4932138f4467762001a4e2cf1d",
     "packet_path": "fixtures/red/shared-artifact-root-active-lanes.json"
   },
   {
@@ -9725,7 +9725,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-branch-active-lanes",
-    "packet_digest": "sha256:116db00bae2d3ed80bc86ad79f6904d08c997808d112a738313fc0afe7010a8c",
+    "packet_digest": "sha256:cb7dc1ab9c08f21b3af5a174d730cae2def12405f1cf0024df9f92de2a0fc7f1",
     "packet_path": "fixtures/red/shared-branch-active-lanes.json"
   },
   {
@@ -9734,7 +9734,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-browser-profile-active-lanes",
-    "packet_digest": "sha256:b2c51d8d118c938c3fa326147f59b4c8d12e72b974a91a61676f221033e471af",
+    "packet_digest": "sha256:66235e4f61d893209b25f4c298742921e3ab9b3cfbe61254ee6c2a3425e6fa32",
     "packet_path": "fixtures/red/shared-browser-profile-active-lanes.json"
   },
   {
@@ -9743,7 +9743,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-port-active-lanes",
-    "packet_digest": "sha256:b44758f28816a29892f7e0fb2408b53c3c6a46f4afb6aca596c87b5e68495c74",
+    "packet_digest": "sha256:d51b7e52d8475ef0dda7a3d32c7611b0671d9be2bb86d5b23d514080c3afff51",
     "packet_path": "fixtures/red/shared-port-active-lanes.json"
   },
   {
@@ -9752,7 +9752,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-state-root-active-lanes",
-    "packet_digest": "sha256:48dff2b624b5fe05a761144257c996684b2f2e96a096660f0662f6e99b8b1b82",
+    "packet_digest": "sha256:09f563125065c10183a029ad568a0c27f889d1619b2fb1da0f78755cb753672d",
     "packet_path": "fixtures/red/shared-state-root-active-lanes.json"
   },
   {
@@ -9761,7 +9761,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-tool-cache-root-active-lanes",
-    "packet_digest": "sha256:83dca8d01efcb9fed9b87bbd90434d7cb4d7956d21fc3a9af9d4d80544c4b321",
+    "packet_digest": "sha256:b34df04dd12f274cc25cd355de064d921cc9fc82df281ae832ccedae130e01f6",
     "packet_path": "fixtures/red/shared-tool-cache-root-active-lanes.json"
   },
   {
@@ -9770,7 +9770,7 @@
       "error": "active_lane_mutable_resource_overlap"
     },
     "id": "shared-workspace-active-lanes",
-    "packet_digest": "sha256:d81b4720940f76ae191641e794a3f9f3594dbc0317314ec210952b78861913c6",
+    "packet_digest": "sha256:f30c9eea70139387b2803a0fee28f9921e29c685394d0420c0391c3469fcd1d8",
     "packet_path": "fixtures/red/shared-workspace-active-lanes.json"
   },
   {
@@ -10463,7 +10463,7 @@
       "error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready"
     },
     "id": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
-    "packet_digest": "sha256:654ba5f53abca13eefdf5e768057ffbced8cfb3eed1f3eb66004ec5e44b04213",
+    "packet_digest": "sha256:bb6bd1edc0a379fc3348cd9141e9c44c58503f7111068b9d52b4928e1a2211e5",
     "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json"
   },
   {

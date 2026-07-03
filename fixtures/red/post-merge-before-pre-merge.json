@@ -2,24 +2,24 @@
   "schema": "harness-ultragoal.red-packet.v1",
   "id": "post-merge-before-pre-merge",
   "expected_failure": {
-    "check_id": "root-verification-phase-coverage",
+    "check_id": "root-verification-stage-coverage",
     "error": "post_merge_without_pre_merge_receipt"
   },
   "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "json_patch": [
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate/status",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate/status",
       "value": "pending"
     },
     {
       "op": "replace",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/status",
       "value": "pass"
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/command_receipt",
       "value": {
         "id": "cmd-post-gate",
         "command": "validate post merge integration gate",
@@ -33,7 +33,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/artifact_receipt",
       "value": {
         "path": "validation_artifacts/post.json",
         "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
@@ -41,7 +41,7 @@
     },
     {
       "op": "add",
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/validated_at",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/validated_at",
       "value": "2026-06-16T00:00:00Z"
     }
   ],
@@ -53,13 +53,13 @@
   },
   "preconditions": [
     {
-      "path": "/lane_registry/root_verification_phases/pre_merge_lane_gate",
+      "path": "/lane_registry/root_verification_stages/pre_merge_lane_gate",
       "exists": true
     }
   ],
   "postconditions": [
     {
-      "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/status",
+      "path": "/lane_registry/root_verification_stages/post_merge_integration_gate/status",
       "expectation": "post_merge_without_pre_merge_receipt"
     }
   ]

@@ -135,7 +135,7 @@ pub fn schema_error_code(errors: &[String]) -> String {
         || joined.contains("classifier_evidence")
     {
         "semantic_classification_receipt_malformed"
-    } else if joined.contains("root_verification_phases.final_all_lanes_gate") {
+    } else if joined.contains("root_verification_stages.final_all_lanes_gate") {
         "root_verification_stage_missing_or_duplicate"
     } else {
         "schema_validation_failed"

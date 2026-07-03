@@ -42,6 +42,13 @@ fn run_bin(bin: &str, root: &Path, args: &[String]) -> std::process::Output {
         .expect("validator command runs")
 }
 
+fn root_relative(root: &Path, path: &Path) -> String {
+    path.strip_prefix(root)
+        .expect("test output path is inside command root")
+        .to_string_lossy()
+        .into_owned()
+}
+
 fn package_digest_from_stdout(output: &std::process::Output) -> String {
     assert!(
         output.status.success(),
@@ -302,7 +309,7 @@ fn cli_surface_commands_execute() {
             temp.display().to_string(),
             "red-fixture-report".into(),
             "--report".into(),
-            red_report.display().to_string(),
+            root_relative(&root, &red_report),
         ],
     );
     assert!(
@@ -325,7 +332,7 @@ fn cli_surface_commands_execute() {
             "performance".into(),
             "prove".into(),
             "--receipt".into(),
-            performance_receipt.display().to_string(),
+            root_relative(&root, &performance_receipt),
         ],
     );
     assert!(
@@ -342,7 +349,7 @@ fn cli_surface_commands_execute() {
             "rust".into(),
             "fast".into(),
             "--receipt".into(),
-            rust_fast_receipt.display().to_string(),
+            root_relative(&root, &rust_fast_receipt),
         ],
     );
     assert!(
@@ -359,7 +366,7 @@ fn cli_surface_commands_execute() {
             "gc".into(),
             "plan".into(),
             "--receipt".into(),
-            gc_plan_receipt.display().to_string(),
+            root_relative(&root, &gc_plan_receipt),
         ],
     );
     assert!(gc_plan.status.success(), "gc plan failed: {gc_plan:?}");
@@ -373,7 +380,7 @@ fn cli_surface_commands_execute() {
             "update-goal".into(),
             "eligibility".into(),
             "--receipt".into(),
-            update_goal_receipt.display().to_string(),
+            "validation_artifacts/cli/update-goal-eligibility.json".into(),
         ],
     );
     assert_eq!(update_goal.status.code(), Some(1));
@@ -389,7 +396,7 @@ fn cli_surface_commands_execute() {
             "update-goal".into(),
             "eligibility".into(),
             "--receipt".into(),
-            self_receipt.display().to_string(),
+            "validation_artifacts/cli/self-law-receipt.json".into(),
         ],
     );
     assert_eq!(self_law.status.code(), Some(1));
@@ -419,7 +426,7 @@ fn cli_surface_commands_execute() {
             "transaction".into(),
             "finalize".into(),
             "--receipt".into(),
-            transaction_receipt.display().to_string(),
+            root_relative(&root, &transaction_receipt),
         ],
     );
     assert_eq!(transaction.status.code(), Some(1));
@@ -431,7 +438,7 @@ fn cli_surface_commands_execute() {
         ".".into(),
         "review-target".into(),
         "--receipt".into(),
-        review_target.display().to_string(),
+        root_relative(&root, &review_target),
     ];
     assert!(run(&root, &review_target_args).status.success());
 
@@ -440,9 +447,9 @@ fn cli_surface_commands_execute() {
         ".".into(),
         "archive".into(),
         "--zip".into(),
-        temp.join("candidate.zip").display().to_string(),
+        root_relative(&root, &temp.join("candidate.zip")),
         "--receipt".into(),
-        temp.join("archive.json").display().to_string(),
+        root_relative(&root, &temp.join("archive.json")),
     ];
     assert!(run(&root, &archive_args).status.success());
 

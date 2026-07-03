@@ -51,7 +51,7 @@ fn check_plugin_manifest(manifest: &Value, root: &Path, out: &mut Vec<Failure>) 
             out.push(Failure::new(
                 "plugin-inventory-closure",
                 "plugin_agent_path_missing",
-                "plugin path missing",
+                path,
             ));
         }
     }

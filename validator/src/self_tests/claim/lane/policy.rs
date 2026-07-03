@@ -45,7 +45,7 @@ fn lane_policy_validates_clock_size_and_dependency_dispatch() {
                 "lane_size_evidence":size
             }
         ],
-        "root_verification_phases":{
+        "root_verification_stages":{
             "pre_merge_lane_gate":{"status":"pass"},
             "post_merge_integration_gate":{"status":"pass"},
             "final_all_lanes_gate":{"status":"pending"}

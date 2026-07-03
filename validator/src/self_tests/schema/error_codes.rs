@@ -60,7 +60,7 @@ fn schema_error_codes_cover_authority_specific_failure_classes() {
             "stale_actor_identity",
         ),
         (
-            vec!["root_verification_phases.final_all_lanes_gate is required".to_string()],
+            vec!["root_verification_stages.final_all_lanes_gate is required".to_string()],
             "root_verification_stage_missing_or_duplicate",
         ),
         (

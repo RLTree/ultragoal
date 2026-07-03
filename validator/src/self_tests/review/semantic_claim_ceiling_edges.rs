@@ -83,7 +83,7 @@ fn semantic_review_and_red_observation_edges_cover_success_paths() {
             "execplan":"EXECPLAN.md",
             "claim_ids":["CLAIM-RED"],
             "owned_paths":[]
-        }],"root_verification_phases":[]},
+        }],"root_verification_stages":[]},
         "ready_for_merge":{
             "ready":true,
             "lane_id":"LANE-RED",

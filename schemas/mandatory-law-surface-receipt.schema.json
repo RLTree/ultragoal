@@ -48,7 +48,7 @@
         "verification_scope": {
           "enum": [
             "per_law",
-            "per_slice",
+            "per_claim_path",
             "full_contract"
           ]
         }

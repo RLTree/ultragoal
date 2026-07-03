@@ -79,8 +79,8 @@
           "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
           "path": "READY_FOR_MERGE-2.json"
         },
-        "scratch_roots": [
-          ".scratch/fixture"
+        "temporary_state_roots": [
+          ".temporary-state/fixture"
         ],
         "state_roots": [
           ".state/fixture"

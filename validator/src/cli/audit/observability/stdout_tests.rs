@@ -28,7 +28,7 @@ fn audit_failure_summary_groups_stale_inventory_and_observability_roots() {
 
     let observability = json!({
         "checks": {
-            "gate-92": {
+            "observability-control-plane": {
                 "status": "fail",
                 "details": "observability_command_telemetry_query_not_current"
             }
@@ -52,7 +52,7 @@ fn audit_stdout_contract_lists_claims_and_bounded_query_hints() {
         "claim_impact": "source_audit_failed_blocks_readiness",
         "supported_claims": [],
         "blocked_claims": ["completion", "readiness"],
-        "law_id": "gate-92",
+        "law_id": "observability-control-plane",
         "check_id": "source-audit-observability-binding",
         "why_failed": "coverage receipt stale",
         "where_failed": "source.audit",
@@ -61,6 +61,6 @@ fn audit_stdout_contract_lists_claims_and_bounded_query_hints() {
 
     assert_eq!(lines.len(), 2);
     assert!(lines[0].contains("unsupported_claims=completion,readiness"));
-    assert!(lines[1].contains("failed_law=gate-92"));
+    assert!(lines[1].contains("failed_law=observability-control-plane"));
     assert!(lines[1].contains("query_metrics='ultragoal observe metrics query"));
 }

@@ -129,7 +129,7 @@ fn proof_receipt(
             "requires_same_candidate_metrics_query": true,
             "requires_same_candidate_traces_query": true,
             "requires_non_fallback_explain": true,
-            "local_spool_only_can_close_gate_92": false
+            "local_spool_only_can_close_observability_claim": false
         }
     })
 }

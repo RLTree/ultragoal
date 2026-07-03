@@ -3,6 +3,7 @@ use serde_json::json;
 use std::path::{Path, PathBuf};
 
 mod edges;
+mod stage_evidence;
 
 #[test]
 fn improvement_loop_receipt_fails_closed_for_partial_loop() {

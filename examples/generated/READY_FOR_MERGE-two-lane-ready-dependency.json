@@ -77,7 +77,7 @@
   "generated_by": "ultragoal-audit",
   "input_manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
   "lane_id": "LANE-001",
-  "lane_registry_digest": "sha256:89ba47bb48c55b93fa3f77520c6db6c6cedd4f988983ef3d14250bb7e6515c49",
+  "lane_registry_digest": "sha256:89ae1116776cc9d95c844d089f20bf0cd353c63a98e2a067be7d6711dce0191f",
   "live_target_head_at_generation": "abcdef0",
   "merge_base": "abcdef0",
   "provenance": {

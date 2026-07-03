@@ -63,12 +63,21 @@ pub(super) fn generated_failures(
 }
 
 fn missing_generated_provenance(value: &Value) -> bool {
-    value
+    if value
         .get("generated_from")
         .and_then(Value::as_str)
-        .is_none()
-        && value.pointer("/provenance/generated_from").is_none()
-        && value.get("source_spec").is_none()
+        .is_some()
+        || value.pointer("/provenance/generated_from").is_some()
+        || value.get("source_spec").is_some()
+    {
+        return false;
+    }
+    let provenance = value.get("provenance").unwrap_or(&Value::Null);
+    !(text(provenance, "generated_artifact_type").is_some()
+        && text(provenance, "validator_run_id").is_some()
+        && text(provenance, "input_manifest_digest").is_some()
+        && provenance.pointer("/validator_receipt/path").is_some()
+        && provenance.pointer("/validator_receipt/digest").is_some())
 }
 
 fn runtime_fixture_claims_artifact_truth(value: &Value) -> bool {
@@ -209,6 +218,7 @@ fn looks_like_repo_or_artifact_path(text: &str) -> bool {
 fn generated_files(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     collect_json_files(root, &root.join("docs/generated"), &mut out);
+    collect_json_files(root, &root.join("examples/generated"), &mut out);
     out
 }
 
@@ -230,4 +240,11 @@ fn collect_json_files(root: &Path, dir: &Path, out: &mut Vec<String>) {
 
 fn push(out: &mut Vec<(String, String)>, check: &str, detail: String) {
     out.push((check.to_string(), detail));
+}
+
+fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
+    value
+        .get(key)
+        .and_then(Value::as_str)
+        .filter(|text| !text.is_empty())
 }

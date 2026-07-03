@@ -64,7 +64,7 @@ fn journey_receipt(
         .get_mut("evidence")
         .and_then(Value::as_array_mut)
         .and_then(|items| items.first_mut())
-        .ok_or_else(|| "plugin_product_journey_receipt_missing_fit_evidence".to_string())?;
+        .ok_or_else(|| "plugin_product_journey_receipt_missing_fit_repo_evidence".to_string())?;
     first["path"] = json!(fit_repo_receipt_rel);
     first["digest"] = json!(crate::digest::file(
         &root.join(rel_dir).join(FIT_REPO_RECEIPT_FILE)

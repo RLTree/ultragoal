@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 pub(crate) const LAW_ID: &str = "full-local-observability-stack-integration-non-opaque-failure";
 pub(crate) const CHECK_ID: &str = LAW_ID;
-pub(crate) const CLAIM_ID: &str = "gate-92-observability-control-plane";
+pub(crate) const CLAIM_ID: &str = "observability-control-plane";
 pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.observability-receipt.v1";
 pub(crate) const QUERY_SCHEMA: &str = "harness-ultragoal.observability-query-result.v1";
 pub(crate) const EVENT_SCHEMA: &str = "harness-ultragoal.observability-event.v1";

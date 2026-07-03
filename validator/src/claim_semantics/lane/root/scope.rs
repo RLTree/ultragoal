@@ -47,14 +47,14 @@ pub(crate) fn root_verification_states(
     let final_all_lanes_state = &states["final_all_lanes_gate"];
     if str_field(post, "status") == "pass" && str_field(pre, "status") != "pass" {
         out.push(Failure::new(
-            "root-verification-phase-coverage",
+            "root-verification-stage-coverage",
             "post_merge_without_pre_merge_receipt",
             "post gate",
         ));
     }
     if str_field(final_all_lanes_state, "status") == "pass" && str_field(post, "status") != "pass" {
         out.push(Failure::new(
-            "root-verification-phase-coverage",
+            "root-verification-stage-coverage",
             "final_gate_without_post_merge_receipt",
             "final gate",
         ));
@@ -63,9 +63,9 @@ pub(crate) fn root_verification_states(
     for state in states.as_object().into_iter().flat_map(|obj| obj.values()) {
         if str_field(state, "status") == "pass" && verification_receipt_bad(root, state) {
             out.push(Failure::new(
-                "root-verification-phase-coverage",
+                "root-verification-stage-coverage",
                 "root_verification_stage_pass_without_successful_receipt",
-                str_field(state, "phase"),
+                str_field(state, "stage"),
             ));
         }
     }
@@ -110,7 +110,7 @@ fn final_all_lanes_state_open_lanes(
         .collect::<Vec<_>>();
     if !open.is_empty() {
         out.push(Failure::new(
-            "root-verification-phase-coverage",
+            "root-verification-stage-coverage",
             "final_gate_with_nonterminal_lanes",
             open.join(","),
         ));
@@ -188,7 +188,7 @@ fn post_merge_receipt_bad(state: &Value, receipt: &Value, lane: Option<&Value>) 
                 && row.get("exit").and_then(Value::as_i64) == Some(0)
         });
     str_field(receipt, "schema") != "harness-ultragoal.root-verification-receipt.v1"
-        || str_field(receipt, "phase") != "post_merge_integration_gate"
+        || str_field(receipt, "stage") != "post_merge_integration_gate"
         || str_field(receipt, "upstream_commit") != str_field(lane, "current_commit")
         || str_field(receipt, "target_branch") != str_field(lane, "target_branch")
         || str_field(receipt, "validated_at") != str_field(state, "validated_at")
@@ -202,7 +202,7 @@ fn post_merge_receipt_bad(state: &Value, receipt: &Value, lane: Option<&Value>) 
 
 fn post_merge_failure(error: &str) -> Failure {
     Failure::new(
-        "root-verification-phase-coverage",
+        "root-verification-stage-coverage",
         error,
         "post_merge_integration_gate",
     )

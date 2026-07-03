@@ -9,27 +9,30 @@ pub(crate) struct LoopValidationSurface {
     pub(crate) high_frequency: bool,
 }
 
-const fn surface(
-    id: &'static str,
-    surface: &'static str,
-    command: &'static str,
-    canonical_full_command: &'static str,
-    narrow_rerun: &'static str,
-    telemetry_reconciliation_state: &'static str,
-) -> LoopValidationSurface {
-    LoopValidationSurface {
-        id,
-        surface,
-        command,
-        canonical_full_command,
-        narrow_rerun,
-        telemetry_reconciliation_state,
-        high_frequency: true,
-    }
+macro_rules! live_loop_surface {
+    (
+        $id:literal,
+        $surface:literal,
+        $command:literal,
+        $canonical_full_command:literal,
+        $narrow_rerun:literal,
+        $telemetry_reconciliation_state:literal
+        $(,)?
+    ) => {
+        LoopValidationSurface {
+            id: $id,
+            surface: $surface,
+            command: $command,
+            canonical_full_command: $canonical_full_command,
+            narrow_rerun: $narrow_rerun,
+            telemetry_reconciliation_state: $telemetry_reconciliation_state,
+            high_frequency: true,
+        }
+    };
 }
 
 pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
-    surface(
+    live_loop_surface!(
         "package_digest",
         "package_boundary",
         "ultragoal package digest",
@@ -37,7 +40,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . package digest",
         "same_candidate_observed",
     ),
-    surface(
+    live_loop_surface!(
         "changed_files",
         "candidate_delta",
         "git status --short --untracked-files=all",
@@ -45,7 +48,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "git status --short --untracked-files=all",
         "same_candidate_observed",
     ),
-    surface(
+    live_loop_surface!(
         "audit_context",
         "audit_context",
         "AuditContext::new",
@@ -53,7 +56,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto",
         "same_candidate_observed",
     ),
-    surface(
+    live_loop_surface!(
         "observability_control_board",
         "command_observability_inventory",
         "ultragoal observe prove",
@@ -61,7 +64,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . observe prove",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "fmt_check",
         "rust_format",
         "cargo fmt --all --check",
@@ -69,7 +72,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "cargo fmt --all --check",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "build_check",
         "rust_build",
         "cargo build --offline --bin ultragoal --quiet",
@@ -77,7 +80,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "cargo build --offline --bin ultragoal --quiet",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "focused_rust_tests",
         "rust_focused_tests",
         "cargo test --offline <affected> --lib --quiet",
@@ -85,7 +88,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "cargo test --offline <affected> --lib --quiet",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "line_caps_check",
         "source_line_caps",
         "ultragoal line-caps check",
@@ -93,7 +96,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . line-caps check --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "namespace_check",
         "source_namespace",
         "ultragoal namespace check",
@@ -101,7 +104,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . namespace check --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "schema_validation",
         "schema_catalog",
         "ultragoal schema validation",
@@ -109,7 +112,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . schema validate --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "package_inventory",
         "package_inventory",
         "ultragoal package inventory",
@@ -117,7 +120,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . package inventory",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "mandatory_law_validation",
         "mandatory_law_graph",
         "ultragoal law check --all",
@@ -125,7 +128,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . law check --all",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "source_obligations_check",
         "source_obligations",
         "ultragoal source-obligations check",
@@ -133,7 +136,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . source-obligations check --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "foundational_trace_check",
         "foundational_trace",
         "ultragoal foundational-trace check",
@@ -141,7 +144,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . foundational-trace check --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "coverage_prove",
         "exact_coverage",
         "ultragoal coverage prove",
@@ -149,7 +152,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "bash scripts/check-coverage-full .",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "coverage_full_script",
         "exact_coverage_script",
         "scripts/check-coverage-full",
@@ -157,7 +160,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "bash scripts/check-coverage-full .",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "coverage_fast_script",
         "coverage_scope_precheck",
         "scripts/check-coverage-fast",
@@ -165,7 +168,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "bash scripts/check-coverage-fast .",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "source_audit",
         "source_audit",
         "ultragoal source audit",
@@ -173,7 +176,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json --mode strict_fixtures --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "red_fixture_report",
         "red_fixture_report",
         "ultragoal fixtures red",
@@ -181,7 +184,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . fixtures red --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "scripts_check",
         "routine_shell_delegation",
         "scripts/check",
@@ -189,7 +192,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "bash scripts/check",
         "requires_command_telemetry_roundtrip",
     ),
-    surface(
+    live_loop_surface!(
         "touched_fixture_reports",
         "affected_fixture_reports",
         "affected fixture report selection",

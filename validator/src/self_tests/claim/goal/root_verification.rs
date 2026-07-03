@@ -19,7 +19,7 @@ fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() 
         &post_receipt_path,
         serde_json::to_vec(&json!({
             "schema": "harness-ultragoal.root-verification-receipt.v1",
-            "phase": "post_merge_integration_gate",
+            "stage": "post_merge_integration_gate",
             "upstream_lane_id": "missing-lane",
             "upstream_commit": "head",
             "target_branch": "main",
@@ -60,10 +60,10 @@ fn aggregate_semantic_failures_cover_goal_receipt_and_root_verification_edges() 
                 "workspace": "work/lane-1",
                 "owned_paths": ["src"]
             }],
-            "root_verification_phases": {
+            "root_verification_stages": {
                 "pre_merge_lane_gate": {"status": "pass"},
                 "post_merge_integration_gate": {
-                    "phase": "post_merge_integration_gate",
+                    "stage": "post_merge_integration_gate",
                     "status": "pass",
                     "validated_at": "2026-06-25T00:00:00Z",
                     "command_receipt": {

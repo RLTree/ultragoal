@@ -115,6 +115,14 @@ fn generated_artifacts_reject_product_opaque_artifact_path_segments() {
         format!("validation_artifacts/observability/{process_noun}/package-digest.json");
     let evidence_path =
         format!("validation_artifacts/observability/{evidence_noun}/source-audit.json");
+    let numbered_stage_artifact_path = format!(
+        "validation_artifacts/observability/{}4/source-audit.json",
+        ascii(&[112, 104, 97, 115, 101])
+    );
+    let work_batch_artifact_path = format!(
+        "validation_artifacts/observability/{}/source-audit.json",
+        ascii(&[115, 108, 105, 99, 101])
+    );
     std::fs::write(
         root.join(rel),
         format!(
@@ -127,7 +135,9 @@ fn generated_artifacts_reject_product_opaque_artifact_path_segments() {
       "validator_check_id":"package-digest-observability-binding",
       "receipt_paths":[
         "{process_path}",
-        "{evidence_path}"
+        "{evidence_path}",
+        "{numbered_stage_artifact_path}",
+        "{work_batch_artifact_path}"
       ]
     }}
   }}
@@ -149,6 +159,18 @@ fn generated_artifacts_reject_product_opaque_artifact_path_segments() {
         failures.iter().any(|(_, failure)| failure
             .contains("generated_artifact_product_opaque_path_segment")
             && failure.contains(&format!("label={evidence_label}"))),
+        "{failures:?}"
+    );
+    assert!(
+        failures.iter().any(|(_, failure)| failure
+            .contains("generated_artifact_product_opaque_path_segment")
+            && failure.contains("label=phase_number")),
+        "{failures:?}"
+    );
+    assert!(
+        failures.iter().any(|(_, failure)| failure
+            .contains("generated_artifact_product_opaque_path_segment")
+            && failure.contains("label=slice")),
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup generated path segment");

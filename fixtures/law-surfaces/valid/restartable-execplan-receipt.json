@@ -13,7 +13,7 @@
     "purpose": true,
     "user_outcome": true,
     "steps": true,
-    "progress": true,
+    "current_state": true,
     "discoveries": true,
     "decisions": true,
     "validation_commands": true,

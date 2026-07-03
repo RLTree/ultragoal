@@ -73,7 +73,7 @@ fn shape_failures(verification: &Value, law: &str) -> Vec<String> {
         verification
             .get("verification_scope")
             .and_then(Value::as_str),
-        Some("per_law" | "per_slice" | "full_contract")
+        Some("per_law" | "per_claim_path" | "full_contract")
     ) {
         out.push(format!(
             "mandatory_law_independent_verification_scope_invalid:{law}"

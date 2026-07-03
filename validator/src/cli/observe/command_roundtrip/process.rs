@@ -94,10 +94,8 @@ mod tests {
 
     #[test]
     fn current_exe_resolution_prefers_explicit_override() {
-        let path = current_exe_with(Some("/bin/echo".to_string()), || {
-            Err(std::io::Error::other("ignored"))
-        })
-        .expect("override wins");
+        let path = current_exe_with(Some("/bin/echo".to_string()), std::env::current_exe)
+            .expect("override wins");
         assert_eq!(path, std::path::PathBuf::from("/bin/echo"));
     }
 

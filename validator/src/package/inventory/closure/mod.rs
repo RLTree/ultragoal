@@ -1,56 +1,10 @@
 use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
-use walkdir::WalkDir;
 
-const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
-    "target/",
-    ".codex-worktree/",
-    ".ui-discipline/",
-    ".git/",
-    "node_modules/",
-    ".pnpm-store/",
-    "validation_artifacts/",
-];
-
-pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
-    walk_package_entries(root, |entry| entry.file_type().is_file())
-}
-
-fn symlink_entries(root: &Path) -> Result<Vec<String>, String> {
-    walk_package_entries(root, |entry| entry.file_type().is_symlink())
-}
-
-fn walk_package_entries(
-    root: &Path,
-    include: impl Fn(&walkdir::DirEntry) -> bool,
-) -> Result<Vec<String>, String> {
-    let mut paths = Vec::new();
-    for entry in WalkDir::new(root).follow_links(false) {
-        let entry = entry.map_err(|err| format!("walk failed: {err}"))?;
-        if include(&entry) {
-            let rel = rel_path(root, entry.path())?;
-            if !local_only(&rel) {
-                paths.push(rel);
-            }
-        }
-    }
-    paths.sort();
-    Ok(paths)
-}
-
-fn local_only(rel: &str) -> bool {
-    crate::package::inventory::parent_session_contract_path(rel)
-        || LOCAL_BUILD_OUTPUT_PREFIXES
-            .iter()
-            .any(|prefix| rel.starts_with(prefix))
-}
-
-fn rel_path(root: &Path, path: &Path) -> Result<String, String> {
-    path.strip_prefix(root)
-        .map(|rel| rel.to_string_lossy().replace('\\', "/"))
-        .map_err(|err| format!("walk root strip failed: {err}"))
-}
+mod package_entries;
+pub use package_entries::actual_files;
+use package_entries::symlink_entries;
 
 pub fn inventory_closure_failures(root: &Path, manifest: &Value) -> Vec<String> {
     let listed = crate::package::inventory::inventory_paths(manifest);
@@ -213,14 +167,6 @@ mod scan_tests {
         assert_eq!(
             super::scan_or_fail(Err("walk failed: denied".to_string())).expect_err("scan error"),
             vec!["walk failed: denied".to_string()]
-        );
-        assert!(
-            super::rel_path(
-                std::path::Path::new("/package/root"),
-                std::path::Path::new("/outside/file")
-            )
-            .expect_err("outside path rejected")
-            .contains("walk root strip failed")
         );
     }
 }

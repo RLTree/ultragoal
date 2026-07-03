@@ -47,7 +47,12 @@ pub(super) fn attach(
             emit: true,
         },
     )?;
-    crate::json_boundary::write_json(&root.join(observability_path), &obs)?;
+    let command_receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        observability_path,
+        "GC observability receipt",
+    );
+    crate::json_boundary::write_json(&command_receipt_path, &obs)?;
     receipt["run_id"] = obs["run_id"].clone();
     receipt["correlation_id"] = obs["correlation_id"].clone();
     receipt["trace_id"] = obs["trace_id"].clone();

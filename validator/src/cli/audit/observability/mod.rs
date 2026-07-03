@@ -5,6 +5,8 @@ mod red;
 #[cfg(test)]
 mod red_tests;
 mod runtime;
+#[cfg(test)]
+mod runtime_tests;
 mod stdout;
 
 pub(crate) const SOURCE_RECEIPT: &str = "validation_artifacts/observability/source-audit.json";
@@ -141,7 +143,12 @@ pub(super) fn emit_receipt(root: &Path, fields: ReceiptFields<'_>) -> Result<Val
             emit: true,
         },
     )?;
-    crate::json_boundary::write_json(&root.join(fields.receipt_path), &value)?;
+    let receipt = crate::output_path::claim_artifact_path(
+        root,
+        Path::new(fields.receipt_path),
+        "audit observability receipt",
+    )?;
+    crate::json_boundary::write_json(&receipt, &value)?;
     for line in stdout::contract(&value) {
         println!("{line}");
     }

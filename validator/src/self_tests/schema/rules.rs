@@ -146,7 +146,7 @@ fn fixture_bundle_rules_reject_claim_lane_backlog_and_manifest_gaps() {
                 }
             ]
         },
-        "lane_registry":{"root_verification_phases":{"pre_merge_lane_gate":{}}},
+        "lane_registry":{"root_verification_stages":{"pre_merge_lane_gate":{}}},
         "validator_receipt":{"schema":"harness-ultragoal.validator-receipt.v1"},
         "verification_backlog":{"rows":[{}]},
         "plugin_manifest":{"skills":[],"agents":[]}
@@ -156,8 +156,8 @@ fn fixture_bundle_rules_reject_claim_lane_backlog_and_manifest_gaps() {
         "required_claim_ids must be non-empty",
         "claims[0].semantic_classification_receipts is required",
         "claims[1].product_cohesion_waiver.reason is not allowed",
-        "root_verification_phases.post_merge_integration_gate is required",
-        "root_verification_phases.final_all_lanes_gate is required",
+        "root_verification_stages.post_merge_integration_gate is required",
+        "root_verification_stages.final_all_lanes_gate is required",
         "verification_backlog.rows[0].attempts is required",
         "plugin_manifest.skills missing required agent-first-repo-init",
         "plugin_manifest.agents missing required harness-contract-claim-falsifier",

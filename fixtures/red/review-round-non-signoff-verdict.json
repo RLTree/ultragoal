@@ -21,7 +21,7 @@
   },
   "preconditions": [
     {
-      "path": "/round_phase",
+      "path": "/review_stage",
       "exists": true
     }
   ],

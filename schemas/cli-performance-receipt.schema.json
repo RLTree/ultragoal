@@ -116,7 +116,7 @@
       ],
       "properties": {
         "version": {
-          "const": "2026-06-26.gate-89-22.v1"
+          "const": "2026-06-26.performance-budget.v1"
         },
         "class": {
           "$ref": "#/$defs/budgetClass"
@@ -379,7 +379,7 @@
       ],
       "properties": {
         "baseline_version": {
-          "const": "2026-06-26.gate-89-22.v1"
+          "const": "2026-06-26.performance-budget.v1"
         },
         "baseline_machine_class": {
           "type": "string",

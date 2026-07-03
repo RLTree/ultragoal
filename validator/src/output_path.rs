@@ -82,6 +82,17 @@ pub(crate) fn claim_artifact_path(
     Ok(root.join(path))
 }
 
+pub(crate) fn literal_claim_artifact_path(
+    root: &Path,
+    path: &'static str,
+    label: &str,
+) -> std::path::PathBuf {
+    match claim_artifact_path(root, Path::new(path), label) {
+        Ok(path) => path,
+        Err(err) => panic!("invalid literal claim artifact path: {err}"),
+    }
+}
+
 pub(crate) fn write_result(path: &Path, label: &str, result: io::Result<()>) -> Result<(), String> {
     result.map_err(|err| format!("{}: {label} write failed: {err}", path.display()))
 }

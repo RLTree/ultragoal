@@ -49,6 +49,11 @@ pub(crate) fn output_authority_failures_for_test(rel: &str, text: &str) -> Vec<S
 }
 
 #[cfg(test)]
+pub(crate) fn source_text_failures_for_test(root: &Path) -> Vec<(String, String)> {
+    source::source_text_failures(root)
+}
+
+#[cfg(test)]
 pub(crate) fn generated_boundary_failures_for_test(
     root: &Path,
     inventory: &BTreeSet<String>,
@@ -59,6 +64,24 @@ pub(crate) fn generated_boundary_failures_for_test(
 #[cfg(test)]
 pub(crate) fn required_surfaces_for_test() -> Vec<(&'static str, &'static str, bool)> {
     inventory_requirements::required_surfaces_for_test()
+}
+
+#[cfg(test)]
+pub(crate) fn required_surface_failures_for_test(
+    root: &Path,
+    inventory: &BTreeSet<String>,
+) -> Vec<(String, String)> {
+    inventory_requirements::failures(root, inventory)
+}
+
+#[cfg(test)]
+pub(crate) fn registry_law_failures_for_test(
+    root: &Path,
+    registry: &Value,
+    red_ids: &BTreeSet<String>,
+    inventory: &BTreeSet<String>,
+) -> Vec<(String, String)> {
+    registry::law_registry_failures(root, registry, red_ids, inventory)
 }
 
 #[cfg(test)]

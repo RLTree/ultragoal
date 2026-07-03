@@ -74,6 +74,8 @@ pub(crate) enum Command {
     Routine(crate::cli::routine::RoutineCommand),
     Session(crate::cli::session::SessionCommand),
     SourceObligations(crate::cli::source_obligations::SourceObligationsCommand),
+    TypedBoundaries(crate::cli::typed_boundaries::TypedBoundariesCommand),
+    PackageInventory(crate::cli::package::inventory::PackageInventoryCommand),
     PackageDigest,
     Help,
 }

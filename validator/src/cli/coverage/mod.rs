@@ -160,7 +160,12 @@ fn authoritative_output(root: &Path, receipt_env: String) -> io::Result<Output> 
 }
 
 fn write_observability_receipt(root: &Path, value: &Value) -> Result<(), String> {
-    crate::json_boundary::write_json(&root.join(OBSERVABILITY_RECEIPT_REL), value)
+    let receipt = crate::output_path::literal_claim_artifact_path(
+        root,
+        OBSERVABILITY_RECEIPT_REL,
+        "coverage observability receipt",
+    );
+    crate::json_boundary::write_json(&receipt, value)
 }
 
 fn reject_unknown(args: &[String]) -> Result<(), String> {

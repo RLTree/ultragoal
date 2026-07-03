@@ -49,7 +49,12 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
             return;
         }
     };
-    let receipt = match crate::json_boundary::read_json(&root.join(CALL_RECEIPT_REL)) {
+    let receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        CALL_RECEIPT_REL,
+        "OpenAI call receipt",
+    );
+    let receipt = match crate::json_boundary::read_json(&receipt_path) {
         Ok(value) => value,
         Err(err) => {
             out.push(format!("openai_call_receipt_missing_or_malformed:{err}"));
@@ -88,7 +93,12 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
 }
 
 fn check_output_receipt(root: &Path, out: &mut Vec<String>) {
-    let receipt = match crate::json_boundary::read_json(&root.join(OUTPUT_RECEIPT_REL)) {
+    let receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        OUTPUT_RECEIPT_REL,
+        "OpenAI model output authority receipt",
+    );
+    let receipt = match crate::json_boundary::read_json(&receipt_path) {
         Ok(value) => value,
         Err(err) => {
             out.push(format!(
@@ -114,7 +124,9 @@ fn check_receipt(root: &Path, out: &mut Vec<String>) {
             return;
         }
     };
-    let receipt = match crate::json_boundary::read_json(&root.join(RECEIPT_REL)) {
+    let receipt_path =
+        crate::output_path::literal_claim_artifact_path(root, RECEIPT_REL, "OpenAI config receipt");
+    let receipt = match crate::json_boundary::read_json(&receipt_path) {
         Ok(value) => value,
         Err(err) => {
             out.push(format!("openai_config_receipt_missing_or_malformed:{err}"));

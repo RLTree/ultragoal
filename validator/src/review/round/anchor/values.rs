@@ -128,7 +128,7 @@ pub(crate) fn anchor_errors(value: &Value, anchors: &AnchorValues, out: &mut Vec
             "status",
         ));
     }
-    let review_stage = string(value, "/round_phase");
+    let review_stage = string(value, "/review_stage");
     let anchor_policy = string(value, "/anchor_policy");
     let full_anchor_required =
         crate::review::round::config::full_anchor_required(&review_stage, &anchor_policy);

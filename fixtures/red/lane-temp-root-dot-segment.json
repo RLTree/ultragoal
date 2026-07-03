@@ -8,8 +8,8 @@
   "json_patch": [
     {
       "op": "replace",
-      "path": "/lane_registry/lanes/0/scratch_roots/0",
-      "value": ".scratch/alt/../fixture"
+      "path": "/lane_registry/lanes/0/temporary_state_roots/0",
+      "value": ".temporary-state/alt/../fixture"
     }
   ],
   "materialization": {
@@ -17,7 +17,7 @@
     "first_failure_must_match_expected": true,
     "post_patch_schema_valid": true
   },
-  "notes": "scratch_roots must reject dot-segment aliases",
+  "notes": "temporary_state_roots must reject dot-segment aliases",
   "postconditions": [
     {
       "expectation": "invalid_lane_resource_path",

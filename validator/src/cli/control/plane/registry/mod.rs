@@ -55,8 +55,13 @@ pub(crate) fn mint_fail_closed_if_needed(
             "update_goal_eligibility"
         ]
     });
-    crate::json_boundary::write_json(&root.join(RAW_OBSERVATION), &raw)?;
-    let raw_digest = crate::digest::file(&root.join(RAW_OBSERVATION))?;
+    let raw_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        RAW_OBSERVATION,
+        "registry raw observation",
+    );
+    crate::json_boundary::write_json(&raw_path, &raw)?;
+    let raw_digest = crate::digest::file(&raw_path)?;
     let receipt = json!({
         "schema": "harness-ultragoal.multi-agent-registry-exposure.v1",
         "generated_at": now,
@@ -95,7 +100,12 @@ pub(crate) fn mint_fail_closed_if_needed(
             ]
         }
     });
-    crate::json_boundary::write_json(&root.join(ACTIVE_RECEIPT), &receipt)
+    let active_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        ACTIVE_RECEIPT,
+        "registry exposure receipt",
+    );
+    crate::json_boundary::write_json(&active_path, &receipt)
 }
 
 #[derive(Clone)]
@@ -164,7 +174,12 @@ fn candidate_suffix(candidate: &str) -> &str {
 }
 
 fn existing_live_pass(root: &Path) -> Result<bool, String> {
-    let Ok(receipt) = crate::json_boundary::read_json(&root.join(ACTIVE_RECEIPT)) else {
+    let receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        ACTIVE_RECEIPT,
+        "active registry receipt",
+    );
+    let Ok(receipt) = crate::json_boundary::read_json(&receipt_path) else {
         return Ok(false);
     };
     let store = crate::schema_catalog::load(root);

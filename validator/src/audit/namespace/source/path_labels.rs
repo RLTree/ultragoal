@@ -48,40 +48,14 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
             return Some(label);
         }
     }
-    for token in &tokens {
-        match token.as_str() {
-            "fitting" => return Some("fitting"),
-            "slice" => return Some("slice"),
-            "phase" => return Some("phase"),
-            "workstream" => return Some("workstream"),
-            "checkpoint" => return Some("checkpoint"),
-            "progress" => return Some("progress"),
-            "wip" => return Some("wip"),
-            "todo" => return Some("todo"),
-            "scratch" => return Some("scratch"),
-            "productionproof" => return Some("production_proof"),
-            "proofstatus" => return Some("proof_status"),
-            "evidencestatus" => return Some("evidence_status"),
-            _ => {}
-        }
-        if token
-            .strip_prefix("gate")
-            .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
-        {
-            return Some("gate_number");
-        }
-        if token
-            .strip_prefix("phase")
-            .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
-        {
-            return Some("phase_number");
-        }
-    }
     if adjacent_numbered_label(&tokens, "gate") {
         return Some("gate_number");
     }
     if adjacent_numbered_label(&tokens, "phase") {
         return Some("phase_number");
+    }
+    if let Some(label) = standalone_goal_work_token_label(&tokens) {
+        return Some(label);
     }
     None
 }
@@ -120,39 +94,7 @@ fn repo_entrypoint_context_label(tokens: &[String]) -> Option<&'static str> {
 }
 
 pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'static str> {
-    let lower = identifier.to_ascii_lowercase();
-    let tokens = semantic_tokens(identifier);
-    if lower == "support" || tokens.iter().any(|token| token == "support") {
-        return Some("support");
-    }
-    if matches!(lower.as_str(), "helper" | "helpers")
-        || tokens
-            .iter()
-            .any(|token| matches!(token.as_str(), "helper" | "helpers"))
-    {
-        return Some("helper");
-    }
-    if matches!(lower.as_str(), "utils" | "utility" | "utilities")
-        || tokens
-            .iter()
-            .any(|token| matches!(token.as_str(), "utils" | "utility" | "utilities"))
-    {
-        return Some("utils");
-    }
-    if lower == "common"
-        || lower.starts_with("common_")
-        || lower.ends_with("_common")
-        || tokens.iter().any(|token| token == "common")
-    {
-        return Some("common");
-    }
-    if lower == "shared" {
-        return Some("shared");
-    }
-    if lower == "misc" {
-        return Some("misc");
-    }
-    None
+    generic_bucket_label(identifier, false)
 }
 
 pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'static str> {
@@ -162,17 +104,14 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
         .filter(|ch| ch.is_ascii_alphanumeric())
         .collect::<String>();
     let tokens = semantic_tokens(text);
+    if !authority_like_string(text) {
+        return None;
+    }
     if let Some(label) = source_name_violation_label(&tokens, &compact) {
         return Some(label);
     }
-    if is_symbolic_name(text) {
-        if let Some(label) = repo_entrypoint_context_label(&tokens) {
-            return Some(label);
-        }
-    }
     if lower.contains("production_proof")
         || lower.contains("production-proof")
-        || lower.contains("production proof")
         || compact.contains("productionproof")
         || adjacent_tokens(&tokens, "production", "proof")
     {
@@ -180,7 +119,6 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
     }
     if lower.contains("root_phase")
         || lower.contains("root-phase")
-        || lower.contains("root phase")
         || compact.contains("rootphase")
         || adjacent_tokens(&tokens, "root", "phase")
     {
@@ -194,11 +132,70 @@ pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'stat
             return Some(label);
         }
     }
+    if let Some(label) = repo_entrypoint_context_label(&tokens) {
+        return Some(label);
+    }
+    if adjacent_numbered_label(&tokens, "gate") {
+        return Some("gate_number");
+    }
+    if adjacent_numbered_label(&tokens, "phase") {
+        return Some("phase_number");
+    }
+    if let Some(label) = standalone_goal_work_token_label(&tokens) {
+        return Some(label);
+    }
+    None
+}
+
+fn authority_like_string(text: &str) -> bool {
+    let trimmed = text.trim();
+    if telemetry_instance_literal(trimmed) {
+        return false;
+    }
+    !trimmed.is_empty()
+        && (trimmed.contains('/')
+            || trimmed.ends_with(".json")
+            || trimmed.ends_with(".jsonl")
+            || trimmed.ends_with(".rs")
+            || trimmed.ends_with(".md")
+            || (trimmed.contains(['_', '-', '.'])
+                && trimmed
+                    .chars()
+                    .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '_' | '-' | '.'))))
+}
+
+fn telemetry_instance_literal(text: &str) -> bool {
+    text.starts_with("run-") || text.starts_with("corr-") || text.starts_with("sha256:")
+}
+
+fn standalone_goal_work_token_label(tokens: &[String]) -> Option<&'static str> {
+    for token in tokens {
+        match token.as_str() {
+            "fitting" => return Some("fitting"),
+            "slice" => return Some("slice"),
+            "phase" => return Some("phase"),
+            "workstream" => return Some("workstream"),
+            "checkpoint" => return Some("checkpoint"),
+            "progress" => return Some("progress"),
+            "wip" => return Some("wip"),
+            "todo" => return Some("todo"),
+            "scratch" => return Some("scratch"),
+            "productionproof" => return Some("production_proof"),
+            "proofstatus" => return Some("proof_status"),
+            "evidencestatus" => return Some("evidence_status"),
+            _ => {}
+        }
+    }
     None
 }
 
 pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
-    let tokens = semantic_tokens(stem);
+    generic_bucket_label(stem, true)
+}
+
+fn generic_bucket_label(value: &str, source_leaf: bool) -> Option<&'static str> {
+    let lower = value.to_ascii_lowercase();
+    let tokens = semantic_tokens(value);
     if tokens.iter().any(|token| token == "support") {
         return Some("support");
     }
@@ -214,16 +211,12 @@ pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
     {
         return Some("utils");
     }
-    if tokens.iter().any(|token| token == "common") {
-        return Some("common");
+    for &(exact, label) in &[("common", "common"), ("shared", "shared"), ("misc", "misc")] {
+        if lower == exact || (exact == "common" && tokens.iter().any(|token| token == exact)) {
+            return Some(label);
+        }
     }
-    if stem == "shared" {
-        return Some("shared");
-    }
-    if stem == "misc" {
-        return Some("misc");
-    }
-    if stem == "nodes" {
+    if source_leaf && lower == "nodes" {
         return Some("nodes");
     }
     None
@@ -233,13 +226,6 @@ fn adjacent_tokens(tokens: &[String], first: &str, second: &str) -> bool {
     tokens
         .windows(2)
         .any(|window| window[0] == first && window[1] == second)
-}
-
-fn is_symbolic_name(text: &str) -> bool {
-    text == "fit"
-        || text
-            .chars()
-            .all(|ch| matches!(ch, '_' | 'A'..='Z' | '0'..='9'))
 }
 
 fn adjacent_numbered_label(tokens: &[String], label: &str) -> bool {

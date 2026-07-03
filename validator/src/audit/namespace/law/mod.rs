@@ -146,7 +146,9 @@ fn schema_authority_leaf_label(rel: &str, components: &[&str]) -> Option<&'stati
     if !rel.starts_with("schemas/") {
         return None;
     }
-    let leaf = components.last()?;
+    let leaf = components
+        .last()
+        .expect("split path components are never empty");
     let stem = leaf
         .strip_suffix(".schema.json")
         .or_else(|| leaf.strip_suffix(".json"))

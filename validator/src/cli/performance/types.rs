@@ -2,7 +2,7 @@ use serde::Serialize;
 
 pub(crate) const PERFORMANCE_RECEIPT_SCHEMA: &str = "harness-ultragoal.cli-performance-receipt.v1";
 
-pub(crate) const PERFORMANCE_BUDGET_VERSION: &str = "2026-06-26.gate-89-22.v1";
+pub(crate) const PERFORMANCE_BUDGET_VERSION: &str = "2026-06-26.performance-budget.v1";
 
 pub(crate) const PERFORMANCE_COMMANDS: &[&str] = &[
     "ultragoal performance prove",

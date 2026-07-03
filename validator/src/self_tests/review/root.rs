@@ -25,7 +25,7 @@ fn review_round_anchor_and_registry_checks_are_fail_closed() {
     crate::review::round::anchor::values::anchor_errors(
         &json!({
             "status":"fail",
-            "round_phase":"sign_off",
+            "review_stage":"sign_off",
             "anchor_policy":"validator_review_target_archive",
             "validator_receipt":{"path":"wrong","digest":crate::self_tests::boundaries::workspace_fixtures::sha('9'),"run_id":"run-2","package_digest":crate::self_tests::boundaries::workspace_fixtures::sha('8')}
         }),

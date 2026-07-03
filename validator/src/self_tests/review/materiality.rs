@@ -169,7 +169,7 @@ fn materiality_review_round_signoff_and_valid_fixture_reader_fail_closed() {
     let mut out = Vec::new();
     crate::review::materiality::review_round_errors(
         &json!({
-            "round_phase":"sign_off",
+            "review_stage":"sign_off",
             "materiality_gate":{
                 "decision":"DELTA_REVIEW_ALLOWED",
                 "deterministic_gates_required":gates(),

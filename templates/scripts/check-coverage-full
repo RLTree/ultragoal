@@ -190,6 +190,6 @@ if receipt.get("coverage", {}).get("percent") != 100:
     fail("coverage_claim_uncovered_code")
 if receipt.get("uncovered_records"):
     fail("coverage_claim_uncovered_code")
-if receipt.get("claim_ceiling") != "supports_complete_claim":
+if receipt.get("claim_ceiling") != "supports_complete_coverage_claim":
     fail("coverage_ratchet_presented_as_complete")
 PY

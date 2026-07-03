@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 pub(crate) const RUST_RECEIPT_SCHEMA: &str = "harness-ultragoal.rust-devx-receipt.v1";
-pub(crate) const RUST_POLICY_VERSION: &str = "2026-06-26.gate-91.v1";
+pub(crate) const RUST_POLICY_VERSION: &str = "2026-06-26.rust-runtime-policy.v1";
 
 pub(crate) const RUST_COMMANDS: &[&str] = &[
     "ultragoal rust toolchain verify",

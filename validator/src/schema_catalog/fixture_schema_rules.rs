@@ -102,14 +102,14 @@ fn completion_manifest_errors(value: &Value) -> Vec<String> {
 
 fn lane_registry_errors(value: &Value) -> Vec<String> {
     let mut errors = Vec::new();
-    let verification_states = &value["root_verification_phases"];
+    let verification_states = &value["root_verification_stages"];
     for key in [
         "pre_merge_lane_gate",
         "post_merge_integration_gate",
         "final_all_lanes_gate",
     ] {
         if verification_states.get(key).is_none() {
-            errors.push(format!("root_verification_phases.{key} is required"));
+            errors.push(format!("root_verification_stages.{key} is required"));
         }
     }
     errors

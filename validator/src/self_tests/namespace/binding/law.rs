@@ -37,6 +37,22 @@ fn namespace_value_failures_accepts_fully_listed_files_without_orphans() {
 }
 
 #[test]
+fn namespace_law_rejects_generic_schema_json_authority_names() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-schema-json");
+    std::fs::create_dir_all(&root).expect("namespace schema root");
+    let failures = crate::audit::namespace::law::value_failures(
+        &root,
+        &json!({"resources":["schemas/common.json"]}),
+    );
+    assert!(
+        contains(&failures, "namespace_schema_generic_authority_path"),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup namespace schema json");
+}
+
+#[test]
 fn namespace_value_cache_reuses_repo_source_paths() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-value-cache");

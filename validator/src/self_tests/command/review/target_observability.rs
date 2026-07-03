@@ -114,3 +114,24 @@ fn review_target_observability_receipt_path_validation_is_fail_closed() {
         );
     }
 }
+
+#[test]
+fn review_target_run_rejects_absolute_observability_claim_artifact() {
+    let root = package_root("review-target-observability-absolute-run");
+    let error = crate::cli::review::target::run(
+        root.clone(),
+        PathBuf::from("receipts/review-target.json"),
+        root.join("absolute-review-target-observability.json"),
+    )
+    .expect_err("absolute observability receipt rejected by runner");
+    assert!(
+        error.contains("review target observability receipt"),
+        "{error}"
+    );
+    assert!(
+        error.contains("root-relative claim artifact path"),
+        "{error}"
+    );
+    assert!(error.contains("external debug only"), "{error}");
+    std::fs::remove_dir_all(root).expect("cleanup review target absolute run");
+}

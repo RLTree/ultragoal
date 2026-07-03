@@ -60,7 +60,12 @@ pub(crate) fn run(root: &Path) -> Result<i32, String> {
         },
         candidate,
     )?;
-    crate::json_boundary::write_json(&root.join(RECEIPT_REL), &value)?;
+    let receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        RECEIPT_REL,
+        "package digest receipt",
+    );
+    crate::json_boundary::write_json(&receipt_path, &value)?;
     print_receipt(&value);
     Ok(i32::from(status != "pass"))
 }

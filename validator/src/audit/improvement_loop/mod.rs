@@ -9,7 +9,12 @@ mod tests;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
-    let receipt = match crate::json_boundary::read_json(&root.join(RECEIPT_REL)) {
+    let receipt_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        RECEIPT_REL,
+        "improvement loop closure receipt",
+    );
+    let receipt = match crate::json_boundary::read_json(&receipt_path) {
         Ok(value) => value,
         Err(err) => {
             out.push(format!(

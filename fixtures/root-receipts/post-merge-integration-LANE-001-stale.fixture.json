@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.root-verification-receipt.v1",
   "fixture_purpose": "Red-fixture support only. This stale post-merge receipt must never be packaged as active proof authority.",
-  "phase": "post_merge_integration_gate",
+  "stage": "post_merge_integration_gate",
   "upstream_lane_id": "LANE-001",
   "upstream_commit": "abcdef0",
   "target_branch": "main",

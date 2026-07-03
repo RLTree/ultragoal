@@ -90,6 +90,26 @@ fn final_packet_claim_guard_accepts_only_fail_closed_blocker_shape() {
     std::fs::remove_dir_all(root).expect("cleanup final packet claim guard");
 }
 
+#[test]
+fn final_packet_claim_guard_pass_receipt_routes_to_full_value_verifier() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "final-packet-claim-guard-pass",
+    );
+    receipt_fixtures::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":[]}),
+    );
+    let store = crate::schema_catalog::load(
+        &crate::self_tests::boundaries::workspace_fixtures::repo_root(),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("digest");
+    let receipt = receipt_fixtures::write_green_proof(&root, &current);
+
+    let failures = crate::audit::final_packet::value_claim_guard_failures(&root, &store, &receipt);
+    assert!(failures.is_empty(), "{failures:?}");
+    std::fs::remove_dir_all(root).expect("cleanup final packet claim guard pass");
+}
+
 fn mutate(value: &Value, edit: impl FnOnce(&mut Value)) -> Value {
     let mut value = value.clone();
     edit(&mut value);

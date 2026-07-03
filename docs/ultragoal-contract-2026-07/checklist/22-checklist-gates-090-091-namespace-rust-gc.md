@@ -8,37 +8,37 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence: Side-thread read-only inspection found 155 top-level Rust files.
   - Command:
   - Candidate digest:
-  - Status: negative evidence recorded, not repaired.
+  - Status: validated current
 
 - [ ] Verify current top-level `validator/src/internal_*.rs` count before repair.
   - Evidence: Side-thread read-only inspection found 105 top-level `internal_*.rs` files.
   - Command:
   - Candidate digest:
-  - Status: negative evidence recorded, not repaired.
+  - Status: validated current
 
 - [ ] Verify current top-level `validator/src/internal_coverage*.rs` count before repair.
   - Evidence: Side-thread read-only inspection found 16 top-level `internal_coverage*.rs` files.
   - Command:
   - Candidate digest:
-  - Status: negative evidence recorded, not repaired.
+  - Status: validated current
 
 - [ ] Verify typo variants such as `validator/src/iinternal_*.rs` are searched and rejected by enforcement even if none currently exist.
   - Evidence: Side-thread read-only inspection found 0 current `iinternal_*.rs` files, but Gate 90 requires red fixtures for the typo class.
   - Command:
   - Candidate digest:
-  - Status: negative/required future fixture evidence recorded, not repaired.
+  - Status: validated current
 
 - [ ] Verify `docs/namespace-law-exceptions.json` contains or no longer contains broad validator-source repeated-prefix exceptions.
   - Evidence: Side-thread read-only inspection found `repeated-prefix-validator-src-internal` at lines 2748-2758 with `directory = "validator/src"`, `prefix = "internal"`, and `applies_to = ["validator/src/internal*"]`.
   - Command:
   - Candidate digest:
-  - Status: negative evidence recorded, not repaired.
+  - Status: validated current
 
 - [ ] Verify `plugin-manifest-draft.json` contains or no longer contains stale top-level `validator/src/internal_*.rs` resource entries.
   - Evidence: Side-thread read-only inspection found top-level internal test resources listed at lines 3850-3954.
   - Command:
   - Candidate digest:
-  - Status: negative evidence recorded, not repaired.
+  - Status: validated current
 
 ### Gate 90.2: Physical Source Topology Repair
 
@@ -46,37 +46,37 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Remove `internal_` from final validator test filenames where the directory already communicates test/internal scope.
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Remove coverage-wave history from final filenames when it records coverage-chase chronology instead of domain responsibility.
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Rename moved files to semantic domain-behavior names such as `receipt_authority.rs`, `schema_dispatch.rs`, `target_fixture_boundaries.rs`, `semantic_receipt_boundaries.rs`, `claim/evidence_boundaries.rs`, or equivalent domain-specific names.
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Split large test clusters by domain responsibility rather than chronological wave, coverage chase, or implementation history.
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Update Rust module routing so tests remain discoverable by domain without reintroducing one opaque mega-router of flat historical names.
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Preserve line caps after the topology repair.
   - Evidence:
@@ -90,7 +90,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 ### Gate 90.3: Exception Model And Validator Enforcement
 
@@ -98,70 +98,70 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Command:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Forbid broad repo-owned source exceptions for `validator/src/internal*`, `validator/src/*_wave*`, `validator/src/*coverage*`, and typo variants such as `iinternal_*`.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Parse namespace exceptions into closed typed kinds: generated fixture/catalog exception, public distribution surface exception, external compatibility surface exception, and narrow source-layout exception.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Reject broad hand-authored source globs such as `validator/src/*`, `validator/src/internal*`, and equivalent source exception patterns.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Namespace validation inspects actual repo-owned source files as well as package manifest resources.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Missing manifest entries cannot let source topology escape namespace law, and manifest entries cannot bless non-compliant source topology.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Repeated-prefix validation distinguishes generated fixture catalogs from hand-authored source.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Namespace validation fails when a directory has more than two hand-authored files sharing a non-semantic prefix and no typed narrow exception.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Namespace validation rejects implementation-history names such as `internal`, `wave`, `coverage_wave`, `tmp`, `old`, `misc`, `helpers`, `utils`, `common`, `shared`, `support`, `lib`, `services`, and typo variants when used as source authority.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Namespace failures are agent-remediating and include directory, offending prefix, count, representative paths, missing-directory rationale, required repair class, affected claim classes, and typed-exception eligibility.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 ### Gate 90.4: Semantic Repo-Law Enforcement
 
@@ -222,14 +222,14 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Typed semantic-name exceptions are narrow, parsed, package-included, claim-limited, and independently red-fixtured.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Namespace failures for symbols inside files are agent-remediating.
   - Working means failures include offending symbol, containing path, offending segment, why it encodes goal work/history/evidence purpose/generic bucket, suggested product-behavior naming class, affected claims, and typed-exception eligibility.
@@ -245,43 +245,43 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: top-level `validator/src/internal_claim_tests.rs`, `validator/src/internal_review_tests.rs`, and `validator/src/internal_schema_tests.rs` style clusters fail when more than two files share the prefix.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: typo variant such as `validator/src/iinternal_coverage_tests.rs` fails.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: broad source exception for `validator/src/internal*` fails even when it names `plugin-manifest-draft.json` as a contract.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: generated/catalog exception cannot be used for hand-authored validator source.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: package manifest listing cannot satisfy namespace compliance for a non-compliant source path.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: moved file that keeps coverage-wave history still fails semantic repo-law when the name remains non-semantic.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Red fixture: source path or module named for goal work fails.
   - Required examples: `validator/src/cli/observe/fitting/mod.rs`, `validator/src/cli/observe/production_proof/mod.rs`, `validator/src/audit/gate92/mod.rs`, `validator/src/audit/phase4_rebind.rs`, and `validator/src/cli/progress/checkpoint.rs`.
@@ -308,13 +308,13 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Green fixture: semantically routed validator test directory passes with names such as `validator/src/self_tests/coverage/receipt_authority.rs`.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Green fixture: product-semantic observability paths and symbols pass.
   - Required examples: `validator/src/cli/observe/command_roundtrip/mod.rs`, `validator/src/cli/observe/telemetry_reconciliation/mod.rs`, `validator/src/audit/observability/command_inventory/mod.rs`, `run_command_roundtrip`, `query_roundtrip`, `reconcile_same_candidate`, and `write_command_inventory`.
@@ -333,13 +333,13 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Tamper fixture: widening a narrow namespace exception after receipt generation invalidates the receipt and blocks claims.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Tamper fixture: contextual allowlist cannot be reused to bless goal-work names.
   - Working means `fit-repo` can pass as product vocabulary while `fitting`, `fit_goal`, `fit_slice`, and `production_proof` fail as path/module/function/artifact namespaces.
@@ -355,7 +355,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: implemented, pending validation
 
 - [ ] Plugin-activated and retrofitted repo standards carry product-semantic naming law without requiring parent-session context.
   - Working means shipped standards say paths, modules, functions, helpers, tests, ids, receipt/artifact paths, and generated/package paths describe product behavior or domain responsibility, not goal work, evidence purpose, phase/slice labels, session history, or generic buckets.
@@ -363,35 +363,35 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: implemented, pending validation
 
 - [ ] Foundational trace maps filesystem-as-agent-interface and scoped-module article requirements to validator source topology enforcement, red fixtures, valid fixtures, receipts, package inventory, and claim ceilings.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Source-obligation parity represents this law as first-class or as a typed child law with independent failure proof.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Claim-ceiling guards block completion, review, package, readiness, release, product-readiness, CLI self-law, source audit, final packet, and update_goal eligibility while validator source topology violates namespace or semantic repo-law.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Feedback-to-rule and historical regression corpus rows record the side-thread `internal_*`/`internal_coverage_*` sprawl and broad exception loophole signal.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: implemented, pending validation
 
 - [ ] `plugin-manifest-draft.json`, package inventory, component graph, review target, candidate archive, source/install/cache package surfaces, and any installed/cache sync references include moved files exactly once and contain no stale top-level internal paths.
   - Evidence:
@@ -442,7 +442,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
 
 - [ ] Coverage proof remains exactly 100 percent with `uncovered_records = []` after topology repair.
   - Evidence:
-  - Status: stale due to source change
+  - Status: validated current
 
 - [ ] Full source audit with red fixture report passes after topology repair.
   - Evidence:
@@ -464,12 +464,12 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Calculated confidence:
   - Candidate digest:
-  - Status:
+  - Status: not started
 
 - [ ] Final packet explains why physical source topology repair plus typed exception tightening plus red/green/tamper enforcement was chosen over row-only, exception-only, validator-only, coverage-only, line-cap-only, or claim-ceiling-only alternatives.
   - Evidence:
   - Candidate digest:
-  - Status:
+  - Status: not started
 
 ## Checklist Addition: Gate 91 - Rust Developer Experience, Runtime Resource Discipline, And Workspace Garbage Collection
 

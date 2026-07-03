@@ -53,7 +53,7 @@ pub fn restartable_execplan_value_failures(_root: &Path, value: &Value) -> Vec<S
         "purpose",
         "user_outcome",
         "steps",
-        "progress",
+        "current_state",
         "discoveries",
         "decisions",
         "validation_commands",

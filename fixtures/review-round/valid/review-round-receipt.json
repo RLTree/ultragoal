@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.review-round-receipt.v1",
   "round_id": "fixture-four-persona-signoff-round",
-  "round_phase": "sign_off",
+  "review_stage": "sign_off",
   "anchor_policy": "validator_review_target_archive",
   "status": "pass",
   "generated_at": "2026-06-18T00:00:00Z",

@@ -35,7 +35,7 @@ pub(crate) fn review_round_errors(receipt: &Value, out: &mut Vec<ReviewFailure>)
         ));
     }
     let decision = str_field(gate, "decision");
-    if receipt.get("round_phase").and_then(Value::as_str) == Some("sign_off") {
+    if receipt.get("review_stage").and_then(Value::as_str) == Some("sign_off") {
         if decision != FULL {
             out.push(failure("material_signoff_requires_full_scope"));
         }

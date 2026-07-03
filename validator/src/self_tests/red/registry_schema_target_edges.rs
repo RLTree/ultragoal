@@ -180,15 +180,20 @@ fn audit_schema_cli_and_target_edges() {
         receipt: Some(repo.join("Cargo.toml/not-a-receipt.json")),
         class: crate::cli::performance::types::BudgetClass::FocusedRepair,
     };
-    let err = crate::cli::performance::run(&repo, &command).expect_err("receipt path under file");
+    let err = crate::cli::performance::run(&repo, &command).expect_err("absolute receipt path");
     assert!(
-        err.contains("create parent failed") || err.contains("Not a directory"),
+        err.contains("root-relative claim artifact path") && err.contains("external debug only"),
         "{err}"
     );
 
     let missing =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("target_boundary-cli-missing");
-    let err = crate::cli::performance::receipt(&missing, &command, 1)
+    let missing_command = crate::cli::performance::PerformanceCommand {
+        operation: crate::cli::performance::types::PerformanceOperation::Prove,
+        receipt: Some("validation_artifacts/performance/not-a-receipt.json".into()),
+        class: crate::cli::performance::types::BudgetClass::FocusedRepair,
+    };
+    let err = crate::cli::performance::receipt(&missing, &missing_command, 1)
         .expect_err("missing manifest blocks performance receipt");
     assert!(
         err.contains("plugin-manifest-draft") || err.contains("open failed"),
