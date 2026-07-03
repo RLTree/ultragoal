@@ -1,6 +1,6 @@
+use super::graph;
 use crate::cli::live_loop::LiveLoopCommand;
-use crate::scheduler::TaskClass;
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::path::Path;
 
 pub(crate) struct AuditContext {
@@ -32,46 +32,14 @@ impl AuditContext {
     }
 
     pub(crate) fn tasks(&self) -> Vec<Box<dyn FnOnce() -> Value + Send + 'static>> {
-        let nodes = [
-            ("package_digest", self.candidate_digest.clone()),
-            ("changed_files", self.changed_files_digest.clone()),
-            ("audit_context", self.input_digest.clone()),
-            ("observability_control_board", self.cache_mode.clone()),
-        ];
-        nodes
-            .into_iter()
-            .map(|(id, digest)| {
-                let tier = self.tier.clone();
-                let cache_mode = self.cache_mode.clone();
-                Box::new(move || node_result(id, &digest, &tier, &cache_mode))
-                    as Box<dyn FnOnce() -> Value + Send + 'static>
-            })
-            .collect()
+        graph::tasks(
+            &self.candidate_digest,
+            &self.changed_files_digest,
+            &self.input_digest,
+            &self.tier,
+            &self.cache_mode,
+        )
     }
-}
-
-fn node_result(id: &str, digest: &str, tier: &str, cache_mode: &str) -> Value {
-    let cache = cache_decision(id, digest, tier, cache_mode);
-    json!({
-        "node_id": id,
-        "status": "pass",
-        "input_digest": digest,
-        "cache": cache,
-        "task_class": TaskClass::PureReadParallel.id(),
-        "claim_impact": "source_local_live_loop_acceleration_only"
-    })
-}
-
-fn cache_decision(id: &str, digest: &str, tier: &str, cache_mode: &str) -> Value {
-    let key = cache_key(id, digest, tier, cache_mode);
-    json!({
-        "mode": cache_mode,
-        "key": key,
-        "hit": false,
-        "invalidation_reason": "no verified local cache entry",
-        "cache_class": "verified_content_addressed_local",
-        "honesty": verify_cache_hit(&key, &key)
-    })
 }
 
 pub(crate) fn verify_cache_hit(expected_key: &str, observed_key: &str) -> &'static str {
@@ -80,15 +48,6 @@ pub(crate) fn verify_cache_hit(expected_key: &str, observed_key: &str) -> &'stat
     } else {
         "fail_stale_or_wrong_digest_cache_hit"
     }
-}
-
-fn cache_key(id: &str, digest: &str, tier: &str, cache_mode: &str) -> String {
-    crate::digest::bytes(
-        format!(
-            "node={id};input={digest};validator=ultragoal-rust;law=observability-live-loop;tier={tier};cache={cache_mode};env=local"
-        )
-        .as_bytes(),
-    )
 }
 
 fn changed_files(root: &Path) -> Vec<String> {

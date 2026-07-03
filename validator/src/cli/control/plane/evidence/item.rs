@@ -23,11 +23,11 @@ pub(super) fn value(root: &Path, label: &str, rel: &str, expected: &str) -> Valu
     };
     let label_failures = parsed
         .as_ref()
-        .map(|value| super::status::label_failures(root, label, value, expected))
+        .map(|value| super::receipt_evaluation::label_failures(root, label, value, expected))
         .unwrap_or_default();
     let status = parsed
         .as_ref()
-        .and_then(|value| super::status::typed_status(label, value, &label_failures));
+        .and_then(|value| super::receipt_evaluation::typed_status(label, value, &label_failures));
     if status != Some("pass") {
         failures.push("status_not_pass".to_string());
     }

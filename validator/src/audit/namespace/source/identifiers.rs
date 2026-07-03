@@ -21,6 +21,7 @@ pub(crate) fn failures(root: &Path, actual_files: &[String]) -> Vec<String> {
             out.extend(parameter_failures(rel, line_number, line));
             out.extend(field_or_parameter_failure(rel, line_number, line));
             out.extend(local_binding_failure(rel, line_number, line));
+            out.extend(super::string_labels::failure(rel, line_number, line));
             out.extend(enum_variant_failure(
                 rel,
                 line_number,

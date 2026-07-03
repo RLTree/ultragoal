@@ -149,7 +149,7 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
         }),
     );
     let status_row = audit_product(&exception, true);
-    assert!(product_detail(&status_row).contains("evidence status not pass"));
+    assert!(product_detail(&status_row).contains("authority receipt status not pass"));
 
     write_exception(
         &exception,

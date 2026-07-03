@@ -124,14 +124,14 @@ fn run_writes_and_prints_fail_closed_receipts() {
 }
 
 #[test]
-fn production_constructor_does_not_pass_from_empty_evidence_without_green_graph() {
+fn control_graph_constructor_does_not_pass_without_green_graph() {
     let root = crate::self_tests::boundaries::support::temp_root("cli-production-no-green");
     write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"version":"0.0.0-test","resources":[]}),
     );
     let candidate = crate::self_tests::boundaries::support::sha('c');
-    let value = crate::cli::control::plane::emit::receipt_from_production_evidence(
+    let value = crate::cli::control::plane::emit::receipt_from_control_graph(
         &root,
         candidate.clone(),
         ControlOperation::UpdateGoalEligibility,

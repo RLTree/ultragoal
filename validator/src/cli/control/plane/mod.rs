@@ -136,7 +136,7 @@ pub(crate) fn run(root: &Path, command: &ControlCommand) -> Result<i32, String> 
 pub(crate) fn receipt(root: &Path, command: &ControlCommand) -> Result<Value, String> {
     let package_digest = crate::package::inventory::package_digest(root)?;
     let evidence_failures = proof::failures(root, command.operation);
-    Ok(emit::receipt_from_production_evidence(
+    Ok(emit::receipt_from_control_graph(
         root,
         package_digest,
         command.operation,

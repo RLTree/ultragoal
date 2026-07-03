@@ -86,7 +86,7 @@ fn current_candidate_failures(root: &Path, receipt: &Value, out: &mut Vec<String
         ));
     }
     if receipt.get("status").and_then(Value::as_str) != Some("pass") {
-        out.push("final_packet_proof_status_not_pass".to_string());
+        out.push("final_packet_authority_status_not_pass".to_string());
     }
     if receipt.get("claim_ceiling").and_then(Value::as_str)
         != Some("final_packet_evidence_dereferenced")

@@ -6,6 +6,9 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
         .filter(|ch| ch.is_ascii_alphanumeric())
         .collect::<String>();
     let tokens = semantic_tokens(tail);
+    if let Some(label) = source_name_violation_label(&tokens, &compact) {
+        return Some(label);
+    }
     if lower.contains("production_proof")
         || lower.contains("production-proof")
         || compact == "productionproof"
@@ -43,6 +46,8 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
             "todo" => return Some("todo"),
             "scratch" => return Some("scratch"),
             "productionproof" => return Some("production_proof"),
+            "proofstatus" => return Some("proof_status"),
+            "evidencestatus" => return Some("evidence_status"),
             _ => {}
         }
         if token
@@ -63,6 +68,27 @@ pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
     }
     if adjacent_numbered_label(&tokens, "phase") {
         return Some("phase_number");
+    }
+    None
+}
+
+fn source_name_violation_label(tokens: &[String], compact: &str) -> Option<&'static str> {
+    for (first, second, compact_name, label) in [
+        ("proof", "status", "proofstatus", "proof_status"),
+        ("proof", "state", "proofstate", "proof_state"),
+        ("evidence", "status", "evidencestatus", "evidence_status"),
+        ("evidence", "posture", "evidenceposture", "evidence_posture"),
+        (
+            "production",
+            "evidence",
+            "productionevidence",
+            "production_evidence",
+        ),
+        ("validation", "proof", "validationproof", "validation_proof"),
+    ] {
+        if compact == compact_name || adjacent_tokens(tokens, first, second) {
+            return Some(label);
+        }
     }
     None
 }
@@ -100,6 +126,44 @@ pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'stat
     None
 }
 
+pub(crate) fn product_opaque_goal_work_string_label(text: &str) -> Option<&'static str> {
+    let lower = text.to_ascii_lowercase();
+    let compact = lower
+        .chars()
+        .filter(|ch| ch.is_ascii_alphanumeric())
+        .collect::<String>();
+    let tokens = semantic_tokens(text);
+    if let Some(label) = source_name_violation_label(&tokens, &compact) {
+        return Some(label);
+    }
+    if lower.contains("production_proof")
+        || lower.contains("production-proof")
+        || lower.contains("production proof")
+        || compact.contains("productionproof")
+        || adjacent_tokens(&tokens, "production", "proof")
+    {
+        return Some("production_proof");
+    }
+    if tokens.iter().any(|token| token == "fitting") {
+        return Some("fitting");
+    }
+    for (first, second, compact_name, label) in [
+        ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
+        (
+            "checkpoint",
+            "progress",
+            "checkpointprogress",
+            "checkpoint_progress",
+        ),
+        ("todo", "repair", "todorepair", "todo_repair"),
+    ] {
+        if compact.contains(compact_name) || adjacent_tokens(&tokens, first, second) {
+            return Some(label);
+        }
+    }
+    None
+}
+
 pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
     let tokens = semantic_tokens(stem);
     if tokens
@@ -122,6 +186,9 @@ pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
     }
     if stem == "misc" {
         return Some("misc");
+    }
+    if stem == "nodes" {
+        return Some("nodes");
     }
     None
 }

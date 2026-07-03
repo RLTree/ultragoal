@@ -170,21 +170,21 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Rust modules, nested modules, public/private functions, helper functions, test functions, type names, enum variants, constants, local authority identifiers, and artifact path segments are treated as semantic authority surfaces.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Generic source/module names that encode storage status or implementation history fail when used as authority surfaces.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Goal-work, evidence-purpose, phase/slice, session-history, and progress labels fail when used as source paths, module names, function names, helper names, test names, ids, or artifact path segments instead of product behavior.
   - Working examples that must fail unless a typed external compatibility boundary applies: `fitting`, `production_proof`, `gate92`, `phase4`, `slice`, `workstream`, `checkpoint`, `progress`, `todo`, `wip`, `scratch`, `helpers`, `utils`, `common`, `misc`, and `shared`.
@@ -192,7 +192,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Product vocabulary allowlist is contextual, not word-based.
   - Working means `fit-repo` is allowed as a user-facing product command, `contract` is allowed only for real product/runtime/data contracts, `closure` is allowed only for package/dependency closure behavior, and `proof` is allowed only for literal `prove` command surfaces or proof-artifact validators.
@@ -200,7 +200,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Compatibility aliases remain at parser/schema boundaries only and route into product-semantic implementation names.
   - Working means existing public commands or schema fields can remain temporarily only when the implementation below them uses behavior names such as command roundtrip, telemetry reconciliation, receipt dereference, span parentage, cache invalidation, source topology, or command inventory. New internal paths/modules/functions may not inherit compatibility jargon.
@@ -208,14 +208,14 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: implemented, pending validation
 
 - [ ] Semantic source modules name the law, domain, authority, boundary, receipt, fixture, product surface, or workflow they govern.
   - Evidence:
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Domain directories carry the repeated concept and filenames inside those directories drop redundant prefixes.
   - Evidence:
@@ -237,7 +237,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Command:
   - Receipt:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 ### Gate 90.5: Red, Green, And Tamper Fixtures
 
@@ -288,21 +288,21 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Red fixture: functions and helpers named for goal work fail even when the file path is otherwise semantic.
   - Required examples: `fit_command`, `fit_path`, `production_proof`, `phase4_rebind`, `checkpoint_progress`, `todo_repair`, and modules named only `helpers`, `utils`, `common`, or `shared`.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Red fixture: observability artifact path segments named for goal work fail.
   - Required examples: `validation_artifacts/observability/fitting/...` and `validation_artifacts/observability/production-proof/...` unless a typed compatibility schema boundary exists and the product-semantic replacement path is present.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Red fixture: namespace errors cannot be hidden by capped reporting, row presence, foundational trace presence, source-obligation presence, coverage pass, line-cap pass, package inventory pass, Product Fitness pass, reviewer approval, or lowered claim ceiling.
   - Evidence:
@@ -321,13 +321,13 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 - [ ] Green fixture: product command vocabulary such as `fit_repo` passes when and only when it represents the user-facing fit-repo product surface.
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: implemented, pending validation
 
 - [ ] Green fixture: generated fixture catalogs may use repeated prefixes only when a generator/catalog route owns the family and the exception is narrow, typed, and claim-limited.
   - Evidence:
@@ -346,7 +346,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Evidence:
   - Fixture:
   - Candidate digest:
-  - Status: not started
+  - Status: validated current
 
 ### Gate 90.6: Standards, Trace, Source-Obligation, Package, And Claim Integration
 

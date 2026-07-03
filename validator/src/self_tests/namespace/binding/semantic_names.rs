@@ -25,6 +25,8 @@ fn namespace_semantic_names_reject_goal_work_path_labels() {
     for path in [
         "validator/src/cli/observe/fitting/mod.rs",
         "validator/src/cli/observe/production_proof/mod.rs",
+        "validator/src/cli/live_loop/nodes.rs",
+        "validator/src/cli/live_loop/proof_status.rs",
         "validator/src/audit/gate92/mod.rs",
         "validator/src/audit/phase4_rebind.rs",
         "validator/src/cli/progress/checkpoint.rs",
@@ -47,7 +49,7 @@ fn namespace_semantic_names_reject_goal_work_identifier_names() {
     let root = crate::self_tests::boundaries::support::temp_root("namespace-goal-work-identifier");
     write_text(
         &root.join("validator/src/cli/observe/command_roundtrip/mod.rs"),
-        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) struct ProductionProof;\npub(crate) enum CommandState { FitCommand, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool) {}\nlet production_proof = true;\nobservability_status: bool,\n",
+        "pub(crate) mod helpers;\npub(crate) mod utils;\npub(crate) mod common;\npub(crate) mod shared;\npub(crate) struct ProductionProof;\npub(crate) struct ProofStatus;\npub(crate) enum CommandState { FitCommand, ProofState, }\npub(crate) const FIT_PATH: &str = \"x\";\npub(crate) const FAILURE_ID: &str = \"final_packet_proof_status_not_pass\";\npub(crate) fn fit_command(fit_path: bool) {}\npub(crate) fn fit_goal() {}\npub(crate) fn fit_slice() {}\npub(crate) fn production_proof() {}\npub(crate) fn proof_status() {}\npub(crate) fn validation_proof() {}\npub(crate) fn production_evidence() {}\npub(crate) fn phase4_rebind() {}\npub(crate) fn checkpoint_progress() {}\npub(crate) fn todo_repair() {}\npub(crate) fn run_command(production_proof: bool, proof_status: bool) {}\nlet production_proof = true;\nlet proof_status = true;\nobservability_status: bool,\n",
     );
     let failures = crate::audit::namespace::law::value_failures(&root, &json!({"resources":[]}));
     assert!(
@@ -59,6 +61,13 @@ fn namespace_semantic_names_reject_goal_work_identifier_names() {
     );
     assert!(
         contains(&failures, "namespace_validator_source_generic_identifier"),
+        "{failures:?}"
+    );
+    assert!(
+        contains(
+            &failures,
+            "namespace_validator_source_product_opaque_goal_work_string"
+        ),
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup namespace goal work identifier");

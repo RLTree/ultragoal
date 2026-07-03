@@ -1,5 +1,7 @@
 mod context;
+mod graph;
 mod receipt;
+mod surfaces;
 #[cfg(test)]
 mod tests;
 

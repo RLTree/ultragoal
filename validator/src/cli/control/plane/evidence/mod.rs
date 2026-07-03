@@ -3,7 +3,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 mod item;
-mod status;
+mod receipt_evaluation;
 mod validate;
 
 const SOURCE_AUDIT: &str = "validation_artifacts/ultragoal-audit/validator-receipt.json";

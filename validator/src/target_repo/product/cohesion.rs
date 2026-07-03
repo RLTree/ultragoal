@@ -192,7 +192,7 @@ fn human_attention_error(repo: &Path, receipt: &Value) -> Option<String> {
         return Some("human_review_queue_exception evidence schema mismatch".to_string());
     }
     if payload.get("status").and_then(Value::as_str) != Some("pass") {
-        return Some("human_review_queue_exception evidence status not pass".to_string());
+        return Some("human_review_queue_exception authority receipt status not pass".to_string());
     }
     if payload.get("product_surface_id") != receipt.get("product_surface_id") {
         return Some("human_review_queue_exception product surface mismatch".to_string());

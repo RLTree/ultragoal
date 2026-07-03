@@ -60,7 +60,7 @@ fn final_packet_proof_requires_same_candidate_dereferenced_packet() {
     support::write_proof(&root, &bad_status);
     let failures = crate::audit::final_packet::package_failures(&root, &store);
     for expected in [
-        "final_packet_proof_status_not_pass",
+        "final_packet_authority_status_not_pass",
         "final_packet_proof_claim_ceiling_not_verified",
         "final_packet_proof_cli_performance_not_pass",
     ] {

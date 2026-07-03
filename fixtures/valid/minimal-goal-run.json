@@ -4234,7 +4234,7 @@
       "validator/src/cli/control/plane/emit.rs",
       "validator/src/cli/control/plane/evidence/mod.rs",
       "validator/src/cli/control/plane/evidence/item.rs",
-      "validator/src/cli/control/plane/evidence/status/mod.rs",
+      "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
       "validator/src/cli/control/plane/evidence/validate.rs",
       "validator/src/cli/control/plane/path.rs",
       "validator/src/cli/control/plane/proof/mod.rs",
@@ -5374,7 +5374,7 @@
         "status": "pass"
       },
       "validator-execution-provenance": {
-        "details": "session_log_hardening_package_digest_mismatch; final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet_proof_source_audit_status_not_pass; final_packet_proof_source_audit_target_digest_mismatch; fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/status/mod.rs",
+        "details": "session_log_hardening_package_digest_mismatch; final_packet_proof_ref_embedded_status_not_pass:source_audit; final_packet_proof_source_audit_status_not_pass; final_packet_proof_source_audit_target_digest_mismatch; fixtures/valid/non-product-engineering-language.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs; fixtures/valid/non-product-feature-completion.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs; fixtures/valid/two-lane-ready-dependency.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs; fixtures/valid/minimal-goal-run.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs; fixtures/valid/proof-surface-negative-probe.json: validator_receipt_not_runtime_provenance: validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
         "status": "fail"
       },
       "validator-theater-miswire-resistance": {
@@ -20555,8 +20555,8 @@
           "path": "validator/src/cli/control/plane/evidence/item.rs"
         },
         {
-          "digest": "sha256:565ba68c79c854c74fa475c664c15a55fa6c41b7705f53e2f2d7e7987409e482",
-          "path": "validator/src/cli/control/plane/evidence/status/mod.rs"
+          "digest": "sha256:c33b8fcad17d390e44bd47fe9f8a8df22e394c7b90c73251fea1766d7b8d3319",
+          "path": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs"
         },
         {
           "digest": "sha256:3ab98e4668453308643309ee07ac92ef7ef97c8e75c66c6876afd1b4529d856f",

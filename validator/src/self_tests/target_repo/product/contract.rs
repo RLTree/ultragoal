@@ -155,7 +155,7 @@ fn target_product_cohesion_exception_artifacts_fail_and_pass_on_same_surface() {
     });
     write_journey(&failed, &journey);
     let failed_row = audit(&failed, true);
-    assert!(detail(&failed_row).contains("evidence status not pass"));
+    assert!(detail(&failed_row).contains("authority receipt status not pass"));
     std::fs::remove_dir_all(failed).expect("cleanup failed exception");
 
     let valid = copied_product("target-product-exception-valid");

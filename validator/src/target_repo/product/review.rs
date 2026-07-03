@@ -42,7 +42,7 @@ fn review_evidence_error(
         return Some("reviewer authority evidence schema mismatch".to_string());
     }
     if payload.get("status").and_then(Value::as_str) != Some("pass") {
-        return Some("reviewer authority evidence status not pass".to_string());
+        return Some("reviewer authority receipt status not pass".to_string());
     }
     if payload.get("actor_disjoint").and_then(Value::as_bool) != Some(true) {
         return Some("reviewer authority evidence must be actor-disjoint".to_string());

@@ -26,7 +26,7 @@ pub(crate) fn receipt_from_evidence(
     )
 }
 
-pub(crate) fn receipt_from_production_evidence(
+pub(crate) fn receipt_from_control_graph(
     root: &Path,
     package_digest: String,
     operation: ControlOperation,

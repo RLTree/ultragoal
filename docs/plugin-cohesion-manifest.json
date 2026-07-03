@@ -1404,9 +1404,9 @@
     "validator/src/cli/control/plane/emit.rs",
     "validator/src/cli/control/plane/evidence/item.rs",
     "validator/src/cli/control/plane/evidence/mod.rs",
-    "validator/src/cli/control/plane/evidence/status/label_failures.rs",
-    "validator/src/cli/control/plane/evidence/status/mod.rs",
-    "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
+    "validator/src/cli/control/plane/evidence/receipt_evaluation/label_failures.rs",
+    "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
+    "validator/src/cli/control/plane/evidence/receipt_evaluation/typed_and_surfaces.rs",
     "validator/src/cli/control/plane/evidence/validate.rs",
     "validator/src/cli/control/plane/mod.rs",
     "validator/src/cli/control/plane/path.rs",
@@ -1476,7 +1476,7 @@
     {
       "from": "harness-ultragoal:fit-repo",
       "to": "templates/.harness/coverage-manifest.json",
-      "reason": "repo fitting installs or verifies coverage scope authority"
+      "reason": "fit-repo entrypoint installs or verifies coverage scope authority"
     },
     {
       "from": "harness-ultragoal:fit-repo",
@@ -1546,7 +1546,7 @@
     {
       "from": "validator/src/cli/control/plane/emit.rs",
       "to": "validator/src/cli/control/plane/evidence/mod.rs",
-      "reason": "CLI control receipts must include a typed production evidence graph, not summary-only fail-closed text"
+      "reason": "CLI control receipts must include a typed control graph, not summary-only fail-closed text"
     },
     {
       "from": "validator/src/cli/control/plane/evidence/mod.rs",
@@ -1555,23 +1555,23 @@
     },
     {
       "from": "validator/src/cli/control/plane/evidence/item.rs",
-      "to": "validator/src/cli/control/plane/evidence/status/mod.rs",
+      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
       "reason": "Evidence graph items use label-specific typed validators instead of pass-shaped receipt rows"
     },
     {
-      "from": "validator/src/cli/control/plane/evidence/status/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/status/label_failures.rs",
-      "reason": "Status-label tests prove typed package-surface schema errors and stale proof labels fail without row-shape authority"
+      "from": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
+      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/label_failures.rs",
+      "reason": "Receipt-evaluation tests prove typed package-surface schema errors and stale proof labels fail without row-shape authority"
     },
     {
-      "from": "validator/src/cli/control/plane/evidence/status/mod.rs",
-      "to": "validator/src/cli/control/plane/evidence/status/typed_and_surfaces.rs",
-      "reason": "Status-label typed status and package-surface tests are routed into semantic leaves instead of an over-cap catch-all test file"
+      "from": "validator/src/cli/control/plane/evidence/receipt_evaluation/mod.rs",
+      "to": "validator/src/cli/control/plane/evidence/receipt_evaluation/typed_and_surfaces.rs",
+      "reason": "Receipt-evaluation typed status and package-surface tests are routed into semantic leaves instead of an over-cap catch-all test file"
     },
     {
       "from": "validator/src/cli/control/plane/evidence/mod.rs",
       "to": "validator/src/cli/control/plane/evidence/validate.rs",
-      "reason": "Receipt validators reject missing, synthetic, stale, or non-production evidence graphs"
+      "reason": "Receipt validators reject missing, synthetic, stale, or non-authoritative control graphs"
     },
     {
       "from": "validator/src/cli/control/plane/mod.rs",
@@ -1581,7 +1581,7 @@
     {
       "from": "validator/src/cli/control/plane/mod.rs",
       "to": "validator/src/cli/control/plane/proof/mod.rs",
-      "reason": "CLI control operations dereference production evidence through the typed proof module"
+      "reason": "CLI control operations dereference authority records through the typed proof module"
     },
     {
       "from": "validator/src/cli/control/plane/proof/mod.rs",
@@ -1666,7 +1666,7 @@
     {
       "from": "validator/src/self_tests/law/anti_theater_dependencies/mod.rs",
       "to": "validator/src/self_tests/law/anti_theater_dependencies/evidence.rs",
-      "reason": "Anti-theater dependency tests share the complete production evidence graph, including install/cache audit labels, through a semantic test helper"
+      "reason": "Anti-theater dependency tests share the complete control graph, including install/cache audit labels, through a semantic test helper"
     },
     {
       "from": "validator/src/cli/control/plane/mod.rs",
