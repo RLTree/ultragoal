@@ -49,7 +49,10 @@ fn explain_fails_closed_when_matching_receipt_has_no_event_binding() {
         receipt["where_failed"],
         "observe.target.receipt_event_binding"
     );
-    assert_eq!(receipt["claim_impact"], "observability_fitting_blocked");
+    assert_eq!(
+        receipt["claim_impact"],
+        "observability_reconciliation_blocked"
+    );
     assert_eq!(receipt["explanation"]["fallback_used"], true);
     assert!(
         receipt["explanation"]["root_cause"]

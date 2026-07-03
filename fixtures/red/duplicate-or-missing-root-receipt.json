@@ -1,6 +1,6 @@
 {
   "schema": "harness-ultragoal.red-packet.v1",
-  "id": "duplicate-or-missing-root-phase",
+  "id": "duplicate-or-missing-root-receipt",
   "expected_failure": {
     "check_id": "root-verification-phase-coverage",
     "error": "root_phase_missing_or_duplicate"

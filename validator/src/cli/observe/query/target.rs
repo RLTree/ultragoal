@@ -130,7 +130,7 @@ fn fallback_event_from_receipt(value: &Value) -> Value {
         "next_repair": format!(
             "rerun {operation} with real event emission, then query logs metrics traces by run/correlation/current digest"
         ),
-        "claim_impact": "observability_fitting_blocked",
+        "claim_impact": "observability_reconciliation_blocked",
         "observed_receipt_status": value.get("status").cloned().unwrap_or(Value::Null),
         "fallback_only": true,
         "law_id": value.get("law_id").cloned().unwrap_or(Value::Null),

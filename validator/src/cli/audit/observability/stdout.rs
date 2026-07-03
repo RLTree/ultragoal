@@ -93,7 +93,7 @@ fn root_group(detail: &str) -> &'static str {
     } else if detail.contains("missing=[") || detail.contains("plugin_inventory") {
         "package_inventory_mismatch"
     } else if detail.contains("observability_") {
-        "observability_fitting_incomplete"
+        "observability_reconciliation_incomplete"
     } else {
         "source_audit_check_failure"
     }

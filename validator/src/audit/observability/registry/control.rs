@@ -2,10 +2,10 @@ use serde_json::Value;
 
 pub(super) fn check(value: &Value, out: &mut Vec<String>) {
     let Some(board) = value
-        .get("fitting_control_board")
+        .get("observability_control_board")
         .and_then(Value::as_object)
     else {
-        out.push("observability_fitting_control_board_missing".to_string());
+        out.push("observability_control_board_missing".to_string());
         return;
     };
     let mut incomplete = Vec::new();
@@ -17,18 +17,18 @@ pub(super) fn check(value: &Value, out: &mut Vec<String>) {
         }
     }
     let actual_status = if incomplete.is_empty() {
-        "fitted"
+        "observable"
     } else {
         "blocked"
     };
     if board.get("status").and_then(Value::as_str) != Some(actual_status) {
         out.push(format!(
-            "observability_fitting_control_board_status_mismatch:{actual_status}"
+            "observability_control_board_status_mismatch:{actual_status}"
         ));
     }
     require_first_incomplete(board, &incomplete, out);
     if !non_empty_string(board.get("claim_impact")) {
-        out.push("observability_fitting_control_board_claim_impact_missing".to_string());
+        out.push("observability_control_board_claim_impact_missing".to_string());
     }
 }
 
@@ -42,7 +42,7 @@ fn families() -> Vec<ControlFamily> {
     let mut out = vec![
         ControlFamily {
             board_key: "commands",
-            inventory_key: "fitting_inventory",
+            inventory_key: "command_observability_inventory",
             ids: super::command_inventory::REQUIRED_COMMANDS,
         },
         ControlFamily {
@@ -82,25 +82,27 @@ fn require_first_incomplete(
     match (incomplete.first(), first) {
         (None, None) => {}
         (None, Some(_)) => {
-            out.push("observability_fitting_control_board_stale_first_incomplete".to_string());
+            out.push("observability_control_board_stale_first_incomplete".to_string());
         }
         (Some((family, expected)), Some(actual)) => {
             if actual.get("family").and_then(Value::as_str) != Some(*family)
                 || actual.get("id").and_then(Value::as_str) != Some(expected.id.as_str())
-                || actual.get("fitting_status").and_then(Value::as_str)
+                || actual.get("observability_status").and_then(Value::as_str)
                     != Some(expected.status.as_str())
-                || actual.get("next_unfitted_surface").and_then(Value::as_str)
-                    != Some(expected.next_unfitted_surface.as_str())
+                || actual
+                    .get("next_unobservable_surface")
+                    .and_then(Value::as_str)
+                    != Some(expected.next_unobservable_surface.as_str())
             {
                 out.push(format!(
-                    "observability_fitting_control_board_first_incomplete_mismatch:{family}:{}",
+                    "observability_control_board_first_incomplete_mismatch:{family}:{}",
                     expected.id
                 ));
             }
         }
         (Some((family, expected)), None) => {
             out.push(format!(
-                "observability_fitting_control_board_first_incomplete_missing:{family}:{}",
+                "observability_control_board_first_incomplete_missing:{family}:{}",
                 expected.id
             ));
         }
@@ -110,9 +112,9 @@ fn require_first_incomplete(
 #[derive(Default)]
 struct Counts {
     total: usize,
-    fitted: usize,
-    partially_fitted: usize,
-    unfitted: usize,
+    observable: usize,
+    partially_observable: usize,
+    unobservable: usize,
 }
 
 impl Counts {
@@ -123,10 +125,10 @@ impl Counts {
         };
         for row in rows.values() {
             counts.total += 1;
-            match row.get("fitting_status").and_then(Value::as_str) {
-                Some("fitted") => counts.fitted += 1,
-                Some("partially_fitted") => counts.partially_fitted += 1,
-                Some("unfitted") => counts.unfitted += 1,
+            match row.get("observability_status").and_then(Value::as_str) {
+                Some("observable") => counts.observable += 1,
+                Some("partially_observable") => counts.partially_observable += 1,
+                Some("unobservable") => counts.unobservable += 1,
                 _ => {}
             }
         }
@@ -146,19 +148,19 @@ impl Counts {
             .and_then(Value::as_object)
         else {
             out.push(format!(
-                "observability_fitting_control_board_family_missing:{family}"
+                "observability_control_board_family_missing:{family}"
             ));
             return;
         };
         for (key, expected) in [
             ("total", self.total),
-            ("fitted", self.fitted),
-            ("partially_fitted", self.partially_fitted),
-            ("unfitted", self.unfitted),
+            ("observable", self.observable),
+            ("partially_observable", self.partially_observable),
+            ("unobservable", self.unobservable),
         ] {
             if row.get(key).and_then(Value::as_u64) != Some(expected as u64) {
                 out.push(format!(
-                    "observability_fitting_control_board_count_mismatch:{family}:{key}"
+                    "observability_control_board_count_mismatch:{family}:{key}"
                 ));
             }
         }
@@ -168,7 +170,7 @@ impl Counts {
 struct IncompleteRow {
     id: String,
     status: String,
-    next_unfitted_surface: String,
+    next_unobservable_surface: String,
 }
 
 fn first_incomplete(
@@ -179,15 +181,15 @@ fn first_incomplete(
     let rows = value.get(inventory_key).and_then(Value::as_object)?;
     required_ids.iter().find_map(|id| {
         rows.get(*id).and_then(|row| {
-            let status = row.get("fitting_status").and_then(Value::as_str)?;
-            if status == "fitted" {
+            let status = row.get("observability_status").and_then(Value::as_str)?;
+            if status == "observable" {
                 return None;
             }
             Some(IncompleteRow {
                 id: (*id).to_string(),
                 status: status.to_string(),
-                next_unfitted_surface: row
-                    .get("next_unfitted_surface")
+                next_unobservable_surface: row
+                    .get("next_unobservable_surface")
                     .and_then(Value::as_str)
                     .unwrap_or("")
                     .to_string(),

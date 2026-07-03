@@ -1,7 +1,7 @@
 use serde_json::json;
 use std::{fs, path::Path};
 
-pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &Path) {
+pub(in crate::self_tests::cli::observe::query) fn write_observable_inventory(root: &Path) {
     let mut rows = serde_json::Map::new();
     let mut surface_rows = serde_json::Map::new();
     let commands = crate::audit::observability::required_commands()
@@ -41,9 +41,9 @@ pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &
             },
             "research_inputs": super::research_inputs::inputs()
         },
-        "fitting_control_board": fitted_control_board(),
+        "observability_control_board": observable_control_board(),
         "row_requirements": row_requirements(),
-        "fitting_inventory": rows,
+        "command_observability_inventory": rows,
         "surface_inventory": surface_rows,
         "operating_loop_inventory": loop_rows,
         "signal_inventory": signal_rows
@@ -54,11 +54,11 @@ pub(in crate::self_tests::cli::observe::query) fn write_fitted_inventory(root: &
         &root.join("docs/generated/observability/command-inventory.json"),
         &inventory,
     )
-    .expect("write fitted inventory");
+    .expect("write observable inventory");
     super::receipts::write_command_roundtrip_receipts(root);
 }
 
-fn fitted_control_board() -> serde_json::Value {
+fn observable_control_board() -> serde_json::Value {
     let mut families = serde_json::Map::new();
     insert_counts(
         &mut families,
@@ -84,9 +84,9 @@ fn fitted_control_board() -> serde_json::Value {
         insert_counts(&mut families, board_key, ids.len());
     }
     json!({
-        "status": "fitted",
+        "status": "observable",
         "families": families,
-        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_fitted_same_candidate"
+        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_command_observable_same_candidate"
     })
 }
 
@@ -95,9 +95,9 @@ fn insert_counts(families: &mut serde_json::Map<String, serde_json::Value>, key:
         key.to_string(),
         json!({
             "total": len,
-            "fitted": len,
-            "partially_fitted": 0,
-            "unfitted": 0
+            "observable": len,
+            "partially_observable": 0,
+            "unobservable": 0
         }),
     );
 }
@@ -128,8 +128,8 @@ fn row_requirements() -> serde_json::Value {
         "same_candidate_query_roundtrip": true,
         "validator_enforced": true,
         "owner_surface_tracking": true,
-        "next_unfitted_surface_tracking": true,
-        "fitting_control_board": true,
+        "next_unobservable_surface_tracking": true,
+        "observability_control_board": true,
         "red_fixture_proof": true,
         "green_fixture_proof": true,
         "tamper_fixture_proof": true,

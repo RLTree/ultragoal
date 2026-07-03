@@ -20,7 +20,7 @@
     },
     "evidence_artifacts": {
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       },
       "minItems": 1,
       "type": "array"
@@ -190,7 +190,7 @@
     },
     "red_fixture_ids": {
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId"
       },
       "minItems": 1,
       "type": "array"

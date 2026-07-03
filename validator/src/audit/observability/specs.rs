@@ -33,7 +33,7 @@ const SURFACE_SPECS: &[SurfaceObservabilitySpec] = &[SurfaceObservabilitySpec {
     family: "package",
     command_ids: PACKAGE_COMMANDS,
     owner_surface: "command-family:package",
-    claim_impact: "source_package_observability_command_roundtrip_only_not_gate92_closure",
+    claim_impact: "source_package_observability_command_roundtrip_only_not_observability_product_closure",
 }];
 
 pub(crate) fn command(id: &str) -> Option<CommandObservabilitySpec> {
@@ -92,7 +92,7 @@ mod tests {
     }
 
     #[test]
-    fn unknown_specs_are_not_silently_fitted() {
+    fn unknown_specs_do_not_become_observable() {
         assert!(command("final-packet prove").is_none());
         assert!(family("unknown").is_none());
     }

@@ -66,7 +66,7 @@ fn attach_records_registry_binding_and_claim_blockers() {
 }
 
 #[test]
-fn helpers_preserve_specific_failure_and_task_counts() {
+fn telemetry_rows_preserve_specific_failure_and_task_counts() {
     assert_eq!(why_failed(&json!({"status":"pass"})), "none");
 
     let failures = json!({

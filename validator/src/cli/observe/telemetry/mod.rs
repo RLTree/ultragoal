@@ -56,18 +56,18 @@ fn command_inventory_failure_summary(root: &Path, failures: &[String]) -> String
     )
     .unwrap_or(Value::Null);
     let board = inventory
-        .get("fitting_control_board")
+        .get("observability_control_board")
         .unwrap_or(&Value::Null);
     let first_incomplete = board.get("first_incomplete").unwrap_or(&Value::Null);
     format!(
-        "observability command inventory incomplete: status={} total_failures={} first_failure={} control_board_first_family={} control_board_first_incomplete={} control_board_first_status={} next_unfitted_surface={} family_counts={}",
+        "observability command inventory incomplete: status={} total_failures={} first_failure={} control_board_first_family={} control_board_first_incomplete={} control_board_first_status={} next_unobservable_surface={} family_counts={}",
         text_field(board, "status", "unknown"),
         failures.len(),
         failures.first().map(String::as_str).unwrap_or("none"),
         text_field(first_incomplete, "family", "unknown"),
         text_field(first_incomplete, "id", "unknown"),
-        text_field(first_incomplete, "fitting_status", "unknown"),
-        text_field(first_incomplete, "next_unfitted_surface", "unknown"),
+        text_field(first_incomplete, "observability_status", "unknown"),
+        text_field(first_incomplete, "next_unobservable_surface", "unknown"),
         family_counts(board)
     )
 }
@@ -83,9 +83,9 @@ fn family_counts(board: &Value) -> String {
                 "{}={}/{}/{}/{}",
                 family,
                 count_field(row, "total"),
-                count_field(row, "fitted"),
-                count_field(row, "partially_fitted"),
-                count_field(row, "unfitted")
+                count_field(row, "observable"),
+                count_field(row, "partially_observable"),
+                count_field(row, "unobservable")
             )
         })
         .collect::<Vec<_>>();

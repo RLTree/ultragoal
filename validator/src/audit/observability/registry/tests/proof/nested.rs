@@ -5,7 +5,7 @@ use serde_json::json;
 #[test]
 fn command_inventory_accepts_nested_law_receipt_observability_binding() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-receipt");
-    write_registry_root(&root, super::super::support::fitted_inventory());
+    write_registry_root(&root, super::super::support::observable_inventory());
     write_valid_fixture(&root);
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let run = "run-final-packet";
@@ -46,7 +46,9 @@ fn command_inventory_accepts_nested_law_receipt_observability_binding() {
     );
     assert!(
         failures.iter().any(|item| {
-            item.starts_with("observability_command_fitting_receipt_not_current:final-packet prove")
+            item.starts_with(
+                "observability_command_telemetry_receipt_not_current:final-packet prove",
+            )
         }),
         "{failures:?}"
     );
@@ -56,7 +58,7 @@ fn command_inventory_accepts_nested_law_receipt_observability_binding() {
 #[test]
 fn nested_command_inventory_rejects_high_cardinality_metric_labels() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-nested-metric-labels");
-    write_registry_root(&root, super::super::support::fitted_inventory());
+    write_registry_root(&root, super::super::support::observable_inventory());
     write_valid_fixture(&root);
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let run = "run-final-packet";
@@ -90,7 +92,7 @@ fn nested_command_inventory_rejects_high_cardinality_metric_labels() {
     );
     assert!(
         failures.iter().any(|item| item
-            .starts_with("observability_command_fitting_query_not_same_run:final-packet prove")),
+            .starts_with("observability_command_telemetry_query_not_same_run:final-packet prove")),
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup");

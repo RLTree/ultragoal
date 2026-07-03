@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind};
 use std::path::Path;
 
 #[test]
-fn artifact_boundary_result_helpers_are_testable() {
+fn artifact_boundary_result_contracts_are_testable() {
     let missing = Error::new(ErrorKind::NotFound, "forced missing");
     assert!(
         crate::target_repo::artifact_refs::target_root_result(Err(missing))
@@ -51,7 +51,7 @@ fn artifact_boundary_result_helpers_are_testable() {
 }
 
 #[test]
-fn package_artifact_boundary_result_helpers_are_testable() {
+fn package_artifact_boundary_result_contracts_are_testable() {
     assert!(
         crate::package::artifact::refs::package_root_result(Err(Error::new(
             ErrorKind::NotFound,
@@ -119,7 +119,7 @@ fn audit_artifact_digest_zero_is_testable() {
 }
 
 #[test]
-fn coverage_digest_boundary_helpers_are_testable() {
+fn coverage_digest_boundary_contracts_are_testable() {
     assert!(
         crate::claim_semantics::coverage::digests::source_rel_path(
             Path::new("/repo"),

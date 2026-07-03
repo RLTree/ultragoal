@@ -21,7 +21,7 @@ pub(super) struct EvaluateInput<'a> {
 }
 
 pub(super) fn evaluate(input: EvaluateInput<'_>) -> super::FixtureResults {
-    let shared = Shared::new(&input);
+    let runtime = FixtureRuntime::new(&input);
     let mut pure_rows = Vec::new();
     let mut isolated_rows = Vec::new();
     for row in input.items {
@@ -36,7 +36,7 @@ pub(super) fn evaluate(input: EvaluateInput<'_>) -> super::FixtureResults {
         let scheduled = crate::scheduler::run_ordered(
             input.scheduler,
             TaskClass::PureReadParallel,
-            tasks(shared.clone(), pure_rows, RowMode::PureRead),
+            tasks(runtime.clone(), pure_rows, RowMode::PureRead),
         );
         metrics.push(scheduled.metrics);
         rows.extend(scheduled.values);
@@ -45,7 +45,7 @@ pub(super) fn evaluate(input: EvaluateInput<'_>) -> super::FixtureResults {
         let scheduled = crate::scheduler::run_ordered(
             input.scheduler,
             TaskClass::IsolatedTempWriteParallel,
-            tasks(shared, isolated_rows, RowMode::IsolatedTempWrite),
+            tasks(runtime, isolated_rows, RowMode::IsolatedTempWrite),
         );
         metrics.push(scheduled.metrics);
         rows.extend(scheduled.values);
@@ -63,7 +63,7 @@ enum RowMode {
 }
 
 #[derive(Clone)]
-struct Shared {
+struct FixtureRuntime {
     root: Arc<PathBuf>,
     store: Arc<SchemaStore>,
     validator_digests: Arc<BTreeMap<String, String>>,
@@ -74,7 +74,7 @@ struct Shared {
     runtime_input_digests: Arc<Vec<Value>>,
 }
 
-impl Shared {
+impl FixtureRuntime {
     fn new(input: &EvaluateInput<'_>) -> Self {
         Self {
             root: Arc::new(input.root.to_path_buf()),
@@ -91,16 +91,16 @@ impl Shared {
 
 type RowTask = Box<dyn FnOnce() -> (String, Value) + Send>;
 
-fn tasks(shared: Shared, rows: Vec<Value>, mode: RowMode) -> Vec<RowTask> {
+fn tasks(runtime: FixtureRuntime, rows: Vec<Value>, mode: RowMode) -> Vec<RowTask> {
     rows.into_iter()
         .map(|row| {
-            let shared = shared.clone();
-            Box::new(move || evaluate_row(shared, row, mode)) as RowTask
+            let runtime = runtime.clone();
+            Box::new(move || evaluate_row(runtime, row, mode)) as RowTask
         })
         .collect()
 }
 
-fn evaluate_row(shared: Shared, row: Value, mode: RowMode) -> (String, Value) {
+fn evaluate_row(runtime: FixtureRuntime, row: Value, mode: RowMode) -> (String, Value) {
     let row_id = row
         .get("id")
         .and_then(Value::as_str)
@@ -108,31 +108,31 @@ fn evaluate_row(shared: Shared, row: Value, mode: RowMode) -> (String, Value) {
         .to_string();
     let packet_rel = row.get("packet_path").and_then(Value::as_str).unwrap_or("");
     let result = match mode {
-        RowMode::PureRead => evaluate_row_at_root(&shared, &row, &shared.root),
+        RowMode::PureRead => evaluate_row_at_root(&runtime, &row, &runtime.root),
         RowMode::IsolatedTempWrite => super::isolation::with_isolated_root(
-            &shared.root,
+            &runtime.root,
             &row_id,
             &[packet_rel],
-            |isolated_root| evaluate_row_at_root(&shared, &row, isolated_root),
+            |isolated_root| evaluate_row_at_root(&runtime, &row, isolated_root),
         )
         .unwrap_or_else(|error| invalid_row(&row, &error)),
     };
     (row_id, result)
 }
 
-fn evaluate_row_at_root(shared: &Shared, row: &Value, root: &Path) -> Value {
-    let mut runtime_digest_cache = (*shared.runtime_digest_cache).clone();
+fn evaluate_row_at_root(runtime: &FixtureRuntime, row: &Value, root: &Path) -> Value {
+    let mut runtime_digest_cache = (*runtime.runtime_digest_cache).clone();
     let mut semantic_cache = crate::claim_semantics::SemanticCache::default();
     super::result_for_row(
         root,
-        &shared.store,
-        &shared.validator_digests,
+        &runtime.store,
+        &runtime.validator_digests,
         row,
-        &shared.target_digest,
+        &runtime.target_digest,
         &mut runtime_digest_cache,
-        &shared.runtime_red_fixture_ids,
-        &shared.runtime_red_fixtures,
-        &shared.runtime_input_digests,
+        &runtime.runtime_red_fixture_ids,
+        &runtime.runtime_red_fixtures,
+        &runtime.runtime_input_digests,
         &mut semantic_cache,
     )
 }

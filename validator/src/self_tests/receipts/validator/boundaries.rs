@@ -69,7 +69,7 @@ fn validator_receipt_reports_unknown_external_path_labels() {
 }
 
 #[test]
-fn validator_receipt_helper_errors_are_typed_and_testable() {
+fn validator_receipt_error_paths_are_typed_and_testable() {
     assert!(
         crate::audit::receipt::current_exe_result(Err(std::io::Error::other("missing exe")))
             .expect_err("current exe error")

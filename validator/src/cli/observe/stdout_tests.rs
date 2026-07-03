@@ -21,7 +21,7 @@ fn command(operation: ObserveOperation) -> ObserveCommand {
 }
 
 #[test]
-fn stdout_query_helpers_report_bounded_match_and_failure_context() {
+fn stdout_query_contracts_report_bounded_match_and_failure_context() {
     let pass = json!({"status":"pass","row_count":2});
     assert!(query_matched(&pass));
     assert_eq!(query_status(Some(&json!({"status":"pass"}))), "pass");

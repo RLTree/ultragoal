@@ -16,16 +16,13 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
     std::fs::create_dir_all(root.join("fixtures/valid")).expect("fixtures");
     std::fs::create_dir_all(root.join("skills/demo")).expect("skill dir");
     std::fs::create_dir_all(root.join("__pycache__")).expect("bytecode dir");
-    std::fs::create_dir_all(root.join("artifacts/root-phase-receipts")).expect("artifacts");
+    std::fs::create_dir_all(root.join("artifacts/root-receipts")).expect("artifacts");
     std::fs::write(root.join("fixtures/valid/bad.json"), "{}").expect("bad fixture");
     std::fs::write(root.join("root-ref.md"), "root").expect("root ref");
     std::fs::write(root.join("skills/demo/SKILL.md"), "`root-ref.md`\n").expect("skill");
     std::fs::write(root.join("__pycache__/x.pyc"), "bytecode").expect("bytecode");
-    std::fs::write(
-        root.join("artifacts/root-phase-receipts/post-merge.json"),
-        "{}",
-    )
-    .expect("root phase artifact");
+    std::fs::write(root.join("artifacts/root-receipts/post-merge.json"), "{}")
+        .expect("root phase artifact");
     std::fs::write(
         root.join("README.md"),
         "Current digest sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n",
@@ -49,7 +46,7 @@ fn package_checks_route_schema_inventory_skill_and_final_hygiene_failures() {
             "generated_examples":[],
             "resources":[
                 "../escape.txt",
-                "artifacts/root-phase-receipts/post-merge.json",
+                "artifacts/root-receipts/post-merge.json",
                 "private.txt"
             ]
         }),

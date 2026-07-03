@@ -8,7 +8,7 @@ use std::path::Path;
 pub fn check_ids(store: &SchemaStore) -> Vec<String> {
     store
         .schemas
-        .get("common-defs.schema.json")
+        .get("schema-authority-primitives.schema.json")
         .and_then(|schema| schema.pointer("/$defs/requiredValidatorCheckId/enum"))
         .and_then(Value::as_array)
         .map(|rows| {

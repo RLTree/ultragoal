@@ -236,7 +236,7 @@ fn fallback_event_from_receipt(value: &Value) -> Value {
         "next_repair": format!(
             "rerun {operation} with real event emission, then query logs metrics traces by run/correlation/current digest"
         ),
-        "claim_impact": "observability_fitting_blocked",
+        "claim_impact": "observability_reconciliation_blocked",
         "observed_receipt_status": get("status"),
         "fallback_only": true,
         "law_id": get("law_id"),

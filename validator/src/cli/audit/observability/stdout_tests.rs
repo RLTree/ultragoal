@@ -30,13 +30,13 @@ fn audit_failure_summary_groups_stale_inventory_and_observability_roots() {
         "checks": {
             "gate-92": {
                 "status": "fail",
-                "details": "observability_command_fitting_query_not_current"
+                "details": "observability_command_telemetry_query_not_current"
             }
         }
     });
     assert!(
         audit_failure_summary(&observability, None, 1)
-            .contains("root_group=observability_fitting_incomplete")
+            .contains("root_group=observability_reconciliation_incomplete")
     );
 }
 

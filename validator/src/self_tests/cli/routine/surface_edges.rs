@@ -67,7 +67,7 @@ fn routine_red_edges_reject_missing_help_and_script_surfaces() {
 }
 
 #[test]
-fn routine_route_assertion_helpers_fail_closed_for_wrong_routes() {
+fn routine_route_assertions_fail_closed_for_wrong_routes() {
     for assertion in [
         || assert_help(crate::Command::PackageDigest),
         || assert_routine(crate::Command::PackageDigest),

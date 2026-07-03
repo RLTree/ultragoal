@@ -46,7 +46,7 @@ fn archive_writer_and_archive_builder_cover_production_zip_path() {
 }
 
 #[test]
-fn audit_artifact_helpers_cover_schema_enum_and_red_fallbacks() {
+fn audit_artifact_schema_edges_cover_enum_and_red_fallbacks() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let store = crate::schema_catalog::load(&root);
     let check_ids = crate::audit::artifacts::check_ids(&store);

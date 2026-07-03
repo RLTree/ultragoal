@@ -348,7 +348,7 @@
           "downstream_lane_id": "LANE-002",
           "post_merge_receipt": {
             "digest": "sha256:c1c666dbaab8e87033bcd163eb47c4797c853dfc86ffbd96b7eb658064e734c7",
-            "path": "validation_artifacts/ultragoal-audit/root-phase-post-merge-integration-LANE-001-receipt.json"
+            "path": "validation_artifacts/ultragoal-audit/root-receipt-post-merge-integration-LANE-001.json"
           },
           "reason": "Upstream lane merged and post-merge verification passed; downstream lane was explicitly resumed for review.",
           "thread_or_session_id": "thread-2",
@@ -472,13 +472,13 @@
       "post_merge_integration_gate": {
         "artifact_receipt": {
           "digest": "sha256:c1c666dbaab8e87033bcd163eb47c4797c853dfc86ffbd96b7eb658064e734c7",
-          "path": "validation_artifacts/ultragoal-audit/root-phase-post-merge-integration-LANE-001-receipt.json"
+          "path": "validation_artifacts/ultragoal-audit/root-receipt-post-merge-integration-LANE-001.json"
         },
         "blocking": true,
         "claim_ceiling_impact": "required before integration claim",
         "command_receipt": {
           "artifact_digest": "sha256:c1c666dbaab8e87033bcd163eb47c4797c853dfc86ffbd96b7eb658064e734c7",
-          "artifact_path": "validation_artifacts/ultragoal-audit/root-phase-post-merge-integration-LANE-001-receipt.json",
+          "artifact_path": "validation_artifacts/ultragoal-audit/root-receipt-post-merge-integration-LANE-001.json",
           "command": "validate post merge integration gate",
           "completed_at": "2026-06-16T00:00:02Z",
           "cwd": "/repo",
@@ -884,7 +884,7 @@
       "fixtures/red/blocked-lane-branch-overlap.json",
       "fixtures/red/blocked-lane-browser-profile-root-overlap.json",
       "fixtures/red/blocked-lane-port-overlap.json",
-      "fixtures/red/blocked-lane-scratch-root-overlap.json",
+      "fixtures/red/blocked-lane-temp-root-overlap.json",
       "fixtures/red/blocked-lane-state-root-overlap.json",
       "fixtures/red/blocked-lane-tool-cache-root-overlap.json",
       "fixtures/red/blocked-lane-workspace-overlap.json",
@@ -1059,7 +1059,7 @@
       "fixtures/red/downstream-launched-on-unverified-claim.json",
       "fixtures/red/duplicate-check-rows.json",
       "fixtures/red/duplicate-completion-claim-id.json",
-      "fixtures/red/duplicate-or-missing-root-phase.json",
+      "fixtures/red/duplicate-or-missing-root-receipt.json",
       "fixtures/red/duplicate-ready-for-merge-receipt-lane-id.json",
       "fixtures/red/duplicate-red-fixture-rows.json",
       "fixtures/red/execplan-no-handback-prototype-promotion-discard-decision-log-current-red.json",
@@ -1221,7 +1221,7 @@
       "fixtures/red/lane-artifact-root-dot-segment.json",
       "fixtures/red/lane-browser-profile-root-dot-segment.json",
       "fixtures/red/lane-owned-path-dot-segment.json",
-      "fixtures/red/lane-scratch-root-dot-segment.json",
+      "fixtures/red/lane-temp-root-dot-segment.json",
       "fixtures/red/lane-state-root-dot-segment.json",
       "fixtures/red/lane-tool-cache-root-dot-segment.json",
       "fixtures/red/lane-workspace-dot-segment.json",
@@ -1270,7 +1270,7 @@
       "fixtures/red/namespace-vague-lib-domain-path.json",
       "fixtures/red/namespace-vague-shared-domain-path.json",
       "fixtures/red/nested-overlapping-active-lanes.json",
-      "fixtures/red/nested-scratch-root-active-lanes.json",
+      "fixtures/red/nested-temp-root-active-lanes.json",
       "fixtures/red/non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red.json",
       "fixtures/red/non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red.json",
       "fixtures/red/non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red.json",
@@ -1348,7 +1348,7 @@
       "fixtures/red/plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red.json",
       "fixtures/red/plugin-journey-only-fit-repo-evidence.json",
       "fixtures/red/plugin-manifest-absolute-path.json",
-      "fixtures/red/plugin-manifest-active-root-phase-proof-resource.json",
+      "fixtures/red/plugin-manifest-active-root-receipt-resource.json",
       "fixtures/red/plugin-manifest-parent-relative-path.json",
       "fixtures/red/plugin-manifest-stale-active-proof-resource.json",
       "fixtures/red/plugin-manifest-symlink-path.json",
@@ -1699,7 +1699,7 @@
       "fixtures/red/review-round-status-fail-not-approval-receipt.json",
       "fixtures/red/review-round-substituted-persona-prompt.json",
       "fixtures/red/reviewer-to-gate-conversion-source-obligation-parity-red.json",
-      "fixtures/red/root-phase-pass-failed-command.json",
+      "fixtures/red/root-receipt-pass-failed-command.json",
       "fixtures/red/runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red.json",
       "fixtures/red/runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red.json",
       "fixtures/red/runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red.json",
@@ -2000,8 +2000,8 @@
       "fixtures/review-round/reports/simplicity_auditor.md",
       "fixtures/review-round/reports/verification_gatekeeper.md",
       "fixtures/review-round/valid/review-round-receipt.json",
-      "fixtures/root-phase-receipts/post-merge-integration-LANE-001-stale.fixture.json",
-      "fixtures/root-phase-receipts/post-merge-integration-LANE-001.fixture.json",
+      "fixtures/root-receipts/post-merge-integration-LANE-001-stale.fixture.json",
+      "fixtures/root-receipts/post-merge-integration-LANE-001.fixture.json",
       "fixtures/semantic-classification/wrong-contract-receipt.json",
       "fixtures/target-repo/red/agent-standards/01-namespace-and-progressive-disclosure.md",
       "fixtures/target-repo/red/agent-standards/02-boundaries-validation-and-enforcement.md",
@@ -4266,7 +4266,7 @@
       "validation_artifacts/ultragoal-audit/active-registry-observation-current.json",
       "validation_artifacts/ultragoal-audit/ready-LANE-001-receipt.json",
       "validation_artifacts/ultragoal-audit/red-fixture-report.json",
-      "validation_artifacts/ultragoal-audit/root-phase-post-merge-integration-LANE-001-receipt.json",
+      "validation_artifacts/ultragoal-audit/root-receipt-post-merge-integration-LANE-001.json",
       "validation_artifacts/ultragoal-audit/target-comment-only-worktree-env-receipt.json",
       "validation_artifacts/ultragoal-audit/target-duplicate-check-gate-receipt.json",
       "validation_artifacts/ultragoal-audit/target-empty-coverage-command-receipt.json",
@@ -4810,7 +4810,7 @@
       "schemas/cli-transactional-finalization-receipt.schema.json",
       "schemas/cli-performance-receipt.schema.json",
       "schemas/codex-registry-exposure.schema.json",
-      "schemas/common-defs.schema.json",
+      "schemas/schema-authority-primitives.schema.json",
       "schemas/completion-manifest.schema.json",
       "schemas/connector-capability.schema.json",
       "schemas/contract-amendment.schema.json",
@@ -7362,13 +7362,13 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "blocked-lane-scratch-root-overlap": {
+      "blocked-lane-temp-root-overlap": {
         "expected_error": "active_lane_mutable_resource_overlap",
         "expected_failing_check": "lane-scope-overlap",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:fb888035b693ad73fc78fe28c9081e12eab0d8f55569ccc9f903760033c8c253",
-        "packet_path": "fixtures/red/blocked-lane-scratch-root-overlap.json",
+        "packet_path": "fixtures/red/blocked-lane-temp-root-overlap.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -9112,13 +9112,13 @@
         "status": "pass",
         "validator_exit": 1
       },
-      "duplicate-or-missing-root-phase": {
+      "duplicate-or-missing-root-receipt": {
         "expected_error": "root_phase_missing_or_duplicate",
         "expected_failing_check": "root-verification-phase-coverage",
         "observed_error": "root_phase_missing_or_duplicate",
         "observed_failing_check": "root-verification-phase-coverage",
         "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
-        "packet_path": "fixtures/red/duplicate-or-missing-root-phase.json",
+        "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json",
         "status": "pass",
         "validator_exit": 1
       },
@@ -11082,13 +11082,13 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "lane-scratch-root-dot-segment": {
+      "lane-temp-root-dot-segment": {
         "expected_error": "invalid_lane_resource_path",
         "expected_failing_check": "lane-scope-overlap",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:f4e5c0d077a837a0d9d145b5bdd9a5cb5f123c391652ea7124185c130f85ba14",
-        "packet_path": "fixtures/red/lane-scratch-root-dot-segment.json",
+        "packet_path": "fixtures/red/lane-temp-root-dot-segment.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -11692,13 +11692,13 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "nested-scratch-root-active-lanes": {
+      "nested-temp-root-active-lanes": {
         "expected_error": "active_lane_mutable_resource_overlap",
         "expected_failing_check": "lane-scope-overlap",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:f518dffd8b78f9ed63107621988d59ad348b511cfbabd1d9ad3a7b325b25e99d",
-        "packet_path": "fixtures/red/nested-scratch-root-active-lanes.json",
+        "packet_path": "fixtures/red/nested-temp-root-active-lanes.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -12512,13 +12512,13 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "plugin-manifest-active-root-phase-proof-resource": {
+      "plugin-manifest-active-root-receipt-resource": {
         "expected_error": "root_phase_proof_resource_packaged",
         "expected_failing_check": "plugin-inventory-closure",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:53897b844a50f37350ba3b637e6c34786ae425e00feec53e09e30dadcfd0f5b1",
-        "packet_path": "fixtures/red/plugin-manifest-active-root-phase-proof-resource.json",
+        "packet_path": "fixtures/red/plugin-manifest-active-root-receipt-resource.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -16062,13 +16062,13 @@
         "status": "pass",
         "validator_exit": 1
       },
-      "root-phase-pass-failed-command": {
+      "root-receipt-pass-failed-command": {
         "expected_error": "root_phase_pass_without_successful_receipt",
         "expected_failing_check": "root-verification-phase-coverage",
         "observed_error": "validator_receipt_not_runtime_provenance",
         "observed_failing_check": "validator-execution-provenance",
         "packet_digest": "sha256:dbbedc52bb9cd11a4b5620f8660f67234c5e561dd590369c56f821b7ee19b029",
-        "packet_path": "fixtures/red/root-phase-pass-failed-command.json",
+        "packet_path": "fixtures/red/root-receipt-pass-failed-command.json",
         "status": "fail",
         "validator_exit": 1
       },
@@ -19081,7 +19081,7 @@
       "blocked-lane-branch-overlap",
       "blocked-lane-browser-profile-root-overlap",
       "blocked-lane-port-overlap",
-      "blocked-lane-scratch-root-overlap",
+      "blocked-lane-temp-root-overlap",
       "blocked-lane-state-root-overlap",
       "blocked-lane-tool-cache-root-overlap",
       "blocked-lane-workspace-overlap",
@@ -19256,7 +19256,7 @@
       "downstream-launched-on-unverified-claim",
       "duplicate-check-rows",
       "duplicate-completion-claim-id",
-      "duplicate-or-missing-root-phase",
+      "duplicate-or-missing-root-receipt",
       "duplicate-ready-for-merge-receipt-lane-id",
       "duplicate-red-fixture-rows",
       "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
@@ -19453,7 +19453,7 @@
       "lane-artifact-root-dot-segment",
       "lane-browser-profile-root-dot-segment",
       "lane-owned-path-dot-segment",
-      "lane-scratch-root-dot-segment",
+      "lane-temp-root-dot-segment",
       "lane-state-root-dot-segment",
       "lane-tool-cache-root-dot-segment",
       "lane-workspace-dot-segment",
@@ -19514,7 +19514,7 @@
       "namespace-validator-source-top-level-internal-coverage-wave-red",
       "namespace-validator-source-widened-class-tamper-red",
       "nested-overlapping-active-lanes",
-      "nested-scratch-root-active-lanes",
+      "nested-temp-root-active-lanes",
       "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
       "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
       "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red",
@@ -19596,7 +19596,7 @@
       "plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red",
       "plugin-journey-only-fit-repo-evidence",
       "plugin-manifest-absolute-path",
-      "plugin-manifest-active-root-phase-proof-resource",
+      "plugin-manifest-active-root-receipt-resource",
       "plugin-manifest-parent-relative-path",
       "plugin-manifest-stale-active-proof-resource",
       "plugin-manifest-symlink-path",
@@ -19951,7 +19951,7 @@
       "review-round-status-fail-not-approval-receipt",
       "review-round-substituted-persona-prompt",
       "reviewer-to-gate-conversion-source-obligation-parity-red",
-      "root-phase-pass-failed-command",
+      "root-receipt-pass-failed-command",
       "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
       "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
       "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",

@@ -3,7 +3,7 @@ use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 
 #[test]
-fn observe_query_helpers_cover_matching_tags_and_bounds() {
+fn observe_query_matching_covers_tags_and_bounds() {
     assert_eq!(
         observe::query::query_text(&super::command(&[
             "observe", "logs", "query", "--run-id", "r1"

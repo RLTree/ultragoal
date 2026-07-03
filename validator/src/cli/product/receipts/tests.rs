@@ -111,7 +111,14 @@ fn product_receipt_report_is_fail_closed_when_receipts_are_invalid_or_missing() 
     let root = crate::self_tests::boundaries::support::temp_root("product-report-fail");
     std::fs::create_dir_all(&root).expect("root");
     let rel = Path::new("validation_artifacts/harness");
-    let report = super::report(&root, rel, &json!({}), &json!({}), &json!({}));
+    let report = super::report(
+        &root,
+        rel,
+        &crate::self_tests::boundaries::support::sha('c'),
+        &json!({}),
+        &json!({}),
+        &json!({}),
+    );
     assert_eq!(report["status"], "fail");
     let failures = report["failures"].as_array().expect("failures");
     assert!(

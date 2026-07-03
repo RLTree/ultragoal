@@ -3,9 +3,9 @@ use crate::self_tests::boundaries::support::sha;
 use serde_json::json;
 
 #[test]
-fn call_receipt_helpers_distinguish_live_and_nonlive_authority() {
+fn call_receipt_modes_distinguish_live_and_nonlive_authority() {
     let root = crate::self_tests::openai::prepare_root(
-        "openai-call-receipt-helpers",
+        "openai-call-receipt-modes",
         &[
             ".gitignore",
             "docs/openai-key-policy.json",
@@ -55,7 +55,7 @@ fn call_receipt_helpers_distinguish_live_and_nonlive_authority() {
 }
 
 #[test]
-fn call_receipt_helpers_cover_status_modes_and_secret_downgrade() {
+fn call_receipt_status_modes_cover_secret_downgrade() {
     let command = CallCommand {
         receipt: "receipt.json".into(),
         provider_mode: "offline_fixture".to_string(),

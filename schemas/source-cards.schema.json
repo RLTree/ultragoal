@@ -31,7 +31,7 @@
         "minLength": 1
       },
       "retrieved_at": {
-        "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
       },
       "used_for": {
         "type": "array",
@@ -94,10 +94,10 @@
             ]
           },
           "retrieved_at": {
-            "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
           },
           "output": {
-            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
           }
         },
         "additionalProperties": false
@@ -115,7 +115,7 @@
             "minLength": 1
           },
           "digest": {
-            "$ref": "common-defs.schema.json#/$defs/sha256"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
           },
           "snapshot_basis": {
             "type": "string",

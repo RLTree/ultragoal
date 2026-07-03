@@ -54,7 +54,7 @@ fn red_catalog_and_audit_outputs_fail_closed() {
     let red_failures = &failures["red-fixture-coverage"];
     for expected in [
         "red catalog count or id uniqueness mismatch",
-        "common-defs requiredRedFixtureId unavailable",
+        "schema-authority-primitives requiredRedFixtureId unavailable",
         "validator-receipt red_fixtures.required unavailable",
         "red catalog digest mismatch",
         "red catalog expected_failure drift",

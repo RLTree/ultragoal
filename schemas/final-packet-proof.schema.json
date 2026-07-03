@@ -45,7 +45,7 @@
       ]
     },
     "candidate_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "run_id": {
       "type": "string",

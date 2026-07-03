@@ -18,19 +18,19 @@ fn require_named_rows(root: &Path, value: &Value, family: InventoryFamily, out: 
     reject_unknown_rows(value, family, out);
     let Some(rows) = value.get(family.inventory_key).and_then(Value::as_object) else {
         out.push(format!(
-            "{}_fitting_inventory_missing",
+            "{}_command_observability_inventory_missing",
             family.failure_prefix
         ));
         return;
     };
     for id in family.ids {
         let Some(row) = rows.get(*id) else {
-            out.push(format!("{}_fitting_missing:{id}", family.failure_prefix));
+            out.push(format!("{}_telemetry_missing:{id}", family.failure_prefix));
             continue;
         };
         let Some(object) = row.as_object() else {
             out.push(format!(
-                "{}_fitting_row_not_object:{id}",
+                "{}_telemetry_row_not_object:{id}",
                 family.failure_prefix
             ));
             continue;
@@ -54,7 +54,7 @@ fn reject_unknown_rows(value: &Value, family: InventoryFamily, out: &mut Vec<Str
     if let Some(rows) = value.get(family.inventory_key).and_then(Value::as_object) {
         for id in rows.keys() {
             if !family.ids.contains(&id.as_str()) {
-                out.push(format!("{}_fitting_unknown:{id}", family.failure_prefix));
+                out.push(format!("{}_telemetry_unknown:{id}", family.failure_prefix));
             }
         }
     }
@@ -67,18 +67,20 @@ fn require_row(
     row: &Map<String, Value>,
     out: &mut Vec<String>,
 ) {
-    match row.get("fitting_status").and_then(Value::as_str) {
-        Some("fitted") => require_fitted_evidence(root, prefix, id, row, out),
-        Some(status @ ("partially_fitted" | "unfitted")) => {
-            require_unfitted_metadata(prefix, id, row, out);
-            out.push(format!("{prefix}_fitting_unfitted:{id}:{status}"));
+    match row.get("observability_status").and_then(Value::as_str) {
+        Some("observable") => require_observable_evidence(root, prefix, id, row, out),
+        Some(status @ ("partially_observable" | "unobservable")) => {
+            require_unobservable_metadata(prefix, id, row, out);
+            out.push(format!("{prefix}_telemetry_unobservable:{id}:{status}"));
         }
-        Some(other) => out.push(format!("{prefix}_fitting_status_invalid:{id}:{other}")),
-        None => out.push(format!("{prefix}_fitting_status_missing:{id}")),
+        Some(other) => out.push(format!(
+            "{prefix}_observability_status_invalid:{id}:{other}"
+        )),
+        None => out.push(format!("{prefix}_observability_status_missing:{id}")),
     }
 }
 
-fn require_unfitted_metadata(
+fn require_unobservable_metadata(
     prefix: &str,
     id: &str,
     row: &Map<String, Value>,
@@ -90,11 +92,11 @@ fn require_unfitted_metadata(
         || !non_empty_string(row, "claim_impact")
         || !owner_tracking(row)
     {
-        out.push(format!("{prefix}_fitting_missing_metadata:{id}"));
+        out.push(format!("{prefix}_telemetry_missing_metadata:{id}"));
     }
 }
 
-fn require_fitted_evidence(
+fn require_observable_evidence(
     root: &Path,
     prefix: &str,
     id: &str,
@@ -102,7 +104,7 @@ fn require_fitted_evidence(
     out: &mut Vec<String>,
 ) {
     let required = [
-        non_empty_array(row, "fitted_surfaces"),
+        non_empty_array(row, "observed_surfaces"),
         empty_array(row, "missing_surfaces"),
         non_empty_string(row, "operation"),
         non_empty_string(row, "validator_check_id"),
@@ -111,11 +113,11 @@ fn require_fitted_evidence(
         non_empty_array(row, "live_query_proof_paths"),
         non_empty_array(row, "same_candidate_query_proof_paths"),
         owner_tracking(row),
-        super::row_contract::fitted(row),
+        super::row_contract::observable(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {
-        out.push(format!("{prefix}_fitting_row_shape_only:{id}"));
+        out.push(format!("{prefix}_telemetry_row_shape_only:{id}"));
         return;
     }
     super::proof::require_current_surface_receipts(root, id, row, out);
@@ -124,7 +126,7 @@ fn require_fitted_evidence(
 fn typed_row_accounting(row: &Map<String, Value>) -> bool {
     non_empty_string(row, "operation")
         && non_empty_string(row, "validator_check_id")
-        && row.get("fitted_surfaces").is_some_and(Value::is_array)
+        && row.get("observed_surfaces").is_some_and(Value::is_array)
         && row.get("focused_tests").is_some_and(Value::is_array)
         && row.get("receipt_paths").is_some_and(Value::is_array)
         && row
@@ -164,5 +166,6 @@ fn empty_array(row: &Map<String, Value>, key: &str) -> bool {
 }
 
 fn owner_tracking(row: &Map<String, Value>) -> bool {
-    non_empty_string(row, "current_owner_surface") && non_empty_string(row, "next_unfitted_surface")
+    non_empty_string(row, "current_owner_surface")
+        && non_empty_string(row, "next_unobservable_surface")
 }

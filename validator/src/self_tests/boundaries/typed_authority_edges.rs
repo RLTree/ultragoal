@@ -89,7 +89,7 @@ fn boundary_failures_are_behavioral() {
 }
 
 #[test]
-fn law_and_text_helpers_hit_negative_edges() {
+fn law_and_text_boundaries_hit_negative_edges() {
     let root = crate::self_tests::boundaries::support::temp_root("typed_authority-law");
     std::fs::create_dir_all(root.join("fixtures/law-surfaces/valid")).expect("fixtures");
     write_text(

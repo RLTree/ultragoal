@@ -7,15 +7,15 @@ fn registry_probe_inventory_records_command_roundtrip_and_fixture_binding() {
     .expect("command inventory");
 
     for pointer in [
-        "/fitting_inventory/registry probe",
+        "/command_observability_inventory/registry probe",
         "/long_running_path_inventory/registry probe",
     ] {
         let row = inventory.pointer(pointer).expect("registry probe row");
-        assert_eq!(row["fitting_status"], "fitted");
+        assert_eq!(row["observability_status"], "observable");
         if pointer.contains("long_running_path_inventory") {
             assert_eq!(row["operation"], "registry_probe");
         }
-        assert_eq!(row["next_unfitted_surface"], "none");
+        assert_eq!(row["next_unobservable_surface"], "none");
         assert_eq!(row["missing_surfaces"], serde_json::json!([]));
         assert_array_contains(
             row,
@@ -56,12 +56,12 @@ fn registry_probe_inventory_records_command_roundtrip_and_fixture_binding() {
     }
 
     let board = inventory
-        .pointer("/fitting_control_board/first_incomplete")
+        .pointer("/observability_control_board/first_incomplete")
         .expect("first incomplete");
     assert_eq!(board["id"], "install audit");
-    assert_eq!(board["fitting_status"], "partially_fitted");
+    assert_eq!(board["observability_status"], "partially_observable");
     assert_eq!(
-        board["next_unfitted_surface"],
+        board["next_unobservable_surface"],
         "red/green/tamper fixture proof"
     );
 }

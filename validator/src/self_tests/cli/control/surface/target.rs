@@ -23,8 +23,8 @@ fn write_package(root: &Path) {
 }
 
 #[test]
-fn package_surface_target_helpers_cover_defaults_and_unavailable_targets() {
-    let root = crate::self_tests::boundaries::support::temp_root("surface-target-helpers");
+fn package_surface_target_defaults_cover_unavailable_targets() {
+    let root = crate::self_tests::boundaries::support::temp_root("surface-target-contracts");
     write_package(&root);
     let plugin = surface::target::plugin_metadata(&root);
     let install_root =
@@ -85,5 +85,5 @@ fn package_surface_target_helpers_cover_defaults_and_unavailable_targets() {
             "{expected}: {failures:?}"
         );
     }
-    std::fs::remove_dir_all(root).expect("cleanup target helpers");
+    std::fs::remove_dir_all(root).expect("cleanup target contracts");
 }

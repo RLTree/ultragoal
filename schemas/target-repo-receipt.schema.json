@@ -91,7 +91,7 @@
             "minLength": 1
           },
           "evidence": {
-            "$ref": "common-defs.schema.json#/$defs/artifactRef"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
           }
         },
         "additionalProperties": false
@@ -110,13 +110,13 @@
       ]
     },
     "command": {
-      "$ref": "common-defs.schema.json#/$defs/commandReceipt"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/commandReceipt"
     },
     "validator_artifacts": {
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       }
     },
     "invocation": {
@@ -131,10 +131,10 @@
       }
     },
     "generated_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "repo_fingerprint": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "requirements": {
       "type": "object",
@@ -168,7 +168,7 @@
         "claim_ids": {
           "type": "array",
           "items": {
-            "$ref": "common-defs.schema.json#/$defs/claimId"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
           },
           "uniqueItems": true
         }

@@ -11,14 +11,14 @@
   ],
   "properties": {
     "id": {
-      "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId"
     },
     "packet_path": {
       "type": "string",
       "minLength": 1
     },
     "packet_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "expected_failure": {
       "type": "object",
@@ -28,7 +28,7 @@
       ],
       "properties": {
         "check_id": {
-          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
         },
         "error": {
           "type": "string",

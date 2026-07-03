@@ -9,16 +9,16 @@ mod matching;
 mod run;
 mod spool;
 mod text;
-use command_inventory::support::write_fitted_inventory;
+use command_inventory::support::write_observable_inventory;
 
 #[test]
-fn observe_green_prove_and_query_helpers_are_typed() {
+fn observe_green_prove_and_query_contracts_are_typed() {
     let root = super::minimal_root("observe-green-prove");
     let health = command(&["observe", "stack", "health", "--run-id", "run-health"]);
     let smoke = command(&["observe", "stack", "smoke", "--run-id", "run-smoke"]);
     write_default_receipt(&root, &health, "pass");
     write_default_receipt(&root, &smoke, "pass");
-    write_fitted_inventory(&root);
+    write_observable_inventory(&root);
 
     let prove_path = root.join("prove.json");
     let prove = command_with_receipt(&["observe", "prove", "--run-id", "run-prove"], &prove_path);

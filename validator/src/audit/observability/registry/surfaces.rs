@@ -46,7 +46,7 @@ fn reject_unknown_surface_rows(value: &Value, out: &mut Vec<String>) {
     if let Some(rows) = value.get("surface_inventory").and_then(Value::as_object) {
         for surface in rows.keys() {
             if !REQUIRED_SURFACES.contains(&surface.as_str()) {
-                out.push(format!("observability_surface_fitting_unknown:{surface}"));
+                out.push(format!("observability_surface_telemetry_unknown:{surface}"));
             }
         }
     }
@@ -54,17 +54,17 @@ fn reject_unknown_surface_rows(value: &Value, out: &mut Vec<String>) {
 
 fn require_surface_inventory(root: &Path, value: &Value, out: &mut Vec<String>) {
     let Some(rows) = value.get("surface_inventory").and_then(Value::as_object) else {
-        out.push("observability_surface_fitting_inventory_missing".to_string());
+        out.push("observability_surface_command_observability_inventory_missing".to_string());
         return;
     };
     for surface in REQUIRED_SURFACES {
         let Some(row) = rows.get(*surface) else {
-            out.push(format!("observability_surface_fitting_missing:{surface}"));
+            out.push(format!("observability_surface_telemetry_missing:{surface}"));
             continue;
         };
         let Some(object) = row.as_object() else {
             out.push(format!(
-                "observability_surface_fitting_row_not_object:{surface}"
+                "observability_surface_telemetry_row_not_object:{surface}"
             ));
             continue;
         };
@@ -78,37 +78,37 @@ fn require_surface_row(
     row: &Map<String, Value>,
     out: &mut Vec<String>,
 ) {
-    match row.get("fitting_status").and_then(Value::as_str) {
-        Some("fitted") => require_fitted_evidence(root, surface, row, out),
-        Some(status @ ("partially_fitted" | "unfitted")) => {
-            require_unfitted_metadata(surface, row, out);
+    match row.get("observability_status").and_then(Value::as_str) {
+        Some("observable") => require_observable_evidence(root, surface, row, out),
+        Some(status @ ("partially_observable" | "unobservable")) => {
+            require_unobservable_metadata(surface, row, out);
             out.push(format!(
-                "observability_surface_fitting_unfitted:{surface}:{status}"
+                "observability_surface_telemetry_unobservable:{surface}:{status}"
             ));
         }
         Some(other) => out.push(format!(
-            "observability_surface_fitting_status_invalid:{surface}:{other}"
+            "observability_surface_observability_status_invalid:{surface}:{other}"
         )),
         None => out.push(format!(
-            "observability_surface_fitting_status_missing:{surface}"
+            "observability_surface_observability_status_missing:{surface}"
         )),
     }
 }
 
-fn require_unfitted_metadata(surface: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
+fn require_unobservable_metadata(surface: &str, row: &Map<String, Value>, out: &mut Vec<String>) {
     if !owner_tracking(row)
         || !typed_row_accounting(row)
         || !super::row_contract::complete(row)
         || !non_empty_array(row, "missing_surfaces")
     {
         out.push(format!(
-            "observability_surface_fitting_missing_metadata:{surface}"
+            "observability_surface_telemetry_missing_metadata:{surface}"
         ));
     }
 }
 
 fn typed_row_accounting(row: &Map<String, Value>) -> bool {
-    row.get("fitted_surfaces").is_some_and(Value::is_array)
+    row.get("observed_surfaces").is_some_and(Value::is_array)
         && non_empty_string(row, "validator_check_id")
         && row.get("focused_tests").is_some_and(Value::is_array)
         && row.get("receipt_paths").is_some_and(Value::is_array)
@@ -123,14 +123,14 @@ fn typed_row_accounting(row: &Map<String, Value>) -> bool {
         && row.get("tamper_fixtures").is_some_and(Value::is_array)
 }
 
-fn require_fitted_evidence(
+fn require_observable_evidence(
     root: &Path,
     surface: &str,
     row: &Map<String, Value>,
     out: &mut Vec<String>,
 ) {
     let required = [
-        non_empty_array(row, "fitted_surfaces"),
+        non_empty_array(row, "observed_surfaces"),
         empty_array(row, "missing_surfaces"),
         non_empty_string(row, "operation"),
         non_empty_string(row, "validator_check_id"),
@@ -139,12 +139,12 @@ fn require_fitted_evidence(
         non_empty_array(row, "live_query_proof_paths"),
         non_empty_array(row, "same_candidate_query_proof_paths"),
         owner_tracking(row),
-        super::row_contract::fitted(row),
+        super::row_contract::observable(row),
         non_empty_string(row, "claim_impact"),
     ];
     if required.into_iter().any(|ok| !ok) {
         out.push(format!(
-            "observability_surface_fitting_row_shape_only:{surface}"
+            "observability_surface_telemetry_row_shape_only:{surface}"
         ));
         return;
     }
@@ -170,5 +170,6 @@ fn empty_array(row: &Map<String, Value>, key: &str) -> bool {
 }
 
 fn owner_tracking(row: &Map<String, Value>) -> bool {
-    non_empty_string(row, "current_owner_surface") && non_empty_string(row, "next_unfitted_surface")
+    non_empty_string(row, "current_owner_surface")
+        && non_empty_string(row, "next_unobservable_surface")
 }

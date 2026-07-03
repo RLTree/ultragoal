@@ -29,13 +29,13 @@ fn law_surface_red_identity_and_package_check_routing_cover_green_edges() {
     write_json(
         &root.join("schemas/schema-catalog.json"),
         &json!({"schemas":[
-            {"id":"common-defs.schema.json","path":"schemas/common-defs.schema.json"},
+            {"id":"schema-authority-primitives.schema.json","path":"schemas/schema-authority-primitives.schema.json"},
             {"id":"validator-receipt.schema.json","path":"schemas/validator-receipt.schema.json"}
         ]}),
     );
     write_json(
-        &root.join("schemas/common-defs.schema.json"),
-        &json!({"$id":"common-defs.schema.json","$defs":{"requiredRedFixtureId":{"enum":["red-one"]}}}),
+        &root.join("schemas/schema-authority-primitives.schema.json"),
+        &json!({"$id":"schema-authority-primitives.schema.json","$defs":{"requiredRedFixtureId":{"enum":["red-one"]}}}),
     );
     write_json(
         &root.join("schemas/validator-receipt.schema.json"),

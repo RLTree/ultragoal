@@ -120,7 +120,7 @@ parent message containing:
 
 ## Claim Ceiling
 
-The claim ceiling is typed. Free-text claims are commentary only. Keep this block aligned with `schemas/common-defs.schema.json#/$defs/claimCeilingEntry`.
+The claim ceiling is typed. Free-text claims are commentary only. Keep this block aligned with `schemas/schema-authority-primitives.schema.json#/$defs/claimCeilingEntry`.
 
 ```json
 [

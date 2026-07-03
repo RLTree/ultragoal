@@ -15,7 +15,7 @@
     {
       "op": "replace",
       "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/command_receipt/artifact_path",
-      "value": "fixtures/root-phase-receipts/post-merge-integration-LANE-001-stale.fixture.json"
+      "value": "fixtures/root-receipts/post-merge-integration-LANE-001-stale.fixture.json"
     },
     {
       "op": "replace",
@@ -25,7 +25,7 @@
     {
       "op": "replace",
       "path": "/lane_registry/root_verification_phases/post_merge_integration_gate/artifact_receipt/path",
-      "value": "fixtures/root-phase-receipts/post-merge-integration-LANE-001-stale.fixture.json"
+      "value": "fixtures/root-receipts/post-merge-integration-LANE-001-stale.fixture.json"
     },
     {
       "op": "replace",

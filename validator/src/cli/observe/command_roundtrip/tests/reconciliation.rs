@@ -1,4 +1,4 @@
-use super::super::checks::{is_fitted, query_passed, same_candidate};
+use super::super::checks::{is_command_observable, query_passed, same_candidate};
 use super::super::process::CommandOutput;
 use serde_json::json;
 
@@ -39,7 +39,7 @@ fn query_and_candidate_reconciliation_are_strict() {
         stdout: "ok".to_string(),
         stderr: String::new(),
     };
-    assert!(is_fitted(
+    assert!(is_command_observable(
         &production,
         &json!({"status": "pass", "candidate_digest": candidate}),
         &pass_query,
@@ -53,7 +53,7 @@ fn query_and_candidate_reconciliation_are_strict() {
         stdout: String::new(),
         stderr: "failed".to_string(),
     };
-    assert!(!is_fitted(
+    assert!(!is_command_observable(
         &failed_production,
         &json!({"status": "pass", "candidate_digest": candidate}),
         &pass_query,

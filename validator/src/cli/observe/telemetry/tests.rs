@@ -28,17 +28,17 @@ fn command_inventory_summary_names_first_blocker_and_family_counts() {
     crate::json_boundary::write_json(
         &inventory.join("command-inventory.json"),
         &json!({
-            "fitting_control_board": {
+            "observability_control_board": {
                 "status": "fail",
                 "first_incomplete": {
                     "family": "commands",
                     "id": "coverage.prove",
-                    "fitting_status": "partial",
-                    "next_unfitted_surface": "traces_query"
+                    "observability_status": "partial",
+                    "next_unobservable_surface": "traces_query"
                 },
                 "families": {
-                    "commands": {"total": 2, "fitted": 1, "partially_fitted": 1, "unfitted": 0},
-                    "claims": {"total": 1, "fitted": 0, "partially_fitted": 0, "unfitted": 1}
+                    "commands": {"total": 2, "observable": 1, "partially_observable": 1, "unobservable": 0},
+                    "claims": {"total": 1, "observable": 0, "partially_observable": 0, "unobservable": 1}
                 }
             }
         }),
@@ -47,7 +47,7 @@ fn command_inventory_summary_names_first_blocker_and_family_counts() {
 
     let summary = command_inventory_failure_summary(
         &root,
-        &["observability_command_fitting_query_not_current:coverage.prove".to_string()],
+        &["observability_command_telemetry_query_not_current:coverage.prove".to_string()],
     );
 
     assert!(summary.contains("control_board_first_family=commands"));
@@ -63,7 +63,7 @@ fn claim_repairs_cover_current_failure_classes() {
         claims::next_repair_for(
             ObserveOperation::Prove,
             "fail",
-            Some("first_failure=observability_command_fitting_query_not_current")
+            Some("first_failure=observability_command_telemetry_query_not_current")
         ),
         "refresh the first same-candidate query proof named in why_failed: rerun the target command, query logs metrics traces for that run, then rerun observe prove"
     );
@@ -71,7 +71,7 @@ fn claim_repairs_cover_current_failure_classes() {
         claims::next_repair_for(
             ObserveOperation::Prove,
             "fail",
-            Some("first_failure=observability_command_fitting_receipt_missing")
+            Some("first_failure=observability_command_telemetry_receipt_missing")
         ),
         "refresh the first command receipt named in why_failed on the current candidate, then query logs metrics traces and rerun observe prove"
     );

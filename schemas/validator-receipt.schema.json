@@ -55,17 +55,17 @@
           "type": "string"
         },
         "expected_failing_check": {
-          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
         },
         "observed_error": {
           "minLength": 1,
           "type": "string"
         },
         "observed_failing_check": {
-          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
         },
         "packet_digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "packet_path": {
           "minLength": 1,
@@ -856,7 +856,7 @@
               "blocked-lane-branch-overlap",
               "blocked-lane-browser-profile-root-overlap",
               "blocked-lane-port-overlap",
-              "blocked-lane-scratch-root-overlap",
+              "blocked-lane-temp-root-overlap",
               "blocked-lane-state-root-overlap",
               "blocked-lane-tool-cache-root-overlap",
               "blocked-lane-workspace-overlap",
@@ -1031,7 +1031,7 @@
               "downstream-launched-on-unverified-claim",
               "duplicate-check-rows",
               "duplicate-completion-claim-id",
-              "duplicate-or-missing-root-phase",
+              "duplicate-or-missing-root-receipt",
               "duplicate-ready-for-merge-receipt-lane-id",
               "duplicate-red-fixture-rows",
               "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
@@ -1224,7 +1224,7 @@
               "lane-artifact-root-dot-segment",
               "lane-browser-profile-root-dot-segment",
               "lane-owned-path-dot-segment",
-              "lane-scratch-root-dot-segment",
+              "lane-temp-root-dot-segment",
               "lane-state-root-dot-segment",
               "lane-tool-cache-root-dot-segment",
               "lane-workspace-dot-segment",
@@ -1285,7 +1285,7 @@
               "namespace-validator-source-top-level-internal-coverage-wave-red",
               "namespace-validator-source-widened-class-tamper-red",
               "nested-overlapping-active-lanes",
-              "nested-scratch-root-active-lanes",
+              "nested-temp-root-active-lanes",
               "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
               "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
               "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red",
@@ -1367,7 +1367,7 @@
               "plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red",
               "plugin-journey-only-fit-repo-evidence",
               "plugin-manifest-absolute-path",
-              "plugin-manifest-active-root-phase-proof-resource",
+              "plugin-manifest-active-root-receipt-resource",
               "plugin-manifest-parent-relative-path",
               "plugin-manifest-stale-active-proof-resource",
               "plugin-manifest-symlink-path",
@@ -1718,7 +1718,7 @@
               "review-round-status-fail-not-approval-receipt",
               "review-round-substituted-persona-prompt",
               "reviewer-to-gate-conversion-source-obligation-parity-red",
-              "root-phase-pass-failed-command",
+              "root-receipt-pass-failed-command",
               "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
               "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
               "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
@@ -2048,7 +2048,7 @@
             "const": "source_audit_pass_does_not_support_final_packet_registry_readiness_release_completion_or_update_goal"
           },
           "digest": {
-            "$ref": "common-defs.schema.json#/$defs/sha256"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
           },
           "observed_failures": {
             "items": {
@@ -2087,7 +2087,7 @@
       "type": "array"
     },
     "check_set_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "checks": {
       "additionalProperties": {
@@ -2096,7 +2096,7 @@
       "maxProperties": 153,
       "minProperties": 143,
       "propertyNames": {
-        "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
       },
       "required": [
         "active-setup-to-idle-orchestration-thread-bound-heartbeat",
@@ -2262,26 +2262,26 @@
       ]
     },
     "commit": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "generated_artifacts": {
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/generatedArtifact"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/generatedArtifact"
       },
       "type": "array"
     },
     "generated_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "input_digests": {
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       },
       "minItems": 1,
       "type": "array"
     },
     "red_fixture_catalog_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "red_fixtures": {
       "additionalProperties": {
@@ -2290,7 +2290,7 @@
       "maxProperties": 1259,
       "minProperties": 1259,
       "propertyNames": {
-        "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId"
       },
       "required": [
         "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
@@ -2408,7 +2408,7 @@
         "blocked-lane-branch-overlap",
         "blocked-lane-browser-profile-root-overlap",
         "blocked-lane-port-overlap",
-        "blocked-lane-scratch-root-overlap",
+        "blocked-lane-temp-root-overlap",
         "blocked-lane-state-root-overlap",
         "blocked-lane-tool-cache-root-overlap",
         "blocked-lane-workspace-overlap",
@@ -2583,7 +2583,7 @@
         "downstream-launched-on-unverified-claim",
         "duplicate-check-rows",
         "duplicate-completion-claim-id",
-        "duplicate-or-missing-root-phase",
+        "duplicate-or-missing-root-receipt",
         "duplicate-ready-for-merge-receipt-lane-id",
         "duplicate-red-fixture-rows",
         "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
@@ -2780,7 +2780,7 @@
         "lane-artifact-root-dot-segment",
         "lane-browser-profile-root-dot-segment",
         "lane-owned-path-dot-segment",
-        "lane-scratch-root-dot-segment",
+        "lane-temp-root-dot-segment",
         "lane-state-root-dot-segment",
         "lane-tool-cache-root-dot-segment",
         "lane-workspace-dot-segment",
@@ -2841,7 +2841,7 @@
         "namespace-validator-source-top-level-internal-coverage-wave-red",
         "namespace-validator-source-widened-class-tamper-red",
         "nested-overlapping-active-lanes",
-        "nested-scratch-root-active-lanes",
+        "nested-temp-root-active-lanes",
         "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
         "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
         "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red",
@@ -2923,7 +2923,7 @@
         "plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red",
         "plugin-journey-only-fit-repo-evidence",
         "plugin-manifest-absolute-path",
-        "plugin-manifest-active-root-phase-proof-resource",
+        "plugin-manifest-active-root-receipt-resource",
         "plugin-manifest-parent-relative-path",
         "plugin-manifest-stale-active-proof-resource",
         "plugin-manifest-symlink-path",
@@ -3278,7 +3278,7 @@
         "review-round-status-fail-not-approval-receipt",
         "review-round-substituted-persona-prompt",
         "reviewer-to-gate-conversion-source-obligation-parity-red",
-        "root-phase-pass-failed-command",
+        "root-receipt-pass-failed-command",
         "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
         "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
         "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
@@ -4124,7 +4124,7 @@
         }
       ],
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
       },
       "maxItems": 153,
       "minItems": 153,
@@ -4636,7 +4636,7 @@
         },
         {
           "contains": {
-            "const": "blocked-lane-scratch-root-overlap"
+            "const": "blocked-lane-temp-root-overlap"
           }
         },
         {
@@ -5201,7 +5201,7 @@
         },
         {
           "contains": {
-            "const": "duplicate-or-missing-root-phase"
+            "const": "duplicate-or-missing-root-receipt"
           }
         },
         {
@@ -5751,7 +5751,7 @@
         },
         {
           "contains": {
-            "const": "lane-scratch-root-dot-segment"
+            "const": "lane-temp-root-dot-segment"
           }
         },
         {
@@ -6001,7 +6001,7 @@
         },
         {
           "contains": {
-            "const": "nested-scratch-root-active-lanes"
+            "const": "nested-temp-root-active-lanes"
           }
         },
         {
@@ -6361,7 +6361,7 @@
         },
         {
           "contains": {
-            "const": "plugin-manifest-active-root-phase-proof-resource"
+            "const": "plugin-manifest-active-root-receipt-resource"
           }
         },
         {
@@ -7711,7 +7711,7 @@
         },
         {
           "contains": {
-            "const": "root-phase-pass-failed-command"
+            "const": "root-receipt-pass-failed-command"
           }
         },
         {
@@ -8776,7 +8776,7 @@
         }
       ],
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId",
+        "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId",
         "enum": [
           "active-setup-to-idle-orchestration-thread-bound-heartbeat-automation-tick-without-cursor-inspection-red",
           "active-setup-to-idle-orchestration-thread-bound-heartbeat-detached-reminder-substituted-for-heartbeat-red",
@@ -8893,7 +8893,7 @@
           "blocked-lane-branch-overlap",
           "blocked-lane-browser-profile-root-overlap",
           "blocked-lane-port-overlap",
-          "blocked-lane-scratch-root-overlap",
+          "blocked-lane-temp-root-overlap",
           "blocked-lane-state-root-overlap",
           "blocked-lane-tool-cache-root-overlap",
           "blocked-lane-workspace-overlap",
@@ -9068,7 +9068,7 @@
           "downstream-launched-on-unverified-claim",
           "duplicate-check-rows",
           "duplicate-completion-claim-id",
-          "duplicate-or-missing-root-phase",
+          "duplicate-or-missing-root-receipt",
           "duplicate-ready-for-merge-receipt-lane-id",
           "duplicate-red-fixture-rows",
           "execplan-no-handback-prototype-promotion-discard-decision-log-current-red",
@@ -9265,7 +9265,7 @@
           "lane-artifact-root-dot-segment",
           "lane-browser-profile-root-dot-segment",
           "lane-owned-path-dot-segment",
-          "lane-scratch-root-dot-segment",
+          "lane-temp-root-dot-segment",
           "lane-state-root-dot-segment",
           "lane-tool-cache-root-dot-segment",
           "lane-workspace-dot-segment",
@@ -9326,7 +9326,7 @@
           "namespace-validator-source-top-level-internal-coverage-wave-red",
           "namespace-validator-source-widened-class-tamper-red",
           "nested-overlapping-active-lanes",
-          "nested-scratch-root-active-lanes",
+          "nested-temp-root-active-lanes",
           "non-e2e-claim-ceiling-confidence-bounds-98-percent-confidence-without-e2e-red",
           "non-e2e-claim-ceiling-confidence-bounds-daily-driver-claim-without-repeated-use-proof-red",
           "non-e2e-claim-ceiling-confidence-bounds-final-response-omitting-non-e2e-ceiling-red",
@@ -9408,7 +9408,7 @@
           "plugin-install-surface-metadata-cache-enable-state-source-obligation-parity-red",
           "plugin-journey-only-fit-repo-evidence",
           "plugin-manifest-absolute-path",
-          "plugin-manifest-active-root-phase-proof-resource",
+          "plugin-manifest-active-root-receipt-resource",
           "plugin-manifest-parent-relative-path",
           "plugin-manifest-stale-active-proof-resource",
           "plugin-manifest-symlink-path",
@@ -9763,7 +9763,7 @@
           "review-round-status-fail-not-approval-receipt",
           "review-round-substituted-persona-prompt",
           "reviewer-to-gate-conversion-source-obligation-parity-red",
-          "root-phase-pass-failed-command",
+          "root-receipt-pass-failed-command",
           "runtime-feasibility-cost-strict-gate-usability-focused-audit-substituted-for-full-audit-red",
           "runtime-feasibility-cost-strict-gate-usability-guardrail-too-slow-without-claim-impact-red",
           "runtime-feasibility-cost-strict-gate-usability-hidden-cache-pass-red",
@@ -10092,7 +10092,7 @@
           "then": {
             "properties": {
               "value": {
-                "$ref": "common-defs.schema.json#/$defs/sha256"
+                "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
               }
             }
           }
@@ -10140,7 +10140,7 @@
       "const": "ultragoal-audit"
     },
     "validator_execution": {
-      "$ref": "common-defs.schema.json#/$defs/validatorExecution"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/validatorExecution"
     },
     "version": {
       "minLength": 1,

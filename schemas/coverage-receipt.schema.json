@@ -34,13 +34,13 @@
   ],
   "properties": {
     "schema": { "const": "harness-ultragoal.coverage-receipt.v1" },
-    "claim_id": { "$ref": "common-defs.schema.json#/$defs/claimId" },
+    "claim_id": { "$ref": "schema-authority-primitives.schema.json#/$defs/claimId" },
     "command": { "type": "string", "minLength": 1 },
     "tool": { "type": "string", "minLength": 1 },
-    "source_tree_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
-    "coverage_manifest_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
-    "coverage_command_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
-    "changed_files_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "source_tree_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
+    "coverage_manifest_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
+    "coverage_command_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
+    "changed_files_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
     "tool_version": { "type": "string", "minLength": 1 },
     "workspace_root": { "type": "string", "minLength": 1 },
     "target_revision": {
@@ -52,8 +52,8 @@
         "value": { "type": "string", "minLength": 1 }
       }
     },
-    "command_started_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
-    "command_completed_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
+    "command_started_at": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
+    "command_completed_at": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
     "command_exit": { "const": 0 },
     "machine_readable_report": {
       "type": "object",
@@ -61,7 +61,7 @@
       "required": ["path", "digest"],
       "properties": {
         "path": { "type": "string", "minLength": 1 },
-        "digest": { "$ref": "common-defs.schema.json#/$defs/sha256" }
+        "digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" }
       }
     },
     "generated_by": { "const": "coverage-command" },
@@ -123,7 +123,7 @@
         }
       }
     },
-    "generated_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
+    "generated_at": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
     "claim_ceiling": {
       "enum": [
         "supports_complete_coverage_claim",

@@ -155,7 +155,7 @@ fn registry_doc(closure_status: &str, evidence_digest: &str) -> serde_json::Valu
             "hand_authored_receipt_as_loop_closure"
         ],
         "loops": [{
-            "loop_id": "source-local-gate-94-fixture",
+            "loop_id": "source-local-agent-improvement-loop-fixture",
             "loop_closure_status": closure_status,
             "stage_evidence_path": "stage-evidence.json",
             "stage_evidence_schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
@@ -183,7 +183,7 @@ fn stage_evidence_doc() -> serde_json::Value {
     json!({
         "schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
         "law_id": super::LAW_ID,
-        "loop_id": "source-local-gate-94-fixture",
+        "loop_id": "source-local-agent-improvement-loop-fixture",
         "status": "pass",
         "authority": "cli_parsed_package_static_stage_evidence",
         "candidate_binding": "package_static_source_evidence",

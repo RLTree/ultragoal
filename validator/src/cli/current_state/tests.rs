@@ -80,7 +80,7 @@ fn git_status_reports_command_failure_as_dirty() {
 }
 
 #[test]
-fn first_blocker_prefers_gate92_board_then_stale_receipt() {
+fn first_blocker_prefers_observability_board_then_stale_receipt() {
     let board = json!({
         "status": "blocked",
         "first_incomplete": {"family": "commands", "id": "package digest"}
@@ -90,13 +90,16 @@ fn first_blocker_prefers_gate92_board_then_stale_receipt() {
         first_blocker(&board, &pass, &pass, &pass)["id"],
         "package digest"
     );
-    let fitted = json!({"status": "fitted"});
+    let observable = json!({"status": "observable"});
     let stale = json!({"status": "fail", "current": false, "path": "coverage"});
     assert_eq!(
-        first_blocker(&fitted, &stale, &pass, &pass)["id"],
+        first_blocker(&observable, &stale, &pass, &pass)["id"],
         "coverage"
     );
-    assert_eq!(first_blocker(&fitted, &pass, &pass, &pass)["id"], "none");
+    assert_eq!(
+        first_blocker(&observable, &pass, &pass, &pass)["id"],
+        "none"
+    );
 }
 
 #[test]

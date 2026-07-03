@@ -10,7 +10,7 @@
     {
       "op": "add",
       "path": "/plugin_manifest/resources/-",
-      "value": "artifacts/root-phase-receipts/post-merge-integration-LANE-001-stale.json"
+      "value": "artifacts/root-receipts/post-merge-integration-LANE-001-stale.json"
     }
   ],
   "materialization": {

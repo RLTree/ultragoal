@@ -11,10 +11,10 @@ fn review_target_inventory_records_command_roundtrip_and_fixture_binding() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/review-target build")
+        .pointer("/command_observability_inventory/review-target build")
         .expect("review-target row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert_array_contains(row, "receipt_paths", COMMAND_ROUNDTRIP);
     assert_array_contains(row, "same_candidate_query_proof_paths", EXPLAIN_FAILURE);

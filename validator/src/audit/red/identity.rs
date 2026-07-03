@@ -13,8 +13,8 @@ pub fn check(
         .map(|id| (*id).to_string())
         .collect::<BTreeSet<_>>();
     compare(
-        "common-defs requiredRedFixtureId",
-        &common_defs(store),
+        "schema-authority-primitives requiredRedFixtureId",
+        &schema_required_red_fixture_ids(store),
         &catalog,
         failures,
     );
@@ -26,11 +26,11 @@ pub fn check(
     );
 }
 
-fn common_defs(store: &SchemaStore) -> Option<BTreeSet<String>> {
+fn schema_required_red_fixture_ids(store: &SchemaStore) -> Option<BTreeSet<String>> {
     ids_from_array(
         store
             .schemas
-            .get("common-defs.schema.json")
+            .get("schema-authority-primitives.schema.json")
             .and_then(|schema| schema.pointer("/$defs/requiredRedFixtureId/enum")),
     )
 }

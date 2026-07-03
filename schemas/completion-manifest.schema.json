@@ -22,18 +22,18 @@
       "const": "harness-ultragoal.completion-manifest.v1"
     },
     "contract_bundle_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "required_claim_ids": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       }
     },
     "required_claim_ids_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "goal_binding": {
       "$ref": "goal-binding.schema.json"
@@ -64,7 +64,7 @@
         ],
         "properties": {
           "id": {
-            "$ref": "common-defs.schema.json#/$defs/claimId"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
           },
           "title": {
             "type": "string",
@@ -75,29 +75,29 @@
             "minLength": 1
           },
           "claim_scope": {
-            "$ref": "common-defs.schema.json#/$defs/claimScope"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimScope"
           },
           "claim_kind": {
-            "$ref": "common-defs.schema.json#/$defs/claimKind"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimKind"
           },
           "status": {
-            "$ref": "common-defs.schema.json#/$defs/claimStatus"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimStatus"
           },
           "claim_surface": {
-            "$ref": "common-defs.schema.json#/$defs/claimSurface"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/claimSurface"
           },
           "allowed_evidence_surfaces": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
             "items": {
-              "$ref": "common-defs.schema.json#/$defs/claimSurface"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/claimSurface"
             }
           },
           "evidence": {
             "type": "array",
             "items": {
-              "$ref": "common-defs.schema.json#/$defs/evidence"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/evidence"
             }
           },
           "claim_ceiling_effect": {
@@ -209,7 +209,7 @@
                 "const": true
               },
               "text_digest": {
-                "$ref": "common-defs.schema.json#/$defs/sha256"
+                "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
               },
               "product_or_ui_claim": {
                 "type": "boolean"
@@ -245,7 +245,7 @@
                   "minLength": 1
                 },
                 "digest": {
-                  "$ref": "common-defs.schema.json#/$defs/sha256"
+                  "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
                 }
               },
               "additionalProperties": false
@@ -268,7 +268,7 @@
               ],
               "properties": {
                 "status": {
-                  "$ref": "common-defs.schema.json#/$defs/positiveClaimStatus"
+                  "$ref": "schema-authority-primitives.schema.json#/$defs/positiveClaimStatus"
                 },
                 "evidence": {
                   "minItems": 1
@@ -319,7 +319,7 @@
             "if": {
               "properties": {
                 "status": {
-                  "$ref": "common-defs.schema.json#/$defs/nonProvenClaimStatus"
+                  "$ref": "schema-authority-primitives.schema.json#/$defs/nonProvenClaimStatus"
                 }
               }
             },
@@ -381,17 +381,17 @@
       "minLength": 1
     },
     "verification_backlog_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "validator_receipts": {
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       }
     },
     "generated_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     }
   },
   "additionalProperties": false,

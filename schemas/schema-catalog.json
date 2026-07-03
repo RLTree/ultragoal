@@ -31,8 +31,8 @@
       "path": "schemas/codex-registry-exposure.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/common-defs.schema.json",
-      "path": "schemas/common-defs.schema.json"
+      "id": "https://harness-ultragoal.local/schemas/schema-authority-primitives.schema.json",
+      "path": "schemas/schema-authority-primitives.schema.json"
     },
     {
       "id": "https://harness-ultragoal.local/schemas/completion-manifest.schema.json",

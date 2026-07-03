@@ -1,7 +1,7 @@
 {
   "schema": "harness-ultragoal.improvement-loop-stage-evidence.v1",
   "law_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-  "loop_id": "source-local-gate-94-bootstrap",
+  "loop_id": "source-local-agent-improvement-loop-bootstrap",
   "status": "pass",
   "authority": "cli_parsed_package_static_stage_evidence",
   "candidate_binding": "package_static_source_evidence",
@@ -9,7 +9,7 @@
   "stages": [
     {
       "stage_id": "trace_capture",
-      "evidence_id": "gate94-trace-capture",
+      "evidence_id": "agent-improvement-loop-trace-capture",
       "evidence_kind": "observability_trace_receipt",
       "status": "pass",
       "source_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
@@ -20,18 +20,18 @@
     },
     {
       "stage_id": "typed_feedback",
-      "evidence_id": "gate94-typed-feedback",
+      "evidence_id": "agent-improvement-loop-typed-feedback",
       "evidence_kind": "control_loop_feedback_binding",
       "status": "pass",
       "source_paths": ["docs/improvement-loop-registry.json"],
       "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
-      "command_ids": ["source-local-gate-94-control-loop-steer"],
+      "command_ids": ["source-local-agent-improvement-loop-control-loop-steer"],
       "forbidden_substitutions_rejected": ["raw_feedback_as_loop_closure", "reviewer_agreement_as_loop_closure"],
       "claim_impact": "stage_only"
     },
     {
       "stage_id": "feedback_clustering",
-      "evidence_id": "gate94-feedback-clustering",
+      "evidence_id": "agent-improvement-loop-feedback-clustering",
       "evidence_kind": "completion_theater_cluster",
       "status": "pass",
       "source_paths": ["docs/improvement-loop-registry.json"],
@@ -42,7 +42,7 @@
     },
     {
       "stage_id": "eval_generation",
-      "evidence_id": "gate94-eval-generation",
+      "evidence_id": "agent-improvement-loop-eval-generation",
       "evidence_kind": "red_green_fixture_generation",
       "status": "pass",
       "source_paths": [
@@ -57,7 +57,7 @@
     },
     {
       "stage_id": "promptfoo_execution",
-      "evidence_id": "gate94-promptfoo-execution",
+      "evidence_id": "agent-improvement-loop-promptfoo-execution",
       "evidence_kind": "promptfoo_adapter_source_local_execution_boundary",
       "status": "pass",
       "source_paths": ["docs/promptfoo-suite-registry.json", "docs/promptfoo-provider-registry.json"],
@@ -68,7 +68,7 @@
     },
     {
       "stage_id": "halo_ranking",
-      "evidence_id": "gate94-halo-ranking",
+      "evidence_id": "agent-improvement-loop-halo-ranking",
       "evidence_kind": "halo_governed_equivalent_source_local_ranking_boundary",
       "status": "pass",
       "source_paths": ["docs/halo-adapter-registry.json"],
@@ -79,18 +79,18 @@
     },
     {
       "stage_id": "codex_handoff",
-      "evidence_id": "gate94-codex-handoff",
+      "evidence_id": "agent-improvement-loop-codex-handoff",
       "evidence_kind": "codex_handoff_contract",
       "status": "pass",
       "source_paths": ["docs/improvement-loop-registry.json"],
       "receipt_paths": ["validation_artifacts/improvement-loop/loop-closure-receipt.json"],
-      "command_ids": ["parent-session-gate94-slice"],
+      "command_ids": ["parent-session-agent-improvement-loop-slice"],
       "forbidden_substitutions_rejected": ["checklist_prose_as_loop_closure"],
       "claim_impact": "stage_only"
     },
     {
       "stage_id": "implementation_linkage",
-      "evidence_id": "gate94-implementation-linkage",
+      "evidence_id": "agent-improvement-loop-implementation-linkage",
       "evidence_kind": "source_commit_linkage",
       "status": "pass",
       "source_paths": ["validator/src/cli/improvement_loop/proof.rs", "validator/src/cli/improvement_loop/registry.rs"],
@@ -101,7 +101,7 @@
     },
     {
       "stage_id": "narrow_validation",
-      "evidence_id": "gate94-narrow-validation",
+      "evidence_id": "agent-improvement-loop-narrow-validation",
       "evidence_kind": "focused_test_validation",
       "status": "pass",
       "source_paths": ["validator/src/cli/improvement_loop/tests/mod.rs"],
@@ -116,7 +116,7 @@
     },
     {
       "stage_id": "before_after_telemetry",
-      "evidence_id": "gate94-before-after-telemetry",
+      "evidence_id": "agent-improvement-loop-before-after-telemetry",
       "evidence_kind": "fail_closed_to_green_receipt_transition",
       "status": "pass",
       "source_paths": ["validation_artifacts/observability/spool/events.jsonl"],
@@ -127,7 +127,7 @@
     },
     {
       "stage_id": "promotion_to_law",
-      "evidence_id": "gate94-promotion-to-law",
+      "evidence_id": "agent-improvement-loop-promotion-to-law",
       "evidence_kind": "law_surface_promotion",
       "status": "pass",
       "source_paths": [

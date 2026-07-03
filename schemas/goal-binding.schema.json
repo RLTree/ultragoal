@@ -32,7 +32,7 @@
     "get_goal_receipt": {
       "allOf": [
         {
-          "$ref": "common-defs.schema.json#/$defs/goalToolReceipt"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/goalToolReceipt"
         },
         {
           "properties": {
@@ -44,7 +44,7 @@
       ]
     },
     "create_goal_receipt": {
-      "$ref": "common-defs.schema.json#/$defs/goalToolReceipt"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/goalToolReceipt"
     },
     "tool_names": {
       "type": "array",
@@ -83,13 +83,13 @@
       "description": "Validator-derived equality result. Producers must compute this from get_goal_receipt fields, not self-attest it from prose."
     },
     "checked_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "gap_reason": {
       "type": "string"
     },
     "discovery_probe_receipt": {
-      "$ref": "common-defs.schema.json#/$defs/goalToolProbeReceipt"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/goalToolProbeReceipt"
     }
   },
   "allOf": [

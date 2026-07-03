@@ -96,7 +96,7 @@
     "law_id": { "type": "string" },
     "check_id": { "type": "string" },
     "claim_id": { "type": "string" },
-    "candidate_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "candidate_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
     "target_revision": { "type": "string" },
     "artifact_path": { "type": "string" },
     "receipt_path": { "type": "string" },
@@ -106,7 +106,7 @@
     "where_failed": { "type": "string" },
     "next_repair": { "type": "string" },
     "claim_impact": { "type": "string" },
-    "timestamp": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
+    "timestamp": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
     "duration_ms": { "type": "integer", "minimum": 0 },
     "worker_count": { "type": "integer", "minimum": 0 },
     "task_count": { "type": "integer", "minimum": 0 },
@@ -164,7 +164,7 @@
         "law_id": { "type": "string" },
         "check_id": { "type": "string" },
         "claim_id": { "type": "string" },
-        "candidate_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+        "candidate_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
         "span_kind": { "enum": ["validator_check", "schema_parse", "receipt_deref", "fixture_run", "claim_ceiling", "final_packet_deref", "surface_probe", "exporter_call"] },
         "span_name": { "type": "string", "minLength": 1 }
       }

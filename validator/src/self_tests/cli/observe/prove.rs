@@ -25,10 +25,10 @@ fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
         &root.join("docs/generated/observability/command-inventory.json"),
         &json!({
             "commands": ["observe prove"],
-            "fitting_inventory": {
+            "command_observability_inventory": {
                 "observe prove": {
-                    "fitting_status": "partially_fitted",
-                    "missing_surfaces": ["all commands fitted"],
+                    "observability_status": "partially_observable",
+                    "missing_surfaces": ["all commands observable"],
                     "claim_impact": "blocks_observability_gate"
                 }
             }
@@ -40,7 +40,7 @@ fn observe_prove_rejects_incomplete_command_inventory_after_stack_passes() {
     assert_eq!(proof["status"], "fail");
     let why = proof["why_failed"].as_str().unwrap();
     assert!(why.contains("total_failures="));
-    assert!(why.contains("first_failure=observability_fitting_control_board_missing"));
+    assert!(why.contains("first_failure=observability_control_board_missing"));
     assert!(why.contains("control_board_first_incomplete=unknown"));
     assert!(!why.contains("; observability_command_inventory_missing"));
     assert_eq!(

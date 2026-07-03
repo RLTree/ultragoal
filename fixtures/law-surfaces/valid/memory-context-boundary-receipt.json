@@ -2,7 +2,7 @@
   "claim_ceiling": "live_same_surface_evidence_required",
   "live_same_surface_evidence": [
     {
-      "digest": "sha256:7b4f35d88c44e368586de215b030780ab277b1c2e909e272fca65c2bb4aee7ae",
+      "digest": "sha256:cd89f2123c6ba981ffb43754e3b0681b8bdbb3fee45a55388ad43c29cfcdad55",
       "path": "docs/source-obligation-matrix.json"
     },
     {

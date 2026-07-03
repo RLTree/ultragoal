@@ -22,12 +22,12 @@ pub(crate) fn mint_all(root: &Path, rel_dir: &Path, out_dir: &Path) -> Result<Va
     let journey = journey_receipt(root, rel_dir, &candidate, &generated_at)?;
     crate::json_boundary::write_json(&journey_path, &journey)?;
 
-    Ok(report(root, rel_dir, &fit, &product, &journey))
+    Ok(report(root, rel_dir, &candidate, &fit, &product, &journey))
 }
 
 fn fit_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value, String> {
     let mut value = read_template(root, FIT)?;
-    set_common(&mut value, candidate, generated_at);
+    set_receipt_revision_fields(&mut value, candidate, generated_at);
     set_plugin_version(root, &mut value)?;
     refresh_artifact_refs(root, &mut value)?;
     set_digest(&mut value, crate::audit::fit_repo_receipt::canonical_digest);
@@ -36,7 +36,7 @@ fn fit_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value
 
 fn product_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value, String> {
     let mut value = read_template(root, PRODUCT)?;
-    set_common(&mut value, candidate, generated_at);
+    set_receipt_revision_fields(&mut value, candidate, generated_at);
     refresh_artifact_refs(root, &mut value)?;
     set_digest(
         &mut value,
@@ -52,7 +52,7 @@ fn journey_receipt(
     generated_at: &str,
 ) -> Result<Value, String> {
     let mut value = read_template(root, JOURNEY)?;
-    set_common(&mut value, candidate, generated_at);
+    set_receipt_revision_fields(&mut value, candidate, generated_at);
     refresh_artifact_refs(root, &mut value)?;
     let rel_fit = rel_dir.join(FIT).to_string_lossy().to_string();
     let first = value
@@ -69,7 +69,7 @@ fn read_template(root: &Path, file: &str) -> Result<Value, String> {
     crate::json_boundary::read_json(&root.join(SOURCE_DIR).join(file))
 }
 
-fn set_common(value: &mut Value, candidate: &str, generated_at: &str) {
+fn set_receipt_revision_fields(value: &mut Value, candidate: &str, generated_at: &str) {
     value["generated_at"] = json!(generated_at);
     value["target_revision"] = json!({"kind": "package_digest", "value": candidate});
 }
@@ -122,22 +122,33 @@ fn refresh_artifact_refs(root: &Path, value: &mut Value) -> Result<(), String> {
     Ok(())
 }
 
-fn report(root: &Path, rel_dir: &Path, fit: &Value, product: &Value, journey: &Value) -> Value {
+fn report(
+    root: &Path,
+    rel_dir: &Path,
+    candidate: &str,
+    fit: &Value,
+    product: &Value,
+    journey: &Value,
+) -> Value {
     let mut failures = Vec::new();
     failures.extend(
-        crate::audit::fit_repo_receipt::failures(root, fit)
+        crate::audit::fit_repo_receipt::failures_with_candidate(root, fit, candidate)
             .into_iter()
             .map(|item| format!("fit_repo:{item}")),
     );
     failures.extend(
-        crate::audit::product::fitness::canonical_package_receipt_value_failures(root, product)
-            .into_iter()
-            .map(|item| format!("product_fitness:{item}")),
+        crate::audit::product::fitness::canonical_package_receipt_value_failures_with_candidate(
+            root, product, candidate,
+        )
+        .into_iter()
+        .map(|item| format!("product_fitness:{item}")),
     );
     failures.extend(
-        crate::audit::plugin::product::cohesion::journey_value_failures(root, journey)
-            .into_iter()
-            .map(|item| format!("product_journey:{item}")),
+        crate::audit::plugin::product::cohesion::journey_value_failures_with_candidate(
+            root, journey, candidate,
+        )
+        .into_iter()
+        .map(|item| format!("product_journey:{item}")),
     );
     let status = if failures.is_empty() { "pass" } else { "fail" };
     json!({
@@ -145,7 +156,7 @@ fn report(root: &Path, rel_dir: &Path, fit: &Value, product: &Value, journey: &V
         "status": status,
         "target_revision": {
             "kind": "package_digest",
-            "value": crate::package::inventory::package_digest(root).unwrap_or_default()
+            "value": candidate
         },
         "receipts": [
             row(root, rel_dir, FIT, fit, status),

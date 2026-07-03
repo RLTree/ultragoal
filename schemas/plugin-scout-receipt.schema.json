@@ -24,10 +24,10 @@
       "minLength": 1
     },
     "observed_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "raw_or_redacted_output": {
-      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
     },
     "decisions": {
       "type": "array",

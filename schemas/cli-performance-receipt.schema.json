@@ -52,7 +52,7 @@
       }
     },
     "generated_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "root": {
       "const": "."
@@ -167,31 +167,31 @@
       ],
       "properties": {
         "source": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "candidate": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "cli_binary": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "schema_catalog": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "law_graph": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "standards": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "fixture_catalog": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "source_obligation": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "config": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         }
       }
     },
@@ -292,10 +292,10 @@
       ],
       "properties": {
         "start_timestamp": {
-          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
         },
         "end_timestamp": {
-          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
         },
         "wall_clock_ms": {
           "type": "integer",

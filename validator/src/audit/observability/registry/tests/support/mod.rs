@@ -51,27 +51,30 @@ pub(super) fn write_valid_fixture(root: &Path) {
     .expect("valid fixture");
 }
 
-pub(super) fn fitted_inventory() -> Value {
+pub(super) fn observable_inventory() -> Value {
     let mut rows = Map::new();
     for command in super::super::command_inventory::REQUIRED_COMMANDS {
-        rows.insert((*command).to_string(), rows::fitted_row(command));
+        rows.insert((*command).to_string(), rows::observable_row(command));
     }
     let mut surface_rows = Map::new();
     for surface in super::super::surfaces::REQUIRED_SURFACES {
-        surface_rows.insert((*surface).to_string(), rows::fitted_surface_row(surface));
+        surface_rows.insert(
+            (*surface).to_string(),
+            rows::observable_surface_row(surface),
+        );
     }
     let mut loop_rows = Map::new();
     for stage in super::super::operating::REQUIRED_LOOP_STAGES {
         loop_rows.insert(
             (*stage).to_string(),
-            rows::fitted_operating_row("loop", stage),
+            rows::observable_operating_row("loop", stage),
         );
     }
     let mut signal_rows = Map::new();
     for signal in super::super::operating::REQUIRED_SIGNAL_CLASSES {
         signal_rows.insert(
             (*signal).to_string(),
-            rows::fitted_operating_row("signal", signal),
+            rows::observable_operating_row("signal", signal),
         );
     }
     let mut inventory = json!({
@@ -89,7 +92,7 @@ pub(super) fn fitted_inventory() -> Value {
             },
             "research_inputs": super::super::research_inputs::fixture_inputs()
         },
-        "fitting_control_board": fitted_control_board(),
+        "observability_control_board": observable_control_board(),
         "row_requirements": {
             "log_instrumentation": true,
             "metric_instrumentation": true,
@@ -106,10 +109,10 @@ pub(super) fn fitted_inventory() -> Value {
             "explicit_instrumentation_fields": true,
             "validator_enforced": true,
             "owner_surface_tracking": true,
-            "next_unfitted_surface_tracking": true,
-            "fitting_control_board": true
+            "next_unobservable_surface_tracking": true,
+            "observability_control_board": true
         },
-        "fitting_inventory": rows,
+        "command_observability_inventory": rows,
         "surface_inventory": surface_rows,
         "operating_loop_inventory": loop_rows,
         "signal_inventory": signal_rows
@@ -118,7 +121,7 @@ pub(super) fn fitted_inventory() -> Value {
     inventory
 }
 
-fn fitted_control_board() -> Value {
+fn observable_control_board() -> Value {
     let mut families = Map::new();
     insert_counts(
         &mut families,
@@ -142,9 +145,9 @@ fn fitted_control_board() -> Value {
     );
     super::dimension_support::insert_dimension_counts(&mut families);
     json!({
-        "status": "fitted",
+        "status": "observable",
         "families": families,
-        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_fitted_same_candidate"
+        "claim_impact": "supports_observability_gate_only_when_every_inventory_row_is_command_observable_same_candidate"
     })
 }
 
@@ -153,9 +156,9 @@ pub(super) fn insert_counts(families: &mut Map<String, Value>, key: &str, len: u
         key.to_string(),
         json!({
             "total": len,
-            "fitted": len,
-            "partially_fitted": 0,
-            "unfitted": 0
+            "observable": len,
+            "partially_observable": 0,
+            "unobservable": 0
         }),
     );
 }

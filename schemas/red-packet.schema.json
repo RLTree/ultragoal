@@ -154,7 +154,7 @@
       "additionalProperties": false,
       "properties": {
         "check_id": {
-          "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
         },
         "error": {
           "minLength": 1,
@@ -219,7 +219,7 @@
       "type": "array"
     },
     "id": {
-      "$ref": "common-defs.schema.json#/$defs/requiredRedFixtureId"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId"
     },
     "json_patch": {
       "items": {

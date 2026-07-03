@@ -22,12 +22,12 @@ runtime identity and coordination receipts, not just CLI or fixture evidence.
 
 ## Claim Classification
 
-Classify each claim using the canonical `ClaimStatus` enum in `../../schemas/common-defs.schema.json`. Positive claim ceilings may include only `proven_live` and narrowly scoped `proven_static`.
+Classify each claim using the canonical `ClaimStatus` enum in `../../schemas/schema-authority-primitives.schema.json`. Positive claim ceilings may include only `proven_live` and narrowly scoped `proven_static`.
 
 ## Required Checks
 
 Run `ultragoal-audit`; every required check id owned by
-`../../schemas/common-defs.schema.json#/$defs/requiredValidatorCheckId` must pass.
+`../../schemas/schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId` must pass.
 Summaries may group the results by claim closure, evidence coupling, backlog
 coverage, lane hygiene, validator provenance, red fixtures, and target-repo
 audit capability, but prose is not a second checklist authority.

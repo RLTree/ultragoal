@@ -39,7 +39,7 @@ fn command_roundtrip_stays_partial_without_live_query_roundtrip() {
 
 #[test]
 fn roundtrip_status_labels_are_explicit() {
-    assert_eq!(roundtrip_status(true), "fitted");
+    assert_eq!(roundtrip_status(true), "observable");
     assert_eq!(roundtrip_status(false), "partial");
 }
 
@@ -122,7 +122,7 @@ fn observe_fit_receipt_fails_closed_when_base_observability_cannot_emit() {
         &root,
         &command(),
         "sha256:fit".to_string(),
-        vec![json!({"roundtrip_status": "fitted"})],
+        vec![json!({"roundtrip_status": "observable"})],
         Instant::now(),
     )
     .expect_err("base receipt needs package boundary");

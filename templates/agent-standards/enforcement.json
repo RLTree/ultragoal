@@ -864,7 +864,7 @@
       "gate_or_fixture_path": "docs/plugin-cohesion-manifest.json",
       "id": "plugin-product-cohesion-authority",
       "owner_lane": "root",
-      "required_behavior": "Harness Ultragoal repo fitting must enter through harness-ultragoal:fit-repo, emit fit-repo and plugin product journey receipts, validate plugin flow graph edges, keep source/install/cache/app-registry proof surfaces separate, and promote severe setup friction into standards-gardener rows.",
+      "required_behavior": "Harness Ultragoal repo activation must enter through harness-ultragoal:fit-repo, emit fit-repo and plugin product journey receipts, validate plugin flow graph edges, keep source/install/cache/app-registry proof surfaces separate, and promote severe setup friction into standards-gardener rows.",
       "required_execplan_refs": [
         "mandatory-plugin-product-cohesion-and-fit-repo-authority.md"
       ],

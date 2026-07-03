@@ -29,8 +29,9 @@ fn write_session_root(label: &str) -> PathBuf {
         &json!({"version":"0.0.11"}),
     );
     std::fs::copy(
-        crate::self_tests::boundaries::support::repo_root().join("schemas/common-defs.schema.json"),
-        root.join("schemas/common-defs.schema.json"),
+        crate::self_tests::boundaries::support::repo_root()
+            .join("schemas/schema-authority-primitives.schema.json"),
+        root.join("schemas/schema-authority-primitives.schema.json"),
     )
     .expect("common schema");
     std::fs::copy(
@@ -45,8 +46,8 @@ fn write_session_root(label: &str) -> PathBuf {
             "schema":"harness-ultragoal.schema-catalog.v1",
             "schemas":[
                 {
-                    "id":"https://harness-ultragoal.local/schemas/common-defs.schema.json",
-                    "path":"schemas/common-defs.schema.json"
+                    "id":"https://harness-ultragoal.local/schemas/schema-authority-primitives.schema.json",
+                    "path":"schemas/schema-authority-primitives.schema.json"
                 },
                 {
                     "id":"https://harness-ultragoal.local/schemas/session-log-hardening-receipt.schema.json",

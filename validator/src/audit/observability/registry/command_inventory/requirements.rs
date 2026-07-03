@@ -15,7 +15,7 @@ pub(super) fn row_requirement_keys() -> [&'static str; 17] {
         "explicit_instrumentation_fields",
         "validator_enforced",
         "owner_surface_tracking",
-        "next_unfitted_surface_tracking",
-        "fitting_control_board",
+        "next_unobservable_surface_tracking",
+        "observability_control_board",
     ]
 }

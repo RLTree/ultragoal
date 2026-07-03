@@ -11,10 +11,10 @@ fn source_audit_inventory_records_stable_command_roundtrip() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/source audit")
+        .pointer("/command_observability_inventory/source audit")
         .expect("source audit row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
         row["receipt_paths"]
@@ -35,19 +35,19 @@ fn source_audit_inventory_records_stable_command_roundtrip() {
         "{row}"
     );
     let board = inventory
-        .pointer("/fitting_control_board/first_incomplete")
+        .pointer("/observability_control_board/first_incomplete")
         .expect("first incomplete");
     assert_eq!(board["id"], "install audit");
-    assert_eq!(board["fitting_status"], "partially_fitted");
+    assert_eq!(board["observability_status"], "partially_observable");
     assert_eq!(
-        board["next_unfitted_surface"],
+        board["next_unobservable_surface"],
         "red/green/tamper fixture proof"
     );
     let review_round = inventory
-        .pointer("/fitting_inventory/review-round verify")
+        .pointer("/command_observability_inventory/review-round verify")
         .expect("review-round row");
-    assert_eq!(review_round["fitting_status"], "fitted");
-    assert_eq!(review_round["next_unfitted_surface"], "none");
+    assert_eq!(review_round["observability_status"], "observable");
+    assert_eq!(review_round["next_unobservable_surface"], "none");
     assert_eq!(review_round["missing_surfaces"], serde_json::json!([]));
     for (key, path) in [
         ("receipt_paths", REVIEW_ROUND_PROOF),
@@ -80,10 +80,10 @@ fn fit_repo_inventory_records_command_roundtrip_and_fixture_binding() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/fit-repo prove")
+        .pointer("/command_observability_inventory/fit-repo prove")
         .expect("fit repo row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
@@ -131,10 +131,10 @@ fn product_journey_inventory_records_command_roundtrip_and_fixture_binding() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/product prove-journey")
+        .pointer("/command_observability_inventory/product prove-journey")
         .expect("product journey row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
@@ -180,10 +180,10 @@ fn product_cohesion_inventory_records_command_roundtrip_and_fixture_binding() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/product prove-cohesion")
+        .pointer("/command_observability_inventory/product prove-cohesion")
         .expect("product cohesion row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {
@@ -229,10 +229,10 @@ fn product_fitness_inventory_records_command_roundtrip_and_fixture_binding() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/product prove-fitness")
+        .pointer("/command_observability_inventory/product prove-fitness")
         .expect("product fitness row");
-    assert_eq!(row["fitting_status"], "fitted");
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["observability_status"], "observable");
+    assert_eq!(row["next_unobservable_surface"], "none");
     assert_eq!(row["missing_surfaces"], serde_json::json!([]));
     assert!(
         row["receipt_paths"].as_array().unwrap().iter().any(|item| {

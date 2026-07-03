@@ -46,7 +46,7 @@ Schema-only validation is insufficient. This phase implements semantic checks fo
 
 `ultragoal-validator` is implemented for the package/static/red-fixture/target-repo
 fixture scope. Required check identity is owned only by
-`schemas/common-defs.schema.json#/$defs/requiredValidatorCheckId`; the
+`schemas/schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId`; the
 validator must implement every id and fail if any required id lacks a handler.
 Roadmap prose may describe categories, not restate the checklist.
 

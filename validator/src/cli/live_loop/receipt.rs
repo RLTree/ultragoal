@@ -25,10 +25,10 @@ pub(crate) fn loop_receipt(
         command: "ultragoal loop",
         subcommand: "run",
         operation: "loop.run",
-        surface: "gate92_fast_loop",
+        surface: "observability_live_loop",
         law_id: crate::cli::observe::types::LAW_ID,
-        check_id: "gate92-fast-loop-verified-incremental-audit",
-        claim_id: "gate92-fast-loop-source-local-acceleration",
+        check_id: "observability-live-loop-verified-incremental-audit",
+        claim_id: "observability-live-loop-source-local-acceleration",
         artifact_path: "validation_artifacts/current-state.json",
         receipt_path: receipt_path.as_ref(),
         status,
@@ -36,9 +36,9 @@ pub(crate) fn loop_receipt(
         why_failed: why_failed.as_deref().unwrap_or("none"),
         where_failed: where_failed(status),
         next_repair: text(&blocker, "next_repair", "none"),
-        claim_impact: "source_local_loop_only_not_gate92_closure",
+        claim_impact: "source_local_loop_only_not_observability_product_closure",
         blocked_claims: blocked_claims(),
-        supported_claims: vec!["gate92_fast_loop_source_local_increment".to_string()],
+        supported_claims: vec!["observability_live_loop_source_local_increment".to_string()],
         runtime: Some(runtime),
         emit: true,
     };
@@ -107,7 +107,7 @@ fn failure_class(status: &str) -> &'static str {
     if status == "pass" {
         "none"
     } else {
-        "gate92_loop_first_blocker"
+        "observability_live_loop_first_blocker"
     }
 }
 
@@ -125,7 +125,7 @@ fn text<'a>(value: &'a Value, key: &str, default: &'a str) -> &'a str {
 
 fn blocked_claims() -> Vec<String> {
     [
-        "gate92_closure",
+        "observability_product_closure",
         "readiness",
         "release",
         "completion",

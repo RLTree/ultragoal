@@ -35,7 +35,7 @@ fn red_fixture_observation_and_rows_fail_closed_on_no_failure_and_mismatch() {
 }
 
 #[test]
-fn red_fixture_no_failure_helpers_are_explicit() {
+fn red_fixture_no_failure_diagnostics_are_explicit() {
     assert_eq!(
         crate::red::fixture::observation::first_semantic_error(None),
         "no_failure"

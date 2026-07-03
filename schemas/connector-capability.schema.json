@@ -39,7 +39,7 @@
       ]
     },
     "discovery_receipt": {
-      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
     },
     "capabilities_checked": {
       "type": "array",
@@ -96,11 +96,11 @@
     "required_for_claim_ids": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       }
     },
     "checked_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     }
   },
   "additionalProperties": false

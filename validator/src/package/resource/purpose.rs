@@ -40,7 +40,7 @@ fn path_failure(rel: &str) -> Option<ResourcePurposeFailure> {
             detail: rel.to_string(),
         });
     }
-    if rel.starts_with("artifacts/root-phase-receipts/") && rel.ends_with(".json") {
+    if rel.starts_with("artifacts/root-receipts/") && rel.ends_with(".json") {
         return Some(ResourcePurposeFailure {
             code: ROOT_VERIFICATION_PROOF_RESOURCE,
             detail: rel.to_string(),
@@ -70,21 +70,21 @@ mod tests {
 
     #[test]
     fn stale_active_artifact_path_is_rejected() {
-        let failure = path_failure("artifacts/root-phase-receipts/stale-proof.json");
+        let failure = path_failure("artifacts/root-receipts/stale-proof.json");
 
         assert_eq!(failure.unwrap().code, STALE_PROOF_RESOURCE);
     }
 
     #[test]
     fn fixture_support_path_is_not_active_artifact() {
-        let failure = path_failure("fixtures/root-phase-receipts/stale-proof.fixture.json");
+        let failure = path_failure("fixtures/root-receipts/stale-proof.fixture.json");
 
         assert!(failure.is_none());
     }
 
     #[test]
     fn active_root_verification_receipt_path_is_rejected() {
-        let failure = path_failure("artifacts/root-phase-receipts/post-merge.json");
+        let failure = path_failure("artifacts/root-receipts/post-merge.json");
 
         assert_eq!(failure.unwrap().code, ROOT_VERIFICATION_PROOF_RESOURCE);
     }

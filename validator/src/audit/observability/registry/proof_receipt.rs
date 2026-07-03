@@ -13,19 +13,19 @@ pub(super) fn receipt_run(
     let rel = strings(row, "receipt_paths").into_iter().next()?;
     let Ok(raw) = crate::json_boundary::read_json(&root.join(&rel)) else {
         out.push(format!(
-            "observability_{prefix}_fitting_receipt_missing:{command}:{rel}"
+            "observability_{prefix}_telemetry_receipt_missing:{command}:{rel}"
         ));
         return None;
     };
     let Some(value) = observability_binding(&raw) else {
         out.push(format!(
-            "observability_{prefix}_fitting_receipt_not_current:{command}:{rel}"
+            "observability_{prefix}_telemetry_receipt_not_current:{command}:{rel}"
         ));
         return None;
     };
     if !receipt_current(value, candidate, operation) {
         out.push(format!(
-            "observability_{prefix}_fitting_receipt_not_current:{command}:{rel}"
+            "observability_{prefix}_telemetry_receipt_not_current:{command}:{rel}"
         ));
         return None;
     }
@@ -127,7 +127,7 @@ fn required_text(
 ) -> Option<String> {
     let Some(text) = value.get(field).and_then(Value::as_str) else {
         out.push(format!(
-            "observability_{prefix}_fitting_receipt_missing_{field}:{command}:{rel}"
+            "observability_{prefix}_telemetry_receipt_missing_{field}:{command}:{rel}"
         ));
         return None;
     };

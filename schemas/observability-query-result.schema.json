@@ -31,7 +31,7 @@
   "properties": {
     "schema": { "const": "harness-ultragoal.observability-query-result.v1" },
     "status": { "enum": ["pass", "fail", "blocked"] },
-    "candidate_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "candidate_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
     "run_id": { "type": "string", "minLength": 1 },
     "correlation_id": { "type": "string", "minLength": 1 },
     "why_failed": { "type": "string" },
@@ -46,7 +46,7 @@
     "cardinality_guard": { "enum": ["bounded", "fail"] },
     "truncated": { "type": "boolean" },
     "claim_impact": { "type": "string" },
-    "result_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+    "result_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
     "rows": { "type": "array", "items": { "type": "object" } },
     "failure": { "type": "string" },
     "supported_claims": { "type": "array", "items": { "type": "string" } },

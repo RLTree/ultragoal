@@ -39,7 +39,7 @@ Simplicity auditor:
 ### Applied Corrections
 
 - Added missing files and this report to `plugin-manifest-draft.json` resources.
-- Hardened `schemas/common-defs.schema.json` so included claim-ceiling entries require positive claim status, and non-proven statuses cannot be included.
+- Hardened `schemas/schema-authority-primitives.schema.json` so included claim-ceiling entries require positive claim status, and non-proven statuses cannot be included.
 - Hardened `schemas/completion-manifest.schema.json` so included `feature_completion` claims require `status: proven_live` and live-beneficial evidence.
 - Hardened `schemas/plugin-manifest.schema.json` with agent uniqueness and required critical template/generated-example entries.
 - Expanded `templates/LANE_EXECPLAN.md` with isolation, dependency, launch-readiness, live-beneficial proof, and typed claim-ceiling sections.

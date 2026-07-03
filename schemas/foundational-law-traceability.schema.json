@@ -61,7 +61,7 @@
             "minLength": 1
           },
           "validator_check_id": {
-            "$ref": "common-defs.schema.json#/$defs/requiredValidatorCheckId"
+            "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
           },
           "red_fixture_id": {
             "type": "string",

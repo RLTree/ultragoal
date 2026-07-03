@@ -72,17 +72,17 @@ fn base_row(
     fixture_slug: String,
 ) -> serde_json::Value {
     let mut row = json!({
-        "fitting_status": "fitted",
-        "fitted_surfaces": fitted_surfaces(),
+        "observability_status": "observable",
+        "observed_surfaces": observed_surfaces(),
         "missing_surfaces": [],
         "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-        "log_instrumentation": "log instrumentation fitted",
-        "metric_instrumentation": "metric instrumentation fitted",
-        "trace_instrumentation": "trace instrumentation fitted",
-        "pass_stdout_contract": "pass stdout contract fitted",
-        "fail_stdout_contract": "fail stdout contract fitted",
-        "receipt_observability_binding": "receipt observability binding fitted",
-        "focused_tests": ["observe_green_prove_and_query_helpers_are_typed"],
+        "log_instrumentation": "log instrumentation observable",
+        "metric_instrumentation": "metric instrumentation observable",
+        "trace_instrumentation": "trace instrumentation observable",
+        "pass_stdout_contract": "pass stdout contract observable",
+        "fail_stdout_contract": "fail stdout contract observable",
+        "receipt_observability_binding": "receipt observability binding observable",
+        "focused_tests": ["observe_green_prove_and_query_contracts_are_typed"],
         "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{receipt_slug}.json")],
         "live_query_proof_paths": query_paths(receipt_slug),
         "same_candidate_query_proof_paths": query_paths(receipt_slug),
@@ -90,7 +90,7 @@ fn base_row(
         "green_fixtures": [format!("fixtures/green/observability/{fixture_slug}-green.json")],
         "tamper_fixtures": [format!("fixtures/tamper/observability/{fixture_slug}-tamper.json")],
         "current_owner_surface": owner,
-        "next_unfitted_surface": "none",
+        "next_unobservable_surface": "none",
         "claim_impact": "supports_observability_gate_when_same_candidate"
     });
     if let Some(operation) = operation {
@@ -100,7 +100,7 @@ fn base_row(
     row
 }
 
-fn fitted_surfaces() -> [&'static str; 6] {
+fn observed_surfaces() -> [&'static str; 6] {
     [
         "log instrumentation",
         "metric instrumentation",

@@ -121,13 +121,13 @@ fn observability_control_board(root: &Path) -> Value {
     )
     .unwrap_or(Value::Null);
     value
-        .get("fitting_control_board")
+        .get("observability_control_board")
         .cloned()
         .unwrap_or_else(|| json!({"status": "missing"}))
 }
 
 fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) -> Value {
-    if board.get("status").and_then(Value::as_str) != Some("fitted") {
+    if board.get("status").and_then(Value::as_str) != Some("observable") {
         let incomplete = board
             .get("first_incomplete")
             .cloned()

@@ -32,7 +32,7 @@ pub(super) fn same_candidate(
         .all(|value| value.get("candidate_digest").and_then(Value::as_str) == Some(candidate))
 }
 
-pub(super) fn is_fitted(
+pub(super) fn is_command_observable(
     production: &CommandOutput,
     command_receipt: &Value,
     logs: &Value,

@@ -58,7 +58,7 @@
           "const": true
         },
         "promoted_at": {
-          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
         },
         "approver_actor_id": {
           "type": "string",
@@ -80,7 +80,7 @@
           "minLength": 1
         },
         "digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         }
       }
     },
@@ -101,7 +101,7 @@
               "minLength": 1
             },
             "package_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             }
           }
         }
@@ -120,10 +120,10 @@
           ],
           "properties": {
             "review_target_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             },
             "package_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             }
           }
         }
@@ -145,7 +145,7 @@
               "const": "candidate_review_anchor"
             },
             "package_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             }
           }
         }
@@ -177,10 +177,10 @@
               "minLength": 1
             },
             "review_target_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             },
             "archive_digest": {
-              "$ref": "common-defs.schema.json#/$defs/sha256"
+              "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
             }
           }
         }

@@ -95,7 +95,7 @@ where
     );
     let traces = traces_result?;
     let explain = explain_roundtrip(root, spec, run_id, correlation_id, timeout_ms)?;
-    let fitted = checks::is_fitted(
+    let observable = checks::is_command_observable(
         &production,
         &command_receipt,
         &logs,
@@ -107,7 +107,7 @@ where
         "command_id": spec.id,
         "family": spec.family,
         "operation": spec.operation,
-        "roundtrip_status": roundtrip_status(fitted),
+        "roundtrip_status": roundtrip_status(observable),
         "production_exit_status": production.exit_code,
         "production_stdout": production.stdout,
         "production_stderr": production.stderr,
@@ -124,8 +124,8 @@ where
     }))
 }
 
-fn roundtrip_status(fitted: bool) -> &'static str {
-    if fitted { "fitted" } else { "partial" }
+fn roundtrip_status(observable: bool) -> &'static str {
+    if observable { "observable" } else { "partial" }
 }
 
 fn query_roundtrip(
@@ -195,17 +195,17 @@ fn receipt(
     results: Vec<Value>,
     started: Instant,
 ) -> Result<Value, String> {
-    let fitted = results
+    let observable = results
         .iter()
-        .all(|row| row["roundtrip_status"] == "fitted");
-    let status = if fitted { "pass" } else { "fail" };
-    let failure = (!fitted).then_some("observability command roundtrip is incomplete");
+        .all(|row| row["roundtrip_status"] == "observable");
+    let status = if observable { "pass" } else { "fail" };
+    let failure = (!observable).then_some("observability command roundtrip is incomplete");
     let mut receipt = super::telemetry::base_receipt(root, command, status, failure)?;
     receipt["schema"] = json!("harness-ultragoal.observe-roundtrip-receipt.v1");
     receipt["candidate_digest"] = json!(candidate);
     receipt["target_command"] = json!(command.target_command);
     receipt["target_family"] = json!(command.target_family);
-    receipt["roundtrip_status"] = json!(if fitted { "fitted" } else { "partial" });
+    receipt["roundtrip_status"] = json!(if observable { "observable" } else { "partial" });
     receipt["duration_ms"] = json!(
         u64::try_from(started.elapsed().as_millis())
             .unwrap_or(u64::MAX)
@@ -222,7 +222,7 @@ fn receipt(
     );
     receipt["supported_claims"] = json!(["spec_driven_observability_command_roundtrip_increment"]);
     receipt["blocked_claims"] = json!([
-        "gate92_closure",
+        "observability_product_closure",
         "readiness",
         "release",
         "completion",

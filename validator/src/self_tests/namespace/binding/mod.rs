@@ -3,6 +3,7 @@ use std::path::Path;
 
 mod class;
 mod law;
+mod semantic_names;
 mod topology;
 
 fn write_json(path: &Path, value: &Value) {

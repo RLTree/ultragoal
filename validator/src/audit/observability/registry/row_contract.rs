@@ -5,7 +5,7 @@ pub(super) fn complete(row: &Map<String, Value>) -> bool {
     surface_contracts(row) && explicit_fields(row)
 }
 
-pub(super) fn fitted(row: &Map<String, Value>) -> bool {
+pub(super) fn observable(row: &Map<String, Value>) -> bool {
     complete(row)
         && [
             "same_candidate_query_proof_paths",
@@ -57,7 +57,7 @@ fn explicit_fields(row: &Map<String, Value>) -> bool {
 }
 
 fn row_accounts_for(row: &Map<String, Value>, terms: &[&str]) -> bool {
-    ["fitted_surfaces", "missing_surfaces"]
+    ["observed_surfaces", "missing_surfaces"]
         .into_iter()
         .flat_map(|key| row.get(key).and_then(Value::as_array).into_iter().flatten())
         .filter_map(Value::as_str)

@@ -135,7 +135,7 @@ mod tests {
     use std::path::Path;
 
     #[test]
-    fn display_helpers_are_fail_closed_and_stable() {
+    fn display_contracts_are_fail_closed_and_stable() {
         assert_eq!(
             super::display_repo(Path::new("/missing/repo"), Some(Path::new("/missing/root"))),
             "<target-repo>"

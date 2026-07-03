@@ -9,12 +9,12 @@ fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
     ));
     let out = root.join(&rel);
     let _ = std::fs::remove_dir_all(&out);
+    let candidate = crate::package::inventory::package_digest(&root).expect("digest before mint");
 
     let report = crate::cli::product::receipts::mint_all(&root, &rel, &out).expect("mint");
     assert_eq!(report["status"], "pass");
     assert!(report["failures"].as_array().expect("failures").is_empty());
 
-    let current = crate::package::inventory::package_digest(&root).expect("digest");
     let fit = crate::json_boundary::read_json(&out.join("fit-repo-receipt.json")).expect("fit");
     let product =
         crate::json_boundary::read_json(&out.join("product-fitness-receipt.json")).expect("pf");
@@ -22,7 +22,7 @@ fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
         .expect("journey");
 
     for value in [&fit, &product, &journey] {
-        assert_eq!(value["target_revision"]["value"], current);
+        assert_eq!(value["target_revision"]["value"], candidate);
     }
     assert_eq!(
         fit["receipt_digest"],

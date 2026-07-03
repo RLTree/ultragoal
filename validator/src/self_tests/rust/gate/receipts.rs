@@ -5,7 +5,7 @@ use crate::cli::rust::{RustCommand, parse, receipt as rust_receipt};
 use serde_json::json;
 
 #[test]
-fn rust_command_parser_routes_required_gate_91_operations() {
+fn rust_command_parser_routes_developer_workflow_operations() {
     for (raw, expected) in [
         (
             vec!["rust", "toolchain", "verify"],
@@ -37,7 +37,7 @@ fn rust_command_parser_routes_required_gate_91_operations() {
 }
 
 #[test]
-fn rust_command_usage_matches_canonical_gate_91_surface() {
+fn rust_command_usage_matches_developer_workflow_surface() {
     let usage = crate::usage();
     for fragment in [
         "rust <toolchain verify",

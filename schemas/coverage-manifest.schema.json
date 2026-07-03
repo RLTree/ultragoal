@@ -34,8 +34,8 @@
   "properties": {
     "schema": { "const": "harness-ultragoal.coverage-manifest.v1" },
     "manifest_version": { "type": "integer", "minimum": 1 },
-    "repo_root_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
-    "generated_at": { "$ref": "common-defs.schema.json#/$defs/isoTimestamp" },
+    "repo_root_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
+    "generated_at": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
     "owner": { "type": "string", "minLength": 1 },
     "policy": { "enum": ["100_percent_required", "ratchet_floor", "blocked_or_withheld"] },
     "coverage_command_id": { "type": "string", "minLength": 1 },
@@ -98,7 +98,7 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
         },
-        "changed_files_digest": { "$ref": "common-defs.schema.json#/$defs/sha256" },
+        "changed_files_digest": { "$ref": "schema-authority-primitives.schema.json#/$defs/sha256" },
         "blocker_path": { "type": "string", "minLength": 1 }
       }
     },

@@ -64,7 +64,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn proof_helpers_return_null_failure_and_pass_notes_for_empty_evidence() {
+    fn proof_diagnostics_return_null_failure_and_pass_notes_for_empty_evidence() {
         let failures = Vec::new();
         assert_eq!(
             failure_value(ControlOperation::UpdateGoalEligibility, &failures),

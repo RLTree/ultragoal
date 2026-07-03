@@ -60,7 +60,7 @@ fn attach_records_pass_and_fail_claim_contracts() {
 }
 
 #[test]
-fn helper_classification_edges_are_specific() {
+fn failure_classification_edges_are_specific() {
     assert_eq!(failure_class("none"), "none");
     assert_eq!(failure_class("coverage stale"), "coverage_blocker");
     assert_eq!(failure_class("registry missing"), "registry_blocker");

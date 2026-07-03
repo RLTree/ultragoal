@@ -31,16 +31,16 @@
       "pattern": "^AMEND-[0-9]{3,}$"
     },
     "previous_contract_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "new_contract_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "previous_amendment_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "amendment_hash": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "change_class": {
       "enum": [
@@ -60,27 +60,27 @@
     "affected_claim_ids": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       }
     },
     "removed_or_weakened_claim_ids": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       },
       "uniqueItems": true
     },
     "before_claim_ceiling": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       },
       "uniqueItems": true
     },
     "after_claim_ceiling": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       },
       "uniqueItems": true
     },
@@ -103,7 +103,7 @@
           ]
         },
         "artifact": {
-          "$ref": "common-defs.schema.json#/$defs/artifactRef"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
         }
       },
       "additionalProperties": false
@@ -111,17 +111,17 @@
     "backlog_updates": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/artifactRef"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
       }
     },
     "created_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "derived_removed_or_weakened_claim_ids": {
       "type": "array",
       "uniqueItems": true,
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       },
       "description": "Validator-derived list from before/after required claim and claim ceiling comparison."
     },

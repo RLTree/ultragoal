@@ -4,7 +4,7 @@
     "check_id": "lane-scope-overlap",
     "error": "invalid_lane_resource_path"
   },
-  "id": "lane-scratch-root-dot-segment",
+  "id": "lane-temp-root-dot-segment",
   "json_patch": [
     {
       "op": "replace",

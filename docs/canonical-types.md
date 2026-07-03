@@ -4,19 +4,19 @@ This document names the schema-owned types used across the package. Prose files 
 
 ## ClaimStatus
 
-Defined in `schemas/common-defs.schema.json`.
+Defined in `schemas/schema-authority-primitives.schema.json`.
 
 Positive and non-proven subsets are also defined there. Positive claim ceilings may include only `proven_live` and narrowly scoped `proven_static`.
 
 ## ClaimSurface
 
-Defined in `schemas/common-defs.schema.json`.
+Defined in `schemas/schema-authority-primitives.schema.json`.
 
 Surfaces are not interchangeable. CLI proof, API proof, UI proof, package proof, installed-app proof, and root-integration proof carry different claim ceilings.
 
 ## EvidenceKind
 
-Defined in `schemas/common-defs.schema.json`.
+Defined in `schemas/schema-authority-primitives.schema.json`.
 
 `live_beneficial_e2e` is required for feature completion claims. `static_check` only supports static claims. `red_fixture` supports validator negative proof.
 `product_cohesion_receipt` supports consumer-facing product claims only when it is paired with UI journey evidence.
@@ -51,7 +51,7 @@ Every non-proven claim needs a backlog row with owner, proof requirement, attemp
 
 ## Validator Checks
 
-Defined in `schemas/common-defs.schema.json` as `requiredValidatorCheckId`.
+Defined in `schemas/schema-authority-primitives.schema.json` as `requiredValidatorCheckId`.
 
 Validator receipts must name the complete required check set. Counting checks is insufficient; `checks` is keyed by check id and every required key must be present.
 

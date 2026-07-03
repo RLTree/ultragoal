@@ -155,7 +155,7 @@ fn live_loop_run_can_pass_when_current_state_has_no_blocker() {
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     crate::json_boundary::write_json(
         &root.join("docs/generated/observability/command-inventory.json"),
-        &json!({"fitting_control_board": {"status": "fitted"}}),
+        &json!({"observability_control_board": {"status": "observable"}}),
     )
     .expect("board");
     for path in [

@@ -1039,9 +1039,9 @@
       "check_id": "lane-scope-overlap",
       "error": "active_lane_mutable_resource_overlap"
     },
-    "id": "blocked-lane-scratch-root-overlap",
+    "id": "blocked-lane-temp-root-overlap",
     "packet_digest": "sha256:fb888035b693ad73fc78fe28c9081e12eab0d8f55569ccc9f903760033c8c253",
-    "packet_path": "fixtures/red/blocked-lane-scratch-root-overlap.json"
+    "packet_path": "fixtures/red/blocked-lane-temp-root-overlap.json"
   },
   {
     "expected_failure": {
@@ -2614,9 +2614,9 @@
       "check_id": "root-verification-phase-coverage",
       "error": "root_phase_missing_or_duplicate"
     },
-    "id": "duplicate-or-missing-root-phase",
+    "id": "duplicate-or-missing-root-receipt",
     "packet_digest": "sha256:21a95b9a8c84934f70a7627373ea51434d317f289fd5006c46aa7839a4b93576",
-    "packet_path": "fixtures/red/duplicate-or-missing-root-phase.json"
+    "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json"
   },
   {
     "expected_failure": {
@@ -4387,9 +4387,9 @@
       "check_id": "lane-scope-overlap",
       "error": "invalid_lane_resource_path"
     },
-    "id": "lane-scratch-root-dot-segment",
+    "id": "lane-temp-root-dot-segment",
     "packet_digest": "sha256:f4e5c0d077a837a0d9d145b5bdd9a5cb5f123c391652ea7124185c130f85ba14",
-    "packet_path": "fixtures/red/lane-scratch-root-dot-segment.json"
+    "packet_path": "fixtures/red/lane-temp-root-dot-segment.json"
   },
   {
     "expected_failure": {
@@ -4936,9 +4936,9 @@
       "check_id": "lane-scope-overlap",
       "error": "active_lane_mutable_resource_overlap"
     },
-    "id": "nested-scratch-root-active-lanes",
+    "id": "nested-temp-root-active-lanes",
     "packet_digest": "sha256:f518dffd8b78f9ed63107621988d59ad348b511cfbabd1d9ad3a7b325b25e99d",
-    "packet_path": "fixtures/red/nested-scratch-root-active-lanes.json"
+    "packet_path": "fixtures/red/nested-temp-root-active-lanes.json"
   },
   {
     "expected_failure": {
@@ -5674,9 +5674,9 @@
       "check_id": "plugin-inventory-closure",
       "error": "root_phase_proof_resource_packaged"
     },
-    "id": "plugin-manifest-active-root-phase-proof-resource",
+    "id": "plugin-manifest-active-root-receipt-resource",
     "packet_digest": "sha256:53897b844a50f37350ba3b637e6c34786ae425e00feec53e09e30dadcfd0f5b1",
-    "packet_path": "fixtures/red/plugin-manifest-active-root-phase-proof-resource.json"
+    "packet_path": "fixtures/red/plugin-manifest-active-root-receipt-resource.json"
   },
   {
     "expected_failure": {
@@ -8869,9 +8869,9 @@
       "check_id": "root-verification-phase-coverage",
       "error": "root_phase_pass_without_successful_receipt"
     },
-    "id": "root-phase-pass-failed-command",
+    "id": "root-receipt-pass-failed-command",
     "packet_digest": "sha256:dbbedc52bb9cd11a4b5620f8660f67234c5e561dd590369c56f821b7ee19b029",
-    "packet_path": "fixtures/red/root-phase-pass-failed-command.json"
+    "packet_path": "fixtures/red/root-receipt-pass-failed-command.json"
   },
   {
     "expected_failure": {

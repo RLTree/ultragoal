@@ -1,28 +1,10 @@
 {
-  "schema": "harness-ultragoal.red-packet.v1",
-  "materialization": {
-    "expected_validation_layer": "semantic",
-    "post_patch_schema_valid": true,
-    "first_failure_must_match_expected": true
-  },
-  "preconditions": [
-    {
-      "path": "/schema",
-      "exists": true
-    }
-  ],
-  "postconditions": [
-    {
-      "path": "/expected_failure/error",
-      "expectation": "active_lane_mutable_resource_overlap remains the first failing error"
-    }
-  ],
-  "id": "blocked-lane-scratch-root-overlap",
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
   "expected_failure": {
     "check_id": "lane-scope-overlap",
     "error": "active_lane_mutable_resource_overlap"
   },
-  "base_fixture_path": "fixtures/valid/minimal-goal-run.json",
+  "id": "nested-temp-root-active-lanes",
   "json_patch": [
     {
       "op": "add",
@@ -48,11 +30,11 @@
           "thread_or_session_id": "thread-2",
           "validated_at": "2026-06-16T00:00:00Z"
         },
-        "artifact_root": "validation_artifacts/blocked",
+        "artifact_root": "validation_artifacts/valid",
         "base_commit": "abcdef0",
-        "branch": "codex/blocked-fixture",
+        "branch": "codex/fixture-2",
         "browser_profile_roots": [
-          ".browser/blocked"
+          ".browser/lane-001"
         ],
         "claim_ids": [
           "CLAIM-001"
@@ -64,7 +46,7 @@
         "dependencies": [],
         "execplan": "docs/exec-plans/active/fixture.md",
         "forbidden_paths": [
-          "src/unrelated-blocked"
+          "src/unrelated-secondary"
         ],
         "id": "LANE-002",
         "lane_objective": "Validate the static fixture contract shape for proposal package schema development.",
@@ -89,21 +71,21 @@
         "macro_lane_rationale": "This fixture lane is intentionally scoped to cover the complete static schema fixture contract, not a tiny implementation task.",
         "merge_base_at_validation": "abcdef0",
         "owned_paths": [
-          "fixtures/blocked"
+          "fixtures/valid-secondary"
         ],
         "owner": "fixture-agent-2",
         "port_allocations": [],
         "ready_receipt": {
-          "path": "READY_FOR_MERGE-BLOCKED.json",
-          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+          "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "path": "READY_FOR_MERGE-2.json"
         },
         "scratch_roots": [
-          ".scratch/fixture"
+          ".scratch/fixture/nested"
         ],
         "state_roots": [
-          ".state/blocked"
+          ".state/fixture"
         ],
-        "status": "blocked",
+        "status": "ready_for_review",
         "target_branch": "main",
         "target_freshness": {
           "checked_at": "2026-06-16T00:00:00Z",
@@ -121,7 +103,7 @@
             "observed_branch": "main",
             "observed_merge_base": "abcdef0",
             "observed_target_head": "abcdef0",
-            "observed_workspace": "/repo-blocked"
+            "observed_workspace": "/repo"
           },
           "merge_base_includes_target_head": true,
           "target_head_matches_live": true
@@ -137,17 +119,15 @@
           "status": "ready"
         },
         "thread_or_session_id": "thread-2",
-        "tool_cache_roots": [
-          ".cache/blocked"
-        ],
-        "workspace": "/repo-blocked",
+        "tool_cache_roots": [],
+        "workspace": "/repo",
         "workspace_status": {
           "clean": true,
           "dirty_paths": [],
-          "observed_branch": "codex/blocked-fixture",
+          "observed_branch": "codex/fixture-2",
           "observed_clean": true,
           "observed_head": "abcdef0",
-          "observed_workspace": "/repo-blocked",
+          "observed_workspace": "/repo",
           "status_command_receipt": {
             "artifact_digest": "sha256:5afb27e091ca518cac19e4b08c6fb6af5e865f020a739b3495a694e75a26abe2",
             "artifact_path": "status.json",
@@ -166,5 +146,23 @@
       }
     }
   ],
-  "notes": "blocked lanes still retain resources and must participate in isolation checks"
+  "materialization": {
+    "expected_validation_layer": "semantic",
+    "first_failure_must_match_expected": true,
+    "post_patch_schema_valid": true
+  },
+  "notes": "adds second active lane with nested scratch_roots under another active lane",
+  "postconditions": [
+    {
+      "expectation": "active_lane_mutable_resource_overlap",
+      "path": "/lane_registry/lanes/1"
+    }
+  ],
+  "preconditions": [
+    {
+      "exists": true,
+      "path": "/lane_registry/lanes/0"
+    }
+  ],
+  "schema": "harness-ultragoal.red-packet.v1"
 }

@@ -7,7 +7,7 @@ use serde_json::json;
 use std::path::PathBuf;
 
 #[test]
-fn check_helpers_build_paths_report_status_and_required_text() {
+fn check_contracts_build_paths_report_status_and_required_text() {
     let spec = specs::command("package digest").expect("package spec");
     assert_eq!(
         query_paths(spec),

@@ -10,7 +10,7 @@ pub(super) fn require_current_receipts(
 ) {
     let Ok(candidate) = crate::package::inventory::package_digest(root) else {
         out.push(format!(
-            "observability_command_fitting_candidate_digest_unavailable:{command}"
+            "observability_command_telemetry_candidate_digest_unavailable:{command}"
         ));
         return;
     };
@@ -41,13 +41,13 @@ pub(super) fn require_current_surface_receipts(
 ) {
     let Ok(candidate) = crate::package::inventory::package_digest(root) else {
         out.push(format!(
-            "observability_surface_fitting_candidate_digest_unavailable:{surface}"
+            "observability_surface_telemetry_candidate_digest_unavailable:{surface}"
         ));
         return;
     };
     let Some(operation) = row.get("operation").and_then(Value::as_str) else {
         out.push(format!(
-            "observability_surface_fitting_operation_missing:{surface}"
+            "observability_surface_telemetry_operation_missing:{surface}"
         ));
         return;
     };
@@ -84,7 +84,7 @@ fn require_query_receipts(
     for rel in strings(row, "same_candidate_query_proof_paths") {
         let Ok(value) = crate::json_boundary::read_json(&root.join(&rel)) else {
             out.push(format!(
-                "observability_{prefix}_fitting_query_missing:{command}:{rel}"
+                "observability_{prefix}_telemetry_query_missing:{command}:{rel}"
             ));
             continue;
         };
@@ -93,7 +93,7 @@ fn require_query_receipts(
         }
         if !query_current(&value, candidate, run_id) {
             out.push(format!(
-                "observability_{prefix}_fitting_query_not_current:{command}:{rel}"
+                "observability_{prefix}_telemetry_query_not_current:{command}:{rel}"
             ));
             continue;
         }
@@ -104,14 +104,14 @@ fn require_query_receipts(
         let rows = value.get("rows");
         if !query_rows_match(query_kind, rows, candidate, correlation_id, operation) {
             out.push(format!(
-                "observability_{prefix}_fitting_query_not_same_run:{command}:{rel}"
+                "observability_{prefix}_telemetry_query_not_same_run:{command}:{rel}"
             ));
         }
     }
     for kind in ["logs", "metrics", "traces"] {
         if !kinds.contains(kind) {
             out.push(format!(
-                "observability_{prefix}_fitting_query_kind_missing:{command}:{kind}"
+                "observability_{prefix}_telemetry_query_kind_missing:{command}:{kind}"
             ));
         }
     }

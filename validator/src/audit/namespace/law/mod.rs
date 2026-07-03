@@ -93,6 +93,18 @@ fn path_name_failures(listed: &[String]) -> Vec<String> {
     let mut out = Vec::new();
     for rel in listed {
         let components = rel.split('/').collect::<Vec<_>>();
+        if let Some(label) =
+            crate::audit::namespace::source::path_labels::product_opaque_goal_work_label(rel)
+        {
+            out.push(format!(
+                "namespace_product_opaque_goal_work_path:path={rel};label={label};why=package_or_artifact_path_names_goal_work_or_evidence_posture_instead_of_product_behavior;repair=rename_package_or_artifact_path_by_product_behavior;claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed=false"
+            ));
+        }
+        if let Some(label) = schema_authority_leaf_label(rel, &components) {
+            out.push(format!(
+                "namespace_schema_generic_authority_path:path={rel};label={label};why=schema_authority_file_name_uses_generic_bucket_instead_of_schema_product_role;repair=rename_schema_file_by_authority_role_or_schema_domain;claims=completion,review,package,readiness,release,product_readiness,cli_self_law,source_audit,final_packet,update_goal;exception_allowed=false"
+            ));
+        }
         if components
             .iter()
             .any(|part| matches!(*part, "utils" | "helpers" | "misc"))
@@ -128,6 +140,18 @@ fn path_name_failures(listed: &[String]) -> Vec<String> {
         }
     }
     out
+}
+
+fn schema_authority_leaf_label(rel: &str, components: &[&str]) -> Option<&'static str> {
+    if !rel.starts_with("schemas/") {
+        return None;
+    }
+    let leaf = components.last()?;
+    let stem = leaf
+        .strip_suffix(".schema.json")
+        .or_else(|| leaf.strip_suffix(".json"))
+        .unwrap_or(leaf);
+    crate::audit::namespace::source::path_labels::generic_source_leaf_label(stem)
 }
 
 fn orphan_file_failures_for_actual_files(

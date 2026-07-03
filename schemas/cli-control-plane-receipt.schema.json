@@ -56,13 +56,13 @@
       }
     },
     "generated_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "root": {
       "const": "."
     },
     "candidate_digest": {
-      "$ref": "common-defs.schema.json#/$defs/sha256"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
     },
     "run_id": {
       "type": "string",
@@ -329,7 +329,7 @@
       ],
       "properties": {
         "candidate_digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "evaluation_mode": {
           "const": "production_dereferenced"
@@ -377,7 +377,7 @@
               "digest": {
                 "oneOf": [
                   {
-                    "$ref": "common-defs.schema.json#/$defs/sha256"
+                    "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
                   },
                   {
                     "type": "null"
@@ -409,7 +409,7 @@
               "candidate_digest": {
                 "oneOf": [
                   {
-                    "$ref": "common-defs.schema.json#/$defs/sha256"
+                    "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
                   },
                   {
                     "type": "null"
@@ -473,13 +473,13 @@
           "minLength": 1
         },
         "log_stream_digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "metric_snapshot_digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         },
         "trace_bundle_digest": {
-          "$ref": "common-defs.schema.json#/$defs/sha256"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
         }
       }
     },

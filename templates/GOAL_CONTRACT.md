@@ -6,7 +6,7 @@ State the objective in observable terms.
 
 ## Claim Ceiling
 
-The claim ceiling is typed. Keep this block aligned with `schemas/common-defs.schema.json#/$defs/claimCeilingEntry`.
+The claim ceiling is typed. Keep this block aligned with `schemas/schema-authority-primitives.schema.json#/$defs/claimCeilingEntry`.
 
 ```json
 [

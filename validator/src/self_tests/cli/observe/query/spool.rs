@@ -3,7 +3,7 @@ use serde_json::json;
 use std::fs;
 
 #[test]
-fn observe_query_receipt_and_spool_helpers_are_typed() {
+fn observe_query_receipt_and_spool_contracts_are_typed() {
     let root = super::super::minimal_root("observe-query-spool");
     let command = super::command(&["observe", "logs", "query"]);
     let query_receipt = observe::telemetry::query_result(

@@ -128,7 +128,7 @@ fn rust_devx_audit_live_root_covers_current_surface_presence() {
 }
 
 #[test]
-fn rust_devx_missing_prefix_helper_covers_present_and_absent_rows() {
+fn rust_devx_missing_prefix_detection_covers_present_and_absent_rows() {
     let failures = vec![(
         "rust-developer-experience-authority".to_string(),
         "rust_devx_missing_artifact:validator/src/cli/rust/mod.rs".to_string(),

@@ -234,10 +234,10 @@ mod tests {
                 .contains("zip exceeds 32-bit size limit")
         );
 
-        let mut helper_flush = FailAfter { bytes_left: 0 };
-        helper_flush.flush().expect("flush is inert");
-        let mut helper_writer = BadSeek { response: Ok(0) };
-        assert_eq!(helper_writer.write(b"x").expect("helper write"), 1);
-        helper_writer.flush().expect("helper flush");
+        let mut exhausted_writer = FailAfter { bytes_left: 0 };
+        exhausted_writer.flush().expect("flush is inert");
+        let mut seek_error_writer = BadSeek { response: Ok(0) };
+        assert_eq!(seek_error_writer.write(b"x").expect("writer write"), 1);
+        seek_error_writer.flush().expect("writer flush");
     }
 }

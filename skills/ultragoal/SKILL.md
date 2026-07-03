@@ -79,7 +79,7 @@ and routes the next active action when lanes are ready or blocked.
 
 The run must define closed `required_claim_ids`. Every advertised claim maps to exactly one required claim id or an explicit non-required informational claim.
 
-Claim status uses the canonical `ClaimStatus` enum in `../../schemas/common-defs.schema.json`. Only `proven_live` and carefully scoped `proven_static` claims may appear in a positive completion claim ceiling.
+Claim status uses the canonical `ClaimStatus` enum in `../../schemas/schema-authority-primitives.schema.json`. Only `proven_live` and carefully scoped `proven_static` claims may appear in a positive completion claim ceiling.
 
 ## Lane Contract
 

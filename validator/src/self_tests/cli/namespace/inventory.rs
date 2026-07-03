@@ -6,11 +6,11 @@ fn namespace_command_inventory_binds_red_green_tamper_proof() {
     )
     .expect("command inventory");
     let row = inventory
-        .pointer("/fitting_inventory/namespace check")
+        .pointer("/command_observability_inventory/namespace check")
         .expect("namespace check row");
-    assert_eq!(row["fitting_status"], "fitted");
+    assert_eq!(row["observability_status"], "observable");
     assert_eq!(row["missing_surfaces"].as_array().unwrap().len(), 0);
-    assert_eq!(row["next_unfitted_surface"], "none");
+    assert_eq!(row["next_unobservable_surface"], "none");
     for test_name in [
         "namespace_command_fails_bad_namespace_with_repair_fields",
         "namespace_command_writes_pass_observability_receipt",

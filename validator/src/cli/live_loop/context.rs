@@ -85,7 +85,7 @@ pub(crate) fn verify_cache_hit(expected_key: &str, observed_key: &str) -> &'stat
 fn cache_key(id: &str, digest: &str, tier: &str, cache_mode: &str) -> String {
     crate::digest::bytes(
         format!(
-            "node={id};input={digest};validator=ultragoal-rust;law=gate92-fast-loop;tier={tier};cache={cache_mode};env=local"
+            "node={id};input={digest};validator=ultragoal-rust;law=observability-live-loop;tier={tier};cache={cache_mode};env=local"
         )
         .as_bytes(),
     )

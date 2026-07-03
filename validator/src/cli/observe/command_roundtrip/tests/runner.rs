@@ -51,7 +51,7 @@ fn observe_fit_run_fails_closed_for_unknown_and_partial_targets() {
             .as_array()
             .unwrap()
             .iter()
-            .any(|claim| claim == "gate92_closure")
+            .any(|claim| claim == "observability_product_closure")
     );
     std::fs::remove_dir_all(root).expect("cleanup roundtrip run");
 }
@@ -65,7 +65,7 @@ fn observe_fit_receipt_keeps_source_local_claim_ceiling() {
         &json!({"resources":["plugin-manifest-draft.json"]}),
     )
     .expect("manifest");
-    let row = json!({"roundtrip_status": "fitted"});
+    let row = json!({"roundtrip_status": "observable"});
     let value = receipt(
         &root,
         &command(),
@@ -75,7 +75,7 @@ fn observe_fit_receipt_keeps_source_local_claim_ceiling() {
     )
     .expect("roundtrip receipt");
     assert_eq!(value["status"], "pass");
-    assert_eq!(value["roundtrip_status"], "fitted");
+    assert_eq!(value["roundtrip_status"], "observable");
     assert_eq!(
         value["supported_claims"][0],
         "spec_driven_observability_command_roundtrip_increment"

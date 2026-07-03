@@ -1,10 +1,38 @@
-pub(super) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str> {
+pub(crate) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str> {
     let tail = path.strip_prefix("validator/").unwrap_or(path);
-    if tail.contains("production_proof") || tail.contains("production-proof") {
+    let lower = tail.to_ascii_lowercase();
+    let compact = lower
+        .chars()
+        .filter(|ch| ch.is_ascii_alphanumeric())
+        .collect::<String>();
+    let tokens = semantic_tokens(tail);
+    if lower.contains("production_proof")
+        || lower.contains("production-proof")
+        || compact == "productionproof"
+        || adjacent_tokens(&tokens, "production", "proof")
+    {
         return Some("production_proof");
     }
-    for token in tail.split(['/', '_', '-', '.']) {
-        match token {
+    for (first, second, compact_name, label) in [
+        ("fit", "command", "fitcommand", "fit_command"),
+        ("fit", "path", "fitpath", "fit_path"),
+        ("fit", "goal", "fitgoal", "fit_goal"),
+        ("fit", "slice", "fitslice", "fit_slice"),
+        ("phase4", "rebind", "phase4rebind", "phase4_rebind"),
+        (
+            "checkpoint",
+            "progress",
+            "checkpointprogress",
+            "checkpoint_progress",
+        ),
+        ("todo", "repair", "todorepair", "todo_repair"),
+    ] {
+        if compact == compact_name || adjacent_tokens(&tokens, first, second) {
+            return Some(label);
+        }
+    }
+    for token in &tokens {
+        match token.as_str() {
             "fitting" => return Some("fitting"),
             "slice" => return Some("slice"),
             "phase" => return Some("phase"),
@@ -17,6 +45,130 @@ pub(super) fn product_opaque_goal_work_label(path: &str) -> Option<&'static str>
             "productionproof" => return Some("production_proof"),
             _ => {}
         }
+        if token
+            .strip_prefix("gate")
+            .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
+        {
+            return Some("gate_number");
+        }
+        if token
+            .strip_prefix("phase")
+            .is_some_and(|rest| !rest.is_empty() && rest.chars().all(|ch| ch.is_ascii_digit()))
+        {
+            return Some("phase_number");
+        }
+    }
+    if adjacent_numbered_label(&tokens, "gate") {
+        return Some("gate_number");
+    }
+    if adjacent_numbered_label(&tokens, "phase") {
+        return Some("phase_number");
     }
     None
+}
+
+pub(crate) fn generic_identifier_bucket_label(identifier: &str) -> Option<&'static str> {
+    let lower = identifier.to_ascii_lowercase();
+    let tokens = semantic_tokens(identifier);
+    if matches!(lower.as_str(), "helper" | "helpers")
+        || tokens
+            .iter()
+            .any(|token| matches!(token.as_str(), "helper" | "helpers"))
+    {
+        return Some("helper");
+    }
+    if matches!(lower.as_str(), "utils" | "utility" | "utilities")
+        || tokens
+            .iter()
+            .any(|token| matches!(token.as_str(), "utils" | "utility" | "utilities"))
+    {
+        return Some("utils");
+    }
+    if lower == "common"
+        || lower.starts_with("common_")
+        || lower.ends_with("_common")
+        || tokens.iter().any(|token| token == "common")
+    {
+        return Some("common");
+    }
+    if lower == "shared" {
+        return Some("shared");
+    }
+    if lower == "misc" {
+        return Some("misc");
+    }
+    None
+}
+
+pub(crate) fn generic_source_leaf_label(stem: &str) -> Option<&'static str> {
+    let tokens = semantic_tokens(stem);
+    if tokens
+        .iter()
+        .any(|token| matches!(token.as_str(), "helper" | "helpers"))
+    {
+        return Some("helper");
+    }
+    if tokens
+        .iter()
+        .any(|token| matches!(token.as_str(), "utils" | "utility" | "utilities"))
+    {
+        return Some("utils");
+    }
+    if tokens.iter().any(|token| token == "common") {
+        return Some("common");
+    }
+    if stem == "shared" {
+        return Some("shared");
+    }
+    if stem == "misc" {
+        return Some("misc");
+    }
+    None
+}
+
+fn adjacent_tokens(tokens: &[String], first: &str, second: &str) -> bool {
+    tokens.windows(2).any(|window| {
+        window.first().is_some_and(|token| token == first)
+            && window.get(1).is_some_and(|token| token == second)
+    })
+}
+
+fn adjacent_numbered_label(tokens: &[String], label: &str) -> bool {
+    tokens.windows(2).any(|window| {
+        window.first().is_some_and(|token| token == label)
+            && window
+                .get(1)
+                .is_some_and(|token| token.chars().all(|ch| ch.is_ascii_digit()))
+    })
+}
+
+fn semantic_tokens(input: &str) -> Vec<String> {
+    let mut tokens = Vec::new();
+    let mut current = String::new();
+    let mut previous: Option<char> = None;
+    for ch in input.chars() {
+        if !ch.is_ascii_alphanumeric() {
+            push_token(&mut tokens, &mut current);
+            previous = None;
+            continue;
+        }
+        let starts_new = previous.is_some_and(|prev| {
+            (ch.is_ascii_uppercase() && (prev.is_ascii_lowercase() || prev.is_ascii_digit()))
+                || (ch.is_ascii_digit() && prev.is_ascii_alphabetic())
+                || (ch.is_ascii_alphabetic() && prev.is_ascii_digit())
+        });
+        if starts_new {
+            push_token(&mut tokens, &mut current);
+        }
+        current.push(ch.to_ascii_lowercase());
+        previous = Some(ch);
+    }
+    push_token(&mut tokens, &mut current);
+    tokens
+}
+
+fn push_token(tokens: &mut Vec<String>, current: &mut String) {
+    if !current.is_empty() {
+        tokens.push(std::mem::take(current));
+    }
 }

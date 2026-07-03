@@ -27,7 +27,7 @@
       "minLength": 1
     },
     "source_artifact": {
-      "$ref": "common-defs.schema.json#/$defs/artifactRef"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/artifactRef"
     },
     "schedule": {
       "type": "string",
@@ -37,13 +37,13 @@
       "type": "boolean"
     },
     "last_tick_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "next_due_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "last_success_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "drift_verdict": {
       "enum": [
@@ -54,12 +54,12 @@
       ]
     },
     "checked_at": {
-      "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+      "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
     },
     "claim_ids": {
       "type": "array",
       "items": {
-        "$ref": "common-defs.schema.json#/$defs/claimId"
+        "$ref": "schema-authority-primitives.schema.json#/$defs/claimId"
       }
     },
     "freshness_policy": {
@@ -79,7 +79,7 @@
           "minimum": 1
         },
         "clock_at_validation": {
-          "$ref": "common-defs.schema.json#/$defs/isoTimestamp"
+          "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp"
         }
       },
       "additionalProperties": false

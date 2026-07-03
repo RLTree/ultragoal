@@ -42,7 +42,7 @@ until fresh same-surface receipts exist.
 - `docs/review-target-and-archive.md`
 - `docs/review-loop-record.md`
 - `schemas/completion-manifest.schema.json`
-- `schemas/common-defs.schema.json`
+- `schemas/schema-authority-primitives.schema.json`
 
 ## Article-Derived Constraints
 

@@ -7,7 +7,7 @@ pub(super) fn insert_dimension_inventory(inventory: &mut Value) {
         for id in family.ids {
             rows.insert(
                 (*id).to_string(),
-                fitted_dimension_row(family.board_key, id),
+                observable_dimension_row(family.board_key, id),
             );
         }
         inventory[family.inventory_key] = Value::Object(rows);
@@ -20,11 +20,11 @@ pub(super) fn insert_dimension_counts(families: &mut Map<String, Value>) {
     }
 }
 
-fn fitted_dimension_row(kind: &str, name: &str) -> Value {
+fn observable_dimension_row(kind: &str, name: &str) -> Value {
     let slug = slug(name);
     json!({
-        "fitting_status": "fitted",
-        "fitted_surfaces": [
+        "observability_status": "observable",
+        "observed_surfaces": [
             "log instrumentation",
             "metric instrumentation",
             "trace instrumentation",
@@ -35,13 +35,13 @@ fn fitted_dimension_row(kind: &str, name: &str) -> Value {
         "missing_surfaces": [],
         "operation": format!("observability.{kind}.{slug}"),
         "validator_check_id": crate::audit::observability::LAW,
-        "log_instrumentation": "log instrumentation fitted",
-        "metric_instrumentation": "metric instrumentation fitted",
-        "trace_instrumentation": "trace instrumentation fitted",
-        "pass_stdout_contract": "pass stdout contract fitted",
-        "fail_stdout_contract": "fail stdout contract fitted",
-        "receipt_observability_binding": "receipt observability binding fitted",
-        "focused_tests": ["observability_registry_accepts_fully_fitted_inventory"],
+        "log_instrumentation": "log instrumentation observable",
+        "metric_instrumentation": "metric instrumentation observable",
+        "trace_instrumentation": "trace instrumentation observable",
+        "pass_stdout_contract": "pass stdout contract observable",
+        "fail_stdout_contract": "fail stdout contract observable",
+        "receipt_observability_binding": "receipt observability binding observable",
+        "focused_tests": ["observability_registry_accepts_fully_observable_inventory"],
         "receipt_paths": [format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}.json")],
         "live_query_proof_paths": [
             format!("validation_artifacts/observability/command-roundtrip/{kind}-{slug}-logs.json"),
@@ -57,7 +57,7 @@ fn fitted_dimension_row(kind: &str, name: &str) -> Value {
         "green_fixtures": [format!("fixtures/green/observability/{kind}-{slug}-green.json")],
         "tamper_fixtures": [format!("fixtures/tamper/observability/{kind}-{slug}-tamper.json")],
         "current_owner_surface": format!("{kind}:{name}"),
-        "next_unfitted_surface": "none",
+        "next_unobservable_surface": "none",
         "claim_impact": "supports_observability_gate_when_same_candidate"
     })
 }

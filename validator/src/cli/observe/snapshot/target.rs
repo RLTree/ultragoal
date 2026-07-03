@@ -131,7 +131,7 @@ fn fallback_event_from_receipt(value: &Value) -> Value {
         "why_failed": format!("observability receipt for {operation} matched the target selector but has no event object"),
         "where_failed": "observe.snapshot.target_receipt_event_binding",
         "next_repair": format!("rerun {operation} with real event emission, query logs metrics traces, then rerun observe snapshot"),
-        "claim_impact": "observability_fitting_blocked",
+        "claim_impact": "observability_reconciliation_blocked",
         "fallback_only": true,
         "law_id": get("law_id"),
         "check_id": get("check_id"),

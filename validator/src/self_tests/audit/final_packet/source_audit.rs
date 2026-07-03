@@ -90,7 +90,7 @@ fn mark_red_fixtures_pass(receipt: &mut Value) {
 }
 
 #[test]
-fn source_audit_helper_covers_missing_sections_and_detail_fill() {
+fn source_audit_detail_fill_covers_missing_sections() {
     let mut no_checks = json!({});
     mark_checks_pass(&mut no_checks);
 

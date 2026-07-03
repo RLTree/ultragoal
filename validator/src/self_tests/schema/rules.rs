@@ -1,7 +1,7 @@
 use serde_json::json;
 
 #[test]
-fn schema_rule_helpers_cover_fixture_receipt_and_keyword_boundaries() {
+fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
     let root = crate::self_tests::boundaries::support::repo_root();
     let store = crate::schema_catalog::load(&root);
 

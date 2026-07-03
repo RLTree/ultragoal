@@ -1,6 +1,6 @@
 {
   "schema": "harness-ultragoal.red-packet.v1",
-  "id": "plugin-manifest-active-root-phase-proof-resource",
+  "id": "plugin-manifest-active-root-receipt-resource",
   "expected_failure": {
     "check_id": "plugin-inventory-closure",
     "error": "root_phase_proof_resource_packaged"
@@ -10,7 +10,7 @@
     {
       "op": "add",
       "path": "/plugin_manifest/resources/-",
-      "value": "artifacts/root-phase-receipts/post-merge-integration-LANE-001.json"
+      "value": "artifacts/root-receipts/post-merge-integration-LANE-001.json"
     }
   ],
   "materialization": {

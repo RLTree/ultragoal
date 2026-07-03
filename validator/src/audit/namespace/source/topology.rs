@@ -131,22 +131,16 @@ fn maximal_factoring_failures(paths: &BTreeSet<String>) -> Vec<String> {
 fn generic_leaf_name_failures(paths: &BTreeSet<String>) -> Vec<String> {
     paths
         .iter()
-        .filter(|path| {
-            let stem = source_stem(path);
-            matches!(
-                stem,
-                "helper" | "helpers" | "utils" | "common" | "shared" | "misc"
-            )
-        })
-        .map(|path| {
-            remediating_failure(
+        .filter_map(|path| {
+            let label = super::path_labels::generic_source_leaf_label(source_stem(path))?;
+            Some(remediating_failure(
                 "namespace_validator_source_generic_leaf",
                 parent_dir(path),
-                source_stem(path),
+                label,
                 &[path.to_string()],
                 "rename_generic_source_leaf_to_the_domain_behavior_it_owns_or_route_it_under_a_semantic_module",
                 false,
-            )
+            ))
         })
         .collect()
 }

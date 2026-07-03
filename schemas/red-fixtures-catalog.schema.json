@@ -1616,7 +1616,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "blocked-lane-scratch-root-overlap"
+            "const": "blocked-lane-temp-root-overlap"
           }
         },
         "required": [
@@ -4066,7 +4066,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "duplicate-or-missing-root-phase"
+            "const": "duplicate-or-missing-root-receipt"
           }
         },
         "required": [
@@ -6768,7 +6768,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "lane-scratch-root-dot-segment"
+            "const": "lane-temp-root-dot-segment"
           }
         },
         "required": [
@@ -7622,7 +7622,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "nested-scratch-root-active-lanes"
+            "const": "nested-temp-root-active-lanes"
           }
         },
         "required": [
@@ -8770,7 +8770,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "plugin-manifest-active-root-phase-proof-resource"
+            "const": "plugin-manifest-active-root-receipt-resource"
           }
         },
         "required": [
@@ -13684,7 +13684,7 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "root-phase-pass-failed-command"
+            "const": "root-receipt-pass-failed-command"
           }
         },
         "required": [

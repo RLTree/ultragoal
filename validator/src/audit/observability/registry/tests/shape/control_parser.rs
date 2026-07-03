@@ -39,13 +39,15 @@ fn production_update_goal_inventory_is_bound_to_real_control_parser() {
     );
     assert_eq!(
         inventory
-            .pointer("/fitting_inventory/update-goal eligibility/receipt_paths/0")
+            .pointer("/command_observability_inventory/update-goal eligibility/receipt_paths/0")
             .and_then(serde_json::Value::as_str),
         Some("validation_artifacts/cli/update-goal-eligibility.json")
     );
     assert_eq!(
         inventory
-            .pointer("/fitting_inventory/self update-goal eligibility/receipt_paths/0")
+            .pointer(
+                "/command_observability_inventory/self update-goal eligibility/receipt_paths/0"
+            )
             .and_then(serde_json::Value::as_str),
         Some("validation_artifacts/cli/self-law-receipt.json")
     );

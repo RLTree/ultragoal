@@ -50,7 +50,7 @@ fn target_query_uses_target_event_status_and_respects_explicit_query() {
 }
 
 #[test]
-fn target_query_without_target_event_stays_unfitted_instead_of_guessing_operation() {
+fn target_query_without_target_event_stays_unobservable_instead_of_guessing_operation() {
     let root = super::super::prepare_root("observe-metrics-target-query-missing");
 
     assert_eq!(

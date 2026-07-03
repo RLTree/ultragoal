@@ -97,7 +97,7 @@ fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges(
     let root = crate::self_tests::boundaries::support::temp_root("plugin-policy-purpose");
     std::fs::create_dir_all(root.join("skills/bad")).expect("skill dir");
     std::fs::create_dir_all(root.join("references")).expect("root references");
-    std::fs::create_dir_all(root.join("artifacts/root-phase-receipts")).expect("artifacts dir");
+    std::fs::create_dir_all(root.join("artifacts/root-receipts")).expect("artifacts dir");
     std::fs::write(root.join("references/missing.md"), "root-only reference\n").expect("reference");
     std::fs::write(
         root.join("skills/bad/SKILL.md"),
@@ -116,7 +116,7 @@ fn plugin_policy_reports_resource_purpose_skill_link_and_non_custom_agent_edges(
         ],
         "resources":[
             "artifacts/stale-proof.json",
-            "artifacts/root-phase-receipts/post.json",
+            "artifacts/root-receipts/post.json",
             "artifacts/fixture.json"
         ]
     });

@@ -77,7 +77,7 @@ fn live_execute_fails_closed_when_key_policy_is_unavailable() {
 }
 
 #[test]
-fn live_http_header_usage_latency_and_temp_helpers_are_typed() {
+fn live_http_header_usage_latency_and_temp_files_are_typed() {
     let body = request_body("gpt-test");
     assert_eq!(body["model"], "gpt-test");
     assert_eq!(

@@ -1,26 +1,24 @@
-use super::super::support::{fitted_inventory, write_registry_root, write_valid_fixture};
+use super::super::support::{observable_inventory, write_registry_root, write_valid_fixture};
 
 #[test]
 fn inventory_requires_owner_and_next_surface_tracking_together() {
     let root =
         crate::self_tests::boundaries::support::temp_root("observe-proof-owner-without-next");
-    write_registry_root(&root, fitted_inventory());
+    write_registry_root(&root, observable_inventory());
     write_valid_fixture(&root);
     let path = root.join("docs/generated/observability/command-inventory.json");
     let mut inventory = crate::json_boundary::read_json(&path).unwrap();
-    inventory["fitting_inventory"]["package digest"]
+    inventory["command_observability_inventory"]["package digest"]
         .as_object_mut()
         .unwrap()
-        .remove("next_unfitted_surface");
+        .remove("next_unobservable_surface");
     crate::json_boundary::write_json(&path, &inventory).unwrap();
 
     let failures = super::super::command_inventory_failures(&root);
 
     assert!(
-        failures
-            .iter()
-            .any(|item| item
-                .starts_with("observability_command_fitting_row_shape_only:package digest")),
+        failures.iter().any(|item| item
+            .starts_with("observability_command_telemetry_row_shape_only:package digest")),
         "{failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup");

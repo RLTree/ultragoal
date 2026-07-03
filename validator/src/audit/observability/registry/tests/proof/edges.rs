@@ -1,5 +1,5 @@
 use super::super::super::proof;
-use super::super::support::{fitted_inventory, write_registry_root, write_valid_fixture};
+use super::super::support::{observable_inventory, write_registry_root, write_valid_fixture};
 use serde_json::json;
 
 #[test]
@@ -14,7 +14,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             )
             .expect("remove receipt");
         },
-        "observability_command_fitting_receipt_missing:package digest:",
+        "observability_command_telemetry_receipt_missing:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -25,7 +25,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             receipt["operation"] = json!("wrong.operation");
             crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
         },
-        "observability_command_fitting_receipt_not_current:package digest:",
+        "observability_command_telemetry_receipt_not_current:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -42,7 +42,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             )
             .unwrap();
         },
-        "observability_command_fitting_receipt_not_current:package digest:",
+        "observability_command_telemetry_receipt_not_current:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -53,7 +53,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             receipt.as_object_mut().unwrap().remove("run_id");
             crate::json_boundary::write_json(&root.join(rel), &receipt).unwrap();
         },
-        "observability_command_fitting_receipt_missing_run_id:package digest:",
+        "observability_command_telemetry_receipt_missing_run_id:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -64,7 +64,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             ))
             .expect("remove query");
         },
-        "observability_command_fitting_query_missing:package digest:",
+        "observability_command_telemetry_query_missing:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -76,7 +76,7 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             query["candidate_digest"] = json!(crate::digest::ZERO);
             crate::json_boundary::write_json(&root.join(rel), &query).unwrap();
         },
-        "observability_command_fitting_query_not_current:package digest:",
+        "observability_command_telemetry_query_not_current:package digest:",
     );
 
     assert_observability_registry_failure(
@@ -88,14 +88,14 @@ fn observability_registry_rejects_stale_missing_and_mismatched_query_receipts() 
             query["rows"] = json!([{"candidate_digest": "sha256:wrong", "operation": "wrong"}]);
             crate::json_boundary::write_json(&root.join(rel), &query).unwrap();
         },
-        "observability_command_fitting_query_not_same_run:package digest:",
+        "observability_command_telemetry_query_not_same_run:package digest:",
     );
 }
 
 #[test]
-fn observability_surface_fitted_rows_require_same_surface_receipts() {
+fn observability_surface_observable_rows_require_same_surface_receipts() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-surface-proof");
-    write_registry_root(&root, fitted_inventory());
+    write_registry_root(&root, observable_inventory());
     write_valid_fixture(&root);
     let rel =
         "validation_artifacts/observability/command-roundtrip/surface-cli-command-families.json";
@@ -106,7 +106,7 @@ fn observability_surface_fitted_rows_require_same_surface_receipts() {
     assert!(
         failures.iter().any(|item| {
             item.starts_with(
-                "observability_surface_fitting_receipt_not_current:cli command families:",
+                "observability_surface_telemetry_receipt_not_current:cli command families:",
             )
         }),
         "{failures:?}"
@@ -117,7 +117,7 @@ fn observability_surface_fitted_rows_require_same_surface_receipts() {
 #[test]
 fn observability_command_inventory_accepts_only_fail_closed_command_receipts() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-proof-fail-closed");
-    write_registry_root(&root, fitted_inventory());
+    write_registry_root(&root, observable_inventory());
     write_valid_fixture(&root);
     let rel = "validation_artifacts/observability/command-roundtrip/source-audit.json";
     let mut receipt = crate::json_boundary::read_json(&root.join(rel)).unwrap();
@@ -152,7 +152,7 @@ fn observability_command_inventory_accepts_only_fail_closed_command_receipts() {
     let failures = super::super::command_inventory_failures(&root);
     assert!(
         failures.iter().any(|item| {
-            item.starts_with("observability_command_fitting_receipt_not_current:source audit:")
+            item.starts_with("observability_command_telemetry_receipt_not_current:source audit:")
         }),
         "{failures:?}"
     );
@@ -162,10 +162,10 @@ fn observability_command_inventory_accepts_only_fail_closed_command_receipts() {
 #[test]
 fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows() {
     let root = crate::self_tests::boundaries::support::temp_root("observe-proof-direct");
-    let inventory = fitted_inventory();
+    let inventory = observable_inventory();
     write_registry_root(&root, inventory.clone());
     write_valid_fixture(&root);
-    let row = inventory["fitting_inventory"]["package digest"]
+    let row = inventory["command_observability_inventory"]["package digest"]
         .as_object()
         .expect("package digest row");
     let mut failures = Vec::new();
@@ -184,7 +184,7 @@ fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows(
     assert!(
         failures.iter().any(|failure| {
             failure.starts_with(
-                "observability_command_fitting_receipt_missing_correlation_id:package digest",
+                "observability_command_telemetry_receipt_missing_correlation_id:package digest",
             )
         }),
         "{failures:?}"
@@ -197,7 +197,8 @@ fn observability_proof_directly_checks_current_empty_and_malformed_receipt_rows(
     proof::require_current_receipts(&root, "package digest", row, &mut failures);
     assert!(
         failures.iter().any(|failure| {
-            failure.starts_with("observability_command_fitting_receipt_not_current:package digest")
+            failure
+                .starts_with("observability_command_telemetry_receipt_not_current:package digest")
         }),
         "{failures:?}"
     );
@@ -213,18 +214,18 @@ fn observability_proof_reports_unavailable_candidates_and_missing_surface_operat
     proof::require_current_receipts(&root, "package digest", &row, &mut failures);
     assert!(failures.iter().any(|item| {
         item.starts_with(
-            "observability_command_fitting_candidate_digest_unavailable:package digest",
+            "observability_command_telemetry_candidate_digest_unavailable:package digest",
         )
     }));
 
     let root = crate::self_tests::boundaries::support::temp_root("observe-proof-no-operation");
-    write_registry_root(&root, fitted_inventory());
+    write_registry_root(&root, observable_inventory());
     let row = json!({"receipt_paths":[]});
     let row = row.as_object().unwrap().clone();
     failures.clear();
     proof::require_current_surface_receipts(&root, "cli command families", &row, &mut failures);
     assert!(failures.contains(
-        &"observability_surface_fitting_operation_missing:cli command families".to_string()
+        &"observability_surface_telemetry_operation_missing:cli command families".to_string()
     ));
     std::fs::remove_dir_all(root).expect("cleanup");
 }
@@ -235,7 +236,7 @@ fn assert_observability_registry_failure(
     expected_prefix: &str,
 ) {
     let root = crate::self_tests::boundaries::support::temp_root(label);
-    write_registry_root(&root, fitted_inventory());
+    write_registry_root(&root, observable_inventory());
     write_valid_fixture(&root);
     mutate(&root);
     let failures = super::super::command_inventory_failures(&root);

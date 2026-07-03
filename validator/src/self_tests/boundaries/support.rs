@@ -116,7 +116,7 @@ fn schema_receipt_rules_cover_required_and_kind_boundaries() {
 }
 
 #[test]
-fn audit_boundary_helpers_reject_malformed_policy_surfaces() {
+fn audit_boundary_edges_reject_malformed_policy_surfaces() {
     let exclusions = json!({
         "exclusions": [
             {"path": "validator/src/lib.rs", "counts_as_covered": true},

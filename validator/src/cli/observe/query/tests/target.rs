@@ -179,7 +179,10 @@ fn target_event_skips_query_receipts_and_fails_closed_for_receipt_without_event(
             .unwrap()
             .contains("real event emission")
     );
-    assert_eq!(found["claim_impact"], "observability_fitting_blocked");
+    assert_eq!(
+        found["claim_impact"],
+        "observability_reconciliation_blocked"
+    );
     assert_eq!(found["observed_receipt_status"], "fail");
     assert_eq!(found["fallback_only"], true);
     std::fs::remove_dir_all(root).expect("cleanup target receipt");

@@ -126,7 +126,7 @@ The lane contract must include:
 
 `proof-gate` owns the rule that every advertised claim must map to proof. It validates the completion manifest and rejects false closure.
 
-Claim statuses, positive-status subsets, evidence kinds, and proof surfaces are schema-owned in `schemas/common-defs.schema.json`. Only `proven_live` and narrowly scoped `proven_static` claims can appear in a positive release claim ceiling.
+Claim statuses, positive-status subsets, evidence kinds, and proof surfaces are schema-owned in `schemas/schema-authority-primitives.schema.json`. Only `proven_live` and narrowly scoped `proven_static` claims can appear in a positive release claim ceiling.
 
 ### Layer 5: Entropy Cleanup
 
@@ -221,7 +221,7 @@ The plugin includes a Rust canonical validator command. It preloads `schemas/sch
 
     cargo run --offline -- --root . audit --receipt <output-dir>/validator-receipt.json
 
-Required checks are schema-owned by `schemas/common-defs.schema.json#/$defs/requiredValidatorCheckId`. Prose may explain why the checks exist, but must not become a second checklist source. Validator receipts are generated outputs, not copyable authoring templates; current proof values must be read from `validation_artifacts/ultragoal-audit/`.
+Required checks are schema-owned by `schemas/schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId`. Prose may explain why the checks exist, but must not become a second checklist source. Validator receipts are generated outputs, not copyable authoring templates; current proof values must be read from `validation_artifacts/ultragoal-audit/`.
 
 Current Rust-canonical proof is recorded in `validation_artifacts/ultragoal-audit/validator-receipt.json`. Quote the fresh generated receipt for run id, package digest, fixture counts, and generated-artifact counts; source docs intentionally avoid embedding those moving values. Retired Python validator/reference files have been removed from the package and manifest.
 
@@ -231,7 +231,7 @@ JSON Schema alone does not prove cross-document truth. The Rust validator comput
 
 ## Red Fixtures
 
-A useful validator must fail known-bad packets. Required red fixture identity is schema-owned by `schemas/common-defs.schema.json#/$defs/requiredRedFixtureId` and `schemas/red-fixtures-catalog.schema.json`. Each packet is a compact executable JSON Patch spec against its declared valid base fixture; the validator/test runner materializes the bad bundle and then runs semantic validation. Prose mutation notes are not evidence.
+A useful validator must fail known-bad packets. Required red fixture identity is schema-owned by `schemas/schema-authority-primitives.schema.json#/$defs/requiredRedFixtureId` and `schemas/red-fixtures-catalog.schema.json`. Each packet is a compact executable JSON Patch spec against its declared valid base fixture; the validator/test runner materializes the bad bundle and then runs semantic validation. Prose mutation notes are not evidence.
 
 ## Implementation Roadmap
 
