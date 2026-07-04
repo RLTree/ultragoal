@@ -49,17 +49,19 @@ pub(crate) fn target_capability_failures_for(
 
 pub fn write_target_receipts(
     root: &Path,
-    out_dir: &Path,
+    receipt_dir: &Path,
     artifacts: &[Value],
 ) -> Result<Vec<Value>, String> {
     let mut generated = Vec::new();
+    let receipt_dir_rel = claim_receipt_dir_rel(root, receipt_dir)?;
     for item in spec::catalog::specs() {
         let (receipt, _) = audit_spec(root, &item, artifacts);
-        let path = out_dir.join(item.name);
+        let rel = receipt_dir_rel.join(item.name);
+        let path = crate::output_path::claim_artifact_path(root, &rel, "target fixture receipt")?;
         json_boundary::write_json(&path, &receipt)?;
         generated.push(json!({
             "artifact_type": "target_repo_receipt",
-            "path": path.to_string_lossy(),
+            "path": rel.to_string_lossy(),
             "digest": digest::file(&path)?,
             "validator_run_id": "pending",
             "input_digest": digest::file(&root.join("schemas/target-repo-receipt.schema.json"))?,
@@ -67,6 +69,21 @@ pub fn write_target_receipts(
         }));
     }
     Ok(generated)
+}
+
+fn claim_receipt_dir_rel(root: &Path, receipt_dir: &Path) -> Result<PathBuf, String> {
+    if receipt_dir.is_absolute() {
+        return receipt_dir
+            .strip_prefix(root)
+            .map(PathBuf::from)
+            .map_err(|_| {
+                format!(
+                    "{}: target fixture receipt directory must stay inside package root",
+                    receipt_dir.display()
+                )
+            });
+    }
+    Ok(receipt_dir.to_path_buf())
 }
 
 fn audit_spec(root: &Path, item: &spec::model::TargetSpec, artifacts: &[Value]) -> (Value, i32) {
@@ -179,15 +196,18 @@ pub(crate) fn create_symlink_parent(parent: &Path) -> Result<(), String> {
     std::fs::create_dir_all(parent).map_err(|err| format!("symlink fixture mkdir: {err}"))
 }
 
-fn read_link_result(result: std::io::Result<PathBuf>, label: &str) -> Result<PathBuf, String> {
+pub(crate) fn read_link_result(
+    result: std::io::Result<PathBuf>,
+    label: &str,
+) -> Result<PathBuf, String> {
     result.map_err(|err| format!("{label}: {err}"))
 }
 
-fn remove_result(result: std::io::Result<()>, label: &str) -> Result<(), String> {
+pub(crate) fn remove_result(result: std::io::Result<()>, label: &str) -> Result<(), String> {
     result.map_err(|err| format!("{label}: {err}"))
 }
 
-fn symlink_result(result: std::io::Result<()>, label: &str) -> Result<(), String> {
+pub(crate) fn symlink_result(result: std::io::Result<()>, label: &str) -> Result<(), String> {
     result.map_err(|err| format!("{label}: {err}"))
 }
 
@@ -209,39 +229,4 @@ fn required_file_failures(root: &Path) -> Vec<String> {
         .filter(|rel| !root.join(rel).is_file())
         .map(|rel| format!("missing target-repo audit files: {rel}"))
         .collect()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{create_symlink_parent, read_link_result, remove_result, symlink_result};
-    use std::io::Error;
-
-    #[test]
-    fn symlink_fixture_os_error_mappers_are_testable() {
-        assert!(
-            read_link_result(
-                Err(Error::other("denied")),
-                "symlink fixture readlink failed"
-            )
-            .expect_err("readlink failure")
-            .contains("readlink failed")
-        );
-        assert!(
-            remove_result(Err(Error::other("busy")), "symlink fixture cleanup failed")
-                .expect_err("remove failure")
-                .contains("cleanup failed")
-        );
-        assert!(
-            symlink_result(
-                Err(Error::other("blocked")),
-                "symlink fixture materialize failed"
-            )
-            .expect_err("symlink failure")
-            .contains("materialize failed")
-        );
-        let tmp =
-            std::env::temp_dir().join(format!("ultragoal-symlink-parent-{}", std::process::id()));
-        create_symlink_parent(&tmp.join("nested")).expect("create symlink parent");
-        std::fs::remove_dir_all(tmp).expect("cleanup symlink parent");
-    }
 }

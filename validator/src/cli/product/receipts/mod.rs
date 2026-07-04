@@ -6,12 +6,18 @@ const PRODUCT: &str = "product-fitness-receipt.json";
 const JOURNEY: &str = "plugin-product-journey-receipt.json";
 const SOURCE_DIR: &str = "validation_artifacts/harness";
 
-pub(crate) fn mint_all(root: &Path, rel_dir: &Path, out_dir: &Path) -> Result<Value, String> {
+pub(crate) fn mint_all(root: &Path, rel_dir: &Path) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
     let generated_at = crate::audit::clock::now_iso();
-    let fit_repo_path = out_dir.join(FIT_REPO_RECEIPT_FILE);
-    let product_path = out_dir.join(PRODUCT);
-    let journey_path = out_dir.join(JOURNEY);
+    let fit_repo_rel = rel_dir.join(FIT_REPO_RECEIPT_FILE);
+    let product_rel = rel_dir.join(PRODUCT);
+    let journey_rel = rel_dir.join(JOURNEY);
+    let fit_repo_path =
+        crate::output_path::claim_artifact_path(root, &fit_repo_rel, "fit-repo receipt")?;
+    let product_path =
+        crate::output_path::claim_artifact_path(root, &product_rel, "product fitness receipt")?;
+    let journey_path =
+        crate::output_path::claim_artifact_path(root, &journey_rel, "product journey receipt")?;
 
     let fit_repo = fit_repo_receipt(root, &candidate, &generated_at)?;
     crate::json_boundary::write_json(&fit_repo_path, &fit_repo)?;

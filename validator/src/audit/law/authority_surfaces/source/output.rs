@@ -63,7 +63,14 @@ fn output_pattern_line(line: &str, pattern: &str) -> bool {
     if trimmed.starts_with('"') || trimmed.starts_with("//") {
         return false;
     }
-    line.contains(pattern)
+    line.contains(pattern) || direct_join_writer_line(trimmed)
+}
+
+fn direct_join_writer_line(trimmed: &str) -> bool {
+    trimmed.contains("json_boundary::write_json(")
+        && trimmed.contains(".join(")
+        && !trimmed.contains("claim_artifact_path(")
+        && !trimmed.contains("literal_claim_artifact_path(")
 }
 
 fn unsafe_claim_output_vars(text: &str) -> Vec<String> {
@@ -87,6 +94,8 @@ fn unsafe_claim_output_vars(text: &str) -> Vec<String> {
 
 fn line_uses_raw_output_authority(trimmed: &str) -> bool {
     (trimmed.contains("= root.join(")
+        || trimmed.contains(".join(")
+        || trimmed.contains("= output_path(")
         || trimmed.contains("= PathBuf::from(")
         || trimmed.contains("= std::path::PathBuf::from(")
         || trimmed.contains("= command.receipt.clone()")

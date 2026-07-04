@@ -62,11 +62,10 @@ fn run_minter(root: &Path, command: &ProductCommand) -> telemetry::ProductOutcom
             "missing required argument --receipt-dir".into(),
         );
     };
-    let out_dir = match output_dir(root, receipt_dir) {
-        Ok(path) => path,
-        Err(err) => return telemetry::ProductOutcome::Failure(err),
-    };
-    match receipts::mint_all(root, receipt_dir, &out_dir) {
+    if let Err(err) = validate_root_relative(receipt_dir, "product receipt directory") {
+        return telemetry::ProductOutcome::Failure(err);
+    }
+    match receipts::mint_all(root, receipt_dir) {
         Ok(report) => telemetry::ProductOutcome::Report(report),
         Err(err) => telemetry::ProductOutcome::Failure(err),
     }
@@ -82,11 +81,6 @@ fn receipt_dir(operation: ProductOperation, args: &[String]) -> Result<Option<Pa
             opt_path(args, "--receipt-dir").map(Some)
         }
     }
-}
-
-fn output_dir(root: &Path, dir: &Path) -> Result<PathBuf, String> {
-    validate_root_relative(dir, "product receipt directory")?;
-    Ok(root.join(dir))
 }
 
 fn validate_root_relative(dir: &Path, label: &str) -> Result<(), String> {

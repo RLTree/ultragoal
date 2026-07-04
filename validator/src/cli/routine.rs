@@ -1,5 +1,5 @@
 use serde_json::{Value, json};
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub(crate) struct RoutineCommand {
@@ -21,13 +21,14 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<RoutineCommand>, String> {
 
 pub(crate) fn run(root: &Path, command: &RoutineCommand) -> Result<i32, String> {
     let value = receipt(root, command)?;
-    let out = output_path(root, &command.receipt)?;
-    crate::json_boundary::write_json(&out, &value)?;
+    let receipt_path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "routine receipt")?;
+    crate::json_boundary::write_json(&receipt_path, &value)?;
     println!(
         "ultragoal-routine {} candidate={} receipt={}",
         value["status"],
         value["candidate_digest"],
-        out.display()
+        receipt_path.display()
     );
     Ok(i32::from(
         value.get("status").and_then(Value::as_str) != Some("pass"),
@@ -74,31 +75,31 @@ pub(crate) fn receipt(root: &Path, command: &RoutineCommand) -> Result<Value, St
 }
 
 pub(crate) fn surface_failures(help: &str, script: &str) -> Vec<String> {
-    let mut out = Vec::new();
+    let mut failures = Vec::new();
     if !help.contains("routine check") {
-        out.push("routine_entrypoint_missing".to_string());
+        failures.push("routine_entrypoint_missing".to_string());
     }
     if help.lines().count() < 12
         || !help.contains("Routine validation")
         || !help.contains("unsupported claims")
     {
-        out.push("routine_help_not_navigable".to_string());
+        failures.push("routine_help_not_navigable".to_string());
     }
     if help.contains("source audit") && !help.contains("routine check") {
-        out.push("routine_leaf_only_validation_substitution".to_string());
+        failures.push("routine_leaf_only_validation_substitution".to_string());
     }
     if !help.contains("fit-repo prove") || !help.contains("First plugin-activated repo path") {
-        out.push("routine_fit_repo_hidden".to_string());
+        failures.push("routine_fit_repo_hidden".to_string());
     }
     if !help.contains("target-repo audit") || !help.contains("Target repo path") {
-        out.push("routine_target_repo_hidden".to_string());
+        failures.push("routine_target_repo_hidden".to_string());
     }
     let delegates = script.contains("routine check");
     let narrow = script.contains("narrow-helper ceiling") && script.contains("unsupported claims");
     if !delegates && !narrow {
-        out.push("routine_scripts_check_claim_ceiling_missing".to_string());
+        failures.push("routine_scripts_check_claim_ceiling_missing".to_string());
     }
-    out
+    failures
 }
 
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
@@ -106,20 +107,4 @@ fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
         .position(|arg| arg == key)
         .and_then(|index| args.get(index + 1))
         .map(PathBuf::from)
-}
-
-fn output_path(root: &Path, path: &Path) -> Result<PathBuf, String> {
-    if path.is_absolute() {
-        return Err("routine receipt path must be root-relative".to_string());
-    }
-    if path
-        .components()
-        .any(|part| !matches!(part, Component::Normal(_)))
-    {
-        return Err(format!(
-            "{}: routine receipt path escapes root",
-            path.display()
-        ));
-    }
-    Ok(root.join(path))
 }

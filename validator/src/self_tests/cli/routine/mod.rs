@@ -207,7 +207,7 @@ fn routine_run_covers_fail_status_and_error_paths() {
     )
     .expect_err("traversal output path propagates");
     assert!(
-        traversal_error.contains("escapes root"),
+        traversal_error.contains("package root"),
         "{traversal_error}"
     );
     std::fs::remove_dir_all(traversal_root).expect("cleanup traversal");

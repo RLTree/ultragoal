@@ -152,9 +152,7 @@ fn product_receipt_report_is_fail_closed_when_receipts_are_invalid_or_missing() 
 fn product_receipt_minting_requires_package_digest_authority() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("product-mint-no-manifest");
-    let out = root.join("receipts");
-    std::fs::create_dir_all(&out).expect("out");
-    let error = super::mint_all(&root, Path::new("receipts"), &out).expect_err("no package digest");
+    let error = super::mint_all(&root, Path::new("receipts")).expect_err("no package digest");
     assert!(error.contains("plugin-manifest-draft.json"), "{error}");
-    std::fs::remove_dir_all(root).expect("cleanup product mint no manifest");
+    let _ = std::fs::remove_dir_all(root);
 }

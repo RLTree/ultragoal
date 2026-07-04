@@ -4565,6 +4565,7 @@
     "validator/src/self_tests/boundaries/authority/output/authority_edges.rs",
     "validator/src/self_tests/boundaries/authority/output/mod.rs",
     "validator/src/self_tests/boundaries/authority/output/projection_edges.rs",
+    "validator/src/self_tests/boundaries/authority/output/receipt_sinks.rs",
     "validator/src/self_tests/boundaries/authority/raw/mod.rs",
     "validator/src/self_tests/boundaries/authority/raw/classification_edges.rs",
     "validator/src/self_tests/boundaries/authority/raw/path_boundaries.rs",

@@ -144,6 +144,42 @@ fn authority_surface_source_scans_reject_raw_downstream_claims_and_claim_output_
         "raw root-relative claim output writes must fail even when the variable name is not receipt-shaped: {renamed_bypass:?}"
     );
 
+    let directory_join_bypass =
+        crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+            "validator/src/cli/product/receipts/mod.rs",
+            "let product_path = out_dir.join(\"product-fitness-receipt.json\");\ncrate::json_boundary::write_json(&product_path, &value)?;",
+        );
+    assert!(
+        directory_join_bypass
+            .iter()
+            .any(|failure| failure.contains("var=product_path")),
+        "claim receipts written under a caller-controlled directory must use typed output authority: {directory_join_bypass:?}"
+    );
+
+    let local_claim_path_resolver_bypass =
+        crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+            "validator/src/cli/routine.rs",
+            "let out = output_path(root, &command.receipt)?;\ncrate::json_boundary::write_json(&out, &value)?;\nfn output_path(root: &Path, path: &Path) -> Result<PathBuf, String> { Ok(root.join(path)) }\n",
+        );
+    assert!(
+        local_claim_path_resolver_bypass
+            .iter()
+            .any(|failure| failure.contains("var=out")),
+        "local output_path functions must not create parallel claim-output authority: {local_claim_path_resolver_bypass:?}"
+    );
+
+    let direct_join_bypass =
+        crate::audit::law::authority_surfaces::output_authority_failures_for_test(
+            "validator/src/cli/current_state/mod.rs",
+            "crate::json_boundary::write_json(&root.join(\"validation_artifacts/current-state.json\"), &value)?;",
+        );
+    assert!(
+        direct_join_bypass
+            .iter()
+            .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
+        "direct root.join claim writes must route through output_path::claim_artifact_path: {direct_join_bypass:?}"
+    );
+
     let typed_var_write = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
         "validator/src/cli/live_loop/mod.rs",
         "let current_state_path = crate::output_path::literal_claim_artifact_path(root, \"validation_artifacts/current-state.json\", \"current state snapshot\");\ncrate::json_boundary::write_json(&current_state_path, &value)?;",
@@ -206,45 +242,4 @@ fn raw_authority_classification_is_not_blessed_by_unrelated_json_projection() {
             .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
         "json projection text elsewhere in a file must not classify raw downstream authority: {failures:?}"
     );
-}
-
-#[test]
-fn output_authority_rejects_observability_and_roundtrip_receipt_bypasses() {
-    for (label, source) in [
-        (
-            "observability_receipt_join",
-            "let path = root.join(&observability_receipt);\ncrate::json_boundary::write_json(&path, &value)?;",
-        ),
-        (
-            "command_observability_receipt_join",
-            "let path = root.join(&command.observability_receipt);\ncrate::json_boundary::write_json(&path, &value)?;",
-        ),
-        (
-            "command_receipt_rel_join",
-            "crate::json_boundary::write_json(&root.join(command.receipt_rel()), &value)?;",
-        ),
-        (
-            "direct_receipt_write",
-            "crate::json_boundary::write_json(receipt, &value)?;",
-        ),
-        (
-            "gc_observability_receipt_join",
-            "crate::json_boundary::write_json(&root.join(observability_path), &obs)?;",
-        ),
-        (
-            "registry_active_receipt_join",
-            "crate::json_boundary::write_json(&root.join(ACTIVE_RECEIPT), &receipt)?;",
-        ),
-    ] {
-        let failures = crate::audit::law::authority_surfaces::output_authority_failures_for_test(
-            "validator/src/cli/observe/command_roundtrip/mod.rs",
-            source,
-        );
-        assert!(
-            failures
-                .iter()
-                .any(|failure| failure.contains("claim_artifact_output_without_typed_authority")),
-            "{label} should be rejected as claim output without typed authority: {failures:?}"
-        );
-    }
 }

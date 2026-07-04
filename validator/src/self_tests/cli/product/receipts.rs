@@ -7,20 +7,23 @@ fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
         "target/ultragoal-product-receipts-{}",
         std::process::id()
     ));
-    let out = root.join(&rel);
-    let _ = std::fs::remove_dir_all(&out);
+    let receipt_dir = root.join(&rel);
+    let _ = std::fs::remove_dir_all(&receipt_dir);
     let candidate = crate::package::inventory::package_digest(&root).expect("digest before mint");
 
-    let report = crate::cli::product::receipts::mint_all(&root, &rel, &out).expect("mint");
+    let report = crate::cli::product::receipts::mint_all(&root, &rel).expect("mint");
     assert_eq!(report["status"], "pass");
     assert!(report["failures"].as_array().expect("failures").is_empty());
 
-    let fit_repo_receipt = crate::json_boundary::read_json(&out.join("fit-repo-receipt.json"))
-        .expect("fit-repo receipt");
+    let fit_repo_receipt =
+        crate::json_boundary::read_json(&receipt_dir.join("fit-repo-receipt.json"))
+            .expect("fit-repo receipt");
     let product =
-        crate::json_boundary::read_json(&out.join("product-fitness-receipt.json")).expect("pf");
-    let journey = crate::json_boundary::read_json(&out.join("plugin-product-journey-receipt.json"))
-        .expect("journey");
+        crate::json_boundary::read_json(&receipt_dir.join("product-fitness-receipt.json"))
+            .expect("pf");
+    let journey =
+        crate::json_boundary::read_json(&receipt_dir.join("plugin-product-journey-receipt.json"))
+            .expect("journey");
 
     for value in [&fit_repo_receipt, &product, &journey] {
         assert_eq!(value["target_revision"]["value"], candidate);
@@ -38,5 +41,5 @@ fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
         format!("{}/fit-repo-receipt.json", rel.display())
     );
 
-    std::fs::remove_dir_all(out).expect("cleanup");
+    std::fs::remove_dir_all(receipt_dir).expect("cleanup");
 }

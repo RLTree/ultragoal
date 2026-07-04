@@ -19,20 +19,62 @@ fn symlink_meta(link_path: &str, target_path: &str) -> Value {
 #[test]
 fn target_receipt_generation_records_all_fixture_outputs() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let out = crate::self_tests::boundaries::workspace_fixtures::temp_root("target-receipts");
+    let rel = std::path::PathBuf::from(format!(
+        "target/ultragoal-target-receipts-{}",
+        std::process::id()
+    ));
+    let receipt_dir = root.join(&rel);
+    let _ = std::fs::remove_dir_all(&receipt_dir);
     let generated =
-        crate::target_fixtures::write_target_receipts(&root, &out, &[]).expect("target receipts");
+        crate::target_fixtures::write_target_receipts(&root, &rel, &[]).expect("target receipts");
     assert!(!generated.is_empty());
     assert!(generated.iter().all(|item| {
         item["artifact_type"] == "target_repo_receipt"
             && item["digest"].as_str().unwrap_or("").starts_with("sha256:")
+            && item["path"]
+                .as_str()
+                .is_some_and(|path| path.starts_with("target/ultragoal-target-receipts-"))
     }));
-    let blocked_out = out.join("blocked-file");
-    std::fs::write(&blocked_out, "not a directory").expect("blocked out file");
-    let err = crate::target_fixtures::write_target_receipts(&root, &blocked_out, &[])
+    let blocked_receipt_dir = receipt_dir.join("blocked-file");
+    std::fs::write(&blocked_receipt_dir, "not a directory").expect("blocked receipt directory");
+    let err = crate::target_fixtures::write_target_receipts(&root, &blocked_receipt_dir, &[])
         .expect_err("file output dir blocks receipt writes");
     assert!(err.contains("create parent failed"), "{err}");
-    std::fs::remove_dir_all(out).expect("cleanup generated receipts");
+    std::fs::remove_dir_all(receipt_dir).expect("cleanup generated receipts");
+}
+
+#[test]
+fn symlink_fixture_os_error_mappers_are_testable() {
+    use std::io::Error;
+
+    assert!(
+        crate::target_fixtures::read_link_result(
+            Err(Error::other("denied")),
+            "symlink fixture readlink failed",
+        )
+        .expect_err("readlink failure")
+        .contains("readlink failed")
+    );
+    assert!(
+        crate::target_fixtures::remove_result(
+            Err(Error::other("busy")),
+            "symlink fixture cleanup failed",
+        )
+        .expect_err("remove failure")
+        .contains("cleanup failed")
+    );
+    assert!(
+        crate::target_fixtures::symlink_result(
+            Err(Error::other("blocked")),
+            "symlink fixture materialize failed",
+        )
+        .expect_err("symlink failure")
+        .contains("materialize failed")
+    );
+    let tmp = std::env::temp_dir().join(format!("ultragoal-symlink-parent-{}", std::process::id()));
+    crate::target_fixtures::create_symlink_parent(&tmp.join("nested"))
+        .expect("create symlink parent");
+    std::fs::remove_dir_all(tmp).expect("cleanup symlink parent");
 }
 
 #[test]
