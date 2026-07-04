@@ -415,7 +415,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:ce854756f999976a6bc89e68e32e21eeed85705f58c12c9e70b34f883b5ad806",
+    "changed_files_digest": "sha256:2ff75890f9ae479abbccc950386e4e4381b599aec8c3f61242f3e53efc369b61",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",

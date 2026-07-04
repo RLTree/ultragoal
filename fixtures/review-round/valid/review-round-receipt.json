@@ -507,7 +507,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:9d0ee054a90b23f7fa22fee1241b903deda7bb02d10c78f730c5fac3e4070de3"
+          "digest": "sha256:86ed04b3e6f472d24716fff5f3d08ead323989de0b886c2794fae0c9400d98ab"
         }
       ],
       "material_blockers": [],
@@ -560,7 +560,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:9d0ee054a90b23f7fa22fee1241b903deda7bb02d10c78f730c5fac3e4070de3"
+          "digest": "sha256:86ed04b3e6f472d24716fff5f3d08ead323989de0b886c2794fae0c9400d98ab"
         }
       ],
       "claim_ceiling_assessment": {
@@ -699,7 +699,7 @@
         },
         {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
+          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
         }
       ],
       "material_blockers": [],
@@ -756,7 +756,7 @@
         },
         {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
+          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
         }
       ],
       "claim_ceiling_assessment": {
@@ -822,7 +822,7 @@
         "status": "pass",
         "receipt": {
           "path": "fixtures/review-round/anchors/product-fitness-receipt.json",
-          "digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f"
+          "digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c"
         },
         "receipt_generated_at": "2026-06-18T00:00:00Z",
         "claim_ids_reviewed": [
@@ -850,7 +850,7 @@
       },
       "product_fitness_required": true,
       "product_fitness_owner": "product_simplicity_falsifier",
-      "product_fitness_receipt_digest": "sha256:6e6e089f503b88e14df23d6b04311a4c6cbb3d3b3a1605437de9c0e866af443f",
+      "product_fitness_receipt_digest": "sha256:040dd25f584bbced15229feefe5cf0f9bfdaafed48d0abfc24ddc09a017b234c",
       "product_fitness_claim_ids": [
         "plugins_ui_visibility",
         "install_button_success",
