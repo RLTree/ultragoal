@@ -6,7 +6,7 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:7b4f35d88c44e368586de215b030780ab277b1c2e909e272fca65c2bb4aee7ae",
+      "digest": "sha256:3523deec670e02ced882b302441597c07060ee9f91bdeeb0cf459d86721de204",
       "path": "docs/source-obligation-matrix.json"
     }
   ],

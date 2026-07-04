@@ -34,9 +34,11 @@ fn authority_surface_inventory_reports_required_product_roles() {
     assert_eq!(inventory["package_inventory_missing_count"], json!(0));
     for role in [
         "source",
+        "output_authority",
         "schema",
         "receipt_schema",
         "law_registry",
+        "namespace_class_registry",
         "research_registry",
         "research_trace",
         "valid_fixture",

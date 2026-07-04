@@ -3635,11 +3635,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+          "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+          "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3679,11 +3679,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+          "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+          "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3723,11 +3723,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+          "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+          "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3767,11 +3767,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+          "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+          "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -3811,11 +3811,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+          "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
           "path": "schemas/rust-devx-receipt.schema.json"
         },
         {
-          "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+          "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
           "path": "validator/src/cli/rust/mod.rs"
         }
       ],
@@ -4962,11 +4962,11 @@
           "path": "validator/src/audit/rust/developer.rs"
         },
         {
-          "digest": "sha256:108eebc31f64f9e48da5c81574ec357fd08bda7c5b70772b856be9dee24bf76c",
+          "digest": "sha256:07d2d6c17cd7e2475e9328617ff03c852a69c2e0dbcebb556a646bc0cf554ac6",
           "path": "schemas/workspace-gc-receipt.schema.json"
         },
         {
-          "digest": "sha256:44541723838962ac38e190e41452855caf693407c1543921f83f145020ba2a4f",
+          "digest": "sha256:a64275dcb11eff731297d87fd9d1b5b4984fc8b6bb904f163c2f086b98e96361",
           "path": "validator/src/cli/garbage/collection/mod.rs"
         }
       ],

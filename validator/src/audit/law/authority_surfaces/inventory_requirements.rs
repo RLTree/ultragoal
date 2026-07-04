@@ -58,6 +58,7 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "source",
         "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
     ),
+    package_authority_surface!("output_authority", "validator/src/output_path.rs"),
     package_authority_surface!("source", "validator/src/audit/namespace/classes.rs"),
     package_authority_surface!("source", "validator/src/audit/namespace/law/mod.rs"),
     package_authority_surface!("source", "validator/src/audit/namespace/law/path_rules.rs"),
@@ -97,6 +98,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "schemas/research-article-to-law-trace.schema.json",
     ),
     package_authority_surface!("law_registry", "docs/mandatory-law-surfaces.json"),
+    package_authority_surface!(
+        "namespace_class_registry",
+        "docs/namespace-class-registry.json"
+    ),
     package_authority_surface!("research_registry", "docs/research-source-registry.json"),
     package_authority_surface!("research_trace", "docs/research-article-to-law-trace.json"),
     package_authority_surface!(

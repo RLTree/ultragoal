@@ -8,7 +8,7 @@
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:7b4f35d88c44e368586de215b030780ab277b1c2e909e272fca65c2bb4aee7ae",
+      "digest": "sha256:3523deec670e02ced882b302441597c07060ee9f91bdeeb0cf459d86721de204",
       "path": "docs/source-obligation-matrix.json"
     },
     {
@@ -16,11 +16,11 @@
       "path": "validator/src/audit/rust/developer.rs"
     },
     {
-      "digest": "sha256:a75d2218a5144ce02ecc39db361e4259ac033868dae3eba12794e15d38fd4008",
+      "digest": "sha256:4a92ae8acbc45cbeb24b9c0d82d2bea82a367e5fe396b3cb6ebc10e38236086d",
       "path": "schemas/rust-devx-receipt.schema.json"
     },
     {
-      "digest": "sha256:3f8b8b610291b9aee045c442df2fbe3ac49734b7d36dd9b3d1ca47afb840d28b",
+      "digest": "sha256:9861bfb87d9e521b726c4d4ce2e2eb5ea48640cf7a9a1db1308c638560128859",
       "path": "validator/src/cli/rust/mod.rs"
     }
   ],

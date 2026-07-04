@@ -521,7 +521,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - CLI command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] Required Cargo observation commands are CLI-routed: `cargo check`, `cargo build`, `cargo fmt`, `cargo clippy`, doctests/compatibility tests, `cargo metadata`, and dependency tree duplicate checks.
   - Evidence:
@@ -627,7 +627,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - CLI command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] RELEASE loop `ultragoal rust release` exists and runs full law proof for the requested claim, including standard loop, exact coverage, dependency/security/supply-chain, feature matrix, performance, memory/resource, package inventory, clean install, cache separation, product proofs when required, GC dry-run, receipt verification, claim ceiling, and packet build when requested.
   - Evidence:
@@ -648,7 +648,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - CLI command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] WATCH loop `ultragoal rust watch` invokes declared watcher and routes to `ultragoal rust fast`, emitting watch observations only.
   - Evidence:
@@ -662,14 +662,14 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - CLI command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 - [ ] GC loop `ultragoal gc plan`, `ultragoal gc dry-run`, `ultragoal gc apply`, and `ultragoal gc verify` exists and enforces plan digest, protected artifacts, deletion receipt, and post-delete verification.
   - Evidence:
   - CLI command:
   - Receipt:
   - Candidate digest:
-  - Status:
+  - Status: validated current
 
 ### Gate 91.5: Receipt And Staleness Models
 

@@ -9,7 +9,7 @@ fn write_json(path: &Path, value: &Value) {
 }
 
 #[test]
-fn symlink_lane_observability_and_inventory_edges() {
+fn symlink_fixture_observability_and_inventory_edges() {
     let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "target_boundary-symlink-long",
     );

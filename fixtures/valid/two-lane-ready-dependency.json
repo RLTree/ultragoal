@@ -4771,7 +4771,7 @@
       "validator/src/self_tests/target_repo/product/contract.rs",
       "validator/src/self_tests/target_repo/product/mod.rs",
       "validator/src/self_tests/target_repo/product/review.rs",
-      "validator/src/self_tests/target_repo/symlink_lane_inventory_edges.rs",
+      "validator/src/self_tests/target_repo/symlink/inventory_edges.rs",
       "validator/src/self_tests/text/guards.rs",
       "validator/src/self_tests/text/mod.rs",
       "validator/src/semantic/mod.rs",
@@ -22324,8 +22324,8 @@
           "path": "validator/src/self_tests/target_repo/product/review.rs"
         },
         {
-          "digest": "sha256:2f8df84e95c6f2165238a3db8f7216538fe1ebcf90bc85dc26be785556d7fc16",
-          "path": "validator/src/self_tests/target_repo/symlink_lane_inventory_edges.rs"
+          "digest": "sha256:dcf3a21fcc064132c78b78ef1cdd3a943e80534798ce6ab00aff337e63d95795",
+          "path": "validator/src/self_tests/target_repo/symlink/inventory_edges.rs"
         },
         {
           "digest": "sha256:2fff1118a0b7e196a94c170c3a8d271e15e236b0b6816bcd7c0243d6ca654114",

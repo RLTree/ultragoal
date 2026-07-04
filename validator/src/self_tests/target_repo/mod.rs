@@ -3,4 +3,4 @@ pub(crate) mod boundaries;
 pub(crate) mod fixtures;
 pub(crate) mod observability;
 pub(crate) mod product;
-pub(crate) mod symlink_lane_inventory_edges;
+pub(crate) mod symlink;

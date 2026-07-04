@@ -10,6 +10,9 @@ mod process;
 #[cfg(test)]
 mod tests;
 
+const QUERY_ROUNDTRIP_RECEIPT_LABEL: &str = "observe query roundtrip receipt";
+const EXPLAIN_ROUNDTRIP_RECEIPT_LABEL: &str = "observe explain roundtrip receipt";
+
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     run_with_timeout(root, command, command.timeout_ms.max(30_000))
 }
@@ -160,11 +163,8 @@ fn query_roundtrip(
     };
     let value = query::run(root, &command, kind)?;
     let receipt_rel = command.receipt_rel();
-    let receipt_path = crate::output_path::claim_artifact_path(
-        root,
-        &receipt_rel,
-        "observe query roundtrip receipt",
-    )?;
+    let receipt_path =
+        generated_roundtrip_receipt_path(root, &receipt_rel, QUERY_ROUNDTRIP_RECEIPT_LABEL);
     crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
 }
@@ -193,13 +193,15 @@ fn explain_roundtrip(
     };
     let value = super::explain::run(root, &command)?;
     let receipt_rel = command.receipt_rel();
-    let receipt_path = crate::output_path::claim_artifact_path(
-        root,
-        &receipt_rel,
-        "observe explain roundtrip receipt",
-    )?;
+    let receipt_path =
+        generated_roundtrip_receipt_path(root, &receipt_rel, EXPLAIN_ROUNDTRIP_RECEIPT_LABEL);
     crate::json_boundary::write_json(&receipt_path, &value)?;
     Ok(value)
+}
+
+fn generated_roundtrip_receipt_path(root: &Path, rel: &Path, label: &str) -> std::path::PathBuf {
+    crate::output_path::claim_artifact_path(root, rel, label)
+        .expect("observe roundtrip receipt paths are generated package-relative paths")
 }
 
 fn receipt(
