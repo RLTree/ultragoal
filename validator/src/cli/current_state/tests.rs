@@ -124,3 +124,25 @@ fn current_state_run_writes_json_and_summary_modes() {
         assert!(root.join(&command.receipt).is_file());
     }
 }
+
+#[test]
+fn current_state_run_fails_closed_without_candidate_digest() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "current-state-missing-package-boundary",
+    );
+    let command = CurrentStateCommand {
+        json: true,
+        receipt: "validation_artifacts/current-state-missing-boundary.json".into(),
+    };
+
+    let err = run(&root, &command).expect_err("missing candidate digest must fail closed");
+
+    assert!(
+        err.contains("plugin-manifest-draft.json") || err.contains("No such file"),
+        "candidate digest failure should name the missing package boundary: {err}"
+    );
+    assert!(
+        !root.join(&command.receipt).exists(),
+        "current-state must not mint a receipt when candidate truth is unavailable"
+    );
+}
