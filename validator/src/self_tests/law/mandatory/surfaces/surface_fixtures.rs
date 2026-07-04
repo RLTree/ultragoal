@@ -66,6 +66,7 @@ pub(super) fn write_specific_red_fixture(root: &Path, id: &str, law: &str, field
 
 pub(super) fn write_manual_verification(root: &Path, law: &str) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
+    write_inspected_source(root);
     write_json(
         &root.join("validation_artifacts/manual/parent-source-runtime-verification.json"),
         &json!({
@@ -85,6 +86,14 @@ pub(super) fn write_manual_verification(root: &Path, law: &str) {
             }]
         }),
     );
+}
+
+pub(super) fn write_inspected_source(root: &Path) {
+    let path = root.join("validator/src/audit/mandatory/law/surfaces/mod.rs");
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent).expect("source parent");
+    }
+    std::fs::write(path, "fn inspected_source() {}\n").expect("source file");
 }
 
 pub(super) fn expect_failure(root: &Path, receipt: &Value, expected: &str) {

@@ -1,8 +1,10 @@
 use super::surface_fixtures::{
     expect_failure, production_law, validator_theater_law, with_independent_verification,
-    write_json, write_manual_verification, write_specific_red_fixture,
+    write_inspected_source, write_json, write_manual_verification, write_specific_red_fixture,
 };
 use serde_json::{Value, json};
+
+mod receipt_paths;
 
 #[test]
 fn independent_verification_rejects_missing_and_unsafe_receipt_paths() {
@@ -157,7 +159,7 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
                 .expect("candidate"),
             "law_ids": ["all_mandatory_laws"],
             "cli_pass_alone_rejected": true,
-            "source_paths": ["validator/src/audit/mandatory/law/surfaces/independent.rs"],
+            "source_paths": ["validator/src/audit/mandatory/law/surfaces/mod.rs"],
             "runtime_evidence_paths": [
                 "validation_artifacts/manual/parent-source-runtime-verification.json"
             ],
@@ -174,6 +176,7 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
         "mandatory_law_independent_verification_receipt_law_missing:schema-valid",
     );
 
+    write_inspected_source(&root);
     write_manual_receipt(
         &root,
         json!({
@@ -183,7 +186,7 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
                 .expect("candidate"),
             "law_ids": ["schema-valid"],
             "cli_pass_alone_rejected": true,
-            "source_paths": ["validator/src/audit/mandatory/law/surfaces/independent.rs"],
+            "source_paths": ["validator/src/audit/mandatory/law/surfaces/mod.rs"],
             "runtime_evidence_paths": [
                 "validation_artifacts/manual/parent-source-runtime-verification.json"
             ],

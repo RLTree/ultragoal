@@ -1,5 +1,5 @@
 use serde_json::Value;
-use std::path::Path;
+use std::path::{Component, Path};
 
 pub(super) fn verification_failures(
     root: &Path,
@@ -30,7 +30,7 @@ pub(super) fn verification_failures(
         return out;
     }
     match crate::json_boundary::read_json(&root.join(receipt_path)) {
-        Ok(receipt) => out.extend(receipt_failures(&receipt, law, current_digest)),
+        Ok(receipt) => out.extend(receipt_failures(root, &receipt, law, current_digest)),
         Err(_) => out.push(format!(
             "mandatory_law_independent_verification_receipt_missing:{law}"
         )),
@@ -83,13 +83,12 @@ fn shape_failures(verification: &Value, law: &str) -> Vec<String> {
 }
 
 fn safe_manual_receipt_path(path: &str) -> bool {
-    !path.starts_with('/')
-        && !path.contains("..")
+    safe_repo_relative_path(path)
         && path.starts_with("validation_artifacts/manual/")
         && path.ends_with(".json")
 }
 
-fn receipt_failures(receipt: &Value, law: &str, current_digest: &str) -> Vec<String> {
+fn receipt_failures(root: &Path, receipt: &Value, law: &str, current_digest: &str) -> Vec<String> {
     let mut out = Vec::new();
     if receipt.get("schema").and_then(Value::as_str)
         != Some("harness-ultragoal.parent-source-runtime-verification.v1")
@@ -133,6 +132,9 @@ fn receipt_failures(receipt: &Value, law: &str, current_digest: &str) -> Vec<Str
             ));
         }
     }
+    for field in ["source_paths", "runtime_evidence_paths"] {
+        out.extend(receipt_path_failures(root, receipt, law, field));
+    }
     out
 }
 
@@ -144,4 +146,42 @@ fn receipt_covers_law(receipt: &Value, law: &str) -> bool {
         .flatten()
         .filter_map(Value::as_str)
         .any(|id| id == law)
+}
+
+fn receipt_path_failures(root: &Path, receipt: &Value, law: &str, field: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    for path in receipt
+        .get(field)
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+    {
+        if !safe_repo_evidence_path(path) {
+            out.push(format!(
+                "mandatory_law_independent_verification_receipt_path_invalid:{law}:{field}"
+            ));
+        } else if !root.join(path).is_file() {
+            out.push(format!(
+                "mandatory_law_independent_verification_receipt_path_missing:{law}:{field}"
+            ));
+        }
+    }
+    out
+}
+
+fn safe_repo_evidence_path(path: &str) -> bool {
+    safe_repo_relative_path(path)
+}
+
+fn safe_repo_relative_path(path: &str) -> bool {
+    !path.trim().is_empty()
+        && path.trim() == path
+        && !path.starts_with('~')
+        && !path.starts_with("file:")
+        && !path.contains('\\')
+        && !path.contains(':')
+        && Path::new(path)
+            .components()
+            .all(|component| matches!(component, Component::Normal(_)))
 }

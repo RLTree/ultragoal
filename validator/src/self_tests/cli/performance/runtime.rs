@@ -99,12 +99,22 @@ fn run_writes_receipt_and_returns_typed_exit_code() {
         receipt: Some(path.clone()),
         class: BudgetClass::FocusedRepair,
     };
-    assert_eq!(run(&root, &command).expect("run succeeds"), 0);
+    let exit_code = run(&root, &command).expect("run succeeds");
     let value = crate::json_boundary::read_json(&root.join(&path)).expect("read written receipt");
+    assert_eq!(value["exit_code"].as_i64(), Some(i64::from(exit_code)));
     assert_eq!(value["command"]["name"], "performance_prove");
     assert_eq!(value["budget"]["class"], "focused_repair");
     assert_eq!(value["output_size_metrics"]["receipt_count_written"], 1);
-    assert_eq!(value["status"], "pass");
+    assert!([0, 1].contains(&exit_code), "typed exit code {exit_code}");
+    assert_eq!(value["status"], ["pass", "fail"][exit_code as usize]);
+    let failure_id = value["failure"]
+        .get("id")
+        .and_then(serde_json::Value::as_str)
+        .unwrap_or("");
+    assert!(
+        [(0, ""), (1, "cli_performance_budget_exceeded")].contains(&(exit_code, failure_id)),
+        "failure id {failure_id} for exit code {exit_code}"
+    );
 
     let no_write = PerformanceCommand {
         operation: PerformanceOperation::Budgets,
