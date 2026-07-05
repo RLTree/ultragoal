@@ -34,6 +34,7 @@ pub(crate) struct LiveLoopCommand {
     pub(crate) jobs: Option<usize>,
     pub(crate) receipt: PathBuf,
     pub(crate) node_id: Option<String>,
+    pub(crate) measure_all: bool,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
@@ -48,20 +49,31 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
                 PathBuf::from("validation_artifacts/observability/loop-run.json")
             }),
             node_id: None,
+            measure_all: false,
         })),
-        [a, b, ..] if a == "loop" && b == "measure" => Ok(Some(LiveLoopCommand {
-            action: LiveLoopAction::Measure,
-            tier: opt_string(&raw[2..], "--tier").unwrap_or_else(|| "hot".to_string()),
-            cache_mode: opt_string(&raw[2..], "--cache-mode")
-                .unwrap_or_else(|| "verified-local".to_string()),
-            jobs: opt_jobs(&raw[2..], "--jobs")?,
-            receipt: opt_path(&raw[2..], "--receipt")
-                .unwrap_or_else(|| PathBuf::from(nodes::timing::NODE_TIMING_REL)),
-            node_id: Some(
-                opt_string(&raw[2..], "--node")
-                    .ok_or_else(|| "loop measure requires --node <id>".to_string())?,
-            ),
-        })),
+        [a, b, ..] if a == "loop" && b == "measure" => {
+            let node_id = opt_string(&raw[2..], "--node");
+            let measure_all = has_flag(&raw[2..], "--all");
+            if measure_all && node_id.is_some() {
+                return Err(
+                    "loop measure accepts either --all or --node <id>, not both".to_string()
+                );
+            }
+            if !measure_all && node_id.is_none() {
+                return Err("loop measure requires --node <id> or --all".to_string());
+            }
+            Ok(Some(LiveLoopCommand {
+                action: LiveLoopAction::Measure,
+                tier: opt_string(&raw[2..], "--tier").unwrap_or_else(|| "hot".to_string()),
+                cache_mode: opt_string(&raw[2..], "--cache-mode")
+                    .unwrap_or_else(|| "verified-local".to_string()),
+                jobs: opt_jobs(&raw[2..], "--jobs")?,
+                receipt: opt_path(&raw[2..], "--receipt")
+                    .unwrap_or_else(|| PathBuf::from(nodes::timing::NODE_TIMING_REL)),
+                node_id,
+                measure_all,
+            }))
+        }
         _ => Ok(None),
     }
 }
@@ -166,6 +178,10 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
+}
+
+fn has_flag(args: &[String], key: &str) -> bool {
+    args.iter().any(|arg| arg == key)
 }
 
 fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {

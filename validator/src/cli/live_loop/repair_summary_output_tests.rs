@@ -10,6 +10,7 @@ fn loop_repair_summary_output_names_trace_and_query_routes() {
         jobs: None,
         receipt: "validation_artifacts/observability/loop-run.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let receipt = json!({
         "status": "fail",

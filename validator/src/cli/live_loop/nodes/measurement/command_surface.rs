@@ -12,6 +12,7 @@ fn command(node_id: Option<&str>, receipt: PathBuf) -> LiveLoopCommand {
         jobs: None,
         receipt,
         node_id: node_id.map(str::to_string),
+        measure_all: false,
     }
 }
 
@@ -90,12 +91,15 @@ fn live_loop_measure_reports_digest_receipt_and_launch_failures() {
     );
 
     let surface = crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface");
-    let launch_failure =
-        super::run_baseline_with_shell(&root, surface, "ultragoal-missing-shell-for-test");
+    let launch_failure = super::full_command::run_full_command_with_shell(
+        &root,
+        surface,
+        "ultragoal-missing-shell-for-test",
+    );
     assert!(!launch_failure.status_success);
     assert!(launch_failure.launch_error);
     assert_eq!(
-        super::measurement_failure_class(&launch_failure, 0),
+        super::node_timing_receipt::measurement_failure_class(&launch_failure, 0),
         "canonical_full_command_launch_failed"
     );
 
@@ -166,18 +170,18 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
 
 #[test]
 fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
-    assert_eq!(super::timing_status(true), "pass");
-    assert_eq!(super::timing_status(false), "fail");
+    assert_eq!(super::node_timing_receipt::timing_status(true), "pass");
+    assert_eq!(super::node_timing_receipt::timing_status(false), "fail");
     assert_eq!(
-        super::affected_set_status(&[]),
+        super::node_timing_receipt::affected_set_status(&[]),
         "clean_worktree_no_affected_files"
     );
     assert_eq!(
-        super::affected_set_status(&[" M validator/src/lib.rs".to_string()]),
+        super::node_timing_receipt::affected_set_status(&[" M validator/src/lib.rs".to_string()]),
         "changed_files_digest_bound"
     );
 
-    let failed_baseline = super::BaselineRun {
+    let failed_baseline = super::full_command::FullCommandRun {
         exit_code: 1,
         status_success: false,
         launch_error: false,
@@ -186,11 +190,11 @@ fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
         stderr_digest: "sha256:stderr".to_string(),
     };
     assert_eq!(
-        super::measurement_failure_class(&failed_baseline, 50),
+        super::node_timing_receipt::measurement_failure_class(&failed_baseline, 50),
         "canonical_full_command_failed"
     );
 
-    let slow_baseline = super::BaselineRun {
+    let slow_baseline = super::full_command::FullCommandRun {
         exit_code: 0,
         status_success: true,
         launch_error: false,
@@ -199,16 +203,19 @@ fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
         stderr_digest: "sha256:stderr".to_string(),
     };
     assert_eq!(
-        super::measurement_failure_class(&slow_baseline, 1),
+        super::node_timing_receipt::measurement_failure_class(&slow_baseline, 1),
         "live_loop_speedup_target_missed"
     );
-    assert_eq!(super::measurement_failure_class(&slow_baseline, 20), "none");
+    assert_eq!(
+        super::node_timing_receipt::measurement_failure_class(&slow_baseline, 20),
+        "none"
+    );
 }
 
 #[test]
 fn live_loop_measure_marks_verified_local_speedup_as_pass() {
     let command = command(Some("changed_files"), node_timing_receipt_arg());
-    let baseline = super::BaselineRun {
+    let baseline = super::full_command::FullCommandRun {
         exit_code: 0,
         status_success: true,
         launch_error: false,
@@ -216,7 +223,7 @@ fn live_loop_measure_marks_verified_local_speedup_as_pass() {
         stdout_digest: "sha256:stdout".to_string(),
         stderr_digest: "sha256:stderr".to_string(),
     };
-    let row = super::node_row(
+    let row = super::node_timing_receipt::node_timing_row(
         crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
         &command,
         "sha256:candidate",

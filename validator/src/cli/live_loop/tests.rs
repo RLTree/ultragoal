@@ -17,6 +17,7 @@ fn live_loop_run_writes_source_local_blocker_receipt() {
         jobs: Some(2),
         receipt: "validation_artifacts/observability/loop-test.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let code = run(&root, &command).expect("loop run");
     assert_eq!(code, 1);
@@ -39,6 +40,7 @@ fn live_loop_run_fails_closed_before_work_for_bad_roots_and_jobs() {
         jobs: Some(2),
         receipt: "validation_artifacts/observability/loop-test.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let err = run(&missing_manifest, &command).expect_err("missing manifest");
     assert!(err.contains("plugin-manifest-draft.json"), "{err}");
@@ -78,6 +80,7 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
         jobs: Some(2),
         receipt: "validation_artifacts/observability/loop-test.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let err = run(&current_state_root, &command).expect_err("current-state write fails");
     assert!(err.contains("validation_artifacts"), "{err}");
@@ -119,6 +122,7 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
         jobs: Some(2),
         receipt: "validation_artifacts/loop-receipt.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let err = run(&observability_root, &command).expect_err("observability spool write fails");
     assert!(err.contains("validation_artifacts/observability"), "{err}");
@@ -141,6 +145,7 @@ fn live_loop_run_rejects_absolute_claim_artifact_receipts() {
         jobs: Some(2),
         receipt: "/tmp/ultragoal-loop-receipt.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let err = run(&root, &command).expect_err("absolute receipt rejected");
     assert!(err.contains("root-relative claim artifact path"), "{err}");
@@ -181,6 +186,7 @@ fn live_loop_run_blocks_until_high_frequency_nodes_have_timing_proof() {
         jobs: Some(2),
         receipt: "validation_artifacts/observability/loop-pass.json".into(),
         node_id: None,
+        measure_all: false,
     };
     let code = run(&root, &command).expect("loop blocked run");
     assert_eq!(code, 1);
