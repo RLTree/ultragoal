@@ -92,7 +92,14 @@ fn surface_record(
         .as_ref()
         .map(|timing| timing.baseline_duration_ms)
         .or(baseline_ms);
-    let measurement = measurement_state(surface, duration_ms, baseline_ms);
+    let measurement = if let Some(timing) = node_timing
+        .as_ref()
+        .filter(|timing| timing.timing_status != "pass")
+    {
+        failed_timing_measurement_state(surface, timing)
+    } else {
+        measurement_state(surface, duration_ms, baseline_ms)
+    };
     json!({
         "node_id": surface.id,
         "surface": surface.surface,
@@ -118,6 +125,13 @@ fn surface_record(
         "baseline_duration_ms": measurement.baseline_duration_ms,
         "verified_local_duration_ms": duration_ms,
         "speedup_ratio": measurement.speedup_ratio,
+        "baseline_exit_code": node_timing
+            .as_ref()
+            .and_then(|timing| timing.baseline_exit_code),
+        "baseline_launch_error": node_timing
+            .as_ref()
+            .map(|timing| timing.baseline_launch_error)
+            .unwrap_or(false),
         "required_speedup": "20x",
         "affected_set_status": node_timing
             .as_ref()
@@ -129,6 +143,51 @@ fn surface_record(
             .unwrap_or("none"),
         "claim_impact": measurement.claim_impact
     })
+}
+
+fn failed_timing_measurement_state(
+    surface: LoopValidationSurface,
+    timing: &NodeTiming,
+) -> super::nodes::status::MeasurementState {
+    let failure_class = match timing.failure_class.as_str() {
+        "canonical_full_command_launch_failed" => "canonical_full_command_launch_failed",
+        "canonical_full_command_failed" => "canonical_full_command_failed",
+        "live_loop_speedup_target_missed" => "live_loop_speedup_target_missed",
+        _ => "live_loop_node_measurement_failed",
+    };
+    let why_failed = if timing.baseline_launch_error {
+        "canonical full command could not launch while measuring this high-frequency live-loop node"
+    } else if failure_class == "canonical_full_command_failed" {
+        "canonical full command exited nonzero while measuring this high-frequency live-loop node"
+    } else if failure_class == "live_loop_speedup_target_missed" {
+        "high-frequency live-loop node has baseline timing but does not meet the verified-local 20x speed target"
+    } else {
+        "current high-frequency live-loop node timing row is failed"
+    };
+    let baseline_state = if timing.baseline_launch_error {
+        "current_full_command_launch_failed"
+    } else {
+        "current_full_command_baseline_failed"
+    };
+    let exit = timing
+        .baseline_exit_code
+        .map(|code| code.to_string())
+        .unwrap_or_else(|| "unknown".to_string());
+    super::nodes::status::MeasurementState {
+        status: "blocked",
+        failure_class,
+        why_failed,
+        where_failed: format!("loop.run.{}.baseline", surface.id),
+        next_repair: format!(
+            "run `{}` and repair the failing command exit code {exit}, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
+            surface.canonical_full_command, surface.id
+        ),
+        baseline_state,
+        speedup_state: "verified_local_20x_not_claimable_until_full_command_passes",
+        baseline_duration_ms: Some(timing.baseline_duration_ms),
+        speedup_ratio: Some(timing.baseline_duration_ms / timing.verified_local_duration_ms.max(1)),
+        claim_impact: "blocks_live_loop_routine_repair_until_canonical_full_command_passes",
+    }
 }
 
 fn baseline_ms(id: &str, package_digest_baseline_ms: Option<u64>) -> Option<u64> {

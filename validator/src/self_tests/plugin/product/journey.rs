@@ -32,7 +32,8 @@ fn plugin_product_flow_reports_missing_schema_entry_edges_and_categories() {
         "custom_agents": [],
         "standards_rows": []
     });
-    let failures = crate::audit::plugin::product::cohesion::flow_value_failures(&root, &flow);
+    let failures =
+        crate::audit::plugin::product::cohesion::flow_manifest_projection_failures(&root, &flow);
     for expected in [
         "plugin_flow_manifest_malformed:schema",
         "plugin_flow_entrypoint_missing",
@@ -199,6 +200,7 @@ fn plugin_flow_authority_requires_checks_edges_and_completion_receipts() {
         "validator_checks":["source-package-inventory"],
         "edges":[{"from":"harness-ultragoal:fit-repo","to":"templates/.harness/coverage-manifest.json"}],
         "flows":[
+            {"required_edges":[]},
             {"id":"setup","required_edges":["missing->edge"]},
             {
                 "id":"complete",
@@ -207,7 +209,7 @@ fn plugin_flow_authority_requires_checks_edges_and_completion_receipts() {
             }
         ]
     });
-    let failures = crate::audit::plugin::flow::authority::failures(&flow);
+    let failures = crate::audit::plugin::flow::authority::failures_from_value(&flow);
     assert!(
         failures.iter().any(|item| {
             item == "plugin_flow_validator_check_missing:agent-standards-enforcement"
@@ -216,6 +218,12 @@ fn plugin_flow_authority_requires_checks_edges_and_completion_receipts() {
     assert!(failures.iter().any(|item| {
         item == "plugin_flow_required_edge_missing:harness-ultragoal:fit-repo->validation_artifacts/harness/fit-repo-receipt.json"
     }));
+    assert!(
+        failures
+            .iter()
+            .any(|item| item == "plugin_flow_completion_receipt_missing:<unknown>"),
+        "{failures:?}"
+    );
     assert!(
         failures
             .iter()
@@ -231,7 +239,7 @@ fn plugin_flow_authority_requires_checks_edges_and_completion_receipts() {
 
     let no_flows = json!({"validator_checks":[],"edges":[]});
     assert!(
-        crate::audit::plugin::flow::authority::failures(&no_flows)
+        crate::audit::plugin::flow::authority::failures_from_value(&no_flows)
             .iter()
             .any(|item| item == "plugin_flow_completion_receipt_missing:flows")
     );

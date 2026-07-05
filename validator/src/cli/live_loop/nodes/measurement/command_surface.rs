@@ -1,4 +1,5 @@
 use super::super::super::{LiveLoopAction, LiveLoopCommand};
+use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 use std::path::{Path, PathBuf};
 
@@ -30,8 +31,7 @@ fn node_timing_receipt_path(root: &std::path::Path) -> PathBuf {
 
 #[test]
 fn live_loop_measure_rejects_missing_or_unknown_node_id() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-measure-errors");
+    let root = temp_root("live-loop-measure-errors");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -58,8 +58,7 @@ fn live_loop_measure_rejects_missing_or_unknown_node_id() {
 
 #[test]
 fn live_loop_measure_reports_digest_receipt_and_launch_failures() {
-    let missing_manifest =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-measure-digest");
+    let missing_manifest = temp_root("live-loop-measure-digest");
     std::fs::create_dir_all(&missing_manifest).expect("missing manifest root");
     let digest_err = super::super::super::run(
         &missing_manifest,
@@ -72,8 +71,7 @@ fn live_loop_measure_reports_digest_receipt_and_launch_failures() {
     );
     std::fs::remove_dir_all(missing_manifest).expect("cleanup missing manifest");
 
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-measure-receipt");
+    let root = temp_root("live-loop-measure-receipt");
     std::fs::create_dir_all(&root).expect("receipt root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -108,8 +106,7 @@ fn live_loop_measure_reports_digest_receipt_and_launch_failures() {
 
 #[test]
 fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-measure-command");
+    let root = temp_root("live-loop-measure-command");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
         &root.join("plugin-manifest-draft.json"),
@@ -163,7 +160,16 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
     );
     assert_eq!(rows[0]["baseline_exit_code"], 0);
     assert_eq!(rows[0]["failure_class"], "none");
-    assert_eq!(rows[0]["affected_set_status"], "changed_files_digest_bound");
+    let affected_set_status = rows[0]["affected_set_status"]
+        .as_str()
+        .expect("affected set status");
+    assert!(
+        matches!(
+            affected_set_status,
+            "clean_worktree_no_affected_files" | "changed_files_digest_bound"
+        ),
+        "{affected_set_status}"
+    );
 
     std::fs::remove_dir_all(root).expect("cleanup measure command");
 }

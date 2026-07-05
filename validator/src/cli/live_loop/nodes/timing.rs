@@ -11,6 +11,10 @@ pub(crate) const NODE_TIMING_REL: &str =
 pub(crate) struct NodeTiming {
     pub(crate) baseline_duration_ms: u64,
     pub(crate) verified_local_duration_ms: u64,
+    pub(crate) timing_status: String,
+    pub(crate) failure_class: String,
+    pub(crate) baseline_exit_code: Option<i32>,
+    pub(crate) baseline_launch_error: bool,
     pub(crate) affected_set_status: String,
     pub(crate) timing_source: String,
 }
@@ -42,18 +46,30 @@ pub(crate) fn read_current(
                 || text(row, "cache_mode")? != cache_mode
                 || text(row, "input_digest")? != expected_input
                 || text(row, "canonical_full_command")? != surface.canonical_full_command
-                || text(row, "timing_status")? != "pass"
                 || text(row, "cache_honesty")? != "pass"
             {
                 return None;
             }
             let baseline_duration_ms = positive(row, "baseline_duration_ms")?;
             let verified_local_duration_ms = positive(row, "verified_local_duration_ms")?;
+            let baseline_exit_code = row
+                .get("baseline_exit_code")
+                .and_then(serde_json::Value::as_i64)
+                .and_then(|value| i32::try_from(value).ok());
             Some((
                 node_id.to_string(),
                 NodeTiming {
                     baseline_duration_ms,
                     verified_local_duration_ms,
+                    timing_status: text(row, "timing_status").unwrap_or("fail").to_string(),
+                    failure_class: text(row, "failure_class")
+                        .unwrap_or("live_loop_node_measurement_failed")
+                        .to_string(),
+                    baseline_exit_code,
+                    baseline_launch_error: row
+                        .get("baseline_launch_error")
+                        .and_then(serde_json::Value::as_bool)
+                        .unwrap_or(false),
                     affected_set_status: text(row, "affected_set_status")
                         .unwrap_or("unknown")
                         .to_string(),
@@ -113,6 +129,9 @@ mod tests {
                         "canonical_full_command": "cargo fmt --all --check",
                         "timing_status": "pass",
                         "cache_honesty": "pass",
+                        "failure_class": "none",
+                        "baseline_exit_code": 0,
+                        "baseline_launch_error": false,
                         "baseline_duration_ms": 1000,
                         "verified_local_duration_ms": 2,
                         "affected_set_status": "clean_worktree_no_affected_files"
@@ -126,6 +145,7 @@ mod tests {
                         "canonical_full_command": "cargo build --offline --bin ultragoal --quiet",
                         "timing_status": "pass",
                         "cache_honesty": "pass",
+                        "failure_class": "none",
                         "baseline_duration_ms": 1000,
                         "verified_local_duration_ms": 2
                     }
@@ -147,6 +167,64 @@ mod tests {
             timings["fmt_check"].affected_set_status,
             "clean_worktree_no_affected_files"
         );
+        assert_eq!(timings["fmt_check"].timing_status, "pass");
+        assert_eq!(timings["fmt_check"].failure_class, "none");
+        assert_eq!(timings["fmt_check"].baseline_exit_code, Some(0));
         std::fs::remove_dir_all(root).expect("cleanup node timing");
+    }
+
+    #[test]
+    fn node_timing_reader_preserves_current_failed_measurement_rows() {
+        let root =
+            crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-failed-timing");
+        let candidate = "sha256:current";
+        let changed = crate::digest::bytes(b"");
+        let context =
+            crate::digest::bytes(format!("{candidate}:hot:verified-local:{changed}").as_bytes());
+        let input = super::graph::surface_input_digest(
+            super::surface_by_id("fmt_check").expect("fmt surface"),
+            candidate,
+            &changed,
+            &context,
+        );
+        crate::json_boundary::write_json(
+            &root.join(NODE_TIMING_REL),
+            &json!({
+                "nodes": [{
+                    "node_id": "fmt_check",
+                    "candidate_digest": candidate,
+                    "tier": "hot",
+                    "cache_mode": "verified-local",
+                    "input_digest": input,
+                    "canonical_full_command": "cargo fmt --all --check",
+                    "timing_status": "fail",
+                    "failure_class": "canonical_full_command_failed",
+                    "baseline_exit_code": 101,
+                    "baseline_launch_error": false,
+                    "cache_honesty": "pass",
+                    "baseline_duration_ms": 1000,
+                    "verified_local_duration_ms": 2,
+                    "affected_set_status": "clean_worktree_no_affected_files"
+                }]
+            }),
+        )
+        .expect("timing artifact");
+
+        let timings = read_current(
+            &root,
+            candidate,
+            "hot",
+            "verified-local",
+            &changed,
+            &context,
+        );
+        assert_eq!(timings.len(), 1);
+        assert_eq!(timings["fmt_check"].timing_status, "fail");
+        assert_eq!(
+            timings["fmt_check"].failure_class,
+            "canonical_full_command_failed"
+        );
+        assert_eq!(timings["fmt_check"].baseline_exit_code, Some(101));
+        std::fs::remove_dir_all(root).expect("cleanup failed timing");
     }
 }

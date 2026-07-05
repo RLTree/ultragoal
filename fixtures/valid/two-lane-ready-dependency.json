@@ -4379,7 +4379,7 @@
       "validator/src/audit/plugin/flow/mod.rs",
       "validator/src/audit/plugin/laws.rs",
       "validator/src/audit/plugin/mod.rs",
-      "validator/src/audit/plugin/product/cohesion.rs",
+      "validator/src/audit/plugin/product/cohesion/mod.rs",
       "validator/src/audit/plugin/product/journey/mod.rs",
       "validator/src/audit/plugin/product/mod.rs",
       "validator/src/audit/plugin/registry/guard.rs",
@@ -20781,7 +20781,7 @@
         },
         {
           "digest": "sha256:d3b7dd599771b22db844224ba7d460b91beb76cb821a4d767e206fa122d3d769",
-          "path": "validator/src/audit/plugin/product/cohesion.rs"
+          "path": "validator/src/audit/plugin/product/cohesion/mod.rs"
         },
         {
           "digest": "sha256:2ebcbe1e0c7814f7e5f3d59d79a80e55b4246df0a7040cafa7cf3fc808d0fc7e",

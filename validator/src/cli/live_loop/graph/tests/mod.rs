@@ -1,8 +1,9 @@
-use super::super::nodes::timing::NodeTiming;
 use super::{first_blocker, required_high_frequency_validation_ids};
 use crate::scheduler::TaskClass;
 use serde_json::json;
 use std::collections::BTreeMap;
+
+mod timing_projection;
 
 #[test]
 fn high_frequency_registry_covers_required_source_local_validation() {
@@ -172,45 +173,4 @@ fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
             .expect("repair text")
             .contains("cargo fmt --all --check")
     );
-}
-
-#[test]
-fn live_loop_tasks_project_current_node_timing_records() {
-    let mut timings = BTreeMap::new();
-    timings.insert(
-        "fmt_check".to_string(),
-        NodeTiming {
-            baseline_duration_ms: 1_000,
-            verified_local_duration_ms: 5,
-            affected_set_status: "changed_files_digest_bound".to_string(),
-            timing_source: super::super::nodes::timing::NODE_TIMING_REL.to_string(),
-        },
-    );
-    let nodes = super::tasks(
-        "sha256:candidate",
-        "sha256:changed",
-        "sha256:context",
-        "hot",
-        "verified-local",
-        Some(1_000),
-        &timings,
-    )
-    .into_iter()
-    .map(|task| task())
-    .collect::<Vec<_>>();
-    let fmt = nodes
-        .iter()
-        .find(|node| node["node_id"] == "fmt_check")
-        .expect("fmt node");
-    assert_eq!(fmt["status"], "pass");
-    assert_eq!(fmt["affected_set_status"], "changed_files_digest_bound");
-    assert_eq!(
-        fmt["timing_source"],
-        super::super::nodes::timing::NODE_TIMING_REL
-    );
-    assert_eq!(fmt["graph_task_class"], "pure_read_parallel");
-    assert_eq!(fmt["execution_task_class"], "pure_read_parallel");
-    assert_eq!(fmt["execution_serial_reason"], "none");
-    assert_eq!(fmt["baseline_duration_ms"], 1_000);
-    assert_eq!(fmt["verified_local_duration_ms"], 5);
 }

@@ -1,4 +1,4 @@
-use serde_json::Value;
+use crate::audit::plugin::product::cohesion::manifest::PluginCohesionManifest;
 use std::collections::BTreeSet;
 
 const REQUIRED_EDGES: &[&str] = &[
@@ -9,23 +9,19 @@ const REQUIRED_EDGES: &[&str] = &[
     "templates/scripts/check-agent-standards->agent-standards-enforcement",
 ];
 
-pub(crate) fn failures(flow: &Value) -> Vec<String> {
+pub(crate) fn failures(flow: &PluginCohesionManifest) -> Vec<String> {
     let mut out = Vec::new();
-    let declared = strings(flow, "validator_checks")
-        .into_iter()
+    let declared = flow
+        .validator_checks
+        .iter()
+        .cloned()
         .collect::<BTreeSet<_>>();
     for check in crate::audit::contract::CHECK_IDS {
         if !declared.contains(*check) {
             out.push(format!("plugin_flow_validator_check_missing:{check}"));
         }
     }
-    let edge_set = flow
-        .get("edges")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(edge_key)
-        .collect::<BTreeSet<_>>();
+    let edge_set = flow.edge_keys().into_iter().collect::<BTreeSet<_>>();
     for edge in REQUIRED_EDGES {
         if !edge_set.contains(*edge) {
             out.push(format!("plugin_flow_required_edge_missing:{edge}"));
@@ -35,44 +31,33 @@ pub(crate) fn failures(flow: &Value) -> Vec<String> {
     out
 }
 
-fn flow_receipt_failures(flow: &Value, edge_set: &BTreeSet<String>) -> Vec<String> {
+#[cfg(test)]
+pub(crate) fn failures_from_value(flow: &serde_json::Value) -> Vec<String> {
+    failures(&PluginCohesionManifest::from_value(flow))
+}
+
+fn flow_receipt_failures(
+    flow: &PluginCohesionManifest,
+    edge_set: &BTreeSet<String>,
+) -> Vec<String> {
     let mut out = Vec::new();
-    let Some(rows) = flow.get("flows").and_then(Value::as_array) else {
+    if flow.flows.is_empty() {
         return vec!["plugin_flow_completion_receipt_missing:flows".to_string()];
-    };
-    for row in rows {
-        let id = row.get("id").and_then(Value::as_str).unwrap_or("<unknown>");
-        if row
-            .get("completion_receipt")
-            .and_then(Value::as_str)
-            .is_none_or(str::is_empty)
-        {
+    }
+    for row in &flow.flows {
+        let id = if row.id.is_empty() {
+            "<unknown>"
+        } else {
+            &row.id
+        };
+        if row.completion_receipt.is_empty() {
             out.push(format!("plugin_flow_completion_receipt_missing:{id}"));
         }
-        for edge in strings(row, "required_edges") {
-            if !edge_set.contains(&edge) {
+        for edge in &row.required_edges {
+            if !edge_set.contains(edge) {
                 out.push(format!("plugin_flow_required_edge_missing:{id}:{edge}"));
             }
         }
     }
     out
-}
-
-fn edge_key(value: &Value) -> Option<String> {
-    Some(format!(
-        "{}->{}",
-        value.get("from")?.as_str()?,
-        value.get("to")?.as_str()?
-    ))
-}
-
-fn strings(value: &Value, key: &str) -> Vec<String> {
-    value
-        .get(key)
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-        .map(ToOwned::to_owned)
-        .collect()
 }

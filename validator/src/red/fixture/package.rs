@@ -144,7 +144,7 @@ pub(crate) fn observation_with_candidate_cached(
         )),
         "docs/plugin-cohesion-manifest.json" => Some(from_failures(
             expected,
-            &crate::audit::plugin::product::cohesion::flow_value_failures(root, bad),
+            &crate::audit::plugin::product::cohesion::flow_manifest_projection_failures(root, bad),
         )),
         "validation_artifacts/harness/plugin-product-journey-receipt.json" => Some(from_failures(
             expected,

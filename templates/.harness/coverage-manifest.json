@@ -189,6 +189,9 @@
       "validator/src/audit/package/run/scope.rs",
       "validator/src/audit/package/schema/map.rs",
       "validator/src/audit/plugin/laws.rs",
+      "validator/src/audit/plugin/flow/authority.rs",
+      "validator/src/audit/plugin/product/cohesion/manifest.rs",
+      "validator/src/audit/plugin/product/cohesion/mod.rs",
       "validator/src/audit/plugin/product/journey/mod.rs",
       "validator/src/audit/plugin/registry/guard.rs",
       "validator/src/audit/plugin/registry/live/mod.rs",
@@ -255,7 +258,10 @@
       "validator/src/cli/current_state/tests.rs",
       "validator/src/cli/final_packet/mod.rs",
       "validator/src/cli/final_packet/proof/mod.rs",
-      "validator/src/cli/live_loop/graph/tests.rs",
+      "validator/src/cli/live_loop/graph/mod.rs",
+      "validator/src/cli/live_loop/graph/tests/mod.rs",
+      "validator/src/cli/live_loop/graph/tests/timing_projection.rs",
+      "validator/src/cli/live_loop/nodes/timing.rs",
       "validator/src/cli/live_loop/nodes/measurement/mod.rs",
       "validator/src/cli/live_loop/nodes/measurement/command_surface.rs",
       "validator/src/cli/live_loop/nodes/measurement/full_command.rs",
@@ -445,7 +451,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:7c6308c11e46a60f4cc3f59b481da531592fef9eb0cf99dbbc4a37ea9f46cc34",
+    "changed_files_digest": "sha256:3efab8f2beebca693a443f88bacf9e10e184cafa70968a7e9abf5ea7140dff13",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -493,7 +499,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:d9fa3cdefc03cc361b27ccb4ffcc654519a159b67c70b42176065ecc7663fe22",
+  "repo_root_digest": "sha256:a9ff732ecef7472ee106357e74e504114aa3c04a673a4b9d22ae3b62e2b1be9d",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

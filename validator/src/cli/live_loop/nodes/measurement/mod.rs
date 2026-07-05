@@ -29,20 +29,24 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
         )
         .as_bytes(),
     );
-    let rows: Vec<Value> = surfaces
-        .into_iter()
-        .map(|surface| {
-            measure_surface(
-                root,
-                command,
-                surface,
-                &candidate,
-                &changed_files_digest,
-                &audit_context_digest,
-                affected_set_status(&changed_files),
-            )
-        })
-        .collect();
+    let mut rows = Vec::new();
+    for surface in surfaces {
+        println!(
+            "ultragoal-loop-measure-start candidate={} node={} command='{}' claim_ceiling='source-local loop timing only'",
+            candidate, surface.id, surface.canonical_full_command
+        );
+        let row = measure_surface(
+            root,
+            command,
+            surface,
+            &candidate,
+            &changed_files_digest,
+            &audit_context_digest,
+            affected_set_status(&changed_files),
+        );
+        print_measurements(command, &candidate, std::slice::from_ref(&row));
+        rows.push(row);
+    }
     write_node_timings(
         root,
         &command.receipt,
@@ -51,7 +55,6 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
         &command.cache_mode,
         rows.clone(),
     )?;
-    print_measurements(command, &candidate, &rows);
     Ok(i32::from(
         rows.iter().any(|row| row["timing_status"] != "pass"),
     ))

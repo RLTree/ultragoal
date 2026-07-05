@@ -1,6 +1,13 @@
 use serde_json::Value;
 use std::path::Path;
 
+pub(crate) mod manifest;
+
+use manifest::{
+    PackageManifestProjection, PluginCohesionManifest, PluginPromptProjection,
+    PluginResourceMapProjection, StandardsRowProjection,
+};
+
 const FLOW: &str = "docs/plugin-cohesion-manifest.json";
 const FIT_REPO_RECEIPT: &str = "validation_artifacts/harness/fit-repo-receipt.json";
 const JOURNEY: &str = "validation_artifacts/harness/plugin-product-journey-receipt.json";
@@ -28,77 +35,83 @@ pub fn package_failures(root: &Path) -> Vec<String> {
 }
 
 fn flow_failures(root: &Path) -> Vec<String> {
-    let flow = match crate::json_boundary::read_json(&root.join(FLOW)) {
+    let value = match crate::json_boundary::read_json(&root.join(FLOW)) {
         Ok(value) => value,
         Err(err) => return vec![format!("plugin_flow_manifest_malformed:{err}")],
     };
-    flow_value_failures(root, &flow)
+    flow_manifest_failures(root, &PluginCohesionManifest::from_value(&value))
 }
 
-pub fn flow_value_failures(root: &Path, flow: &Value) -> Vec<String> {
+pub(crate) fn flow_manifest_projection_failures(root: &Path, flow: &Value) -> Vec<String> {
+    flow_manifest_failures(root, &PluginCohesionManifest::from_value(flow))
+}
+
+fn flow_manifest_failures(root: &Path, flow: &PluginCohesionManifest) -> Vec<String> {
     let mut out = Vec::new();
-    if str_field(&flow, "schema") != "harness-ultragoal.plugin-cohesion-manifest.v1" {
+    if flow.schema != "harness-ultragoal.plugin-cohesion-manifest.v1" {
         out.push("plugin_flow_manifest_malformed:schema".to_string());
     }
-    let entries = strings(&flow, "entrypoints");
-    if !entries.iter().any(|entry| entry == FIT_REPO_ENTRYPOINT) {
+    if !flow
+        .entrypoints
+        .iter()
+        .any(|entry| entry == FIT_REPO_ENTRYPOINT)
+    {
         out.push("plugin_flow_entrypoint_missing".to_string());
     }
-    if flow
-        .get("edges")
-        .and_then(Value::as_array)
-        .is_none_or(Vec::is_empty)
-    {
+    if flow.edges.is_empty() {
         out.push("plugin_flow_required_edge_missing".to_string());
     }
-    out.extend(crate::audit::plugin::flow::authority::failures(&flow));
-    for surface in strings(&flow, "required_surfaces") {
+    out.extend(crate::audit::plugin::flow::authority::failures(flow));
+    for surface in &flow.required_surfaces {
         if !root.join(&surface).is_file() {
             out.push(format!("plugin_flow_setup_file_not_packaged:{surface}"));
         }
     }
-    out.extend(category_failures(root, &flow));
+    out.extend(category_failures(root, flow));
     out
 }
 
-fn category_failures(root: &Path, flow: &Value) -> Vec<String> {
+fn category_failures(root: &Path, flow: &PluginCohesionManifest) -> Vec<String> {
     let mut out = Vec::new();
-    let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
-        .unwrap_or(Value::Null);
-    require_manifest_paths(&manifest, flow, "skills", "skills", &mut out);
-    require_manifest_paths(&manifest, flow, "schemas", "schemas", &mut out);
+    let manifest = PackageManifestProjection::from_value(
+        &crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
+            .unwrap_or(Value::Null),
+    );
+    require_manifest_paths(&manifest.skills, &flow.skills, "skills", &mut out);
+    require_manifest_paths(&manifest.schemas, &flow.schemas, "schemas", &mut out);
     require_manifest_paths(
-        &manifest,
-        flow,
-        "authorable_templates",
+        &manifest.authorable_templates,
+        &flow.templates,
         "templates",
         &mut out,
     );
-    require_manifest_paths(&manifest, flow, "agents", "custom_agents", &mut out);
-    for key in [
-        "setup_scripts",
-        "fixture_groups",
-        "receipts",
-        "validator_checks",
-        "standards_rows",
-        "package_cache_install_surfaces",
+    require_manifest_paths(
+        &manifest.agents,
+        &flow.custom_agents,
+        "custom_agents",
+        &mut out,
+    );
+    for (key, values) in [
+        ("setup_scripts", &flow.setup_scripts),
+        ("fixture_groups", &flow.fixture_groups),
+        ("receipts", &flow.receipts),
+        ("validator_checks", &flow.validator_checks),
+        ("standards_rows", &flow.standards_rows),
+        (
+            "package_cache_install_surfaces",
+            &flow.package_cache_install_surfaces,
+        ),
     ] {
-        if strings(flow, key).is_empty() {
+        if values.is_empty() {
             out.push(format!("plugin_flow_category_missing:{key}"));
         }
     }
-    let standards =
-        crate::json_boundary::read_json(&root.join("templates/agent-standards/enforcement.json"))
-            .unwrap_or(Value::Null);
-    let declared = strings(flow, "standards_rows");
-    for row in standards
-        .get("rows")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(|row| row.get("id").and_then(Value::as_str))
-    {
-        if !declared.iter().any(|item| item == row) {
+    let standards = StandardsRowProjection::from_value(
+        &crate::json_boundary::read_json(&root.join("templates/agent-standards/enforcement.json"))
+            .unwrap_or(Value::Null),
+    );
+    for row in standards.row_ids {
+        if !flow.standards_rows.iter().any(|item| item == &row) {
             out.push(format!("plugin_flow_standards_row_missing:{row}"));
         }
     }
@@ -106,27 +119,13 @@ fn category_failures(root: &Path, flow: &Value) -> Vec<String> {
 }
 
 fn require_manifest_paths(
-    manifest: &Value,
-    flow: &Value,
-    manifest_key: &str,
+    manifest_paths: &[String],
+    declared: &[String],
     flow_key: &str,
     out: &mut Vec<String>,
 ) {
-    let declared = strings(flow, flow_key);
-    let paths = manifest
-        .get(manifest_key)
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(|row| {
-            row.as_str().map(ToOwned::to_owned).or_else(|| {
-                row.get("path")
-                    .and_then(Value::as_str)
-                    .map(ToOwned::to_owned)
-            })
-        });
-    for path in paths {
-        if !declared.iter().any(|item| item == &path) {
+    for path in manifest_paths {
+        if !declared.iter().any(|item| item == path) {
             out.push(format!(
                 "plugin_flow_manifest_path_missing:{flow_key}:{path}"
             ));
@@ -136,20 +135,26 @@ fn require_manifest_paths(
 
 fn visible_entry_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
-    let plugin =
-        std::fs::read_to_string(root.join(".codex-plugin/plugin.json")).unwrap_or_default();
-    if !plugin.contains(FIT_REPO_ENTRYPOINT) {
+    let plugin = PluginPromptProjection::from_value(
+        &crate::json_boundary::read_json(&root.join(".codex-plugin/plugin.json"))
+            .unwrap_or(Value::Null),
+    );
+    if !plugin.mentions(FIT_REPO_ENTRYPOINT) {
         out.push("plugin_flow_entrypoint_not_visible".to_string());
     }
-    let map = std::fs::read_to_string(root.join("docs/plugin-resource-map.md")).unwrap_or_default();
-    let fit_repo_entry = map.find(FIT_REPO_ENTRYPOINT).unwrap_or(usize::MAX);
+    let map = PluginResourceMapProjection::from_text(
+        std::fs::read_to_string(root.join("docs/plugin-resource-map.md")).unwrap_or_default(),
+    );
+    let fit_repo_entry = map
+        .first_position(FIT_REPO_ENTRYPOINT)
+        .unwrap_or(usize::MAX);
     let legacy = [
         "`ultragoal`",
         "`harness-engineering`",
         "`agent-first-repo-init`",
     ]
     .iter()
-    .filter_map(|needle| map.find(needle))
+    .filter_map(|needle| map.first_position(needle))
     .min()
     .unwrap_or(usize::MAX);
     if fit_repo_entry == usize::MAX || legacy < fit_repo_entry {
@@ -159,16 +164,8 @@ fn visible_entry_failures(root: &Path) -> Vec<String> {
 }
 
 pub fn plugin_json_failures(value: &Value) -> Vec<String> {
-    let text = value
-        .get("interface")
-        .and_then(|item| item.get("defaultPrompt"))
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-        .collect::<Vec<_>>()
-        .join("\n");
-    if text.contains(FIT_REPO_ENTRYPOINT) {
+    let prompt = PluginPromptProjection::from_value(value);
+    if prompt.mentions(FIT_REPO_ENTRYPOINT) {
         Vec::new()
     } else {
         vec!["plugin_flow_entrypoint_not_visible".to_string()]
@@ -213,23 +210,4 @@ pub fn journey_value_failures_with_candidate(
     target_digest: &str,
 ) -> Vec<String> {
     crate::audit::plugin::product::journey::failures_with_candidate(root, value, target_digest)
-}
-
-fn strings(value: &Value, key: &str) -> Vec<String> {
-    value
-        .get(key)
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-        .map(ToOwned::to_owned)
-        .collect()
-}
-
-fn str_field(value: &Value, key: &str) -> String {
-    value
-        .get(key)
-        .and_then(Value::as_str)
-        .unwrap_or_default()
-        .to_string()
 }
