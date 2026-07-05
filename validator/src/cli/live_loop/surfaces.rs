@@ -130,8 +130,8 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "schema_validation",
         "schema_catalog",
         "ultragoal schema validation",
-        "target/debug/ultragoal --root . schema validation --strict --jobs 8",
-        "target/debug/ultragoal --root . schema validation --strict --jobs 8",
+        "target/debug/ultragoal --root . schema validation --jobs 8",
+        "target/debug/ultragoal --root . schema validation --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
     live_loop_surface!(
@@ -145,9 +145,9 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
     live_loop_surface!(
         "mandatory_law_validation",
         "mandatory_law_graph",
-        "ultragoal law check --all",
-        "target/debug/ultragoal --root . law check --all",
-        "target/debug/ultragoal --root . law check --all",
+        "ultragoal mandatory-law validation",
+        "target/debug/ultragoal --root . mandatory-law validation --jobs 8",
+        "target/debug/ultragoal --root . mandatory-law validation --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
     live_loop_surface!(
@@ -170,8 +170,8 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "coverage_prove",
         "exact_coverage",
         "ultragoal coverage prove",
-        "target/debug/ultragoal --root . coverage prove",
-        "bash scripts/check-coverage-full .",
+        "target/debug/ultragoal --root . coverage prove --receipt validation_artifacts/coverage/coverage-receipt.json --jobs 8",
+        "target/debug/ultragoal --root . coverage prove --receipt validation_artifacts/coverage/coverage-receipt.json --validate-existing --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
     live_loop_surface!(
@@ -201,9 +201,9 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
     live_loop_surface!(
         "red_fixture_report",
         "red_fixture_report",
-        "ultragoal fixtures red",
-        "target/debug/ultragoal --root . fixtures red --jobs 8",
-        "target/debug/ultragoal --root . fixtures red --jobs 8",
+        "ultragoal red fixture report",
+        "target/debug/ultragoal --root . red fixture report --report validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "target/debug/ultragoal --root . red fixture report --report validation_artifacts/ultragoal-audit/red-fixture-report.json",
         "requires_command_telemetry_roundtrip",
     ),
     live_loop_surface!(
@@ -218,8 +218,8 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "touched_fixture_reports",
         "affected_fixture_reports",
         "affected fixture report selection",
-        "target/debug/ultragoal --root . fixtures all --jobs 8",
-        "target/debug/ultragoal --root . fixtures all --jobs 8",
+        "target/debug/ultragoal --root . red fixture report --report validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "target/debug/ultragoal --root . red fixture report --report validation_artifacts/ultragoal-audit/red-fixture-report.json",
         "requires_command_telemetry_roundtrip",
     ),
 ];

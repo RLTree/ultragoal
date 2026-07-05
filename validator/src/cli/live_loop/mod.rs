@@ -1,9 +1,13 @@
+#[cfg(test)]
+mod command_registry_tests;
 mod context;
 mod graph;
 mod nodes;
 #[cfg(test)]
 mod parser_tests;
 mod receipt;
+#[cfg(test)]
+mod repair_summary_output_tests;
 mod surfaces;
 #[cfg(test)]
 mod tests;
@@ -100,8 +104,12 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
 }
 
 fn print_summary(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) {
-    println!(
-        "ultragoal-loop {} candidate={} tier={} cache_mode={} duration_ms={} worker_count={} task_count={} queue_depth={} critical_path='{}' first_blocker={} why={} next_repair={} narrow_rerun='{}' broad_rerun='{}' claim_ceiling='{}' receipt={} run_id={} correlation_id={}",
+    println!("{}", summary_line(command, receipt, blocker));
+}
+
+fn summary_line(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) -> String {
+    format!(
+        "ultragoal-loop {} candidate={} tier={} cache_mode={} duration_ms={} worker_count={} task_count={} queue_depth={} critical_path='{}' first_blocker={} why={} next_repair={} narrow_rerun='{}' broad_rerun='{}' claim_ceiling='{}' receipt={} run_id={} correlation_id={} trace_id={} span_id={} query_logs='{}' query_metrics='{}' query_traces='{}'",
         text(receipt, "status", "fail"),
         text(receipt, "candidate_digest", "<missing>"),
         command.tier,
@@ -119,8 +127,23 @@ fn print_summary(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) {
         text(receipt, "claim_ceiling", "source-local only"),
         command.receipt.display(),
         text(&receipt["observability"], "run_id", "unknown"),
-        text(&receipt["observability"], "correlation_id", "unknown")
-    );
+        text(&receipt["observability"], "correlation_id", "unknown"),
+        text(&receipt["observability"], "trace_id", "unknown"),
+        text(&receipt["observability"]["trace"], "span_id", "unknown"),
+        query_example(receipt, 0),
+        query_example(receipt, 1),
+        query_example(receipt, 2)
+    )
+}
+
+fn query_example(receipt: &Value, index: usize) -> &str {
+    receipt
+        .get("observability")
+        .and_then(|value| value.get("query_examples"))
+        .and_then(Value::as_array)
+        .and_then(|examples| examples.get(index))
+        .and_then(Value::as_str)
+        .unwrap_or("unknown")
 }
 
 fn status_for_blocker(blocker: &Value) -> &'static str {
