@@ -31,6 +31,38 @@ fn generated_artifact_inventory_rows_require_provenance_and_reject_hand_edits() 
         r#"{
   "schema":"harness-ultragoal.observability-command-inventory.v3",
   "generated_from":"test generator",
+  "command_observability_inventory":{
+    "package digest":{
+      "validator_check_id":"package-digest-observability-binding"
+    },
+    "source audit":{
+      "current_owner_surface":"command:source audit"
+    }
+  }
+}"#,
+    )
+    .expect("generated inventory with row-shape-only provenance");
+    let failures = crate::audit::law::authority_surfaces::generated_boundary_failures_for_test(
+        &root, &inventory,
+    );
+    assert!(
+        failures.iter().any(|(_, failure)| failure.contains(
+            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:package digest"
+        )),
+        "check-only generated rows must not pass as provenance: {failures:?}"
+    );
+    assert!(
+        failures.iter().any(|(_, failure)| failure.contains(
+            "generated_inventory_row_missing_provenance:docs/generated/observability/command-inventory.json:command_observability_inventory:source audit"
+        )),
+        "owner-only generated rows must not pass as provenance: {failures:?}"
+    );
+
+    std::fs::write(
+        root.join(rel),
+        r#"{
+  "schema":"harness-ultragoal.observability-command-inventory.v3",
+  "generated_from":"test generator",
   "surface_inventory":{
     "validator check families":{"observability_status":"observable"}
   },

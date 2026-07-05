@@ -1,5 +1,6 @@
 mod classifiers;
 mod markers;
+mod projection;
 
 use classifiers::{typed_cli_command_boundary_text, typed_law_check_boundary_text};
 use markers::raw_authority_marker;
@@ -26,7 +27,7 @@ fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
     if authority_surface_inventory_path(rel) {
         return Some("catalog_materialization");
     }
-    if projection_boundary_text(rel, text) {
+    if projection::boundary_text(rel, text) {
         return Some("projection");
     }
     if parser_boundary_text(rel, text) || typed_failure_boundary_text(text) {
@@ -47,130 +48,6 @@ fn fixture_or_catalog_path(rel: &str) -> bool {
 
 fn authority_surface_inventory_path(rel: &str) -> bool {
     rel.contains("/authority_surfaces/surface_inventory/discovered/")
-}
-
-fn projection_boundary_text(rel: &str, text: &str) -> bool {
-    typed_record_projection_text(text)
-        || classified_product_projection_boundary(rel, text)
-        || (projection_boundary_path(rel) && projection_value_text(text))
-}
-
-fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
-    let required: &[&str] = match rel {
-        "validator/src/cli/control/plane/mod.rs" => &[
-            "ControlOperation",
-            "receipt_from_control_graph",
-            "registry::stdout::print",
-        ],
-        "validator/src/cli/control/plane/proof/mod.rs" => &[
-            "ControlOperation",
-            "diagnostic::failure_value",
-            "diagnostic::notes",
-        ],
-        "validator/src/cli/control/plane/registry/capability/gap.rs" => &[
-            "missing_capability_class",
-            "affected_claim_ids",
-            "current_claim_ceiling",
-        ],
-        "validator/src/cli/final_packet/proof/spans.rs" => {
-            &["span_kind", "receipt_deref", "dereferenced_receipt_digest"]
-        }
-        "validator/src/cli/live_loop/context.rs" => {
-            &["AuditContext", "changed_files_digest", "input_digest"]
-        }
-        "validator/src/cli/live_loop/graph/mod.rs" => {
-            &["LoopValidationSurface", "input_digest", "claim_impact"]
-        }
-        "validator/src/cli/observe/explain/summary.rs" => {
-            &["ExplainContext", "smallest_repair", "query_evidence"]
-        }
-        "validator/src/cli/openai/config.rs" => &[
-            "openai_config_redacted_resolution",
-            "secret_material_serialized",
-            "blocked_claims",
-        ],
-        "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs" => &[
-            "AuthoritySurfaceInventoryRow",
-            "harness-ultragoal.foundational-law-surface-inventory.v1",
-            "surface_state",
-        ],
-        "validator/src/cli/product/cohesion.rs" => &[
-            "product-cohesion",
-            "source_local_product_cohesion_only",
-            "target_repo::product::cohesion::check",
-        ],
-        _ => return false,
-    };
-    required.iter().all(|needle| text.contains(needle)) && projection_value_text(text)
-}
-
-fn projection_boundary_path(rel: &str) -> bool {
-    [
-        "/stdout",
-        "/receipt",
-        "/receipts",
-        "/telemetry",
-        "/query",
-        "/snapshot",
-        "/report",
-        "/diagnostic",
-        "/emit",
-        "/output",
-        "/current_state",
-        "/archive",
-        "/review/",
-        "/package/digest.rs",
-        "/semantic/receipt",
-    ]
-    .iter()
-    .any(|needle| rel.contains(needle))
-        || rel.ends_with("target_repo/receipt.rs")
-}
-
-fn projection_value_text(text: &str) -> bool {
-    text.contains("json!(")
-        || text.contains("json!({")
-        || text.contains("Value::Array(")
-        || text.contains("Value::Object")
-        || text.contains("serde_json::Map::new")
-        || text.contains("serde_json::to_string")
-        || text.contains("serde_json::to_value")
-        || text.contains("canonical_json")
-        || text.contains("stdout_contract")
-        || text.contains("print_receipt")
-        || text.contains("csv(")
-        || text.contains("checks: &mut serde_json::Map")
-        || text.contains("serde_json::Map<String, Value>")
-        || text.contains("checks.insert(")
-        || text.contains("metric.to_value(")
-        || text.contains("FnOnce() -> Value")
-        || text.contains("diagnostic::failure_value")
-        || text.contains("receipt_from_control_graph")
-        || text.contains("crate::json_boundary::write_json")
-}
-
-fn typed_record_projection_text(text: &str) -> bool {
-    if text.contains("-> Value")
-        || text.contains("-> Result<Value")
-        || text.contains("-> Option<Value")
-        || text.contains("Value) -> Value")
-    {
-        return false;
-    }
-    let returns_typed_record = text.contains("-> String")
-        || text.contains("-> &str")
-        || text.contains("-> bool")
-        || text.contains("-> Option<")
-        || text.contains("-> Vec<")
-        || (text.contains("-> BTreeMap<")
-            && !text.contains("BTreeMap<String, Value")
-            && !text.contains("HashMap<String, Value"))
-        || text.contains("-> crate::cli::observe::telemetry::RuntimeTelemetry")
-        || (text.contains("struct ") && text.contains("-> "));
-    returns_typed_record
-        && (contains_json_value_binding(text)
-            || text.contains(": &Value")
-            || text.contains(": &[Value]"))
 }
 
 fn parser_boundary_text(rel: &str, text: &str) -> bool {

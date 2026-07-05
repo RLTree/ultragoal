@@ -144,15 +144,23 @@ fn inventory_map_keys(value: &Value) -> BTreeSet<String> {
 }
 
 fn has_row_provenance(row: &Value) -> bool {
-    row.get("current_owner_surface")
+    let has_owner_surface = row
+        .get("current_owner_surface")
         .and_then(Value::as_str)
+        .filter(|value| !value.trim().is_empty())
         .is_some()
-        || row.get("owner_surface").and_then(Value::as_str).is_some()
-        || row.get("source_spec").is_some()
+        || row
+            .get("owner_surface")
+            .and_then(Value::as_str)
+            .filter(|value| !value.trim().is_empty())
+            .is_some();
+    let has_source_binding = row.get("source_spec").is_some()
         || row
             .get("validator_check_id")
             .and_then(Value::as_str)
-            .is_some()
+            .filter(|value| !value.trim().is_empty())
+            .is_some();
+    has_owner_surface && has_source_binding
 }
 
 fn generated_product_opaque_path_failures(rel: &str, value: &Value) -> Vec<(String, String)> {

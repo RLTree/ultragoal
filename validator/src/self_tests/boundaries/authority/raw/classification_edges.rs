@@ -43,44 +43,23 @@ fn raw_authority_scanner_allows_fixture_and_catalog_materialization_paths() {
 }
 
 #[test]
-fn raw_authority_scanner_allows_named_product_projection_boundaries() {
-    for (rel, text) in [
-        (
-            "validator/src/cli/control/plane/mod.rs",
-            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = receipt_from_control_graph(); let _ = registry::stdout::print(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/proof/mod.rs",
-            "use serde_json::{json, Value};\nstruct ControlOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = diagnostic::failure_value(); let _ = diagnostic::notes(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/control/plane/registry/capability/gap.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = missing_capability_class(); let _ = affected_claim_ids(); let _ = current_claim_ceiling(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/final_packet/proof/spans.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = span_kind(); let _ = receipt_deref(); let _ = dereferenced_receipt_digest(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/live_loop/context.rs",
-            "use serde_json::{json, Value};\nstruct AuditContext;\npub(crate) fn project(value: &Value) -> Value { let _ = changed_files_digest(); let _ = input_digest(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/live_loop/graph/mod.rs",
-            "use serde_json::{json, Value};\nstruct LoopValidationSurface;\npub(crate) fn project(value: &Value) -> Value { let _ = input_digest(); let _ = claim_impact(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/openai/config.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = openai_config_redacted_resolution(); let _ = secret_material_serialized(); let _ = blocked_claims(); json!({\"value\":value}) }\n",
-        ),
-        (
-            "validator/src/cli/product/cohesion.rs",
-            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"product-cohesion\"; let _ = \"source_local_product_cohesion_only\"; let _ = \"target_repo::product::cohesion::check\"; json!({\"value\":value}) }\n",
-        ),
+fn raw_authority_scanner_rejects_directory_only_projection_classification() {
+    for rel in [
+        "validator/src/cli/observe/receipt/random_projection.rs",
+        "validator/src/cli/observe/telemetry/random_projection.rs",
+        "validator/src/cli/observe/query/random_projection.rs",
+        "validator/src/cli/current_state/random_projection.rs",
     ] {
-        let failures =
-            crate::audit::law::authority_surfaces::raw_authority_failures_for_test(rel, text);
-        assert!(failures.is_empty(), "{rel}: {failures:?}");
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            rel,
+            "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { json!({\"value\":value}) }\n",
+        );
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+            "{rel}: {failures:?}"
+        );
     }
 }
 

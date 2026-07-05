@@ -61,6 +61,14 @@ fn query_and_candidate_reconciliation_are_strict() {
         &pass_query,
         &explain
     ));
+    assert!(!is_command_observable(
+        &production,
+        &json!({"status": "unknown", "candidate_digest": candidate}),
+        &pass_query,
+        &pass_query,
+        &pass_query,
+        &explain
+    ));
 }
 
 #[test]
@@ -117,6 +125,40 @@ fn failed_command_roundtrip_is_observable_when_agent_legible_and_same_candidate(
         &production,
         &command_receipt,
         &observed,
+        &metrics,
+        &observed,
+        &observed
+    ));
+
+    let direct_failure_fields = json!({
+        "status": "pass",
+        "row_count": 1,
+        "candidate_digest": candidate,
+        "why_failed": "package_surface_digest_mismatch",
+        "where_failed": "package_surface_audit#/failures/0",
+        "next_repair": "refresh installed package after source-local proof graph passes"
+    });
+    assert!(is_command_observable(
+        &production,
+        &command_receipt,
+        &direct_failure_fields,
+        &metrics,
+        &direct_failure_fields,
+        &direct_failure_fields
+    ));
+
+    let opaque_observed_failure = json!({
+        "status": "pass",
+        "row_count": 1,
+        "candidate_digest": candidate,
+        "observed_why_failed": "unknown",
+        "observed_where_failed": "package_surface_audit#/failures/0",
+        "observed_next_repair": "refresh installed package after source-local proof graph passes"
+    });
+    assert!(!is_command_observable(
+        &production,
+        &command_receipt,
+        &opaque_observed_failure,
         &metrics,
         &observed,
         &observed

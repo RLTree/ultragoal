@@ -165,6 +165,7 @@
       "validator/src/audit/law/authority_surfaces/source/raw/classifiers.rs",
       "validator/src/audit/law/authority_surfaces/source/raw/markers.rs",
       "validator/src/audit/law/authority_surfaces/source/raw/mod.rs",
+      "validator/src/audit/law/authority_surfaces/source/raw/projection.rs",
       "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/mod.rs",
       "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
       "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/law_catalog_authority.rs",
@@ -336,6 +337,7 @@
       "validator/src/self_tests/boundaries/authority/raw/classification_edges.rs",
       "validator/src/self_tests/boundaries/authority/raw/mod.rs",
       "validator/src/self_tests/boundaries/authority/raw/path_boundaries.rs",
+      "validator/src/self_tests/boundaries/authority/raw/projection_boundaries.rs",
       "validator/src/self_tests/boundaries/filesystem.rs",
       "validator/src/self_tests/boundaries/filesystem_inventory_law_edges.rs",
       "validator/src/self_tests/boundaries/typed_authority_edges.rs",
@@ -420,7 +422,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:b2b8ccefd3901f2379cb5689849061386a00800c41255b4675ace231c41546c8",
+    "changed_files_digest": "sha256:077be7611c4887508bcb0940766bf4d3f8b634aacb94d2dddfbc89bc84697d4b",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -468,7 +470,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:23c02ac5ca5c55f5399be13ccffb1fec268ab944ff5f80f56be5aae8ad1c69f6",
+  "repo_root_digest": "sha256:63f4e2637d5dd8bfc9ba1584b50982d78b5ba80dc888a6535dd9e5945472f104",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

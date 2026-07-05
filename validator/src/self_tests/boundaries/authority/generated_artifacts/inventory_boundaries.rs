@@ -125,8 +125,14 @@ fn generated_inventory_accepts_typed_provenance_sources() {
         r#"{
   "provenance":{"generated_from":"command-observability-spec"},
   "command_observability_inventory":{
-    "package digest":{"owner_surface":"command:package digest"},
-    "source audit":{"source_spec":{"id":"source-audit-command"}}
+    "package digest":{
+      "owner_surface":"command:package digest",
+      "validator_check_id":"package-digest-observability-binding"
+    },
+    "source audit":{
+      "owner_surface":"command:source audit",
+      "source_spec":{"id":"source-audit-command"}
+    }
   }
 }"#,
     )
