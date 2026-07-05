@@ -68,6 +68,8 @@ pub(crate) fn text() -> &'static str {
         "  ultragoal observe fit --family <family>\n",
         "    Public compatibility spelling for the command telemetry roundtrip runner;\n",
         "    receipts stay under product-behavior command-roundtrip paths.\n",
+        "  ultragoal observe explain --next\n",
+        "    Explain the first observability control-board blocker and exact narrow repair.\n",
         "  ultragoal observe command-roundtrip --command <id>\n",
         "  ultragoal observe command-roundtrip --family <family>\n",
         "  ultragoal openai config prove --receipt <path>\n",

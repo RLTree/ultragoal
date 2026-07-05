@@ -4,6 +4,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 
 mod fallback;
+mod next;
 mod query_evidence;
 mod summary;
 mod target;
@@ -17,6 +18,9 @@ pub(crate) fn query_evidence_for_target(
 }
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
+    if command.operation == crate::cli::observe::types::ObserveOperation::ExplainNext {
+        return next::run(root, command);
+    }
     let audit = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
     let candidate = crate::package::inventory::package_digest(root)?;
     let target_requested = target::requested(command);

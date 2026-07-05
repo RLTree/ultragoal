@@ -3,6 +3,7 @@ use serde_json::json;
 use std::fs;
 
 mod explanation_fixtures;
+mod next_plan;
 mod observation_skip;
 mod receipt_fallback;
 mod target_edges;

@@ -48,6 +48,7 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<i32, String> 
         ObserveOperation::Snapshot => snapshot::run(root, command)?,
         ObserveOperation::Prove => telemetry::prove(root, command)?,
         ObserveOperation::CommandRoundtrip => command_roundtrip::run(root, command)?,
+        ObserveOperation::ExplainNext => explain::run(root, command)?,
         ObserveOperation::ExplainFailure
         | ObserveOperation::ExplainClaim
         | ObserveOperation::ExplainCheck
@@ -78,6 +79,9 @@ fn operation(raw: &[String]) -> Result<ObserveOperation, String> {
         [_, a, ..] if a == "prove" => Ok(ObserveOperation::Prove),
         [_, a, ..] if a == "command-roundtrip" || a == "fit" => {
             Ok(ObserveOperation::CommandRoundtrip)
+        }
+        [_, a, ..] if a == "explain" && raw.iter().any(|arg| arg == "--next") => {
+            Ok(ObserveOperation::ExplainNext)
         }
         [_, a, ..] if a == "explain-failure" => Ok(ObserveOperation::ExplainFailure),
         [_, a, ..] if a == "explain-claim" => Ok(ObserveOperation::ExplainClaim),

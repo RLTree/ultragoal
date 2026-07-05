@@ -169,7 +169,8 @@ fn is_query(operation: ObserveOperation) -> bool {
 fn is_explain(operation: ObserveOperation) -> bool {
     matches!(
         operation,
-        ObserveOperation::ExplainFailure
+        ObserveOperation::ExplainNext
+            | ObserveOperation::ExplainFailure
             | ObserveOperation::ExplainClaim
             | ObserveOperation::ExplainCheck
             | ObserveOperation::ExplainLaw
