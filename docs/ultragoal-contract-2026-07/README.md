@@ -87,6 +87,12 @@ Checklist tracking:
 - Manual validation is risk-tiered. It is mandatory at claim-boundary points and
   suspicious CLI passes, but it must inspect real source/runtime behavior and
   tune validators. It must not become universal manual-receipt theater.
+- Genuine proof is mandatory for every claim-bearing statement. Parser tests,
+  schema shape, receipt existence, generated rows, current-state projections,
+  workflow output, cache-key construction, synthetic timing, and CLI pass output
+  are observations until they reconcile to the actual product behavior or to a
+  verified same-candidate reuse/equivalence chain. Any unsupported proof-shaped
+  output must lower the claim ceiling and fail the affected row.
 - Claim ceiling remains source-local until same-candidate source, install,
   cache, app-registry, reviewer, final-packet, and update_goal surfaces support
   stronger claims.

@@ -22,6 +22,8 @@ pub(crate) struct NodeTiming {
     pub(crate) invalidation_proof: String,
     pub(crate) telemetry_reconciliation_status: String,
     pub(crate) verified_local_command: String,
+    pub(crate) result_digest: String,
+    pub(crate) output_digest: String,
     pub(crate) verified_local_result_digest: String,
     pub(crate) verified_local_output_digest: String,
     pub(crate) where_failed: String,
@@ -106,6 +108,13 @@ pub(crate) fn read_current(
                 valid_digest(text(row, "verified_local_result_digest")?)?;
             let verified_local_output_digest =
                 valid_digest(text(row, "verified_local_output_digest")?)?;
+            let result_digest = valid_digest(text(row, "result_digest")?)?;
+            let output_digest = valid_digest(text(row, "output_digest")?)?;
+            if result_digest != verified_local_result_digest
+                || output_digest != verified_local_output_digest
+            {
+                return None;
+            }
             valid_digest(text(row, "verified_local_stdout_digest")?)?;
             valid_digest(text(row, "verified_local_stderr_digest")?)?;
             match proof_kind {
@@ -155,6 +164,8 @@ pub(crate) fn read_current(
                     invalidation_proof: invalidation_proof.to_string(),
                     telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
                     verified_local_command: verified_local_command.to_string(),
+                    result_digest: result_digest.to_string(),
+                    output_digest: output_digest.to_string(),
                     verified_local_result_digest: verified_local_result_digest.to_string(),
                     verified_local_output_digest: verified_local_output_digest.to_string(),
                     where_failed: where_failed.to_string(),

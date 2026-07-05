@@ -21,6 +21,8 @@ pub(super) fn node_timing(
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
         verified_local_command: "cargo fmt --all --check".to_string(),
+        result_digest: "sha256:result".to_string(),
+        output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
         where_failed: "none".to_string(),

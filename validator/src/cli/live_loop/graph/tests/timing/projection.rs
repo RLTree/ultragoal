@@ -39,6 +39,13 @@ fn live_loop_tasks_project_current_node_timing_records() {
     assert_eq!(fmt["actual_work_duration_ms"], 5);
     assert_eq!(fmt["telemetry_reconciliation_status"], "pass");
     assert!(
+        fmt["result_digest"]
+            .as_str()
+            .expect("result digest")
+            .starts_with("sha256:")
+    );
+    assert_eq!(fmt["result_digest"], fmt["verified_local_result_digest"]);
+    assert!(
         fmt["verified_local_result_digest"]
             .as_str()
             .expect("result digest")
@@ -64,6 +71,8 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             invalidation_proof: "cache_not_used_current_command_executed".to_string(),
             telemetry_reconciliation_status: "pass".to_string(),
             verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+            result_digest: "sha256:result".to_string(),
+            output_digest: "sha256:output".to_string(),
             verified_local_result_digest: "sha256:result".to_string(),
             verified_local_output_digest: "sha256:output".to_string(),
             where_failed: "mandatory-law.validation".to_string(),
@@ -129,6 +138,8 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
         verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        result_digest: "sha256:result".to_string(),
+        output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
         where_failed: "loop.measure.focused_rust_tests.canonical_full_command".to_string(),
@@ -171,6 +182,8 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
         verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        result_digest: "sha256:result".to_string(),
+        output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
         where_failed: "loop.measure.focused_rust_tests.speedup".to_string(),
@@ -205,6 +218,8 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
         verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        result_digest: "sha256:result".to_string(),
+        output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
         where_failed: "loop.measure.focused_rust_tests.measurement".to_string(),

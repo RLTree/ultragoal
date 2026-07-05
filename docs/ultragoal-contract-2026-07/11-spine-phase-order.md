@@ -88,6 +88,18 @@ the parent spends more cycles manually proving individual rows:
   scheduled audit shape is about 181 seconds, so a 20x routine live-loop target
   is about 9.1 seconds. Recompute the baseline if current receipts differ. A
   strict no-cache final proof may be slower and must be reported separately.
+- The live-loop speed claim must prove actual validation work or verified reuse,
+  not proxy execution. Measuring cache-key construction, generated row
+  materialization, current-state projection, graph scheduling overhead, workflow
+  output, dry-run planning, or a no-op wrapper is diagnostic telemetry only.
+  `verified-local` timing is claim-bearing only when each affected node records
+  `proof_kind=executed` or `proof_kind=verified_cache_hit`, result/output
+  digests, current input digests, validator/law/schema/fixture versions, cache
+  key and invalidation proof when reused, actual work duration, graph overhead,
+  and same-candidate stdout/receipt/log/metric/trace reconciliation. If a node
+  has `work_unit_count=0`, `cache_hit=false`, no executed command, no verified
+  cache equivalence, or no result digest, the speed row fails regardless of the
+  displayed speedup ratio.
 - The live-loop target applies to the validation work agents actually run, not
   only to the wrapper command. `scripts/check`, `scripts/check-coverage-full`,
   `scripts/check-coverage-fast`, `ultragoal coverage prove`, source audit, red
@@ -131,8 +143,11 @@ tamper fixtures for cache dishonesty, stale/wrong-digest hits, hidden worker
 caps, hidden serial locks, unbounded concurrency, nondeterministic ordering,
 omitted affected fixtures, omitted high-frequency checks, workflow-output-as-
 proof, tests-without-production-fitting, coverage-fast-substituted-for-exact-
-coverage, and slow-check-hidden-outside-loop; measured live-loop timing with
-worker/task/queue/cache metrics; per-node 20x proof for each routinely-run
+coverage, synthetic/key-only timing, wrapper-only timing, current-state-only
+timing, cache_hit-false-with-no-execution, no-result-digest speed claims, and
+slow-check-hidden-outside-loop; measured live-loop timing with separated
+actual-work and graph-overhead durations plus worker/task/queue/cache metrics;
+per-node 20x proof for each routinely-run
 source-local check/audit; whole-loop timing at or below the current 9.1 second
 target; current-state and explain output from a real run; concise checklist
 status updates only; and a source-local/not-readiness commit. This slice may

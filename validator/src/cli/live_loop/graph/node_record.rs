@@ -128,6 +128,14 @@ fn insert_timing_fields(
         json!(text(node_timing, |t| &t.verified_local_command)),
     );
     object.insert(
+        "result_digest".to_string(),
+        json!(text(node_timing, |t| &t.result_digest)),
+    );
+    object.insert(
+        "output_digest".to_string(),
+        json!(text(node_timing, |t| &t.output_digest)),
+    );
+    object.insert(
         "verified_local_result_digest".to_string(),
         json!(text(node_timing, |t| &t.verified_local_result_digest)),
     );

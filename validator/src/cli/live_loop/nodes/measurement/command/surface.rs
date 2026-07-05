@@ -72,6 +72,20 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
         "missing_command_telemetry"
     );
     assert!(
+        rows[0]["result_digest"]
+            .as_str()
+            .expect("result digest")
+            .starts_with("sha256:")
+    );
+    assert_eq!(
+        rows[0]["result_digest"],
+        rows[0]["verified_local_result_digest"]
+    );
+    assert_eq!(
+        rows[0]["output_digest"],
+        rows[0]["verified_local_output_digest"]
+    );
+    assert!(
         rows[0]["verified_local_result_digest"]
             .as_str()
             .expect("result digest")
@@ -166,6 +180,13 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
     );
     assert_eq!(row["proof_kind"], "executed");
     assert_eq!(row["verified_local_command_argv"][0], "bash");
+    assert!(
+        row["output_digest"]
+            .as_str()
+            .expect("output digest")
+            .starts_with("sha256:")
+    );
+    assert_eq!(row["output_digest"], row["verified_local_output_digest"]);
     assert!(
         row["verified_local_output_digest"]
             .as_str()

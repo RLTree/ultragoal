@@ -60,6 +60,38 @@ the CLI passed too broadly, passed with stale evidence, passed a row-shape
 substitute, or passed while a dependent law surface remains incomplete, repair
 the validator/check/fixture/claim guard before the claim can move.
 
+## Genuine Proof And Proxy-Claim Ban
+
+Claim-bearing proof must prove the product behavior that the claim names. A
+schema-valid receipt, generated inventory row, current-state projection,
+workflow-engine output, parser/unit test, local spool record, timing field,
+cache-key calculation, or CLI `pass` line is not proof by itself. It is only an
+observation unless it dereferences one of these proof paths:
+
+1. actual command or runtime behavior on the current candidate, with stdout,
+   exit status, receipt/artifact paths, logs/metrics/traces where applicable,
+   source/runtime inspection, and explicit claim impact; or
+2. verified same-candidate reuse of a prior result, with current input digests,
+   validator/law/schema/fixture versions, arguments, environment class, cache
+   key, prior result digest, replayed output digest, equivalence status, and
+   invalidation proof.
+
+All other proxy surfaces are diagnostic only and must carry a claim ceiling of
+`observation_only` or `source_local_diagnostic_only`. The CLI must fail closed
+when a claim-bearing row has `work_unit_count=0`, no command/result digest, no
+same-candidate cache equivalence, no observability reconciliation, stale or
+wrong-digest evidence, generic fail text, or a proof surface that cannot explain
+what product behavior was actually observed.
+
+Performance and speedup claims have the same standard. Timing graph overhead,
+cache-key construction, dry-run planning, current-state reads, generated row
+materialization, local JSON shape checks, workflow worker reports, or synthetic
+no-op paths cannot prove speed. A speed claim is legal only when every included
+node records `proof_kind=executed` or `proof_kind=verified_cache_hit`, separates
+actual work duration from scheduler/graph overhead, records result and output
+digests, and reconciles same-candidate telemetry. Missing proof blocks the speed
+claim even when the displayed ratio exceeds the target.
+
 ## Current State Assumption To Recompute
 
 On every resume, recompute current package digest with the canonical CLI command.

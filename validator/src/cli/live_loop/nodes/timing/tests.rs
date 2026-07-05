@@ -217,6 +217,8 @@ fn current_timing_row(
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
         "verified_local_stdout_digest": "sha256:stdout",
         "verified_local_stderr_digest": "sha256:stderr",
+        "output_digest": "sha256:output",
+        "result_digest": "sha256:result",
         "verified_local_output_digest": "sha256:output",
         "verified_local_result_digest": "sha256:result",
         "where_failed": "loop.measure.fmt_check.canonical_full_command",

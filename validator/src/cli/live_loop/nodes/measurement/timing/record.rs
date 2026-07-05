@@ -71,10 +71,12 @@ pub(crate) fn node_timing_row(
         .as_object_mut()
         .expect("live-loop timing row is always an object");
     insert_execution_fields(object, surface, input_digest, verified_local);
+    object.insert("output_digest".to_string(), json!(output_digest));
     object.insert(
         "verified_local_output_digest".to_string(),
         json!(output_digest),
     );
+    object.insert("result_digest".to_string(), json!(result_digest));
     object.insert(
         "verified_local_result_digest".to_string(),
         json!(result_digest),

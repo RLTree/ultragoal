@@ -6,6 +6,15 @@ The Harness Ultragoal CLI and plugin must be a fully observability-instrumented 
 
 This gate cannot be satisfied by better error messages, optional diagnostics, local JSON fallback, docs-only setup, Grafana-only inspection, checklist prose, packet text, claim-ceiling language, shell wrappers, row-shape compliance, hidden network calls, stale telemetry, wrong-digest telemetry, uncorrelated telemetry, unredacted telemetry, unbounded telemetry, or opaque failure output.
 
+Gate 92 also rejects proxy proof. A parser test, schema-valid JSON document,
+receipt path, generated inventory row, current-state projection, workflow-engine
+output, cache key, timing field, or CLI pass line is not proof unless it
+reconciles to actual product behavior or to verified same-candidate reuse. Every
+claim-bearing row must identify the claim, the product behavior observed, the
+proof surface, and the independent reconciliation surface. Unsupported
+proof-shaped output must be reported as diagnostic evidence only and must block
+the stronger claim.
+
 Gate 92 is rooted in the actual foundational and additional research sources, not in repo-derived summaries alone. The OpenAI Harness Engineering article makes local worktree-scoped logs, metrics, traces, queryability, and agent legibility part of the engineering substrate. The OpenAI Codex repair-loop and agent-improvement-loop research makes structured review/repair/validate records, traces, feedback, evals, ranked changes, handoffs, and before/after validation mandatory loop components. The OpenAI Agents tracing guidance makes full workflow traces, tool/model/guardrail/custom spans, span parentage, immediate export for long-running work, and sensitive-data controls mandatory for any agent-runtime authority. Google SRE monitoring guidance makes freshness, purpose-built metrics, log/metric consistency, four golden signals, saturation/resource signals, and monitoring tests mandatory. Structured-event and high-cardinality research requires wide, ordered, trace-aware raw events with enough context to ask new questions, not write-time aggregate theater. OpenTelemetry semantic conventions require one stable telemetry vocabulary across logs, metrics, traces, resources, schemas, receipts, command inventory, and claim guards.
 
 Therefore Gate 92 closure requires full research-to-law integration for every observability requirement, not a minimum set, sample set, or current-failure slice. Every requirement from every mandatory observability/improvement research source must be mapped through `docs/research-source-registry.json`, `docs/research-article-to-law-trace.json`, canonical law ids, standards rows, source obligations, foundational trace entries, schemas, validator check ids, red fixtures, green fixtures, tamper fixtures, receipt requirements, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers. Missing, stale, prose-only, alias-only, row-shape-only, checklist-only, package-omitted, fixture-incomplete, or setup/retrofit-omitted research mapping fails Gate 92 and Gate 93.
@@ -110,8 +119,23 @@ Required CLI authority:
   audit shape is approximately 181 seconds of work dominated by broad package
   checks and red fixtures, making the routine live-loop 20x target approximately
   9.1 seconds. If that baseline changes, recompute it from current receipts. A
-  run can claim the speedup only from live command execution with current digest,
-  not dry-run estimates, stale receipts, or synthetic no-op paths.
+  run can claim the speedup only from live command execution with current digest
+  or from verified same-candidate cache reuse that proves output equivalence.
+  Dry-run estimates, stale receipts, synthetic no-op paths, current-state reads,
+  generated row materialization, cache-key construction, graph scheduling
+  overhead, local JSON shape checks, or workflow-worker reports are not speed
+  proof.
+- Every speed-bearing node must record `proof_kind=executed` or
+  `proof_kind=verified_cache_hit`. Executed nodes must record command argv,
+  exit status, work_unit_count, actual_work_duration_ms, graph_overhead_ms,
+  stdout/stderr digests where applicable, result digest, candidate digest,
+  worker/task/queue state, receipt/artifact paths, and telemetry run/
+  correlation ids. Verified cache hits must record cache key, current input
+  digests, validator/law/schema/fixture versions, arguments, environment class,
+  prior result digest, replayed output digest, equivalence status, invalidation
+  proof, and claim impact. Missing fields, `work_unit_count=0` without verified
+  cache equivalence, `cache_hit=false` without execution, no result digest, or
+  timing from graph overhead alone fails the speed claim.
 - The routine loop must absorb the checks and audits that agents actually run on
   every repair path. It is non-compliant to make `ultragoal loop run` fast while
   leaving `scripts/check`, `scripts/check-coverage-full`,
