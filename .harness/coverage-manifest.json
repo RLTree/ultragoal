@@ -259,8 +259,10 @@
       "validator/src/cli/final_packet/mod.rs",
       "validator/src/cli/final_packet/proof/mod.rs",
       "validator/src/cli/live_loop/graph/mod.rs",
+      "validator/src/cli/live_loop/graph/measurement_failure.rs",
       "validator/src/cli/live_loop/graph/tests/mod.rs",
       "validator/src/cli/live_loop/graph/tests/timing_projection.rs",
+      "validator/src/cli/live_loop/nodes/command_failure.rs",
       "validator/src/cli/live_loop/nodes/timing.rs",
       "validator/src/cli/live_loop/nodes/measurement/mod.rs",
       "validator/src/cli/live_loop/nodes/measurement/command_surface.rs",
@@ -451,7 +453,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:3efab8f2beebca693a443f88bacf9e10e184cafa70968a7e9abf5ea7140dff13",
+    "changed_files_digest": "sha256:e9467eb75c9d1ff945e315691fce20505632e5df177d16dfa9532e58eeb37549",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -499,7 +501,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:a9ff732ecef7472ee106357e74e504114aa3c04a673a4b9d22ae3b62e2b1be9d",
+  "repo_root_digest": "sha256:9e8fea67675148ed9bf17d563d3c984d8fd9eb86fdfbeb7d2f9f6fa373f87dee",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

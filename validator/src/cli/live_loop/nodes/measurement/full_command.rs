@@ -1,4 +1,5 @@
 use super::super::super::surfaces::LoopValidationSurface;
+use super::super::command_failure::CommandFailureSummary;
 use std::path::Path;
 use std::process::Command;
 use std::time::Instant;
@@ -30,9 +31,11 @@ pub(super) fn run_full_command_with_shell(
                 stderr_digest: crate::digest::bytes(
                     format!("{} launch failed: {err}", surface.canonical_full_command).as_bytes(),
                 ),
+                failure: CommandFailureSummary::default(),
             };
         }
     };
+    let failure = CommandFailureSummary::from_stdout(&output.stdout);
     FullCommandRun {
         exit_code: output.status.code().unwrap_or(1),
         status_success: output.status.success(),
@@ -40,6 +43,7 @@ pub(super) fn run_full_command_with_shell(
         duration_ms: elapsed_ms(started),
         stdout_digest: crate::digest::bytes(&output.stdout),
         stderr_digest: crate::digest::bytes(&output.stderr),
+        failure,
     }
 }
 
@@ -57,4 +61,5 @@ pub(super) struct FullCommandRun {
     pub(super) duration_ms: u64,
     pub(super) stdout_digest: String,
     pub(super) stderr_digest: String,
+    pub(super) failure: CommandFailureSummary,
 }

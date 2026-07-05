@@ -39,6 +39,7 @@ pub(super) fn node_timing_row(
         "baseline_launch_error": baseline.launch_error,
         "baseline_stdout_digest": baseline.stdout_digest,
         "baseline_stderr_digest": baseline.stderr_digest,
+        "baseline_failure": baseline.failure.to_value(),
         "affected_set_status": affected_set_status,
         "cache_honesty": "pass",
         "timing_source": NODE_TIMING_REL,
@@ -89,13 +90,16 @@ pub(super) fn write_node_timings(
 pub(super) fn print_measurements(command: &LiveLoopCommand, candidate: &str, rows: &[Value]) {
     for row in rows {
         println!(
-            "ultragoal-loop-measure {} candidate={} node={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} receipt={} claim_ceiling='source-local loop timing only'",
+            "ultragoal-loop-measure {} candidate={} node={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} where_failed='{}' why_failed='{}' next_repair='{}' receipt={} claim_ceiling='source-local loop timing only'",
             text(row, "timing_status").unwrap_or("fail"),
             candidate,
             text(row, "node_id").unwrap_or("unknown"),
             positive(row, "baseline_duration_ms").unwrap_or(0),
             positive(row, "verified_local_duration_ms").unwrap_or(0),
             positive(row, "speedup_ratio").unwrap_or(0),
+            nested_text(row, "baseline_failure", "where_failed").unwrap_or("none"),
+            nested_text(row, "baseline_failure", "why_failed").unwrap_or("none"),
+            nested_text(row, "baseline_failure", "next_repair").unwrap_or("none"),
             command.receipt.display()
         );
     }
@@ -143,4 +147,8 @@ fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
 fn positive(value: &Value, key: &str) -> Option<u64> {
     let number = value.get(key).and_then(Value::as_u64)?;
     (number > 0).then_some(number)
+}
+
+fn nested_text<'a>(value: &'a Value, object: &str, key: &str) -> Option<&'a str> {
+    value.get(object)?.get(key).and_then(Value::as_str)
 }

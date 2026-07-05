@@ -1,3 +1,4 @@
+use super::super::super::nodes::command_failure::CommandFailureSummary;
 use super::super::super::nodes::timing::NodeTiming;
 use std::collections::BTreeMap;
 
@@ -13,6 +14,7 @@ fn live_loop_tasks_project_current_node_timing_records() {
             failure_class: "none".to_string(),
             baseline_exit_code: Some(0),
             baseline_launch_error: false,
+            baseline_failure: CommandFailureSummary::default(),
             affected_set_status: "changed_files_digest_bound".to_string(),
             timing_source: super::super::super::nodes::timing::NODE_TIMING_REL.to_string(),
         },
@@ -58,6 +60,7 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             failure_class: "canonical_full_command_failed".to_string(),
             baseline_exit_code: Some(101),
             baseline_launch_error: false,
+            baseline_failure: mandatory_law_failure(),
             affected_set_status: "clean_worktree_no_affected_files".to_string(),
             timing_source: super::super::super::nodes::timing::NODE_TIMING_REL.to_string(),
         },
@@ -89,7 +92,12 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
         focused["next_repair"]
             .as_str()
             .expect("repair")
-            .contains("cargo test --offline --lib --quiet")
+            .contains("repair the named mandatory-law row")
+    );
+    assert_eq!(focused["where_failed"], "mandatory-law.validation");
+    assert_eq!(
+        focused["baseline_failed_law"],
+        "full-local-observability-stack-integration-non-opaque-failure"
     );
 }
 
@@ -102,6 +110,7 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         failure_class: "canonical_full_command_launch_failed".to_string(),
         baseline_exit_code: None,
         baseline_launch_error: true,
+        baseline_failure: CommandFailureSummary::default(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: super::super::super::nodes::timing::NODE_TIMING_REL.to_string(),
     });
@@ -127,6 +136,7 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         failure_class: "live_loop_speedup_target_missed".to_string(),
         baseline_exit_code: Some(0),
         baseline_launch_error: false,
+        baseline_failure: CommandFailureSummary::default(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: super::super::super::nodes::timing::NODE_TIMING_REL.to_string(),
     });
@@ -145,6 +155,7 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         failure_class: "unexpected_measurement_failure".to_string(),
         baseline_exit_code: Some(2),
         baseline_launch_error: false,
+        baseline_failure: CommandFailureSummary::default(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: super::super::super::nodes::timing::NODE_TIMING_REL.to_string(),
     });
@@ -158,6 +169,23 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
             .expect("why")
             .contains("timing row is failed")
     );
+}
+
+fn mandatory_law_failure() -> CommandFailureSummary {
+    CommandFailureSummary {
+        failed_law: Some("full-local-observability-stack-integration-non-opaque-failure".into()),
+        failed_check: Some("mandatory-law-validation-observability-binding".into()),
+        why_failed: Some("mandatory law validation failed: stale receipt".into()),
+        where_failed: Some("mandatory-law.validation".into()),
+        claim_impact: Some("mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal".into()),
+        next_repair: Some("query this run through observe logs/metrics/traces, repair the named mandatory-law row, fixture, dependency, or evidence digest, then rerun mandatory-law validation".into()),
+        receipt: Some("validation_artifacts/observability/mandatory-law-validation.json".into()),
+        run_id: Some("run-mandatory-law".into()),
+        correlation_id: Some("corr-mandatory-law".into()),
+        query_logs: None,
+        query_metrics: None,
+        query_traces: None,
+    }
 }
 
 fn projected_node(timing: NodeTiming) -> serde_json::Value {

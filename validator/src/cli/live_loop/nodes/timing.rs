@@ -1,5 +1,6 @@
 use super::super::graph;
 use super::super::surfaces::surface_by_id;
+use super::command_failure::CommandFailureSummary;
 use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
@@ -15,6 +16,7 @@ pub(crate) struct NodeTiming {
     pub(crate) failure_class: String,
     pub(crate) baseline_exit_code: Option<i32>,
     pub(crate) baseline_launch_error: bool,
+    pub(crate) baseline_failure: CommandFailureSummary,
     pub(crate) affected_set_status: String,
     pub(crate) timing_source: String,
 }
@@ -70,6 +72,9 @@ pub(crate) fn read_current(
                         .get("baseline_launch_error")
                         .and_then(serde_json::Value::as_bool)
                         .unwrap_or(false),
+                    baseline_failure: CommandFailureSummary::from_value(
+                        row.get("baseline_failure"),
+                    ),
                     affected_set_status: text(row, "affected_set_status")
                         .unwrap_or("unknown")
                         .to_string(),

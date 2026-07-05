@@ -187,27 +187,13 @@ fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
         "changed_files_digest_bound"
     );
 
-    let failed_baseline = super::full_command::FullCommandRun {
-        exit_code: 1,
-        status_success: false,
-        launch_error: false,
-        duration_ms: 50,
-        stdout_digest: "sha256:stdout".to_string(),
-        stderr_digest: "sha256:stderr".to_string(),
-    };
+    let failed_baseline = full_command_run(1, false, 50);
     assert_eq!(
         super::node_timing_receipt::measurement_failure_class(&failed_baseline, 50),
         "canonical_full_command_failed"
     );
 
-    let slow_baseline = super::full_command::FullCommandRun {
-        exit_code: 0,
-        status_success: true,
-        launch_error: false,
-        duration_ms: 50,
-        stdout_digest: "sha256:stdout".to_string(),
-        stderr_digest: "sha256:stderr".to_string(),
-    };
+    let slow_baseline = full_command_run(0, true, 50);
     assert_eq!(
         super::node_timing_receipt::measurement_failure_class(&slow_baseline, 1),
         "live_loop_speedup_target_missed"
@@ -221,14 +207,7 @@ fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
 #[test]
 fn live_loop_measure_marks_verified_local_speedup_as_pass() {
     let command = command(Some("changed_files"), node_timing_receipt_arg());
-    let baseline = super::full_command::FullCommandRun {
-        exit_code: 0,
-        status_success: true,
-        launch_error: false,
-        duration_ms: 200,
-        stdout_digest: "sha256:stdout".to_string(),
-        stderr_digest: "sha256:stderr".to_string(),
-    };
+    let baseline = full_command_run(0, true, 200);
     let row = super::node_timing_receipt::node_timing_row(
         crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
         &command,
@@ -247,4 +226,20 @@ fn live_loop_measure_marks_verified_local_speedup_as_pass() {
         row["claim_impact"],
         "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal"
     );
+}
+
+fn full_command_run(
+    exit_code: i32,
+    status_success: bool,
+    duration_ms: u64,
+) -> super::full_command::FullCommandRun {
+    super::full_command::FullCommandRun {
+        exit_code,
+        status_success,
+        launch_error: false,
+        duration_ms,
+        stdout_digest: "sha256:stdout".to_string(),
+        stderr_digest: "sha256:stderr".to_string(),
+        failure: Default::default(),
+    }
 }
