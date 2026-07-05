@@ -3,7 +3,7 @@ use crate::scheduler::TaskClass;
 use serde_json::json;
 use std::collections::BTreeMap;
 
-mod timing_projection;
+mod timing;
 
 #[test]
 fn high_frequency_registry_covers_required_source_local_validation() {
@@ -129,14 +129,14 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
 }
 
 #[test]
-fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
+fn high_frequency_nodes_without_timing_rows_report_missing_measurement() {
     let surface = super::super::surfaces::LOOP_VALIDATION_SURFACES
         .iter()
         .find(|surface| surface.id == "fmt_check")
         .copied()
         .expect("fmt check surface");
 
-    let fast_node = super::surface_record(
+    let missing_timing_node = super::surface_record(
         surface,
         "sha256:fmt-input",
         "hot",
@@ -144,17 +144,17 @@ fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
         Some(1_000),
         None,
     );
-    assert_eq!(fast_node["status"], "pass");
+    assert_eq!(missing_timing_node["status"], "blocked");
     assert_eq!(
-        fast_node["speedup_measurement_state"],
-        "verified_local_20x_proof_observed"
+        missing_timing_node["speedup_measurement_state"],
+        "missing_verified_local_20x_proof"
     );
     assert_eq!(
-        fast_node["claim_impact"],
-        "supports_source_local_live_loop_node_measurement_only"
+        missing_timing_node["failure_class"],
+        "live_loop_high_frequency_measurement_missing"
     );
 
-    let slow_node = super::surface_record(
+    let other_missing_timing_node = super::surface_record(
         surface,
         "sha256:fmt-input",
         "hot",
@@ -162,15 +162,15 @@ fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
         Some(1),
         None,
     );
-    assert_eq!(slow_node["status"], "blocked");
+    assert_eq!(other_missing_timing_node["status"], "blocked");
     assert_eq!(
-        slow_node["failure_class"],
-        "live_loop_speedup_target_missed"
+        other_missing_timing_node["failure_class"],
+        "live_loop_high_frequency_measurement_missing"
     );
     assert!(
-        slow_node["next_repair"]
+        other_missing_timing_node["next_repair"]
             .as_str()
             .expect("repair text")
-            .contains("cargo fmt --all --check")
+            .contains("measure canonical baseline")
     );
 }

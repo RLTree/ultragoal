@@ -5,18 +5,27 @@ use std::process::Command;
 use std::time::Instant;
 
 pub(super) fn run_full_command(root: &Path, surface: LoopValidationSurface) -> FullCommandRun {
-    run_full_command_with_shell(root, surface, "bash")
+    run_surface_command_with_shell(root, surface.canonical_full_command, "bash")
 }
 
+#[cfg(test)]
 pub(super) fn run_full_command_with_shell(
     root: &Path,
     surface: LoopValidationSurface,
     shell: &str,
 ) -> FullCommandRun {
+    run_surface_command_with_shell(root, surface.canonical_full_command, shell)
+}
+
+pub(super) fn run_narrow_command(root: &Path, surface: LoopValidationSurface) -> FullCommandRun {
+    run_surface_command_with_shell(root, surface.narrow_rerun, "bash")
+}
+
+fn run_surface_command_with_shell(root: &Path, command_text: &str, shell: &str) -> FullCommandRun {
     let started = Instant::now();
     let output = match Command::new(shell)
         .arg("-lc")
-        .arg(surface.canonical_full_command)
+        .arg(command_text)
         .current_dir(root)
         .output()
     {
@@ -29,7 +38,7 @@ pub(super) fn run_full_command_with_shell(
                 duration_ms: elapsed_ms(started),
                 stdout_digest: crate::digest::bytes(&[]),
                 stderr_digest: crate::digest::bytes(
-                    format!("{} launch failed: {err}", surface.canonical_full_command).as_bytes(),
+                    format!("{command_text} launch failed: {err}").as_bytes(),
                 ),
                 failure: CommandFailureSummary::default(),
             };

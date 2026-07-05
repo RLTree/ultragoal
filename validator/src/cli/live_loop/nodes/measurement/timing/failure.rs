@@ -1,0 +1,177 @@
+use super::super::super::timing::NODE_TIMING_REL;
+use super::super::full_command::FullCommandRun;
+use super::record::VerifiedLocalProof;
+use crate::cli::live_loop::surfaces::LoopValidationSurface;
+
+pub(crate) fn measurement_failure_class(
+    baseline: &FullCommandRun,
+    verified_local: &VerifiedLocalProof,
+    speedup_ratio: u64,
+) -> &'static str {
+    if baseline.launch_error {
+        "canonical_full_command_launch_failed"
+    } else if !baseline.status_success {
+        "canonical_full_command_failed"
+    } else if verified_local.actual_work.launch_error {
+        "verified_local_command_launch_failed"
+    } else if !verified_local.actual_work.status_success {
+        "verified_local_command_failed"
+    } else if verified_local.proof_kind != "executed" {
+        "verified_local_proof_kind_invalid"
+    } else if verified_local.cache_hit {
+        "verified_local_cache_equivalence_missing"
+    } else if verified_local.work_unit_count == 0 {
+        "verified_local_work_unit_missing"
+    } else if verified_local.equivalence_status != "executed_current_candidate_not_cache_replay" {
+        "verified_local_equivalence_status_invalid"
+    } else if verified_local.invalidation_proof.is_empty() {
+        "verified_local_invalidation_proof_missing"
+    } else if verified_local.telemetry_reconciliation_status != "pass" {
+        "live_loop_telemetry_reconciliation_missing"
+    } else if speedup_ratio < 20 {
+        "live_loop_speedup_target_missed"
+    } else {
+        "none"
+    }
+}
+
+pub(crate) fn measurement_where_failed(
+    surface: LoopValidationSurface,
+    baseline: &FullCommandRun,
+    failure_class: &str,
+) -> String {
+    if matches!(
+        failure_class,
+        "canonical_full_command_launch_failed" | "canonical_full_command_failed"
+    ) {
+        return baseline
+            .failure
+            .where_failed
+            .clone()
+            .unwrap_or_else(|| format!("loop.measure.{}.canonical_full_command", surface.id));
+    }
+    let suffix = match failure_class {
+        "verified_local_command_launch_failed" | "verified_local_command_failed" => {
+            "verified_local_command"
+        }
+        "verified_local_work_unit_missing" => "work_unit",
+        "verified_local_proof_kind_invalid" => "proof_kind",
+        "verified_local_cache_equivalence_missing" => "cache_equivalence",
+        "verified_local_equivalence_status_invalid" => "equivalence_status",
+        "verified_local_invalidation_proof_missing" => "invalidation_proof",
+        "live_loop_telemetry_reconciliation_missing" => "telemetry_reconciliation",
+        "live_loop_speedup_target_missed" => "speedup",
+        _ => "measurement",
+    };
+    format!("loop.measure.{}.{suffix}", surface.id)
+}
+
+pub(crate) fn measurement_why_failed(baseline: &FullCommandRun, failure_class: &str) -> String {
+    if let Some(why) = baseline.failure.why_failed.clone().filter(|_| {
+        matches!(
+            failure_class,
+            "canonical_full_command_launch_failed" | "canonical_full_command_failed"
+        )
+    }) {
+        return why;
+    }
+    match failure_class {
+        "none" => "none".to_string(),
+        "canonical_full_command_launch_failed" => {
+            "canonical full command could not launch while measuring live-loop node".to_string()
+        }
+        "canonical_full_command_failed" => {
+            "canonical full command exited nonzero while measuring live-loop node".to_string()
+        }
+        "verified_local_command_launch_failed" => {
+            "verified-local narrow command could not launch, so executed-work proof is missing"
+                .to_string()
+        }
+        "verified_local_command_failed" => {
+            "verified-local narrow command exited nonzero, so speed proof is not claimable"
+                .to_string()
+        }
+        "verified_local_work_unit_missing" => {
+            "speed row has no executed work unit and no verified cache equivalence".to_string()
+        }
+        "verified_local_proof_kind_invalid" => {
+            "speed row proof_kind is not executed or verified same-candidate cache equivalence"
+                .to_string()
+        }
+        "verified_local_cache_equivalence_missing" => {
+            "speed row reports a cache hit without verified cache equivalence".to_string()
+        }
+        "verified_local_equivalence_status_invalid" => {
+            "executed speed row lacks current-candidate execution equivalence status".to_string()
+        }
+        "verified_local_invalidation_proof_missing" => {
+            "speed row lacks cache invalidation proof for the measured input".to_string()
+        }
+        "live_loop_telemetry_reconciliation_missing" => {
+            "executed work lacks same-candidate log, metric, trace, and explain reconciliation"
+                .to_string()
+        }
+        "live_loop_speedup_target_missed" => {
+            "executed verified-local work did not meet the 20x speed target".to_string()
+        }
+        _ => "live-loop node timing row failed strict proof validation".to_string(),
+    }
+}
+
+pub(crate) fn measurement_next_repair(
+    surface: LoopValidationSurface,
+    baseline: &FullCommandRun,
+    failure_class: &str,
+) -> String {
+    if let Some(next) = baseline.failure.next_repair.clone().filter(|_| {
+        matches!(
+            failure_class,
+            "canonical_full_command_launch_failed" | "canonical_full_command_failed"
+        )
+    }) {
+        return next;
+    }
+    match failure_class {
+        "none" => "none".to_string(),
+        "canonical_full_command_launch_failed" | "canonical_full_command_failed" => format!(
+            "run `{}` directly, repair the command failure, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
+            surface.canonical_full_command, surface.id
+        ),
+        "verified_local_command_launch_failed" | "verified_local_command_failed" => format!(
+            "run `{}` directly, repair the narrow command behavior, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
+            surface.narrow_rerun, surface.id
+        ),
+        "verified_local_work_unit_missing" => format!(
+            "execute `{}` or provide verified same-candidate cache equivalence before recomputing the speed row",
+            surface.narrow_rerun
+        ),
+        "verified_local_proof_kind_invalid" => format!(
+            "replace proof-shaped timing for `{}` with executed work or verified same-candidate cache equivalence, then rerun node `{}`",
+            surface.narrow_rerun, surface.id
+        ),
+        "verified_local_cache_equivalence_missing" => format!(
+            "verify cache key, current input digests, prior result digest, replayed output digest, and invalidation proof before treating `{}` as a cache hit",
+            surface.narrow_rerun
+        ),
+        "verified_local_equivalence_status_invalid" => format!(
+            "record current-candidate execution equivalence for `{}` or fail the timing row",
+            surface.narrow_rerun
+        ),
+        "verified_local_invalidation_proof_missing" => format!(
+            "record input invalidation proof for `{}` before claiming loop speed",
+            surface.narrow_rerun
+        ),
+        "live_loop_telemetry_reconciliation_missing" => format!(
+            "bind `{}` to same-candidate logs, metrics, traces, and explain output, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
+            surface.narrow_rerun, surface.id
+        ),
+        "live_loop_speedup_target_missed" => format!(
+            "split or cache `{}` with verified equivalence until node `{}` is at least 20x faster than its canonical baseline",
+            surface.narrow_rerun, surface.id
+        ),
+        _ => format!(
+            "inspect `{}` timing receipt fields, repair missing proof data, then rerun node `{}`",
+            NODE_TIMING_REL, surface.id
+        ),
+    }
+}

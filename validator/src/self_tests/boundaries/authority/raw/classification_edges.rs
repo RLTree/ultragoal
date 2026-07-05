@@ -88,6 +88,54 @@ fn raw_authority_scanner_allows_typed_map_projection_and_field_parsers() {
 }
 
 #[test]
+fn raw_authority_scanner_classifies_live_loop_timing_projections_by_product_fields() {
+    let graph_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/live_loop/graph/node_record.rs",
+        "use serde_json::{Value,json};\n\
+         pub struct LoopValidationSurface;\n\
+         pub struct NodeTiming;\n\
+         fn surface_record() -> Value {\n\
+             let mut object: serde_json::Map<String, Value> = serde_json::Map::new();\n\
+             object.insert(\"verified_local_result_digest\".to_string(), json!(\"sha256:test\"));\n\
+             object.insert(\"telemetry_reconciliation_status\".to_string(), json!(\"pass\"));\n\
+             json!({\"claim_impact\":\"source-local\",\"record\":object})\n\
+         }\n",
+    );
+    assert!(graph_projection.is_empty(), "{graph_projection:?}");
+
+    let timing_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/live_loop/nodes/measurement/timing/record.rs",
+        "use serde_json::{Value,json};\n\
+         pub struct VerifiedLocalProof;\n\
+         const NODE_TIMING_REL: &str = \"validation_artifacts/observability/live-loop-node-timing.json\";\n\
+         fn node_timing_row() -> Value {\n\
+             json!({\"actual_work_duration_ms\":1,\"verified_local_result_digest\":\"sha256:test\",\"timing_source\":NODE_TIMING_REL})\n\
+         }\n",
+    );
+    assert!(timing_projection.is_empty(), "{timing_projection:?}");
+}
+
+#[test]
+fn raw_authority_scanner_rejects_generic_live_loop_json_projection_rows() {
+    for rel in [
+        "validator/src/cli/live_loop/graph/node_record.rs",
+        "validator/src/cli/live_loop/nodes/measurement/timing/record.rs",
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            rel,
+            "use serde_json::{Value,json};\n\
+             fn generic_record() -> Value { json!({\"status\":\"pass\"}) }\n",
+        );
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+            "{rel}: {failures:?}"
+        );
+    }
+}
+
+#[test]
 fn source_text_scanner_routes_raw_and_output_authority_failures() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("authority-source-scanner");

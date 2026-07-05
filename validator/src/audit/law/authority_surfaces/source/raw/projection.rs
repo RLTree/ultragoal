@@ -61,6 +61,19 @@ fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
         "validator/src/cli/live_loop/graph/mod.rs" => {
             &["LoopValidationSurface", "input_digest", "claim_impact"]
         }
+        "validator/src/cli/live_loop/graph/node_record.rs" => &[
+            "LoopValidationSurface",
+            "NodeTiming",
+            "verified_local_result_digest",
+            "telemetry_reconciliation_status",
+        ],
+        "validator/src/cli/live_loop/nodes/measurement/timing/record.rs" => &[
+            "VerifiedLocalProof",
+            "node_timing_row",
+            "actual_work_duration_ms",
+            "verified_local_result_digest",
+            "NODE_TIMING_REL",
+        ],
         "validator/src/cli/live_loop/receipt.rs" => &[
             "AuditContext",
             "CommandTelemetry",

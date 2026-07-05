@@ -1,13 +1,14 @@
-use super::nodes::status::measurement_state;
 use super::nodes::timing::NodeTiming;
 use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
-use std::time::Instant;
 
 mod measurement_failure;
+mod node_record;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+pub(crate) use node_record::surface_record;
 
 pub(crate) fn tasks(
     candidate_digest: &str,
@@ -33,7 +34,7 @@ pub(crate) fn tasks(
             let tier = tier.to_string();
             let cache_mode = cache_mode.to_string();
             Box::new(move || {
-                surface_record(
+                node_record::surface_record(
                     surface,
                     &input_digest,
                     &tier,
@@ -72,95 +73,6 @@ pub(crate) fn required_high_frequency_validation_ids() -> Vec<&'static str> {
         .collect()
 }
 
-fn surface_record(
-    surface: LoopValidationSurface,
-    input_digest: &str,
-    tier: &str,
-    cache_mode: &str,
-    baseline_ms: Option<u64>,
-    node_timing: Option<NodeTiming>,
-) -> Value {
-    let started = Instant::now();
-    let cache = cache_decision(surface.id, input_digest, tier, cache_mode);
-    let graph_duration_ms = u64::try_from(started.elapsed().as_millis())
-        .unwrap_or(u64::MAX)
-        .max(1);
-    let duration_ms = node_timing
-        .as_ref()
-        .map(|timing| timing.verified_local_duration_ms)
-        .unwrap_or(graph_duration_ms);
-    let baseline_ms = node_timing
-        .as_ref()
-        .map(|timing| timing.baseline_duration_ms)
-        .or(baseline_ms);
-    let measurement = if let Some(timing) = node_timing
-        .as_ref()
-        .filter(|timing| timing.timing_status != "pass")
-    {
-        measurement_failure::failed_timing_measurement_state(surface, timing)
-    } else {
-        measurement_state(surface, duration_ms, baseline_ms)
-    };
-    json!({
-        "node_id": surface.id,
-        "surface": surface.surface,
-        "status": measurement.status,
-        "failure_class": measurement.failure_class,
-        "why_failed": measurement.why_failed,
-        "where_failed": measurement.where_failed,
-        "next_repair": measurement.next_repair,
-        "telemetry_reconciliation_state": surface.telemetry_reconciliation_state,
-        "input_digest": input_digest,
-        "cache": cache,
-        "graph_task_class": crate::scheduler::TaskClass::PureReadParallel.id(),
-        "execution_task_class": surface.execution_task_class.id(),
-        "execution_serial_reason": surface.execution_serial_reason,
-        "high_frequency": surface.high_frequency,
-        "duration_ms": duration_ms,
-        "graph_evaluation_duration_ms": graph_duration_ms,
-        "command": surface.command,
-        "canonical_full_command": surface.canonical_full_command,
-        "narrow_rerun": surface.narrow_rerun,
-        "baseline_measurement_state": measurement.baseline_state,
-        "speedup_measurement_state": measurement.speedup_state,
-        "baseline_duration_ms": measurement.baseline_duration_ms,
-        "verified_local_duration_ms": duration_ms,
-        "speedup_ratio": measurement.speedup_ratio,
-        "baseline_exit_code": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_exit_code),
-        "baseline_launch_error": node_timing
-            .as_ref()
-            .map(|timing| timing.baseline_launch_error)
-            .unwrap_or(false),
-        "baseline_failed_law": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_failure.failed_law.as_deref()),
-        "baseline_failed_check": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_failure.failed_check.as_deref()),
-        "baseline_receipt": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_failure.receipt.as_deref()),
-        "baseline_run_id": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_failure.run_id.as_deref()),
-        "baseline_correlation_id": node_timing
-            .as_ref()
-            .and_then(|timing| timing.baseline_failure.correlation_id.as_deref()),
-        "required_speedup": "20x",
-        "affected_set_status": node_timing
-            .as_ref()
-            .map(|timing| timing.affected_set_status.as_str())
-            .unwrap_or("missing_current_timing_record"),
-        "timing_source": node_timing
-            .as_ref()
-            .map(|timing| timing.timing_source.as_str())
-            .unwrap_or("none"),
-        "claim_impact": measurement.claim_impact
-    })
-}
-
 fn baseline_ms(id: &str, package_digest_baseline_ms: Option<u64>) -> Option<u64> {
     match id {
         "package_digest" => package_digest_baseline_ms,
@@ -184,18 +96,6 @@ pub(crate) fn surface_input_digest(
         ),
     };
     crate::digest::bytes(digest_material.as_bytes())
-}
-
-fn cache_decision(id: &str, input_digest: &str, tier: &str, cache_mode: &str) -> Value {
-    let key = verified_local_cache_key(id, input_digest, tier, cache_mode);
-    json!({
-        "mode": cache_mode,
-        "key": key,
-        "hit": false,
-        "invalidation_reason": "no verified local cache entry",
-        "cache_class": "verified_content_addressed_local",
-        "honesty": super::context::verify_cache_hit(&key, &key)
-    })
 }
 
 pub(crate) fn verified_local_cache_key(
