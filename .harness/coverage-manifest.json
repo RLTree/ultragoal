@@ -165,7 +165,10 @@
       "validator/src/audit/law/authority_surfaces/source/raw/classifiers.rs",
       "validator/src/audit/law/authority_surfaces/source/raw/markers.rs",
       "validator/src/audit/law/authority_surfaces/source/raw/mod.rs",
-      "validator/src/audit/law/authority_surfaces/surface_inventory/dynamic.rs",
+      "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/mod.rs",
+      "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
+      "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/law_catalog_authority.rs",
+      "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/source_authority.rs",
       "validator/src/audit/law/authority_surfaces/surface_inventory/mod.rs",
       "validator/src/audit/observability/registry/proof.rs",
       "validator/src/audit/observability/registry/tests/receipts.rs",
@@ -326,6 +329,7 @@
       "validator/src/self_tests/audit/source_audit.rs",
       "validator/src/self_tests/boundaries/authority/graph_edges.rs",
       "validator/src/self_tests/boundaries/authority/inventory/mod.rs",
+      "validator/src/self_tests/boundaries/authority/inventory/authority_classes.rs",
       "validator/src/self_tests/boundaries/authority/inventory/roles.rs",
       "validator/src/self_tests/boundaries/authority/inventory/rows.rs",
       "validator/src/self_tests/boundaries/authority/inventory/schema_rows.rs",
@@ -416,7 +420,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:b6053d9e189ba05b128e6f0f4011abdb6a4c2a1e05d9566225d7ce39f9a4c1fe",
+    "changed_files_digest": "sha256:098b1dfecf0a7c33eff660a7511b01865a465f8e6ecb696c64d5e7fd116eed24",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -464,7 +468,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:3863b6b67f1589bdb69a06a066ee80c3830dc2f4cd4bfb82cdd88f5646aa45e2",
+  "repo_root_digest": "sha256:8f156d8c96338504799aed79693427efeea2e7767bb62b830d7c72793a258c0b",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

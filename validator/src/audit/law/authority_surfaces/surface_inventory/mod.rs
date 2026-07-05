@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
-mod dynamic;
+mod discovered;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct AuthoritySurfaceInventoryRow {
@@ -24,7 +24,7 @@ pub(super) fn rows(root: &Path, inventory: &BTreeSet<String>) -> Vec<AuthoritySu
             listed_in_package_inventory: inventory.contains(surface.rel),
         })
         .collect::<Vec<_>>();
-    rows.extend(dynamic::rows(root, inventory));
+    rows.extend(discovered::rows(root, inventory));
     rows.sort_by(|left, right| left.role.cmp(&right.role).then(left.path.cmp(&right.path)));
     rows.dedup_by(|left, right| left.role == right.role && left.path == right.path);
     rows

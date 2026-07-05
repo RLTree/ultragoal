@@ -30,6 +30,8 @@ fn raw_authority_scanner_allows_fixture_and_catalog_materialization_paths() {
         "validator/src/schema_catalog/generated.rs",
         "validator/src/package/schema/catalog.rs",
         "validator/src/cli/schema_catalog.rs",
+        "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/artifact_authority.rs",
+        "validator/src/audit/law/authority_surfaces/surface_inventory/discovered/source_authority.rs",
     ] {
         let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
             rel,

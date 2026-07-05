@@ -48,6 +48,7 @@ fn authority_surface_inventory_reports_required_product_roles() {
         "setup_retrofit_output",
         "generated_artifact",
         "receipt",
+        "runtime_receipt",
         "standards",
         "source_obligation",
         "foundational_trace",

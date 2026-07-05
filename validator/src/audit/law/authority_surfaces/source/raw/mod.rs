@@ -23,6 +23,9 @@ fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
     if fixture_or_catalog_path(rel) {
         return Some("fixture_catalog_materialization");
     }
+    if authority_surface_inventory_path(rel) {
+        return Some("catalog_materialization");
+    }
     if projection_boundary_text(rel, text) {
         return Some("projection");
     }
@@ -39,6 +42,10 @@ fn fixture_or_catalog_path(rel: &str) -> bool {
         || rel.contains("/schema_catalog/")
         || rel.contains("/package/schema/")
         || rel.ends_with("schema_catalog.rs")
+}
+
+fn authority_surface_inventory_path(rel: &str) -> bool {
+    rel.contains("/authority_surfaces/surface_inventory/discovered/")
 }
 
 fn projection_boundary_text(rel: &str, text: &str) -> bool {
