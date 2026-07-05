@@ -164,7 +164,7 @@ fn live_result_failure_accepts_non_metric_rows_and_reports_empty_results() {
             &json!({"candidate_digest": candidate, "operation": "source.audit"}).to_string(),
             &candidate
         ),
-        None
+        Some("observability_logs_target_record_mismatch:run_id:none!=run-query-bound".to_string())
     );
 
     std::fs::remove_dir_all(root).expect("cleanup live result");

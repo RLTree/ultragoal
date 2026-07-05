@@ -21,6 +21,9 @@ pub(super) fn reconciliation_failure(
     if let Some(failure) = candidate_failure(query_kind, &event, candidate) {
         return Some(failure);
     }
+    if let Some(failure) = target_record_failure(query_kind, &event, rows) {
+        return Some(failure);
+    }
     target_failure_mismatch(query_kind, &event, super::observed_failure(rows).as_ref())
 }
 
@@ -67,6 +70,44 @@ fn target_failure_mismatch(
         ));
     }
     None
+}
+
+fn target_record_failure(query_kind: QueryKind, event: &Value, rows: &[Value]) -> Option<String> {
+    let record = super::observed_telemetry_record(rows);
+    if record.as_object().is_none_or(serde_json::Map::is_empty) {
+        return Some(format!(
+            "observability_{}_target_record_missing:{}",
+            query_kind.label(),
+            target_label(event)
+        ));
+    }
+    for field in ["run_id", "candidate_digest", "operation"] {
+        let expected = text(event, field).unwrap_or("");
+        let observed = text(&record, field).unwrap_or("");
+        if !expected.is_empty() && observed != expected {
+            return Some(format!(
+                "observability_{}_target_record_mismatch:{field}:{observed}!={expected}",
+                query_kind.label()
+            ));
+        }
+    }
+    if let Some(expected) = text(event, "correlation_id").filter(|value| !value.is_empty()) {
+        let observed = text(&record, "correlation_id").unwrap_or("");
+        if observed != expected {
+            return Some(format!(
+                "observability_{}_target_record_mismatch:correlation_id:{observed}!={expected}",
+                query_kind.label()
+            ));
+        }
+    }
+    None
+}
+
+fn target_label(event: &Value) -> String {
+    text(event, "run_id")
+        .map(|run| format!("run_id={run}"))
+        .or_else(|| text(event, "check_id").map(|check| format!("check_id={check}")))
+        .unwrap_or_else(|| "unknown-target".to_string())
 }
 
 fn pass_target_failure(query_kind: QueryKind, observed: Option<&Value>) -> Option<String> {

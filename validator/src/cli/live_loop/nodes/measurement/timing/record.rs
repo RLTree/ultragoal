@@ -1,5 +1,5 @@
 use super::super::super::timing::NODE_TIMING_REL;
-use super::super::full_command::FullCommandRun;
+use super::super::{full_command::FullCommandRun, observation::TelemetryReconciliation};
 use super::failure::{
     measurement_failure_class, measurement_next_repair, measurement_where_failed,
     measurement_why_failed,
@@ -17,7 +17,8 @@ pub(crate) struct VerifiedLocalProof {
     pub(crate) work_unit_count: u64,
     pub(crate) equivalence_status: &'static str,
     pub(crate) invalidation_proof: &'static str,
-    pub(crate) telemetry_reconciliation_status: &'static str,
+    pub(crate) telemetry_reconciliation_status: String,
+    pub(crate) telemetry_reconciliation: TelemetryReconciliation,
 }
 
 pub(crate) fn node_timing_row(
@@ -150,6 +151,10 @@ fn insert_execution_fields(
     object.insert(
         "telemetry_reconciliation_status".to_string(),
         json!(verified_local.telemetry_reconciliation_status),
+    );
+    object.insert(
+        "telemetry_reconciliation".to_string(),
+        verified_local.telemetry_reconciliation.value(),
     );
     object.insert(
         "verified_local_command".to_string(),

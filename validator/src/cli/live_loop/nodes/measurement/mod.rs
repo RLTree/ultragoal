@@ -3,12 +3,13 @@ mod command;
 mod full_command;
 #[cfg(test)]
 mod high_frequency_nodes;
+mod observation;
 mod timing;
 
 use super::super::LiveLoopCommand;
 use super::super::graph;
 use super::super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface, surface_by_id};
-use full_command::{FullCommandRun, run_full_command, run_narrow_command};
+use full_command::{run_full_command, run_narrow_command};
 use serde_json::Value;
 use std::path::Path;
 use std::process::Command;
@@ -103,7 +104,7 @@ fn measure_surface(
         audit_context_digest,
     );
     let baseline = run_full_command(root, surface);
-    let verified_local = measure_verified_local(root, surface, &input_digest, command);
+    let verified_local = measure_verified_local(root, surface, candidate, &input_digest, command);
     node_timing_row(
         surface,
         command,
@@ -120,6 +121,7 @@ fn measure_surface(
 fn measure_verified_local(
     root: &Path,
     surface: LoopValidationSurface,
+    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
 ) -> VerifiedLocalProof {
@@ -131,8 +133,10 @@ fn measure_verified_local(
         &command.cache_mode,
     );
     let graph_overhead_ms = elapsed_ms(started);
-    let actual_work = run_narrow_command(root, surface);
-    let telemetry_reconciliation_status = telemetry_reconciliation_status(&actual_work);
+    let mut actual_work = run_narrow_command(root, surface);
+    let telemetry_reconciliation =
+        observation::reconcile(root, surface, candidate, command, &actual_work);
+    actual_work.failure = telemetry_reconciliation.failure_summary();
     VerifiedLocalProof {
         proof_kind: "executed",
         cache_hit: false,
@@ -142,15 +146,8 @@ fn measure_verified_local(
         work_unit_count: 1,
         equivalence_status: "executed_current_candidate_not_cache_replay",
         invalidation_proof: "cache_not_used_current_command_executed",
-        telemetry_reconciliation_status,
-    }
-}
-
-fn telemetry_reconciliation_status(run: &FullCommandRun) -> &'static str {
-    if run.failure.run_id.is_none() || run.failure.correlation_id.is_none() {
-        "missing_command_telemetry"
-    } else {
-        "missing_query_reconciliation"
+        telemetry_reconciliation_status: telemetry_reconciliation.status.clone(),
+        telemetry_reconciliation,
     }
 }
 
@@ -174,33 +171,4 @@ fn changed_files(root: &Path) -> Vec<String> {
                 .collect()
         })
         .unwrap_or_default()
-}
-
-#[cfg(test)]
-mod telemetry_status_tests {
-    use super::full_command::FullCommandRun;
-    use super::telemetry_reconciliation_status;
-    use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
-
-    #[test]
-    fn telemetry_reconciliation_requires_query_after_command_ids_exist() {
-        let run = FullCommandRun {
-            exit_code: 1,
-            status_success: false,
-            launch_error: false,
-            duration_ms: 1,
-            stdout_digest: "sha256:stdout".to_string(),
-            stderr_digest: "sha256:stderr".to_string(),
-            failure: CommandFailureSummary {
-                run_id: Some("run-current".to_string()),
-                correlation_id: Some("corr-current".to_string()),
-                ..Default::default()
-            },
-        };
-
-        assert_eq!(
-            telemetry_reconciliation_status(&run),
-            "missing_query_reconciliation"
-        );
-    }
 }

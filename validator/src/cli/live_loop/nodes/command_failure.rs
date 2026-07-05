@@ -49,7 +49,7 @@ impl CommandFailureSummary {
             where_failed: text(value, "where_failed"),
             claim_impact: text(value, "claim_impact"),
             next_repair: text(value, "next_repair"),
-            receipt: text(value, "receipt"),
+            receipt: text(value, "receipt").or_else(|| text(value, "receipt_path")),
             run_id: text(value, "run_id"),
             correlation_id: text(value, "correlation_id"),
             query_logs: text(value, "query_logs"),

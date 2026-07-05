@@ -119,12 +119,8 @@ fn explain_identifies_stale_missing_and_passed_target_events() {
         passed["explanation"]["known_current_failure"][0],
         "requested telemetry target passed; no failure"
     );
-    assert!(
-        passed["next_repair"]
-            .as_str()
-            .unwrap()
-            .contains("No repair")
-    );
+    let next_repair = passed["next_repair"].as_str().unwrap();
+    assert!(next_repair.contains("No repair"));
     assert_eq!(
         passed["explanation"]["query_evidence"]["logs"]["status"],
         "pass"
@@ -156,7 +152,7 @@ fn explain_reconciles_query_evidence_by_check_operation_and_failure_class() {
     );
     write_query_receipt(
         &root,
-        "logs-query",
+        "live-loop/commands/logs-query",
         "logs",
         "unrelated-run",
         &candidate,
@@ -191,6 +187,12 @@ fn explain_reconciles_query_evidence_by_check_operation_and_failure_class() {
             "pass"
         );
     }
+    assert!(
+        receipt["explanation"]["query_evidence"]["logs"]["path"]
+            .as_str()
+            .expect("logs path")
+            .contains("live-loop/commands/logs-query.json")
+    );
     assert_eq!(
         receipt["explanation"]["query_evidence"]["metrics"]["metric_error_count"],
         2
@@ -239,12 +241,9 @@ fn write_query_receipt(
 }
 
 fn assert_path_list_contains(value: &Value, expected: &str) {
+    let items = value.as_array().expect("array");
     assert!(
-        value
-            .as_array()
-            .expect("array")
-            .iter()
-            .any(|item| item.as_str() == Some(expected)),
+        items.iter().any(|item| item.as_str() == Some(expected)),
         "{value}"
     );
 }

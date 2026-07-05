@@ -30,13 +30,8 @@ fn empty() -> Value {
 
 fn query_receipts(root: &Path) -> Vec<(PathBuf, Value)> {
     let dir = root.join("validation_artifacts/observability");
-    let mut paths = std::fs::read_dir(dir)
-        .ok()
-        .into_iter()
-        .flat_map(|entries| entries.filter_map(Result::ok))
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().and_then(|ext| ext.to_str()) == Some("json"))
-        .collect::<Vec<_>>();
+    let mut paths = Vec::new();
+    collect_json_files(&dir, &mut paths);
     paths.sort();
     paths
         .into_iter()
@@ -47,6 +42,25 @@ fn query_receipts(root: &Path) -> Vec<(PathBuf, Value)> {
             .then_some((path, value))
         })
         .collect()
+}
+
+fn collect_json_files(dir: &Path, paths: &mut Vec<PathBuf>) {
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for entry in entries.filter_map(Result::ok) {
+        let path = entry.path();
+        let Ok(file_type) = entry.file_type() else {
+            continue;
+        };
+        if file_type.is_dir() {
+            collect_json_files(&path, paths);
+        } else if file_type.is_file()
+            && path.extension().and_then(|ext| ext.to_str()) == Some("json")
+        {
+            paths.push(path);
+        }
+    }
 }
 
 fn matching_query(

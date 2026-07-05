@@ -59,6 +59,10 @@ pub(super) fn verified_local_proof(
         work_unit_count: 1,
         equivalence_status: "executed_current_candidate_not_cache_replay",
         invalidation_proof: "cache_not_used_current_command_executed",
-        telemetry_reconciliation_status,
+        telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
+        telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
+            status: telemetry_reconciliation_status.to_string(),
+            value: serde_json::json!({"status": telemetry_reconciliation_status}),
+        },
     }
 }

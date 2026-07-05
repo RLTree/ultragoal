@@ -59,7 +59,7 @@ fn logs_and_traces_fail_when_target_failure_is_missing_or_mismatched() {
     assert_eq!(receipt["status"], "fail");
     assert_eq!(
         receipt["why_failed"],
-        "observability_logs_failure_missing:source_audit_check_failure"
+        "observability_logs_target_record_missing:run_id=run-records-reconcile"
     );
 
     let trace_root = super::prepare_root("observe-records-traces-mismatch");
@@ -77,7 +77,7 @@ fn logs_and_traces_fail_when_target_failure_is_missing_or_mismatched() {
     assert_eq!(receipt["status"], "fail");
     assert_eq!(
         receipt["why_failed"],
-        "observability_traces_failure_mismatch:coverage_prove_failure!=source_audit_check_failure"
+        "observability_traces_target_record_mismatch:operation:coverage.prove!=source.audit"
     );
     std::fs::remove_dir_all(root).expect("cleanup logs missing");
     std::fs::remove_dir_all(trace_root).expect("cleanup traces mismatch");

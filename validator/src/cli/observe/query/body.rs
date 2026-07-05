@@ -1,6 +1,9 @@
 use crate::cli::observe::types::ObserveOperation;
 use serde_json::{Value, json};
 
+const PRIVATE_HOME_MARKER: &str = concat!("/", "Users/");
+const PRIVATE_TMP_MARKER: &str = concat!("/", "private", "/tmp/");
+
 pub(crate) fn candidate_digest_failure(body: &str, expected: &str) -> Option<String> {
     let digests = typed_candidate_digests(body);
     if digests.is_empty() {
@@ -112,6 +115,9 @@ fn observed_failure_in_body(body: &str) -> Option<Value> {
 fn first_observed_failure(value: &Value) -> Option<Value> {
     match value {
         Value::Object(map) => {
+            if semantic_text_field(value, "operation").is_some_and(is_observe_query_or_explain) {
+                return None;
+            }
             if is_failure_object(value) {
                 return Some(observed_failure_object(value));
             }
@@ -128,6 +134,14 @@ fn first_observed_failure(value: &Value) -> Option<Value> {
             .and_then(|nested| first_observed_failure(&nested)),
         _ => None,
     }
+}
+
+fn is_observe_query_or_explain(operation: &str) -> bool {
+    operation.starts_with("observe.explain-")
+        || matches!(
+            operation,
+            "observe.logs.query" | "observe.metrics.query" | "observe.traces.query"
+        )
 }
 
 fn is_failure_object(value: &Value) -> bool {
@@ -176,20 +190,12 @@ fn tag_array_text_field<'a>(value: &'a Value, field: &str) -> Option<&'a str> {
 }
 
 fn redact_private_paths(body: &str) -> String {
-    let home_redacted = redact_path_marker(body, private_home_marker(), "[redacted-home-path]");
+    let home_redacted = redact_path_marker(body, PRIVATE_HOME_MARKER, "[redacted-home-path]");
     redact_path_marker(
         &home_redacted,
-        private_tmp_marker(),
+        PRIVATE_TMP_MARKER,
         "[redacted-private-tmp-path]",
     )
-}
-
-fn private_home_marker() -> &'static str {
-    concat!("/", "Users/")
-}
-
-fn private_tmp_marker() -> &'static str {
-    concat!("/", "private", "/tmp/")
 }
 
 fn redact_path_marker(body: &str, marker: &str, replacement: &str) -> String {

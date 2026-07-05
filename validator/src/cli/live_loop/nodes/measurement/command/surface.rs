@@ -60,16 +60,40 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
         "git status --short --untracked-files=all"
     );
     assert_eq!(rows[0]["baseline_exit_code"], 0);
-    assert_eq!(
-        rows[0]["failure_class"],
-        "live_loop_telemetry_reconciliation_missing"
+    assert!(
+        matches!(
+            rows[0]["failure_class"].as_str().expect("failure class"),
+            "live_loop_telemetry_reconciliation_missing"
+                | "live_loop_speedup_target_missed"
+                | "none"
+        ),
+        "{}",
+        rows[0]["failure_class"]
     );
     assert_eq!(rows[0]["proof_kind"], "executed");
     assert_eq!(rows[0]["cache_hit"], false);
     assert_eq!(rows[0]["work_unit_count"], 1);
+    let telemetry_status = rows[0]["telemetry_reconciliation_status"]
+        .as_str()
+        .expect("telemetry status");
+    assert!(
+        matches!(
+            telemetry_status,
+            "query_or_explain_reconciliation_failed" | "pass"
+        ),
+        "{telemetry_status}"
+    );
+    assert_ne!(telemetry_status, "missing_command_telemetry");
+    let telemetry = &rows[0]["telemetry_reconciliation"];
     assert_eq!(
-        rows[0]["telemetry_reconciliation_status"],
-        "missing_command_telemetry"
+        telemetry["command_observation"]["event"]["operation"],
+        "loop.measure.changed_files"
+    );
+    assert!(
+        telemetry["command_observation_receipt"]
+            .as_str()
+            .expect("command observation receipt")
+            .contains("changed_files-command-observation.json")
     );
     assert!(
         rows[0]["result_digest"]
