@@ -1444,6 +1444,7 @@
     "validator/src/self_tests/cli/control/production/receipts.rs",
     "validator/src/self_tests/cli/control/production/registry.rs",
     "validator/src/self_tests/cli/control/registry.rs",
+    "validator/src/self_tests/cli/control/stale_authority.rs",
     "validator/src/self_tests/cli/control/surface/mod.rs",
     "validator/src/self_tests/cli/control/surface/observability.rs",
     "validator/src/self_tests/cli/control/surface/target.rs",

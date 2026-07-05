@@ -86,6 +86,11 @@ pub(crate) fn same_candidate_pass_failures(
     {
         out.push("cli_control_plane_receipt_pass_has_failure".to_string());
     }
+    if candidate != expected_candidate
+        || value.get("operation").and_then(Value::as_str) != Some(expected_operation)
+    {
+        return out;
+    }
     out.extend(super::evidence::same_candidate_pass_failures(
         value,
         expected_candidate,
@@ -151,6 +156,11 @@ pub(crate) fn same_candidate_fail_closed_failures(
             }
         }
         _ => out.push("cli_control_plane_receipt_missing_fail_closed_failure".to_string()),
+    }
+    if candidate != expected_candidate
+        || value.get("operation").and_then(Value::as_str) != Some(expected_operation)
+    {
+        return out;
     }
     out.extend(super::evidence::same_candidate_fail_closed_failures(
         value,

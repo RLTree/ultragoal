@@ -4635,6 +4635,7 @@
     "validator/src/self_tests/cli/control/receipt_modes.rs",
     "validator/src/self_tests/cli/control/receipts.rs",
     "validator/src/self_tests/cli/control/registry.rs",
+    "validator/src/self_tests/cli/control/stale_authority.rs",
     "validator/src/self_tests/cli/control/surface/mod.rs",
     "validator/src/self_tests/cli/control/surface/observability.rs",
     "validator/src/self_tests/cli/control/surface/target.rs",

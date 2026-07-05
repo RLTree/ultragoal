@@ -8,6 +8,7 @@ pub(crate) mod production;
 pub(crate) mod receipt_modes;
 pub(crate) mod receipts;
 pub(crate) mod registry;
+pub(crate) mod stale_authority;
 pub(crate) mod surface;
 pub(crate) mod transaction;
 pub(crate) mod types;
