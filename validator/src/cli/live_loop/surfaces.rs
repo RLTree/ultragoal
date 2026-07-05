@@ -130,8 +130,8 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "schema_validation",
         "schema_catalog",
         "ultragoal schema validation",
-        "target/debug/ultragoal --root . schema validate --strict --jobs 8",
-        "target/debug/ultragoal --root . schema validate --strict --jobs 8",
+        "target/debug/ultragoal --root . schema validation --strict --jobs 8",
+        "target/debug/ultragoal --root . schema validation --strict --jobs 8",
         "requires_command_telemetry_roundtrip",
     ),
     live_loop_surface!(
@@ -223,3 +223,10 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "requires_command_telemetry_roundtrip",
     ),
 ];
+
+pub(crate) fn surface_by_id(id: &str) -> Option<LoopValidationSurface> {
+    LOOP_VALIDATION_SURFACES
+        .iter()
+        .copied()
+        .find(|surface| surface.id == id)
+}

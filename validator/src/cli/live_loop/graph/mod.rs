@@ -1,6 +1,9 @@
+use super::nodes::status::measurement_state;
+use super::nodes::timing::NodeTiming;
 use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
 use crate::scheduler::TaskClass;
 use serde_json::{Value, json};
+use std::collections::BTreeMap;
 use std::time::Instant;
 
 #[cfg(test)]
@@ -13,22 +16,31 @@ pub(crate) fn tasks(
     tier: &str,
     cache_mode: &str,
     package_digest_baseline_ms: Option<u64>,
+    node_timings: &BTreeMap<String, NodeTiming>,
 ) -> Vec<Box<dyn FnOnce() -> Value + Send + 'static>> {
     LOOP_VALIDATION_SURFACES
         .iter()
         .map(|surface| {
             let surface = *surface;
-            let input_digest = input_digest(
+            let input_digest = surface_input_digest(
                 surface,
                 candidate_digest,
                 changed_files_digest,
                 audit_context_digest,
             );
             let baseline_ms = baseline_ms(surface.id, package_digest_baseline_ms);
+            let node_timing = node_timings.get(surface.id).cloned();
             let tier = tier.to_string();
             let cache_mode = cache_mode.to_string();
             Box::new(move || {
-                surface_record(surface, &input_digest, &tier, &cache_mode, baseline_ms)
+                surface_record(
+                    surface,
+                    &input_digest,
+                    &tier,
+                    &cache_mode,
+                    baseline_ms,
+                    node_timing,
+                )
             }) as Box<dyn FnOnce() -> Value + Send + 'static>
         })
         .collect()
@@ -66,12 +78,21 @@ fn surface_record(
     tier: &str,
     cache_mode: &str,
     baseline_ms: Option<u64>,
+    node_timing: Option<NodeTiming>,
 ) -> Value {
     let started = Instant::now();
     let cache = cache_decision(surface.id, input_digest, tier, cache_mode);
-    let duration_ms = u64::try_from(started.elapsed().as_millis())
+    let graph_duration_ms = u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
         .max(1);
+    let duration_ms = node_timing
+        .as_ref()
+        .map(|timing| timing.verified_local_duration_ms)
+        .unwrap_or(graph_duration_ms);
+    let baseline_ms = node_timing
+        .as_ref()
+        .map(|timing| timing.baseline_duration_ms)
+        .or(baseline_ms);
     let measurement = measurement_state(surface, duration_ms, baseline_ms);
     json!({
         "node_id": surface.id,
@@ -87,6 +108,7 @@ fn surface_record(
         "task_class": TaskClass::PureReadParallel.id(),
         "high_frequency": surface.high_frequency,
         "duration_ms": duration_ms,
+        "graph_evaluation_duration_ms": graph_duration_ms,
         "command": surface.command,
         "canonical_full_command": surface.canonical_full_command,
         "narrow_rerun": surface.narrow_rerun,
@@ -96,89 +118,16 @@ fn surface_record(
         "verified_local_duration_ms": duration_ms,
         "speedup_ratio": measurement.speedup_ratio,
         "required_speedup": "20x",
+        "affected_set_status": node_timing
+            .as_ref()
+            .map(|timing| timing.affected_set_status.as_str())
+            .unwrap_or("missing_current_timing_record"),
+        "timing_source": node_timing
+            .as_ref()
+            .map(|timing| timing.timing_source.as_str())
+            .unwrap_or("none"),
         "claim_impact": measurement.claim_impact
     })
-}
-
-struct MeasurementState {
-    status: &'static str,
-    failure_class: &'static str,
-    why_failed: &'static str,
-    where_failed: String,
-    next_repair: String,
-    baseline_state: &'static str,
-    speedup_state: &'static str,
-    baseline_duration_ms: Option<u64>,
-    speedup_ratio: Option<u64>,
-    claim_impact: &'static str,
-}
-
-fn measurement_state(
-    surface: LoopValidationSurface,
-    duration_ms: u64,
-    baseline_ms: Option<u64>,
-) -> MeasurementState {
-    if !surface.high_frequency {
-        return MeasurementState {
-            status: "pass",
-            failure_class: "none",
-            why_failed: "none",
-            where_failed: "none".to_string(),
-            next_repair: "none".to_string(),
-            baseline_state: "not_required_for_context_or_control_node",
-            speedup_state: "not_required_for_context_or_control_node",
-            baseline_duration_ms: baseline_ms,
-            speedup_ratio: baseline_ms.map(|value| value / duration_ms.max(1)),
-            claim_impact: "supports_live_loop_context_observation_only",
-        };
-    }
-    if let Some(baseline_duration_ms) = baseline_ms {
-        let speedup_ratio = baseline_duration_ms / duration_ms.max(1);
-        if speedup_ratio >= 20 {
-            return MeasurementState {
-                status: "pass",
-                failure_class: "none",
-                why_failed: "none",
-                where_failed: "none".to_string(),
-                next_repair: "none".to_string(),
-                baseline_state: "current_full_command_baseline_observed",
-                speedup_state: "verified_local_20x_proof_observed",
-                baseline_duration_ms: Some(baseline_duration_ms),
-                speedup_ratio: Some(speedup_ratio),
-                claim_impact: "supports_source_local_live_loop_node_measurement_only",
-            };
-        }
-        return MeasurementState {
-            status: "blocked",
-            failure_class: "live_loop_speedup_target_missed",
-            why_failed: "high-frequency live-loop node has baseline timing but does not meet the verified-local 20x speed target",
-            where_failed: format!("loop.run.{}.speedup", surface.id),
-            next_repair: format!(
-                "split, cache, daemonize, or re-architect `{}` until verified-local timing is at least 20x faster than baseline `{}`",
-                surface.id, surface.canonical_full_command
-            ),
-            baseline_state: "current_full_command_baseline_observed",
-            speedup_state: "verified_local_20x_proof_failed",
-            baseline_duration_ms: Some(baseline_duration_ms),
-            speedup_ratio: Some(speedup_ratio),
-            claim_impact: "blocks_live_loop_routine_repair_until_current_timing_proof",
-        };
-    }
-    MeasurementState {
-        status: "blocked",
-        failure_class: "live_loop_high_frequency_measurement_missing",
-        why_failed: "high-frequency live-loop node lacks current full-command baseline and verified-local 20x timing proof",
-        where_failed: format!("loop.run.{}.measurement", surface.id),
-        next_repair: format!(
-            "measure canonical baseline `{}` and verified-local node timing for `{}`, bind both to current inputs, then rerun `target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto`",
-            surface.canonical_full_command, surface.id
-        ),
-        baseline_state: "missing_current_full_command_baseline",
-        speedup_state: "missing_verified_local_20x_proof",
-        baseline_duration_ms: None,
-        speedup_ratio: None,
-        claim_impact: "blocks_live_loop_routine_repair_until_current_timing_proof",
-    }
 }
 
 fn baseline_ms(id: &str, package_digest_baseline_ms: Option<u64>) -> Option<u64> {
@@ -188,7 +137,7 @@ fn baseline_ms(id: &str, package_digest_baseline_ms: Option<u64>) -> Option<u64>
     }
 }
 
-fn input_digest(
+pub(crate) fn surface_input_digest(
     surface: LoopValidationSurface,
     candidate_digest: &str,
     changed_files_digest: &str,
@@ -207,7 +156,7 @@ fn input_digest(
 }
 
 fn cache_decision(id: &str, input_digest: &str, tier: &str, cache_mode: &str) -> Value {
-    let key = cache_key(id, input_digest, tier, cache_mode);
+    let key = verified_local_cache_key(id, input_digest, tier, cache_mode);
     json!({
         "mode": cache_mode,
         "key": key,
@@ -218,7 +167,12 @@ fn cache_decision(id: &str, input_digest: &str, tier: &str, cache_mode: &str) ->
     })
 }
 
-fn cache_key(id: &str, digest: &str, tier: &str, cache_mode: &str) -> String {
+pub(crate) fn verified_local_cache_key(
+    id: &str,
+    digest: &str,
+    tier: &str,
+    cache_mode: &str,
+) -> String {
     crate::digest::bytes(
         format!(
             "surface={id};input={digest};validator=ultragoal-rust;law=observability-live-loop;tier={tier};cache={cache_mode};env=local"

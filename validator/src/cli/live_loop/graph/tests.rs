@@ -1,5 +1,6 @@
 use super::{first_blocker, required_high_frequency_validation_ids};
 use serde_json::json;
+use std::collections::BTreeMap;
 
 #[test]
 fn high_frequency_registry_covers_required_source_local_validation() {
@@ -61,6 +62,7 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
         "hot",
         "verified-local",
         Some(1_000),
+        &BTreeMap::new(),
     );
     let first_node = tasks.into_iter().next().expect("package node")();
     assert_eq!(first_node["node_id"], "package_digest");
@@ -89,6 +91,7 @@ fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
         "hot",
         "verified-local",
         Some(1_000),
+        None,
     );
     assert_eq!(fast_node["status"], "pass");
     assert_eq!(
@@ -106,6 +109,7 @@ fn high_frequency_nodes_report_speedup_pass_and_miss_states() {
         "hot",
         "verified-local",
         Some(1),
+        None,
     );
     assert_eq!(slow_node["status"], "blocked");
     assert_eq!(

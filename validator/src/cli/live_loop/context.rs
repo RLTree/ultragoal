@@ -1,6 +1,8 @@
 use super::graph;
+use super::nodes::timing::{self, NodeTiming};
 use crate::cli::live_loop::LiveLoopCommand;
 use serde_json::Value;
+use std::collections::BTreeMap;
 use std::path::Path;
 
 pub(crate) struct AuditContext {
@@ -8,6 +10,7 @@ pub(crate) struct AuditContext {
     pub(crate) cache_mode: String,
     pub(crate) changed_files_digest: String,
     pub(crate) input_digest: String,
+    node_timings: BTreeMap<String, NodeTiming>,
     package_digest_baseline_ms: Option<u64>,
     tier: String,
 }
@@ -24,12 +27,21 @@ impl AuditContext {
             .as_bytes(),
         );
         let package_digest_baseline_ms = package_digest_baseline_ms(root, &candidate_digest);
+        let node_timings = timing::read_current(
+            root,
+            &candidate_digest,
+            &command.tier,
+            &command.cache_mode,
+            &changed_files_digest,
+            &input_digest,
+        );
         Self {
             candidate_digest,
             tier: command.tier.clone(),
             cache_mode: command.cache_mode.clone(),
             changed_files_digest,
             input_digest,
+            node_timings,
             package_digest_baseline_ms,
         }
     }
@@ -42,6 +54,7 @@ impl AuditContext {
             &self.tier,
             &self.cache_mode,
             self.package_digest_baseline_ms,
+            &self.node_timings,
         )
     }
 }

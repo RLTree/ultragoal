@@ -1,5 +1,8 @@
 mod context;
 mod graph;
+mod nodes;
+#[cfg(test)]
+mod parser_tests;
 mod receipt;
 mod surfaces;
 #[cfg(test)]
@@ -13,17 +16,26 @@ use serde_json::Value;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum LiveLoopAction {
+    Run,
+    Measure,
+}
+
 #[derive(Debug)]
 pub(crate) struct LiveLoopCommand {
+    pub(crate) action: LiveLoopAction,
     pub(crate) tier: String,
     pub(crate) cache_mode: String,
     pub(crate) jobs: Option<usize>,
     pub(crate) receipt: PathBuf,
+    pub(crate) node_id: Option<String>,
 }
 
 pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
     match raw {
         [a, b, ..] if a == "loop" && b == "run" => Ok(Some(LiveLoopCommand {
+            action: LiveLoopAction::Run,
             tier: opt_string(&raw[2..], "--tier").unwrap_or_else(|| "hot".to_string()),
             cache_mode: opt_string(&raw[2..], "--cache-mode")
                 .unwrap_or_else(|| "verified-local".to_string()),
@@ -31,12 +43,29 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
             receipt: opt_path(&raw[2..], "--receipt").unwrap_or_else(|| {
                 PathBuf::from("validation_artifacts/observability/loop-run.json")
             }),
+            node_id: None,
+        })),
+        [a, b, ..] if a == "loop" && b == "measure" => Ok(Some(LiveLoopCommand {
+            action: LiveLoopAction::Measure,
+            tier: opt_string(&raw[2..], "--tier").unwrap_or_else(|| "hot".to_string()),
+            cache_mode: opt_string(&raw[2..], "--cache-mode")
+                .unwrap_or_else(|| "verified-local".to_string()),
+            jobs: opt_jobs(&raw[2..], "--jobs")?,
+            receipt: opt_path(&raw[2..], "--receipt")
+                .unwrap_or_else(|| PathBuf::from(nodes::timing::NODE_TIMING_REL)),
+            node_id: Some(
+                opt_string(&raw[2..], "--node")
+                    .ok_or_else(|| "loop measure requires --node <id>".to_string())?,
+            ),
         })),
         _ => Ok(None),
     }
 }
 
 pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
+    if command.action == LiveLoopAction::Measure {
+        return nodes::measure(root, command);
+    }
     let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
     let config = SchedulerConfig::from_jobs(command.jobs)?;

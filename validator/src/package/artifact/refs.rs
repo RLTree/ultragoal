@@ -3,6 +3,52 @@ use serde_json::Value;
 use std::fs::Metadata;
 use std::path::{Component, Path};
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct ArtifactRef {
+    path: String,
+    digest: String,
+}
+
+impl ArtifactRef {
+    pub(crate) fn from_object(item: &Value, label: &str) -> Result<Self, String> {
+        let path = item
+            .get("path")
+            .and_then(Value::as_str)
+            .ok_or_else(|| format!("{label} artifact ref missing path"))?;
+        let digest = item
+            .get("digest")
+            .and_then(Value::as_str)
+            .ok_or_else(|| format!("{label} artifact ref missing digest"))?;
+        Ok(Self {
+            path: path.to_string(),
+            digest: digest.to_string(),
+        })
+    }
+
+    pub(crate) fn from_command_object(item: &Value, label: &str) -> Result<Self, String> {
+        let path = item
+            .get("artifact_path")
+            .and_then(Value::as_str)
+            .ok_or_else(|| format!("{label} artifact ref missing artifact_path"))?;
+        let digest = item
+            .get("artifact_digest")
+            .and_then(Value::as_str)
+            .ok_or_else(|| format!("{label} artifact ref missing artifact_digest"))?;
+        Ok(Self {
+            path: path.to_string(),
+            digest: digest.to_string(),
+        })
+    }
+
+    pub(crate) fn path(&self) -> &str {
+        &self.path
+    }
+
+    pub(crate) fn validate(&self, root: &Path, label: &str) -> Result<(), String> {
+        validate_path_digest(root, &self.path, &self.digest, label)
+    }
+}
+
 pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> Result<(), String> {
     if path.is_empty() || got.is_empty() || got == digest::ZERO {
         return Err(format!("{label} lacks non-zero artifact digest"));
@@ -38,21 +84,11 @@ pub fn validate_path_digest(root: &Path, path: &str, got: &str, label: &str) -> 
 }
 
 pub fn validate_object(root: &Path, item: &Value, label: &str) -> Result<(), String> {
-    let path = item.get("path").and_then(Value::as_str).unwrap_or("");
-    let got = item.get("digest").and_then(Value::as_str).unwrap_or("");
-    validate_path_digest(root, path, got, label)
+    ArtifactRef::from_object(item, label)?.validate(root, label)
 }
 
 pub fn validate_command_artifact(root: &Path, item: &Value, label: &str) -> Result<(), String> {
-    let path = item
-        .get("artifact_path")
-        .and_then(Value::as_str)
-        .unwrap_or("");
-    let got = item
-        .get("artifact_digest")
-        .and_then(Value::as_str)
-        .unwrap_or("");
-    validate_path_digest(root, path, got, label)
+    ArtifactRef::from_command_object(item, label)?.validate(root, label)
 }
 
 fn placeholder_path(path: &str) -> bool {
