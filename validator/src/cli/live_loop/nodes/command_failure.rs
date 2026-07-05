@@ -21,19 +21,20 @@ pub(crate) struct CommandFailureSummary {
 impl CommandFailureSummary {
     pub(crate) fn from_stdout(stdout: &[u8]) -> Self {
         let text = String::from_utf8_lossy(stdout);
+        let failure_text = failure_detail_line(&text);
         Self {
-            failed_law: between(&text, "failed_law=", " failed_check="),
-            failed_check: between(&text, "failed_check=", " why="),
-            why_failed: between(&text, "why=", " where="),
-            where_failed: between(&text, "where=", " claim_impact="),
-            claim_impact: between(&text, "claim_impact=", " next_repair="),
-            next_repair: between(&text, "next_repair=", " receipt="),
-            receipt: between(&text, "receipt=", " run_id="),
-            run_id: between(&text, "run_id=", " correlation_id="),
-            correlation_id: between(&text, "correlation_id=", " query_logs="),
-            query_logs: between(&text, "query_logs='", "' query_metrics="),
-            query_metrics: between(&text, "query_metrics='", "' query_traces="),
-            query_traces: between(&text, "query_traces='", "'"),
+            failed_law: between(failure_text, "failed_law=", " failed_check="),
+            failed_check: between(failure_text, "failed_check=", " why="),
+            why_failed: between(failure_text, "why=", " where="),
+            where_failed: between(failure_text, "where=", " claim_impact="),
+            claim_impact: between(failure_text, "claim_impact=", " next_repair="),
+            next_repair: between(failure_text, "next_repair=", " receipt="),
+            receipt: between(failure_text, "receipt=", " run_id="),
+            run_id: token_after(failure_text, "run_id="),
+            correlation_id: token_after(failure_text, "correlation_id="),
+            query_logs: between(failure_text, "query_logs='", "' query_metrics="),
+            query_metrics: between(failure_text, "query_metrics='", "' query_traces="),
+            query_traces: between(failure_text, "query_traces='", "'"),
         }
     }
 
@@ -75,11 +76,24 @@ impl CommandFailureSummary {
     }
 }
 
+fn failure_detail_line(text: &str) -> &str {
+    text.lines()
+        .find(|line| line.contains("failed_law="))
+        .unwrap_or(text)
+}
+
 fn between(text: &str, start: &str, end: &str) -> Option<String> {
     let start_index = text.find(start)? + start.len();
     let rest = &text[start_index..];
     let end_index = rest.find(end).unwrap_or(rest.len());
     bounded(&rest[..end_index])
+}
+
+fn token_after(text: &str, start: &str) -> Option<String> {
+    let start_index = text.find(start)? + start.len();
+    let rest = &text[start_index..];
+    let token = rest.split_whitespace().next()?;
+    bounded(token)
 }
 
 fn text(value: &Value, key: &str) -> Option<String> {
@@ -144,6 +158,34 @@ query_traces='ultragoal observe traces query --run-id run-123'";
         );
         assert!(summary.why_failed.is_some());
         assert!(summary.next_repair.is_some());
+    }
+
+    #[test]
+    fn command_failure_summary_uses_failure_detail_line_for_repair_ids() {
+        let stdout = b"ultragoal-mandatory-law-validation fail operation=mandatory-law.validation candidate=sha256:current receipt=validation_artifacts/observability/mandatory-law-validation.json run_id=run-summary correlation_id=corr-summary claim_impact=mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal supported_claims=none unsupported_claims=completion,readiness\n\
+failed_law=full-local-observability-stack-integration-non-opaque-failure failed_check=mandatory-law-validation-observability-binding why=mandatory law validation failed: stale evidence where=mandatory-law.validation claim_impact=mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal next_repair=query this run through observe logs/metrics/traces, repair stale evidence, then rerun mandatory-law validation receipt=validation_artifacts/observability/mandatory-law-validation.json run_id=run-detail correlation_id=corr-detail query_logs='ultragoal observe logs query --run-id run-detail --limit 100' query_metrics='ultragoal observe metrics query --query bounded --limit 100' query_traces='ultragoal observe traces query --run-id run-detail --limit 100'";
+        let summary = CommandFailureSummary::from_stdout(stdout);
+        assert_eq!(summary.run_id.as_deref(), Some("run-detail"));
+        assert_eq!(summary.correlation_id.as_deref(), Some("corr-detail"));
+        assert_eq!(
+            summary.claim_impact.as_deref(),
+            Some("mandatory_law_validation_failed_blocks_readiness_release_completion_update_goal")
+        );
+        assert!(
+            summary
+                .query_logs
+                .as_deref()
+                .expect("query logs")
+                .contains("run-detail")
+        );
+        assert!(
+            !summary
+                .correlation_id
+                .as_deref()
+                .expect("correlation")
+                .contains("claim_impact"),
+            "{summary:?}"
+        );
     }
 
     #[test]
