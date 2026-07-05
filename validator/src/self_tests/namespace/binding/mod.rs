@@ -4,6 +4,7 @@ use std::path::Path;
 mod class;
 mod law;
 mod path_label_edges;
+mod raw_string_edges;
 mod semantic_names;
 mod topology;
 

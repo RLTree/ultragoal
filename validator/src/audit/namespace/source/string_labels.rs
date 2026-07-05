@@ -1,5 +1,5 @@
 pub(crate) fn failure(rel: &str, line_number: usize, line: &str) -> Option<String> {
-    if source_path_exempt(rel) || !line.contains('"') {
+    if !line.contains('"') {
         return None;
     }
     let label = string_literals(line)
@@ -12,9 +12,6 @@ pub(crate) fn failure(rel: &str, line_number: usize, line: &str) -> Option<Strin
 }
 
 pub(crate) fn raw_source_failures(rel: &str, source: &str) -> Vec<String> {
-    if source_path_exempt(rel) {
-        return Vec::new();
-    }
     raw_string_literals(source)
         .into_iter()
         .filter_map(|literal| {
@@ -27,15 +24,11 @@ pub(crate) fn raw_source_failures(rel: &str, source: &str) -> Vec<String> {
         .collect()
 }
 
-fn source_path_exempt(rel: &str) -> bool {
-    rel.starts_with("validator/src/audit/namespace/")
-        || rel.starts_with("validator/src/self_tests/namespace/")
-}
-
 fn allowed_label_literal(rel: &str, line: &str, label: &str) -> bool {
     owned_template_project_state_rejection_catalog(rel, line, label)
         || builder_contract_boundary_literal(rel, line, label)
         || semantic_negative_fixture_literal(rel, label)
+        || super::rejection_ownership::catalog_or_fixture_owns_label(rel, label)
 }
 
 fn failure_message(rel: &str, line_number: usize, label: &str) -> String {

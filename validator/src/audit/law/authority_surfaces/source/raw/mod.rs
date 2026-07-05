@@ -41,6 +41,7 @@ fn fixture_or_catalog_path(rel: &str) -> bool {
         || rel.contains("/fixture/")
         || rel.contains("/schema_catalog/")
         || rel.contains("/package/schema/")
+        || rel == "validator/src/audit/namespace/source/rejection_ownership.rs"
         || rel.ends_with("schema_catalog.rs")
 }
 
