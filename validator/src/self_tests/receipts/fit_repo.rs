@@ -105,3 +105,41 @@ fn fit_repo_receipt_binds_version_cache_artifacts_and_canonical_digest() {
     );
     std::fs::remove_dir_all(root).expect("cleanup bound");
 }
+
+#[test]
+fn fit_repo_receipt_rejects_unowned_producer_actor() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("fit-repo-session-actor");
+    write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"version":"1.0.0","resources":[]}),
+    );
+    write_json(
+        &root.join(".codex-plugin/plugin.json"),
+        &json!({"version":"1.0.0"}),
+    );
+    let current = crate::package::inventory::package_digest(&root).expect("package digest");
+    let receipt = json!({
+        "schema":"harness-ultragoal.fit-repo-receipt.v1",
+        "entrypoint_contract":{"id":"harness-ultragoal:fit-repo"},
+        "target_revision":{"value":current},
+        "plugin_source_path":"source",
+        "installed_plugin_path":"installed",
+        "cache_package_path":"local-harness-plugins/harness-ultragoal/1.0.0",
+        "plugin_version":"1.0.0",
+        "producer_actor_id":format!("harness-ultragoal-parent-{}", "session"),
+        "receipt_digest":crate::self_tests::boundaries::workspace_fixtures::sha('1'),
+        "target_classification":"plugin_activated_repo",
+        "runtime_surface_classification":"source_local",
+        "product_surface_classification":"harness_ultragoal_plugin",
+        "claim_ceiling":"source_local_only",
+        "checks":[{"id":"fit-repo-static-fixture"}],
+        "blockers":[{"owner":"fit-repo"}]
+    });
+    let failures = crate::audit::fit_repo_receipt::failures(&root, &receipt);
+    assert!(
+        has(&failures, "fit_repo_receipt_unowned_producer_actor"),
+        "{failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup session actor");
+}

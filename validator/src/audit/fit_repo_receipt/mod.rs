@@ -101,10 +101,23 @@ fn authority_failures(receipt: &FitRepoReceipt) -> Vec<String> {
     if receipt.producer_actor_id == "fixture-author" || receipt.producer_actor_id.is_empty() {
         out.push("fit_repo_receipt_placeholder_actor".to_string());
     }
+    if producer_actor_lacks_product_authority(&receipt.producer_actor_id) {
+        out.push("fit_repo_receipt_unowned_producer_actor".to_string());
+    }
     if receipt.receipt_digest == crate::digest::ZERO {
         out.push("fit_repo_receipt_placeholder_digest".to_string());
     }
     out
+}
+
+fn producer_actor_lacks_product_authority(actor: &str) -> bool {
+    let actor = actor.to_ascii_lowercase();
+    let parent_session = concat!("parent", "-", "session");
+    let history_session = concat!("session", "-", "history");
+    actor.contains(parent_session)
+        || actor.contains(history_session)
+        || actor.starts_with(concat!("session", "-"))
+        || actor.starts_with(concat!("session", "_"))
 }
 
 fn digest_failures(raw: &Value, receipt: &FitRepoReceipt) -> Vec<String> {

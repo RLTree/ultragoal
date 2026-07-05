@@ -5,6 +5,7 @@ const FIT_REPO_RECEIPT_FILE: &str = "fit-repo-receipt.json";
 const PRODUCT: &str = "product-fitness-receipt.json";
 const JOURNEY: &str = "plugin-product-journey-receipt.json";
 const SOURCE_DIR: &str = "validation_artifacts/harness";
+const PRODUCT_RECEIPT_PRODUCER: &str = "harness-ultragoal-product-receipt-minter";
 
 pub(crate) fn mint_all(root: &Path, rel_dir: &Path) -> Result<Value, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
@@ -36,6 +37,7 @@ pub(crate) fn mint_all(root: &Path, rel_dir: &Path) -> Result<Value, String> {
 fn fit_repo_receipt(root: &Path, candidate: &str, generated_at: &str) -> Result<Value, String> {
     let mut value = read_template(root, FIT_REPO_RECEIPT_FILE)?;
     set_receipt_revision_fields(&mut value, candidate, generated_at);
+    value["producer_actor_id"] = json!(PRODUCT_RECEIPT_PRODUCER);
     set_plugin_version(root, &mut value)?;
     refresh_artifact_refs(root, &mut value)?;
     set_digest(&mut value, crate::audit::fit_repo_receipt::canonical_digest);
