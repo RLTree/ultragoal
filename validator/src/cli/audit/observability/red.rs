@@ -24,9 +24,16 @@ pub(super) fn write_standalone(
     root: &Path,
     red_report: &Path,
     runtime: RuntimeFacts,
+    scheduler_metrics: &[crate::scheduler::Metrics],
 ) -> Result<i32, String> {
-    write_with_context(root, red_report, None, runtime, ReportContext::standalone())
-        .map(red_report_exit_code)
+    write_with_context(
+        root,
+        red_report,
+        None,
+        runtime,
+        ReportContext::standalone(scheduler_metrics),
+    )
+    .map(red_report_exit_code)
 }
 
 fn write_with_context(
@@ -73,22 +80,16 @@ fn write_with_context(
             next_repair: context.next_repair(status),
             claim_impact: claim_impact(status),
             supported_claims: supported_claims(status),
-            runtime: crate::cli::observe::telemetry::RuntimeTelemetry {
-                duration_ms: runtime.elapsed_ms(),
-                worker_count: 0,
-                task_count: 0,
-                queue_depth: 0,
-                cpu_ms: None,
-                memory_bytes: None,
-                io_bytes: None,
-                cache_mode: context.cache_mode.to_string(),
-                resource_measurement_status: context.resource_status.to_string(),
-                retry_count: 0,
-                backoff_ms: 0,
-                saturation_status: context.saturation_status.to_string(),
-                repair_anchor_before: context.repair_anchor_before.to_string(),
-                repair_anchor_after: "red_fixture_report_observability_emit".to_string(),
-            },
+            runtime: super::fixture_report_runtime::telemetry(
+                runtime,
+                super::fixture_report_runtime::RuntimeContext {
+                    cache_mode: context.cache_mode,
+                    resource_status: context.resource_status,
+                    saturation_status: context.saturation_status,
+                    repair_anchor_before: context.repair_anchor_before,
+                    scheduler_metrics: context.scheduler_metrics,
+                },
+            ),
         },
     )
 }
@@ -101,6 +102,7 @@ struct ReportContext<'a> {
     saturation_status: &'a str,
     repair_anchor_before: &'a str,
     next_repair_failure: &'a str,
+    scheduler_metrics: &'a [crate::scheduler::Metrics],
 }
 
 impl<'a> ReportContext<'a> {
@@ -113,18 +115,20 @@ impl<'a> ReportContext<'a> {
             saturation_status: "red_report_no_scheduler_tasks_started",
             repair_anchor_before: "source_audit_red_report_requested",
             next_repair_failure: "query this run through observe logs/metrics/traces, repair failing red fixtures, then rerun source audit with --red-report once",
+            scheduler_metrics: &[],
         }
     }
 
-    fn standalone() -> Self {
+    fn standalone(scheduler_metrics: &'a [crate::scheduler::Metrics]) -> Self {
         Self {
             command: "ultragoal red",
             subcommand: "fixture report",
-            cache_mode: "red_report_standalone_read",
-            resource_status: "standalone_red_report_wall_time_only",
-            saturation_status: "standalone_red_report_no_scheduler_tasks_started",
+            cache_mode: "red_report_standalone_generate",
+            resource_status: "standalone_red_report_generation_wall_time_only",
+            saturation_status: "standalone_red_report_scheduler_metrics_available",
             repair_anchor_before: "red_fixture_report_command_start",
-            next_repair_failure: "query this run through observe logs/metrics/traces, repair failing red fixtures or regenerate the red report, then rerun red fixture report",
+            next_repair_failure: "query this run through observe logs/metrics/traces, repair failing red fixtures, then rerun red fixture report",
+            scheduler_metrics,
         }
     }
 

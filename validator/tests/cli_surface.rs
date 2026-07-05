@@ -49,19 +49,6 @@ fn root_relative(root: &Path, path: &Path) -> String {
         .into_owned()
 }
 
-fn package_digest_from_stdout(output: &std::process::Output) -> String {
-    assert!(
-        output.status.success(),
-        "package digest command failed: {output:?}"
-    );
-    let stdout = String::from_utf8_lossy(&output.stdout);
-    stdout
-        .lines()
-        .find(|line| line.starts_with("sha256:") && line.len() == "sha256:".len() + 64)
-        .expect("raw package digest line")
-        .to_string()
-}
-
 #[test]
 fn cli_surface_commands_execute() {
     let root = repo_root();
@@ -277,31 +264,40 @@ fn cli_surface_commands_execute() {
         r#"{"version":"0.0.0-test","resources":[]}"#,
     )
     .expect("write temp manifest");
-
-    let temp_digest = package_digest_from_stdout(&run_ultragoal(
-        &root,
-        &[
-            "--root".into(),
-            temp.display().to_string(),
-            "package".into(),
-            "digest".into(),
-        ],
-    ));
+    std::fs::create_dir_all(temp.join("fixtures/valid")).expect("valid fixtures");
+    std::fs::create_dir_all(temp.join("fixtures/red")).expect("red fixtures");
+    std::fs::create_dir_all(temp.join("templates")).expect("templates");
+    std::fs::write(
+        temp.join("fixtures/valid/minimal-goal-run.json"),
+        r#"{"claims":[]}"#,
+    )
+    .expect("base fixture");
+    std::fs::write(
+        temp.join("fixtures/red/missing-patch.json"),
+        r#"{
+  "expected_failure": {
+    "check_id": "red-fixture-coverage",
+    "error": "red_fixture_json_patch_missing"
+  },
+  "base_fixture_path": "fixtures/valid/minimal-goal-run.json"
+}"#,
+    )
+    .expect("red packet");
+    std::fs::write(
+        temp.join("templates/RED_FIXTURES.json"),
+        r#"[{
+  "id": "missing-patch",
+  "packet_path": "fixtures/red/missing-patch.json",
+  "expected_failure": {
+    "check_id": "red-fixture-coverage",
+    "error": "red_fixture_json_patch_missing"
+  }
+}]"#,
+    )
+    .expect("red catalog");
     let red_report = temp.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
     std::fs::create_dir_all(red_report.parent().expect("red report parent"))
         .expect("red report dir");
-    std::fs::write(
-        &red_report,
-        format!(
-            r#"{{
-  "schema": "harness-ultragoal.red-fixture-report.v1",
-  "status": "pass",
-  "target_revision": {{"kind": "package_digest", "value": "{temp_digest}"}},
-  "red_fixtures": {{"red-one": {{"status": "pass"}}}}
-}}"#
-        ),
-    )
-    .expect("red report");
     let red_report_run = run_ultragoal(
         &root,
         &[
@@ -309,7 +305,7 @@ fn cli_surface_commands_execute() {
             temp.display().to_string(),
             "red-fixture-report".into(),
             "--report".into(),
-            root_relative(&root, &red_report),
+            root_relative(&temp, &red_report),
         ],
     );
     assert!(

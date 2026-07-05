@@ -87,7 +87,7 @@ fn red_fixture_report_observability_receipt_supports_only_red_report() {
         }),
     )
     .expect("fallback report");
-    red::write_standalone(&root, &report, RuntimeFacts::from_elapsed_ms(8))
+    red::write_standalone(&root, &report, RuntimeFacts::from_elapsed_ms(8), &[])
         .expect("fallback observe");
     let fallback = crate::json_boundary::read_json(&root.join(RECEIPT)).expect("fallback receipt");
     assert_eq!(fallback["status"], "pass");
@@ -101,7 +101,7 @@ fn red_fixture_report_observability_receipt_supports_only_red_report() {
         }),
     )
     .expect("package digest fallback report");
-    red::write_standalone(&root, &report, RuntimeFacts::from_elapsed_ms(9))
+    red::write_standalone(&root, &report, RuntimeFacts::from_elapsed_ms(9), &[])
         .expect("package digest fallback observe");
     let package_fallback =
         crate::json_boundary::read_json(&root.join(RECEIPT)).expect("package fallback receipt");

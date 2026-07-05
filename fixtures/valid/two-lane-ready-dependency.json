@@ -4342,7 +4342,7 @@
       "validator/src/audit/final_packet/references/coverage.rs",
       "validator/src/audit/final_packet/references/package.rs",
       "validator/src/audit/final_packet/references/mod.rs",
-      "validator/src/audit/fit_repo_receipt.rs",
+      "validator/src/audit/fit_repo_receipt/mod.rs",
       "validator/src/audit/foundational_law_trace.rs",
       "validator/src/audit/law/family/aliases.rs",
       "validator/src/audit/law/family/mod.rs",
@@ -4380,7 +4380,7 @@
       "validator/src/audit/plugin/laws.rs",
       "validator/src/audit/plugin/mod.rs",
       "validator/src/audit/plugin/product/cohesion.rs",
-      "validator/src/audit/plugin/product/journey.rs",
+      "validator/src/audit/plugin/product/journey/mod.rs",
       "validator/src/audit/plugin/product/mod.rs",
       "validator/src/audit/plugin/registry/guard.rs",
       "validator/src/audit/plugin/registry/live/mod.rs",
@@ -20633,7 +20633,7 @@
         },
         {
           "digest": "sha256:0fb532f5cc37827240828a95df946cd55935236e617534e6ecdc3da1aa8d6a3c",
-          "path": "validator/src/audit/fit_repo_receipt.rs"
+          "path": "validator/src/audit/fit_repo_receipt/mod.rs"
         },
         {
           "digest": "sha256:4c6568b7fb7ce98eebf726495b78e86f47ec55ee4e2b6919d2505e7ad5035131",
@@ -20785,7 +20785,7 @@
         },
         {
           "digest": "sha256:2ebcbe1e0c7814f7e5f3d59d79a80e55b4246df0a7040cafa7cf3fc808d0fc7e",
-          "path": "validator/src/audit/plugin/product/journey.rs"
+          "path": "validator/src/audit/plugin/product/journey/mod.rs"
         },
         {
           "digest": "sha256:c1dc416efb38f6bf7056b1f488d5e569381c662ae54e20db5362c60e39e0c1fe",

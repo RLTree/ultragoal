@@ -7,6 +7,9 @@ use std::path::Path;
 use std::process::Command;
 use std::time::Instant;
 
+#[cfg(test)]
+mod command_surface;
+
 pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
     let node_id = command
         .node_id
@@ -30,7 +33,7 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
         &changed_files_digest,
         &audit_context_digest,
     );
-    let baseline = run_baseline(root, surface)?;
+    let baseline = run_baseline(root, surface);
     let verified_local = measure_verified_local(surface, &input_digest, command);
     let row = node_row(
         surface,
@@ -48,23 +51,48 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
     Ok(i32::from(row["timing_status"] != "pass"))
 }
 
-fn run_baseline(root: &Path, surface: LoopValidationSurface) -> Result<BaselineRun, String> {
+fn run_baseline(root: &Path, surface: LoopValidationSurface) -> BaselineRun {
+    run_baseline_with_shell(root, surface, "bash")
+}
+
+fn run_baseline_with_shell(
+    root: &Path,
+    surface: LoopValidationSurface,
+    shell: &str,
+) -> BaselineRun {
     let started = Instant::now();
-    let output = Command::new("bash")
+    let output = match Command::new(shell)
         .arg("-lc")
         .arg(surface.canonical_full_command)
         .current_dir(root)
         .output()
-        .map_err(|err| format!("{} launch failed: {err}", surface.canonical_full_command))?;
-    Ok(BaselineRun {
+    {
+        Ok(output) => output,
+        Err(err) => {
+            return BaselineRun {
+                exit_code: 1,
+                status_success: false,
+                launch_error: true,
+                duration_ms: u64::try_from(started.elapsed().as_millis())
+                    .unwrap_or(u64::MAX)
+                    .max(1),
+                stdout_digest: crate::digest::bytes(&[]),
+                stderr_digest: crate::digest::bytes(
+                    format!("{} launch failed: {err}", surface.canonical_full_command).as_bytes(),
+                ),
+            };
+        }
+    };
+    BaselineRun {
         exit_code: output.status.code().unwrap_or(1),
         status_success: output.status.success(),
+        launch_error: false,
         duration_ms: u64::try_from(started.elapsed().as_millis())
             .unwrap_or(u64::MAX)
             .max(1),
         stdout_digest: crate::digest::bytes(&output.stdout),
         stderr_digest: crate::digest::bytes(&output.stderr),
-    })
+    }
 }
 
 fn measure_verified_local(
@@ -97,6 +125,7 @@ fn node_row(
 ) -> Value {
     let speedup_ratio = baseline.duration_ms / verified_local_duration_ms.max(1);
     let pass = baseline.status_success && speedup_ratio >= 20;
+    let timing_status = timing_status(pass);
     json!({
         "node_id": surface.id,
         "surface": surface.surface,
@@ -107,13 +136,14 @@ fn node_row(
         "audit_context_digest": audit_context_digest,
         "input_digest": input_digest,
         "canonical_full_command": surface.canonical_full_command,
-        "timing_status": if pass { "pass" } else { "fail" },
+        "timing_status": timing_status,
         "failure_class": measurement_failure_class(baseline, speedup_ratio),
         "baseline_duration_ms": baseline.duration_ms,
         "verified_local_duration_ms": verified_local_duration_ms,
         "speedup_ratio": speedup_ratio,
         "required_speedup": "20x",
         "baseline_exit_code": baseline.exit_code,
+        "baseline_launch_error": baseline.launch_error,
         "baseline_stdout_digest": baseline.stdout_digest,
         "baseline_stderr_digest": baseline.stderr_digest,
         "affected_set_status": affected_set_status,
@@ -192,7 +222,9 @@ fn affected_set_status(changed_files: &[String]) -> &'static str {
 }
 
 fn measurement_failure_class(baseline: &BaselineRun, speedup_ratio: u64) -> &'static str {
-    if !baseline.status_success {
+    if baseline.launch_error {
+        "canonical_full_command_launch_failed"
+    } else if !baseline.status_success {
         "canonical_full_command_failed"
     } else if speedup_ratio < 20 {
         "live_loop_speedup_target_missed"
@@ -201,9 +233,15 @@ fn measurement_failure_class(baseline: &BaselineRun, speedup_ratio: u64) -> &'st
     }
 }
 
+fn timing_status(pass: bool) -> &'static str {
+    if pass { "pass" } else { "fail" }
+}
+
+#[derive(Debug)]
 struct BaselineRun {
     exit_code: i32,
     status_success: bool,
+    launch_error: bool,
     duration_ms: u64,
     stdout_digest: String,
     stderr_digest: String,

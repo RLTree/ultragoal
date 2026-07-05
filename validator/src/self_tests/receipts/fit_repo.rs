@@ -74,6 +74,8 @@ fn fit_repo_receipt_binds_version_cache_artifacts_and_canonical_digest() {
         "checks":[{
             "stdout":{"path":"bad/stdout","digest":crate::self_tests::boundaries::workspace_fixtures::sha('2')},
             "stderr":{"path":"validation_artifacts/harness/fit-repo-command.stdout","digest":crate::self_tests::boundaries::workspace_fixtures::sha('3')}
+        },{
+            "stdout":{"digest":crate::self_tests::boundaries::workspace_fixtures::sha('4')}
         }],
         "blockers":[{}]
     });

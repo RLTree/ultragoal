@@ -1,6 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
+mod fixture_report_runtime;
 mod red;
 #[cfg(test)]
 mod red_tests;
@@ -41,8 +42,9 @@ pub(crate) fn write_standalone_red_report(
     root: &Path,
     red_report: &Path,
     runtime: RuntimeFacts,
+    scheduler_metrics: &[crate::scheduler::Metrics],
 ) -> Result<i32, String> {
-    red::write_standalone(root, red_report, runtime)
+    red::write_standalone(root, red_report, runtime, scheduler_metrics)
 }
 
 fn write_audit(

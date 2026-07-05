@@ -59,10 +59,30 @@ fn package_artifact_refs_reject_boundary_substitutes() {
     }
     let object = json!({"path":"artifacts/proof.json","digest":digest});
     crate::package::artifact::refs::validate_object(&root, &object, "object").expect("object");
+    let missing_digest = json!({"path":"artifacts/proof.json"});
+    let err = crate::package::artifact::refs::validate_object(&root, &missing_digest, "object")
+        .expect_err("object digest is required");
+    assert!(err.contains("missing digest"), "{err}");
     let command =
         json!({"artifact_path":"artifacts/proof.json","artifact_digest":object["digest"]});
     crate::package::artifact::refs::validate_command_artifact(&root, &command, "command")
         .expect("command artifact");
+    let missing_command_path = json!({"artifact_digest":object["digest"]});
+    let err = crate::package::artifact::refs::validate_command_artifact(
+        &root,
+        &missing_command_path,
+        "command",
+    )
+    .expect_err("command artifact_path is required");
+    assert!(err.contains("artifact_path"), "{err}");
+    let missing_command_digest = json!({"artifact_path":"artifacts/proof.json"});
+    let err = crate::package::artifact::refs::validate_command_artifact(
+        &root,
+        &missing_command_digest,
+        "command",
+    )
+    .expect_err("command artifact_digest is required");
+    assert!(err.contains("artifact_digest"), "{err}");
     #[cfg(unix)]
     {
         let link = root.join("artifacts/link.json");
