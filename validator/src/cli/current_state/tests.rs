@@ -146,3 +146,53 @@ fn current_state_run_fails_closed_without_candidate_digest() {
         "current-state must not mint a receipt when candidate truth is unavailable"
     );
 }
+
+#[test]
+fn current_state_run_rejects_external_claim_receipts() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "current-state-external-receipt",
+    );
+    std::fs::create_dir_all(&root).expect("root");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    let command = CurrentStateCommand {
+        json: false,
+        receipt: std::env::temp_dir().join("current-state-claim.json"),
+    };
+
+    let err = run(&root, &command).expect_err("external claim receipt must fail closed");
+
+    assert!(
+        err.contains("must be a root-relative claim artifact path"),
+        "absolute current-state receipts must not support claims: {err}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup external receipt");
+}
+
+#[test]
+fn current_state_run_fails_closed_when_receipt_cannot_be_written() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("current-state-write-failure");
+    std::fs::create_dir_all(&root).expect("root");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    std::fs::write(root.join("validation_artifacts"), b"file").expect("block receipt directory");
+    let command = CurrentStateCommand {
+        json: false,
+        receipt: "validation_artifacts/current-state.json".into(),
+    };
+
+    let err = run(&root, &command).expect_err("receipt write must fail closed");
+
+    assert!(
+        err.contains("validation_artifacts"),
+        "receipt write failure should name the blocked artifact path: {err}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup write failure");
+}

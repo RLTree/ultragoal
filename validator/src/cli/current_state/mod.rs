@@ -199,11 +199,7 @@ fn git_status(root: &Path) -> Value {
     {
         Ok(output) => {
             let text = String::from_utf8_lossy(&output.stdout).to_string();
-            let files = text
-                .lines()
-                .filter(|line| !line.trim().is_empty())
-                .map(ToString::to_string)
-                .collect::<Vec<_>>();
+            let files = text.lines().map(ToString::to_string).collect::<Vec<_>>();
             json!({"dirty": !files.is_empty(), "files": files})
         }
         Err(err) => json!({"dirty": true, "files": [], "error": err.to_string()}),

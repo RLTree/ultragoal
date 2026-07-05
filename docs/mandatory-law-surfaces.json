@@ -676,19 +676,19 @@
           "path": "validator/src/cli/control/plane/types.rs"
         },
         {
-          "digest": "sha256:eef4a26a120f7b15e1e9fc26e5b1444433802518353dcfac741e5e641dd9cbc3",
+          "digest": "sha256:d172959745712e8bc0bafe61ce4a5559ae7bf19e47d32c7ed9f886ff56d65fb0",
           "path": "validator/src/cli/control/plane/mod.rs"
         },
         {
-          "digest": "sha256:bb86fd94e30c7f28a9e1d39565bf7910d12f18d835520f9c96d6795ad3dc00f5",
+          "digest": "sha256:ef2f0de1d21b0b9419addb77deeaf6fc91c04280aa68db6eb52a74c1f03c3894",
           "path": "validator/src/cli/control/plane/emit.rs"
         },
         {
-          "digest": "sha256:be0d4cbdbba64d1339a2be8a44637fbcce9494cffac68515ca792f1b68061117",
+          "digest": "sha256:7ed5c44022e11a2021e4d6834489621db7b83423f0f7d19b49676c90561b8500",
           "path": "validator/src/cli/control/plane/evidence/mod.rs"
         },
         {
-          "digest": "sha256:bafc76cc23fe21e73fa63256e0442a720ba4e594a7e60e76fd58ab8ed6d2ccd3",
+          "digest": "sha256:95b854fe8b1b46877546cd6afd7a853821e7ea9d9cedd9a64e3b0cee10071af4",
           "path": "validator/src/cli/control/plane/evidence/item.rs"
         },
         {
@@ -708,11 +708,11 @@
           "path": "validator/src/cli/control/plane/proof/transaction.rs"
         },
         {
-          "digest": "sha256:be8b46993d8a7a1fd7a2bb3b91e4952a508a46daa73cc23974ccd9794eeac1c7",
+          "digest": "sha256:d89e7854499e49e9e222b112b25c81ccbe11a6f273eff4d94e6590be171741dc",
           "path": "validator/src/cli/control/plane/transactional/mod.rs"
         },
         {
-          "digest": "sha256:40aaf1c83f2e7eb60a8b5497512c6fbc45a680f1b7a69ce4b33c8e8c50ca4714",
+          "digest": "sha256:af0c00338112447e68b568930c9f0743b528e731ff9df4cb3771e47df603b888",
           "path": "validator/src/self_tests/cli/control/audit.rs"
         },
         {
@@ -724,27 +724,27 @@
           "path": "validator/src/self_tests/cli/control/parse.rs"
         },
         {
-          "digest": "sha256:a6f258842419774a7a93483833e29d8d67b008d37bb79882ba7fdcef60602254",
+          "digest": "sha256:4a8d6861cb5533f6eb90f693201f9bd536f81506594f5d169b007e936a6e8202",
           "path": "validator/src/self_tests/cli/control/production/mod.rs"
         },
         {
-          "digest": "sha256:e90c57343d16d9ca326f3c545546daf1cdedd28d9d1e74a47c32e48e087fd729",
+          "digest": "sha256:2bbc813ec5205c20c9e7ac53daf05482b1471a591706346b57efa0e864e67e9f",
           "path": "validator/src/self_tests/cli/control/receipt_modes.rs"
         },
         {
-          "digest": "sha256:6068fb788eff7b77b5bf2a46c038d7ff141cbd29a99cd3ecf6457f0f645fc84a",
+          "digest": "sha256:dc1f97a8cc2550caec2dbafcce3f81d9546f6f58883e020533eb10e51e9d0be5",
           "path": "validator/src/self_tests/cli/control/receipts.rs"
         },
         {
-          "digest": "sha256:1bc4d7bec891a9877a5f9f83ffdbc1fbd535606296efe7ce986bd91639b4d511",
+          "digest": "sha256:77ffdb563a9bb2d71f13d855807c57a775462b0acd45c65df98b71d84f76ae85",
           "path": "validator/src/self_tests/cli/control/transaction/mod.rs"
         },
         {
-          "digest": "sha256:fb139ce104c909e96181e49f4e8b0729114a2b8db56f40a537d99981f603885b",
+          "digest": "sha256:8f31fbc40aec4a6ad6b9da95e1394d95abc305c254e4d5d91d03be6540f45e57",
           "path": "validator/src/self_tests/cli/control/transaction/required.rs"
         },
         {
-          "digest": "sha256:36b58cf448c5e395c4554aa907c9916c097b2b1deae9879e75187f44caf0f30b",
+          "digest": "sha256:e4f870c1b3b4478017874f9c5b529d6196ae8bbf382d111e427e5072489dd10e",
           "path": "validator/src/self_tests/cli/control/transaction/reference.rs"
         },
         {
@@ -752,11 +752,11 @@
           "path": "validator/src/self_tests/cli/parse_errors.rs"
         },
         {
-          "digest": "sha256:ffd41753273f1342e055ec0ad2d440b08ced7554ea2e3009124959352200cbcc",
+          "digest": "sha256:6662480aa2f80d69afc0c228f4a021d8e0111c09c83029e598c5323f72dbf19e",
           "path": "schemas/cli-control-plane-receipt.schema.json"
         },
         {
-          "digest": "sha256:a62e869636f6a0da558e7ea0524b1afeb85d2f9cd326610d53199fa3a8a45252",
+          "digest": "sha256:d60fc9b03a5e624dee4e5128b6e7b6c22453a7ea957e0860ebfe13b3e442b594",
           "path": "schemas/cli-transactional-finalization-receipt.schema.json"
         }
       ],
