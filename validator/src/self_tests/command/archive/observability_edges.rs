@@ -37,9 +37,9 @@ fn archive_parse_defaults_and_rejects_package_escaping_observability_receipts() 
         "archive".to_string(),
         "build".to_string(),
         "--zip".to_string(),
-        "receipts/candidate.zip".to_string(),
+        "validation_artifacts/review/candidate.zip".to_string(),
         "--receipt".to_string(),
-        "receipts/archive.json".to_string(),
+        "validation_artifacts/review/archive.json".to_string(),
     ])
     .expect("parse archive command");
 
@@ -52,9 +52,9 @@ fn archive_parse_defaults_and_rejects_package_escaping_observability_receipts() 
         "archive".to_string(),
         "build".to_string(),
         "--zip".to_string(),
-        "receipts/candidate.zip".to_string(),
+        "validation_artifacts/review/candidate.zip".to_string(),
         "--receipt".to_string(),
-        "receipts/archive.json".to_string(),
+        "validation_artifacts/review/archive.json".to_string(),
         "--observability-receipt".to_string(),
         "../outside.json".to_string(),
     ])
@@ -68,7 +68,7 @@ fn archive_command_records_missing_manifest_as_fail_closed_observability() {
         "archive-observability-no-manifest",
     );
     std::fs::create_dir_all(&root).expect("root");
-    let observability = "observability/archive-build-missing-manifest.json";
+    let observability = "validation_artifacts/observability/archive-build-missing-manifest.json";
 
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -76,9 +76,9 @@ fn archive_command_records_missing_manifest_as_fail_closed_observability() {
             "archive",
             "build",
             "--zip",
-            "receipts/candidate.zip",
+            "validation_artifacts/review/candidate.zip",
             "--receipt",
-            "receipts/archive.json",
+            "validation_artifacts/review/archive.json",
             "--observability-receipt",
             observability,
             "--zip-root",
@@ -104,26 +104,26 @@ fn archive_command_records_missing_manifest_as_fail_closed_observability() {
 #[test]
 fn archive_command_propagates_observability_receipt_write_errors() {
     let root = package_root("archive-observability-receipt-write-error");
-    std::fs::write(root.join("observability"), b"not a directory")
-        .expect("block observability dir");
+    std::fs::create_dir_all(root.join("validation_artifacts/observability/archive-build.json"))
+        .expect("block observability receipt path");
     let error = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "archive",
             "build",
             "--zip",
-            "receipts/candidate.zip",
+            "validation_artifacts/review/candidate.zip",
             "--receipt",
-            "receipts/archive.json",
+            "validation_artifacts/review/archive.json",
             "--observability-receipt",
-            "observability/archive-build.json",
+            "validation_artifacts/observability/archive-build.json",
             "--zip-root",
             "harness-ultragoal",
         ],
     ))
     .expect_err("observability receipt write failure propagates");
 
-    assert!(error.contains("create parent failed"), "{error}");
+    assert!(error.contains("json rename failed"), "{error}");
     assert!(
         !error.contains(&root.to_string_lossy().to_string()),
         "{error}"

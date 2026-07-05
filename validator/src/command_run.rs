@@ -125,12 +125,20 @@ fn run_transactional_finalization(
     receipt: std::path::PathBuf,
 ) -> Result<i32, String> {
     let started = std::time::Instant::now();
+    let claim_receipt = crate::output_path::claim_artifact_path(
+        &root,
+        &receipt,
+        "transactional finalization receipt",
+    )?;
     let mut value = crate::cli::control::plane::transactional::receipt(&root)?;
     crate::cli::control::plane::transactional::telemetry::attach(
-        &root, &receipt, &mut value, started,
+        &root,
+        &claim_receipt,
+        &mut value,
+        started,
     )?;
-    crate::json_boundary::write_json(&receipt, &value)?;
-    crate::cli::control::plane::transactional::stdout::print(&root, &receipt, &value);
+    crate::json_boundary::write_json(&claim_receipt, &value)?;
+    crate::cli::control::plane::transactional::stdout::print(&root, &claim_receipt, &value);
     Ok(i32::from(
         value.get("status").and_then(serde_json::Value::as_str) != Some("pass"),
     ))

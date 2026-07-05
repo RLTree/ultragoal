@@ -39,13 +39,14 @@ fn line_caps_reports_receipt_write_failures() {
         "line-caps-receipt-write-fail",
         &[("validator/src/lib.rs", "pub fn ok() {}\n".to_string())],
     );
-    let blocker = root.join("target/line-cap-blocker");
-    std::fs::create_dir_all(root.join("target")).expect("target dir");
+    let blocker = root.join("validation_artifacts/line-caps/line-cap-blocker");
+    std::fs::create_dir_all(root.join("validation_artifacts/line-caps"))
+        .expect("line-cap artifact dir");
     std::fs::write(&blocker, "not a directory").expect("blocker file");
     let err = crate::cli::line_caps::run(
         &root,
         &crate::cli::line_caps::LineCapsCommand {
-            receipt: PathBuf::from("target/line-cap-blocker/receipt.json"),
+            receipt: PathBuf::from("validation_artifacts/line-caps/line-cap-blocker/receipt.json"),
             jobs: Some(1),
         },
     )

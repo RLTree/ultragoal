@@ -54,7 +54,7 @@ fn transaction_finalize_reports_observability_spool_write_failures() {
     let err = crate::command_run::run_with_exit_code(crate::Args {
         root: root.clone(),
         command: crate::Command::TransactionalFinalization {
-            receipt: root.join(super::RECEIPT),
+            receipt: std::path::PathBuf::from(super::RECEIPT),
         },
     })
     .expect_err("spool file blocks telemetry emission");
@@ -64,4 +64,26 @@ fn transaction_finalize_reports_observability_spool_write_failures() {
         "{err}"
     );
     std::fs::remove_dir_all(root).expect("cleanup transaction spool file");
+}
+
+#[test]
+fn transaction_finalize_rejects_ungoverned_claim_receipt_outputs() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "transaction-command-ungoverned-receipt",
+    );
+    super::write_manifest(&root);
+
+    let err = crate::command_run::run_with_exit_code(crate::Args {
+        root: root.clone(),
+        command: crate::Command::TransactionalFinalization {
+            receipt: std::path::PathBuf::from("target/transaction-finalization.json"),
+        },
+    })
+    .expect_err("ungoverned transaction receipt path rejected");
+
+    assert!(err.contains("transactional finalization receipt"), "{err}");
+    assert!(err.contains("governed claim artifact root"), "{err}");
+    assert!(err.contains("external debug only"), "{err}");
+    assert!(!root.join("target/transaction-finalization.json").exists());
+    std::fs::remove_dir_all(root).expect("cleanup transaction ungoverned receipt");
 }

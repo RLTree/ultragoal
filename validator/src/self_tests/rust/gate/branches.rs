@@ -12,7 +12,7 @@ use std::path::PathBuf;
 #[test]
 fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let out_rel = PathBuf::from("target/self-tests/rust-run-receipt.json");
+    let out_rel = PathBuf::from("validation_artifacts/rust/rust-run-receipt.json");
     let out = root.join(&out_rel);
     let code = rust_run(
         &root,
@@ -24,7 +24,7 @@ fn rust_receipts_cover_write_fail_and_observed_tool_branches() {
     .expect("rust run");
     assert_eq!(code, 0);
     assert!(out.is_file());
-    let parent_file = root.join("target/self-tests/rust-parent-file");
+    let parent_file = root.join("validation_artifacts/rust/rust-parent-file");
     std::fs::write(&parent_file, "not a directory").expect("parent file");
     let write_failure = rust_run_receipt(
         &root,

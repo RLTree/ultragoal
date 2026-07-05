@@ -35,7 +35,7 @@ fn rel(root: &Path, path: &Path) -> String {
 fn command_run_accepts_current_review_round_anchors() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let out_dir = root
-        .join("target")
+        .join("validation_artifacts/review")
         .join(format!("review-round-command-{}", stamp()));
     std::fs::create_dir_all(&out_dir).expect("review round output dir");
     let package_digest = crate::package::inventory::package_digest(&root).expect("package digest");

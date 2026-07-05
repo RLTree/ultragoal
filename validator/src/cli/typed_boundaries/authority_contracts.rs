@@ -35,7 +35,7 @@ fn typed_boundaries_claim_and_stdout_contracts_are_agent_legible() {
         "status": "fail",
         "operation": "typed-boundaries.check",
         "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('b'),
-        "receipt_path": "validation_artifacts/test/typed-boundaries.json",
+        "receipt_path": "validation_artifacts/typed-boundaries/typed-boundaries.json",
         "run_id": "run-typed",
         "correlation_id": "corr-typed",
         "claim_impact": "typed_boundary_check_failed_blocks_readiness_release_completion_update_goal",

@@ -23,13 +23,16 @@ fn parses_performance_command_variants_and_budget_aliases() {
         "--class",
         "repair-loop",
         "--receipt",
-        "target/perf.json",
+        "validation_artifacts/performance/perf.json",
     ]))
     .expect("parse verify")
     .expect("performance command");
     assert_eq!(verify.operation, PerformanceOperation::Verify);
     assert_eq!(verify.class, BudgetClass::StandardSourceLocal);
-    assert_eq!(verify.receipt, Some(PathBuf::from("target/perf.json")));
+    assert_eq!(
+        verify.receipt,
+        Some(PathBuf::from("validation_artifacts/performance/perf.json"))
+    );
 
     let verify_default = parse(&args(&["performance", "verify"]))
         .expect("parse verify default")

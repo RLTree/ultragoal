@@ -187,10 +187,10 @@ fn cli_surface_commands_execute() {
         "canonical package digest failed: {canonical_digest:?}"
     );
 
-    let product_receipt_dir = temp
-        .strip_prefix(&root)
-        .expect("temp under root")
-        .join("product-receipts");
+    let pid = std::process::id();
+    let product_receipt_dir = PathBuf::from(format!(
+        "validation_artifacts/product/cli-surface-receipts-{pid}"
+    ));
     let product = run_ultragoal(
         &root,
         &[
@@ -323,7 +323,9 @@ fn cli_surface_commands_execute() {
     assert_eq!(red_value["operation"], "red_fixture.report");
     assert_eq!(red_value["event"]["command"], "ultragoal red");
 
-    let performance_receipt = temp.join("validation_artifacts/cli/performance-receipt.json");
+    let performance_receipt = root.join(format!(
+        "validation_artifacts/cli/cli-surface-performance-{pid}.json"
+    ));
     let performance = run_ultragoal(
         &root,
         &[
@@ -340,7 +342,9 @@ fn cli_surface_commands_execute() {
         "performance command failed: {performance:?}"
     );
 
-    let rust_fast_receipt = temp.join("validation_artifacts/rust/fast-receipt.json");
+    let rust_fast_receipt = root.join(format!(
+        "validation_artifacts/rust/cli-surface-fast-{pid}.json"
+    ));
     let rust_fast = run_ultragoal(
         &root,
         &[
@@ -357,7 +361,9 @@ fn cli_surface_commands_execute() {
         "rust fast failed: {rust_fast:?}"
     );
 
-    let gc_plan_receipt = temp.join("validation_artifacts/gc/plan-receipt.json");
+    let gc_plan_receipt = root.join(format!(
+        "validation_artifacts/gc/cli-surface-plan-{pid}.json"
+    ));
     let gc_plan = run_ultragoal(
         &root,
         &[
@@ -426,13 +432,15 @@ fn cli_surface_commands_execute() {
             "transaction".into(),
             "finalize".into(),
             "--receipt".into(),
-            root_relative(&root, &transaction_receipt),
+            "validation_artifacts/cli/transactional-finalization.json".into(),
         ],
     );
     assert_eq!(transaction.status.code(), Some(1));
     assert_fail_closed_transaction_receipt(&transaction_receipt);
 
-    let review_target = temp.join("review-target.json");
+    let review_target = root.join(format!(
+        "validation_artifacts/review/cli-surface-review-target-{pid}.json"
+    ));
     let review_target_args = vec![
         "--root".into(),
         ".".into(),
@@ -447,9 +455,9 @@ fn cli_surface_commands_execute() {
         ".".into(),
         "archive".into(),
         "--zip".into(),
-        root_relative(&root, &temp.join("candidate.zip")),
+        format!("validation_artifacts/review/cli-surface-candidate-{pid}.zip"),
         "--receipt".into(),
-        root_relative(&root, &temp.join("archive.json")),
+        format!("validation_artifacts/review/cli-surface-archive-{pid}.json"),
     ];
     assert!(run(&root, &archive_args).status.success());
 
@@ -460,7 +468,7 @@ fn cli_surface_commands_execute() {
         "--input".into(),
         "fixtures/valid/minimal-goal-run.json".into(),
         "--out-dir".into(),
-        temp.join("semantic").display().to_string(),
+        format!("validation_artifacts/semantic/cli-surface-normal-{pid}"),
     ];
     assert!(run(&root, &semantic_args).status.success());
 
@@ -471,7 +479,7 @@ fn cli_surface_commands_execute() {
         "--input".into(),
         "fixtures/valid/minimal-goal-run.json".into(),
         "--out-dir".into(),
-        temp.join("semantic-model-refusal").display().to_string(),
+        format!("validation_artifacts/semantic/cli-surface-model-refusal-{pid}"),
         "--implementation-kind".into(),
         "model".into(),
         "--provider".into(),
@@ -490,7 +498,7 @@ fn cli_surface_commands_execute() {
         "--input".into(),
         "fixtures/red/semantic-classification-receipt-wrong-claim.json".into(),
         "--out-dir".into(),
-        temp.join("semantic-red").display().to_string(),
+        format!("validation_artifacts/semantic/cli-surface-red-{pid}"),
     ];
     assert_ne!(run(&root, &red_semantic_args).status.code(), None);
 
@@ -511,7 +519,7 @@ fn cli_surface_commands_execute() {
             "--target-repo".into(),
             fixture.into(),
             "--receipt".into(),
-            temp.join(receipt_name).display().to_string(),
+            format!("validation_artifacts/target-repo/cli-surface-{pid}-{receipt_name}"),
             "--require-observability".into(),
             "--require-product-cohesion".into(),
         ];

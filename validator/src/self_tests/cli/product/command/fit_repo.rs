@@ -4,7 +4,7 @@ use std::path::PathBuf;
 fn fit_repo_command_runs_minter_with_observability() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = PathBuf::from(format!(
-        "target/ultragoal-fit-repo-command-{}",
+        "validation_artifacts/product/ultragoal-fit-repo-command-{}",
         std::process::id()
     ));
     let obs = rel.join("fit-repo-observability.json");
@@ -35,7 +35,7 @@ fn fit_repo_command_runs_minter_with_observability() {
 fn fit_repo_command_emits_fail_closed_observability_for_invalid_receipt_dir() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let obs = PathBuf::from(format!(
-        "target/fit-repo-invalid-receipt-dir-{}.json",
+        "validation_artifacts/observability/fit-repo-invalid-receipt-dir-{}.json",
         std::process::id()
     ));
     let code = crate::cli::product::run(

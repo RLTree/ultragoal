@@ -4,7 +4,7 @@ use std::path::PathBuf;
 fn product_receipt_minter_rebinds_canonical_source_local_receipts() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = PathBuf::from(format!(
-        "target/ultragoal-product-receipts-{}",
+        "validation_artifacts/product/test-receipts-{}",
         std::process::id()
     ));
     let receipt_dir = root.join(&rel);

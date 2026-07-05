@@ -71,7 +71,7 @@ pub(crate) fn claim_artifact_path(
     if path.components().any(|part| {
         matches!(
             part,
-            Component::ParentDir | Component::Prefix(_) | Component::RootDir
+            Component::CurDir | Component::ParentDir | Component::Prefix(_) | Component::RootDir
         )
     }) {
         return Err(format!(
@@ -79,7 +79,20 @@ pub(crate) fn claim_artifact_path(
             path.display()
         ));
     }
+    if !governed_claim_artifact_root(path) {
+        return Err(format!(
+            "{}: {label} must use a governed claim artifact root such as validation_artifacts/...; arbitrary root-relative outputs are external debug only and cannot support claims",
+            path.display()
+        ));
+    }
     Ok(root.join(path))
+}
+
+fn governed_claim_artifact_root(path: &Path) -> bool {
+    matches!(
+        path.components().next(),
+        Some(Component::Normal(name)) if name == "validation_artifacts"
+    )
 }
 
 pub(crate) fn literal_claim_artifact_path(

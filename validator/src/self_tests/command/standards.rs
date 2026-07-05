@@ -21,7 +21,7 @@ fn command_dispatch_routes_standards_gardener_rebind() {
             "standards-gardener",
             "rebind",
             "--receipt",
-            "target/not-standards.json",
+            "validation_artifacts/not-standards.json",
         ],
     ))
     .expect("standards command fail-closes with receipt");

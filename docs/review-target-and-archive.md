@@ -13,7 +13,7 @@ proof.
 Generate the current review target after the canonical validator pass:
 
 ```text
-cargo run --offline -- --root . review-target --receipt <output-dir>/harness-ultragoal-plugin-proposal.review-target-receipt.json
+cargo run --offline -- --root . review-target --receipt validation_artifacts/review/review-target-receipt.json
 ```
 
 The receipt is intentionally detached from the repo archive. It contains
@@ -43,7 +43,7 @@ to inspect; it is not upload, release, distribution, publication, or install
 proof.
 
 ```text
-cargo run --offline -- --root . archive --zip <output-dir>/harness-ultragoal-plugin-proposal.candidate.zip --receipt <output-dir>/harness-ultragoal-plugin-proposal.candidate-archive-receipt.json --archive-purpose candidate_review_anchor
+cargo run --offline -- --root . archive --zip validation_artifacts/review/harness-ultragoal-plugin-proposal.candidate.zip --receipt validation_artifacts/review/candidate-archive-receipt.json --archive-purpose candidate_review_anchor
 ```
 
 The archive builder writes deterministic zip entries under one root directory,

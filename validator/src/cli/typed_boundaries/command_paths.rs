@@ -32,7 +32,7 @@ fn typed_boundaries_parser_requires_strict_product_command() {
         "check",
         "--strict",
         "--receipt",
-        "validation_artifacts/test/typed-boundaries.json",
+        "validation_artifacts/typed-boundaries/typed-boundaries.json",
         "--jobs",
         "3",
     ]);
@@ -45,7 +45,7 @@ fn typed_boundaries_parser_requires_strict_product_command() {
         .expect("typed-boundaries command");
     assert_eq!(
         command.receipt,
-        std::path::PathBuf::from("validation_artifacts/test/typed-boundaries.json")
+        std::path::PathBuf::from("validation_artifacts/typed-boundaries/typed-boundaries.json")
     );
     assert_eq!(command.jobs, Some(3));
     assert!(
@@ -97,7 +97,8 @@ fn typed_boundaries_parser_requires_strict_product_command() {
 #[test]
 fn typed_boundaries_dispatch_writes_fail_closed_receipt() {
     let root = minimal_root("typed-boundaries-dispatch");
-    let receipt = std::path::PathBuf::from("validation_artifacts/test/typed-boundaries.json");
+    let receipt =
+        std::path::PathBuf::from("validation_artifacts/typed-boundaries/typed-boundaries.json");
     let command = crate::parse_command(&args(&[
         "typed-boundaries",
         "check",
@@ -134,8 +135,9 @@ fn typed_boundaries_dispatch_writes_fail_closed_receipt() {
 #[test]
 fn typed_boundaries_run_passes_for_current_authority_surface() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let receipt =
-        std::path::PathBuf::from("target/ultragoal-test-receipts/typed-boundaries-pass.json");
+    let receipt = std::path::PathBuf::from(
+        "validation_artifacts/typed-boundaries/typed-boundaries-pass.json",
+    );
     let receipt_path =
         crate::output_path::claim_artifact_path(&root, &receipt, "test typed boundaries receipt")
             .expect("typed receipt path");
@@ -167,7 +169,9 @@ fn typed_boundaries_run_reports_candidate_digest_error_before_receipt_claim() {
     );
     std::fs::create_dir_all(&root).expect("root");
     let command = super::TypedBoundariesCommand {
-        receipt: std::path::PathBuf::from("validation_artifacts/test/typed-boundaries.json"),
+        receipt: std::path::PathBuf::from(
+            "validation_artifacts/typed-boundaries/typed-boundaries.json",
+        ),
         jobs: Some(1),
     };
     let err = super::run(&root, &command).expect_err("candidate digest is required");

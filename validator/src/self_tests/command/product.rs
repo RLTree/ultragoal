@@ -11,7 +11,10 @@ fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
 #[test]
 fn command_dispatch_routes_product_receipt_minting() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let rel = format!("target/ultragoal-command-product-{}", std::process::id());
+    let rel = format!(
+        "validation_artifacts/product/command-dispatch-{}",
+        std::process::id()
+    );
     let out = root.join(&rel);
     let _ = std::fs::remove_dir_all(&out);
     let code = crate::command_run::run_with_exit_code(args(

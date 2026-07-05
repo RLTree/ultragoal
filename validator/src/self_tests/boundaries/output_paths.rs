@@ -150,6 +150,26 @@ fn claim_artifact_path_rejects_external_claim_outputs() {
             .expect_err("parent traversal rejected");
     assert!(traversal.contains("must stay inside the package root"));
 
+    for path in [
+        "target/ultragoal-test-receipts/receipt.json",
+        "artifacts/review/receipt.json",
+        ".harness/receipt.json",
+        "receipt.json",
+    ] {
+        let err = crate::output_path::claim_artifact_path(&root, Path::new(path), "receipt")
+            .expect_err("ungoverned root-relative claim output rejected");
+        assert!(err.contains("governed claim artifact root"), "{err}");
+        assert!(err.contains("external debug only"), "{err}");
+    }
+
+    let current_dir = crate::output_path::claim_artifact_path(
+        &root,
+        Path::new("./validation_artifacts/observability/receipt.json"),
+        "receipt",
+    )
+    .expect_err("current-dir segments are not normalized claim paths");
+    assert!(current_dir.contains("must stay inside the package root"));
+
     let _ = fs::remove_dir_all(root);
 }
 

@@ -31,7 +31,7 @@ fn package_inventory_parser_dispatches_to_product_command() {
         "package",
         "inventory",
         "--receipt",
-        "validation_artifacts/test/package-inventory.json",
+        "validation_artifacts/package/package-inventory.json",
         "--jobs",
         "2",
     ]);
@@ -44,7 +44,7 @@ fn package_inventory_parser_dispatches_to_product_command() {
         .expect("package inventory command");
     assert_eq!(
         command.receipt,
-        std::path::PathBuf::from("validation_artifacts/test/package-inventory.json")
+        std::path::PathBuf::from("validation_artifacts/package/package-inventory.json")
     );
     assert_eq!(command.jobs, Some(2));
     assert!(matches!(
@@ -79,7 +79,7 @@ fn package_inventory_parser_dispatches_to_product_command() {
 #[test]
 fn package_inventory_dispatch_writes_fail_closed_receipt() {
     let root = minimal_root("package-inventory-dispatch");
-    let receipt = std::path::PathBuf::from("validation_artifacts/test/package-inventory.json");
+    let receipt = std::path::PathBuf::from("validation_artifacts/package/package-inventory.json");
     let command = crate::parse_command(&args(&[
         "package",
         "inventory",
@@ -116,7 +116,7 @@ fn package_inventory_dispatch_writes_fail_closed_receipt() {
 fn package_inventory_run_passes_for_current_package_surface() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let receipt =
-        std::path::PathBuf::from("target/ultragoal-test-receipts/package-inventory-pass.json");
+        std::path::PathBuf::from("validation_artifacts/package/package-inventory-pass.json");
     let receipt_path =
         crate::output_path::claim_artifact_path(&root, &receipt, "test package inventory receipt")
             .expect("typed receipt path");
@@ -148,7 +148,7 @@ fn package_inventory_run_reports_candidate_digest_error_before_receipt_claim() {
     );
     std::fs::create_dir_all(&root).expect("root");
     let command = super::PackageInventoryCommand {
-        receipt: std::path::PathBuf::from("validation_artifacts/test/package-inventory.json"),
+        receipt: std::path::PathBuf::from("validation_artifacts/package/package-inventory.json"),
         jobs: Some(1),
     };
     let err = super::run(&root, &command).expect_err("candidate digest is required");
@@ -167,7 +167,7 @@ fn package_inventory_run_reports_candidate_digest_error_before_receipt_claim() {
 fn package_inventory_run_rejects_zero_workers_before_receipt_claim() {
     let root = minimal_root("package-inventory-zero-workers");
     let command = super::PackageInventoryCommand {
-        receipt: std::path::PathBuf::from("validation_artifacts/test/package-inventory.json"),
+        receipt: std::path::PathBuf::from("validation_artifacts/package/package-inventory.json"),
         jobs: Some(0),
     };
     let err = super::run(&root, &command).expect_err("zero workers rejected");

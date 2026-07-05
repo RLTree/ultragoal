@@ -30,7 +30,7 @@ fn package_root(label: &str) -> PathBuf {
 #[test]
 fn command_dispatch_builds_review_archive_and_semantic_receipts() {
     let root = package_root("command-dispatch-success");
-    let review_receipt = "receipts/review-target.json";
+    let review_receipt = "validation_artifacts/review/review-target.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &["review-target", "build", "--receipt", review_receipt],
@@ -41,8 +41,8 @@ fn command_dispatch_builds_review_archive_and_semantic_receipts() {
         crate::json_boundary::read_json(&root.join(review_receipt)).expect("review receipt json");
     assert_eq!(review["status"], "pass");
 
-    let archive_receipt = "receipts/archive.json";
-    let archive_zip = "receipts/candidate.zip";
+    let archive_receipt = "validation_artifacts/review/archive.json";
+    let archive_zip = "validation_artifacts/review/candidate.zip";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
@@ -140,7 +140,12 @@ fn command_run_propagates_package_and_packet_builder_errors() {
     );
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
-        &["review-target", "build", "--receipt", "receipt.json"],
+        &[
+            "review-target",
+            "build",
+            "--receipt",
+            "validation_artifacts/review/review-target.json",
+        ],
     ))
     .expect("invalid review target returns fail code");
     assert_eq!(code, 1);
@@ -150,7 +155,9 @@ fn command_run_propagates_package_and_packet_builder_errors() {
 #[test]
 fn command_run_propagates_output_and_generation_errors() {
     let review_root = package_root("command-run-review-output-error");
-    let blocked = review_root.join("blocked-parent");
+    let blocked = review_root.join("validation_artifacts/review/blocked-parent");
+    std::fs::create_dir_all(review_root.join("validation_artifacts/review"))
+        .expect("review artifact dir");
     std::fs::write(&blocked, "not a directory").expect("blocked parent file");
     let code = crate::command_run::run_with_exit_code(args(
         review_root.clone(),
@@ -158,7 +165,7 @@ fn command_run_propagates_output_and_generation_errors() {
             "review-target",
             "build",
             "--receipt",
-            "blocked-parent/review-target.json",
+            "validation_artifacts/review/blocked-parent/review-target.json",
         ],
     ))
     .expect("review-target receipt output returns fail code");

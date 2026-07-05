@@ -168,81 +168,16 @@ fn command_run_routes_audit_and_performance_variants() {
             "--class",
             "focused",
             "--receipt",
-            "performance.json",
+            "validation_artifacts/performance/performance.json",
         ],
     ))
     .expect("performance command");
     assert_eq!(code, 0);
-    let performance_receipt = root.join("performance.json");
+    let performance_receipt = root.join("validation_artifacts/performance/performance.json");
     assert!(performance_receipt.is_file());
     let performance = crate::json_boundary::read_json(&performance_receipt).expect("performance");
     assert_eq!(performance["budget"]["class"], "focused_repair");
     assert_eq!(performance["budget"]["target_ms"], 15_000);
 
-    for (label, raw, receipt) in [
-        (
-            "halo",
-            vec![
-                "halo",
-                "capability",
-                "prove",
-                "--receipt",
-                "halo.json",
-                "--app-path",
-                "Missing.app",
-            ],
-            "halo.json",
-        ),
-        (
-            "improvement-loop",
-            vec!["improvement-loop", "prove", "--receipt", "improvement.json"],
-            "improvement.json",
-        ),
-        (
-            "promptfoo",
-            vec![
-                "promptfoo",
-                "prove",
-                "--receipt",
-                "promptfoo.json",
-                "--promptfoo-bin",
-                "missing-promptfoo",
-            ],
-            "promptfoo.json",
-        ),
-    ] {
-        let result = crate::command_run::run_with_exit_code(args(root.clone(), &raw));
-        assert!(result.is_ok(), "{label} dispatch failed: {result:?}");
-        let code = result.expect("checked dispatch result");
-        assert_eq!(code, 1, "{label} should fail closed");
-        assert!(root.join(receipt).is_file(), "{label} receipt missing");
-    }
-
-    let openai_root = crate::self_tests::openai::prepare_root(
-        "command-dispatch-openai",
-        &[
-            ".gitignore",
-            "docs/openai-key-policy.json",
-            "docs/openai-provider-policy.json",
-        ],
-    );
-    let openai_code = crate::command_run::run_with_exit_code(args(
-        openai_root.clone(),
-        &[
-            "openai",
-            "config",
-            "prove",
-            "--receipt",
-            "validation_artifacts/openai/dispatch-config.json",
-        ],
-    ))
-    .expect("openai dispatch");
-    assert_eq!(openai_code, 0);
-    assert!(
-        openai_root
-            .join("validation_artifacts/openai/dispatch-config.json")
-            .is_file()
-    );
-    std::fs::remove_dir_all(openai_root).expect("cleanup openai dispatch");
     std::fs::remove_dir_all(root).expect("cleanup command dispatch routes");
 }

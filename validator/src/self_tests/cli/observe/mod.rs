@@ -11,6 +11,7 @@ mod prove;
 mod query;
 mod run;
 mod snapshot;
+mod stack_receipts;
 mod stdout_contract;
 
 pub(super) fn args(values: &[&str]) -> Vec<String> {

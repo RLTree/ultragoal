@@ -17,7 +17,8 @@ fn temp_receipt(_root: &Path) -> PathBuf {
         .duration_since(UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    PathBuf::from("target").join(format!("cli-performance-test-{stamp}.json"))
+    PathBuf::from("validation_artifacts/performance")
+        .join(format!("cli-performance-test-{stamp}.json"))
 }
 
 #[test]
@@ -25,7 +26,7 @@ fn receipt_is_fail_closed_and_surface_bound() {
     let root = repo_root();
     let command = PerformanceCommand {
         operation: PerformanceOperation::SelfProve,
-        receipt: Some(PathBuf::from("target/perf.json")),
+        receipt: Some(PathBuf::from("validation_artifacts/performance/perf.json")),
         class: BudgetClass::ExternalLive,
     };
     let value = receipt(&root, &command, 123).expect("receipt builds");

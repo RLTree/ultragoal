@@ -2,7 +2,7 @@
 fn target_receipt_generation_records_all_fixture_outputs() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = std::path::PathBuf::from(format!(
-        "target/ultragoal-target-receipts-{}",
+        "validation_artifacts/target-repo/test-receipts-{}",
         std::process::id()
     ));
     let receipt_dir = root.join(&rel);
@@ -13,9 +13,9 @@ fn target_receipt_generation_records_all_fixture_outputs() {
     assert!(generated.iter().all(|item| {
         item["artifact_type"] == "target_repo_receipt"
             && item["digest"].as_str().unwrap_or("").starts_with("sha256:")
-            && item["path"]
-                .as_str()
-                .is_some_and(|path| path.starts_with("target/ultragoal-target-receipts-"))
+            && item["path"].as_str().is_some_and(|path| {
+                path.starts_with("validation_artifacts/target-repo/test-receipts-")
+            })
     }));
     let blocked_receipt_dir = receipt_dir.join("blocked-file");
     std::fs::write(&blocked_receipt_dir, "not a directory").expect("blocked receipt directory");

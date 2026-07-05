@@ -110,7 +110,7 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
     assert!(err.contains("validation_artifacts"), "{err}");
 
     let receipt_root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-receipt-write");
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-receipt-root");
     std::fs::create_dir_all(&receipt_root).expect("root");
     crate::json_boundary::write_json(
         &receipt_root.join("plugin-manifest-draft.json"),
@@ -118,11 +118,12 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
     )
     .expect("manifest");
     let bad_receipt = LiveLoopCommand {
-        receipt: "plugin-manifest-draft.json/loop-test.json".into(),
+        receipt: "artifacts/loop-test.json".into(),
         ..command
     };
-    let err = run(&receipt_root, &bad_receipt).expect_err("loop receipt write fails");
-    assert!(err.contains("plugin-manifest-draft.json"), "{err}");
+    let err = run(&receipt_root, &bad_receipt).expect_err("ungoverned receipt root rejected");
+    assert!(err.contains("governed claim artifact root"), "{err}");
+    assert!(err.contains("external debug only"), "{err}");
 
     let observability_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "live-loop-observability-write",

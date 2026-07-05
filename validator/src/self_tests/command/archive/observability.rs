@@ -34,9 +34,9 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
 #[test]
 fn archive_command_emits_pass_observability() {
     let root = package_root("archive-observability-pass");
-    let zip = "receipts/candidate.zip";
-    let receipt = "receipts/archive.json";
-    let observability = "observability/archive-build.json";
+    let zip = "validation_artifacts/review/candidate.zip";
+    let receipt = "validation_artifacts/review/archive.json";
+    let observability = "validation_artifacts/observability/archive-build.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
@@ -65,24 +65,30 @@ fn archive_command_emits_pass_observability() {
     assert_eq!(obs["event"]["task_count"], 3);
     assert_eq!(obs["event"]["queue_depth"], 3);
     assert_eq!(obs["event"]["cache_mode"], "archive_digest_no_cache");
-    assert!(root.join("receipts/candidate.zip").is_file());
-    assert!(root.join("receipts/archive.json").is_file());
+    assert!(
+        root.join("validation_artifacts/review/candidate.zip")
+            .is_file()
+    );
+    assert!(
+        root.join("validation_artifacts/review/archive.json")
+            .is_file()
+    );
     std::fs::remove_dir_all(root).expect("cleanup archive pass");
 }
 
 #[test]
 fn archive_command_emits_fail_closed_observability() {
     let root = package_root("archive-observability-fail");
-    let observability = "observability/archive-build-fail.json";
+    let observability = "validation_artifacts/observability/archive-build-fail.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "archive",
             "build",
             "--zip",
-            "receipts/candidate.zip",
+            "validation_artifacts/review/candidate.zip",
             "--receipt",
-            "receipts/archive.json",
+            "validation_artifacts/review/archive.json",
             "--observability-receipt",
             observability,
             "--archive-purpose",
@@ -123,8 +129,8 @@ fn archive_run_rejects_absolute_observability_claim_artifact() {
     let root = package_root("archive-observability-absolute-run");
     let error = crate::cli::archive::run(
         root.clone(),
-        PathBuf::from("receipts/candidate.zip"),
-        PathBuf::from("receipts/archive.json"),
+        PathBuf::from("validation_artifacts/review/candidate.zip"),
+        PathBuf::from("validation_artifacts/review/archive.json"),
         root.join("absolute-archive-observability.json"),
         "harness-ultragoal".to_string(),
         "candidate_review_anchor".to_string(),
@@ -142,9 +148,9 @@ fn archive_run_rejects_absolute_observability_claim_artifact() {
 #[test]
 fn archive_command_records_archive_receipt_write_failures() {
     let root = package_root("archive-observability-receipt-write-fail");
-    let receipt_dir = root.join("receipts/archive.json");
+    let receipt_dir = root.join("validation_artifacts/review/archive.json");
     std::fs::create_dir_all(&receipt_dir).expect("receipt dir blocks file write");
-    let observability = "observability/archive-build-write-fail.json";
+    let observability = "validation_artifacts/observability/archive-build-write-fail.json";
 
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -152,9 +158,9 @@ fn archive_command_records_archive_receipt_write_failures() {
             "archive",
             "build",
             "--zip",
-            "receipts/candidate.zip",
+            "validation_artifacts/review/candidate.zip",
             "--receipt",
-            "receipts/archive.json",
+            "validation_artifacts/review/archive.json",
             "--observability-receipt",
             observability,
             "--zip-root",
@@ -177,7 +183,13 @@ fn archive_command_records_archive_receipt_write_failures() {
 #[test]
 fn archive_command_propagates_observability_spool_write_errors() {
     let root = package_root("archive-observability-spool-write-fail");
-    std::fs::write(root.join("validation_artifacts"), b"not a directory").expect("block spool");
+    std::fs::create_dir_all(root.join("validation_artifacts/observability"))
+        .expect("observability dir");
+    std::fs::write(
+        root.join("validation_artifacts/observability/spool"),
+        b"not a directory",
+    )
+    .expect("block spool");
 
     let error = crate::command_run::run_with_exit_code(args(
         root.clone(),
@@ -185,11 +197,11 @@ fn archive_command_propagates_observability_spool_write_errors() {
             "archive",
             "build",
             "--zip",
-            "receipts/candidate.zip",
+            "validation_artifacts/review/candidate.zip",
             "--receipt",
-            "receipts/archive.json",
+            "validation_artifacts/review/archive.json",
             "--observability-receipt",
-            "observability/archive-build.json",
+            "validation_artifacts/observability/archive-build.json",
             "--zip-root",
             "harness-ultragoal",
         ],

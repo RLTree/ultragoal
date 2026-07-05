@@ -79,13 +79,14 @@ fn namespace_scheduler_rejects_unbounded_zero_jobs() {
 #[test]
 fn namespace_reports_receipt_write_failures() {
     let root = super::package_root("namespace-receipt-write-fail", &[]);
-    let blocker = root.join("target/namespace-blocker");
-    std::fs::create_dir_all(root.join("target")).expect("target dir");
+    let blocker = root.join("validation_artifacts/namespace/namespace-blocker");
+    std::fs::create_dir_all(root.join("validation_artifacts/namespace"))
+        .expect("namespace artifact dir");
     std::fs::write(&blocker, "not a directory").expect("blocker file");
     let err = crate::cli::namespace::run(
         &root,
         &crate::cli::namespace::NamespaceCommand {
-            receipt: PathBuf::from("target/namespace-blocker/receipt.json"),
+            receipt: PathBuf::from("validation_artifacts/namespace/namespace-blocker/receipt.json"),
             jobs: Some(1),
         },
     )

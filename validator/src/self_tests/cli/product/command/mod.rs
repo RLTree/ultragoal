@@ -12,7 +12,7 @@ fn product_command_rejects_unsafe_receipt_dirs() {
         PathBuf::from("validation_artifacts/../harness"),
     ] {
         let obs = PathBuf::from(format!(
-            "target/product-observability-fail-{}-{}.json",
+            "validation_artifacts/observability/product-observability-fail-{}-{}.json",
             std::process::id(),
             receipt_dir.to_string_lossy().len()
         ));
@@ -42,7 +42,7 @@ fn product_command_rejects_unsafe_receipt_dirs() {
 fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = PathBuf::from(format!(
-        "target/ultragoal-product-command-{}",
+        "validation_artifacts/product/ultragoal-product-command-{}",
         std::process::id()
     ));
     let obs = rel.join("product-observability.json");
@@ -89,7 +89,7 @@ fn product_command_runs_typed_receipt_minter_and_returns_pass_exit() {
 fn product_command_emits_fail_closed_observability_for_missing_receipt_dir() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let obs = PathBuf::from(format!(
-        "target/product-missing-receipt-dir-{}.json",
+        "validation_artifacts/observability/product-missing-receipt-dir-{}.json",
         std::process::id()
     ));
     let code = crate::cli::product::run(
@@ -117,11 +117,14 @@ fn product_command_emits_fail_closed_observability_for_missing_receipt_dir() {
 #[test]
 fn product_command_reports_minter_write_failures_with_observability() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let rel = PathBuf::from(format!("target/product-output-file-{}", std::process::id()));
+    let rel = PathBuf::from(format!(
+        "validation_artifacts/product/product-output-file-{}",
+        std::process::id()
+    ));
     let output_file = root.join(&rel);
     std::fs::write(&output_file, "not a directory").expect("output blocker");
     let obs = PathBuf::from(format!(
-        "target/product-minter-failure-{}.json",
+        "validation_artifacts/observability/product-minter-failure-{}.json",
         std::process::id()
     ));
     let code = crate::cli::product::run(

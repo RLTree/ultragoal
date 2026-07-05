@@ -160,9 +160,15 @@ fn mandatory_law_run_propagates_telemetry_and_receipt_write_errors() {
     let blocked =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("mandatory-law-blocked");
     super::create_law_package(&blocked);
-    fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
+    fs::create_dir_all(blocked.join("validation_artifacts/mandatory-law"))
+        .expect("blocked parent root");
+    fs::write(
+        blocked.join("validation_artifacts/mandatory-law/blocked-parent"),
+        "blocked",
+    )
+    .expect("blocked path");
     let blocked_command = MandatoryLawValidationCommand {
-        receipt: PathBuf::from("blocked-parent/receipt.json"),
+        receipt: PathBuf::from("validation_artifacts/mandatory-law/blocked-parent/receipt.json"),
         ..command
     };
     let err = run(&blocked, &blocked_command).expect_err("receipt write should fail");

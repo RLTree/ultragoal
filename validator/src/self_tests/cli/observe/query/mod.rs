@@ -20,7 +20,7 @@ fn observe_green_prove_and_query_contracts_are_typed() {
     write_default_receipt(&root, &smoke, "pass");
     write_observable_inventory(&root);
 
-    let prove_rel = Path::new("prove.json");
+    let prove_rel = Path::new("validation_artifacts/observability/test/prove.json");
     let prove_path = root.join(prove_rel);
     let prove = command_with_receipt(&["observe", "prove", "--run-id", "run-prove"], prove_rel);
     assert_eq!(observe::run(&root, &prove).expect("prove"), 0);
@@ -38,7 +38,7 @@ fn observe_green_prove_and_query_contracts_are_typed() {
         root: root.clone(),
         command: crate::Command::Observe(command_with_receipt(
             &["observe", "prove", "--run-id", "run-dispatch"],
-            Path::new("dispatch-prove.json"),
+            Path::new("validation_artifacts/observability/test/dispatch-prove.json"),
         )),
     };
     assert_eq!(crate::command_run::run_with_exit_code(dispatch).unwrap(), 0);

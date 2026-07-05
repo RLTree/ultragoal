@@ -4,7 +4,7 @@ use std::path::PathBuf;
 fn product_journey_command_runs_default_minter_with_journey_telemetry() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let rel = PathBuf::from(format!(
-        "target/ultragoal-product-journey-command-{}",
+        "validation_artifacts/product/ultragoal-product-journey-command-{}",
         std::process::id()
     ));
     let obs = rel.join("journey-observability.json");
@@ -41,7 +41,7 @@ fn product_journey_command_runs_default_minter_with_journey_telemetry() {
 fn product_journey_command_emits_fail_closed_observability_for_invalid_receipt_dir() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     let obs = PathBuf::from(format!(
-        "target/product-journey-invalid-receipt-dir-{}.json",
+        "validation_artifacts/observability/product-journey-invalid-receipt-dir-{}.json",
         std::process::id()
     ));
     let code = crate::cli::product::run(

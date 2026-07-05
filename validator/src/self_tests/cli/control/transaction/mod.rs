@@ -124,7 +124,7 @@ fn transaction_finalize_command_writes_fail_closed_receipt_for_missing_refs() {
     let code = crate::command_run::run_with_exit_code(crate::Args {
         root: root.clone(),
         command: crate::Command::TransactionalFinalization {
-            receipt: receipt.clone(),
+            receipt: std::path::PathBuf::from(RECEIPT),
         },
     })
     .expect("transaction command");

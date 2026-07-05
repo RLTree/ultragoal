@@ -77,7 +77,7 @@ fn package_inventory_claim_and_stdout_contracts_are_agent_legible() {
         "status": "fail",
         "operation": "package.inventory",
         "candidate_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a'),
-        "receipt_path": "validation_artifacts/test/package-inventory.json",
+        "receipt_path": "validation_artifacts/package/package-inventory.json",
         "run_id": "run-package",
         "correlation_id": "corr-package",
         "claim_impact": "package_inventory_failed_blocks_package_readiness_release_completion_update_goal",

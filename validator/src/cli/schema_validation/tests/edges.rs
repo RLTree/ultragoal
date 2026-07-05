@@ -180,9 +180,17 @@ fn schema_validation_run_propagates_telemetry_and_receipt_write_errors() {
     let blocked =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-blocked");
     super::create_schema_package(&blocked, json!({"name": "Tree"}));
-    fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
+    fs::create_dir_all(blocked.join("validation_artifacts/schema-validation"))
+        .expect("blocked parent root");
+    fs::write(
+        blocked.join("validation_artifacts/schema-validation/blocked-parent"),
+        "blocked",
+    )
+    .expect("blocked path");
     let blocked_command = SchemaValidationCommand {
-        receipt: PathBuf::from("blocked-parent/receipt.json"),
+        receipt: PathBuf::from(
+            "validation_artifacts/schema-validation/blocked-parent/receipt.json",
+        ),
         ..command
     };
     let err = run(&blocked, &blocked_command).expect_err("receipt write should fail");

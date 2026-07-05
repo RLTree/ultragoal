@@ -34,8 +34,8 @@ fn text<'a>(value: &'a Value, field: &str) -> &'a str {
 #[test]
 fn review_target_command_emits_pass_observability() {
     let root = package_root("review-target-observability-pass");
-    let receipt = "receipts/review-target.json";
-    let observability = "observability/review-target-build.json";
+    let receipt = "validation_artifacts/review/review-target.json";
+    let observability = "validation_artifacts/observability/review-target-build.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
@@ -71,14 +71,14 @@ fn review_target_command_emits_fail_closed_observability() {
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":["../escape.txt"]}),
     );
-    let observability = "observability/review-target-build-fail.json";
+    let observability = "validation_artifacts/observability/review-target-build-fail.json";
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[
             "review-target",
             "build",
             "--receipt",
-            "receipts/review-target.json",
+            "validation_artifacts/review/review-target.json",
             "--observability-receipt",
             observability,
         ],
@@ -120,7 +120,7 @@ fn review_target_run_rejects_absolute_observability_claim_artifact() {
     let root = package_root("review-target-observability-absolute-run");
     let error = crate::cli::review::target::run(
         root.clone(),
-        PathBuf::from("receipts/review-target.json"),
+        PathBuf::from("validation_artifacts/review/review-target.json"),
         root.join("absolute-review-target-observability.json"),
     )
     .expect_err("absolute observability receipt rejected by runner");

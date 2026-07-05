@@ -55,7 +55,7 @@ fn command_run_routes_rust_and_gc_without_bypass() {
     .expect("rust run");
     assert_eq!(rust_code, 0);
 
-    let out_rel = std::path::PathBuf::from("target/self-tests/gc-run-receipt.json");
+    let out_rel = std::path::PathBuf::from("validation_artifacts/gc/gc-run-receipt.json");
     let out = root.join(&out_rel);
     let gc_code = crate::command_run::run_with_exit_code(crate::Args {
         root,

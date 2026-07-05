@@ -189,9 +189,17 @@ fn foundational_trace_run_propagates_telemetry_and_receipt_write_errors() {
     let blocked =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("foundational-trace-blocked");
     super::write_minimal_root(&blocked, &["agent-queryable-observability"], true);
-    fs::write(blocked.join("blocked-parent"), "blocked").expect("blocked path");
+    fs::create_dir_all(blocked.join("validation_artifacts/foundational-trace"))
+        .expect("blocked parent root");
+    fs::write(
+        blocked.join("validation_artifacts/foundational-trace/blocked-parent"),
+        "blocked",
+    )
+    .expect("blocked path");
     let blocked_command = FoundationalTraceCommand {
-        receipt: PathBuf::from("blocked-parent/receipt.json"),
+        receipt: PathBuf::from(
+            "validation_artifacts/foundational-trace/blocked-parent/receipt.json",
+        ),
         ..command
     };
     let err = run(&blocked, &blocked_command).expect_err("receipt write should fail");

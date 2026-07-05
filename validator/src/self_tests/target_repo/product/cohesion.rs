@@ -207,8 +207,9 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
         "fail"
     );
 
-    let performance_receipt =
-        std::path::PathBuf::from("target/self-tests/performance-dispatch/performance.json");
+    let performance_receipt = std::path::PathBuf::from(
+        "validation_artifacts/performance/performance-dispatch/performance.json",
+    );
     let performance_code = crate::command_run::run_with_exit_code(args(
         root.clone(),
         &[

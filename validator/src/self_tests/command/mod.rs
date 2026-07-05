@@ -1,4 +1,5 @@
 mod archive;
+mod authority_dispatch;
 pub(crate) mod dispatch;
 pub(crate) mod product;
 pub(crate) mod review;
