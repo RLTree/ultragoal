@@ -10,15 +10,12 @@ pub(crate) fn loop_receipt(
     context: AuditContext,
     scheduled: crate::scheduler::Scheduled<Value>,
     current_state: Value,
+    first_blocker: Value,
     status: &str,
     started: Instant,
 ) -> Result<Value, String> {
-    let blocker = current_state
-        .get("first_blocker")
-        .cloned()
-        .unwrap_or(Value::Null);
     let why_failed =
-        (status != "pass").then(|| text(&blocker, "why_failed", "loop blocker").to_string());
+        (status != "pass").then(|| text(&first_blocker, "why_failed", "loop blocker").to_string());
     let runtime = runtime(command, &scheduled, started);
     let receipt_path = command.receipt.to_string_lossy();
     let telemetry = crate::cli::observe::telemetry::CommandTelemetry {
@@ -35,7 +32,7 @@ pub(crate) fn loop_receipt(
         failure_class: failure_class(status),
         why_failed: why_failed.as_deref().unwrap_or("none"),
         where_failed: where_failed(status),
-        next_repair: text(&blocker, "next_repair", "none"),
+        next_repair: text(&first_blocker, "next_repair", "none"),
         claim_impact: "source_local_loop_only_not_observability_product_closure",
         blocked_claims: blocked_claims(),
         supported_claims: vec!["observability_live_loop_source_local_increment".to_string()],
@@ -48,6 +45,13 @@ pub(crate) fn loop_receipt(
         context.candidate_digest.clone(),
     );
     let observability = observability_result?;
+    let narrow_rerun = text(&first_blocker, "narrow_rerun", "none").to_string();
+    let broad_rerun = text(
+        &first_blocker,
+        "broad_rerun",
+        "source audit once after narrow proof",
+    )
+    .to_string();
     Ok(json!({
         "schema": "harness-ultragoal.loop-run-receipt.v1",
         "status": status,
@@ -66,9 +70,9 @@ pub(crate) fn loop_receipt(
         "critical_path": "current_digest -> AuditContext -> observability_control_board -> current_state",
         "nodes": scheduled.values,
         "current_state": current_state,
-        "first_blocker": blocker,
-        "narrow_rerun": text(&blocker, "narrow_rerun", "none"),
-        "broad_rerun": text(&blocker, "broad_rerun", "source audit once after narrow proof"),
+        "first_blocker": first_blocker,
+        "narrow_rerun": narrow_rerun,
+        "broad_rerun": broad_rerun,
         "forbidden_actions": ["worktrees", "install_cache_refresh", "final_packet_finalization", "readiness_release_completion_claim", "update_goal"],
         "claim_ceiling": "source-local loop proof only",
         "observability": observability
@@ -137,4 +141,21 @@ fn blocked_claims() -> Vec<String> {
     .into_iter()
     .map(ToString::to_string)
     .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn status_projection_reports_pass_without_failure_fields() {
+        assert_eq!(super::failure_class("pass"), "none");
+        assert_eq!(super::where_failed("pass"), "none");
+        assert_eq!(
+            super::failure_class("fail"),
+            "observability_live_loop_first_blocker"
+        );
+        assert_eq!(
+            super::where_failed("fail"),
+            "loop.run.current_state.first_blocker"
+        );
+    }
 }

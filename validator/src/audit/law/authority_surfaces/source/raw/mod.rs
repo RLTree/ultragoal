@@ -78,7 +78,7 @@ fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
         "validator/src/cli/live_loop/context.rs" => {
             &["AuditContext", "changed_files_digest", "input_digest"]
         }
-        "validator/src/cli/live_loop/graph.rs" => {
+        "validator/src/cli/live_loop/graph/mod.rs" => {
             &["LoopValidationSurface", "input_digest", "claim_impact"]
         }
         "validator/src/cli/observe/explain/summary.rs" => {

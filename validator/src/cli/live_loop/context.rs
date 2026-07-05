@@ -8,6 +8,7 @@ pub(crate) struct AuditContext {
     pub(crate) cache_mode: String,
     pub(crate) changed_files_digest: String,
     pub(crate) input_digest: String,
+    package_digest_baseline_ms: Option<u64>,
     tier: String,
 }
 
@@ -22,12 +23,14 @@ impl AuditContext {
             )
             .as_bytes(),
         );
+        let package_digest_baseline_ms = package_digest_baseline_ms(root, &candidate_digest);
         Self {
             candidate_digest,
             tier: command.tier.clone(),
             cache_mode: command.cache_mode.clone(),
             changed_files_digest,
             input_digest,
+            package_digest_baseline_ms,
         }
     }
 
@@ -38,6 +41,7 @@ impl AuditContext {
             &self.input_digest,
             &self.tier,
             &self.cache_mode,
+            self.package_digest_baseline_ms,
         )
     }
 }
@@ -66,9 +70,24 @@ fn changed_files(root: &Path) -> Vec<String> {
         .unwrap_or_default()
 }
 
+fn package_digest_baseline_ms(root: &Path, candidate_digest: &str) -> Option<u64> {
+    let receipt = crate::json_boundary::read_json(
+        &root.join("validation_artifacts/observability/package-digest.json"),
+    )
+    .ok()?;
+    let receipt_candidate = receipt.get("candidate_digest")?.as_str()?;
+    if receipt_candidate != candidate_digest {
+        return None;
+    }
+    receipt
+        .pointer("/event/duration_ms")
+        .and_then(serde_json::Value::as_u64)
+}
+
 #[cfg(test)]
 mod tests {
-    use super::verify_cache_hit;
+    use super::{package_digest_baseline_ms, verify_cache_hit};
+    use serde_json::json;
 
     #[test]
     fn cache_hit_verification_fails_stale_or_wrong_digest() {
@@ -77,5 +96,36 @@ mod tests {
             verify_cache_hit("key-a", "key-b"),
             "fail_stale_or_wrong_digest_cache_hit"
         );
+    }
+
+    #[test]
+    fn package_digest_baseline_uses_same_candidate_telemetry_only() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "live-loop-package-baseline",
+        );
+        let receipt_path = root.join("validation_artifacts/observability/package-digest.json");
+        crate::json_boundary::write_json(
+            &receipt_path,
+            &json!({
+                "candidate_digest": "sha256:current",
+                "event": {"duration_ms": 123}
+            }),
+        )
+        .expect("package digest telemetry receipt");
+
+        assert_eq!(
+            package_digest_baseline_ms(&root, "sha256:current"),
+            Some(123)
+        );
+        assert_eq!(package_digest_baseline_ms(&root, "sha256:stale"), None);
+        crate::json_boundary::write_json(
+            &receipt_path,
+            &json!({
+                "candidate_digest": 7,
+                "event": {"duration_ms": 123}
+            }),
+        )
+        .expect("malformed package digest telemetry receipt");
+        assert_eq!(package_digest_baseline_ms(&root, "sha256:current"), None);
     }
 }

@@ -149,7 +149,28 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
 }
 
 #[test]
-fn live_loop_run_can_pass_when_current_state_has_no_blocker() {
+fn live_loop_run_rejects_absolute_claim_artifact_receipts() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-absolute-receipt");
+    std::fs::create_dir_all(&root).expect("root");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    let command = LiveLoopCommand {
+        tier: "hot".to_string(),
+        cache_mode: "verified-local".to_string(),
+        jobs: Some(2),
+        receipt: "/tmp/ultragoal-loop-receipt.json".into(),
+    };
+    let err = run(&root, &command).expect_err("absolute receipt rejected");
+    assert!(err.contains("root-relative claim artifact path"), "{err}");
+    assert!(err.contains("external debug only"), "{err}");
+}
+
+#[test]
+fn live_loop_run_blocks_until_high_frequency_nodes_have_timing_proof() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-pass");
     std::fs::create_dir_all(&root).expect("root");
     crate::json_boundary::write_json(
@@ -181,12 +202,32 @@ fn live_loop_run_can_pass_when_current_state_has_no_blocker() {
         jobs: Some(2),
         receipt: "validation_artifacts/observability/loop-pass.json".into(),
     };
-    let code = run(&root, &command).expect("loop pass run");
-    assert_eq!(code, 0);
+    let code = run(&root, &command).expect("loop blocked run");
+    assert_eq!(code, 1);
     let receipt = crate::json_boundary::read_json(&root.join(&command.receipt)).expect("receipt");
-    assert_eq!(receipt["status"], "pass");
-    assert_eq!(receipt["first_blocker"]["id"], "none");
-    assert_eq!(receipt["observability"]["event"]["failure_class"], "none");
-    assert_eq!(receipt["observability"]["event"]["where_failed"], "none");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(receipt["first_blocker"]["id"], "fmt_check");
+    assert_eq!(
+        receipt["first_blocker"]["failure_class"],
+        "live_loop_high_frequency_measurement_missing"
+    );
+    let fmt_node = receipt["nodes"]
+        .as_array()
+        .expect("nodes")
+        .iter()
+        .find(|node| node["node_id"] == "fmt_check")
+        .expect("fmt node");
+    assert_eq!(
+        fmt_node["baseline_measurement_state"],
+        "missing_current_full_command_baseline"
+    );
+    assert_eq!(
+        fmt_node["speedup_measurement_state"],
+        "missing_verified_local_20x_proof"
+    );
+    assert_eq!(
+        receipt["observability"]["event"]["failure_class"],
+        "observability_live_loop_first_blocker"
+    );
     std::fs::remove_dir_all(root).expect("cleanup live loop pass");
 }

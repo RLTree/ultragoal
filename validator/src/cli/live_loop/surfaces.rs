@@ -31,8 +31,30 @@ macro_rules! live_loop_surface {
     };
 }
 
+macro_rules! loop_context_surface {
+    (
+        $id:literal,
+        $surface:literal,
+        $command:literal,
+        $canonical_full_command:literal,
+        $narrow_rerun:literal,
+        $telemetry_reconciliation_state:literal
+        $(,)?
+    ) => {
+        LoopValidationSurface {
+            id: $id,
+            surface: $surface,
+            command: $command,
+            canonical_full_command: $canonical_full_command,
+            narrow_rerun: $narrow_rerun,
+            telemetry_reconciliation_state: $telemetry_reconciliation_state,
+            high_frequency: false,
+        }
+    };
+}
+
 pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
-    live_loop_surface!(
+    loop_context_surface!(
         "package_digest",
         "package_boundary",
         "ultragoal package digest",
@@ -40,7 +62,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . package digest",
         "same_candidate_observed",
     ),
-    live_loop_surface!(
+    loop_context_surface!(
         "changed_files",
         "candidate_delta",
         "git status --short --untracked-files=all",
@@ -48,7 +70,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "git status --short --untracked-files=all",
         "same_candidate_observed",
     ),
-    live_loop_surface!(
+    loop_context_surface!(
         "audit_context",
         "audit_context",
         "AuditContext::new",
@@ -56,7 +78,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto",
         "same_candidate_observed",
     ),
-    live_loop_surface!(
+    loop_context_surface!(
         "observability_control_board",
         "command_observability_inventory",
         "ultragoal observe prove",

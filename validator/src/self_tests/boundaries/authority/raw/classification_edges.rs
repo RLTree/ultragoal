@@ -66,7 +66,7 @@ fn raw_authority_scanner_allows_named_product_projection_boundaries() {
             "use serde_json::{json, Value};\nstruct AuditContext;\npub(crate) fn project(value: &Value) -> Value { let _ = changed_files_digest(); let _ = input_digest(); json!({\"value\":value}) }\n",
         ),
         (
-            "validator/src/cli/live_loop/graph.rs",
+            "validator/src/cli/live_loop/graph/mod.rs",
             "use serde_json::{json, Value};\nstruct LoopValidationSurface;\npub(crate) fn project(value: &Value) -> Value { let _ = input_digest(); let _ = claim_impact(); json!({\"value\":value}) }\n",
         ),
         (

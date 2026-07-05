@@ -50,18 +50,15 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
         "current state snapshot",
     );
     crate::json_boundary::write_json(&current_state_path, &current_state)?;
-    let first_blocker = current_state["first_blocker"].clone();
-    let status = if first_blocker.get("id").and_then(Value::as_str) == Some("none") {
-        "pass"
-    } else {
-        "fail"
-    };
+    let first_blocker = first_loop_blocker(&scheduled.values, &current_state);
+    let status = status_for_blocker(&first_blocker);
     let receipt_result = loop_receipt(
         root,
         command,
         context,
         scheduled,
         current_state,
+        first_blocker.clone(),
         status,
         started,
     );
@@ -97,6 +94,18 @@ fn print_summary(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) {
     );
 }
 
+fn status_for_blocker(blocker: &Value) -> &'static str {
+    if blocker.get("id").and_then(Value::as_str) == Some("none") {
+        "pass"
+    } else {
+        "fail"
+    }
+}
+
+fn first_loop_blocker(nodes: &[Value], current_state: &Value) -> Value {
+    graph::first_blocker(nodes).unwrap_or_else(|| current_state["first_blocker"].clone())
+}
+
 fn opt_string(args: &[String], key: &str) -> Option<String> {
     args.windows(2)
         .find(|window| window[0] == key)
@@ -123,4 +132,31 @@ fn text<'a>(value: &'a Value, key: &str, default: &'a str) -> &'a str {
 
 fn number(value: &Value, key: &str) -> u64 {
     value.get(key).and_then(Value::as_u64).unwrap_or(0)
+}
+
+#[cfg(test)]
+mod projection_tests {
+    use serde_json::json;
+
+    #[test]
+    fn loop_status_projects_current_blocker_state() {
+        assert_eq!(super::status_for_blocker(&json!({"id": "none"})), "pass");
+        assert_eq!(
+            super::status_for_blocker(&json!({"id": "fmt_check"})),
+            "fail"
+        );
+    }
+
+    #[test]
+    fn loop_blocker_uses_current_state_when_graph_has_no_blocker() {
+        let current_state = json!({
+            "first_blocker": {
+                "id": "coverage_prove",
+                "why_failed": "coverage receipt is stale"
+            }
+        });
+        let blocker = super::first_loop_blocker(&[], &current_state);
+        assert_eq!(blocker["id"], "coverage_prove");
+        assert_eq!(blocker["why_failed"], "coverage receipt is stale");
+    }
 }
