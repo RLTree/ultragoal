@@ -1,5 +1,6 @@
 use super::super::nodes::timing::NodeTiming;
 use super::{first_blocker, required_high_frequency_validation_ids};
+use crate::scheduler::TaskClass;
 use serde_json::json;
 use std::collections::BTreeMap;
 
@@ -27,6 +28,43 @@ fn high_frequency_registry_covers_required_source_local_validation() {
     ] {
         assert!(ids.contains(&required), "missing {required}: {ids:?}");
     }
+}
+
+#[test]
+fn high_frequency_registry_classifies_authority_artifact_writers_as_serial() {
+    for id in [
+        "build_check",
+        "focused_rust_tests",
+        "line_caps_check",
+        "namespace_check",
+        "schema_validation",
+        "package_inventory",
+        "mandatory_law_validation",
+        "source_obligations_check",
+        "foundational_trace_check",
+        "coverage_prove",
+        "coverage_full_script",
+        "coverage_fast_script",
+        "source_audit",
+        "red_fixture_report",
+        "scripts_check",
+        "touched_fixture_reports",
+    ] {
+        let surface = super::super::surfaces::surface_by_id(id).expect(id);
+        assert_eq!(
+            surface.execution_task_class,
+            TaskClass::SharedAuthorityWriteSerial,
+            "{id} writes authority artifacts and must not be executed by a parallel worker"
+        );
+        assert_ne!(surface.execution_serial_reason, "none", "{id}");
+    }
+}
+
+#[test]
+fn read_only_high_frequency_registry_entries_remain_parallel() {
+    let fmt = super::super::surfaces::surface_by_id("fmt_check").expect("fmt");
+    assert_eq!(fmt.execution_task_class, TaskClass::PureReadParallel);
+    assert_eq!(fmt.execution_serial_reason, "none");
 }
 
 #[test]
@@ -68,6 +106,17 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
     let first_node = tasks.into_iter().next().expect("package node")();
     assert_eq!(first_node["node_id"], "package_digest");
     assert_eq!(first_node["status"], "pass");
+    assert_eq!(first_node["graph_task_class"], "pure_read_parallel");
+    assert_eq!(
+        first_node["execution_task_class"],
+        "shared_authority_write_serial"
+    );
+    assert!(
+        first_node["execution_serial_reason"]
+            .as_str()
+            .expect("serial reason")
+            .contains("validation_artifacts")
+    );
     assert_eq!(
         first_node["baseline_measurement_state"],
         "not_required_for_context_or_control_node"
@@ -159,6 +208,9 @@ fn live_loop_tasks_project_current_node_timing_records() {
         fmt["timing_source"],
         super::super::nodes::timing::NODE_TIMING_REL
     );
+    assert_eq!(fmt["graph_task_class"], "pure_read_parallel");
+    assert_eq!(fmt["execution_task_class"], "pure_read_parallel");
+    assert_eq!(fmt["execution_serial_reason"], "none");
     assert_eq!(fmt["baseline_duration_ms"], 1_000);
     assert_eq!(fmt["verified_local_duration_ms"], 5);
 }

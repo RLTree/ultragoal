@@ -1,7 +1,6 @@
 use super::nodes::status::measurement_state;
 use super::nodes::timing::NodeTiming;
 use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
-use crate::scheduler::TaskClass;
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 use std::time::Instant;
@@ -105,7 +104,9 @@ fn surface_record(
         "telemetry_reconciliation_state": surface.telemetry_reconciliation_state,
         "input_digest": input_digest,
         "cache": cache,
-        "task_class": TaskClass::PureReadParallel.id(),
+        "graph_task_class": crate::scheduler::TaskClass::PureReadParallel.id(),
+        "execution_task_class": surface.execution_task_class.id(),
+        "execution_serial_reason": surface.execution_serial_reason,
         "high_frequency": surface.high_frequency,
         "duration_ms": duration_ms,
         "graph_evaluation_duration_ms": graph_duration_ms,
