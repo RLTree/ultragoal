@@ -507,7 +507,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:86ed04b3e6f472d24716fff5f3d08ead323989de0b886c2794fae0c9400d98ab"
+          "digest": "sha256:0416cb10fe0eeae62ad511576cdde3067d187fba8a054c0b84782ea17db367b7"
         }
       ],
       "material_blockers": [],
@@ -560,7 +560,7 @@
         },
         {
           "path": "validator/src/schema_catalog/mod.rs",
-          "digest": "sha256:86ed04b3e6f472d24716fff5f3d08ead323989de0b886c2794fae0c9400d98ab"
+          "digest": "sha256:0416cb10fe0eeae62ad511576cdde3067d187fba8a054c0b84782ea17db367b7"
         }
       ],
       "claim_ceiling_assessment": {

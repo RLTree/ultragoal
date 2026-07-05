@@ -39,7 +39,7 @@ pub fn load(root: &Path) -> SchemaStore {
                     .into_iter()
                     .map(|err| format!("{name}: {err}")),
             );
-            errors.extend(schema::supported::keywords::errors(name, schema));
+            errors.extend(schema::vocabulary::keywords::errors(name, schema));
         }
     }
     store(schemas, errors)

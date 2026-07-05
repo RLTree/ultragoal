@@ -4334,8 +4334,8 @@
       "validator/src/schema_catalog/schema/patterns.rs",
       "validator/src/schema_catalog/schema/scalar/keywords.rs",
       "validator/src/schema_catalog/schema/scalar/mod.rs",
-      "validator/src/schema_catalog/schema/supported/keywords.rs",
-      "validator/src/schema_catalog/schema/supported/mod.rs",
+      "validator/src/schema_catalog/schema/vocabulary/keywords.rs",
+      "validator/src/schema_catalog/schema/vocabulary/mod.rs",
       "validator/src/self_tests/audit/branch_failures.rs",
       "validator/src/self_tests/audit/edge_cases.rs",
       "validator/src/self_tests/audit/final_packet/mod.rs",
@@ -21179,11 +21179,11 @@
         },
         {
           "digest": "sha256:76ca46bc4f05701330e49e158044d0b869eed0cd7a2803a3d3e58435ea1a5989",
-          "path": "validator/src/schema_catalog/schema/supported/keywords.rs"
+          "path": "validator/src/schema_catalog/schema/vocabulary/keywords.rs"
         },
         {
           "digest": "sha256:c4f3d8e1910b35c102972e7777e2cfed0fddf994190590ee3184e6ca98743d2f",
-          "path": "validator/src/schema_catalog/schema/supported/mod.rs"
+          "path": "validator/src/schema_catalog/schema/vocabulary/mod.rs"
         },
         {
           "digest": "sha256:5360d6a305703d77a8daeda5aad1ff3a6caa0e217fc3377e98611ff1271942a4",
