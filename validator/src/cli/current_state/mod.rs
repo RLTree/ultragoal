@@ -171,7 +171,7 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
 }
 
 fn observability_repair(id: &str) -> (String, String) {
-    let narrow_rerun = format!("ultragoal observe command-roundtrip --command \"{id}\"");
+    let narrow_rerun = format!("ultragoal observe fit --command \"{id}\"");
     if crate::audit::observability::specs::command(id).is_some() {
         (
             format!(

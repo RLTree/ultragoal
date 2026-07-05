@@ -422,7 +422,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:774391f95c9df34cba129cbab858db48fa3af175ec723fc3a848560f4db3dc9e",
+    "changed_files_digest": "sha256:a897c381d601ad85a6b479816f0ea0f7cb5550bf6ed21b34204afb54a03d5d91",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -438,7 +438,7 @@
     "full_required_for_completion": true,
     "missing_claim_context_fails": true
   },
-  "generated_at": "2026-06-28T08:24:10Z",
+  "generated_at": "2026-07-05T07:54:02Z",
   "generated_roots": [],
   "manifest_version": 1,
   "owner": "repo-owner",
@@ -470,7 +470,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:d4f943059b541aaf4e2ba542fd2040d7046a23116f4eca2099d07ceb4e20d6d3",
+  "repo_root_digest": "sha256:cc47a0645f26809db8e2f31dadf58d4f59cd400a6cd2bb62007cc1c4408fe44e",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,

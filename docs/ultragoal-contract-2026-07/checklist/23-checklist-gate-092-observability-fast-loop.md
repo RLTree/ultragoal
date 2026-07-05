@@ -218,7 +218,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Working means any compatibility vocabulary such as `fitting_status`, `fitting_control_board`, or public `observe fit` remains contained at schema/parser/status boundaries, while source paths, modules, functions, helpers, tests, ids, and artifact path segments use product-behavior names such as command roundtrip, telemetry reconciliation, command inventory, receipt dereference, span parentage, cache invalidation, current state, or explain planning.
   - Validation means namespace checks and red/green/tamper fixtures fail goal-work implementation names such as `observe/fitting`, `production_proof`, `fit_command`, `fit_path`, and `validation_artifacts/observability/fitting/...`, while allowing product vocabulary such as `fit-repo` and behavior names such as `command_roundtrip`.
   - Production proof means the real `observe fit` compatibility command, if retained, routes into product-semantic implementation modules and emits product-legible stdout/receipt paths without goal-work artifact namespaces.
-  - Status: not started
+  - Status: validated current
 
 - [ ] Workflow-engine use is explicitly bounded for Gate 92 acceleration work.
   - Working means the parent owns execution, source changes, command runs, telemetry proof, and claim ceilings. The dynamic workflow engine may design or suggest a workflow only when the parent inspects, supplements, and verifies it through canonical `ultragoal` surfaces. Workflow output, worker output, or generated plans cannot satisfy Gate 92, Product Usage, Phase 4, readiness, release, final packet, worktree eligibility, or update_goal claims.

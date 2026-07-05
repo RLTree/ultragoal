@@ -4,6 +4,7 @@ use crate::cli::observe::types::ObserveOperation;
 use serde_json::json;
 use std::fs;
 
+mod command_roundtrip;
 mod exporter;
 mod package;
 mod package_digest;
@@ -64,6 +65,7 @@ fn observe_parser_covers_required_command_inventory() {
             &["observe", "command-roundtrip"][..],
             ObserveOperation::CommandRoundtrip,
         ),
+        (&["observe", "fit"][..], ObserveOperation::CommandRoundtrip),
         (
             &["observe", "explain-failure"][..],
             ObserveOperation::ExplainFailure,
@@ -87,23 +89,6 @@ fn observe_parser_covers_required_command_inventory() {
             .expect("observe command");
         assert_eq!(parsed.operation, operation);
     }
-}
-
-#[test]
-fn observe_run_routes_command_roundtrip_without_substituting_unknown_specs() {
-    let root = minimal_root("observe-roundtrip-run-route");
-    let command = observe::parse(&args(&[
-        "observe",
-        "command-roundtrip",
-        "--command",
-        "unknown-command",
-    ]))
-    .expect("parse")
-    .expect("observe command roundtrip");
-    let err =
-        observe::run(&root, &command).expect_err("unknown command roundtrip spec fails closed");
-    assert!(err.contains("unknown observability command spec"), "{err}");
-    fs::remove_dir_all(root).expect("cleanup observe command roundtrip route");
 }
 
 #[test]
