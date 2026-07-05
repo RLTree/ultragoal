@@ -75,3 +75,53 @@ fn raw_authority_scanner_allows_named_product_projection_boundaries() {
         assert!(failures.is_empty(), "{rel}: {failures:?}");
     }
 }
+
+#[test]
+fn raw_authority_scanner_allows_check_map_projection_shapes() {
+    for (label, text) in [
+        (
+            "input_checks_object",
+            "use serde_json::Value;\npub struct TargetReceiptInput { pub checks: serde_json::Map<String, Value> }\npub fn target_receipt(input: TargetReceiptInput) -> Value { Value::Object(input.checks) }\n",
+        ),
+        (
+            "json_report",
+            "use serde_json::{Value, json};\npub fn report() -> Value { let mut checks = serde_json::Map::new(); json!({\"checks\": checks}) }\n",
+        ),
+        (
+            "target_receipt_projection",
+            "use serde_json::Value;\npub fn report(checks: &mut serde_json::Map<String, Value>) -> Value { target_receipt(checks) }\nfn target_receipt(_: &mut serde_json::Map<String, Value>) -> Value { Value::Null }\n",
+        ),
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/target_repo/projection.rs",
+            text,
+        );
+        assert!(
+            failures.is_empty(),
+            "{label} should classify as check-map projection: {failures:?}"
+        );
+    }
+}
+
+#[test]
+fn raw_authority_scanner_allows_typed_record_projection_value_aliases() {
+    for (label, text) in [
+        (
+            "value_alias",
+            "use serde_json as json;\ntype Value = json::Value;\npub struct ClaimState { pub status: String }\npub fn project(value: &Value) -> ClaimState { ClaimState { status: value.to_string() } }\n",
+        ),
+        (
+            "value_collection_alias",
+            "use serde_json as json;\ntype Value = json::Value;\npub fn project(values: &[Value]) -> Vec<String> { values.iter().map(|value| value.to_string()).collect() }\n",
+        ),
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/audit/domain/claim_projection.rs",
+            text,
+        );
+        assert!(
+            failures.is_empty(),
+            "{label} should classify as typed record projection: {failures:?}"
+        );
+    }
+}

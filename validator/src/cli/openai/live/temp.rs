@@ -1,7 +1,10 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+const OUTPUT_AUTHORITY_CLASS: &str = "external_debug_no_claim_output";
+
 pub(super) fn write_temp(path: &Path, bytes: &[u8], failures: &mut Vec<String>) {
+    let _ = OUTPUT_AUTHORITY_CLASS;
     if std::fs::write(path, bytes).is_err() {
         failures.push("openai_live_temp_write_failed".to_string());
     }

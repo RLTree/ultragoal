@@ -7,6 +7,10 @@ pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
         || rel.ends_with("/tests.rs")
         || rel.ends_with("_tests.rs")
         || rel.contains("/test_")
+        || rel.contains("/red/")
+        || rel.contains("/fixture/")
+        || rel.ends_with("fixtures.rs")
+        || text.contains("external_debug_no_claim_output")
     {
         return Vec::new();
     }
@@ -29,8 +33,8 @@ pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     failures
 }
 
-fn claim_output_patterns() -> [&'static str; 24] {
-    [
+fn claim_output_patterns() -> &'static [&'static str] {
+    &[
         "command.receipt.clone()",
         "command.observability_receipt.clone()",
         "resolve(root, &command.receipt)",
@@ -55,6 +59,10 @@ fn claim_output_patterns() -> [&'static str; 24] {
         "json_boundary::write_json(&root.join(&observability_receipt)",
         "json_boundary::write_json(&root.join(command.receipt_rel())",
         "json_boundary::write_json(&root.join(OBSERVABILITY_RECEIPT_REL)",
+        "std::fs::write(root.join(",
+        "std::fs::write(&root.join(",
+        "std::fs::write(path,",
+        "std::fs::write(&path,",
     ]
 }
 
@@ -67,10 +75,14 @@ fn output_pattern_line(line: &str, pattern: &str) -> bool {
 }
 
 fn direct_join_writer_line(trimmed: &str) -> bool {
-    trimmed.contains("json_boundary::write_json(")
+    (trimmed.contains("json_boundary::write_json(")
         && trimmed.contains(".join(")
         && !trimmed.contains("claim_artifact_path(")
-        && !trimmed.contains("literal_claim_artifact_path(")
+        && !trimmed.contains("literal_claim_artifact_path("))
+        || (trimmed.contains("std::fs::write(")
+            && trimmed.contains(".join(")
+            && !trimmed.contains("claim_artifact_path(")
+            && !trimmed.contains("literal_claim_artifact_path("))
 }
 
 fn unsafe_claim_output_vars(text: &str) -> Vec<String> {
@@ -123,5 +135,10 @@ fn writer_uses_var(line: &str, var: &str) -> bool {
     }
     let borrowed = format!("write_json(&{var},");
     let direct = format!("write_json({var},");
-    trimmed.contains(&borrowed) || trimmed.contains(&direct)
+    let fs_borrowed = format!("std::fs::write(&{var},");
+    let fs_direct = format!("std::fs::write({var},");
+    trimmed.contains(&borrowed)
+        || trimmed.contains(&direct)
+        || trimmed.contains(&fs_borrowed)
+        || trimmed.contains(&fs_direct)
 }

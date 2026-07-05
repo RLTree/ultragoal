@@ -2,7 +2,7 @@
 fn raw_authority_scanner_rejects_unclassified_path_authority() {
     let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
         "validator/src/domain/claim_core.rs",
-        "use std::path::PathBuf;\npub(crate) fn decide(path: PathBuf) -> bool { path.is_absolute() }\n",
+        "use std::path::PathBuf;\npub(crate) fn decide(raw_path: PathBuf) -> bool { raw_path.is_absolute() }\n",
     );
     assert!(
         failures

@@ -4570,6 +4570,7 @@
     "validator/src/self_tests/boundaries/authority/inventory/rows.rs",
     "validator/src/self_tests/boundaries/authority/inventory/schema_rows.rs",
     "validator/src/self_tests/boundaries/authority/output/authority_edges.rs",
+    "validator/src/self_tests/boundaries/authority/output/claim_writes.rs",
     "validator/src/self_tests/boundaries/authority/output/mod.rs",
     "validator/src/self_tests/boundaries/authority/output/projection_edges.rs",
     "validator/src/self_tests/boundaries/authority/output/receipt_sinks.rs",

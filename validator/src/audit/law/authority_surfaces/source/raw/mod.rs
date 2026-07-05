@@ -2,22 +2,25 @@ mod classifiers;
 mod markers;
 mod projection;
 
-use classifiers::{typed_cli_command_boundary_text, typed_law_check_boundary_text};
-use markers::raw_authority_marker;
+use classifiers::{
+    typed_cli_command_boundary_text, typed_law_check_boundary_text, typed_path_boundary_text,
+};
+use markers::{RawAuthorityMarker, raw_authority_markers};
 
 pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
-    let Some(marker) = raw_authority_marker(text) else {
-        return Vec::new();
-    };
-    if raw_authority_class(rel, text).is_some() {
-        return Vec::new();
-    }
-    vec![format!(
-        "raw_downstream_authority_unclassified:path={rel};raw_authority={marker};classification_required=parser_boundary|projection|fixture_catalog_materialization|catalog_materialization;repair=route_raw_input_through_typed_record_or_typed_failure_before_law_execution"
-    )]
+    raw_authority_markers(text)
+        .into_iter()
+        .filter(|marker| raw_authority_class(rel, text, marker).is_none())
+        .map(|marker| {
+            format!(
+                "raw_downstream_authority_unclassified:path={rel};raw_authority={};classification_required=parser_boundary|projection|fixture_catalog_materialization|catalog_materialization;repair=route_raw_input_through_typed_record_or_typed_failure_before_law_execution",
+                marker.as_str()
+            )
+        })
+        .collect()
 }
 
-fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
+fn raw_authority_class(rel: &str, text: &str, marker: &RawAuthorityMarker) -> Option<&'static str> {
     if rel.contains("/self_tests/") || rel.contains("/tests/") || rel.ends_with("/tests.rs") {
         return Some("fixture_catalog_materialization");
     }
@@ -27,10 +30,10 @@ fn raw_authority_class(rel: &str, text: &str) -> Option<&'static str> {
     if authority_surface_inventory_path(rel) {
         return Some("catalog_materialization");
     }
-    if projection::boundary_text(rel, text) {
+    if projection::boundary_text(rel, text, marker) {
         return Some("projection");
     }
-    if parser_boundary_text(rel, text) || typed_failure_boundary_text(text) {
+    if parser_boundary_text(rel, text, marker) {
         return Some("parser_boundary");
     }
     None
@@ -50,19 +53,33 @@ fn authority_surface_inventory_path(rel: &str) -> bool {
     rel.contains("/authority_surfaces/surface_inventory/discovered/")
 }
 
-fn parser_boundary_text(rel: &str, text: &str) -> bool {
+fn parser_boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> bool {
     parser_boundary_path(rel)
-        || reads_structured_input(text)
-        || typed_cli_command_boundary_text(rel, text)
-        || typed_law_check_boundary_text(text)
-        || schema_catalog_boundary(text)
-        || typed_json_field_parser(text)
-        || validator_artifact_parser(text)
+        || match marker {
+            RawAuthorityMarker::RawPath => {
+                typed_cli_command_boundary_text(rel, text)
+                    || typed_path_boundary_text(rel, text)
+                    || reads_structured_input(text)
+                    || (contains_json_value_binding(text) && typed_law_check_boundary_text(text))
+            }
+            RawAuthorityMarker::RawMap => {
+                reads_structured_input(text) || typed_law_check_boundary_text(text)
+            }
+            RawAuthorityMarker::RawJson
+            | RawAuthorityMarker::RawString
+            | RawAuthorityMarker::RawObservation => {
+                reads_structured_input(text)
+                    || typed_law_check_boundary_text(text)
+                    || schema_catalog_boundary(text)
+                    || typed_json_field_parser(text)
+                    || validator_artifact_parser(text)
+            }
+        }
 }
 
 fn parser_boundary_path(rel: &str) -> bool {
     rel.ends_with("json_boundary.rs")
-        || rel.contains("/authority_surfaces/source/raw")
+        || rel.contains("/authority_surfaces/source/")
         || rel.starts_with("validator/src/schema_catalog/")
         || rel == "validator/src/schema_catalog/mod.rs"
         || rel.contains("/schema/")
@@ -104,7 +121,8 @@ fn typed_failure_boundary_text(text: &str) -> bool {
         || text.contains("failures: &mut Vec<")
         || text.contains("type Failures = BTreeMap<String, Vec<String>>")
         || text.contains("Vec<Failure>")
-        || text.contains("Vec<ResourcePurposeFailure>");
+        || text.contains("Vec<ResourcePurposeFailure>")
+        || text.contains("Vec<SkillLinkFailure>");
     returns_typed_failure
         && (text.contains("format!(\"")
             || text.contains("Failure::new")
