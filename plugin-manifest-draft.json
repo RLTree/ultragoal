@@ -4393,6 +4393,7 @@
     "validator/src/cli/observe/command_roundtrip/mod.rs",
     "validator/src/cli/observe/command_roundtrip/checks.rs",
     "validator/src/cli/observe/command_roundtrip/process.rs",
+    "validator/src/cli/observe/command_roundtrip/receipt.rs",
     "validator/src/cli/observe/command_roundtrip/tests/mod.rs",
     "validator/src/cli/observe/command_roundtrip/tests/failures.rs",
     "validator/src/cli/observe/command_roundtrip/tests/proof.rs",

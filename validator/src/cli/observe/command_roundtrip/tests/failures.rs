@@ -22,6 +22,7 @@ fn command_roundtrip_stays_partial_without_live_query_roundtrip() {
     let spec = specs::command("package digest").expect("package spec");
     let row = run_command_roundtrip_with(&root, spec, 1, successful_production)
         .expect("local-spool-only roundtrip row");
+    let row = row.as_json();
     assert_eq!(row["roundtrip_status"], "partial");
     assert_eq!(row["stdout_receipt_same_candidate"], true);
     assert!(
@@ -121,11 +122,14 @@ fn command_roundtrip_receipt_fails_closed_when_base_observability_cannot_emit() 
         "observe-roundtrip-receipt-error",
     );
     std::fs::create_dir_all(&root).expect("root");
-    let err = receipt(
+    let err = receipt::build(
         &root,
         &command(),
         "sha256:fit".to_string(),
-        vec![json!({"roundtrip_status": "observable"})],
+        vec![super::super::CommandRoundtripRecord::new(
+            true,
+            json!({"roundtrip_status": "observable"}),
+        )],
         Instant::now(),
     )
     .expect_err("base receipt needs package boundary");

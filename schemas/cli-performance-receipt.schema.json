@@ -416,11 +416,14 @@
           }
         },
         "first_blocker": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "minLength": 1
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/speedProofBlocker"
+            }
+          ]
         },
         "proof_boundary": {
           "type": "string",
@@ -595,7 +598,11 @@
         "why_failed",
         "next_repair",
         "surface",
-        "claim_impact"
+        "claim_impact",
+        "claim_name",
+        "product_behavior_observed",
+        "proof_surface",
+        "independent_reconciliation_surface"
       ],
       "properties": {
         "node_id": {
@@ -669,10 +676,14 @@
           "const": "pass"
         },
         "timing_status": {
-          "const": "pass"
+          "enum": [
+            "pass",
+            "fail"
+          ]
         },
         "failure_class": {
-          "const": "none"
+          "type": "string",
+          "minLength": 1
         },
         "where_failed": {
           "type": "string",
@@ -691,6 +702,22 @@
           "minLength": 1
         },
         "claim_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product_behavior_observed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proof_surface": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_reconciliation_surface": {
           "type": "string",
           "minLength": 1
         },
@@ -805,6 +832,46 @@
           }
         }
       ]
+    },
+    "speedProofBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "node_id",
+        "failure_class",
+        "where_failed",
+        "why_failed",
+        "next_repair"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "blocked",
+            "fail"
+          ]
+        },
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "failure_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "where_failed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "why_failed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next_repair": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     },
     "artifactPathList": {
       "type": "array",

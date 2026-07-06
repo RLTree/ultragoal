@@ -16,6 +16,11 @@ fn node_supports_positive_speed_claim(node: &Value) -> bool {
         && timing_projection::text(node, "where_failed").is_some_and(not_empty)
         && timing_projection::text(node, "why_failed").is_some_and(not_empty)
         && timing_projection::text(node, "next_repair").is_some_and(not_empty)
+        && timing_projection::text(node, "claim_name").is_some_and(not_empty)
+        && timing_projection::text(node, "product_behavior_observed").is_some_and(not_empty)
+        && timing_projection::text(node, "proof_surface").is_some_and(not_empty)
+        && timing_projection::text(node, "independent_reconciliation_surface")
+            .is_some_and(not_empty)
         && node.get("cache_hit").and_then(Value::as_bool).is_some()
         && node
             .get("work_unit_count")
@@ -73,7 +78,10 @@ pub(super) fn first_blocker(nodes: &[Value]) -> Value {
     if nodes.is_empty() {
         return json!({
             "status": "blocked",
-            "reason": "missing_current_node_speed_evidence",
+            "node_id": "missing_speed_node",
+            "failure_class": "missing_current_node_speed_evidence",
+            "where_failed": "performance.speed_proof.nodes",
+            "why_failed": "speed_proof.nodes is empty; no executed command or verified-cache replay can support the speed claim",
             "next_repair": "run `ultragoal loop measure --node <id> --tier hot --cache-mode verified-local` for the blocker node"
         });
     };

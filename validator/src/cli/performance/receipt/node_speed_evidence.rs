@@ -41,11 +41,27 @@ fn speed_node_failures(node: &Value, expected_candidate: Option<&str>) -> Vec<St
         "result_digest",
         "output_digest",
         "telemetry_reconciliation_status",
+        "claim_name",
+        "product_behavior_observed",
+        "proof_surface",
+        "independent_reconciliation_surface",
         "claim_impact",
     ] {
         if node.get(field).is_none() {
             out.push(format!(
                 "cli_performance_speed_node_missing:{node_id}:/{field}"
+            ));
+        }
+    }
+    for field in [
+        "claim_name",
+        "product_behavior_observed",
+        "proof_surface",
+        "independent_reconciliation_surface",
+    ] {
+        if str_field(node, field).is_some_and(weak_claim_text) {
+            out.push(format!(
+                "cli_performance_speed_node_weak_claim_binding:{node_id}:/{field}"
             ));
         }
     }
@@ -216,4 +232,16 @@ fn nonempty_string_array(value: &Value, key: &str) -> bool {
         .get(key)
         .and_then(Value::as_array)
         .is_some_and(|items| !items.is_empty() && items.iter().all(|item| item.as_str().is_some()))
+}
+
+fn weak_claim_text(value: &str) -> bool {
+    let normalized = value.trim().to_ascii_lowercase();
+    normalized.is_empty()
+        || matches!(normalized.as_str(), "none" | "unknown" | "n/a")
+        || normalized.contains("proof-shaped")
+        || normalized.contains("receipt exists")
+        || normalized.contains("inspect receipt")
+        || normalized.contains("validation passed")
+        || normalized.contains("workflow output")
+        || normalized.contains("cache key only")
 }

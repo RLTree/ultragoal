@@ -21,6 +21,19 @@ fn projects_current_verified_cache_timing_into_speed_proof() {
     assert_eq!(node["node_id"], "fmt_check");
     assert_eq!(node["proof_kind"], "verified_cache_hit");
     assert_eq!(node["work_unit_count"], 0);
+    assert_eq!(node["claim_name"], "source-local speed node timing claim");
+    assert_eq!(
+        node["product_behavior_observed"],
+        "cargo fmt --all --check verified cache replay"
+    );
+    assert_eq!(
+        node["proof_surface"],
+        "speed node receipt with cache key, current input digest, prior result digest, replayed output digest, and invalidation proof"
+    );
+    assert_eq!(
+        node["independent_reconciliation_surface"],
+        "same-candidate telemetry and verified cache equivalence replay"
+    );
     assert_eq!(
         node["equivalence_status"],
         "verified_same_candidate_cache_replay"
@@ -47,6 +60,19 @@ fn projects_current_executed_timing_into_speed_proof() {
     assert_eq!(node["proof_kind"], "executed");
     assert_eq!(node["cache_hit"], false);
     assert_eq!(node["work_unit_count"], 3);
+    assert_eq!(node["claim_name"], "source-local speed node timing claim");
+    assert_eq!(
+        node["product_behavior_observed"],
+        "cargo fmt --all --check command execution"
+    );
+    assert_eq!(
+        node["proof_surface"],
+        "speed node receipt with command argv, exit status, result digest, output digest, and telemetry reconciliation"
+    );
+    assert_eq!(
+        node["independent_reconciliation_surface"],
+        "same-candidate telemetry and performance receipt"
+    );
     assert_eq!(
         node["claim_impact"],
         "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal"

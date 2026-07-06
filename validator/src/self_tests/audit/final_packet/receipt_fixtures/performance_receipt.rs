@@ -52,6 +52,10 @@ fn node_speed_evidence(candidate: &str) -> Value {
         "output_digest": digest,
         "receipt_paths": ["validation_artifacts/cli/performance-receipt.json"],
         "telemetry_reconciliation_status": "pass",
+        "claim_name": "source-local speed node timing claim",
+        "product_behavior_observed": "real ultragoal performance prove command execution",
+        "proof_surface": "speed node receipt with command argv, exit status, result digest, output digest, and telemetry reconciliation",
+        "independent_reconciliation_surface": "same-candidate logs, metrics, traces, explain output, and performance receipt",
         "claim_impact": "supports_routine_usability_only"
     })
 }

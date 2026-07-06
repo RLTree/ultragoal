@@ -7,11 +7,37 @@ use std::time::Instant;
 
 mod checks;
 mod process;
+mod receipt;
 #[cfg(test)]
 mod tests;
 
 const QUERY_ROUNDTRIP_RECEIPT_LABEL: &str = "observe query roundtrip receipt";
 const EXPLAIN_ROUNDTRIP_RECEIPT_LABEL: &str = "observe explain roundtrip receipt";
+
+#[derive(Clone, Debug)]
+pub(super) struct CommandRoundtripRecord {
+    observable: bool,
+    value: Value,
+}
+
+impl CommandRoundtripRecord {
+    fn new(observable: bool, value: Value) -> Self {
+        Self { observable, value }
+    }
+
+    pub(super) fn is_observable(&self) -> bool {
+        self.observable
+    }
+
+    #[cfg(test)]
+    pub(super) fn as_json(&self) -> &Value {
+        &self.value
+    }
+
+    pub(super) fn into_json(self) -> Value {
+        self.value
+    }
+}
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     run_with_timeout(root, command, command.timeout_ms.max(30_000))
@@ -29,7 +55,7 @@ fn run_with_timeout(
     for spec in commands {
         results.push(run_command_roundtrip(root, spec, roundtrip_timeout_ms)?);
     }
-    receipt(root, command, candidate, results, started)
+    receipt::build(root, command, candidate, results, started)
 }
 
 fn requested_specs(command: &ObserveCommand) -> Result<Vec<CommandObservabilitySpec>, String> {
@@ -55,7 +81,7 @@ fn run_command_roundtrip(
     root: &Path,
     spec: CommandObservabilitySpec,
     timeout_ms: u64,
-) -> Result<Value, String> {
+) -> Result<CommandRoundtripRecord, String> {
     run_command_roundtrip_with(root, spec, timeout_ms, process::run_production_command)
 }
 
@@ -64,7 +90,7 @@ fn run_command_roundtrip_with<F>(
     spec: CommandObservabilitySpec,
     timeout_ms: u64,
     run_production: F,
-) -> Result<Value, String>
+) -> Result<CommandRoundtripRecord, String>
 where
     F: Fn(&Path, &[&str]) -> Result<process::CommandOutput, String>,
 {
@@ -108,25 +134,33 @@ where
         &traces,
         &explain,
     );
-    Ok(json!({
-        "command_id": spec.id,
-        "family": spec.family,
-        "operation": spec.operation,
-        "roundtrip_status": roundtrip_status(observable),
-        "production_exit_status": production.exit_code,
-        "production_stdout": production.stdout,
-        "production_stderr": production.stderr,
-        "receipt_path": spec.receipt_rel,
-        "validator_check_id": spec.validator_check_id,
-        "query_roundtrip_paths": checks::query_paths(spec),
-        "explain_roundtrip_path": checks::roundtrip_path(spec, "explain-failure"),
-        "stdout_receipt_same_candidate": checks::same_candidate(&command_receipt, &logs, &metrics, &traces, &explain),
-        "logs_query_status": checks::status(&logs),
-        "metrics_query_status": checks::status(&metrics),
-        "traces_query_status": checks::status(&traces),
-        "explain_status": checks::status(&explain),
-        "claim_impact": spec.claim_impact
-    }))
+    Ok(CommandRoundtripRecord::new(
+        observable,
+        json!({
+            "command_id": spec.id,
+            "family": spec.family,
+            "operation": spec.operation,
+            "roundtrip_status": roundtrip_status(observable),
+            "production_exit_status": production.exit_code,
+            "production_stdout": production.stdout,
+            "production_stderr": production.stderr,
+            "receipt_path": spec.receipt_rel,
+            "validator_check_id": spec.validator_check_id,
+            "query_roundtrip_paths": checks::query_paths(spec),
+            "explain_roundtrip_path": checks::roundtrip_path(spec, "explain-failure"),
+            "stdout_receipt_same_candidate": checks::same_candidate(&command_receipt, &logs, &metrics, &traces, &explain),
+            "logs_query_status": checks::status(&logs),
+            "metrics_query_status": checks::status(&metrics),
+            "traces_query_status": checks::status(&traces),
+            "explain_status": checks::status(&explain),
+            "claim_name": "source-local command telemetry roundtrip claim",
+            "product_behavior_observed": format!("real ultragoal command run: {}", spec.command_args.join(" ")),
+            "proof_surface": "production stdout, command receipt, logs query receipt, metrics query receipt, traces query receipt, and explain receipt",
+            "independent_reconciliation_surface": "same-candidate run/correlation/digest reconciliation across stdout, receipt, logs, metrics, traces, and explain output",
+            "claim_status": if observable { "supported_source_local" } else { "partial_no_claim" },
+            "claim_impact": spec.claim_impact
+        }),
+    ))
 }
 
 fn roundtrip_status(observable: bool) -> &'static str {
@@ -202,48 +236,4 @@ fn explain_roundtrip(
 fn generated_roundtrip_receipt_path(root: &Path, rel: &Path, label: &str) -> std::path::PathBuf {
     crate::output_path::claim_artifact_path(root, rel, label)
         .expect("observe roundtrip receipt paths are generated package-relative paths")
-}
-
-fn receipt(
-    root: &Path,
-    command: &ObserveCommand,
-    candidate: String,
-    results: Vec<Value>,
-    started: Instant,
-) -> Result<Value, String> {
-    let observable = results
-        .iter()
-        .all(|row| row["roundtrip_status"] == "observable");
-    let status = if observable { "pass" } else { "fail" };
-    let failure = (!observable).then_some("observability command roundtrip is incomplete");
-    let mut receipt = super::telemetry::base_receipt(root, command, status, failure)?;
-    receipt["schema"] = json!("harness-ultragoal.observe-roundtrip-receipt.v1");
-    receipt["candidate_digest"] = json!(candidate);
-    receipt["target_command"] = json!(command.target_command);
-    receipt["target_family"] = json!(command.target_family);
-    receipt["roundtrip_status"] = json!(if observable { "observable" } else { "partial" });
-    receipt["duration_ms"] = json!(
-        u64::try_from(started.elapsed().as_millis())
-            .unwrap_or(u64::MAX)
-            .max(1)
-    );
-    receipt["generated_from"] = json!("CommandObservabilitySpec and SurfaceObservabilitySpec");
-    receipt["spec_command_ids"] = json!(specs::command_ids());
-    receipt["results"] = json!(results);
-    receipt["claim_ceiling"] = json!(
-        "source-local observability command roundtrip only; observability product closure remains blocked until every row has same-candidate telemetry reconciliation"
-    );
-    receipt["claim_impact"] = json!(
-        "supports one spec-driven command observability roundtrip increment only_not_readiness_release_completion_update_goal"
-    );
-    receipt["supported_claims"] = json!(["spec_driven_observability_command_roundtrip_increment"]);
-    receipt["blocked_claims"] = json!([
-        "observability_product_closure",
-        "readiness",
-        "release",
-        "completion",
-        "final_packet_correctness",
-        "update_goal_eligibility"
-    ]);
-    Ok(receipt)
 }

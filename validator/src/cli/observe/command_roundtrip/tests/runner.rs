@@ -11,6 +11,7 @@ fn command_roundtrip_refuses_observable_status_without_same_candidate_query_roun
     let spec = specs::command("package digest").expect("package spec");
 
     let row = run_command_roundtrip(&root, spec, 1).expect("roundtrip row");
+    let row = row.as_json();
     assert_eq!(row["command_id"], "package digest");
     assert_eq!(row["roundtrip_status"], "partial");
     assert_eq!(
@@ -19,6 +20,19 @@ fn command_roundtrip_refuses_observable_status_without_same_candidate_query_roun
     );
     assert_eq!(row["stdout_receipt_same_candidate"], true);
     assert_eq!(row["explain_status"], "pass");
+    assert_eq!(row["claim_status"], "partial_no_claim");
+    assert_eq!(
+        row["claim_name"],
+        "source-local command telemetry roundtrip claim"
+    );
+    assert_eq!(
+        row["product_behavior_observed"],
+        "real ultragoal command run: package digest"
+    );
+    assert_eq!(
+        row["independent_reconciliation_surface"],
+        "same-candidate run/correlation/digest reconciliation across stdout, receipt, logs, metrics, traces, and explain output"
+    );
     assert_eq!(
         crate::json_boundary::read_json(&root.join(roundtrip_path(spec, "explain-failure")))
             .expect("explain")["candidate_digest"],
@@ -46,6 +60,8 @@ fn observe_command_roundtrip_run_fails_closed_for_unknown_and_partial_targets() 
     assert_eq!(receipt["status"], "fail");
     assert_eq!(receipt["roundtrip_status"], "partial");
     assert_eq!(receipt["target_family"], "package");
+    assert_eq!(receipt["claim_status"], "partial_no_claim");
+    assert_eq!(receipt["supported_claims"], json!([]));
     assert!(
         receipt["blocked_claims"]
             .as_array()
@@ -67,16 +83,29 @@ fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
     )
     .expect("manifest");
     let row = json!({"roundtrip_status": "observable"});
-    let value = receipt(
+    let value = receipt::build(
         &root,
         &command(),
         "sha256:fit".to_string(),
-        vec![row],
+        vec![super::super::CommandRoundtripRecord::new(true, row)],
         Instant::now(),
     )
     .expect("roundtrip receipt");
     assert_eq!(value["status"], "pass");
     assert_eq!(value["roundtrip_status"], "observable");
+    assert_eq!(value["claim_status"], "supported_source_local");
+    assert_eq!(
+        value["claim_name"],
+        "source-local command telemetry roundtrip claim"
+    );
+    assert_eq!(
+        value["proof_surface"],
+        "production stdout, command receipts, logs query receipts, metrics query receipts, traces query receipts, and explain receipts"
+    );
+    assert_eq!(
+        value["independent_reconciliation_surface"],
+        "same-candidate run/correlation/digest reconciliation across stdout, receipts, logs, metrics, traces, and explain output"
+    );
     assert_eq!(
         value["supported_claims"][0],
         "spec_driven_observability_command_roundtrip_increment"
@@ -88,15 +117,20 @@ fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
             .iter()
             .any(|claim| claim == "update_goal_eligibility")
     );
-    let partial = receipt(
+    let partial = receipt::build(
         &root,
         &command(),
         "sha256:fit".to_string(),
-        vec![json!({"roundtrip_status": "partial"})],
+        vec![super::super::CommandRoundtripRecord::new(
+            false,
+            json!({"roundtrip_status": "partial"}),
+        )],
         Instant::now(),
     )
     .expect("partial roundtrip receipt");
     assert_eq!(partial["status"], "fail");
+    assert_eq!(partial["claim_status"], "partial_no_claim");
+    assert_eq!(partial["supported_claims"], json!([]));
     assert_eq!(
         partial["why_failed"],
         "observability command roundtrip is incomplete"

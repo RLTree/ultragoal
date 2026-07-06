@@ -38,6 +38,10 @@ pub(super) fn executed_speed_node(candidate: &str) -> Value {
         "where_failed": "none",
         "why_failed": "none",
         "next_repair": "none",
+        "claim_name": "source-local speed node timing claim",
+        "product_behavior_observed": "real ultragoal performance prove command execution",
+        "proof_surface": "speed node receipt with command argv, exit status, result digest, output digest, and telemetry reconciliation",
+        "independent_reconciliation_surface": "same-candidate logs, metrics, traces, explain output, and performance receipt",
         "claim_impact": "supports_performance_command_speed_only"
     })
 }
@@ -121,4 +125,27 @@ fn performance_receipt_names_budget_failure_only_after_speed_proof_is_real() {
     assert_eq!(receipt["status"], "fail");
     assert_eq!(receipt["failure"]["id"], "cli_performance_budget_exceeded");
     assert_eq!(receipt["failure"]["observed_value"], "wall_clock_ms=60001");
+}
+
+#[test]
+fn performance_receipt_pass_requires_claim_behavior_and_reconciliation_surfaces() {
+    let candidate = digest('a');
+    let mut receipt = performance_receipt(&candidate, executed_speed_node(&candidate));
+    let node = &mut receipt["speed_proof"]["nodes"][0];
+    node.as_object_mut()
+        .expect("node")
+        .remove("product_behavior_observed");
+    node["proof_surface"] = json!("receipt exists");
+
+    let failures =
+        crate::cli::performance::receipt::same_candidate_pass_failures(&receipt, &candidate);
+    for expected in [
+        "cli_performance_speed_node_missing:performance_command_roundtrip:/product_behavior_observed",
+        "cli_performance_speed_node_weak_claim_binding:performance_command_roundtrip:/proof_surface",
+    ] {
+        assert!(
+            failures.iter().any(|failure| failure == expected),
+            "{expected}: {failures:?}"
+        );
+    }
 }

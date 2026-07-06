@@ -204,3 +204,17 @@ fn raw_authority_scanner_rejects_generic_live_loop_json_projection_rows() {
         );
     }
 }
+
+#[test]
+fn raw_authority_scanner_classifies_command_roundtrip_receipt_projection_by_product_fields() {
+    let projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/observe/command_roundtrip/receipt.rs",
+        "use serde_json::{Value,json};\n\
+         pub struct CommandRoundtripRecord;\n\
+         pub struct CommandObservabilitySpec;\n\
+         fn receipt() -> Value {\n\
+             json!({\"supported_claims\":[\"spec_driven_observability_command_roundtrip_increment\"]})\n\
+         }\n",
+    );
+    assert!(projection.is_empty(), "{projection:?}");
+}

@@ -35,6 +35,10 @@ fn project_node(row: &Value) -> Option<Value> {
         "next_repair",
         "required_speedup",
         "surface",
+        "claim_name",
+        "product_behavior_observed",
+        "proof_surface",
+        "independent_reconciliation_surface",
     ] {
         insert_text(row, &mut object, key);
     }
