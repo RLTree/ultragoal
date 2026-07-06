@@ -135,3 +135,54 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
         "full-local-observability-stack-integration-non-opaque-failure"
     );
 }
+
+#[test]
+fn live_loop_tasks_project_cache_and_invalid_proof_claim_surfaces() {
+    let mut cache_timings = BTreeMap::new();
+    let mut cache_row = node_timing(1_000, 5, "pass".to_string(), "none".to_string());
+    cache_row.proof_kind = "verified_cache_hit".to_string();
+    cache_timings.insert("fmt_check".to_string(), cache_row);
+    let cache_node = super::super::super::tasks(
+        "sha256:candidate",
+        "sha256:changed",
+        "sha256:context",
+        "hot",
+        "verified-local",
+        Some(1_000),
+        &cache_timings,
+    )
+    .into_iter()
+    .map(|task| task())
+    .find(|node| node["node_id"] == "fmt_check")
+    .expect("fmt node");
+    assert_eq!(cache_node["claim_status"], "supported_source_local");
+    assert!(
+        cache_node["proof_surface"]
+            .as_str()
+            .expect("cache proof surface")
+            .contains("verified same-candidate cache replay")
+    );
+
+    let mut invalid_row = node_timing(
+        1_000,
+        5,
+        "fail".to_string(),
+        "verified_local_proof_kind_invalid".to_string(),
+    );
+    invalid_row.proof_kind = "planned".to_string();
+    let invalid_node = super::rows::projected_node(invalid_row);
+    assert_eq!(invalid_node["status"], "blocked");
+    assert_eq!(
+        invalid_node["failure_class"],
+        "verified_local_proof_kind_invalid"
+    );
+    assert_eq!(
+        invalid_node["where_failed"],
+        "loop.run.focused_rust_tests.proof_kind"
+    );
+    assert_eq!(invalid_node["claim_status"], "blocked");
+    assert_eq!(
+        invalid_node["proof_surface"],
+        "invalid proof_kind; row is blocked"
+    );
+}

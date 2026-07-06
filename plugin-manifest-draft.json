@@ -4331,6 +4331,7 @@
     "validator/src/cli/live_loop/nodes/measurement/command/errors.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/fixtures.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/mod.rs",
+    "validator/src/cli/live_loop/nodes/measurement/command/proof_kind.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/surface.rs",
     "validator/src/cli/live_loop/nodes/measurement/observation/diagnostics.rs",
     "validator/src/cli/live_loop/nodes/measurement/observation/event.rs",

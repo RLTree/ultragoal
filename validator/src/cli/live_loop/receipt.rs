@@ -171,6 +171,10 @@ fn blocked_claims() -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
+    use crate::cli::live_loop::{LiveLoopAction, LiveLoopCommand};
+    use serde_json::json;
+    use std::path::PathBuf;
+
     #[test]
     fn status_projection_reports_pass_without_failure_fields() {
         assert_eq!(super::failure_class("pass"), "none");
@@ -183,5 +187,51 @@ mod tests {
             super::where_failed("fail"),
             "loop.run.current_state.first_blocker"
         );
+    }
+
+    #[test]
+    fn loop_receipt_claim_evaluation_names_pass_and_blocked_surfaces() {
+        let command = LiveLoopCommand {
+            action: LiveLoopAction::Run,
+            tier: "hot".to_string(),
+            cache_mode: "verified-local".to_string(),
+            jobs: None,
+            receipt: PathBuf::from("validation_artifacts/observability/live-loop-run.json"),
+            node_id: None,
+            measure_all: false,
+        };
+        let first_blocker = json!({
+            "id": "coverage_prove",
+            "why_failed": "coverage receipt is stale"
+        });
+
+        let pass = super::claim_evaluation("pass", &command, &first_blocker);
+        assert_eq!(pass["claim_status"], "supported_source_local");
+        assert_eq!(
+            pass["product_behavior_observed"],
+            "ultragoal loop run --tier hot --cache-mode verified-local"
+        );
+        assert!(
+            pass["proof_surface"]
+                .as_str()
+                .expect("pass proof surface")
+                .contains("executed or verified-cache timing proof")
+        );
+        assert!(
+            pass["independent_reconciliation_surface"]
+                .as_str()
+                .expect("pass reconciliation")
+                .contains("logs, metrics, traces")
+        );
+
+        let blocked = super::claim_evaluation("fail", &command, &first_blocker);
+        assert_eq!(blocked["claim_status"], "blocked");
+        assert!(
+            blocked["proof_surface"]
+                .as_str()
+                .expect("blocked proof surface")
+                .contains("no acceleration claim")
+        );
+        assert_eq!(blocked["first_blocker"]["id"], "coverage_prove");
     }
 }
