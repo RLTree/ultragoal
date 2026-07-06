@@ -108,13 +108,13 @@ where
         &observation.run_id,
         &observation.correlation_id,
     )?;
-    let metrics = roundtrip(
-        query_roundtrip::RoundtripQuery::Metrics,
+    let traces = roundtrip(
+        query_roundtrip::RoundtripQuery::Traces,
         &observation.run_id,
         &observation.correlation_id,
     )?;
-    let traces = roundtrip(
-        query_roundtrip::RoundtripQuery::Traces,
+    let metrics = roundtrip(
+        query_roundtrip::RoundtripQuery::Metrics,
         &observation.run_id,
         &observation.correlation_id,
     )?;

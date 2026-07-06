@@ -114,6 +114,14 @@ fn target_signal_mismatch(event: &Value, summary: &Value) -> Option<String> {
 fn freshness_mismatch(event: &Value, summary: &Value) -> Option<String> {
     let target_timestamp = event.get("timestamp").and_then(Value::as_str)?;
     let target_unix = crate::audit::clock::parse_iso_seconds(target_timestamp)?;
+    let metric_event_unix = summary.get("event_unix_seconds").and_then(Value::as_u64)?;
+    let target_unix_u64 = u64::try_from(target_unix).ok()?;
+    if metric_event_unix < target_unix_u64 {
+        return Some(format!(
+            "observability_metric_event_time_stale:metric_event_unix={} target_event_unix={}",
+            metric_event_unix, target_unix_u64
+        ));
+    }
     let latest_sample = summary.get("latest_sample_unix").and_then(Value::as_i64)?;
     if latest_sample == 0 || latest_sample <= target_unix + METRIC_QUERY_WINDOW_SECONDS {
         return None;

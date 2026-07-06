@@ -32,6 +32,7 @@ fn metrics_query_reports_target_run_outside_bounded_window() {
     write_target_event(&root);
     let mut command = super::super::metrics_command();
     command.correlation_id = Some("corr-query-bound".to_string());
+    command.byte_limit = 4096;
 
     let receipt = crate::cli::observe::query::result_from_output(
         Path::new(&root),
@@ -90,7 +91,8 @@ fn metric_body() -> String {
                 {"metric": metric_labels(&labels, "ultragoal_command_total"), "value": [1782935280, "1"]},
                 {"metric": metric_labels(&labels, "ultragoal_command_duration_ms"), "value": [1782935280, "893"]},
                 {"metric": metric_labels(&labels, "ultragoal_command_task_count"), "value": [1782935280, "55"]},
-                {"metric": metric_labels(&labels, "ultragoal_command_queue_depth"), "value": [1782935280, "55"]}
+                {"metric": metric_labels(&labels, "ultragoal_command_queue_depth"), "value": [1782935280, "55"]},
+                {"metric": metric_labels(&labels, "ultragoal_command_event_unix_seconds"), "value": [1782935280, "1782934959"]}
             ]
         }
     })

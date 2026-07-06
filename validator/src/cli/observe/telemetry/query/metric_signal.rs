@@ -14,6 +14,7 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
     let mut error_count = 0_u64;
     let mut queue_depth = 0_u64;
     let mut latest_sample_unix = 0_i64;
+    let mut event_unix_seconds = 0_u64;
     for sample in metric_samples(rows) {
         let labels = sample.get("metric").unwrap_or(&Value::Null);
         if operation == "unknown" {
@@ -34,6 +35,9 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
         match metric_label(labels, "__name__", "ultragoal_command_total") {
             "ultragoal_command_duration_ms" => latency_ms = latency_ms.max(value),
             "ultragoal_command_task_count" => task_count += value,
+            "ultragoal_command_event_unix_seconds" => {
+                event_unix_seconds = event_unix_seconds.max(value)
+            }
             "ultragoal_command_queue_depth" => {
                 if value >= queue_depth {
                     queue_depth = value;
@@ -59,6 +63,7 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
         "failure_class": failure_class,
         "queue_depth": queue_depth,
         "latest_sample_unix": latest_sample_unix,
+        "event_unix_seconds": event_unix_seconds,
         "saturation_status": format!("{saturation_status};queue_depth={queue_depth}"),
         "high_cardinality_labels": high_cardinality_labels
     })

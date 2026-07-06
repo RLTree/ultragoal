@@ -102,7 +102,7 @@ fn metric_filter_with_primary(mut fields: Vec<String>) -> String {
 fn metric_selector(filter: String) -> String {
     let names = metric_label(
         "__name__",
-        "~ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth",
+        "~ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds",
     );
     let names = names.replacen("__name__=\"~", "__name__=~\"", 1);
     let filter = metric_filter_with_primary(vec![names, filter]);
@@ -197,7 +197,7 @@ mod tests {
         let query = query_text(&command);
         assert_eq!(
             query,
-            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\",check_id=\"coverage-prove-observability-binding\"}[5m]))"
+            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\",check_id=\"coverage-prove-observability-binding\"}[5m]))"
         );
     }
 
@@ -232,7 +232,7 @@ mod tests {
         let query = query_text(&metrics);
         assert_eq!(
             query,
-            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\"}[5m]))"
+            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\"}[5m]))"
         );
         assert!(!query.contains("run_id=\"run-abc\""));
         assert!(!query.contains("correlation_id=\"corr-abc\""));

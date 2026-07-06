@@ -189,8 +189,8 @@ fn reconciliation_passes_when_all_observe_roundtrips_match_command_run() {
 fn all_roundtrips() -> [query_roundtrip::RoundtripQuery; 4] {
     [
         query_roundtrip::RoundtripQuery::Logs,
-        query_roundtrip::RoundtripQuery::Metrics,
         query_roundtrip::RoundtripQuery::Traces,
+        query_roundtrip::RoundtripQuery::Metrics,
         query_roundtrip::RoundtripQuery::ExplainFailure,
     ]
 }

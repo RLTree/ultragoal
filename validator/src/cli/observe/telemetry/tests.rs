@@ -135,6 +135,15 @@ fn metric_summary_rejects_high_cardinality_labels_and_ignores_bad_rows() {
                         "saturation_status": "queue_pressure_after_join"
                     },
                     "value": [12, "7"]
+                },
+                {
+                    "metric": {
+                        "__name__": "ultragoal_command_event_unix_seconds",
+                        "operation": "coverage.prove",
+                        "status": "fail",
+                        "failure_class": "coverage_prove_failure"
+                    },
+                    "value": [12, "12"]
                 }
             ]}
         }).to_string()}),
@@ -150,6 +159,7 @@ fn metric_summary_rejects_high_cardinality_labels_and_ignores_bad_rows() {
     assert_eq!(summary["task_count"], 3);
     assert_eq!(summary["queue_depth"], 7);
     assert_eq!(summary["latest_sample_unix"], 12);
+    assert_eq!(summary["event_unix_seconds"], 12);
     assert_eq!(
         summary["saturation_status"],
         "queue_pressure_after_join;queue_depth=7"

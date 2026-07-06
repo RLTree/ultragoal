@@ -17,7 +17,8 @@ pub(crate) fn from_event(event: &Value) -> Value {
             sample("ultragoal_command_total", 1, event, exporter),
             sample("ultragoal_command_duration_ms", number(event, "duration_ms"), event, exporter),
             sample("ultragoal_command_task_count", number(event, "task_count"), event, exporter),
-            sample("ultragoal_command_queue_depth", number(event, "queue_depth"), event, exporter)
+            sample("ultragoal_command_queue_depth", number(event, "queue_depth"), event, exporter),
+            sample("ultragoal_command_event_unix_seconds", event_unix(event), event, exporter)
         ],
         "run_id": event["run_id"],
         "correlation_id": event["correlation_id"],
@@ -99,4 +100,13 @@ fn base_labels(event: &Value, exporter: &str) -> Value {
 
 fn number(event: &Value, field: &str) -> u64 {
     event.get(field).and_then(Value::as_u64).unwrap_or(0)
+}
+
+fn event_unix(event: &Value) -> u64 {
+    event
+        .get("timestamp")
+        .and_then(Value::as_str)
+        .and_then(crate::audit::clock::parse_iso_seconds)
+        .and_then(|value| u64::try_from(value).ok())
+        .unwrap_or(0)
 }

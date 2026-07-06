@@ -195,7 +195,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Working means every speed-bearing node records `proof_kind=executed` or `proof_kind=verified_cache_hit`, actual_work_duration_ms, graph_overhead_ms, work_unit_count, command argv when executed, result digest, output digest where applicable, candidate digest, worker/task/queue state, receipt/artifact paths, and telemetry run/correlation ids. Verified cache hits additionally record cache key, current input digests, validator/law/schema/fixture versions, arguments, environment class, prior result digest, replayed output digest, equivalence status, invalidation proof, and claim impact.
   - Validation means red/green/tamper fixtures fail synthetic/key-only timing, current-state-only timing, graph-overhead-only timing, generated-row timing, workflow-output-as-proof, `cache_hit=false` with no execution, `work_unit_count=0` with no verified cache equivalence, missing result digest, stale/wrong-digest cache reuse, and speedup ratio computed from proxy duration.
   - Production proof means a real current-candidate loop run shows the displayed speedup is computed from executed work or verified same-candidate reuse for every included node, and same-candidate stdout/receipt/logs/metrics/traces/explain/current-state reconciliation confirms the same node results.
-  - Status: not started
+  - Status: implemented, pending validation
 
 - [ ] High-frequency validation surfaces are inside the verified incremental loop rather than slow side channels.
   - Working means `scripts/check`, `scripts/check-coverage-full`, `scripts/check-coverage-fast`, `ultragoal coverage prove`, source audit, red fixture report, line caps, namespace, schema validation, mandatory-law validation, source-obligations, foundational trace, package inventory scans, focused Rust tests, fmt/build checks, and touched fixture/report paths are represented as typed query-graph nodes with affected-set resolution, cache/input-digest keys, worker/task/queue/cache telemetry, source-local claim impact, and exact narrow rerun commands.
@@ -311,8 +311,8 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Status: validated current for source-local stack smoke/query only; no final packet, readiness, release, registry/reviewer exposure, completion, or `update_goal()` claim.
 
 - [ ] The current proof-graph failure is visible through stdout, source audit receipt, final-packet proof receipt, VictoriaLogs, VictoriaMetrics, VictoriaTraces, observe query commands, and `observe explain-failure --run-id`.
-  - Status: in progress; touched source-audit failure output is agent-legible and same-candidate logs/traces/explain proof is visible, while metrics query proof correctly remains partial when the target run signal is not reconciled.
-  - Next blocker: complete same-candidate metrics reconciliation and then continue fitting the next unfitted command/surface row.
+  - Status: in progress
+  - Next blocker: live-loop `fmt_check` misses the 20x speed target after same-candidate logs, metrics, traces, and explain reconciliation.
   - Claim impact: no final packet correctness, registry/reviewer exposure, readiness, release, completion, or `update_goal()` eligibility claim.
 
 - [ ] Gate 92 validation commands run: runtime detection, stack up, stack health, stack smoke, query logs, query metrics, query traces, explain current failure, focused observability tests, observability red/green/tamper fixtures, exact coverage, line-cap scan, source audit, red fixture report, package digest, git status, and checkpoint commit.

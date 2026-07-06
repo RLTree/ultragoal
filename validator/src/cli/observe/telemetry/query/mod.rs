@@ -88,6 +88,7 @@ pub(super) fn result(
     receipt["metric_latency_ms"] = metric_summary["latency_ms"].clone();
     receipt["metric_error_count"] = metric_summary["error_count"].clone();
     receipt["metric_latest_sample_unix"] = metric_summary["latest_sample_unix"].clone();
+    receipt["metric_event_unix_seconds"] = metric_summary["event_unix_seconds"].clone();
     receipt["metric_failure_class"] = json!(metric_signal::text(
         &metric_summary,
         "failure_class",
