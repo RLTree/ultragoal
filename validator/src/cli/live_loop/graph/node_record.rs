@@ -1,6 +1,7 @@
 use super::super::nodes::status::measurement_state;
 use super::super::nodes::timing::NodeTiming;
 use super::super::surfaces::LoopValidationSurface;
+use super::claim_evaluation;
 use super::measurement_failure;
 use super::verified_local_cache_key;
 use serde_json::{Map, Value, json};
@@ -67,6 +68,7 @@ pub(crate) fn surface_record(
         .as_object_mut()
         .expect("live-loop node projection is always an object");
     insert_timing_fields(object, node_timing.as_ref(), graph_duration_ms);
+    claim_evaluation::insert(object, surface, node_timing.as_ref(), &measurement);
     record
 }
 

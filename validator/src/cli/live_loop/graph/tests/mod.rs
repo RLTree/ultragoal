@@ -106,7 +106,7 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
     );
     let first_node = tasks.into_iter().next().expect("package node")();
     assert_eq!(first_node["node_id"], "package_digest");
-    assert_eq!(first_node["status"], "pass");
+    assert_eq!(first_node["status"], "observed");
     assert_eq!(first_node["graph_task_class"], "pure_read_parallel");
     assert_eq!(
         first_node["execution_task_class"],
@@ -125,6 +125,15 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
     assert_eq!(
         first_node["speedup_measurement_state"],
         "not_required_for_context_or_control_node"
+    );
+    assert_eq!(first_node["claim_status"], "observation_only");
+    assert_eq!(
+        first_node["claim_impact"],
+        "observation_only_no_speed_readiness_release_completion_or_update_goal_claim"
+    );
+    assert!(
+        first_blocker(&[first_node]).is_none(),
+        "context observations must not become blockers or proof"
     );
 }
 

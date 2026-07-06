@@ -78,8 +78,31 @@ pub(crate) fn loop_receipt(
         "broad_rerun": broad_rerun,
         "forbidden_actions": ["worktrees", "install_cache_refresh", "final_packet_finalization", "readiness_release_completion_claim", "update_goal"],
         "claim_ceiling": "source-local loop proof only",
+        "claim_evaluation": claim_evaluation(status, command, &first_blocker),
         "observability": observability
     }))
+}
+
+fn claim_evaluation(status: &str, command: &LiveLoopCommand, first_blocker: &Value) -> Value {
+    json!({
+        "claim_name": "observability live-loop source-local acceleration",
+        "claim_status": if status == "pass" { "supported_source_local" } else { "blocked" },
+        "product_behavior_observed": format!(
+            "ultragoal loop run --tier {} --cache-mode {}",
+            command.tier, command.cache_mode
+        ),
+        "proof_surface": if status == "pass" {
+            "all high-frequency nodes have executed or verified-cache timing proof and loop receipt"
+        } else {
+            "no acceleration claim; first blocker names missing or failed product proof"
+        },
+        "independent_reconciliation_surface": if status == "pass" {
+            "same-candidate stdout, receipt, logs, metrics, traces, explain output, and current-state reconciliation"
+        } else {
+            "blocked until first blocker has same-candidate product behavior and telemetry reconciliation"
+        },
+        "first_blocker": first_blocker
+    })
 }
 
 fn runtime(

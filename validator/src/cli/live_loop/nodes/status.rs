@@ -20,16 +20,19 @@ pub(crate) fn measurement_state(
 ) -> MeasurementState {
     if !surface.high_frequency {
         return MeasurementState {
-            status: "pass",
+            status: "observed",
             failure_class: "none",
-            why_failed: "none".to_string(),
+            why_failed: "diagnostic context node observed; no speed or closure claim is supported"
+                .to_string(),
             where_failed: "none".to_string(),
             next_repair: "none".to_string(),
             baseline_state: "not_required_for_context_or_control_node",
             speedup_state: "not_required_for_context_or_control_node",
             baseline_duration_ms: baseline_ms,
             speedup_ratio: baseline_ms.map(|value| value / duration_ms.max(1)),
-            claim_impact: "supports_live_loop_context_observation_only".to_string(),
+            claim_impact:
+                "observation_only_no_speed_readiness_release_completion_or_update_goal_claim"
+                    .to_string(),
         };
     }
     if let Some(baseline_duration_ms) = baseline_ms {

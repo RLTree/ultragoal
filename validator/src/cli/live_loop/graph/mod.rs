@@ -3,6 +3,7 @@ use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 
+mod claim_evaluation;
 mod measurement_failure;
 mod node_record;
 #[cfg(test)]
@@ -48,7 +49,7 @@ pub(crate) fn tasks(
 }
 
 pub(crate) fn first_blocker(nodes: &[Value]) -> Option<Value> {
-    nodes.iter().find(|node| node["status"] != "pass").map(|node| {
+    nodes.iter().find(|node| is_blocking_node(node)).map(|node| {
         let id = node["node_id"].as_str().unwrap_or("unknown_loop_node");
         json!({
             "id": id,
@@ -62,6 +63,13 @@ pub(crate) fn first_blocker(nodes: &[Value]) -> Option<Value> {
             "claim_impact": node["claim_impact"].as_str().unwrap_or("source_local_live_loop_blocked")
         })
     })
+}
+
+fn is_blocking_node(node: &Value) -> bool {
+    matches!(
+        node.get("status").and_then(Value::as_str),
+        Some("blocked" | "fail" | "failed")
+    )
 }
 
 #[cfg(test)]

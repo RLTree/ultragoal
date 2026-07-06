@@ -44,6 +44,12 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         "validator/src/cli/live_loop/graph/mod.rs" => {
             Some(&["LoopValidationSurface", "input_digest", "claim_impact"])
         }
+        "validator/src/cli/live_loop/graph/claim_evaluation.rs" => Some(&[
+            "LoopValidationSurface",
+            "NodeTiming",
+            "product_behavior_observed",
+            "independent_reconciliation_surface",
+        ]),
         "validator/src/cli/live_loop/graph/node_record.rs" => Some(&[
             "LoopValidationSurface",
             "NodeTiming",

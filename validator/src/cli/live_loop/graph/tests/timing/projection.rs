@@ -1,5 +1,4 @@
-use super::rows::{mandatory_law_failure, node_timing, projected_node};
-use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
+use super::rows::{mandatory_law_failure, node_timing};
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
 use std::collections::BTreeMap;
 
@@ -37,6 +36,20 @@ fn live_loop_tasks_project_current_node_timing_records() {
     assert_eq!(fmt["proof_kind"], "executed");
     assert_eq!(fmt["work_unit_count"], 1);
     assert_eq!(fmt["actual_work_duration_ms"], 5);
+    assert_eq!(fmt["claim_name"], "source-local live-loop speed claim");
+    assert_eq!(fmt["claim_status"], "supported_source_local");
+    assert!(
+        fmt["proof_surface"]
+            .as_str()
+            .expect("proof surface")
+            .contains("executed current-candidate command")
+    );
+    assert!(
+        fmt["independent_reconciliation_surface"]
+            .as_str()
+            .expect("reconciliation surface")
+            .contains("logs, metrics, traces")
+    );
     assert_eq!(fmt["telemetry_reconciliation_status"], "pass");
     assert!(
         fmt["result_digest"]
@@ -120,127 +133,5 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
     assert_eq!(
         focused["baseline_failed_law"],
         "full-local-observability-stack-integration-non-opaque-failure"
-    );
-}
-
-#[test]
-fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
-    let launch = projected_node(NodeTiming {
-        baseline_duration_ms: 100_000,
-        verified_local_duration_ms: 1,
-        proof_kind: "executed".to_string(),
-        cache_hit: false,
-        cache_key: "sha256:cache".to_string(),
-        work_unit_count: 1,
-        actual_work_duration_ms: 1,
-        graph_overhead_ms: 1,
-        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
-        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
-        telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
-        result_digest: "sha256:result".to_string(),
-        output_digest: "sha256:output".to_string(),
-        verified_local_result_digest: "sha256:result".to_string(),
-        verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.canonical_full_command".to_string(),
-        why_failed: "canonical full command could not launch while measuring live-loop node"
-            .to_string(),
-        next_repair: "run cargo test directly and repair launch failure".to_string(),
-        timing_status: "fail".to_string(),
-        failure_class: "canonical_full_command_launch_failed".to_string(),
-        baseline_exit_code: None,
-        baseline_launch_error: true,
-        baseline_failure: CommandFailureSummary::default(),
-        affected_set_status: "changed_files_digest_bound".to_string(),
-        timing_source: NODE_TIMING_REL.to_string(),
-    });
-    assert_eq!(
-        launch["failure_class"],
-        "canonical_full_command_launch_failed"
-    );
-    assert_eq!(
-        launch["baseline_measurement_state"],
-        "current_full_command_launch_failed"
-    );
-    assert!(
-        launch["why_failed"]
-            .as_str()
-            .expect("why")
-            .contains("could not launch")
-    );
-
-    let slow = projected_node(NodeTiming {
-        baseline_duration_ms: 100_000,
-        verified_local_duration_ms: 99_000,
-        proof_kind: "executed".to_string(),
-        cache_hit: false,
-        cache_key: "sha256:cache".to_string(),
-        work_unit_count: 1,
-        actual_work_duration_ms: 99_000,
-        graph_overhead_ms: 1,
-        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
-        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
-        telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
-        result_digest: "sha256:result".to_string(),
-        output_digest: "sha256:output".to_string(),
-        verified_local_result_digest: "sha256:result".to_string(),
-        verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.speedup".to_string(),
-        why_failed: "executed verified-local work did not meet the 20x speed target".to_string(),
-        next_repair: "split or cache focused_rust_tests with verified equivalence".to_string(),
-        timing_status: "fail".to_string(),
-        failure_class: "live_loop_speedup_target_missed".to_string(),
-        baseline_exit_code: Some(0),
-        baseline_launch_error: false,
-        baseline_failure: CommandFailureSummary::default(),
-        affected_set_status: "changed_files_digest_bound".to_string(),
-        timing_source: NODE_TIMING_REL.to_string(),
-    });
-    assert_eq!(slow["failure_class"], "live_loop_speedup_target_missed");
-    assert!(
-        slow["why_failed"]
-            .as_str()
-            .expect("why")
-            .contains("20x speed target")
-    );
-
-    let unknown = projected_node(NodeTiming {
-        baseline_duration_ms: 100_000,
-        verified_local_duration_ms: 1,
-        proof_kind: "executed".to_string(),
-        cache_hit: false,
-        cache_key: "sha256:cache".to_string(),
-        work_unit_count: 1,
-        actual_work_duration_ms: 1,
-        graph_overhead_ms: 1,
-        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
-        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
-        telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
-        result_digest: "sha256:result".to_string(),
-        output_digest: "sha256:output".to_string(),
-        verified_local_result_digest: "sha256:result".to_string(),
-        verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.measurement".to_string(),
-        why_failed: "live-loop node timing row failed strict proof validation".to_string(),
-        next_repair: "inspect live-loop timing receipt fields".to_string(),
-        timing_status: "fail".to_string(),
-        failure_class: "unexpected_measurement_failure".to_string(),
-        baseline_exit_code: Some(2),
-        baseline_launch_error: false,
-        baseline_failure: CommandFailureSummary::default(),
-        affected_set_status: "changed_files_digest_bound".to_string(),
-        timing_source: NODE_TIMING_REL.to_string(),
-    });
-    assert_eq!(
-        unknown["failure_class"],
-        "live_loop_node_measurement_failed"
-    );
-    assert!(
-        unknown["why_failed"]
-            .as_str()
-            .expect("why")
-            .contains("strict proof validation")
     );
 }

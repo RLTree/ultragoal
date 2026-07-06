@@ -66,6 +66,11 @@ pub(crate) fn node_timing_row(
         "baseline_stdout_digest": baseline.stdout_digest,
         "baseline_stderr_digest": baseline.stderr_digest,
         "baseline_failure": baseline.failure.to_value(),
+        "claim_name": "source-local live-loop speed claim",
+        "product_behavior_observed": surface.narrow_rerun,
+        "proof_surface": proof_surface(verified_local),
+        "independent_reconciliation_surface": "same-candidate logs, metrics, traces, explain output, and live-loop timing receipt",
+        "claim_status": if pass { "supported_source_local" } else { "blocked" },
         "affected_set_status": affected_set_status,
         "cache_honesty": "pass",
         "timing_source": NODE_TIMING_REL,
@@ -118,6 +123,18 @@ fn result_digest(verified_local: &VerifiedLocalProof, output_digest: &str) -> St
         )
         .as_bytes(),
     )
+}
+
+fn proof_surface(verified_local: &VerifiedLocalProof) -> &'static str {
+    match verified_local.proof_kind {
+        "executed" => {
+            "executed current-candidate command with exit status, work units, digests, and timing receipt"
+        }
+        "verified_cache_hit" => {
+            "verified same-candidate cache replay with current input digests and equivalence proof"
+        }
+        _ => "invalid proof_kind; row is blocked",
+    }
 }
 
 fn insert_execution_fields(
