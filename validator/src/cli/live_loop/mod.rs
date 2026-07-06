@@ -2,12 +2,16 @@
 mod command_registry_tests;
 mod context;
 mod graph;
+mod node_timing_refresh;
 mod nodes;
 #[cfg(test)]
 mod parser_tests;
 mod receipt;
 #[cfg(test)]
-mod repair_summary_output_tests;
+mod run_node_timing_refresh_tests;
+mod stdout;
+#[cfg(test)]
+mod stdout_tests;
 mod surfaces;
 #[cfg(test)]
 mod tests;
@@ -85,77 +89,68 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
     let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
     let config = SchedulerConfig::from_jobs(command.jobs)?;
-    let context = AuditContext::new(root, candidate.clone(), command);
-    let scheduled =
-        crate::scheduler::run_ordered(config, TaskClass::PureReadParallel, context.tasks());
-    let current_state = crate::cli::current_state::snapshot_for_candidate(root, candidate.clone());
     let current_state_path = crate::output_path::literal_claim_artifact_path(
         root,
         "validation_artifacts/current-state.json",
         "current state snapshot",
     );
-    crate::json_boundary::write_json(&current_state_path, &current_state)?;
-    let first_blocker = first_loop_blocker(&scheduled.values, &current_state);
+    crate::output_path::prepare_parent(&current_state_path)?;
+    let receipt_path =
+        crate::output_path::claim_artifact_path(root, &command.receipt, "live loop receipt")?;
+    crate::output_path::prepare_parent(&receipt_path)?;
+    let mut snapshot = loop_snapshot(root, &candidate, command, config);
+    let mut timing_refreshes = Vec::new();
+    if let Some(measurement) =
+        node_timing_refresh::refresh_current_blocker_timing(root, command, &snapshot.first_blocker)?
+    {
+        timing_refreshes.push(measurement);
+        snapshot = loop_snapshot(root, &candidate, command, config);
+    }
+    crate::json_boundary::write_json(&current_state_path, &snapshot.current_state)?;
+    let first_blocker = snapshot.first_blocker.clone();
     let status = status_for_blocker(&first_blocker);
     let receipt_result = loop_receipt(
         root,
         command,
-        context,
-        scheduled,
-        current_state,
+        snapshot.context,
+        snapshot.scheduled,
+        snapshot.current_state,
         first_blocker.clone(),
+        timing_refreshes,
         status,
         started,
     );
     let receipt = receipt_result?;
-    let path =
-        crate::output_path::claim_artifact_path(root, &command.receipt, "live loop receipt")?;
-    crate::json_boundary::write_json(&path, &receipt)?;
-    print_summary(command, &receipt, &first_blocker);
+    crate::json_boundary::write_json(&receipt_path, &receipt)?;
+    stdout::print_run_summary(command, &receipt, &first_blocker);
     Ok(i32::from(status != "pass"))
 }
 
-fn print_summary(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) {
-    println!("{}", summary_line(command, receipt, blocker));
+struct LoopSnapshot {
+    context: AuditContext,
+    scheduled: crate::scheduler::Scheduled<Value>,
+    current_state: Value,
+    first_blocker: Value,
 }
 
-fn summary_line(command: &LiveLoopCommand, receipt: &Value, blocker: &Value) -> String {
-    format!(
-        "ultragoal-loop {} candidate={} tier={} cache_mode={} duration_ms={} worker_count={} task_count={} queue_depth={} critical_path='{}' first_blocker={} why={} next_repair={} narrow_rerun='{}' broad_rerun='{}' claim_ceiling='{}' receipt={} run_id={} correlation_id={} trace_id={} span_id={} query_logs='{}' query_metrics='{}' query_traces='{}'",
-        text(receipt, "status", "fail"),
-        text(receipt, "candidate_digest", "<missing>"),
-        command.tier,
-        command.cache_mode,
-        number(receipt, "duration_ms"),
-        number(receipt, "worker_count"),
-        number(receipt, "task_count"),
-        number(receipt, "queue_depth"),
-        text(receipt, "critical_path", "unknown"),
-        text(blocker, "id", "unknown"),
-        text(blocker, "why_failed", "unknown"),
-        text(blocker, "next_repair", "unknown"),
-        text(blocker, "narrow_rerun", "unknown"),
-        text(blocker, "broad_rerun", "unknown"),
-        text(receipt, "claim_ceiling", "source-local only"),
-        command.receipt.display(),
-        text(&receipt["observability"], "run_id", "unknown"),
-        text(&receipt["observability"], "correlation_id", "unknown"),
-        text(&receipt["observability"], "trace_id", "unknown"),
-        text(&receipt["observability"]["trace"], "span_id", "unknown"),
-        query_example(receipt, 0),
-        query_example(receipt, 1),
-        query_example(receipt, 2)
-    )
-}
-
-fn query_example(receipt: &Value, index: usize) -> &str {
-    receipt
-        .get("observability")
-        .and_then(|value| value.get("query_examples"))
-        .and_then(Value::as_array)
-        .and_then(|examples| examples.get(index))
-        .and_then(Value::as_str)
-        .unwrap_or("unknown")
+fn loop_snapshot(
+    root: &Path,
+    candidate: &str,
+    command: &LiveLoopCommand,
+    config: SchedulerConfig,
+) -> LoopSnapshot {
+    let context = AuditContext::new(root, candidate.to_string(), command);
+    let scheduled =
+        crate::scheduler::run_ordered(config, TaskClass::PureReadParallel, context.tasks());
+    let current_state =
+        crate::cli::current_state::snapshot_for_candidate(root, candidate.to_string());
+    let first_blocker = first_loop_blocker(&scheduled.values, &current_state);
+    LoopSnapshot {
+        context,
+        scheduled,
+        current_state,
+        first_blocker,
+    }
 }
 
 fn status_for_blocker(blocker: &Value) -> &'static str {
@@ -192,14 +187,6 @@ fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
             .map(Some)
             .map_err(|_| format!("invalid --jobs value: {raw}")),
     }
-}
-
-fn text<'a>(value: &'a Value, key: &str, default: &'a str) -> &'a str {
-    value.get(key).and_then(Value::as_str).unwrap_or(default)
-}
-
-fn number(value: &Value, key: &str) -> u64 {
-    value.get(key).and_then(Value::as_u64).unwrap_or(0)
 }
 
 #[cfg(test)]

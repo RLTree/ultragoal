@@ -78,7 +78,7 @@ fn performance_overclaim(current: &str) -> Value {
         },
         "performance_regression":{"status":"pass"},
         "failure":null,
-        "claim_ceiling":"performance_proven",
+        "claim_ceiling":"source_local_speed_node_timing_only",
         "blocked_claim_classes":[],
         "supported_claim_classes":["update_goal_eligibility"]
     })

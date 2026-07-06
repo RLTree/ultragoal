@@ -3,6 +3,8 @@ use serde_json::Value;
 
 mod node_speed_evidence;
 
+pub(crate) const SPEED_NODE_CLAIM_CEILING: &str = "source_local_speed_node_timing_only";
+
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     let mut out = Vec::new();
     if value.get("schema").and_then(Value::as_str) != Some(PERFORMANCE_RECEIPT_SCHEMA) {
@@ -31,9 +33,9 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
         out.push("cli_performance_receipt_missing:/failure/check_id".to_string());
     }
     if status == Some("pass")
-        && value.get("claim_ceiling").and_then(Value::as_str) != Some("performance_proven")
+        && value.get("claim_ceiling").and_then(Value::as_str) != Some(SPEED_NODE_CLAIM_CEILING)
     {
-        out.push("cli_performance_pass_without_positive_claim_ceiling".to_string());
+        out.push("cli_performance_pass_without_speed_node_claim_ceiling".to_string());
     }
     if status == Some("pass")
         && value
@@ -172,4 +174,8 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
 
 pub(crate) fn speed_proof_claim_ready(value: &Value, expected_candidate: Option<&str>) -> bool {
     node_speed_evidence::speed_claim_ready(value, expected_candidate)
+}
+
+pub(crate) fn speed_proof_failures(value: &Value, expected_candidate: Option<&str>) -> Vec<String> {
+    node_speed_evidence::speed_failures(value, expected_candidate)
 }

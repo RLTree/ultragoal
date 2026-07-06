@@ -1,27 +1,8 @@
 use serde_json::json;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::{SystemTime, UNIX_EPOCH};
 
-static NEXT_TEMP_ROOT: AtomicU64 = AtomicU64::new(0);
-
-fn digest(ch: char) -> String {
-    crate::self_tests::boundaries::workspace_fixtures::sha(ch)
-}
-
-fn temp_root() -> std::path::PathBuf {
-    let stamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("clock")
-        .as_nanos();
-    let sequence = NEXT_TEMP_ROOT.fetch_add(1, Ordering::SeqCst);
-    std::env::current_dir()
-        .expect("cwd")
-        .join("target")
-        .join(format!(
-            "ultragoal-performance-speed-nodes-{}-{stamp}-{sequence}",
-            std::process::id()
-        ))
-}
+#[path = "test_rows.rs"]
+mod test_rows;
+use test_rows::{digest, executed_row, temp_root, verified_cache_row, write_timing_fixture};
 
 #[test]
 fn projects_current_verified_cache_timing_into_speed_proof() {
@@ -75,6 +56,18 @@ fn projects_current_executed_timing_into_speed_proof() {
 }
 
 #[test]
+fn speed_claim_accepts_artifact_path_when_receipt_path_is_absent() {
+    let candidate = digest('a');
+    let mut row = executed_row(&candidate);
+    row.as_object_mut()
+        .expect("speed row object")
+        .remove("receipt_paths");
+    let proof_kind = super::speed_proof_kind(&row).expect("proof kind");
+
+    assert!(super::row_supports_speed_claim(&row, proof_kind));
+}
+
+#[test]
 fn projects_speed_nodes_in_deterministic_order() {
     let root = temp_root();
     std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");
@@ -94,7 +87,7 @@ fn projects_speed_nodes_in_deterministic_order() {
 }
 
 #[test]
-fn stale_failed_or_unknown_timing_rows_do_not_become_speed_proof() {
+fn stale_rows_are_ignored_but_current_blockers_stay_visible() {
     let root = temp_root();
     std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");
     let candidate = digest('a');
@@ -103,6 +96,7 @@ fn stale_failed_or_unknown_timing_rows_do_not_become_speed_proof() {
     let mut failed = verified_cache_row(&candidate);
     failed["node_id"] = json!("failed");
     failed["timing_status"] = json!("fail");
+    failed["failure_class"] = json!("live_loop_speedup_target_missed");
     let mut unknown = verified_cache_row(&candidate);
     unknown["node_id"] = json!("unknown");
     unknown["proof_kind"] = json!("planned");
@@ -119,8 +113,32 @@ fn stale_failed_or_unknown_timing_rows_do_not_become_speed_proof() {
 
     let proof = super::speed_proof_value(&root, &candidate, true);
     assert_eq!(proof["status"], "blocked");
-    assert_eq!(proof["nodes"].as_array().expect("nodes").len(), 0);
+    let nodes = proof["nodes"].as_array().expect("nodes");
+    assert_eq!(nodes.len(), 3);
+    assert_eq!(proof["first_blocker"]["node_id"], "failed");
+    assert_eq!(
+        proof["first_blocker"]["failure_class"],
+        "live_loop_speedup_target_missed"
+    );
     std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn unknown_speed_proof_kind_blocks_claim_without_neighbor_failure() {
+    let root = temp_root();
+    std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");
+    let candidate = digest('a');
+    let mut unknown = verified_cache_row(&candidate);
+    unknown["node_id"] = json!("unknown-proof-kind");
+    unknown["proof_kind"] = json!("planned");
+    assert!(super::speed_proof_kind(&unknown).is_none());
+    write_timing_fixture(&root, json!({"nodes": [unknown]}));
+
+    let proof = super::speed_proof_value(&root, &candidate, true);
+    assert_eq!(proof["status"], "blocked");
+    assert_eq!(proof["first_blocker"]["node_id"], "unknown-proof-kind");
+    assert_eq!(proof["first_blocker"]["failure_class"], "none");
+    std::fs::remove_dir_all(root).expect("cleanup unknown proof kind");
 }
 
 #[test]
@@ -139,75 +157,9 @@ fn proof_shaped_speed_rows_without_equivalence_do_not_become_speed_proof() {
 
     let proof = super::speed_proof_value(&root, &candidate, true);
     assert_eq!(proof["status"], "blocked");
-    assert_eq!(proof["nodes"].as_array().expect("nodes").len(), 0);
+    let nodes = proof["nodes"].as_array().expect("nodes");
+    assert_eq!(nodes.len(), 2);
+    assert_eq!(nodes[0]["node_id"], "mismatched-cache");
+    assert_eq!(nodes[1]["node_id"], "zero-work");
     std::fs::remove_dir_all(root).expect("cleanup");
-}
-
-fn verified_cache_row(candidate: &str) -> serde_json::Value {
-    let result = digest('c');
-    let output = digest('d');
-    json!({
-        "node_id": "fmt_check",
-        "proof_kind": "verified_cache_hit",
-        "candidate_digest": candidate,
-        "timing_status": "pass",
-        "failure_class": "none",
-        "cache_hit": true,
-        "work_unit_count": 0,
-        "actual_work_duration_ms": 1,
-        "graph_overhead_ms": 1,
-        "result_digest": result,
-        "output_digest": output,
-        "telemetry_reconciliation_status": "pass",
-        "claim_impact": "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
-        "verified_local_exit_code": 0,
-        "receipt_path": "validation_artifacts/observability/live-loop-node-timing.json",
-        "verified_local_failure": {
-            "receipt": "validation_artifacts/observability/live-loop/commands/fmt_check-command-observation.json"
-        },
-        "cache_key": digest('e'),
-        "current_input_digest": digest('f'),
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
-        "prior_result_digest": result,
-        "replayed_output_digest": output,
-        "cache_equivalence_status": "pass",
-        "equivalence_status": "verified_same_candidate_cache_replay",
-        "invalidation_proof": "cache_key_current_input_digest_command_versions_and_candidate_row_matched"
-    })
-}
-
-fn executed_row(candidate: &str) -> serde_json::Value {
-    json!({
-        "node_id": "fmt_check",
-        "proof_kind": "executed",
-        "candidate_digest": candidate,
-        "timing_status": "pass",
-        "failure_class": "none",
-        "cache_hit": false,
-        "work_unit_count": 3,
-        "actual_work_duration_ms": 1253,
-        "graph_overhead_ms": 1,
-        "result_digest": digest('c'),
-        "output_digest": digest('d'),
-        "telemetry_reconciliation_status": "pass",
-        "claim_impact": "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
-        "verified_local_exit_code": 0,
-        "receipt_path": "validation_artifacts/observability/live-loop-node-timing.json",
-        "verified_local_failure": {
-            "receipt": "validation_artifacts/observability/live-loop/commands/fmt_check-command-observation.json"
-        }
-    })
-}
-
-fn write_timing_fixture(root: &std::path::Path, value: serde_json::Value) {
-    std::fs::write(
-        root.join(super::NODE_TIMING_REL),
-        serde_json::to_string_pretty(&value).expect("json"),
-    )
-    .expect("timing");
 }

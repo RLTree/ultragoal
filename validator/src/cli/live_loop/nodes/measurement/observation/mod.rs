@@ -4,7 +4,9 @@ mod event;
 mod event_receipt;
 mod query_roundtrip;
 #[cfg(test)]
-mod roundtrip_status;
+mod receipts;
+#[cfg(test)]
+mod status;
 
 use super::full_command::FullCommandRun;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
@@ -154,13 +156,41 @@ fn all_roundtrip_statuses_pass(
     traces: &query_roundtrip::ObserveReceipt,
     explain: &query_roundtrip::ObserveReceipt,
 ) -> bool {
-    let statuses = [
-        logs.status.as_str(),
-        metrics.status.as_str(),
-        traces.status.as_str(),
-        explain.status.as_str(),
-    ];
-    statuses == ["pass", "pass", "pass", "pass"]
+    query_receipt_is_claim_observable(logs)
+        && query_receipt_is_claim_observable(metrics)
+        && query_receipt_is_claim_observable(traces)
+        && explain_receipt_is_claim_observable(explain)
+}
+
+fn query_receipt_is_claim_observable(receipt: &query_roundtrip::ObserveReceipt) -> bool {
+    receipt.exit_code == 0
+        && receipt.status == "pass"
+        && text(&receipt.value, "status") == Some("pass")
+        && text(&receipt.value, "bounded_output_status") == Some("pass")
+        && text(&receipt.value, "redaction_status") == Some("pass")
+        && receipt
+            .value
+            .get("row_count")
+            .and_then(Value::as_u64)
+            .is_some_and(|rows| rows > 0)
+        && text(&receipt.value, "result_digest").is_some_and(nonempty)
+}
+
+fn explain_receipt_is_claim_observable(receipt: &query_roundtrip::ObserveReceipt) -> bool {
+    receipt.exit_code == 0
+        && receipt.status == "pass"
+        && text(&receipt.value, "status") == Some("pass")
+        && text(&receipt.value, "bounded_output_proof") == Some("pass")
+        && text(&receipt.value, "failure_class").is_some()
+        && text(&receipt.value, "claim_impact").is_some_and(nonempty)
+}
+
+fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
+    value.get(key).and_then(Value::as_str)
+}
+
+fn nonempty(value: &str) -> bool {
+    !value.is_empty()
 }
 
 fn reconciliation_status(roundtrips_passed: bool) -> &'static str {

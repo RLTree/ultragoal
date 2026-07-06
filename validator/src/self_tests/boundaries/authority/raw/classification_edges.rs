@@ -130,6 +130,61 @@ fn raw_authority_scanner_classifies_live_loop_timing_projections_by_product_fiel
 }
 
 #[test]
+fn raw_authority_scanner_classifies_speed_claim_projection_by_product_fields() {
+    let speed_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/performance/proof/speed_nodes/mod.rs",
+        "use serde_json::{Value,json};\n\
+         fn speed_proof_value() -> Value {\n\
+             let _ = current_nodes();\n\
+             let _ = first_blocker();\n\
+             json!({\"claim_impact\":\"performance_claims_withheld_until_speed_nodes_record_product_work_or_verified_reuse\"})\n\
+         }\n\
+         fn current_nodes() -> Vec<Value> { Vec::new() }\n\
+         fn first_blocker() -> Value { Value::Null }\n",
+    );
+    assert!(speed_projection.is_empty(), "{speed_projection:?}");
+
+    let claim_readiness = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/performance/proof/speed_nodes/claim_readiness.rs",
+        "use serde_json::{Value,json};\n\
+         fn node_supports_positive_speed_claim(_: &Value) -> bool { true }\n\
+         fn node_has_cache_replay_speed_proof(_: &Value) -> bool { true }\n\
+         fn first_blocker() -> Value { json!({\"equivalence_status\":\"verified_same_candidate_cache_replay\"}) }\n",
+    );
+    assert!(claim_readiness.is_empty(), "{claim_readiness:?}");
+
+    let timing_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/performance/proof/speed_nodes/timing_projection.rs",
+        "use serde_json::{Value,json};\n\
+         const NODE_TIMING_REL: &str = \"validation_artifacts/observability/live-loop-node-timing.json\";\n\
+         fn current_nodes() -> Vec<Value> { Vec::new() }\n\
+         fn project_node() -> Value { json!({\"command_argv\":[\"ultragoal\"],\"timing_source\":NODE_TIMING_REL}) }\n",
+    );
+    assert!(timing_projection.is_empty(), "{timing_projection:?}");
+}
+
+#[test]
+fn raw_authority_scanner_rejects_generic_speed_claim_projection_rows() {
+    for rel in [
+        "validator/src/cli/performance/proof/speed_nodes/mod.rs",
+        "validator/src/cli/performance/proof/speed_nodes/claim_readiness.rs",
+        "validator/src/cli/performance/proof/speed_nodes/timing_projection.rs",
+    ] {
+        let failures = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            rel,
+            "use serde_json::{Value,json};\n\
+             fn generic_record() -> Value { json!({\"status\":\"pass\"}) }\n",
+        );
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+            "{rel}: {failures:?}"
+        );
+    }
+}
+
+#[test]
 fn raw_authority_scanner_rejects_generic_live_loop_json_projection_rows() {
     for rel in [
         "validator/src/cli/live_loop/graph/node_record.rs",

@@ -30,7 +30,7 @@ fn valid_fail() -> Value {
 fn valid_pass() -> Value {
     let mut value = valid_fail();
     value["status"] = json!("pass");
-    value["claim_ceiling"] = json!("performance_proven");
+    value["claim_ceiling"] = json!("source_local_speed_node_timing_only");
     value["failure"] = Value::Null;
     value["blocked_claim_classes"] = json!([]);
     value["supported_claim_classes"] = json!(["routine_usability"]);
@@ -44,7 +44,7 @@ fn strict_pass(candidate: &str) -> Value {
     json!({
         "schema": PERFORMANCE_RECEIPT_SCHEMA,
         "status": "pass",
-        "claim_ceiling": "performance_proven",
+        "claim_ceiling": "source_local_speed_node_timing_only",
         "command": {"argv": ["ultragoal", "performance", "prove"]},
         "budget": strict_budget(),
         "digests": {"candidate": candidate},
@@ -84,6 +84,11 @@ fn speed_node(candidate: &str) -> Value {
         "output_digest": digest,
         "receipt_paths": ["validation_artifacts/observability/live-loop-node-timing.json"],
         "telemetry_reconciliation_status": "pass",
+        "timing_status": "pass",
+        "failure_class": "none",
+        "where_failed": "none",
+        "why_failed": "none",
+        "next_repair": "none",
         "claim_impact": "supports_node_speed_only"
     })
 }
@@ -140,7 +145,7 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
     fake_pass["claim_ceiling"] = json!("withheld_or_blocked");
     assert!(
         surface_value_failures(&fake_pass)
-            .contains(&"cli_performance_pass_without_positive_claim_ceiling".to_string())
+            .contains(&"cli_performance_pass_without_speed_node_claim_ceiling".to_string())
     );
 
     let mut blocked_pass = valid_pass();

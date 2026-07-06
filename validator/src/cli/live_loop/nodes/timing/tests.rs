@@ -189,7 +189,7 @@ fn current_timing_row(
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
-    json!({
+    let mut row = json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
         "tier": "hot",
@@ -221,6 +221,7 @@ fn current_timing_row(
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
         "verified_local_stdout_digest": stdout_digest,
         "verified_local_stderr_digest": stderr_digest,
+        "verified_local_exit_code": exit_code,
         "output_digest": output_digest,
         "result_digest": result_digest,
         "verified_local_output_digest": output_digest,
@@ -229,7 +230,16 @@ fn current_timing_row(
         "why_failed": "canonical full command exited nonzero while measuring live-loop node",
         "next_repair": "run cargo fmt and rerun loop measure",
         "affected_set_status": "clean_worktree_no_affected_files"
-    })
+    });
+    let object = row.as_object_mut().expect("timing row object");
+    object.insert(
+        "command_argv".to_string(),
+        json!(["bash", "-lc", "cargo fmt --all --check"]),
+    );
+    object.insert("exit_status".to_string(), json!(exit_code));
+    object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
+    object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
+    row
 }
 
 fn digest(label: &str) -> String {

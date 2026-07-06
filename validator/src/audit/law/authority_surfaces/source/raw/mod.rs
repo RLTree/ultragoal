@@ -1,6 +1,7 @@
 mod classifiers;
 mod markers;
 mod projection;
+mod projection_catalog;
 
 use classifiers::{
     typed_cli_command_boundary_text, typed_law_check_boundary_text, typed_path_boundary_text,

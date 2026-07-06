@@ -41,7 +41,7 @@ fn cache_replay_rejects_prior_rows_without_product_equivalence() {
     for bad_row in [
         timing_row(&fixture).with_value("candidate_digest", json!(digest("other"))),
         timing_row(&fixture).with_value("proof_kind", json!("planned")),
-        timing_row(&fixture).with_value("verified_local_exit_code", json!(1)),
+        timing_row(&fixture).with_value("exit_status", json!(1)),
         timing_row(&fixture).with_value("output_digest", json!(digest("wrong-output"))),
         timing_row(&fixture).with_value(
             "verified_local_result_digest",
@@ -49,7 +49,7 @@ fn cache_replay_rejects_prior_rows_without_product_equivalence() {
         ),
         timing_row(&fixture).with_value("work_unit_count", json!(0)),
         timing_row(&fixture).with_value("equivalence_status", json!("unknown")),
-        timing_row(&fixture).with_value("verified_local_command_argv", json!([])),
+        timing_row(&fixture).with_value("command_argv", json!([])),
     ] {
         write_timing_row(&fixture.root, bad_row);
         assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
@@ -152,7 +152,10 @@ fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "cache_honesty": "pass",
         "telemetry_reconciliation_status": "pass",
         "verified_local_exit_code": 0,
+        "exit_status": 0,
         "verified_local_launch_error": false,
+        "receipt_paths": [NODE_TIMING_REL],
+        "artifact_paths": [NODE_TIMING_REL],
         "verified_local_stdout_digest": stdout_digest(),
         "verified_local_stderr_digest": stderr_digest(),
         "output_digest": output_digest(),
@@ -169,7 +172,8 @@ fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "equivalence_status": "executed_current_candidate_not_cache_replay",
         "invalidation_proof": "input_digest_and_candidate_checked",
         "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"]
+        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
+        "command_argv": ["bash", "-lc", "cargo fmt --all --check"]
     })
 }
 

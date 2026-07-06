@@ -84,20 +84,23 @@ pub(crate) fn read_current(
             let equivalence_status = text(row, "equivalence_status")?;
             let invalidation_proof = text(row, "invalidation_proof")?;
             let telemetry_reconciliation_status = text(row, "telemetry_reconciliation_status")?;
-            let validator_version = text(row, "validator_version")?;
-            let law_version = text(row, "law_version")?;
-            let schema_version = text(row, "schema_version")?;
-            let fixture_version = text(row, "fixture_version")?;
-            if validator_version.is_empty()
-                || law_version.is_empty()
-                || schema_version.is_empty()
-                || fixture_version.is_empty()
-            {
+            let version_fields = [
+                text(row, "validator_version")?,
+                text(row, "law_version")?,
+                text(row, "schema_version")?,
+                text(row, "fixture_version")?,
+            ];
+            if version_fields.iter().any(|value| value.is_empty()) {
                 return None;
             }
             let verified_local_command = text(row, "verified_local_command")?;
-            if verified_local_command.is_empty()
-                || !has_nonempty_string_array(row, "verified_local_command_argv")
+            if verified_local_command.is_empty() || !has_nonempty_string_array(row, "command_argv")
+            {
+                return None;
+            }
+            row.get("exit_status").and_then(Value::as_i64)?;
+            if !has_nonempty_string_array(row, "receipt_paths")
+                && !has_nonempty_string_array(row, "artifact_paths")
             {
                 return None;
             }

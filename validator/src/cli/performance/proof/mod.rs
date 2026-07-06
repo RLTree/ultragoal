@@ -6,6 +6,7 @@ use super::types::{
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
+mod speed_claim_failure;
 mod speed_nodes;
 
 pub(crate) fn receipt(
@@ -56,13 +57,17 @@ pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) 
     let speed_proof_ready = super::receipt::speed_proof_claim_ready(value, None);
     if wall_ms <= class.cold_p95_ms() && speed_proof_ready {
         value["status"] = json!("pass");
-        value["claim_ceiling"] = json!("performance_proven");
+        value["claim_ceiling"] = json!(super::receipt::SPEED_NODE_CLAIM_CEILING);
         value["performance_regression"] = regression_value("pass");
         value["exit_code"] = json!(0);
         value["supported_claim_classes"] = json!(["routine_usability"]);
         value["blocked_claim_classes"] = json!([]);
         value["failure"] = Value::Null;
     } else {
+        let has_speed_nodes = value
+            .pointer("/speed_proof/nodes")
+            .and_then(Value::as_array)
+            .is_some_and(|nodes| !nodes.is_empty());
         let (failure_id, failed_invariant, observed_value, expected_value) = if speed_proof_ready {
             (
                 "cli_performance_budget_exceeded",
@@ -70,11 +75,18 @@ pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) 
                 format!("wall_clock_ms={wall_ms}"),
                 format!("wall_clock_ms<={}", class.cold_p95_ms()),
             )
+        } else if has_speed_nodes {
+            (
+                "cli_performance_node_speed_proof_failed",
+                "current same-candidate speed proof nodes must satisfy node timing and reuse laws",
+                speed_claim_failure::observed_value(value),
+                "each node has timing_status=pass, failure_class=none, product-work evidence, and verified telemetry reconciliation".to_string(),
+            )
         } else {
             (
                 "cli_performance_missing_node_speed_proof",
                 "speed claims require executed work or verified same-candidate cache replay per node",
-                "speed_proof.nodes=[]".to_string(),
+                speed_claim_failure::observed_value(value),
                 "each node records proof_kind=executed or proof_kind=verified_cache_hit with product-work evidence".to_string(),
             )
         };

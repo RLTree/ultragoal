@@ -8,6 +8,8 @@ mod exporter;
 mod identity;
 mod metric;
 mod query;
+#[cfg(test)]
+mod query_receipt_tests;
 mod receipt;
 mod record;
 mod runtime;

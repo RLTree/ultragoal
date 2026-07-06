@@ -65,7 +65,7 @@ fn replay_from_row(
         return None;
     }
     let exit_code = row
-        .get("verified_local_exit_code")?
+        .get("exit_status")?
         .as_i64()
         .and_then(|value| i32::try_from(value).ok())?;
     let launch_error = row.get("verified_local_launch_error")?.as_bool()?;
@@ -151,7 +151,7 @@ fn row_has_required_versions(row: &Value) -> bool {
 }
 
 fn row_has_command_argv(row: &Value) -> bool {
-    row.get("verified_local_command_argv")
+    row.get("command_argv")
         .and_then(Value::as_array)
         .is_some_and(|argv| {
             !argv.is_empty()

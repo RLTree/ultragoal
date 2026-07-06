@@ -23,7 +23,9 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"actual_work_duration_ms": 3}),
         json!({"validator_version": ""}),
         json!({"verified_local_command": ""}),
-        json!({"verified_local_command_argv": []}),
+        json!({"command_argv": []}),
+        json!({"exit_status": serde_json::Value::Null}),
+        json!({"receipt_paths": [], "artifact_paths": []}),
         json!({"result_digest": serde_json::Value::Null}),
         json!({"output_digest": serde_json::Value::Null}),
         json!({"result_digest": digest("different-result")}),
@@ -85,7 +87,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
-    json!({
+    let mut row = json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
         "tier": "hot",
@@ -117,6 +119,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
         "verified_local_stdout_digest": stdout_digest,
         "verified_local_stderr_digest": stderr_digest,
+        "verified_local_exit_code": 0,
         "output_digest": output_digest,
         "result_digest": result_digest,
         "verified_local_output_digest": output_digest,
@@ -125,7 +128,16 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "why_failed": "none",
         "next_repair": "none",
         "affected_set_status": "clean_worktree_no_affected_files"
-    })
+    });
+    let object = row.as_object_mut().expect("timing row object");
+    object.insert(
+        "command_argv".to_string(),
+        json!(["bash", "-lc", "cargo fmt --all --check"]),
+    );
+    object.insert("exit_status".to_string(), json!(0));
+    object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
+    object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
+    row
 }
 
 fn digest(label: &str) -> String {

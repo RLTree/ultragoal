@@ -74,7 +74,13 @@ pub(crate) fn node_timing_row(
     let object = row
         .as_object_mut()
         .expect("live-loop timing row is always an object");
-    insert_execution_fields(object, surface, input_digest, verified_local);
+    insert_execution_fields(
+        object,
+        surface,
+        input_digest,
+        command.receipt.display().to_string(),
+        verified_local,
+    );
     object.insert("output_digest".to_string(), json!(output_digest));
     object.insert(
         "verified_local_output_digest".to_string(),
@@ -118,6 +124,7 @@ fn insert_execution_fields(
     object: &mut Map<String, Value>,
     surface: LoopValidationSurface,
     input_digest: &str,
+    receipt_path: String,
     verified_local: &VerifiedLocalProof,
 ) {
     object.insert("proof_kind".to_string(), json!(verified_local.proof_kind));
@@ -168,9 +175,19 @@ fn insert_execution_fields(
         json!(["bash", "-lc", surface.narrow_rerun]),
     );
     object.insert(
+        "command_argv".to_string(),
+        json!(["bash", "-lc", surface.narrow_rerun]),
+    );
+    object.insert(
         "verified_local_exit_code".to_string(),
         json!(verified_local.actual_work.exit_code),
     );
+    object.insert(
+        "exit_status".to_string(),
+        json!(verified_local.actual_work.exit_code),
+    );
+    object.insert("receipt_paths".to_string(), json!([receipt_path]));
+    object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert(
         "verified_local_launch_error".to_string(),
         json!(verified_local.actual_work.launch_error),

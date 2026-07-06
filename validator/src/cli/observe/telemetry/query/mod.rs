@@ -15,7 +15,21 @@ pub(super) fn result(
     status: &str,
     failure: Option<&str>,
 ) -> Result<Value, String> {
-    let telemetry = super::receipt::base(root, command, status, failure)?;
+    let row_value = Value::Array(rows.clone());
+    let row_text = row_value.to_string();
+    let redaction_status = record::redaction_status(&row_value);
+    let bounded_output_status = claims::bounds_status(command);
+    let mut effective_status = status;
+    let mut effective_failure = failure;
+    if effective_status == "pass" && bounded_output_status != "pass" {
+        effective_status = "fail";
+        effective_failure = Some("observability_query_bounds_failed");
+    }
+    if effective_status == "pass" && redaction_status != "pass" {
+        effective_status = "fail";
+        effective_failure = Some("observability_query_redaction_failed");
+    }
+    let telemetry = super::receipt::base(root, command, effective_status, effective_failure)?;
     let candidate = receipt_text(&telemetry, "candidate_digest")?;
     let run_id = receipt_text(&telemetry, "run_id")?;
     let correlation_id = receipt_text(&telemetry, "correlation_id")?;
@@ -23,9 +37,6 @@ pub(super) fn result(
     let why_failed = receipt_text(&telemetry, "why_failed")?;
     let where_failed = receipt_text(&telemetry, "where_failed")?;
     let next_repair = receipt_text(&telemetry, "next_repair")?;
-    let row_value = Value::Array(rows.clone());
-    let row_text = row_value.to_string();
-    let redaction_status = record::redaction_status(&row_value);
     let observed_failure = observed_failure(&rows).unwrap_or(Value::Null);
     let observed_record = crate::cli::observe::query::observed_telemetry_record(&rows);
     let observed_failure_class = observed_failure_text(&observed_failure, "failure_class");
@@ -36,7 +47,7 @@ pub(super) fn result(
     let metric_summary = metric_signal::summary(query_kind, &rows);
     let mut receipt = json!({
         "schema": types::QUERY_SCHEMA,
-        "status": status,
+        "status": effective_status,
         "candidate_digest": candidate,
         "run_id": run_id,
         "correlation_id": correlation_id,
@@ -54,9 +65,9 @@ pub(super) fn result(
         "retention_bound": "2d",
         "cardinality_guard": "bounded",
         "truncated": rows.len() >= command.row_limit,
-        "bounded_output_status": claims::bounds_status(command),
+        "bounded_output_status": bounded_output_status,
         "redaction_status": redaction_status,
-        "claim_impact": if status == "pass" { "query_observation_only" } else { "observability_claims_blocked" },
+        "claim_impact": if effective_status == "pass" { "query_observation_only" } else { "observability_claims_blocked" },
         "result_digest": crate::digest::canonical_json(&Value::Array(rows.clone())),
         "observed_failure": observed_failure,
         "observed_failure_class": observed_failure_class,
@@ -65,8 +76,8 @@ pub(super) fn result(
         "observed_next_repair": observed_next_repair,
         "observed_claim_impact": observed_claim_impact,
         "rows": rows,
-        "failure": failure.unwrap_or(""),
-        "supported_claims": if status == "pass" { json!(["observability_query_observation"]) } else { json!([]) },
+        "failure": effective_failure.unwrap_or(""),
+        "supported_claims": if effective_status == "pass" { json!(["observability_query_observation"]) } else { json!([]) },
         "blocked_claims": json!(["completion", "readiness", "release", "update_goal_eligibility"])
     });
     receipt["observed_record"] = observed_record;

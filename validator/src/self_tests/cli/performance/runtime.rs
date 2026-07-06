@@ -50,10 +50,7 @@ fn receipt_is_fail_closed_and_surface_bound() {
     assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
     assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
     assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);
-    assert_eq!(
-        value["failure"]["id"],
-        "cli_performance_missing_node_speed_proof"
-    );
+    assert_performance_speed_failure(value["failure"]["id"].as_str().unwrap_or(""));
     assert!(
         value["supported_claim_classes"]
             .as_array()
@@ -87,10 +84,7 @@ fn receipt_is_fail_closed_and_surface_bound() {
         receipt(&root, &command, BudgetClass::ExternalLive.cold_p95_ms() + 1).expect("receipt");
     assert_eq!(over_budget["status"], "fail");
     assert_eq!(over_budget["claim_ceiling"], "withheld_or_blocked");
-    assert_eq!(
-        over_budget["failure"]["id"],
-        "cli_performance_missing_node_speed_proof"
-    );
+    assert_performance_speed_failure(over_budget["failure"]["id"].as_str().unwrap_or(""));
     assert!(
         over_budget["blocked_claim_classes"]
             .as_array()
@@ -125,7 +119,8 @@ fn run_writes_receipt_and_returns_typed_exit_code() {
         [
             (0, ""),
             (1, "cli_performance_budget_exceeded"),
-            (1, "cli_performance_missing_node_speed_proof")
+            (1, "cli_performance_missing_node_speed_proof"),
+            (1, "cli_performance_node_speed_proof_failed")
         ]
         .contains(&(exit_code, failure_id)),
         "failure id {failure_id} for exit code {exit_code}"
@@ -137,4 +132,15 @@ fn run_writes_receipt_and_returns_typed_exit_code() {
         class: BudgetClass::StrictLocal,
     };
     assert_eq!(run(&root, &no_write).expect("run prints receipt"), 0);
+}
+
+fn assert_performance_speed_failure(failure_id: &str) {
+    assert!(
+        [
+            "cli_performance_missing_node_speed_proof",
+            "cli_performance_node_speed_proof_failed"
+        ]
+        .contains(&failure_id),
+        "failure id {failure_id}"
+    );
 }

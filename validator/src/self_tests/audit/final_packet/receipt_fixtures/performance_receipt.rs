@@ -8,7 +8,7 @@ pub(super) fn ref_for(root: &Path, candidate: &str) -> Value {
         &json!({
             "schema":"harness-ultragoal.cli-performance-receipt.v1",
             "status":"pass",
-            "claim_ceiling":"performance_proven",
+            "claim_ceiling":"source_local_speed_node_timing_only",
             "command":{"argv":["ultragoal","performance","prove"]},
             "budget":{
                 "class":"strict_local",
@@ -36,6 +36,11 @@ fn node_speed_evidence(candidate: &str) -> Value {
     json!({
         "node_id": "performance_prove",
         "proof_kind": "executed",
+        "timing_status": "pass",
+        "failure_class": "none",
+        "where_failed": "none",
+        "why_failed": "none",
+        "next_repair": "none",
         "candidate_digest": candidate,
         "cache_hit": false,
         "command_argv": ["ultragoal", "performance", "prove"],

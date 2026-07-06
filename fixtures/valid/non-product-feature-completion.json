@@ -4453,7 +4453,7 @@
       "validator/src/self_tests/cli/performance/observability_edges.rs",
       "validator/src/self_tests/cli/performance/receipts.rs",
       "validator/src/self_tests/cli/performance/runtime.rs",
-      "validator/src/self_tests/cli/performance/speed_node_receipts.rs",
+      "validator/src/self_tests/cli/performance/speed_node/receipts.rs",
       "validator/src/self_tests/cli/product/mod.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/root.rs",
@@ -21558,8 +21558,8 @@
           "path": "validator/src/self_tests/cli/performance/runtime.rs"
         },
         {
-          "digest": "sha256:2749fecedf58ca438b04ab4dd348f80ee507d7d2465ff5e979ff62fb2744d9cb",
-          "path": "validator/src/self_tests/cli/performance/speed_node_receipts.rs"
+          "digest": "sha256:24971db4e765c6de445acc2f49b197136c2021bdd71d988583502f086e386ef8",
+          "path": "validator/src/self_tests/cli/performance/speed_node/receipts.rs"
         },
         {
           "digest": "sha256:d7294fa94a996b7f74eb4856420a2ec9ea77b45a7e8b095cdaf63edc431694f0",

@@ -202,7 +202,8 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
         "live_loop_telemetry_reconciliation_missing"
     );
     assert_eq!(row["proof_kind"], "executed");
-    assert_eq!(row["verified_local_command_argv"][0], "bash");
+    assert_eq!(row["command_argv"][0], "bash");
+    assert_eq!(row["exit_status"], 0);
     assert!(
         row["output_digest"]
             .as_str()

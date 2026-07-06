@@ -4,7 +4,7 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 const QUERY_TIMEOUT_MS: u64 = 3_000;
-const METRIC_QUERY_TIMEOUT_MS: u64 = 60_000;
+const METRIC_QUERY_TIMEOUT_MS: u64 = 30_000;
 const TRACE_QUERY_TIMEOUT_MS: u64 = 30_000;
 const ROW_LIMIT: usize = 100;
 const BYTE_LIMIT: usize = 262_144;

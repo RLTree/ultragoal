@@ -1,0 +1,102 @@
+use super::*;
+use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
+use serde_json::json;
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+static NEXT_TEMP_ROOT: AtomicU64 = AtomicU64::new(0);
+
+fn command(operation: ObserveOperation) -> ObserveCommand {
+    ObserveCommand {
+        operation,
+        receipt: None,
+        query: None,
+        run_id: None,
+        correlation_id: None,
+        claim_id: None,
+        check_id: None,
+        law_id: None,
+        target_command: None,
+        target_family: None,
+        row_limit: 100,
+        byte_limit: 4096,
+        timeout_ms: 1000,
+    }
+}
+
+fn temp_root(name: &str) -> PathBuf {
+    let stamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("clock")
+        .as_nanos();
+    let sequence = NEXT_TEMP_ROOT.fetch_add(1, Ordering::SeqCst);
+    std::env::current_dir()
+        .expect("cwd")
+        .join("target")
+        .join(format!(
+            "ultragoal-observe-telemetry-{name}-{}-{stamp}-{sequence}",
+            std::process::id()
+        ))
+}
+
+fn write_minimal_manifest(root: &std::path::Path) {
+    std::fs::create_dir_all(root).expect("root");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+}
+
+fn synthetic_private_path() -> String {
+    ["", "Users", "tree", "private-token"].join("/")
+}
+
+#[test]
+fn query_receipts_fail_closed_for_bounds_or_redaction_violation() {
+    let root = temp_root("query-proof-shaped-bounds");
+    write_minimal_manifest(&root);
+
+    let mut unbounded = command(ObserveOperation::LogsQuery);
+    unbounded.timeout_ms = 60_000;
+    let bounds_receipt = query_result(
+        &root,
+        &unbounded,
+        "logs",
+        "run_id:run-bounds".to_string(),
+        vec![json!({"body":"{\"status\":\"pass\"}"})],
+        "pass",
+        None,
+    )
+    .expect("bounds receipt");
+    assert_eq!(bounds_receipt["status"], "fail");
+    assert_eq!(
+        bounds_receipt["failure"],
+        "observability_query_bounds_failed"
+    );
+    assert_eq!(bounds_receipt["bounded_output_status"], "fail");
+    assert_eq!(
+        bounds_receipt["claim_impact"],
+        "observability_claims_blocked"
+    );
+
+    let redaction_receipt = query_result(
+        &root,
+        &command(ObserveOperation::LogsQuery),
+        "logs",
+        "run_id:run-redaction".to_string(),
+        vec![json!({"body": synthetic_private_path()})],
+        "pass",
+        None,
+    )
+    .expect("redaction receipt");
+    assert_eq!(redaction_receipt["status"], "fail");
+    assert_eq!(
+        redaction_receipt["failure"],
+        "observability_query_redaction_failed"
+    );
+    assert_eq!(redaction_receipt["redaction_status"], "fail");
+    assert_eq!(redaction_receipt["supported_claims"], json!([]));
+    std::fs::remove_dir_all(root).expect("cleanup query fail closed");
+}

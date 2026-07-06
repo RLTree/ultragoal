@@ -31,6 +31,11 @@ fn speed_node_failures(node: &Value, expected_candidate: Option<&str>) -> Vec<St
         "node_id",
         "proof_kind",
         "candidate_digest",
+        "timing_status",
+        "failure_class",
+        "where_failed",
+        "why_failed",
+        "next_repair",
         "actual_work_duration_ms",
         "graph_overhead_ms",
         "result_digest",
@@ -83,6 +88,14 @@ fn speed_node_failures(node: &Value, expected_candidate: Option<&str>) -> Vec<St
     if str_field(node, "telemetry_reconciliation_status") != Some("pass") {
         out.push(format!(
             "cli_performance_speed_node_telemetry_not_reconciled:{node_id}"
+        ));
+    }
+    if str_field(node, "timing_status") != Some("pass")
+        || str_field(node, "failure_class") != Some("none")
+    {
+        let failure_class = str_field(node, "failure_class").unwrap_or("unknown_failure_class");
+        out.push(format!(
+            "cli_performance_speed_node_timing_failed:{node_id}:{failure_class}"
         ));
     }
     match proof_kind {

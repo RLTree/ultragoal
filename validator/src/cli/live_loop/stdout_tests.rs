@@ -1,8 +1,8 @@
-use super::{LiveLoopAction, LiveLoopCommand, summary_line};
+use super::{LiveLoopAction, LiveLoopCommand, stdout::summary_line};
 use serde_json::json;
 
 #[test]
-fn loop_repair_summary_output_names_trace_and_query_routes() {
+fn loop_stdout_names_trace_and_query_routes() {
     let command = LiveLoopCommand {
         action: LiveLoopAction::Run,
         tier: "hot".to_string(),

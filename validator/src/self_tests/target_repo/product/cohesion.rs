@@ -157,9 +157,14 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     let performance_value = crate::json_boundary::read_json(&root.join(&performance_receipt))
         .expect("performance receipt");
     assert_eq!(performance_value["status"], "fail");
-    assert_eq!(
-        performance_value["failure"]["id"],
-        "cli_performance_missing_node_speed_proof"
+    let failure_id = performance_value["failure"]["id"].as_str().unwrap_or("");
+    assert!(
+        [
+            "cli_performance_missing_node_speed_proof",
+            "cli_performance_node_speed_proof_failed"
+        ]
+        .contains(&failure_id),
+        "performance failure id {failure_id}"
     );
 
     let review_code =

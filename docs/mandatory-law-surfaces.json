@@ -819,23 +819,39 @@
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:1d7910ebb7cf8fae8c909fefdc5666f054dd04e948ca7201d48be8ce8994cc45",
+          "digest": "sha256:98590b83fb7dfeaaa6e3d8d763d51a7422ddf5fdb6087e78aeed0e0b67465e57",
           "path": "validator/src/cli/performance/proof/mod.rs"
         },
         {
-          "digest": "sha256:9b0ab1719ceaf448ac9f7803dfb75a2c40f3ce2e2f46883de4ba5179fbb781a3",
+          "digest": "sha256:c6f2abbc0689a7fdedf94eb9305a3eebfdc7d3b45ade120ff52159f374550be9",
+          "path": "validator/src/cli/performance/proof/speed_claim_failure.rs"
+        },
+        {
+          "digest": "sha256:ae7a45e0626d21846844155ab5bbcffe8a09f18ea56daf33057e79de796881f4",
           "path": "validator/src/cli/performance/proof/speed_nodes/mod.rs"
         },
         {
-          "digest": "sha256:592b7478a05deb5f540d56cff0872b7281d2d1e2bb9340cc232ba01262229074",
+          "digest": "sha256:fff010be8d68121f6654ff859d9dd364822121ce15fabfa718764d0dc8b591a5",
+          "path": "validator/src/cli/performance/proof/speed_nodes/claim_readiness.rs"
+        },
+        {
+          "digest": "sha256:9d1cc966a612843ab9b262d285af9398185a93a88a25d62839ac22e75b68d5f4",
+          "path": "validator/src/cli/performance/proof/speed_nodes/timing_projection.rs"
+        },
+        {
+          "digest": "sha256:5c5eb1e538f81cc8703e43db572f9667b81f5805388da98713dfbcd722d12ace",
+          "path": "validator/src/cli/performance/proof/speed_nodes/test_rows.rs"
+        },
+        {
+          "digest": "sha256:1608255a71e95d44ba88faf841b3d867786fdab4ea78a998d0d1a3e560e7747b",
           "path": "validator/src/cli/performance/proof/speed_nodes/tests.rs"
         },
         {
-          "digest": "sha256:5300416b2eafab124ba1d7f260a9f7f3949031282992885ef88c73ddebea8267",
+          "digest": "sha256:38fea8eea2635270f1d35774431f288e5a33a9f321d8515520b4647b6ecf3cfb",
           "path": "validator/src/cli/performance/receipt/mod.rs"
         },
         {
-          "digest": "sha256:b7b1a7207471cd2118e9729175b0e0b05f48f38b203319af0910567b19c1095c",
+          "digest": "sha256:2e9b1cab559fde326f65344f29cf756c3b015ab4bfd8f98fb854800acf37aee9",
           "path": "validator/src/cli/performance/receipt/node_speed_evidence.rs"
         },
         {
@@ -843,7 +859,7 @@
           "path": "validator/src/cli/performance/types.rs"
         },
         {
-          "digest": "sha256:dd11b1b6fb8fec8e8bfe71dde0cd28cd7c3fb9a903472d746772a2c8f75253ce",
+          "digest": "sha256:d6026a61c20d7af83fafef101ea83c3f5df56a92edd7cf33bbcbf48eb607dfc9",
           "path": "schemas/cli-performance-receipt.schema.json"
         }
       ],

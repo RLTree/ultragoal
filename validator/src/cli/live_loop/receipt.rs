@@ -1,3 +1,4 @@
+use super::node_timing_refresh::TimingRefresh;
 use crate::cli::live_loop::LiveLoopCommand;
 use crate::cli::live_loop::context::AuditContext;
 use serde_json::{Value, json};
@@ -11,6 +12,7 @@ pub(crate) fn loop_receipt(
     scheduled: crate::scheduler::Scheduled<Value>,
     current_state: Value,
     first_blocker: Value,
+    timing_refreshes: Vec<TimingRefresh>,
     status: &str,
     started: Instant,
 ) -> Result<Value, String> {
@@ -68,6 +70,7 @@ pub(crate) fn loop_receipt(
         "task_count": scheduled.metrics.task_count,
         "queue_depth": scheduled.metrics.queue_depth,
         "critical_path": "current_digest -> AuditContext -> observability_control_board -> current_state",
+        "timing_refreshes": timing_refreshes,
         "nodes": scheduled.values,
         "current_state": current_state,
         "first_blocker": first_blocker,
