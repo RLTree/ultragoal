@@ -88,12 +88,8 @@ where
     F: Fn(&Value) -> bool,
 {
     let dir = root.join("validation_artifacts/observability");
-    let mut paths = std::fs::read_dir(dir)
-        .ok()?
-        .filter_map(Result::ok)
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().and_then(|ext| ext.to_str()) == Some("json"))
-        .collect::<Vec<_>>();
+    let mut paths = Vec::new();
+    collect_json_files(&dir, &mut paths);
     paths.sort();
     paths.into_iter().rev().find_map(|path| {
         let value = crate::json_boundary::read_json(&path).ok()?;
@@ -109,6 +105,20 @@ where
                 .then(|| fallback_event_from_receipt(&value))
             })
     })
+}
+
+fn collect_json_files(dir: &Path, paths: &mut Vec<std::path::PathBuf>) {
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for entry in entries.filter_map(Result::ok) {
+        let path = entry.path();
+        if path.is_dir() {
+            collect_json_files(&path, paths);
+        } else if path.is_file() && path.extension().and_then(|ext| ext.to_str()) == Some("json") {
+            paths.push(path);
+        }
+    }
 }
 
 fn fallback_event_from_receipt(value: &Value) -> Value {
@@ -137,4 +147,16 @@ fn fallback_event_from_receipt(value: &Value) -> Value {
         "check_id": value.get("check_id").cloned().unwrap_or(Value::Null),
         "claim_id": value.get("claim_id").cloned().unwrap_or(Value::Null)
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn json_receipt_discovery_tolerates_missing_observability_directory() {
+        let mut paths = Vec::new();
+        collect_json_files(Path::new("missing-observability-directory"), &mut paths);
+        assert!(paths.is_empty());
+    }
 }

@@ -8,6 +8,7 @@ mod record_projection;
 mod records;
 mod retry_edges;
 mod target;
+mod target_receipts;
 
 fn prepare_root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);

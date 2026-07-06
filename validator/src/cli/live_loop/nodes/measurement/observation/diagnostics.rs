@@ -90,3 +90,59 @@ pub(super) fn blocked_claims() -> Vec<String> {
     .map(ToString::to_string)
     .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cli::live_loop::surfaces::surface_by_id;
+
+    fn command_run(exit_code: i32, status_success: bool, launch_error: bool) -> FullCommandRun {
+        FullCommandRun {
+            exit_code,
+            status_success,
+            launch_error,
+            duration_ms: 17,
+            stdout_digest: "sha256:stdout".to_string(),
+            stderr_digest: "sha256:stderr".to_string(),
+            failure: Default::default(),
+        }
+    }
+
+    #[test]
+    fn command_observation_diagnostics_describe_failed_verified_work() {
+        let surface = surface_by_id("changed_files").expect("surface");
+        let launched = command_run(7, false, false);
+        assert_eq!(
+            command_failure_class(&launched),
+            "verified_local_command_failed"
+        );
+        assert_eq!(
+            where_failed(surface, "verified_local_command_failed"),
+            "loop.measure.changed_files.verified_local_command"
+        );
+        assert!(
+            why_failed(surface, &launched, "verified_local_command_failed")
+                .contains("verified-local command exited 7")
+        );
+        assert!(
+            next_repair(surface, "verified_local_command_failed")
+                .contains("loop measure --node changed_files")
+        );
+
+        let launch_error = command_run(1, false, true);
+        assert_eq!(
+            command_failure_class(&launch_error),
+            "verified_local_command_launch_failed"
+        );
+        assert!(
+            why_failed(
+                surface,
+                &launch_error,
+                "verified_local_command_launch_failed"
+            )
+            .contains("could not launch")
+        );
+        assert!(why_failed(surface, &launch_error, "unknown").contains("strict classification"));
+        assert!(blocked_claims().contains(&"update_goal_eligibility".to_string()));
+    }
+}

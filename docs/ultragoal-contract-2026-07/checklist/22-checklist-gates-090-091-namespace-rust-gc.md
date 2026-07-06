@@ -450,7 +450,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Receipt:
   - Candidate digest:
   - Red report:
-  - Status: implemented, pending validation
+  - Status: in progress
 
 - [ ] Source/install/cache package evidence is regenerated after source passes, and only after source passes.
   - Evidence:

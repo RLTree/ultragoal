@@ -60,15 +60,14 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
         "git status --short --untracked-files=all"
     );
     assert_eq!(rows[0]["baseline_exit_code"], 0);
+    let failure_class = rows[0]["failure_class"].as_str().expect("failure class");
     assert!(
-        matches!(
-            rows[0]["failure_class"].as_str().expect("failure class"),
-            "live_loop_telemetry_reconciliation_missing"
-                | "live_loop_speedup_target_missed"
-                | "none"
-        ),
-        "{}",
-        rows[0]["failure_class"]
+        [
+            "live_loop_telemetry_reconciliation_missing",
+            "live_loop_speedup_target_missed"
+        ]
+        .contains(&failure_class),
+        "{failure_class}"
     );
     assert_eq!(rows[0]["proof_kind"], "executed");
     assert_eq!(rows[0]["cache_hit"], false);

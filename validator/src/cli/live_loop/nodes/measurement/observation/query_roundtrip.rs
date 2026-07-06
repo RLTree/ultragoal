@@ -4,16 +4,53 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 const QUERY_TIMEOUT_MS: u64 = 3_000;
-const TRACE_QUERY_TIMEOUT_MS: u64 = 10_000;
+const METRIC_QUERY_TIMEOUT_MS: u64 = 10_000;
+const TRACE_QUERY_TIMEOUT_MS: u64 = 30_000;
 const ROW_LIMIT: usize = 100;
 const BYTE_LIMIT: usize = 262_144;
 const RECEIPT_DIR: &str = "validation_artifacts/observability/live-loop/commands";
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) enum RoundtripQuery {
+    Logs,
+    Metrics,
+    Traces,
+    ExplainFailure,
+}
+
+impl RoundtripQuery {
+    fn operation(self) -> ObserveOperation {
+        match self {
+            Self::Logs => ObserveOperation::LogsQuery,
+            Self::Metrics => ObserveOperation::MetricsQuery,
+            Self::Traces => ObserveOperation::TracesQuery,
+            Self::ExplainFailure => ObserveOperation::ExplainFailure,
+        }
+    }
+
+    fn receipt_suffix(self) -> &'static str {
+        match self {
+            Self::Logs => "logs-query",
+            Self::Metrics => "metrics-query",
+            Self::Traces => "traces-query",
+            Self::ExplainFailure => "explain-failure",
+        }
+    }
+
+    fn timeout_ms(self) -> u64 {
+        match self {
+            Self::Metrics => METRIC_QUERY_TIMEOUT_MS,
+            Self::Traces => TRACE_QUERY_TIMEOUT_MS,
+            Self::Logs | Self::ExplainFailure => QUERY_TIMEOUT_MS,
+        }
+    }
+}
 
 pub(super) struct ObserveReceipt {
     pub(super) receipt: String,
     pub(super) exit_code: i32,
     pub(super) status: String,
-    value: Value,
+    pub(super) value: Value,
 }
 
 impl ObserveReceipt {
@@ -30,13 +67,13 @@ impl ObserveReceipt {
 pub(super) fn run(
     root: &Path,
     surface: LoopValidationSurface,
-    operation: ObserveOperation,
+    roundtrip: RoundtripQuery,
     run_id: &str,
     correlation_id: &str,
 ) -> Result<ObserveReceipt, String> {
-    let receipt = receipt_path(surface.id, receipt_suffix(operation));
+    let receipt = receipt_path(surface.id, roundtrip.receipt_suffix());
     let command = ObserveCommand {
-        operation,
+        operation: roundtrip.operation(),
         receipt: Some(receipt.clone()),
         query: None,
         run_id: Some(run_id.to_string()),
@@ -48,7 +85,7 @@ pub(super) fn run(
         target_family: None,
         row_limit: ROW_LIMIT,
         byte_limit: BYTE_LIMIT,
-        timeout_ms: timeout_ms(operation),
+        timeout_ms: roundtrip.timeout_ms(),
     };
     let code = crate::cli::observe::run(root, &command)?;
     let value = crate::json_boundary::read_json(&root.join(&receipt))?;
@@ -67,22 +104,4 @@ pub(super) fn run(
 
 pub(super) fn receipt_path(node_id: &str, suffix: &str) -> PathBuf {
     Path::new(RECEIPT_DIR).join(format!("{node_id}-{suffix}.json"))
-}
-
-fn receipt_suffix(operation: ObserveOperation) -> &'static str {
-    match operation {
-        ObserveOperation::LogsQuery => "logs-query",
-        ObserveOperation::MetricsQuery => "metrics-query",
-        ObserveOperation::TracesQuery => "traces-query",
-        ObserveOperation::ExplainFailure => "explain-failure",
-        _ => "observe",
-    }
-}
-
-fn timeout_ms(operation: ObserveOperation) -> u64 {
-    if operation == ObserveOperation::TracesQuery {
-        TRACE_QUERY_TIMEOUT_MS
-    } else {
-        QUERY_TIMEOUT_MS
-    }
 }

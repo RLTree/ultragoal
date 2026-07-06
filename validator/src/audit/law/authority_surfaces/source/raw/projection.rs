@@ -74,6 +74,12 @@ fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {
             "verified_local_result_digest",
             "NODE_TIMING_REL",
         ],
+        "validator/src/cli/live_loop/nodes/measurement/observation/event.rs" => &[
+            "FullCommandRun",
+            "CommandTelemetry",
+            "command_receipt_for_candidate",
+            "source_local_live_loop_node_observation_only_not_speed_claim",
+        ],
         "validator/src/cli/live_loop/receipt.rs" => &[
             "AuditContext",
             "CommandTelemetry",

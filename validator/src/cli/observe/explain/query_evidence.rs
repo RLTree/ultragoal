@@ -50,14 +50,9 @@ fn collect_json_files(dir: &Path, paths: &mut Vec<PathBuf>) {
     };
     for entry in entries.filter_map(Result::ok) {
         let path = entry.path();
-        let Ok(file_type) = entry.file_type() else {
-            continue;
-        };
-        if file_type.is_dir() {
+        if path.is_dir() {
             collect_json_files(&path, paths);
-        } else if file_type.is_file()
-            && path.extension().and_then(|ext| ext.to_str()) == Some("json")
-        {
+        } else if path.is_file() && path.extension().and_then(|ext| ext.to_str()) == Some("json") {
             paths.push(path);
         }
     }
@@ -145,4 +140,36 @@ fn query_mentions(value: &Value, needle: &str) -> bool {
             .get("query")
             .and_then(Value::as_str)
             .is_some_and(|query| query.contains(needle))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn query_evidence_reports_missing_when_receipt_tree_is_absent() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "observe-explain-query-evidence-missing",
+        );
+        std::fs::create_dir_all(&root).expect("root");
+        crate::json_boundary::write_json(
+            &root.join("plugin-manifest-draft.json"),
+            &json!({"resources":["plugin-manifest-draft.json"]}),
+        )
+        .expect("manifest");
+        let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+        let event = json!({
+            "run_id": "run-missing-query-evidence",
+            "candidate_digest": candidate,
+            "operation": "coverage.prove",
+            "failure_class": "coverage_prove_failure"
+        });
+
+        let evidence = for_target(&root, Some(&event), &candidate);
+
+        assert_eq!(evidence["logs"]["status"], "missing");
+        assert_eq!(evidence["metrics"]["status"], "missing");
+        assert_eq!(evidence["traces"]["status"], "missing");
+        std::fs::remove_dir_all(root).expect("cleanup missing query evidence");
+    }
 }
