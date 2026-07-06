@@ -134,6 +134,7 @@
         "ultragoal_command_duration_ms",
         "ultragoal_command_task_count",
         "ultragoal_command_queue_depth",
+        "ultragoal_command_event_unix_seconds",
         "ultragoal_check_total",
         "ultragoal_check_failure_total",
         "ultragoal_law_failure_total",
@@ -195,6 +196,7 @@
               "ultragoal_command_duration_ms",
               "ultragoal_command_task_count",
               "ultragoal_command_queue_depth",
+              "ultragoal_command_event_unix_seconds",
               "ultragoal_stack_health_status",
               "ultragoal_stack_smoke_status"
             ]

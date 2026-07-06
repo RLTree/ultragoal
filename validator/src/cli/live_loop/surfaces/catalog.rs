@@ -53,9 +53,9 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
     hot_loop_authority_artifact_surface(
         "focused_rust_tests",
         "rust_focused_tests",
-        "cargo test --offline <affected> --lib --quiet",
+        "cargo test --offline live_loop --lib --quiet",
         "cargo test --offline --lib --quiet",
-        "cargo test --offline <affected> --lib --quiet",
+        "cargo test --offline live_loop --lib --quiet",
     ),
     hot_loop_authority_artifact_surface(
         "line_caps_check",

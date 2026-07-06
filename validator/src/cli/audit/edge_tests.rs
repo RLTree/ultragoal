@@ -182,7 +182,7 @@ fn source_audit_stdout_contract_reports_pass_and_fail_claim_ceiling() {
         "query_logs='ultragoal observe logs query --run-id {run_id} --limit 100'"
     )));
     assert!(fail_lines[1].contains(
-        "query_metrics='ultragoal observe metrics query --query 'sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\",operation=\"source.audit\""
+        "query_metrics='ultragoal observe metrics query --query 'sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\",operation=\"source.audit\""
     ));
     let stale_metric_hint = format!(
         "{}{}{}",

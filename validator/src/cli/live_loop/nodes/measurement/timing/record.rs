@@ -15,10 +15,13 @@ pub(crate) struct VerifiedLocalProof {
     pub(crate) graph_overhead_ms: u64,
     pub(crate) actual_work: FullCommandRun,
     pub(crate) work_unit_count: u64,
-    pub(crate) equivalence_status: &'static str,
-    pub(crate) invalidation_proof: &'static str,
+    pub(crate) equivalence_status: String,
+    pub(crate) invalidation_proof: String,
     pub(crate) telemetry_reconciliation_status: String,
     pub(crate) telemetry_reconciliation: TelemetryReconciliation,
+    pub(crate) prior_result_digest: Option<String>,
+    pub(crate) replayed_output_digest: Option<String>,
+    pub(crate) cache_equivalence_status: Option<String>,
 }
 
 pub(crate) fn node_timing_row(
@@ -184,4 +187,22 @@ fn insert_execution_fields(
         "verified_local_failure".to_string(),
         json!(verified_local.actual_work.failure.to_value()),
     );
+    if let Some(prior_result_digest) = verified_local.prior_result_digest.as_deref() {
+        object.insert(
+            "prior_result_digest".to_string(),
+            json!(prior_result_digest),
+        );
+    }
+    if let Some(replayed_output_digest) = verified_local.replayed_output_digest.as_deref() {
+        object.insert(
+            "replayed_output_digest".to_string(),
+            json!(replayed_output_digest),
+        );
+    }
+    if let Some(cache_equivalence_status) = verified_local.cache_equivalence_status.as_deref() {
+        object.insert(
+            "cache_equivalence_status".to_string(),
+            json!(cache_equivalence_status),
+        );
+    }
 }

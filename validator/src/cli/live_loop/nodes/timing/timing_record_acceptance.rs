@@ -7,8 +7,8 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
         "proof_kind": "verified_cache_hit",
         "cache_hit": true,
         "work_unit_count": 0,
-        "prior_result_digest": "sha256:prior",
-        "replayed_output_digest": "sha256:replayed",
+        "prior_result_digest": digest("prior"),
+        "replayed_output_digest": digest("replayed"),
         "cache_equivalence_status": "pass"
     }));
 
@@ -24,12 +24,13 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"verified_local_command_argv": []}),
         json!({"result_digest": serde_json::Value::Null}),
         json!({"output_digest": serde_json::Value::Null}),
-        json!({"result_digest": "sha256:different"}),
-        json!({"output_digest": "sha256:different"}),
+        json!({"result_digest": digest("different-result")}),
+        json!({"output_digest": digest("different-output")}),
+        json!({"verified_local_stdout_digest": "sha256:short"}),
         json!({"cache_hit": true}),
         json!({"work_unit_count": 0}),
         json!({"proof_kind": "verified_cache_hit", "cache_hit": true}),
-        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "prior_result_digest": "sha256:prior", "replayed_output_digest": "sha256:replayed", "cache_equivalence_status": "miss"}),
+        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "prior_result_digest": digest("prior"), "replayed_output_digest": digest("replayed"), "cache_equivalence_status": "miss"}),
         json!({"proof_kind": "planned"}),
     ];
 
@@ -72,6 +73,10 @@ fn read_with_patch(patch: Value) -> usize {
 }
 
 fn current_timing_row(candidate: &str, input: &str) -> Value {
+    let stdout_digest = digest("stdout");
+    let stderr_digest = digest("stderr");
+    let output_digest = digest("output");
+    let result_digest = digest("result");
     json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
@@ -89,7 +94,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "verified_local_duration_ms": 2,
         "proof_kind": "executed",
         "cache_hit": false,
-        "cache_key": "sha256:cache",
+        "cache_key": digest("cache"),
         "validator_version": "ultragoal-rust",
         "law_version": "observability-live-loop",
         "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
@@ -102,15 +107,19 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "telemetry_reconciliation_status": "pass",
         "verified_local_command": "cargo fmt --all --check",
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
-        "verified_local_stdout_digest": "sha256:stdout",
-        "verified_local_stderr_digest": "sha256:stderr",
-        "output_digest": "sha256:output",
-        "result_digest": "sha256:result",
-        "verified_local_output_digest": "sha256:output",
-        "verified_local_result_digest": "sha256:result",
+        "verified_local_stdout_digest": stdout_digest,
+        "verified_local_stderr_digest": stderr_digest,
+        "output_digest": output_digest,
+        "result_digest": result_digest,
+        "verified_local_output_digest": output_digest,
+        "verified_local_result_digest": result_digest,
         "where_failed": "none",
         "why_failed": "none",
         "next_repair": "none",
         "affected_set_status": "clean_worktree_no_affected_files"
     })
+}
+
+fn digest(label: &str) -> String {
+    crate::digest::bytes(label.as_bytes())
 }

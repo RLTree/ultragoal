@@ -213,7 +213,10 @@ pub(super) fn positive(value: &Value, key: &str) -> Option<u64> {
 }
 
 fn valid_digest(value: &str) -> Option<&str> {
-    value.starts_with("sha256:").then_some(value)
+    (value.len() == 71
+        && value.starts_with("sha256:")
+        && value[7..].bytes().all(|byte| byte.is_ascii_hexdigit()))
+    .then_some(value)
 }
 
 fn has_nonempty_string_array(value: &Value, key: &str) -> bool {

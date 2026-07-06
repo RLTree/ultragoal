@@ -185,6 +185,10 @@ fn current_timing_row(
     failure_class: &str,
 ) -> serde_json::Value {
     let exit_code = if timing_status == "pass" { 0 } else { 101 };
+    let stdout_digest = digest("stdout");
+    let stderr_digest = digest("stderr");
+    let output_digest = digest("output");
+    let result_digest = digest("result");
     json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
@@ -202,7 +206,7 @@ fn current_timing_row(
         "verified_local_duration_ms": 2,
         "proof_kind": "executed",
         "cache_hit": false,
-        "cache_key": "sha256:cache",
+        "cache_key": digest("cache"),
         "validator_version": "ultragoal-rust",
         "law_version": "observability-live-loop",
         "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
@@ -215,15 +219,19 @@ fn current_timing_row(
         "telemetry_reconciliation_status": "pass",
         "verified_local_command": "cargo fmt --all --check",
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
-        "verified_local_stdout_digest": "sha256:stdout",
-        "verified_local_stderr_digest": "sha256:stderr",
-        "output_digest": "sha256:output",
-        "result_digest": "sha256:result",
-        "verified_local_output_digest": "sha256:output",
-        "verified_local_result_digest": "sha256:result",
+        "verified_local_stdout_digest": stdout_digest,
+        "verified_local_stderr_digest": stderr_digest,
+        "output_digest": output_digest,
+        "result_digest": result_digest,
+        "verified_local_output_digest": output_digest,
+        "verified_local_result_digest": result_digest,
         "where_failed": "loop.measure.fmt_check.canonical_full_command",
         "why_failed": "canonical full command exited nonzero while measuring live-loop node",
         "next_repair": "run cargo fmt and rerun loop measure",
         "affected_set_status": "clean_worktree_no_affected_files"
     })
+}
+
+fn digest(label: &str) -> String {
+    crate::digest::bytes(label.as_bytes())
 }

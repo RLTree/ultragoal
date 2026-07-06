@@ -1,3 +1,4 @@
+mod cache_replay;
 #[cfg(test)]
 mod command;
 mod full_command;
@@ -133,6 +134,34 @@ fn measure_verified_local(
         &command.cache_mode,
     );
     let graph_overhead_ms = elapsed_ms(started);
+    if let Some(mut actual_work) = cache_replay::verified_local_hit(
+        root,
+        surface,
+        candidate,
+        input_digest,
+        command,
+        &cache_key,
+        started,
+    ) {
+        let telemetry_reconciliation =
+            observation::reconcile(root, surface, candidate, command, &actual_work.run);
+        actual_work.run.failure = telemetry_reconciliation.failure_summary();
+        return VerifiedLocalProof {
+            proof_kind: "verified_cache_hit",
+            cache_hit: true,
+            cache_key,
+            graph_overhead_ms,
+            actual_work: actual_work.run,
+            work_unit_count: 0,
+            equivalence_status: "verified_same_candidate_cache_replay".to_string(),
+            invalidation_proof: actual_work.invalidation_proof,
+            telemetry_reconciliation_status: telemetry_reconciliation.status.clone(),
+            telemetry_reconciliation,
+            prior_result_digest: Some(actual_work.prior_result_digest),
+            replayed_output_digest: Some(actual_work.replayed_output_digest),
+            cache_equivalence_status: Some("pass".to_string()),
+        };
+    }
     let mut actual_work = run_narrow_command(root, surface);
     let telemetry_reconciliation =
         observation::reconcile(root, surface, candidate, command, &actual_work);
@@ -144,10 +173,13 @@ fn measure_verified_local(
         graph_overhead_ms,
         actual_work,
         work_unit_count: 1,
-        equivalence_status: "executed_current_candidate_not_cache_replay",
-        invalidation_proof: "cache_not_used_current_command_executed",
+        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
+        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation.status.clone(),
         telemetry_reconciliation,
+        prior_result_digest: None,
+        replayed_output_digest: None,
+        cache_equivalence_status: None,
     }
 }
 

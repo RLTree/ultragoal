@@ -47,7 +47,7 @@ fn timing_failure_class_names_every_executed_work_blocker() {
         (
             command_run(0, true, false, 100),
             proof_with(command_run(0, true, false, 1), |proof| {
-                proof.equivalence_status = "unknown";
+                proof.equivalence_status = "unknown".to_string();
             }),
             100,
             "verified_local_equivalence_status_invalid",
@@ -55,7 +55,7 @@ fn timing_failure_class_names_every_executed_work_blocker() {
         (
             command_run(0, true, false, 100),
             proof_with(command_run(0, true, false, 1), |proof| {
-                proof.invalidation_proof = "";
+                proof.invalidation_proof = String::new();
             }),
             100,
             "verified_local_invalidation_proof_missing",
@@ -199,13 +199,16 @@ fn proof(
         graph_overhead_ms: 1,
         actual_work,
         work_unit_count,
-        equivalence_status: "executed_current_candidate_not_cache_replay",
-        invalidation_proof: "cache_not_used_current_command_executed",
+        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
+        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
         telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
             status: telemetry_reconciliation_status.to_string(),
             value: serde_json::json!({"status": telemetry_reconciliation_status}),
         },
+        prior_result_digest: None,
+        replayed_output_digest: None,
+        cache_equivalence_status: None,
     }
 }
 

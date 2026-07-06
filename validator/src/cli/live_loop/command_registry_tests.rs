@@ -38,3 +38,20 @@ fn loop_command_registry_rejects_invented_high_frequency_cli_spellings() {
         );
     }
 }
+
+#[test]
+fn loop_command_registry_rejects_placeholder_commands() {
+    for surface in LOOP_VALIDATION_SURFACES {
+        for command in [
+            surface.command,
+            surface.canonical_full_command,
+            surface.narrow_rerun,
+        ] {
+            assert!(
+                !command.contains('<') && !command.contains('>'),
+                "{} command must be executable product behavior, not placeholder text: {command}",
+                surface.id
+            );
+        }
+    }
+}

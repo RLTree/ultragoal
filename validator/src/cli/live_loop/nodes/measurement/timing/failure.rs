@@ -16,16 +16,8 @@ pub(crate) fn measurement_failure_class(
         "verified_local_command_launch_failed"
     } else if !verified_local.actual_work.status_success {
         "verified_local_command_failed"
-    } else if verified_local.proof_kind != "executed" {
-        "verified_local_proof_kind_invalid"
-    } else if verified_local.cache_hit {
-        "verified_local_cache_equivalence_missing"
-    } else if verified_local.work_unit_count == 0 {
-        "verified_local_work_unit_missing"
-    } else if verified_local.equivalence_status != "executed_current_candidate_not_cache_replay" {
-        "verified_local_equivalence_status_invalid"
-    } else if verified_local.invalidation_proof.is_empty() {
-        "verified_local_invalidation_proof_missing"
+    } else if let Some(failure) = proof_kind_failure(verified_local) {
+        failure
     } else if verified_local.telemetry_reconciliation_status != "pass" {
         "live_loop_telemetry_reconciliation_missing"
     } else if speedup_ratio < 20 {
@@ -33,6 +25,53 @@ pub(crate) fn measurement_failure_class(
     } else {
         "none"
     }
+}
+
+fn proof_kind_failure(verified_local: &VerifiedLocalProof) -> Option<&'static str> {
+    match verified_local.proof_kind {
+        "executed" => executed_failure(verified_local),
+        "verified_cache_hit" => cache_hit_failure(verified_local),
+        _ => Some("verified_local_proof_kind_invalid"),
+    }
+}
+
+fn executed_failure(verified_local: &VerifiedLocalProof) -> Option<&'static str> {
+    if verified_local.cache_hit {
+        Some("verified_local_cache_equivalence_missing")
+    } else if verified_local.work_unit_count == 0 {
+        Some("verified_local_work_unit_missing")
+    } else if verified_local.equivalence_status != "executed_current_candidate_not_cache_replay" {
+        Some("verified_local_equivalence_status_invalid")
+    } else if verified_local.invalidation_proof.is_empty() {
+        Some("verified_local_invalidation_proof_missing")
+    } else {
+        None
+    }
+}
+
+fn cache_hit_failure(verified_local: &VerifiedLocalProof) -> Option<&'static str> {
+    if !verified_local.cache_hit
+        || verified_local.work_unit_count != 0
+        || !valid_digest(verified_local.prior_result_digest.as_deref())
+        || !valid_digest(verified_local.replayed_output_digest.as_deref())
+        || verified_local.cache_equivalence_status.as_deref() != Some("pass")
+    {
+        Some("verified_local_cache_equivalence_missing")
+    } else if verified_local.equivalence_status != "verified_same_candidate_cache_replay" {
+        Some("verified_local_equivalence_status_invalid")
+    } else if verified_local.invalidation_proof.is_empty() {
+        Some("verified_local_invalidation_proof_missing")
+    } else {
+        None
+    }
+}
+
+fn valid_digest(value: Option<&str>) -> bool {
+    value.is_some_and(|digest| {
+        digest.len() == 71
+            && digest.starts_with("sha256:")
+            && digest[7..].bytes().all(|byte| byte.is_ascii_hexdigit())
+    })
 }
 
 pub(crate) fn measurement_where_failed(

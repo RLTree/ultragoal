@@ -57,12 +57,15 @@ pub(super) fn verified_local_proof(
         graph_overhead_ms: 1,
         actual_work: full_command_run(exit_code, status_success, duration_ms),
         work_unit_count: 1,
-        equivalence_status: "executed_current_candidate_not_cache_replay",
-        invalidation_proof: "cache_not_used_current_command_executed",
+        equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
+        invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
         telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
             status: telemetry_reconciliation_status.to_string(),
             value: serde_json::json!({"status": telemetry_reconciliation_status}),
         },
+        prior_result_digest: None,
+        replayed_output_digest: None,
+        cache_equivalence_status: None,
     }
 }
