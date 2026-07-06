@@ -1,3 +1,4 @@
+use super::super::command_failure::CommandFailureSummary;
 use super::super::timing::NODE_TIMING_REL;
 use super::full_command::FullCommandRun;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
@@ -7,6 +8,7 @@ use std::time::Instant;
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
+    pub(super) baseline: FullCommandRun,
     pub(super) prior_result_digest: String,
     pub(super) replayed_output_digest: String,
     pub(super) invalidation_proof: String,
@@ -85,6 +87,17 @@ fn replay_from_row(
     if text(row, "verified_local_result_digest")? != prior_result_digest {
         return None;
     }
+    let baseline_duration_ms = row
+        .get("baseline_duration_ms")?
+        .as_u64()
+        .filter(|value| *value > 0)?;
+    let baseline_exit_code = row
+        .get("baseline_exit_code")?
+        .as_i64()
+        .and_then(|value| i32::try_from(value).ok())?;
+    let baseline_launch_error = row.get("baseline_launch_error")?.as_bool()?;
+    let baseline_stdout_digest = valid_digest(text(row, "baseline_stdout_digest")?)?;
+    let baseline_stderr_digest = valid_digest(text(row, "baseline_stderr_digest")?)?;
     Some(CacheReplay {
         run: FullCommandRun {
             exit_code,
@@ -94,6 +107,15 @@ fn replay_from_row(
             stdout_digest: stdout_digest.to_string(),
             stderr_digest: stderr_digest.to_string(),
             failure: Default::default(),
+        },
+        baseline: FullCommandRun {
+            exit_code: baseline_exit_code,
+            status_success: !baseline_launch_error && baseline_exit_code == 0,
+            launch_error: baseline_launch_error,
+            duration_ms: baseline_duration_ms,
+            stdout_digest: baseline_stdout_digest.to_string(),
+            stderr_digest: baseline_stderr_digest.to_string(),
+            failure: CommandFailureSummary::from_value(row.get("baseline_failure")),
         },
         prior_result_digest: prior_result_digest.to_string(),
         replayed_output_digest,

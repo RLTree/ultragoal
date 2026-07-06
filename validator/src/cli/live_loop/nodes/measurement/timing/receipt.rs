@@ -46,7 +46,7 @@ pub(crate) fn write_node_timings(
 pub(crate) fn print_measurements(command: &LiveLoopCommand, candidate: &str, rows: &[Value]) {
     for row in rows {
         println!(
-            "ultragoal-loop-measure {} candidate={} node={} proof_kind={} cache_hit={} work_unit_count={} actual_work_duration_ms={} graph_overhead_ms={} telemetry_reconciliation={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} failure_class={} where_failed='{}' why_failed='{}' next_repair='{}' receipt={} claim_ceiling='source-local loop timing only'",
+            "ultragoal-loop-measure {} candidate={} node={} proof_kind={} cache_hit={} work_unit_count={} actual_work_duration_ms={} graph_overhead_ms={} telemetry_reconciliation_duration_ms={} reconciled_command_duration_ms={} telemetry_reconciliation={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} failure_class={} where_failed='{}' why_failed='{}' next_repair='{}' receipt={} claim_ceiling='source-local loop timing only'",
             text(row, "timing_status").unwrap_or("fail"),
             candidate,
             text(row, "node_id").unwrap_or("unknown"),
@@ -57,6 +57,8 @@ pub(crate) fn print_measurements(command: &LiveLoopCommand, candidate: &str, row
             positive(row, "work_unit_count").unwrap_or(0),
             positive(row, "actual_work_duration_ms").unwrap_or(0),
             positive(row, "graph_overhead_ms").unwrap_or(0),
+            positive(row, "telemetry_reconciliation_duration_ms").unwrap_or(0),
+            positive(row, "reconciled_command_duration_ms").unwrap_or(0),
             text(row, "telemetry_reconciliation_status").unwrap_or("missing"),
             positive(row, "baseline_duration_ms").unwrap_or(0),
             positive(row, "verified_local_duration_ms").unwrap_or(0),

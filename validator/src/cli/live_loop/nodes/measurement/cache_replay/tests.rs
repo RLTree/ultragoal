@@ -11,6 +11,8 @@ fn cache_replay_accepts_only_same_input_executed_rows() {
     let replay = cache_hit(&fixture, &fixture.input_digest).expect("same-candidate cache replay");
     assert_eq!(replay.run.exit_code, 0);
     assert_eq!(replay.run.stdout_digest, stdout_digest());
+    assert_eq!(replay.baseline.exit_code, 0);
+    assert_eq!(replay.baseline.duration_ms, 200);
     assert_eq!(replay.prior_result_digest, result_digest());
     assert_eq!(replay.replayed_output_digest, output_digest());
     assert!(cache_hit(&fixture, &digest("stale-input")).is_none());
@@ -65,6 +67,8 @@ fn cache_replay_accepts_same_candidate_verified_cache_rows() {
     let replay = cache_hit(&fixture, &fixture.input_digest).expect("verified cache row replay");
     assert_eq!(replay.run.exit_code, 0);
     assert_eq!(replay.run.stdout_digest, stdout_digest());
+    assert_eq!(replay.baseline.exit_code, 0);
+    assert_eq!(replay.baseline.duration_ms, 200);
     assert_eq!(replay.prior_result_digest, result_digest());
     assert_eq!(replay.replayed_output_digest, output_digest());
 
@@ -175,6 +179,12 @@ fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
         "command_argv": ["bash", "-lc", "cargo fmt --all --check"]
     })
+    .with_value("baseline_duration_ms", json!(200))
+    .with_value("baseline_exit_code", json!(0))
+    .with_value("baseline_launch_error", json!(false))
+    .with_value("baseline_stdout_digest", json!(stdout_digest()))
+    .with_value("baseline_stderr_digest", json!(stderr_digest()))
+    .with_value("baseline_failure", json!({}))
 }
 
 fn verified_cache_row(fixture: &ReplayFixture) -> serde_json::Value {

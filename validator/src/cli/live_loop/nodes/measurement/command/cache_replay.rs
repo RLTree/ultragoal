@@ -64,6 +64,11 @@ fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
     assert_eq!(row["proof_kind"], "verified_cache_hit");
     assert_eq!(row["cache_hit"], true);
     assert_eq!(row["work_unit_count"], 0);
+    assert_eq!(row["baseline_proof_kind"], "verified_baseline_reuse");
+    assert_eq!(
+        row["baseline_invalidation_proof"],
+        "baseline_reused_from_same_candidate_current_input_timing_row"
+    );
     assert_eq!(
         row["equivalence_status"],
         "verified_same_candidate_cache_replay"
@@ -110,6 +115,12 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "verified_local_exit_code": 0,
         "exit_status": 0,
         "verified_local_launch_error": false,
+        "baseline_duration_ms": 200,
+        "baseline_exit_code": 0,
+        "baseline_launch_error": false,
+        "baseline_stdout_digest": stdout_digest(),
+        "baseline_stderr_digest": stderr_digest(),
+        "baseline_failure": {},
         "receipt_paths": [live_loop_timing_receipt_arg()],
         "artifact_paths": ["validation_artifacts/observability/live-loop-node-timing.json"],
         "verified_local_stdout_digest": stdout_digest(),

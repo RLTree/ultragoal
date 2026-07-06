@@ -1,28 +1,14 @@
 use super::super::super::timing::NODE_TIMING_REL;
-use super::super::{full_command::FullCommandRun, observation::TelemetryReconciliation};
+use super::super::full_command::FullCommandRun;
+use super::derived_fields;
 use super::failure::{
     measurement_failure_class, measurement_next_repair, measurement_where_failed,
     measurement_why_failed,
 };
+use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::LiveLoopCommand;
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
 use serde_json::{Map, Value, json};
-
-pub(crate) struct VerifiedLocalProof {
-    pub(crate) proof_kind: &'static str,
-    pub(crate) cache_hit: bool,
-    pub(crate) cache_key: String,
-    pub(crate) graph_overhead_ms: u64,
-    pub(crate) actual_work: FullCommandRun,
-    pub(crate) work_unit_count: u64,
-    pub(crate) equivalence_status: String,
-    pub(crate) invalidation_proof: String,
-    pub(crate) telemetry_reconciliation_status: String,
-    pub(crate) telemetry_reconciliation: TelemetryReconciliation,
-    pub(crate) prior_result_digest: Option<String>,
-    pub(crate) replayed_output_digest: Option<String>,
-    pub(crate) cache_equivalence_status: Option<String>,
-}
 
 pub(crate) fn node_timing_row(
     surface: LoopValidationSurface,
@@ -37,10 +23,12 @@ pub(crate) fn node_timing_row(
 ) -> Value {
     let actual_work_duration_ms = verified_local.actual_work.duration_ms;
     let speedup_ratio = baseline.duration_ms / actual_work_duration_ms.max(1);
-    let output_digest = output_digest(verified_local);
-    let result_digest = result_digest(verified_local, &output_digest);
+    let output_digest = derived_fields::output_digest(verified_local);
+    let result_digest = derived_fields::result_digest(verified_local, &output_digest);
     let failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
     let pass = failure_class == "none";
+    let (baseline_proof_kind, baseline_invalidation_proof) =
+        derived_fields::baseline_reuse_fields(verified_local.proof_kind);
     let mut row = json!({
         "node_id": surface.id,
         "surface": surface.surface,
@@ -58,7 +46,11 @@ pub(crate) fn node_timing_row(
         "why_failed": measurement_why_failed(baseline, failure_class),
         "next_repair": measurement_next_repair(surface, baseline, failure_class),
         "baseline_duration_ms": baseline.duration_ms,
+        "baseline_proof_kind": baseline_proof_kind,
+        "baseline_invalidation_proof": baseline_invalidation_proof,
         "verified_local_duration_ms": actual_work_duration_ms,
+        "telemetry_reconciliation_duration_ms": verified_local.telemetry_reconciliation_duration_ms,
+        "reconciled_command_duration_ms": derived_fields::reconciled_command_duration_ms(verified_local),
         "speedup_ratio": speedup_ratio,
         "required_speedup": "20x",
         "baseline_exit_code": baseline.exit_code,
@@ -68,9 +60,10 @@ pub(crate) fn node_timing_row(
         "baseline_failure": baseline.failure.to_value(),
         "claim_name": "source-local live-loop speed claim",
         "product_behavior_observed": surface.narrow_rerun,
-        "proof_surface": proof_surface(verified_local),
+        "proof_surface": derived_fields::proof_surface(verified_local),
         "independent_reconciliation_surface": "same-candidate logs, metrics, traces, explain output, and live-loop timing receipt",
         "claim_status": if pass { "supported_source_local" } else { "blocked" },
+        "claim_ceiling": "source-local loop timing only; readiness release completion final-packet and update_goal remain blocked",
         "affected_set_status": affected_set_status,
         "cache_honesty": "pass",
         "timing_source": NODE_TIMING_REL,
@@ -101,40 +94,6 @@ pub(crate) fn node_timing_row(
 
 pub(crate) fn timing_status(pass: bool) -> &'static str {
     if pass { "pass" } else { "fail" }
-}
-
-fn output_digest(verified_local: &VerifiedLocalProof) -> String {
-    crate::digest::bytes(
-        format!(
-            "stdout={};stderr={}",
-            verified_local.actual_work.stdout_digest, verified_local.actual_work.stderr_digest
-        )
-        .as_bytes(),
-    )
-}
-
-fn result_digest(verified_local: &VerifiedLocalProof, output_digest: &str) -> String {
-    crate::digest::bytes(
-        format!(
-            "exit={};launch={};output={}",
-            verified_local.actual_work.exit_code,
-            verified_local.actual_work.launch_error,
-            output_digest
-        )
-        .as_bytes(),
-    )
-}
-
-fn proof_surface(verified_local: &VerifiedLocalProof) -> &'static str {
-    match verified_local.proof_kind {
-        "executed" => {
-            "executed current-candidate command with exit status, work units, digests, and timing receipt"
-        }
-        "verified_cache_hit" => {
-            "verified same-candidate cache replay with current input digests and equivalence proof"
-        }
-        _ => "invalid proof_kind; row is blocked",
-    }
 }
 
 fn insert_execution_fields(

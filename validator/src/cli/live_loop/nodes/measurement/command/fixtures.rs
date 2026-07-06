@@ -49,8 +49,8 @@ pub(super) fn verified_local_proof(
     status_success: bool,
     duration_ms: u64,
     telemetry_reconciliation_status: &'static str,
-) -> super::super::timing::record::VerifiedLocalProof {
-    super::super::timing::record::VerifiedLocalProof {
+) -> super::super::timing::verified_work::VerifiedLocalProof {
+    super::super::timing::verified_work::VerifiedLocalProof {
         proof_kind: "executed",
         cache_hit: false,
         cache_key: "sha256:cache".to_string(),
@@ -60,8 +60,10 @@ pub(super) fn verified_local_proof(
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
+        telemetry_reconciliation_duration_ms: 1,
         telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
             status: telemetry_reconciliation_status.to_string(),
+            duration_ms: 1,
             value: serde_json::json!({"status": telemetry_reconciliation_status}),
         },
         prior_result_digest: None,

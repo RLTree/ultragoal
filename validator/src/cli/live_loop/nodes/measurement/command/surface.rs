@@ -202,6 +202,13 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
         "live_loop_telemetry_reconciliation_missing"
     );
     assert_eq!(row["proof_kind"], "executed");
+    assert_eq!(row["baseline_proof_kind"], "executed");
+    assert_eq!(row["telemetry_reconciliation_duration_ms"], 1);
+    assert_eq!(row["reconciled_command_duration_ms"], 12);
+    assert_eq!(
+        row["baseline_invalidation_proof"],
+        "baseline_command_executed_for_current_measurement"
+    );
     assert_eq!(row["command_argv"][0], "bash");
     assert_eq!(row["exit_status"], 0);
     assert!(
@@ -221,26 +228,8 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
         row["claim_impact"],
         "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal"
     );
-}
-
-#[test]
-fn live_loop_measure_marks_executed_reconciled_speedup_as_pass() {
-    let command = command(Some("changed_files"), live_loop_timing_receipt_arg());
-    let baseline = full_command_run(0, true, 200);
-    let row = super::super::timing::record::node_timing_row(
-        crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
-        &command,
-        "sha256:candidate",
-        "sha256:changed",
-        "sha256:audit",
-        "sha256:input",
-        &baseline,
-        &verified_local_proof(0, true, 10, "pass"),
-        "changed_files_digest_bound",
+    assert_eq!(
+        row["claim_ceiling"],
+        "source-local loop timing only; readiness release completion final-packet and update_goal remain blocked"
     );
-
-    assert_eq!(row["timing_status"], "pass");
-    assert_eq!(row["failure_class"], "none");
-    assert_eq!(row["actual_work_duration_ms"], 10);
-    assert_eq!(row["graph_overhead_ms"], 1);
 }

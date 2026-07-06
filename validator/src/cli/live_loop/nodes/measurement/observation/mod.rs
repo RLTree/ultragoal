@@ -12,10 +12,12 @@ use super::full_command::FullCommandRun;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
 use serde_json::{Value, json};
 use std::path::Path;
+use std::time::Instant;
 
 #[derive(Clone, Debug)]
 pub(crate) struct TelemetryReconciliation {
     pub(crate) status: String,
+    pub(crate) duration_ms: u64,
     pub(crate) value: Value,
 }
 
@@ -46,16 +48,22 @@ pub(crate) fn reconcile(
     command: &LiveLoopCommand,
     actual_work: &FullCommandRun,
 ) -> TelemetryReconciliation {
-    match reconcile_result(root, surface, candidate, command, actual_work) {
+    let started = Instant::now();
+    let result = reconcile_result(root, surface, candidate, command, actual_work);
+    let duration_ms = elapsed_ms(started);
+    match result {
         Ok(report) => TelemetryReconciliation {
             status: report.status,
-            value: report.value,
+            duration_ms,
+            value: with_duration(report.value, duration_ms),
         },
         Err(err) => TelemetryReconciliation {
             status: "command_observation_failed".to_string(),
+            duration_ms,
             value: json!({
                 "status": "command_observation_failed",
                 "failure": err,
+                "telemetry_reconciliation_duration_ms": duration_ms,
                 "claim_impact": "live_loop_node_timing_blocked"
             }),
         },
@@ -191,6 +199,22 @@ fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
 
 fn nonempty(value: &str) -> bool {
     !value.is_empty()
+}
+
+fn with_duration(mut value: Value, duration_ms: u64) -> Value {
+    if let Some(object) = value.as_object_mut() {
+        object.insert(
+            "telemetry_reconciliation_duration_ms".to_string(),
+            json!(duration_ms),
+        );
+    }
+    value
+}
+
+fn elapsed_ms(started: Instant) -> u64 {
+    u64::try_from(started.elapsed().as_millis())
+        .unwrap_or(u64::MAX)
+        .max(1)
 }
 
 fn reconciliation_status(roundtrips_passed: bool) -> &'static str {

@@ -16,7 +16,7 @@ use std::path::Path;
 use std::process::Command;
 use std::time::Instant;
 use timing::receipt::{affected_set_status, print_measurements, write_node_timings};
-use timing::record::{VerifiedLocalProof, node_timing_row};
+use timing::{record::node_timing_row, verified_work::VerifiedLocalProof};
 
 pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
     let surfaces = selected_surfaces(command)?;
@@ -104,8 +104,24 @@ fn measure_surface(
         changed_files_digest,
         audit_context_digest,
     );
+    if let Some((baseline, verified_local)) =
+        measure_cached_verified_local(root, surface, candidate, &input_digest, command)
+    {
+        return node_timing_row(
+            surface,
+            command,
+            candidate,
+            changed_files_digest,
+            audit_context_digest,
+            &input_digest,
+            &baseline,
+            &verified_local,
+            affected_set_status,
+        );
+    }
     let baseline = run_full_command(root, surface);
-    let verified_local = measure_verified_local(root, surface, candidate, &input_digest, command);
+    let verified_local =
+        measure_executed_verified_local(root, surface, candidate, &input_digest, command);
     node_timing_row(
         surface,
         command,
@@ -119,13 +135,13 @@ fn measure_surface(
     )
 }
 
-fn measure_verified_local(
+fn measure_cached_verified_local(
     root: &Path,
     surface: LoopValidationSurface,
     candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
-) -> VerifiedLocalProof {
+) -> Option<(full_command::FullCommandRun, VerifiedLocalProof)> {
     let started = Instant::now();
     let cache_key = graph::verified_local_cache_key(
         surface.id,
@@ -146,7 +162,7 @@ fn measure_verified_local(
         let telemetry_reconciliation =
             observation::reconcile(root, surface, candidate, command, &actual_work.run);
         actual_work.run.failure = telemetry_reconciliation.failure_summary();
-        return VerifiedLocalProof {
+        let proof = VerifiedLocalProof {
             proof_kind: "verified_cache_hit",
             cache_hit: true,
             cache_key,
@@ -156,12 +172,32 @@ fn measure_verified_local(
             equivalence_status: "verified_same_candidate_cache_replay".to_string(),
             invalidation_proof: actual_work.invalidation_proof,
             telemetry_reconciliation_status: telemetry_reconciliation.status.clone(),
+            telemetry_reconciliation_duration_ms: telemetry_reconciliation.duration_ms,
             telemetry_reconciliation,
             prior_result_digest: Some(actual_work.prior_result_digest),
             replayed_output_digest: Some(actual_work.replayed_output_digest),
             cache_equivalence_status: Some("pass".to_string()),
         };
+        return Some((actual_work.baseline, proof));
     }
+    None
+}
+
+fn measure_executed_verified_local(
+    root: &Path,
+    surface: LoopValidationSurface,
+    candidate: &str,
+    input_digest: &str,
+    command: &LiveLoopCommand,
+) -> VerifiedLocalProof {
+    let started = Instant::now();
+    let cache_key = graph::verified_local_cache_key(
+        surface.id,
+        input_digest,
+        &command.tier,
+        &command.cache_mode,
+    );
+    let graph_overhead_ms = elapsed_ms(started);
     let mut actual_work = run_narrow_command(root, surface);
     let telemetry_reconciliation =
         observation::reconcile(root, surface, candidate, command, &actual_work);
@@ -176,6 +212,7 @@ fn measure_verified_local(
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation.status.clone(),
+        telemetry_reconciliation_duration_ms: telemetry_reconciliation.duration_ms,
         telemetry_reconciliation,
         prior_result_digest: None,
         replayed_output_digest: None,

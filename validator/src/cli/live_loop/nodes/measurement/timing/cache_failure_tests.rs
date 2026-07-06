@@ -1,5 +1,5 @@
 use super::failure::measurement_failure_class;
-use super::record::VerifiedLocalProof;
+use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
 use crate::cli::live_loop::nodes::measurement::full_command::FullCommandRun;
 
@@ -51,8 +51,10 @@ fn cache_hit_proof(update: impl FnOnce(&mut VerifiedLocalProof)) -> VerifiedLoca
         invalidation_proof:
             "cache_key_current_input_digest_command_versions_and_candidate_row_matched".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
+        telemetry_reconciliation_duration_ms: 1,
         telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
             status: "pass".to_string(),
+            duration_ms: 1,
             value: serde_json::json!({"status": "pass"}),
         },
         prior_result_digest: Some(digest("prior")),

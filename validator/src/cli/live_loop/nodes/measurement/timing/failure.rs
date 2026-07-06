@@ -1,6 +1,6 @@
 use super::super::super::timing::NODE_TIMING_REL;
 use super::super::full_command::FullCommandRun;
-use super::record::VerifiedLocalProof;
+use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
 
 pub(crate) fn measurement_failure_class(
