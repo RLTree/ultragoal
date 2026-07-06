@@ -1,9 +1,12 @@
 use super::PerformanceCommand;
 use super::types::{
     BudgetClass, PERFORMANCE_BUDGET_VERSION, PERFORMANCE_COMMANDS, PERFORMANCE_RECEIPT_SCHEMA,
+    PerformanceOperation,
 };
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
+
+mod speed_nodes;
 
 pub(crate) fn receipt(
     root: &Path,
@@ -25,7 +28,11 @@ pub(crate) fn receipt(
         "cache": cache_value(&candidate, command),
         "concurrency": concurrency_value(),
         "telemetry": telemetry_value(wall_ms),
-        "speed_proof": speed_proof_value(),
+        "speed_proof": speed_nodes::speed_proof_value(
+            root,
+            &candidate,
+            command.operation == PerformanceOperation::Prove,
+        ),
         "external_probe_policy": external_policy(command.class),
         "commands": PERFORMANCE_COMMANDS
     });
@@ -189,16 +196,6 @@ fn telemetry_value(wall_ms: u64) -> Value {
         "external_wait_ms": 0,
         "timeout_count": 0,
         "retry_count": 0
-    })
-}
-
-fn speed_proof_value() -> Value {
-    json!({
-        "status": "blocked",
-        "nodes": [],
-        "proof_boundary": "wrapper_latency_is_observation_only_until_node_work_is_bound",
-        "required_node_proof": "executed_or_verified_same_candidate_cache_replay",
-        "claim_impact": "performance_claims_withheld_until_speed_nodes_record_product_work_or_verified_reuse"
     })
 }
 

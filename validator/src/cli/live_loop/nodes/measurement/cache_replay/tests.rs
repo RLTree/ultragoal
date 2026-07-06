@@ -6,24 +6,9 @@ use std::path::{Path, PathBuf};
 #[test]
 fn cache_replay_accepts_only_same_input_executed_rows() {
     let fixture = ReplayFixture::new();
-    let candidate = digest("candidate");
-    let input_digest = digest("input");
-    let cache_key = digest("cache");
-    write_timing_row(
-        &fixture.root,
-        timing_row(fixture.surface.id, &candidate, &input_digest, &cache_key),
-    );
+    write_timing_row(&fixture.root, timing_row(&fixture));
 
-    let replay = verified_local_hit(
-        &fixture.root,
-        fixture.surface,
-        &candidate,
-        &input_digest,
-        &fixture.command,
-        &cache_key,
-        std::time::Instant::now(),
-    )
-    .expect("same-candidate cache replay");
+    let replay = cache_hit(&fixture, &fixture.input_digest).expect("same-candidate cache replay");
     assert_eq!(replay.run.exit_code, 0);
     assert_eq!(replay.run.stdout_digest, stdout_digest());
     assert_eq!(replay.prior_result_digest, result_digest());
@@ -38,10 +23,10 @@ fn cache_replay_accepts_only_same_input_executed_rows() {
         verified_local_hit(
             &fixture.root,
             fixture.surface,
-            &candidate,
-            &input_digest,
+            &fixture.candidate,
+            &fixture.input_digest,
             &non_cache_command,
-            &cache_key,
+            &fixture.cache_key,
             std::time::Instant::now(),
         )
         .is_none()
@@ -53,31 +38,66 @@ fn cache_replay_accepts_only_same_input_executed_rows() {
 #[test]
 fn cache_replay_rejects_prior_rows_without_product_equivalence() {
     let fixture = ReplayFixture::new();
-    let candidate = digest("candidate");
-    let input_digest = digest("input");
-    let cache_key = digest("cache");
     for bad_row in [
-        timing_row(fixture.surface.id, &candidate, &input_digest, &cache_key)
-            .with_value("candidate_digest", json!(digest("other"))),
-        timing_row(fixture.surface.id, &candidate, &input_digest, &cache_key)
-            .with_value("verified_local_exit_code", json!(1)),
-        timing_row(fixture.surface.id, &candidate, &input_digest, &cache_key)
-            .with_value("output_digest", json!(digest("wrong-output"))),
-        timing_row(fixture.surface.id, &candidate, &input_digest, &cache_key).with_value(
+        timing_row(&fixture).with_value("candidate_digest", json!(digest("other"))),
+        timing_row(&fixture).with_value("proof_kind", json!("planned")),
+        timing_row(&fixture).with_value("verified_local_exit_code", json!(1)),
+        timing_row(&fixture).with_value("output_digest", json!(digest("wrong-output"))),
+        timing_row(&fixture).with_value(
             "verified_local_result_digest",
             json!(digest("wrong-result")),
         ),
+        timing_row(&fixture).with_value("work_unit_count", json!(0)),
+        timing_row(&fixture).with_value("equivalence_status", json!("unknown")),
+        timing_row(&fixture).with_value("verified_local_command_argv", json!([])),
     ] {
         write_timing_row(&fixture.root, bad_row);
-        assert!(cache_hit(&fixture, &input_digest).is_none());
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
     }
     std::fs::remove_dir_all(fixture.root).expect("cleanup cache replay");
+}
+
+#[test]
+fn cache_replay_accepts_same_candidate_verified_cache_rows() {
+    let fixture = ReplayFixture::new();
+    write_timing_row(&fixture.root, verified_cache_row(&fixture));
+
+    let replay = cache_hit(&fixture, &fixture.input_digest).expect("verified cache row replay");
+    assert_eq!(replay.run.exit_code, 0);
+    assert_eq!(replay.run.stdout_digest, stdout_digest());
+    assert_eq!(replay.prior_result_digest, result_digest());
+    assert_eq!(replay.replayed_output_digest, output_digest());
+
+    std::fs::remove_dir_all(fixture.root).expect("cleanup verified cache replay");
+}
+
+#[test]
+fn cache_replay_rejects_verified_cache_rows_without_same_candidate_equivalence() {
+    let fixture = ReplayFixture::new();
+    for bad_row in [
+        verified_cache_row(&fixture).with_value("cache_hit", json!(false)),
+        verified_cache_row(&fixture).with_value("work_unit_count", json!(1)),
+        verified_cache_row(&fixture).with_value("equivalence_status", json!("unknown")),
+        verified_cache_row(&fixture).with_value("cache_equivalence_status", json!("miss")),
+        verified_cache_row(&fixture)
+            .with_value("prior_result_digest", json!(digest("wrong-result"))),
+        verified_cache_row(&fixture)
+            .with_value("replayed_output_digest", json!(digest("wrong-output"))),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
+    }
+
+    std::fs::remove_dir_all(fixture.root).expect("cleanup bad verified cache replay");
 }
 
 struct ReplayFixture {
     root: PathBuf,
     surface: crate::cli::live_loop::surfaces::LoopValidationSurface,
     command: LiveLoopCommand,
+    candidate: String,
+    input_digest: String,
+    cache_key: String,
 }
 
 impl ReplayFixture {
@@ -98,40 +118,37 @@ impl ReplayFixture {
             root,
             surface,
             command,
+            candidate: digest("candidate"),
+            input_digest: digest("input"),
+            cache_key: digest("cache"),
         }
     }
 }
 
 fn cache_hit(fixture: &ReplayFixture, input_digest: &str) -> Option<CacheReplay> {
-    let candidate = digest("candidate");
-    let cache_key = digest("cache");
     verified_local_hit(
         &fixture.root,
         fixture.surface,
-        &candidate,
+        &fixture.candidate,
         input_digest,
         &fixture.command,
-        &cache_key,
+        &fixture.cache_key,
         std::time::Instant::now(),
     )
 }
 
-fn timing_row(
-    node_id: &str,
-    candidate: &str,
-    input_digest: &str,
-    cache_key: &str,
-) -> serde_json::Value {
+fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
     json!({
-        "node_id": node_id,
-        "candidate_digest": candidate,
+        "node_id": fixture.surface.id,
+        "candidate_digest": fixture.candidate,
         "tier": "hot",
         "cache_mode": "verified-local",
-        "input_digest": input_digest,
-        "current_input_digest": input_digest,
+        "input_digest": fixture.input_digest,
+        "current_input_digest": fixture.input_digest,
         "canonical_full_command": "cargo fmt --all --check",
         "proof_kind": "executed",
-        "cache_key": cache_key,
+        "cache_hit": false,
+        "cache_key": fixture.cache_key,
         "cache_honesty": "pass",
         "telemetry_reconciliation_status": "pass",
         "verified_local_exit_code": 0,
@@ -141,8 +158,33 @@ fn timing_row(
         "output_digest": output_digest(),
         "verified_local_output_digest": output_digest(),
         "result_digest": result_digest(),
-        "verified_local_result_digest": result_digest()
+        "verified_local_result_digest": result_digest(),
+        "validator_version": "ultragoal-rust",
+        "law_version": "observability-live-loop",
+        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
+        "fixture_version": "source-tree-current",
+        "work_unit_count": 1,
+        "actual_work_duration_ms": 100,
+        "graph_overhead_ms": 1,
+        "equivalence_status": "executed_current_candidate_not_cache_replay",
+        "invalidation_proof": "input_digest_and_candidate_checked",
+        "verified_local_command": "cargo fmt --all --check",
+        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"]
     })
+}
+
+fn verified_cache_row(fixture: &ReplayFixture) -> serde_json::Value {
+    timing_row(fixture)
+        .with_value("proof_kind", json!("verified_cache_hit"))
+        .with_value("cache_hit", json!(true))
+        .with_value("work_unit_count", json!(0))
+        .with_value(
+            "equivalence_status",
+            json!("verified_same_candidate_cache_replay"),
+        )
+        .with_value("cache_equivalence_status", json!("pass"))
+        .with_value("prior_result_digest", json!(result_digest()))
+        .with_value("replayed_output_digest", json!(output_digest()))
 }
 
 fn output_digest() -> String {

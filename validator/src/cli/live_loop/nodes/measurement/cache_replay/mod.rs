@@ -54,11 +54,14 @@ fn replay_from_row(
         || text(row, "input_digest")? != input_digest
         || text(row, "current_input_digest")? != input_digest
         || text(row, "canonical_full_command")? != surface.canonical_full_command
-        || text(row, "proof_kind")? != "executed"
         || text(row, "cache_key")? != cache_key
         || text(row, "cache_honesty")? != "pass"
         || text(row, "telemetry_reconciliation_status")? != "pass"
     {
+        return None;
+    }
+    let proof_kind = text(row, "proof_kind")?;
+    if !row_has_replayable_proof(row, proof_kind) {
         return None;
     }
     let exit_code = row
@@ -97,6 +100,65 @@ fn replay_from_row(
         invalidation_proof:
             "cache_key_current_input_digest_command_versions_and_candidate_row_matched".to_string(),
     })
+}
+
+fn row_has_replayable_proof(row: &Value, proof_kind: &str) -> bool {
+    match proof_kind {
+        "executed" => row_has_executed_work(row),
+        "verified_cache_hit" => {
+            row.get("cache_hit").and_then(Value::as_bool) == Some(true)
+                && row.get("work_unit_count").and_then(Value::as_u64) == Some(0)
+                && row_has_required_versions(row)
+                && text(row, "equivalence_status") == Some("verified_same_candidate_cache_replay")
+                && text(row, "cache_equivalence_status") == Some("pass")
+                && text(row, "invalidation_proof").is_some_and(|value| !value.is_empty())
+                && text(row, "prior_result_digest") == text(row, "result_digest")
+                && text(row, "replayed_output_digest") == text(row, "output_digest")
+        }
+        _ => false,
+    }
+}
+
+fn row_has_executed_work(row: &Value) -> bool {
+    row.get("cache_hit").and_then(Value::as_bool) == Some(false)
+        && row
+            .get("work_unit_count")
+            .and_then(Value::as_u64)
+            .is_some_and(|value| value > 0)
+        && row
+            .get("actual_work_duration_ms")
+            .and_then(Value::as_u64)
+            .is_some_and(|value| value > 0)
+        && row
+            .get("graph_overhead_ms")
+            .and_then(Value::as_u64)
+            .is_some()
+        && row_has_required_versions(row)
+        && text(row, "equivalence_status") == Some("executed_current_candidate_not_cache_replay")
+        && text(row, "invalidation_proof").is_some_and(|value| !value.is_empty())
+        && row_has_command_argv(row)
+}
+
+fn row_has_required_versions(row: &Value) -> bool {
+    [
+        "validator_version",
+        "law_version",
+        "schema_version",
+        "fixture_version",
+    ]
+    .into_iter()
+    .all(|key| text(row, key).is_some_and(|value| !value.is_empty()))
+}
+
+fn row_has_command_argv(row: &Value) -> bool {
+    row.get("verified_local_command_argv")
+        .and_then(Value::as_array)
+        .is_some_and(|argv| {
+            !argv.is_empty()
+                && argv
+                    .iter()
+                    .all(|arg| arg.as_str().is_some_and(|value| !value.is_empty()))
+        })
 }
 
 fn node_rows(value: &Value) -> Vec<&Value> {

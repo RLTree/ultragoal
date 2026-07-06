@@ -327,6 +327,7 @@ fn cli_surface_commands_execute() {
         &[
             "--root".into(),
             ".".into(),
+            "self".into(),
             "performance".into(),
             "prove".into(),
             "--receipt".into(),

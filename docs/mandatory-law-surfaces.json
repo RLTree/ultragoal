@@ -819,8 +819,16 @@
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:c31d3f061d10ce92c5f4ee228129920aa46e0e34631fbfb1d2ba12aafab60696",
-          "path": "validator/src/cli/performance/proof.rs"
+          "digest": "sha256:1d7910ebb7cf8fae8c909fefdc5666f054dd04e948ca7201d48be8ce8994cc45",
+          "path": "validator/src/cli/performance/proof/mod.rs"
+        },
+        {
+          "digest": "sha256:9b0ab1719ceaf448ac9f7803dfb75a2c40f3ce2e2f46883de4ba5179fbb781a3",
+          "path": "validator/src/cli/performance/proof/speed_nodes/mod.rs"
+        },
+        {
+          "digest": "sha256:592b7478a05deb5f540d56cff0872b7281d2d1e2bb9340cc232ba01262229074",
+          "path": "validator/src/cli/performance/proof/speed_nodes/tests.rs"
         },
         {
           "digest": "sha256:5300416b2eafab124ba1d7f260a9f7f3949031282992885ef88c73ddebea8267",

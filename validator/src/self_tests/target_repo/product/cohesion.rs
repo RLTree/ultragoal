@@ -145,6 +145,7 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
         crate::command_run::run_with_exit_code(command_args_for_product_cohesion_dispatch(
             root.clone(),
             &[
+                "self",
                 "performance",
                 "prove",
                 "--receipt",

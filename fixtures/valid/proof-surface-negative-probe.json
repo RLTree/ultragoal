@@ -4285,7 +4285,7 @@
       "validator/src/cli/garbage/mod.rs",
       "validator/src/cli/mod.rs",
       "validator/src/cli/performance/mod.rs",
-      "validator/src/cli/performance/proof.rs",
+      "validator/src/cli/performance/proof/mod.rs",
       "validator/src/cli/performance/receipt/mod.rs",
       "validator/src/cli/performance/receipt/node_speed_evidence.rs",
       "validator/src/cli/performance/types.rs",
@@ -20910,8 +20910,8 @@
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:c31d3f061d10ce92c5f4ee228129920aa46e0e34631fbfb1d2ba12aafab60696",
-          "path": "validator/src/cli/performance/proof.rs"
+          "digest": "sha256:1d7910ebb7cf8fae8c909fefdc5666f054dd04e948ca7201d48be8ce8994cc45",
+          "path": "validator/src/cli/performance/proof/mod.rs"
         },
         {
           "digest": "sha256:5300416b2eafab124ba1d7f260a9f7f3949031282992885ef88c73ddebea8267",

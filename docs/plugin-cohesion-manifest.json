@@ -1731,16 +1731,21 @@
     },
     {
       "from": "validator/src/cli/performance/mod.rs",
-      "to": "validator/src/cli/performance/proof.rs",
+      "to": "validator/src/cli/performance/proof/mod.rs",
       "reason": "Performance command routing delegates receipt construction to the bounded proof module"
     },
     {
-      "from": "validator/src/cli/performance/proof.rs",
+      "from": "validator/src/cli/performance/proof/mod.rs",
+      "to": "validator/src/cli/performance/proof/speed_nodes/mod.rs",
+      "reason": "Performance proof dereferences claim-bearing live-loop node timing records"
+    },
+    {
+      "from": "validator/src/cli/performance/proof/mod.rs",
       "to": "schemas/cli-performance-receipt.schema.json",
       "reason": "Performance commands emit schema-bound performance receipts"
     },
     {
-      "from": "validator/src/cli/performance/proof.rs",
+      "from": "validator/src/cli/performance/proof/mod.rs",
       "to": "validator/src/cli/performance/types.rs",
       "reason": "Performance receipt issuer consumes closed budget classes"
     },
