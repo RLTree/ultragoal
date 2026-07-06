@@ -28,7 +28,7 @@ pub(crate) fn surface_record(
         .map(|timing| timing.baseline_duration_ms)
         .or(baseline_ms);
     let measurement = match node_timing.as_ref() {
-        Some(timing) if timing.timing_status != "pass" => {
+        Some(timing) if !timing_claim_ready(timing) => {
             measurement_failure::failed_timing_measurement_state(surface, timing)
         }
         Some(_) => measurement_state(surface, duration_ms, baseline_ms),
@@ -68,6 +68,12 @@ pub(crate) fn surface_record(
         .expect("live-loop node projection is always an object");
     insert_timing_fields(object, node_timing.as_ref(), graph_duration_ms);
     record
+}
+
+fn timing_claim_ready(timing: &NodeTiming) -> bool {
+    timing.timing_status == "pass"
+        && timing.failure_class == "none"
+        && timing.telemetry_reconciliation_status == "pass"
 }
 
 fn insert_timing_fields(

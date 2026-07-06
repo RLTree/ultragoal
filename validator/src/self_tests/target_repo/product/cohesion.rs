@@ -1,93 +1,23 @@
+use super::cohesion_target_repository::{
+    audit_product_cohesion, command_args_for_product_cohesion_dispatch, product_cohesion_detail,
+    product_cohesion_repository_from_fixture, read_product_journey_receipt,
+    write_human_review_exception_receipt, write_product_journey_receipt,
+};
 use serde_json::{Value, json};
-use std::path::{Path, PathBuf};
-
-fn copy_dir(from: &Path, to: &Path) {
-    std::fs::create_dir_all(to).expect("copy target");
-    for entry in std::fs::read_dir(from).expect("read fixture dir") {
-        let entry = entry.expect("dir entry");
-        let ty = entry.file_type().expect("file type");
-        let dest = to.join(entry.file_name());
-        if ty.is_dir() {
-            copy_dir(&entry.path(), &dest);
-        } else {
-            std::fs::copy(entry.path(), dest).expect("copy fixture file");
-        }
-    }
-}
-
-fn copied_fixture(label: &str, fixture: &str) -> PathBuf {
-    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
-    let target = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
-    copy_dir(&root.join(fixture), &target);
-    target
-}
-
-fn audit_product(root: &Path, required: bool) -> Value {
-    let (receipt, _) = crate::target_repo::audit_target_repo(
-        root,
-        "fresh-init",
-        "target audit test",
-        &[],
-        false,
-        required,
-        None,
-    );
-    receipt["checks"]["product-cohesion"].clone()
-}
-
-fn product_detail(row: &Value) -> &str {
-    row["detail"].as_str().expect("detail")
-}
-
-fn read_journey(root: &Path) -> Value {
-    crate::json_boundary::read_json(
-        &root.join("validation_artifacts/product-cohesion/journey-receipt.json"),
-    )
-    .expect("journey json")
-}
-
-fn write_journey(root: &Path, value: &Value) {
-    std::fs::write(
-        root.join("validation_artifacts/product-cohesion/journey-receipt.json"),
-        serde_json::to_vec_pretty(value).expect("journey bytes"),
-    )
-    .expect("write journey");
-}
-
-fn write_exception(root: &Path, payload: Value) {
-    let path = root.join("validation_artifacts/product-cohesion/human-review-queue-exception.json");
-    std::fs::write(
-        &path,
-        serde_json::to_vec_pretty(&payload).expect("payload bytes"),
-    )
-    .expect("write exception");
-    let mut journey = read_journey(root);
-    journey["human_attention_policy"]["human_review_queue_exception"]["evidence"]["digest"] =
-        json!(crate::digest::file(&path).expect("exception digest"));
-    write_journey(root, &journey);
-}
-
-fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
-    crate::Args {
-        root,
-        command: crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
-            .expect("parse command"),
-    }
-}
 
 #[test]
 fn product_cohesion_audit_reports_missing_marker_and_malformed_receipt() {
     let empty = crate::self_tests::boundaries::workspace_fixtures::temp_root("product-empty");
     std::fs::create_dir_all(&empty).expect("empty target");
-    let optional = audit_product(&empty, false);
+    let optional = audit_product_cohesion(&empty, false);
     assert_eq!(optional["status"], "not_applicable");
-    assert!(product_detail(&optional).contains("not requested"));
-    let required = audit_product(&empty, true);
+    assert!(product_cohesion_detail(&optional).contains("not requested"));
+    let required = audit_product_cohesion(&empty, true);
     assert_eq!(required["status"], "blocked");
-    assert!(product_detail(&required).contains("docs/product-cohesion.md"));
+    assert!(product_cohesion_detail(&required).contains("docs/product-cohesion.md"));
     std::fs::remove_dir_all(empty).expect("cleanup empty");
 
-    let no_marker = copied_fixture(
+    let no_marker = product_cohesion_repository_from_fixture(
         "product-no-marker",
         "fixtures/target-repo/valid-product-cohesion",
     );
@@ -98,12 +28,12 @@ fn product_cohesion_audit_reports_missing_marker_and_malformed_receipt() {
         text.replace("echo \"harness-check:product-cohesion pass\"\n", ""),
     )
     .expect("remove marker");
-    let marker_row = audit_product(&no_marker, true);
+    let marker_row = audit_product_cohesion(&no_marker, true);
     assert_eq!(marker_row["status"], "blocked");
-    assert!(product_detail(&marker_row).contains("gate marker"));
+    assert!(product_cohesion_detail(&marker_row).contains("gate marker"));
     std::fs::remove_dir_all(no_marker).expect("cleanup marker");
 
-    let malformed = copied_fixture(
+    let malformed = product_cohesion_repository_from_fixture(
         "product-malformed",
         "fixtures/target-repo/valid-product-cohesion",
     );
@@ -112,35 +42,35 @@ fn product_cohesion_audit_reports_missing_marker_and_malformed_receipt() {
         "{",
     )
     .expect("malformed journey");
-    let malformed_row = audit_product(&malformed, true);
+    let malformed_row = audit_product_cohesion(&malformed, true);
     assert_eq!(malformed_row["status"], "blocked");
-    assert!(product_detail(&malformed_row).contains("journey receipt malformed"));
+    assert!(product_cohesion_detail(&malformed_row).contains("journey receipt malformed"));
     std::fs::remove_dir_all(malformed).expect("cleanup malformed");
 }
 
 #[test]
 fn product_cohesion_human_attention_exception_branches_are_specific() {
-    let no_exception = copied_fixture(
+    let no_exception = product_cohesion_repository_from_fixture(
         "product-no-exception",
         "fixtures/target-repo/valid-product-cohesion",
     );
-    let mut journey = read_journey(&no_exception);
+    let mut journey = read_product_journey_receipt(&no_exception);
     journey["human_attention_policy"]["expected_interruption_rate"] = json!("frequent");
     journey["human_attention_policy"]["human_review_queue_exception"] = Value::Null;
-    write_journey(&no_exception, &journey);
-    let row = audit_product(&no_exception, true);
-    assert!(product_detail(&row).contains("requires human review queue exception"));
+    write_product_journey_receipt(&no_exception, &journey);
+    let row = audit_product_cohesion(&no_exception, true);
+    assert!(product_cohesion_detail(&row).contains("requires human review queue exception"));
     std::fs::remove_dir_all(no_exception).expect("cleanup no exception");
 
-    let exception = copied_fixture(
+    let exception = product_cohesion_repository_from_fixture(
         "product-exception-branches",
         "fixtures/target-repo/red/exception-product-cohesion",
     );
-    let schema_row = audit_product(&exception, true);
-    assert!(product_detail(&schema_row).contains("evidence schema mismatch"));
+    let schema_row = audit_product_cohesion(&exception, true);
+    assert!(product_cohesion_detail(&schema_row).contains("evidence schema mismatch"));
 
-    let surface_id = read_journey(&exception)["product_surface_id"].clone();
-    write_exception(
+    let surface_id = read_product_journey_receipt(&exception)["product_surface_id"].clone();
+    write_human_review_exception_receipt(
         &exception,
         json!({
             "schema": "harness-ultragoal.human-review-queue-exception.v1",
@@ -148,10 +78,10 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
             "product_surface_id": surface_id
         }),
     );
-    let status_row = audit_product(&exception, true);
-    assert!(product_detail(&status_row).contains("authority receipt status not pass"));
+    let status_row = audit_product_cohesion(&exception, true);
+    assert!(product_cohesion_detail(&status_row).contains("authority receipt status not pass"));
 
-    write_exception(
+    write_human_review_exception_receipt(
         &exception,
         json!({
             "schema": "harness-ultragoal.human-review-queue-exception.v1",
@@ -159,10 +89,10 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
             "product_surface_id": "other-surface"
         }),
     );
-    let mismatch_row = audit_product(&exception, true);
-    assert!(product_detail(&mismatch_row).contains("product surface mismatch"));
+    let mismatch_row = audit_product_cohesion(&exception, true);
+    assert!(product_cohesion_detail(&mismatch_row).contains("product surface mismatch"));
 
-    write_exception(
+    write_human_review_exception_receipt(
         &exception,
         json!({
             "schema": "harness-ultragoal.human-review-queue-exception.v1",
@@ -171,8 +101,8 @@ fn product_cohesion_human_attention_exception_branches_are_specific() {
             "intrinsic_human_decision": "short"
         }),
     );
-    let field_row = audit_product(&exception, true);
-    assert!(product_detail(&field_row).contains("missing substantive"));
+    let field_row = audit_product_cohesion(&exception, true);
+    assert!(product_cohesion_detail(&field_row).contains("missing substantive"));
     std::fs::remove_dir_all(exception).expect("cleanup exception");
 }
 
@@ -190,16 +120,17 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     .expect("write control manifest");
     let control_receipt =
         std::path::PathBuf::from("validation_artifacts/cli/update-goal-eligibility.json");
-    let control_code = crate::command_run::run_with_exit_code(args(
-        control_root.clone(),
-        &[
-            "update-goal",
-            "eligibility",
-            "--receipt",
-            control_receipt.to_str().expect("control path"),
-        ],
-    ))
-    .expect("control command");
+    let control_code =
+        crate::command_run::run_with_exit_code(command_args_for_product_cohesion_dispatch(
+            control_root.clone(),
+            &[
+                "update-goal",
+                "eligibility",
+                "--receipt",
+                control_receipt.to_str().expect("control path"),
+            ],
+        ))
+        .expect("control command");
     assert_eq!(control_code, 1);
     assert_eq!(
         crate::json_boundary::read_json(&control_root.join(&control_receipt))
@@ -210,39 +141,43 @@ fn command_dispatch_returns_typed_exit_codes_for_fail_closed_paths() {
     let performance_receipt = std::path::PathBuf::from(
         "validation_artifacts/performance/performance-dispatch/performance.json",
     );
-    let performance_code = crate::command_run::run_with_exit_code(args(
-        root.clone(),
-        &[
-            "performance",
-            "prove",
-            "--receipt",
-            performance_receipt.to_str().expect("performance path"),
-        ],
-    ))
-    .expect("performance command");
-    assert_eq!(performance_code, 0);
+    let performance_code =
+        crate::command_run::run_with_exit_code(command_args_for_product_cohesion_dispatch(
+            root.clone(),
+            &[
+                "performance",
+                "prove",
+                "--receipt",
+                performance_receipt.to_str().expect("performance path"),
+            ],
+        ))
+        .expect("performance command");
+    assert_eq!(performance_code, 1);
+    let performance_value = crate::json_boundary::read_json(&root.join(&performance_receipt))
+        .expect("performance receipt");
+    assert_eq!(performance_value["status"], "fail");
     assert_eq!(
-        crate::json_boundary::read_json(&root.join(&performance_receipt))
-            .expect("performance receipt")["status"],
-        "pass"
+        performance_value["failure"]["id"],
+        "cli_performance_missing_node_speed_proof"
     );
 
-    let review_code = crate::command_run::run_with_exit_code(args(
-        root.clone(),
-        &[
-            "review-round",
-            "verify",
-            "--receipt",
-            "fixtures/review-round/valid/review-round-receipt.json",
-            "--validator-receipt",
-            "fixtures/review-round/anchors/validator-receipt.json",
-            "--review-target-receipt",
-            "fixtures/review-round/anchors/review-target-receipt.json",
-            "--archive-receipt",
-            "fixtures/review-round/anchors/archive-receipt.json",
-        ],
-    ))
-    .expect("review command");
+    let review_code =
+        crate::command_run::run_with_exit_code(command_args_for_product_cohesion_dispatch(
+            root.clone(),
+            &[
+                "review-round",
+                "verify",
+                "--receipt",
+                "fixtures/review-round/valid/review-round-receipt.json",
+                "--validator-receipt",
+                "fixtures/review-round/anchors/validator-receipt.json",
+                "--review-target-receipt",
+                "fixtures/review-round/anchors/review-target-receipt.json",
+                "--archive-receipt",
+                "fixtures/review-round/anchors/archive-receipt.json",
+            ],
+        ))
+        .expect("review command");
     assert_eq!(review_code, 1);
     std::fs::remove_dir_all(control_root).expect("cleanup control dispatch root");
     let _ = std::fs::remove_file(root.join(&performance_receipt));

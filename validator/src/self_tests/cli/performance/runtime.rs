@@ -31,8 +31,8 @@ fn receipt_is_fail_closed_and_surface_bound() {
     };
     let value = receipt(&root, &command, 123).expect("receipt builds");
     assert_eq!(value["schema"], PERFORMANCE_RECEIPT_SCHEMA);
-    assert_eq!(value["status"], "pass");
-    assert_eq!(value["claim_ceiling"], "performance_proven");
+    assert_eq!(value["status"], "fail");
+    assert_eq!(value["claim_ceiling"], "withheld_or_blocked");
     assert_eq!(value["command"]["name"], "self_performance_prove");
     assert_eq!(value["budget"]["class"], "external_live");
     assert_eq!(value["budget"]["target_ms"], 30_000);
@@ -50,14 +50,23 @@ fn receipt_is_fail_closed_and_surface_bound() {
     assert_eq!(value["telemetry"]["wall_clock_ms"], 123);
     assert_eq!(value["external_probe_policy"]["live_probe_class"], true);
     assert_eq!(value["external_probe_policy"]["timeout_ms"], 30_000);
-    assert_eq!(value["failure"], serde_json::Value::Null);
-    let claims = value["supported_claim_classes"]
-        .as_array()
-        .expect("supported claims")
-        .iter()
-        .filter_map(|claim| claim.as_str())
-        .collect::<Vec<_>>();
-    assert_eq!(claims, vec!["routine_usability"]);
+    assert_eq!(
+        value["failure"]["id"],
+        "cli_performance_missing_node_speed_proof"
+    );
+    assert!(
+        value["supported_claim_classes"]
+            .as_array()
+            .expect("supported claims")
+            .is_empty()
+    );
+    assert!(
+        value["blocked_claim_classes"]
+            .as_array()
+            .expect("blocked claims")
+            .iter()
+            .any(|claim| claim.as_str() == Some("update_goal_eligibility"))
+    );
     for ptr in [
         "/digests/candidate",
         "/digests/cli_binary",
@@ -80,7 +89,7 @@ fn receipt_is_fail_closed_and_surface_bound() {
     assert_eq!(over_budget["claim_ceiling"], "withheld_or_blocked");
     assert_eq!(
         over_budget["failure"]["id"],
-        "cli_performance_budget_exceeded"
+        "cli_performance_missing_node_speed_proof"
     );
     assert!(
         over_budget["blocked_claim_classes"]
@@ -113,7 +122,12 @@ fn run_writes_receipt_and_returns_typed_exit_code() {
         .and_then(serde_json::Value::as_str)
         .unwrap_or("");
     assert!(
-        [(0, ""), (1, "cli_performance_budget_exceeded")].contains(&(exit_code, failure_id)),
+        [
+            (0, ""),
+            (1, "cli_performance_budget_exceeded"),
+            (1, "cli_performance_missing_node_speed_proof")
+        ]
+        .contains(&(exit_code, failure_id)),
         "failure id {failure_id} for exit code {exit_code}"
     );
 

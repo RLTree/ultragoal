@@ -117,21 +117,36 @@ pub(crate) fn read_current(
             }
             valid_digest(text(row, "verified_local_stdout_digest")?)?;
             valid_digest(text(row, "verified_local_stderr_digest")?)?;
+            let timing_status = text(row, "timing_status").unwrap_or("fail");
+            let failure_class =
+                text(row, "failure_class").unwrap_or("live_loop_node_measurement_failed");
+            if timing_status == "pass"
+                && (failure_class != "none" || telemetry_reconciliation_status != "pass")
+            {
+                return None;
+            }
             match proof_kind {
                 "executed" => {
-                    if cache_hit || work_unit_count == 0 {
+                    if cache_hit
+                        || work_unit_count == 0
+                        || equivalence_status != "executed_current_candidate_not_cache_replay"
+                        || invalidation_proof.is_empty()
+                    {
                         return None;
                     }
                 }
                 "verified_cache_hit" => {
+                    let prior_result_digest =
+                        text(row, "prior_result_digest").and_then(valid_digest)?;
+                    let replayed_output_digest =
+                        text(row, "replayed_output_digest").and_then(valid_digest)?;
                     if !cache_hit
-                        || text(row, "prior_result_digest")
-                            .and_then(valid_digest)
-                            .is_none()
-                        || text(row, "replayed_output_digest")
-                            .and_then(valid_digest)
-                            .is_none()
+                        || work_unit_count != 0
+                        || prior_result_digest != result_digest
+                        || replayed_output_digest != output_digest
                         || text(row, "cache_equivalence_status") != Some("pass")
+                        || equivalence_status != "verified_same_candidate_cache_replay"
+                        || invalidation_proof.is_empty()
                     {
                         return None;
                     }
@@ -171,10 +186,8 @@ pub(crate) fn read_current(
                     where_failed: where_failed.to_string(),
                     why_failed: why_failed.to_string(),
                     next_repair: next_repair.to_string(),
-                    timing_status: text(row, "timing_status").unwrap_or("fail").to_string(),
-                    failure_class: text(row, "failure_class")
-                        .unwrap_or("live_loop_node_measurement_failed")
-                        .to_string(),
+                    timing_status: timing_status.to_string(),
+                    failure_class: failure_class.to_string(),
                     baseline_exit_code,
                     baseline_launch_error,
                     baseline_failure: CommandFailureSummary::from_value(

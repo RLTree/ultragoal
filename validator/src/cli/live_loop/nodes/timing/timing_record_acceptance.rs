@@ -7,8 +7,10 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
         "proof_kind": "verified_cache_hit",
         "cache_hit": true,
         "work_unit_count": 0,
-        "prior_result_digest": digest("prior"),
-        "replayed_output_digest": digest("replayed"),
+        "equivalence_status": "verified_same_candidate_cache_replay",
+        "invalidation_proof": "cache_key_current_input_digest_command_versions_and_candidate_row_matched",
+        "prior_result_digest": digest("result"),
+        "replayed_output_digest": digest("output"),
         "cache_equivalence_status": "pass"
     }));
 
@@ -27,10 +29,16 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"result_digest": digest("different-result")}),
         json!({"output_digest": digest("different-output")}),
         json!({"verified_local_stdout_digest": "sha256:short"}),
+        json!({"timing_status": "pass", "failure_class": "live_loop_speedup_target_missed"}),
+        json!({"timing_status": "pass", "telemetry_reconciliation_status": "missing"}),
+        json!({"equivalence_status": "unknown"}),
+        json!({"invalidation_proof": ""}),
         json!({"cache_hit": true}),
         json!({"work_unit_count": 0}),
         json!({"proof_kind": "verified_cache_hit", "cache_hit": true}),
-        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "prior_result_digest": digest("prior"), "replayed_output_digest": digest("replayed"), "cache_equivalence_status": "miss"}),
+        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "work_unit_count": 0, "equivalence_status": "verified_same_candidate_cache_replay", "prior_result_digest": digest("prior"), "replayed_output_digest": digest("output"), "cache_equivalence_status": "pass"}),
+        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "work_unit_count": 0, "equivalence_status": "verified_same_candidate_cache_replay", "prior_result_digest": digest("result"), "replayed_output_digest": digest("replayed"), "cache_equivalence_status": "pass"}),
+        json!({"proof_kind": "verified_cache_hit", "cache_hit": true, "work_unit_count": 0, "equivalence_status": "verified_same_candidate_cache_replay", "prior_result_digest": digest("result"), "replayed_output_digest": digest("output"), "cache_equivalence_status": "miss"}),
         json!({"proof_kind": "planned"}),
     ];
 

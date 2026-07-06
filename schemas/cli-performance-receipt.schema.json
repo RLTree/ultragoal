@@ -22,6 +22,7 @@
     "telemetry",
     "external_probe_policy",
     "performance_regression",
+    "speed_proof",
     "exit_code",
     "supported_claim_classes",
     "blocked_claim_classes",
@@ -395,6 +396,39 @@
         }
       }
     },
+    "speed_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "blocked",
+            "pass"
+          ]
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/speedProofNode"
+          }
+        },
+        "proof_boundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_node_proof": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_impact": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "exit_code": {
       "type": "integer"
     },
@@ -528,6 +562,201 @@
           "type": "string",
           "minLength": 1
         }
+      }
+    },
+    "speedProofNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "proof_kind",
+        "candidate_digest",
+        "cache_hit",
+        "work_unit_count",
+        "actual_work_duration_ms",
+        "graph_overhead_ms",
+        "result_digest",
+        "output_digest",
+        "telemetry_reconciliation_status",
+        "claim_impact"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proof_kind": {
+          "enum": [
+            "executed",
+            "verified_cache_hit"
+          ]
+        },
+        "candidate_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "cache_hit": {
+          "type": "boolean"
+        },
+        "command_argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exit_status": {
+          "type": "integer"
+        },
+        "work_unit_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actual_work_duration_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "graph_overhead_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "output_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "receipt_paths": {
+          "$ref": "#/$defs/artifactPathList"
+        },
+        "artifact_paths": {
+          "$ref": "#/$defs/artifactPathList"
+        },
+        "telemetry_reconciliation_status": {
+          "const": "pass"
+        },
+        "claim_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cache_key": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "current_input_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "validator_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "law_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fixture_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prior_result_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "replayed_output_digest": {
+          "$ref": "schema-authority-primitives.schema.json#/$defs/sha256"
+        },
+        "equivalence_status": {
+          "const": "verified_same_candidate_cache_replay"
+        },
+        "invalidation_proof": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "proof_kind": {
+                "const": "executed"
+              }
+            },
+            "required": [
+              "proof_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "command_argv",
+              "exit_status"
+            ],
+            "properties": {
+              "cache_hit": {
+                "const": false
+              },
+              "work_unit_count": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "receipt_paths"
+                ]
+              },
+              {
+                "required": [
+                  "artifact_paths"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "proof_kind": {
+                "const": "verified_cache_hit"
+              }
+            },
+            "required": [
+              "proof_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "cache_key",
+              "current_input_digest",
+              "validator_version",
+              "law_version",
+              "schema_version",
+              "fixture_version",
+              "prior_result_digest",
+              "replayed_output_digest",
+              "equivalence_status",
+              "invalidation_proof"
+            ],
+            "properties": {
+              "cache_hit": {
+                "const": true
+              },
+              "work_unit_count": {
+                "const": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "artifactPathList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
       }
     }
   }

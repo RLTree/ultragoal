@@ -34,6 +34,9 @@ fn valid_pass() -> Value {
     value["failure"] = Value::Null;
     value["blocked_claim_classes"] = json!([]);
     value["supported_claim_classes"] = json!(["routine_usability"]);
+    value["speed_proof"] = json!({"nodes": [speed_node(
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    )]});
     value
 }
 
@@ -58,9 +61,30 @@ fn strict_pass(candidate: &str) -> Value {
             "io_bytes": null
         },
         "performance_regression": {"status": "pass"},
+        "speed_proof": {"nodes": [speed_node(candidate)]},
         "failure": null,
         "blocked_claim_classes": [],
         "supported_claim_classes": ["routine_usability"]
+    })
+}
+
+fn speed_node(candidate: &str) -> Value {
+    let digest = crate::self_tests::boundaries::workspace_fixtures::sha('c');
+    json!({
+        "node_id": "fmt_check",
+        "proof_kind": "executed",
+        "candidate_digest": candidate,
+        "cache_hit": false,
+        "command_argv": ["cargo", "fmt", "--all", "--check"],
+        "exit_status": 0,
+        "work_unit_count": 1,
+        "actual_work_duration_ms": 10,
+        "graph_overhead_ms": 1,
+        "result_digest": digest,
+        "output_digest": digest,
+        "receipt_paths": ["validation_artifacts/observability/live-loop-node-timing.json"],
+        "telemetry_reconciliation_status": "pass",
+        "claim_impact": "supports_node_speed_only"
     })
 }
 
@@ -126,6 +150,13 @@ fn rejects_wrong_schema_missing_fields_and_claim_theater() {
             .contains(&"cli_performance_pass_with_blocked_claims".to_string())
     );
 
+    let mut proof_shaped_pass = valid_pass();
+    proof_shaped_pass["speed_proof"]["nodes"] = json!([]);
+    assert!(
+        surface_value_failures(&proof_shaped_pass)
+            .contains(&"cli_performance_receipt_missing_node_speed_proof".to_string())
+    );
+
     let mut missing_failure_check = valid_fail();
     missing_failure_check["failure"]
         .as_object_mut()
@@ -186,4 +217,17 @@ fn strict_surface_validation_rejects_stale_or_placeholder_performance_proof() {
     }
     let green_failures = same_candidate_pass_failures(&strict_pass(&current), &current);
     assert!(green_failures.is_empty(), "{green_failures:?}");
+
+    let mut cache_theater = strict_pass(&current);
+    cache_theater["speed_proof"]["nodes"][0]["proof_kind"] = json!("verified_cache_hit");
+    cache_theater["speed_proof"]["nodes"][0]["cache_hit"] = json!(true);
+    cache_theater["speed_proof"]["nodes"][0]["work_unit_count"] = json!(0);
+    cache_theater["speed_proof"]["nodes"][0]["equivalence_status"] = json!("unknown");
+    let failures = same_candidate_pass_failures(&cache_theater, &current);
+    assert!(
+        failures
+            .iter()
+            .any(|failure| failure.contains("cli_performance_speed_node_unverified_cache_reuse")),
+        "{failures:?}"
+    );
 }

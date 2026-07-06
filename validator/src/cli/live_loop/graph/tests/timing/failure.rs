@@ -117,6 +117,24 @@ fn live_loop_graph_blocks_pass_shaped_timing_that_misses_speed_target() {
 }
 
 #[test]
+fn live_loop_graph_blocks_pass_shaped_timing_without_reconciliation() {
+    let mut timing = node_timing(1_000, 1, "pass".to_string(), "none".to_string());
+    timing.telemetry_reconciliation_status = "missing".to_string();
+
+    let node = projected_node(timing);
+
+    assert_eq!(node["status"], "blocked");
+    assert_eq!(
+        node["failure_class"],
+        "live_loop_telemetry_reconciliation_missing"
+    );
+    assert_eq!(
+        node["speedup_measurement_state"],
+        "telemetry_reconciliation_missing"
+    );
+}
+
+#[test]
 fn live_loop_graph_uses_baseline_failure_details_without_duplicate_rerun() {
     let rerun = "target/debug/ultragoal --root . loop measure --node focused_rust_tests --tier hot";
     let mut timing = node_timing(

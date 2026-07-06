@@ -6,22 +6,7 @@ pub(crate) fn failed_timing_measurement_state(
     surface: LoopValidationSurface,
     timing: &NodeTiming,
 ) -> MeasurementState {
-    let failure_class = match timing.failure_class.as_str() {
-        "canonical_full_command_launch_failed" => "canonical_full_command_launch_failed",
-        "canonical_full_command_failed" => "canonical_full_command_failed",
-        "verified_local_command_launch_failed" => "verified_local_command_launch_failed",
-        "verified_local_command_failed" => "verified_local_command_failed",
-        "verified_local_proof_kind_invalid" => "verified_local_proof_kind_invalid",
-        "verified_local_cache_equivalence_missing" => "verified_local_cache_equivalence_missing",
-        "verified_local_work_unit_missing" => "verified_local_work_unit_missing",
-        "verified_local_equivalence_status_invalid" => "verified_local_equivalence_status_invalid",
-        "verified_local_invalidation_proof_missing" => "verified_local_invalidation_proof_missing",
-        "live_loop_telemetry_reconciliation_missing" => {
-            "live_loop_telemetry_reconciliation_missing"
-        }
-        "live_loop_speedup_target_missed" => "live_loop_speedup_target_missed",
-        _ => "live_loop_node_measurement_failed",
-    };
+    let failure_class = measurement_failure_class(timing);
     let baseline_state = baseline_state(failure_class, timing);
     let speedup_state = speedup_state(failure_class);
     let fallback = fallback_why(failure_class, timing.baseline_launch_error);
@@ -57,6 +42,28 @@ pub(crate) fn failed_timing_measurement_state(
             .unwrap_or_else(|| {
                 "blocks_live_loop_routine_repair_until_canonical_full_command_passes".to_string()
             }),
+    }
+}
+
+fn measurement_failure_class(timing: &NodeTiming) -> &'static str {
+    match timing.failure_class.as_str() {
+        "none" if timing.telemetry_reconciliation_status != "pass" => {
+            "live_loop_telemetry_reconciliation_missing"
+        }
+        "canonical_full_command_launch_failed" => "canonical_full_command_launch_failed",
+        "canonical_full_command_failed" => "canonical_full_command_failed",
+        "verified_local_command_launch_failed" => "verified_local_command_launch_failed",
+        "verified_local_command_failed" => "verified_local_command_failed",
+        "verified_local_proof_kind_invalid" => "verified_local_proof_kind_invalid",
+        "verified_local_cache_equivalence_missing" => "verified_local_cache_equivalence_missing",
+        "verified_local_work_unit_missing" => "verified_local_work_unit_missing",
+        "verified_local_equivalence_status_invalid" => "verified_local_equivalence_status_invalid",
+        "verified_local_invalidation_proof_missing" => "verified_local_invalidation_proof_missing",
+        "live_loop_telemetry_reconciliation_missing" => {
+            "live_loop_telemetry_reconciliation_missing"
+        }
+        "live_loop_speedup_target_missed" => "live_loop_speedup_target_missed",
+        _ => "live_loop_node_measurement_failed",
     }
 }
 

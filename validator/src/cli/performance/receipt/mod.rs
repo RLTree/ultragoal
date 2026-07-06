@@ -1,6 +1,8 @@
 use crate::cli::performance::types::{BudgetClass, PERFORMANCE_RECEIPT_SCHEMA};
 use serde_json::Value;
 
+mod node_speed_evidence;
+
 pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
     let mut out = Vec::new();
     if value.get("schema").and_then(Value::as_str) != Some(PERFORMANCE_RECEIPT_SCHEMA) {
@@ -47,6 +49,9 @@ pub(crate) fn surface_value_failures(value: &Value) -> Vec<String> {
         .is_some_and(|rows| !rows.is_empty());
     if status == Some("fail") && !blocked {
         out.push("cli_performance_fail_without_blocked_claims".to_string());
+    }
+    if status == Some("pass") {
+        out.extend(node_speed_evidence::speed_failures(value, None));
     }
     out
 }
@@ -158,5 +163,13 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
     {
         out.push("cli_performance_receipt_update_goal_overclaim".to_string());
     }
+    out.extend(node_speed_evidence::speed_failures(
+        value,
+        Some(expected_candidate),
+    ));
     out
+}
+
+pub(crate) fn speed_proof_claim_ready(value: &Value, expected_candidate: Option<&str>) -> bool {
+    node_speed_evidence::speed_claim_ready(value, expected_candidate)
 }

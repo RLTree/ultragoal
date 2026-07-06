@@ -25,6 +25,7 @@ pub(crate) fn receipt(
         "cache": cache_value(&candidate, command),
         "concurrency": concurrency_value(),
         "telemetry": telemetry_value(wall_ms),
+        "speed_proof": speed_proof_value(),
         "external_probe_policy": external_policy(command.class),
         "commands": PERFORMANCE_COMMANDS
     });
@@ -34,7 +35,19 @@ pub(crate) fn receipt(
 
 pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) {
     value["telemetry"]["wall_clock_ms"] = json!(wall_ms);
-    if wall_ms <= class.cold_p95_ms() {
+    if value.pointer("/command/name").and_then(Value::as_str) == Some("performance_budgets") {
+        value["status"] = json!("pass");
+        value["claim_ceiling"] = json!("budget_catalog_observation_only");
+        value["performance_regression"] = regression_value("not_a_speed_claim");
+        value["exit_code"] = json!(0);
+        value["supported_claim_classes"] = json!([]);
+        value["blocked_claim_classes"] = json!([]);
+        value["failure"] = Value::Null;
+        return;
+    }
+
+    let speed_proof_ready = super::receipt::speed_proof_claim_ready(value, None);
+    if wall_ms <= class.cold_p95_ms() && speed_proof_ready {
         value["status"] = json!("pass");
         value["claim_ceiling"] = json!("performance_proven");
         value["performance_regression"] = regression_value("pass");
@@ -43,6 +56,21 @@ pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) 
         value["blocked_claim_classes"] = json!([]);
         value["failure"] = Value::Null;
     } else {
+        let (failure_id, failed_invariant, observed_value, expected_value) = if speed_proof_ready {
+            (
+                "cli_performance_budget_exceeded",
+                "current same-candidate performance proof must finish within the declared budget",
+                format!("wall_clock_ms={wall_ms}"),
+                format!("wall_clock_ms<={}", class.cold_p95_ms()),
+            )
+        } else {
+            (
+                "cli_performance_missing_node_speed_proof",
+                "speed claims require executed work or verified same-candidate cache replay per node",
+                "speed_proof.nodes=[]".to_string(),
+                "each node records proof_kind=executed or proof_kind=verified_cache_hit with product-work evidence".to_string(),
+            )
+        };
         value["status"] = json!("fail");
         value["claim_ceiling"] = json!("withheld_or_blocked");
         value["performance_regression"] =
@@ -58,13 +86,13 @@ pub(crate) fn apply_status(value: &mut Value, class: BudgetClass, wall_ms: u64) 
             "update_goal_eligibility"
         ]);
         value["failure"] = json!({
-            "id": "cli_performance_budget_exceeded",
+            "id": failure_id,
             "law_id": "cli-performance-latency-speed-iteration-fitness",
             "gate_id": "89.22",
             "check_id": "cli-performance-latency-speed-iteration-fitness",
-            "failed_invariant": "current same-candidate performance proof must finish within the declared budget",
-            "observed_value": format!("wall_clock_ms={wall_ms}"),
-            "expected_value": format!("wall_clock_ms<={}", class.cold_p95_ms()),
+            "failed_invariant": failed_invariant,
+            "observed_value": observed_value,
+            "expected_value": expected_value,
             "claim_ceiling_impact": "routine_usability_product_readiness_release_update_goal_withheld",
             "repair_class": "deterministic_enforcement",
             "severity": "hard_blocker"
@@ -161,6 +189,16 @@ fn telemetry_value(wall_ms: u64) -> Value {
         "external_wait_ms": 0,
         "timeout_count": 0,
         "retry_count": 0
+    })
+}
+
+fn speed_proof_value() -> Value {
+    json!({
+        "status": "blocked",
+        "nodes": [],
+        "proof_boundary": "wrapper_latency_is_observation_only_until_node_work_is_bound",
+        "required_node_proof": "executed_or_verified_same_candidate_cache_replay",
+        "claim_impact": "performance_claims_withheld_until_speed_nodes_record_product_work_or_verified_reuse"
     })
 }
 

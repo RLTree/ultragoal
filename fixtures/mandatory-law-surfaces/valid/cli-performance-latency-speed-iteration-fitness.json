@@ -35,15 +35,27 @@
       "path": "validator/src/audit/cli/performance.rs"
     },
     {
-      "digest": "sha256:0d7fcc9fa2217e1a22bb7fb690919b6d0d012164c832036026208380f4fe5deb",
+      "digest": "sha256:33fe1a31fefbeba7bacd45884c4033919fba7395252feff16a24f89d8c5361e3",
       "path": "validator/src/cli/performance/mod.rs"
     },
     {
-      "digest": "sha256:c444a730bfad062a38a9965d716e99a43c97c2b6b557197f8e50cf1470d889d5",
+      "digest": "sha256:c31d3f061d10ce92c5f4ee228129920aa46e0e34631fbfb1d2ba12aafab60696",
+      "path": "validator/src/cli/performance/proof.rs"
+    },
+    {
+      "digest": "sha256:5300416b2eafab124ba1d7f260a9f7f3949031282992885ef88c73ddebea8267",
+      "path": "validator/src/cli/performance/receipt/mod.rs"
+    },
+    {
+      "digest": "sha256:b7b1a7207471cd2118e9729175b0e0b05f48f38b203319af0910567b19c1095c",
+      "path": "validator/src/cli/performance/receipt/node_speed_evidence.rs"
+    },
+    {
+      "digest": "sha256:f0560360253d723b2a2683cf9c767a5b07a41b8610f0e6164d938e0514544dac",
       "path": "validator/src/cli/performance/types.rs"
     },
     {
-      "digest": "sha256:7d63a1ff3b4a175e86b93376d7d6bf7df9fe49cc24437e4d89fe059b6a2d0114",
+      "digest": "sha256:dd11b1b6fb8fec8e8bfe71dde0cd28cd7c3fb9a903472d746772a2c8f75253ce",
       "path": "schemas/cli-performance-receipt.schema.json"
     }
   ],

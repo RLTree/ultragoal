@@ -4258,7 +4258,8 @@
       "validator/src/cli/mod.rs",
       "validator/src/cli/performance/mod.rs",
       "validator/src/cli/performance/proof.rs",
-      "validator/src/cli/performance/receipt.rs",
+      "validator/src/cli/performance/receipt/mod.rs",
+      "validator/src/cli/performance/receipt/node_speed_evidence.rs",
       "validator/src/cli/performance/types.rs",
       "validator/src/cli/product/mod.rs",
       "validator/src/cli/product/receipts/mod.rs",
@@ -4416,6 +4417,7 @@
       "validator/src/self_tests/cli/performance/observability_edges.rs",
       "validator/src/self_tests/cli/performance/receipts.rs",
       "validator/src/self_tests/cli/performance/runtime.rs",
+      "validator/src/self_tests/cli/performance/speed_node_receipts.rs",
       "validator/src/self_tests/cli/product/mod.rs",
       "validator/src/self_tests/cli/session.rs",
       "validator/src/self_tests/cli/root.rs",
@@ -4532,6 +4534,7 @@
       "validator/src/self_tests/target_repo/mod.rs",
       "validator/src/self_tests/target_repo/observability.rs",
       "validator/src/self_tests/target_repo/product/cohesion.rs",
+      "validator/src/self_tests/target_repo/product/cohesion_target_repository.rs",
       "validator/src/self_tests/target_repo/product/contract.rs",
       "validator/src/self_tests/target_repo/product/mod.rs",
       "validator/src/self_tests/target_repo/product/review.rs",
@@ -20870,12 +20873,16 @@
           "path": "validator/src/cli/performance/mod.rs"
         },
         {
-          "digest": "sha256:78fe079a00a6a43fad51ba96d8d59660417fb5b11dc44c9faac0219cb8f49856",
+          "digest": "sha256:c31d3f061d10ce92c5f4ee228129920aa46e0e34631fbfb1d2ba12aafab60696",
           "path": "validator/src/cli/performance/proof.rs"
         },
         {
-          "digest": "sha256:628aa56bab0e11acc145a0d9c36b83367d3d217da3476385b66d7726c9ed21bd",
-          "path": "validator/src/cli/performance/receipt.rs"
+          "digest": "sha256:5300416b2eafab124ba1d7f260a9f7f3949031282992885ef88c73ddebea8267",
+          "path": "validator/src/cli/performance/receipt/mod.rs"
+        },
+        {
+          "digest": "sha256:b7b1a7207471cd2118e9729175b0e0b05f48f38b203319af0910567b19c1095c",
+          "path": "validator/src/cli/performance/receipt/node_speed_evidence.rs"
         },
         {
           "digest": "sha256:c444a730bfad062a38a9965d716e99a43c97c2b6b557197f8e50cf1470d889d5",
@@ -21490,7 +21497,7 @@
           "path": "validator/src/self_tests/cli/performance/budgets.rs"
         },
         {
-          "digest": "sha256:e419d7f026dc534140ea65a63b72ba7075c9e480b38eb799b30894ed6d871025",
+          "digest": "sha256:c5ad1c840dd2e275c5f2d26ef61c0089090a84e1fed69bbce540868d7fcaf7a0",
           "path": "validator/src/self_tests/cli/performance/mod.rs"
         },
         {
@@ -21504,6 +21511,10 @@
         {
           "digest": "sha256:e2406df52200adc02ab8b9124ed594a10a09f182f594a1f1d4a6b0f3f41aa64f",
           "path": "validator/src/self_tests/cli/performance/runtime.rs"
+        },
+        {
+          "digest": "sha256:2749fecedf58ca438b04ab4dd348f80ee507d7d2465ff5e979ff62fb2744d9cb",
+          "path": "validator/src/self_tests/cli/performance/speed_node_receipts.rs"
         },
         {
           "digest": "sha256:d7294fa94a996b7f74eb4856420a2ec9ea77b45a7e8b095cdaf63edc431694f0",
@@ -21954,15 +21965,19 @@
           "path": "validator/src/self_tests/target_repo/observability.rs"
         },
         {
-          "digest": "sha256:22b87e36d2bd35198dcbffaab182851ada49aecc08a42b496dbaa544f52e941b",
+          "digest": "sha256:37e502bbbd1e77965168a62726a4c6e0ecadd209fa4d41e14a959364b549b936",
           "path": "validator/src/self_tests/target_repo/product/cohesion.rs"
+        },
+        {
+          "digest": "sha256:3ba847741093951c90b7a0a9c0e04bd1e1dd0706931fa125470359320bd9f4cd",
+          "path": "validator/src/self_tests/target_repo/product/cohesion_target_repository.rs"
         },
         {
           "digest": "sha256:2a967f61d4de7328baad8eb7a9c1c8c016a55c34b3a8f132709b9dcc59935170",
           "path": "validator/src/self_tests/target_repo/product/contract.rs"
         },
         {
-          "digest": "sha256:194d4439567c442b8071a6bd52dd0c36a0888ab92a064eab4a283e5c255c9a24",
+          "digest": "sha256:0a2772d213bf7b8a93a015ab0c9153191e0481b0207cc7ea8345d580ca5da066",
           "path": "validator/src/self_tests/target_repo/product/mod.rs"
         },
         {

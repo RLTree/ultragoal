@@ -333,9 +333,17 @@ fn cli_surface_commands_execute() {
             root_relative(&root, &performance_receipt),
         ],
     );
-    assert!(
-        performance.status.success(),
-        "performance command failed: {performance:?}"
+    assert_eq!(
+        performance.status.code(),
+        Some(1),
+        "performance command should fail closed without node speed evidence: {performance:?}"
+    );
+    let performance_value: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&performance_receipt).expect("performance receipt"))
+            .expect("performance receipt json");
+    assert_eq!(
+        performance_value["failure"]["id"],
+        "cli_performance_missing_node_speed_proof"
     );
 
     let rust_fast_receipt = root.join(format!(

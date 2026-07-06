@@ -4,6 +4,7 @@ use std::path::Path;
 mod coverage;
 mod observability;
 mod package_receipts;
+mod performance_receipt;
 
 pub(crate) fn write_json(path: &Path, value: &Value) {
     let parent = path.parent().expect("test JSON path has a parent");
@@ -35,7 +36,7 @@ pub(crate) fn write_green_proof(root: &Path, current: &str) -> Value {
         "status": "pass",
         "target_revision": {"kind": "package_digest", "value": current},
         "packet": {"path": packet_path, "exists": true, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
-        "cli_performance": performance_ref(root, current),
+        "cli_performance": performance_receipt::ref_for(root, current),
         "registry_exposure": registry_ref(root, current, &raw),
         "source_audit": super::source_audit::ref_for(root, current),
         "coverage": coverage::ref_for(root, current),
@@ -61,7 +62,7 @@ pub(crate) fn write_fail_closed_proof(root: &Path, current: &str) -> Value {
         "status": "fail",
         "target_revision": {"kind": "package_digest", "value": current},
         "packet": {"path": packet_path, "exists": true, "digest": crate::digest::file(&root.join(packet_path)).expect("packet digest")},
-        "cli_performance": performance_ref(root, current),
+        "cli_performance": performance_receipt::ref_for(root, current),
         "registry_exposure": fail_closed_registry_ref(root, current),
         "source_audit": super::source_audit::ref_for(root, current),
         "coverage": coverage::ref_for(root, current),
@@ -102,35 +103,6 @@ fn ref_for_with_status(root: &Path, rel: &str, value: &Value, status: &str) -> V
         "digest": crate::digest::file(&root.join(rel)).expect("ref digest"),
         "status": status
     })
-}
-
-fn performance_ref(root: &Path, candidate: &str) -> Value {
-    ref_for(
-        root,
-        "validation_artifacts/cli/performance-receipt.json",
-        &json!({
-            "schema":"harness-ultragoal.cli-performance-receipt.v1",
-            "status":"pass",
-            "claim_ceiling":"performance_proven",
-            "command":{"argv":["ultragoal","performance","prove"]},
-            "budget":{
-                "class":"strict_local",
-                "cold_p95_ms":60000,
-                "warm_p95_ms":null,
-                "target_ms":60000,
-                "hard_ceiling_ms":180000,
-                "threshold_ms":60000
-            },
-            "digests":{"candidate":candidate},
-            "cache":{"mode":"disabled","no_cache_mode_result":"executed_without_cache"},
-            "concurrency":{"worker_count":1,"queue_depth":0,"isolation_namespace":"test_isolated_no_shared_artifact_writes"},
-            "telemetry":{"wall_clock_ms":1,"cpu_ms":null,"peak_memory_bytes":null,"io_bytes":null},
-            "performance_regression":{"status":"pass"},
-            "failure":null,
-            "blocked_claim_classes":[],
-            "supported_claim_classes":["routine_usability"]
-        }),
-    )
 }
 
 fn registry_ref(root: &Path, current: &str, raw: &Value) -> Value {
