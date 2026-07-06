@@ -4,9 +4,18 @@ set -euo pipefail
 root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
 cd "$root"
 
-json_path="agent-standards/enforcement.json"
-tsv_path="agent-standards/enforcement.tsv"
-audit_path="agent-standards/enforcement-audit.tsv"
+if [[ -f "agent-standards/enforcement.json" ]]; then
+  standards_root="agent-standards"
+elif [[ -f "templates/agent-standards/enforcement.json" ]]; then
+  standards_root="templates/agent-standards"
+else
+  echo "missing standards enforcement file: agent-standards/enforcement.json or templates/agent-standards/enforcement.json" >&2
+  exit 1
+fi
+
+json_path="$standards_root/enforcement.json"
+tsv_path="$standards_root/enforcement.tsv"
+audit_path="$standards_root/enforcement-audit.tsv"
 
 for path in "$json_path" "$tsv_path" "$audit_path"; do
   if [[ ! -f "$path" ]]; then

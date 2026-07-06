@@ -466,7 +466,7 @@
       "validator/src/semantic/receipt/mod.rs",
       "validator/tests/cli_surface.rs"
     ],
-    "changed_files_digest": "sha256:cc84bc9c49ae5514991ff5f8ce86a9560bd4ed9e6c749117be6e171b07087293",
+    "changed_files_digest": "sha256:66522a091f7746331cf450d5e29fa1572409f025697a8b893fb97ec4153b1d84",
     "required": true
   },
   "claim_ceiling_when_incomplete": "withheld_or_blocked",
@@ -514,7 +514,7 @@
     "custom-agents",
     "docs"
   ],
-  "repo_root_digest": "sha256:b317fdbd35ab1dca55d2b503c2bb1b53bb2ce87d35c7a12d7e490fa9379738ee",
+  "repo_root_digest": "sha256:edbf4f64b29a5972f3d4353661fc67de5157b2b81c52c04d35dc3491484096a1",
   "repo_walk_policy": {
     "classify_all_nonignored_files": true,
     "ignored_local_state_cannot_be_target": true,
