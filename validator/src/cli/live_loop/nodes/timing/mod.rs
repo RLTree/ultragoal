@@ -50,6 +50,11 @@ pub(crate) fn read_current(
             let proof_kind = record_fields::text(row, "proof_kind")?;
             let cache_hit = row.get("cache_hit")?.as_bool()?;
             let cache_key = record_fields::valid_digest(record_fields::text(row, "cache_key")?)?;
+            let expected_cache_key =
+                graph::verified_local_cache_key(node_id, &expected_input, tier, cache_mode);
+            if cache_key != expected_cache_key {
+                return None;
+            }
             let work_unit_count = row.get("work_unit_count")?.as_u64()?;
             let actual_work_duration_ms = record_fields::positive(row, "actual_work_duration_ms")?;
             let graph_overhead_ms = record_fields::positive(row, "graph_overhead_ms")?;
@@ -65,8 +70,10 @@ pub(crate) fn read_current(
                     row,
                     "telemetry_reconciliation_duration_ms",
                 )?);
+            let expected_product_latency_ms =
+                actual_work_duration_ms.saturating_add(graph_overhead_ms);
             if reconciled_command_duration_ms != expected_reconciled_ms
-                || product_latency_ms != reconciled_command_duration_ms
+                || product_latency_ms != expected_product_latency_ms
             {
                 return None;
             }
@@ -84,13 +91,7 @@ pub(crate) fn read_current(
             let speed_claim_status = record_fields::nonempty_text(row, "speed_claim_status")?;
             let observability_failure_class =
                 record_fields::nonempty_text(row, "observability_failure_class")?;
-            let version_fields = [
-                record_fields::text(row, "validator_version")?,
-                record_fields::text(row, "law_version")?,
-                record_fields::text(row, "schema_version")?,
-                record_fields::text(row, "fixture_version")?,
-            ];
-            if version_fields.iter().any(|value| value.is_empty()) {
+            if !record_fields::runtime_versions_match(row) {
                 return None;
             }
             let verified_local_command = record_fields::text(row, "verified_local_command")?;

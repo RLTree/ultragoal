@@ -59,6 +59,62 @@ fn existing_cache_records_remain_available_when_latest_node_is_unusable() {
     assert_eq!(records[0]["timing_status"], "pass");
 }
 
+#[test]
+fn telemetry_stdout_fields_fall_back_to_cached_reconciliation() {
+    let row = json!({
+        "telemetry_reconciliation": {
+            "status": "pass",
+            "reconciliation_mode": "verified_same_candidate_telemetry_reuse",
+            "cached_reconciliation": {
+                "run_id": "run-cached",
+                "correlation_id": "corr-cached",
+                "trace_id": "trace-cached",
+                "command_observation_receipt": "validation_artifacts/observability/live-loop/commands/fmt.json",
+                "logs_query": {"value": {"query": "logs query"}},
+                "metrics_query": {"value": {"query": "metrics query"}},
+                "traces_query": {"value": {"query": "traces query"}},
+                "first_failed_roundtrip": {"roundtrip": "metrics"}
+            }
+        }
+    });
+
+    assert_eq!(telemetry_text(&row, "run_id"), Some("run-cached"));
+    assert_eq!(telemetry_text(&row, "correlation_id"), Some("corr-cached"));
+    assert_eq!(telemetry_text(&row, "trace_id"), Some("trace-cached"));
+    assert_eq!(telemetry_query(&row, "logs_query"), Some("logs query"));
+    assert_eq!(
+        telemetry_json(&row, "first_failed_roundtrip"),
+        "{\"roundtrip\":\"metrics\"}"
+    );
+}
+
+#[test]
+fn telemetry_stdout_fields_read_direct_query_receipt_shape() {
+    let row = json!({
+        "telemetry_reconciliation": {
+            "status": "pass",
+            "run_id": "run-direct",
+            "logs_query": {"query": "logs direct query"},
+            "metrics_query": {"query": "metrics direct query"},
+            "traces_query": {"query": "traces direct query"}
+        }
+    });
+
+    assert_eq!(telemetry_text(&row, "run_id"), Some("run-direct"));
+    assert_eq!(
+        telemetry_query(&row, "logs_query"),
+        Some("logs direct query")
+    );
+    assert_eq!(
+        telemetry_query(&row, "metrics_query"),
+        Some("metrics direct query")
+    );
+    assert_eq!(
+        telemetry_query(&row, "traces_query"),
+        Some("traces direct query")
+    );
+}
+
 fn row(candidate: &str, timing_status: &str, failure_class: &str) -> serde_json::Value {
     let digest = crate::digest::bytes;
     let output_digest = digest(b"output");
@@ -86,10 +142,10 @@ fn row(candidate: &str, timing_status: &str, failure_class: &str) -> serde_json:
         "telemetry_reconciliation": {"status": "pass"},
         "exit_status": 0,
         "verified_local_launch_error": false,
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
+        "validator_version": crate::cli::live_loop::graph::validator_version(),
+        "law_version": crate::cli::live_loop::graph::law_version(),
+        "schema_version": crate::cli::live_loop::graph::schema_version(),
+        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
         "result_digest": result_digest,
         "output_digest": output_digest,
         "verified_local_result_digest": result_digest,

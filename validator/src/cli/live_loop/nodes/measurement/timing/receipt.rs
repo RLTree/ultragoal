@@ -1,7 +1,8 @@
+use super::cache_records::replayable_cache_records;
 use super::record::NodeTimingRow;
 use crate::cli::live_loop::LiveLoopCommand;
-use serde_json::{Map, Value, json};
-use std::collections::{BTreeMap, BTreeSet};
+use serde_json::{Value, json};
+use std::collections::BTreeSet;
 use std::path::Path;
 
 pub(crate) fn write_node_timings(
@@ -54,7 +55,7 @@ pub(crate) fn print_measurements(
     for row in rows {
         let row = row.as_value();
         println!(
-            "ultragoal-loop-measure {} candidate={} node={} validation_status={} validation_cache_status={} observability_status={} speed_claim_status={} proof_kind={} cache_hit={} work_unit_count={} actual_work_duration_ms={} graph_overhead_ms={} telemetry_reconciliation_duration_ms={} reconciled_command_duration_ms={} telemetry_reconciliation={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} failure_class={} observability_failure_class={} where_failed='{}' why_failed='{}' next_repair='{}' receipt={} claim_ceiling='source-local loop timing only'",
+            "ultragoal-loop-measure {} candidate={} node={} validation_status={} validation_cache_status={} observability_status={} speed_claim_status={} proof_kind={} cache_hit={} work_unit_count={} actual_work_duration_ms={} graph_overhead_ms={} telemetry_reconciliation_duration_ms={} reconciled_command_duration_ms={} telemetry_reconciliation={} baseline_duration_ms={} verified_local_duration_ms={} speedup_ratio={} failure_class={} observability_failure_class={} where_failed='{}' why_failed='{}' next_repair='{}' receipt={} run_id={} correlation_id={} trace_id={} command_observation_receipt={} first_failed_roundtrip='{}' query_logs='{}' query_metrics='{}' query_traces='{}' claim_ceiling='source-local loop timing only'",
             text(row, "timing_status").unwrap_or("fail"),
             candidate,
             text(row, "node_id").unwrap_or("unknown"),
@@ -80,7 +81,15 @@ pub(crate) fn print_measurements(
             text(row, "where_failed").unwrap_or("none"),
             text(row, "why_failed").unwrap_or("none"),
             text(row, "next_repair").unwrap_or("none"),
-            command.receipt.display()
+            command.receipt.display(),
+            telemetry_text(row, "run_id").unwrap_or("unknown"),
+            telemetry_text(row, "correlation_id").unwrap_or("unknown"),
+            telemetry_text(row, "trace_id").unwrap_or("unknown"),
+            telemetry_text(row, "command_observation_receipt").unwrap_or("unknown"),
+            telemetry_json(row, "first_failed_roundtrip"),
+            telemetry_query(row, "logs_query").unwrap_or("unknown"),
+            telemetry_query(row, "metrics_query").unwrap_or("unknown"),
+            telemetry_query(row, "traces_query").unwrap_or("unknown")
         );
     }
 }
@@ -110,102 +119,51 @@ fn positive(value: &Value, key: &str) -> Option<u64> {
     (number > 0).then_some(number)
 }
 
-fn replayable_cache_records(
-    existing: &Value,
-    latest_nodes: &[Value],
-    tier: &str,
-    cache_mode: &str,
-) -> Vec<Value> {
-    let mut records = BTreeMap::new();
-    for row in cache_row_sources(existing)
-        .into_iter()
-        .chain(latest_nodes.iter())
-    {
-        if !is_replayable_cache_record(row, tier, cache_mode) {
-            continue;
-        }
-        if let Some(key) = cache_record_key(row) {
-            records.insert(key, row.clone());
-        }
-    }
-    records.into_values().collect()
-}
-
-fn cache_row_sources(value: &Value) -> Vec<&Value> {
-    let mut rows = Vec::new();
-    if let Some(cache_records) = value.get("cache_records").and_then(Value::as_array) {
-        rows.extend(cache_records.iter());
-    }
-    if let Some(nodes) = value.get("nodes").and_then(Value::as_array) {
-        rows.extend(nodes.iter());
-    }
-    rows
-}
-
-fn is_replayable_cache_record(row: &Value, tier: &str, cache_mode: &str) -> bool {
-    text(row, "tier") == Some(tier)
-        && text(row, "cache_mode") == Some(cache_mode)
-        && text(row, "cache_honesty") == Some("pass")
-        && text(row, "validation_status") == Some("pass")
-        && text(row, "validation_cache_status") == Some("reusable")
-        && row.get("exit_status").and_then(Value::as_i64) == Some(0)
-        && row
-            .get("verified_local_launch_error")
-            .and_then(Value::as_bool)
-            == Some(false)
-        && matches!(
-            text(row, "proof_kind"),
-            Some("executed" | "verified_cache_hit")
-        )
-        && row
-            .get("telemetry_reconciliation")
-            .and_then(Value::as_object)
-            .is_some_and(telemetry_status_present)
-        && required_cache_fields_present(row)
-}
-
-fn telemetry_status_present(object: &Map<String, Value>) -> bool {
-    object
-        .get("status")
+fn telemetry_text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
+    let telemetry = value.get("telemetry_reconciliation")?;
+    telemetry
+        .get(key)
+        .or_else(|| {
+            telemetry
+                .get("cached_reconciliation")
+                .and_then(|cached| cached.get(key))
+        })
         .and_then(Value::as_str)
-        .is_some_and(|status| !status.is_empty())
 }
 
-fn required_cache_fields_present(row: &Value) -> bool {
-    [
-        "node_id",
-        "input_digest",
-        "current_input_digest",
-        "canonical_full_command",
-        "cache_key",
-        "validator_version",
-        "law_version",
-        "schema_version",
-        "fixture_version",
-        "validation_status",
-        "validation_cache_status",
-        "observability_status",
-        "speed_claim_status",
-        "result_digest",
-        "output_digest",
-        "verified_local_result_digest",
-        "verified_local_output_digest",
-        "verified_local_stdout_digest",
-        "verified_local_stderr_digest",
-        "baseline_stdout_digest",
-        "baseline_stderr_digest",
-    ]
-    .into_iter()
-    .all(|field| text(row, field).is_some_and(|value| !value.is_empty()))
+fn telemetry_query<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
+    let telemetry = value.get("telemetry_reconciliation")?;
+    telemetry
+        .get(key)
+        .or_else(|| {
+            telemetry
+                .get("cached_reconciliation")
+                .and_then(|cached| cached.get(key))
+        })
+        .and_then(query_text)
 }
 
-fn cache_record_key(row: &Value) -> Option<String> {
-    Some(format!(
-        "{}:{}:{}",
-        text(row, "node_id")?,
-        text(row, "input_digest")?,
-        text(row, "cache_key")?
-    ))
+fn query_text(value: &Value) -> Option<&str> {
+    value.get("query").and_then(Value::as_str).or_else(|| {
+        value
+            .get("value")
+            .and_then(|query_value| query_value.get("query"))
+            .and_then(Value::as_str)
+    })
+}
+
+fn telemetry_json(value: &Value, key: &str) -> String {
+    value
+        .get("telemetry_reconciliation")
+        .and_then(|telemetry| {
+            telemetry.get(key).or_else(|| {
+                telemetry
+                    .get("cached_reconciliation")
+                    .and_then(|cached| cached.get(key))
+            })
+        })
+        .and_then(|item| serde_json::to_string(item).ok())
+        .unwrap_or_else(|| "unknown".to_string())
 }
 
 #[cfg(test)]

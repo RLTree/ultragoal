@@ -1,10 +1,9 @@
-use super::failure::{
-    measurement_failure_class, measurement_next_repair, measurement_where_failed,
-    measurement_why_failed,
-};
+use super::failure::{measurement_failure_class, measurement_where_failed, measurement_why_failed};
+use super::repair::measurement_next_repair;
 use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
 use crate::cli::live_loop::nodes::measurement::full_command::FullCommandRun;
+use crate::cli::live_loop::nodes::measurement::observation;
 use crate::cli::live_loop::surfaces::surface_by_id;
 
 #[test]
@@ -203,7 +202,7 @@ fn proof(
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
         telemetry_reconciliation_duration_ms: 1,
-        telemetry_reconciliation: super::super::observation::TelemetryReconciliation {
+        telemetry_reconciliation: observation::TelemetryReconciliation {
             status: telemetry_reconciliation_status.to_string(),
             duration_ms: 1,
             value: serde_json::json!({"status": telemetry_reconciliation_status}),

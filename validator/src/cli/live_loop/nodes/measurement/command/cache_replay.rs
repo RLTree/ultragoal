@@ -51,6 +51,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
         &candidate,
         &inputs,
         super::super::timing::receipt::affected_set_status(inputs.changed_file_count),
+        super::super::ObservationMode::FullRoundtrip,
     );
 
     assert_eq!(row["proof_kind"], "verified_cache_hit");
@@ -92,10 +93,10 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "cache_hit": false,
         "cache_key": cache_key,
         "cache_honesty": "pass",
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
+        "validator_version": crate::cli::live_loop::graph::validator_version(),
+        "law_version": crate::cli::live_loop::graph::law_version(),
+        "schema_version": crate::cli::live_loop::graph::schema_version(),
+        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
         "work_unit_count": 1,
         "actual_work_duration_ms": 100,
         "graph_overhead_ms": 1,
@@ -130,7 +131,7 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
     .with_value("observability_failure_class", json!("none"))
     .with_value("telemetry_reconciliation_duration_ms", json!(3))
     .with_value("reconciled_command_duration_ms", json!(104))
-    .with_value("product_latency_ms", json!(104))
+    .with_value("product_latency_ms", json!(101))
 }
 
 fn stdout_digest() -> String {

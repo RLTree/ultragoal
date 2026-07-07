@@ -36,3 +36,10 @@ pub(super) fn has_nonempty_string_array(value: &Value, key: &str) -> bool {
         .map(|items| !items.is_empty() && items.iter().all(|item| item.as_str().is_some()))
         .unwrap_or(false)
 }
+
+pub(super) fn runtime_versions_match(value: &Value) -> bool {
+    text(value, "validator_version") == Some(&crate::cli::live_loop::graph::validator_version())
+        && text(value, "law_version") == Some(crate::cli::live_loop::graph::law_version())
+        && text(value, "schema_version") == Some(crate::cli::live_loop::graph::schema_version())
+        && text(value, "fixture_version") == Some(crate::cli::live_loop::graph::fixture_version())
+}

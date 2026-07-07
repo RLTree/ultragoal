@@ -54,6 +54,15 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
             && refresh["status"] == "measurement_batch_result_recorded"
             && refresh.get("exit_code").is_none()
             && refresh["exit_code_scope"] == "aggregate_for_refresh_batch_not_per_node"
+            && refresh["observation_mode"] == "loop_run_snapshot"
+            && refresh["command"]
+                .as_str()
+                .expect("refresh command")
+                .contains("--observation-mode loop-run-snapshot")
+            && refresh["full_roundtrip_rerun"]
+                .as_str()
+                .expect("full roundtrip rerun")
+                .contains("loop measure --node")
             && refresh["refresh_batch_exit_code"].as_i64().is_some()
     }));
     assert_eq!(

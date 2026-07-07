@@ -95,6 +95,7 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
     assert_eq!(row["baseline_proof_kind"], "executed_same_command_reuse");
     assert_eq!(row["telemetry_reconciliation_duration_ms"], 1);
     assert_eq!(row["reconciled_command_duration_ms"], 12);
+    assert_eq!(row["product_latency_ms"], 11);
     assert_eq!(
         row["baseline_invalidation_proof"],
         "baseline_reused_from_executed_narrow_command_because_canonical_full_command_matches"

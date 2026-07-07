@@ -11,6 +11,12 @@ pub(super) fn current_timing_row(
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
+    let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
+        "fmt_check",
+        input,
+        "hot",
+        "verified-local",
+    );
     let mut row = json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
@@ -28,11 +34,11 @@ pub(super) fn current_timing_row(
         "verified_local_duration_ms": 2,
         "proof_kind": "executed",
         "cache_hit": false,
-        "cache_key": digest("cache"),
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
+        "cache_key": cache_key,
+        "validator_version": crate::cli::live_loop::graph::validator_version(),
+        "law_version": crate::cli::live_loop::graph::law_version(),
+        "schema_version": crate::cli::live_loop::graph::schema_version(),
+        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
         "work_unit_count": 1,
         "actual_work_duration_ms": 2,
         "graph_overhead_ms": 1,
@@ -84,7 +90,7 @@ fn insert_derived_fields(
     object.insert("exit_status".to_string(), json!(exit_code));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
     object.insert("reconciled_command_duration_ms".to_string(), json!(6));
-    object.insert("product_latency_ms".to_string(), json!(6));
+    object.insert("product_latency_ms".to_string(), json!(3));
     object.insert(
         "receipt_paths".to_string(),
         json!([super::super::NODE_TIMING_REL]),

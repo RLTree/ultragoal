@@ -2,9 +2,10 @@ use super::super::super::timing::NODE_TIMING_REL;
 use super::super::full_command::FullCommandRun;
 use super::derived_fields;
 use super::failure::{
-    measurement_failure_class, measurement_next_repair, measurement_where_failed,
-    measurement_why_failed,
+    measurement_failure_class, measurement_where_failed_with_telemetry,
+    measurement_why_failed_with_telemetry,
 };
+use super::repair::measurement_next_repair_with_telemetry;
 use super::state::NodeTimingState;
 #[cfg(test)]
 pub(crate) use super::state::timing_status;
@@ -54,9 +55,10 @@ pub(crate) fn node_timing_row(
     affected_set_status: &'static str,
 ) -> NodeTimingRow {
     let actual_work_duration_ms = verified_local.actual_work.duration_ms;
+    let product_latency_ms = derived_fields::validation_product_latency_ms(verified_local);
     let reconciled_command_duration_ms =
         derived_fields::reconciled_command_duration_ms(verified_local);
-    let speedup_ratio = baseline.duration_ms / reconciled_command_duration_ms.max(1);
+    let speedup_ratio = baseline.duration_ms / product_latency_ms.max(1);
     let output_digest = derived_fields::output_digest(verified_local);
     let result_digest = derived_fields::result_digest(verified_local, &output_digest);
     let failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
@@ -77,16 +79,16 @@ pub(crate) fn node_timing_row(
         "receipt_path": command.receipt.display().to_string(),
         "timing_status": state.timing_status,
         "failure_class": failure_class,
-        "where_failed": measurement_where_failed(surface, baseline, failure_class),
-        "why_failed": measurement_why_failed(baseline, failure_class),
-        "next_repair": measurement_next_repair(surface, baseline, failure_class),
+        "where_failed": measurement_where_failed_with_telemetry(surface, baseline, verified_local, failure_class),
+        "why_failed": measurement_why_failed_with_telemetry(baseline, verified_local, failure_class),
+        "next_repair": measurement_next_repair_with_telemetry(surface, baseline, verified_local, failure_class),
         "baseline_duration_ms": baseline.duration_ms,
         "baseline_proof_kind": baseline_proof_kind,
         "baseline_invalidation_proof": baseline_invalidation_proof,
         "verified_local_duration_ms": actual_work_duration_ms,
         "telemetry_reconciliation_duration_ms": verified_local.telemetry_reconciliation_duration_ms,
         "reconciled_command_duration_ms": reconciled_command_duration_ms,
-        "product_latency_ms": reconciled_command_duration_ms,
+        "product_latency_ms": product_latency_ms,
         "speedup_ratio": speedup_ratio,
         "required_speedup": "20x",
         "baseline_exit_code": baseline.exit_code,

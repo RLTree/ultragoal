@@ -17,13 +17,19 @@ pub(crate) fn surface_record(
     node_timing: Option<NodeTiming>,
 ) -> Value {
     let started = Instant::now();
-    let cache = cache_decision(surface.id, input_digest, tier, cache_mode);
     let graph_duration_ms = u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
         .max(1);
+    let cache = cache_decision(
+        surface.id,
+        input_digest,
+        tier,
+        cache_mode,
+        node_timing.as_ref(),
+    );
     let duration_ms = node_timing
         .as_ref()
-        .map(|timing| timing.reconciled_command_duration_ms)
+        .map(|timing| timing.product_latency_ms)
         .unwrap_or(graph_duration_ms);
     let baseline_ms = node_timing
         .as_ref()
@@ -83,13 +89,32 @@ fn timing_claim_ready(timing: &NodeTiming) -> bool {
         && timing.speed_claim_status == "supported"
 }
 
-fn cache_decision(id: &str, input_digest: &str, tier: &str, cache_mode: &str) -> Value {
+fn cache_decision(
+    id: &str,
+    input_digest: &str,
+    tier: &str,
+    cache_mode: &str,
+    node_timing: Option<&NodeTiming>,
+) -> Value {
     let key = verified_local_cache_key(id, input_digest, tier, cache_mode);
+    let cache_enabled = cache_mode == "verified-local";
+    let reused = cache_enabled
+        && node_timing.is_some_and(|timing| {
+            timing.validation_cache_status == "reusable"
+                && timing.result_digest == timing.verified_local_result_digest
+                && timing.output_digest == timing.verified_local_output_digest
+        });
     json!({
         "mode": cache_mode,
         "key": key,
-        "hit": false,
-        "invalidation_reason": "no verified local cache entry",
+        "hit": reused,
+        "invalidation_reason": if reused {
+            "verified_current_input_node_timing_row_reused"
+        } else if !cache_enabled {
+            "cache_disabled_by_requested_cache_mode"
+        } else {
+            "no verified local cache entry"
+        },
         "cache_class": "verified_content_addressed_local",
         "honesty": super::super::context::verify_cache_hit(&key, &key)
     })

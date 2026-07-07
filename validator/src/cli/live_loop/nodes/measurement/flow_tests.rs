@@ -70,12 +70,21 @@ fn measurement_executes_separate_baseline_when_canonical_command_differs_from_na
         "sha256:current",
         &inputs,
         "changed_files_digest_bound",
+        ObservationMode::FullRoundtrip,
     );
 
     assert_eq!(row["validation_status"], "pass");
     assert_eq!(row["validation_cache_status"], "reusable");
-    assert_eq!(row["observability_status"], "partial");
+    assert!(matches!(
+        row["observability_status"].as_str(),
+        Some("partial" | "unavailable")
+    ));
     assert_eq!(row["speed_claim_status"], "withheld");
+    assert!(
+        row["telemetry_reconciliation_status"]
+            .as_str()
+            .is_some_and(|status| !status.is_empty() && status != "missing")
+    );
     assert_eq!(row["baseline_proof_kind"], "executed");
     assert_eq!(
         row["baseline_invalidation_proof"],
@@ -107,6 +116,7 @@ fn measurement_reuses_executed_narrow_command_when_baseline_command_is_identical
         "sha256:current",
         &inputs,
         "changed_files_digest_bound",
+        ObservationMode::FullRoundtrip,
     );
 
     assert_eq!(row["baseline_proof_kind"], "executed_same_command_reuse");
@@ -119,7 +129,7 @@ fn measurement_reuses_executed_narrow_command_when_baseline_command_is_identical
 }
 
 #[test]
-fn non_hot_measurement_reconciles_observability_without_erasing_validation_result() {
+fn hot_measurement_reconciles_observability_without_erasing_validation_result() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "live-loop-measure-observability-reconciliation",
     );
@@ -141,18 +151,20 @@ fn non_hot_measurement_reconciles_observability_without_erasing_validation_resul
 
     let row = measure_surface(
         &root,
-        &command_for("standard", "verified-local"),
+        &command_for("hot", "verified-local"),
         surface,
         &crate::package::inventory::package_digest(&root).expect("candidate"),
         &inputs,
         "changed_files_digest_bound",
+        ObservationMode::FullRoundtrip,
     );
 
     assert_eq!(row["validation_status"], "pass");
     assert_eq!(row["validation_cache_status"], "reusable");
-    assert_ne!(
-        row["telemetry_reconciliation_status"],
-        "deferred_hot_loop_observability"
+    assert!(
+        row["telemetry_reconciliation_status"]
+            .as_str()
+            .is_some_and(|status| !status.is_empty() && status != "missing")
     );
     assert_ne!(row["observability_status"], "unavailable");
     assert_ne!(row["where_failed"], "");

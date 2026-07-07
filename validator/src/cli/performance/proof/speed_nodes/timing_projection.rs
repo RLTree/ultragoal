@@ -1,4 +1,5 @@
 use super::NODE_TIMING_REL;
+use crate::cli::live_loop;
 use serde_json::{Map, Value, json};
 use std::path::Path;
 
@@ -11,6 +12,7 @@ pub(super) fn current_nodes(root: &Path, candidate: &str) -> Vec<Value> {
         .into_iter()
         .flatten()
         .filter(|row| text(row, "candidate_digest") == Some(candidate))
+        .filter(|row| row_matches_current_live_loop_context(root, candidate, row))
         .filter_map(project_node)
         .collect::<Vec<_>>();
     nodes.sort_by(|left, right| text(left, "node_id").cmp(&text(right, "node_id")));
@@ -24,6 +26,17 @@ fn project_node(row: &Value) -> Option<Value> {
         "node_id",
         "proof_kind",
         "candidate_digest",
+        "tier",
+        "cache_mode",
+        "changed_files_digest",
+        "audit_context_digest",
+        "input_digest",
+        "current_input_digest",
+        "cache_key",
+        "validator_version",
+        "law_version",
+        "schema_version",
+        "fixture_version",
         "result_digest",
         "output_digest",
         "telemetry_reconciliation_status",
@@ -64,6 +77,31 @@ fn project_node(row: &Value) -> Option<Value> {
     insert_command_fields(row, &mut object);
     insert_cache_replay_fields(row, &mut object);
     Some(Value::Object(object))
+}
+
+fn row_matches_current_live_loop_context(root: &Path, candidate: &str, row: &Value) -> bool {
+    let Some(node_id) = text(row, "node_id") else {
+        return false;
+    };
+    let Some(tier) = text(row, "tier") else {
+        return false;
+    };
+    let Some(cache_mode) = text(row, "cache_mode") else {
+        return false;
+    };
+    let Some(context) =
+        live_loop::validation_surface_context(root, candidate, node_id, tier, cache_mode)
+    else {
+        return false;
+    };
+    text(row, "input_digest") == Some(context.input_digest.as_str())
+        && text(row, "current_input_digest") == Some(context.input_digest.as_str())
+        && text(row, "audit_context_digest") == Some(context.audit_context_digest.as_str())
+        && text(row, "cache_key") == Some(context.cache_key.as_str())
+        && text(row, "validator_version") == Some(context.validator_version.as_str())
+        && text(row, "law_version") == Some(context.law_version)
+        && text(row, "schema_version") == Some(context.schema_version)
+        && text(row, "fixture_version") == Some(context.fixture_version)
 }
 
 fn insert_command_fields(row: &Value, object: &mut Map<String, Value>) {

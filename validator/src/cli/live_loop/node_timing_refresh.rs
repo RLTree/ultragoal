@@ -1,5 +1,6 @@
 use super::{LiveLoopAction, LiveLoopCommand, changed_inputs::ChangedInputs, nodes, surfaces};
 use crate::scheduler::TaskClass;
+use nodes::ObservationMode;
 use serde::Serialize;
 use serde_json::Value;
 use std::path::Path;
@@ -12,6 +13,8 @@ pub(super) struct TimingRefresh {
     task_class: &'static str,
     serial_reason: &'static str,
     command: String,
+    observation_mode: &'static str,
+    full_roundtrip_rerun: String,
     receipt: &'static str,
     refresh_batch_exit_code: i32,
     exit_code_scope: &'static str,
@@ -85,7 +88,12 @@ fn refresh_surface_timing(
         node_id: None,
         measure_all: false,
     };
-    let exit_code = nodes::measure_surfaces(root, &measure_command, refresh_surfaces.to_vec())?;
+    let exit_code = nodes::measure_surfaces_with_observation(
+        root,
+        &measure_command,
+        refresh_surfaces.to_vec(),
+        ObservationMode::LoopRunSnapshot,
+    )?;
     Ok(refresh_surfaces
         .iter()
         .map(|surface| TimingRefresh {
@@ -95,6 +103,11 @@ fn refresh_surface_timing(
             task_class: TaskClass::SharedAuthorityWriteSerial.id(),
             serial_reason: "live_loop_run_refreshes_affected_node_timing_receipt_before_parallel_read_graph",
             command: format!(
+                "internal loop run timing refresh --node {} --tier {} --cache-mode {} --observation-mode loop-run-snapshot",
+                surface.id, command.tier, command.cache_mode
+            ),
+            observation_mode: "loop_run_snapshot",
+            full_roundtrip_rerun: format!(
                 "target/debug/ultragoal --root . loop measure --node {} --tier {} --cache-mode {}",
                 surface.id, command.tier, command.cache_mode
             ),

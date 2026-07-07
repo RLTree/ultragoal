@@ -3,6 +3,7 @@ use super::nodes::timing::NodeTiming;
 use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
+use std::sync::OnceLock;
 
 mod claim_evaluation;
 mod measurement_failure;
@@ -188,10 +189,45 @@ pub(crate) fn verified_local_cache_key(
     tier: &str,
     cache_mode: &str,
 ) -> String {
+    let validator_version = validator_version();
     crate::digest::bytes(
         format!(
-            "surface={id};input={digest};validator=ultragoal-rust;law=observability-live-loop;tier={tier};cache={cache_mode};env=local"
+            "surface={id};input={digest};validator={validator_version};law={};schema={};fixture={};tier={tier};cache={cache_mode};env=local",
+            law_version(),
+            schema_version(),
+            fixture_version()
         )
         .as_bytes(),
+    )
+}
+
+pub(crate) fn validator_version() -> String {
+    static VERSION: OnceLock<String> = OnceLock::new();
+    VERSION
+        .get_or_init(|| crate::digest::bytes(validator_authority_material().as_bytes()))
+        .clone()
+}
+
+pub(crate) fn law_version() -> &'static str {
+    "observability-live-loop"
+}
+
+pub(crate) fn schema_version() -> &'static str {
+    "harness-ultragoal.live-loop-node-timing.v1"
+}
+
+pub(crate) fn fixture_version() -> &'static str {
+    "source-tree-current"
+}
+
+fn validator_authority_material() -> String {
+    format!(
+        "authority=ultragoal-cli-control-plane;crate=ultragoal-validator;package_version={};os={};arch={};law={};schema={};fixture={}",
+        env!("CARGO_PKG_VERSION"),
+        std::env::consts::OS,
+        std::env::consts::ARCH,
+        law_version(),
+        schema_version(),
+        fixture_version()
     )
 }

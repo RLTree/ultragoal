@@ -26,6 +26,9 @@ fn raw_authority_class(rel: &str, text: &str, marker: &RawAuthorityMarker) -> Op
     if rel.contains("/self_tests/") || rel.contains("/tests/") || rel.ends_with("/tests.rs") {
         return Some("fixture_catalog_materialization");
     }
+    if rel.contains("/test_rows/") {
+        return Some("fixture_catalog_materialization");
+    }
     if fixture_or_catalog_path(rel) {
         return Some("fixture_catalog_materialization");
     }

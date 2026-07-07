@@ -3,6 +3,7 @@ mod event;
 #[cfg(test)]
 mod event_receipt;
 mod live_backend;
+mod loop_run_snapshot;
 mod observe_receipt_reader;
 #[path = "../query/mod.rs"]
 mod query;
@@ -18,6 +19,7 @@ mod validation_state_tests;
 
 use super::full_command::FullCommandRun;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
+pub(crate) use loop_run_snapshot::loop_run_snapshot_pending;
 use serde_json::{Value, json};
 use std::path::Path;
 use std::thread::ScopedJoinHandle;
@@ -72,29 +74,6 @@ pub(crate) fn reconcile(
                 "claim_impact": "live_loop_node_timing_blocked"
             }),
         },
-    }
-}
-
-pub(crate) fn deferred_hot_validation(surface: LoopValidationSurface) -> TelemetryReconciliation {
-    TelemetryReconciliation {
-        status: "deferred_hot_loop_observability".to_string(),
-        duration_ms: 1,
-        value: json!({
-            "status": "deferred_hot_loop_observability",
-            "surface": surface.surface,
-            "node_id": surface.id,
-            "reconciliation_mode": "hot_loop_validation_result_retained_without_live_query_roundtrip",
-            "observability_status": "partial",
-            "validation_cache_status": "reusable_when_input_equivalence_holds",
-            "speed_claim_status": "withheld",
-            "why_failed": "hot verified-local loop retained the real validation result and deferred logs metrics traces and explain reconciliation to the observability repair path",
-            "where_failed": format!("loop.measure.{}.observability_roundtrip", surface.id),
-            "next_repair": format!(
-                "run `{}` once when observability proof is in scope, then query logs metrics traces and explain by run_id/correlation_id/current digest",
-                surface.narrow_rerun
-            ),
-            "claim_impact": "validation_result_available_speed_and_observability_claims_withheld"
-        }),
     }
 }
 

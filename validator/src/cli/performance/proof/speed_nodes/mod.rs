@@ -57,6 +57,7 @@ fn row_supports_speed_claim(row: &Value, proof_kind: SpeedProofKind) -> bool {
 fn row_has_claim_bearing_speed_fields(row: &Value) -> bool {
     timing_projection::text(row, "telemetry_reconciliation_status") == Some("pass")
         && timing_projection::text(row, "candidate_digest").is_some_and(not_empty)
+        && row_has_currentness_fields(row)
         && timing_projection::text(row, "result_digest").is_some_and(not_empty)
         && timing_projection::text(row, "output_digest").is_some_and(not_empty)
         && timing_projection::text(row, "claim_impact").is_some_and(not_empty)
@@ -79,6 +80,24 @@ fn row_has_claim_bearing_speed_fields(row: &Value) -> bool {
             || timing_projection::string_array(row, "artifact_paths").is_some_and(|paths| {
                 !paths.is_empty() && paths.iter().all(|path| !path.is_empty())
             }))
+}
+
+#[cfg(test)]
+fn row_has_currentness_fields(row: &Value) -> bool {
+    [
+        "tier",
+        "cache_mode",
+        "input_digest",
+        "current_input_digest",
+        "audit_context_digest",
+        "cache_key",
+        "validator_version",
+        "law_version",
+        "schema_version",
+        "fixture_version",
+    ]
+    .into_iter()
+    .all(|key| timing_projection::text(row, key).is_some_and(not_empty))
 }
 
 #[cfg(test)]
@@ -105,7 +124,7 @@ pub(super) fn row_has_reconciled_product_latency(row: &Value) -> bool {
         return false;
     };
     reconciled == actual.saturating_add(graph).saturating_add(telemetry)
-        && product_latency == reconciled
+        && product_latency == actual.saturating_add(graph)
 }
 
 #[cfg(test)]

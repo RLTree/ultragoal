@@ -199,7 +199,13 @@ fn node_timing_reader_rejects_launched_rows_without_baseline_exit_code() {
 
 fn context_digest() -> String {
     crate::digest::bytes(
-        "validator=ultragoal-rust;law=observability-live-loop;tier=hot;cache=verified-local"
-            .as_bytes(),
+        format!(
+            "validator={};law={};schema={};fixture={};tier=hot;cache=verified-local",
+            crate::cli::live_loop::graph::validator_version(),
+            crate::cli::live_loop::graph::law_version(),
+            crate::cli::live_loop::graph::schema_version(),
+            crate::cli::live_loop::graph::fixture_version()
+        )
+        .as_bytes(),
     )
 }

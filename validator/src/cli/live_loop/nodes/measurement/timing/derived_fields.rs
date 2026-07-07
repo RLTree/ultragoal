@@ -36,11 +36,15 @@ pub(super) fn proof_surface(verified_local: &VerifiedLocalProof) -> &'static str
 }
 
 pub(super) fn reconciled_command_duration_ms(verified_local: &VerifiedLocalProof) -> u64 {
+    validation_product_latency_ms(verified_local)
+        .saturating_add(verified_local.telemetry_reconciliation_duration_ms)
+}
+
+pub(super) fn validation_product_latency_ms(verified_local: &VerifiedLocalProof) -> u64 {
     verified_local
         .actual_work
         .duration_ms
         .saturating_add(verified_local.graph_overhead_ms)
-        .saturating_add(verified_local.telemetry_reconciliation_duration_ms)
 }
 
 pub(super) fn baseline_reuse_fields(

@@ -4,4 +4,4 @@ pub(crate) mod timing;
 
 mod measurement;
 
-pub(crate) use measurement::{measure, measure_surfaces};
+pub(crate) use measurement::{ObservationMode, measure, measure_surfaces_with_observation};

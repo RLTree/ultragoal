@@ -15,13 +15,22 @@ pub(crate) fn insert(
     object.insert("cache_hit".to_string(), json!(verified_local.cache_hit));
     object.insert("cache_key".to_string(), json!(verified_local.cache_key));
     object.insert("current_input_digest".to_string(), json!(input_digest));
-    object.insert("validator_version".to_string(), json!("ultragoal-rust"));
-    object.insert("law_version".to_string(), json!("observability-live-loop"));
+    object.insert(
+        "validator_version".to_string(),
+        json!(crate::cli::live_loop::graph::validator_version()),
+    );
+    object.insert(
+        "law_version".to_string(),
+        json!(crate::cli::live_loop::graph::law_version()),
+    );
     object.insert(
         "schema_version".to_string(),
-        json!("harness-ultragoal.live-loop-node-timing.v1"),
+        json!(crate::cli::live_loop::graph::schema_version()),
     );
-    object.insert("fixture_version".to_string(), json!("source-tree-current"));
+    object.insert(
+        "fixture_version".to_string(),
+        json!(crate::cli::live_loop::graph::fixture_version()),
+    );
     object.insert(
         "work_unit_count".to_string(),
         json!(verified_local.work_unit_count),

@@ -90,19 +90,12 @@ fn assert_command_receipt_state(row: &serde_json::Value) {
     assert!(
         matches!(
             telemetry_status,
-            "deferred_hot_loop_observability" | "query_or_explain_reconciliation_failed" | "pass"
+            "query_or_explain_reconciliation_failed" | "pass" | "command_observation_failed"
         ),
         "{telemetry_status}"
     );
     assert_ne!(telemetry_status, "missing_command_telemetry");
-    if telemetry_status == "deferred_hot_loop_observability" {
-        assert_eq!(row["observability_status"], "partial");
-        assert_eq!(row["speed_claim_status"], "withheld");
-        assert_eq!(
-            row["telemetry_reconciliation"]["reconciliation_mode"],
-            "hot_loop_validation_result_retained_without_live_query_roundtrip"
-        );
-    } else {
+    if telemetry_status != "command_observation_failed" {
         assert_eq!(
             row["telemetry_reconciliation"]["command_observation"]["event"]["operation"],
             "loop.measure.changed_files"
@@ -113,6 +106,9 @@ fn assert_command_receipt_state(row: &serde_json::Value) {
                 .expect("command observation receipt")
                 .contains("changed_files-command-observation.json")
         );
+    } else {
+        assert_eq!(row["observability_status"], "unavailable");
+        assert_eq!(row["speed_claim_status"], "withheld");
     }
     assert_result_digests(row);
 }

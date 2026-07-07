@@ -827,31 +827,39 @@
           "path": "validator/src/cli/performance/proof/speed_claim_failure.rs"
         },
         {
-          "digest": "sha256:ae7a45e0626d21846844155ab5bbcffe8a09f18ea56daf33057e79de796881f4",
+          "digest": "sha256:db980f4b1dfabf7ab644e2b99ce7fa7f116994523e87221d2ebd961973714013",
           "path": "validator/src/cli/performance/proof/speed_nodes/mod.rs"
         },
         {
-          "digest": "sha256:fff010be8d68121f6654ff859d9dd364822121ce15fabfa718764d0dc8b591a5",
+          "digest": "sha256:7ae5d721cb0ef258d44ceb711102a84e85b7fe3b7c0838baf9c517712a7d34dd",
           "path": "validator/src/cli/performance/proof/speed_nodes/claim_readiness.rs"
         },
         {
-          "digest": "sha256:9d1cc966a612843ab9b262d285af9398185a93a88a25d62839ac22e75b68d5f4",
+          "digest": "sha256:954b390c60a359c6a2249540274b8688faea34198551d2c49932217b472a64e5",
           "path": "validator/src/cli/performance/proof/speed_nodes/timing_projection.rs"
         },
         {
-          "digest": "sha256:5c5eb1e538f81cc8703e43db572f9667b81f5805388da98713dfbcd722d12ace",
-          "path": "validator/src/cli/performance/proof/speed_nodes/test_rows.rs"
+          "digest": "sha256:bff96e6eafc2d92075b6339255136b14ab62984b953032cde5a6f7627ae780e5",
+          "path": "validator/src/cli/performance/proof/speed_nodes/test_rows/cache_hit.rs"
         },
         {
-          "digest": "sha256:1608255a71e95d44ba88faf841b3d867786fdab4ea78a998d0d1a3e560e7747b",
-          "path": "validator/src/cli/performance/proof/speed_nodes/tests.rs"
+          "digest": "sha256:31c14075ab81c037a151a003c58873dcd8974b0885ff41d2993a66df8d1b09ae",
+          "path": "validator/src/cli/performance/proof/speed_nodes/test_rows/mod.rs"
+        },
+        {
+          "digest": "sha256:8a01e1a4f25ac8cd3abcbaf8d54393cce4e679044928e3c7b5a24943b2292dee",
+          "path": "validator/src/cli/performance/proof/speed_nodes/tests/mod.rs"
+        },
+        {
+          "digest": "sha256:e932a2d682c56f6702760f6ab6b19415616059fa3f3a74a7ec1e6dfae6af05ce",
+          "path": "validator/src/cli/performance/proof/speed_nodes/tests/proof_rejection.rs"
         },
         {
           "digest": "sha256:38fea8eea2635270f1d35774431f288e5a33a9f321d8515520b4647b6ecf3cfb",
           "path": "validator/src/cli/performance/receipt/mod.rs"
         },
         {
-          "digest": "sha256:2e9b1cab559fde326f65344f29cf756c3b015ab4bfd8f98fb854800acf37aee9",
+          "digest": "sha256:aabc342203fcb5934b3a6a69989ecb981edfb8afc1fe10627484083e07b3be33",
           "path": "validator/src/cli/performance/receipt/node_speed_evidence.rs"
         },
         {
@@ -859,7 +867,7 @@
           "path": "validator/src/cli/performance/types.rs"
         },
         {
-          "digest": "sha256:d6026a61c20d7af83fafef101ea83c3f5df56a92edd7cf33bbcbf48eb607dfc9",
+          "digest": "sha256:28efd8c344cb39b3fe181c7dd9ee38adeb1c3123b6f597817766234938f19329",
           "path": "schemas/cli-performance-receipt.schema.json"
         }
       ],

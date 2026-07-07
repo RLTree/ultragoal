@@ -21,6 +21,7 @@ fn node_supports_positive_speed_claim(node: &Value) -> bool {
         && timing_projection::text(node, "proof_surface").is_some_and(not_empty)
         && timing_projection::text(node, "independent_reconciliation_surface")
             .is_some_and(not_empty)
+        && node_has_currentness_fields(node)
         && node.get("cache_hit").and_then(Value::as_bool).is_some()
         && node
             .get("work_unit_count")
@@ -32,6 +33,23 @@ fn node_supports_positive_speed_claim(node: &Value) -> bool {
             Some("verified_cache_hit") => node_has_cache_replay_speed_proof(node),
             _ => false,
         }
+}
+
+fn node_has_currentness_fields(node: &Value) -> bool {
+    [
+        "tier",
+        "cache_mode",
+        "input_digest",
+        "current_input_digest",
+        "audit_context_digest",
+        "cache_key",
+        "validator_version",
+        "law_version",
+        "schema_version",
+        "fixture_version",
+    ]
+    .into_iter()
+    .all(|key| timing_projection::text(node, key).is_some_and(not_empty))
 }
 
 fn node_has_executed_speed_proof(node: &Value) -> bool {
@@ -120,7 +138,7 @@ fn reconciled_product_latency_valid(node: &Value) -> bool {
         return false;
     }
     reconciled == actual.saturating_add(graph).saturating_add(telemetry)
-        && product_latency == reconciled
+        && product_latency == actual.saturating_add(graph)
 }
 
 fn nonempty_strings(node: &Value, key: &str) -> bool {

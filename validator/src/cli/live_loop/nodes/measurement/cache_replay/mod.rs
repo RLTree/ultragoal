@@ -2,12 +2,16 @@ use super::super::command_failure::CommandFailureSummary;
 use super::super::timing::NODE_TIMING_REL;
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
+use super::observation_mode::ObservationMode;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
 use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;
 
+mod row_fields;
 mod telemetry_reuse;
+
+use row_fields::{elapsed_ms, node_rows, text, valid_digest};
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
@@ -26,14 +30,23 @@ pub(super) fn verified_local_hit(
     command: &LiveLoopCommand,
     cache_key: &str,
     started: Instant,
+    observation_mode: ObservationMode,
 ) -> Option<CacheReplay> {
     if command.cache_mode != "verified-local" {
         return None;
     }
     let value = crate::json_boundary::read_json(&root.join(NODE_TIMING_REL)).ok()?;
-    node_rows(&value)
-        .into_iter()
-        .find_map(|row| replay_from_row(row, surface, input_digest, command, cache_key, started))
+    node_rows(&value).into_iter().find_map(|row| {
+        replay_from_row(
+            row,
+            surface,
+            input_digest,
+            command,
+            cache_key,
+            started,
+            observation_mode,
+        )
+    })
 }
 
 fn replay_from_row(
@@ -43,6 +56,7 @@ fn replay_from_row(
     command: &LiveLoopCommand,
     cache_key: &str,
     started: Instant,
+    observation_mode: ObservationMode,
 ) -> Option<CacheReplay> {
     if text(row, "node_id")? != surface.id
         || text(row, "tier")? != command.tier
@@ -54,11 +68,18 @@ fn replay_from_row(
         || text(row, "cache_honesty")? != "pass"
         || text(row, "validation_status")? != "pass"
         || text(row, "validation_cache_status")? != "reusable"
+        || text(row, "validator_version")? != crate::cli::live_loop::graph::validator_version()
+        || text(row, "law_version")? != crate::cli::live_loop::graph::law_version()
+        || text(row, "schema_version")? != crate::cli::live_loop::graph::schema_version()
+        || text(row, "fixture_version")? != crate::cli::live_loop::graph::fixture_version()
     {
         return None;
     }
     let proof_kind = text(row, "proof_kind")?;
     if !row_has_replayable_proof(row, proof_kind) {
+        return None;
+    }
+    if !row_matches_observation_mode(row, observation_mode) {
         return None;
     }
     if !row_has_reconciled_duration(row) {
@@ -124,6 +145,13 @@ fn replay_from_row(
     })
 }
 
+fn row_matches_observation_mode(row: &Value, observation_mode: ObservationMode) -> bool {
+    match observation_mode {
+        ObservationMode::LoopRunSnapshot => true,
+        ObservationMode::FullRoundtrip => text(row, "observability_status") == Some("pass"),
+    }
+}
+
 fn row_has_replayable_proof(row: &Value, proof_kind: &str) -> bool {
     match proof_kind {
         "executed" => row_has_executed_work(row),
@@ -174,7 +202,7 @@ fn row_has_reconciled_duration(row: &Value) -> bool {
     match (actual, graph, telemetry, reconciled, product_latency) {
         (Some(actual), Some(graph), Some(telemetry), Some(reconciled), Some(product_latency)) => {
             reconciled == actual.saturating_add(graph).saturating_add(telemetry)
-                && product_latency == reconciled
+                && product_latency == actual.saturating_add(graph)
         }
         _ => false,
     }
@@ -200,34 +228,6 @@ fn row_has_command_argv(row: &Value) -> bool {
                     .iter()
                     .all(|arg| arg.as_str().is_some_and(|value| !value.is_empty()))
         })
-}
-
-fn node_rows(value: &Value) -> Vec<&Value> {
-    let mut rows = Vec::new();
-    if let Some(cache_records) = value.get("cache_records").and_then(Value::as_array) {
-        rows.extend(cache_records.iter());
-    }
-    if let Some(nodes) = value.get("nodes").and_then(Value::as_array) {
-        rows.extend(nodes.iter());
-    }
-    rows
-}
-
-fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
-    value.get(key).and_then(Value::as_str)
-}
-
-fn valid_digest(value: &str) -> Option<&str> {
-    (value.len() == 71
-        && value.starts_with("sha256:")
-        && value[7..].bytes().all(|byte| byte.is_ascii_hexdigit()))
-    .then_some(value)
-}
-
-fn elapsed_ms(started: Instant) -> u64 {
-    u64::try_from(started.elapsed().as_millis())
-        .unwrap_or(u64::MAX)
-        .max(1)
 }
 
 #[cfg(test)]

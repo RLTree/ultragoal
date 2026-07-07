@@ -65,8 +65,14 @@ fn read_with_patch(patch: Value) -> usize {
     let candidate = "sha256:current";
     let changed = crate::digest::bytes(b"");
     let context = crate::digest::bytes(
-        "validator=ultragoal-rust;law=observability-live-loop;tier=hot;cache=verified-local"
-            .as_bytes(),
+        format!(
+            "validator={};law={};schema={};fixture={};tier=hot;cache=verified-local",
+            crate::cli::live_loop::graph::validator_version(),
+            crate::cli::live_loop::graph::law_version(),
+            crate::cli::live_loop::graph::schema_version(),
+            crate::cli::live_loop::graph::fixture_version()
+        )
+        .as_bytes(),
     );
     let changed_inputs =
         crate::cli::live_loop::changed_inputs::ChangedInputs::for_tests(&changed, &context);
@@ -93,6 +99,12 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
+    let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
+        "fmt_check",
+        input,
+        "hot",
+        "verified-local",
+    );
     let mut row = json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
@@ -110,11 +122,11 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "verified_local_duration_ms": 2,
         "proof_kind": "executed",
         "cache_hit": false,
-        "cache_key": digest("cache"),
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
+        "cache_key": cache_key,
+        "validator_version": crate::cli::live_loop::graph::validator_version(),
+        "law_version": crate::cli::live_loop::graph::law_version(),
+        "schema_version": crate::cli::live_loop::graph::schema_version(),
+        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
         "work_unit_count": 1,
         "actual_work_duration_ms": 2,
         "graph_overhead_ms": 1,
@@ -154,7 +166,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     object.insert("exit_status".to_string(), json!(0));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
     object.insert("reconciled_command_duration_ms".to_string(), json!(6));
-    object.insert("product_latency_ms".to_string(), json!(6));
+    object.insert("product_latency_ms".to_string(), json!(3));
     object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert("validation_status".to_string(), json!("pass"));

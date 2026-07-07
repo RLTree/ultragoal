@@ -1,5 +1,5 @@
-use super::super::super::timing::NODE_TIMING_REL;
 use super::super::full_command::FullCommandRun;
+use super::explain::telemetry_explain_text;
 use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
 
@@ -74,7 +74,30 @@ fn valid_digest(value: Option<&str>) -> bool {
     })
 }
 
+#[cfg(test)]
 pub(crate) fn measurement_where_failed(
+    surface: LoopValidationSurface,
+    baseline: &FullCommandRun,
+    failure_class: &str,
+) -> String {
+    measurement_where_failed_base(surface, baseline, failure_class)
+}
+
+pub(crate) fn measurement_where_failed_with_telemetry(
+    surface: LoopValidationSurface,
+    baseline: &FullCommandRun,
+    verified_local: &VerifiedLocalProof,
+    failure_class: &str,
+) -> String {
+    if failure_class == "live_loop_telemetry_reconciliation_missing" {
+        if let Some(where_failed) = telemetry_explain_text(verified_local, "where_failed") {
+            return where_failed.to_string();
+        }
+    }
+    measurement_where_failed_base(surface, baseline, failure_class)
+}
+
+fn measurement_where_failed_base(
     surface: LoopValidationSurface,
     baseline: &FullCommandRun,
     failure_class: &str,
@@ -105,7 +128,25 @@ pub(crate) fn measurement_where_failed(
     format!("loop.measure.{}.{suffix}", surface.id)
 }
 
+#[cfg(test)]
 pub(crate) fn measurement_why_failed(baseline: &FullCommandRun, failure_class: &str) -> String {
+    measurement_why_failed_base(baseline, failure_class)
+}
+
+pub(crate) fn measurement_why_failed_with_telemetry(
+    baseline: &FullCommandRun,
+    verified_local: &VerifiedLocalProof,
+    failure_class: &str,
+) -> String {
+    if failure_class == "live_loop_telemetry_reconciliation_missing" {
+        if let Some(why_failed) = telemetry_explain_text(verified_local, "why_failed") {
+            return why_failed.to_string();
+        }
+    }
+    measurement_why_failed_base(baseline, failure_class)
+}
+
+fn measurement_why_failed_base(baseline: &FullCommandRun, failure_class: &str) -> String {
     if let Some(why) = baseline.failure.why_failed.clone().filter(|_| {
         matches!(
             failure_class,
@@ -151,66 +192,8 @@ pub(crate) fn measurement_why_failed(baseline: &FullCommandRun, failure_class: &
                 .to_string()
         }
         "live_loop_speedup_target_missed" => {
-            "verified-local product latency including graph overhead and telemetry reconciliation did not meet the 20x speed target".to_string()
+            "verified-local validation latency including graph overhead did not meet the 20x speed target".to_string()
         }
         _ => "live-loop node timing row failed strict proof validation".to_string(),
-    }
-}
-
-pub(crate) fn measurement_next_repair(
-    surface: LoopValidationSurface,
-    baseline: &FullCommandRun,
-    failure_class: &str,
-) -> String {
-    if let Some(next) = baseline.failure.next_repair.clone().filter(|_| {
-        matches!(
-            failure_class,
-            "canonical_full_command_launch_failed" | "canonical_full_command_failed"
-        )
-    }) {
-        return next;
-    }
-    match failure_class {
-        "none" => "none".to_string(),
-        "canonical_full_command_launch_failed" | "canonical_full_command_failed" => format!(
-            "run `{}` directly, repair the command failure, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
-            surface.canonical_full_command, surface.id
-        ),
-        "verified_local_command_launch_failed" | "verified_local_command_failed" => format!(
-            "run `{}` directly, repair the narrow command behavior, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
-            surface.narrow_rerun, surface.id
-        ),
-        "verified_local_work_unit_missing" => format!(
-            "execute `{}` or provide verified same-candidate cache equivalence before recomputing the speed row",
-            surface.narrow_rerun
-        ),
-        "verified_local_proof_kind_invalid" => format!(
-            "replace proof-shaped timing for `{}` with executed work or verified same-candidate cache equivalence, then rerun node `{}`",
-            surface.narrow_rerun, surface.id
-        ),
-        "verified_local_cache_equivalence_missing" => format!(
-            "verify cache key, current input digests, prior result digest, replayed output digest, and invalidation proof before treating `{}` as a cache hit",
-            surface.narrow_rerun
-        ),
-        "verified_local_equivalence_status_invalid" => format!(
-            "record current-candidate execution equivalence for `{}` or fail the timing row",
-            surface.narrow_rerun
-        ),
-        "verified_local_invalidation_proof_missing" => format!(
-            "record input invalidation proof for `{}` before claiming loop speed",
-            surface.narrow_rerun
-        ),
-        "live_loop_telemetry_reconciliation_missing" => format!(
-            "bind `{}` to same-candidate logs, metrics, traces, and explain output, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
-            surface.narrow_rerun, surface.id
-        ),
-        "live_loop_speedup_target_missed" => format!(
-            "split, cache, batch telemetry reconciliation, or daemonize `{}` with verified equivalence until node `{}` product latency is at least 20x faster than its canonical baseline",
-            surface.narrow_rerun, surface.id
-        ),
-        _ => format!(
-            "inspect `{}` timing receipt fields, repair missing proof data, then rerun node `{}`",
-            NODE_TIMING_REL, surface.id
-        ),
     }
 }

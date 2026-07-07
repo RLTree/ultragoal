@@ -1,4 +1,5 @@
 use super::super::{CacheReplay, NODE_TIMING_REL, verified_local_hit};
+use crate::cli::live_loop::nodes::measurement::ObservationMode;
 use crate::cli::live_loop::{LiveLoopAction, LiveLoopCommand, surfaces::surface_by_id};
 use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
@@ -38,6 +39,14 @@ impl ReplayFixture {
 }
 
 pub(super) fn cache_hit(fixture: &ReplayFixture, input_digest: &str) -> Option<CacheReplay> {
+    cache_hit_for_observation(fixture, input_digest, ObservationMode::LoopRunSnapshot)
+}
+
+pub(super) fn cache_hit_for_observation(
+    fixture: &ReplayFixture,
+    input_digest: &str,
+    observation_mode: ObservationMode,
+) -> Option<CacheReplay> {
     verified_local_hit(
         &fixture.root,
         fixture.surface,
@@ -46,6 +55,7 @@ pub(super) fn cache_hit(fixture: &ReplayFixture, input_digest: &str) -> Option<C
         &fixture.command,
         &fixture.cache_key,
         std::time::Instant::now(),
+        observation_mode,
     )
 }
 
@@ -75,10 +85,10 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "verified_local_output_digest": output_digest(),
         "result_digest": result_digest(),
         "verified_local_result_digest": result_digest(),
-        "validator_version": "ultragoal-rust",
-        "law_version": "observability-live-loop",
-        "schema_version": "harness-ultragoal.live-loop-node-timing.v1",
-        "fixture_version": "source-tree-current",
+        "validator_version": crate::cli::live_loop::graph::validator_version(),
+        "law_version": crate::cli::live_loop::graph::law_version(),
+        "schema_version": crate::cli::live_loop::graph::schema_version(),
+        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
         "work_unit_count": 1,
         "actual_work_duration_ms": 100,
         "graph_overhead_ms": 1,
@@ -101,7 +111,7 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
     .with_value("baseline_failure", json!({}))
     .with_value("telemetry_reconciliation_duration_ms", json!(3))
     .with_value("reconciled_command_duration_ms", json!(104))
-    .with_value("product_latency_ms", json!(104))
+    .with_value("product_latency_ms", json!(101))
 }
 
 pub(super) fn verified_cache_row(fixture: &ReplayFixture) -> serde_json::Value {

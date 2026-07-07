@@ -20,6 +20,7 @@ mod run_node_timing_refresh_tests;
 mod stdout;
 #[cfg(test)]
 mod stdout_tests;
+pub(crate) mod surface_context;
 mod surfaces;
 #[cfg(test)]
 mod tests;
@@ -27,7 +28,10 @@ mod tests;
 mod timing_refresh_policy_tests;
 
 use context::AuditContext;
+#[cfg(test)]
+pub(crate) use graph::{fixture_version, law_version, schema_version, validator_version};
 use receipt::loop_receipt;
+pub(crate) use surface_context::validation_surface_context;
 
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use serde_json::Value;

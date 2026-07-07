@@ -1,5 +1,6 @@
 use super::verified_local_hit;
 use crate::cli::live_loop::LiveLoopCommand;
+use crate::cli::live_loop::nodes::measurement::ObservationMode;
 use serde_json::json;
 
 #[path = "cache_equivalence_tests.rs"]
@@ -35,6 +36,7 @@ fn cache_replay_accepts_only_same_input_executed_rows() {
             &non_cache_command,
             &fixture.cache_key,
             std::time::Instant::now(),
+            ObservationMode::LoopRunSnapshot,
         )
         .is_none()
     );
@@ -92,6 +94,15 @@ fn cache_replay_reuses_validation_result_when_observability_is_partial() {
     assert_eq!(
         replay.telemetry_reconciliation.status,
         "query_or_explain_reconciliation_failed"
+    );
+    assert!(
+        cache_hit_for_observation(
+            &fixture,
+            &fixture.input_digest,
+            ObservationMode::FullRoundtrip
+        )
+        .is_none(),
+        "full measurement must not replay partial telemetry when the next repair asks for reconciliation"
     );
     std::fs::remove_dir_all(fixture.root).expect("cleanup partial telemetry cache replay");
 }

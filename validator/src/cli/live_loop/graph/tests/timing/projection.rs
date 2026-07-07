@@ -1,7 +1,6 @@
 use super::rows::{mandatory_law_failure, node_timing};
 use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
-use serde_json::json;
 use std::collections::BTreeMap;
 
 #[test]
@@ -44,7 +43,12 @@ fn live_loop_tasks_project_current_node_timing_records() {
     assert_eq!(fmt["proof_kind"], "executed");
     assert_eq!(fmt["work_unit_count"], 1);
     assert_eq!(fmt["actual_work_duration_ms"], 5);
-    assert_eq!(fmt["product_latency_ms"], 7);
+    assert_eq!(fmt["product_latency_ms"], 6);
+    assert_eq!(fmt["cache"]["hit"], true);
+    assert_eq!(
+        fmt["cache"]["invalidation_reason"],
+        "verified_current_input_node_timing_row_reused"
+    );
     assert_eq!(fmt["claim_name"], "source-local live-loop speed claim");
     assert_eq!(fmt["claim_status"], "supported_source_local");
     assert!(
@@ -78,6 +82,39 @@ fn live_loop_tasks_project_current_node_timing_records() {
 }
 
 #[test]
+fn live_loop_tasks_do_not_report_cache_hits_when_cache_mode_is_none() {
+    let mut timings = BTreeMap::new();
+    timings.insert(
+        "fmt_check".to_string(),
+        node_timing(1_000, 5, "pass".to_string(), "none".to_string()),
+    );
+    let nodes = super::super::super::tasks(
+        "sha256:candidate",
+        "sha256:changed",
+        "sha256:context",
+        "hot",
+        "none",
+        Some(1_000),
+        &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
+    )
+    .into_iter()
+    .map(|task| task())
+    .collect::<Vec<_>>();
+    let fmt = nodes
+        .iter()
+        .find(|node| node["node_id"] == "fmt_check")
+        .expect("fmt node");
+    assert_eq!(fmt["cache"]["mode"], "none");
+    assert_eq!(fmt["cache"]["hit"], false);
+    assert_eq!(
+        fmt["cache"]["invalidation_reason"],
+        "cache_disabled_by_requested_cache_mode"
+    );
+    assert_eq!(fmt["validation_cache_status"], "reusable");
+}
+
+#[test]
 fn live_loop_tasks_project_failed_full_command_timing_rows() {
     let mut timings = BTreeMap::new();
     timings.insert(
@@ -92,7 +129,7 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             actual_work_duration_ms: 1,
             graph_overhead_ms: 1,
             reconciled_command_duration_ms: 3,
-            product_latency_ms: 3,
+            product_latency_ms: 2,
             equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
             invalidation_proof: "cache_not_used_current_command_executed".to_string(),
             telemetry_reconciliation_status: "pass".to_string(),
@@ -118,7 +155,7 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             baseline_exit_code: Some(101),
             baseline_launch_error: false,
             baseline_failure: mandatory_law_failure(),
-            telemetry_reconciliation: json!({"status": "pass"}).into(),
+            telemetry_reconciliation: serde_json::json!({"status": "pass"}).into(),
             affected_set_status: "clean_worktree_no_affected_files".to_string(),
             timing_source: NODE_TIMING_REL.to_string(),
         },

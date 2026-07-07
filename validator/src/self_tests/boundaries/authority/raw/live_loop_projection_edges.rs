@@ -124,6 +124,19 @@ fn raw_authority_scanner_classifies_live_loop_timing_projections_by_product_fiel
         execution_field_projection.is_empty(),
         "{execution_field_projection:?}"
     );
+
+    let speed_node_test_row_materialization =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/cli/performance/proof/speed_nodes/test_rows/cache_hit.rs",
+            "use serde_json::{Value,json};\n\
+             fn verified_cache_row() -> Value {\n\
+                 json!({\"proof_kind\":\"verified_cache_hit\",\"cache_equivalence_status\":\"pass\"})\n\
+             }\n",
+        );
+    assert!(
+        speed_node_test_row_materialization.is_empty(),
+        "{speed_node_test_row_materialization:?}"
+    );
 }
 
 #[test]

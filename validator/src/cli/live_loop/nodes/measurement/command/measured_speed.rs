@@ -24,6 +24,7 @@ fn live_loop_measure_marks_executed_reconciled_speedup_as_pass() {
     assert_eq!(row["graph_overhead_ms"], 1);
     assert_eq!(row["telemetry_reconciliation_duration_ms"], 1);
     assert_eq!(row["reconciled_command_duration_ms"], 12);
+    assert_eq!(row["product_latency_ms"], 11);
     assert_eq!(
         row["claim_ceiling"],
         "source-local loop timing only; readiness release completion final-packet and update_goal remain blocked"

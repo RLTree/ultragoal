@@ -9,6 +9,21 @@ mod registry;
 mod timing;
 
 #[test]
+fn validator_version_uses_stable_cli_authority_not_wrapper_binary() {
+    let material = super::validator_authority_material();
+    assert!(material.contains("authority=ultragoal-cli-control-plane"));
+    assert!(material.contains("crate=ultragoal-validator"));
+    assert!(
+        !material.contains("target/debug"),
+        "validator authority must not depend on the invoked wrapper path"
+    );
+    assert_eq!(
+        super::validator_version(),
+        crate::digest::bytes(material.as_bytes())
+    );
+}
+
+#[test]
 fn live_loop_nodes_fail_closed_when_measurement_is_missing() {
     let nodes = vec![json!({
         "node_id": "schema_validation",

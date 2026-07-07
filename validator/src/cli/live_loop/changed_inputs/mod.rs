@@ -24,8 +24,14 @@ impl ChangedInputs {
         let changed_file_count = changed_files.len();
         let changed_files_digest = crate::digest::bytes(changed_files.join("\n").as_bytes());
         let audit_context_digest = crate::digest::bytes(
-            format!("validator=ultragoal-rust;law=observability-live-loop;tier={tier};cache={cache_mode}")
-                .as_bytes(),
+            format!(
+                "validator={};law={};schema={};fixture={};tier={tier};cache={cache_mode}",
+                super::graph::validator_version(),
+                super::graph::law_version(),
+                super::graph::schema_version(),
+                super::graph::fixture_version()
+            )
+            .as_bytes(),
         );
         let mut surface_digests = BTreeMap::new();
         let mut affected_surfaces = BTreeMap::new();
