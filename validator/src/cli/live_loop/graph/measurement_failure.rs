@@ -25,8 +25,13 @@ pub(crate) fn failed_timing_measurement_state(
         || timing.baseline_failure.why_failed.clone(),
         || fallback.to_string(),
     );
+    let status = if timing.validation_status == "pass" && timing.speed_claim_status == "withheld" {
+        "partial"
+    } else {
+        "blocked"
+    };
     MeasurementState {
-        status: "blocked",
+        status,
         failure_class,
         why_failed,
         where_failed,
@@ -37,13 +42,7 @@ pub(crate) fn failed_timing_measurement_state(
         speedup_ratio: Some(
             timing.baseline_duration_ms / timing.reconciled_command_duration_ms.max(1),
         ),
-        claim_impact: timing
-            .baseline_failure
-            .claim_impact
-            .clone()
-            .unwrap_or_else(|| {
-                "blocks_live_loop_routine_repair_until_canonical_full_command_passes".to_string()
-            }),
+        claim_impact: claim_impact(timing),
     }
 }
 
@@ -147,6 +146,20 @@ fn speedup_state(failure_class: &str) -> &'static str {
         "live_loop_speedup_target_missed" => "verified_local_20x_proof_failed",
         _ => "verified_local_measurement_failed",
     }
+}
+
+fn claim_impact(timing: &NodeTiming) -> String {
+    if timing.validation_status == "pass" && timing.speed_claim_status == "withheld" {
+        return "source_local_validation_available_speed_or_observability_claim_withheld"
+            .to_string();
+    }
+    timing
+        .baseline_failure
+        .claim_impact
+        .clone()
+        .unwrap_or_else(|| {
+            "blocks_live_loop_routine_repair_until_canonical_full_command_passes".to_string()
+        })
 }
 
 fn where_failed_for(surface: LoopValidationSurface, failure_class: &str) -> String {

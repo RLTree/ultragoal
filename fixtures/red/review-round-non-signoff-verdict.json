@@ -28,7 +28,7 @@
   "postconditions": [
     {
       "path": "/reviewers/0/verdict",
-      "expectation": "phase verdict rejected"
+      "expectation": "review verdict rejected"
     }
   ]
 }

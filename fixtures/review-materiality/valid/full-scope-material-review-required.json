@@ -56,7 +56,7 @@
     "blocked": []
   },
   "decision": "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
-  "reason": "Material sign-off and phase advancement require full-scope review against current anchors.",
+  "reason": "Material sign-off and release advancement require full-scope review against current anchors.",
   "material_triggers": [
     "material_signoff",
     "phase_advancement",

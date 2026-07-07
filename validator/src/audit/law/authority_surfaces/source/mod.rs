@@ -1,5 +1,7 @@
 use std::path::Path;
 
+#[cfg(test)]
+mod cfg_test_module_tests;
 mod output;
 mod raw;
 
@@ -44,18 +46,118 @@ fn cfg_test_module_file(root: &Path, rel: &str) -> bool {
     let Some((parent_rel, module_name)) = parent_module_and_name(rel) else {
         return false;
     };
+    if cfg_test_path_sibling_file(root, rel, &module_name) {
+        return true;
+    }
+    cfg_test_declared_in_parent_mod(root, &parent_rel, &module_name)
+}
+
+fn cfg_test_declared_in_parent_mod(root: &Path, parent_rel: &str, module_name: &str) -> bool {
     let parent_text = std::fs::read_to_string(root.join(parent_rel)).unwrap_or_default();
-    let mut previous_nonempty = "";
+    let mut pending_cfg_test = false;
     for line in parent_text.lines() {
         let trimmed = line.trim();
-        if trimmed == format!("mod {module_name};") && previous_nonempty == "#[cfg(test)]" {
+        if pending_cfg_test && module_declaration_for(trimmed, &module_name) {
             return true;
         }
         if !trimmed.is_empty() {
-            previous_nonempty = trimmed;
+            if trimmed == "#[cfg(test)]" {
+                pending_cfg_test = true;
+            } else if pending_cfg_test && trimmed.starts_with("#[") {
+                continue;
+            } else {
+                pending_cfg_test = false;
+            }
         }
     }
     false
+}
+
+fn cfg_test_path_sibling_file(root: &Path, rel: &str, module_name: &str) -> bool {
+    let Some((dir, file_name)) = rel.rsplit_once('/') else {
+        return false;
+    };
+    let Ok(entries) = std::fs::read_dir(root.join(dir)) else {
+        return false;
+    };
+    entries
+        .filter_map(Result::ok)
+        .filter(|entry| entry.path().extension().and_then(|ext| ext.to_str()) == Some("rs"))
+        .any(|entry| {
+            let path = entry.path();
+            if path.file_name().and_then(|name| name.to_str()) == Some(file_name) {
+                return false;
+            }
+            let text = std::fs::read_to_string(&path).unwrap_or_default();
+            let sibling_file = path
+                .file_name()
+                .and_then(|name| name.to_str())
+                .unwrap_or("");
+            let sibling_module = sibling_file.strip_suffix(".rs").unwrap_or("");
+            let sibling_parent = format!("{dir}/mod.rs");
+            declares_cfg_test_path_module(&text, file_name, module_name)
+                || (cfg_test_declared_in_parent_mod(root, &sibling_parent, sibling_module)
+                    && declares_path_module(&text, file_name, module_name))
+        })
+}
+
+fn declares_path_module(text: &str, file_name: &str, module_name: &str) -> bool {
+    let mut pending_path_file = false;
+    let expected_path = format!("#[path = \"{file_name}\"]");
+    for line in text.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+        if trimmed == expected_path {
+            pending_path_file = true;
+            continue;
+        }
+        if pending_path_file && module_declaration_for(trimmed, module_name) {
+            return true;
+        }
+        if pending_path_file && trimmed.starts_with("#[") {
+            continue;
+        }
+        pending_path_file = false;
+    }
+    false
+}
+
+fn declares_cfg_test_path_module(text: &str, file_name: &str, module_name: &str) -> bool {
+    let mut pending_cfg_test = false;
+    let mut pending_path_file = false;
+    let expected_path = format!("#[path = \"{file_name}\"]");
+    for line in text.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+        if trimmed == "#[cfg(test)]" {
+            pending_cfg_test = true;
+            pending_path_file = false;
+            continue;
+        }
+        if pending_cfg_test && trimmed == expected_path {
+            pending_path_file = true;
+            continue;
+        }
+        if pending_cfg_test && pending_path_file && module_declaration_for(trimmed, module_name) {
+            return true;
+        }
+        if pending_cfg_test && trimmed.starts_with("#[") {
+            continue;
+        }
+        pending_cfg_test = false;
+        pending_path_file = false;
+    }
+    false
+}
+
+fn module_declaration_for(trimmed: &str, module_name: &str) -> bool {
+    trimmed == format!("mod {module_name};")
+        || trimmed == format!("pub mod {module_name};")
+        || trimmed.ends_with(&format!(" mod {module_name};"))
 }
 
 fn parent_module_and_name(rel: &str) -> Option<(String, String)> {
@@ -77,7 +179,10 @@ fn strip_cfg_test_modules(text: &str) -> String {
             pending_cfg_test = true;
             continue;
         }
-        if skip_depth.is_none() && pending_cfg_test && trimmed.starts_with("mod ") {
+        if skip_depth.is_none() && pending_cfg_test && trimmed.starts_with("#[") {
+            continue;
+        }
+        if skip_depth.is_none() && pending_cfg_test && module_declaration_start(trimmed) {
             if trimmed.ends_with(';') {
                 pending_cfg_test = false;
                 continue;
@@ -101,6 +206,10 @@ fn strip_cfg_test_modules(text: &str) -> String {
         out.push('\n');
     }
     out
+}
+
+fn module_declaration_start(trimmed: &str) -> bool {
+    trimmed.starts_with("mod ") || trimmed.starts_with("pub mod ")
 }
 
 fn brace_delta(line: &str) -> isize {

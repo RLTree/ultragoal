@@ -1,4 +1,7 @@
 pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'static str]> {
+    if let Some(markers) = super::live_loop_projection_catalog::required_projection_markers(rel) {
+        return Some(markers);
+    }
     match rel {
         "validator/src/cli/control/plane/mod.rs" => Some(&[
             "ControlOperation",
@@ -38,61 +41,6 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         "validator/src/cli/final_packet/proof/spans.rs" => {
             Some(&["span_kind", "receipt_deref", "dereferenced_receipt_digest"])
         }
-        "validator/src/cli/live_loop/context.rs" => {
-            Some(&["AuditContext", "changed_files_digest", "input_digest"])
-        }
-        "validator/src/cli/live_loop/graph/mod.rs" => {
-            Some(&["LoopValidationSurface", "input_digest", "claim_impact"])
-        }
-        "validator/src/cli/live_loop/graph/claim_evaluation.rs" => Some(&[
-            "LoopValidationSurface",
-            "NodeTiming",
-            "product_behavior_observed",
-            "independent_reconciliation_surface",
-        ]),
-        "validator/src/cli/live_loop/graph/surface_record.rs" => Some(&[
-            "LoopValidationSurface",
-            "NodeTiming",
-            "timing_projection_fields::insert",
-            "claim_evaluation::insert",
-            "speedup_ratio",
-        ]),
-        "validator/src/cli/live_loop/graph/timing_projection_fields.rs" => Some(&[
-            "NodeTiming",
-            "product_latency_ms",
-            "reconciled_command_duration_ms",
-            "telemetry_reconciliation_duration_ms",
-            "verified_local_result_digest",
-            "verified_local_output_digest",
-            "telemetry_reconciliation_status",
-            "equivalence_status",
-        ]),
-        "validator/src/cli/live_loop/nodes/measurement/observation/backend_readiness.rs" => {
-            Some(&[
-                "RoundtripQuery",
-                "backend_service",
-                "backend_readiness_timeout_ms",
-                "live_loop_observability_backend_unavailable",
-            ])
-        }
-        "validator/src/cli/live_loop/nodes/measurement/timing/record.rs" => Some(&[
-            "VerifiedLocalProof",
-            "node_timing_row",
-            "actual_work_duration_ms",
-            "verified_local_result_digest",
-            "NODE_TIMING_REL",
-        ]),
-        "validator/src/cli/live_loop/nodes/measurement/observation/event.rs" => Some(&[
-            "FullCommandRun",
-            "CommandTelemetry",
-            "command_receipt_for_candidate",
-            "source_local_live_loop_node_observation_only_not_speed_claim",
-        ]),
-        "validator/src/cli/live_loop/receipt.rs" => Some(&[
-            "AuditContext",
-            "CommandTelemetry",
-            "observability_live_loop_source_local_increment",
-        ]),
         "validator/src/cli/observe/explain/summary.rs" => {
             Some(&["ExplainContext", "smallest_repair", "query_evidence"])
         }
@@ -100,6 +48,11 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "telemetry::base_receipt",
             "summary::repair_guidance",
             "explanation_target",
+        ]),
+        "validator/src/cli/observe/explain/receipt/event_target.rs" => Some(&[
+            "fallback_from_receipt",
+            "receipt_without_observability_event",
+            "fallback_only",
         ]),
         "validator/src/cli/observe/query/mod.rs" => Some(&[
             "telemetry::query_result",
@@ -120,7 +73,13 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "observability_product_closure_failed_completion_readiness_release_update_goal_blocked",
             "bounds_status",
         ]),
-        "validator/src/cli/observe/telemetry/metric.rs" => Some(&[
+        "validator/src/cli/observe/telemetry/exporter.rs" => Some(&[
+            "metric::export::lines",
+            "trace::export::payload",
+            "post_json",
+            "post_text",
+        ]),
+        "validator/src/cli/observe/telemetry/metric/mod.rs" => Some(&[
             "ultragoal_command_total",
             "ultragoal_command_duration_ms",
             "saturation_status",
@@ -133,9 +92,20 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
         "validator/src/cli/observe/telemetry/receipt.rs" => {
             Some(&["ObserveCommand", "query_examples", "trace_bundle_digest"])
         }
-        "validator/src/cli/observe/telemetry/trace.rs" => {
+        "validator/src/cli/observe/telemetry/mod.rs" => Some(&[
+            "base_receipt_for_candidate",
+            "query_result_for_candidate",
+            "command_receipt_for_candidate",
+        ]),
+        "validator/src/cli/observe/telemetry/trace/mod.rs" => {
             Some(&["child_spans", "parent_span_id", "span_kind"])
         }
+        "validator/src/cli/observe/telemetry/trace/export.rs" => Some(&[
+            "resourceSpans",
+            "parentSpanId",
+            "child_spans",
+            "candidate_digest",
+        ]),
         "validator/src/cli/performance/proof/speed_nodes/mod.rs" => Some(&[
             "speed_proof_value",
             "current_nodes",

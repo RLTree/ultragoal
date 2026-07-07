@@ -5,7 +5,8 @@ use std::path::Path;
 
 mod fallback;
 mod next;
-mod query_evidence;
+mod query;
+mod receipt;
 mod summary;
 mod target;
 
@@ -14,7 +15,7 @@ pub(crate) fn query_evidence_for_target(
     observed: Option<&Value>,
     candidate: &str,
 ) -> Value {
-    query_evidence::for_target(root, observed, candidate)
+    query::evidence::for_target(root, observed, candidate)
 }
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
@@ -38,6 +39,10 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         missing_observed.as_deref(),
         opaque_observed.as_deref(),
     );
+    let observed_failed = observed
+        .as_ref()
+        .and_then(|event| target::event_failure(event))
+        .is_some();
     let failure_summary = failure_summary(
         observed.as_ref(),
         stale_observed.as_deref(),
@@ -45,14 +50,22 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         opaque_observed.as_deref(),
         &known_current_failure,
     );
-    let receipt_status =
-        if stale_observed.is_some() || missing_observed.is_some() || opaque_observed.is_some() {
-            "fail"
-        } else {
-            "pass"
-        };
-    let mut receipt =
-        telemetry::base_receipt(root, command, receipt_status, failure_summary.as_deref())?;
+    let receipt_status = if stale_observed.is_some()
+        || missing_observed.is_some()
+        || opaque_observed.is_some()
+        || observed_failed
+    {
+        "fail"
+    } else {
+        "pass"
+    };
+    let mut receipt = telemetry::base_receipt_for_candidate(
+        root,
+        command,
+        receipt_status,
+        failure_summary.as_deref(),
+        candidate.clone(),
+    )?;
     let repair_guidance = summary::repair_guidance(
         observed.as_ref(),
         stale_observed.as_deref(),

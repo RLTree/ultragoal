@@ -1,6 +1,9 @@
 use std::collections::BTreeSet;
 use std::path::Path;
 
+#[path = "observability_package_surfaces.rs"]
+mod observability_package_surfaces;
+
 macro_rules! package_authority_surface {
     ($role:literal, $rel:literal $(,)?) => {
         RequiredSurface {
@@ -57,6 +60,10 @@ const REQUIRED_SURFACES: &[RequiredSurface] = &[
     package_authority_surface!(
         "source",
         "validator/src/audit/law/authority_surfaces/inventory_requirements.rs",
+    ),
+    package_authority_surface!(
+        "source",
+        "validator/src/audit/law/authority_surfaces/observability_package_surfaces.rs",
     ),
     package_authority_surface!("output_authority", "validator/src/output_path.rs"),
     package_authority_surface!("source", "validator/src/audit/namespace/classes.rs"),
@@ -194,47 +201,46 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
     let mut out = Vec::new();
     for surface in super::surface_inventory::rows(root, inventory) {
         if !surface.exists_on_disk {
-            push(
-                &mut out,
-                "authority-source-binding",
+            out.push((
+                "authority-source-binding".to_string(),
                 format!(
                     "authority_surface_missing:role={}:path={}",
                     surface.role, surface.path
                 ),
-            );
+            ));
         }
         if surface.package_inventory_required && !surface.listed_in_package_inventory {
-            push(
-                &mut out,
-                "authority-source-binding",
+            out.push((
+                "authority-source-binding".to_string(),
                 format!(
                     "authority_surface_not_in_package_inventory:role={}:path={}",
                     surface.role, surface.path
                 ),
-            );
+            ));
         }
     }
     out
 }
 
-pub(super) fn required_surfaces() -> &'static [RequiredSurface] {
-    REQUIRED_SURFACES
+pub(super) fn required_surfaces() -> Vec<RequiredSurface> {
+    let mut surfaces = REQUIRED_SURFACES.to_vec();
+    surfaces.extend_from_slice(observability_package_surfaces::REQUIRED_SURFACES);
+    surfaces
 }
 
 #[cfg(test)]
 pub(crate) fn required_surfaces_for_test() -> Vec<(&'static str, &'static str, bool)> {
-    REQUIRED_SURFACES
-        .iter()
-        .map(|surface| {
-            (
-                surface.role,
-                surface.rel,
-                surface.package_inventory_required,
-            )
-        })
+    required_surfaces()
+        .into_iter()
+        .map(surface_for_test)
         .collect()
 }
 
-fn push(out: &mut Vec<(String, String)>, check: &str, detail: String) {
-    out.push((check.to_string(), detail));
+#[cfg(test)]
+fn surface_for_test(surface: RequiredSurface) -> (&'static str, &'static str, bool) {
+    (
+        surface.role,
+        surface.rel,
+        surface.package_inventory_required,
+    )
 }

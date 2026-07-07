@@ -4771,10 +4771,10 @@
           "digest": "sha256:72f1bcbd0f499b3a77477ce9ecaa8b7607de1e5eeffa389b74855f978f4b1c48",
           "path": "validator/src/audit/namespace/classes.rs"
         },
-        {
-          "digest": "sha256:05b9f9749153b8540543b6129697687b6dc6dc0582e124e71354699c1f4179b3",
-          "path": "validator/src/audit/namespace/law/mod.rs"
-        },
+    {
+      "digest": "sha256:6359fa4fc34b1c9da869ec638712ac68c94f27aacbab0012e79a8ce39cc6404a",
+      "path": "validator/src/audit/namespace/law/mod.rs"
+    },
         {
           "digest": "sha256:565b1ba7e54545c405afb857f76cb85f98ee544502f1cfeb11dba20ba50c315d",
           "path": "validator/src/self_tests/namespace/red_fixtures.rs"

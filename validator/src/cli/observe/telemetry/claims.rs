@@ -79,6 +79,25 @@ pub(super) fn next_repair_for(
         "rerun target command on the current candidate before claiming observability command telemetry"
     } else if failure.is_some_and(|text| text.contains("observed telemetry failure is opaque")) {
         "repair target command stdout and telemetry fields: failure_class why_failed where_failed next_repair"
+    } else if matches!(operation, ObserveOperation::TracesQuery)
+        && failure.is_some_and(|text| {
+            text.contains("observability query returned no matching rows")
+                || text.contains("victoriatraces trace lookup returned 404")
+                || (text.contains("curl query failed") && text.contains("404"))
+        })
+    {
+        "trace backend did not return a same-candidate span tree inside the bounded query window; keep the row partial, inspect exporter ingestion latency and trace tag projection, rerun the target command once, then rerun observe traces query by run_id/correlation_id/current digest"
+    } else if matches!(operation, ObserveOperation::MetricsQuery)
+        && failure.is_some_and(|text| text.contains("observability_metric_event_time_stale"))
+    {
+        "metrics backend returned an older sample than the target command event; keep the row partial, inspect metric exporter timestamp/import path and bounded PromQL selector, rerun the target command once, then rerun observe metrics query by run_id/correlation_id/current digest"
+    } else if matches!(operation, ObserveOperation::MetricsQuery)
+        && failure.is_some_and(|text| {
+            text.contains("observability_metric_missing_for_target")
+                || text.contains("observability query returned no matching rows")
+        })
+    {
+        "metrics backend did not return a bounded current sample for the target command; keep the row partial, inspect metric ingestion latency and the bounded PromQL selector, rerun the target command once, then rerun observe metrics query by run_id/correlation_id/current digest"
     } else {
         match operation {
             ObserveOperation::StackHealth => "run ultragoal observe stack up, then stack health",

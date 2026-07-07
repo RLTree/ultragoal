@@ -1,5 +1,5 @@
-use super::graph;
 use super::nodes::timing::{self, NodeTiming};
+use super::{changed_inputs::ChangedInputs, graph};
 use crate::cli::live_loop::LiveLoopCommand;
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -10,6 +10,7 @@ pub(crate) struct AuditContext {
     pub(crate) cache_mode: String,
     pub(crate) changed_files_digest: String,
     pub(crate) input_digest: String,
+    changed_inputs: ChangedInputs,
     node_timings: BTreeMap<String, NodeTiming>,
     package_digest_baseline_ms: Option<u64>,
     tier: String,
@@ -17,23 +18,17 @@ pub(crate) struct AuditContext {
 
 impl AuditContext {
     pub(crate) fn new(root: &Path, candidate_digest: String, command: &LiveLoopCommand) -> Self {
-        let changed_files = changed_files(root);
-        let changed_files_digest = crate::digest::bytes(changed_files.join("\n").as_bytes());
-        let input_digest = crate::digest::bytes(
-            format!(
-                "{}:{}:{}:{}",
-                candidate_digest, command.tier, command.cache_mode, changed_files_digest
-            )
-            .as_bytes(),
-        );
+        let inputs =
+            ChangedInputs::collect(root, &candidate_digest, &command.tier, &command.cache_mode);
+        let changed_files_digest = inputs.changed_files_digest.clone();
+        let input_digest = inputs.audit_context_digest.clone();
         let package_digest_baseline_ms = package_digest_baseline_ms(root, &candidate_digest);
         let node_timings = timing::read_current(
             root,
             &candidate_digest,
             &command.tier,
             &command.cache_mode,
-            &changed_files_digest,
-            &input_digest,
+            &inputs,
         );
         Self {
             candidate_digest,
@@ -41,6 +36,7 @@ impl AuditContext {
             cache_mode: command.cache_mode.clone(),
             changed_files_digest,
             input_digest,
+            changed_inputs: inputs,
             node_timings,
             package_digest_baseline_ms,
         }
@@ -55,7 +51,16 @@ impl AuditContext {
             &self.cache_mode,
             self.package_digest_baseline_ms,
             &self.node_timings,
+            &self.changed_inputs,
         )
+    }
+
+    pub(crate) fn changed_inputs(&self) -> &ChangedInputs {
+        &self.changed_inputs
+    }
+
+    pub(crate) fn changed_input_summary(&self) -> Value {
+        self.changed_inputs.summary()
     }
 }
 
@@ -65,22 +70,6 @@ pub(crate) fn verify_cache_hit(expected_key: &str, observed_key: &str) -> &'stat
     } else {
         "fail_stale_or_wrong_digest_cache_hit"
     }
-}
-
-fn changed_files(root: &Path) -> Vec<String> {
-    let output = std::process::Command::new("git")
-        .args(["status", "--short", "--untracked-files=all"])
-        .current_dir(root)
-        .output();
-    output
-        .ok()
-        .map(|out| {
-            String::from_utf8_lossy(&out.stdout)
-                .lines()
-                .map(ToString::to_string)
-                .collect()
-        })
-        .unwrap_or_default()
 }
 
 fn package_digest_baseline_ms(root: &Path, candidate_digest: &str) -> Option<u64> {

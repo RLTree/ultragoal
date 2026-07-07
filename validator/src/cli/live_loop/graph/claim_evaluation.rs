@@ -1,6 +1,6 @@
 use super::super::nodes::status::MeasurementState;
 use super::super::nodes::timing::NodeTiming;
-use super::super::surfaces::LoopValidationSurface;
+use super::super::surfaces::{BOUNDARY_PROOF_POLICY, LoopValidationSurface};
 use serde_json::{Map, Value, json};
 
 pub(super) fn insert(
@@ -21,6 +21,13 @@ pub(super) fn insert(
             } else {
                 "blocked"
             },
+        )
+    } else if surface.hot_loop_policy == BOUNDARY_PROOF_POLICY {
+        (
+            "strict boundary proof claim",
+            "withheld from dirty hot-loop execution; requires canonical boundary command on current candidate",
+            "same-candidate receipt/stdout/telemetry reconciliation at the source-local proof boundary",
+            "withheld_until_boundary",
         )
     } else {
         (

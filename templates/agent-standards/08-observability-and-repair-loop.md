@@ -57,7 +57,7 @@ The routine repair loop is executable:
 5. Repair the smallest root cause.
 6. Rerun the narrow command.
 7. Compare before/after telemetry.
-8. Run broad audit only at the slice or claim boundary.
+8. Run broad audit only at the strict claim boundary.
 
 `ultragoal current-state --json` is a read model, not proof. `ultragoal next`
 is the navigator that consumes current-state and explain output to name the

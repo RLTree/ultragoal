@@ -5,10 +5,42 @@ use super::failure::{
     measurement_failure_class, measurement_next_repair, measurement_where_failed,
     measurement_why_failed,
 };
+use super::state::NodeTimingState;
+#[cfg(test)]
+pub(crate) use super::state::timing_status;
 use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::LiveLoopCommand;
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
-use serde_json::{Map, Value, json};
+use serde_json::{Value, json};
+use std::ops::Deref;
+
+#[derive(Clone)]
+pub(crate) struct NodeTimingRow {
+    value: Value,
+    blocks_hot_loop: bool,
+}
+
+impl NodeTimingRow {
+    pub(crate) fn as_value(&self) -> &Value {
+        &self.value
+    }
+
+    pub(crate) fn into_value(self) -> Value {
+        self.value
+    }
+
+    pub(crate) fn blocks_hot_loop(&self) -> bool {
+        self.blocks_hot_loop
+    }
+}
+
+impl Deref for NodeTimingRow {
+    type Target = Value;
+
+    fn deref(&self) -> &Self::Target {
+        &self.value
+    }
+}
 
 pub(crate) fn node_timing_row(
     surface: LoopValidationSurface,
@@ -20,7 +52,7 @@ pub(crate) fn node_timing_row(
     baseline: &FullCommandRun,
     verified_local: &VerifiedLocalProof,
     affected_set_status: &'static str,
-) -> Value {
+) -> NodeTimingRow {
     let actual_work_duration_ms = verified_local.actual_work.duration_ms;
     let reconciled_command_duration_ms =
         derived_fields::reconciled_command_duration_ms(verified_local);
@@ -28,9 +60,10 @@ pub(crate) fn node_timing_row(
     let output_digest = derived_fields::output_digest(verified_local);
     let result_digest = derived_fields::result_digest(verified_local, &output_digest);
     let failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
-    let pass = failure_class == "none";
+    let state = NodeTimingState::from_measurement(verified_local, failure_class);
+    let blocks_hot_loop = state.validation_status != "pass" || state.speed_claim_status == "failed";
     let (baseline_proof_kind, baseline_invalidation_proof) =
-        derived_fields::baseline_reuse_fields(verified_local.proof_kind);
+        derived_fields::baseline_reuse_fields(surface, verified_local.proof_kind);
     let mut row = json!({
         "node_id": surface.id,
         "surface": surface.surface,
@@ -42,7 +75,7 @@ pub(crate) fn node_timing_row(
         "input_digest": input_digest,
         "canonical_full_command": surface.canonical_full_command,
         "receipt_path": command.receipt.display().to_string(),
-        "timing_status": timing_status(pass),
+        "timing_status": state.timing_status,
         "failure_class": failure_class,
         "where_failed": measurement_where_failed(surface, baseline, failure_class),
         "why_failed": measurement_why_failed(baseline, failure_class),
@@ -65,7 +98,6 @@ pub(crate) fn node_timing_row(
         "product_behavior_observed": surface.narrow_rerun,
         "proof_surface": derived_fields::proof_surface(verified_local),
         "independent_reconciliation_surface": "same-candidate logs, metrics, traces, explain output, and live-loop timing receipt",
-        "claim_status": if pass { "supported_source_local" } else { "blocked" },
         "claim_ceiling": "source-local loop timing only; readiness release completion final-packet and update_goal remain blocked",
         "affected_set_status": affected_set_status,
         "cache_honesty": "pass",
@@ -75,7 +107,28 @@ pub(crate) fn node_timing_row(
     let object = row
         .as_object_mut()
         .expect("live-loop timing row is always an object");
-    insert_execution_fields(
+    object.insert(
+        "validation_status".to_string(),
+        json!(state.validation_status),
+    );
+    object.insert(
+        "validation_cache_status".to_string(),
+        json!(state.validation_cache_status),
+    );
+    object.insert(
+        "observability_status".to_string(),
+        json!(state.observability_status),
+    );
+    object.insert(
+        "speed_claim_status".to_string(),
+        json!(state.speed_claim_status),
+    );
+    object.insert(
+        "observability_failure_class".to_string(),
+        json!(state.observability_failure_class),
+    );
+    object.insert("claim_status".to_string(), json!(state.claim_status));
+    super::execution_fields::insert(
         object,
         surface,
         input_digest,
@@ -92,113 +145,8 @@ pub(crate) fn node_timing_row(
         "verified_local_result_digest".to_string(),
         json!(result_digest),
     );
-    row
-}
-
-pub(crate) fn timing_status(pass: bool) -> &'static str {
-    if pass { "pass" } else { "fail" }
-}
-
-fn insert_execution_fields(
-    object: &mut Map<String, Value>,
-    surface: LoopValidationSurface,
-    input_digest: &str,
-    receipt_path: String,
-    verified_local: &VerifiedLocalProof,
-) {
-    object.insert("proof_kind".to_string(), json!(verified_local.proof_kind));
-    object.insert("cache_hit".to_string(), json!(verified_local.cache_hit));
-    object.insert("cache_key".to_string(), json!(verified_local.cache_key));
-    object.insert("current_input_digest".to_string(), json!(input_digest));
-    object.insert("validator_version".to_string(), json!("ultragoal-rust"));
-    object.insert("law_version".to_string(), json!("observability-live-loop"));
-    object.insert(
-        "schema_version".to_string(),
-        json!("harness-ultragoal.live-loop-node-timing.v1"),
-    );
-    object.insert("fixture_version".to_string(), json!("source-tree-current"));
-    object.insert(
-        "work_unit_count".to_string(),
-        json!(verified_local.work_unit_count),
-    );
-    object.insert(
-        "actual_work_duration_ms".to_string(),
-        json!(verified_local.actual_work.duration_ms),
-    );
-    object.insert(
-        "graph_overhead_ms".to_string(),
-        json!(verified_local.graph_overhead_ms),
-    );
-    object.insert(
-        "equivalence_status".to_string(),
-        json!(verified_local.equivalence_status),
-    );
-    object.insert(
-        "invalidation_proof".to_string(),
-        json!(verified_local.invalidation_proof),
-    );
-    object.insert(
-        "telemetry_reconciliation_status".to_string(),
-        json!(verified_local.telemetry_reconciliation_status),
-    );
-    object.insert(
-        "telemetry_reconciliation".to_string(),
-        verified_local.telemetry_reconciliation.value(),
-    );
-    object.insert(
-        "verified_local_command".to_string(),
-        json!(surface.narrow_rerun),
-    );
-    object.insert(
-        "verified_local_command_argv".to_string(),
-        json!(["bash", "-lc", surface.narrow_rerun]),
-    );
-    object.insert(
-        "command_argv".to_string(),
-        json!(["bash", "-lc", surface.narrow_rerun]),
-    );
-    object.insert(
-        "verified_local_exit_code".to_string(),
-        json!(verified_local.actual_work.exit_code),
-    );
-    object.insert(
-        "exit_status".to_string(),
-        json!(verified_local.actual_work.exit_code),
-    );
-    object.insert("receipt_paths".to_string(), json!([receipt_path]));
-    object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
-    object.insert(
-        "verified_local_launch_error".to_string(),
-        json!(verified_local.actual_work.launch_error),
-    );
-    object.insert(
-        "verified_local_stdout_digest".to_string(),
-        json!(verified_local.actual_work.stdout_digest),
-    );
-    object.insert(
-        "verified_local_stderr_digest".to_string(),
-        json!(verified_local.actual_work.stderr_digest),
-    );
-    object.insert(
-        "verified_local_failure".to_string(),
-        json!(verified_local.actual_work.failure.to_value()),
-    );
-    if let Some(prior_result_digest) = verified_local.prior_result_digest.as_deref() {
-        object.insert(
-            "prior_result_digest".to_string(),
-            json!(prior_result_digest),
-        );
-    }
-    if let Some(replayed_output_digest) = verified_local.replayed_output_digest.as_deref() {
-        object.insert(
-            "replayed_output_digest".to_string(),
-            json!(replayed_output_digest),
-        );
-    }
-    if let Some(cache_equivalence_status) = verified_local.cache_equivalence_status.as_deref() {
-        object.insert(
-            "cache_equivalence_status".to_string(),
-            json!(cache_equivalence_status),
-        );
+    NodeTimingRow {
+        value: row,
+        blocks_hot_loop,
     }
 }

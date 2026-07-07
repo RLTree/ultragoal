@@ -7,6 +7,8 @@ use std::process::Command;
 const COMPOSE: &str = "dev/observability/compose.yml";
 mod health;
 #[cfg(test)]
+mod health_tests;
+#[cfg(test)]
 pub(crate) use health::compose_health_row_for_test;
 #[cfg(test)]
 pub(crate) use health::compose_health_rows_from_result_for_test;

@@ -1,9 +1,10 @@
 use super::fixtures::{command, live_loop_timing_receipt_arg, live_loop_timing_receipt_path};
+use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use crate::cli::live_loop::surfaces::surface_by_id;
 use serde_json::json;
 
 #[test]
-fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
+fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "live-loop-measure-cache-replay",
     );
@@ -22,20 +23,12 @@ fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
     let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
     let command = command(Some("changed_files"), live_loop_timing_receipt_arg());
     let surface = surface_by_id("changed_files").expect("changed files surface");
-    let changed_files = super::super::changed_files(&root);
-    let changed_files_digest = crate::digest::bytes(changed_files.join("\n").as_bytes());
-    let audit_context_digest = crate::digest::bytes(
-        format!(
-            "{}:{}:{}:{}",
-            candidate, command.tier, command.cache_mode, changed_files_digest
-        )
-        .as_bytes(),
-    );
+    let inputs = ChangedInputs::collect(&root, &candidate, &command.tier, &command.cache_mode);
     let input_digest = super::super::super::super::graph::surface_input_digest(
         surface,
         &candidate,
-        &changed_files_digest,
-        &audit_context_digest,
+        inputs.surface_digest(surface),
+        &inputs.audit_context_digest,
     );
     let cache_key = super::super::super::super::graph::verified_local_cache_key(
         surface.id,
@@ -56,9 +49,8 @@ fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
         &command,
         surface,
         &candidate,
-        &changed_files_digest,
-        &audit_context_digest,
-        super::super::timing::receipt::affected_set_status(&changed_files),
+        &inputs,
+        super::super::timing::receipt::affected_set_status(inputs.changed_file_count),
     );
 
     assert_eq!(row["proof_kind"], "verified_cache_hit");
@@ -67,7 +59,7 @@ fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
     assert_eq!(row["baseline_proof_kind"], "verified_baseline_reuse");
     assert_eq!(
         row["baseline_invalidation_proof"],
-        "baseline_reused_from_same_candidate_current_input_timing_row"
+        "baseline_reused_from_verified_current_input_timing_row"
     );
     assert_eq!(
         row["equivalence_status"],
@@ -75,7 +67,7 @@ fn live_loop_measure_replays_same_candidate_cache_row_into_timing_output() {
     );
     assert_eq!(
         row["invalidation_proof"],
-        "cache_key_current_input_digest_command_versions_and_candidate_row_matched"
+        "cache_key_current_input_digest_command_versions_and_environment_matched"
     );
     assert_eq!(row["prior_result_digest"], result_digest());
     assert_eq!(row["replayed_output_digest"], output_digest());
@@ -110,6 +102,7 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "equivalence_status": "executed_current_candidate_not_cache_replay",
         "invalidation_proof": "input_digest_and_candidate_checked",
         "telemetry_reconciliation_status": "pass",
+        "telemetry_reconciliation": {"status": "pass"},
         "verified_local_command_argv": ["bash", "-lc", "git status --short --untracked-files=all"],
         "command_argv": ["bash", "-lc", "git status --short --untracked-files=all"],
         "verified_local_exit_code": 0,
@@ -130,6 +123,11 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "result_digest": result_digest(),
         "verified_local_result_digest": result_digest()
     })
+    .with_value("validation_status", json!("pass"))
+    .with_value("validation_cache_status", json!("reusable"))
+    .with_value("observability_status", json!("pass"))
+    .with_value("speed_claim_status", json!("supported"))
+    .with_value("observability_failure_class", json!("none"))
     .with_value("telemetry_reconciliation_duration_ms", json!(3))
     .with_value("reconciled_command_duration_ms", json!(104))
     .with_value("product_latency_ms", json!(104))

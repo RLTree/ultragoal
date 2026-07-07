@@ -10,7 +10,7 @@
     {
       "op": "replace",
       "path": "/completion_manifest/claims/0/title",
-      "value": "Fixture tests passed, ready for phase advancement"
+      "value": "Fixture tests passed, ready for release advancement"
     }
   ],
   "notes": "Coverage authority red fixture for coverage_test_pass_substitution.",

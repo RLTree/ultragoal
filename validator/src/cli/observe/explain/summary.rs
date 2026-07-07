@@ -67,7 +67,7 @@ pub(super) fn explanation(root: &Path, audit_digest: String, ctx: ExplainContext
             .unwrap_or(false)
     });
     let fallback_used = ctx.observed.is_none() || receipt_fallback;
-    let query_evidence = super::query_evidence::for_target(root, ctx.observed, ctx.candidate);
+    let query_evidence = super::query::evidence::for_target(root, ctx.observed, ctx.candidate);
     json!({
         "requested_target": ctx.target_requested,
         "current_source_audit_receipt": "validation_artifacts/ultragoal-audit/validator-receipt.json",
@@ -188,6 +188,9 @@ fn narrow_rerun(observed: Option<&Value>) -> String {
     let Some(event) = observed else {
         return "run the requested target command once, then rerun explain".to_string();
     };
+    if let Some(command) = observe_query_rerun(event) {
+        return command;
+    }
     let command = event
         .get("command")
         .and_then(Value::as_str)
@@ -199,44 +202,18 @@ fn narrow_rerun(observed: Option<&Value>) -> String {
     format!("{command} {subcommand}")
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn root_cause_and_paths_cover_defensive_empty_failure_boundaries() {
-        let known = json!([]);
-        let ctx = ExplainContext {
-            candidate: "sha256:current",
-            target_requested: None,
-            observed: None,
-            stale_observed: None,
-            missing_observed: None,
-            opaque_observed: None,
-            known_current_failure: &known,
-            repair_guidance: "repair specific blocker",
-        };
-
-        assert_eq!(root_cause(&ctx), "no current failure identified");
-        assert_eq!(
-            narrow_rerun(None),
-            "run the requested target command once, then rerun explain"
-        );
-    }
-
-    #[test]
-    fn implicated_paths_include_artifact_and_receipt_when_present() {
-        let paths = implicated_paths(Some(&json!({
-            "artifact_path": "validation_artifacts/coverage",
-            "receipt_path": "validation_artifacts/coverage/coverage-receipt.json"
-        })));
-
-        assert_eq!(
-            paths,
-            json!([
-                "validation_artifacts/coverage",
-                "validation_artifacts/coverage/coverage-receipt.json"
-            ])
-        );
-    }
+fn observe_query_rerun(event: &Value) -> Option<String> {
+    let operation = event.get("operation").and_then(Value::as_str)?;
+    let kind = operation
+        .strip_prefix("observe.")
+        .and_then(|rest| rest.strip_suffix(".query"))?;
+    let run_id = event.get("run_id").and_then(Value::as_str)?;
+    let correlation_id = event.get("correlation_id").and_then(Value::as_str)?;
+    Some(format!(
+        "ultragoal observe {kind} query --run-id {run_id} --correlation-id {correlation_id} --limit 100"
+    ))
 }
+
+#[cfg(test)]
+#[path = "summary_tests.rs"]
+mod tests;

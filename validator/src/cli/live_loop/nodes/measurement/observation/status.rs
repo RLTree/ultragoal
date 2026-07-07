@@ -4,99 +4,140 @@ use crate::cli::live_loop::surfaces::surface_by_id;
 use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 
+#[path = "roundtrip_failure_tests.rs"]
+mod roundtrip_failure;
+#[path = "successful_roundtrip_tests.rs"]
+mod success;
+
 #[test]
-fn reconciliation_fails_at_each_required_observe_roundtrip() {
-    for failing_roundtrip in all_roundtrips() {
-        let root = temp_root(&format!("live-loop-roundtrip-{failing_roundtrip:?}"));
+fn reconciliation_propagates_command_observation_write_failure() {
+    let root = temp_root("live-loop-command-observation-helper-write-failure");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("changed_files").expect("surface");
+    std::fs::create_dir_all(root.join(super::event::receipt_path(surface.id)))
+        .expect("claim artifact path blocked");
+    let command = measure_command();
+    let run = command_run(11);
+    let mut roundtrip = |roundtrip: query::RoundtripQuery, run_id: &str, correlation_id: &str| {
+        Ok(observe_receipt(roundtrip, "pass", run_id, correlation_id))
+    };
+    let callback_probe =
+        roundtrip(query::RoundtripQuery::Logs, "run-probe", "corr-probe").expect("probe callback");
+    assert_eq!(callback_probe.status, "pass");
+    assert_eq!(callback_probe.value["run_id"], "run-probe");
+    assert_eq!(callback_probe.value["correlation_id"], "corr-probe");
+
+    let err = reconcile_with_observe_roundtrip(
+        &root,
+        surface,
+        &candidate,
+        &command,
+        &run,
+        &mut roundtrip,
+    )
+    .expect_err("command observation write failure propagates");
+
+    assert_publication_failure(&err);
+    std::fs::remove_dir_all(root).expect("cleanup helper write failure");
+}
+
+#[test]
+fn reconciliation_reports_query_receipt_publication_failure() {
+    let root = temp_root("live-loop-query-receipt-publication-failure");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("changed_files").expect("surface");
+    std::fs::create_dir_all(root.join(query::receipt_path(surface.id, "logs-query")))
+        .expect("logs query receipt path blocked");
+    let command = measure_command();
+    let run = command_run(11);
+
+    let reconciliation = reconcile(&root, surface, &candidate, &command, &run);
+
+    assert_eq!(reconciliation.status, "command_observation_failed");
+    assert_publication_failure(reconciliation.value["failure"].as_str().unwrap_or_default());
+    assert_eq!(
+        reconciliation.value["claim_impact"],
+        "live_loop_node_timing_blocked"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup query publication failure");
+}
+
+#[test]
+fn reconciliation_reports_later_query_receipt_publication_failures() {
+    for suffix in ["metrics-query", "traces-query"] {
+        let root = temp_root(&format!("live-loop-{suffix}-receipt-publication-failure"));
         let candidate = write_minimal_manifest(&root);
         let surface = surface_by_id("changed_files").expect("surface");
+        std::fs::create_dir_all(root.join(query::receipt_path(surface.id, suffix)))
+            .expect("query receipt path blocked");
         let command = measure_command();
         let run = command_run(11);
-        let mut roundtrip =
-            |roundtrip: query_roundtrip::RoundtripQuery, run_id: &str, correlation_id: &str| {
-                if roundtrip == failing_roundtrip {
-                    return Err(format!("{failing_roundtrip:?} unavailable"));
-                }
-                Ok(observe_receipt(roundtrip, "pass", run_id, correlation_id))
-            };
 
-        let err = reconcile_with_observe_roundtrip(
-            &root,
-            surface,
-            &candidate,
-            &command,
-            &run,
-            &mut roundtrip,
-        )
-        .expect_err("roundtrip failure blocks reconciliation");
+        let reconciliation = reconcile(&root, surface, &candidate, &command, &run);
 
-        assert_eq!(err, format!("{failing_roundtrip:?} unavailable"));
-        std::fs::remove_dir_all(root).expect("cleanup failed observe roundtrip");
+        assert_eq!(reconciliation.status, "command_observation_failed");
+        assert_publication_failure(reconciliation.value["failure"].as_str().unwrap_or_default());
+        assert_eq!(
+            reconciliation.value["claim_impact"],
+            "live_loop_node_timing_blocked"
+        );
+        std::fs::remove_dir_all(root).expect("cleanup later query publication failure");
     }
 }
 
 #[test]
-fn reconciliation_status_fails_when_any_observe_roundtrip_reports_fail() {
-    for failing_roundtrip in all_roundtrips() {
-        let root = temp_root(&format!(
-            "live-loop-command-observation-{failing_roundtrip:?}-fail-status"
-        ));
-        let candidate = write_minimal_manifest(&root);
-        let surface = surface_by_id("changed_files").expect("surface");
-        let command = measure_command();
-        let run = command_run(11);
-        let mut roundtrip =
-            |roundtrip: query_roundtrip::RoundtripQuery, run_id: &str, correlation_id: &str| {
-                let status = if roundtrip == failing_roundtrip {
-                    "fail"
-                } else {
-                    "pass"
-                };
-                Ok(observe_receipt(roundtrip, status, run_id, correlation_id))
-            };
+fn query_capture_worker_panic_is_reported_as_typed_join_failure() {
+    std::thread::scope(|scope| {
+        let handle =
+            scope.spawn(|| -> query::PendingQueryReceipt { panic!("query capture worker panic") });
 
-        let reconciliation = reconcile_with_observe_roundtrip(
-            &root,
-            surface,
-            &candidate,
-            &command,
-            &run,
-            &mut roundtrip,
-        )
-        .expect("nonpassing query receipt still produces reconciliation");
+        let err = join_query_capture("logs-query", handle)
+            .err()
+            .expect("worker panic must become typed failure");
 
-        assert_eq!(
-            reconciliation.status,
-            "query_or_explain_reconciliation_failed"
-        );
-        let reconciliation = reconciliation.value;
-        assert_eq!(
-            reconciliation[roundtrip_key(failing_roundtrip)]["status"],
-            "fail"
-        );
-        assert_eq!(
-            reconciliation["claim_impact"],
-            "source_local_live_loop_node_observation_only_not_speed_claim"
-        );
-        std::fs::remove_dir_all(root).expect("cleanup failed-status observe roundtrip");
-    }
+        assert_eq!(err, "observe logs-query worker panicked");
+    });
 }
 
 #[test]
-fn reconciliation_status_rejects_pass_shaped_query_without_bounds_proof() {
-    let root = temp_root("live-loop-command-observation-pass-shaped-query");
+fn reconciliation_reports_explain_receipt_publication_failure() {
+    let root = temp_root("live-loop-explain-receipt-publication-failure");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("changed_files").expect("surface");
+    std::fs::create_dir_all(root.join(query::receipt_path(surface.id, "explain-failure")))
+        .expect("explain receipt path blocked");
+    let command = measure_command();
+    let run = command_run(11);
+
+    let reconciliation = reconcile(&root, surface, &candidate, &command, &run);
+
+    assert_eq!(reconciliation.status, "command_observation_failed");
+    assert_publication_failure(reconciliation.value["failure"].as_str().unwrap_or_default());
+    assert_eq!(
+        reconciliation.value["claim_impact"],
+        "live_loop_node_timing_blocked"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup explain publication failure");
+}
+
+#[test]
+fn reconciliation_rejects_explain_receipt_that_lacks_query_evidence() {
+    let root = temp_root("live-loop-command-observation-explain-without-query-evidence");
     let candidate = write_minimal_manifest(&root);
     let surface = surface_by_id("changed_files").expect("surface");
     let command = measure_command();
     let run = command_run(11);
-    let mut roundtrip =
-        |roundtrip: query_roundtrip::RoundtripQuery, run_id: &str, correlation_id: &str| {
-            let mut receipt = observe_receipt(roundtrip, "pass", run_id, correlation_id);
-            if roundtrip == query_roundtrip::RoundtripQuery::Metrics {
-                receipt.value["bounded_output_status"] = json!("fail");
-            }
-            Ok(receipt)
-        };
+    let mut roundtrip = |roundtrip: query::RoundtripQuery, run_id: &str, correlation_id: &str| {
+        let mut receipt = observe_receipt(roundtrip, "pass", run_id, correlation_id);
+        if roundtrip == query::RoundtripQuery::ExplainFailure {
+            receipt.value["explanation"]["query_evidence"] = json!({
+                "logs": {"status":"missing"},
+                "metrics": {"status":"missing"},
+                "traces": {"status":"missing"}
+            });
+        }
+        Ok(receipt)
+    };
 
     let reconciliation = reconcile_with_observe_roundtrip(
         &root,
@@ -106,33 +147,33 @@ fn reconciliation_status_rejects_pass_shaped_query_without_bounds_proof() {
         &run,
         &mut roundtrip,
     )
-    .expect("pass-shaped query still produces reconciliation report");
+    .expect("missing explain query evidence still reports reconciliation");
 
     assert_eq!(
         reconciliation.status,
         "query_or_explain_reconciliation_failed"
     );
-    assert_eq!(reconciliation.value["metrics_query"]["status"], "pass");
     assert_eq!(
-        reconciliation.value["metrics_query"]["value"]["bounded_output_status"],
-        "fail"
+        reconciliation.value["first_failed_roundtrip"]["roundtrip"],
+        "explain_failure"
     );
-    std::fs::remove_dir_all(root).expect("cleanup pass-shaped query");
+    std::fs::remove_dir_all(root).expect("cleanup explain query evidence");
 }
 
 #[test]
-fn reconciliation_passes_when_all_observe_roundtrips_match_command_run() {
-    let root = temp_root("live-loop-command-observation-pass");
+fn reconciliation_rejects_explain_receipt_without_explanation_tree() {
+    let root = temp_root("live-loop-command-observation-explain-without-tree");
     let candidate = write_minimal_manifest(&root);
     let surface = surface_by_id("changed_files").expect("surface");
     let command = measure_command();
     let run = command_run(11);
-    let mut observed_roundtrips = Vec::new();
-    let mut roundtrip =
-        |roundtrip: query_roundtrip::RoundtripQuery, run_id: &str, correlation_id: &str| {
-            observed_roundtrips.push((roundtrip, run_id.to_string(), correlation_id.to_string()));
-            Ok(observe_receipt(roundtrip, "pass", run_id, correlation_id))
-        };
+    let mut roundtrip = |roundtrip: query::RoundtripQuery, run_id: &str, correlation_id: &str| {
+        let mut receipt = observe_receipt(roundtrip, "pass", run_id, correlation_id);
+        if roundtrip == query::RoundtripQuery::ExplainFailure {
+            receipt.value["explanation"] = serde_json::Value::Null;
+        }
+        Ok(receipt)
+    };
 
     let reconciliation = reconcile_with_observe_roundtrip(
         &root,
@@ -142,47 +183,24 @@ fn reconciliation_passes_when_all_observe_roundtrips_match_command_run() {
         &run,
         &mut roundtrip,
     )
-    .expect("successful reconciliation");
+    .expect("missing explain tree still reports reconciliation");
 
-    assert_eq!(reconciliation.status, "pass");
-    let reconciliation = reconciliation.value;
     assert_eq!(
-        reconciliation["claim_impact"],
-        "source_local_live_loop_node_observation_only_not_speed_claim"
+        reconciliation.status,
+        "query_or_explain_reconciliation_failed"
     );
-    let run_id = reconciliation["run_id"].as_str().expect("run id");
-    let correlation_id = reconciliation["correlation_id"]
-        .as_str()
-        .expect("correlation id");
-    assert_eq!(observed_roundtrips.len(), all_roundtrips().len());
+    assert_eq!(
+        reconciliation.value["first_failed_roundtrip"]["roundtrip"],
+        "explain_failure"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup missing explain tree");
+}
+
+fn assert_publication_failure(failure: &str) {
     assert!(
-        observed_roundtrips
-            .iter()
-            .all(|(_, observed_run, observed_correlation)| {
-                observed_run == run_id && observed_correlation == correlation_id
-            })
+        ["rename failed", "json"]
+            .into_iter()
+            .any(|needle| failure.contains(needle)),
+        "{failure}"
     );
-    assert_eq!(reconciliation["logs_query"]["status"], "pass");
-    assert_eq!(reconciliation["metrics_query"]["status"], "pass");
-    assert_eq!(reconciliation["traces_query"]["status"], "pass");
-    assert_eq!(reconciliation["explain_failure"]["status"], "pass");
-    std::fs::remove_dir_all(root).expect("cleanup successful command observation");
-}
-
-fn all_roundtrips() -> [query_roundtrip::RoundtripQuery; 4] {
-    [
-        query_roundtrip::RoundtripQuery::Logs,
-        query_roundtrip::RoundtripQuery::Traces,
-        query_roundtrip::RoundtripQuery::Metrics,
-        query_roundtrip::RoundtripQuery::ExplainFailure,
-    ]
-}
-
-fn roundtrip_key(roundtrip: query_roundtrip::RoundtripQuery) -> &'static str {
-    match roundtrip {
-        query_roundtrip::RoundtripQuery::Logs => "logs_query",
-        query_roundtrip::RoundtripQuery::Metrics => "metrics_query",
-        query_roundtrip::RoundtripQuery::Traces => "traces_query",
-        query_roundtrip::RoundtripQuery::ExplainFailure => "explain_failure",
-    }
 }

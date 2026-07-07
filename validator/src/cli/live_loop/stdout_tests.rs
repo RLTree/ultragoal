@@ -19,8 +19,19 @@ fn loop_stdout_names_trace_and_query_routes() {
         "worker_count": 3,
         "task_count": 7,
         "queue_depth": 7,
+        "audit_context": {
+            "changed_inputs": {
+                "changed_file_count": 2,
+                "affected_node_count": 4,
+                "unaffected_node_count": 3
+            }
+        },
         "critical_path": "current_digest -> AuditContext",
         "claim_ceiling": "source-local loop proof only",
+        "first_product_blocker": {"id": "compile_check"},
+        "first_observability_blocker": {"id": "observe_trace"},
+        "first_speed_blocker": {"id": "fmt_check"},
+        "first_control_board_blocker": {"id": "install_audit"},
         "observability": {
             "run_id": "run-loop",
             "correlation_id": "corr-loop",
@@ -44,6 +55,13 @@ fn loop_stdout_names_trace_and_query_routes() {
     for expected in [
         "trace_id=trace-loop",
         "span_id=span-loop",
+        "first_product_blocker=compile_check",
+        "changed_file_count=2",
+        "affected_node_count=4",
+        "unaffected_node_count=3",
+        "first_observability_blocker=observe_trace",
+        "first_speed_blocker=fmt_check",
+        "first_control_board_blocker=install_audit",
         "query_logs='ultragoal observe logs query --run-id run-loop --limit 100'",
         "query_metrics='ultragoal observe metrics query --run-id run-loop --limit 100'",
         "query_traces='ultragoal observe traces query --run-id run-loop --limit 100'",

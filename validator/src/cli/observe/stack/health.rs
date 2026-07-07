@@ -5,6 +5,10 @@ use serde_json::{Value, json};
 use std::io;
 use std::path::Path;
 use std::process::{Command, Output};
+use std::thread;
+use std::time::{Duration, Instant};
+
+const STARTING_HEALTH_POLL_MS: u64 = 500;
 
 pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let endpoints = [
@@ -15,7 +19,18 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
         ("vector", "http://127.0.0.1:8686/health"),
         ("grafana", "http://127.0.0.1:3009/api/health"),
     ];
-    let mut rows = endpoints
+    let rows = health_rows(root, command, &endpoints);
+    health_receipt(root, command, rows)
+}
+
+fn health_rows(root: &Path, command: &ObserveCommand, endpoints: &[(&str, &str)]) -> Vec<Value> {
+    let mut rows = endpoint_health_rows(command, endpoints);
+    rows.extend(compose_health_rows(root));
+    wait_for_starting_compose_health(root, command, endpoints, rows)
+}
+
+fn endpoint_health_rows(command: &ObserveCommand, endpoints: &[(&str, &str)]) -> Vec<Value> {
+    endpoints
         .iter()
         .map(|(name, url)| {
             let ok = curl_ok(url, command.timeout_ms);
@@ -26,9 +41,36 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
                 "status": if ok { "pass" } else { "fail" }
             })
         })
-        .collect::<Vec<_>>();
-    rows.extend(compose_health_rows(root));
-    health_receipt(root, command, rows)
+        .collect::<Vec<_>>()
+}
+
+pub(super) fn wait_for_starting_compose_health(
+    root: &Path,
+    command: &ObserveCommand,
+    endpoints: &[(&str, &str)],
+    mut rows: Vec<Value>,
+) -> Vec<Value> {
+    let deadline = Instant::now() + Duration::from_millis(command.timeout_ms.max(1));
+    while should_retry_starting_health(&rows) && Instant::now() < deadline {
+        thread::sleep(Duration::from_millis(STARTING_HEALTH_POLL_MS));
+        rows = endpoint_health_rows(command, endpoints);
+        rows.extend(compose_health_rows(root));
+    }
+    rows
+}
+
+pub(super) fn should_retry_starting_health(rows: &[Value]) -> bool {
+    rows.iter().any(is_starting_compose_row)
+        && rows.iter().all(|row| {
+            row["status"] == "pass"
+                || (row["check_source"] == "docker_compose_ps" && is_starting_compose_row(row))
+        })
+}
+
+fn is_starting_compose_row(row: &Value) -> bool {
+    row["check_source"] == "docker_compose_ps"
+        && row["state"] == "running"
+        && row["health"] == "starting"
 }
 
 pub(crate) fn health_receipt(

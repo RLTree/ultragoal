@@ -1,4 +1,5 @@
 use super::verified_work::VerifiedLocalProof;
+use crate::cli::live_loop::surfaces::LoopValidationSurface;
 
 pub(super) fn output_digest(verified_local: &VerifiedLocalProof) -> String {
     crate::digest::bytes(
@@ -28,7 +29,7 @@ pub(super) fn proof_surface(verified_local: &VerifiedLocalProof) -> &'static str
             "executed current-candidate command with exit status, work units, digests, and timing receipt"
         }
         "verified_cache_hit" => {
-            "verified same-candidate cache replay with current input digests and equivalence proof"
+            "verified current-input cache replay with command, version, result, and output equivalence proof"
         }
         _ => "invalid proof_kind; row is blocked",
     }
@@ -42,11 +43,18 @@ pub(super) fn reconciled_command_duration_ms(verified_local: &VerifiedLocalProof
         .saturating_add(verified_local.telemetry_reconciliation_duration_ms)
 }
 
-pub(super) fn baseline_reuse_fields(proof_kind: &str) -> (&'static str, &'static str) {
+pub(super) fn baseline_reuse_fields(
+    surface: LoopValidationSurface,
+    proof_kind: &str,
+) -> (&'static str, &'static str) {
     match proof_kind {
         "verified_cache_hit" => (
             "verified_baseline_reuse",
-            "baseline_reused_from_same_candidate_current_input_timing_row",
+            "baseline_reused_from_verified_current_input_timing_row",
+        ),
+        "executed" if surface.canonical_full_command.trim() == surface.narrow_rerun.trim() => (
+            "executed_same_command_reuse",
+            "baseline_reused_from_executed_narrow_command_because_canonical_full_command_matches",
         ),
         _ => (
             "executed",

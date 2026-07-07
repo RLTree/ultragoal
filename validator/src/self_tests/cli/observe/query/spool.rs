@@ -58,7 +58,9 @@ fn observe_query_receipt_and_spool_contracts_are_typed() {
         "metric_value": 1.0,
         "labels": {"bad": "a/b secret=token ok"}
     }));
-    assert!(metric_line.contains("absecrettokenok"));
+    assert!(!metric_line.contains("bad="));
+    assert!(!metric_line.contains("secret"));
+    assert!(!metric_line.contains("token"));
     observe::telemetry::spool_write_for_test(&root, &json!({"event":"ok"})).expect("spool write");
     let spool_text =
         fs::read_to_string(root.join("validation_artifacts/observability/spool/events.jsonl"))

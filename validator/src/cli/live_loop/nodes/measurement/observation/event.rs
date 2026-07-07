@@ -1,7 +1,7 @@
 use super::diagnostics;
 use crate::cli::live_loop::{
     LiveLoopCommand, nodes::measurement::full_command::FullCommandRun,
-    nodes::measurement::observation::query_roundtrip, surfaces::LoopValidationSurface,
+    nodes::measurement::observation::query, surfaces::LoopValidationSurface,
 };
 use serde_json::Value;
 use std::path::{Path, PathBuf};
@@ -46,7 +46,12 @@ pub(super) fn write(
     let node_id = surface.id.replace('_', "-");
     let check_id = format!("live-loop-{node_id}-command-observation");
     let receipt_text = receipt_path.to_string_lossy();
-    let subcommand = format!("-lc {}", surface.narrow_rerun);
+    let subcommand = format!(
+        "-lc {}",
+        crate::cli::live_loop::nodes::measurement::full_command::runtime_command_text(
+            surface.narrow_rerun
+        )
+    );
     let observation = crate::cli::observe::telemetry::command_receipt_for_candidate(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
@@ -56,7 +61,7 @@ pub(super) fn write(
             surface: surface.surface,
             law_id: crate::cli::observe::types::LAW_ID,
             check_id: &check_id,
-            claim_id: "observability-live-loop-source-local-acceleration",
+            claim_id: "live-loop-hot-repair-feedback",
             artifact_path: command.receipt.to_string_lossy().as_ref(),
             receipt_path: receipt_text.as_ref(),
             status,
@@ -78,7 +83,7 @@ pub(super) fn write(
 }
 
 pub(super) fn receipt_path(node_id: &str) -> PathBuf {
-    query_roundtrip::receipt_path(node_id, "command-observation")
+    query::receipt_path(node_id, "command-observation")
 }
 
 fn write_receipt(root: &Path, receipt_path: &Path, value: &Value) -> Result<(), String> {

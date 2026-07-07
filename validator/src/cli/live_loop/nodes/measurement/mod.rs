@@ -1,35 +1,40 @@
 mod cache_replay;
 #[cfg(test)]
 mod command;
+#[cfg(test)]
+mod flow_tests;
 mod full_command;
 #[cfg(test)]
 mod high_frequency_nodes;
 mod observation;
+#[cfg(test)]
+mod runtime_command_tests;
+mod surface_selection;
 mod timing;
 
 use super::super::LiveLoopCommand;
+use super::super::changed_inputs::ChangedInputs;
 use super::super::graph;
-use super::super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface, surface_by_id};
+use super::super::surfaces::LoopValidationSurface;
 use full_command::{run_full_command, run_narrow_command};
-use serde_json::Value;
 use std::path::Path;
-use std::process::Command;
 use std::time::Instant;
+use surface_selection::selected_surfaces;
 use timing::receipt::{affected_set_status, print_measurements, write_node_timings};
-use timing::{record::node_timing_row, verified_work::VerifiedLocalProof};
+use timing::{record::NodeTimingRow, record::node_timing_row, verified_work::VerifiedLocalProof};
 
 pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
     let surfaces = selected_surfaces(command)?;
+    measure_surfaces(root, command, surfaces)
+}
+
+pub(crate) fn measure_surfaces(
+    root: &Path,
+    command: &LiveLoopCommand,
+    surfaces: Vec<LoopValidationSurface>,
+) -> Result<i32, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
-    let changed_files = changed_files(root);
-    let changed_files_digest = crate::digest::bytes(changed_files.join("\n").as_bytes());
-    let audit_context_digest = crate::digest::bytes(
-        format!(
-            "{}:{}:{}:{}",
-            candidate, command.tier, command.cache_mode, changed_files_digest
-        )
-        .as_bytes(),
-    );
+    let inputs = ChangedInputs::collect(root, &candidate, &command.tier, &command.cache_mode);
     let mut rows = Vec::new();
     for surface in surfaces {
         println!(
@@ -41,13 +46,13 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
             command,
             surface,
             &candidate,
-            &changed_files_digest,
-            &audit_context_digest,
-            affected_set_status(&changed_files),
+            &inputs,
+            affected_set_status(inputs.changed_file_count),
         );
         print_measurements(command, &candidate, std::slice::from_ref(&row));
         rows.push(row);
     }
+    let exit_code = i32::from(rows.iter().any(NodeTimingRow::blocks_hot_loop));
     write_node_timings(
         root,
         &command.receipt,
@@ -56,37 +61,7 @@ pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, Str
         &command.cache_mode,
         rows.clone(),
     )?;
-    Ok(i32::from(
-        rows.iter().any(|row| row["timing_status"] != "pass"),
-    ))
-}
-
-fn selected_surfaces(command: &LiveLoopCommand) -> Result<Vec<LoopValidationSurface>, String> {
-    if command.measure_all {
-        return high_frequency_surfaces_from(LOOP_VALIDATION_SURFACES);
-    }
-    let node_id = command
-        .node_id
-        .as_deref()
-        .ok_or_else(|| "loop measure requires --node <id> or --all".to_string())?;
-    surface_by_id(node_id)
-        .map(|surface| vec![surface])
-        .ok_or_else(|| format!("unknown live-loop node: {node_id}"))
-}
-
-fn high_frequency_surfaces_from(
-    surfaces: &[LoopValidationSurface],
-) -> Result<Vec<LoopValidationSurface>, String> {
-    let selected: Vec<LoopValidationSurface> = surfaces
-        .iter()
-        .copied()
-        .filter(|surface| surface.high_frequency)
-        .collect();
-    if selected.is_empty() {
-        Err("live-loop high-frequency registry has no command surfaces".to_string())
-    } else {
-        Ok(selected)
-    }
+    Ok(exit_code)
 }
 
 fn measure_surface(
@@ -94,15 +69,14 @@ fn measure_surface(
     command: &LiveLoopCommand,
     surface: LoopValidationSurface,
     candidate: &str,
-    changed_files_digest: &str,
-    audit_context_digest: &str,
+    inputs: &ChangedInputs,
     affected_set_status: &'static str,
-) -> Value {
+) -> NodeTimingRow {
     let input_digest = graph::surface_input_digest(
         surface,
         candidate,
-        changed_files_digest,
-        audit_context_digest,
+        inputs.surface_digest(surface),
+        &inputs.audit_context_digest,
     );
     if let Some((baseline, verified_local)) =
         measure_cached_verified_local(root, surface, candidate, &input_digest, command)
@@ -111,8 +85,24 @@ fn measure_surface(
             surface,
             command,
             candidate,
-            changed_files_digest,
-            audit_context_digest,
+            &inputs.changed_files_digest,
+            &inputs.audit_context_digest,
+            &input_digest,
+            &baseline,
+            &verified_local,
+            affected_set_status,
+        );
+    }
+    if same_command_baseline_reuse_allowed(surface) {
+        let verified_local =
+            measure_executed_verified_local(root, surface, candidate, &input_digest, command);
+        let baseline = verified_local.actual_work.clone();
+        return node_timing_row(
+            surface,
+            command,
+            candidate,
+            &inputs.changed_files_digest,
+            &inputs.audit_context_digest,
             &input_digest,
             &baseline,
             &verified_local,
@@ -126,13 +116,17 @@ fn measure_surface(
         surface,
         command,
         candidate,
-        changed_files_digest,
-        audit_context_digest,
+        &inputs.changed_files_digest,
+        &inputs.audit_context_digest,
         &input_digest,
         &baseline,
         &verified_local,
         affected_set_status,
     )
+}
+
+fn same_command_baseline_reuse_allowed(surface: LoopValidationSurface) -> bool {
+    surface.canonical_full_command.trim() == surface.narrow_rerun.trim()
 }
 
 fn measure_cached_verified_local(
@@ -160,8 +154,7 @@ fn measure_cached_verified_local(
         &cache_key,
         replay_started,
     ) {
-        let telemetry_reconciliation =
-            observation::reconcile(root, surface, candidate, command, &actual_work.run);
+        let telemetry_reconciliation = actual_work.telemetry_reconciliation.clone();
         actual_work.run.failure = telemetry_reconciliation.failure_summary();
         let proof = VerifiedLocalProof {
             proof_kind: "verified_cache_hit",
@@ -200,9 +193,14 @@ fn measure_executed_verified_local(
     );
     let graph_overhead_ms = elapsed_ms(started);
     let mut actual_work = run_narrow_command(root, surface);
-    let telemetry_reconciliation =
-        observation::reconcile(root, surface, candidate, command, &actual_work);
-    actual_work.failure = telemetry_reconciliation.failure_summary();
+    let telemetry_reconciliation = if hot_validation_retains_observability(command) {
+        observation::deferred_hot_validation(surface)
+    } else {
+        observation::reconcile(root, surface, candidate, command, &actual_work)
+    };
+    if telemetry_reconciliation.status != "deferred_hot_loop_observability" {
+        actual_work.failure = telemetry_reconciliation.failure_summary();
+    }
     VerifiedLocalProof {
         proof_kind: "executed",
         cache_hit: false,
@@ -221,24 +219,12 @@ fn measure_executed_verified_local(
     }
 }
 
+fn hot_validation_retains_observability(command: &LiveLoopCommand) -> bool {
+    command.tier == "hot" && command.cache_mode == "verified-local"
+}
+
 fn elapsed_ms(started: Instant) -> u64 {
     u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
         .max(1)
-}
-
-fn changed_files(root: &Path) -> Vec<String> {
-    let output = Command::new("git")
-        .args(["status", "--short", "--untracked-files=all"])
-        .current_dir(root)
-        .output();
-    output
-        .ok()
-        .map(|out| {
-            String::from_utf8_lossy(&out.stdout)
-                .lines()
-                .map(ToString::to_string)
-                .collect()
-        })
-        .unwrap_or_default()
 }

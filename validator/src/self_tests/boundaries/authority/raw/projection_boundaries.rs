@@ -43,18 +43,18 @@ fn raw_authority_scanner_allows_named_product_projection_boundaries() {
         ),
         (
             "validator/src/cli/live_loop/receipt.rs",
-            "use serde_json::{json, Value};\nuse std::path::Path;\nstruct AuditContext;\nstruct CommandTelemetry;\npub(crate) fn project(root: &Path, value: &Value) -> Value { let _ = root; let _ = \"observability_live_loop_source_local_increment\"; json!({\"value\":value}) }\n",
+            "use serde_json::{json, Value};\nuse std::path::Path;\nstruct AuditContext;\nstruct CommandTelemetry;\npub(crate) fn project(root: &Path, value: &Value) -> Value { let _ = root; let _ = \"live_loop_hot_repair_feedback\"; json!({\"value\":value}) }\n",
         ),
         (
             "validator/src/cli/observe/telemetry/claims.rs",
             "use serde_json::{json, Value};\nstruct ObserveOperation;\npub(crate) fn project(value: &Value) -> Value { let _ = \"observability_product_closure_failed_completion_readiness_release_update_goal_blocked\"; let _ = bounds_status(); json!({\"value\":value}) }\n",
         ),
         (
-            "validator/src/cli/observe/telemetry/metric.rs",
+            "validator/src/cli/observe/telemetry/metric/mod.rs",
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = \"ultragoal_command_total\"; let _ = \"ultragoal_command_duration_ms\"; let _ = \"saturation_status\"; json!({\"value\":value}) }\n",
         ),
         (
-            "validator/src/cli/observe/telemetry/trace.rs",
+            "validator/src/cli/observe/telemetry/trace/mod.rs",
             "use serde_json::{json, Value};\npub(crate) fn project(value: &Value) -> Value { let _ = child_spans(); let _ = parent_span_id(); let _ = span_kind(); json!({\"value\":value}) }\n",
         ),
         (

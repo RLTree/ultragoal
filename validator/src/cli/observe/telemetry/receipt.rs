@@ -10,8 +10,18 @@ pub(super) fn base(
     status: &str,
     failure: Option<&str>,
 ) -> Result<Value, String> {
-    let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;
+    base_for_candidate(root, command, status, failure, candidate)
+}
+
+pub(super) fn base_for_candidate(
+    root: &Path,
+    command: &ObserveCommand,
+    status: &str,
+    failure: Option<&str>,
+    candidate: String,
+) -> Result<Value, String> {
+    let started = Instant::now();
     let run_id = command
         .run_id
         .clone()

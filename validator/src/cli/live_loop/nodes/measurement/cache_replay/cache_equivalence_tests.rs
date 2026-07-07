@@ -2,7 +2,7 @@ use super::*;
 use serde_json::json;
 
 #[test]
-fn cache_replay_accepts_same_candidate_verified_cache_rows() {
+fn cache_replay_accepts_current_input_verified_cache_rows() {
     let fixture = ReplayFixture::new();
     write_timing_row(&fixture.root, verified_cache_row(&fixture));
 
@@ -18,7 +18,7 @@ fn cache_replay_accepts_same_candidate_verified_cache_rows() {
 }
 
 #[test]
-fn cache_replay_rejects_verified_cache_rows_without_same_candidate_equivalence() {
+fn cache_replay_rejects_verified_cache_rows_without_current_input_equivalence() {
     let fixture = ReplayFixture::new();
     for bad_row in [
         verified_cache_row(&fixture).with_value("cache_hit", json!(false)),

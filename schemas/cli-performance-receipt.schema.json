@@ -592,6 +592,11 @@
         "result_digest",
         "output_digest",
         "telemetry_reconciliation_status",
+        "validation_status",
+        "validation_cache_status",
+        "observability_status",
+        "speed_claim_status",
+        "observability_failure_class",
         "timing_status",
         "failure_class",
         "where_failed",
@@ -673,11 +678,46 @@
           "$ref": "#/$defs/artifactPathList"
         },
         "telemetry_reconciliation_status": {
-          "const": "pass"
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_status": {
+          "enum": [
+            "pass",
+            "fail",
+            "blocked"
+          ]
+        },
+        "validation_cache_status": {
+          "enum": [
+            "reusable",
+            "not_reusable",
+            "unknown"
+          ]
+        },
+        "observability_status": {
+          "enum": [
+            "pass",
+            "partial",
+            "fail",
+            "unavailable"
+          ]
+        },
+        "speed_claim_status": {
+          "enum": [
+            "supported",
+            "withheld",
+            "failed"
+          ]
+        },
+        "observability_failure_class": {
+          "type": "string",
+          "minLength": 1
         },
         "timing_status": {
           "enum": [
             "pass",
+            "partial",
             "fail"
           ]
         },

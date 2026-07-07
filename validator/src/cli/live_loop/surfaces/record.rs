@@ -2,6 +2,9 @@ use crate::scheduler::TaskClass;
 
 pub(crate) const SAME_CANDIDATE: &str = "same_candidate_observed";
 pub(crate) const ROUNDTRIP_REQUIRED: &str = "requires_command_telemetry_roundtrip";
+pub(crate) const HOT_REPAIR_POLICY: &str = "routine_hot_repair";
+pub(crate) const BOUNDARY_PROOF_POLICY: &str = "strict_boundary_proof";
+pub(crate) const CONTEXT_POLICY: &str = "context_observation";
 const AUTHORITY_ARTIFACT_WRITE_REASON: &str =
     "writes canonical validation_artifacts or build artifacts requiring serial authority control";
 
@@ -16,6 +19,7 @@ pub(crate) struct LoopValidationSurface {
     pub(crate) execution_task_class: TaskClass,
     pub(crate) execution_serial_reason: &'static str,
     pub(crate) high_frequency: bool,
+    pub(crate) hot_loop_policy: &'static str,
 }
 
 const fn validation_surface_record(
@@ -28,6 +32,7 @@ const fn validation_surface_record(
     execution_task_class: TaskClass,
     execution_serial_reason: &'static str,
     high_frequency: bool,
+    hot_loop_policy: &'static str,
 ) -> LoopValidationSurface {
     LoopValidationSurface {
         id,
@@ -39,6 +44,7 @@ const fn validation_surface_record(
         execution_task_class,
         execution_serial_reason,
         high_frequency,
+        hot_loop_policy,
     }
 }
 
@@ -60,6 +66,7 @@ pub(crate) const fn context_read_surface(
         TaskClass::PureReadParallel,
         "none",
         false,
+        CONTEXT_POLICY,
     )
 }
 
@@ -81,6 +88,7 @@ pub(crate) const fn context_authority_artifact_surface(
         TaskClass::SharedAuthorityWriteSerial,
         AUTHORITY_ARTIFACT_WRITE_REASON,
         false,
+        CONTEXT_POLICY,
     )
 }
 
@@ -101,6 +109,7 @@ pub(crate) const fn hot_loop_read_surface(
         TaskClass::PureReadParallel,
         "none",
         true,
+        HOT_REPAIR_POLICY,
     )
 }
 
@@ -121,6 +130,28 @@ pub(crate) const fn hot_loop_authority_artifact_surface(
         TaskClass::SharedAuthorityWriteSerial,
         AUTHORITY_ARTIFACT_WRITE_REASON,
         true,
+        HOT_REPAIR_POLICY,
+    )
+}
+
+pub(crate) const fn boundary_authority_artifact_surface(
+    id: &'static str,
+    surface: &'static str,
+    command: &'static str,
+    canonical_full_command: &'static str,
+    narrow_rerun: &'static str,
+) -> LoopValidationSurface {
+    validation_surface_record(
+        id,
+        surface,
+        command,
+        canonical_full_command,
+        narrow_rerun,
+        ROUNDTRIP_REQUIRED,
+        TaskClass::SharedAuthorityWriteSerial,
+        AUTHORITY_ARTIFACT_WRITE_REASON,
+        false,
+        BOUNDARY_PROOF_POLICY,
     )
 }
 
@@ -191,5 +222,19 @@ mod tests {
             TaskClass::SharedAuthorityWriteSerial
         );
         assert!(hot_loop_writer.high_frequency);
+
+        let boundary_writer = boundary_authority_artifact_surface(
+            "source_audit",
+            "source_audit",
+            "ultragoal source audit",
+            "target/debug/ultragoal --root . source audit",
+            "target/debug/ultragoal --root . source audit",
+        );
+        assert_eq!(
+            boundary_writer.execution_task_class,
+            TaskClass::SharedAuthorityWriteSerial
+        );
+        assert!(!boundary_writer.high_frequency);
+        assert_eq!(boundary_writer.hot_loop_policy, BOUNDARY_PROOF_POLICY);
     }
 }

@@ -1,5 +1,7 @@
+use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
+use serde_json::json;
 use std::collections::BTreeMap;
 
 pub(super) fn node_timing(
@@ -22,6 +24,15 @@ pub(super) fn node_timing(
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
+        validation_status: "pass".to_string(),
+        validation_cache_status: "reusable".to_string(),
+        observability_status: "pass".to_string(),
+        speed_claim_status: if timing_status == "pass" {
+            "supported".to_string()
+        } else {
+            "failed".to_string()
+        },
+        observability_failure_class: "none".to_string(),
         verified_local_command: "cargo fmt --all --check".to_string(),
         result_digest: "sha256:result".to_string(),
         output_digest: "sha256:output".to_string(),
@@ -32,9 +43,23 @@ pub(super) fn node_timing(
         next_repair: "none".to_string(),
         timing_status,
         failure_class,
+        baseline_proof_kind: "executed".to_string(),
+        baseline_invalidation_proof: "baseline_command_executed_for_current_measurement"
+            .to_string(),
         baseline_exit_code: Some(0),
         baseline_launch_error: false,
         baseline_failure: CommandFailureSummary::default(),
+        telemetry_reconciliation: json!({
+            "status": "pass",
+            "roundtrip_durations_ms": {
+                "logs_query": 1,
+                "metrics_query": 1,
+                "traces_query": 1,
+                "explain_failure": 1
+            },
+            "first_failed_roundtrip": null
+        })
+        .into(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: NODE_TIMING_REL.to_string(),
     }
@@ -59,7 +84,7 @@ pub(super) fn mandatory_law_failure() -> CommandFailureSummary {
 
 pub(super) fn projected_node(timing: NodeTiming) -> serde_json::Value {
     let mut timings = BTreeMap::new();
-    timings.insert("focused_rust_tests".to_string(), timing);
+    timings.insert("live_loop_measurement_rust_tests".to_string(), timing);
     super::super::super::tasks(
         "sha256:candidate",
         "sha256:changed",
@@ -68,9 +93,10 @@ pub(super) fn projected_node(timing: NodeTiming) -> serde_json::Value {
         "verified-local",
         Some(1_000),
         &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
     )
     .into_iter()
     .map(|task| task())
-    .find(|node| node["node_id"] == "focused_rust_tests")
+    .find(|node| node["node_id"] == "live_loop_measurement_rust_tests")
     .expect("focused rust node")
 }

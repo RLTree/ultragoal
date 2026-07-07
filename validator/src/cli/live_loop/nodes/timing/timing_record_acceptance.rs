@@ -5,10 +5,12 @@ use serde_json::{Value, json};
 fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
     let timings = read_with_patch(json!({
         "proof_kind": "verified_cache_hit",
+        "baseline_proof_kind": "verified_baseline_reuse",
+        "baseline_invalidation_proof": "baseline_reused_from_verified_current_input_timing_row",
         "cache_hit": true,
         "work_unit_count": 0,
         "equivalence_status": "verified_same_candidate_cache_replay",
-        "invalidation_proof": "cache_key_current_input_digest_command_versions_and_candidate_row_matched",
+        "invalidation_proof": "cache_key_current_input_digest_command_versions_and_environment_matched",
         "prior_result_digest": digest("result"),
         "replayed_output_digest": digest("output"),
         "cache_equivalence_status": "pass"
@@ -62,8 +64,12 @@ fn read_with_patch(patch: Value) -> usize {
     );
     let candidate = "sha256:current";
     let changed = crate::digest::bytes(b"");
-    let context =
-        crate::digest::bytes(format!("{candidate}:hot:verified-local:{changed}").as_bytes());
+    let context = crate::digest::bytes(
+        "validator=ultragoal-rust;law=observability-live-loop;tier=hot;cache=verified-local"
+            .as_bytes(),
+    );
+    let changed_inputs =
+        crate::cli::live_loop::changed_inputs::ChangedInputs::for_tests(&changed, &context);
     let input = super::graph::surface_input_digest(
         super::surface_by_id("fmt_check").expect("fmt surface"),
         candidate,
@@ -77,14 +83,7 @@ fn read_with_patch(patch: Value) -> usize {
     }
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({"nodes": [row]}))
         .expect("timing artifact");
-    let timings = read_current(
-        &root,
-        candidate,
-        "hot",
-        "verified-local",
-        &changed,
-        &context,
-    );
+    let timings = read_current(&root, candidate, "hot", "verified-local", &changed_inputs);
     std::fs::remove_dir_all(root).expect("cleanup timing acceptance");
     timings.len()
 }
@@ -134,9 +133,20 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "where_failed": "none",
         "why_failed": "none",
         "next_repair": "none",
+        "telemetry_reconciliation": {"status": "pass"},
         "affected_set_status": "clean_worktree_no_affected_files"
     });
     let object = row.as_object_mut().expect("timing row object");
+    object.insert(
+        "baseline_proof_kind".to_string(),
+        json!("executed_same_command_reuse"),
+    );
+    object.insert(
+        "baseline_invalidation_proof".to_string(),
+        json!(
+            "baseline_reused_from_executed_narrow_command_because_canonical_full_command_matches"
+        ),
+    );
     object.insert(
         "command_argv".to_string(),
         json!(["bash", "-lc", "cargo fmt --all --check"]),
@@ -147,6 +157,11 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     object.insert("product_latency_ms".to_string(), json!(6));
     object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
+    object.insert("validation_status".to_string(), json!("pass"));
+    object.insert("validation_cache_status".to_string(), json!("reusable"));
+    object.insert("observability_status".to_string(), json!("pass"));
+    object.insert("speed_claim_status".to_string(), json!("supported"));
+    object.insert("observability_failure_class".to_string(), json!("none"));
     row
 }
 

@@ -118,3 +118,29 @@ fn target_event_with_missing_operation_is_not_misclassified_as_query_observation
     assert!(found.get("operation").is_none());
     std::fs::remove_dir_all(root).expect("cleanup no operation target");
 }
+
+#[test]
+fn metrics_transport_uses_explicit_evaluation_time_for_fresh_samples() {
+    let mut command = selector_command();
+    command.timeout_ms = 2500;
+
+    let args = super::super::transport::metric_query_args_for_test(
+        "ultragoal_command_event_unix_seconds",
+        &command,
+    );
+
+    assert!(
+        args.windows(2)
+            .any(|pair| pair[0] == "--max-time" && pair[1] == "2.5")
+    );
+    assert!(
+        args.iter()
+            .any(|arg| arg == "query=ultragoal_command_event_unix_seconds")
+    );
+    assert!(args.iter().any(|arg| {
+        arg.strip_prefix("time=")
+            .and_then(|value| value.parse::<i64>().ok())
+            .is_some_and(|value| value > 0)
+    }));
+    assert!(args.iter().any(|arg| arg == "nocache=1"));
+}

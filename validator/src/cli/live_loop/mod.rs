@@ -1,12 +1,20 @@
+mod blockers;
+mod changed_inputs;
 #[cfg(test)]
 mod command_registry_tests;
 mod context;
 mod graph;
+#[cfg(test)]
+mod loop_status_projection_tests;
 mod node_timing_refresh;
 mod nodes;
 #[cfg(test)]
 mod parser_tests;
+#[cfg(test)]
+mod projection_tests;
 mod receipt;
+#[cfg(test)]
+mod receipt_tests;
 #[cfg(test)]
 mod run_node_timing_refresh_tests;
 mod stdout;
@@ -15,6 +23,8 @@ mod stdout_tests;
 mod surfaces;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod timing_refresh_policy_tests;
 
 use context::AuditContext;
 use receipt::loop_receipt;
@@ -99,16 +109,18 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
         crate::output_path::claim_artifact_path(root, &command.receipt, "live loop receipt")?;
     crate::output_path::prepare_parent(&receipt_path)?;
     let mut snapshot = loop_snapshot(root, &candidate, command, config);
-    let mut timing_refreshes = Vec::new();
-    if let Some(measurement) =
-        node_timing_refresh::refresh_current_blocker_timing(root, command, &snapshot.first_blocker)?
-    {
-        timing_refreshes.push(measurement);
+    let timing_refreshes = node_timing_refresh::refresh_hot_repair_timing(
+        root,
+        command,
+        &snapshot.first_blocker,
+        snapshot.context.changed_inputs(),
+    )?;
+    if !timing_refreshes.is_empty() {
         snapshot = loop_snapshot(root, &candidate, command, config);
     }
     crate::json_boundary::write_json(&current_state_path, &snapshot.current_state)?;
     let first_blocker = snapshot.first_blocker.clone();
-    let status = status_for_blocker(&first_blocker);
+    let status = blockers::status_for_blockers(&snapshot.first_product_blocker, &first_blocker);
     let receipt_result = loop_receipt(
         root,
         command,
@@ -116,6 +128,10 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
         snapshot.scheduled,
         snapshot.current_state,
         first_blocker.clone(),
+        snapshot.first_product_blocker,
+        snapshot.first_observability_blocker,
+        snapshot.first_speed_blocker,
+        snapshot.first_control_board_blocker,
         timing_refreshes,
         status,
         started,
@@ -131,6 +147,10 @@ struct LoopSnapshot {
     scheduled: crate::scheduler::Scheduled<Value>,
     current_state: Value,
     first_blocker: Value,
+    first_product_blocker: Value,
+    first_observability_blocker: Value,
+    first_speed_blocker: Value,
+    first_control_board_blocker: Value,
 }
 
 fn loop_snapshot(
@@ -144,25 +164,28 @@ fn loop_snapshot(
         crate::scheduler::run_ordered(config, TaskClass::PureReadParallel, context.tasks());
     let current_state =
         crate::cli::current_state::snapshot_for_candidate(root, candidate.to_string());
-    let first_blocker = first_loop_blocker(&scheduled.values, &current_state);
+    let first_product_blocker = blockers::first_product_blocker(&scheduled.values);
+    let first_observability_blocker =
+        graph::first_observability_blocker(&scheduled.values).unwrap_or_else(blockers::none);
+    let first_speed_blocker =
+        graph::first_speed_blocker(&scheduled.values).unwrap_or_else(blockers::none);
+    let first_control_board_blocker = blockers::first_control_board_blocker(&current_state);
+    let first_blocker = blockers::first_loop_blocker(
+        &first_product_blocker,
+        &first_observability_blocker,
+        &first_speed_blocker,
+        &first_control_board_blocker,
+    );
     LoopSnapshot {
         context,
         scheduled,
         current_state,
         first_blocker,
+        first_product_blocker,
+        first_observability_blocker,
+        first_speed_blocker,
+        first_control_board_blocker,
     }
-}
-
-fn status_for_blocker(blocker: &Value) -> &'static str {
-    if blocker.get("id").and_then(Value::as_str) == Some("none") {
-        "pass"
-    } else {
-        "fail"
-    }
-}
-
-fn first_loop_blocker(nodes: &[Value], current_state: &Value) -> Value {
-    graph::first_blocker(nodes).unwrap_or_else(|| current_state["first_blocker"].clone())
 }
 
 fn opt_string(args: &[String], key: &str) -> Option<String> {
@@ -186,32 +209,5 @@ fn opt_jobs(args: &[String], key: &str) -> Result<Option<usize>, String> {
             .parse()
             .map(Some)
             .map_err(|_| format!("invalid --jobs value: {raw}")),
-    }
-}
-
-#[cfg(test)]
-mod projection_tests {
-    use serde_json::json;
-
-    #[test]
-    fn loop_status_projects_current_blocker_state() {
-        assert_eq!(super::status_for_blocker(&json!({"id": "none"})), "pass");
-        assert_eq!(
-            super::status_for_blocker(&json!({"id": "fmt_check"})),
-            "fail"
-        );
-    }
-
-    #[test]
-    fn loop_blocker_uses_current_state_when_graph_has_no_blocker() {
-        let current_state = json!({
-            "first_blocker": {
-                "id": "coverage_prove",
-                "why_failed": "coverage receipt is stale"
-            }
-        });
-        let blocker = super::first_loop_blocker(&[], &current_state);
-        assert_eq!(blocker["id"], "coverage_prove");
-        assert_eq!(blocker["why_failed"], "coverage receipt is stale");
     }
 }

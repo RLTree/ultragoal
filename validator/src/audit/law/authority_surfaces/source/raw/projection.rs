@@ -47,6 +47,7 @@ fn projection_value_text(text: &str) -> bool {
         || text.contains("csv(")
         || text.contains("checks: &mut serde_json::Map")
         || text.contains("serde_json::Map<String, Value>")
+        || text.contains("Map<String, Value>")
         || text.contains("checks.insert(")
         || text.contains("telemetry::query_result")
         || text.contains("PathBuf::from(format!(")

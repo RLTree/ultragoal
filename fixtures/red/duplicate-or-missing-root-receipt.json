@@ -12,7 +12,7 @@
       "path": "/lane_registry/root_verification_stages/final_all_lanes_gate"
     }
   ],
-  "notes": "remove final root verification phase",
+  "notes": "remove final root verification step",
   "materialization": {
     "expected_validation_layer": "schema",
     "post_patch_schema_valid": false,

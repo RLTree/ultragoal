@@ -27,26 +27,34 @@ pub(super) fn command_run(duration_ms: u64) -> FullCommandRun {
 }
 
 pub(super) fn observe_receipt(
-    roundtrip: query_roundtrip::RoundtripQuery,
+    roundtrip: query::RoundtripQuery,
     status: &str,
     run_id: &str,
     correlation_id: &str,
-) -> query_roundtrip::ObserveReceipt {
-    query_roundtrip::ObserveReceipt {
+) -> query::ObserveReceipt {
+    query::ObserveReceipt {
         receipt: format!(
             "validation_artifacts/observability/live-loop/commands/{roundtrip:?}.json"
         ),
         exit_code: 0,
         status: status.to_string(),
+        duration_ms: 7,
         value: match roundtrip {
-            query_roundtrip::RoundtripQuery::ExplainFailure => json!({
+            query::RoundtripQuery::ExplainFailure => json!({
                 "status": status,
                 "roundtrip": format!("{roundtrip:?}"),
                 "run_id": run_id,
                 "correlation_id": correlation_id,
                 "bounded_output_proof": "pass",
                 "failure_class": "none",
-                "claim_impact": "observability_evidence_only"
+                "claim_impact": "observability_evidence_only",
+                "explanation": {
+                    "query_evidence": {
+                        "logs": {"status":"pass"},
+                        "metrics": {"status":"pass"},
+                        "traces": {"status":"pass"}
+                    }
+                }
             }),
             _ => json!({
                 "status": status,

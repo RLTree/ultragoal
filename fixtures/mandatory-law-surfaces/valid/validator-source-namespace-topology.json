@@ -4,25 +4,26 @@
     "namespace_class_generated_for_hand_authored_source",
     "namespace_class_waiver_field_present",
     "namespace_validator_source_history_name",
+    "namespace_validator_source_partial_module_factoring",
     "namespace_validator_source_top_level_internal_cluster"
   ],
   "claim_ceiling_guard": "completion_review_package_readiness_release_cli_self_law_final_packet_update_goal_claims_withheld_when_validator_source_topology_or_semantic_repo_law_fails",
   "enforcement_status": "deterministic_fail_closed",
   "evidence_artifacts": [
     {
-      "digest": "sha256:07e91d6cd920667abcf8c3237785ec40d044ddc534e857f231b453136a149650",
+      "digest": "sha256:b579c4f8a541af8428efa5f5a401146f9c80b6a416e276855ba991ad1f1cee8e",
       "path": "validator/src/audit/namespace/source/topology.rs"
     },
     {
-      "digest": "sha256:7160c81964c5e79bd9ce5da7bdb90768b44dc8a56be39a7860466dab80c7f643",
+      "digest": "sha256:72f1bcbd0f499b3a77477ce9ecaa8b7607de1e5eeffa389b74855f978f4b1c48",
       "path": "validator/src/audit/namespace/classes.rs"
     },
     {
-      "digest": "sha256:35d2f89e5f14a8624db9101d0594f896a18c565f5fc27411b55b7808ce996caf",
+      "digest": "sha256:6359fa4fc34b1c9da869ec638712ac68c94f27aacbab0012e79a8ce39cc6404a",
       "path": "validator/src/audit/namespace/law/mod.rs"
     },
     {
-      "digest": "sha256:cce6c9611674e59b239e82981bbadbdb0cacc51160a4dbef1153c209485da8a5",
+      "digest": "sha256:565b1ba7e54545c405afb857f76cb85f98ee544502f1cfeb11dba20ba50c315d",
       "path": "validator/src/self_tests/namespace/red_fixtures.rs"
     },
     {
@@ -32,6 +33,10 @@
     {
       "digest": "sha256:c2fefea05a80ec9365d651abf2c74d6b28c3519d479efce1add3fa995a86b30e",
       "path": "fixtures/red/namespace-validator-source-widened-class-tamper-red.json"
+    },
+    {
+      "digest": "sha256:cbeec92da27d710611fcf5e207d79d0a19c0068a472d8fd703caba1da41b7a1a",
+      "path": "fixtures/red/namespace-validator-source-partial-module-factoring-red.json"
     }
   ],
   "foundational_trace_id": "validator-source-namespace-topology",
@@ -41,6 +46,7 @@
     "namespace_class_generated_for_hand_authored_source": true,
     "namespace_class_waiver_field_present": true,
     "namespace_validator_source_history_name": true,
+    "namespace_validator_source_partial_module_factoring": true,
     "namespace_validator_source_top_level_internal_cluster": true
   },
   "red_fixture_ids": [
@@ -51,6 +57,7 @@
     "namespace-validator-source-generated-class-red",
     "namespace-validator-source-iinternal-typo-red",
     "namespace-validator-source-manifest-listing-cannot-bless-red",
+    "namespace-validator-source-partial-module-factoring-red",
     "namespace-validator-source-top-level-internal-cluster-red",
     "namespace-validator-source-top-level-internal-coverage-wave-red",
     "namespace-validator-source-widened-class-tamper-red"

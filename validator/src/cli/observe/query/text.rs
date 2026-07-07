@@ -50,7 +50,7 @@ fn metric_query_text(command: &ObserveCommand) -> String {
 
 fn bounded_metric_query(selector: &str) -> String {
     format!(
-        "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({selector}[5m]))"
+        "sum by (__name__,command,operation,status,law_id,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({selector}[5m]))"
     )
 }
 
@@ -197,7 +197,7 @@ mod tests {
         let query = query_text(&command);
         assert_eq!(
             query,
-            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\",check_id=\"coverage-prove-observability-binding\"}[5m]))"
+            "sum by (__name__,command,operation,status,law_id,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\",check_id=\"coverage-prove-observability-binding\"}[5m]))"
         );
     }
 
@@ -232,7 +232,7 @@ mod tests {
         let query = query_text(&metrics);
         assert_eq!(
             query,
-            "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\"}[5m]))"
+            "sum by (__name__,command,operation,status,law_id,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\"}[5m]))"
         );
         assert!(!query.contains("run_id=\"run-abc\""));
         assert!(!query.contains("correlation_id=\"corr-abc\""));

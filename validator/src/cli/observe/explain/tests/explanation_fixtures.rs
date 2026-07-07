@@ -21,7 +21,7 @@ pub(super) fn write_run_event(root: &std::path::Path, run_id: &str, why_failed: 
                 "check_id": "full-local-observability-stack-integration-non-opaque-failure",
                 "claim_id": "observability-control-plane",
                 "query_hint_logql": "_time:5m operation:observe.prove",
-                "query_hint_promql": "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth\",operation=\"observe.prove\"}[5m]))",
+                "query_hint_promql": "sum by (__name__,command,operation,status,law_id,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({__name__=~\"ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds\",operation=\"observe.prove\"}[5m]))",
                 "query_hint_traceql": "{operation=\"observe.prove\"}"
             })
         ),

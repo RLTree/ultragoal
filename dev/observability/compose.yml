@@ -39,6 +39,9 @@ services:
       - -httpListenAddr=:10428
       - -retentionPeriod=2d
       - -storageDataPath=/storage
+      - -inmemoryDataFlushInterval=1s
+      - -insert.indexFlushInterval=250ms
+      - -search.latencyOffset=0s
       - -otlpGRPCListenAddr=:4317
       - -otlpGRPC.tls=false
     ports:

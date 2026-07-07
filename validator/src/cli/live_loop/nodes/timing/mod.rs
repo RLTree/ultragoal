@@ -1,54 +1,23 @@
-use super::super::graph;
 use super::super::surfaces::surface_by_id;
+use super::super::{changed_inputs::ChangedInputs, graph};
 use super::command_failure::CommandFailureSummary;
+pub(crate) use node_timing::{NodeTiming, TelemetryReconciliationRecord};
 use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
+mod node_timing;
 mod record_fields;
 
 pub(crate) const NODE_TIMING_REL: &str =
     "validation_artifacts/observability/live-loop-node-timing.json";
-
-#[derive(Clone, Debug)]
-pub(crate) struct NodeTiming {
-    pub(crate) baseline_duration_ms: u64,
-    pub(crate) verified_local_duration_ms: u64,
-    pub(crate) proof_kind: String,
-    pub(crate) cache_hit: bool,
-    pub(crate) cache_key: String,
-    pub(crate) work_unit_count: u64,
-    pub(crate) actual_work_duration_ms: u64,
-    pub(crate) graph_overhead_ms: u64,
-    pub(crate) reconciled_command_duration_ms: u64,
-    pub(crate) product_latency_ms: u64,
-    pub(crate) equivalence_status: String,
-    pub(crate) invalidation_proof: String,
-    pub(crate) telemetry_reconciliation_status: String,
-    pub(crate) verified_local_command: String,
-    pub(crate) result_digest: String,
-    pub(crate) output_digest: String,
-    pub(crate) verified_local_result_digest: String,
-    pub(crate) verified_local_output_digest: String,
-    pub(crate) where_failed: String,
-    pub(crate) why_failed: String,
-    pub(crate) next_repair: String,
-    pub(crate) timing_status: String,
-    pub(crate) failure_class: String,
-    pub(crate) baseline_exit_code: Option<i32>,
-    pub(crate) baseline_launch_error: bool,
-    pub(crate) baseline_failure: CommandFailureSummary,
-    pub(crate) affected_set_status: String,
-    pub(crate) timing_source: String,
-}
 
 pub(crate) fn read_current(
     root: &Path,
     candidate_digest: &str,
     tier: &str,
     cache_mode: &str,
-    changed_files_digest: &str,
-    audit_context_digest: &str,
+    changed_inputs: &ChangedInputs,
 ) -> BTreeMap<String, NodeTiming> {
     let Ok(value) = crate::json_boundary::read_json(&root.join(NODE_TIMING_REL)) else {
         return BTreeMap::new();
@@ -61,11 +30,11 @@ pub(crate) fn read_current(
             let expected_input = graph::surface_input_digest(
                 surface,
                 candidate_digest,
-                changed_files_digest,
-                audit_context_digest,
+                changed_inputs.surface_digest(surface),
+                &changed_inputs.audit_context_digest,
             );
-            if record_fields::text(row, "candidate_digest")? != candidate_digest
-                || record_fields::text(row, "tier")? != tier
+            let row_candidate = record_fields::text(row, "candidate_digest")?;
+            if record_fields::text(row, "tier")? != tier
                 || record_fields::text(row, "cache_mode")? != cache_mode
                 || record_fields::text(row, "input_digest")? != expected_input
                 || record_fields::text(row, "current_input_digest")? != expected_input
@@ -103,8 +72,18 @@ pub(crate) fn read_current(
             }
             let equivalence_status = record_fields::text(row, "equivalence_status")?;
             let invalidation_proof = record_fields::text(row, "invalidation_proof")?;
+            if row_candidate != candidate_digest && !surface.high_frequency {
+                return None;
+            }
             let telemetry_reconciliation_status =
                 record_fields::text(row, "telemetry_reconciliation_status")?;
+            let validation_status = record_fields::nonempty_text(row, "validation_status")?;
+            let validation_cache_status =
+                record_fields::nonempty_text(row, "validation_cache_status")?;
+            let observability_status = record_fields::nonempty_text(row, "observability_status")?;
+            let speed_claim_status = record_fields::nonempty_text(row, "speed_claim_status")?;
+            let observability_failure_class =
+                record_fields::nonempty_text(row, "observability_failure_class")?;
             let version_fields = [
                 record_fields::text(row, "validator_version")?,
                 record_fields::text(row, "law_version")?,
@@ -151,14 +130,28 @@ pub(crate) fn read_current(
             let timing_status = record_fields::text(row, "timing_status").unwrap_or("fail");
             let failure_class = record_fields::text(row, "failure_class")
                 .unwrap_or("live_loop_node_measurement_failed");
+            let baseline_proof_kind = record_fields::nonempty_text(row, "baseline_proof_kind")?;
+            let baseline_invalidation_proof =
+                record_fields::nonempty_text(row, "baseline_invalidation_proof")?;
+            let telemetry_reconciliation =
+                TelemetryReconciliationRecord::from_value(row.get("telemetry_reconciliation")?)?;
             if timing_status == "pass"
                 && (failure_class != "none" || telemetry_reconciliation_status != "pass")
             {
                 return None;
             }
+            if timing_status == "partial"
+                && (validation_status != "pass" || speed_claim_status != "withheld")
+            {
+                return None;
+            }
+            if timing_status == "fail" && failure_class == "none" {
+                return None;
+            }
             match proof_kind {
                 "executed" => {
                     if cache_hit
+                        || row_candidate != candidate_digest
                         || work_unit_count == 0
                         || equivalence_status != "executed_current_candidate_not_cache_replay"
                         || invalidation_proof.is_empty()
@@ -211,6 +204,11 @@ pub(crate) fn read_current(
                     equivalence_status: equivalence_status.to_string(),
                     invalidation_proof: invalidation_proof.to_string(),
                     telemetry_reconciliation_status: telemetry_reconciliation_status.to_string(),
+                    validation_status: validation_status.to_string(),
+                    validation_cache_status: validation_cache_status.to_string(),
+                    observability_status: observability_status.to_string(),
+                    speed_claim_status: speed_claim_status.to_string(),
+                    observability_failure_class: observability_failure_class.to_string(),
                     verified_local_command: verified_local_command.to_string(),
                     result_digest: result_digest.to_string(),
                     output_digest: output_digest.to_string(),
@@ -221,11 +219,14 @@ pub(crate) fn read_current(
                     next_repair: next_repair.to_string(),
                     timing_status: timing_status.to_string(),
                     failure_class: failure_class.to_string(),
+                    baseline_proof_kind: baseline_proof_kind.to_string(),
+                    baseline_invalidation_proof: baseline_invalidation_proof.to_string(),
                     baseline_exit_code,
                     baseline_launch_error,
                     baseline_failure: CommandFailureSummary::from_value(
                         row.get("baseline_failure"),
                     ),
+                    telemetry_reconciliation,
                     affected_set_status: record_fields::text(row, "affected_set_status")
                         .unwrap_or("unknown")
                         .to_string(),
@@ -236,6 +237,8 @@ pub(crate) fn read_current(
         .collect()
 }
 
+#[cfg(test)]
+mod candidate_boundary_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]

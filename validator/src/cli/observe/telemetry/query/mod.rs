@@ -15,6 +15,22 @@ pub(super) fn result(
     status: &str,
     failure: Option<&str>,
 ) -> Result<Value, String> {
+    let candidate = crate::package::inventory::package_digest(root)?;
+    result_for_candidate(
+        root, command, query_kind, query_text, rows, status, failure, candidate,
+    )
+}
+
+pub(super) fn result_for_candidate(
+    root: &Path,
+    command: &ObserveCommand,
+    query_kind: &str,
+    query_text: String,
+    rows: Vec<Value>,
+    status: &str,
+    failure: Option<&str>,
+    candidate: String,
+) -> Result<Value, String> {
     let row_value = Value::Array(rows.clone());
     let row_text = row_value.to_string();
     let redaction_status = record::redaction_status(&row_value);
@@ -29,11 +45,18 @@ pub(super) fn result(
         effective_status = "fail";
         effective_failure = Some("observability_query_redaction_failed");
     }
-    let telemetry = super::receipt::base(root, command, effective_status, effective_failure)?;
+    let telemetry = super::receipt::base_for_candidate(
+        root,
+        command,
+        effective_status,
+        effective_failure,
+        candidate,
+    )?;
     let candidate = receipt_text(&telemetry, "candidate_digest")?;
     let run_id = receipt_text(&telemetry, "run_id")?;
     let correlation_id = receipt_text(&telemetry, "correlation_id")?;
     let trace_id = receipt_text(&telemetry, "trace_id")?;
+    let failure_class = receipt_text(&telemetry, "failure_class")?;
     let why_failed = receipt_text(&telemetry, "why_failed")?;
     let where_failed = receipt_text(&telemetry, "where_failed")?;
     let next_repair = receipt_text(&telemetry, "next_repair")?;
@@ -52,6 +75,7 @@ pub(super) fn result(
         "run_id": run_id,
         "correlation_id": correlation_id,
         "trace_id": trace_id,
+        "failure_class": failure_class,
         "why_failed": why_failed,
         "where_failed": where_failed,
         "next_repair": next_repair,

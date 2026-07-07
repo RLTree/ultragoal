@@ -1598,7 +1598,7 @@
       "error": "coverage_test_pass_substitution"
     },
     "id": "completion-fixture-test-without-coverage",
-    "packet_digest": "sha256:2b5de1c89a98bedd7d4956e4fead16b34eb6b2f56b1bc38c186dbe17aba6e98b",
+    "packet_digest": "sha256:fffe66fb6bbc222b5e948823a089224229f5e103af879d048e900a14c7c86f69",
     "packet_path": "fixtures/red/completion-fixture-test-without-coverage.json"
   },
   {
@@ -2678,7 +2678,7 @@
       "error": "root_verification_stage_missing_or_duplicate"
     },
     "id": "duplicate-or-missing-root-receipt",
-    "packet_digest": "sha256:5630d456ab43040fca551aca96f128fb827e5aa73b998745c02a5c748dc8fdc4",
+    "packet_digest": "sha256:39856b1810c4f593103d3888c1a23e0f2af32c4a64021f3719980496ba7284c6",
     "packet_path": "fixtures/red/duplicate-or-missing-root-receipt.json"
   },
   {
@@ -3029,7 +3029,7 @@
       "error": "final_gate_without_post_merge_receipt"
     },
     "id": "final-without-post-merge-receipt",
-    "packet_digest": "sha256:8ba0f4ea2f7b5b50a0e385609d8f3509d5922500dee25511fe6f641134482bd4",
+    "packet_digest": "sha256:8b64da874bcd478ad52a242c4938cb710ae5bc0b4513e0b45ce2f7aa7fb8057a",
     "packet_path": "fixtures/red/final-without-post-merge-receipt.json"
   },
   {
@@ -8537,7 +8537,7 @@
       "error": "schema_validation_failed"
     },
     "id": "review-round-non-signoff-verdict",
-    "packet_digest": "sha256:266117457b0bcba8d4cce7be1a0db1d33947a829e874c90d805196da04db74bc",
+    "packet_digest": "sha256:45986207a015846dbe6b1fd3db3c6eb15b1175c5741ae3b8ae8b7595b0b50bd5",
     "packet_path": "fixtures/red/review-round-non-signoff-verdict.json"
   },
   {

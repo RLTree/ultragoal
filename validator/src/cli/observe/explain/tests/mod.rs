@@ -4,9 +4,14 @@ use std::fs;
 
 mod explanation_fixtures;
 mod next_plan;
-mod observation_skip;
+mod observation {
+    mod query_receipts;
+    mod skip;
+    mod staleness;
+}
 mod receipt_fallback;
 mod target_edges;
+mod telemetry_receipt;
 use explanation_fixtures::*;
 
 #[test]

@@ -86,7 +86,7 @@ fn live_loop_graph_projects_executed_work_failure_locations() {
         assert_eq!(node["failure_class"], expected_class);
         assert_eq!(
             node["where_failed"],
-            format!("loop.run.focused_rust_tests.{where_suffix}")
+            format!("loop.run.live_loop_measurement_rust_tests.{where_suffix}")
         );
         assert!(
             node["why_failed"]
@@ -136,7 +136,7 @@ fn live_loop_graph_blocks_pass_shaped_timing_without_reconciliation() {
 
 #[test]
 fn live_loop_graph_uses_baseline_failure_details_without_duplicate_rerun() {
-    let rerun = "target/debug/ultragoal --root . loop measure --node focused_rust_tests --tier hot";
+    let rerun = "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot";
     let mut timing = node_timing(
         100_000,
         1,
@@ -168,12 +168,15 @@ fn live_loop_graph_names_canonical_baseline_when_failure_has_no_detail_fields() 
         "canonical_full_command_failed".to_string(),
     ));
 
-    assert_eq!(node["where_failed"], "loop.run.focused_rust_tests.baseline");
+    assert_eq!(
+        node["where_failed"],
+        "loop.run.live_loop_measurement_rust_tests.baseline"
+    );
     assert!(
         node["next_repair"]
             .as_str()
             .expect("repair")
-            .contains("cargo test --offline --lib --quiet")
+            .contains("cargo test --offline live_loop::nodes::measurement --lib --quiet")
     );
 }
 
@@ -190,7 +193,10 @@ fn live_loop_graph_names_launch_failure_without_exit_code_guessing() {
 
     let node = projected_node(timing);
     let next_repair = node["next_repair"].as_str().expect("repair");
-    assert_eq!(node["where_failed"], "loop.run.focused_rust_tests.baseline");
+    assert_eq!(
+        node["where_failed"],
+        "loop.run.live_loop_measurement_rust_tests.baseline"
+    );
     assert!(next_repair.contains("launch successfully"));
     assert!(!next_repair.contains("exit code unknown"));
 }

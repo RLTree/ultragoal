@@ -100,3 +100,67 @@ fn query_receipts_fail_closed_for_bounds_or_redaction_violation() {
     assert_eq!(redaction_receipt["supported_claims"], json!([]));
     std::fs::remove_dir_all(root).expect("cleanup query fail closed");
 }
+
+#[test]
+fn query_receipts_project_specific_failure_class_to_stdout_surface() {
+    let root = temp_root("query-specific-failure-class");
+    write_minimal_manifest(&root);
+
+    let receipt = query_result(
+        &root,
+        &command(ObserveOperation::MetricsQuery),
+        "metrics",
+        "sum by (...)".to_string(),
+        vec![],
+        "fail",
+        Some("observability query returned no matching rows"),
+    )
+    .expect("query receipt");
+
+    assert_eq!(
+        receipt["failure_class"],
+        "observability_metric_missing_for_target"
+    );
+    assert_eq!(
+        receipt["failure"],
+        "observability query returned no matching rows"
+    );
+    assert!(
+        receipt["next_repair"]
+            .as_str()
+            .expect("next repair")
+            .contains("metric ingestion latency")
+    );
+    std::fs::remove_dir_all(root).expect("cleanup query failure class");
+}
+
+#[test]
+fn query_receipt_for_candidate_fails_closed_when_spool_authority_is_unwritable() {
+    let root = temp_root("query-base-receipt-spool-blocked");
+    write_minimal_manifest(&root);
+    std::fs::create_dir_all(root.join("validation_artifacts/observability"))
+        .expect("observability artifact parent");
+    std::fs::write(
+        root.join("validation_artifacts/observability/spool"),
+        b"not a dir",
+    )
+    .expect("blocked spool path");
+
+    let err = query_result_for_candidate(
+        &root,
+        &command(ObserveOperation::LogsQuery),
+        "logs",
+        "run_id:run-missing-package".to_string(),
+        vec![],
+        "fail",
+        Some("observability query returned no matching rows"),
+        "sha256:test-candidate".to_string(),
+    )
+    .expect_err("unwritable spool blocks query receipt");
+
+    assert!(
+        err.contains("spool") || err.contains("Not a directory"),
+        "{err}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup blocked spool");
+}

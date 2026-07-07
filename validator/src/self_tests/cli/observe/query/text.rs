@@ -1,6 +1,7 @@
 use crate::cli::observe;
 
 const METRIC_NAMES: &str = "ultragoal_command_total|ultragoal_command_duration_ms|ultragoal_command_task_count|ultragoal_command_queue_depth|ultragoal_command_event_unix_seconds";
+const METRIC_GROUPING: &str = "sum by (__name__,command,operation,status,law_id,check_id,claim_id,surface,failure_class,exporter,saturation_status)";
 
 #[test]
 fn observe_metric_query_text_covers_all_authority_selectors() {
@@ -8,29 +9,27 @@ fn observe_metric_query_text_covers_all_authority_selectors() {
         (
             "--run-id",
             "run-abc",
-            format!(
-                "sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({{__name__=~\"{METRIC_NAMES}\""
-            ),
+            format!("{METRIC_GROUPING} (last_over_time({{__name__=~\"{METRIC_NAMES}\""),
         ),
         (
             "--law-id",
             "law-abc",
             format!(
-                r#"sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({{__name__=~"{METRIC_NAMES}",law_id="law-abc""#
+                r#"{METRIC_GROUPING} (last_over_time({{__name__=~"{METRIC_NAMES}",law_id="law-abc""#
             ),
         ),
         (
             "--check-id",
             "check-abc",
             format!(
-                r#"sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({{__name__=~"{METRIC_NAMES}",check_id="check-abc""#
+                r#"{METRIC_GROUPING} (last_over_time({{__name__=~"{METRIC_NAMES}",check_id="check-abc""#
             ),
         ),
         (
             "--claim-id",
             "claim-abc",
             format!(
-                r#"sum by (__name__,operation,status,check_id,claim_id,surface,failure_class,exporter,saturation_status) (last_over_time({{__name__=~"{METRIC_NAMES}",claim_id="claim-abc""#
+                r#"{METRIC_GROUPING} (last_over_time({{__name__=~"{METRIC_NAMES}",claim_id="claim-abc""#
             ),
         ),
     ] {

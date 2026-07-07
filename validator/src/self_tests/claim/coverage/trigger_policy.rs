@@ -14,7 +14,7 @@ fn coverage_policy_rejects_check_and_test_substitutions_only_for_completion_clai
         &json!({
             "id":"COV-CI",
             "title":"All checks passed with material sign-off",
-            "description":"The package is ready for phase advancement without coverage evidence."
+            "description":"The package is ready for release advancement without coverage evidence."
         }),
         &root,
         &mut out,

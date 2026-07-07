@@ -4,4 +4,4 @@ pub(crate) mod timing;
 
 mod measurement;
 
-pub(crate) use measurement::measure;
+pub(crate) use measurement::{measure, measure_surfaces};

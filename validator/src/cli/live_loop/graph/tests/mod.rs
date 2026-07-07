@@ -1,88 +1,28 @@
-use super::{first_blocker, required_high_frequency_validation_ids};
-use crate::scheduler::TaskClass;
+use super::{
+    first_blocker, first_observability_blocker, first_product_blocker, first_speed_blocker,
+};
+use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use serde_json::json;
 use std::collections::BTreeMap;
 
+mod registry;
 mod timing;
-
-#[test]
-fn high_frequency_registry_covers_required_source_local_validation() {
-    let ids = required_high_frequency_validation_ids();
-    for required in [
-        "scripts_check",
-        "coverage_full_script",
-        "coverage_fast_script",
-        "coverage_prove",
-        "source_audit",
-        "red_fixture_report",
-        "line_caps_check",
-        "namespace_check",
-        "schema_validation",
-        "mandatory_law_validation",
-        "source_obligations_check",
-        "foundational_trace_check",
-        "package_inventory",
-        "focused_rust_tests",
-        "fmt_check",
-        "build_check",
-        "touched_fixture_reports",
-    ] {
-        assert!(ids.contains(&required), "missing {required}: {ids:?}");
-    }
-}
-
-#[test]
-fn high_frequency_registry_classifies_authority_artifact_writers_as_serial() {
-    for id in [
-        "build_check",
-        "focused_rust_tests",
-        "line_caps_check",
-        "namespace_check",
-        "schema_validation",
-        "package_inventory",
-        "mandatory_law_validation",
-        "source_obligations_check",
-        "foundational_trace_check",
-        "coverage_prove",
-        "coverage_full_script",
-        "coverage_fast_script",
-        "source_audit",
-        "red_fixture_report",
-        "scripts_check",
-        "touched_fixture_reports",
-    ] {
-        let surface = super::super::surfaces::surface_by_id(id).expect(id);
-        assert_eq!(
-            surface.execution_task_class,
-            TaskClass::SharedAuthorityWriteSerial,
-            "{id} writes authority artifacts and must not be executed by a parallel worker"
-        );
-        assert_ne!(surface.execution_serial_reason, "none", "{id}");
-    }
-}
-
-#[test]
-fn read_only_high_frequency_registry_entries_remain_parallel() {
-    let fmt = super::super::surfaces::surface_by_id("fmt_check").expect("fmt");
-    assert_eq!(fmt.execution_task_class, TaskClass::PureReadParallel);
-    assert_eq!(fmt.execution_serial_reason, "none");
-}
 
 #[test]
 fn live_loop_nodes_fail_closed_when_measurement_is_missing() {
     let nodes = vec![json!({
-        "node_id": "coverage_full_script",
-        "surface": "exact_coverage_script",
+        "node_id": "schema_validation",
+        "surface": "schema_catalog",
         "status": "blocked",
         "failure_class": "live_loop_high_frequency_measurement_missing",
         "why_failed": "high-frequency live-loop node lacks current full-command baseline and verified-local 20x timing proof",
-        "where_failed": "loop.run.coverage_full_script.measurement",
+        "where_failed": "loop.run.schema_validation.measurement",
         "next_repair": "measure canonical baseline",
-        "narrow_rerun": "bash scripts/check-coverage-full .",
+        "narrow_rerun": "target/debug/ultragoal --root . schema validation --jobs 8",
         "claim_impact": "blocks_live_loop_routine_repair_until_current_timing_proof"
     })];
     let blocker = first_blocker(&nodes).expect("node blocker");
-    assert_eq!(blocker["id"], "coverage_full_script");
+    assert_eq!(blocker["id"], "schema_validation");
     assert_eq!(
         blocker["failure_class"],
         "live_loop_high_frequency_measurement_missing"
@@ -90,6 +30,68 @@ fn live_loop_nodes_fail_closed_when_measurement_is_missing() {
     assert_eq!(
         blocker["claim_impact"],
         "blocks_live_loop_routine_repair_until_current_timing_proof"
+    );
+}
+
+#[test]
+fn blocker_selection_prefers_product_failures_and_preserves_proof_blockers() {
+    let nodes = vec![
+        json!({
+            "node_id": "fmt_check",
+            "surface": "format_check",
+            "status": "blocked",
+            "validation_status": "pass",
+            "observability_status": "pass",
+            "speed_claim_status": "failed",
+            "failure_class": "live_loop_speedup_target_missed",
+            "why_failed": "format validation passed but speed target failed",
+            "where_failed": "loop.run.fmt_check.speedup",
+            "next_repair": "reuse or split format validation",
+            "narrow_rerun": "cargo fmt --all --check",
+            "claim_impact": "speed_claim_failed_validation_available"
+        }),
+        json!({
+            "node_id": "build_check",
+            "surface": "compile_check",
+            "status": "blocked",
+            "validation_status": "fail",
+            "observability_status": "partial",
+            "speed_claim_status": "withheld",
+            "failure_class": "canonical_full_command_failed",
+            "why_failed": "cargo build failed",
+            "where_failed": "loop.run.build_check.baseline",
+            "next_repair": "repair compile error",
+            "narrow_rerun": "cargo build --offline --bin ultragoal --quiet",
+            "claim_impact": "validation_failed"
+        }),
+        json!({
+            "node_id": "observe_trace",
+            "surface": "trace_query",
+            "status": "partial",
+            "validation_status": "pass",
+            "observability_status": "partial",
+            "speed_claim_status": "withheld",
+            "failure_class": "live_loop_telemetry_reconciliation_missing",
+            "why_failed": "trace query lagged",
+            "where_failed": "loop.run.observe_trace.telemetry",
+            "next_repair": "rerun trace query",
+            "narrow_rerun": "ultragoal observe traces query --run-id run-x",
+            "claim_impact": "observability_claim_withheld"
+        }),
+    ];
+
+    assert_eq!(first_blocker(&nodes).expect("first")["id"], "build_check");
+    assert_eq!(
+        first_product_blocker(&nodes).expect("product")["id"],
+        "build_check"
+    );
+    assert_eq!(
+        first_observability_blocker(&nodes).expect("observability")["id"],
+        "observe_trace"
+    );
+    assert_eq!(
+        first_speed_blocker(&nodes).expect("speed")["id"],
+        "fmt_check"
     );
 }
 
@@ -103,6 +105,7 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
         "verified-local",
         Some(1_000),
         &BTreeMap::new(),
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
     );
     let first_node = tasks.into_iter().next().expect("package node")();
     assert_eq!(first_node["node_id"], "package_digest");
@@ -134,6 +137,35 @@ fn context_nodes_do_not_substitute_for_high_frequency_validation_speedproof() {
     assert!(
         first_blocker(&[first_node]).is_none(),
         "context observations must not become blockers or proof"
+    );
+}
+
+#[test]
+fn boundary_nodes_are_withheld_without_blocking_dirty_hot_loop_validation() {
+    let surface = super::super::surfaces::surface_by_id("coverage_full_script")
+        .expect("coverage full boundary surface");
+    let node = super::surface_record(
+        surface,
+        "sha256:coverage-input",
+        "hot",
+        "verified-local",
+        None,
+        None,
+    );
+
+    assert_eq!(node["status"], "withheld");
+    assert_eq!(
+        node["failure_class"],
+        "boundary_proof_withheld_from_hot_loop"
+    );
+    assert_eq!(
+        node["hot_loop_policy"],
+        super::super::surfaces::BOUNDARY_PROOF_POLICY
+    );
+    assert_eq!(node["claim_status"], "withheld_until_boundary");
+    assert!(
+        first_blocker(&[node]).is_none(),
+        "boundary proof withholding must not erase useful hot-loop validation"
     );
 }
 

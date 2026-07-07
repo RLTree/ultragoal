@@ -19,7 +19,8 @@ fn command_roundtrip_refuses_observable_status_without_same_candidate_query_roun
         "validation_artifacts/observability/package-digest.json"
     );
     assert_eq!(row["stdout_receipt_same_candidate"], true);
-    assert_eq!(row["explain_status"], "pass");
+    assert_eq!(row["logs_query_status"], "fail");
+    assert_eq!(row["explain_status"], "fail");
     assert_eq!(row["claim_status"], "partial_no_claim");
     assert_eq!(
         row["claim_name"],

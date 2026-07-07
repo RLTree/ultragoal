@@ -1,10 +1,13 @@
 use super::super::command_failure::CommandFailureSummary;
 use super::super::timing::NODE_TIMING_REL;
 use super::full_command::FullCommandRun;
+use super::observation::TelemetryReconciliation;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
 use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;
+
+mod telemetry_reuse;
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
@@ -12,12 +15,13 @@ pub(super) struct CacheReplay {
     pub(super) prior_result_digest: String,
     pub(super) replayed_output_digest: String,
     pub(super) invalidation_proof: String,
+    pub(super) telemetry_reconciliation: TelemetryReconciliation,
 }
 
 pub(super) fn verified_local_hit(
     root: &Path,
     surface: LoopValidationSurface,
-    candidate: &str,
+    _candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     cache_key: &str,
@@ -27,30 +31,20 @@ pub(super) fn verified_local_hit(
         return None;
     }
     let value = crate::json_boundary::read_json(&root.join(NODE_TIMING_REL)).ok()?;
-    node_rows(&value).into_iter().find_map(|row| {
-        replay_from_row(
-            row,
-            surface,
-            candidate,
-            input_digest,
-            command,
-            cache_key,
-            started,
-        )
-    })
+    node_rows(&value)
+        .into_iter()
+        .find_map(|row| replay_from_row(row, surface, input_digest, command, cache_key, started))
 }
 
 fn replay_from_row(
     row: &Value,
     surface: LoopValidationSurface,
-    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     cache_key: &str,
     started: Instant,
 ) -> Option<CacheReplay> {
     if text(row, "node_id")? != surface.id
-        || text(row, "candidate_digest")? != candidate
         || text(row, "tier")? != command.tier
         || text(row, "cache_mode")? != command.cache_mode
         || text(row, "input_digest")? != input_digest
@@ -58,7 +52,8 @@ fn replay_from_row(
         || text(row, "canonical_full_command")? != surface.canonical_full_command
         || text(row, "cache_key")? != cache_key
         || text(row, "cache_honesty")? != "pass"
-        || text(row, "telemetry_reconciliation_status")? != "pass"
+        || text(row, "validation_status")? != "pass"
+        || text(row, "validation_cache_status")? != "reusable"
     {
         return None;
     }
@@ -90,6 +85,7 @@ fn replay_from_row(
     if text(row, "verified_local_result_digest")? != prior_result_digest {
         return None;
     }
+    let cached_telemetry = telemetry_reuse::reconciliation(row)?;
     let baseline_duration_ms = row
         .get("baseline_duration_ms")?
         .as_u64()
@@ -123,7 +119,8 @@ fn replay_from_row(
         prior_result_digest: prior_result_digest.to_string(),
         replayed_output_digest,
         invalidation_proof:
-            "cache_key_current_input_digest_command_versions_and_candidate_row_matched".to_string(),
+            "cache_key_current_input_digest_command_versions_and_environment_matched".to_string(),
+        telemetry_reconciliation: cached_telemetry,
     })
 }
 
@@ -206,11 +203,14 @@ fn row_has_command_argv(row: &Value) -> bool {
 }
 
 fn node_rows(value: &Value) -> Vec<&Value> {
-    value
-        .get("nodes")
-        .and_then(Value::as_array)
-        .map(|rows| rows.iter().collect())
-        .unwrap_or_default()
+    let mut rows = Vec::new();
+    if let Some(cache_records) = value.get("cache_records").and_then(Value::as_array) {
+        rows.extend(cache_records.iter());
+    }
+    if let Some(nodes) = value.get("nodes").and_then(Value::as_array) {
+        rows.extend(nodes.iter());
+    }
+    rows
 }
 
 fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {

@@ -10,6 +10,7 @@ const LOCAL_BUILD_OUTPUT_PREFIXES: &[&str] = &[
     ".pnpm-store/",
     "validation_artifacts/",
 ];
+const LOCAL_BUILD_OUTPUT_COMPONENTS: &[&str] = &["target"];
 
 pub fn actual_files(root: &Path) -> Result<Vec<String>, String> {
     walk_package_entries(root, |entry| entry.file_type().is_file())
@@ -52,6 +53,9 @@ fn should_descend(root: &Path, entry: &DirEntry) -> bool {
 
 fn local_only(rel: &str) -> bool {
     crate::package::inventory::builder_contract_resource_path(rel)
+        || LOCAL_BUILD_OUTPUT_COMPONENTS
+            .iter()
+            .any(|component| rel.split('/').any(|part| part == *component))
         || LOCAL_BUILD_OUTPUT_PREFIXES
             .iter()
             .any(|prefix| local_prefix_match(rel, prefix))
@@ -78,8 +82,15 @@ mod tests {
         ));
         let _ = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(root.join("target/transient")).expect("target dir");
+        std::fs::create_dir_all(root.join("validator/target/transient"))
+            .expect("nested target dir");
         std::fs::create_dir_all(root.join("src")).expect("src dir");
         std::fs::write(root.join("target/transient/output.txt"), "local").expect("target file");
+        std::fs::write(
+            root.join("validator/target/transient/output.txt"),
+            "local nested",
+        )
+        .expect("nested target file");
         std::fs::write(root.join("src/lib.rs"), "fn main() {}\n").expect("source file");
 
         let files = super::actual_files(&root).expect("actual files");
@@ -88,6 +99,8 @@ mod tests {
         assert_eq!(files, vec!["src/lib.rs".to_string()]);
         assert!(super::local_only("target"));
         assert!(super::local_only("target/transient/output.txt"));
+        assert!(super::local_only("validator/target/transient/output.txt"));
+        assert!(!super::local_only("target-file.txt"));
     }
 
     #[test]

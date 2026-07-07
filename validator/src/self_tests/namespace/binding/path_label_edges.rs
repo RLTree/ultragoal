@@ -57,7 +57,7 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
     );
     for prose_or_api_string in [
         "serde_json::from_slice",
-        "phase advancement",
+        "release advancement",
         "progress claim only",
         "run-fit",
         "corr-fit",

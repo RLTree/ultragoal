@@ -46,7 +46,7 @@ fn command_inventory_summary_names_first_blocker_and_family_counts() {
     )
     .expect("inventory");
 
-    let summary = command_inventory_failure_summary(
+    let summary = inventory_status::failure_summary(
         &root,
         &["observability_command_telemetry_query_not_current:coverage.prove".to_string()],
     );
@@ -54,7 +54,7 @@ fn command_inventory_summary_names_first_blocker_and_family_counts() {
     assert!(summary.contains("control_board_first_family=commands"));
     assert!(summary.contains("control_board_first_incomplete=coverage.prove"));
     assert!(summary.contains("claims=1/0/0/1"));
-    assert_eq!(family_counts(&json!({})), "unavailable");
+    assert_eq!(inventory_status::family_counts(&json!({})), "unavailable");
     std::fs::remove_dir_all(root).expect("cleanup");
 }
 
@@ -88,83 +88,142 @@ fn claim_repairs_cover_current_failure_classes() {
         claims::next_repair_for(command(ObserveOperation::LogsQuery).operation, "pass", None),
         "keep receipt same-candidate and rerun source audit before any readiness claim"
     );
+    assert_eq!(
+        claims::next_repair_for(
+            ObserveOperation::TracesQuery,
+            "fail",
+            Some("observability query returned no matching rows")
+        ),
+        "trace backend did not return a same-candidate span tree inside the bounded query window; keep the row partial, inspect exporter ingestion latency and trace tag projection, rerun the target command once, then rerun observe traces query by run_id/correlation_id/current digest"
+    );
+    assert_eq!(
+        claims::next_repair_for(
+            ObserveOperation::TracesQuery,
+            "fail",
+            Some("victoriatraces trace lookup returned 404 before the span tree was queryable")
+        ),
+        "trace backend did not return a same-candidate span tree inside the bounded query window; keep the row partial, inspect exporter ingestion latency and trace tag projection, rerun the target command once, then rerun observe traces query by run_id/correlation_id/current digest"
+    );
+    assert_eq!(
+        claims::next_repair_for(
+            ObserveOperation::MetricsQuery,
+            "fail",
+            Some("observability_metric_event_time_stale:metric_event_unix=1 target_event_unix=2")
+        ),
+        "metrics backend returned an older sample than the target command event; keep the row partial, inspect metric exporter timestamp/import path and bounded PromQL selector, rerun the target command once, then rerun observe metrics query by run_id/correlation_id/current digest"
+    );
+    assert_eq!(
+        claims::next_repair_for(
+            ObserveOperation::MetricsQuery,
+            "fail",
+            Some("observability query returned no matching rows")
+        ),
+        "metrics backend did not return a bounded current sample for the target command; keep the row partial, inspect metric ingestion latency and the bounded PromQL selector, rerun the target command once, then rerun observe metrics query by run_id/correlation_id/current digest"
+    );
 }
 
 #[test]
-fn metric_summary_rejects_high_cardinality_labels_and_ignores_bad_rows() {
-    let rows = vec![
-        json!({"body": "not-json"}),
-        json!({"no_body": true}),
-        json!({"body": json!({
-            "data": {"result": [
-                {
-                    "metric": {
-                        "__name__": "ultragoal_command_total",
-                        "operation": "coverage.prove",
-                        "status": "fail",
-                        "failure_class": "coverage_prove_failure",
-                        "saturation_status": "queue_pressure",
-                        "run_id": "run-high-cardinality"
-                    },
-                    "value": [10, "2"]
-                },
-                {
-                    "metric": {
-                        "__name__": "ultragoal_command_duration_ms",
-                        "operation": "coverage.prove",
-                        "status": "fail",
-                        "failure_class": "coverage_prove_failure"
-                    },
-                    "value": [10.6, "42.4"]
-                },
-                {
-                    "metric": {
-                        "__name__": "ultragoal_command_task_count",
-                        "operation": "coverage.prove",
-                        "status": "fail",
-                        "failure_class": "coverage_prove_failure"
-                    },
-                    "value": ["11", "3"]
-                },
-                {
-                    "metric": {
-                        "__name__": "ultragoal_command_queue_depth",
-                        "operation": "coverage.prove",
-                        "status": "fail",
-                        "failure_class": "coverage_prove_failure",
-                        "saturation_status": "queue_pressure_after_join"
-                    },
-                    "value": [12, "7"]
-                },
-                {
-                    "metric": {
-                        "__name__": "ultragoal_command_event_unix_seconds",
-                        "operation": "coverage.prove",
-                        "status": "fail",
-                        "failure_class": "coverage_prove_failure"
-                    },
-                    "value": [12, "12"]
-                }
-            ]}
-        }).to_string()}),
-    ];
-
-    let summary = metric_summary(&rows);
-
-    assert_eq!(summary["operation"], "coverage.prove");
-    assert_eq!(summary["traffic_count"], 2);
-    assert_eq!(summary["error_count"], 2);
-    assert_eq!(summary["failure_class"], "coverage_prove_failure");
-    assert_eq!(summary["latency_ms"], 42);
-    assert_eq!(summary["task_count"], 3);
-    assert_eq!(summary["queue_depth"], 7);
-    assert_eq!(summary["latest_sample_unix"], 12);
-    assert_eq!(summary["event_unix_seconds"], 12);
-    assert_eq!(
-        summary["saturation_status"],
-        "queue_pressure_after_join;queue_depth=7"
+fn query_failure_receipts_name_specific_backend_failure_class() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "observe-query-specific-failure-class",
     );
-    assert_eq!(summary["high_cardinality_labels"], "fail");
+    std::fs::create_dir_all(&root).expect("root");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+
+    let metrics = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::MetricsQuery),
+        "fail",
+        Some("observability query returned no matching rows"),
+        candidate.clone(),
+    )
+    .expect("metrics receipt");
+    assert_eq!(
+        metrics["failure_class"],
+        "observability_metric_missing_for_target"
+    );
+    assert_eq!(
+        metrics["event"]["failure_class"],
+        "observability_metric_missing_for_target"
+    );
+    assert!(
+        metrics["next_repair"]
+            .as_str()
+            .expect("next repair")
+            .contains("metric ingestion latency")
+    );
+
+    let traces = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::TracesQuery),
+        "fail",
+        Some("victoriatraces trace lookup returned 404 before the span tree was queryable"),
+        candidate,
+    )
+    .expect("traces receipt");
+    assert_eq!(
+        traces["failure_class"],
+        "observability_trace_tree_unavailable"
+    );
+    assert_eq!(
+        traces["event"]["failure_class"],
+        "observability_trace_tree_unavailable"
+    );
+
+    let logs_timeout = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::LogsQuery),
+        "fail",
+        Some("curl query failed: operation timed out"),
+        crate::package::inventory::package_digest(&root).expect("candidate"),
+    )
+    .expect("logs timeout receipt");
+    assert_eq!(
+        logs_timeout["failure_class"],
+        "observability_live_backend_timeout"
+    );
+    let logs_empty = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::LogsQuery),
+        "fail",
+        Some("observability query returned no matching rows"),
+        crate::package::inventory::package_digest(&root).expect("candidate"),
+    )
+    .expect("logs empty receipt");
+    assert_eq!(
+        logs_empty["failure_class"],
+        "observability_log_record_unavailable"
+    );
+    let stale_logs = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::LogsQuery),
+        "fail",
+        Some("observability_logs_candidate_mismatch:sha256:old!=sha256:current"),
+        crate::package::inventory::package_digest(&root).expect("candidate"),
+    )
+    .expect("logs candidate mismatch receipt");
+    assert_eq!(
+        stale_logs["failure_class"],
+        "observability_candidate_mismatch"
+    );
+    let stale_metrics = base_receipt_for_candidate(
+        &root,
+        &command(ObserveOperation::MetricsQuery),
+        "fail",
+        Some("observability_metric_candidate_missing"),
+        crate::package::inventory::package_digest(&root).expect("candidate"),
+    )
+    .expect("metrics candidate missing receipt");
+    assert_eq!(
+        stale_metrics["event"]["failure_class"],
+        "observability_candidate_mismatch"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup query failure class");
 }
 
 #[test]

@@ -38,7 +38,7 @@
       "value": "2026-06-16T00:00:00Z"
     }
   ],
-  "notes": "set final phase pass without post-merge artifact",
+  "notes": "set final stage pass without post-merge artifact",
   "materialization": {
     "expected_validation_layer": "semantic",
     "post_patch_schema_valid": true,

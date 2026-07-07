@@ -8,7 +8,11 @@ pub(super) fn requested(command: &ObserveCommand) -> Option<String> {
 
 pub(super) fn event(root: &Path, command: &ObserveCommand) -> Option<Value> {
     let (field, expected) = selected(command)?;
-    matching_event(root, field, expected)
+    let product_event = matching_product_event(root, field, expected);
+    if product_event.as_ref().is_some_and(event_failed) {
+        return product_event;
+    }
+    matching_failed_observation_event(root, field, expected).or(product_event)
 }
 
 fn selected(command: &ObserveCommand) -> Option<(&'static str, &str)> {
@@ -158,7 +162,11 @@ fn is_observation_event(event: &Value) -> bool {
         )
 }
 
-fn matching_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
+fn event_failed(event: &Value) -> bool {
+    event.get("status").and_then(Value::as_str) == Some("fail")
+}
+
+fn matching_product_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
     spool_event(root, |event| {
         event.get(field).and_then(Value::as_str) == Some(expected) && !is_observation_event(event)
     })
@@ -166,6 +174,24 @@ fn matching_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
         receipt_event(root, |event| {
             event.get(field).and_then(Value::as_str) == Some(expected)
                 && !is_observation_event(event)
+        })
+    })
+}
+
+fn matching_failed_observation_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
+    latest_observation_event(root, field, expected)
+        .filter(event_failed)
+        .or_else(|| super::query::receipt_target::latest_failed_event(root, field, expected))
+}
+
+fn latest_observation_event(root: &Path, field: &str, expected: &str) -> Option<Value> {
+    spool_event(root, |event| {
+        event.get(field).and_then(Value::as_str) == Some(expected) && is_observation_event(event)
+    })
+    .or_else(|| {
+        receipt_event(root, |event| {
+            event.get(field).and_then(Value::as_str) == Some(expected)
+                && is_observation_event(event)
         })
     })
 }
@@ -186,27 +212,22 @@ fn receipt_event<F>(root: &Path, matches: F) -> Option<Value>
 where
     F: Fn(&Value) -> bool,
 {
-    let dir = root.join("validation_artifacts/observability");
-    let mut paths = std::fs::read_dir(dir)
-        .ok()?
-        .filter_map(Result::ok)
-        .map(|entry| entry.path())
-        .filter(|path| path.extension().and_then(|ext| ext.to_str()) == Some("json"))
-        .collect::<Vec<_>>();
-    paths.sort();
-    paths.into_iter().rev().find_map(|path| {
-        let value = crate::json_boundary::read_json(&path).ok()?;
-        if is_query_receipt(&value) {
-            return None;
-        }
-        value
-            .get("event")
-            .and_then(|event| matches(event).then(|| event.clone()))
-            .or_else(|| {
-                (is_observability_receipt(&value) && matches(&value))
-                    .then(|| fallback_event_from_receipt(&value))
-            })
-    })
+    super::receipt::catalog::observability_json_files(root)
+        .into_iter()
+        .rev()
+        .find_map(|path| {
+            let value = crate::json_boundary::read_json(&path).ok()?;
+            if is_query_receipt(&value) {
+                return None;
+            }
+            value
+                .get("event")
+                .and_then(|event| matches(event).then(|| event.clone()))
+                .or_else(|| {
+                    (is_observability_receipt(&value) && matches(&value))
+                        .then(|| super::receipt::event_target::fallback_from_receipt(&value))
+                })
+        })
 }
 
 fn is_query_receipt(value: &Value) -> bool {
@@ -215,35 +236,4 @@ fn is_query_receipt(value: &Value) -> bool {
 
 fn is_observability_receipt(value: &Value) -> bool {
     value.get("schema").and_then(Value::as_str) == Some(crate::cli::observe::types::RECEIPT_SCHEMA)
-}
-
-fn fallback_event_from_receipt(value: &Value) -> Value {
-    let get = |key: &str| value.get(key).cloned().unwrap_or(Value::Null);
-    let operation = value
-        .get("operation")
-        .and_then(Value::as_str)
-        .unwrap_or("unknown");
-    json!({
-        "run_id": get("run_id"),
-        "candidate_digest": get("candidate_digest"),
-        "operation": get("operation"),
-        "status": "fail",
-        "failure_class": "receipt_without_observability_event",
-        "why_failed": format!(
-            "observability receipt for {operation} matched the target selector but has no event object"
-        ),
-        "where_failed": "observe.target.receipt_event_binding",
-        "next_repair": format!(
-            "rerun {operation} with real event emission, then query logs metrics traces by run/correlation/current digest"
-        ),
-        "claim_impact": "observability_reconciliation_blocked",
-        "observed_receipt_status": get("status"),
-        "fallback_only": true,
-        "law_id": get("law_id"),
-        "check_id": get("check_id"),
-        "claim_id": get("claim_id"),
-        "query_hint_logql": get("query_hint_logql"),
-        "query_hint_promql": get("query_hint_promql"),
-        "query_hint_traceql": get("query_hint_traceql")
-    })
 }

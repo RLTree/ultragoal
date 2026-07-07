@@ -17,7 +17,7 @@ fn command_all(receipt: PathBuf) -> LiveLoopCommand {
 fn live_loop_measure_all_selects_high_frequency_nodes_only() {
     let command =
         command_all("validation_artifacts/observability/live-loop-node-timing.json".into());
-    let surfaces = super::selected_surfaces(&command).expect("surfaces");
+    let surfaces = super::surface_selection::selected_surfaces(&command).expect("surfaces");
     assert!(surfaces.iter().any(|surface| surface.id == "fmt_check"));
     assert!(surfaces.iter().any(|surface| surface.id == "build_check"));
     assert!(!surfaces.iter().any(|surface| surface.id == "changed_files"));
@@ -25,7 +25,7 @@ fn live_loop_measure_all_selects_high_frequency_nodes_only() {
 
 #[test]
 fn live_loop_measure_all_fails_closed_for_empty_high_frequency_registry() {
-    let error = super::high_frequency_surfaces_from(&[])
+    let error = super::surface_selection::high_frequency_surfaces_from(&[])
         .err()
         .unwrap_or_default();
     assert!(

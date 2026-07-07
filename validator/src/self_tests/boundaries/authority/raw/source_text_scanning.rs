@@ -39,6 +39,10 @@ fn source_text_scanner_excludes_only_test_gated_modules() {
         .expect("current state source dir");
     std::fs::create_dir_all(root.join("validator/src/cli/final_packet/proof"))
         .expect("final packet source dir");
+    std::fs::create_dir_all(root.join("validator/src/cli/live_loop/observation"))
+        .expect("live-loop observation source dir");
+    std::fs::create_dir_all(root.join("validator/src/cli/live_loop/observation/status"))
+        .expect("live-loop observation status source dir");
 
     let raw_output_write = "use serde_json::Value;\n\
 fn raw_write(root: &std::path::Path, value: &Value) {\n\
@@ -84,6 +88,36 @@ pub(crate) fn failures(value: &Value) -> Vec<String> {\n\
 }\n",
     )
     .expect("declaration test module with production parser after it");
+    std::fs::write(
+        root.join("validator/src/cli/live_loop/observation/mod.rs"),
+        "#[cfg(test)]\n#[path = \"status/success.rs\"]\nmod success;\n#[cfg(test)]\nmod status;\n",
+    )
+    .expect("path test module parent");
+    std::fs::write(
+        root.join("validator/src/cli/live_loop/observation/status/success.rs"),
+        "use serde_json::json;\n\
+#[test]\n\
+fn verifies_status_projection() {\n\
+    let value = json!({\"status\":\"pass\"});\n\
+    assert_eq!(value[\"status\"], \"pass\");\n\
+}\n",
+    )
+    .expect("path test sibling");
+    std::fs::write(
+        root.join("validator/src/cli/live_loop/observation/status.rs"),
+        "#[path = \"status_nested.rs\"]\nmod status_nested;\n",
+    )
+    .expect("nested path test parent");
+    std::fs::write(
+        root.join("validator/src/cli/live_loop/observation/status_nested.rs"),
+        "use serde_json::json;\n\
+#[test]\n\
+fn verifies_nested_status_projection() {\n\
+    let value = json!({\"status\":\"pass\"});\n\
+    assert_eq!(value[\"status\"], \"pass\");\n\
+}\n",
+    )
+    .expect("nested path test sibling");
 
     let failures = crate::audit::law::authority_surfaces::source_text_failures_for_test(&root);
     assert!(
@@ -95,6 +129,16 @@ pub(crate) fn failures(value: &Value) -> Vec<String> {\n\
         failures.iter().all(|(_, failure)| !failure
             .contains("validator/src/cli/package/inventory/command_paths.rs")),
         "cfg(test) sibling modules must not be production authority failures: {failures:?}"
+    );
+    assert!(
+        failures.iter().all(|(_, failure)| !failure
+            .contains("validator/src/cli/live_loop/observation/status/success.rs")),
+        "cfg(test) path sibling modules must not be production authority surfaces: {failures:?}"
+    );
+    assert!(
+        failures.iter().all(|(_, failure)| !failure
+            .contains("validator/src/cli/live_loop/observation/status_nested.rs")),
+        "nested cfg(test) path sibling modules must not be production authority surfaces: {failures:?}"
     );
     assert!(
         failures.iter().any(

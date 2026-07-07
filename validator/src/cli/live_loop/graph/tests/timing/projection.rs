@@ -1,5 +1,7 @@
 use super::rows::{mandatory_law_failure, node_timing};
+use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
+use serde_json::json;
 use std::collections::BTreeMap;
 
 #[test]
@@ -17,6 +19,7 @@ fn live_loop_tasks_project_current_node_timing_records() {
         "verified-local",
         Some(1_000),
         &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
     )
     .into_iter()
     .map(|task| task())
@@ -32,6 +35,11 @@ fn live_loop_tasks_project_current_node_timing_records() {
     assert_eq!(fmt["execution_task_class"], "pure_read_parallel");
     assert_eq!(fmt["execution_serial_reason"], "none");
     assert_eq!(fmt["baseline_duration_ms"], 1_000);
+    assert_eq!(fmt["baseline_proof_kind"], "executed");
+    assert_eq!(
+        fmt["baseline_invalidation_proof"],
+        "baseline_command_executed_for_current_measurement"
+    );
     assert_eq!(fmt["verified_local_duration_ms"], 5);
     assert_eq!(fmt["proof_kind"], "executed");
     assert_eq!(fmt["work_unit_count"], 1);
@@ -52,6 +60,8 @@ fn live_loop_tasks_project_current_node_timing_records() {
             .contains("logs, metrics, traces")
     );
     assert_eq!(fmt["telemetry_reconciliation_status"], "pass");
+    assert_eq!(fmt["roundtrip_durations_ms"]["logs_query"], 1);
+    assert_eq!(fmt["first_failed_roundtrip"], serde_json::Value::Null);
     assert!(
         fmt["result_digest"]
             .as_str()
@@ -71,7 +81,7 @@ fn live_loop_tasks_project_current_node_timing_records() {
 fn live_loop_tasks_project_failed_full_command_timing_rows() {
     let mut timings = BTreeMap::new();
     timings.insert(
-        "focused_rust_tests".to_string(),
+        "live_loop_measurement_rust_tests".to_string(),
         NodeTiming {
             baseline_duration_ms: 100_000,
             verified_local_duration_ms: 1,
@@ -86,7 +96,13 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
             invalidation_proof: "cache_not_used_current_command_executed".to_string(),
             telemetry_reconciliation_status: "pass".to_string(),
-            verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+            validation_status: "pass".to_string(),
+            validation_cache_status: "reusable".to_string(),
+            observability_status: "pass".to_string(),
+            speed_claim_status: "failed".to_string(),
+            observability_failure_class: "none".to_string(),
+            verified_local_command:
+                "cargo test --offline live_loop::nodes::measurement --lib --quiet".to_string(),
             result_digest: "sha256:result".to_string(),
             output_digest: "sha256:output".to_string(),
             verified_local_result_digest: "sha256:result".to_string(),
@@ -96,9 +112,13 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             next_repair: "query this run through observe logs/metrics/traces, repair the named mandatory-law row, fixture, dependency, or evidence digest, then rerun mandatory-law validation".to_string(),
             timing_status: "fail".to_string(),
             failure_class: "canonical_full_command_failed".to_string(),
+            baseline_proof_kind: "executed".to_string(),
+            baseline_invalidation_proof: "baseline_command_executed_for_current_measurement"
+                .to_string(),
             baseline_exit_code: Some(101),
             baseline_launch_error: false,
             baseline_failure: mandatory_law_failure(),
+            telemetry_reconciliation: json!({"status": "pass"}).into(),
             affected_set_status: "clean_worktree_no_affected_files".to_string(),
             timing_source: NODE_TIMING_REL.to_string(),
         },
@@ -111,13 +131,14 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
         "verified-local",
         Some(1_000),
         &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
     )
     .into_iter()
     .map(|task| task())
     .collect::<Vec<_>>();
     let focused = nodes
         .iter()
-        .find(|node| node["node_id"] == "focused_rust_tests")
+        .find(|node| node["node_id"] == "live_loop_measurement_rust_tests")
         .expect("focused rust node");
     assert_eq!(focused["status"], "blocked");
     assert_eq!(focused["failure_class"], "canonical_full_command_failed");
@@ -153,6 +174,7 @@ fn live_loop_tasks_project_cache_and_invalid_proof_claim_surfaces() {
         "verified-local",
         Some(1_000),
         &cache_timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
     )
     .into_iter()
     .map(|task| task())
@@ -181,7 +203,7 @@ fn live_loop_tasks_project_cache_and_invalid_proof_claim_surfaces() {
     );
     assert_eq!(
         invalid_node["where_failed"],
-        "loop.run.focused_rust_tests.proof_kind"
+        "loop.run.live_loop_measurement_rust_tests.proof_kind"
     );
     assert_eq!(invalid_node["claim_status"], "blocked");
     assert_eq!(

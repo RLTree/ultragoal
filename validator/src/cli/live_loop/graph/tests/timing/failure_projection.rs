@@ -1,6 +1,7 @@
 use super::rows::projected_node;
 use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
+use serde_json::json;
 
 #[test]
 fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
@@ -18,20 +19,31 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        validation_status: "pass".to_string(),
+        validation_cache_status: "reusable".to_string(),
+        observability_status: "pass".to_string(),
+        speed_claim_status: "failed".to_string(),
+        observability_failure_class: "none".to_string(),
+        verified_local_command: "cargo test --offline live_loop::nodes::measurement --lib --quiet"
+            .to_string(),
         result_digest: "sha256:result".to_string(),
         output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.canonical_full_command".to_string(),
+        where_failed: "loop.measure.live_loop_measurement_rust_tests.canonical_full_command"
+            .to_string(),
         why_failed: "canonical full command could not launch while measuring live-loop node"
             .to_string(),
         next_repair: "run cargo test directly and repair launch failure".to_string(),
         timing_status: "fail".to_string(),
         failure_class: "canonical_full_command_launch_failed".to_string(),
+        baseline_proof_kind: "executed".to_string(),
+        baseline_invalidation_proof: "baseline_command_executed_for_current_measurement"
+            .to_string(),
         baseline_exit_code: None,
         baseline_launch_error: true,
         baseline_failure: CommandFailureSummary::default(),
+        telemetry_reconciliation: json!({"status": "pass"}).into(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: NODE_TIMING_REL.to_string(),
     });
@@ -64,19 +76,30 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        validation_status: "pass".to_string(),
+        validation_cache_status: "reusable".to_string(),
+        observability_status: "pass".to_string(),
+        speed_claim_status: "failed".to_string(),
+        observability_failure_class: "none".to_string(),
+        verified_local_command: "cargo test --offline live_loop::nodes::measurement --lib --quiet"
+            .to_string(),
         result_digest: "sha256:result".to_string(),
         output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.speedup".to_string(),
+        where_failed: "loop.measure.live_loop_measurement_rust_tests.speedup".to_string(),
         why_failed: "executed verified-local work did not meet the 20x speed target".to_string(),
-        next_repair: "split or cache focused_rust_tests with verified equivalence".to_string(),
+        next_repair: "split or cache live_loop_measurement_rust_tests with verified equivalence"
+            .to_string(),
         timing_status: "fail".to_string(),
         failure_class: "live_loop_speedup_target_missed".to_string(),
+        baseline_proof_kind: "executed".to_string(),
+        baseline_invalidation_proof: "baseline_command_executed_for_current_measurement"
+            .to_string(),
         baseline_exit_code: Some(0),
         baseline_launch_error: false,
         baseline_failure: CommandFailureSummary::default(),
+        telemetry_reconciliation: json!({"status": "pass"}).into(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: NODE_TIMING_REL.to_string(),
     });
@@ -102,19 +125,29 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
-        verified_local_command: "cargo test --offline live_loop --lib --quiet".to_string(),
+        validation_status: "pass".to_string(),
+        validation_cache_status: "reusable".to_string(),
+        observability_status: "pass".to_string(),
+        speed_claim_status: "failed".to_string(),
+        observability_failure_class: "none".to_string(),
+        verified_local_command: "cargo test --offline live_loop::nodes::measurement --lib --quiet"
+            .to_string(),
         result_digest: "sha256:result".to_string(),
         output_digest: "sha256:output".to_string(),
         verified_local_result_digest: "sha256:result".to_string(),
         verified_local_output_digest: "sha256:output".to_string(),
-        where_failed: "loop.measure.focused_rust_tests.measurement".to_string(),
+        where_failed: "loop.measure.live_loop_measurement_rust_tests.measurement".to_string(),
         why_failed: "live-loop node timing row failed strict proof validation".to_string(),
         next_repair: "inspect live-loop timing receipt fields".to_string(),
         timing_status: "fail".to_string(),
         failure_class: "unexpected_measurement_failure".to_string(),
+        baseline_proof_kind: "executed".to_string(),
+        baseline_invalidation_proof: "baseline_command_executed_for_current_measurement"
+            .to_string(),
         baseline_exit_code: Some(2),
         baseline_launch_error: false,
         baseline_failure: CommandFailureSummary::default(),
+        telemetry_reconciliation: json!({"status": "pass"}).into(),
         affected_set_status: "changed_files_digest_bound".to_string(),
         timing_source: NODE_TIMING_REL.to_string(),
     });

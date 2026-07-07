@@ -68,7 +68,7 @@ fn completion_claim(text: &str) -> bool {
         "production-ready",
         "release",
         "release-ready",
-        "phase advancement",
+        "release advancement",
         "material sign-off",
     ]
     .iter()

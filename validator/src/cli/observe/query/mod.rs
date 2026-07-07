@@ -2,22 +2,24 @@ use crate::cli::observe::telemetry;
 use crate::cli::observe::types::ObserveCommand;
 use serde_json::Value;
 use std::path::Path;
-use std::thread;
-use std::time::{Duration, Instant};
-
-const NO_MATCHING_ROWS: &str = "observability query returned no matching rows";
 
 mod body;
 mod metrics;
 mod record_projection;
 mod records;
+mod retry;
 mod target;
 #[cfg(test)]
 mod tests;
 mod text;
+mod trace_transport;
 mod transport;
 pub(crate) use body::{bounded_rows, candidate_digest_failure, has_matches, observed_failure};
 pub(crate) use record_projection::observed_telemetry_record;
+use retry::NO_MATCHING_ROWS;
+#[cfg(test)]
+pub(crate) use retry::retry_until_match_for_test;
+pub(crate) use retry::retry_until_reconciled;
 pub(crate) use text::{
     bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation,
     bounded_success_metric_query_for_operation, query_text, trace_tags,
@@ -42,26 +44,59 @@ impl QueryKind {
     }
 }
 
+#[derive(Clone, Debug)]
+pub(crate) struct LiveQueryObservation {
+    pub(crate) query: String,
+    pub(crate) output: Result<String, String>,
+    pub(crate) candidate: String,
+}
+
 pub(crate) fn run(
     root: &Path,
     command: &ObserveCommand,
     query_kind: QueryKind,
 ) -> Result<Value, String> {
-    if command.row_limit == 0 || command.byte_limit == 0 || command.timeout_ms == 0 {
-        return telemetry::query_result(
-            root,
-            command,
-            query_kind.label(),
-            query_text(command),
-            vec![],
-            "fail",
-            Some("unbounded observability query rejected"),
-        );
-    }
-    let query = metrics::target_query(root, command).unwrap_or_else(|| query_text(command));
     let candidate = crate::package::inventory::package_digest(root)?;
+    let observation = capture_for_candidate(root, command, query_kind, candidate);
+    receipt_from_observation(root, command, query_kind, observation)
+}
+
+pub(crate) fn capture_for_candidate(
+    root: &Path,
+    command: &ObserveCommand,
+    query_kind: QueryKind,
+    candidate: String,
+) -> LiveQueryObservation {
+    if command.row_limit == 0 || command.byte_limit == 0 || command.timeout_ms == 0 {
+        return LiveQueryObservation {
+            query: query_text(command),
+            output: Err("unbounded observability query rejected".to_string()),
+            candidate,
+        };
+    }
+    let query = target_query(root, command, query_kind).unwrap_or_else(|| query_text(command));
     let output = query_with_retry(root, command, query_kind, &query, &candidate);
-    result_from_output_for_candidate(root, command, query_kind, query, output, candidate)
+    LiveQueryObservation {
+        query,
+        output,
+        candidate,
+    }
+}
+
+pub(crate) fn receipt_from_observation(
+    root: &Path,
+    command: &ObserveCommand,
+    query_kind: QueryKind,
+    observation: LiveQueryObservation,
+) -> Result<Value, String> {
+    result_from_output_for_candidate(
+        root,
+        command,
+        query_kind,
+        observation.query,
+        observation.output,
+        observation.candidate,
+    )
 }
 
 #[cfg(test)]
@@ -101,7 +136,7 @@ fn result_from_output_for_candidate(
         }
         Err(err) => ("fail", vec![], Some(err)),
     };
-    telemetry::query_result(
+    telemetry::query_result_for_candidate(
         root,
         command,
         query_kind.label(),
@@ -109,6 +144,7 @@ fn result_from_output_for_candidate(
         rows,
         status,
         failure.as_deref(),
+        candidate,
     )
 }
 
@@ -120,7 +156,19 @@ fn query_with_retry(
     candidate: &str,
 ) -> Result<String, String> {
     let validate = live_result_validator(root, command, query_kind, candidate);
-    retry_until_reconciled(command, || live_query(command, query_kind, query), validate)
+    retry_until_reconciled(
+        command,
+        || live_query(root, command, query_kind, query),
+        validate,
+    )
+}
+
+fn target_query(root: &Path, command: &ObserveCommand, query_kind: QueryKind) -> Option<String> {
+    match query_kind {
+        QueryKind::Metrics => metrics::target_query(root, command),
+        QueryKind::Traces => Some(trace_transport::trace_query(root, command)),
+        QueryKind::Logs => None,
+    }
 }
 
 fn live_result_validator<'a>(
@@ -140,68 +188,6 @@ pub(crate) fn live_result_validator_for_test<'a>(
     candidate: &'a str,
 ) -> impl FnMut(&str) -> Option<String> + 'a {
     live_result_validator(root, command, query_kind, candidate)
-}
-
-#[cfg(test)]
-pub(crate) fn retry_until_match_for_test(
-    command: &ObserveCommand,
-    mut outputs: Vec<Result<String, String>>,
-) -> Result<String, String> {
-    outputs.reverse();
-    retry_until_match(command, || {
-        outputs
-            .pop()
-            .unwrap_or_else(|| Err("test outputs exhausted".to_string()))
-    })
-}
-
-#[cfg(test)]
-fn retry_until_match<F>(command: &ObserveCommand, fetch: F) -> Result<String, String>
-where
-    F: FnMut() -> Result<String, String>,
-{
-    retry_until_reconciled(command, fetch, |body| {
-        if has_matches(body, command.operation) {
-            None
-        } else {
-            Some(NO_MATCHING_ROWS.to_string())
-        }
-    })
-}
-
-fn retry_until_reconciled<F, V>(
-    command: &ObserveCommand,
-    mut fetch: F,
-    mut validate: V,
-) -> Result<String, String>
-where
-    F: FnMut() -> Result<String, String>,
-    V: FnMut(&str) -> Option<String>,
-{
-    let deadline = Instant::now() + Duration::from_millis(command.timeout_ms.max(1));
-    let mut last_body_failure = None;
-    let mut last_error = NO_MATCHING_ROWS.to_string();
-    loop {
-        match fetch() {
-            Ok(body) => match validate(&body) {
-                None => return Ok(body),
-                Some(failure) => {
-                    last_body_failure = Some((body, failure));
-                }
-            },
-            Err(err) => {
-                last_error = err;
-            }
-        }
-        if Instant::now() >= deadline {
-            return match last_body_failure {
-                Some((body, failure)) if failure != NO_MATCHING_ROWS => Ok(body),
-                Some((_, failure)) if last_error == NO_MATCHING_ROWS => Err(failure),
-                Some(_) | None => Err(last_error),
-            };
-        }
-        thread::sleep(Duration::from_millis(250));
-    }
 }
 
 fn live_result_failure(
@@ -233,6 +219,7 @@ fn live_result_failure(
 }
 
 fn live_query(
+    root: &Path,
     command: &ObserveCommand,
     query_kind: QueryKind,
     query: &str,
@@ -241,7 +228,7 @@ fn live_query(
         QueryKind::Logs => {
             transport::curl("http://127.0.0.1:9428/select/logsql/query", query, command)
         }
-        QueryKind::Metrics => transport::curl("http://127.0.0.1:8428/api/v1/query", query, command),
-        QueryKind::Traces => transport::curl_traces(command),
+        QueryKind::Metrics => transport::curl_metrics(query, command),
+        QueryKind::Traces => transport::curl_traces(root, command, query),
     }
 }

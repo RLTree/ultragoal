@@ -1,3 +1,4 @@
+use super::changed_inputs::ChangedInputs;
 use super::nodes::timing::NodeTiming;
 use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
 use serde_json::{Value, json};
@@ -14,21 +15,23 @@ pub(crate) use surface_record::surface_record;
 
 pub(crate) fn tasks(
     candidate_digest: &str,
-    changed_files_digest: &str,
+    _changed_files_digest: &str,
     audit_context_digest: &str,
     tier: &str,
     cache_mode: &str,
     package_digest_baseline_ms: Option<u64>,
     node_timings: &BTreeMap<String, NodeTiming>,
+    changed_inputs: &ChangedInputs,
 ) -> Vec<Box<dyn FnOnce() -> Value + Send + 'static>> {
     LOOP_VALIDATION_SURFACES
         .iter()
         .map(|surface| {
             let surface = *surface;
+            let surface_changed_digest = changed_inputs.surface_digest(surface).to_string();
             let input_digest = surface_input_digest(
                 surface,
                 candidate_digest,
-                changed_files_digest,
+                &surface_changed_digest,
                 audit_context_digest,
             );
             let baseline_ms = baseline_ms(surface.id, package_digest_baseline_ms);
@@ -49,28 +52,96 @@ pub(crate) fn tasks(
         .collect()
 }
 
+#[cfg(test)]
 pub(crate) fn first_blocker(nodes: &[Value]) -> Option<Value> {
-    nodes.iter().find(|node| is_blocking_node(node)).map(|node| {
-        let id = node["node_id"].as_str().unwrap_or("unknown_loop_node");
-        json!({
-            "id": id,
-            "surface": node["surface"].as_str().unwrap_or("loop_node"),
-            "why_failed": node["why_failed"].as_str().unwrap_or("live-loop node failed"),
-            "where_failed": node["where_failed"].as_str().unwrap_or("loop.run.node"),
-            "failure_class": node["failure_class"].as_str().unwrap_or("live_loop_node_failure"),
-            "next_repair": node["next_repair"].as_str().unwrap_or("repair the live-loop node, then rerun ultragoal loop run"),
-            "narrow_rerun": node["narrow_rerun"].as_str().unwrap_or("target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto"),
-            "broad_rerun": "source audit once after narrow observable proof passes",
-            "claim_impact": node["claim_impact"].as_str().unwrap_or("source_local_live_loop_blocked")
+    first_product_blocker(nodes)
+        .or_else(|| first_observability_blocker(nodes))
+        .or_else(|| first_speed_blocker(nodes))
+        .or_else(|| {
+            nodes
+                .iter()
+                .find(|node| is_blocking_node(node))
+                .map(blocker_record)
         })
+}
+
+pub(crate) fn first_product_blocker(nodes: &[Value]) -> Option<Value> {
+    nodes
+        .iter()
+        .find(|node| is_product_blocking_node(node))
+        .map(blocker_record)
+}
+
+pub(crate) fn first_observability_blocker(nodes: &[Value]) -> Option<Value> {
+    nodes
+        .iter()
+        .find(|node| is_observability_blocking_node(node))
+        .map(blocker_record)
+}
+
+pub(crate) fn first_speed_blocker(nodes: &[Value]) -> Option<Value> {
+    nodes
+        .iter()
+        .find(|node| is_speed_blocking_node(node))
+        .map(blocker_record)
+}
+
+fn blocker_record(node: &Value) -> Value {
+    let id = node["node_id"].as_str().unwrap_or("unknown_loop_node");
+    json!({
+        "id": id,
+        "surface": node["surface"].as_str().unwrap_or("loop_node"),
+        "why_failed": node["why_failed"].as_str().unwrap_or("live-loop node failed"),
+        "where_failed": node["where_failed"].as_str().unwrap_or("loop.run.node"),
+        "failure_class": node["failure_class"].as_str().unwrap_or("live_loop_node_failure"),
+        "next_repair": node["next_repair"].as_str().unwrap_or("repair the live-loop node, then rerun ultragoal loop run"),
+        "narrow_rerun": node["narrow_rerun"].as_str().unwrap_or("target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto"),
+        "broad_rerun": "source audit once after narrow observable proof passes",
+        "claim_impact": node["claim_impact"].as_str().unwrap_or("source_local_live_loop_blocked")
     })
 }
 
-fn is_blocking_node(node: &Value) -> bool {
+pub(crate) fn is_blocking_node(node: &Value) -> bool {
     matches!(
         node.get("status").and_then(Value::as_str),
-        Some("blocked" | "fail" | "failed")
+        Some("blocked" | "fail" | "failed" | "partial")
     )
+}
+
+fn is_product_blocking_node(node: &Value) -> bool {
+    is_blocking_node(node)
+        && node
+            .get("validation_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status != "pass")
+}
+
+fn is_observability_blocking_node(node: &Value) -> bool {
+    is_blocking_node(node)
+        && node
+            .get("validation_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status == "pass")
+        && node
+            .get("observability_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status != "pass")
+}
+
+fn is_speed_blocking_node(node: &Value) -> bool {
+    is_blocking_node(node)
+        && node
+            .get("validation_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status == "pass")
+        && node
+            .get("observability_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status == "pass")
+        && node
+            .get("speed_claim_status")
+            .and_then(Value::as_str)
+            .is_some_and(|status| status != "supported")
 }
 
 #[cfg(test)]
@@ -92,15 +163,19 @@ fn baseline_ms(id: &str, package_digest_baseline_ms: Option<u64>) -> Option<u64>
 pub(crate) fn surface_input_digest(
     surface: LoopValidationSurface,
     candidate_digest: &str,
-    changed_files_digest: &str,
+    surface_changed_digest: &str,
     audit_context_digest: &str,
 ) -> String {
     let digest_material = match surface.id {
         "package_digest" => candidate_digest.to_string(),
-        "changed_files" => changed_files_digest.to_string(),
+        "changed_files" => surface_changed_digest.to_string(),
         "audit_context" => audit_context_digest.to_string(),
+        _ if surface.high_frequency => format!(
+            "candidate={candidate_digest};affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
+            surface.id
+        ),
         _ => format!(
-            "candidate={candidate_digest};changed={changed_files_digest};context={audit_context_digest};surface={}",
+            "candidate={candidate_digest};affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
             surface.id
         ),
     };

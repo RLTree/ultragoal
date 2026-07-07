@@ -10,6 +10,7 @@ mod records;
 mod retry_edges;
 mod target;
 mod target_receipts;
+mod trace;
 
 fn prepare_root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
@@ -209,26 +210,4 @@ fn live_result_validator_reconciles_metric_rows_to_current_target() {
     drop(validate);
 
     std::fs::remove_dir_all(root).expect("cleanup live metrics result");
-}
-
-#[test]
-fn retry_returns_specific_body_failures_but_not_empty_poll_results() {
-    let mut command = command();
-    command.timeout_ms = 1;
-    let body = "{\"data\":{\"result\":[{}]}}".to_string();
-    let result = super::retry_until_reconciled(
-        &command,
-        || Ok(body.clone()),
-        |_| Some("observability_metric_failure_mismatch:none!=coverage".to_string()),
-    )
-    .expect("specific body failure is returned for receipt reconciliation");
-    assert_eq!(result, body);
-
-    let empty = super::retry_until_reconciled(
-        &command,
-        || Ok("{\"data\":[]}".to_string()),
-        |_| Some("observability query returned no matching rows".to_string()),
-    )
-    .expect_err("empty polling results are not accepted");
-    assert_eq!(empty, "observability query returned no matching rows");
 }

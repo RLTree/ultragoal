@@ -1,4 +1,5 @@
 mod classifiers;
+mod live_loop_projection_catalog;
 mod markers;
 mod projection;
 mod projection_catalog;

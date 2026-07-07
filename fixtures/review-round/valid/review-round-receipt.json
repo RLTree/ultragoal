@@ -96,7 +96,7 @@
       },
       "review_report": {
         "path": "fixtures/review-round/reports/contract_claim_falsifier.md",
-        "digest": "sha256:9b9f6541e74e7475d76ed0f945a576f9adf5edbcb5dda7eaca9ebf853cf35beb"
+        "digest": "sha256:0f89e061f6773e9cab61c18e01ac02a3bacd3bb5ff51f4b7e59f20e9e9b03f5c"
       },
       "evidence_paths_checked": [
         "fixtures/review-round/anchors/validator-receipt.json",
@@ -279,7 +279,7 @@
       },
       "review_report": {
         "path": "fixtures/review-round/reports/orchestration_recovery_falsifier.md",
-        "digest": "sha256:a8f9ae6ec0aec9f84bed48e457c7b6f65a3bc35b7ac70691bff70271545df66c"
+        "digest": "sha256:65103d1a0555c0c1c653520fbb7739eef3481e9a33bf79a0d65b5831f53c3969"
       },
       "evidence_paths_checked": [
         "fixtures/review-round/anchors/validator-receipt.json",
@@ -462,7 +462,7 @@
       },
       "review_report": {
         "path": "fixtures/review-round/reports/security_trust_boundary_falsifier.md",
-        "digest": "sha256:3f56b49952aeed9b5827df3414cb4595a42c00bf44c34ba5a063467a1a565232"
+        "digest": "sha256:028b24cc70a438c416d13d736a927dcb5563d39b1ca992281d08e3a657b5d795"
       },
       "evidence_paths_checked": [
         "fixtures/review-round/anchors/validator-receipt.json",
@@ -645,7 +645,7 @@
       },
       "review_report": {
         "path": "fixtures/review-round/reports/product_simplicity_falsifier.md",
-        "digest": "sha256:abfed0b2e4455811785edfb0fce17a89a65b92b20d80e35b3818c933d592c41f"
+        "digest": "sha256:b44eb286d28246949816af828f121680cc377df805177d290aee28eea3b9628e"
       },
       "evidence_paths_checked": [
         "fixtures/review-round/anchors/validator-receipt.json",
@@ -931,7 +931,7 @@
       "blocked": []
     },
     "decision": "FULL_SCOPE_MATERIAL_REVIEW_REQUIRED",
-    "reason": "Material sign-off and phase advancement require full-scope review against current anchors.",
+    "reason": "Material sign-off and release advancement require full-scope review against current anchors.",
     "material_triggers": [
       "material_signoff",
       "phase_advancement",

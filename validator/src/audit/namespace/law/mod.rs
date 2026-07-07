@@ -165,6 +165,7 @@ fn orphan_file_failures_for_actual_files(
         .iter()
         .filter(|rel| !listed.contains(rel.as_str()))
         .filter(|rel| !rel.starts_with("validation_artifacts/"))
+        .filter(|rel| !generated_build_output(rel))
         .cloned()
         .collect::<Vec<_>>();
     match unlisted.len() {
@@ -180,6 +181,10 @@ fn orphan_file_failures_for_actual_files(
             )]
         }
     }
+}
+
+fn generated_build_output(rel: &str) -> bool {
+    rel.starts_with("target/") || rel.starts_with("validator/target/")
 }
 
 pub(crate) fn binding_failures(root: &Path) -> Vec<String> {

@@ -57,7 +57,7 @@ fn report_text_errors(text: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
         && lower.contains("typed review-round receipt")
         && lower.contains("validated by rust");
     let scan_text = lower.replace(
-        "this fixture report is a narrative attachment only. it is not an authority for verdicts, blockers, counterexample coverage, proof anchors, claim ceilings, or next-phase routing. those obligations live in the typed review-round receipt and are validated by rust.",
+        "this fixture report is a narrative attachment only. it is not an authority for verdicts, blockers, counterexample coverage, proof anchors, claim ceilings, or next-stage routing. those obligations live in the typed review-round receipt and are validated by rust.",
         "",
     );
     for phrase in [
@@ -65,7 +65,7 @@ fn report_text_errors(text: &str, persona: &str, out: &mut Vec<ReviewFailure>) {
         "material blocker",
         "counterexample",
         "proof anchor",
-        "recommended next phase",
+        "recommended next stage",
         "sign off",
         "sign-off",
     ] {

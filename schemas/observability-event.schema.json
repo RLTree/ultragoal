@@ -78,6 +78,7 @@
         "review_round",
         "review_target",
         "schema",
+        "live_loop",
         "live_stack",
         "source_obligations",
         "standards_gardener",

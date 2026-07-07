@@ -22,7 +22,7 @@ inspected, resumed, retried, rejected, or closed without losing truth.
 
 ## Feedback Latency
 
-Name the fast gate, focused changed-slice gate, full package gate, and any
+Name the fast gate, focused changed-file gate, full package gate, and any
 latency target. Measure before changing caches, parallelism, cold-start
 behavior, or gate scope. Do not lower correctness, security, or coverage to win
 timing.

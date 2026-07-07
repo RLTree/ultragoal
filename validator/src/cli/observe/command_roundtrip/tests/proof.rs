@@ -49,9 +49,16 @@ fn query_and_explain_roundtrip_write_receipts_and_keep_candidate_binding() {
 
     let explain = explain_roundtrip(&root, spec, "run-fit", "corr-fit", 1)
         .expect("explain roundtrip receipt");
-    assert_eq!(explain["status"], "pass");
     assert_eq!(explain["candidate_digest"], candidate);
-    assert_eq!(explain["failure_class"], "none");
+    if logs["status"] == "pass" {
+        assert_eq!(explain["status"], "pass");
+        assert_eq!(explain["failure_class"], "none");
+    } else {
+        assert_eq!(explain["status"], "fail");
+        assert_ne!(explain["failure_class"], "none");
+        assert_eq!(explain["observed_run"]["operation"], "observe.logs.query");
+        assert_eq!(explain["observed_status"], "fail");
+    }
     assert!(root.join(roundtrip_path(spec, "explain-failure")).is_file());
     std::fs::remove_dir_all(root).expect("cleanup query explain");
 }

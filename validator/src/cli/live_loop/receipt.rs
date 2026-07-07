@@ -12,6 +12,10 @@ pub(crate) fn loop_receipt(
     scheduled: crate::scheduler::Scheduled<Value>,
     current_state: Value,
     first_blocker: Value,
+    first_product_blocker: Value,
+    first_observability_blocker: Value,
+    first_speed_blocker: Value,
+    first_control_board_blocker: Value,
     timing_refreshes: Vec<TimingRefresh>,
     status: &str,
     started: Instant,
@@ -19,25 +23,27 @@ pub(crate) fn loop_receipt(
     let why_failed =
         (status != "pass").then(|| text(&first_blocker, "why_failed", "loop blocker").to_string());
     let runtime = runtime(command, &scheduled, started);
+    let changed_inputs = context.changed_input_summary();
     let receipt_path = command.receipt.to_string_lossy();
+    let telemetry_status = telemetry_status(status);
     let telemetry = crate::cli::observe::telemetry::CommandTelemetry {
         command: "ultragoal loop",
         subcommand: "run",
         operation: "loop.run",
-        surface: "observability_live_loop",
+        surface: "live_loop",
         law_id: crate::cli::observe::types::LAW_ID,
         check_id: "observability-live-loop-verified-incremental-audit",
-        claim_id: "observability-live-loop-source-local-acceleration",
+        claim_id: "live-loop-hot-repair-feedback",
         artifact_path: "validation_artifacts/current-state.json",
         receipt_path: receipt_path.as_ref(),
-        status,
-        failure_class: failure_class(status),
+        status: telemetry_status,
+        failure_class: failure_class(status, &first_blocker),
         why_failed: why_failed.as_deref().unwrap_or("none"),
-        where_failed: where_failed(status),
+        where_failed: where_failed(status, &first_blocker),
         next_repair: text(&first_blocker, "next_repair", "none"),
-        claim_impact: "source_local_loop_only_not_observability_product_closure",
+        claim_impact: "source_local_hot_loop_feedback_only_not_full_observability_closure",
         blocked_claims: blocked_claims(),
-        supported_claims: vec!["observability_live_loop_source_local_increment".to_string()],
+        supported_claims: vec!["live_loop_hot_repair_feedback".to_string()],
         runtime: Some(runtime),
         emit: true,
     };
@@ -60,20 +66,29 @@ pub(crate) fn loop_receipt(
         "candidate_digest": context.candidate_digest,
         "tier": command.tier,
         "cache_mode": command.cache_mode,
+        "validation_status": validation_status(&first_product_blocker),
+        "validation_cache_status": validation_cache_status(status, &first_product_blocker),
+        "observability_status": observability_status(&first_observability_blocker),
+        "speed_claim_status": speed_claim_status(status, &first_speed_blocker),
         "audit_context": {
             "changed_files_digest": context.changed_files_digest,
             "input_digest": context.input_digest,
-            "typed_context": "AuditContext"
+            "typed_context": "AuditContext",
+            "changed_inputs": changed_inputs
         },
         "duration_ms": observability["event"]["duration_ms"],
         "worker_count": scheduled.metrics.worker_count,
         "task_count": scheduled.metrics.task_count,
         "queue_depth": scheduled.metrics.queue_depth,
-        "critical_path": "current_digest -> AuditContext -> observability_control_board -> current_state",
+        "critical_path": "current_digest -> AuditContext -> hot_loop_graph -> current_state_downstream_claims",
         "timing_refreshes": timing_refreshes,
         "nodes": scheduled.values,
         "current_state": current_state,
         "first_blocker": first_blocker,
+        "first_product_blocker": first_product_blocker,
+        "first_observability_blocker": first_observability_blocker,
+        "first_speed_blocker": first_speed_blocker,
+        "first_control_board_blocker": first_control_board_blocker,
         "narrow_rerun": narrow_rerun,
         "broad_rerun": broad_rerun,
         "forbidden_actions": ["worktrees", "install_cache_refresh", "final_packet_finalization", "readiness_release_completion_claim", "update_goal"],
@@ -83,10 +98,14 @@ pub(crate) fn loop_receipt(
     }))
 }
 
-fn claim_evaluation(status: &str, command: &LiveLoopCommand, first_blocker: &Value) -> Value {
+pub(super) fn claim_evaluation(
+    status: &str,
+    command: &LiveLoopCommand,
+    first_blocker: &Value,
+) -> Value {
     json!({
-        "claim_name": "observability live-loop source-local acceleration",
-        "claim_status": if status == "pass" { "supported_source_local" } else { "blocked" },
+        "claim_name": "live-loop hot repair feedback",
+        "claim_status": claim_status(status),
         "product_behavior_observed": format!(
             "ultragoal loop run --tier {} --cache-mode {}",
             command.tier, command.cache_mode
@@ -94,7 +113,7 @@ fn claim_evaluation(status: &str, command: &LiveLoopCommand, first_blocker: &Val
         "proof_surface": if status == "pass" {
             "all high-frequency nodes have executed or verified-cache timing proof and loop receipt"
         } else {
-            "no acceleration claim; first blocker names missing or failed product proof"
+            "no acceleration claim; first blocker names product validation, observability, speed, or downstream claim proof gap"
         },
         "independent_reconciliation_surface": if status == "pass" {
             "same-candidate stdout, receipt, logs, metrics, traces, explain output, and current-state reconciliation"
@@ -103,6 +122,61 @@ fn claim_evaluation(status: &str, command: &LiveLoopCommand, first_blocker: &Val
         },
         "first_blocker": first_blocker
     })
+}
+
+pub(super) fn telemetry_status(status: &str) -> &'static str {
+    match status {
+        "pass" => "pass",
+        "fail" => "fail",
+        "partial" => "blocked",
+        _ => "blocked",
+    }
+}
+
+fn claim_status(status: &str) -> &'static str {
+    match status {
+        "pass" => "supported_source_local",
+        "partial" => "withheld_validation_result_available",
+        _ => "blocked",
+    }
+}
+
+pub(super) fn validation_status(first_product_blocker: &Value) -> &'static str {
+    if blocker_id(first_product_blocker) == "none" {
+        "pass"
+    } else {
+        "fail"
+    }
+}
+
+pub(super) fn validation_cache_status(status: &str, first_product_blocker: &Value) -> &'static str {
+    if status != "fail" && blocker_id(first_product_blocker) == "none" {
+        "reusable"
+    } else {
+        "not_reusable"
+    }
+}
+
+pub(super) fn observability_status(first_observability_blocker: &Value) -> &'static str {
+    if blocker_id(first_observability_blocker) == "none" {
+        "pass"
+    } else {
+        "partial"
+    }
+}
+
+pub(super) fn speed_claim_status(status: &str, first_speed_blocker: &Value) -> &'static str {
+    if status == "pass" {
+        "supported"
+    } else if blocker_id(first_speed_blocker) == "none" {
+        "withheld"
+    } else {
+        "failed"
+    }
+}
+
+fn blocker_id(blocker: &Value) -> &str {
+    blocker.get("id").and_then(Value::as_str).unwrap_or("none")
 }
 
 fn runtime(
@@ -133,19 +207,23 @@ fn runtime(
     }
 }
 
-fn failure_class(status: &str) -> &'static str {
+pub(super) fn failure_class<'a>(status: &str, first_blocker: &'a Value) -> &'a str {
     if status == "pass" {
         "none"
     } else {
-        "observability_live_loop_first_blocker"
+        text(
+            first_blocker,
+            "failure_class",
+            "observability_live_loop_first_blocker",
+        )
     }
 }
 
-fn where_failed(status: &str) -> &'static str {
+pub(super) fn where_failed<'a>(status: &str, first_blocker: &'a Value) -> &'a str {
     if status == "pass" {
         "none"
     } else {
-        "loop.run.current_state.first_blocker"
+        text(first_blocker, "where_failed", "loop.run.first_blocker")
     }
 }
 
@@ -167,71 +245,4 @@ fn blocked_claims() -> Vec<String> {
     .into_iter()
     .map(ToString::to_string)
     .collect()
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::cli::live_loop::{LiveLoopAction, LiveLoopCommand};
-    use serde_json::json;
-    use std::path::PathBuf;
-
-    #[test]
-    fn status_projection_reports_pass_without_failure_fields() {
-        assert_eq!(super::failure_class("pass"), "none");
-        assert_eq!(super::where_failed("pass"), "none");
-        assert_eq!(
-            super::failure_class("fail"),
-            "observability_live_loop_first_blocker"
-        );
-        assert_eq!(
-            super::where_failed("fail"),
-            "loop.run.current_state.first_blocker"
-        );
-    }
-
-    #[test]
-    fn loop_receipt_claim_evaluation_names_pass_and_blocked_surfaces() {
-        let command = LiveLoopCommand {
-            action: LiveLoopAction::Run,
-            tier: "hot".to_string(),
-            cache_mode: "verified-local".to_string(),
-            jobs: None,
-            receipt: PathBuf::from("validation_artifacts/observability/live-loop-run.json"),
-            node_id: None,
-            measure_all: false,
-        };
-        let first_blocker = json!({
-            "id": "coverage_prove",
-            "why_failed": "coverage receipt is stale"
-        });
-
-        let pass = super::claim_evaluation("pass", &command, &first_blocker);
-        assert_eq!(pass["claim_status"], "supported_source_local");
-        assert_eq!(
-            pass["product_behavior_observed"],
-            "ultragoal loop run --tier hot --cache-mode verified-local"
-        );
-        assert!(
-            pass["proof_surface"]
-                .as_str()
-                .expect("pass proof surface")
-                .contains("executed or verified-cache timing proof")
-        );
-        assert!(
-            pass["independent_reconciliation_surface"]
-                .as_str()
-                .expect("pass reconciliation")
-                .contains("logs, metrics, traces")
-        );
-
-        let blocked = super::claim_evaluation("fail", &command, &first_blocker);
-        assert_eq!(blocked["claim_status"], "blocked");
-        assert!(
-            blocked["proof_surface"]
-                .as_str()
-                .expect("blocked proof surface")
-                .contains("no acceleration claim")
-        );
-        assert_eq!(blocked["first_blocker"]["id"], "coverage_prove");
-    }
 }

@@ -82,6 +82,7 @@
         "review_round",
         "review_target",
         "schema",
+        "live_loop",
         "live_stack",
         "source_obligations",
         "standards_gardener",
@@ -202,6 +203,7 @@
             ]
           },
           "metric_value": { "type": "number" },
+          "timestamp": { "$ref": "schema-authority-primitives.schema.json#/$defs/isoTimestamp" },
           "labels": {
             "type": "object",
             "additionalProperties": false,

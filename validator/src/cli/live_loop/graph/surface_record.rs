@@ -52,6 +52,7 @@ pub(crate) fn surface_record(
         "execution_task_class": surface.execution_task_class.id(),
         "execution_serial_reason": surface.execution_serial_reason,
         "high_frequency": surface.high_frequency,
+        "hot_loop_policy": surface.hot_loop_policy,
         "duration_ms": duration_ms,
         "graph_evaluation_duration_ms": graph_duration_ms,
         "command": surface.command,
@@ -68,7 +69,7 @@ pub(crate) fn surface_record(
     let object = record
         .as_object_mut()
         .expect("live-loop node projection is always an object");
-    timing_projection_fields::insert(object, node_timing.as_ref(), graph_duration_ms);
+    timing_projection_fields::insert(object, surface, node_timing.as_ref(), graph_duration_ms);
     claim_evaluation::insert(object, surface, node_timing.as_ref(), &measurement);
     record
 }
@@ -77,6 +78,9 @@ fn timing_claim_ready(timing: &NodeTiming) -> bool {
     timing.timing_status == "pass"
         && timing.failure_class == "none"
         && timing.telemetry_reconciliation_status == "pass"
+        && timing.validation_status == "pass"
+        && timing.observability_status == "pass"
+        && timing.speed_claim_status == "supported"
 }
 
 fn cache_decision(id: &str, input_digest: &str, tier: &str, cache_mode: &str) -> Value {

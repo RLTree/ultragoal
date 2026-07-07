@@ -1,31 +1,35 @@
-mod backend_readiness;
 mod diagnostics;
 mod event;
 #[cfg(test)]
 mod event_receipt;
-mod query_roundtrip;
+mod live_backend;
+mod observe_receipt_reader;
+#[path = "../query/mod.rs"]
+mod query;
 #[cfg(test)]
 mod receipts;
+mod reconciliation_report;
 #[cfg(test)]
 mod status;
+#[cfg(test)]
+mod test_reconciliation;
+#[cfg(test)]
+mod validation_state_tests;
 
 use super::full_command::FullCommandRun;
 use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
 use serde_json::{Value, json};
 use std::path::Path;
+use std::thread::ScopedJoinHandle;
 use std::time::Instant;
+#[cfg(test)]
+use test_reconciliation::reconcile_with_observe_roundtrip;
 
 #[derive(Clone, Debug)]
 pub(crate) struct TelemetryReconciliation {
     pub(crate) status: String,
     pub(crate) duration_ms: u64,
     pub(crate) value: Value,
-}
-
-#[derive(Clone, Debug)]
-struct ReconciliationReport {
-    status: String,
-    value: Value,
 }
 
 impl TelemetryReconciliation {
@@ -71,40 +75,36 @@ pub(crate) fn reconcile(
     }
 }
 
+pub(crate) fn deferred_hot_validation(surface: LoopValidationSurface) -> TelemetryReconciliation {
+    TelemetryReconciliation {
+        status: "deferred_hot_loop_observability".to_string(),
+        duration_ms: 1,
+        value: json!({
+            "status": "deferred_hot_loop_observability",
+            "surface": surface.surface,
+            "node_id": surface.id,
+            "reconciliation_mode": "hot_loop_validation_result_retained_without_live_query_roundtrip",
+            "observability_status": "partial",
+            "validation_cache_status": "reusable_when_input_equivalence_holds",
+            "speed_claim_status": "withheld",
+            "why_failed": "hot verified-local loop retained the real validation result and deferred logs metrics traces and explain reconciliation to the observability repair path",
+            "where_failed": format!("loop.measure.{}.observability_roundtrip", surface.id),
+            "next_repair": format!(
+                "run `{}` once when observability proof is in scope, then query logs metrics traces and explain by run_id/correlation_id/current digest",
+                surface.narrow_rerun
+            ),
+            "claim_impact": "validation_result_available_speed_and_observability_claims_withheld"
+        }),
+    }
+}
+
 fn reconcile_result(
     root: &Path,
     surface: LoopValidationSurface,
     candidate: &str,
     command: &LiveLoopCommand,
     actual_work: &FullCommandRun,
-) -> Result<ReconciliationReport, String> {
-    reconcile_with_observe_roundtrip(
-        root,
-        surface,
-        candidate,
-        command,
-        actual_work,
-        &mut |roundtrip, run_id, correlation_id| {
-            query_roundtrip::run(root, surface, roundtrip, run_id, correlation_id)
-        },
-    )
-}
-
-fn reconcile_with_observe_roundtrip<F>(
-    root: &Path,
-    surface: LoopValidationSurface,
-    candidate: &str,
-    command: &LiveLoopCommand,
-    actual_work: &FullCommandRun,
-    roundtrip: &mut F,
-) -> Result<ReconciliationReport, String>
-where
-    F: FnMut(
-        query_roundtrip::RoundtripQuery,
-        &str,
-        &str,
-    ) -> Result<query_roundtrip::ObserveReceipt, String>,
-{
+) -> Result<reconciliation_report::ReconciliationReport, String> {
     let observation_path = event::receipt_path(surface.id);
     let observation = event::write(
         root,
@@ -114,101 +114,108 @@ where
         actual_work,
         &observation_path,
     )?;
-    let logs = roundtrip(
-        query_roundtrip::RoundtripQuery::Logs,
+    let roundtrips = run_bounded_query_roundtrips(
+        root,
+        surface,
+        candidate,
         &observation.run_id,
         &observation.correlation_id,
     )?;
-    let traces = roundtrip(
-        query_roundtrip::RoundtripQuery::Traces,
-        &observation.run_id,
-        &observation.correlation_id,
-    )?;
-    let metrics = roundtrip(
-        query_roundtrip::RoundtripQuery::Metrics,
-        &observation.run_id,
-        &observation.correlation_id,
-    )?;
-    let explain = roundtrip(
-        query_roundtrip::RoundtripQuery::ExplainFailure,
-        &observation.run_id,
-        &observation.correlation_id,
-    )?;
-    let status = reconciliation_status(all_roundtrip_statuses_pass(
-        &logs, &metrics, &traces, &explain,
-    ));
-    let run_id = observation.run_id.clone();
-    let correlation_id = observation.correlation_id.clone();
-    let trace_id = observation.trace_id.clone();
-    let value = json!({
-        "status": status,
-        "run_id": run_id,
-        "correlation_id": correlation_id,
-        "trace_id": trace_id,
-        "command_observation_receipt": observation_path.display().to_string(),
-        "command_observation": observation.value(),
-        "logs_query": logs.value(),
-        "metrics_query": metrics.value(),
-        "traces_query": traces.value(),
-        "explain_failure": explain.value(),
-        "claim_impact": "source_local_live_loop_node_observation_only_not_speed_claim"
-    });
-    Ok(ReconciliationReport {
-        status: status.to_string(),
-        value,
+    Ok(reconciliation_report::from_roundtrips(
+        observation,
+        observation_path,
+        roundtrips.logs,
+        roundtrips.metrics,
+        roundtrips.traces,
+        roundtrips.explain,
+    ))
+}
+
+struct ObserveRoundtrips {
+    logs: query::ObserveReceipt,
+    metrics: query::ObserveReceipt,
+    traces: query::ObserveReceipt,
+    explain: query::ObserveReceipt,
+}
+
+fn run_bounded_query_roundtrips(
+    root: &Path,
+    surface: LoopValidationSurface,
+    candidate: &str,
+    run_id: &str,
+    correlation_id: &str,
+) -> Result<ObserveRoundtrips, String> {
+    std::thread::scope(|scope| {
+        let logs = scope.spawn(|| {
+            query::capture_query_roundtrip(
+                root,
+                surface,
+                query::LiveQueryRoundtrip::Logs,
+                run_id,
+                correlation_id,
+                candidate,
+            )
+        });
+        let metrics = scope.spawn(|| {
+            query::capture_query_roundtrip(
+                root,
+                surface,
+                query::LiveQueryRoundtrip::Metrics,
+                run_id,
+                correlation_id,
+                candidate,
+            )
+        });
+        let traces = scope.spawn(|| {
+            query::capture_query_roundtrip(
+                root,
+                surface,
+                query::LiveQueryRoundtrip::Traces,
+                run_id,
+                correlation_id,
+                candidate,
+            )
+        });
+        let logs = join_query_capture("logs-query", logs)?;
+        let metrics = join_query_capture("metrics-query", metrics)?;
+        let traces = join_query_capture("traces-query", traces)?;
+        let logs = query::write_pending_query_receipt(root, logs)?;
+        let metrics = query::write_pending_query_receipt(root, metrics)?;
+        let traces = query::write_pending_query_receipt(root, traces)?;
+        let explain = query::run(
+            root,
+            surface,
+            query::RoundtripQuery::ExplainFailure,
+            run_id,
+            correlation_id,
+            candidate,
+        )?;
+        Ok(ObserveRoundtrips {
+            logs,
+            metrics,
+            traces,
+            explain,
+        })
     })
 }
 
-fn all_roundtrip_statuses_pass(
-    logs: &query_roundtrip::ObserveReceipt,
-    metrics: &query_roundtrip::ObserveReceipt,
-    traces: &query_roundtrip::ObserveReceipt,
-    explain: &query_roundtrip::ObserveReceipt,
-) -> bool {
-    query_receipt_is_claim_observable(logs)
-        && query_receipt_is_claim_observable(metrics)
-        && query_receipt_is_claim_observable(traces)
-        && explain_receipt_is_claim_observable(explain)
-}
-
-fn query_receipt_is_claim_observable(receipt: &query_roundtrip::ObserveReceipt) -> bool {
-    receipt.exit_code == 0
-        && receipt.status == "pass"
-        && text(&receipt.value, "status") == Some("pass")
-        && text(&receipt.value, "bounded_output_status") == Some("pass")
-        && text(&receipt.value, "redaction_status") == Some("pass")
-        && receipt
-            .value
-            .get("row_count")
-            .and_then(Value::as_u64)
-            .is_some_and(|rows| rows > 0)
-        && text(&receipt.value, "result_digest").is_some_and(nonempty)
-}
-
-fn explain_receipt_is_claim_observable(receipt: &query_roundtrip::ObserveReceipt) -> bool {
-    receipt.exit_code == 0
-        && receipt.status == "pass"
-        && text(&receipt.value, "status") == Some("pass")
-        && text(&receipt.value, "bounded_output_proof") == Some("pass")
-        && text(&receipt.value, "failure_class").is_some()
-        && text(&receipt.value, "claim_impact").is_some_and(nonempty)
-}
-
-fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
-    value.get(key).and_then(Value::as_str)
-}
-
-fn nonempty(value: &str) -> bool {
-    !value.is_empty()
+fn join_query_capture<'scope>(
+    label: &str,
+    handle: ScopedJoinHandle<'scope, query::PendingQueryReceipt>,
+) -> Result<query::PendingQueryReceipt, String> {
+    Ok(handle
+        .join()
+        .map_err(|_| format!("observe {label} worker panicked"))?)
 }
 
 fn with_duration(mut value: Value, duration_ms: u64) -> Value {
-    if let Some(object) = value.as_object_mut() {
-        object.insert(
+    value
+        .as_object_mut()
+        .expect("reconciliation report projection is always a JSON object")
+        .insert(
             "telemetry_reconciliation_duration_ms".to_string(),
             json!(duration_ms),
         );
-    }
     value
 }
 
@@ -216,11 +223,4 @@ fn elapsed_ms(started: Instant) -> u64 {
     u64::try_from(started.elapsed().as_millis())
         .unwrap_or(u64::MAX)
         .max(1)
-}
-
-fn reconciliation_status(roundtrips_passed: bool) -> &'static str {
-    match roundtrips_passed {
-        true => "pass",
-        false => "query_or_explain_reconciliation_failed",
-    }
 }
