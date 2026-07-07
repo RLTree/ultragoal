@@ -130,6 +130,9 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "result_digest": result_digest(),
         "verified_local_result_digest": result_digest()
     })
+    .with_value("telemetry_reconciliation_duration_ms", json!(3))
+    .with_value("reconciled_command_duration_ms", json!(104))
+    .with_value("product_latency_ms", json!(104))
 }
 
 fn stdout_digest() -> String {
@@ -148,4 +151,17 @@ fn output_digest() -> String {
 
 fn result_digest() -> String {
     crate::digest::bytes(format!("exit=0;launch=false;output={}", output_digest()).as_bytes())
+}
+
+trait WithValue {
+    fn with_value(self, key: &str, value: serde_json::Value) -> Self;
+}
+
+impl WithValue for serde_json::Value {
+    fn with_value(mut self, key: &str, value: serde_json::Value) -> Self {
+        self.as_object_mut()
+            .expect("timing row object")
+            .insert(key.to_string(), value);
+        self
+    }
 }

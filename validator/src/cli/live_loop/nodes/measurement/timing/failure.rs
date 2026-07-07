@@ -151,7 +151,7 @@ pub(crate) fn measurement_why_failed(baseline: &FullCommandRun, failure_class: &
                 .to_string()
         }
         "live_loop_speedup_target_missed" => {
-            "executed verified-local work did not meet the 20x speed target".to_string()
+            "verified-local product latency including graph overhead and telemetry reconciliation did not meet the 20x speed target".to_string()
         }
         _ => "live-loop node timing row failed strict proof validation".to_string(),
     }
@@ -205,7 +205,7 @@ pub(crate) fn measurement_next_repair(
             surface.narrow_rerun, surface.id
         ),
         "live_loop_speedup_target_missed" => format!(
-            "split or cache `{}` with verified equivalence until node `{}` is at least 20x faster than its canonical baseline",
+            "split, cache, batch telemetry reconciliation, or daemonize `{}` with verified equivalence until node `{}` product latency is at least 20x faster than its canonical baseline",
             surface.narrow_rerun, surface.id
         ),
         _ => format!(

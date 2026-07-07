@@ -7,6 +7,7 @@ pub(super) fn ref_for(root: &Path, current: &str) -> Value {
         "validation_artifacts/coverage/coverage-receipt.json",
         &json!({
             "schema":"harness-ultragoal.coverage-receipt.v1",
+            "coverage_target_dir":"target/ultragoal-coverage",
             "claim_id":"CLAIM-100",
             "command":"ultragoal coverage prove",
             "tool":"cargo-llvm-cov",

@@ -66,6 +66,9 @@ fn replay_from_row(
     if !row_has_replayable_proof(row, proof_kind) {
         return None;
     }
+    if !row_has_reconciled_duration(row) {
+        return None;
+    }
     let exit_code = row
         .get("exit_status")?
         .as_i64()
@@ -159,6 +162,25 @@ fn row_has_executed_work(row: &Value) -> bool {
         && text(row, "equivalence_status") == Some("executed_current_candidate_not_cache_replay")
         && text(row, "invalidation_proof").is_some_and(|value| !value.is_empty())
         && row_has_command_argv(row)
+}
+
+fn row_has_reconciled_duration(row: &Value) -> bool {
+    let actual = row.get("actual_work_duration_ms").and_then(Value::as_u64);
+    let graph = row.get("graph_overhead_ms").and_then(Value::as_u64);
+    let telemetry = row
+        .get("telemetry_reconciliation_duration_ms")
+        .and_then(Value::as_u64);
+    let reconciled = row
+        .get("reconciled_command_duration_ms")
+        .and_then(Value::as_u64);
+    let product_latency = row.get("product_latency_ms").and_then(Value::as_u64);
+    match (actual, graph, telemetry, reconciled, product_latency) {
+        (Some(actual), Some(graph), Some(telemetry), Some(reconciled), Some(product_latency)) => {
+            reconciled == actual.saturating_add(graph).saturating_add(telemetry)
+                && product_latency == reconciled
+        }
+        _ => false,
+    }
 }
 
 fn row_has_required_versions(row: &Value) -> bool {

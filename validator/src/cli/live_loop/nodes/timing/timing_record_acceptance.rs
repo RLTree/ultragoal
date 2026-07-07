@@ -21,6 +21,11 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
 fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivalence() {
     let cases = [
         json!({"actual_work_duration_ms": 3}),
+        json!({"telemetry_reconciliation_duration_ms": serde_json::Value::Null}),
+        json!({"reconciled_command_duration_ms": serde_json::Value::Null}),
+        json!({"reconciled_command_duration_ms": 5}),
+        json!({"product_latency_ms": serde_json::Value::Null}),
+        json!({"product_latency_ms": 5}),
         json!({"validator_version": ""}),
         json!({"verified_local_command": ""}),
         json!({"command_argv": []}),
@@ -30,6 +35,8 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"output_digest": serde_json::Value::Null}),
         json!({"result_digest": digest("different-result")}),
         json!({"output_digest": digest("different-output")}),
+        json!({"verified_local_result_digest": "sha256:short"}),
+        json!({"verified_local_output_digest": "sha256:short"}),
         json!({"verified_local_stdout_digest": "sha256:short"}),
         json!({"timing_status": "pass", "failure_class": "live_loop_speedup_target_missed"}),
         json!({"timing_status": "pass", "telemetry_reconciliation_status": "missing"}),
@@ -135,6 +142,9 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         json!(["bash", "-lc", "cargo fmt --all --check"]),
     );
     object.insert("exit_status".to_string(), json!(0));
+    object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
+    object.insert("reconciled_command_duration_ms".to_string(), json!(6));
+    object.insert("product_latency_ms".to_string(), json!(6));
     object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
     row

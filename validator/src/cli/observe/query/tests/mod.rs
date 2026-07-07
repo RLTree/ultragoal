@@ -3,6 +3,7 @@ use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
 
+mod live_reconciliation;
 mod metrics;
 mod record_projection;
 mod records;

@@ -90,18 +90,38 @@ fn raw_authority_scanner_allows_typed_map_projection_and_field_parsers() {
 #[test]
 fn raw_authority_scanner_classifies_live_loop_timing_projections_by_product_fields() {
     let graph_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
-        "validator/src/cli/live_loop/graph/node_record.rs",
+        "validator/src/cli/live_loop/graph/surface_record.rs",
         "use serde_json::{Value,json};\n\
          pub struct LoopValidationSurface;\n\
          pub struct NodeTiming;\n\
          fn surface_record() -> Value {\n\
              let mut object: serde_json::Map<String, Value> = serde_json::Map::new();\n\
-             object.insert(\"verified_local_result_digest\".to_string(), json!(\"sha256:test\"));\n\
-             object.insert(\"telemetry_reconciliation_status\".to_string(), json!(\"pass\"));\n\
-             json!({\"claim_impact\":\"source-local\",\"record\":object})\n\
+             timing_projection_fields::insert(&mut object);\n\
+             claim_evaluation::insert(&mut object);\n\
+             json!({\"claim_impact\":\"source-local\",\"speedup_ratio\":\"20x\",\"record\":object})\n\
          }\n",
     );
     assert!(graph_projection.is_empty(), "{graph_projection:?}");
+
+    let timing_field_projection =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/cli/live_loop/graph/timing_projection_fields.rs",
+            "use serde_json::{Value,json};\n\
+         pub struct NodeTiming;\n\
+         fn insert(object: &mut serde_json::Map<String, Value>) {\n\
+             object.insert(\"product_latency_ms\".to_string(), json!(1));\n\
+             object.insert(\"reconciled_command_duration_ms\".to_string(), json!(1));\n\
+             object.insert(\"telemetry_reconciliation_duration_ms\".to_string(), json!(1));\n\
+             object.insert(\"verified_local_result_digest\".to_string(), json!(\"sha256:test\"));\n\
+             object.insert(\"verified_local_output_digest\".to_string(), json!(\"sha256:test\"));\n\
+             object.insert(\"telemetry_reconciliation_status\".to_string(), json!(\"pass\"));\n\
+             object.insert(\"equivalence_status\".to_string(), json!(\"executed_current_candidate_not_cache_replay\"));\n\
+         }\n",
+        );
+    assert!(
+        timing_field_projection.is_empty(),
+        "{timing_field_projection:?}"
+    );
 
     let timing_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
         "validator/src/cli/live_loop/nodes/measurement/timing/record.rs",
@@ -113,6 +133,16 @@ fn raw_authority_scanner_classifies_live_loop_timing_projections_by_product_fiel
          }\n",
     );
     assert!(timing_projection.is_empty(), "{timing_projection:?}");
+
+    let backend_readiness = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/live_loop/nodes/measurement/observation/backend_readiness.rs",
+        "use serde_json::{Value,json};\n\
+         pub enum RoundtripQuery { Logs }\n\
+         fn unavailable() -> Value {\n\
+             json!({\"backend_service\":\"victorialogs\",\"backend_readiness_timeout_ms\":500,\"failure_class\":\"live_loop_observability_backend_unavailable\"})\n\
+         }\n",
+    );
+    assert!(backend_readiness.is_empty(), "{backend_readiness:?}");
 
     let command_observation =
         crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
@@ -187,7 +217,7 @@ fn raw_authority_scanner_rejects_generic_speed_claim_projection_rows() {
 #[test]
 fn raw_authority_scanner_rejects_generic_live_loop_json_projection_rows() {
     for rel in [
-        "validator/src/cli/live_loop/graph/node_record.rs",
+        "validator/src/cli/live_loop/graph/surface_record.rs",
         "validator/src/cli/live_loop/nodes/measurement/timing/record.rs",
         "validator/src/cli/live_loop/nodes/measurement/observation/event.rs",
     ] {

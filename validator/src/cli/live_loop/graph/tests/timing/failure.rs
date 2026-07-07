@@ -113,7 +113,7 @@ fn live_loop_graph_blocks_pass_shaped_timing_that_misses_speed_target() {
         node["speedup_measurement_state"],
         "verified_local_20x_proof_failed"
     );
-    assert_eq!(node["speedup_ratio"], 10);
+    assert_eq!(node["speedup_ratio"], 9);
 }
 
 #[test]

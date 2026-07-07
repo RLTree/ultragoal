@@ -1,7 +1,11 @@
 use super::*;
 use crate::cli::live_loop::{LiveLoopAction, LiveLoopCommand, surfaces::surface_by_id};
+use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 use std::path::{Path, PathBuf};
+
+#[path = "cache_equivalence_tests.rs"]
+mod cache_equivalence_tests;
 
 #[test]
 fn cache_replay_accepts_only_same_input_executed_rows() {
@@ -52,47 +56,17 @@ fn cache_replay_rejects_prior_rows_without_product_equivalence() {
         timing_row(&fixture).with_value("work_unit_count", json!(0)),
         timing_row(&fixture).with_value("equivalence_status", json!("unknown")),
         timing_row(&fixture).with_value("command_argv", json!([])),
+        timing_row(&fixture).with_value("actual_work_duration_ms", json!(0)),
+        timing_row(&fixture).with_value("reconciled_command_duration_ms", json!(1)),
+        timing_row(&fixture).without_key("product_latency_ms"),
+        timing_row(&fixture).with_value("product_latency_ms", json!(1)),
+        timing_row(&fixture).without_key("telemetry_reconciliation_duration_ms"),
+        timing_row(&fixture).without_key("actual_work_duration_ms"),
     ] {
         write_timing_row(&fixture.root, bad_row);
         assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
     }
     std::fs::remove_dir_all(fixture.root).expect("cleanup cache replay");
-}
-
-#[test]
-fn cache_replay_accepts_same_candidate_verified_cache_rows() {
-    let fixture = ReplayFixture::new();
-    write_timing_row(&fixture.root, verified_cache_row(&fixture));
-
-    let replay = cache_hit(&fixture, &fixture.input_digest).expect("verified cache row replay");
-    assert_eq!(replay.run.exit_code, 0);
-    assert_eq!(replay.run.stdout_digest, stdout_digest());
-    assert_eq!(replay.baseline.exit_code, 0);
-    assert_eq!(replay.baseline.duration_ms, 200);
-    assert_eq!(replay.prior_result_digest, result_digest());
-    assert_eq!(replay.replayed_output_digest, output_digest());
-
-    std::fs::remove_dir_all(fixture.root).expect("cleanup verified cache replay");
-}
-
-#[test]
-fn cache_replay_rejects_verified_cache_rows_without_same_candidate_equivalence() {
-    let fixture = ReplayFixture::new();
-    for bad_row in [
-        verified_cache_row(&fixture).with_value("cache_hit", json!(false)),
-        verified_cache_row(&fixture).with_value("work_unit_count", json!(1)),
-        verified_cache_row(&fixture).with_value("equivalence_status", json!("unknown")),
-        verified_cache_row(&fixture).with_value("cache_equivalence_status", json!("miss")),
-        verified_cache_row(&fixture)
-            .with_value("prior_result_digest", json!(digest("wrong-result"))),
-        verified_cache_row(&fixture)
-            .with_value("replayed_output_digest", json!(digest("wrong-output"))),
-    ] {
-        write_timing_row(&fixture.root, bad_row);
-        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
-    }
-
-    std::fs::remove_dir_all(fixture.root).expect("cleanup bad verified cache replay");
 }
 
 struct ReplayFixture {
@@ -106,8 +80,7 @@ struct ReplayFixture {
 
 impl ReplayFixture {
     fn new() -> Self {
-        let root =
-            crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-cache-replay");
+        let root = temp_root("live-loop-cache-replay");
         let surface = surface_by_id("fmt_check").expect("fmt surface");
         let command = LiveLoopCommand {
             action: LiveLoopAction::Measure,
@@ -161,7 +134,7 @@ fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "receipt_paths": [NODE_TIMING_REL],
         "artifact_paths": [NODE_TIMING_REL],
         "verified_local_stdout_digest": stdout_digest(),
-        "verified_local_stderr_digest": stderr_digest(),
+        "verified_local_stderr_digest": digest("stderr"),
         "output_digest": output_digest(),
         "verified_local_output_digest": output_digest(),
         "result_digest": result_digest(),
@@ -183,8 +156,11 @@ fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
     .with_value("baseline_exit_code", json!(0))
     .with_value("baseline_launch_error", json!(false))
     .with_value("baseline_stdout_digest", json!(stdout_digest()))
-    .with_value("baseline_stderr_digest", json!(stderr_digest()))
+    .with_value("baseline_stderr_digest", json!(digest("stderr")))
     .with_value("baseline_failure", json!({}))
+    .with_value("telemetry_reconciliation_duration_ms", json!(3))
+    .with_value("reconciled_command_duration_ms", json!(104))
+    .with_value("product_latency_ms", json!(104))
 }
 
 fn verified_cache_row(fixture: &ReplayFixture) -> serde_json::Value {
@@ -203,7 +179,7 @@ fn verified_cache_row(fixture: &ReplayFixture) -> serde_json::Value {
 
 fn output_digest() -> String {
     crate::digest::bytes(
-        format!("stdout={};stderr={}", stdout_digest(), stderr_digest()).as_bytes(),
+        format!("stdout={};stderr={}", stdout_digest(), digest("stderr")).as_bytes(),
     )
 }
 
@@ -215,10 +191,6 @@ fn stdout_digest() -> String {
     digest("stdout")
 }
 
-fn stderr_digest() -> String {
-    digest("stderr")
-}
-
 fn digest(label: &str) -> String {
     crate::digest::bytes(label.as_bytes())
 }
@@ -228,8 +200,9 @@ fn write_timing_row(root: &Path, row: serde_json::Value) {
         .expect("timing row");
 }
 
-trait WithValue {
+pub(super) trait WithValue {
     fn with_value(self, key: &str, value: serde_json::Value) -> Self;
+    fn without_key(self, key: &str) -> Self;
 }
 
 impl WithValue for serde_json::Value {
@@ -237,6 +210,11 @@ impl WithValue for serde_json::Value {
         self.as_object_mut()
             .expect("timing row object")
             .insert(key.to_string(), value);
+        self
+    }
+
+    fn without_key(mut self, key: &str) -> Self {
+        self.as_object_mut().expect("timing row object").remove(key);
         self
     }
 }

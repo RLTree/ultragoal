@@ -146,7 +146,7 @@ fn transaction_rejects_uncovered_coverage_ref_without_source_audit_circularity()
     );
     super::write_json(
         &root.join("validation_artifacts/coverage/coverage-receipt.json"),
-        &json!({"schema":"harness-ultragoal.coverage-receipt.v1","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('f')},"coverage":{"percent":100.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
+        &json!({"schema":"harness-ultragoal.coverage-receipt.v1","coverage_target_dir":"target/ultragoal-coverage","target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('f')},"coverage":{"percent":100.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
     );
     super::write_transaction(&root, &current);
     let mut tx = crate::json_boundary::read_json(&root.join(super::RECEIPT)).expect("tx");

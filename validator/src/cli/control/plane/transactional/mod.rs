@@ -86,6 +86,10 @@ fn typed_status(root: &Path, rel: &str) -> Option<&'static str> {
         && value.get("schema").and_then(Value::as_str)
             == Some("harness-ultragoal.coverage-receipt.v1")
         && value.get("command_exit").and_then(Value::as_i64) == Some(0)
+        && value
+            .get("coverage_target_dir")
+            .and_then(Value::as_str)
+            .is_some_and(|target_dir| !target_dir.is_empty() && target_dir != "target")
         && value.pointer("/coverage/percent").and_then(Value::as_f64) == Some(100.0)
         && value
             .get("uncovered_records")
@@ -121,6 +125,7 @@ mod tests {
             &root.join(rel),
             &json!({
                 "schema":"harness-ultragoal.coverage-receipt.v1",
+                "coverage_target_dir":"target/ultragoal-coverage",
                 "command_exit":0,
                 "coverage":{"percent":100.0},
                 "uncovered_records":[],
@@ -144,6 +149,7 @@ mod tests {
             &root.join(rel),
             &json!({
                 "schema":"harness-ultragoal.coverage-receipt.v1",
+                "coverage_target_dir":"target/ultragoal-coverage",
                 "command_exit":0,
                 "coverage":{"percent":99.0},
                 "uncovered_records":[],

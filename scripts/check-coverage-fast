@@ -74,6 +74,12 @@ def resolve_repo_path(raw, code):
         fail(code)
     return candidate
 
+def coverage_target_dir_not_isolated(raw):
+    if not raw:
+        fail("coverage_target_dir_missing")
+    candidate = (Path(raw) if Path(raw).is_absolute() else root_path / raw).resolve()
+    return candidate == (root_path / "target").resolve()
+
 def ignored(path):
     if path.startswith("docs/parent-session-full-ultragoal-") and path.endswith(".md"):
         return True
@@ -145,6 +151,10 @@ if not Path(receipt_path).is_file():
 receipt = load_json(receipt_path, "coverage_receipt_malformed")
 if receipt.get("schema") != "harness-ultragoal.coverage-receipt.v1":
     fail("coverage_receipt_malformed")
+if not receipt.get("command") or not receipt.get("tool"):
+    fail("coverage_receipt_malformed")
+if coverage_target_dir_not_isolated(receipt.get("coverage_target_dir")):
+    fail("coverage_target_dir_not_isolated")
 if not receipt.get("tool_version"):
     fail("coverage_receipt_tool_version_missing")
 if receipt.get("generated_by") != "coverage-command":

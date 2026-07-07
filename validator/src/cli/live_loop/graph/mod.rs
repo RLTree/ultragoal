@@ -5,11 +5,12 @@ use std::collections::BTreeMap;
 
 mod claim_evaluation;
 mod measurement_failure;
-mod node_record;
+mod surface_record;
 #[cfg(test)]
 mod tests;
+mod timing_projection_fields;
 #[cfg(test)]
-pub(crate) use node_record::surface_record;
+pub(crate) use surface_record::surface_record;
 
 pub(crate) fn tasks(
     candidate_digest: &str,
@@ -35,7 +36,7 @@ pub(crate) fn tasks(
             let tier = tier.to_string();
             let cache_mode = cache_mode.to_string();
             Box::new(move || {
-                node_record::surface_record(
+                surface_record::surface_record(
                     surface,
                     &input_digest,
                     &tier,

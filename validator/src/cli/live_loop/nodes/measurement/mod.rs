@@ -150,6 +150,7 @@ fn measure_cached_verified_local(
         &command.cache_mode,
     );
     let graph_overhead_ms = elapsed_ms(started);
+    let replay_started = Instant::now();
     if let Some(mut actual_work) = cache_replay::verified_local_hit(
         root,
         surface,
@@ -157,7 +158,7 @@ fn measure_cached_verified_local(
         input_digest,
         command,
         &cache_key,
-        started,
+        replay_started,
     ) {
         let telemetry_reconciliation =
             observation::reconcile(root, surface, candidate, command, &actual_work.run);

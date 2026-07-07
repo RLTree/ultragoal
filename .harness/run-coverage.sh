@@ -5,28 +5,44 @@ root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
 cd "$root"
 
 mkdir -p validation_artifacts/coverage
+coverage_target_dir="${ULTRAGOAL_COVERAGE_TARGET_DIR:-target/ultragoal-coverage}"
+mkdir -p "$coverage_target_dir"
 
 report="validation_artifacts/coverage/llvm-cov-full.json"
 missing_report="validation_artifacts/coverage/missing-lines.txt"
-receipt="validation_artifacts/coverage/coverage-receipt.json"
+receipt="${HARNESS_COVERAGE_RECEIPT:-validation_artifacts/coverage/coverage-receipt.json}"
 started_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-cargo llvm-cov clean --workspace
-cargo llvm-cov --workspace --all-features --json \
+env CARGO_TARGET_DIR="$coverage_target_dir" cargo llvm-cov clean --workspace
+env CARGO_TARGET_DIR="$coverage_target_dir" cargo llvm-cov --workspace --all-features --json \
   --output-path "$report" --offline
-cargo llvm-cov report --text --show-missing-lines \
+env CARGO_TARGET_DIR="$coverage_target_dir" cargo llvm-cov report --text --show-missing-lines \
   --output-path "$missing_report" --offline
+
+env CARGO_TARGET_DIR=target cargo build --offline --bin ultragoal --quiet
+package_digest_output="$(CARGO_TARGET_DIR=target target/debug/ultragoal --root . package digest)"
+target_value=""
+while IFS= read -r line; do
+  if [[ "$line" == sha256:* && ${#line} -eq 71 ]]; then
+    target_value="$line"
+    break
+  fi
+done <<< "$package_digest_output"
+if [[ -z "$target_value" ]]; then
+  echo "coverage_package_digest_unavailable: target/debug/ultragoal --root . package digest" >&2
+  exit 2
+fi
 
 completed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-python3 - "$started_at" "$completed_at" "$report" "$receipt" <<'PY'
+python3 - "$started_at" "$completed_at" "$report" "$receipt" "$coverage_target_dir" "$target_value" <<'PY'
 import hashlib
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-started_at, completed_at, report_path, receipt_path = sys.argv[1:5]
+started_at, completed_at, report_path, receipt_path, coverage_target_dir, target_value = sys.argv[1:7]
 root = Path.cwd().resolve()
 manifest_path = Path(".harness/coverage-manifest.json")
 command_path = Path(".harness/coverage-command")
@@ -106,31 +122,6 @@ for item in files:
             "blocker_or_debt_id": "coverage-100-plugin-self-law"
         })
 
-pkg = subprocess.run(
-    [
-        "cargo",
-        "run",
-        "--offline",
-        "--bin",
-        "ultragoal",
-        "--",
-        "--root",
-        ".",
-        "package",
-        "digest",
-    ],
-    text=True,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.DEVNULL,
-)
-target_value = "unavailable"
-if pkg.returncode == 0:
-    for line in pkg.stdout.splitlines():
-        candidate = line.strip()
-        if candidate.startswith("sha256:") and len(candidate) == 71:
-            target_value = candidate
-            break
-
 dimensions = sorted({
     dim
     for row in manifest["required_measured_dimensions_per_root"]
@@ -142,6 +133,7 @@ receipt = {
     "claim_id": "CLAIM-001",
     "command": "bash .harness/run-coverage.sh",
     "tool": "cargo-llvm-cov",
+    "coverage_target_dir": coverage_target_dir,
     "source_tree_digest": digest_files(source_files(manifest)),
     "coverage_manifest_digest": sha_file(manifest_path),
     "coverage_command_digest": sha_file(command_path),

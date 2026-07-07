@@ -68,6 +68,35 @@ fn schema_keywords_reject_unresolved_refs_recursion_and_type_mismatch() {
 }
 
 #[test]
+fn schema_keywords_accept_unsigned_integer_counters() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-keyword-integer-u64");
+    write_json(
+        &root.join("schemas/counter.schema.json"),
+        &json!({
+            "$id":"counter.schema.json",
+            "type":"object",
+            "required":["count"],
+            "properties":{"count":{"type":"integer","minimum":0}}
+        }),
+    );
+    write_json(
+        &root.join("schemas/schema-catalog.json"),
+        &json!({"schemas":[
+            {"id":"counter.schema.json","path":"schemas/counter.schema.json"}
+        ]}),
+    );
+    let store = crate::schema_catalog::load(&root);
+    let errors = crate::schema_catalog::schema_errors(
+        &store,
+        "counter.schema.json",
+        &json!({"count": u64::MAX}),
+    );
+    assert!(errors.is_empty(), "{errors:?}");
+    std::fs::remove_dir_all(root).expect("cleanup schema keyword integer u64");
+}
+
+#[test]
 fn schema_keywords_cover_scalar_object_branch_and_contains_boundaries() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-keyword-boundaries");

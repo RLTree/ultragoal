@@ -101,6 +101,7 @@ mod tests {
             &root.join(rel),
             &serde_json::json!({
                 "schema": "harness-ultragoal.coverage-receipt.v1",
+                "coverage_target_dir": "target/ultragoal-coverage",
                 "command_exit": 0,
                 "coverage": {"percent": 100.0},
                 "uncovered_records": [],
@@ -137,6 +138,7 @@ mod tests {
             &root.join(rel),
             &serde_json::json!({
                 "schema": "harness-ultragoal.coverage-receipt.v1",
+                "coverage_target_dir": "target/ultragoal-coverage",
                 "command_exit": 0,
                 "coverage": {"percent": 99.0},
                 "uncovered_records": [{"path": "src/lib.rs"}],

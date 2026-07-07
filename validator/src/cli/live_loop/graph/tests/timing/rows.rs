@@ -17,6 +17,8 @@ pub(super) fn node_timing(
         work_unit_count: 1,
         actual_work_duration_ms: verified_local_duration_ms,
         graph_overhead_ms: 1,
+        reconciled_command_duration_ms: verified_local_duration_ms + 2,
+        product_latency_ms: verified_local_duration_ms + 2,
         equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
         invalidation_proof: "cache_not_used_current_command_executed".to_string(),
         telemetry_reconciliation_status: "pass".to_string(),

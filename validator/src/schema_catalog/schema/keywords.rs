@@ -236,7 +236,7 @@ fn one_type_matches(kind: &str, instance: &Value) -> bool {
         "array" => instance.is_array(),
         "string" => instance.is_string(),
         "boolean" => instance.is_boolean(),
-        "integer" => instance.as_i64().is_some(),
+        "integer" => instance.as_i64().is_some() || instance.as_u64().is_some(),
         "number" => instance.is_number(),
         "null" => instance.is_null(),
         _ => true,

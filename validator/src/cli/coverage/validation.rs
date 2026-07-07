@@ -3,6 +3,7 @@ use std::path::Path;
 
 #[path = "receipt_fields.rs"]
 mod receipt_fields;
+use super::target_dir::{self, TargetDirStatus};
 
 const REQUIRED_BLOCKED: &[&str] = &[
     "completion",
@@ -65,6 +66,12 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
         if bad {
             out.push(code.to_string());
         }
+    }
+    let target_dir = receipt_fields::string(receipt, "coverage_target_dir");
+    match target_dir::status(root, &target_dir) {
+        TargetDirStatus::Missing => out.push("coverage_target_dir_missing".to_string()),
+        TargetDirStatus::NotIsolated => out.push("coverage_target_dir_not_isolated".to_string()),
+        TargetDirStatus::Isolated => {}
     }
     let workspace = receipt_fields::string(receipt, "workspace_root");
     let root_string = root

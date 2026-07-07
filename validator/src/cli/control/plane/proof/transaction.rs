@@ -193,7 +193,7 @@ fn ref_value_failures(
                 .map(|failure| format!("cli_control_plane_transaction_performance:{failure}"))
                 .collect()
         }
-        "coverage" => coverage_failures(store, value, expected),
+        "coverage" => coverage_failures(root, store, value, expected),
         _ => vec![format!("cli_control_plane_transaction_ref_unknown:{label}")],
     }
 }
@@ -205,6 +205,7 @@ pub(crate) fn unknown_ref_value_failures_for_test(root: &Path) -> Vec<String> {
 }
 
 fn coverage_failures(
+    root: &Path,
     store: &schema_catalog::SchemaStore,
     value: &Value,
     expected: &str,
@@ -213,25 +214,11 @@ fn coverage_failures(
         .into_iter()
         .map(|failure| format!("cli_control_plane_transaction_coverage_schema:{failure}"))
         .collect::<Vec<_>>();
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("cli_control_plane_transaction_coverage_digest_mismatch".to_string());
-    }
-    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-        || !value
-            .get("uncovered_records")
-            .and_then(Value::as_array)
-            .is_some_and(Vec::is_empty)
-    {
-        out.push("cli_control_plane_transaction_coverage_not_exact_100".to_string());
-    }
-    if value.get("claim_ceiling").and_then(Value::as_str)
-        != Some("supports_complete_coverage_claim")
-    {
-        out.push("cli_control_plane_transaction_coverage_claim_ceiling_not_complete".to_string());
-    }
+    out.extend(crate::cli::coverage::exact_receipt::claim_failures(
+        root,
+        value,
+        expected,
+        &crate::cli::coverage::exact_receipt::TRANSACTION_CODES,
+    ));
     out
 }

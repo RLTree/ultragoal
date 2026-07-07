@@ -5,8 +5,10 @@ use std::process::{Command, Output};
 use std::time::Instant;
 
 mod claims;
+pub(crate) mod exact_receipt;
 mod runtime;
 mod stdout;
+pub(crate) mod target_dir;
 #[cfg(test)]
 mod tests;
 mod validation;

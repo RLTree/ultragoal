@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 
 pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
     if query_kind != "metrics" {
-        return json!({});
+        return empty_summary();
     }
     let mut operation = "unknown".to_string();
     let mut failure_class = "none".to_string();
@@ -66,6 +66,23 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
         "event_unix_seconds": event_unix_seconds,
         "saturation_status": format!("{saturation_status};queue_depth={queue_depth}"),
         "high_cardinality_labels": high_cardinality_labels
+    })
+}
+
+fn empty_summary() -> Value {
+    json!({
+        "operation": "unknown",
+        "traffic_task_count": 0_u64,
+        "traffic_count": 0_u64,
+        "task_count": 0_u64,
+        "latency_ms": 0_u64,
+        "error_count": 0_u64,
+        "failure_class": "none",
+        "queue_depth": 0_u64,
+        "latest_sample_unix": 0_i64,
+        "event_unix_seconds": 0_u64,
+        "saturation_status": "unknown;queue_depth=0",
+        "high_cardinality_labels": "pass"
     })
 }
 

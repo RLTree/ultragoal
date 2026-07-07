@@ -36,6 +36,7 @@ fn live_loop_tasks_project_current_node_timing_records() {
     assert_eq!(fmt["proof_kind"], "executed");
     assert_eq!(fmt["work_unit_count"], 1);
     assert_eq!(fmt["actual_work_duration_ms"], 5);
+    assert_eq!(fmt["product_latency_ms"], 7);
     assert_eq!(fmt["claim_name"], "source-local live-loop speed claim");
     assert_eq!(fmt["claim_status"], "supported_source_local");
     assert!(
@@ -80,6 +81,8 @@ fn live_loop_tasks_project_failed_full_command_timing_rows() {
             work_unit_count: 1,
             actual_work_duration_ms: 1,
             graph_overhead_ms: 1,
+            reconciled_command_duration_ms: 3,
+            product_latency_ms: 3,
             equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
             invalidation_proof: "cache_not_used_current_command_executed".to_string(),
             telemetry_reconciliation_status: "pass".to_string(),

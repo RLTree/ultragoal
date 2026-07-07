@@ -237,6 +237,9 @@ fn current_timing_row(
         json!(["bash", "-lc", "cargo fmt --all --check"]),
     );
     object.insert("exit_status".to_string(), json!(exit_code));
+    object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
+    object.insert("reconciled_command_duration_ms".to_string(), json!(6));
+    object.insert("product_latency_ms".to_string(), json!(6));
     object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
     object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
     row

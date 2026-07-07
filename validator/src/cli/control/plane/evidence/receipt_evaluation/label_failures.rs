@@ -97,6 +97,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         .any(|failure| failure == "source_audit_target_digest_mismatch")
     );
     let coverage_wrong_target = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":crate::self_tests::boundaries::workspace_fixtures::sha('e')},
         "coverage":{"percent":100.0},
         "uncovered_records":[],
@@ -110,6 +111,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
             .any(|failure| failure == "coverage_target_digest_mismatch")
     );
     let coverage_pass = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "uncovered_records":[],
@@ -118,7 +120,21 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         "blocked_claim_classes": blocked_claims()
     });
     assert!(super::label_failures(&root, "coverage", &coverage_pass, &candidate).is_empty());
+    let coverage_missing_target_dir = json!({
+        "target_revision":{"kind":"package_digest","value":candidate},
+        "coverage":{"percent":100.0},
+        "uncovered_records":[],
+        "claim_ceiling":"supports_complete_coverage_claim",
+        "supported_claim_classes":["complete_coverage"],
+        "blocked_claim_classes": blocked_claims()
+    });
+    assert!(
+        super::label_failures(&root, "coverage", &coverage_missing_target_dir, &candidate)
+            .iter()
+            .any(|failure| failure == "coverage_target_dir_missing")
+    );
     let coverage_not_exact = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":99.0},
         "uncovered_records":["validator/src/main.rs:1"],
@@ -132,6 +148,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
             .any(|failure| failure == "coverage_not_exact_100")
     );
     let coverage_without_uncovered_records = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "claim_ceiling":"supports_complete_coverage_claim",
@@ -149,6 +166,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         .any(|failure| failure == "coverage_not_exact_100")
     );
     let coverage_with_uncovered_records = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "uncovered_records":["validator/src/main.rs:1"],
@@ -167,6 +185,7 @@ fn label_failures_cover_unknown_rust_and_gc_status_edges() {
         .any(|failure| failure == "coverage_not_exact_100")
     );
     let coverage_wrong_claim_ceiling = json!({
+        "coverage_target_dir":"target/ultragoal-coverage",
         "target_revision":{"kind":"package_digest","value":candidate},
         "coverage":{"percent":100.0},
         "uncovered_records":[],

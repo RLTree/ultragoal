@@ -43,8 +43,7 @@ fn post(url: &str, body: &str, content_type: &str) -> Result<(), String> {
             body,
         ])
         .output();
-    post_output_result(output)?;
-    Ok(())
+    post_output_result(output)
 }
 
 fn post_output_result(output: Result<std::process::Output, std::io::Error>) -> Result<(), String> {
@@ -58,6 +57,10 @@ fn post_output_result(output: Result<std::process::Output, std::io::Error>) -> R
         ))
     }
 }
+
+#[cfg(test)]
+#[path = "exporter_tests.rs"]
+mod tests;
 
 fn metric_lines(metric: &Value) -> String {
     if let Some(samples) = metric.get("samples").and_then(Value::as_array) {

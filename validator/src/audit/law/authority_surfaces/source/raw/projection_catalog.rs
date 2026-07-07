@@ -50,12 +50,31 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "product_behavior_observed",
             "independent_reconciliation_surface",
         ]),
-        "validator/src/cli/live_loop/graph/node_record.rs" => Some(&[
+        "validator/src/cli/live_loop/graph/surface_record.rs" => Some(&[
             "LoopValidationSurface",
             "NodeTiming",
-            "verified_local_result_digest",
-            "telemetry_reconciliation_status",
+            "timing_projection_fields::insert",
+            "claim_evaluation::insert",
+            "speedup_ratio",
         ]),
+        "validator/src/cli/live_loop/graph/timing_projection_fields.rs" => Some(&[
+            "NodeTiming",
+            "product_latency_ms",
+            "reconciled_command_duration_ms",
+            "telemetry_reconciliation_duration_ms",
+            "verified_local_result_digest",
+            "verified_local_output_digest",
+            "telemetry_reconciliation_status",
+            "equivalence_status",
+        ]),
+        "validator/src/cli/live_loop/nodes/measurement/observation/backend_readiness.rs" => {
+            Some(&[
+                "RoundtripQuery",
+                "backend_service",
+                "backend_readiness_timeout_ms",
+                "live_loop_observability_backend_unavailable",
+            ])
+        }
         "validator/src/cli/live_loop/nodes/measurement/timing/record.rs" => Some(&[
             "VerifiedLocalProof",
             "node_timing_row",

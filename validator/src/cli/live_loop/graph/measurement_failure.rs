@@ -34,7 +34,9 @@ pub(crate) fn failed_timing_measurement_state(
         baseline_state,
         speedup_state,
         baseline_duration_ms: Some(timing.baseline_duration_ms),
-        speedup_ratio: Some(timing.baseline_duration_ms / timing.verified_local_duration_ms.max(1)),
+        speedup_ratio: Some(
+            timing.baseline_duration_ms / timing.reconciled_command_duration_ms.max(1),
+        ),
         claim_impact: timing
             .baseline_failure
             .claim_impact

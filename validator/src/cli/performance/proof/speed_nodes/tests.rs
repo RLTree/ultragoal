@@ -1,7 +1,8 @@
-use serde_json::json;
-
+#[path = "evidence_requirement_tests.rs"]
+mod evidence_requirement_tests;
 #[path = "test_rows.rs"]
 mod test_rows;
+use serde_json::json;
 use test_rows::{digest, executed_row, temp_root, verified_cache_row, write_timing_fixture};
 
 #[test]
@@ -188,4 +189,39 @@ fn proof_shaped_speed_rows_without_equivalence_do_not_become_speed_proof() {
     assert_eq!(nodes[0]["node_id"], "mismatched-cache");
     assert_eq!(nodes[1]["node_id"], "zero-work");
     std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn speed_rows_without_reconciled_product_latency_are_rejected() {
+    let root = temp_root();
+    std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");
+    let candidate = digest('a');
+    let mut mismatched_latency = executed_row(&candidate);
+    mismatched_latency["node_id"] = json!("mismatched-product-latency");
+    mismatched_latency["reconciled_command_duration_ms"] = json!(1);
+    let mut rows = vec![mismatched_latency];
+    for field in [
+        "actual_work_duration_ms",
+        "graph_overhead_ms",
+        "telemetry_reconciliation_duration_ms",
+        "reconciled_command_duration_ms",
+        "product_latency_ms",
+    ] {
+        let mut row = executed_row(&candidate);
+        row["node_id"] = json!(format!("missing-{field}"));
+        row.as_object_mut().expect("row object").remove(field);
+        rows.push(row);
+    }
+    write_timing_fixture(&root, json!({"nodes": rows}));
+
+    let proof = super::speed_proof_value(&root, &candidate, true);
+    assert_eq!(proof["status"], "blocked");
+    let nodes = proof["nodes"].as_array().expect("nodes");
+    assert_eq!(nodes.len(), 6);
+    assert!(
+        nodes
+            .iter()
+            .all(super::claim_readiness::node_blocks_speed_claim)
+    );
+    std::fs::remove_dir_all(root).expect("cleanup product latency");
 }

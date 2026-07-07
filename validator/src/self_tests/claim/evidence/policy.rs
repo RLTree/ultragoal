@@ -202,6 +202,7 @@ fn coverage_policy_rejects_ratchet_completion_and_missing_behavior_dimensions() 
         &root.join("receipts/ratchet.json"),
         &json!({
             "schema":"harness-ultragoal.coverage-receipt.v1",
+            "coverage_target_dir":"target/ultragoal-coverage",
             "claim_id":"COV-DIMS",
             "command":"coverage",
             "tool":"llvm-cov",

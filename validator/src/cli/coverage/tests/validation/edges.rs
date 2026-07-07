@@ -20,6 +20,16 @@ fn coverage_validation_rejects_scalar_completion_and_missing_receipts() {
         ("command", json!(""), "coverage_command_missing"),
         ("tool", json!(""), "coverage_tool_missing"),
         (
+            "coverage_target_dir",
+            json!(""),
+            "coverage_target_dir_missing",
+        ),
+        (
+            "coverage_target_dir",
+            json!("target"),
+            "coverage_target_dir_not_isolated",
+        ),
+        (
             "tool_version",
             json!(""),
             "coverage_receipt_tool_version_missing",

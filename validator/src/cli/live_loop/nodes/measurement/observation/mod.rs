@@ -1,3 +1,4 @@
+mod backend_readiness;
 mod diagnostics;
 mod event;
 #[cfg(test)]

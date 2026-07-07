@@ -27,7 +27,7 @@ pub(super) fn label_failures(
     match label {
         "source_audit" => source_audit_failures(value, expected),
         "red_fixture_report" => target_status_failures(value, expected, "red_fixture_report"),
-        "coverage" => coverage_failures(value, expected),
+        "coverage" => coverage_failures(root, value, expected),
         "cli_performance" => {
             crate::cli::performance::receipt::same_candidate_pass_failures(value, expected)
         }
@@ -119,45 +119,13 @@ fn target_status_failures(value: &Value, expected: &str, label: &str) -> Vec<Str
     out
 }
 
-fn coverage_failures(value: &Value, expected: &str) -> Vec<String> {
-    let mut out = Vec::new();
-    if value
-        .pointer("/target_revision/value")
-        .and_then(Value::as_str)
-        != Some(expected)
-    {
-        out.push("coverage_target_digest_mismatch".to_string());
-    }
-    if value.pointer("/coverage/percent").and_then(Value::as_f64) != Some(100.0)
-        || !value
-            .get("uncovered_records")
-            .and_then(Value::as_array)
-            .is_some_and(Vec::is_empty)
-    {
-        out.push("coverage_not_exact_100".to_string());
-    }
-    if value.get("claim_ceiling").and_then(Value::as_str)
-        != Some("supports_complete_coverage_claim")
-    {
-        out.push("coverage_claim_ceiling_not_complete".to_string());
-    }
-    if !array_contains(value, "supported_claim_classes", "complete_coverage") {
-        out.push("coverage_supported_claim_missing".to_string());
-    }
-    for blocked in [
-        "completion",
-        "package_readiness",
-        "review_readiness",
-        "release_readiness",
-        "final_packet_correctness",
-        "update_goal_eligibility",
-        "app_registry_or_reviewer_exposure",
-    ] {
-        if !array_contains(value, "blocked_claim_classes", blocked) {
-            out.push(format!("coverage_missing_blocked_claim:{blocked}"));
-        }
-    }
-    out
+fn coverage_failures(root: &Path, value: &Value, expected: &str) -> Vec<String> {
+    crate::cli::coverage::exact_receipt::claim_failures(
+        root,
+        value,
+        expected,
+        &crate::cli::coverage::exact_receipt::EVIDENCE_CODES,
+    )
 }
 
 fn transactional_finalization_failures(root: &Path, value: &Value, expected: &str) -> Vec<String> {

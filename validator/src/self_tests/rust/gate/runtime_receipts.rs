@@ -61,6 +61,7 @@ fn gc_run_without_receipt_and_rust_audit_receipt_ok_path_are_covered() {
     );
 
     let parent_file = root.join("target/self-tests/gc-parent-file");
+    std::fs::create_dir_all(parent_file.parent().expect("gc parent dir")).expect("gc parent dir");
     std::fs::write(&parent_file, "not a directory").expect("gc parent file");
     let write_failure = gc_run_receipt(
         &root,

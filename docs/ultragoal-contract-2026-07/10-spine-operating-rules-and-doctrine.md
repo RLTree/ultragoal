@@ -328,7 +328,9 @@ HU-STACK law integration:
   cockpit or equivalent runtime surface, without replacing CLI proof.
 - `HU-STACK-009 Full-Stack GC`: every artifact/cache/state/receipt/packet/lock/
   pid/port/tempdir is classed before cleanup; deletion requires dry-run plan and
-  receipt.
+  receipt; generated, rebuildable, duplicated, superseded, cache-like, and stale
+  runtime artifacts are deletion-first, with archive retention allowed only by
+  typed protected-proof or irreproducible-retention exception.
 - `HU-STACK-010 Update Goal Eligibility`: update_goal remains forbidden until
   current goal state, active receipts, stack claim ceiling, product proof
   eligibility, and cleanup/protection status are verified.
@@ -351,7 +353,8 @@ Command loop implications:
 - `ultragoal stack resources prove` proves memory, queues, processes, pools,
   browser artifacts, workflow backlog, and agent tool cleanup are bounded.
 - `ultragoal gc plan/dry-run/apply/verify` governs cleanup. No blind cleanup,
-  broad deletion, or unclassified artifact removal can support claims.
+  broad deletion, archive-first retention of rebuildable/stale artifacts, or
+  unclassified artifact removal can support claims.
 
 Stack proof discipline:
 
@@ -371,6 +374,11 @@ Stack proof discipline:
   source-only proof for runtime claims, package-only proof for install/runtime,
   install/cache proof for product success, fixture names without execution, or a
   lowered claim ceiling alone can satisfy it.
+- GC validation is not GC proof. Schema validity, fixture success, and dry-run
+  output validate the mechanism; only current-candidate plan/apply/verify
+  receipts with protected-set preservation, deletion receipt, reclaimed-byte
+  accounting, remaining-byte summary, and active-claim preservation can prove
+  workspace cleanup.
 
 ## Carry-Forward Control Loop Requirements
 

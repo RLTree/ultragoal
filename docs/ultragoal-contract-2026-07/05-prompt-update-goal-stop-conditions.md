@@ -24,7 +24,7 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 102. Validator source namespace topology and semantic repo-law enforcement are proven by physical source-tree repair, removal of broad `validator/src/internal*` exceptions, typed narrow exception parsing, actual repo-owned source inspection, red/green/tamper fixtures, package inventory exactly-once closure, 100 percent coverage preservation, source audit pass, and a calculated confidence score of at least 99 percent supported by evidence. No completion, review, package, readiness, release, CLI self-law, final packet, or update_goal claim may pass while top-level `validator/src/internal_*.rs`, `validator/src/internal_coverage*.rs`, `validator/src/iinternal_*.rs`, or equivalent prefix-as-directory source clusters remain accepted by the law.
 
-103. Rust Developer Experience, runtime memory/resource discipline, and workspace/artifact/cache garbage collection are proven by CLI-routed Rust command loops, current toolchain/substrate receipt, fast/standard/release/clean-proof/watch observation command surfaces, exact coverage proof, dependency/security/supply-chain proof where applicable, cache/no-cache honesty receipt, performance budget receipt, memory/resource receipt, GC plan/dry-run/apply/verify receipts where cleanup is performed, standards/source-obligation/foundational-trace bindings, red/green/tamper fixtures, source audit pass, and calculated confidence of at least 96 percent supported by evidence. No completion, review, package, readiness, release, Product Fitness, Product Cohesion, Product Success, CLI self-law, final packet, or update_goal claim may pass from raw Cargo/tool output, hidden cache state, watcher/editor state, unbounded Rust runtime resources, unmanaged long-running tasks, blind cleanup, deletion without receipt, or stale Rust DevX/memory/GC proof.
+103. Rust Developer Experience, runtime memory/resource discipline, and workspace/artifact/cache garbage collection are proven by CLI-routed Rust command loops, current toolchain/substrate receipt, fast/standard/release/clean-proof/watch observation command surfaces, exact coverage proof, dependency/security/supply-chain proof where applicable, cache/no-cache honesty receipt, performance budget receipt, memory/resource receipt, deletion-first GC plan/dry-run/apply/verify receipts where cleanup is performed, protected-set proof, archive-exception justification, reclaimed-byte accounting, standards/source-obligation/foundational-trace bindings, red/green/tamper fixtures, source audit pass, and calculated confidence of at least 96 percent supported by evidence. No completion, review, package, readiness, release, Product Fitness, Product Cohesion, Product Success, CLI self-law, final packet, or update_goal claim may pass from raw Cargo/tool output, hidden cache state, watcher/editor state, unbounded Rust runtime resources, unmanaged long-running tasks, blind cleanup, deletion without receipt, avoidable archive retention of rebuildable or superseded artifacts, dry-run substituted for current-workspace cleanup proof, schema/fixture validation substituted for proof, or stale Rust DevX/memory/GC proof.
 
 104. update_goal is forbidden until the full local observability stack is installed, started, health-checked, smoke-tested, CLI-integrated, queryable by agents, redaction-proven, bounded, receipt-bound, validator-enforced, package-included, and every law-bearing Harness Ultragoal CLI and plugin surface emits complete logs, metrics, traces, diagnostics, claim-impact evidence, and repair guidance on the same candidate digest.
 
@@ -73,6 +73,7 @@ Final response must include:
 - Rust dependency/security/supply-chain status
 - Rust memory/resource discipline status
 - workspace/artifact/cache garbage-collection status
+- deletion-first artifact retention, archive-exception, and reclaimed-byte accounting status
 - namespace law enforcement status
 - validator source namespace topology and semantic repo-law enforcement status
 - namespace/semantic repo-law confidence calculation and rationale
@@ -126,6 +127,7 @@ Final response must include:
 - cache/no-cache honesty by cache class status
 - full-stack memory/resource discipline status
 - full-stack GC/protected artifact classification status
+- full-stack deletion-first GC proof versus validation separation status
 - CI/local parity for stack commands status
 - full-stack migration phase status
 - operational addenda status for Vite, Tailwind/design-system substrate, OpenAI

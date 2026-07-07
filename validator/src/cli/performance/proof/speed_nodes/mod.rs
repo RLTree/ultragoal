@@ -70,6 +70,7 @@ fn row_has_claim_bearing_speed_fields(row: &Value) -> bool {
             .get("graph_overhead_ms")
             .and_then(Value::as_u64)
             .is_some()
+        && row_has_reconciled_product_latency(row)
         && timing_projection::string_array(row, "command_argv")
             .is_some_and(|argv| !argv.is_empty() && argv.iter().all(|arg| !arg.is_empty()))
         && row.get("exit_status").and_then(Value::as_i64).is_some()
@@ -78,6 +79,33 @@ fn row_has_claim_bearing_speed_fields(row: &Value) -> bool {
             || timing_projection::string_array(row, "artifact_paths").is_some_and(|paths| {
                 !paths.is_empty() && paths.iter().all(|path| !path.is_empty())
             }))
+}
+
+#[cfg(test)]
+pub(super) fn row_has_reconciled_product_latency(row: &Value) -> bool {
+    let Some(actual) = row.get("actual_work_duration_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    let Some(graph) = row.get("graph_overhead_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    let Some(telemetry) = row
+        .get("telemetry_reconciliation_duration_ms")
+        .and_then(Value::as_u64)
+    else {
+        return false;
+    };
+    let Some(reconciled) = row
+        .get("reconciled_command_duration_ms")
+        .and_then(Value::as_u64)
+    else {
+        return false;
+    };
+    let Some(product_latency) = row.get("product_latency_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    reconciled == actual.saturating_add(graph).saturating_add(telemetry)
+        && product_latency == reconciled
 }
 
 #[cfg(test)]

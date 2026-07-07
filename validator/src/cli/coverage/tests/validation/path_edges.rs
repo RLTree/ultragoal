@@ -46,3 +46,39 @@ fn coverage_validation_accepts_relative_receipts_and_template_fallbacks() {
     assert!(failures.is_empty(), "{failures:?}");
     fs::remove_dir_all(root).expect("cleanup template");
 }
+
+#[test]
+fn coverage_validation_rejects_target_directory_aliases() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "coverage-target-dir-alias-rejected",
+    );
+    super::write_coverage_root(&root, 100.0, json!([]));
+    let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    let receipt_path = root.join(COVERAGE_RECEIPT_REL);
+    let absolute_target = root.join("target").display().to_string();
+
+    for raw in [
+        "target",
+        "./target",
+        "target/",
+        "target/.",
+        &absolute_target,
+    ] {
+        let mut receipt = crate::json_boundary::read_json(&receipt_path).expect("receipt");
+        receipt["coverage_target_dir"] = json!(raw);
+        crate::json_boundary::write_json(&receipt_path, &receipt).expect("write receipt");
+        let failures = super::super::super::validation::failures(
+            &root,
+            Path::new(COVERAGE_RECEIPT_REL),
+            &candidate,
+        );
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure.contains("coverage_target_dir_not_isolated")),
+            "{raw}: {failures:?}"
+        );
+    }
+
+    fs::remove_dir_all(root).expect("cleanup target-dir alias");
+}

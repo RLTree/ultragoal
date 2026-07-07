@@ -5,7 +5,6 @@ use crate::self_tests::boundaries::workspace_fixtures;
 
 const RECEIPT: &str = "validation_artifacts/cli/transactional-finalization-receipt.json";
 const SCHEMA: &str = "harness-ultragoal.cli-transactional-finalization-receipt.v1";
-
 mod reference;
 mod required;
 
@@ -43,7 +42,7 @@ fn write_receipt_set(root: &Path, current: &str) {
         ),
         (
             "validation_artifacts/coverage/coverage-receipt.json",
-            json!({"schema":"harness-ultragoal.coverage-receipt.v1","target_revision":{"kind":"package_digest","value":current},"coverage":{"percent":99.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
+            json!({"schema":"harness-ultragoal.coverage-receipt.v1","coverage_target_dir":"target/ultragoal-coverage","target_revision":{"kind":"package_digest","value":current},"coverage":{"percent":99.0},"uncovered_records":[{"path":"validator/src/lib.rs"}]}),
         ),
     ] {
         write_json(&root.join(rel), &value);
@@ -211,6 +210,7 @@ fn transaction_references_use_typed_receipt_status_not_file_existence() {
         &root.join("validation_artifacts/coverage/coverage-receipt.json"),
         &json!({
             "schema":"harness-ultragoal.coverage-receipt.v1",
+            "coverage_target_dir":"target/ultragoal-coverage",
             "command_exit":0,
             "coverage":{"percent":100.0},
             "uncovered_records":[],

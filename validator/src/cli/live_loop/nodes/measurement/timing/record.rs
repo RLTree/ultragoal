@@ -22,7 +22,9 @@ pub(crate) fn node_timing_row(
     affected_set_status: &'static str,
 ) -> Value {
     let actual_work_duration_ms = verified_local.actual_work.duration_ms;
-    let speedup_ratio = baseline.duration_ms / actual_work_duration_ms.max(1);
+    let reconciled_command_duration_ms =
+        derived_fields::reconciled_command_duration_ms(verified_local);
+    let speedup_ratio = baseline.duration_ms / reconciled_command_duration_ms.max(1);
     let output_digest = derived_fields::output_digest(verified_local);
     let result_digest = derived_fields::result_digest(verified_local, &output_digest);
     let failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
@@ -50,7 +52,8 @@ pub(crate) fn node_timing_row(
         "baseline_invalidation_proof": baseline_invalidation_proof,
         "verified_local_duration_ms": actual_work_duration_ms,
         "telemetry_reconciliation_duration_ms": verified_local.telemetry_reconciliation_duration_ms,
-        "reconciled_command_duration_ms": derived_fields::reconciled_command_duration_ms(verified_local),
+        "reconciled_command_duration_ms": reconciled_command_duration_ms,
+        "product_latency_ms": reconciled_command_duration_ms,
         "speedup_ratio": speedup_ratio,
         "required_speedup": "20x",
         "baseline_exit_code": baseline.exit_code,

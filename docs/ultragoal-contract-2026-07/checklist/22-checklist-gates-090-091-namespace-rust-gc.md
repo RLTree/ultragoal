@@ -805,6 +805,32 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
   - Candidate digest:
   - Status:
 
+- [ ] Generated, rebuildable, duplicated, superseded, cache-like, and stale runtime artifacts are deletion-first, not archive-first.
+  - Evidence:
+  - CLI command:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] Archive exceptions are typed, digest-bound, claim-limited, owner-scoped, justified by protected proof or irreproducible retention need, and include expiry or review condition.
+  - Evidence:
+  - Red fixture:
+  - Candidate digest:
+  - Status:
+
+- [ ] GC proof for the current workspace includes classified inputs, protected set, plan digest, dry-run, apply receipt, reclaimed-byte accounting, remaining-byte summary, and post-delete verification.
+  - Evidence:
+  - CLI command:
+  - Receipt:
+  - Candidate digest:
+  - Status:
+
+- [ ] GC validation remains distinct from GC proof: schema validity, fixture pass, dry-run output, or command pass text cannot prove the current workspace was actually cleaned.
+  - Evidence:
+  - Red fixture:
+  - Candidate digest:
+  - Status:
+
 - [ ] Cleanup after failed/interrupted agents inspects locks, pids, ports, child process records, temp dirs, partial receipts, partial package/install/cache copies, watcher state, and abandoned worktree lanes.
   - Evidence:
   - CLI command:
@@ -887,7 +913,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 91 an
 
 ### Gate 91.10: Red, Green, Tamper, Validation, And Confidence
 
-- [ ] Red fixtures prove raw-tool substitution, `cargo test` overclaim, hidden local state, stale toolchain/metadata/feature matrix, missing nextest/bootstrap, rejected watcher/script authority, typed-boundary failures, memory/resource violations, tracing GC as core, and unsafe cleanup all fail.
+- [ ] Red fixtures prove raw-tool substitution, `cargo test` overclaim, hidden local state, stale toolchain/metadata/feature matrix, missing nextest/bootstrap, rejected watcher/script authority, typed-boundary failures, memory/resource violations, tracing GC as core, unsafe cleanup, avoidable archive retention, archive exception without typed justification, dry-run substituted for cleanup proof, and missing reclaimed-byte accounting all fail.
   - Evidence:
   - Fixture report:
   - Candidate digest:

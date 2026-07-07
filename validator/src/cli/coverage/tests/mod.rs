@@ -175,6 +175,7 @@ fn coverage_receipt(
         "claim_id": "CLAIM-001",
         "command": "bash .harness/run-coverage.sh",
         "tool": "cargo-llvm-cov",
+        "coverage_target_dir": "target/ultragoal-coverage",
         "source_tree_digest": crate::claim_semantics::coverage::digests::source_tree_digest(root, manifest).expect("source"),
         "coverage_manifest_digest": crate::digest::file(&root.join(".harness/coverage-manifest.json")).expect("manifest digest"),
         "coverage_command_digest": crate::digest::file(&root.join(".harness/coverage-command")).expect("command digest"),

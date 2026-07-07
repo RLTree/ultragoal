@@ -26,11 +26,7 @@ fn node_supports_positive_speed_claim(node: &Value) -> bool {
             .get("work_unit_count")
             .and_then(Value::as_u64)
             .is_some()
-        && positive_number(node, "actual_work_duration_ms")
-        && node
-            .get("graph_overhead_ms")
-            .and_then(Value::as_u64)
-            .is_some()
+        && reconciled_product_latency_valid(node)
         && match timing_projection::text(node, "proof_kind") {
             Some("executed") => node_has_executed_speed_proof(node),
             Some("verified_cache_hit") => node_has_cache_replay_speed_proof(node),
@@ -98,10 +94,33 @@ pub(super) fn first_blocker(nodes: &[Value]) -> Value {
     })
 }
 
-fn positive_number(node: &Value, key: &str) -> bool {
-    node.get(key)
+fn reconciled_product_latency_valid(node: &Value) -> bool {
+    let Some(actual) = node.get("actual_work_duration_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    let Some(graph) = node.get("graph_overhead_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    let Some(telemetry) = node
+        .get("telemetry_reconciliation_duration_ms")
         .and_then(Value::as_u64)
-        .is_some_and(|value| value > 0)
+    else {
+        return false;
+    };
+    let Some(reconciled) = node
+        .get("reconciled_command_duration_ms")
+        .and_then(Value::as_u64)
+    else {
+        return false;
+    };
+    let Some(product_latency) = node.get("product_latency_ms").and_then(Value::as_u64) else {
+        return false;
+    };
+    if actual == 0 {
+        return false;
+    }
+    reconciled == actual.saturating_add(graph).saturating_add(telemetry)
+        && product_latency == reconciled
 }
 
 fn nonempty_strings(node: &Value, key: &str) -> bool {

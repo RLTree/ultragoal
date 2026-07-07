@@ -5,7 +5,7 @@ use super::fixtures::{
 #[test]
 fn live_loop_measure_marks_executed_reconciled_speedup_as_pass() {
     let command = command(Some("changed_files"), live_loop_timing_receipt_arg());
-    let baseline = full_command_run(0, true, 200);
+    let baseline = full_command_run(0, true, 240);
     let row = super::super::timing::record::node_timing_row(
         crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
         &command,
