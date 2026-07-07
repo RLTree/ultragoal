@@ -1,6 +1,25 @@
 use crate::cli::observe::query::QueryKind;
+use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::Path;
+
+fn command() -> ObserveCommand {
+    ObserveCommand {
+        operation: ObserveOperation::MetricsQuery,
+        receipt: None,
+        query: None,
+        run_id: Some("run-metrics-freshness".to_string()),
+        correlation_id: None,
+        claim_id: None,
+        check_id: None,
+        law_id: None,
+        target_command: None,
+        target_family: None,
+        row_limit: 100,
+        byte_limit: 4096,
+        timeout_ms: 100,
+    }
+}
 
 #[test]
 fn metrics_query_retry_waits_for_reconciled_rows() {
@@ -24,6 +43,50 @@ fn metrics_query_retry_waits_for_reconciled_rows() {
 
     assert_eq!(body, "body-2");
     assert_eq!(attempts, 2);
+}
+
+#[test]
+fn accepts_same_window_pass_metrics() {
+    let root = super::super::prepare_root("observe-metrics-fresh-pass");
+    write_target_event_with_timestamp(&root, "coverage.prove", "2026-07-01T00:00:00Z");
+    let receipt = super::super::super::result_from_output(
+        Path::new(&root),
+        &command(),
+        QueryKind::Metrics,
+        "sum by (...)".to_string(),
+        Ok(metric_body_with_timestamp("coverage.prove", 1_782_864_000)),
+    )
+    .expect("fresh receipt");
+
+    assert_eq!(receipt["status"], "pass");
+    assert_eq!(receipt["metric_operation"], "coverage.prove");
+    std::fs::remove_dir_all(root).expect("cleanup fresh pass");
+}
+
+#[test]
+fn rejects_stale_operation_metric_even_when_duration_is_high_enough() {
+    let root = super::super::prepare_root("observe-metrics-stale-event-time");
+    write_target_event_with_timestamp(&root, "coverage.prove", "2026-07-01T00:01:00Z");
+    let receipt = super::super::super::result_from_output(
+        Path::new(&root),
+        &command(),
+        QueryKind::Metrics,
+        "sum by (...)".to_string(),
+        Ok(metric_body_with_event_time(
+            "coverage.prove",
+            1_782_864_000,
+            1_782_863_940,
+            99,
+        )),
+    )
+    .expect("stale metric event time receipt");
+
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        receipt["why_failed"],
+        "observability_metric_event_time_stale:metric_event_unix=1782863940 target_event_unix=1782864060"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup stale metric event time");
 }
 
 #[test]
@@ -52,6 +115,23 @@ fn metrics_query_reports_target_run_outside_bounded_window() {
     std::fs::remove_dir_all(root).expect("cleanup stale target metrics");
 }
 
+fn write_target_event_with_timestamp(root: &Path, operation: &str, timestamp: &str) {
+    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
+    let event = json!({
+        "schema": crate::cli::observe::types::EVENT_SCHEMA,
+        "run_id": "run-metrics-freshness",
+        "candidate_digest": candidate,
+        "operation": operation,
+        "status": "pass",
+        "failure_class": "none",
+        "duration_ms": 1,
+        "task_count": 1,
+        "queue_depth": 1,
+        "timestamp": timestamp
+    });
+    crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
+}
+
 fn write_target_event(root: &Path) {
     let candidate = crate::package::inventory::package_digest(root).expect("candidate");
     let event = json!({
@@ -75,6 +155,35 @@ fn write_target_event(root: &Path) {
         "queue_depth": 2695
     });
     crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
+}
+
+fn metric_body_with_timestamp(operation: &str, timestamp: i64) -> String {
+    metric_body_with_event_time(operation, timestamp, timestamp, 1)
+}
+
+fn metric_body_with_event_time(
+    operation: &str,
+    sample_timestamp: i64,
+    event_timestamp: i64,
+    duration_ms: u64,
+) -> String {
+    let labels = json!({
+        "operation": operation,
+        "status": "pass",
+        "failure_class": "none",
+        "saturation_status": "serial_command_typed"
+    });
+    json!({
+        "status": "success",
+        "data": {"result": [
+            {"metric": metric_labels(&labels, "ultragoal_command_total"), "value": [sample_timestamp, "1"]},
+            {"metric": metric_labels(&labels, "ultragoal_command_duration_ms"), "value": [sample_timestamp, duration_ms.to_string()]},
+            {"metric": metric_labels(&labels, "ultragoal_command_task_count"), "value": [sample_timestamp, "1"]},
+            {"metric": metric_labels(&labels, "ultragoal_command_queue_depth"), "value": [sample_timestamp, "1"]},
+            {"metric": metric_labels(&labels, "ultragoal_command_event_unix_seconds"), "value": [sample_timestamp, event_timestamp.to_string()]}
+        ]}
+    })
+    .to_string()
 }
 
 fn metric_body() -> String {

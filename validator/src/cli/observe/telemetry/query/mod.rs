@@ -116,6 +116,7 @@ pub(super) fn result_for_candidate(
     }
     receipt["metric_operation"] =
         json!(metric_signal::text(&metric_summary, "operation", "unknown"));
+    receipt["metric_status"] = json!(metric_signal::text(&metric_summary, "status", "unknown"));
     receipt["metric_traffic_task_count"] = metric_summary["traffic_task_count"].clone();
     receipt["metric_traffic_count"] = metric_summary["traffic_count"].clone();
     receipt["metric_task_count"] = metric_summary["task_count"].clone();

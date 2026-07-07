@@ -68,48 +68,6 @@ fn reports_candidate_missing_failure_mismatch_and_metric_absence() {
     std::fs::remove_dir_all(root).expect("cleanup operation missing");
 }
 #[test]
-fn accepts_same_window_pass_metrics() {
-    let root = super::super::prepare_root("observe-metrics-fresh-pass");
-    write_target_event_with_timestamp(&root, "coverage.prove", "2026-07-01T00:00:00Z");
-    let receipt = super::super::super::result_from_output(
-        Path::new(&root),
-        &command(),
-        QueryKind::Metrics,
-        "sum by (...)".to_string(),
-        Ok(metric_body_with_timestamp("coverage.prove", 1_782_864_000)),
-    )
-    .expect("fresh receipt");
-
-    assert_eq!(receipt["status"], "pass");
-    assert_eq!(receipt["metric_operation"], "coverage.prove");
-    std::fs::remove_dir_all(root).expect("cleanup fresh pass");
-}
-#[test]
-fn rejects_stale_operation_metric_even_when_duration_is_high_enough() {
-    let root = super::super::prepare_root("observe-metrics-stale-event-time");
-    write_target_event_with_timestamp(&root, "coverage.prove", "2026-07-01T00:01:00Z");
-    let receipt = super::super::super::result_from_output(
-        Path::new(&root),
-        &command(),
-        QueryKind::Metrics,
-        "sum by (...)".to_string(),
-        Ok(metric_body_with_event_time(
-            "coverage.prove",
-            1_782_864_000,
-            1_782_863_940,
-            99,
-        )),
-    )
-    .expect("stale metric event time receipt");
-
-    assert_eq!(receipt["status"], "fail");
-    assert_eq!(
-        receipt["why_failed"],
-        "observability_metric_event_time_stale:metric_event_unix=1782863940 target_event_unix=1782864060"
-    );
-    std::fs::remove_dir_all(root).expect("cleanup stale metric event time");
-}
-#[test]
 fn pass_target_uses_pass_only_query_and_rejects_error_metrics() {
     let root = super::super::prepare_root("observe-metrics-pass-target-error-signal");
     write_target_event(&root, "line-caps.check", "pass", "none");
@@ -127,6 +85,25 @@ fn pass_target_uses_pass_only_query_and_rejects_error_metrics() {
         Ok(metric_body("line-caps.check", "line_cap_failure")),
     )
     .expect("pass target rejects error metric");
+    assert_eq!(receipt["status"], "fail");
+    assert_eq!(
+        receipt["why_failed"],
+        "observability_metric_status_mismatch:fail!=pass"
+    );
+    assert_eq!(receipt["metric_status"], "fail");
+
+    let receipt = super::super::super::result_from_output(
+        Path::new(&root),
+        &command(),
+        QueryKind::Metrics,
+        "sum by (...)".to_string(),
+        Ok(metric_body_with_status(
+            "line-caps.check",
+            "pass",
+            "line_cap_failure",
+        )),
+    )
+    .expect("pass target rejects same-status error metric");
     assert_eq!(receipt["status"], "fail");
     assert_eq!(
         receipt["why_failed"],
@@ -162,30 +139,17 @@ fn write_target_event_without_candidate(root: &Path, operation: &str, failure_cl
     });
     crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
 }
-fn write_target_event_with_timestamp(root: &Path, operation: &str, timestamp: &str) {
-    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
-    let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
-        "run_id": "run-metrics-reconcile",
-        "candidate_digest": candidate,
-        "operation": operation,
-        "status": "pass",
-        "failure_class": "none",
-        "duration_ms": 1,
-        "task_count": 1,
-        "queue_depth": 1,
-        "timestamp": timestamp
-    });
-    crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
-}
 fn metric_body(operation: &str, failure_class: &str) -> String {
+    metric_body_with_status(operation, "fail", failure_class)
+}
+fn metric_body_with_status(operation: &str, status: &str, failure_class: &str) -> String {
     json!({
         "status": "success",
         "data": {"result": [{
             "metric": {
                 "__name__": "ultragoal_command_total",
                 "operation": operation,
-                "status": "fail",
+                "status": status,
                 "failure_class": failure_class,
                 "saturation_status": "serial_command_typed"
             },
@@ -208,36 +172,4 @@ fn metric_body_without_operation() -> String {
         }]}
     })
     .to_string()
-}
-fn metric_body_with_timestamp(operation: &str, timestamp: i64) -> String {
-    metric_body_with_event_time(operation, timestamp, timestamp, 1)
-}
-fn metric_body_with_event_time(
-    operation: &str,
-    sample_timestamp: i64,
-    event_timestamp: i64,
-    duration_ms: u64,
-) -> String {
-    let labels = json!({
-        "operation": operation,
-        "status": "pass",
-        "failure_class": "none",
-        "saturation_status": "serial_command_typed"
-    });
-    json!({
-        "status": "success",
-        "data": {"result": [
-            {"metric": metric_labels(&labels, "ultragoal_command_total"), "value": [sample_timestamp, "1"]},
-            {"metric": metric_labels(&labels, "ultragoal_command_duration_ms"), "value": [sample_timestamp, duration_ms.to_string()]},
-            {"metric": metric_labels(&labels, "ultragoal_command_task_count"), "value": [sample_timestamp, "1"]},
-            {"metric": metric_labels(&labels, "ultragoal_command_queue_depth"), "value": [sample_timestamp, "1"]},
-            {"metric": metric_labels(&labels, "ultragoal_command_event_unix_seconds"), "value": [sample_timestamp, event_timestamp.to_string()]}
-        ]}
-    })
-    .to_string()
-}
-fn metric_labels(labels: &serde_json::Value, metric_name: &str) -> serde_json::Value {
-    let mut out = labels.as_object().cloned().unwrap_or_default();
-    out.insert("__name__".to_string(), json!(metric_name));
-    serde_json::Value::Object(out)
 }

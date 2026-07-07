@@ -4,7 +4,7 @@ use serde_json::Value;
 use std::path::Path;
 
 use super::{
-    bounded_failure_metric_query_for_operation, bounded_success_metric_query_for_operation, target,
+    bounded_metric_query_for_operation_status, bounded_success_metric_query_for_operation, target,
 };
 
 const METRIC_QUERY_WINDOW_SECONDS: i64 = 300;
@@ -15,10 +15,10 @@ pub(super) fn target_query(root: &Path, command: &ObserveCommand) -> Option<Stri
     }
     let event = target::event(root, command)?;
     let operation = event.get("operation").and_then(Value::as_str)?;
-    if event.get("status").and_then(Value::as_str) == Some("fail") {
-        Some(bounded_failure_metric_query_for_operation(operation))
-    } else {
-        Some(bounded_success_metric_query_for_operation(operation))
+    match event.get("status").and_then(Value::as_str) {
+        Some("pass") => Some(bounded_success_metric_query_for_operation(operation)),
+        Some(status) => Some(bounded_metric_query_for_operation_status(operation, status)),
+        None => None,
     }
 }
 
@@ -54,6 +54,9 @@ pub(super) fn reconciliation_failure(
         return Some(format!(
             "observability_metric_operation_mismatch:{metric_operation}!={target_operation}"
         ));
+    }
+    if let Some(failure) = status_mismatch(event, &summary) {
+        return Some(failure);
     }
     if let Some(failure) = failure_class_mismatch(event, &summary) {
         return Some(failure);
@@ -103,6 +106,19 @@ fn failure_class_mismatch(event: &Value, summary: &Value) -> Option<String> {
         .unwrap_or(0)
         == 0)
         .then(|| format!("observability_metric_error_count_missing:{target_failure}"))
+}
+
+fn status_mismatch(event: &Value, summary: &Value) -> Option<String> {
+    let target_status = event.get("status").and_then(Value::as_str).unwrap_or("");
+    let metric_status = text_field(summary, "status", "unknown");
+    (target_status.is_empty() || metric_status == "unknown" || metric_status != target_status).then(
+        || {
+            format!(
+                "observability_metric_status_mismatch:{metric_status}!={}",
+                target_status_or_unknown(target_status)
+            )
+        },
+    )
 }
 
 fn target_signal_mismatch(event: &Value, summary: &Value) -> Option<String> {
@@ -159,4 +175,8 @@ fn target_operation_or_unknown(operation: &str) -> &str {
     } else {
         operation
     }
+}
+
+fn target_status_or_unknown(status: &str) -> &str {
+    if status.is_empty() { "unknown" } else { status }
 }

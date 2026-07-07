@@ -66,6 +66,7 @@
     "observed_correlation_id": { "type": "string" },
     "observed_candidate_digest": { "type": "string" },
     "metric_operation": { "type": "string" },
+    "metric_status": { "type": "string" },
     "metric_traffic_task_count": { "type": "integer", "minimum": 0 },
     "metric_traffic_count": { "type": "integer", "minimum": 0 },
     "metric_task_count": { "type": "integer", "minimum": 0 },

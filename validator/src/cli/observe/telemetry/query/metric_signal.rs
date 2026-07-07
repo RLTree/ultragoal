@@ -5,6 +5,7 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
         return empty_summary();
     }
     let mut operation = "unknown".to_string();
+    let mut status = "unknown".to_string();
     let mut failure_class = "none".to_string();
     let mut saturation_status = "unknown".to_string();
     let mut high_cardinality_labels = "pass";
@@ -19,6 +20,12 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
         let labels = sample.get("metric").unwrap_or(&Value::Null);
         if operation == "unknown" {
             operation = metric_label(labels, "operation", "unknown").to_string();
+        }
+        let sample_status = metric_label(labels, "status", "unknown");
+        if status == "unknown" {
+            status = sample_status.to_string();
+        } else if sample_status != "unknown" && sample_status != status {
+            status = "mixed".to_string();
         }
         let sample_failure = metric_label(labels, "failure_class", "none");
         if failure_class == "none" && sample_failure != "none" {
@@ -55,6 +62,7 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
     }
     json!({
         "operation": operation,
+        "status": status,
         "traffic_task_count": task_count.max(traffic_count),
         "traffic_count": traffic_count,
         "task_count": task_count,
@@ -72,6 +80,7 @@ pub(super) fn summary(query_kind: &str, rows: &[Value]) -> Value {
 fn empty_summary() -> Value {
     json!({
         "operation": "unknown",
+        "status": "unknown",
         "traffic_task_count": 0_u64,
         "traffic_count": 0_u64,
         "task_count": 0_u64,

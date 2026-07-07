@@ -5,6 +5,7 @@ use std::path::Path;
 mod edges;
 mod freshness;
 mod reconciliation;
+mod target_status;
 
 const OBSERVABILITY_CLOSURE_FAILURE: &str = "observability_product_closure_failure";
 

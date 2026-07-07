@@ -22,7 +22,8 @@ pub(crate) use retry::retry_until_match_for_test;
 pub(crate) use retry::retry_until_reconciled;
 pub(crate) use text::{
     bounded_failure_metric_query_for_operation, bounded_metric_query_for_operation,
-    bounded_success_metric_query_for_operation, query_text, trace_tags,
+    bounded_metric_query_for_operation_status, bounded_success_metric_query_for_operation,
+    query_text, trace_tags,
 };
 #[cfg(test)]
 pub(crate) use transport::{curl_output_body, curl_result_body};
