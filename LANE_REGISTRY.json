@@ -2,13 +2,21 @@
   "schema": "harness-ultragoal.lane-registry.v1",
   "goal_id": "harness-ultragoal-june-25-full-compliance-e2e",
   "canonical_authority": "LANE_REGISTRY.json",
+  "active_program": {
+    "id": "custom-tooling-prerequisite",
+    "status": "in_progress",
+    "product_role": "Build Harness-owned Rust authority tooling that makes routine source-local repair fast before Gate 92 production-observability fitting resumes.",
+    "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+    "gate92_status": "not_started_by_this_program",
+    "correction": "Custom tooling is a prerequisite acceleration and authority layer for Gate 92. It must not be reported as Gate 92 fitting, Gate 92 closure, Product Usage, Phase 4, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal evidence."
+  },
   "lanes": [
     {
       "id": "LANE-001",
       "status": "blocked_on_parent_ownership",
       "lane_type": "implementation",
-      "lane_objective": "Build AuditContext and product-surface input-spec authority for the verified incremental query graph.",
-      "macro_lane_rationale": "This lane owns input authority and cache invalidation semantics that must be resolved before downstream hot-loop and telemetry lanes can safely consume affected-set or verified-local reuse claims.",
+      "lane_objective": "Build custom-tooling prerequisite AuditContext and product-surface input-spec authority for the verified incremental query graph.",
+      "macro_lane_rationale": "This lane owns input authority and cache invalidation semantics that must be resolved before downstream routine hot-loop and telemetry lanes can safely consume affected-set or verified-local reuse claims. It is prerequisite custom tooling, not Gate 92 fitting.",
       "acceptance_scope": [
         "AuditContext or product-surface input specs drive changed inputs and invalidation reasons.",
         "Verified-local cache keys include current input digests plus law, schema, fixture, validator, argument, environment, and cache-mode versions.",
@@ -27,7 +35,7 @@
           "add stale and mutation fixtures for input equivalence",
           "prove one real source-local command path"
         ],
-        "why_not_parent_inline": "The parent is now orchestrator/reconciler and this implementation can proceed in a disjoint worktree without blocking root monitoring.",
+        "why_not_parent_inline": "The parent is now orchestrator/reconciler and this prerequisite custom tooling implementation can proceed in a disjoint worktree without blocking root monitoring.",
         "why_not_smaller": "Input specs, cache keys, and invalidation proof must be changed together or downstream lanes would consume inconsistent authority."
       },
       "covered_claim_ids": [
@@ -120,9 +128,9 @@
       },
       "parent_orchestrator_state": {
         "status": "blocked_on_parent_ownership",
-        "observed_at": "2026-07-08T18:59:52Z",
-        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. Remaining input-spec/cache-reuse hardening requires validator/src/cli/live_loop/nodes/measurement/**, which is outside the Lane 1 owned path set.",
-        "action": "Do not merge or extend Lane 1 until parent creates/expands a hot-loop executor or telemetry-row ownership lane for nodes/measurement/**."
+        "observed_at": "2026-07-08T20:02:00Z",
+        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. Remaining input-spec/cache-reuse hardening requires validator/src/cli/live_loop/nodes/measurement/**, which is outside the Lane 1 owned path set. The user corrected that this work is prerequisite custom tooling, not Gate 92 fitting.",
+        "action": "Do not merge or extend Lane 1 until parent creates a corrected prerequisite custom-tooling lane for nodes/measurement/** or explicitly expands ownership under that prerequisite framing."
       },
       "teardown": {
         "required": true,
@@ -135,7 +143,7 @@
       "status": "merged_source_local_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build coverage lineage and routine coverage intelligence while preserving strict exact coverage authority.",
-      "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks fast-loop honesty because routine coverage cannot substitute for strict boundary proof.",
+      "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks prerequisite custom-tooling honesty because routine coverage cannot substitute for strict boundary proof.",
       "acceptance_scope": [
         "Strict full-clean coverage remains the only exact coverage boundary proof.",
         "Routine coverage feedback carries lineage, equivalence, cache class, and routine-only claim limits.",
@@ -155,7 +163,7 @@
           "fail stale or warm strict-proof substitution",
           "prove one current-candidate coverage behavior or claim-limited routine reuse"
         ],
-        "why_not_parent_inline": "The parent must preserve orchestration quality and coverage lineage has a wide enough source footprint to need an owned implementation lane.",
+        "why_not_parent_inline": "The parent must preserve orchestration quality and coverage lineage has a wide enough source footprint to need an owned prerequisite custom-tooling lane.",
         "why_not_smaller": "Coverage command, audit, claim semantics, and fixtures must agree or the lane would produce contradictory proof surfaces."
       },
       "covered_claim_ids": [
@@ -265,7 +273,7 @@
       "status": "merged_source_local_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build product-semantic active-surface inventory and authority-topology enforcement.",
-      "macro_lane_rationale": "Active-surface authority is independent from coverage lineage and live-loop input specs, but it controls namespace, duplicate authority, alias, orphan, and row-shape theater risks before broader Gate 92 fitting.",
+      "macro_lane_rationale": "Active-surface authority is independent from coverage lineage and live-loop input specs, but it controls namespace, duplicate authority, alias, orphan, and row-shape theater risks before prerequisite custom tooling can safely feed Gate 92.",
       "acceptance_scope": [
         "Every active package-owned surface has a typed product role and authority level.",
         "Duplicate authority, orphan surfaces, compatibility-alias overclaim, broad exceptions, and row-shape-only passes fail closed.",
@@ -285,7 +293,7 @@
           "add orphan and row-shape-only failure fixtures",
           "prove current namespace or active-surface command behavior"
         ],
-        "why_not_parent_inline": "The parent must remain reconciler, and active-surface authority spans enough namespace and law surfaces to need an owned implementation lane.",
+        "why_not_parent_inline": "The parent must remain reconciler, and active-surface authority spans enough namespace and law surfaces to need an owned prerequisite custom-tooling lane.",
         "why_not_smaller": "Source, schema, fixture, and package-surface ownership must be consistent or duplicate/orphan enforcement becomes theater."
       },
       "covered_claim_ids": [
@@ -429,18 +437,19 @@
     "final_all_lanes_gate": {
       "stage": "final_all_lanes_gate",
       "status": "pending",
-      "trigger": "all first-wave Phase 2 lanes are accepted or explicitly abandoned",
+      "trigger": "all first-wave prerequisite custom-tooling lanes are accepted or explicitly abandoned",
       "owner": "parent-orchestrator",
       "required_inputs": [
         "all lane registry rows current",
         "root source-local verification",
-        "Gate 92 control-board status",
+        "custom-tooling prerequisite status",
+        "Gate 92 control-board status only as downstream blocked/not-started context",
         "focused red/green/tamper proof for touched semantics",
         "explicit remaining blockers"
       ],
       "blocking": true,
-      "claim_ceiling_impact": "Gate 92 remains open and source-local only until all required production proof surfaces reconcile"
+      "claim_ceiling_impact": "Custom tooling remains source-local prerequisite evidence only; Gate 92 remains open and not claimable until downstream production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T19:02:19Z"
+  "generated_at": "2026-07-08T20:02:00Z"
 }
