@@ -1,3 +1,4 @@
+mod catalog;
 mod path_rules;
 mod registry;
 

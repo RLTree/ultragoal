@@ -83,6 +83,8 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
 }
 
 fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json::Value {
+    let input_spec = crate::cli::live_loop::surfaces::input_spec_for("changed_files")
+        .expect("changed_files input spec");
     json!({
         "node_id": "changed_files",
         "candidate_digest": candidate,
@@ -135,6 +137,23 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
     .with_value("observability_status", json!("pass"))
     .with_value("speed_claim_status", json!("supported"))
     .with_value("observability_failure_class", json!("none"))
+    .with_value(
+        "surface_input_spec_status",
+        json!("surface_input_spec_bound"),
+    )
+    .with_value("surface_input_spec_node_id", json!(input_spec.node_id))
+    .with_value(
+        "surface_input_spec_cache_boundary",
+        json!(input_spec.cache_boundary_name()),
+    )
+    .with_value("validator_authority", json!(input_spec.validator_authority))
+    .with_value("environment_class", json!(input_spec.environment_class))
+    .with_value("cache_class", json!(input_spec.cache_class))
+    .with_value("claim_surface", json!(input_spec.claim_surface))
+    .with_value(
+        "output_digest_expectation",
+        json!(input_spec.output_digest_expectation),
+    )
     .with_value("graph_task_class", json!("pure_read_parallel"))
     .with_value("execution_task_class", json!("pure_read_parallel"))
     .with_value("execution_serial_reason", json!("none"))

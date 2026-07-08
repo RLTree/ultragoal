@@ -173,6 +173,17 @@ fn cache_replay_rejects_prior_rows_without_product_equivalence() {
         timing_row(&fixture).with_value("work_unit_count", json!(0)),
         timing_row(&fixture).with_value("equivalence_status", json!("unknown")),
         timing_row(&fixture).without_key("runtime_execution_model"),
+        timing_row(&fixture).without_key("surface_input_spec_status"),
+        timing_row(&fixture).with_value(
+            "surface_input_spec_status",
+            json!("missing_surface_input_spec"),
+        ),
+        timing_row(&fixture).with_value("validator_authority", json!("wrong-validator-authority")),
+        timing_row(&fixture).with_value("environment_class", json!("ci")),
+        timing_row(&fixture).with_value("cache_class", json!("unverified_local")),
+        timing_row(&fixture).with_value("claim_surface", json!("wrong-claim-surface")),
+        timing_row(&fixture)
+            .with_value("output_digest_expectation", json!("wrong-output-contract")),
         timing_row(&fixture).with_value("command_argv", json!([])),
         timing_row(&fixture).with_value("actual_work_duration_ms", json!(0)),
         timing_row(&fixture).with_value("reconciled_command_duration_ms", json!(1)),

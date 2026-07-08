@@ -1,4 +1,4 @@
-use super::path_rules;
+use super::{catalog::SURFACE_INPUT_SPECS, path_rules};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub(crate) enum CacheBoundary {
@@ -25,6 +25,14 @@ pub(crate) struct SurfaceInputSpec {
 impl SurfaceInputSpec {
     pub(crate) fn affects_path(self, path: &str) -> bool {
         !path_rules::is_non_product_input(path) && (self.path_rule)(path)
+    }
+
+    pub(crate) fn cache_boundary_name(self) -> &'static str {
+        match self.cache_boundary {
+            CacheBoundary::ChangedInputs => "changed_inputs",
+            CacheBoundary::CandidatePackage => "candidate_package",
+            CacheBoundary::AuditContext => "audit_context",
+        }
     }
 
     pub(crate) fn cache_material(self, tier: &str, cache_mode: &str) -> String {
@@ -62,178 +70,6 @@ impl SurfaceInputSpec {
             CacheBoundary::AuditContext => "audit_context_versions_and_args_unchanged",
             CacheBoundary::ChangedInputs => "surface_inputs_unchanged",
         }
-    }
-}
-
-pub(crate) const SURFACE_INPUT_SPECS: &[SurfaceInputSpec] = &[
-    spec(
-        "package_digest",
-        CacheBoundary::CandidatePackage,
-        path_rules::is_package_owned_source,
-        "package_boundary",
-        "package_digest_matches_current_candidate",
-    ),
-    spec(
-        "changed_files",
-        CacheBoundary::ChangedInputs,
-        path_rules::always_product_path,
-        "candidate_delta",
-        "changed_file_list_digest",
-    ),
-    spec(
-        "audit_context",
-        CacheBoundary::AuditContext,
-        path_rules::is_audit_context_input,
-        "audit_context",
-        "audit_context_digest",
-    ),
-    spec(
-        "observability_control_board",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_observability_input,
-        "command_observability_inventory",
-        "observability_inventory_digest",
-    ),
-    spec(
-        "fmt_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_fmt_input,
-        "rust_format",
-        "rustfmt_stdout_digest",
-    ),
-    spec(
-        "build_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_rust_build_surface_input,
-        "rust_build",
-        "cargo_build_output_digest",
-    ),
-    spec(
-        "live_loop_measurement_rust_tests",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_rust_build_surface_input,
-        "rust_live_loop_measurement_tests",
-        "focused_test_output_digest",
-    ),
-    spec(
-        "line_caps_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_rust_source,
-        "source_line_caps",
-        "line_cap_result_digest",
-    ),
-    spec(
-        "namespace_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_namespace_input,
-        "source_namespace",
-        "namespace_result_digest",
-    ),
-    spec(
-        "schema_validation",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_schema_input,
-        "schema_catalog",
-        "schema_validation_result_digest",
-    ),
-    spec(
-        "package_inventory",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_package_inventory_closure_input,
-        "package_inventory",
-        "package_inventory_result_digest",
-    ),
-    spec(
-        "mandatory_law_validation",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_mandatory_law_input,
-        "mandatory_law_graph",
-        "mandatory_law_result_digest",
-    ),
-    spec(
-        "source_obligations_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_source_obligation_input,
-        "source_obligations",
-        "source_obligation_result_digest",
-    ),
-    spec(
-        "foundational_trace_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_foundational_trace_input,
-        "foundational_trace",
-        "foundational_trace_result_digest",
-    ),
-    spec(
-        "coverage_prove",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_coverage_input,
-        "exact_coverage",
-        "coverage_receipt_digest",
-    ),
-    spec(
-        "coverage_full_script",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_coverage_input,
-        "exact_coverage_script",
-        "coverage_full_output_digest",
-    ),
-    spec(
-        "coverage_fast_script",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_coverage_input,
-        "coverage_scope_precheck",
-        "coverage_routine_output_digest",
-    ),
-    spec(
-        "source_audit",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_source_audit_input,
-        "source_audit",
-        "source_audit_receipt_digest",
-    ),
-    spec(
-        "red_fixture_report",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_fixture_input,
-        "red_fixture_report",
-        "red_fixture_report_digest",
-    ),
-    spec(
-        "scripts_check",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_scripts_check_input,
-        "routine_shell_delegation",
-        "scripts_check_output_digest",
-    ),
-    spec(
-        "touched_fixture_reports",
-        CacheBoundary::ChangedInputs,
-        path_rules::is_fixture_input,
-        "affected_fixture_reports",
-        "affected_fixture_report_digest",
-    ),
-];
-
-const fn spec(
-    node_id: &'static str,
-    cache_boundary: CacheBoundary,
-    path_rule: fn(&str) -> bool,
-    claim_surface: &'static str,
-    output_digest_expectation: &'static str,
-) -> SurfaceInputSpec {
-    SurfaceInputSpec {
-        node_id,
-        cache_boundary,
-        path_rule,
-        law_version: "observability-live-loop",
-        schema_version: "harness-ultragoal.live-loop-node-timing.v2",
-        fixture_version: "source-tree-current",
-        validator_authority: "ultragoal-cli-control-plane",
-        environment_class: "local",
-        cache_class: "verified_content_addressed_local",
-        claim_surface,
-        output_digest_expectation,
     }
 }
 

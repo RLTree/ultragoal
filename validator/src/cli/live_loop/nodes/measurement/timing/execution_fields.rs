@@ -2,7 +2,7 @@ use super::super::super::timing::NODE_TIMING_REL;
 use super::super::full_command;
 use super::record::MeasurementExecutionAuthority;
 use super::verified_work::VerifiedLocalProof;
-use crate::cli::live_loop::surfaces::LoopValidationSurface;
+use crate::cli::live_loop::surfaces::{LoopValidationSurface, input_spec_for};
 use serde_json::{Map, Value, json};
 
 pub(crate) fn insert(
@@ -38,6 +38,7 @@ pub(crate) fn insert(
         "runtime_execution_model".to_string(),
         json!(crate::cli::live_loop::graph::runtime_execution_model()),
     );
+    insert_surface_input_spec_fields(object, surface);
     object.insert(
         "work_unit_count".to_string(),
         json!(verified_local.work_unit_count),
@@ -94,6 +95,45 @@ pub(crate) fn insert(
         json!(verified_local.actual_work.failure.to_value()),
     );
     insert_cache_replay_fields(object, verified_local);
+}
+
+fn insert_surface_input_spec_fields(
+    object: &mut Map<String, Value>,
+    surface: LoopValidationSurface,
+) {
+    let Some(spec) = input_spec_for(surface.id) else {
+        object.insert(
+            "surface_input_spec_status".to_string(),
+            json!("missing_surface_input_spec"),
+        );
+        return;
+    };
+    object.insert(
+        "surface_input_spec_status".to_string(),
+        json!("surface_input_spec_bound"),
+    );
+    object.insert(
+        "surface_input_spec_node_id".to_string(),
+        json!(spec.node_id),
+    );
+    object.insert(
+        "surface_input_spec_cache_boundary".to_string(),
+        json!(spec.cache_boundary_name()),
+    );
+    object.insert(
+        "validator_authority".to_string(),
+        json!(spec.validator_authority),
+    );
+    object.insert(
+        "environment_class".to_string(),
+        json!(spec.environment_class),
+    );
+    object.insert("cache_class".to_string(), json!(spec.cache_class));
+    object.insert("claim_surface".to_string(), json!(spec.claim_surface));
+    object.insert(
+        "output_digest_expectation".to_string(),
+        json!(spec.output_digest_expectation),
+    );
 }
 
 fn insert_scheduler_fields(

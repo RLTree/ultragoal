@@ -3,7 +3,10 @@ use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
-use crate::cli::live_loop::{LiveLoopCommand, surfaces::LoopValidationSurface};
+use crate::cli::live_loop::{
+    LiveLoopCommand,
+    surfaces::{LoopValidationSurface, input_spec_for},
+};
 use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;
@@ -119,6 +122,9 @@ fn replay_from_row(
     {
         return None;
     }
+    if !matches_surface_input_spec(row, surface) {
+        return None;
+    }
     let proof_kind = text(row, "proof_kind")?;
     if !has_replayable_proof(row, proof_kind) {
         return None;
@@ -188,6 +194,20 @@ fn replay_from_row(
                 .to_string(),
         telemetry_reconciliation: cached_telemetry,
     })
+}
+
+fn matches_surface_input_spec(row: &Value, surface: LoopValidationSurface) -> bool {
+    let Some(spec) = input_spec_for(surface.id) else {
+        return false;
+    };
+    text(row, "surface_input_spec_status") == Some("surface_input_spec_bound")
+        && text(row, "surface_input_spec_node_id") == Some(spec.node_id)
+        && text(row, "surface_input_spec_cache_boundary") == Some(spec.cache_boundary_name())
+        && text(row, "validator_authority") == Some(spec.validator_authority)
+        && text(row, "environment_class") == Some(spec.environment_class)
+        && text(row, "cache_class") == Some(spec.cache_class)
+        && text(row, "claim_surface") == Some(spec.claim_surface)
+        && text(row, "output_digest_expectation") == Some(spec.output_digest_expectation)
 }
 
 #[cfg(test)]

@@ -60,6 +60,8 @@ pub(super) fn cache_hit_for_observation(
 }
 
 pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
+    let input_spec = crate::cli::live_loop::surfaces::input_spec_for(fixture.surface.id)
+        .expect("fixture surface input spec");
     json!({
         "node_id": fixture.surface.id,
         "candidate_digest": fixture.candidate,
@@ -104,6 +106,23 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
     .with_value("observability_status", json!("pass"))
     .with_value("speed_claim_status", json!("supported"))
     .with_value("observability_failure_class", json!("none"))
+    .with_value(
+        "surface_input_spec_status",
+        json!("surface_input_spec_bound"),
+    )
+    .with_value("surface_input_spec_node_id", json!(input_spec.node_id))
+    .with_value(
+        "surface_input_spec_cache_boundary",
+        json!(input_spec.cache_boundary_name()),
+    )
+    .with_value("validator_authority", json!(input_spec.validator_authority))
+    .with_value("environment_class", json!(input_spec.environment_class))
+    .with_value("cache_class", json!(input_spec.cache_class))
+    .with_value("claim_surface", json!(input_spec.claim_surface))
+    .with_value(
+        "output_digest_expectation",
+        json!(input_spec.output_digest_expectation),
+    )
     .with_value("baseline_duration_ms", json!(200))
     .with_value("baseline_exit_code", json!(0))
     .with_value("baseline_launch_error", json!(false))

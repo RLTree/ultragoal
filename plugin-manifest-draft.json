@@ -4309,6 +4309,7 @@
     "validator/src/cli/live_loop/surface_context.rs",
     "validator/src/cli/live_loop/surfaces/catalog.rs",
     "validator/src/cli/live_loop/surfaces/input_spec/mod.rs",
+    "validator/src/cli/live_loop/surfaces/input_spec/catalog.rs",
     "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
     "validator/src/cli/live_loop/surfaces/input_spec/registry.rs",
     "validator/src/cli/live_loop/surfaces/mod.rs",
