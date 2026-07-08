@@ -436,23 +436,24 @@
         "CLAIM-101"
       ],
       "owner": "codex-app-worktree-lane-004",
-      "thread_or_session_id": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+      "thread_or_session_id": "019f4335-bf7e-79d0-b731-63c006af87a8",
       "actor_binding": {
         "actor_id": "codex-app-worktree-lane-004",
-        "thread_or_session_id": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
-        "actor_status": "pending_worktree_setup",
-        "validated_at": "2026-07-08T20:07:00Z"
+        "thread_or_session_id": "019f4335-bf7e-79d0-b731-63c006af87a8",
+        "pending_worktree_id": "local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+        "actor_status": "active",
+        "validated_at": "2026-07-08T20:10:00Z"
       },
-      "branch": "pending_codex_app_worktree",
-      "workspace": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+      "branch": "HEAD",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
-      "current_commit": "pending",
+      "current_commit": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
       "target_head_at_validation": "pending",
       "merge_base_at_validation": "pending",
-      "last_heartbeat": "2026-07-08T20:07:00Z",
+      "last_heartbeat": "2026-07-08T20:10:00Z",
       "owned_paths": [
         "validator/src/cli/live_loop/nodes/measurement/**",
         "validator/src/cli/live_loop/nodes/status.rs",
@@ -478,7 +479,7 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "state_roots": [
-        "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3"
+        "/Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal"
       ],
       "temporary_state_roots": [],
       "tool_cache_roots": [],
@@ -486,7 +487,7 @@
       "artifact_root": ".codex/lane-registry",
       "port_allocations": [],
       "ready_receipt": {
-        "path": "pending_codex_app_thread_creation",
+        "path": "codex_app_thread:019f4335-bf7e-79d0-b731-63c006af87a8",
         "digest": "pending"
       },
       "claim_ids": [
@@ -497,22 +498,22 @@
         "LANE-001 parent blocker"
       ],
       "workspace_status": {
-        "clean": null,
+        "clean": true,
         "status_receipt": {
-          "path": "pending_codex_app_thread_creation",
+          "path": "codex_app_thread:019f4335-bf7e-79d0-b731-63c006af87a8",
           "digest": "pending"
         },
-        "observed_clean": null,
-        "observed_workspace": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
-        "observed_branch": "pending",
-        "observed_head": "pending",
+        "observed_clean": true,
+        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal",
+        "observed_branch": "HEAD",
+        "observed_head": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "pending_worktree_setup",
-        "observed_at": "2026-07-08T20:07:00Z",
-        "finding": "Codex app worktree lane creation returned pendingWorktreeId local:c995f5c9-59fc-4440-a26a-8045d63172d3. The lane prompt is goal-bound and framed as source-local custom tooling prerequisite, not Gate 92 fitting.",
-        "action": "Wait for Codex app worktree setup to produce a thread id, then monitor Lane 4. Do not accept or merge Lane 4 without source inspection, focused validation, real routine hot-loop behavior or verified current-input reuse, explicit prerequisite-only claim ceiling, and root ultragoal reconciliation."
+        "status": "active",
+        "observed_at": "2026-07-08T20:10:00Z",
+        "finding": "Codex app worktree lane creation produced thread 019f4335-bf7e-79d0-b731-63c006af87a8 at /Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal. The lane prompt is goal-bound and framed as source-local custom tooling prerequisite, not Gate 92 fitting.",
+        "action": "Monitor Lane 4. Do not accept or merge Lane 4 without source inspection, focused validation, real routine hot-loop behavior or verified current-input reuse, explicit prerequisite-only claim ceiling, and root ultragoal reconciliation."
       },
       "teardown": {
         "required": true,
