@@ -13,9 +13,9 @@
   "lanes": [
     {
       "id": "LANE-001",
-      "status": "blocked_on_parent_ownership",
+      "status": "active_rebound_custom_tooling_prerequisite",
       "lane_type": "implementation",
-      "lane_objective": "Build custom-tooling prerequisite AuditContext and product-surface input-spec authority for the verified incremental query graph.",
+      "lane_objective": "Build custom-tooling prerequisite AuditContext and product-surface input-spec authority for routine hot-loop acceleration before broad Gate 92 production-observability fitting.",
       "macro_lane_rationale": "This lane owns input authority and cache invalidation semantics that must be resolved before downstream routine hot-loop and telemetry lanes can safely consume affected-set or verified-local reuse claims. It is prerequisite custom tooling, not Gate 92 fitting.",
       "acceptance_scope": [
         "AuditContext or product-surface input specs drive changed inputs and invalidation reasons.",
@@ -72,10 +72,16 @@
         "validator/src/cli/live_loop/surface_context.rs",
         "validator/src/cli/live_loop/changed_inputs/**",
         "validator/src/cli/live_loop/surfaces/**",
-        "validator/src/cli/live_loop/graph/**"
+        "validator/src/cli/live_loop/graph/**",
+        "validator/src/cli/live_loop/nodes/measurement/cache_replay/**",
+        "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs",
+        "validator/src/cli/live_loop/nodes/measurement/timing/execution_fields.rs",
+        "validator/src/cli/live_loop/nodes/measurement/timing/record.rs"
       ],
       "forbidden_paths": [
         "validation_artifacts/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "LANE_REGISTRY.json",
         "validator/src/cli/coverage/**",
         "validator/src/audit/coverage/**",
         "validator/src/claim_semantics/coverage/**",
@@ -127,10 +133,10 @@
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "blocked_on_parent_ownership",
-        "observed_at": "2026-07-08T20:02:00Z",
-        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. Remaining input-spec/cache-reuse hardening requires validator/src/cli/live_loop/nodes/measurement/**, which is outside the Lane 1 owned path set. The user corrected that this work is prerequisite custom tooling, not Gate 92 fitting.",
-        "action": "Do not merge or extend Lane 1 until parent creates a corrected prerequisite custom-tooling lane for nodes/measurement/** or explicitly expands ownership under that prerequisite framing."
+        "status": "active_rebound_custom_tooling_prerequisite",
+        "observed_at": "2026-07-08T20:18:00Z",
+        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. The prior blocker was real coupling between product-surface input specs and measurement/cache-replay authority. The user corrected that this is prerequisite custom tooling before broad Phase 2 Gate 92 fitting, not downstream Gate 92 fitting work.",
+        "action": "Parent rebound thread 019f4303-8945-7d22-b380-790b049c0cbd with source-local custom-tooling prerequisite framing and a bounded ownership expansion for measurement cache replay/timing rows only. Lane must reconcile against root commit fce3b770d and stop if broader ownership is needed."
       },
       "teardown": {
         "required": true,
