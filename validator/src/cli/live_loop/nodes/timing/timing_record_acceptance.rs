@@ -30,6 +30,20 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"product_latency_ms": 5}),
         json!({"validator_version": ""}),
         json!({"runtime_execution_model": ""}),
+        json!({"execution_task_class": ""}),
+        json!({"execution_task_class": "shared_authority_write_serial"}),
+        json!({"execution_serial_reason": "hidden serial cap"}),
+        json!({"worker_count": 0}),
+        json!({"worker_count": 2}),
+        json!({"task_count": 0}),
+        json!({"queue_depth": 0}),
+        json!({"task_count": 2, "queue_depth": 3}),
+        json!({"worker_state": ""}),
+        json!({"task_state": ""}),
+        json!({"queue_state": ""}),
+        json!({"executor_behavior": ""}),
+        json!({"executor_scope": ""}),
+        json!({"parallel_write_policy": "shared_validation_artifact_write_allowed"}),
         json!({"verified_local_command": ""}),
         json!({"command_argv": []}),
         json!({"exit_status": serde_json::Value::Null}),
@@ -57,6 +71,14 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
     for patch in cases {
         assert_eq!(read_with_patch(patch), 0);
     }
+}
+
+#[test]
+fn node_timing_reader_accepts_batch_derived_measurement_queue_state() {
+    assert_eq!(
+        read_with_patch(json!({"task_count": 3, "queue_depth": 2})),
+        1
+    );
 }
 
 fn read_with_patch(patch: Value) -> usize {
@@ -169,6 +191,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "command_argv".to_string(),
         json!(["cargo", "fmt", "--all", "--check"]),
     );
+    insert_scheduler_fields(object);
     object.insert("exit_status".to_string(), json!(0));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
     object.insert("reconciled_command_duration_ms".to_string(), json!(6));
@@ -181,6 +204,42 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     object.insert("speed_claim_status".to_string(), json!("supported"));
     object.insert("observability_failure_class".to_string(), json!("none"));
     row
+}
+
+fn insert_scheduler_fields(object: &mut serde_json::Map<String, Value>) {
+    object.insert("graph_task_class".to_string(), json!("pure_read_parallel"));
+    object.insert(
+        "execution_task_class".to_string(),
+        json!("pure_read_parallel"),
+    );
+    object.insert("execution_serial_reason".to_string(), json!("none"));
+    object.insert("worker_count".to_string(), json!(1));
+    object.insert("task_count".to_string(), json!(1));
+    object.insert("queue_depth".to_string(), json!(1));
+    object.insert(
+        "worker_state".to_string(),
+        json!("single_surface_measurement_worker"),
+    );
+    object.insert(
+        "task_state".to_string(),
+        json!("surface_measurement_completed"),
+    );
+    object.insert(
+        "queue_state".to_string(),
+        json!("deterministic_measurement_batch_order"),
+    );
+    object.insert(
+        "executor_behavior".to_string(),
+        json!("measure_surface_invokes_one_node_command_at_a_time"),
+    );
+    object.insert(
+        "executor_scope".to_string(),
+        json!("source_local_custom_tooling_prerequisite_measurement_runner"),
+    );
+    object.insert(
+        "parallel_write_policy".to_string(),
+        json!("no_shared_validation_artifact_parallel_write"),
+    );
 }
 
 fn digest(label: &str) -> String {

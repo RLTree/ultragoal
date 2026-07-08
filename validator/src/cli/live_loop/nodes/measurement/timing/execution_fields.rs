@@ -1,5 +1,6 @@
 use super::super::super::timing::NODE_TIMING_REL;
 use super::super::full_command;
+use super::record::MeasurementExecutionAuthority;
 use super::verified_work::VerifiedLocalProof;
 use crate::cli::live_loop::surfaces::LoopValidationSurface;
 use serde_json::{Map, Value, json};
@@ -10,7 +11,9 @@ pub(crate) fn insert(
     input_digest: &str,
     receipt_path: String,
     verified_local: &VerifiedLocalProof,
+    authority: &MeasurementExecutionAuthority,
 ) {
+    insert_scheduler_fields(object, authority);
     object.insert("proof_kind".to_string(), json!(verified_local.proof_kind));
     object.insert("cache_hit".to_string(), json!(verified_local.cache_hit));
     object.insert("cache_key".to_string(), json!(verified_local.cache_key));
@@ -91,6 +94,42 @@ pub(crate) fn insert(
         json!(verified_local.actual_work.failure.to_value()),
     );
     insert_cache_replay_fields(object, verified_local);
+}
+
+fn insert_scheduler_fields(
+    object: &mut Map<String, Value>,
+    authority: &MeasurementExecutionAuthority,
+) {
+    object.insert(
+        "graph_task_class".to_string(),
+        json!(authority.graph_task_class),
+    );
+    object.insert(
+        "execution_task_class".to_string(),
+        json!(authority.execution_task_class),
+    );
+    object.insert(
+        "execution_serial_reason".to_string(),
+        json!(authority.execution_serial_reason),
+    );
+    object.insert("worker_count".to_string(), json!(authority.worker_count));
+    object.insert("task_count".to_string(), json!(authority.task_count));
+    object.insert("queue_depth".to_string(), json!(authority.queue_depth));
+    object.insert("worker_state".to_string(), json!(authority.worker_state));
+    object.insert("task_state".to_string(), json!(authority.task_state));
+    object.insert("queue_state".to_string(), json!(authority.queue_state));
+    object.insert(
+        "executor_behavior".to_string(),
+        json!(authority.executor_behavior),
+    );
+    object.insert(
+        "executor_scope".to_string(),
+        json!(authority.executor_scope),
+    );
+    object.insert(
+        "parallel_write_policy".to_string(),
+        json!(authority.parallel_write_policy),
+    );
 }
 
 fn insert_command_fields(object: &mut Map<String, Value>, surface: LoopValidationSurface) {

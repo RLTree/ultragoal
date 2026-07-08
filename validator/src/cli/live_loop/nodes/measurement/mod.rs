@@ -26,7 +26,7 @@ pub(crate) use observation_mode::ObservationMode;
 use std::path::Path;
 use surface_selection::selected_surfaces;
 use timing::receipt::{affected_set_status, print_measurements, write_node_timings};
-use timing::{record::NodeTimingRow, record::node_timing_row};
+use timing::record::{MeasurementExecutionAuthority, NodeTimingRow, node_timing_row};
 use verified_local_work::{cached_verified_local, executed_verified_local};
 
 pub(crate) fn measure(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
@@ -51,13 +51,19 @@ pub(crate) fn measure_surfaces_with_observation(
     let candidate = crate::package::inventory::package_digest(root)?;
     let inputs = ChangedInputs::collect(root, &candidate, &command.tier, &command.cache_mode);
     let replay_store = cache_replay::ReplayStore::load(root, command);
+    let batch_task_count = surfaces.len();
     let mut rows = Vec::new();
-    for surface in surfaces {
+    for (batch_index, surface) in surfaces.into_iter().enumerate() {
+        let authority = MeasurementExecutionAuthority::from_measurement_batch(
+            surface,
+            batch_task_count,
+            batch_index,
+        );
         println!(
             "ultragoal-loop-measure-start candidate={} node={} command='{}' claim_ceiling='source-local loop timing only'",
             candidate, surface.id, surface.canonical_full_command
         );
-        let row = measure_surface(
+        let row = measure_surface_with_authority(
             root,
             command,
             surface,
@@ -66,6 +72,7 @@ pub(crate) fn measure_surfaces_with_observation(
             &replay_store,
             affected_set_status(inputs.changed_file_count),
             observation_mode,
+            &authority,
         );
         print_measurements(command, &candidate, std::slice::from_ref(&row));
         rows.push(row);
@@ -82,6 +89,7 @@ pub(crate) fn measure_surfaces_with_observation(
     Ok(exit_code)
 }
 
+#[cfg(test)]
 fn measure_surface(
     root: &Path,
     command: &LiveLoopCommand,
@@ -91,6 +99,31 @@ fn measure_surface(
     replay_store: &cache_replay::ReplayStore,
     affected_set_status: &'static str,
     observation_mode: ObservationMode,
+) -> NodeTimingRow {
+    let authority = MeasurementExecutionAuthority::single_surface(surface);
+    measure_surface_with_authority(
+        root,
+        command,
+        surface,
+        candidate,
+        inputs,
+        replay_store,
+        affected_set_status,
+        observation_mode,
+        &authority,
+    )
+}
+
+fn measure_surface_with_authority(
+    root: &Path,
+    command: &LiveLoopCommand,
+    surface: LoopValidationSurface,
+    candidate: &str,
+    inputs: &ChangedInputs,
+    replay_store: &cache_replay::ReplayStore,
+    affected_set_status: &'static str,
+    observation_mode: ObservationMode,
+    authority: &MeasurementExecutionAuthority,
 ) -> NodeTimingRow {
     let input_digest = graph::surface_input_digest(
         surface,
@@ -116,6 +149,7 @@ fn measure_surface(
             &baseline,
             &verified_local,
             affected_set_status,
+            authority,
         );
     }
     if same_command_baseline_reuse_allowed(surface) {
@@ -138,6 +172,7 @@ fn measure_surface(
             &baseline,
             &verified_local,
             affected_set_status,
+            authority,
         );
     }
     let baseline = run_full_command(root, surface);
@@ -159,6 +194,7 @@ fn measure_surface(
         &baseline,
         &verified_local,
         affected_set_status,
+        authority,
     )
 }
 

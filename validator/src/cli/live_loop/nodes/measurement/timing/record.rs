@@ -15,6 +15,59 @@ use crate::cli::live_loop::surfaces::LoopValidationSurface;
 use serde_json::{Value, json};
 use std::ops::Deref;
 
+#[derive(Clone, Debug)]
+pub(in crate::cli::live_loop::nodes::measurement) struct MeasurementExecutionAuthority {
+    pub(super) graph_task_class: &'static str,
+    pub(super) execution_task_class: &'static str,
+    pub(super) execution_serial_reason: &'static str,
+    pub(super) worker_count: usize,
+    pub(super) task_count: usize,
+    pub(super) queue_depth: usize,
+    pub(super) worker_state: &'static str,
+    pub(super) task_state: &'static str,
+    pub(super) queue_state: &'static str,
+    pub(super) executor_behavior: &'static str,
+    pub(super) executor_scope: &'static str,
+    pub(super) parallel_write_policy: &'static str,
+}
+
+impl MeasurementExecutionAuthority {
+    pub(in crate::cli::live_loop::nodes::measurement) fn from_measurement_batch(
+        surface: LoopValidationSurface,
+        batch_task_count: usize,
+        batch_index: usize,
+    ) -> Self {
+        let task_count = batch_task_count.max(1);
+        Self {
+            graph_task_class: surface.execution_task_class.id(),
+            execution_task_class: surface.execution_task_class.id(),
+            execution_serial_reason: surface.execution_serial_reason,
+            worker_count: single_node_worker_count(),
+            task_count,
+            queue_depth: task_count.saturating_sub(batch_index),
+            worker_state: "single_surface_measurement_worker",
+            task_state: "surface_measurement_completed",
+            queue_state: "deterministic_measurement_batch_order",
+            executor_behavior: "measure_surface_invokes_one_node_command_at_a_time",
+            executor_scope: "source_local_custom_tooling_prerequisite_measurement_runner",
+            parallel_write_policy: "no_shared_validation_artifact_parallel_write",
+        }
+    }
+
+    #[cfg(test)]
+    pub(in crate::cli::live_loop::nodes::measurement) fn single_surface(
+        surface: LoopValidationSurface,
+    ) -> Self {
+        Self::from_measurement_batch(surface, 1, 0)
+    }
+}
+
+fn single_node_worker_count() -> usize {
+    // The measurement runner executes one selected surface command per row. Parallel
+    // fanout belongs to the live-loop graph, not this authority-artifact writer.
+    1
+}
+
 #[derive(Clone)]
 pub(crate) struct NodeTimingRow {
     value: Value,
@@ -53,6 +106,7 @@ pub(crate) fn node_timing_row(
     baseline: &FullCommandRun,
     verified_local: &VerifiedLocalProof,
     affected_set_status: &'static str,
+    authority: &MeasurementExecutionAuthority,
 ) -> NodeTimingRow {
     let actual_work_duration_ms = verified_local.actual_work.duration_ms;
     let product_latency_ms = derived_fields::validation_product_latency_ms(verified_local);
@@ -138,6 +192,7 @@ pub(crate) fn node_timing_row(
         input_digest,
         command.receipt.display().to_string(),
         verified_local,
+        authority,
     );
     object.insert("output_digest".to_string(), json!(output_digest));
     object.insert(
@@ -163,5 +218,32 @@ fn claim_bearing_failure_class(
         "none"
     } else {
         failure_class
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cli::live_loop::surfaces::surface_by_id;
+
+    #[test]
+    fn measurement_authority_is_derived_from_surface_and_batch_position() {
+        let fmt = surface_by_id("fmt_check").expect("fmt surface");
+        let build = surface_by_id("build_check").expect("build surface");
+
+        let fmt_authority = MeasurementExecutionAuthority::from_measurement_batch(fmt, 3, 1);
+        let build_authority = MeasurementExecutionAuthority::from_measurement_batch(build, 3, 0);
+
+        assert_eq!(fmt_authority.execution_task_class, "pure_read_parallel");
+        assert_eq!(fmt_authority.execution_serial_reason, "none");
+        assert_eq!(fmt_authority.task_count, 3);
+        assert_eq!(fmt_authority.queue_depth, 2);
+        assert_eq!(
+            build_authority.execution_task_class,
+            "shared_authority_write_serial"
+        );
+        let reason = build_authority.execution_serial_reason;
+        assert!(reason.starts_with("writes"));
+        assert_eq!(build_authority.worker_count, 1);
     }
 }

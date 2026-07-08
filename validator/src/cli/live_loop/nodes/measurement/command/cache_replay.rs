@@ -135,6 +135,30 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
     .with_value("observability_status", json!("pass"))
     .with_value("speed_claim_status", json!("supported"))
     .with_value("observability_failure_class", json!("none"))
+    .with_value("graph_task_class", json!("pure_read_parallel"))
+    .with_value("execution_task_class", json!("pure_read_parallel"))
+    .with_value("execution_serial_reason", json!("none"))
+    .with_value("worker_count", json!(1))
+    .with_value("task_count", json!(1))
+    .with_value("queue_depth", json!(1))
+    .with_value("worker_state", json!("single_surface_measurement_worker"))
+    .with_value("task_state", json!("surface_measurement_completed"))
+    .with_value(
+        "queue_state",
+        json!("deterministic_measurement_batch_order"),
+    )
+    .with_value(
+        "executor_behavior",
+        json!("measure_surface_invokes_one_node_command_at_a_time"),
+    )
+    .with_value(
+        "executor_scope",
+        json!("source_local_custom_tooling_prerequisite_measurement_runner"),
+    )
+    .with_value(
+        "parallel_write_policy",
+        json!("no_shared_validation_artifact_parallel_write"),
+    )
     .with_value("telemetry_reconciliation_duration_ms", json!(3))
     .with_value("reconciled_command_duration_ms", json!(104))
     .with_value("product_latency_ms", json!(101))

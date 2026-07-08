@@ -6,8 +6,11 @@ use super::fixtures::{
 fn live_loop_measure_marks_executed_reconciled_speedup_as_pass() {
     let command = command(Some("fmt_check"), live_loop_timing_receipt_arg());
     let baseline = full_command_run(0, true, 240);
+    let surface = crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("surface");
+    let authority =
+        super::super::timing::record::MeasurementExecutionAuthority::single_surface(surface);
     let row = super::super::timing::record::node_timing_row(
-        crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("surface"),
+        surface,
         &command,
         "sha256:candidate",
         "sha256:changed",
@@ -16,6 +19,7 @@ fn live_loop_measure_marks_executed_reconciled_speedup_as_pass() {
         &baseline,
         &verified_local_proof(0, true, 10, "pass"),
         "changed_files_digest_bound",
+        &authority,
     );
 
     assert_eq!(row["timing_status"], "pass");

@@ -66,8 +66,11 @@ fn live_loop_measure_projects_empty_affected_set_and_failure_classes() {
 fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
     let command = command(Some("changed_files"), live_loop_timing_receipt_arg());
     let baseline = full_command_run(0, true, 200);
+    let surface = crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface");
+    let authority =
+        super::super::timing::record::MeasurementExecutionAuthority::single_surface(surface);
     let row = super::super::timing::record::node_timing_row(
-        crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
+        surface,
         &command,
         "sha256:candidate",
         "sha256:changed",
@@ -76,6 +79,7 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
         &baseline,
         &verified_local_proof(0, true, 10, "missing_query_reconciliation"),
         "changed_files_digest_bound",
+        &authority,
     );
 
     assert_eq!(row["timing_status"], "partial");

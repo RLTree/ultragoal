@@ -88,6 +88,7 @@ fn insert_derived_fields(
         "command_argv".to_string(),
         json!(["cargo", "fmt", "--all", "--check"]),
     );
+    insert_scheduler_fields(object);
     object.insert(
         "runtime_execution_model".to_string(),
         json!(crate::cli::live_loop::graph::runtime_execution_model()),
@@ -130,6 +131,42 @@ fn insert_derived_fields(
         }),
     );
     object.insert("observability_failure_class".to_string(), json!("none"));
+}
+
+fn insert_scheduler_fields(object: &mut serde_json::Map<String, serde_json::Value>) {
+    object.insert("graph_task_class".to_string(), json!("pure_read_parallel"));
+    object.insert(
+        "execution_task_class".to_string(),
+        json!("pure_read_parallel"),
+    );
+    object.insert("execution_serial_reason".to_string(), json!("none"));
+    object.insert("worker_count".to_string(), json!(1));
+    object.insert("task_count".to_string(), json!(1));
+    object.insert("queue_depth".to_string(), json!(1));
+    object.insert(
+        "worker_state".to_string(),
+        json!("single_surface_measurement_worker"),
+    );
+    object.insert(
+        "task_state".to_string(),
+        json!("surface_measurement_completed"),
+    );
+    object.insert(
+        "queue_state".to_string(),
+        json!("deterministic_measurement_batch_order"),
+    );
+    object.insert(
+        "executor_behavior".to_string(),
+        json!("measure_surface_invokes_one_node_command_at_a_time"),
+    );
+    object.insert(
+        "executor_scope".to_string(),
+        json!("source_local_custom_tooling_prerequisite_measurement_runner"),
+    );
+    object.insert(
+        "parallel_write_policy".to_string(),
+        json!("no_shared_validation_artifact_parallel_write"),
+    );
 }
 
 pub(super) fn fmt_input(candidate: &str, changed: &str, context: &str) -> String {

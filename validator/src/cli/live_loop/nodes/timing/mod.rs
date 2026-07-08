@@ -96,6 +96,9 @@ pub(crate) fn read_current(
             if !record_fields::runtime_versions_match(row) {
                 return None;
             }
+            if !record_fields::scheduler_contract_matches(row, surface) {
+                return None;
+            }
             let verified_local_command = record_fields::text(row, "verified_local_command")?;
             if verified_local_command.is_empty()
                 || !record_fields::has_nonempty_string_array(row, "command_argv")
@@ -180,10 +183,7 @@ pub(crate) fn read_current(
                 }
                 _ => return None,
             }
-            let baseline_exit_code = row
-                .get("baseline_exit_code")
-                .and_then(serde_json::Value::as_i64)
-                .and_then(|value| i32::try_from(value).ok());
+            let baseline_exit_code = record_fields::i32_field(row, "baseline_exit_code");
             let baseline_launch_error = row
                 .get("baseline_launch_error")
                 .and_then(serde_json::Value::as_bool)
