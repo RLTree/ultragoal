@@ -5,7 +5,7 @@
   "lanes": [
     {
       "id": "LANE-001",
-      "status": "attention_required",
+      "status": "blocked_on_parent_ownership",
       "lane_type": "implementation",
       "lane_objective": "Build AuditContext and product-surface input-spec authority for the verified incremental query graph.",
       "macro_lane_rationale": "This lane owns input authority and cache invalidation semantics that must be resolved before downstream hot-loop and telemetry lanes can safely consume affected-set or verified-local reuse claims.",
@@ -59,7 +59,7 @@
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T18:56:23Z",
+      "last_heartbeat": "2026-07-08T18:59:52Z",
       "owned_paths": [
         "validator/src/cli/live_loop/surface_context.rs",
         "validator/src/cli/live_loop/changed_inputs/**",
@@ -98,17 +98,12 @@
       ],
       "dependencies": [],
       "workspace_status": {
-        "clean": false,
+        "clean": true,
         "status_receipt": {
           "path": ".codex/lane-registry/lane-001-launch-status.json",
           "digest": "sha256:aaed312ee8a7d40dbb2b7175411a044eb39c17770427d2acf4c2758af08b60a1"
         },
-        "preserved_dirty_paths": [
-          {
-            "path": "validator/src/cli/live_loop/nodes/measurement/timing/execution_fields.rs",
-            "digest": "sha256:608ddacea7a11b4e0474e1542ef92101bacd009e663def503bd66e85fcb7e9df"
-          }
-        ],
+        "preserved_dirty_paths": [],
         "status_command_receipt": {
           "id": "lane-001-worktree-status-launch",
           "command": "git status --short --branch && git rev-parse HEAD",
@@ -117,19 +112,17 @@
           "started_at": "2026-07-08T18:38:51Z",
           "completed_at": "2026-07-08T18:38:51Z"
         },
-        "observed_clean": false,
+        "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/73e9/harness-ultragoal-plugin-proposal",
         "observed_branch": "HEAD",
         "observed_head": "6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd",
-        "dirty_paths": [
-          "validator/src/cli/live_loop/nodes/measurement/timing/execution_fields.rs"
-        ]
+        "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "attention_required",
-        "observed_at": "2026-07-08T18:56:23Z",
-        "finding": "Lane 1 committed input-spec authority at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd, then began editing validator/src/cli/live_loop/nodes/measurement/timing/execution_fields.rs outside the lane-owned path set.",
-        "action": "Parent sent steer to drop the out-of-scope edit or report the exact ownership expansion required before committing."
+        "status": "blocked_on_parent_ownership",
+        "observed_at": "2026-07-08T18:59:52Z",
+        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. Remaining input-spec/cache-reuse hardening requires validator/src/cli/live_loop/nodes/measurement/**, which is outside the Lane 1 owned path set.",
+        "action": "Do not merge or extend Lane 1 until parent creates/expands a hot-loop executor or telemetry-row ownership lane for nodes/measurement/**."
       },
       "teardown": {
         "required": true,
@@ -139,7 +132,7 @@
     },
     {
       "id": "LANE-002",
-      "status": "active",
+      "status": "changes_requested",
       "lane_type": "implementation",
       "lane_objective": "Build coverage lineage and routine coverage intelligence while preserving strict exact coverage authority.",
       "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks fast-loop honesty because routine coverage cannot substitute for strict boundary proof.",
@@ -189,12 +182,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "2482c2727d519befb14e8e2504786bb61310a8bf",
+      "current_commit": "ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T18:56:23Z",
+      "last_heartbeat": "2026-07-08T19:02:19Z",
       "owned_paths": [
         "validator/src/cli/coverage/**",
         "validator/src/audit/coverage/**",
@@ -235,7 +228,7 @@
       ],
       "dependencies": [],
       "workspace_status": {
-        "clean": false,
+        "clean": true,
         "status_receipt": {
           "path": ".codex/lane-registry/lane-002-launch-status.json",
           "digest": "sha256:5e24930a109a4f281eddf5fa4bfaae717ce81b383c9133a3576d50beb73337a7"
@@ -248,30 +241,18 @@
           "started_at": "2026-07-08T18:38:51Z",
           "completed_at": "2026-07-08T18:38:51Z"
         },
-        "observed_clean": false,
+        "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
         "observed_branch": "codex/gate92-coverage-lineage-routine",
-        "observed_head": "2482c2727d519befb14e8e2504786bb61310a8bf",
-        "dirty_paths": [
-          "validator/src/cli/coverage/mod.rs",
-          "validator/src/cli/coverage/routine_observation.rs"
-        ],
-        "preserved_dirty_paths": [
-          {
-            "path": "validator/src/cli/coverage/mod.rs",
-            "digest": "sha256:cbab6fd9f3a48ff3e2344110e0aca51dee8530c1822294b1fb5f8e287a31c3f5"
-          },
-          {
-            "path": "validator/src/cli/coverage/routine_observation.rs",
-            "digest": "sha256:b5d836bd8e437d877d30809abf8e128adc0b2b61e20b0a29e531923cfa44992f"
-          }
-        ]
+        "observed_head": "ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b",
+        "dirty_paths": [],
+        "preserved_dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active_dirty",
-        "observed_at": "2026-07-08T18:56:23Z",
-        "finding": "Lane 2 is continuing owned coverage-lineage work after commit 2482c2727d519befb14e8e2504786bb61310a8bf.",
-        "action": "No parent acceptance yet; lane remains owner for the current dirty coverage files."
+        "status": "changes_requested",
+        "observed_at": "2026-07-08T19:02:19Z",
+        "finding": "Lane 2 is clean at ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b, but adversarial review found stale coverage-manifest references to deleted authority surface inventory paths.",
+        "action": "Parent sent Lane 2 a classification request for .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json ownership or fail-closed coverage-lineage guard work before acceptance."
       },
       "teardown": {
         "required": true,
@@ -331,12 +312,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/ba58/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "697309117b9ceecde70919d6de8ae4bd4e5c9d82",
+      "current_commit": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T18:56:23Z",
+      "last_heartbeat": "2026-07-08T19:02:19Z",
       "owned_paths": [
         "validator/src/audit/law/authority_surfaces/**",
         "validator/src/audit/namespace/**",
@@ -396,15 +377,15 @@
         "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/ba58/harness-ultragoal-plugin-proposal",
         "observed_branch": "HEAD",
-        "observed_head": "697309117b9ceecde70919d6de8ae4bd4e5c9d82",
+        "observed_head": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
         "status": "changes_requested",
-        "observed_at": "2026-07-08T18:56:23Z",
-        "candidate_commit": "697309117b9ceecde70919d6de8ae4bd4e5c9d82",
-        "finding": "Missing runtime materialization surfaces are no longer counted as source-local missing surfaces, but surface_inventory::surface_state marks them available when exists_on_disk=false and existence_required=false.",
-        "action": "Parent returned changes requesting an explicit runtime-proof-pending state so absent receipts/final/update_goal artifacts cannot be interpreted as available product proof."
+        "observed_at": "2026-07-08T19:02:19Z",
+        "candidate_commit": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
+        "finding": "Lane 3 repaired pending runtime materialization state, but adversarial review found top-level validation_artifacts/** still listed as package inventory resources and stale moved-path references in package/coverage manifests.",
+        "action": "Parent sent Lane 3 a changes-requested follow-up to classify or repair top-level validation_artifacts package-boundary handling and owned stale inventory references before acceptance."
       },
       "teardown": {
         "required": true,
@@ -461,5 +442,5 @@
       "claim_ceiling_impact": "Gate 92 remains open and source-local only until all required production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T18:56:23Z"
+  "generated_at": "2026-07-08T19:02:19Z"
 }
