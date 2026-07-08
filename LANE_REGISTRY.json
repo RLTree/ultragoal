@@ -132,7 +132,7 @@
     },
     {
       "id": "LANE-002",
-      "status": "changes_requested",
+      "status": "merged_source_local_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build coverage lineage and routine coverage intelligence while preserving strict exact coverage authority.",
       "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks fast-loop honesty because routine coverage cannot substitute for strict boundary proof.",
@@ -182,12 +182,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "d30fbf1df105887dfd3927b649035f6ea46b4c9b",
+      "current_commit": "4ee781d845c0736d4653044b5d395760f58de414",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T19:14:38Z",
+      "last_heartbeat": "2026-07-08T19:18:25Z",
       "owned_paths": [
         "validator/src/cli/coverage/**",
         "validator/src/audit/coverage/**",
@@ -244,20 +244,20 @@
         "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
         "observed_branch": "codex/gate92-coverage-lineage-routine",
-        "observed_head": "d30fbf1df105887dfd3927b649035f6ea46b4c9b",
+        "observed_head": "4ee781d845c0736d4653044b5d395760f58de414",
         "dirty_paths": [],
         "preserved_dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "changes_requested",
-        "observed_at": "2026-07-08T19:14:38Z",
-        "finding": "Lane 2 is clean at d30fbf1df105887dfd3927b649035f6ea46b4c9b and added a useful coverage_manifest_stale_source_path guard, but the actual stale coverage manifest references remain in .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json.",
-        "action": "Parent sent a goal-bound continuation to repair those two coverage manifests under explicit ownership expansion before acceptance. Lane output is not merged or accepted."
+        "status": "merged_source_local_teardown_complete",
+        "observed_at": "2026-07-08T19:18:25Z",
+        "finding": "Lane 2 source-local chain was parent-inspected, merged into root through cherry-picked commits 8b7e2b337, 1fb0c34a6, 29fc753ed, and 7b25af20b. Root validation passed on package digest sha256:faccfcf083f9ab001410523e7d02b3771863a0252cc73f9da9045d7d583a6296, with coverage prove explicitly limited to routine_repair_only.",
+        "action": "Codex app handoff operation call_Tpj9IYD69i32crPtkBrk8d6F completed successfully and the destination lane thread 019f4329-c81f-7aa2-aca8-a9cd0fc9fdc9 was archived. Claim ceiling remains source-local; strict completion coverage remains unclaimed."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Active implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+        "status": "complete",
+        "reason": "Lane 2 was merged source-local, handed off from the Codex worktree to the root checkout, and archived after parent validation."
       }
     },
     {
