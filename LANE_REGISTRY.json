@@ -7,13 +7,14 @@
     "status": "in_progress",
     "product_role": "Build Harness-owned Rust authority tooling that makes routine source-local repair fast before Gate 92 production-observability fitting resumes.",
     "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+    "custom_tooling_completion_status": "incomplete_do_not_start_gate92_speed_or_fitting",
     "gate92_status": "not_started_by_this_program",
     "correction": "Custom tooling is a prerequisite acceleration and authority layer for Gate 92. It must not be reported as Gate 92 fitting, Gate 92 closure, Product Usage, Phase 4, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal evidence."
   },
   "lanes": [
     {
       "id": "LANE-001",
-      "status": "active_rebound_custom_tooling_prerequisite",
+      "status": "merged_source_local_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build custom-tooling prerequisite AuditContext and product-surface input-spec authority for routine hot-loop acceleration before broad Gate 92 production-observability fitting.",
       "macro_lane_rationale": "This lane owns input authority and cache invalidation semantics that must be resolved before downstream routine hot-loop and telemetry lanes can safely consume affected-set or verified-local reuse claims. It is prerequisite custom tooling, not Gate 92 fitting.",
@@ -58,16 +59,16 @@
         "actor_status": "current",
         "validated_at": "2026-07-08T18:38:51Z"
       },
-      "branch": "HEAD",
+      "branch": "codex/custom-tooling-input-spec-prereq",
       "workspace": "/Users/terrynoblin/.codex/worktrees/73e9/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd",
+      "current_commit": "59064a85697c69c012b9e32bceb6a6c3daed6fe7",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T18:59:52Z",
+      "target_head_at_validation": "59064a85697c69c012b9e32bceb6a6c3daed6fe7",
+      "merge_base_at_validation": "256c166e8bf79315780fa40d42abc1e2b9c9b418",
+      "last_heartbeat": "2026-07-08T22:02:48Z",
       "owned_paths": [
         "validator/src/cli/live_loop/surface_context.rs",
         "validator/src/cli/live_loop/changed_inputs/**",
@@ -128,20 +129,20 @@
         },
         "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/73e9/harness-ultragoal-plugin-proposal",
-        "observed_branch": "HEAD",
-        "observed_head": "6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd",
+        "observed_branch": "codex/custom-tooling-input-spec-prereq",
+        "observed_head": "59064a85697c69c012b9e32bceb6a6c3daed6fe7",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active_rebound_custom_tooling_prerequisite",
-        "observed_at": "2026-07-08T20:18:00Z",
-        "finding": "Lane 1 is clean at 6d5bcd5d42ce0f4800dce43b59aa4c0c1a945ebd. The prior blocker was real coupling between product-surface input specs and measurement/cache-replay authority. The user corrected that this is prerequisite custom tooling before broad Phase 2 Gate 92 fitting, not downstream Gate 92 fitting work.",
-        "action": "Parent rebound thread 019f4303-8945-7d22-b380-790b049c0cbd with source-local custom-tooling prerequisite framing and a bounded ownership expansion for measurement cache replay/timing rows only. Lane must reconcile against root commit fce3b770d and stop if broader ownership is needed."
+        "status": "merged_source_local_teardown_complete",
+        "observed_at": "2026-07-08T22:02:48Z",
+        "finding": "Lane 1 completed one custom-tooling prerequisite slice: product-surface input specs now drive affected-set/cache-key material and measurement cache replay/timing rows reject missing or stale input-spec authority. Root accepted commit 59064a85697c69c012b9e32bceb6a6c3daed6fe7 after focused tests, fmt, build, package digest, line caps, namespace, raw line-cap scan, and a real hot-loop command that failed closed with validation retained and observability/speed claims withheld.",
+        "action": "Lane thread 019f4303-8945-7d22-b380-790b049c0cbd was archived, handoff destination 019f43c0-0d72-7cb3-82d3-8c34472ffb4e was archived, and worktree /Users/terrynoblin/.codex/worktrees/73e9/harness-ultragoal-plugin-proposal was removed. This does not complete the custom-tooling program; remaining custom tools must be inventoried and proven before Gate 92 speed/fitting work starts."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Active implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+        "status": "complete",
+        "reason": "Root accepted source-local prerequisite commit and removed the merged lane worktree. Claim ceiling remains source_local_custom_tooling_prerequisite_only."
       }
     },
     {
