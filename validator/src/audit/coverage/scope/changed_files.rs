@@ -24,7 +24,7 @@ pub(crate) fn failures(root: Option<&Path>, policy: &Value) -> Vec<String> {
         }
         let path = root.join(rel);
         if !path.is_file() {
-            out.push("coverage_changed_file_missing_from_manifest".to_string());
+            out.push("coverage_manifest_stale_source_path".to_string());
         }
     }
     out

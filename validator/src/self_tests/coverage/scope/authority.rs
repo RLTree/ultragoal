@@ -117,8 +117,18 @@ fn coverage_scope_subchecks_reject_missing_changed_files_and_weak_scripts() {
         vec![
             "coverage_changed_file_missing_from_manifest",
             "coverage_changed_file_missing_from_manifest",
-            "coverage_changed_file_missing_from_manifest"
+            "coverage_manifest_stale_source_path"
         ]
+    );
+    let moved_inventory_failures = crate::audit::coverage::scope::changed_files::failures(
+        Some(&root),
+        &json!({"changed_files":[
+            "validator/src/audit/law/authority_surfaces/inventory_requirements.rs"
+        ]}),
+    );
+    assert_eq!(
+        moved_inventory_failures,
+        vec!["coverage_manifest_stale_source_path"]
     );
     let generated = root.join("validation_artifacts/coverage/coverage-receipt.json");
     std::fs::create_dir_all(generated.parent().expect("generated parent")).expect("generated dir");
