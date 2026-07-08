@@ -392,6 +392,124 @@
         "status": "complete",
         "reason": "Lane 3 was merged source-local, handed off from the Codex worktree to the root checkout, and archived after parent validation."
       }
+    },
+    {
+      "id": "LANE-004",
+      "status": "pending_worktree_setup",
+      "lane_type": "implementation",
+      "lane_objective": "Build routine hot-loop measurement authority and per-node validation/observability/speed status separation.",
+      "macro_lane_rationale": "Lane 1 is blocked because remaining input-spec/cache-reuse hardening needs the live-loop measurement executor path, which was outside Lane 1 ownership. This lane owns that missing custom Rust authority surface without broadening Lane 1 or overlapping coverage, namespace, or command-roundtrip lanes.",
+      "acceptance_scope": [
+        "Routine hot-loop nodes preserve validation results when observability proof is partial.",
+        "Speed-bearing nodes use executed or verified-cache-hit proof semantics with required result digests and claim limits.",
+        "First product blocker and first observability blocker are reported as separate agent-legible outputs."
+      ],
+      "lane_size_evidence": {
+        "independent_outcome": "The lane can return a source-local commit for measurement authority and status separation without changing graph input specs, coverage lineage, namespace authority, command roundtrip, current-state, or shared receipts.",
+        "owned_path_groups": [
+          "validator/src/cli/live_loop/nodes/measurement/**",
+          "validator/src/cli/live_loop/nodes/status.rs",
+          "validator/src/cli/live_loop/nodes/mod.rs",
+          "validator/src/cli/live_loop/rust_format/**",
+          "validator/src/cli/live_loop/node_timing/** if needed for measurement-row compatibility"
+        ],
+        "work_units": [
+          "separate validation, cache, observability, speed, and claim-ceiling states",
+          "retain cacheable validation results when telemetry is partial",
+          "fail unsupported speed claims without executed work or verified cache equivalence",
+          "prove one real hot-loop command path or explicitly label remaining mechanics-only proof"
+        ],
+        "why_not_parent_inline": "The parent is now orchestrator/reconciler and this implementation belongs in a source-local Codex app worktree lane.",
+        "why_not_smaller": "The measurement executor, node status model, and rust-format hot-loop path must agree or the product would keep collapsing validation failures, observability gaps, and speed claims."
+      },
+      "covered_claim_ids": [
+        "CLAIM-092",
+        "CLAIM-101"
+      ],
+      "owner": "codex-app-worktree-lane-004",
+      "thread_or_session_id": "pending:local:7035ad4b-e4e4-498d-b054-05d50526be62",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-004",
+        "thread_or_session_id": "pending:local:7035ad4b-e4e4-498d-b054-05d50526be62",
+        "actor_status": "pending_worktree_setup",
+        "validated_at": "2026-07-08T19:33:00Z"
+      },
+      "branch": "pending_codex_app_worktree",
+      "workspace": "pending:local:7035ad4b-e4e4-498d-b054-05d50526be62",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "22a05a0a6f50b19382c3ceb1decf70c2a0c7ce3e",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "22a05a0a6f50b19382c3ceb1decf70c2a0c7ce3e",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T19:33:00Z",
+      "owned_paths": [
+        "validator/src/cli/live_loop/nodes/measurement/**",
+        "validator/src/cli/live_loop/nodes/status.rs",
+        "validator/src/cli/live_loop/nodes/mod.rs",
+        "validator/src/cli/live_loop/rust_format/**",
+        "validator/src/cli/live_loop/node_timing/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "LANE_REGISTRY.json",
+        "validator/src/cli/live_loop/changed_inputs/**",
+        "validator/src/cli/live_loop/surfaces/**",
+        "validator/src/cli/live_loop/graph/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/claim_semantics/coverage/**",
+        "validator/src/audit/law/authority_surfaces/**",
+        "validator/src/audit/namespace/**",
+        "validator/src/cli/observe/command_roundtrip/**",
+        "validator/src/cli/observe/explain/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "state_roots": [
+        "pending:local:7035ad4b-e4e4-498d-b054-05d50526be62"
+      ],
+      "temporary_state_roots": [],
+      "tool_cache_roots": [],
+      "browser_profile_roots": [],
+      "artifact_root": ".codex/lane-registry",
+      "port_allocations": [],
+      "ready_receipt": {
+        "path": "pending_codex_app_thread_creation",
+        "digest": "pending"
+      },
+      "claim_ids": [
+        "CLAIM-092",
+        "CLAIM-101"
+      ],
+      "dependencies": [
+        "LANE-001 parent blocker"
+      ],
+      "workspace_status": {
+        "clean": null,
+        "status_receipt": {
+          "path": "pending_codex_app_thread_creation",
+          "digest": "pending"
+        },
+        "observed_clean": null,
+        "observed_workspace": "pending:local:7035ad4b-e4e4-498d-b054-05d50526be62",
+        "observed_branch": "pending",
+        "observed_head": "pending",
+        "dirty_paths": []
+      },
+      "parent_orchestrator_state": {
+        "status": "pending_worktree_setup",
+        "observed_at": "2026-07-08T19:33:00Z",
+        "finding": "Codex app worktree lane creation returned pendingWorktreeId local:7035ad4b-e4e4-498d-b054-05d50526be62. The lane prompt is goal-bound and owns the measurement authority path needed to unblock Lane 1.",
+        "action": "Wait for Codex app worktree setup to produce a thread id, then monitor Lane 4. Do not accept or merge Lane 4 without source inspection, focused validation, real hot-loop behavior or explicit mechanics-only labels, and root ultragoal reconciliation."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Pending implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+      }
     }
   ],
   "root_verification_stages": {
@@ -442,5 +560,5 @@
       "claim_ceiling_impact": "Gate 92 remains open and source-local only until all required production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T19:02:19Z"
+  "generated_at": "2026-07-08T19:33:00Z"
 }
