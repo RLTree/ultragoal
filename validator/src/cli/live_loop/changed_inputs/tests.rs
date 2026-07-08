@@ -1,7 +1,4 @@
-use super::{
-    changed_path, git_root_matches_requested_root, path_affects_surface,
-    path_rules::surface_has_explicit_input_spec,
-};
+use super::{changed_path, git_root_matches_requested_root, path_affects_surface};
 
 #[test]
 fn changed_path_extracts_status_and_rename_target() {
@@ -52,14 +49,13 @@ fn changed_inputs_are_surface_local_for_hot_repair_nodes() {
 #[test]
 fn changed_input_rules_reject_unknown_surfaces_and_builder_contract_inputs() {
     let modular = modular_contract_path();
-    let compatibility = compatibility_contract_path();
     for (path, surface) in [
         (
             "validator/src/cli/live_loop/mod.rs",
             "unknown_product_surface",
         ),
         (modular.as_str(), "package_inventory"),
-        (compatibility.as_str(), "source_audit"),
+        (modular.as_str(), "source_audit"),
     ] {
         assert!(!path_affects_surface(path, surface), "{path} {surface}");
     }
@@ -86,7 +82,7 @@ fn changed_input_rules_reject_unknown_surfaces_and_builder_contract_inputs() {
 fn every_live_loop_surface_has_explicit_product_input_spec() {
     let missing: Vec<_> = super::super::surfaces::LOOP_VALIDATION_SURFACES
         .iter()
-        .filter(|surface| !surface_has_explicit_input_spec(surface.id))
+        .filter(|surface| super::super::surfaces::input_spec_for(surface.id).is_none())
         .map(|surface| surface.id)
         .collect();
 
@@ -158,21 +154,6 @@ fn modular_contract_path() -> String {
     "docs/ultragoal-contract-2026-07/README.md".to_string()
 }
 
-fn compatibility_contract_path() -> String {
-    let parts = [
-        "parent",
-        "session",
-        "full",
-        "ultragoal",
-        "compliance",
-        "prompt",
-        "2026",
-        "06",
-        "25",
-    ];
-    format!("docs/{}.md", parts.join("-"))
-}
-
 #[test]
 fn changed_summary_keeps_changed_inputs_and_surface_selection_visible() {
     let root =
@@ -183,11 +164,12 @@ fn changed_summary_keeps_changed_inputs_and_surface_selection_visible() {
         "fn main() {}\n",
     )
     .expect("rust source");
+    let changed_input_path = "validator/src/cli/live_loop/mod.rs".to_string();
     let inputs = super::ChangedInputs {
         changed_files_digest: "sha256:changed".to_string(),
         changed_file_count: 1,
         audit_context_digest: "sha256:context".to_string(),
-        changed_files: vec!["validator/src/cli/live_loop/mod.rs".to_string()],
+        changed_files: vec![changed_input_path.clone()],
         surface_digests: super::super::surfaces::LOOP_VALIDATION_SURFACES
             .iter()
             .map(|surface| {
@@ -197,7 +179,7 @@ fn changed_summary_keeps_changed_inputs_and_surface_selection_visible() {
                         &root,
                         *surface,
                         "sha256:candidate",
-                        &["validator/src/cli/live_loop/mod.rs".to_string()],
+                        std::slice::from_ref(&changed_input_path),
                     ),
                 )
             })
@@ -207,10 +189,16 @@ fn changed_summary_keeps_changed_inputs_and_surface_selection_visible() {
             .map(|surface| {
                 (
                     surface.id,
-                    super::surface_is_affected(
-                        *surface,
-                        &["validator/src/cli/live_loop/mod.rs".to_string()],
-                    ),
+                    super::surface_is_affected(*surface, std::slice::from_ref(&changed_input_path)),
+                )
+            })
+            .collect(),
+        invalidation_reasons: super::super::surfaces::LOOP_VALIDATION_SURFACES
+            .iter()
+            .map(|surface| {
+                (
+                    surface.id,
+                    super::invalidation_reason(*surface, std::slice::from_ref(&changed_input_path)),
                 )
             })
             .collect(),
@@ -222,7 +210,8 @@ fn changed_summary_keeps_changed_inputs_and_surface_selection_visible() {
             .as_array()
             .expect("affected nodes")
             .iter()
-            .any(|node| node["node_id"] == "fmt_check")
+            .any(|node| node["node_id"] == "fmt_check"
+                && node["invalidation_reason"] == "covered_input_mutation")
     );
     assert!(
         summary["unaffected_nodes"]

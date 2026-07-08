@@ -1,8 +1,19 @@
-use super::surfaces::LoopValidationSurface;
+use super::surfaces::{LoopValidationSurface, input_spec_for};
 use std::collections::BTreeMap;
 use std::path::Path;
 
-mod path_rules;
+mod git_status;
+mod surface_inputs;
+
+use git_status::changed_files;
+use surface_inputs::{
+    invalidation_reason, path_affects_surface, surface_changed_digest, surface_is_affected,
+};
+
+#[cfg(test)]
+pub(super) use git_status::{changed_path, git_root_matches_requested_root};
+#[cfg(test)]
+pub(super) use surface_inputs::file_digest;
 
 pub(crate) struct ChangedInputs {
     pub(crate) changed_files_digest: String,
@@ -11,6 +22,7 @@ pub(crate) struct ChangedInputs {
     changed_files: Vec<String>,
     surface_digests: BTreeMap<&'static str, String>,
     affected_surfaces: BTreeMap<&'static str, bool>,
+    invalidation_reasons: BTreeMap<&'static str, &'static str>,
 }
 
 impl ChangedInputs {
@@ -35,12 +47,14 @@ impl ChangedInputs {
         );
         let mut surface_digests = BTreeMap::new();
         let mut affected_surfaces = BTreeMap::new();
+        let mut invalidation_reasons = BTreeMap::new();
         for surface in super::surfaces::LOOP_VALIDATION_SURFACES {
             surface_digests.insert(
                 surface.id,
                 surface_changed_digest(root, *surface, candidate_digest, &changed_files),
             );
             affected_surfaces.insert(surface.id, surface_is_affected(*surface, &changed_files));
+            invalidation_reasons.insert(surface.id, invalidation_reason(*surface, &changed_files));
         }
         Self {
             changed_files_digest,
@@ -49,6 +63,7 @@ impl ChangedInputs {
             changed_files,
             surface_digests,
             affected_surfaces,
+            invalidation_reasons,
         }
     }
 
@@ -74,6 +89,13 @@ impl ChangedInputs {
             .collect()
     }
 
+    pub(crate) fn invalidation_reason(&self, surface: LoopValidationSurface) -> &'static str {
+        self.invalidation_reasons
+            .get(surface.id)
+            .copied()
+            .unwrap_or("missing_surface_input_spec")
+    }
+
     pub(crate) fn affected_high_frequency_surfaces(&self) -> Vec<LoopValidationSurface> {
         super::surfaces::LOOP_VALIDATION_SURFACES
             .iter()
@@ -90,7 +112,8 @@ impl ChangedInputs {
                 serde_json::json!({
                     "node_id": surface.id,
                     "surface": surface.surface,
-                    "changed_input_digest": self.surface_digest(*surface)
+                    "changed_input_digest": self.surface_digest(*surface),
+                    "invalidation_reason": self.invalidation_reason(*surface)
                 })
             })
             .collect();
@@ -101,7 +124,9 @@ impl ChangedInputs {
                 serde_json::json!({
                     "node_id": surface.id,
                     "surface": surface.surface,
-                    "reuse_condition": "verified_cache_hit_required_or_boundary_withheld"
+                    "reuse_condition": input_spec_for(surface.id)
+                        .map(|spec| spec.unaffected_reuse_condition())
+                        .unwrap_or("missing_surface_input_spec_blocks_cache_reuse")
                 })
             })
             .collect();
@@ -127,6 +152,10 @@ impl ChangedInputs {
             .iter()
             .map(|surface| (surface.id, true))
             .collect();
+        let invalidation_reasons = super::surfaces::LOOP_VALIDATION_SURFACES
+            .iter()
+            .map(|surface| (surface.id, "covered_input_mutation"))
+            .collect();
         Self {
             changed_files_digest: changed_files_digest.to_string(),
             changed_file_count: 1,
@@ -134,115 +163,13 @@ impl ChangedInputs {
             changed_files: vec!["validator/src/cli/live_loop/mod.rs".to_string()],
             surface_digests,
             affected_surfaces,
+            invalidation_reasons,
         }
     }
 }
 
 fn bounded_changed_files(changed_files: &[String]) -> Vec<&str> {
     changed_files.iter().take(25).map(String::as_str).collect()
-}
-
-fn changed_files(root: &Path) -> Vec<String> {
-    if !git_root_matches_requested_root(root) {
-        return Vec::new();
-    }
-    let output = std::process::Command::new("git")
-        .args(["status", "--short", "--untracked-files=all"])
-        .current_dir(root)
-        .output();
-    output
-        .ok()
-        .map(|out| {
-            String::from_utf8_lossy(&out.stdout)
-                .lines()
-                .filter_map(changed_path)
-                .collect()
-        })
-        .unwrap_or_default()
-}
-
-fn git_root_matches_requested_root(root: &Path) -> bool {
-    let requested = root.canonicalize().ok();
-    let output = std::process::Command::new("git")
-        .args(["rev-parse", "--show-toplevel"])
-        .current_dir(root)
-        .output()
-        .ok();
-    let git_root = output
-        .filter(|out| out.status.success())
-        .and_then(|out| String::from_utf8(out.stdout).ok())
-        .map(|text| text.trim().to_string())
-        .filter(|text| !text.is_empty())
-        .and_then(|text| Path::new(&text).canonicalize().ok());
-    requested
-        .zip(git_root)
-        .is_some_and(|(requested, git_root)| requested == git_root)
-}
-
-fn changed_path(line: &str) -> Option<String> {
-    if line.trim().is_empty() {
-        return None;
-    }
-    let path_part = line.get(3..).unwrap_or(line);
-    let path = path_part
-        .split_once(" -> ")
-        .map(|(_, renamed)| renamed)
-        .unwrap_or(path_part)
-        .trim();
-    (!path.is_empty()).then(|| path.to_string())
-}
-
-fn surface_changed_digest(
-    root: &Path,
-    surface: LoopValidationSurface,
-    candidate_digest: &str,
-    changed_files: &[String],
-) -> String {
-    match surface.id {
-        "package_digest" => return candidate_digest.to_string(),
-        "changed_files" => return crate::digest::bytes(changed_files.join("\n").as_bytes()),
-        "audit_context" => {
-            return crate::digest::bytes(
-                format!("surface={};role=audit-context", surface.id).as_bytes(),
-            );
-        }
-        _ => {}
-    }
-    let mut material = format!("surface={};", surface.id);
-    let mut matched = false;
-    for path in changed_files
-        .iter()
-        .filter(|path| path_affects_surface(path, surface.id))
-    {
-        matched = true;
-        material.push_str(path);
-        material.push('=');
-        material.push_str(&file_digest(root, path));
-        material.push(';');
-    }
-    if !matched {
-        material.push_str("no-relevant-changed-inputs");
-    }
-    crate::digest::bytes(material.as_bytes())
-}
-
-fn surface_is_affected(surface: LoopValidationSurface, changed_files: &[String]) -> bool {
-    !changed_files.is_empty()
-        && changed_files
-            .iter()
-            .any(|path| path_affects_surface(path, surface.id))
-}
-
-fn file_digest(root: &Path, path: &str) -> String {
-    let full_path = root.join(path);
-    match std::fs::read(&full_path) {
-        Ok(bytes) => crate::digest::bytes(&bytes),
-        Err(_) => crate::digest::bytes(format!("missing:{path}").as_bytes()),
-    }
-}
-
-fn path_affects_surface(path: &str, surface_id: &str) -> bool {
-    path_rules::path_affects_surface(path, surface_id)
 }
 
 #[cfg(test)]

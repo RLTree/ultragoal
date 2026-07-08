@@ -122,8 +122,10 @@ fn cache_decision(
             "verified_current_input_node_timing_row_reused"
         } else if !cache_enabled {
             "cache_disabled_by_requested_cache_mode"
+        } else if let Some(spec) = super::super::surfaces::input_spec_for(surface.id) {
+            spec.no_changed_input_reason()
         } else {
-            "no verified local cache entry"
+            "missing_surface_input_spec"
         },
         "cache_class": "verified_content_addressed_local",
         "honesty": super::super::context::verify_cache_hit(&key, &key)

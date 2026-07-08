@@ -1,6 +1,8 @@
 use super::changed_inputs::ChangedInputs;
 use super::nodes::timing::NodeTiming;
-use super::surfaces::{LOOP_VALIDATION_SURFACES, LoopValidationSurface};
+use super::surfaces::{
+    CacheBoundary, LOOP_VALIDATION_SURFACES, LoopValidationSurface, input_spec_for,
+};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 use std::sync::OnceLock;
@@ -167,18 +169,21 @@ pub(crate) fn surface_input_digest(
     surface_changed_digest: &str,
     audit_context_digest: &str,
 ) -> String {
-    let digest_material = match surface.id {
-        "package_digest" => candidate_digest.to_string(),
-        "changed_files" => surface_changed_digest.to_string(),
-        "audit_context" => audit_context_digest.to_string(),
-        _ if surface.high_frequency => format!(
+    let digest_material = match input_spec_for(surface.id).map(|spec| spec.cache_boundary) {
+        Some(CacheBoundary::CandidatePackage) => candidate_digest.to_string(),
+        Some(CacheBoundary::ChangedInputs) if surface.id == "changed_files" => {
+            surface_changed_digest.to_string()
+        }
+        Some(CacheBoundary::AuditContext) => audit_context_digest.to_string(),
+        Some(CacheBoundary::ChangedInputs) if surface.high_frequency => format!(
             "affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
             surface.id
         ),
-        _ => format!(
+        Some(CacheBoundary::ChangedInputs) => format!(
             "candidate={candidate_digest};affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
             surface.id
         ),
+        None => format!("missing-surface-input-spec={}", surface.id),
     };
     crate::digest::bytes(digest_material.as_bytes())
 }
@@ -191,9 +196,12 @@ pub(crate) fn verified_local_cache_key(
 ) -> String {
     let validator_version = validator_version();
     let runtime_execution_model = runtime_execution_model();
+    let spec_material = input_spec_for(surface.id)
+        .map(|spec| spec.cache_material(tier, cache_mode))
+        .unwrap_or_else(|| "missing_surface_input_spec".to_string());
     crate::digest::bytes(
         format!(
-            "surface={};input={digest};full={};narrow={};validator={validator_version};law={};schema={};fixture={};runtime={runtime_execution_model};tier={tier};cache={cache_mode};env=local",
+            "surface={};input={digest};full={};narrow={};validator={validator_version};law={};schema={};fixture={};runtime={runtime_execution_model};tier={tier};cache={cache_mode};env=local;spec={spec_material}",
             surface.id,
             surface.canonical_full_command,
             surface.narrow_rerun,

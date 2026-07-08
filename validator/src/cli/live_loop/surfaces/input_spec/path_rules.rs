@@ -1,72 +1,4 @@
-pub(super) fn path_affects_surface(path: &str, surface_id: &str) -> bool {
-    if !surface_has_explicit_input_spec(surface_id) || is_non_product_input(path) {
-        return false;
-    }
-    match surface_id {
-        "package_digest" => is_package_owned_source(path),
-        "changed_files" => true,
-        "audit_context" => is_audit_context_input(path),
-        "observability_control_board" => is_observability_input(path),
-        "fmt_check" => is_rust_source(path) || is_rust_format_config(path),
-        "build_check" | "live_loop_measurement_rust_tests" => {
-            is_rust_source(path) || is_rust_build_input(path)
-        }
-        "line_caps_check" => is_rust_source(path),
-        "namespace_check" => {
-            is_rust_source(path)
-                || path == "docs/namespace-law-exceptions.json"
-                || path == "plugin-manifest-draft.json"
-        }
-        "schema_validation" => is_json_surface(path) || path.starts_with("schemas/"),
-        "package_inventory" => is_package_inventory_closure_input(path),
-        "mandatory_law_validation" => is_law_input(path) || is_receipt_input(path),
-        "source_obligations_check" => is_source_obligation_input(path),
-        "foundational_trace_check" => is_foundational_trace_input(path),
-        "coverage_prove" | "coverage_full_script" | "coverage_fast_script" => {
-            is_coverage_input(path)
-        }
-        "source_audit" => {
-            is_package_inventory_closure_input(path)
-                || is_package_boundary_input(path)
-                || is_package_owned_source(path)
-                || is_law_input(path)
-                || is_receipt_input(path)
-                || is_fixture_input(path)
-        }
-        "red_fixture_report" | "touched_fixture_reports" => is_fixture_input(path),
-        "scripts_check" => is_scripts_check_input(path),
-        _ => false,
-    }
-}
-
-pub(super) fn surface_has_explicit_input_spec(surface_id: &str) -> bool {
-    matches!(
-        surface_id,
-        "package_digest"
-            | "changed_files"
-            | "audit_context"
-            | "observability_control_board"
-            | "fmt_check"
-            | "build_check"
-            | "live_loop_measurement_rust_tests"
-            | "line_caps_check"
-            | "namespace_check"
-            | "schema_validation"
-            | "package_inventory"
-            | "mandatory_law_validation"
-            | "source_obligations_check"
-            | "foundational_trace_check"
-            | "coverage_prove"
-            | "coverage_full_script"
-            | "coverage_fast_script"
-            | "source_audit"
-            | "red_fixture_report"
-            | "scripts_check"
-            | "touched_fixture_reports"
-    )
-}
-
-fn is_non_product_input(path: &str) -> bool {
+pub(super) fn is_non_product_input(path: &str) -> bool {
     crate::package::inventory::builder_contract_resource_path(path)
         || is_local_review_state(path)
         || path.starts_with("target/")
@@ -81,22 +13,11 @@ fn is_local_review_state(path: &str) -> bool {
         || path.starts_with("state/codex-review-receipts.d/")
 }
 
-fn is_package_boundary_input(path: &str) -> bool {
-    is_package_root_resource(path)
-        || matches!(
-            path,
-            ".codex-plugin/plugin.json"
-                | "validator/Cargo.toml"
-                | ".harness/coverage-manifest.json"
-                | "templates/.harness/coverage-manifest.json"
-        )
-        || path.starts_with("schemas/")
-        || path.starts_with("templates/")
-        || path.starts_with("dev/observability/")
-        || path.starts_with("validator/")
+pub(super) fn always_product_path(path: &str) -> bool {
+    !path.is_empty()
 }
 
-fn is_package_owned_source(path: &str) -> bool {
+pub(super) fn is_package_owned_source(path: &str) -> bool {
     path.starts_with("validator/")
         || path.starts_with("schemas/")
         || path.starts_with("templates/")
@@ -122,9 +43,7 @@ fn is_validation_artifact(path: &str) -> bool {
     path.starts_with("validation_artifacts/")
 }
 
-fn is_package_inventory_closure_input(path: &str) -> bool {
-    // Package inventory enforces closure, so any product-candidate path can be
-    // the exact new file the inventory must reject when it is not registered.
+pub(super) fn is_package_inventory_closure_input(path: &str) -> bool {
     !is_validation_artifact(path)
 }
 
@@ -134,6 +53,7 @@ fn is_package_root_resource(path: &str) -> bool {
         ".gitignore"
             | "Cargo.lock"
             | "Cargo.toml"
+            | "LICENSE"
             | "README.md"
             | "REPORT.md"
             | "audit.toml"
@@ -146,7 +66,7 @@ fn is_package_root_resource(path: &str) -> bool {
     )
 }
 
-fn is_audit_context_input(path: &str) -> bool {
+pub(super) fn is_audit_context_input(path: &str) -> bool {
     is_rust_source(path)
         || path.starts_with("schemas/")
         || path.starts_with("fixtures/")
@@ -157,7 +77,7 @@ fn is_audit_context_input(path: &str) -> bool {
         || path.starts_with("docs/mandatory-law")
 }
 
-fn is_observability_input(path: &str) -> bool {
+pub(super) fn is_observability_input(path: &str) -> bool {
     path.starts_with("validator/src/audit/observability/")
         || path.starts_with("validator/src/cli/observe/")
         || path.starts_with("validator/src/cli/live_loop/")
@@ -165,6 +85,10 @@ fn is_observability_input(path: &str) -> bool {
         || path.starts_with("docs/generated/observability/")
         || path.starts_with("dev/observability/")
         || path.starts_with("validation_artifacts/observability/")
+}
+
+pub(super) fn is_mandatory_law_input(path: &str) -> bool {
+    is_law_input(path) || is_receipt_input(path)
 }
 
 fn is_law_input(path: &str) -> bool {
@@ -185,20 +109,20 @@ fn is_receipt_input(path: &str) -> bool {
         || path.starts_with("validator/src/audit/observability/registry/")
 }
 
-fn is_source_obligation_input(path: &str) -> bool {
+pub(super) fn is_source_obligation_input(path: &str) -> bool {
     path.starts_with("docs/source-obligation")
         || path.starts_with("validator/src/audit/source_obligations")
         || path.starts_with("templates/agent-standards/")
 }
 
-fn is_foundational_trace_input(path: &str) -> bool {
+pub(super) fn is_foundational_trace_input(path: &str) -> bool {
     path.starts_with("docs/foundational-")
         || path.starts_with("docs/research-")
         || path.starts_with("validator/src/audit/foundational")
         || path.starts_with("validator/src/cli/foundational_trace")
 }
 
-fn is_coverage_input(path: &str) -> bool {
+pub(super) fn is_coverage_input(path: &str) -> bool {
     is_rust_source(path)
         || path == ".harness/coverage-manifest.json"
         || path == "templates/.harness/coverage-manifest.json"
@@ -208,14 +132,14 @@ fn is_coverage_input(path: &str) -> bool {
         || path.starts_with("validator/src/bin/")
 }
 
-fn is_fixture_input(path: &str) -> bool {
+pub(super) fn is_fixture_input(path: &str) -> bool {
     path.starts_with("fixtures/")
         || path.starts_with("validator/src/audit/red/")
         || path.starts_with("validator/src/self_tests/red/")
         || path.starts_with("validator/src/self_tests/")
 }
 
-fn is_scripts_check_input(path: &str) -> bool {
+pub(super) fn is_scripts_check_input(path: &str) -> bool {
     path == "scripts/check"
         || path.starts_with("scripts/check-")
         || is_rust_source(path)
@@ -223,7 +147,49 @@ fn is_scripts_check_input(path: &str) -> bool {
         || path.starts_with("schemas/")
 }
 
-fn is_rust_source(path: &str) -> bool {
+pub(super) fn is_source_audit_input(path: &str) -> bool {
+    is_package_inventory_closure_input(path)
+        || is_package_boundary_input(path)
+        || is_package_owned_source(path)
+        || is_law_input(path)
+        || is_receipt_input(path)
+        || is_fixture_input(path)
+}
+
+fn is_package_boundary_input(path: &str) -> bool {
+    is_package_root_resource(path)
+        || matches!(
+            path,
+            ".codex-plugin/plugin.json"
+                | "validator/Cargo.toml"
+                | ".harness/coverage-manifest.json"
+                | "templates/.harness/coverage-manifest.json"
+        )
+        || path.starts_with("schemas/")
+        || path.starts_with("templates/")
+        || path.starts_with("dev/observability/")
+        || path.starts_with("validator/")
+}
+
+pub(super) fn is_fmt_input(path: &str) -> bool {
+    is_rust_source(path) || is_rust_format_config(path)
+}
+
+pub(super) fn is_rust_build_surface_input(path: &str) -> bool {
+    is_rust_source(path) || is_rust_build_input(path)
+}
+
+pub(super) fn is_namespace_input(path: &str) -> bool {
+    is_rust_source(path)
+        || path == "docs/namespace-law-exceptions.json"
+        || path == "plugin-manifest-draft.json"
+}
+
+pub(super) fn is_schema_input(path: &str) -> bool {
+    is_json_surface(path) || path.starts_with("schemas/")
+}
+
+pub(super) fn is_rust_source(path: &str) -> bool {
     path.starts_with("validator/") && path.ends_with(".rs")
 }
 
