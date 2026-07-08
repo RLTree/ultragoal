@@ -8,8 +8,123 @@
     "product_role": "Build Harness-owned Rust authority tooling that makes routine source-local repair fast before Gate 92 production-observability fitting resumes.",
     "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
     "custom_tooling_completion_status": "incomplete_do_not_start_gate92_speed_or_fitting",
-    "gate92_status": "not_started_by_this_program",
-    "correction": "Custom tooling is a prerequisite acceleration and authority layer for Gate 92. It must not be reported as Gate 92 fitting, Gate 92 closure, Product Usage, Phase 4, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal evidence."
+    "gate92_status": "blocked_until_all_custom_tools_have_current_product_proof",
+    "correction": "Custom tooling is a prerequisite acceleration and authority layer for Gate 92. It must not be reported as Gate 92 fitting, Gate 92 closure, Product Usage, Phase 4, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal evidence.",
+    "gate92_speed_or_fitting_unblock_rule": "Every required custom tool must be built, mapped through law surfaces, validated mechanically, and proven through real current-candidate ultragoal behavior or verified current-input equivalence with explicit claim limits. Proxy proof, tests-only proof, generated rows, workflow output, local spool output, or stale lane receipts keep Gate 92 speed and fitting blocked.",
+    "required_custom_tools": [
+      {
+        "id": "audit_context",
+        "product_role": "Immutable command snapshot authority for package digest, changed inputs, parsed indexes, law/schema/fixture/validator versions, and shared read-only state.",
+        "status": "in_progress",
+        "current_evidence": "AuditContext source exists and is consumed by live-loop receipt paths, but full parsed-index and digest-once product behavior is not fully proven on the current candidate.",
+        "next_required_proof": "Real current-candidate ultragoal command shows AuditContext owns one immutable snapshot across affected nodes, fails closed on mutation, and reconciles stdout, receipt, source inspection, and typed claim ceiling."
+      },
+      {
+        "id": "product_surface_input_specs",
+        "product_role": "Typed product-surface input authority for affected-set selection, cache keys, invalidation reasons, command args, environment class, output digests, and claim surface.",
+        "status": "implemented_pending_validation",
+        "current_evidence": "Lane 1 source was accepted for changed-input, cache-key, and timing-row input-spec binding, but registry changes require a fresh current-candidate proof before any broader claim.",
+        "next_required_proof": "Current digest plus focused tests and real loop or measure command showing input specs drive affected nodes and cache invalidation without hand-edited rows."
+      },
+      {
+        "id": "verified_incremental_query_graph",
+        "product_role": "Query graph that selects legally sufficient affected validation nodes and deterministic dependencies for dirty-tree repair.",
+        "status": "in_progress",
+        "current_evidence": "Live-loop graph modules exist and some graph tests pass, but all high-frequency law nodes and command families are not proven through the graph.",
+        "next_required_proof": "Real current-candidate loop run shows changed inputs, affected nodes, skipped/reused nodes, first blockers, and deterministic output produced by the graph."
+      },
+      {
+        "id": "node_local_cache_authority",
+        "product_role": "Verified-local cache authority that proves current-input equivalence per node without whole-package invalidation theater.",
+        "status": "in_progress",
+        "current_evidence": "Measurement cache replay and input-spec fields exist for selected live-loop nodes, but full node-local cache authority is not proven across required routine nodes.",
+        "next_required_proof": "Real two-edit sequence proves cache hit and miss legality with cache key, input digests, validator/law/schema/fixture versions, result/output digests, equivalence, invalidation proof, and claim ceiling."
+      },
+      {
+        "id": "routine_hot_loop_executor",
+        "product_role": "Typed executor for routine repair loops that separates validation, cache, observability, speed, and claim-ceiling state.",
+        "status": "implemented_pending_validation",
+        "current_evidence": "Lane 4 source-equivalent measurement authority is present in root and old proof showed fail-closed hot-loop behavior, but current registry changes require fresh proof.",
+        "next_required_proof": "Current-candidate loop run reports validation results, cache status, observability status, speed claim status, first product blocker, first observability blocker, exact rerun, and explicit source-local claim ceiling."
+      },
+      {
+        "id": "product_semantic_active_surface_inventory",
+        "product_role": "Inventory of active package-owned surfaces with typed product roles, duplicate authority detection, aliases, orphans, and no coverage-only wrappers.",
+        "status": "implemented_pending_validation",
+        "current_evidence": "Lane 3 source-local active-surface work was previously accepted, but its receipts were bound to an older digest and require current-candidate reconciliation.",
+        "next_required_proof": "Current namespace/source-audit or dedicated active-surface command detects actual binaries, commands, modules, functions, helpers, schemas, fixtures, receipt producers, generated rows, aliases, and orphans."
+      },
+      {
+        "id": "semantic_namespace_symbol_inventory",
+        "product_role": "Product-semantic namespace and symbol inventory for paths, modules, functions, helpers, tests, schemas, fixtures, and generated artifacts.",
+        "status": "implemented_pending_validation",
+        "current_evidence": "Namespace hardening exists and strict namespace check passed before this registry update, but symbol-level current proof and full custom-tool mapping remain pending.",
+        "next_required_proof": "Current-candidate namespace and typed-boundary checks reject goal-work names, orphan symbols, alias overclaim, broad exceptions, and function/module names that do not describe product behavior."
+      },
+      {
+        "id": "package_truth_snapshotter",
+        "product_role": "Package-boundary truth snapshotter that computes digest and package inventory once per immutable command snapshot while excluding builder-contract docs from package evidence.",
+        "status": "in_progress",
+        "current_evidence": "Package digest and package inventory surfaces exist, but one-shot snapshot reuse across routine nodes and builder-contract exclusion proof are not fully proven for the custom-tooling program.",
+        "next_required_proof": "Real current-candidate command shows one package truth snapshot consumed by downstream nodes, with mutation detection, package-boundary inputs, inventory reconciliation, and claim ceiling."
+      },
+      {
+        "id": "coverage_lineage_intelligence",
+        "product_role": "Coverage lineage layer over llvm-cov output separating strict full-clean coverage proof from routine repair feedback.",
+        "status": "implemented_pending_validation",
+        "current_evidence": "Lane 2 coverage-lineage work was previously accepted with routine-only claim limits on an older digest; current exact coverage and current lineage proof remain separate.",
+        "next_required_proof": "Current-candidate coverage command proves strict 100 percent boundary only when exact coverage runs, and routine coverage feedback carries lineage, equivalence, stale/warm substitution guards, and routine-only claim ceiling."
+      },
+      {
+        "id": "red_green_tamper_fixture_scheduler",
+        "product_role": "Isolated fixture scheduler for red, green, and tamper fixtures with deterministic aggregation and no shared validation_artifacts writes from parallel workers.",
+        "status": "not_started",
+        "current_evidence": "Red fixture infrastructure exists, but the custom scheduler authority is not proven as a current-candidate product tool for all required fixture classes.",
+        "next_required_proof": "Real fixture command or scheduler path proves isolated temp roots, deterministic ordering, typed task classes, no shared receipt writes, leak checks, and fail-closed stale or mutation behavior."
+      },
+      {
+        "id": "command_telemetry_roundtrip_reconciliation",
+        "product_role": "Command roundtrip authority that runs real commands, captures stdout and receipts, queries telemetry, reconciles same-candidate proof, and refuses generic rows.",
+        "status": "in_progress",
+        "current_evidence": "observe command_roundtrip source exists, but full production behavior for command families is not proven on the current candidate.",
+        "next_required_proof": "Real current-candidate command roundtrip captures stdout, receipt, logs, metrics, traces or wide events, explain output, current-state linkage, and explicit claim ceiling."
+      },
+      {
+        "id": "receipt_artifact_dereference_reconciliation",
+        "product_role": "Receipt and artifact reconciliation authority that names product behavior, proof surface, independent reconciliation surface, stale or wrong-digest state, and claim ceiling.",
+        "status": "in_progress",
+        "current_evidence": "Receipt dereference and explanation code exists in several surfaces, but there is no complete current-candidate custom authority proof for all receipt/proof paths.",
+        "next_required_proof": "Real current-candidate command rejects receipt existence as proof, dereferences receipts/artifacts, compares digest/run/correlation fields, and names the exact stale or missing proof surface."
+      },
+      {
+        "id": "current_state_read_model",
+        "product_role": "Typed current-state read model for candidate digest, dirty/stale state, first legal blocker, proof surfaces, claim ceiling, and next narrow repair.",
+        "status": "in_progress",
+        "current_evidence": "`ultragoal current-state --json` exists with tests, but full reconciliation against source audit, red report, coverage, Gate 92 board, and custom-tool status is not proven current.",
+        "next_required_proof": "Real current-candidate current-state command emits bounded typed state from authority surfaces, fails closed on stale/missing inputs, and reconciles stdout, receipt, source inspection, and claim ceiling."
+      },
+      {
+        "id": "ultragoal_next",
+        "product_role": "Agent next-action command that consumes current-state and observe explain output to identify the first legal move without manual spelunking.",
+        "status": "not_started",
+        "current_evidence": "`observe explain --next` exists, but a canonical `ultragoal next` command surface is not implemented as a product command.",
+        "next_required_proof": "Real `ultragoal next` and `ultragoal next --json` current-candidate runs name digest, phase, blocker, dependency chain, exact repair, exact rerun, forbidden actions, and claim ceiling from typed authority inputs."
+      },
+      {
+        "id": "observe_query_explain_repair_compiler",
+        "product_role": "Observe query and explain compiler that turns run/correlation/digest telemetry into root cause, implicated source or artifact, blocked claim, smallest repair, and narrow rerun.",
+        "status": "in_progress",
+        "current_evidence": "observe query and explain modules exist, including `observe explain --next`, but many command and family rows lack current production proof.",
+        "next_required_proof": "Real failed command plus observe logs, metrics, traces, and explain commands reconcile same-candidate telemetry and produce a specific repair plan without fallback-only or generic output."
+      },
+      {
+        "id": "impacted_rust_test_mapping",
+        "product_role": "Impacted Rust test map that feeds nextest or the canonical test runner with legally sufficient focused tests instead of broad cargo sweeps or fake parallelism.",
+        "status": "not_started",
+        "current_evidence": "Focused tests are run manually or by broad filters; no Harness-owned impacted-test map is proven as a current product tool.",
+        "next_required_proof": "Current-candidate command maps changed source surfaces to impacted Rust tests, invokes one legal runner path, records input digests and result digests, and fails closed on unknown or unsafe mappings."
+      }
+    ]
   },
   "lanes": [
     {
@@ -410,7 +525,7 @@
     },
     {
       "id": "LANE-004",
-      "status": "active",
+      "status": "merged_source_equivalent_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build custom Rust tooling prerequisite routine hot-loop executor and measurement authority.",
       "macro_lane_rationale": "This lane owns the routine executor and measurement-status authority that Lane 1 needs before input-spec/cache-reuse work can be accepted. It is prerequisite custom tooling that improves speed and proof honesty before Gate 92 production-observability fitting resumes.",
@@ -448,19 +563,19 @@
         "actor_id": "codex-app-worktree-lane-004",
         "thread_or_session_id": "019f4335-bf7e-79d0-b731-63c006af87a8",
         "pending_worktree_id": "local:c995f5c9-59fc-4440-a26a-8045d63172d3",
-        "actor_status": "active",
-        "validated_at": "2026-07-08T20:10:00Z"
+        "actor_status": "archived_after_parent_reconciliation",
+        "validated_at": "2026-07-08T22:45:00Z"
       },
-      "branch": "HEAD",
+      "branch": "codex/routine-hot-loop-measurement-authority",
       "workspace": "/Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
-      "current_commit": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
+      "current_commit": "fce3b770da6d55ced4e14a7792957ac2b28d799f",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
-      "target_head_at_validation": "pending",
-      "merge_base_at_validation": "pending",
-      "last_heartbeat": "2026-07-08T20:10:00Z",
+      "target_head_at_validation": "dc87c0996ed4ea5262d3611da0405dab2a7454f8",
+      "merge_base_at_validation": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
+      "last_heartbeat": "2026-07-08T22:45:00Z",
       "owned_paths": [
         "validator/src/cli/live_loop/nodes/measurement/**",
         "validator/src/cli/live_loop/nodes/status.rs",
@@ -495,7 +610,7 @@
       "port_allocations": [],
       "ready_receipt": {
         "path": "codex_app_thread:019f4335-bf7e-79d0-b731-63c006af87a8",
-        "digest": "pending"
+        "digest": "source-equivalent-root-commit-fce3b770da6d55ced4e14a7792957ac2b28d799f"
       },
       "claim_ids": [
         "CUSTOM-TOOLING-PREREQ",
@@ -508,24 +623,24 @@
         "clean": true,
         "status_receipt": {
           "path": "codex_app_thread:019f4335-bf7e-79d0-b731-63c006af87a8",
-          "digest": "pending"
+          "digest": "source-equivalent-root-commit-fce3b770da6d55ced4e14a7792957ac2b28d799f"
         },
         "observed_clean": true,
-        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal",
-        "observed_branch": "HEAD",
-        "observed_head": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
+        "observed_workspace": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+        "observed_branch": "codex/gate92-product-fitness-telemetry",
+        "observed_head": "dc87c0996ed4ea5262d3611da0405dab2a7454f8",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active",
-        "observed_at": "2026-07-08T20:10:00Z",
-        "finding": "Codex app worktree lane creation produced thread 019f4335-bf7e-79d0-b731-63c006af87a8 at /Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal. The lane prompt is goal-bound and framed as source-local custom tooling prerequisite, not Gate 92 fitting.",
-        "action": "Monitor Lane 4. Do not accept or merge Lane 4 without source inspection, focused validation, real routine hot-loop behavior or verified current-input reuse, explicit prerequisite-only claim ceiling, and root ultragoal reconciliation."
+        "status": "merged_source_equivalent_teardown_complete",
+        "observed_at": "2026-07-08T22:45:00Z",
+        "finding": "Lane 4 completed in thread 019f4335-bf7e-79d0-b731-63c006af87a8 at lane commit 60d8e4d80c495882ba9664012517f62343e0f8dc. Parent reconciliation found the accepted source behavior was already present in root commit fce3b770da6d55ced4e14a7792957ac2b28d799f; cherry-picking the lane commit against current root produced no needed source delta after preserving the newer Lane 1 input-spec fields.",
+        "action": "Lane 4 thread was archived and worktree /Users/terrynoblin/.codex/worktrees/017a/harness-ultragoal-plugin-proposal was removed. This closes only the source-local routine measurement-authority prerequisite; the custom-tooling program remains incomplete until every required tool has current product proof."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Pending prerequisite custom-tooling implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+        "status": "complete",
+        "reason": "Lane 4 was reconciled as source-equivalent in root, its Codex thread was archived, and its clean worktree was removed. Claim ceiling remains source_local_custom_tooling_prerequisite_only."
       }
     }
   ],
@@ -578,5 +693,5 @@
       "claim_ceiling_impact": "Custom tooling remains source-local prerequisite evidence only; Gate 92 remains open and not claimable until downstream production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T20:07:00Z"
+  "generated_at": "2026-07-08T22:45:00Z"
 }
