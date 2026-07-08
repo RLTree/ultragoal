@@ -2,7 +2,6 @@ use super::super::super::surfaces::LoopValidationSurface;
 use super::super::command_failure::CommandFailureSummary;
 pub(super) use super::command_run::FullCommandRun;
 use std::ffi::OsString;
-use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::Instant;
@@ -11,49 +10,21 @@ pub(super) fn run_full_command(root: &Path, surface: LoopValidationSurface) -> F
     run_surface_command(root, surface.canonical_full_command)
 }
 
-#[cfg(test)]
-pub(super) fn run_full_command_with_shell(
-    root: &Path,
-    surface: LoopValidationSurface,
-    shell: &str,
-) -> FullCommandRun {
-    run_surface_command_with_shell(root, surface.canonical_full_command, shell)
-}
-
 pub(super) fn run_narrow_command(root: &Path, surface: LoopValidationSurface) -> FullCommandRun {
     run_surface_command(root, surface.narrow_rerun)
 }
 
 fn run_surface_command(root: &Path, command_text: &str) -> FullCommandRun {
     let argv = runtime_command_argv(command_text);
-    run_surface_command_with_argv(root, &argv, Some(command_text))
+    run_surface_command_with_argv(root, &argv)
 }
 
-fn run_surface_command_with_argv(
-    root: &Path,
-    argv: &[String],
-    fallback_command_text: Option<&str>,
-) -> FullCommandRun {
+fn run_surface_command_with_argv(root: &Path, argv: &[String]) -> FullCommandRun {
     let started = Instant::now();
-    let Some((program, args)) = argv.split_first() else {
-        return FullCommandRun {
-            exit_code: 1,
-            status_success: false,
-            launch_error: true,
-            duration_ms: elapsed_ms(started),
-            stdout_digest: crate::digest::bytes(&[]),
-            stderr_digest: crate::digest::bytes(b"empty runtime command argv"),
-            failure: CommandFailureSummary::default(),
-        };
-    };
+    let (program, args) = nonempty_runtime_argv(argv);
     let output = match Command::new(program).args(args).current_dir(root).output() {
         Ok(output) => output,
         Err(err) => {
-            if err.kind() == ErrorKind::NotFound && login_shell_fallback_allowed(program) {
-                if let Some(command_text) = fallback_command_text {
-                    return run_surface_command_with_shell(root, command_text, "bash");
-                }
-            }
             let runtime_command = argv.join(" ");
             return FullCommandRun {
                 exit_code: 1,
@@ -80,44 +51,9 @@ fn run_surface_command_with_argv(
     }
 }
 
-fn run_surface_command_with_shell(root: &Path, command_text: &str, shell: &str) -> FullCommandRun {
-    let started = Instant::now();
-    let runtime_command = runtime_command_text(command_text);
-    let output = match Command::new(shell)
-        .arg("-lc")
-        .arg(&runtime_command)
-        .current_dir(root)
-        .output()
-    {
-        Ok(output) => output,
-        Err(err) => {
-            return FullCommandRun {
-                exit_code: 1,
-                status_success: false,
-                launch_error: true,
-                duration_ms: elapsed_ms(started),
-                stdout_digest: crate::digest::bytes(&[]),
-                stderr_digest: crate::digest::bytes(
-                    format!("{runtime_command} launch failed: {err}").as_bytes(),
-                ),
-                failure: CommandFailureSummary::default(),
-            };
-        }
-    };
-    let failure = CommandFailureSummary::from_stdout(&output.stdout);
-    FullCommandRun {
-        exit_code: output.status.code().unwrap_or(1),
-        status_success: output.status.success(),
-        launch_error: false,
-        duration_ms: elapsed_ms(started),
-        stdout_digest: crate::digest::bytes(&output.stdout),
-        stderr_digest: crate::digest::bytes(&output.stderr),
-        failure,
-    }
-}
-
-pub(super) fn login_shell_fallback_allowed(program: &str) -> bool {
-    program != "bash" && !program.contains('/') && !program.contains('\\')
+fn nonempty_runtime_argv(argv: &[String]) -> (&String, &[String]) {
+    argv.split_first()
+        .expect("runtime_command_argv always returns a command program")
 }
 
 pub(super) fn runtime_command_text(command_text: &str) -> String {
@@ -165,6 +101,13 @@ pub(super) fn runtime_command_argv_with_executable_context(
             argv.extend(split_simple_args(rest.trim_start()));
             return argv;
         }
+    }
+    if requires_developer_shell_resolution(command_text) {
+        return vec![
+            "bash".to_string(),
+            "-lc".to_string(),
+            runtime_command_text(command_text),
+        ];
     }
     match split_typed_runtime_command(command_text) {
         Some(argv) => argv,
@@ -218,6 +161,12 @@ fn requires_shell(command_text: &str) -> bool {
             '|' | '&' | ';' | '<' | '>' | '(' | ')' | '$' | '`' | '"' | '\''
         )
     })
+}
+
+fn requires_developer_shell_resolution(command_text: &str) -> bool {
+    matches!(command_text, "cargo" | "ultragoal")
+        || command_text.starts_with("cargo ")
+        || command_text.starts_with("ultragoal ")
 }
 
 fn shell_quote(value: &str) -> String {

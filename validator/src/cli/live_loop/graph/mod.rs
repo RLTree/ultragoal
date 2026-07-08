@@ -218,7 +218,7 @@ pub(crate) fn schema_version() -> &'static str {
 }
 
 pub(crate) fn runtime_execution_model() -> &'static str {
-    "direct-argv-with-login-shell-fallback-v1"
+    "direct-argv-with-developer-shell-resolution-v2"
 }
 
 pub(crate) fn fixture_version() -> &'static str {

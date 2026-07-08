@@ -63,12 +63,19 @@ fn live_loop_measure_reports_digest_receipt_and_launch_failures() {
         "{receipt_err}"
     );
 
-    let surface = crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface");
-    let launch_failure = super::super::full_command::run_full_command_with_shell(
-        &root,
-        surface,
-        "ultragoal-missing-shell-for-test",
-    );
+    let surface = crate::cli::live_loop::surfaces::LoopValidationSurface {
+        id: "unit_launch_failure",
+        surface: "rust_validation",
+        command: "launch failure classifier contract",
+        canonical_full_command: "/missing/live-loop-command",
+        narrow_rerun: "/missing/live-loop-command",
+        telemetry_reconciliation_state: "requires_command_telemetry_roundtrip",
+        execution_task_class: crate::scheduler::TaskClass::PureReadParallel,
+        execution_serial_reason: "none",
+        high_frequency: true,
+        hot_loop_policy: "routine_hot_repair",
+    };
+    let launch_failure = super::super::full_command::run_full_command(&root, surface);
     assert!(!launch_failure.status_success);
     assert!(launch_failure.launch_error);
     assert_eq!(

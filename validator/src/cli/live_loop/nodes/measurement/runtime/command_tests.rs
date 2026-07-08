@@ -1,5 +1,4 @@
-use super::full_command as subject;
-use crate::cli::live_loop::surfaces::surface_by_id;
+use super::super::full_command as subject;
 use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
 
@@ -18,7 +17,7 @@ fn ultragoal_self_calls_use_running_binary_not_target_root_artifact() {
 }
 
 #[test]
-fn non_ultragoal_commands_stay_literal() {
+fn non_ultragoal_command_text_stays_literal() {
     assert_eq!(
         subject::runtime_command_text("cargo fmt --all --check"),
         "cargo fmt --all --check"
@@ -78,7 +77,7 @@ fn runtime_ultragoal_command_uses_adjacent_product_binary_for_cargo_test_executa
 }
 
 #[test]
-fn runtime_ultragoal_command_falls_back_to_current_executable_when_adjacent_binary_is_absent() {
+fn runtime_ultragoal_command_uses_current_executable_when_adjacent_binary_is_absent() {
     let current = PathBuf::from("/tmp/target/debug/deps/validator_tests-abc123");
 
     let runtime = subject::runtime_command_text_with_executable_context(
@@ -100,6 +99,20 @@ fn runtime_ultragoal_command_stays_literal_when_executable_context_is_unavailabl
     let runtime = subject::runtime_command_text_with_executable_context(command, None, None);
 
     assert_eq!(runtime, command);
+}
+
+#[test]
+fn runtime_ultragoal_argv_stays_literal_when_executable_context_is_unavailable() {
+    let argv = subject::runtime_command_argv_with_executable_context(
+        "target/debug/ultragoal --root . package digest",
+        None,
+        None,
+    );
+
+    assert_eq!(
+        argv,
+        ["target/debug/ultragoal", "--root", ".", "package", "digest"]
+    );
 }
 
 #[test]
@@ -135,6 +148,37 @@ fn product_command_argv_preserves_non_ultragoal_surface_identity() {
 }
 
 #[test]
+fn cargo_toolchain_commands_execute_through_developer_shell() {
+    let argv = subject::runtime_command_argv("cargo fmt --all --check");
+
+    assert_eq!(argv, ["bash", "-lc", "cargo fmt --all --check"]);
+    assert_eq!(
+        subject::product_command_argv("cargo fmt --all --check"),
+        ["cargo", "fmt", "--all", "--check"],
+        "receipts keep the product tool surface, while runtime argv records shell resolution"
+    );
+}
+
+#[test]
+fn bare_ultragoal_commands_execute_through_developer_shell() {
+    let argv = subject::runtime_command_argv("ultragoal loop run --tier hot");
+
+    assert_eq!(argv, ["bash", "-lc", "ultragoal loop run --tier hot"]);
+    assert_eq!(
+        subject::product_command_argv("ultragoal loop run --tier hot"),
+        ["ultragoal", "loop", "run", "--tier", "hot"],
+        "receipts keep the canonical CLI surface while runtime argv records shell resolution"
+    );
+}
+
+#[test]
+fn ordinary_read_commands_execute_directly() {
+    let argv = subject::runtime_command_argv("git status --short --untracked-files=all");
+
+    assert_eq!(argv, ["git", "status", "--short", "--untracked-files=all"]);
+}
+
+#[test]
 fn runtime_command_argv_uses_shell_only_for_shell_specific_syntax() {
     let argv = subject::runtime_command_argv("printf ok > artifact.txt");
 
@@ -144,62 +188,7 @@ fn runtime_command_argv_uses_shell_only_for_shell_specific_syntax() {
 }
 
 #[test]
-fn bare_substrate_commands_can_fall_back_to_login_shell_resolution() {
-    assert!(subject::login_shell_fallback_allowed("cargo"));
-    assert!(subject::login_shell_fallback_allowed("git"));
-    assert!(!subject::login_shell_fallback_allowed("bash"));
-    assert!(!subject::login_shell_fallback_allowed(
-        "/opt/homebrew/bin/cargo"
-    ));
-}
-
-#[test]
-fn command_launch_failure_is_reported_as_validation_result_not_panic() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-command-launch");
-    std::fs::create_dir_all(&root).expect("root");
-    let surface = surface_by_id("fmt_check").expect("fmt surface");
-
-    let run = subject::run_full_command_with_shell(&root, surface, "/missing/ultragoal-shell");
-
-    assert_eq!(run.exit_code, 1);
-    assert!(!run.status_success);
-    assert!(run.launch_error);
-    assert!(run.duration_ms >= 1);
-    assert!(run.stdout_digest.starts_with("sha256:"));
-    assert!(run.stderr_digest.starts_with("sha256:"));
-    std::fs::remove_dir_all(root).expect("cleanup launch failure");
-}
-
-#[test]
-fn full_and_narrow_command_runners_execute_product_surface_commands() {
-    let root =
-        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-command-runners");
-    std::fs::create_dir_all(&root).expect("root");
-    let surface = crate::cli::live_loop::surfaces::LoopValidationSurface {
-        id: "unit_command_runner",
-        surface: "rust_validation",
-        command: "command runner contract",
-        canonical_full_command: "printf full-command",
-        narrow_rerun: "printf narrow-command",
-        telemetry_reconciliation_state: "requires_command_telemetry_roundtrip",
-        execution_task_class: crate::scheduler::TaskClass::PureReadParallel,
-        execution_serial_reason: "none",
-        high_frequency: true,
-        hot_loop_policy: "routine_hot_repair",
-    };
-
-    let full = subject::run_full_command(&root, surface);
-    let narrow = subject::run_narrow_command(&root, surface);
-
-    assert!(full.status_success);
-    assert!(narrow.status_success);
-    assert_ne!(full.stdout_digest, narrow.stdout_digest);
-    std::fs::remove_dir_all(root).expect("cleanup command runners");
-}
-
-#[test]
-fn ultragoal_runtime_falls_back_to_current_test_binary_when_product_binary_is_unavailable() {
+fn ultragoal_runtime_uses_current_test_binary_when_product_binary_is_unavailable() {
     let _guard = env_lock();
     let previous = std::env::var_os("CARGO_BIN_EXE_ultragoal");
     // SAFETY: this test holds a process-local mutex for the full mutation window.

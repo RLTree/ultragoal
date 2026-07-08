@@ -10,7 +10,7 @@ mod high_frequency_nodes;
 mod observation;
 mod observation_mode;
 #[cfg(test)]
-mod runtime_command_tests;
+mod runtime;
 #[cfg(test)]
 mod snapshot_flow_tests;
 mod surface_selection;

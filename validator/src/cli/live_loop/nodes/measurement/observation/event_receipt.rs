@@ -154,6 +154,38 @@ fn command_observation_uses_product_identity_for_ultragoal_surface() {
 }
 
 #[test]
+fn command_observation_preserves_program_identity_when_path_has_no_file_name() {
+    let root = temp_root("live-loop-command-observation-program-identity");
+    let candidate = write_minimal_manifest(&root);
+    let surface = crate::cli::live_loop::surfaces::LoopValidationSurface {
+        id: "unit_program_identity",
+        surface: "command_observation",
+        command: "command observation product identity",
+        canonical_full_command: "/",
+        narrow_rerun: "/",
+        telemetry_reconciliation_state: "requires_command_telemetry_roundtrip",
+        execution_task_class: crate::scheduler::TaskClass::PureReadParallel,
+        execution_serial_reason: "none",
+        high_frequency: true,
+        hot_loop_policy: "routine_hot_repair",
+    };
+    let receipt = event::receipt_path(surface.id);
+
+    let value = event::write(
+        &root,
+        surface,
+        &candidate,
+        &measure_command(),
+        &command_run_with_status(0, true),
+        &receipt,
+    )
+    .expect("path command observation");
+
+    assert_eq!(value.value["event"]["command"], "/");
+    std::fs::remove_dir_all(root).expect("cleanup path identity observation");
+}
+
+#[test]
 fn reconciliation_reports_command_observation_write_failure() {
     let root = temp_root("live-loop-command-observation-write-failure");
     std::fs::create_dir_all(&root).expect("root");

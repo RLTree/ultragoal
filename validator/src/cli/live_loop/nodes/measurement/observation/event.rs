@@ -82,16 +82,16 @@ pub(super) fn write(
 }
 
 fn telemetry_command_name(command_text: &str, argv: &[String]) -> String {
-    let Some(program) = argv.first() else {
-        return "unknown-runtime-command".to_string();
-    };
+    let program = argv
+        .first()
+        .expect("product_command_argv always returns a command program");
     if command_text.starts_with("target/debug/ultragoal") || program.ends_with("/ultragoal") {
         return "ultragoal".to_string();
     }
     std::path::Path::new(program)
         .file_name()
         .and_then(|name| name.to_str())
-        .unwrap_or("unknown-runtime-command")
+        .unwrap_or(program)
         .to_string()
 }
 
