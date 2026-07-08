@@ -132,7 +132,7 @@
     },
     {
       "id": "LANE-002",
-      "status": "ready_for_parent_reconciliation",
+      "status": "changes_requested",
       "lane_type": "implementation",
       "lane_objective": "Build coverage lineage and routine coverage intelligence while preserving strict exact coverage authority.",
       "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks fast-loop honesty because routine coverage cannot substitute for strict boundary proof.",
@@ -187,7 +187,7 @@
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T19:08:52Z",
+      "last_heartbeat": "2026-07-08T19:14:38Z",
       "owned_paths": [
         "validator/src/cli/coverage/**",
         "validator/src/audit/coverage/**",
@@ -249,10 +249,10 @@
         "preserved_dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-08T19:08:52Z",
-        "finding": "Lane 2 is clean at d30fbf1df105887dfd3927b649035f6ea46b4c9b. It added a coverage-lineage guard that classifies missing changed-file references as coverage_manifest_stale_source_path and left .harness coverage manifests untouched because they were outside lane ownership.",
-        "action": "Parent must inspect the lane diff and decide whether direct .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json repair is root-owned, Lane 2 ownership expansion, or a separate manifest-maintenance lane before accepting or merging."
+        "status": "changes_requested",
+        "observed_at": "2026-07-08T19:14:38Z",
+        "finding": "Lane 2 is clean at d30fbf1df105887dfd3927b649035f6ea46b4c9b and added a useful coverage_manifest_stale_source_path guard, but the actual stale coverage manifest references remain in .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json.",
+        "action": "Parent sent a goal-bound continuation to repair those two coverage manifests under explicit ownership expansion before acceptance. Lane output is not merged or accepted."
       },
       "teardown": {
         "required": true,
@@ -262,7 +262,7 @@
     },
     {
       "id": "LANE-003",
-      "status": "ready_for_parent_reconciliation",
+      "status": "merged_source_local_teardown_complete",
       "lane_type": "implementation",
       "lane_objective": "Build product-semantic active-surface inventory and authority-topology enforcement.",
       "macro_lane_rationale": "Active-surface authority is independent from coverage lineage and live-loop input specs, but it controls namespace, duplicate authority, alias, orphan, and row-shape theater risks before broader Gate 92 fitting.",
@@ -317,7 +317,7 @@
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T19:08:52Z",
+      "last_heartbeat": "2026-07-08T19:14:38Z",
       "owned_paths": [
         "validator/src/audit/law/authority_surfaces/**",
         "validator/src/audit/namespace/**",
@@ -381,16 +381,16 @@
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-08T19:08:52Z",
+        "status": "merged_source_local_teardown_complete",
+        "observed_at": "2026-07-08T19:14:38Z",
         "candidate_commit": "28b00acddae48a030aaab16cbd0a67fde904fcfc",
-        "finding": "Lane 3 is clean at 28b00acddae48a030aaab16cbd0a67fde904fcfc. It rejects top-level validation_artifacts/** as package resources, preserves fixture-contained validation_artifacts paths, removes top-level live proof resources from plugin-manifest-draft.json, and registers the new package-surface helper.",
-        "action": "Parent must inspect the lane diff and rerun root reconciliation before accepting or merging. Stale inventory_requirements.rs references remain in .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json outside Lane 3 ownership."
+        "finding": "Lane 3 source-local chain was parent-inspected, merged into root through cherry-picked commits 93d885f99, 69f891435, d25ef5fff, and c9e3cca92, and root validation passed on package digest sha256:6dd55309e663dfae877d98432005be90bbd0bf9db7d09893987ea5c2f202e9c8.",
+        "action": "Codex app handoff operation call_A1gTV1CY6PsIH0fDXKjuZzd8 completed successfully and the destination lane thread 019f4326-2134-7123-a4d3-85cccaf336fc was archived. Claim ceiling remains source-local; stale coverage manifest references are Lane 2 follow-up work."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Active implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+        "status": "complete",
+        "reason": "Lane 3 was merged source-local, handed off from the Codex worktree to the root checkout, and archived after parent validation."
       }
     }
   ],
