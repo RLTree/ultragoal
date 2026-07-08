@@ -32,6 +32,10 @@ pub(crate) fn insert(
         json!(crate::cli::live_loop::graph::fixture_version()),
     );
     object.insert(
+        "runtime_execution_model".to_string(),
+        json!(crate::cli::live_loop::graph::runtime_execution_model()),
+    );
+    object.insert(
         "work_unit_count".to_string(),
         json!(verified_local.work_unit_count),
     );
@@ -92,15 +96,15 @@ pub(crate) fn insert(
 fn insert_command_fields(object: &mut Map<String, Value>, surface: LoopValidationSurface) {
     object.insert(
         "verified_local_command".to_string(),
-        json!(full_command::runtime_command_text(surface.narrow_rerun)),
+        json!(full_command::product_command_text(surface.narrow_rerun)),
     );
     object.insert(
         "verified_local_command_argv".to_string(),
-        json!(full_command::runtime_shell_argv(surface.narrow_rerun)),
+        json!(full_command::product_command_argv(surface.narrow_rerun)),
     );
     object.insert(
         "command_argv".to_string(),
-        json!(full_command::runtime_shell_argv(surface.narrow_rerun)),
+        json!(full_command::product_command_argv(surface.narrow_rerun)),
     );
 }
 

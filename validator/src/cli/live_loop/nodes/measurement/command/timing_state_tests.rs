@@ -100,7 +100,7 @@ fn live_loop_measure_rejects_speedup_without_telemetry_reconciliation() {
         row["baseline_invalidation_proof"],
         "baseline_reused_from_executed_narrow_command_because_canonical_full_command_matches"
     );
-    assert_eq!(row["command_argv"][0], "bash");
+    assert_eq!(row["command_argv"][0], "git");
     assert_eq!(row["exit_status"], 0);
     assert!(
         row["output_digest"]

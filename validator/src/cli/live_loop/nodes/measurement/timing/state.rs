@@ -1,4 +1,5 @@
 use super::verified_work::VerifiedLocalProof;
+use crate::cli::live_loop::surfaces::LoopValidationSurface;
 
 pub(crate) struct NodeTimingState {
     pub(crate) validation_status: &'static str,
@@ -12,14 +13,19 @@ pub(crate) struct NodeTimingState {
 
 impl NodeTimingState {
     pub(crate) fn from_measurement(
+        surface: LoopValidationSurface,
         verified_local: &VerifiedLocalProof,
         failure_class: &str,
     ) -> Self {
         let validation_status = validation_status(verified_local);
         let validation_cache_status = validation_cache_status(verified_local);
         let observability_status = observability_status(verified_local);
-        let speed_claim_status =
-            speed_claim_status(validation_status, observability_status, failure_class);
+        let speed_claim_status = speed_claim_status(
+            surface,
+            validation_status,
+            observability_status,
+            failure_class,
+        );
         Self {
             validation_status,
             validation_cache_status,
@@ -94,11 +100,15 @@ fn observability_status(verified_local: &VerifiedLocalProof) -> &'static str {
 }
 
 fn speed_claim_status(
+    surface: LoopValidationSurface,
     validation_status: &str,
     observability_status: &str,
     failure_class: &str,
 ) -> &'static str {
     if validation_status != "pass" || observability_status != "pass" {
+        return "withheld";
+    }
+    if !surface.high_frequency {
         return "withheld";
     }
     match failure_class {
@@ -136,10 +146,12 @@ mod tests {
     use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
     use crate::cli::live_loop::nodes::measurement::full_command::FullCommandRun;
     use crate::cli::live_loop::nodes::measurement::observation::TelemetryReconciliation;
+    use crate::cli::live_loop::surfaces::surface_by_id;
 
     #[test]
     fn validation_state_distinguishes_blocked_launch_from_failed_product_command() {
         let blocked = NodeTimingState::from_measurement(
+            surface_by_id("fmt_check").expect("fmt surface"),
             &proof(|run| {
                 run.launch_error = true;
                 run.status_success = false;
@@ -153,6 +165,7 @@ mod tests {
         assert_eq!(blocked.claim_status, "withheld_validation_result_available");
 
         let failed = NodeTimingState::from_measurement(
+            surface_by_id("fmt_check").expect("fmt surface"),
             &proof(|run| {
                 run.status_success = false;
                 run.exit_code = 2;
@@ -162,6 +175,21 @@ mod tests {
         assert_eq!(failed.validation_status, "fail");
         assert_eq!(failed.validation_cache_status, "not_reusable");
         assert_eq!(failed.timing_status, "fail");
+    }
+
+    #[test]
+    fn context_observation_does_not_claim_or_fail_speed() {
+        let state = NodeTimingState::from_measurement(
+            surface_by_id("changed_files").expect("changed files surface"),
+            &proof(|_| {}),
+            "live_loop_speedup_target_missed",
+        );
+
+        assert_eq!(state.validation_status, "pass");
+        assert_eq!(state.observability_status, "pass");
+        assert_eq!(state.speed_claim_status, "withheld");
+        assert_eq!(state.timing_status, "partial");
+        assert_eq!(state.claim_status, "withheld_validation_result_available");
     }
 
     fn proof(update: impl FnOnce(&mut FullCommandRun)) -> VerifiedLocalProof {

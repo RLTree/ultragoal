@@ -103,17 +103,54 @@ fn runtime_ultragoal_command_stays_literal_when_executable_context_is_unavailabl
 }
 
 #[test]
-fn runtime_shell_argv_preserves_the_product_command_shape() {
-    let argv = subject::runtime_shell_argv(
+fn runtime_command_argv_uses_direct_product_command_shape() {
+    let argv = subject::runtime_command_argv(
         "target/debug/ultragoal --root . loop format check --changed-rust",
     );
 
-    assert_eq!(
+    assert_ne!(
         argv[0], "bash",
-        "runtime shell keeps one shell boundary for product command execution"
+        "simple product command avoids shell wrapper"
     );
+    assert!(argv.iter().any(|arg| arg == "loop"));
+    assert!(argv.iter().any(|arg| arg == "--changed-rust"));
+}
+
+#[test]
+fn product_command_argv_uses_bounded_product_identity_for_receipts() {
+    let argv = subject::product_command_argv("target/debug/ultragoal --root . package digest");
+
+    assert_eq!(argv, ["ultragoal", "--root", ".", "package", "digest"]);
+    assert_eq!(
+        subject::product_command_text("target/debug/ultragoal --root . package digest"),
+        "ultragoal --root . package digest"
+    );
+}
+
+#[test]
+fn product_command_argv_preserves_non_ultragoal_surface_identity() {
+    let argv = subject::product_command_argv("git status --short --untracked-files=all");
+
+    assert_eq!(argv, ["git", "status", "--short", "--untracked-files=all"]);
+}
+
+#[test]
+fn runtime_command_argv_uses_shell_only_for_shell_specific_syntax() {
+    let argv = subject::runtime_command_argv("printf ok > artifact.txt");
+
+    assert_eq!(argv[0], "bash");
     assert_eq!(argv[1], "-lc");
-    assert!(argv[2].contains("loop format check --changed-rust"));
+    assert_eq!(argv[2], "printf ok > artifact.txt");
+}
+
+#[test]
+fn bare_substrate_commands_can_fall_back_to_login_shell_resolution() {
+    assert!(subject::login_shell_fallback_allowed("cargo"));
+    assert!(subject::login_shell_fallback_allowed("git"));
+    assert!(!subject::login_shell_fallback_allowed("bash"));
+    assert!(!subject::login_shell_fallback_allowed(
+        "/opt/homebrew/bin/cargo"
+    ));
 }
 
 #[test]

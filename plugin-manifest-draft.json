@@ -4383,6 +4383,7 @@
     "validator/src/cli/live_loop/nodes/measurement/command/mod.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/proof_kind.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/timing_state_tests.rs",
+    "validator/src/cli/live_loop/nodes/measurement/command_run.rs",
     "validator/src/cli/live_loop/nodes/measurement/flow_tests.rs",
     "validator/src/cli/live_loop/nodes/measurement/observation/live_backend.rs",
     "validator/src/cli/live_loop/nodes/measurement/observation/loop_run_snapshot.rs",

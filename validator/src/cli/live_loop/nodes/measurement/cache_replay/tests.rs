@@ -151,7 +151,7 @@ fn cache_replay_reuses_same_input_from_prior_candidate() {
         .expect("same-input prior-candidate cache replay");
     assert_eq!(
         replay.invalidation_proof,
-        "cache_key_current_input_digest_command_versions_and_environment_matched"
+        "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
     );
     std::fs::remove_dir_all(fixture.root).expect("cleanup prior candidate cache replay");
 }
@@ -172,6 +172,7 @@ fn cache_replay_rejects_prior_rows_without_product_equivalence() {
         ),
         timing_row(&fixture).with_value("work_unit_count", json!(0)),
         timing_row(&fixture).with_value("equivalence_status", json!("unknown")),
+        timing_row(&fixture).without_key("runtime_execution_model"),
         timing_row(&fixture).with_value("command_argv", json!([])),
         timing_row(&fixture).with_value("actual_work_duration_ms", json!(0)),
         timing_row(&fixture).with_value("reconciled_command_duration_ms", json!(1)),

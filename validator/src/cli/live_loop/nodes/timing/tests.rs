@@ -75,7 +75,7 @@ fn node_timing_reader_accepts_prior_candidate_verified_cache_hit_with_current_in
         );
         object.insert(
             "invalidation_proof".to_string(),
-            json!("cache_key_current_input_digest_command_versions_and_environment_matched"),
+            json!("cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"),
         );
         object.insert("prior_result_digest".to_string(), json!(result_digest));
         object.insert("replayed_output_digest".to_string(), json!(output_digest));

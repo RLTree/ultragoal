@@ -36,7 +36,7 @@ pub(super) fn insert(
     );
     object.insert(
         "speed_claim_status".to_string(),
-        json!(defaults::text(surface, node_timing, |timing| &timing.speed_claim_status)),
+        json!(speed_claim_status(surface, node_timing)),
     );
     object.insert(
         "observability_failure_class".to_string(),
@@ -45,6 +45,18 @@ pub(super) fn insert(
     );
     insert_reconciliation_fields(object, surface, node_timing);
     insert_digest_fields(object, surface, node_timing);
+}
+
+fn speed_claim_status<'a>(
+    surface: LoopValidationSurface,
+    node_timing: Option<&'a NodeTiming>,
+) -> &'a str {
+    let status = defaults::text(surface, node_timing, |timing| &timing.speed_claim_status);
+    if !surface.high_frequency && status == "supported" {
+        "withheld"
+    } else {
+        status
+    }
 }
 
 fn insert_reconciliation_fields(

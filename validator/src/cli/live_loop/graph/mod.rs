@@ -190,9 +190,10 @@ pub(crate) fn verified_local_cache_key(
     cache_mode: &str,
 ) -> String {
     let validator_version = validator_version();
+    let runtime_execution_model = runtime_execution_model();
     crate::digest::bytes(
         format!(
-            "surface={id};input={digest};validator={validator_version};law={};schema={};fixture={};tier={tier};cache={cache_mode};env=local",
+            "surface={id};input={digest};validator={validator_version};law={};schema={};fixture={};runtime={runtime_execution_model};tier={tier};cache={cache_mode};env=local",
             law_version(),
             schema_version(),
             fixture_version()
@@ -213,7 +214,11 @@ pub(crate) fn law_version() -> &'static str {
 }
 
 pub(crate) fn schema_version() -> &'static str {
-    "harness-ultragoal.live-loop-node-timing.v1"
+    "harness-ultragoal.live-loop-node-timing.v2"
+}
+
+pub(crate) fn runtime_execution_model() -> &'static str {
+    "direct-argv-with-login-shell-fallback-v1"
 }
 
 pub(crate) fn fixture_version() -> &'static str {
@@ -222,12 +227,13 @@ pub(crate) fn fixture_version() -> &'static str {
 
 fn validator_authority_material() -> String {
     format!(
-        "authority=ultragoal-cli-control-plane;cli=ultragoal;package_version={};os={};arch={};law={};schema={};fixture={}",
+        "authority=ultragoal-cli-control-plane;cli=ultragoal;package_version={};os={};arch={};law={};schema={};fixture={};runtime={}",
         env!("CARGO_PKG_VERSION"),
         std::env::consts::OS,
         std::env::consts::ARCH,
         law_version(),
         schema_version(),
-        fixture_version()
+        fixture_version(),
+        runtime_execution_model()
     )
 }

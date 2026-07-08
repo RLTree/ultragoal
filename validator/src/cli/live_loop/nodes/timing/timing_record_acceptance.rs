@@ -10,7 +10,7 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
         "cache_hit": true,
         "work_unit_count": 0,
         "equivalence_status": "verified_same_candidate_cache_replay",
-        "invalidation_proof": "cache_key_current_input_digest_command_versions_and_environment_matched",
+        "invalidation_proof": "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched",
         "prior_result_digest": digest("result"),
         "replayed_output_digest": digest("output"),
         "cache_equivalence_status": "pass"
@@ -29,6 +29,7 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"product_latency_ms": serde_json::Value::Null}),
         json!({"product_latency_ms": 5}),
         json!({"validator_version": ""}),
+        json!({"runtime_execution_model": ""}),
         json!({"verified_local_command": ""}),
         json!({"command_argv": []}),
         json!({"exit_status": serde_json::Value::Null}),
@@ -134,7 +135,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
         "invalidation_proof": "cache_not_used_current_command_executed",
         "telemetry_reconciliation_status": "pass",
         "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
+        "verified_local_command_argv": ["cargo", "fmt", "--all", "--check"],
         "verified_local_stdout_digest": stdout_digest,
         "verified_local_stderr_digest": stderr_digest,
         "verified_local_exit_code": 0,
@@ -150,6 +151,10 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     });
     let object = row.as_object_mut().expect("timing row object");
     object.insert(
+        "runtime_execution_model".to_string(),
+        json!(crate::cli::live_loop::graph::runtime_execution_model()),
+    );
+    object.insert(
         "baseline_proof_kind".to_string(),
         json!("executed_same_command_reuse"),
     );
@@ -161,7 +166,7 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     );
     object.insert(
         "command_argv".to_string(),
-        json!(["bash", "-lc", "cargo fmt --all --check"]),
+        json!(["cargo", "fmt", "--all", "--check"]),
     );
     object.insert("exit_status".to_string(), json!(0));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));

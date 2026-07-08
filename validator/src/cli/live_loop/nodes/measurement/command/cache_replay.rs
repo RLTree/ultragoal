@@ -70,7 +70,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
     );
     assert_eq!(
         row["invalidation_proof"],
-        "cache_key_current_input_digest_command_versions_and_environment_matched"
+        "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
     );
     assert_eq!(row["prior_result_digest"], result_digest());
     assert_eq!(row["replayed_output_digest"], output_digest());
@@ -106,8 +106,8 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "invalidation_proof": "input_digest_and_candidate_checked",
         "telemetry_reconciliation_status": "pass",
         "telemetry_reconciliation": {"status": "pass"},
-        "verified_local_command_argv": ["bash", "-lc", "git status --short --untracked-files=all"],
-        "command_argv": ["bash", "-lc", "git status --short --untracked-files=all"],
+        "verified_local_command_argv": ["git", "status", "--short", "--untracked-files=all"],
+        "command_argv": ["git", "status", "--short", "--untracked-files=all"],
         "verified_local_exit_code": 0,
         "exit_status": 0,
         "verified_local_launch_error": false,
@@ -126,6 +126,10 @@ fn cache_row(candidate: &str, input_digest: &str, cache_key: &str) -> serde_json
         "result_digest": result_digest(),
         "verified_local_result_digest": result_digest()
     })
+    .with_value(
+        "runtime_execution_model",
+        json!(crate::cli::live_loop::graph::runtime_execution_model()),
+    )
     .with_value("validation_status", json!("pass"))
     .with_value("validation_cache_status", json!("reusable"))
     .with_value("observability_status", json!("pass"))

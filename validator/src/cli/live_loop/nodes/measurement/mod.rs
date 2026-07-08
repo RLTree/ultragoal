@@ -1,6 +1,7 @@
 mod cache_replay;
 #[cfg(test)]
 mod command;
+mod command_run;
 #[cfg(test)]
 mod flow_tests;
 mod full_command;

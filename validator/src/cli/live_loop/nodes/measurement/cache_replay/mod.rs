@@ -114,6 +114,8 @@ fn replay_from_row(
         || text(row, "law_version")? != crate::cli::live_loop::graph::law_version()
         || text(row, "schema_version")? != crate::cli::live_loop::graph::schema_version()
         || text(row, "fixture_version")? != crate::cli::live_loop::graph::fixture_version()
+        || text(row, "runtime_execution_model")?
+            != crate::cli::live_loop::graph::runtime_execution_model()
     {
         return None;
     }
@@ -182,7 +184,8 @@ fn replay_from_row(
         prior_result_digest: prior_result_digest.to_string(),
         replayed_output_digest,
         invalidation_proof:
-            "cache_key_current_input_digest_command_versions_and_environment_matched".to_string(),
+            "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
+                .to_string(),
         telemetry_reconciliation: cached_telemetry,
     })
 }

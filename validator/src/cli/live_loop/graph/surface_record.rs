@@ -36,7 +36,7 @@ pub(crate) fn surface_record(
         .map(|timing| timing.baseline_duration_ms)
         .or(baseline_ms);
     let measurement = match node_timing.as_ref() {
-        Some(timing) if !timing_claim_ready(timing) => {
+        Some(timing) if !timing_claim_ready(surface, timing) => {
             measurement_failure::failed_timing_measurement_state(surface, timing)
         }
         Some(_) => measurement_state(surface, duration_ms, baseline_ms),
@@ -80,13 +80,23 @@ pub(crate) fn surface_record(
     record
 }
 
-fn timing_claim_ready(timing: &NodeTiming) -> bool {
-    timing.timing_status == "pass"
-        && timing.failure_class == "none"
+fn timing_claim_ready(surface: LoopValidationSurface, timing: &NodeTiming) -> bool {
+    let timing_row_supports_surface_observation = timing.failure_class == "none"
         && timing.telemetry_reconciliation_status == "pass"
         && timing.validation_status == "pass"
-        && timing.observability_status == "pass"
-        && timing.speed_claim_status == "supported"
+        && timing.observability_status == "pass";
+    if !timing_row_supports_surface_observation {
+        return false;
+    }
+    if surface.high_frequency {
+        return timing.timing_status == "pass" && timing.speed_claim_status == "supported";
+    }
+    context_or_boundary_observation_ready(timing)
+}
+
+fn context_or_boundary_observation_ready(timing: &NodeTiming) -> bool {
+    (timing.timing_status == "partial" && timing.speed_claim_status == "withheld")
+        || (timing.timing_status == "pass" && timing.speed_claim_status == "supported")
 }
 
 fn cache_decision(

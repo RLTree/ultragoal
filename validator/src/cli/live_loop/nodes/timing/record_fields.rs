@@ -42,4 +42,6 @@ pub(super) fn runtime_versions_match(value: &Value) -> bool {
         && text(value, "law_version") == Some(crate::cli::live_loop::graph::law_version())
         && text(value, "schema_version") == Some(crate::cli::live_loop::graph::schema_version())
         && text(value, "fixture_version") == Some(crate::cli::live_loop::graph::fixture_version())
+        && text(value, "runtime_execution_model")
+            == Some(crate::cli::live_loop::graph::runtime_execution_model())
 }

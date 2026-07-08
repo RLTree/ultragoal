@@ -53,7 +53,7 @@ pub(crate) fn write_node_timings(
     crate::json_boundary::write_json(
         &path,
         &json!({
-            "schema": "harness-ultragoal.live-loop-node-timing.v1",
+            "schema": crate::cli::live_loop::graph::schema_version(),
             "candidate_digest": candidate,
             "tier": tier,
             "cache_mode": cache_mode,

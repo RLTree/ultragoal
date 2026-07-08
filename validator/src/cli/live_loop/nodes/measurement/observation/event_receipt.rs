@@ -28,6 +28,13 @@ fn command_run(duration_ms: u64) -> FullCommandRun {
     }
 }
 
+fn command_run_with_status(exit_code: i32, status_success: bool) -> FullCommandRun {
+    let mut run = command_run(23);
+    run.exit_code = exit_code;
+    run.status_success = status_success;
+    run
+}
+
 fn write_minimal_manifest(root: &Path) -> String {
     std::fs::create_dir_all(root).expect("root");
     crate::json_boundary::write_json(
@@ -70,6 +77,83 @@ fn command_observation_receipt_names_actual_node_command_surface() {
 }
 
 #[test]
+fn command_observation_records_failed_verified_work_without_speed_claim() {
+    let root = temp_root("live-loop-command-observation-fail");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("changed_files").expect("surface");
+    let receipt = event::receipt_path(surface.id);
+    let value = event::write(
+        &root,
+        surface,
+        &candidate,
+        &measure_command(),
+        &command_run_with_status(2, false),
+        &receipt,
+    )
+    .expect("failed command observation");
+
+    assert_eq!(value.value["status"], "fail");
+    assert_eq!(
+        value.value["event"]["failure_class"],
+        "verified_local_command_failed"
+    );
+    assert_eq!(
+        value.value["event"]["claim_impact"],
+        "source_local_live_loop_node_observation_only_not_speed_claim"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup failed command observation");
+}
+
+#[test]
+fn command_observation_rejects_external_receipt_path() {
+    let root = temp_root("live-loop-command-observation-path");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("changed_files").expect("surface");
+    let err = event::write(
+        &root,
+        surface,
+        &candidate,
+        &measure_command(),
+        &command_run_with_status(0, true),
+        Path::new("/tmp/live-loop-command-observation.json"),
+    )
+    .expect_err("absolute observation receipt rejected");
+
+    assert!(err.contains("external debug only") || err.contains("outside root"));
+    std::fs::remove_dir_all(root).expect("cleanup rejected command observation");
+}
+
+#[test]
+fn command_observation_uses_product_identity_for_ultragoal_surface() {
+    let root = temp_root("live-loop-command-observation-product-identity");
+    let candidate = write_minimal_manifest(&root);
+    let surface = surface_by_id("package_digest").expect("surface");
+    let receipt = event::receipt_path(surface.id);
+    let value = event::write(
+        &root,
+        surface,
+        &candidate,
+        &measure_command(),
+        &command_run_with_status(0, true),
+        &receipt,
+    )
+    .expect("ultragoal command observation");
+
+    assert_eq!(value.value["event"]["command"], "ultragoal");
+    assert!(
+        !value.value["event"]["command"]
+            .as_str()
+            .expect("command")
+            .contains('/')
+    );
+    assert_eq!(
+        value.value["event"]["subcommand"],
+        "--root . package digest"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup product identity observation");
+}
+
+#[test]
 fn reconciliation_reports_command_observation_write_failure() {
     let root = temp_root("live-loop-command-observation-write-failure");
     std::fs::create_dir_all(&root).expect("root");
@@ -105,4 +189,15 @@ fn command_observation_field_parser_names_missing_required_field() {
         .expect_err("missing trace id rejected");
 
     assert_eq!(err, "live-loop command observation missing correlation_id");
+}
+
+#[test]
+fn command_observation_identity_parser_requires_trace_id() {
+    let err = event::CommandObservation::from_receipt(json!({
+        "run_id": "run-present",
+        "correlation_id": "corr-present"
+    }))
+    .expect_err("missing trace id rejected");
+
+    assert_eq!(err, "live-loop command observation missing trace_id");
 }

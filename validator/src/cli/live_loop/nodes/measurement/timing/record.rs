@@ -61,9 +61,11 @@ pub(crate) fn node_timing_row(
     let speedup_ratio = baseline.duration_ms / product_latency_ms.max(1);
     let output_digest = derived_fields::output_digest(verified_local);
     let result_digest = derived_fields::result_digest(verified_local, &output_digest);
-    let failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
-    let state = NodeTimingState::from_measurement(verified_local, failure_class);
-    let blocks_hot_loop = state.validation_status != "pass" || state.speed_claim_status == "failed";
+    let raw_failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
+    let failure_class = claim_bearing_failure_class(surface, raw_failure_class);
+    let state = NodeTimingState::from_measurement(surface, verified_local, failure_class);
+    let blocks_hot_loop = state.validation_status != "pass"
+        || (surface.high_frequency && state.speed_claim_status == "failed");
     let (baseline_proof_kind, baseline_invalidation_proof) =
         derived_fields::baseline_reuse_fields(surface, verified_local.proof_kind);
     let mut row = json!({
@@ -150,5 +152,16 @@ pub(crate) fn node_timing_row(
     NodeTimingRow {
         value: row,
         blocks_hot_loop,
+    }
+}
+
+fn claim_bearing_failure_class(
+    surface: LoopValidationSurface,
+    failure_class: &'static str,
+) -> &'static str {
+    if !surface.high_frequency && failure_class == "live_loop_speedup_target_missed" {
+        "none"
+    } else {
+        failure_class
     }
 }

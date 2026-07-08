@@ -3,6 +3,10 @@ use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
 use crate::cli::live_loop::nodes::timing::{NODE_TIMING_REL, NodeTiming};
 use serde_json::json;
 
+use super::rows::node_timing;
+use crate::cli::live_loop::changed_inputs::ChangedInputs;
+use std::collections::BTreeMap;
+
 #[test]
 fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
     let launch = projected_node(NodeTiming {
@@ -161,4 +165,66 @@ fn live_loop_tasks_project_launch_speedup_and_unknown_timing_failures() {
             .expect("why")
             .contains("strict proof validation")
     );
+}
+
+#[test]
+fn live_loop_tasks_project_context_measurements_as_observations() {
+    let mut package_digest = node_timing(100, 10, "partial".to_string(), "none".to_string());
+    package_digest.speed_claim_status = "withheld".to_string();
+    let mut timings = BTreeMap::new();
+    timings.insert("package_digest".to_string(), package_digest);
+
+    let node = super::super::super::tasks(
+        "sha256:candidate",
+        "sha256:changed",
+        "sha256:context",
+        "hot",
+        "verified-local",
+        Some(100),
+        &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
+    )
+    .into_iter()
+    .map(|task| task())
+    .find(|node| node["node_id"] == "package_digest")
+    .expect("package digest node");
+
+    assert_eq!(node["status"], "observed");
+    assert_eq!(node["failure_class"], "none");
+    assert_eq!(node["validation_status"], "pass");
+    assert_eq!(node["observability_status"], "pass");
+    assert_eq!(node["speed_claim_status"], "withheld");
+    assert_eq!(
+        node["claim_impact"],
+        "observation_only_no_speed_readiness_release_completion_or_update_goal_claim"
+    );
+}
+
+#[test]
+fn live_loop_tasks_accept_legacy_context_speed_rows_without_speed_claim() {
+    let package_digest = node_timing(100, 10, "pass".to_string(), "none".to_string());
+    let mut timings = BTreeMap::new();
+    timings.insert("package_digest".to_string(), package_digest);
+
+    let node = super::super::super::tasks(
+        "sha256:candidate",
+        "sha256:changed",
+        "sha256:context",
+        "hot",
+        "verified-local",
+        Some(100),
+        &timings,
+        &ChangedInputs::for_tests("sha256:changed", "sha256:context"),
+    )
+    .into_iter()
+    .map(|task| task())
+    .find(|node| node["node_id"] == "package_digest")
+    .expect("package digest node");
+
+    assert_eq!(node["status"], "observed");
+    assert_eq!(node["failure_class"], "none");
+    assert_eq!(node["validation_status"], "pass");
+    assert_eq!(node["observability_status"], "pass");
+    assert_eq!(node["speed_claim_status"], "withheld");
+    assert_eq!(node["claim_status"], "observation_only");
 }

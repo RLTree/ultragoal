@@ -119,6 +119,7 @@ fn row(candidate: &str, timing_status: &str, failure_class: &str) -> serde_json:
         "law_version": crate::cli::live_loop::graph::law_version(),
         "schema_version": crate::cli::live_loop::graph::schema_version(),
         "fixture_version": crate::cli::live_loop::graph::fixture_version(),
+        "runtime_execution_model": crate::cli::live_loop::graph::runtime_execution_model(),
         "result_digest": result_digest,
         "output_digest": output_digest,
         "verified_local_result_digest": result_digest,

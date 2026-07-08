@@ -46,16 +46,15 @@ pub(super) fn write(
     let node_id = surface.id.replace('_', "-");
     let check_id = format!("live-loop-{node_id}-command-observation");
     let receipt_text = receipt_path.to_string_lossy();
-    let subcommand = format!(
-        "-lc {}",
-        crate::cli::live_loop::nodes::measurement::full_command::runtime_command_text(
-            surface.narrow_rerun
-        )
+    let argv = crate::cli::live_loop::nodes::measurement::full_command::product_command_argv(
+        surface.narrow_rerun,
     );
+    let command_name = telemetry_command_name(surface.narrow_rerun, &argv);
+    let subcommand = argv.iter().skip(1).cloned().collect::<Vec<_>>().join(" ");
     let observation = crate::cli::observe::telemetry::command_receipt_for_candidate(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
-            command: "bash",
+            command: &command_name,
             subcommand: &subcommand,
             operation: &format!("loop.measure.{}", surface.id),
             surface: surface.surface,
@@ -82,6 +81,20 @@ pub(super) fn write(
     Ok(observation)
 }
 
+fn telemetry_command_name(command_text: &str, argv: &[String]) -> String {
+    let Some(program) = argv.first() else {
+        return "unknown-runtime-command".to_string();
+    };
+    if command_text.starts_with("target/debug/ultragoal") || program.ends_with("/ultragoal") {
+        return "ultragoal".to_string();
+    }
+    std::path::Path::new(program)
+        .file_name()
+        .and_then(|name| name.to_str())
+        .unwrap_or("unknown-runtime-command")
+        .to_string()
+}
+
 pub(super) fn receipt_path(node_id: &str) -> PathBuf {
     query::receipt_path(node_id, "command-observation")
 }
@@ -100,106 +113,4 @@ fn required_text<'a>(value: &'a Value, key: &str) -> Result<&'a str, String> {
         .get(key)
         .and_then(Value::as_str)
         .ok_or_else(|| format!("live-loop command observation missing {key}"))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::cli::live_loop::surfaces::surface_by_id;
-
-    fn command() -> LiveLoopCommand {
-        LiveLoopCommand {
-            action: crate::cli::live_loop::LiveLoopAction::Measure,
-            tier: "hot".to_string(),
-            cache_mode: "verified-local".to_string(),
-            jobs: None,
-            receipt: PathBuf::from("validation_artifacts/observability/live-loop-node-timing.json"),
-            node_id: Some("changed_files".to_string()),
-            measure_all: false,
-        }
-    }
-
-    fn command_run(exit_code: i32, status_success: bool) -> FullCommandRun {
-        FullCommandRun {
-            exit_code,
-            status_success,
-            launch_error: false,
-            duration_ms: 23,
-            stdout_digest: "sha256:stdout".to_string(),
-            stderr_digest: "sha256:stderr".to_string(),
-            failure: Default::default(),
-        }
-    }
-
-    #[test]
-    fn command_observation_records_failed_verified_work_without_speed_claim() {
-        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-            "live-loop-command-observation-fail",
-        );
-        std::fs::create_dir_all(&root).expect("root");
-        crate::json_boundary::write_json(
-            &root.join("plugin-manifest-draft.json"),
-            &serde_json::json!({"resources":["plugin-manifest-draft.json"]}),
-        )
-        .expect("manifest");
-        let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
-        let surface = surface_by_id("changed_files").expect("surface");
-        let receipt = receipt_path(surface.id);
-        let value = write(
-            &root,
-            surface,
-            &candidate,
-            &command(),
-            &command_run(2, false),
-            &receipt,
-        )
-        .expect("failed command observation");
-        assert_eq!(value.value["status"], "fail");
-        assert_eq!(
-            value.value["event"]["failure_class"],
-            "verified_local_command_failed"
-        );
-        assert_eq!(
-            value.value["event"]["claim_impact"],
-            "source_local_live_loop_node_observation_only_not_speed_claim"
-        );
-        std::fs::remove_dir_all(root).expect("cleanup failed command observation");
-    }
-
-    #[test]
-    fn command_observation_rejects_external_receipt_path() {
-        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
-            "live-loop-command-observation-path",
-        );
-        std::fs::create_dir_all(&root).expect("root");
-        crate::json_boundary::write_json(
-            &root.join("plugin-manifest-draft.json"),
-            &serde_json::json!({"resources":["plugin-manifest-draft.json"]}),
-        )
-        .expect("manifest");
-        let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
-        let surface = surface_by_id("changed_files").expect("surface");
-        let err = write(
-            &root,
-            surface,
-            &candidate,
-            &command(),
-            &command_run(0, true),
-            Path::new("/tmp/live-loop-command-observation.json"),
-        )
-        .expect_err("absolute observation receipt rejected");
-        assert!(err.contains("external debug only") || err.contains("outside root"));
-        std::fs::remove_dir_all(root).expect("cleanup rejected command observation");
-    }
-
-    #[test]
-    fn command_observation_identity_parser_fails_closed() {
-        let err = CommandObservation::from_receipt(serde_json::json!({
-            "run_id": "run-present",
-            "correlation_id": "corr-present"
-        }))
-        .expect_err("missing trace id rejected");
-
-        assert_eq!(err, "live-loop command observation missing trace_id");
-    }
 }

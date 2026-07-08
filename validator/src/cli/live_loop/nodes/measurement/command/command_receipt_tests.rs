@@ -60,7 +60,7 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
     let timing = crate::json_boundary::read_json(&receipt).expect("timing receipt");
     assert_eq!(
         timing["schema"],
-        "harness-ultragoal.live-loop-node-timing.v1"
+        crate::cli::live_loop::graph::schema_version()
     );
     assert_eq!(timing["candidate_digest"], candidate);
     let rows = timing["nodes"].as_array().expect("nodes");
@@ -90,6 +90,7 @@ fn assert_executed_receipt_state(row: &serde_json::Value) {
     let failure_class = row["failure_class"].as_str().expect("failure class");
     assert!(
         [
+            "none",
             "live_loop_telemetry_reconciliation_missing",
             "live_loop_speedup_target_missed"
         ]
@@ -140,7 +141,7 @@ fn assert_cache_replay_receipt_state(row: &serde_json::Value) {
     assert_eq!(row["validation_status"], "pass");
     assert_eq!(row["validation_cache_status"], "reusable");
     assert_eq!(row["observability_status"], "pass");
-    assert_eq!(row["speed_claim_status"], "supported");
+    assert_eq!(row["speed_claim_status"], "withheld");
     assert_eq!(row["cache_hit"], true);
     assert_eq!(row["work_unit_count"], 0);
     assert_eq!(

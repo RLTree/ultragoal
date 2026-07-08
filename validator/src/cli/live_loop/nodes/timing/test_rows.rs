@@ -46,7 +46,7 @@ pub(super) fn current_timing_row(
         "invalidation_proof": "cache_not_used_current_command_executed",
         "telemetry_reconciliation_status": "pass",
         "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
+        "verified_local_command_argv": ["cargo", "fmt", "--all", "--check"],
         "verified_local_stdout_digest": stdout_digest,
         "verified_local_stderr_digest": stderr_digest,
         "verified_local_exit_code": exit_code,
@@ -85,7 +85,11 @@ fn insert_derived_fields(
     );
     object.insert(
         "command_argv".to_string(),
-        json!(["bash", "-lc", "cargo fmt --all --check"]),
+        json!(["cargo", "fmt", "--all", "--check"]),
+    );
+    object.insert(
+        "runtime_execution_model".to_string(),
+        json!(crate::cli::live_loop::graph::runtime_execution_model()),
     );
     object.insert("exit_status".to_string(), json!(exit_code));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));

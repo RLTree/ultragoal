@@ -4,12 +4,12 @@ use super::fixtures::{
 
 #[test]
 fn live_loop_measure_blocks_proof_shaped_timing_rows() {
-    let command = command(Some("changed_files"), live_loop_timing_receipt_arg());
+    let command = command(Some("fmt_check"), live_loop_timing_receipt_arg());
     let baseline = full_command_run(0, true, 200);
     let mut proof = verified_local_proof(0, true, 10, "pass");
     proof.proof_kind = "planned";
     let row = super::super::timing::record::node_timing_row(
-        crate::cli::live_loop::surfaces::surface_by_id("changed_files").expect("surface"),
+        crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("surface"),
         &command,
         "sha256:candidate",
         "sha256:changed",
@@ -22,7 +22,7 @@ fn live_loop_measure_blocks_proof_shaped_timing_rows() {
 
     assert_eq!(row["timing_status"], "fail");
     assert_eq!(row["failure_class"], "verified_local_proof_kind_invalid");
-    assert_eq!(row["where_failed"], "loop.measure.changed_files.proof_kind");
+    assert_eq!(row["where_failed"], "loop.measure.fmt_check.proof_kind");
     assert!(
         row["why_failed"]
             .as_str()

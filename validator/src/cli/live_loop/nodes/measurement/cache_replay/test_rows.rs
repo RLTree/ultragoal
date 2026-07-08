@@ -89,14 +89,15 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "law_version": crate::cli::live_loop::graph::law_version(),
         "schema_version": crate::cli::live_loop::graph::schema_version(),
         "fixture_version": crate::cli::live_loop::graph::fixture_version(),
+        "runtime_execution_model": crate::cli::live_loop::graph::runtime_execution_model(),
         "work_unit_count": 1,
         "actual_work_duration_ms": 100,
         "graph_overhead_ms": 1,
         "equivalence_status": "executed_current_candidate_not_cache_replay",
         "invalidation_proof": "input_digest_and_candidate_checked",
         "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["bash", "-lc", "cargo fmt --all --check"],
-        "command_argv": ["bash", "-lc", "cargo fmt --all --check"]
+        "verified_local_command_argv": ["cargo", "fmt", "--all", "--check"],
+        "command_argv": ["cargo", "fmt", "--all", "--check"]
     })
     .with_value("validation_status", json!("pass"))
     .with_value("validation_cache_status", json!("reusable"))
