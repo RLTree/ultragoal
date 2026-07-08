@@ -11,6 +11,7 @@ fn schema_validation_parse_supports_default_targeted_and_alias() {
         .expect("command");
     assert_eq!(default.receipt, PathBuf::from(RECEIPT_REL));
     assert!(default.schema.is_none());
+    assert!(!default.changed_inputs);
 
     let targeted = parse(&[
         "schema-validation".into(),
@@ -26,6 +27,19 @@ fn schema_validation_parse_supports_default_targeted_and_alias() {
     assert_eq!(targeted.schema.as_deref(), Some("test.schema.json"));
     assert_eq!(targeted.file, Some(PathBuf::from("sample.json")));
     assert_eq!(targeted.jobs, Some(2));
+    assert!(!targeted.changed_inputs);
+
+    let changed = parse(&[
+        "schema".into(),
+        "validation".into(),
+        "--changed-inputs".into(),
+        "--jobs".into(),
+        "8".into(),
+    ])
+    .expect("changed parse")
+    .expect("changed command");
+    assert!(changed.changed_inputs);
+    assert_eq!(changed.jobs, Some(8));
 
     assert!(parse(&["source".into(), "audit".into()]).unwrap().is_none());
     assert!(
@@ -38,6 +52,19 @@ fn schema_validation_parse_supports_default_targeted_and_alias() {
         .expect_err("schema alone rejected")
         .contains("--schema and --file")
     );
+    assert!(
+        parse(&[
+            "schema".into(),
+            "validation".into(),
+            "--changed-inputs".into(),
+            "--schema".into(),
+            "x".into(),
+            "--file".into(),
+            "y".into(),
+        ])
+        .expect_err("changed plus targeted rejected")
+        .contains("--changed-inputs cannot be combined")
+    );
 }
 
 #[test]
@@ -48,6 +75,7 @@ fn schema_validation_command_writes_pass_and_fail_observability() {
     let command = SchemaValidationCommand {
         schema: Some("test.schema.json".to_string()),
         file: Some(PathBuf::from("sample.json")),
+        changed_inputs: false,
         receipt: PathBuf::from(RECEIPT_REL),
         jobs: None,
     };
@@ -71,6 +99,60 @@ fn schema_validation_command_writes_pass_and_fail_observability() {
         stdout::contract(&fail)
             .iter()
             .any(|line| line.contains("failed_check=schema-validation-observability-binding"))
+    );
+    fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn changed_input_schema_validation_reports_bounded_routine_pass_without_changed_schema_inputs() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-routine");
+    create_schema_package(&root, json!({"name": "Tree"}));
+    let command = SchemaValidationCommand {
+        schema: None,
+        file: None,
+        changed_inputs: true,
+        receipt: PathBuf::from(RECEIPT_REL),
+        jobs: Some(4),
+    };
+    assert_eq!(run(&root, &command).expect("routine run"), 0);
+    let pass = crate::json_boundary::read_json(&root.join(RECEIPT_REL)).expect("pass receipt");
+    assert_eq!(pass["status"], "pass");
+    assert_eq!(pass["event"]["artifact_path"], "changed-schema-inputs");
+    assert_eq!(pass["event"]["task_count"], 0);
+    assert_eq!(
+        pass["event"]["saturation_status"],
+        "no_scheduler_tasks_started"
+    );
+    fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn changed_input_schema_validation_checks_mapped_changed_instances() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("schema-validation-mapped");
+    crate::json_boundary::write_json(&root.join("plugin-manifest-draft.json"), &json!({}))
+        .expect("manifest");
+    let repo_root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let store = crate::schema_catalog::load(&repo_root);
+    let scheduler = SchedulerConfig::from_jobs(Some(4)).expect("scheduler");
+
+    let results = crate::audit::package::checks::schema_validation_results_for_paths(
+        &root,
+        &store,
+        scheduler,
+        &["plugin-manifest-draft.json".to_string()],
+    );
+
+    assert_eq!(results.scheduler_metrics.len(), 1);
+    assert_eq!(results.scheduler_metrics[0].task_count, 1);
+    assert!(
+        results
+            .failures
+            .iter()
+            .any(|failure| failure.contains("plugin-manifest-draft.json")),
+        "{:?}",
+        results.failures
     );
     fs::remove_dir_all(root).expect("cleanup");
 }

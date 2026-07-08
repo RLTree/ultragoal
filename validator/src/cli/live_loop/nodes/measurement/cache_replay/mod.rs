@@ -184,7 +184,7 @@ fn replay_from_row(
         prior_result_digest: prior_result_digest.to_string(),
         replayed_output_digest,
         invalidation_proof:
-            "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
+            "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
                 .to_string(),
         telemetry_reconciliation: cached_telemetry,
     })

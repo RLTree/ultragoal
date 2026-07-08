@@ -66,6 +66,14 @@ impl ChangedInputs {
             .unwrap_or(false)
     }
 
+    pub(crate) fn surface_changed_paths(&self, surface_id: &str) -> Vec<String> {
+        self.changed_files
+            .iter()
+            .filter(|path| path_affects_surface(path, surface_id))
+            .cloned()
+            .collect()
+    }
+
     pub(crate) fn affected_high_frequency_surfaces(&self) -> Vec<LoopValidationSurface> {
         super::surfaces::LOOP_VALIDATION_SURFACES
             .iter()

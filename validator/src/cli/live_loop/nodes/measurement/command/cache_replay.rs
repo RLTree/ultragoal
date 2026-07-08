@@ -31,7 +31,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
         &inputs.audit_context_digest,
     );
     let cache_key = super::super::super::super::graph::verified_local_cache_key(
-        surface.id,
+        surface,
         &input_digest,
         &command.tier,
         &command.cache_mode,
@@ -70,7 +70,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
     );
     assert_eq!(
         row["invalidation_proof"],
-        "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
+        "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
     );
     assert_eq!(row["prior_result_digest"], result_digest());
     assert_eq!(row["replayed_output_digest"], output_digest());

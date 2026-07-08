@@ -151,7 +151,7 @@ fn cache_replay_reuses_same_input_from_prior_candidate() {
         .expect("same-input prior-candidate cache replay");
     assert_eq!(
         replay.invalidation_proof,
-        "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
+        "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
     );
     std::fs::remove_dir_all(fixture.root).expect("cleanup prior candidate cache replay");
 }

@@ -10,7 +10,7 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
         "cache_hit": true,
         "work_unit_count": 0,
         "equivalence_status": "verified_same_candidate_cache_replay",
-        "invalidation_proof": "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched",
+        "invalidation_proof": "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched",
         "prior_result_digest": digest("result"),
         "replayed_output_digest": digest("output"),
         "cache_equivalence_status": "pass"
@@ -100,8 +100,9 @@ fn current_timing_row(candidate: &str, input: &str) -> Value {
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
+    let surface = crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("fmt surface");
     let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
-        "fmt_check",
+        surface,
         input,
         "hot",
         "verified-local",

@@ -21,7 +21,7 @@ pub(crate) fn surface_record(
         .unwrap_or(u64::MAX)
         .max(1);
     let cache = cache_decision(
-        surface.id,
+        surface,
         input_digest,
         tier,
         cache_mode,
@@ -100,13 +100,13 @@ fn context_or_boundary_observation_ready(timing: &NodeTiming) -> bool {
 }
 
 fn cache_decision(
-    id: &str,
+    surface: LoopValidationSurface,
     input_digest: &str,
     tier: &str,
     cache_mode: &str,
     node_timing: Option<&NodeTiming>,
 ) -> Value {
-    let key = verified_local_cache_key(id, input_digest, tier, cache_mode);
+    let key = verified_local_cache_key(surface, input_digest, tier, cache_mode);
     let cache_enabled = cache_mode == "verified-local";
     let reused = cache_enabled
         && node_timing.is_some_and(|timing| {

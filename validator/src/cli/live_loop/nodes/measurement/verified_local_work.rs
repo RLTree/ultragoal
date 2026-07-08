@@ -17,12 +17,8 @@ pub(super) fn cached_verified_local(
     observation_mode: ObservationMode,
 ) -> Option<(FullCommandRun, VerifiedLocalProof)> {
     let started = Instant::now();
-    let cache_key = graph::verified_local_cache_key(
-        surface.id,
-        input_digest,
-        &command.tier,
-        &command.cache_mode,
-    );
+    let cache_key =
+        graph::verified_local_cache_key(surface, input_digest, &command.tier, &command.cache_mode);
     let graph_overhead_ms = elapsed_ms(started);
     let replay_started = Instant::now();
     let mut cached = cache_replay::verified_local_hit_from_store(
@@ -64,12 +60,8 @@ pub(super) fn executed_verified_local(
     observation_mode: ObservationMode,
 ) -> VerifiedLocalProof {
     let started = Instant::now();
-    let cache_key = graph::verified_local_cache_key(
-        surface.id,
-        input_digest,
-        &command.tier,
-        &command.cache_mode,
-    );
+    let cache_key =
+        graph::verified_local_cache_key(surface, input_digest, &command.tier, &command.cache_mode);
     let graph_overhead_ms = elapsed_ms(started);
     let mut actual_work = run_narrow_command(root, surface);
     let telemetry_reconciliation = match observation_mode {

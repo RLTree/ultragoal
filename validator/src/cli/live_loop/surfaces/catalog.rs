@@ -77,7 +77,7 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
         "schema_catalog",
         "ultragoal schema validation",
         "target/debug/ultragoal --root . schema validation --jobs 8",
-        "target/debug/ultragoal --root . schema validation --jobs 8",
+        "target/debug/ultragoal --root . schema validation --changed-inputs --jobs 8",
     ),
     hot_loop_authority_artifact_surface(
         "package_inventory",

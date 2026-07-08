@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Instant;
 
+mod changed_inputs;
 mod claims;
 mod runtime;
 mod stdout;
@@ -16,6 +17,7 @@ const RECEIPT_REL: &str = "validation_artifacts/observability/schema-validation.
 pub(crate) struct SchemaValidationCommand {
     pub(crate) schema: Option<String>,
     pub(crate) file: Option<PathBuf>,
+    pub(crate) changed_inputs: bool,
     pub(crate) receipt: PathBuf,
     pub(crate) jobs: Option<usize>,
 }
@@ -31,9 +33,17 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<SchemaValidationCommand>, S
     if schema.is_some() != file.is_some() {
         return Err("schema validation requires --schema and --file together".to_string());
     }
+    let changed_inputs = has_flag(args, "--changed-inputs");
+    if changed_inputs && schema.is_some() {
+        return Err(
+            "schema validation --changed-inputs cannot be combined with --schema/--file"
+                .to_string(),
+        );
+    }
     Ok(Some(SchemaValidationCommand {
         schema,
         file,
+        changed_inputs,
         receipt: opt_path(args, "--receipt").unwrap_or_else(|| PathBuf::from(RECEIPT_REL)),
         jobs: opt_usize(args, "--jobs")?,
     }))
@@ -45,6 +55,8 @@ pub(crate) fn run(root: &Path, command: &SchemaValidationCommand) -> Result<i32,
     let store = crate::schema_catalog::load(root);
     let result = if let (Some(schema), Some(file)) = (&command.schema, &command.file) {
         targeted(root, &store, schema, file, scheduler)
+    } else if command.changed_inputs {
+        changed_inputs::validate(root, &store, scheduler)?
     } else {
         mapped(root, &store, scheduler)
     };
@@ -96,7 +108,7 @@ pub(crate) fn run(root: &Path, command: &SchemaValidationCommand) -> Result<i32,
     Ok(i32::from(status != "pass"))
 }
 
-struct ValidationResult {
+pub(super) struct ValidationResult {
     failures: Vec<String>,
     scheduler_metrics: Vec<crate::scheduler::Metrics>,
 }
@@ -174,6 +186,9 @@ fn write_receipt(root: &Path, receipt: &Path, value: &Value) -> Result<(), Strin
 }
 
 fn artifact_path(command: &SchemaValidationCommand) -> &str {
+    if command.changed_inputs {
+        return "changed-schema-inputs";
+    }
     command
         .file
         .as_ref()
@@ -190,6 +205,10 @@ fn opt_string(args: &[String], key: &str) -> Option<String> {
 
 fn opt_path(args: &[String], key: &str) -> Option<PathBuf> {
     opt_string(args, key).map(PathBuf::from)
+}
+
+fn has_flag(args: &[String], key: &str) -> bool {
+    args.iter().any(|arg| arg == key)
 }
 
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {

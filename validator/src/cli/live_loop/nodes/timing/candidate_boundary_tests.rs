@@ -27,7 +27,7 @@ fn node_timing_reader_rejects_prior_candidate_boundary_rows() {
         object.insert(
             "cache_key".to_string(),
             json!(crate::cli::live_loop::graph::verified_local_cache_key(
-                surface.id,
+                surface,
                 &input,
                 "hot",
                 "verified-local"

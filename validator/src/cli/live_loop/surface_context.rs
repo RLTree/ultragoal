@@ -27,7 +27,7 @@ pub(crate) fn validation_surface_context(
         &inputs.audit_context_digest,
     );
     Some(ValidationSurfaceContext {
-        cache_key: graph::verified_local_cache_key(surface.id, &input_digest, tier, cache_mode),
+        cache_key: graph::verified_local_cache_key(surface, &input_digest, tier, cache_mode),
         input_digest,
         audit_context_digest: inputs.audit_context_digest,
         validator_version: graph::validator_version(),

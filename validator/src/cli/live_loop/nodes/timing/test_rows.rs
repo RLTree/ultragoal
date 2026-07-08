@@ -11,8 +11,9 @@ pub(super) fn current_timing_row(
     let stderr_digest = digest("stderr");
     let output_digest = digest("output");
     let result_digest = digest("result");
+    let surface = crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("fmt surface");
     let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
-        "fmt_check",
+        surface,
         input,
         "hot",
         "verified-local",

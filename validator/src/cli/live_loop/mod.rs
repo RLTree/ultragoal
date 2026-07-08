@@ -1,5 +1,5 @@
 mod blockers;
-mod changed_inputs;
+pub(crate) mod changed_inputs;
 #[cfg(test)]
 mod command_registry_tests;
 mod context;

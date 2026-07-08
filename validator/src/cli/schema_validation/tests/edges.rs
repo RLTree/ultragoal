@@ -27,6 +27,7 @@ fn schema_validation_parse_and_scheduler_edges_are_bounded() {
     let command = SchemaValidationCommand {
         schema: Some("test.schema.json".to_string()),
         file: Some(PathBuf::from("sample.json")),
+        changed_inputs: false,
         receipt: PathBuf::from(RECEIPT_REL),
         jobs: Some(0),
     };
@@ -87,6 +88,7 @@ fn schema_validation_failure_edges_external_claim_output_and_default_run_are_obs
     let command = SchemaValidationCommand {
         schema: None,
         file: None,
+        changed_inputs: false,
         receipt: receipt.clone(),
         jobs: Some(1),
     };
@@ -99,6 +101,7 @@ fn schema_validation_failure_edges_external_claim_output_and_default_run_are_obs
     let command = SchemaValidationCommand {
         schema: None,
         file: None,
+        changed_inputs: false,
         receipt: relative_receipt.clone(),
         jobs: Some(1),
     };
@@ -170,6 +173,7 @@ fn schema_validation_run_propagates_telemetry_and_receipt_write_errors() {
     let command = SchemaValidationCommand {
         schema: Some("test.schema.json".to_string()),
         file: Some(PathBuf::from("sample.json")),
+        changed_inputs: false,
         receipt: PathBuf::from(RECEIPT_REL),
         jobs: Some(1),
     };

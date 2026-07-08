@@ -53,7 +53,7 @@ pub(crate) fn read_current(
             let cache_hit = row.get("cache_hit")?.as_bool()?;
             let cache_key = record_fields::valid_digest(record_fields::text(row, "cache_key")?)?;
             let expected_cache_key =
-                graph::verified_local_cache_key(node_id, &expected_input, tier, cache_mode);
+                graph::verified_local_cache_key(surface, &expected_input, tier, cache_mode);
             if cache_key != expected_cache_key {
                 return None;
             }

@@ -49,7 +49,7 @@ fn cache_hit_proof(update: impl FnOnce(&mut VerifiedLocalProof)) -> VerifiedLoca
         work_unit_count: 0,
         equivalence_status: "verified_same_candidate_cache_replay".to_string(),
         invalidation_proof:
-            "cache_key_current_input_digest_command_runtime_model_versions_and_environment_matched"
+            "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
                 .to_string(),
         telemetry_reconciliation_status: "pass".to_string(),
         telemetry_reconciliation_duration_ms: 1,

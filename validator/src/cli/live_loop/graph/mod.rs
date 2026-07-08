@@ -184,7 +184,7 @@ pub(crate) fn surface_input_digest(
 }
 
 pub(crate) fn verified_local_cache_key(
-    id: &str,
+    surface: LoopValidationSurface,
     digest: &str,
     tier: &str,
     cache_mode: &str,
@@ -193,7 +193,10 @@ pub(crate) fn verified_local_cache_key(
     let runtime_execution_model = runtime_execution_model();
     crate::digest::bytes(
         format!(
-            "surface={id};input={digest};validator={validator_version};law={};schema={};fixture={};runtime={runtime_execution_model};tier={tier};cache={cache_mode};env=local",
+            "surface={};input={digest};full={};narrow={};validator={validator_version};law={};schema={};fixture={};runtime={runtime_execution_model};tier={tier};cache={cache_mode};env=local",
+            surface.id,
+            surface.canonical_full_command,
+            surface.narrow_rerun,
             law_version(),
             schema_version(),
             fixture_version()

@@ -85,6 +85,21 @@ pub fn schema_validation_results(
     }
 }
 
+pub fn schema_validation_results_for_paths(
+    root: &Path,
+    store: &SchemaStore,
+    scheduler: SchedulerConfig,
+    paths: &[String],
+) -> SchemaValidationResults {
+    let mut failures = BTreeMap::from([("schema-valid".to_string(), Vec::new())]);
+    let scheduler_metrics =
+        mapped_schema_checks_for_paths(root, store, scheduler, paths, &mut failures);
+    SchemaValidationResults {
+        failures: failures.remove("schema-valid").unwrap_or_default(),
+        scheduler_metrics,
+    }
+}
+
 fn mapped_schema_checks(
     root: &Path,
     store: &SchemaStore,
@@ -93,6 +108,35 @@ fn mapped_schema_checks(
 ) -> Vec<crate::scheduler::Metrics> {
     let mut mapped = crate::audit::package::schema::map::base();
     add_mapped_globs(root, &mut mapped);
+    scheduled_mapped_schema_checks(root, store, scheduler, mapped, failures)
+}
+
+fn mapped_schema_checks_for_paths(
+    root: &Path,
+    store: &SchemaStore,
+    scheduler: SchedulerConfig,
+    paths: &[String],
+    failures: &mut BTreeMap<String, Vec<String>>,
+) -> Vec<crate::scheduler::Metrics> {
+    if paths.is_empty() {
+        return Vec::new();
+    }
+    let mut mapped = crate::audit::package::schema::map::base();
+    add_mapped_globs(root, &mut mapped);
+    let mapped = paths
+        .iter()
+        .filter_map(|rel| mapped.get(rel).copied().map(|schema| (rel.clone(), schema)))
+        .collect::<BTreeMap<_, _>>();
+    scheduled_mapped_schema_checks(root, store, scheduler, mapped, failures)
+}
+
+fn scheduled_mapped_schema_checks(
+    root: &Path,
+    store: &SchemaStore,
+    scheduler: SchedulerConfig,
+    mapped: BTreeMap<String, &'static str>,
+    failures: &mut BTreeMap<String, Vec<String>>,
+) -> Vec<crate::scheduler::Metrics> {
     let root = Arc::new(root.to_path_buf());
     let store = Arc::new(store.clone());
     let tasks = mapped
