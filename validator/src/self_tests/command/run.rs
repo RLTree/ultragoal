@@ -112,7 +112,7 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
     .expect("control command returns code");
     assert_eq!(code, 1);
     assert!(root.join(&update_goal_receipt).is_file());
-    let code = crate::command_run::run(args(root.clone(), &["package-digest"]))
+    let code = crate::command_run::run(args(root.clone(), &["package", "digest"]))
         .expect("package digest returns code");
     assert_eq!(code, 0);
     let code = crate::command_run::run(args(root.clone(), &["help"])).expect("help returns code");
@@ -123,7 +123,7 @@ fn command_run_returns_exit_codes_without_exiting_test_process() {
 #[test]
 fn command_run_propagates_package_and_packet_builder_errors() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("command-run-errors");
-    let code = crate::command_run::run_with_exit_code(args(root.clone(), &["package-digest"]))
+    let code = crate::command_run::run_with_exit_code(args(root.clone(), &["package", "digest"]))
         .expect("missing manifest returns package digest fail code");
     assert_eq!(code, 1);
     let receipt = crate::json_boundary::read_json(

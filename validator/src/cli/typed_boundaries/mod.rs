@@ -1,8 +1,8 @@
 use crate::scheduler::{SchedulerConfig, TaskClass};
-use serde_json::Value;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+mod artifact;
 #[cfg(test)]
 mod authority_contracts;
 mod claims;
@@ -12,6 +12,10 @@ mod runtime;
 mod stdout;
 
 const RECEIPT_REL: &str = "validation_artifacts/observability/typed-boundaries-check.json";
+const FOUNDATIONAL_SURFACE_INVENTORY_REL: &str =
+    "validation_artifacts/package/foundational-surface-inventory.json";
+const PACKAGE_SURFACE_INVENTORY_REL: &str =
+    "validation_artifacts/package/package-surface-inventory.json";
 
 #[derive(Debug)]
 pub(crate) struct TypedBoundariesCommand {
@@ -35,6 +39,8 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<TypedBoundariesCommand>, St
 }
 
 pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, String> {
+    let receipt_path = artifact::publication::ClaimReceiptPath::new(root, &command.receipt)?;
+    artifact::paths::reject_receipt_collision(&command.receipt)?;
     let started = Instant::now();
     let scheduler = SchedulerConfig::from_jobs(command.jobs)?;
     let result = validate(root, scheduler);
@@ -45,6 +51,34 @@ pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, 
     };
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
+    let foundational_surface_artifact =
+        crate::audit::law::authority_surfaces::foundational_surface_inventory_artifact(root);
+    let foundational_write = artifact::publication::write_inventory_artifact(
+        root,
+        FOUNDATIONAL_SURFACE_INVENTORY_REL,
+        &foundational_surface_artifact,
+        "foundational surface inventory artifact",
+    )?;
+    let foundational_surface_binding =
+        crate::audit::law::authority_surfaces::FoundationalSurfaceArtifactBinding {
+            path: FOUNDATIONAL_SURFACE_INVENTORY_REL.to_string(),
+            digest: foundational_write.digest,
+            status: foundational_write.status,
+        };
+    let package_surface_artifact =
+        crate::audit::law::authority_surfaces::package_surface_inventory_artifact(root);
+    let artifact_write = artifact::publication::write_inventory_artifact(
+        root,
+        PACKAGE_SURFACE_INVENTORY_REL,
+        &package_surface_artifact,
+        "package surface inventory artifact",
+    )?;
+    let package_surface_binding =
+        crate::audit::law::authority_surfaces::PackageSurfaceArtifactBinding {
+            path: PACKAGE_SURFACE_INVENTORY_REL.to_string(),
+            digest: artifact_write.digest,
+            status: artifact_write.status,
+        };
     let mut value = crate::cli::observe::telemetry::command_receipt(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
@@ -80,11 +114,15 @@ pub(crate) fn run(root: &Path, command: &TypedBoundariesCommand) -> Result<i32, 
             emit: true,
         },
     )?;
-    value["foundational_law_surface_inventory"] =
-        crate::audit::law::authority_surfaces::foundational_surface_inventory(root);
-    value["event"]["foundational_law_surface_inventory"] =
-        value["foundational_law_surface_inventory"].clone();
-    write_receipt(root, &command.receipt, &value)?;
+    let surface_inventory =
+        crate::audit::law::authority_surfaces::foundational_surface_inventory_with_artifacts(
+            root,
+            &foundational_surface_binding,
+            &package_surface_binding,
+        );
+    value["foundational_law_surface_inventory"] = surface_inventory.clone();
+    value["event"]["foundational_law_surface_inventory"] = surface_inventory;
+    artifact::publication::write_receipt(&receipt_path, &value)?;
     stdout::print(&value);
     Ok(i32::from(status != "pass"))
 }
@@ -119,11 +157,6 @@ fn run_typed_boundary_tasks(
         crate::audit::law::authority_surfaces::package_failures(&root)
     })];
     crate::scheduler::run_ordered(scheduler, TaskClass::PureReadParallel, tasks)
-}
-
-fn write_receipt(root: &Path, receipt: &Path, value: &Value) -> Result<(), String> {
-    let path = crate::output_path::claim_artifact_path(root, receipt, "typed boundaries receipt")?;
-    crate::json_boundary::write_json(&path, value)
 }
 
 fn has_flag(args: &[String], flag: &str) -> bool {

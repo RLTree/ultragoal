@@ -113,7 +113,7 @@ fn write_cli_pass(root: &std::path::Path, current: &str, name: &str, operation: 
         &json!({
             "schema":"harness-ultragoal.cli-control-plane-receipt.v1",
             "schema_version":"v1",
-            "issuer":{"tool":"ultragoal","authority":"cli_control_plane","compatibility_binary":"ultragoal-validator","self_law_state":"self_hosted"},
+            "issuer":{"tool":"ultragoal","authority":"cli_control_plane","canonical_binary":"ultragoal","self_law_state":"self_hosted"},
             "generated_at":"2026-06-27T00:00:00Z",
             "root":".",
             "operation":operation,
@@ -150,7 +150,7 @@ fn write_cli_fail_closed(root: &std::path::Path, current: &str, name: &str, oper
         &json!({
             "schema":"harness-ultragoal.cli-control-plane-receipt.v1",
             "schema_version":"v1",
-            "issuer":{"tool":"ultragoal","authority":"cli_control_plane","compatibility_binary":"ultragoal-validator","self_law_state":"transition_only"},
+            "issuer":{"tool":"ultragoal","authority":"cli_control_plane","canonical_binary":"ultragoal","self_law_state":"transition_only"},
             "generated_at":"2026-06-27T00:00:00Z",
             "root":".",
             "operation":operation,

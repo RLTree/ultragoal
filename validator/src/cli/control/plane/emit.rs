@@ -59,7 +59,7 @@ fn pass_receipt(package_digest: String, operation: ControlOperation, graph: Valu
         "issuer": {
             "tool": "ultragoal",
             "authority": "cli_control_plane",
-            "compatibility_binary": "ultragoal-validator",
+            "canonical_binary": "ultragoal",
             "self_law_state": "self_hosted"
         },
         "generated_at": crate::audit::clock::now_iso(),
@@ -89,7 +89,7 @@ fn fail_receipt(
         "issuer": {
             "tool": "ultragoal",
             "authority": "cli_control_plane",
-            "compatibility_binary": "ultragoal-validator",
+            "canonical_binary": "ultragoal",
             "self_law_state": "transition_only"
         },
         "generated_at": crate::audit::clock::now_iso(),

@@ -1,3 +1,4 @@
+use super::metric_events::{metric_body, metric_body_without_total, pass_metric_body};
 use crate::cli::observe::query::QueryKind;
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
@@ -14,7 +15,7 @@ fn command() -> ObserveCommand {
 #[test]
 fn target_query_uses_target_event_status_and_respects_explicit_query() {
     let root = super::super::prepare_root("observe-metrics-target-query");
-    write_target_event(
+    write_target_event_with_status(
         &root,
         "coverage.prove",
         "fail",
@@ -40,7 +41,7 @@ fn target_query_uses_target_event_status_and_respects_explicit_query() {
     );
 
     let root_pass = super::super::prepare_root("observe-metrics-target-query-pass");
-    write_target_event(&root_pass, "package.digest", "pass", "none", None);
+    write_target_event_with_status(&root_pass, "package.digest", "pass", "none", None);
     let query = super::super::super::metrics::target_query(Path::new(&root_pass), &command())
         .expect("target pass query");
     assert!(query.contains("package.digest"));
@@ -58,6 +59,29 @@ fn target_query_without_target_event_stays_unobservable_instead_of_guessing_oper
         None
     );
     std::fs::remove_dir_all(root).expect("cleanup missing target query");
+}
+
+#[test]
+fn target_query_without_target_status_stays_unobservable() {
+    let root = super::super::prepare_root("observe-metrics-target-query-no-status");
+    let candidate = crate::package::inventory::package_digest(&root).expect("candidate");
+    crate::cli::observe::telemetry::spool_write_for_test(
+        &root,
+        &json!({
+            "schema": crate::cli::observe::types::EVENT_SCHEMA,
+            "run_id": "run-metrics-edge",
+            "candidate_digest": candidate,
+            "operation": "coverage.prove",
+            "failure_class": "none"
+        }),
+    )
+    .expect("target event without status");
+
+    assert_eq!(
+        super::super::super::metrics::target_query(Path::new(&root), &command()),
+        None
+    );
+    std::fs::remove_dir_all(root).expect("cleanup no-status target query");
 }
 
 #[test]
@@ -80,7 +104,7 @@ fn metrics_reconciliation_fails_for_missing_target_and_wrong_candidate() {
     );
 
     let root = super::super::prepare_root("observe-metrics-candidate-mismatch");
-    write_target_event(
+    write_target_event_with_status(
         &root,
         "coverage.prove",
         "fail",
@@ -108,7 +132,7 @@ fn metrics_reconciliation_fails_for_missing_target_and_wrong_candidate() {
 #[test]
 fn metrics_reconciliation_reports_missing_operation_and_error_count() {
     let root = super::super::prepare_root("observe-metrics-missing-operation");
-    write_target_event(&root, "", "fail", "coverage_prove_failure", None);
+    write_target_event_with_status(&root, "", "fail", "coverage_prove_failure", None);
     let receipt = super::super::super::result_from_output(
         Path::new(&root),
         &command(),
@@ -123,7 +147,7 @@ fn metrics_reconciliation_reports_missing_operation_and_error_count() {
     );
 
     let root = super::super::prepare_root("observe-metrics-error-count");
-    write_target_event(
+    write_target_event_with_status(
         &root,
         "coverage.prove",
         "fail",
@@ -178,7 +202,7 @@ fn metrics_reconciliation_ignores_unreported_optional_runtime_signals() {
     std::fs::remove_dir_all(root).expect("cleanup optional runtime");
 }
 
-fn write_target_event(
+fn write_target_event_with_status(
     root: &Path,
     operation: &str,
     status: &str,
@@ -200,46 +224,4 @@ fn write_target_event(
         "queue_depth": 1
     });
     crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
-}
-
-fn metric_body(operation: &str, failure_class: &str) -> String {
-    metric_body_with_status(operation, "fail", failure_class)
-}
-
-fn pass_metric_body(operation: &str) -> String {
-    metric_body_with_status(operation, "pass", "none")
-}
-
-fn metric_body_with_status(operation: &str, status: &str, failure_class: &str) -> String {
-    json!({
-        "status": "success",
-        "data": {"result": [{
-            "metric": {
-                "__name__": "ultragoal_command_total",
-                "operation": operation,
-                "status": status,
-                "failure_class": failure_class,
-                "saturation_status": "serial_command_typed"
-            },
-            "value": [1, "1"]
-        }]}
-    })
-    .to_string()
-}
-
-fn metric_body_without_total(operation: &str, failure_class: &str) -> String {
-    json!({
-        "status": "success",
-        "data": {"result": [{
-            "metric": {
-                "__name__": "ultragoal_command_duration_ms",
-                "operation": operation,
-                "status": "fail",
-                "failure_class": failure_class,
-                "saturation_status": "serial_command_typed"
-            },
-            "value": [1, "10"]
-        }]}
-    })
-    .to_string()
 }

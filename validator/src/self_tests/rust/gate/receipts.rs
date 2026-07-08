@@ -115,7 +115,7 @@ fn rust_observation_excerpts_redact_private_home_paths() {
     );
 
     let metadata = crate::cli::rust::observations::redacted_excerpt_for_test(&format!(
-        r#"{{"id":"path+file://{}tree/project/validator#ultragoal-validator@0.1.0"}}"#,
+        r#"{{"id":"path+file://{}tree/project/validator#ultragoal@0.1.0"}}"#,
         users_marker()
     ));
     assert!(!metadata.contains(users_marker()), "{metadata}");

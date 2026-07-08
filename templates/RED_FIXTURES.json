@@ -8429,7 +8429,7 @@
       "error": "review_round_hollow_evidence_artifacts"
     },
     "id": "review-round-hollow-evidence-artifacts",
-    "packet_digest": "sha256:21ca37961e419916988a1e1b9b3cd479d530ca19250aa2ada6d6ccfc6523aae2",
+    "packet_digest": "sha256:4a0d3b6fb4711170f97c53deeb1079806fecd1a9b8ff714d591eda617e7119a3",
     "packet_path": "fixtures/red/review-round-hollow-evidence-artifacts.json"
   },
   {

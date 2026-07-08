@@ -1,3 +1,3 @@
 fn main() {
-    std::process::exit(ultragoal_validator::main_entry());
+    std::process::exit(ultragoal::main_entry());
 }

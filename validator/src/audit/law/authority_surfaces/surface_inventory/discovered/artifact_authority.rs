@@ -37,8 +37,17 @@ fn runtime_receipt_rows(
     collect_files(root, &root.join("validation_artifacts"), &mut out);
     out.into_iter()
         .filter(|path| path.ends_with(".json"))
+        .filter(|path| !inventory_materialization_artifact(path))
         .map(|path| authority_row("runtime_receipt", &path, false, root, inventory))
         .collect()
+}
+
+fn inventory_materialization_artifact(path: &str) -> bool {
+    matches!(
+        path,
+        "validation_artifacts/package/foundational-surface-inventory.json"
+            | "validation_artifacts/package/package-surface-inventory.json"
+    )
 }
 
 fn generated_artifact_rows(

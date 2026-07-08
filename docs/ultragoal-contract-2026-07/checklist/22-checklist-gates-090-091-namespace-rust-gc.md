@@ -239,7 +239,157 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status: validated current
 
-### Gate 90.5: Red, Green, And Tamper Fixtures
+### Gate 90.5: Purpose-Backed Active Surface Inventory And Duplicate Authority Enforcement
+
+- [ ] Purpose-backed active surface inventory covers every package-owned binary, command, subcommand, module, function, helper, test, type, enum variant, constant, schema, fixture, receipt producer, generated artifact, script/helper, package resource, setup/retrofit output, claim guard, final-packet blocker, and update_goal blocker.
+  - Working means no package-owned active surface can exist as an unregistered orphan, coverage-only wrapper, historical leftover, goal-progress label, or duplicated authority.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Every active surface inventory row has a typed product role and closed authority level.
+  - Required fields include `surface_id`, `surface_kind`, `path_or_symbol`, `product_role`, `canonical_owner`, `authority_level`, `canonical_surface_id` when non-canonical, `compatibility_contract_id` when retained for compatibility, `sunset_condition`, `claim_surfaces_allowed`, `proof_surface`, `law_ids`, `validator_check_ids`, `fixture_ids`, `receipt_ids`, `package_inventory_binding`, `setup_retrofit_output_binding`, `claim_guard_ids`, `final_packet_blockers`, `update_goal_blockers`, provenance/generator owner, and stale-evidence rules.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Authority levels are closed and enforced.
+  - Allowed levels are `canonical`, `compatibility_alias`, `parser_boundary`, `generated_projection`, `fixture_catalog_materialization`, `test_only_validation_surface`, and `external_debug_no_claim`.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Duplicate executable, command, module, function, helper, schema, fixture, receipt-producer, generated-row, or script behavior fails unless exactly one surface is canonical and every duplicate has a typed non-canonical contract.
+  - Working means two binaries delegating to the same entrypoint, two helpers with the same product behavior, or two receipt producers with the same authority cannot both claim canonical product purpose.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Compatibility aliases are claim-limited parser/schema boundaries, not alternate product authorities.
+  - Working means every alias names the canonical surface, external compatibility contract, delegation-only route, forbidden claim surfaces, red fixtures for bypass/overclaim, and a sunset condition or removal trigger.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] `ultragoal` and `ultragoal-validator` are classified through the active surface inventory.
+  - Working means `ultragoal` is the canonical product CLI unless same-surface proof changes the contract. `ultragoal-validator` must either be removed or retained only as a typed `compatibility_alias` that delegates to `ultragoal`, cannot emit canonical receipt/tool authority, is described as compatibility in help/stdout, and has a sunset/removal rule.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Coverage-only wrappers, no-contract fallbacks, dead aliases, duplicate helpers, and no-op tests fail the purpose-backed surface law.
+  - Working means exact coverage proves behavior that earns its place in the product; it cannot preserve redundant code, unreachable branches, or tests whose only purpose is hit count.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Generated active-surface rows carry provenance and hand edits fail closed.
+  - Working means generated rows name their generator/source spec, input digests, output digest, stale rules, and claim ceiling; manual row edits are detected as artifact-boundary violations.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Proof-surface separation is enforced for package-owned surfaces.
+  - Working means source-local proof cannot satisfy install/cache/app/live proof, tests cannot satisfy production behavior, receipt existence cannot satisfy product behavior, and compatibility aliases cannot satisfy canonical surface proof.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Active-surface failures are agent-remediating.
+  - Working means failures include `failure_class=purpose_backed_surface_violation`, offending path or symbol, duplicate/canonical surface ids, missing product role or invalid authority level, why it blocks claims, smallest repair, narrow rerun, and claim impact.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Validation for active-surface enforcement is distinct from proof.
+  - Validation includes schema checks, parser/help/unit tests, duplicate-detector tests, red/green/tamper fixtures, line caps, coverage, and namespace-check mechanics. Proof requires real current-candidate CLI/source-audit execution that detects actual surfaces, reconciles receipts/claim guards where applicable, and is source-inspected for non-theater implementation.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: duplicate CLI binaries delegate to the same entrypoint without a typed compatibility alias contract and fail.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: a compatibility alias is used as canonical receipt/tool authority and fails.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: a coverage-only wrapper or no-op test exists solely to satisfy coverage and fails.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: an unregistered package-owned source/symbol/schema/fixture/receipt-producer surface fails.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: generated active-surface inventory row is hand edited or lacks generator provenance and fails.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Red fixture: a source-local proof surface is substituted for install/cache/app/live proof and fails.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Green fixture: a typed compatibility alias delegates to the canonical CLI, is claim-limited, has external contract and sunset metadata, and passes.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Green fixture: a canonical surface plus generated projection or fixture materialization has one product role, generator provenance, and exact claim limits, and passes.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Tamper fixture: removing the sunset/removal trigger from a retained compatibility alias invalidates the receipt and blocks claims.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+- [ ] Tamper fixture: changing a duplicate surface from `compatibility_alias` to `canonical` without same-surface product proof invalidates the receipt and blocks claims.
+  - Evidence:
+  - Fixture:
+  - Candidate digest:
+  - Status: validated current
+
+### Gate 90.6: Red, Green, And Tamper Fixtures
 
 - [ ] Red fixture: top-level `validator/src/internal_coverage_wave99_tests.rs` style file fails.
   - Evidence:
@@ -348,7 +498,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status: validated current
 
-### Gate 90.6: Standards, Trace, Source-Obligation, Package, And Claim Integration
+### Gate 90.7: Standards, Trace, Source-Obligation, Package, And Claim Integration
 
 - [ ] Agent-standards rows explicitly cover validator source namespace topology and semantic repo-law enforcement, not only generic namespace or semantic-domain row presence.
   - Evidence:
@@ -379,6 +529,14 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status: validated current
 
+- [ ] Standards, source obligations, foundational trace, schemas, validators, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet blockers, and update_goal blockers represent the purpose-backed active surface law.
+  - Working means redundant binaries such as `ultragoal-validator`, compatibility aliases, duplicate functions, coverage-only wrappers, generated projections, and external-debug/no-claim surfaces are governed by law ids instead of manual reviewer judgment.
+  - Evidence:
+  - Command:
+  - Receipt:
+  - Candidate digest:
+  - Status: validated current
+
 - [ ] Claim-ceiling guards block completion, review, package, readiness, release, product-readiness, CLI self-law, source audit, final packet, and update_goal eligibility while validator source topology violates namespace or semantic repo-law.
   - Evidence:
   - Command:
@@ -400,7 +558,7 @@ This checklist section is a tracking surface only. It does not weaken Gate 90 an
   - Candidate digest:
   - Status: validated current
 
-### Gate 90.7: Validation And Confidence
+### Gate 90.8: Validation And Confidence
 
 - [ ] `cargo fmt --check` passes after topology repair.
   - Evidence:

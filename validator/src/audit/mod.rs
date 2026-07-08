@@ -75,7 +75,7 @@ fn run_target_repo(
     let (target_receipt, code) = target_repo::audit_target_repo(
         target_repo_path,
         &options.mode,
-        "ultragoal-validator --root . audit --target-repo <target-repo> --receipt <receipt>",
+        "ultragoal --root . target-repo audit --surface-root <target-repo> --receipt <receipt>",
         &validator_artifacts,
         options.require_observability,
         options.require_product_cohesion,

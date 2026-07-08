@@ -1,0 +1,21 @@
+codex review --uncommitted
+review_session_id=019f3fee-faa6-7d20-8692-a686797fc77a
+target=uncommitted
+
+Reviewer finding:
+[P2] Bind receipt inventory summary to the published artifact
+file=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/validator/src/cli/typed_boundaries/mod.rs
+lines=117-122
+
+Summary:
+When typed-boundaries check runs in a workspace without existing validation_artifacts/package artifacts, the foundational inventory artifact is materialized before those artifacts are written, but the receipt summary is recomputed afterward. That can make foundational_law_surface_inventory.rows_digest and surface_count describe a different row set than the row_materialization.artifact_digest referenced in the same receipt.
+
+Disposition:
+accepted_fixed
+
+Fix:
+validation_artifacts/package/foundational-surface-inventory.json and validation_artifacts/package/package-surface-inventory.json are excluded from runtime_receipt discovery because they are row_materialization backing artifacts, not independent runtime receipt/proof inputs. The typed-boundaries receipt test now reconciles summary rows_digest against the rows in the materialized artifact and rejects self-scanning.
+
+Verification:
+cargo test --offline --lib typed_boundaries_receipt_uses_bounded_inventory_summaries --quiet
+target/debug/ultragoal --root . typed-boundaries check --strict --jobs 8

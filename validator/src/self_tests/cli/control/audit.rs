@@ -21,7 +21,7 @@ fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
         crate::self_tests::boundaries::workspace_fixtures::temp_root("cli-control-plane-audit");
     write_text(
         &root.join("validator/Cargo.toml"),
-        "[[bin]]\nname = \"ultragoal\"\n[[bin]]\nname = \"ultragoal-validator\"\n",
+        "[[bin]]\nname = \"ultragoal\"\n",
     );
     write_text(
         &root.join("validator/src/cli/control/plane/mod.rs"),
@@ -72,6 +72,12 @@ fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
     assert!(
         failures.contains(&"cli_control_plane_schema_catalog_missing_receipt_schema".to_string())
     );
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("missing_compatibility_binary")),
+        "legacy compatibility binary is no longer required: {failures:?}"
+    );
     assert!(failures.iter().any(|failure| failure.contains(
         "validation_artifacts/cli/update-goal-eligibility.json: cli_control_plane_receipt_wrong_schema"
     )));
@@ -79,4 +85,48 @@ fn cli_control_plane_audit_rejects_missing_schema_and_invalid_receipts() {
         "validation_artifacts/cli/self-law-receipt.json: cli_control_plane_receipt_wrong_issuer"
     )));
     std::fs::remove_dir_all(root).expect("cleanup cli control audit");
+}
+
+#[test]
+fn cli_control_plane_audit_requires_canonical_binary_not_package_name() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli-control-plane-package-name-only",
+    );
+    write_text(
+        &root.join("validator/Cargo.toml"),
+        "[package]\nname = \"ultragoal\"\n\n[[bin]]\nname = \"other-tool\"\n",
+    );
+
+    let failures = crate::audit::cli::control_plane::authority::package_failures(&root);
+    assert!(
+        failures.contains(&"cli_control_plane_missing_ultragoal_binary".to_string()),
+        "package name must not satisfy canonical binary authority: {failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup cli control package-name-only audit");
+}
+
+#[test]
+fn cli_control_plane_audit_rejects_legacy_validator_binary() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "cli-control-plane-legacy-bin",
+    );
+    write_text(
+        &root.join("validator/Cargo.toml"),
+        r#"
+[[bin]]
+name = "ultragoal"
+path = "src/bin/ultragoal.rs"
+
+[[bin]]
+name = "ultragoal-validator"
+path = "src/bin/ultragoal-validator.rs"
+"#,
+    );
+
+    let failures = crate::audit::cli::control_plane::authority::package_failures(&root);
+    assert!(
+        failures.contains(&"cli_control_plane_legacy_validator_binary_present".to_string()),
+        "legacy validator binary must not remain an alternate authority: {failures:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup cli control legacy binary audit");
 }

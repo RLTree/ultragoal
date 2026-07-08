@@ -4208,7 +4208,6 @@
       "validator/src/audit/text_guards/mod.rs",
       "validator/src/audit/text_guards/moving_values.rs",
       "validator/src/audit/text_guards/stale_review.rs",
-      "validator/src/bin/ultragoal-validator.rs",
       "validator/src/bin/ultragoal.rs",
       "validator/src/claim/language/mod.rs",
       "validator/src/claim/language/product.rs",
@@ -15271,7 +15270,7 @@
         "expected_failing_check": "validator-execution-provenance",
         "observed_error": "review_round_hollow_evidence_artifacts",
         "observed_failing_check": "validator-execution-provenance",
-        "packet_digest": "sha256:21ca37961e419916988a1e1b9b3cd479d530ca19250aa2ada6d6ccfc6523aae2",
+        "packet_digest": "sha256:4a0d3b6fb4711170f97c53deeb1079806fecd1a9b8ff714d591eda617e7119a3",
         "packet_path": "fixtures/red/review-round-hollow-evidence-artifacts.json",
         "status": "pass",
         "validator_exit": 1
@@ -20584,13 +20583,8 @@
         {
           "digest": "sha256:d87960b60d93f1b61edeaaf4da67be0f14cefedd80a94723d731ab158caf1ddb",
           "path": "validator/src/audit/text_guards/stale_review.rs"
-        },
-        {
-          "digest": "sha256:53d628a2e3fbecf7d0b5c4d7eca2b75177ecf3fbb8ba0e7d2ff154e5312a2167",
-          "path": "validator/src/bin/ultragoal-validator.rs"
-        },
-        {
-          "digest": "sha256:53d628a2e3fbecf7d0b5c4d7eca2b75177ecf3fbb8ba0e7d2ff154e5312a2167",
+        },        {
+          "digest": "sha256:92fde06c5cece43a2e0ed81763959a81b8dd552167ab8eb4fffd56eb7e7bb5a5",
           "path": "validator/src/bin/ultragoal.rs"
         },
         {

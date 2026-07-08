@@ -71,15 +71,17 @@ observation unless it dereferences one of these proof paths:
 1. actual command or runtime behavior on the current candidate, with stdout,
    exit status, receipt/artifact paths, logs/metrics/traces where applicable,
    source/runtime inspection, and explicit claim impact; or
-2. verified same-candidate reuse of a prior result, with current input digests,
+2. verified current-input reuse of a prior result, with current input digests,
    validator/law/schema/fixture versions, arguments, environment class, cache
    key, prior result digest, replayed output digest, equivalence status, and
-   invalidation proof.
+   invalidation proof. If the reused row was minted on a different package
+   candidate, it may support only the routine verified-local claim named by the
+   cache policy. It must not be described as same-candidate production proof.
 
 All other proxy surfaces are diagnostic only and must carry a claim ceiling of
 `observation_only` or `source_local_diagnostic_only`. The CLI must fail closed
 when a claim-bearing row has `work_unit_count=0`, no command/result digest, no
-same-candidate cache equivalence, no observability reconciliation, stale or
+verified current-input cache equivalence, no observability reconciliation, stale or
 wrong-digest evidence, generic fail text, or a proof surface that cannot explain
 what product behavior was actually observed.
 
@@ -89,8 +91,10 @@ materialization, local JSON shape checks, workflow worker reports, or synthetic
 no-op paths cannot prove speed. A speed claim is legal only when every included
 node records `proof_kind=executed` or `proof_kind=verified_cache_hit`, separates
 actual work duration from scheduler/graph overhead, records result and output
-digests, and reconciles same-candidate telemetry. Missing proof blocks the speed
-claim even when the displayed ratio exceeds the target.
+digests, and reconciles telemetry for the current run when the node executed or
+the cached run's stored telemetry/replayed output when the node reused prior
+work. Missing proof blocks the speed claim even when the displayed ratio exceeds
+the target.
 
 ## Current State Assumption To Recompute
 

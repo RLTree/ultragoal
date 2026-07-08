@@ -66,7 +66,7 @@ fn package_json_authority_allows_red_fixture_negative_examples() {
     );
     assert!(
         failures.is_empty(),
-        "red fixture negative examples should not fail active package authority labels: {failures:?}"
+        "red fixture negative examples should not fail package authority labels: {failures:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup authority json red fixture");
 }

@@ -4,8 +4,14 @@ use std::path::Path;
 
 mod edges;
 mod freshness;
+mod metric_events;
 mod reconciliation;
 mod target_status;
+
+use metric_events::{
+    RuntimeSignals, metric_body, metric_body_with_signals, write_target_event,
+    write_target_event_with_runtime,
+};
 
 const OBSERVABILITY_CLOSURE_FAILURE: &str = "observability_product_closure_failure";
 
@@ -139,112 +145,4 @@ fn metrics_query_rejects_underreported_target_run_signals() {
     assert_eq!(receipt["metric_task_count"], 10);
     assert_eq!(receipt["metric_queue_depth"], 10);
     std::fs::remove_dir_all(root).expect("cleanup metrics underreport");
-}
-
-fn write_target_event(root: &Path, operation: &str, failure_class: &str) {
-    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
-    let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
-        "run_id": "run-query-bound",
-        "correlation_id": "corr-query-bound",
-        "candidate_digest": candidate,
-        "operation": operation,
-        "status": "fail",
-        "failure_class": failure_class,
-        "why_failed": "target command failed for a specific reason",
-        "where_failed": operation,
-        "next_repair": "repair the target operation and rerun narrowly",
-        "claim_impact": "readiness_release_completion_update_goal_blocked",
-        "law_id": crate::cli::observe::types::LAW_ID,
-        "check_id": crate::cli::observe::types::CHECK_ID,
-        "claim_id": crate::cli::observe::types::CLAIM_ID
-    });
-    crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
-}
-
-struct RuntimeSignals {
-    duration_ms: u64,
-    task_count: u64,
-    queue_depth: u64,
-    saturation_status: &'static str,
-}
-
-fn write_target_event_with_runtime(
-    root: &Path,
-    operation: &str,
-    failure_class: &str,
-    runtime: RuntimeSignals,
-) {
-    let candidate = crate::package::inventory::package_digest(root).expect("candidate");
-    let event = json!({
-        "schema": crate::cli::observe::types::EVENT_SCHEMA,
-        "run_id": "run-query-bound",
-        "correlation_id": "corr-query-bound",
-        "candidate_digest": candidate,
-        "operation": operation,
-        "status": "fail",
-        "failure_class": failure_class,
-        "why_failed": "target command failed for a specific reason",
-        "where_failed": operation,
-        "next_repair": "repair the target operation and rerun narrowly",
-        "claim_impact": "readiness_release_completion_update_goal_blocked",
-        "law_id": crate::cli::observe::types::LAW_ID,
-        "check_id": crate::cli::observe::types::CHECK_ID,
-        "claim_id": crate::cli::observe::types::CLAIM_ID,
-        "duration_ms": runtime.duration_ms,
-        "task_count": runtime.task_count,
-        "queue_depth": runtime.queue_depth,
-        "saturation_status": runtime.saturation_status
-    });
-    crate::cli::observe::telemetry::spool_write_for_test(root, &event).expect("spool event");
-}
-
-fn metric_body(operation: &str, failure_class: &str) -> String {
-    json!({
-        "status": "success",
-        "data": {
-            "result": [{
-                "metric": {
-                    "__name__": "ultragoal_command_total",
-                    "operation": operation,
-                    "status": "fail",
-                    "failure_class": failure_class,
-                    "saturation_status": "serial_command_typed"
-                },
-                "value": [1, "1"]
-            }]
-        }
-    })
-    .to_string()
-}
-
-fn metric_body_with_signals(
-    operation: &str,
-    failure_class: &str,
-    runtime: RuntimeSignals,
-) -> String {
-    let labels = json!({
-        "operation": operation,
-        "status": "fail",
-        "failure_class": failure_class,
-        "saturation_status": runtime.saturation_status
-    });
-    json!({
-        "status": "success",
-        "data": {
-            "result": [
-                {"metric": metric_labels(&labels, "ultragoal_command_total"), "value": [1, "1"]},
-                {"metric": metric_labels(&labels, "ultragoal_command_duration_ms"), "value": [1, runtime.duration_ms.to_string()]},
-                {"metric": metric_labels(&labels, "ultragoal_command_task_count"), "value": [1, runtime.task_count.to_string()]},
-                {"metric": metric_labels(&labels, "ultragoal_command_queue_depth"), "value": [1, runtime.queue_depth.to_string()]}
-            ]
-        }
-    })
-    .to_string()
-}
-
-fn metric_labels(labels: &serde_json::Value, metric_name: &str) -> serde_json::Value {
-    let mut out = labels.as_object().cloned().unwrap_or_default();
-    out.insert("__name__".to_string(), json!(metric_name));
-    serde_json::Value::Object(out)
 }

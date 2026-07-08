@@ -222,7 +222,7 @@ pub(crate) fn fixture_version() -> &'static str {
 
 fn validator_authority_material() -> String {
     format!(
-        "authority=ultragoal-cli-control-plane;crate=ultragoal-validator;package_version={};os={};arch={};law={};schema={};fixture={}",
+        "authority=ultragoal-cli-control-plane;cli=ultragoal;package_version={};os={};arch={};law={};schema={};fixture={}",
         env!("CARGO_PKG_VERSION"),
         std::env::consts::OS,
         std::env::consts::ARCH,

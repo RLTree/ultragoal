@@ -27,10 +27,31 @@ receipt dereference. Names such as `fitting`, `production_proof`, `phase4`,
 `slice`, `workstream`, `checkpoint`, `progress`, `todo`, `wip`, and generic
 `helpers`/`utils`/`common` fail when they stand in for product behavior.
 
+Phase 1 also owns purpose-backed active surface enforcement. Every package-owned
+binary, command, module, function, helper, test, type, schema, fixture, receipt
+producer, generated artifact, package resource, setup/retrofit output, claim
+guard, final-packet blocker, and update_goal blocker must have one typed product
+role and one authority level. Redundant surfaces, duplicate entrypoints,
+coverage-only wrappers, dead fallback branches, history/progress labels, and
+compatibility aliases without external contract and sunset are law violations.
+For example, `ultragoal` and `ultragoal-validator` cannot both remain as
+undifferentiated product authorities. Either `ultragoal-validator` is a typed,
+claim-limited compatibility alias that delegates to canonical `ultragoal`, or
+it is removed.
+
+Validation for this phase proves the mechanics: schema checks, parser/help/unit
+tests, duplicate-detector tests, namespace checks, line caps, coverage, and
+red/green/tamper fixtures. Proof for this phase proves current product behavior:
+real CLI/source-audit execution on the current candidate detects actual
+package-owned surfaces, rejects unregistered or redundant authority, reconciles
+claim guards and receipts where applicable, and source inspection confirms the
+registry is not row-shape theater.
+
 Exit requires: focused package/namespace tests, product-semantic symbol checks,
-red/green/tamper fixtures for opaque path/module/function names, no broad orphan
-inventory explosion, schema/catalog paths listed, current receipt, and claim
-guard.
+purpose-backed active surface inventory, duplicate-authority/compatibility-alias
+proof, red/green/tamper fixtures for opaque path/module/function/surface names,
+no broad orphan inventory explosion, schema/catalog paths listed, current
+receipt, and claim guard.
 
 ### Phase 2 - Research-Rooted Full Gate 92 Observability And Agent Legibility
 
@@ -63,6 +84,36 @@ The acceleration slice is: Gate 92 Fast Loop, Verified Incremental Audit, And
 Command Telemetry Roundtrip/Reconciliation. It must produce one routine
 live-loop command and one spec-driven command telemetry roundtrip path before
 the parent spends more cycles manually proving individual rows:
+
+This acceleration work is dependency ordered. Do not jump directly to broad
+Gate 92 row fitting while the speed-law architecture is dishonest or the routine
+commands remain slow side channels. The required internal order is:
+
+1. Close or explicitly block Phase 1A active-surface/namespace work.
+2. Repair speed-law arithmetic, baseline provenance, and Rust/cache receipt
+   honesty. Same-command baselines and integer-truncated ratios cannot support
+   a speed claim.
+3. Split coverage into strict full-clean boundary proof and routine warm/
+   retained-artifact repair proof. Routine coverage must be claim-limited and
+   must never satisfy strict/no-cache or completion-adjacent claims.
+4. Introduce one product-surface input spec that drives affected-set detection,
+   cache keys, invalidation proof, and command telemetry roundtrip rows.
+5. Route loop measurement/execution through typed task classes and in-process
+   validator nodes sharing `AuditContext`, while keeping cargo/build/test/fmt
+   target-dir contention typed and isolated or serial for a stated reason.
+6. Compute package digest and shared source indexes once per immutable process
+   snapshot.
+7. De-duplicate broad source audit and red fixture work through shared read-only
+   inventories, deterministic parallelism, and isolated mutated fixture state.
+8. Bound observability I/O: indexed local spool, bounded retention, batched
+   exporter flushes, and compact hot-path timing receipts.
+9. Consider crate/workspace splitting only after measured residual test/build
+   cost proves it is still needed.
+
+Each sub-slice must have focused tests, red/green/tamper fixtures for the
+semantics it changes, source inspection, measured before/after timing, explicit
+proof-vs-validation labels, concise checklist status updates only, and a
+source-local/not-readiness commit when coherent.
 
 - `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` is the
   routine live source-local repair command. It computes the current candidate
@@ -113,15 +164,20 @@ the parent spends more cycles manually proving individual rows:
   A node that remains slow, serial, hidden outside the loop, or unmeasured blocks
   the fast-loop slice unless it has a typed serial/destructive/external-live
   reason and emits a fail-closed blocker.
-- Every high-frequency source-local node must be at least 20x faster than its
-  canonical full-command baseline in the verified-local routine loop, and the
-  whole routine loop including those nodes must complete within the current
-  whole-loop target of about 9.1 seconds unless the baseline is recomputed from
-  current receipts. Coverage is explicitly included: `check-coverage-full` and
-  `coverage prove` must either meet the 20x routine-loop law with same-candidate
-  equivalence to authoritative exact coverage, or block slice closure. A strict
-  `--cache-mode none` clean proof may be slower, but it cannot be used to excuse
-  the routine loop from the 20x verified-local requirement.
+- The 20x target is a routine-loop law, not a universal strict-proof law. Every
+  high-frequency source-local node must either run current-candidate affected
+  work fast enough for the verified-local routine loop, replay a verified
+  current-input cache hit with explicit routine-only claim limits, or emit a
+  typed blocker/strict-boundary-only reason. The whole routine loop including
+  those nodes must complete within the current whole-loop target of about 9.1
+  seconds unless the baseline is recomputed from current receipts.
+- Coverage is explicitly split by proof surface. Routine coverage feedback must
+  have verified current-input equivalence to authoritative exact coverage or a
+  `routine_repair_only` claim ceiling. Strict `check-coverage-full` and strict
+  `coverage prove` remain full-clean claim-boundary proof for 100 percent
+  coverage and may remain slower within the strict coverage budget. They cannot
+  be used as the ordinary edit loop, and their cost cannot excuse missing
+  routine coverage feedback when coverage is relevant to the edit class.
 - Add a canonical `CommandObservabilitySpec` and `SurfaceObservabilitySpec`
   registry. Generated artifacts must derive command inventory rows, telemetry
   reconciliation rows, stdout contracts, receipt expectations, query proof paths,

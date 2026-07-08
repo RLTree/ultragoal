@@ -24,6 +24,15 @@ fn node_timing_reader_rejects_prior_candidate_boundary_rows() {
             "canonical_full_command".to_string(),
             json!(surface.canonical_full_command),
         );
+        object.insert(
+            "cache_key".to_string(),
+            json!(crate::cli::live_loop::graph::verified_local_cache_key(
+                surface.id,
+                &input,
+                "hot",
+                "verified-local"
+            )),
+        );
     }
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({ "nodes": [row] }))
         .expect("timing artifact");
@@ -38,6 +47,33 @@ fn node_timing_reader_rejects_prior_candidate_boundary_rows() {
 
     assert!(timings.is_empty());
     std::fs::remove_dir_all(root).expect("cleanup prior boundary timing");
+}
+
+#[test]
+fn node_timing_reader_rejects_mismatched_verified_cache_key() {
+    let root = temp_root("live-loop-mismatched-cache-key-timing");
+    let candidate = "sha256:current";
+    let changed = crate::digest::bytes(b"");
+    let context = context_digest();
+    let input = fmt_input(candidate, &changed, &context);
+    let mut row = current_timing_row(candidate, &input, "pass", "none");
+    row.as_object_mut().expect("timing row object").insert(
+        "cache_key".to_string(),
+        json!(crate::digest::bytes(b"wrong-key")),
+    );
+    crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({ "nodes": [row] }))
+        .expect("timing artifact");
+
+    let timings = read_current(
+        &root,
+        candidate,
+        "hot",
+        "verified-local",
+        &changed_inputs(&changed, &context),
+    );
+
+    assert!(timings.is_empty());
+    std::fs::remove_dir_all(root).expect("cleanup mismatched cache-key timing");
 }
 
 #[test]

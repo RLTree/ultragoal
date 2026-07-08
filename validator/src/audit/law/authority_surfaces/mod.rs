@@ -7,10 +7,14 @@ mod graph;
 mod graph_edges;
 mod inventory;
 mod inventory_requirements;
+mod package_surfaces;
 mod paths;
 mod registry;
 mod source;
 mod surface_inventory;
+
+pub(crate) use package_surfaces::InventoryArtifactBinding as PackageSurfaceArtifactBinding;
+pub(crate) use surface_inventory::InventoryArtifactBinding as FoundationalSurfaceArtifactBinding;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
@@ -38,18 +42,56 @@ pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     out.extend(authority_labels::package_json_label_failures(
         root, &inventory,
     ));
+    out.extend(package_surfaces::failures(root, &inventory));
     out.extend(source::source_text_failures(root));
     out.extend(inventory::generated_failures(root, &inventory));
     out
 }
 
+#[cfg(test)]
 pub(crate) fn foundational_surface_inventory(root: &Path) -> Value {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
         .unwrap_or(Value::Null);
     let inventory = crate::package::inventory::inventory_paths(&manifest)
         .into_iter()
         .collect::<BTreeSet<_>>();
+    let mut value = surface_inventory::value(root, &inventory);
+    value["package_surface_inventory"] = package_surfaces::value(root, &inventory);
+    value
+}
+
+pub(crate) fn foundational_surface_inventory_with_artifacts(
+    root: &Path,
+    foundational_artifact: &FoundationalSurfaceArtifactBinding,
+    package_artifact: &PackageSurfaceArtifactBinding,
+) -> Value {
+    let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
+        .unwrap_or(Value::Null);
+    let inventory = crate::package::inventory::inventory_paths(&manifest)
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+    let mut value = surface_inventory::summary_value(root, &inventory, foundational_artifact);
+    value["package_surface_inventory"] =
+        package_surfaces::summary_value(root, &inventory, package_artifact);
+    value
+}
+
+pub(crate) fn foundational_surface_inventory_artifact(root: &Path) -> Value {
+    let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
+        .unwrap_or(Value::Null);
+    let inventory = crate::package::inventory::inventory_paths(&manifest)
+        .into_iter()
+        .collect::<BTreeSet<_>>();
     surface_inventory::value(root, &inventory)
+}
+
+pub(crate) fn package_surface_inventory_artifact(root: &Path) -> Value {
+    let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
+        .unwrap_or(Value::Null);
+    let inventory = crate::package::inventory::inventory_paths(&manifest)
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+    package_surfaces::value(root, &inventory)
 }
 
 #[cfg(test)]
@@ -81,6 +123,14 @@ pub(crate) fn generated_boundary_failures_for_test(
     inventory: &BTreeSet<String>,
 ) -> Vec<(String, String)> {
     inventory::generated_failures(root, inventory)
+}
+
+#[cfg(test)]
+pub(crate) fn package_surface_failures_for_test(
+    root: &Path,
+    inventory: &BTreeSet<String>,
+) -> Vec<(String, String)> {
+    package_surfaces::failures_for_test(root, inventory)
 }
 
 #[cfg(test)]

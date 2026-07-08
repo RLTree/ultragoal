@@ -74,6 +74,12 @@ def resolve_repo_path(raw, code):
         fail(code)
     return candidate
 
+def coverage_target_dir_not_isolated(raw):
+    if not raw:
+        fail("coverage_target_dir_missing")
+    candidate = (Path(raw) if Path(raw).is_absolute() else root_path / raw).resolve()
+    return candidate == (root_path / "target").resolve()
+
 def ignored(path):
     if path.startswith("docs/parent-session-full-ultragoal-") and path.endswith(".md"):
         return True
@@ -91,6 +97,8 @@ def ignored(path):
             prefix = pattern[:-3]
             if path == prefix or path.startswith(prefix + "/"):
                 return True
+        elif path == pattern:
+            return True
     return False
 
 def source_tree_digest():
@@ -143,6 +151,10 @@ if not Path(receipt_path).is_file():
 receipt = load_json(receipt_path, "coverage_receipt_malformed")
 if receipt.get("schema") != "harness-ultragoal.coverage-receipt.v1":
     fail("coverage_receipt_malformed")
+if not receipt.get("command") or not receipt.get("tool"):
+    fail("coverage_receipt_malformed")
+if coverage_target_dir_not_isolated(receipt.get("coverage_target_dir")):
+    fail("coverage_target_dir_not_isolated")
 if not receipt.get("tool_version"):
     fail("coverage_receipt_tool_version_missing")
 if receipt.get("generated_by") != "coverage-command":
@@ -175,6 +187,9 @@ if not resolved_report.is_file():
 load_json(resolved_report, "coverage_report_not_machine_readable")
 if report.get("digest") != sha256_file(resolved_report):
     fail("coverage_report_digest_mismatch")
-if claim_context != "source_local_iteration" and receipt.get("coverage", {}).get("policy") != "100_percent_required":
+if (
+    claim_context != "source_local_iteration"
+    and receipt.get("coverage", {}).get("policy") != "100_percent_required"
+):
     fail("coverage_fast_gate_used_for_completion")
 PY

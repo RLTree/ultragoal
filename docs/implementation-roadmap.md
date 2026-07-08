@@ -44,7 +44,7 @@ Acceptance:
 
 Schema-only validation is insufficient. This phase implements semantic checks for claim/evidence coupling, backlog-row joins, generated ready-artifact provenance, goal-binding receipt matches, derived amendment deltas, and live-beneficial non-fixture status.
 
-`ultragoal-validator` is implemented for the package/static/red-fixture/target-repo
+`ultragoal` is implemented for the package/static/red-fixture/target-repo
 fixture scope. Required check identity is owned only by
 `schemas/schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId`; the
 validator must implement every id and fail if any required id lacks a handler.

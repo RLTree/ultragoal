@@ -120,6 +120,40 @@ fn projects_speed_nodes_in_deterministic_order() {
 }
 
 #[test]
+fn speed_projection_ignores_rows_without_live_loop_context() {
+    let root = temp_root();
+    std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");
+    let candidate = digest('a');
+    let current = bind_current_context(&root, executed_row(&candidate));
+    let mut missing_node = current.clone();
+    missing_node
+        .as_object_mut()
+        .expect("missing node row")
+        .remove("node_id");
+    let mut missing_tier = current.clone();
+    missing_tier
+        .as_object_mut()
+        .expect("missing tier row")
+        .remove("tier");
+    let mut missing_cache_mode = current.clone();
+    missing_cache_mode
+        .as_object_mut()
+        .expect("missing cache mode row")
+        .remove("cache_mode");
+    let mut unknown_surface = current;
+    unknown_surface["node_id"] = json!("unknown_surface");
+    write_timing_fixture(
+        &root,
+        json!({"nodes": [missing_node, missing_tier, missing_cache_mode, unknown_surface]}),
+    );
+
+    let proof = super::speed_proof_value(&root, &candidate, true);
+    assert_eq!(proof["status"], "blocked");
+    assert_eq!(proof["nodes"].as_array().expect("nodes").len(), 0);
+    std::fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
 fn stale_rows_are_ignored_but_current_blockers_stay_visible() {
     let root = temp_root();
     std::fs::create_dir_all(root.join("validation_artifacts/observability")).expect("dir");

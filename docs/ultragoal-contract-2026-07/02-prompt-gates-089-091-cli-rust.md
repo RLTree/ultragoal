@@ -1048,10 +1048,41 @@ The CLI must emit performance receipts for every evidence-affecting command. Per
 
 The CLI must support fast iterative use and honest final proof at the same time:
 
-- Focused and repair-loop commands may use verified caches only when cache keys include source digest, candidate digest, CLI binary digest, schema catalog digest, law graph digest, standards digest, source-obligation digest, fixture catalog digest, config digest, and command arguments.
+- The 20x speed target is mandatory for the routine verified-local edit/repair
+  loop relative to the current full-world source-local baseline, not for every
+  strict no-cache boundary command. Strict coverage, strict audit, strict
+  fixture, and strict final proof remain separate claim-boundary surfaces with
+  their own budgets and no-cache/cache-validation requirements. They must not be
+  routed as the ordinary dirty-tree loop. A command may not claim routine
+  usability while requiring agents to run the full strict proof after every small
+  edit.
+- Routine speed proof is valid only when each included node records executed
+  current-candidate work or verified current-input cache equivalence. A reused
+  result from another package candidate supports only routine acceleration with
+  an explicit claim ceiling; it cannot satisfy same-candidate production fitting,
+  strict proof, readiness, release, final-packet, install/cache, registry/
+  reviewer, completion, or update_goal claims.
+- Focused and repair-loop commands may use verified caches only when cache keys
+  include the surface's declared current input digests, CLI/validator digest,
+  schema catalog digest, law graph digest, standards digest, source-obligation
+  digest, fixture catalog digest, config/environment class, cache mode, command
+  arguments, and the product-surface spec version. The whole package candidate
+  digest must be recorded in receipts and used for reconciliation, but it must
+  not be forced into every per-surface cache key unless the surface genuinely
+  depends on the entire package boundary. Over-invalidating every focused node
+  on every unrelated edit is a performance-law failure because it makes the hot
+  loop slow precisely during normal dirty iterative work.
 - Final strict proof must include no-cache execution or cache-validation execution sufficient to prove no hidden stale cache dependency.
 - A focused command may help repair a law but cannot satisfy final completion, review readiness, package readiness, product readiness, release readiness, registry readiness, app readiness, or update_goal eligibility.
-- A cache hit may reduce runtime only when the CLI proves the cache entry is same-candidate, same-digest, same-schema, same-law-graph, same-fixture-catalog, same-config, and same-command.
+- A cache hit may reduce routine runtime only when the CLI proves current-input
+  equivalence: the matched input files/content digests, validator digest,
+  schema/law/standards/source-obligation/fixture versions, config/environment
+  class, command arguments, cache mode, prior result digest, and replayed output
+  digest all match the declared product-surface spec. Same-candidate proof is
+  still required for production command fitting and claim-boundary observability
+  rows. A verified current-input cache hit from an older package candidate is a
+  routine acceleration proof with an explicit claim ceiling, not same-candidate
+  production proof.
 - A cache miss may not silently downgrade proof; it must either compute fresh proof within budget or fail with a typed performance/availability claim impact.
 - A live external timeout may not be replaced by stale local proof or source/install/cache proof.
 
@@ -1330,6 +1361,61 @@ Required product-semantic path and symbol naming hardening:
   such as `fitting_status` may remain only as compatibility debt with a planned
   migration or encapsulation; new source paths, functions, modules, or helper
   names must use product-behavior names.
+- Every active package-owned surface must earn its keep through an explicit
+  typed product role. This applies to binaries, command aliases, subcommands,
+  modules, functions, helpers, tests, types, enum variants, constants, schemas,
+  fixtures, receipt producers, generated artifacts, package resources, setup/
+  retrofit outputs, claim guards, final-packet blockers, and update_goal
+  blockers. A surface that exists only because it is easy to keep, raises
+  coverage, preserves history, mirrors another surface, supports a hypothetical
+  future mode, or satisfies a goal label is a law violation.
+- Gate 90 requires a purpose-backed active surface inventory, represented by a
+  typed registry or equivalent validator-readable source of truth. Each row must
+  include `surface_id`, `surface_kind`, `path_or_symbol`, `product_role`,
+  `canonical_owner`, `authority_level`, `canonical_surface_id` when it is not
+  canonical, `compatibility_contract_id` when retained for compatibility,
+  `sunset_condition`, `claim_surfaces_allowed`, `proof_surface`, `law_ids`,
+  `validator_check_ids`, `fixture_ids`, `receipt_ids`,
+  `package_inventory_binding`, `setup_retrofit_output_binding`,
+  `claim_guard_ids`, `final_packet_blockers`, `update_goal_blockers`,
+  provenance or generator owner, and stale-evidence rules.
+- Allowed authority levels are closed: `canonical`, `compatibility_alias`,
+  `parser_boundary`, `generated_projection`, `fixture_catalog_materialization`,
+  `test_only_validation_surface`, and `external_debug_no_claim`. Any other role
+  fails until the law schema and fixtures explicitly define it. A compatibility
+  alias cannot be a canonical claim authority, cannot emit canonical receipt
+  identity, cannot bypass the canonical parser/control plane, and must have a
+  typed external compatibility contract plus a sunset or removal condition.
+- Duplicate authorities fail closed. The validator must reject duplicate
+  binaries, commands, modules, functions, helpers, scripts, schemas, fixtures,
+  receipt producers, or generated rows that expose the same behavior or delegate
+  to the same entrypoint unless exactly one surface is canonical and every
+  other surface is a typed compatibility alias, parser boundary, generated
+  projection, fixture materialization, test-only validation surface, or
+  external-debug/no-claim surface with explicit claim limits.
+- `ultragoal` is the canonical product CLI unless the contract is later changed
+  with same-surface proof. A binary such as `ultragoal-validator` may remain
+  only as a typed `compatibility_alias` that delegates directly to canonical
+  `ultragoal` authority, is named in help as compatibility, cannot act as
+  canonical receipt/tool authority, has red fixtures for alias overclaim and
+  bypass attempts, and has a sunset or removal rule. If no external product
+  contract requires the alias, the correct repair is deletion, not coverage.
+- Validation and proof are separate for this law. Validation includes registry
+  schema checks, parser/help/unit tests, duplicate-detector unit tests,
+  red/green/tamper fixtures, line-cap checks, coverage, and namespace-check
+  mechanics. Proof requires real current-candidate CLI/source-audit execution
+  that detects actual package-owned surfaces, reconciles stdout/receipt/logs
+  where applicable, blocks claims through claim guards, and is independently
+  confirmed by source inspection showing the inventory is not a row-shape or
+  manual-exception substitute for product behavior.
+- Required failures include unregistered package-owned surfaces, redundant
+  wrappers with no typed product role, coverage-only tests or wrappers,
+  hypothetical fallbacks with no live contract, compatibility aliases used as
+  canonical claim authority, helper/script/raw Cargo surfaces used as claim
+  authority, generated rows without provenance, hand-edited generated proof
+  rows, proof surfaces that substitute source-local evidence for install/cache/
+  app/live evidence, and any surface whose only role is history, phase, goal,
+  progress, or receipt ambition.
 - The validator must not rely on a static banned-word list alone. It must
   combine mechanical token checks with contextual allowlists and red/green/
   tamper fixtures so product terms such as `fit-repo` pass while goal-work

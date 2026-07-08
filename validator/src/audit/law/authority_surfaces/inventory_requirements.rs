@@ -3,6 +3,8 @@ use std::path::Path;
 
 #[path = "observability_package_surfaces.rs"]
 mod observability_package_surfaces;
+#[path = "package_surfaces/requirements.rs"]
+mod package_surface_requirements;
 
 macro_rules! package_authority_surface {
     ($role:literal, $rel:literal $(,)?) => {
@@ -224,6 +226,7 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
 
 pub(super) fn required_surfaces() -> Vec<RequiredSurface> {
     let mut surfaces = REQUIRED_SURFACES.to_vec();
+    surfaces.extend_from_slice(package_surface_requirements::REQUIRED_SURFACES);
     surfaces.extend_from_slice(observability_package_surfaces::REQUIRED_SURFACES);
     surfaces
 }

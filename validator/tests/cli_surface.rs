@@ -18,19 +18,11 @@ fn temp_root(root: &Path) -> PathBuf {
         .join(format!("ultragoal-cli-surface-{stamp}"))
 }
 
-fn validator() -> &'static str {
-    env!("CARGO_BIN_EXE_ultragoal-validator")
-}
-
 fn ultragoal() -> &'static str {
     env!("CARGO_BIN_EXE_ultragoal")
 }
 
 fn run(root: &Path, args: &[String]) -> std::process::Output {
-    run_bin(validator(), root, args)
-}
-
-fn run_ultragoal(root: &Path, args: &[String]) -> std::process::Output {
     run_bin(ultragoal(), root, args)
 }
 
@@ -65,7 +57,7 @@ fn cli_surface_commands_execute() {
     );
     assert_eq!(run(&root, &["review-target".into()]).status.code(), Some(2));
     assert_eq!(
-        run_ultragoal(
+        run(
             &root,
             &["--root".into(), ".".into(), "source".into(), "audit".into(),],
         )
@@ -117,7 +109,7 @@ fn cli_surface_commands_execute() {
             "fixtures/valid/minimal-goal-run.json".into(),
         ],
     ] {
-        assert_eq!(run_ultragoal(&root, &args).status.code(), Some(2));
+        assert_eq!(run(&root, &args).status.code(), Some(2));
     }
 
     let review_round_parse_success = vec![
@@ -137,17 +129,20 @@ fn cli_surface_commands_execute() {
         "fixtures/review-round/anchors/archive-receipt.json".into(),
     ];
     assert_eq!(
-        run_ultragoal(&root, &review_round_parse_success)
-            .status
-            .code(),
+        run(&root, &review_round_parse_success).status.code(),
         Some(1)
     );
 
     let digest = run(
         &root,
-        &["--root".into(), ".".into(), "package-digest".into()],
+        &[
+            "--root".into(),
+            ".".into(),
+            "package".into(),
+            "digest".into(),
+        ],
     );
-    assert!(digest.status.success(), "package-digest failed: {digest:?}");
+    assert!(digest.status.success(), "package digest failed: {digest:?}");
     let digest_stdout = String::from_utf8_lossy(&digest.stdout);
     assert!(
         digest_stdout.lines().next().is_some_and(|line| {
@@ -160,25 +155,11 @@ fn cli_surface_commands_execute() {
     );
     assert!(digest_stdout.contains("run_id=run-"));
 
-    let canonical_digest = run_ultragoal(
-        &root,
-        &[
-            "--root".into(),
-            ".".into(),
-            "package".into(),
-            "digest".into(),
-        ],
-    );
-    assert!(
-        canonical_digest.status.success(),
-        "canonical package digest failed: {canonical_digest:?}"
-    );
-
     let pid = std::process::id();
     let product_receipt_dir = PathBuf::from(format!(
         "validation_artifacts/product/cli-surface-receipts-{pid}"
     ));
-    let product = run_ultragoal(
+    let product = run(
         &root,
         &[
             "--root".into(),
@@ -199,7 +180,7 @@ fn cli_surface_commands_execute() {
             .is_file()
     );
     assert_eq!(
-        run_ultragoal(
+        run(
             &root,
             &[
                 "--root".into(),
@@ -215,7 +196,7 @@ fn cli_surface_commands_execute() {
         Some(2)
     );
     assert_eq!(
-        run_ultragoal(
+        run(
             &root,
             &[
                 "--root".into(),
@@ -236,7 +217,7 @@ fn cli_surface_commands_execute() {
         r#"{"resources":[]}"#,
     )
     .expect("target parse manifest");
-    let target_parse = run_ultragoal(
+    let target_parse = run(
         &root,
         &[
             "--root".into(),
@@ -298,7 +279,7 @@ fn cli_surface_commands_execute() {
     let red_report = temp.join("validation_artifacts/ultragoal-audit/red-fixture-report.json");
     std::fs::create_dir_all(red_report.parent().expect("red report parent"))
         .expect("red report dir");
-    let red_report_run = run_ultragoal(
+    let red_report_run = run(
         &root,
         &[
             "--root".into(),
@@ -322,7 +303,7 @@ fn cli_surface_commands_execute() {
     let performance_receipt = root.join(format!(
         "validation_artifacts/cli/cli-surface-performance-{pid}.json"
     ));
-    let performance = run_ultragoal(
+    let performance = run(
         &root,
         &[
             "--root".into(),
@@ -350,7 +331,7 @@ fn cli_surface_commands_execute() {
     let rust_fast_receipt = root.join(format!(
         "validation_artifacts/rust/cli-surface-fast-{pid}.json"
     ));
-    let rust_fast = run_ultragoal(
+    let rust_fast = run(
         &root,
         &[
             "--root".into(),
@@ -369,7 +350,7 @@ fn cli_surface_commands_execute() {
     let gc_plan_receipt = root.join(format!(
         "validation_artifacts/gc/cli-surface-plan-{pid}.json"
     ));
-    let gc_plan = run_ultragoal(
+    let gc_plan = run(
         &root,
         &[
             "--root".into(),
@@ -383,7 +364,7 @@ fn cli_surface_commands_execute() {
     assert!(gc_plan.status.success(), "gc plan failed: {gc_plan:?}");
 
     let update_goal_receipt = temp.join("validation_artifacts/cli/update-goal-eligibility.json");
-    let update_goal = run_ultragoal(
+    let update_goal = run(
         &root,
         &[
             "--root".into(),
@@ -398,7 +379,7 @@ fn cli_surface_commands_execute() {
     assert_fail_closed_cli_receipt(&update_goal_receipt, "update_goal_eligibility");
 
     let self_receipt = temp.join("validation_artifacts/cli/self-law-receipt.json");
-    let self_law = run_ultragoal(
+    let self_law = run(
         &root,
         &[
             "--root".into(),
@@ -414,7 +395,7 @@ fn cli_surface_commands_execute() {
     assert_fail_closed_cli_receipt(&self_receipt, "self_update_goal_eligibility");
 
     assert_eq!(
-        run_ultragoal(
+        run(
             &root,
             &[
                 "--root".into(),
@@ -429,7 +410,7 @@ fn cli_surface_commands_execute() {
     );
 
     let transaction_receipt = temp.join("validation_artifacts/cli/transactional-finalization.json");
-    let transaction = run_ultragoal(
+    let transaction = run(
         &root,
         &[
             "--root".into(),

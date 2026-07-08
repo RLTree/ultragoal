@@ -78,6 +78,12 @@ Checklist tracking:
 - Work by dependency-closed slices. Do not start broad downstream work while the
   active slice has dirty source, stale receipts, no focused proof, or unresolved
   claim-boundary gaps.
+- Phase 1A namespace/source-topology work includes purpose-backed active surface
+  enforcement. Redundant binaries, commands, modules, functions, helpers,
+  scripts, schemas, fixtures, receipt producers, generated rows, compatibility
+  aliases, dead fallbacks, and coverage-only wrappers must be removed or typed
+  with a product role, canonical owner, authority level, proof surface, claim
+  limits, and sunset/removal rule before Gate 92 resumes.
 - Checklist files are progress status only: `not started`, `in progress`,
   `implemented, pending validation`, `validated current`, or
   `stale due to source change`. Do not use checklist rows as receipt ledgers.
@@ -90,9 +96,12 @@ Checklist tracking:
 - Genuine proof is mandatory for every claim-bearing statement. Parser tests,
   schema shape, receipt existence, generated rows, current-state projections,
   workflow output, cache-key construction, synthetic timing, and CLI pass output
-  are observations until they reconcile to the actual product behavior or to a
-  verified same-candidate reuse/equivalence chain. Any unsupported proof-shaped
-  output must lower the claim ceiling and fail the affected row.
+  are observations until they reconcile to actual current-candidate product
+  behavior or to a verified current-input reuse/equivalence chain with explicit
+  claim limits. A reused row from another candidate can support routine
+  verified-local acceleration only; it cannot be called same-candidate
+  production proof. Any unsupported proof-shaped output must lower the claim
+  ceiling and fail the affected row.
 - Claim ceiling remains source-local until same-candidate source, install,
   cache, app-registry, reviewer, final-packet, and update_goal surfaces support
   stronger claims.

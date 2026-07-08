@@ -12,7 +12,7 @@ mod timing;
 fn validator_version_uses_stable_cli_authority_not_wrapper_binary() {
     let material = super::validator_authority_material();
     assert!(material.contains("authority=ultragoal-cli-control-plane"));
-    assert!(material.contains("crate=ultragoal-validator"));
+    assert!(material.contains("cli=ultragoal"));
     assert!(
         !material.contains("target/debug"),
         "validator authority must not depend on the invoked wrapper path"

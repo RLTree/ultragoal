@@ -134,6 +134,11 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "harness-ultragoal.foundational-law-surface-inventory.v1",
             "surface_state",
         ]),
+        "validator/src/audit/law/authority_surfaces/package_surfaces/document.rs" => Some(&[
+            "PackageSurfaceRow",
+            "harness-ultragoal.package-surface-inventory.v1",
+            "row_materialization",
+        ]),
         "validator/src/audit/observability/registry/control.rs" => {
             Some(&["observability_control_board", "Counts", "first_incomplete"])
         }

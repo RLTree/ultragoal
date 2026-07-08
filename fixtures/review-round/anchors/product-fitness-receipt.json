@@ -82,7 +82,7 @@
     },
     "job": "Fit a repository with product proof rules without relying on memory"
   },
-  "producer_actor_id": "harness-ultragoal-validator",
+  "producer_actor_id": "harness-ultragoal-cli",
   "proof_surface": {
     "evidence": {
       "digest": "sha256:135341d618fdb786a5c60dbb32c96c3d98129663e66c347b90769b96b9ad5f58",

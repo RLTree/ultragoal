@@ -98,7 +98,6 @@ pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
             Command::Standards(command)
         }
         "package" if raw.get(1).map(String::as_str) == Some("digest") => Command::PackageDigest,
-        "package-digest" => Command::PackageDigest,
         "transaction" if raw.get(1).map(String::as_str) == Some("finalize") => {
             Command::TransactionalFinalization {
                 receipt: opt_path(&raw[2..], "--receipt")?,

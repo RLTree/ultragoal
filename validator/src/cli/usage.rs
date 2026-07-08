@@ -40,7 +40,6 @@ pub(crate) fn text() -> &'static str {
         "  ultragoal source-obligations check --strict [--obligation <id>] [--jobs N]\n",
         "  ultragoal foundational-trace check --strict [--obligation <id>] [--jobs N]\n",
         "  ultragoal package digest\n",
-        "  ultragoal package-digest\n",
         "  ultragoal coverage prove --receipt <path> [--jobs N] [--validate-existing]\n",
         "  ultragoal performance prove --receipt <path>\n",
         "  ultragoal rust <toolchain verify|fast|standard|release|clean-proof|watch|\n",
@@ -83,6 +82,5 @@ pub(crate) fn text() -> &'static str {
         "scripts/check is a narrow helper unless it delegates to routine check; its\n",
         "pass cannot satisfy routine_usability, product_readiness, readiness, release,\n",
         "final_packet, registry/reviewer exposure, completion, or update_goal claims.\n",
-        "ultragoal-validator compatibility commands remain routed through this parser.",
     )
 }

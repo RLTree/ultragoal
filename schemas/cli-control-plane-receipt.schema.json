@@ -34,7 +34,7 @@
       "required": [
         "tool",
         "authority",
-        "compatibility_binary",
+        "canonical_binary",
         "self_law_state"
       ],
       "properties": {
@@ -44,8 +44,8 @@
         "authority": {
           "const": "cli_control_plane"
         },
-        "compatibility_binary": {
-          "const": "ultragoal-validator"
+        "canonical_binary": {
+          "const": "ultragoal"
         },
         "self_law_state": {
           "enum": [

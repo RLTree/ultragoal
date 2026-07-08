@@ -7,7 +7,7 @@ fn fail_closed_surface_receipt(candidate: &str, operation: &str, surface: &str) 
         "issuer": {
             "tool": "ultragoal",
             "authority": "cli_control_plane",
-            "compatibility_binary": "ultragoal-validator"
+            "canonical_binary": "ultragoal"
         },
         "generated_at": "2026-01-01T00:00:00Z",
         "root": ".",

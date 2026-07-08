@@ -9,7 +9,12 @@ This gate cannot be satisfied by better error messages, optional diagnostics, lo
 Gate 92 also rejects proxy proof. A parser test, schema-valid JSON document,
 receipt path, generated inventory row, current-state projection, workflow-engine
 output, cache key, timing field, or CLI pass line is not proof unless it
-reconciles to actual product behavior or to verified same-candidate reuse. Every
+reconciles to actual current-candidate product behavior or to verified
+current-input reuse with explicit claim limits. Same-candidate proof means the
+same candidate digest, run/correlation identifiers, stdout, receipt, logs,
+metrics, traces or wide events, and explain output reconcile for the product
+behavior being claimed. Verified cache reuse from an older candidate is routine
+acceleration evidence only, even when the input digests are equivalent. Every
 claim-bearing row must identify the claim, the product behavior observed, the
 proof surface, and the independent reconciliation surface. Unsupported
 proof-shaped output must be reported as diagnostic evidence only and must block
@@ -120,7 +125,10 @@ Required CLI authority:
   checks and red fixtures, making the routine live-loop 20x target approximately
   9.1 seconds. If that baseline changes, recompute it from current receipts. A
   run can claim the speedup only from live command execution with current digest
-  or from verified same-candidate cache reuse that proves output equivalence.
+  or from verified current-input cache reuse that proves output equivalence and
+  declares its routine-only claim ceiling. Same-candidate production proof is
+  still required for command fitting, Gate 92 row fitting, and any claim-boundary
+  observability row.
   Dry-run estimates, stale receipts, synthetic no-op paths, current-state reads,
   generated row materialization, cache-key construction, graph scheduling
   overhead, local JSON shape checks, or workflow-worker reports are not speed
@@ -133,9 +141,11 @@ Required CLI authority:
   correlation ids. Verified cache hits must record cache key, current input
   digests, validator/law/schema/fixture versions, arguments, environment class,
   prior result digest, replayed output digest, equivalence status, invalidation
-  proof, and claim impact. Missing fields, `work_unit_count=0` without verified
-  cache equivalence, `cache_hit=false` without execution, no result digest, or
-  timing from graph overhead alone fails the speed claim.
+  proof, original candidate digest, current candidate digest, original run/
+  correlation ids if available, replay telemetry binding or explicit telemetry
+  replay gap, and claim impact. Missing fields, `work_unit_count=0` without
+  verified cache equivalence, `cache_hit=false` without execution, no result
+  digest, or timing from graph overhead alone fails the speed claim.
 - The routine loop must absorb the checks and audits that agents actually run on
   every repair path. It is non-compliant to make `ultragoal loop run` fast while
   leaving `scripts/check`, `scripts/check-coverage-full`,
@@ -151,19 +161,109 @@ Required CLI authority:
   cannot close while any routinely-run source-local check remains outside the
   loop without a typed serial/destructive/external-live reason and a fail-closed
   claim blocker.
-- Every routinely-run source-local check or audit node must meet the same speed
-  law as the loop: at least 20x faster than its current canonical full-command
-  baseline under `--cache-mode verified-local`, and the complete routine loop
-  containing all required high-frequency nodes must land at or below the current
-  20x whole-loop target, approximately 9.1 seconds unless recomputed from current
-  receipts. `scripts/check-coverage-full` and `ultragoal coverage prove` are not
-  exempt. If exact coverage cannot meet the threshold, the slice is blocked until
-  coverage is split, cached, daemonized, indexed, or otherwise re-architected
-  with honest same-candidate equivalence proof to the authoritative full coverage
-  command. Strict no-cache final proof may remain slower, but warm-cache,
-  affected-only, or verified-local timing may support only routine repair-loop
-  speed claims, never clean-proof, readiness, release, final-packet, install/
-  cache, app-registry, reviewer, completion, or update_goal claims.
+- Every routinely-run source-local check or audit node must meet the live-loop
+  law: execute current-candidate affected work or replay a verified
+  current-input cache hit, record actual work and graph overhead separately, and
+  keep the complete routine loop at or below the current 20x whole-loop target,
+  approximately 9.1 seconds unless recomputed from current receipts.
+  High-frequency nodes should be at least 20x faster than their canonical
+  full-command baselines in routine mode when a legal affected-set or
+  cache-equivalent path exists. If a node cannot legally meet that target, it
+  must emit a typed blocker or strict-boundary-only reason with claim impact
+  instead of being hidden outside the loop.
+- Exact coverage is split by proof surface. `scripts/check-coverage-full` and
+  strict `ultragoal coverage prove` remain the authoritative full-clean
+  claim-boundary proof for 100 percent coverage and `uncovered_records=[]`; they
+  do not have to satisfy the routine-loop 20x target and must not be run after
+  every small edit by default. Routine coverage feedback must use a separate
+  retained-artifact, affected-set, or verified-local mode that proves current
+  input equivalence to the authoritative coverage boundary or lowers the claim
+  ceiling to `routine_repair_only`. Warm-cache, affected-only, or verified-local
+  timing may support only routine repair-loop speed claims, never clean-proof,
+  readiness, release, final-packet, install/cache, app-registry, reviewer,
+  completion, or update_goal claims.
+
+Required fast-loop speed architecture and dependency order:
+
+1. Speed law arithmetic and baseline provenance must be repaired before any
+   faster result can be claimed. The CLI must stop storing a lossy integer
+   `speedup_ratio` as authority. It may emit a displayed fixed-point ratio, but
+   the authority fields are `baseline_duration_ms`, `product_latency_ms`,
+   `actual_work_duration_ms`, `graph_overhead_ms`, `telemetry_reconciliation_ms`,
+   `baseline_proof_kind`, and `baseline_invalidation_proof`. A same-command
+   baseline cannot support a speedup claim. Boundary baselines must be stored as
+   digest-bound artifacts keyed by node id, canonical command, validator digest,
+   law/schema/fixture versions, command arguments, environment class, and cache
+   mode. If any key component changes, the node fails closed as
+   `baseline_stale` until a boundary baseline is regenerated. Red fixtures must
+   cover integer truncation, same-command baseline reuse, fabricated baselines,
+   stale baselines, and displayed ratios computed from proxy timing.
+2. Rust/cache receipt honesty must be repaired with the speed law. Rust receipts
+   must record the effective Cargo incremental/cache state observed for the
+   command, not a hardcoded desired value. If incremental compilation, target
+   directories, sccache, Cargo registry/git cache, or coverage instrumentation
+   artifacts influence timing, the receipt must declare them and set the claim
+   ceiling accordingly. Hidden cache use blocks no-cache and clean-proof claims.
+3. Coverage must be split into strict boundary mode and routine mode before the
+   loop can be fast. Strict boundary mode keeps the authoritative full-clean
+   exact coverage behavior and remains the only mode that can support complete
+   coverage, readiness, release, final-packet, completion, or update_goal
+   claims. Routine mode may use documented retained-artifact coverage workflows
+   such as `--no-clean` only after a boundary lineage is established, and its
+   receipt must include source-tree digest, coverage manifest digest, coverage
+   command digest, toolchain and `cargo-llvm-cov` version, flags, target dir,
+   boundary lineage digest, cache class, current candidate digest, coverage
+   percent, uncovered record count, equivalence status, and
+   `claim_ceiling=routine_repair_only`. `scripts/check-coverage-fast` must be
+   deleted or made an honest routine-mode alias; a command that runs the full
+   pipeline cannot be named or routed as fast.
+4. One product-surface input spec must drive both affected-set detection and
+   cache keys. Each spec declares path/content rules, law/schema/fixture/
+   validator versions, arguments, environment class, cache mode, output digest
+   expectations, claim surface, and invalidation reasons. The same spec must
+   feed `loop run`, `loop measure`, `scripts/check` delegation, source audit
+   affected paths, red fixture affected paths, and command telemetry roundtrip
+   rows. Separate coarse tables that can disagree are forbidden. Tamper fixtures
+   must prove that mutating a covered input invalidates the row and mutating an
+   unrelated input preserves only verified current-input cache reuse with a
+   bounded claim ceiling.
+5. The execution model must use typed task classes instead of a serial shell
+   wrapper. Cargo-touching nodes such as build, test, and fmt must either run as
+   a typed serial chain with a reason or in isolated target/cache namespaces.
+   Validator-owned nodes such as line caps, namespace, schema validation,
+   package inventory, source-obligation checks, foundational trace checks, and
+   receipt dereferences must run as in-process typed nodes sharing `AuditContext`
+   unless a specific product reason requires a subprocess. In-process nodes must
+   record `execution_class=in_process_validator_node`, function id, args,
+   source digests, output/result digest, and CLI-equivalence proof; they must
+   not fake a shell argv. Remaining subprocesses should avoid login-shell
+   overhead unless the command explicitly requires it.
+6. Package digest and shared source indexes must be computed once per immutable
+   process snapshot and threaded through `AuditContext`. If the tree mutates
+   after the snapshot is created, the command must fail closed or create a new
+   snapshot; cached digests must never outlive their source boundary. Validation
+   must include an internal digest-computation counter or equivalent proof that
+   routine commands do not recompute the whole package digest per node/row.
+7. Broad audit and red fixture performance must be repaired through shared
+   read-only inventories and deterministic parallelism. Source audit text-check
+   families must consume one shared parsed-source inventory instead of
+   re-walking/re-reading the tree per family. Red fixture execution must share
+   only bundle-independent semantic indexes and parse packets once; row-mutated
+   bundle state must remain isolated. Acceptance requires byte-equivalent
+   pass/fail matrices before/after and tamper fixtures proving no cross-row
+   leakage.
+8. Observability I/O must be bounded as part of speed compliance. Local spools
+   must be segmented/indexed by run/correlation ids with retention bounds,
+   exporter calls must be batched or flushed at run boundaries without
+   spawn-and-forget loss, timing receipts must retain current candidate plus a
+   declared bounded history, and hot-path artifacts must avoid pretty-printed
+   bulk output unless a human-readable projection is explicitly requested.
+9. Crate/workspace splitting is an endgame optimization, not the first repair.
+   It may proceed only after the speed law, coverage modes, input specs,
+   execution model, digest snapshot, and audit/red-fixture de-duplication have
+   measured residual test/build cost. A spike must split one product-semantic
+   leaf crate, preserve namespace law, update coverage/package manifests, and
+   measure before/after edit-class timings before broad crate churn is allowed.
 
 Gold-standard observability doctrine required by the synthesis:
 

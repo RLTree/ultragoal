@@ -54,7 +54,7 @@ pub(crate) fn receipt(
         "issuer": {
             "tool": "ultragoal",
             "authority": "cli_control_plane",
-            "compatibility_binary": "ultragoal-validator"
+            "canonical_binary": "ultragoal"
         },
         "generated_at": crate::audit::clock::now_iso(),
         "root": ".",

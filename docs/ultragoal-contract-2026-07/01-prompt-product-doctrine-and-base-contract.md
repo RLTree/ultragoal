@@ -518,7 +518,22 @@ Mandatory integration objectives from the synthesis:
      correctness proof. Every cache hit must record input digests, validator
      digest, law/schema/fixture versions, cache key, cache mode, hit/miss state,
      invalidation reason, worker/task/queue state, timing class, and claim
-     impact. `--cache-mode none` remains mandatory for strict proof boundaries.
+     impact. Cache reuse across an older package candidate is verified
+     current-input equivalence for routine acceleration only, not same-candidate
+     production proof. `--cache-mode none` remains mandatory for strict proof
+     boundaries.
+   - Required speed-recovery order: first fix speed-law arithmetic and
+     digest-bound baseline provenance so same-command baselines and integer
+     truncation cannot fake failure or success; repair Rust/Cargo cache receipt
+     honesty so effective cache state is observed instead of hardcoded; split
+     coverage into strict full-clean boundary proof and routine warm/retained
+     repair proof; introduce one product-surface input spec that drives both
+     affected-set detection and cache keys; route loop work through typed task
+     classes and in-process validator nodes sharing `AuditContext`; compute
+     package digest and shared source indexes once per immutable snapshot;
+     de-duplicate source-audit and red-fixture work with safe read-only indexes;
+     bound observability I/O; and consider crate/workspace splitting only after
+     measured residual test/build cost proves it is still needed.
    - Rule: The parent must also build a Gate 92 fitting compiler and runner
      before continuing command-by-command fitting churn. The canonical
      `CommandObservabilitySpec` and `SurfaceObservabilitySpec` registry must
@@ -535,22 +550,35 @@ Mandatory integration objectives from the synthesis:
      proof is missing. Fit by family where semantics are shared. Do not hand-edit
      generated inventory rows as the normal path.
    - Required latency targets for live source-local iteration:
-     hot edit-check loop <= 5s p95; routine live loop from the current
-     full-world audit baseline <= 9.1s when affected-set and verified-cache
-     assumptions hold; focused repair loop <= 15s p95; standard affected
-     source-local loop <= 30s p95; strict source-local proof target <= 60s and
-     hard ceiling <= 180s. A strict no-cache final proof may be slower, but it
-     must record why and must not be confused with the live hot loop.
-     The routine live loop must include the high-frequency validation work agents
-     repeatedly run during repair, including coverage, source audit, red fixture
-     report, line caps, namespace, schema validation, mandatory-law validation,
-     source-obligations, foundational trace, package inventory scans, focused
-     Rust tests, fmt/build checks, `scripts/check`, and coverage helper scripts.
-     Each such node must be at least 20x faster than its own canonical full
-     baseline under verified-local cache, and the whole routine loop containing
-     those nodes must still land under the current <=9.1s target. Coverage full
-     is not exempt; if exact coverage cannot meet the 20x routine-loop law while
-     preserving authoritative 100% proof semantics, fast-loop closure is blocked.
+     hot edit-check loop <= 5s p95; focused repair loop <= 15s p95; standard
+     affected source-local loop <= 30s p95; strict source-local proof target <=
+     60s and hard ceiling <= 180s. The routine live loop should be about 20x
+     faster than the current full-world audit baseline for ordinary dirty-tree
+     repair work; the current known baseline is about 181 seconds, making the
+     current routine target about 9.1 seconds when affected-set and
+     verified-cache assumptions hold. Recompute that target from current
+     receipts when the baseline changes.
+   - Rule: The 20x target applies to the routine verified-local product loop,
+     not to every strict no-cache boundary proof. The routine live loop must
+     include legally sufficient high-frequency validation work agents repeatedly
+     need during repair: line caps, namespace, schema validation, package
+     inventory scans, focused Rust tests, fmt/build checks, source-obligation and
+     foundational-trace affected checks, affected source-audit families, affected
+     red/green/tamper fixtures, receipt dereferences, `scripts/check`
+     delegation, and routine coverage when the edit class requires coverage
+     feedback. Each included node must either execute current-candidate work or
+     record verified current-input cache equivalence with explicit
+     routine-only claim limits. A node that cannot legally run fast must emit a
+     typed blocker or strict-boundary-only reason; it may not hide outside the
+     loop as a slow side channel.
+   - Rule: Strict full-clean coverage, full source audit, full red fixture
+     report, and final source-local proof remain claim-boundary surfaces. They
+     may be slower than the routine loop, within their strict budgets, and must
+     not be run after every small edit as the default iteration path. They also
+     cannot be used to excuse a missing fast routine equivalent for ordinary
+     repair. Coverage must therefore have two honest modes: strict full-clean
+     exact coverage for claim boundaries, and routine coverage feedback only when
+     it can prove verified current-input equivalence or lower the claim ceiling.
    - Required speed evidence: receipts and telemetry must report duration_ms,
      worker_count, task_count, queue_depth, critical path, affected node count,
      skipped node count, cache mode, cache hit rate, invalidation reasons,
@@ -588,7 +616,8 @@ Mandatory integration objectives from the synthesis:
      live loops can deliver 20x routine-loop speedup; 84% that the fitting
      compiler/runner can deliver 20x repeated Gate 92 family-fitting speedup;
      38% that strict no-cache final proof can deliver 20x without deeper
-     architectural evidence.
+     architectural evidence, so strict final proof remains a separate
+     claim-boundary budget rather than the routine-loop speed target.
 
 20. Builder-Contract Modularization Without Semantic Loss
    - Rule: The parent prompt, checklist, and spine are builder contracts. They

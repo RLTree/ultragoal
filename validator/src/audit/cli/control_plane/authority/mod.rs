@@ -1,6 +1,7 @@
 use serde_json::Value;
 use std::path::Path;
 
+mod cargo;
 mod surface;
 
 const CLI_SCHEMA: &str = "schemas/cli-control-plane-receipt.schema.json";
@@ -52,11 +53,12 @@ fn require_files(root: &Path, out: &mut Vec<String>) {
 
 fn require_cargo_bins(root: &Path, out: &mut Vec<String>) {
     let text = read_text(root, "validator/Cargo.toml");
-    if !text.contains("name = \"ultragoal\"") {
+    let bins = cargo::bin_names(&text);
+    if !bins.contains("ultragoal") {
         out.push("cli_control_plane_missing_ultragoal_binary".to_string());
     }
-    if !text.contains("name = \"ultragoal-validator\"") {
-        out.push("cli_control_plane_missing_compatibility_binary".to_string());
+    if bins.contains("ultragoal-validator") {
+        out.push("cli_control_plane_legacy_validator_binary_present".to_string());
     }
 }
 
@@ -205,25 +207,26 @@ fn json_array_has_id(root: &Path, rel: &str, key: &str, id: &str) -> bool {
     read_json(root, rel)
         .get(key)
         .and_then(Value::as_array)
-        .is_some_and(|rows| {
-            rows.iter()
-                .any(|row| row.get("id").and_then(Value::as_str) == Some(id))
-        })
+        .is_some_and(|rows| rows.iter().any(|row| has_id(row, id)))
 }
 
 fn trace_has_obligation(root: &Path, id: &str) -> bool {
     read_json(root, "docs/foundational-law-traceability.json")
         .get("entries")
         .and_then(Value::as_array)
-        .is_some_and(|rows| {
-            rows.iter()
-                .any(|row| row.get("obligation_id").and_then(Value::as_str) == Some(id))
-        })
+        .is_some_and(|rows| rows.iter().any(|row| has_obligation_id(row, id)))
 }
 
 fn array_contains_id(value: &Value, id: &str) -> bool {
-    value.as_array().is_some_and(|rows| {
-        rows.iter()
-            .any(|row| row.get("id").and_then(Value::as_str) == Some(id))
-    })
+    value
+        .as_array()
+        .is_some_and(|rows| rows.iter().any(|row| has_id(row, id)))
+}
+
+fn has_id(row: &Value, id: &str) -> bool {
+    row.get("id").and_then(Value::as_str) == Some(id)
+}
+
+fn has_obligation_id(row: &Value, id: &str) -> bool {
+    row.get("obligation_id").and_then(Value::as_str) == Some(id)
 }

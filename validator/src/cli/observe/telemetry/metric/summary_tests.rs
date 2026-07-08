@@ -39,6 +39,15 @@ fn metric_summary_rejects_high_cardinality_labels_and_ignores_bad_rows() {
                 },
                 {
                     "metric": {
+                        "__name__": "ultragoal_command_duration_ms",
+                        "operation": "coverage.prove",
+                        "status": "pass",
+                        "failure_class": "none"
+                    },
+                    "value": [11.5, "12"]
+                },
+                {
+                    "metric": {
                         "__name__": "ultragoal_command_queue_depth",
                         "operation": "coverage.prove",
                         "status": "fail",
@@ -63,6 +72,7 @@ fn metric_summary_rejects_high_cardinality_labels_and_ignores_bad_rows() {
     let summary = metric_summary(&rows);
 
     assert_eq!(summary["operation"], "coverage.prove");
+    assert_eq!(summary["status"], "mixed");
     assert_eq!(summary["traffic_count"], 2);
     assert_eq!(summary["error_count"], 2);
     assert_eq!(summary["failure_class"], "coverage_prove_failure");

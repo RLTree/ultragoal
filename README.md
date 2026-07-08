@@ -1,6 +1,6 @@
 # Harness Ultragoal Plugin Proposal Package
 
-This package is a proposal bundle plus a Rust `ultragoal-validator` for a future plugin that turns the strongest practices from the `codex-workflow-rs` repo and the recent large goal run into reusable, reproducible goal-run infrastructure.
+This package is a proposal bundle plus the Rust-backed `ultragoal` CLI for a future plugin that turns the strongest practices from the `codex-workflow-rs` repo and the recent large goal run into reusable, reproducible goal-run infrastructure.
 
 The skills, agents, connectors, and dogfood rollout remain proposal-stage. The included Rust validator is implemented for package/schema validation, exactly-once inventory closure, static semantic fixture checks, target-repo fixtures, semantic-classification receipts, and red-fixture proof.
 

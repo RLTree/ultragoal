@@ -219,7 +219,7 @@
     }
   ],
   "claim_ceiling": "package_static_fixture_only",
-  "producer_actor_id": "harness-ultragoal-validator",
+  "producer_actor_id": "harness-ultragoal-cli",
   "reviewer_actor_id": "harness-product-simplicity-falsifier",
   "actor_disjoint": true,
   "generated_at": "2026-06-25T04:00:00Z",

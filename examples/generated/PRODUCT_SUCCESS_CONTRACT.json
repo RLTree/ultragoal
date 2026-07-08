@@ -64,7 +64,7 @@
     "external user success"
   ],
   "claim_ceiling": "package_static_fixture_only_until_live_e2e",
-  "producer_actor_id": "harness-ultragoal-validator",
+  "producer_actor_id": "harness-ultragoal-cli",
   "review_owner": "harness-product-simplicity-falsifier",
   "generated_at": "2026-06-25T00:00:00Z",
   "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"

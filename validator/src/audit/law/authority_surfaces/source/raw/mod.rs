@@ -56,6 +56,7 @@ fn fixture_or_catalog_path(rel: &str) -> bool {
 
 fn authority_surface_inventory_path(rel: &str) -> bool {
     rel.contains("/authority_surfaces/surface_inventory/discovered/")
+        || rel == "validator/src/audit/law/authority_surfaces/package_surfaces/row.rs"
 }
 
 fn parser_boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> bool {

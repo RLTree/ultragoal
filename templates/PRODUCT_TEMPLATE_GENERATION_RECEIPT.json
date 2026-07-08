@@ -14,7 +14,7 @@
     "templates/PRODUCT_REVIEW_DISPOSITION.md"
   ],
   "retained_references": [],
-  "operator": "harness-ultragoal-validator",
+  "operator": "harness-ultragoal-cli",
   "generated_at": "2026-06-25T00:00:00Z",
   "manual_edits": [],
   "claim_ceiling": "package_static_fixture_only",
