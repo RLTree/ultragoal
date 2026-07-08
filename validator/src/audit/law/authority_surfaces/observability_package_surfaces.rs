@@ -53,6 +53,7 @@ const fn source(rel: &'static str) -> RequiredSurface {
         role: "source",
         rel,
         package_inventory_required: true,
+        existence_required: true,
     }
 }
 

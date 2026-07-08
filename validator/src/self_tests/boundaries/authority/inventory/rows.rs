@@ -85,6 +85,31 @@ fn authority_surface_inventory_reports_required_product_roles() {
                     == Some("available")),
         "{inventory}"
     );
+    for rel in [
+        "validation_artifacts/coverage/coverage-receipt.json",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "validation_artifacts/review/final-packet-proof.json",
+        "validation_artifacts/cli/update-goal-eligibility.json",
+    ] {
+        assert!(
+            inventory
+                .get("rows")
+                .and_then(serde_json::Value::as_array)
+                .expect("rows")
+                .iter()
+                .any(
+                    |row| row.get("path").and_then(serde_json::Value::as_str) == Some(rel)
+                        && row
+                            .get("existence_required")
+                            .and_then(serde_json::Value::as_bool)
+                            == Some(false)
+                        && row.get("surface_state").and_then(serde_json::Value::as_str)
+                            == Some("available")
+                ),
+            "runtime materialization row should be present without requiring local file existence for {rel}: {inventory}"
+        );
+    }
     std::fs::remove_dir_all(root).expect("cleanup authority surface inventory");
 }
 

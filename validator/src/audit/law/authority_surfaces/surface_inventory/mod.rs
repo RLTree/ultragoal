@@ -9,6 +9,7 @@ pub(crate) struct AuthoritySurfaceInventoryRow {
     pub(crate) role: String,
     pub(crate) path: String,
     pub(crate) package_inventory_required: bool,
+    pub(crate) existence_required: bool,
     pub(crate) exists_on_disk: bool,
     pub(crate) listed_in_package_inventory: bool,
 }
@@ -26,6 +27,7 @@ pub(super) fn rows(root: &Path, inventory: &BTreeSet<String>) -> Vec<AuthoritySu
             role: surface.role.to_string(),
             path: surface.rel.to_string(),
             package_inventory_required: surface.package_inventory_required,
+            existence_required: surface.existence_required,
             exists_on_disk: root.join(surface.rel).is_file(),
             listed_in_package_inventory: inventory.contains(surface.rel),
         })
@@ -52,7 +54,10 @@ pub(super) fn summary_value(
     for row in &rows {
         *role_counts.entry(row.role.clone()).or_insert(0usize) += 1;
     }
-    let missing_surface_count = rows.iter().filter(|row| !row.exists_on_disk).count();
+    let missing_surface_count = rows
+        .iter()
+        .filter(|row| row.existence_required && !row.exists_on_disk)
+        .count();
     let package_inventory_missing_count = rows
         .iter()
         .filter(|row| row.package_inventory_required && !row.listed_in_package_inventory)
@@ -81,7 +86,10 @@ fn full_value(rows: Vec<AuthoritySurfaceInventoryRow>) -> Value {
     for row in &rows {
         *role_counts.entry(row.role.clone()).or_insert(0usize) += 1;
     }
-    let missing_surface_count = rows.iter().filter(|row| !row.exists_on_disk).count();
+    let missing_surface_count = rows
+        .iter()
+        .filter(|row| row.existence_required && !row.exists_on_disk)
+        .count();
     let package_inventory_missing_count = rows
         .iter()
         .filter(|row| row.package_inventory_required && !row.listed_in_package_inventory)
@@ -101,6 +109,7 @@ fn row_value(row: AuthoritySurfaceInventoryRow) -> Value {
         "role": row.role,
         "path": row.path,
         "package_inventory_required": row.package_inventory_required,
+        "existence_required": row.existence_required,
         "exists_on_disk": row.exists_on_disk,
         "listed_in_package_inventory": row.listed_in_package_inventory,
         "surface_state": surface_state(&row)
@@ -108,7 +117,9 @@ fn row_value(row: AuthoritySurfaceInventoryRow) -> Value {
 }
 
 fn surface_state(row: &AuthoritySurfaceInventoryRow) -> &'static str {
-    if row.exists_on_disk && (!row.package_inventory_required || row.listed_in_package_inventory) {
+    if (!row.existence_required || row.exists_on_disk)
+        && (!row.package_inventory_required || row.listed_in_package_inventory)
+    {
         "available"
     } else {
         "blocked"

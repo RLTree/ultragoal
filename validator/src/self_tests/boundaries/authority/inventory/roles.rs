@@ -73,5 +73,19 @@ fn foundational_inventory_rejects_missing_and_unpackaged_required_surfaces() {
         }),
         "runtime coverage receipt is required at proof time but must not become package inventory: {failures:?}"
     );
+    for rel in [
+        "validation_artifacts/coverage/coverage-receipt.json",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json",
+        "validation_artifacts/review/final-packet-proof.json",
+        "validation_artifacts/cli/update-goal-eligibility.json",
+    ] {
+        assert!(
+            !failures.iter().any(|(_, failure)| failure
+                .contains(&format!("authority_surface_missing:role="))
+                && failure.contains(rel)),
+            "runtime materialization {rel} must remain a proof-time expectation, not a source-local inventory existence requirement: {failures:?}"
+        );
+    }
     std::fs::remove_dir_all(root).expect("cleanup required authority surfaces");
 }

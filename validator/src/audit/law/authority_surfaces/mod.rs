@@ -6,6 +6,9 @@ mod authority_labels;
 mod graph;
 mod graph_edges;
 mod inventory;
+#[path = "inventory/required_surfaces.rs"]
+mod inventory_required_surfaces;
+#[path = "inventory/requirements.rs"]
 mod inventory_requirements;
 mod package_surfaces;
 mod paths;

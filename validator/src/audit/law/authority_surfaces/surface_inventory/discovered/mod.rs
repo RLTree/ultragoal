@@ -25,6 +25,7 @@ fn authority_row(
         role: role.to_string(),
         path: path.to_string(),
         package_inventory_required,
+        existence_required: true,
         exists_on_disk: root.join(path).is_file(),
         listed_in_package_inventory: inventory.contains(path),
     }
