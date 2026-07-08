@@ -78,8 +78,8 @@
       {
         "id": "red_green_tamper_fixture_scheduler",
         "product_role": "Isolated fixture scheduler for red, green, and tamper fixtures with deterministic aggregation and no shared validation_artifacts writes from parallel workers.",
-        "status": "not_started",
-        "current_evidence": "Red fixture infrastructure exists, but the custom scheduler authority is not proven as a current-candidate product tool for all required fixture classes.",
+        "status": "in_progress",
+        "current_evidence": "Red fixture infrastructure exists, but the custom scheduler authority is not proven as a current-candidate product tool for all required fixture classes. Lane 6 is active for this custom tool.",
         "next_required_proof": "Real fixture command or scheduler path proves isolated temp roots, deterministic ordering, typed task classes, no shared receipt writes, leak checks, and fail-closed stale or mutation behavior."
       },
       {
@@ -106,8 +106,8 @@
       {
         "id": "ultragoal_next",
         "product_role": "Agent next-action command that consumes current-state and observe explain output to identify the first legal move without manual spelunking.",
-        "status": "not_started",
-        "current_evidence": "`observe explain --next` exists, but a canonical `ultragoal next` command surface is not implemented as a product command.",
+        "status": "in_progress",
+        "current_evidence": "`observe explain --next` exists, but a canonical `ultragoal next` command surface is not implemented as a product command. Lane 8 is active for this custom tool.",
         "next_required_proof": "Real `ultragoal next` and `ultragoal next --json` current-candidate runs name digest, phase, blocker, dependency chain, exact repair, exact rerun, forbidden actions, and claim ceiling from typed authority inputs."
       },
       {
@@ -120,8 +120,8 @@
       {
         "id": "impacted_rust_test_mapping",
         "product_role": "Impacted Rust test map that feeds nextest or the canonical test runner with legally sufficient focused tests instead of broad cargo sweeps or fake parallelism.",
-        "status": "not_started",
-        "current_evidence": "Focused tests are run manually or by broad filters; no Harness-owned impacted-test map is proven as a current product tool.",
+        "status": "in_progress",
+        "current_evidence": "Focused tests are run manually or by broad filters; no Harness-owned impacted-test map is proven as a current product tool. Lane 6 is active for this custom tool.",
         "next_required_proof": "Current-candidate command maps changed source surfaces to impacted Rust tests, invokes one legal runner path, records input digests and result digests, and fails closed on unknown or unsafe mappings."
       }
     ]
@@ -157,6 +157,9 @@
       "covered_claim_ids": [
         "CLAIM-092",
         "CLAIM-101"
+      ],
+      "covered_custom_tools": [
+        "product_surface_input_specs"
       ],
       "owner": "codex-app-worktree-lane-001",
       "thread_or_session_id": "019f4303-8945-7d22-b380-790b049c0cbd",
@@ -292,6 +295,9 @@
         "CLAIM-092",
         "CLAIM-103"
       ],
+      "covered_custom_tools": [
+        "coverage_lineage_intelligence"
+      ],
       "owner": "codex-app-worktree-lane-002",
       "thread_or_session_id": "019f4303-d1bc-7f61-964b-b6581de422a2",
       "actor_binding": {
@@ -421,6 +427,10 @@
       "covered_claim_ids": [
         "CLAIM-090",
         "CLAIM-092"
+      ],
+      "covered_custom_tools": [
+        "product_semantic_active_surface_inventory",
+        "semantic_namespace_symbol_inventory"
       ],
       "owner": "codex-app-worktree-lane-003",
       "thread_or_session_id": "019f4304-27e2-7741-bef7-bc0732e5c5b6",
@@ -557,6 +567,9 @@
         "CUSTOM-TOOLING-PREREQ",
         "CLAIM-101"
       ],
+      "covered_custom_tools": [
+        "routine_hot_loop_executor"
+      ],
       "owner": "codex-app-worktree-lane-004",
       "thread_or_session_id": "019f4335-bf7e-79d0-b731-63c006af87a8",
       "actor_binding": {
@@ -642,6 +655,277 @@
         "status": "complete",
         "reason": "Lane 4 was reconciled as source-equivalent in root, its Codex thread was archived, and its clean worktree was removed. Claim ceiling remains source_local_custom_tooling_prerequisite_only."
       }
+    },
+    {
+      "id": "LANE-005",
+      "status": "active",
+      "lane_type": "implementation",
+      "lane_objective": "Build custom tooling prerequisite AuditContext, package truth snapshotter, verified incremental query graph, and node-local cache authority.",
+      "macro_lane_rationale": "These tools own immutable command snapshot truth, affected-set graph legality, package-boundary truth, and verified-local reuse. Gate 92 speed or fitting remains blocked until this authority exists and is proven through current product behavior.",
+      "covered_custom_tools": [
+        "audit_context",
+        "verified_incremental_query_graph",
+        "node_local_cache_authority",
+        "package_truth_snapshotter"
+      ],
+      "owner": "codex-app-worktree-lane-005",
+      "thread_or_session_id": "019f43cb-9975-7c93-9b58-53b0a75b2ca2",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-005",
+        "thread_or_session_id": "019f43cb-9975-7c93-9b58-53b0a75b2ca2",
+        "pending_worktree_id": "local:e5fbf4a3-2556-47cd-aa8d-b8e1f2521164",
+        "actor_status": "active",
+        "validated_at": "2026-07-08T22:55:00Z"
+      },
+      "branch": "codex/gate92-product-fitness-telemetry worktree",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/1133/harness-ultragoal-plugin-proposal",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T22:55:00Z",
+      "owned_paths": [
+        "validator/src/cli/live_loop/context.rs",
+        "validator/src/cli/live_loop/graph/**",
+        "validator/src/cli/live_loop/surfaces/**",
+        "validator/src/cli/package/**",
+        "validator/src/package/**",
+        "validator/src/self_tests/package/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/claim_semantics/coverage/**",
+        "validator/src/red/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "workspace_status": {
+        "clean": "pending_lane_report",
+        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/1133/harness-ultragoal-plugin-proposal",
+        "dirty_paths": "pending_lane_report"
+      },
+      "parent_orchestrator_state": {
+        "status": "active",
+        "observed_at": "2026-07-08T22:55:00Z",
+        "finding": "Lane 5 was launched as a goal-bound Codex app worktree thread for immutable snapshot, package truth, incremental query graph, and node-local cache authority.",
+        "action": "Do not accept without clean lane commit, focused tests, root source inspection, current-candidate ultragoal proof or verified current-input equivalence, and explicit source-local claim ceiling."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Active custom-tooling prerequisite lane."
+      }
+    },
+    {
+      "id": "LANE-006",
+      "status": "active",
+      "lane_type": "implementation",
+      "lane_objective": "Build custom tooling prerequisite isolated red/green/tamper fixture scheduler and impacted Rust test mapping.",
+      "macro_lane_rationale": "Fixture execution and impacted-test selection must be Harness-owned authority rather than broad red reports, broad cargo sweeps, or fake parallel subprocesses.",
+      "covered_custom_tools": [
+        "red_green_tamper_fixture_scheduler",
+        "impacted_rust_test_mapping"
+      ],
+      "owner": "codex-app-worktree-lane-006",
+      "thread_or_session_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-006",
+        "thread_or_session_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
+        "pending_worktree_id": "local:b17000a1-9f17-45cc-81fa-f41281c5c59f",
+        "actor_status": "active",
+        "validated_at": "2026-07-08T22:55:00Z"
+      },
+      "branch": "codex/gate92-product-fitness-telemetry worktree",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T22:55:00Z",
+      "owned_paths": [
+        "validator/src/red/**",
+        "validator/src/audit/red/**",
+        "validator/src/cli/red_report/**",
+        "validator/src/self_tests/red/**",
+        "validator/src/cli/live_loop/rust_tests/**",
+        "validator/src/cli/rust/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/live_loop/context.rs",
+        "validator/src/cli/live_loop/graph/**",
+        "validator/src/cli/live_loop/surfaces/**",
+        "validator/src/cli/live_loop/nodes/measurement/**",
+        "validator/src/cli/package/**",
+        "validator/src/package/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "workspace_status": {
+        "clean": "pending_lane_report",
+        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
+        "dirty_paths": "pending_lane_report"
+      },
+      "parent_orchestrator_state": {
+        "status": "active",
+        "observed_at": "2026-07-08T22:55:00Z",
+        "finding": "Lane 6 was launched as a goal-bound Codex app worktree thread for isolated fixture scheduling and impacted Rust test mapping.",
+        "action": "Do not accept without clean lane commit, focused tests, red/green/tamper proof for scheduler/test-map semantics, real current-candidate product behavior or explicit blocker, and root reconciliation."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Active custom-tooling prerequisite lane."
+      }
+    },
+    {
+      "id": "LANE-007",
+      "status": "active",
+      "lane_type": "implementation",
+      "lane_objective": "Build custom tooling prerequisite command telemetry roundtrip and receipt/artifact reconciliation authority.",
+      "macro_lane_rationale": "Command telemetry and receipt reconciliation must reject proxy proof before any later Gate 92 command family can be fitted.",
+      "covered_custom_tools": [
+        "command_telemetry_roundtrip_reconciliation",
+        "receipt_artifact_dereference_reconciliation"
+      ],
+      "owner": "codex-app-worktree-lane-007",
+      "thread_or_session_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-007",
+        "thread_or_session_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
+        "pending_worktree_id": "local:00717311-30d7-4bef-843e-5e1779c87b04",
+        "actor_status": "active",
+        "validated_at": "2026-07-08T22:55:00Z"
+      },
+      "branch": "codex/gate92-product-fitness-telemetry worktree",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T22:55:00Z",
+      "owned_paths": [
+        "validator/src/cli/observe/command_roundtrip/**",
+        "validator/src/cli/observe/telemetry/**",
+        "validator/src/cli/observe/query/**",
+        "validator/src/cli/observe/stdout/**",
+        "validator/src/cli/observe/snapshot/**",
+        "validator/src/self_tests/cli/observe/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/live_loop/**",
+        "validator/src/cli/current_state/**",
+        "validator/src/cli/observe/explain/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/red/**",
+        "validator/src/cli/package/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "workspace_status": {
+        "clean": "pending_lane_report",
+        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
+        "dirty_paths": "pending_lane_report"
+      },
+      "parent_orchestrator_state": {
+        "status": "active",
+        "observed_at": "2026-07-08T22:55:00Z",
+        "finding": "Lane 7 was launched as a goal-bound Codex app worktree thread for command telemetry roundtrip and receipt/artifact reconciliation authority.",
+        "action": "Do not accept without clean lane commit, focused tests, real current-candidate roundtrip or explicit blocker, red/green/tamper proof for proxy-proof rejection, and root reconciliation."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Active custom-tooling prerequisite lane."
+      }
+    },
+    {
+      "id": "LANE-008",
+      "status": "active",
+      "lane_type": "implementation",
+      "lane_objective": "Build custom tooling prerequisite current-state read model, ultragoal next, and repair explanation compiler.",
+      "macro_lane_rationale": "Agent next-action and repair explanation must be Harness-owned product tools before later Gate 92 fitting can be operationally useful.",
+      "covered_custom_tools": [
+        "current_state_read_model",
+        "ultragoal_next",
+        "observe_query_explain_repair_compiler"
+      ],
+      "owner": "codex-app-worktree-lane-008",
+      "thread_or_session_id": "019f43cc-e0e9-7432-aa7f-2d56ab16242a",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-008",
+        "thread_or_session_id": "019f43cc-e0e9-7432-aa7f-2d56ab16242a",
+        "pending_worktree_id": "local:7afe0bcf-3435-4e84-a29d-7f18c00be8e4",
+        "actor_status": "active",
+        "validated_at": "2026-07-08T22:55:00Z"
+      },
+      "branch": "codex/gate92-product-fitness-telemetry worktree",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T22:55:00Z",
+      "owned_paths": [
+        "validator/src/cli/current_state/**",
+        "validator/src/cli/observe/explain/**",
+        "validator/src/cli/next_action/**",
+        "validator/src/cli/usage.rs",
+        "validator/src/self_tests/command/**",
+        "validator/src/self_tests/cli/observe/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/live_loop/**",
+        "validator/src/cli/observe/command_roundtrip/**",
+        "validator/src/cli/observe/query/**",
+        "validator/src/cli/observe/telemetry/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/red/**",
+        "validator/src/cli/package/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "workspace_status": {
+        "clean": "pending_lane_report",
+        "observed_workspace": "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal",
+        "dirty_paths": "pending_lane_report"
+      },
+      "parent_orchestrator_state": {
+        "status": "active",
+        "observed_at": "2026-07-08T22:55:00Z",
+        "finding": "Lane 8 was launched as a goal-bound Codex app worktree thread for current-state, ultragoal next, and repair explanation compiler authority.",
+        "action": "Do not accept without clean lane commit, focused tests, real current-candidate current-state/explain/next behavior or explicit blocker, source inspection, and root reconciliation."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Active custom-tooling prerequisite lane."
+      }
     }
   ],
   "root_verification_stages": {
@@ -693,5 +977,5 @@
       "claim_ceiling_impact": "Custom tooling remains source-local prerequisite evidence only; Gate 92 remains open and not claimable until downstream production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T22:45:00Z"
+  "generated_at": "2026-07-08T22:55:00Z"
 }
