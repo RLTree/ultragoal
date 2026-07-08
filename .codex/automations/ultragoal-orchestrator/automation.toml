@@ -1,0 +1,82 @@
+version = 1
+id = "ultragoal-orchestrator"
+kind = "heartbeat"
+name = "Ultragoal Orchestrator"
+status = "ACTIVE"
+target_thread_id = "019f1a7d-ad26-7081-ad9b-e7e7769b4c58"
+source_root = "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
+branch = "codex/gate92-product-fitness-telemetry"
+lane_registry = "LANE_REGISTRY.json"
+claim_ceiling = "source_local_orchestration_only"
+created_from_parent_commit = "67eb340862b705cdce0ce237745289841a3e34a5"
+created_from_package_digest = "sha256:225a334aa4102bdc1c82da35f27d51326b239b0c9bc9a997d6db3fd93d7918c0"
+
+[cadence]
+kind = "heartbeat"
+interval_minutes = 30
+
+[duties]
+first_actions = [
+  "recompute package digest with target/debug/ultragoal --root . package digest",
+  "check git status --short --branch --untracked-files=all",
+  "read LANE_REGISTRY.json",
+  "classify active lanes by thread, worktree, owned custom tools, dirty paths, and claim ceiling"
+]
+allowed_actions = [
+  "poll Codex lane threads",
+  "send corrective steering to blocked or drifting lanes",
+  "mark merge-ready lanes for parent reconciliation",
+  "update LANE_REGISTRY.json with concise orchestration state",
+  "reconcile completed lanes only after parent validation",
+  "teardown clean accepted worktrees after merge"
+]
+forbidden_actions = [
+  "Gate 92 speed or fitting claims before all custom tools have current product proof",
+  "readiness, release, completion, final packet, install, cache, registry, reviewer exposure, or update_goal claims",
+  "broad receipt churn during heartbeat monitoring",
+  "shared validation_artifacts writes from lane workers",
+  "ad hoc shell worktree creation"
+]
+
+[[active_lanes]]
+id = "LANE-005"
+thread_id = "019f43cb-9975-7c93-9b58-53b0a75b2ca2"
+worktree = "/Users/terrynoblin/.codex/worktrees/1133/harness-ultragoal-plugin-proposal"
+status = "ready_for_parent_reconciliation"
+owned_custom_tools = [
+  "audit_context",
+  "verified_incremental_query_graph",
+  "node_local_cache_authority",
+  "package_truth_snapshotter"
+]
+
+[[active_lanes]]
+id = "LANE-006"
+thread_id = "019f43cc-0202-7f82-9464-340f3a3ee8f1"
+worktree = "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal"
+status = "active_requires_overlap_steer"
+owned_custom_tools = [
+  "red_green_tamper_fixture_scheduler",
+  "impacted_rust_test_mapping"
+]
+
+[[active_lanes]]
+id = "LANE-007"
+thread_id = "019f43cc-6eb5-7b02-9074-4669427ad545"
+worktree = "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal"
+status = "active"
+owned_custom_tools = [
+  "command_telemetry_roundtrip_reconciliation",
+  "receipt_artifact_dereference_reconciliation"
+]
+
+[[active_lanes]]
+id = "LANE-008"
+thread_id = "019f43cc-e0e9-7432-aa7f-2d56ab16242a"
+worktree = "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal"
+status = "ready_for_parent_reconciliation"
+owned_custom_tools = [
+  "current_state_read_model",
+  "ultragoal_next",
+  "observe_query_explain_repair_compiler"
+]

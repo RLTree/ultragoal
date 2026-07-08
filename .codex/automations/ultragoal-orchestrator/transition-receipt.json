@@ -1,0 +1,62 @@
+{
+  "schema": "harness-ultragoal.orchestrator-transition-receipt.v1",
+  "receipt_kind": "source_local_orchestration_transition",
+  "created_at": "2026-07-08T22:26:23Z",
+  "automation_id": "ultragoal-orchestrator",
+  "app_automation_created": true,
+  "target_thread_id": "019f1a7d-ad26-7081-ad9b-e7e7769b4c58",
+  "source_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+  "parent_commit": "67eb340862b705cdce0ce237745289841a3e34a5",
+  "parent_package_digest": "sha256:225a334aa4102bdc1c82da35f27d51326b239b0c9bc9a997d6db3fd93d7918c0",
+  "lane_registry": "LANE_REGISTRY.json",
+  "claim_ceiling": "source_local_orchestration_only",
+  "gate92_status": "blocked_until_all_required_custom_tools_have_current_product_proof",
+  "active_lanes": [
+    {
+      "id": "LANE-005",
+      "thread_id": "019f43cb-9975-7c93-9b58-53b0a75b2ca2",
+      "worktree": "/Users/terrynoblin/.codex/worktrees/1133/harness-ultragoal-plugin-proposal",
+      "observed_head": "11bb5680a1543d458a20341932007b6ce2cb19a0",
+      "status": "ready_for_parent_reconciliation"
+    },
+    {
+      "id": "LANE-006",
+      "thread_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
+      "worktree": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
+      "observed_head": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "status": "active_requires_overlap_steer"
+    },
+    {
+      "id": "LANE-007",
+      "thread_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
+      "worktree": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
+      "observed_head": "67eb340862b705cdce0ce237745289841a3e34a5",
+      "status": "active"
+    },
+    {
+      "id": "LANE-008",
+      "thread_id": "019f43cc-e0e9-7432-aa7f-2d56ab16242a",
+      "worktree": "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal",
+      "observed_head": "631d34d3d5fdd209bfe7217927ff22b6d1de46a5",
+      "status": "ready_for_parent_reconciliation"
+    }
+  ],
+  "reviewer_findings_addressed": [
+    "shared CLI dispatch paths are parent-serialized integration blockers",
+    "Lane 007 and Lane 008 no longer both own validator/src/self_tests/cli/observe/**",
+    "active lanes carry goal_binding, claim_ceiling, and proof_validation_contract fields",
+    "lane HEAD, dirty path, and merge-base observations are recorded"
+  ],
+  "forbidden_claims": [
+    "Gate 92 fitting or closure",
+    "Product Usage closure",
+    "Phase 4 closure",
+    "readiness",
+    "release",
+    "completion",
+    "install/cache proof",
+    "registry/reviewer exposure",
+    "final packet correctness",
+    "update_goal eligibility"
+  ]
+}
