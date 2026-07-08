@@ -403,7 +403,7 @@
     },
     {
       "id": "LANE-004",
-      "status": "pending_worktree_setup",
+      "status": "active",
       "lane_type": "implementation",
       "lane_objective": "Build custom Rust tooling prerequisite routine hot-loop executor and measurement authority.",
       "macro_lane_rationale": "This lane owns the routine executor and measurement-status authority that Lane 1 needs before input-spec/cache-reuse work can be accepted. It is prerequisite custom tooling that improves speed and proof honesty before Gate 92 production-observability fitting resumes.",
