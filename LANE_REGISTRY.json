@@ -400,6 +400,125 @@
         "status": "complete",
         "reason": "Lane 3 was merged source-local, handed off from the Codex worktree to the root checkout, and archived after parent validation."
       }
+    },
+    {
+      "id": "LANE-004",
+      "status": "pending_worktree_setup",
+      "lane_type": "implementation",
+      "lane_objective": "Build custom Rust tooling prerequisite routine hot-loop executor and measurement authority.",
+      "macro_lane_rationale": "This lane owns the routine executor and measurement-status authority that Lane 1 needs before input-spec/cache-reuse work can be accepted. It is prerequisite custom tooling that improves speed and proof honesty before Gate 92 production-observability fitting resumes.",
+      "acceptance_scope": [
+        "Routine source-local nodes separate validation, validation-cache, observability, speed-claim, and claim-ceiling states.",
+        "Validation results remain reusable when observability proof is partial or unavailable.",
+        "Speed-bearing rows fail closed without executed work or verified current-input cache equivalence.",
+        "First product blocker and first observability blocker are reported separately with exact rerun/repair guidance."
+      ],
+      "lane_size_evidence": {
+        "independent_outcome": "The lane can return a source-local commit for hot-loop executor and measurement authority without changing graph input specs, coverage lineage, namespace authority, command roundtrip, current-state, or shared receipts.",
+        "owned_path_groups": [
+          "validator/src/cli/live_loop/nodes/measurement/**",
+          "validator/src/cli/live_loop/nodes/status.rs",
+          "validator/src/cli/live_loop/nodes/mod.rs",
+          "validator/src/cli/live_loop/rust_format/**",
+          "validator/src/cli/live_loop/node_timing/** if needed for measurement-row compatibility"
+        ],
+        "work_units": [
+          "implement typed validation/cache/observability/speed status separation",
+          "retain validation result when telemetry proof is partial",
+          "fail unsupported speed claims without executed work or verified cache equivalence",
+          "prove one real routine hot-loop or closest current CLI path as source-local custom-tooling prerequisite proof"
+        ],
+        "why_not_parent_inline": "The parent is orchestrator/reconciler and this prerequisite custom tooling belongs in a Codex app worktree lane.",
+        "why_not_smaller": "Executor status, measurement records, and rust-format routine path must agree or the product keeps collapsing validation output, observability gaps, and speed claims."
+      },
+      "covered_claim_ids": [
+        "CUSTOM-TOOLING-PREREQ",
+        "CLAIM-101"
+      ],
+      "owner": "codex-app-worktree-lane-004",
+      "thread_or_session_id": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-004",
+        "thread_or_session_id": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+        "actor_status": "pending_worktree_setup",
+        "validated_at": "2026-07-08T20:07:00Z"
+      },
+      "branch": "pending_codex_app_worktree",
+      "workspace": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+      "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
+      "base_commit": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
+      "current_commit": "pending",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "987f0036b48d0c9b80c0c4c9ff17c5580d063faa",
+      "target_head_at_validation": "pending",
+      "merge_base_at_validation": "pending",
+      "last_heartbeat": "2026-07-08T20:07:00Z",
+      "owned_paths": [
+        "validator/src/cli/live_loop/nodes/measurement/**",
+        "validator/src/cli/live_loop/nodes/status.rs",
+        "validator/src/cli/live_loop/nodes/mod.rs",
+        "validator/src/cli/live_loop/rust_format/**",
+        "validator/src/cli/live_loop/node_timing/**"
+      ],
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "LANE_REGISTRY.json",
+        "validator/src/cli/live_loop/changed_inputs/**",
+        "validator/src/cli/live_loop/surfaces/**",
+        "validator/src/cli/live_loop/graph/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/claim_semantics/coverage/**",
+        "validator/src/audit/law/authority_surfaces/**",
+        "validator/src/audit/namespace/**",
+        "validator/src/cli/observe/command_roundtrip/**",
+        "validator/src/cli/observe/explain/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "state_roots": [
+        "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3"
+      ],
+      "temporary_state_roots": [],
+      "tool_cache_roots": [],
+      "browser_profile_roots": [],
+      "artifact_root": ".codex/lane-registry",
+      "port_allocations": [],
+      "ready_receipt": {
+        "path": "pending_codex_app_thread_creation",
+        "digest": "pending"
+      },
+      "claim_ids": [
+        "CUSTOM-TOOLING-PREREQ",
+        "CLAIM-101"
+      ],
+      "dependencies": [
+        "LANE-001 parent blocker"
+      ],
+      "workspace_status": {
+        "clean": null,
+        "status_receipt": {
+          "path": "pending_codex_app_thread_creation",
+          "digest": "pending"
+        },
+        "observed_clean": null,
+        "observed_workspace": "pending:local:c995f5c9-59fc-4440-a26a-8045d63172d3",
+        "observed_branch": "pending",
+        "observed_head": "pending",
+        "dirty_paths": []
+      },
+      "parent_orchestrator_state": {
+        "status": "pending_worktree_setup",
+        "observed_at": "2026-07-08T20:07:00Z",
+        "finding": "Codex app worktree lane creation returned pendingWorktreeId local:c995f5c9-59fc-4440-a26a-8045d63172d3. The lane prompt is goal-bound and framed as source-local custom tooling prerequisite, not Gate 92 fitting.",
+        "action": "Wait for Codex app worktree setup to produce a thread id, then monitor Lane 4. Do not accept or merge Lane 4 without source inspection, focused validation, real routine hot-loop behavior or verified current-input reuse, explicit prerequisite-only claim ceiling, and root ultragoal reconciliation."
+      },
+      "teardown": {
+        "required": true,
+        "status": "not_ready",
+        "reason": "Pending prerequisite custom-tooling implementation lane; teardown is forbidden until parent accepts or abandons lane output."
+      }
     }
   ],
   "root_verification_stages": {
@@ -451,5 +570,5 @@
       "claim_ceiling_impact": "Custom tooling remains source-local prerequisite evidence only; Gate 92 remains open and not claimable until downstream production proof surfaces reconcile"
     }
   },
-  "generated_at": "2026-07-08T20:02:00Z"
+  "generated_at": "2026-07-08T20:07:00Z"
 }
