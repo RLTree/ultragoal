@@ -43,7 +43,7 @@ fn missing_runtime_materializations_do_not_increment_source_surface_missing_coun
                     .and_then(serde_json::Value::as_bool)
                     == Some(false)
                 && row.get("surface_state").and_then(serde_json::Value::as_str)
-                    == Some("available")),
+                    == Some("runtime_materialization_pending")),
         "{inventory}"
     );
     std::fs::remove_dir_all(root).expect("cleanup runtime materialization count");

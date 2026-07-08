@@ -5,7 +5,10 @@ fn authority_surface_inventory_reports_required_product_roles() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("authority-surface-inventory");
     let required = crate::audit::law::authority_surfaces::required_surfaces_for_test();
-    for (_, rel, _) in &required {
+    for (_, rel, packaged) in &required {
+        if !*packaged {
+            continue;
+        }
         let path = root.join(rel);
         std::fs::create_dir_all(path.parent().expect("surface parent")).expect("surface dir");
         std::fs::write(&path, "{}").expect("surface file");
@@ -105,7 +108,7 @@ fn authority_surface_inventory_reports_required_product_roles() {
                             .and_then(serde_json::Value::as_bool)
                             == Some(false)
                         && row.get("surface_state").and_then(serde_json::Value::as_str)
-                            == Some("available")
+                            == Some("runtime_materialization_pending")
                 ),
             "runtime materialization row should be present without requiring local file existence for {rel}: {inventory}"
         );

@@ -136,6 +136,18 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "receipt",
         "validation_artifacts/coverage/coverage-receipt.json",
     ),
+    runtime(
+        "runtime_receipt",
+        "validation_artifacts/ultragoal-audit/validator-receipt.json",
+    ),
+    runtime(
+        "runtime_receipt",
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json",
+    ),
+    runtime(
+        "runtime_receipt",
+        "validation_artifacts/coverage/coverage-receipt.json",
+    ),
     package("standards", "templates/agent-standards/enforcement.json"),
     package("standards", "templates/agent-standards/enforcement.tsv"),
     package(

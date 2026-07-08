@@ -117,10 +117,13 @@ fn row_value(row: AuthoritySurfaceInventoryRow) -> Value {
 }
 
 fn surface_state(row: &AuthoritySurfaceInventoryRow) -> &'static str {
-    if (!row.existence_required || row.exists_on_disk)
+    if row.exists_on_disk && (!row.package_inventory_required || row.listed_in_package_inventory) {
+        "available"
+    } else if !row.existence_required
+        && !row.exists_on_disk
         && (!row.package_inventory_required || row.listed_in_package_inventory)
     {
-        "available"
+        "runtime_materialization_pending"
     } else {
         "blocked"
     }
