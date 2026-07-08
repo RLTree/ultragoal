@@ -10,6 +10,7 @@ mod claims;
 pub(crate) mod exact_receipt;
 mod executor;
 mod routine;
+mod routine_observation;
 mod runtime;
 mod stdout;
 pub(crate) mod target_dir;
@@ -78,10 +79,12 @@ fn run_with_executor(
     let scheduler = crate::scheduler::SchedulerConfig::from_jobs(command.jobs)?;
     crate::output_path::claim_artifact_path(root, &command.receipt, "coverage receipt")?;
     let before = crate::package::inventory::package_digest(root)?;
-    let execution = if command.validate_existing {
-        CoverageExecution::validate_existing()
-    } else {
-        executor(root, &command.receipt)
+    let execution = match (command.validate_existing, command.mode) {
+        (true, _) => CoverageExecution::validate_existing(),
+        (false, CoverageMode::Strict) => executor(root, &command.receipt),
+        (false, CoverageMode::Routine) => {
+            routine_observation::execute(root, &command.receipt, &before)
+        }
     };
     let candidate = crate::package::inventory::package_digest(root)?;
     let mut failures = match command.mode {

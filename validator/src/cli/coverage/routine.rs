@@ -55,6 +55,14 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
             "coverage_routine_tool_version_missing",
         ),
         (
+            receipt_fields::string(receipt, "cargo_version").is_empty(),
+            "coverage_routine_cargo_version_missing",
+        ),
+        (
+            receipt_fields::string(receipt, "rustc_version").is_empty(),
+            "coverage_routine_rustc_version_missing",
+        ),
+        (
             receipt_fields::string(receipt, "coverage_cache_class").is_empty(),
             "coverage_routine_cache_class_missing",
         ),

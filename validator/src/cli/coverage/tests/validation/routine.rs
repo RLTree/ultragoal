@@ -20,6 +20,16 @@ fn routine_coverage_accepts_verified_lineage_and_rejects_claim_overreach() {
             "coverage_routine_cache_class_missing",
         ),
         (
+            "cargo_version",
+            json!(""),
+            "coverage_routine_cargo_version_missing",
+        ),
+        (
+            "rustc_version",
+            json!(""),
+            "coverage_routine_rustc_version_missing",
+        ),
+        (
             "boundary_lineage_digest",
             json!(""),
             "coverage_routine_boundary_lineage_missing",
@@ -85,6 +95,8 @@ fn make_routine(receipt: &mut Value) {
         "app_registry_or_reviewer_exposure"
     ]);
     receipt["coverage_cache_class"] = json!("retained_artifact_verified_local");
+    receipt["cargo_version"] = json!("cargo test");
+    receipt["rustc_version"] = json!("rustc test");
     receipt["boundary_lineage_digest"] = json!("sha256:boundary");
     receipt["equivalence_status"] = json!("verified_current_input_equivalent");
 }

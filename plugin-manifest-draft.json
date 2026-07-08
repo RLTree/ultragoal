@@ -4132,6 +4132,7 @@
     "validator/src/cli/coverage/executor.rs",
     "validator/src/cli/coverage/mod.rs",
     "validator/src/cli/coverage/routine.rs",
+    "validator/src/cli/coverage/routine_observation.rs",
     "validator/src/cli/coverage/runtime.rs",
     "validator/src/cli/coverage/stdout.rs",
     "validator/src/cli/coverage/target_dir.rs",
