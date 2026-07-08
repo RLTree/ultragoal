@@ -119,6 +119,33 @@ fn unsupported_legacy_command_alias_fails() {
 }
 
 #[test]
+fn unsupported_legacy_command_alias_fails_after_parser_directory_split() {
+    let root = temp_root("legacy-command-alias-routed-parser");
+    write_canonical_bin(&root);
+    write_file(
+        &root,
+        "validator/src/argument_parser/mod.rs",
+        "mod specialized;\n",
+    );
+    write_file(
+        &root,
+        "validator/src/argument_parser/specialized.rs",
+        r#"match command { "package-digest" => Command::PackageDigest, _ => Command::Help }"#,
+    );
+
+    let failures = failures(
+        &root,
+        inventory(&[
+            "validator/src/bin/ultragoal.rs",
+            "validator/src/argument_parser/mod.rs",
+            "validator/src/argument_parser/specialized.rs",
+        ]),
+    );
+    assert_contains(&failures, "surface=command-alias:package-digest");
+    cleanup(root);
+}
+
+#[test]
 fn usage_text_cannot_advertise_legacy_validator_binary() {
     let root = temp_root("usage-legacy-validator");
     write_canonical_bin(&root);

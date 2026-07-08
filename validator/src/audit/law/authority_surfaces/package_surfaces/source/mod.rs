@@ -204,3 +204,17 @@ pub(super) fn symbols(root: &Path, rel: &str) -> Result<Vec<SourceSymbol>, Strin
 pub(super) fn contains(root: &Path, rel: &str, needle: &str) -> bool {
     std::fs::read_to_string(root.join(rel)).is_ok_and(|text| text.contains(needle))
 }
+
+pub(super) fn tree_contains(root: &Path, rel: &str, needle: &str) -> bool {
+    let path = root.join(rel);
+    if path.is_file() {
+        return contains(root, rel, needle);
+    }
+    let Ok(entries) = crate::package::inventory::closure::actual_files(root) else {
+        return false;
+    };
+    entries
+        .iter()
+        .filter(|entry| entry.starts_with(rel))
+        .any(|entry| contains(root, entry, needle))
+}

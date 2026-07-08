@@ -107,12 +107,12 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
             );
         }
     }
-    if [
-        "validator/src/argument_parser.rs",
-        "validator/src/argument_parser/mod.rs",
-    ]
-    .iter()
-    .any(|rel| source::contains(root, rel, "\"package-digest\""))
+    if source::tree_contains(root, "validator/src/argument_parser", "\"package-digest\"")
+        || source::contains(
+            root,
+            "validator/src/argument_parser.rs",
+            "\"package-digest\"",
+        )
     {
         push(
             &mut out,
