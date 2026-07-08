@@ -46,7 +46,40 @@ pub(super) fn raw_authority_markers(text: &str) -> Vec<RawAuthorityMarker> {
 
 fn contains_raw_path_authority(text: &str) -> bool {
     let compact = text.replace(['\n', '\t'], " ");
-    contains_identifier(&compact, "raw_path") || compact.contains("PathBuf::from(")
+    contains_identifier(&compact, "raw_path")
+        || compact.contains("PathBuf::from(")
+        || exported_record_carries_pathbuf(text)
+}
+
+fn exported_record_carries_pathbuf(text: &str) -> bool {
+    let mut in_record = false;
+    let mut brace_depth = 0usize;
+    for line in text.lines() {
+        let trimmed = line.trim_start();
+        if !in_record
+            && (trimmed.starts_with("pub(crate) struct ")
+                || trimmed.starts_with("pub(crate) enum "))
+        {
+            in_record = true;
+            brace_depth = 0;
+        }
+        if in_record && line.contains("PathBuf") {
+            return true;
+        }
+        if in_record {
+            for ch in line.chars() {
+                match ch {
+                    '{' => brace_depth += 1,
+                    '}' => brace_depth = brace_depth.saturating_sub(1),
+                    _ => {}
+                }
+            }
+            if brace_depth == 0 && (line.contains('}') || line.trim_end().ends_with(';')) {
+                in_record = false;
+            }
+        }
+    }
+    false
 }
 
 fn contains_identifier(text: &str, needle: &str) -> bool {

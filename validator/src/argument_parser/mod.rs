@@ -2,12 +2,18 @@ use crate::command::{Args, Command};
 use crate::{audit, cli};
 use std::path::PathBuf;
 
+mod authority;
+mod help_request;
+mod specialized;
+#[cfg(test)]
+mod tests;
+
 pub(crate) fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
     let started = std::time::Instant::now();
     if raw.is_empty() {
         return Err(usage());
     }
-    let mut root = PathBuf::from(".");
+    let mut root = authority::CliRoot::workspace_default();
     let mut i = 0;
     while i < raw.len() {
         match raw[i].as_str() {
@@ -16,7 +22,7 @@ pub(crate) fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
                 if value_index >= raw.len() {
                     return Err("missing value for --root".to_string());
                 }
-                root = PathBuf::from(raw[value_index].clone());
+                root = authority::CliRoot::from_option_value(&raw[value_index])?;
                 raw.drain(i..=i + 1);
             }
             _ => i += 1,
@@ -29,13 +35,19 @@ pub(crate) fn parse_args_from(mut raw: Vec<String>) -> Result<Args, String> {
         let elapsed_ms = u64::try_from(started.elapsed().as_millis())
             .unwrap_or(u64::MAX)
             .max(1);
-        let _ = cli::audit::emit_parse_error_observability(&root, &raw, &err, elapsed_ms);
+        let _ = cli::audit::emit_parse_error_observability(root.as_path(), &raw, &err, elapsed_ms);
         err
     })?;
-    Ok(Args { root, command })
+    Ok(Args {
+        root: root.into_path_buf(),
+        command,
+    })
 }
 
 pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
+    if help_request::is_help_request(raw) {
+        return Ok(Command::Help);
+    }
     Ok(match raw[0].as_str() {
         "help" | "--help" | "-h" => Command::Help,
         "audit" => parse_audit(&raw[1..])?,
@@ -103,60 +115,8 @@ pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
                 receipt: opt_path(&raw[2..], "--receipt")?,
             }
         }
-        _ => parse_specialized_command(raw)?,
+        _ => specialized::parse(raw)?,
     })
-}
-
-fn parse_specialized_command(raw: &[String]) -> Result<Command, String> {
-    if let Some(command) = cli::coverage::parse(raw)? {
-        Ok(Command::Coverage(command))
-    } else if let Some(command) = cli::package::inventory::parse(raw)? {
-        Ok(Command::PackageInventory(command))
-    } else if let Some(command) = cli::performance::parse(raw)? {
-        Ok(Command::Performance(command))
-    } else if let Some(command) = cli::rust::parse(raw)? {
-        Ok(Command::Rust(command))
-    } else if let Some(command) = cli::garbage::collection::parse(raw)? {
-        Ok(Command::Garbage(command))
-    } else if let Some(command) = cli::halo::parse(raw)? {
-        Ok(Command::Halo(command))
-    } else if let Some(command) = cli::improvement_loop::parse(raw)? {
-        Ok(Command::ImprovementLoop(command))
-    } else if let Some(command) = cli::line_caps::parse(raw)? {
-        Ok(Command::LineCaps(command))
-    } else if let Some(command) = cli::live_loop::parse(raw)? {
-        Ok(Command::LiveLoop(command))
-    } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
-        Ok(Command::MandatoryLawValidation(command))
-    } else if let Some(command) = cli::namespace::parse(raw)? {
-        Ok(Command::Namespace(command))
-    } else if let Some(command) = cli::observe::parse(raw)? {
-        Ok(Command::Observe(command))
-    } else if let Some(command) = cli::openai::parse(raw)? {
-        Ok(Command::OpenAi(command))
-    } else if let Some(command) = cli::promptfoo::parse(raw)? {
-        Ok(Command::Promptfoo(command))
-    } else if let Some(command) = cli::red_report::parse(raw)? {
-        Ok(Command::RedReport(command))
-    } else if let Some(command) = cli::schema_validation::parse(raw)? {
-        Ok(Command::SchemaValidation(command))
-    } else if let Some(command) = cli::current_state::parse(raw)? {
-        Ok(Command::CurrentState(command))
-    } else if let Some(command) = cli::routine::parse(raw)? {
-        Ok(Command::Routine(command))
-    } else if let Some(command) = cli::session::parse(raw)? {
-        Ok(Command::Session(command))
-    } else if let Some(command) = cli::source_obligations::parse(raw)? {
-        Ok(Command::SourceObligations(command))
-    } else if let Some(command) = cli::typed_boundaries::parse(raw)? {
-        Ok(Command::TypedBoundaries(command))
-    } else if let Some(command) = cli::foundational_trace::parse(raw)? {
-        Ok(Command::FoundationalTrace(command))
-    } else if let Some(command) = cli::control::plane::parse(raw) {
-        Ok(Command::Control(command))
-    } else {
-        Err(usage())
-    }
 }
 
 fn strip_build_or_verify(args: &[String]) -> &[String] {
@@ -171,10 +131,13 @@ fn parse_audit(args: &[String]) -> Result<Command, String> {
     if !audit::receipt::speed::is_known_mode(&mode) {
         return Err(format!("invalid source audit --mode: {mode}"));
     }
+    let target_repo =
+        authority::optional_artifact_path(args, "--target-repo", "target repository root")?;
     Ok(Command::Audit {
         receipt: opt_path(args, "--receipt")?,
-        red_report: opt_string(args, "--red-report").map(PathBuf::from),
-        target_repo: opt_string(args, "--target-repo").map(PathBuf::from),
+        red_report: authority::optional_artifact_path(args, "--red-report", "red fixture report")?
+            .map(authority::CliArtifactPath::into_path_buf),
+        target_repo: target_repo.map(authority::CliArtifactPath::into_path_buf),
         mode,
         require_observability: args.iter().any(|a| a == "--require-observability"),
         require_product_cohesion: args.iter().any(|a| a == "--require-product-cohesion"),
@@ -199,19 +162,19 @@ fn parse_target_repo_audit(args: &[String]) -> Result<Command, String> {
 }
 
 fn opt_path(args: &[String], key: &str) -> Result<PathBuf, String> {
-    opt_string(args, key)
-        .map(PathBuf::from)
-        .ok_or_else(|| format!("missing required argument {key}"))
+    authority::required_artifact_path(args, key, cli_option_role(key))
+        .map(|path| path.into_path_buf())
 }
 
 fn opt_string(args: &[String], key: &str) -> Option<String> {
-    args.windows(2)
-        .find(|window| window[0] == key)
-        .map(|window| window[1].clone())
+    authority::optional_text(args, key, cli_option_role(key))
+        .ok()
+        .flatten()
+        .map(authority::CliText::into_string)
 }
 
 fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
-    let Some(raw) = opt_string(args, key) else {
+    let Some(raw) = authority::option_value(args, key) else {
         return Ok(None);
     };
     raw.parse::<usize>()
@@ -221,4 +184,33 @@ fn opt_usize(args: &[String], key: &str) -> Result<Option<usize>, String> {
 
 pub(crate) fn usage() -> String {
     cli::usage::text().to_string()
+}
+
+fn cli_option_role(key: &str) -> &'static str {
+    match key {
+        "--archive-receipt" => "archive receipt path",
+        "--archive-purpose" => "archive purpose",
+        "--cache-mode" => "verified cache mode",
+        "--class" => "performance budget class",
+        "--classifier-actor-id" => "semantic receipt classifier actor",
+        "--contract-id" => "semantic receipt contract id",
+        "--contract-version" => "semantic receipt contract version",
+        "--implementation-kind" => "semantic receipt implementation kind",
+        "--input" => "semantic receipt input path",
+        "--mode" => "source audit mode",
+        "--model" => "external model identifier",
+        "--out-dir" => "semantic receipt output directory",
+        "--producer-actor-id" => "semantic receipt producer actor",
+        "--prompt-contract-digest" => "semantic prompt contract digest",
+        "--provider" => "external provider identifier",
+        "--receipt" => "claim receipt path",
+        "--red-report" => "red fixture report path",
+        "--review-target-receipt" => "review target receipt path",
+        "--surface-root" => "target repository surface root",
+        "--target-repo" => "target repository root",
+        "--validator-receipt" => "validator receipt path",
+        "--zip" => "archive zip path",
+        "--zip-root" => "archive zip root",
+        _ => panic!("unregistered CLI option product role: {key}"),
+    }
 }

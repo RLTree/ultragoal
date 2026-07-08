@@ -4,4 +4,5 @@ mod control_parser;
 mod dimensions;
 mod edges;
 mod fixture_binding;
+mod operator_surfaces;
 mod research_inputs;

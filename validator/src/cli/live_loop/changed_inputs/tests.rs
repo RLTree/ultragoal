@@ -27,6 +27,12 @@ fn changed_inputs_are_surface_local_for_hot_repair_nodes() {
         "validator/src/cli/live_loop/mod.rs",
         "fmt_check"
     ));
+    assert!(path_affects_surface(
+        "validator/tests/cli_surface.rs",
+        "fmt_check"
+    ));
+    assert!(path_affects_surface("validator/rustfmt.toml", "fmt_check"));
+    assert!(path_affects_surface("validator/.rustfmt.toml", "fmt_check"));
     assert!(!path_affects_surface("schemas/example.json", "fmt_check"));
     assert!(path_affects_surface(
         "schemas/example.json",

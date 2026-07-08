@@ -1,6 +1,6 @@
 pub(super) fn typed_cli_command_boundary_text(rel: &str, text: &str) -> bool {
-    rel == "validator/src/argument_parser.rs"
-        || rel == "validator/src/command/mod.rs"
+    typed_argument_parser_boundary(rel, text)
+        || typed_execution_projection_boundary(rel, text)
         || (rel.starts_with("validator/src/cli/")
             && text.contains("PathBuf")
             && (text.contains("pub(crate) struct ")
@@ -9,6 +9,21 @@ pub(super) fn typed_cli_command_boundary_text(rel: &str, text: &str) -> bool {
                 || (text.contains("args: &[String]")
                     && text.contains("Result<PathBuf, String>")
                     && text.contains("is_absolute()"))))
+}
+
+fn typed_argument_parser_boundary(rel: &str, text: &str) -> bool {
+    (rel == "validator/src/argument_parser.rs" || rel.starts_with("validator/src/argument_parser/"))
+        && (text.contains("CliRoot")
+            || text.contains("CliArtifactPath")
+            || text.contains("CliText")
+            || text.contains("typed_path("))
+}
+
+fn typed_execution_projection_boundary(rel: &str, text: &str) -> bool {
+    let command_projection_path = rel == "validator/src/command/mod.rs";
+    let has_marker_constant = text.contains("EXECUTION_PROJECTION_ROLE");
+    let has_product_role = text.contains("execution_projection_from_typed_cli_authority");
+    command_projection_path && has_marker_constant && has_product_role
 }
 
 pub(super) fn typed_law_check_boundary_text(text: &str) -> bool {
@@ -51,4 +66,24 @@ fn path_boundary_product_role(text: &str) -> bool {
         || command_process_adapter
         || generated_artifact_normalizer
         || skill_reference_parser
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn execution_projection_boundary_requires_path_marker_and_product_role() {
+        let valid = "pub(crate) const EXECUTION_PROJECTION_ROLE: &str = \"execution_projection_from_typed_cli_authority\";";
+        assert!(super::typed_execution_projection_boundary(
+            "validator/src/command/mod.rs",
+            valid
+        ));
+        assert!(!super::typed_execution_projection_boundary(
+            "validator/src/command/mod.rs",
+            "pub(crate) const EXECUTION_PROJECTION_ROLE: &str = \"missing\";"
+        ));
+        assert!(!super::typed_execution_projection_boundary(
+            "validator/src/not_command/mod.rs",
+            valid
+        ));
+    }
 }

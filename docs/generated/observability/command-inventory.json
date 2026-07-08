@@ -7,6 +7,7 @@
     "archive build",
     "cache audit",
     "coverage prove",
+    "current-state",
     "final-packet prove",
     "fit-repo prove",
     "foundational-trace check",
@@ -15,14 +16,21 @@
     "gc plan",
     "gc verify",
     "halo capability prove",
+    "improvement-loop prove",
     "install audit",
     "line-cap check",
+    "loop format check",
+    "loop measure",
+    "loop run",
     "mandatory-law validation",
     "namespace check",
+    "observe command-roundtrip",
+    "observe explain --next",
     "observe explain-check",
     "observe explain-claim",
     "observe explain-failure",
     "observe explain-law",
+    "observe fit",
     "observe logs query",
     "observe metrics query",
     "observe prove",
@@ -39,14 +47,17 @@
     "openai config prove",
     "openai output prove",
     "package digest",
-    "promptfoo prove",
+    "package inventory",
+    "performance prove",
     "product prove-cohesion",
     "product prove-fitness",
     "product prove-journey",
+    "promptfoo prove",
     "red fixture report",
     "registry probe",
     "review-round verify",
     "review-target build",
+    "routine check",
     "rust clean-proof",
     "rust coverage prove",
     "rust dependency audit",
@@ -65,6 +76,7 @@
     "standards-gardener rebind",
     "target-repo audit",
     "transaction finalize",
+    "typed-boundaries check",
     "update-goal eligibility"
   ],
   "surfaces": [
@@ -107,10 +119,10 @@
     "status": "blocked",
     "families": {
       "commands": {
-        "total": 62,
+        "total": 74,
         "observable": 20,
         "partially_observable": 27,
-        "unobservable": 15
+        "unobservable": 27
       },
       "surfaces": {
         "total": 10,
@@ -3229,6 +3241,474 @@
       "pass_stdout_contract": "missing pass stdout contract",
       "fail_stdout_contract": "missing fail stdout contract",
       "receipt_observability_binding": "observable receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "current-state": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/current-state.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_current-state_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:current-state",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "improvement-loop prove": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/improvement-loop-prove.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_improvement-loop-prove_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:improvement-loop prove",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "loop format check": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/loop-format-check.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_loop-format-check_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:loop format check",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "loop measure": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/loop-measure.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_loop-measure_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:loop measure",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "loop run": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/loop-run.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_loop-run_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:loop run",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "observe command-roundtrip": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/observe-command-roundtrip.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_observe-command-roundtrip_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:observe command-roundtrip",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "observe explain --next": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/observe-explain-next.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_observe-explain-next_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:observe explain --next",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "observe fit": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/observe-command-telemetry.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_observe_command_telemetry_roundtrip_has_same_candidate_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:observe fit",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "package inventory": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/package-inventory.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_package-inventory_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:package inventory",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "performance prove": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/performance-prove.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_performance-prove_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:performance prove",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "routine check": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/routine-check.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_routine-check_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:routine check",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
+      "same_candidate_query_proof_paths": [],
+      "red_fixtures": [],
+      "green_fixtures": [],
+      "tamper_fixtures": []
+    },
+    "typed-boundaries check": {
+      "observability_status": "unobservable",
+      "observed_surfaces": [],
+      "missing_surfaces": [
+        "log instrumentation missing for active command surface",
+        "metric instrumentation missing for active command surface",
+        "trace instrumentation missing for active command surface",
+        "pass stdout contract missing from command-roundtrip proof",
+        "fail stdout contract missing from command-roundtrip proof",
+        "receipt observability binding missing from command-roundtrip proof",
+        "same-candidate logs query proof missing",
+        "same-candidate metrics query proof missing",
+        "same-candidate traces query proof missing",
+        "red fixture proof missing",
+        "green fixture proof missing",
+        "tamper fixture proof missing"
+      ],
+      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
+      "focused_tests": [
+        "required_command_authority_includes_help_visible_operator_surfaces"
+      ],
+      "receipt_paths": [
+        "validation_artifacts/observability/command-roundtrip/typed-boundaries-check.json"
+      ],
+      "live_query_proof_paths": [],
+      "claim_impact": "blocks_observability_product_closure_until_command_typed-boundaries-check_has_same_candidate_command_roundtrip_proof; no_readiness_release_completion_final_packet_update_goal",
+      "current_owner_surface": "command:typed-boundaries check",
+      "next_unobservable_surface": "same-candidate command telemetry roundtrip proof",
+      "log_instrumentation": "missing log instrumentation",
+      "metric_instrumentation": "missing metric instrumentation",
+      "trace_instrumentation": "missing trace instrumentation",
+      "pass_stdout_contract": "missing pass stdout contract",
+      "fail_stdout_contract": "missing fail stdout contract",
+      "receipt_observability_binding": "missing receipt observability binding",
       "same_candidate_query_proof_paths": [],
       "red_fixtures": [],
       "green_fixtures": [],

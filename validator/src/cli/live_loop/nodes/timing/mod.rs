@@ -11,6 +11,8 @@ mod record_fields;
 
 pub(crate) const NODE_TIMING_REL: &str =
     "validation_artifacts/observability/live-loop-node-timing.json";
+pub(crate) const VALIDATION_CACHE_REL: &str =
+    "validation_artifacts/observability/live-loop-validation-cache.json";
 
 pub(crate) fn read_current(
     root: &Path,

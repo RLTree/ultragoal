@@ -1,4 +1,5 @@
 use super::fixtures::{command, live_loop_timing_receipt_arg, live_loop_timing_receipt_path};
+use crate::cli::live_loop::nodes::timing::VALIDATION_CACHE_REL;
 use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 
@@ -21,6 +22,20 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
     let first_rows = first_timing["nodes"].as_array().expect("first nodes");
     assert_eq!(first_rows.len(), 1);
     assert_eq!(first_rows[0]["node_id"], "changed_files");
+    let validation_cache = crate::json_boundary::read_json(&root.join(VALIDATION_CACHE_REL))
+        .expect("validation cache");
+    assert_eq!(
+        validation_cache["schema"],
+        "harness-ultragoal.live-loop-validation-cache.v1"
+    );
+    assert_eq!(validation_cache["candidate_digest"], candidate);
+    assert!(
+        validation_cache["records"]
+            .as_array()
+            .expect("cache records")
+            .iter()
+            .any(|row| row["node_id"] == "changed_files")
+    );
 
     crate::json_boundary::write_json(
         &receipt,
@@ -63,6 +78,15 @@ fn live_loop_measure_writes_current_node_timing_from_real_command_surface() {
 }
 
 fn assert_command_receipt_state(row: &serde_json::Value) {
+    match row["proof_kind"].as_str().expect("proof kind") {
+        "executed" => assert_executed_receipt_state(row),
+        "verified_cache_hit" => assert_cache_replay_receipt_state(row),
+        proof_kind => panic!("{proof_kind}"),
+    }
+    assert_result_digests(row);
+}
+
+fn assert_executed_receipt_state(row: &serde_json::Value) {
     let failure_class = row["failure_class"].as_str().expect("failure class");
     assert!(
         [
@@ -72,7 +96,6 @@ fn assert_command_receipt_state(row: &serde_json::Value) {
         .contains(&failure_class),
         "{failure_class}"
     );
-    assert_eq!(row["proof_kind"], "executed");
     assert_eq!(row["validation_status"], "pass");
     assert!(
         matches!(
@@ -110,7 +133,28 @@ fn assert_command_receipt_state(row: &serde_json::Value) {
         assert_eq!(row["observability_status"], "unavailable");
         assert_eq!(row["speed_claim_status"], "withheld");
     }
-    assert_result_digests(row);
+}
+
+fn assert_cache_replay_receipt_state(row: &serde_json::Value) {
+    assert_eq!(row["failure_class"], "none");
+    assert_eq!(row["validation_status"], "pass");
+    assert_eq!(row["validation_cache_status"], "reusable");
+    assert_eq!(row["observability_status"], "pass");
+    assert_eq!(row["speed_claim_status"], "supported");
+    assert_eq!(row["cache_hit"], true);
+    assert_eq!(row["work_unit_count"], 0);
+    assert_eq!(
+        row["equivalence_status"],
+        "verified_same_candidate_cache_replay"
+    );
+    assert_eq!(row["cache_equivalence_status"], "pass");
+    assert_eq!(row["prior_result_digest"], row["result_digest"]);
+    assert_eq!(row["replayed_output_digest"], row["output_digest"]);
+    assert_eq!(row["telemetry_reconciliation"]["status"], "pass");
+    assert_eq!(
+        row["telemetry_reconciliation"]["reconciliation_mode"],
+        "verified_same_candidate_telemetry_reuse"
+    );
 }
 
 fn assert_result_digests(row: &serde_json::Value) {

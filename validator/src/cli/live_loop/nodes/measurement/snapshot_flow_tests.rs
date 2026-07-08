@@ -53,13 +53,16 @@ fn loop_run_snapshot_keeps_validation_result_when_observability_roundtrip_is_pen
         "printf same-command",
         "printf same-command",
     );
+    let command = command_for("hot", "verified-local");
+    let replay_store = cache_replay::ReplayStore::load(&root, &command);
 
     let row = measure_surface(
         &root,
-        &command_for("hot", "verified-local"),
+        &command,
         surface,
         "sha256:current",
         &inputs(),
+        &replay_store,
         "changed_files_digest_bound",
         ObservationMode::LoopRunSnapshot,
     );
@@ -96,13 +99,16 @@ fn loop_run_snapshot_preserves_command_failure_details_without_observation_round
         "printf same-command",
         "printf \"failed_law=loop-law failed_check=loop-check why=narrow command failed where=loop.measure claim_impact=blocks_hot_loop next_repair=repair narrow command receipt=validation_artifacts/observability/live-loop-node-timing.json run_id=run-snapshot correlation_id=corr-snapshot query_logs='observe logs query' query_metrics='observe metrics query' query_traces='observe traces query'\"; exit 2",
     );
+    let command = command_for("hot", "verified-local");
+    let replay_store = cache_replay::ReplayStore::load(&root, &command);
 
     let row = measure_surface(
         &root,
-        &command_for("hot", "verified-local"),
+        &command,
         surface,
         "sha256:current",
         &inputs(),
+        &replay_store,
         "changed_files_digest_bound",
         ObservationMode::LoopRunSnapshot,
     );

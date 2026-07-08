@@ -104,9 +104,16 @@ fn runtime_ultragoal_command_stays_literal_when_executable_context_is_unavailabl
 
 #[test]
 fn runtime_shell_argv_preserves_the_product_command_shape() {
-    let argv = subject::runtime_shell_argv("cargo fmt --all --check");
+    let argv = subject::runtime_shell_argv(
+        "target/debug/ultragoal --root . loop format check --changed-rust",
+    );
 
-    assert_eq!(argv, ["bash", "-lc", "cargo fmt --all --check"]);
+    assert_eq!(
+        argv[0], "bash",
+        "runtime shell keeps one shell boundary for product command execution"
+    );
+    assert_eq!(argv[1], "-lc");
+    assert!(argv[2].contains("loop format check --changed-rust"));
 }
 
 #[test]

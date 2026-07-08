@@ -14,17 +14,49 @@ fn raw_authority_scanner_rejects_unclassified_path_authority() {
 
 #[test]
 fn raw_authority_scanner_allows_typed_cli_command_path_boundaries() {
-    let command_enum = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
-        "validator/src/command/mod.rs",
-        "use std::path::PathBuf;\npub(crate) enum Command { Audit { receipt: PathBuf } }\n",
+    let untyped_command_enum =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/command/mod.rs",
+            "use std::path::PathBuf;\npub(crate) enum Command { Audit { receipt: PathBuf } }\n",
+        );
+    assert!(
+        untyped_command_enum
+            .iter()
+            .any(|failure| failure.contains("raw_authority=raw_path")),
+        "{untyped_command_enum:?}"
     );
-    assert!(command_enum.is_empty(), "{command_enum:?}");
+
+    let command_projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/command/mod.rs",
+        "use std::path::PathBuf;\npub(crate) const EXECUTION_PROJECTION_ROLE: &str = \"execution_projection_from_typed_cli_authority\";\npub(crate) enum Command { Audit { receipt: PathBuf } }\n",
+    );
+    assert!(command_projection.is_empty(), "{command_projection:?}");
 
     let parser = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
         "validator/src/cli/performance/mod.rs",
         "use std::path::PathBuf;\npub(crate) struct PerformanceCommand { receipt: Option<PathBuf> }\npub(crate) fn parse(raw: &[String]) -> Result<Option<PerformanceCommand>, String> { Ok(None) }\n",
     );
     assert!(parser.is_empty(), "{parser:?}");
+}
+
+#[test]
+fn raw_authority_scanner_rejects_parser_that_exports_untyped_paths() {
+    let direct_parser = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/argument_parser/mod.rs",
+        "use std::path::PathBuf;\npub(crate) fn parse(raw: &[String]) -> PathBuf { PathBuf::from(raw[0].clone()) }\n",
+    );
+    assert!(
+        direct_parser
+            .iter()
+            .any(|failure| failure.contains("raw_authority=raw_path")),
+        "{direct_parser:?}"
+    );
+
+    let typed_parser = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/argument_parser/authority.rs",
+        "use std::path::PathBuf;\npub(super) struct CliRoot { path: PathBuf }\nfn typed_path(raw: &str, product_role: &str) -> Result<PathBuf, String> { Ok(PathBuf::from(raw)) }\n",
+    );
+    assert!(typed_parser.is_empty(), "{typed_parser:?}");
 }
 
 #[test]

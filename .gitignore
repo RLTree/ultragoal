@@ -4,3 +4,5 @@ target/
 node_modules/
 .pnpm-store/
 validation_artifacts/
+state/codex-review-artifacts/
+state/codex-review-receipts.d/

@@ -46,6 +46,10 @@ fn roundtrip_query_metadata_covers_every_product_operation() {
         LiveQueryRoundtrip::Logs.query_kind(),
         crate::cli::observe::query::QueryKind::Logs
     );
+    assert_eq!(RoundtripQuery::Logs.timeout_ms(), 3_000);
+    assert_eq!(RoundtripQuery::Metrics.timeout_ms(), 10_000);
+    assert_eq!(RoundtripQuery::Traces.timeout_ms(), 5_000);
+    assert_eq!(RoundtripQuery::ExplainFailure.timeout_ms(), 1_000);
 }
 
 #[test]

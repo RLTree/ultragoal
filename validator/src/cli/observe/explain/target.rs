@@ -96,6 +96,7 @@ pub(super) fn promote_fields(receipt: &mut Value, event: &Value) {
         receipt,
         event,
         &[
+            ("observed_operation", "operation"),
             ("observed_status", "status"),
             ("observed_candidate_digest", "candidate_digest"),
             ("observed_artifact_path", "artifact_path"),

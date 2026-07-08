@@ -5,6 +5,7 @@ use crate::cli::live_loop::changed_inputs::ChangedInputs;
 use serde_json::json;
 use std::collections::BTreeMap;
 
+mod input_digest;
 mod registry;
 mod timing;
 

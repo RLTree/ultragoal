@@ -62,13 +62,16 @@ fn measurement_executes_separate_baseline_when_canonical_command_differs_from_na
         &crate::digest::bytes(b"changed"),
         &crate::digest::bytes(b"audit"),
     );
+    let command = command();
+    let replay_store = cache_replay::ReplayStore::load(&root, &command);
 
     let row = measure_surface(
         &root,
-        &command(),
+        &command,
         surface,
         "sha256:current",
         &inputs,
+        &replay_store,
         "changed_files_digest_bound",
         ObservationMode::FullRoundtrip,
     );
@@ -108,13 +111,16 @@ fn measurement_reuses_executed_narrow_command_when_baseline_command_is_identical
         &crate::digest::bytes(b"changed"),
         &crate::digest::bytes(b"audit"),
     );
+    let command = command();
+    let replay_store = cache_replay::ReplayStore::load(&root, &command);
 
     let row = measure_surface(
         &root,
-        &command(),
+        &command,
         surface,
         "sha256:current",
         &inputs,
+        &replay_store,
         "changed_files_digest_bound",
         ObservationMode::FullRoundtrip,
     );
@@ -148,13 +154,16 @@ fn hot_measurement_reconciles_observability_without_erasing_validation_result() 
         &crate::digest::bytes(b"changed"),
         &crate::digest::bytes(b"audit"),
     );
+    let command = command_for("hot", "verified-local");
+    let replay_store = cache_replay::ReplayStore::load(&root, &command);
 
     let row = measure_surface(
         &root,
-        &command_for("hot", "verified-local"),
+        &command,
         surface,
         &crate::package::inventory::package_digest(&root).expect("candidate"),
         &inputs,
+        &replay_store,
         "changed_files_digest_bound",
         ObservationMode::FullRoundtrip,
     );

@@ -29,6 +29,40 @@ fn live_loop_run_writes_source_local_blocker_receipt() {
 }
 
 #[test]
+fn live_loop_measure_and_format_actions_delegate_to_product_commands() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-action-delegation");
+    std::fs::create_dir_all(&root).expect("root");
+    let measure_command = LiveLoopCommand {
+        action: LiveLoopAction::Measure,
+        tier: "hot".to_string(),
+        cache_mode: "verified-local".to_string(),
+        jobs: Some(2),
+        receipt: "validation_artifacts/observability/loop-measure.json".into(),
+        node_id: Some("not-a-current-node".to_string()),
+        measure_all: false,
+    };
+    let err = run(&root, &measure_command).expect_err("unknown measure node");
+    assert!(
+        err.contains("unknown live-loop node: not-a-current-node"),
+        "{err}"
+    );
+
+    let format_command = LiveLoopCommand {
+        action: LiveLoopAction::FormatCheck,
+        tier: "hot".to_string(),
+        cache_mode: "verified-local".to_string(),
+        jobs: None,
+        receipt: "validation_artifacts/observability/loop-format-check.json".into(),
+        node_id: None,
+        measure_all: false,
+    };
+    let code = run(&root, &format_command).expect("format action delegates to routine formatter");
+    assert_eq!(code, 1);
+    std::fs::remove_dir_all(root).expect("cleanup action delegation root");
+}
+
+#[test]
 fn live_loop_run_fails_closed_before_work_for_bad_roots_and_jobs() {
     let missing_manifest =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-missing");
@@ -126,6 +160,57 @@ fn live_loop_run_fails_closed_when_authority_receipts_cannot_be_written() {
     };
     let err = run(&observability_root, &command).expect_err("observability spool write fails");
     assert!(err.contains("validation_artifacts/observability"), "{err}");
+}
+
+#[test]
+fn live_loop_run_fails_closed_when_current_state_or_receipt_file_targets_are_blocked() {
+    let current_state_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "live-loop-current-state-file-target",
+    );
+    std::fs::create_dir_all(current_state_root.join("validation_artifacts/current-state.json"))
+        .expect("block current-state file target");
+    crate::json_boundary::write_json(
+        &current_state_root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    let command = LiveLoopCommand {
+        action: LiveLoopAction::Run,
+        tier: "hot".to_string(),
+        cache_mode: "verified-local".to_string(),
+        jobs: Some(2),
+        receipt: "validation_artifacts/loop-receipt.json".into(),
+        node_id: None,
+        measure_all: false,
+    };
+    let err = run(&current_state_root, &command).expect_err("current-state file write fails");
+    assert!(
+        err.contains("validation_artifacts/current-state.json"),
+        "{err}"
+    );
+    assert!(err.contains("json"), "{err}");
+
+    let receipt_parent_root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "live-loop-receipt-parent-file",
+    );
+    std::fs::create_dir_all(receipt_parent_root.join("validation_artifacts")).expect("root");
+    crate::json_boundary::write_json(
+        &receipt_parent_root.join("plugin-manifest-draft.json"),
+        &json!({"resources":["plugin-manifest-draft.json"]}),
+    )
+    .expect("manifest");
+    std::fs::write(
+        receipt_parent_root.join("validation_artifacts/observability"),
+        b"file",
+    )
+    .expect("block receipt parent");
+    let command = LiveLoopCommand {
+        receipt: "validation_artifacts/observability/loop-test.json".into(),
+        ..command
+    };
+    let err = run(&receipt_parent_root, &command).expect_err("receipt parent prepare fails");
+    assert!(err.contains("validation_artifacts/observability"), "{err}");
+    assert!(err.contains("create parent failed"), "{err}");
 }
 
 #[test]

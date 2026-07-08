@@ -92,3 +92,52 @@ fn stdout_failure_hint_uses_command_specific_query_contract() {
         std::path::Path::new("validation_artifacts/observability/explain.json"),
     );
 }
+
+#[test]
+fn stdout_failure_hint_uses_observed_product_operation_for_explain_targets() {
+    let value = json!({
+        "status": "fail",
+        "observed_operation": "loop.run"
+    });
+
+    assert_eq!(
+        query_hint::failure_metric_operation(&command(ObserveOperation::ExplainFailure), &value),
+        "loop.run"
+    );
+
+    let nested = json!({
+        "status": "fail",
+        "observed_run": {
+            "operation": "coverage.prove"
+        }
+    });
+    assert_eq!(
+        query_hint::failure_metric_operation(&command(ObserveOperation::ExplainFailure), &nested),
+        "coverage.prove"
+    );
+
+    assert_eq!(
+        query_hint::failure_metric_operation(
+            &command(ObserveOperation::ExplainFailure),
+            &json!({})
+        ),
+        "observe.explain-failure"
+    );
+    assert_eq!(
+        query_hint::failure_metric_operation(
+            &command(ObserveOperation::MetricsQuery),
+            &json!({"observed_operation":"none"})
+        ),
+        "observe.metrics.query"
+    );
+
+    let query = query_hint::failure_metric_query(
+        &command(ObserveOperation::ExplainFailure),
+        &json!({
+            "observed_operation": "loop.run",
+            "observed_status": "blocked"
+        }),
+    );
+    assert!(query.contains("operation=\"loop.run\""));
+    assert!(query.contains("status=\"blocked\""));
+}

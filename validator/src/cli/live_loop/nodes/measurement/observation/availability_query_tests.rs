@@ -14,13 +14,16 @@ fn roundtrip_timeouts_keep_live_queries_bounded() {
     );
     assert_eq!(
         LiveQueryRoundtrip::Metrics.timeout_ms(),
-        LIVE_BACKEND_QUERY_TIMEOUT_MS
+        RoundtripQuery::Metrics.timeout_ms()
     );
     assert_eq!(
         LiveQueryRoundtrip::Traces.timeout_ms(),
         TRACE_QUERY_TIMEOUT_MS
     );
     assert!(LiveQueryRoundtrip::Traces.timeout_ms() > LIVE_BACKEND_QUERY_TIMEOUT_MS);
+    assert!(LiveQueryRoundtrip::Metrics.timeout_ms() > LIVE_BACKEND_QUERY_TIMEOUT_MS);
+    assert!(RoundtripQuery::Metrics.timeout_ms() > TRACE_QUERY_TIMEOUT_MS);
+    assert_eq!(RoundtripQuery::Metrics.timeout_ms(), 10_000);
     assert_eq!(LIVE_BACKEND_QUERY_TIMEOUT_MS, 3_000);
     assert!(RoundtripQuery::ExplainFailure.timeout_ms() < LIVE_BACKEND_QUERY_TIMEOUT_MS);
 }

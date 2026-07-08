@@ -62,6 +62,23 @@ fn cache_replay_reads_cache_records_as_validation_reuse_inputs() {
 }
 
 #[test]
+fn cache_replay_falls_back_to_node_timing_when_cache_has_no_matching_record() {
+    let fixture = ReplayFixture::new();
+    write_validation_cache_row(
+        &fixture.root,
+        timing_row(&fixture).with_value("cache_key", json!(digest("stale-cache"))),
+    );
+    write_timing_row(&fixture.root, timing_row(&fixture));
+
+    let replay = cache_hit(&fixture, &fixture.input_digest)
+        .expect("node timing replay remains usable when compact cache misses");
+
+    assert_eq!(replay.run.exit_code, 0);
+    assert_eq!(replay.prior_result_digest, result_digest());
+    std::fs::remove_dir_all(fixture.root).expect("cleanup cache miss fallback");
+}
+
+#[test]
 fn cache_replay_reuses_validation_result_when_observability_is_partial() {
     let fixture = ReplayFixture::new();
     write_timing_row(

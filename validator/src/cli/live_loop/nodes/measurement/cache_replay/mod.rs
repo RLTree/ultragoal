@@ -1,5 +1,5 @@
 use super::super::command_failure::CommandFailureSummary;
-use super::super::timing::NODE_TIMING_REL;
+use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
@@ -8,10 +8,12 @@ use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;
 
-mod row_fields;
+mod acceptance;
+mod fields;
 mod telemetry_reuse;
 
-use row_fields::{elapsed_ms, node_rows, text, valid_digest};
+use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
+use fields::{elapsed_ms, node_rows, text, valid_digest};
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
@@ -22,6 +24,24 @@ pub(super) struct CacheReplay {
     pub(super) telemetry_reconciliation: TelemetryReconciliation,
 }
 
+pub(super) struct ReplayStore {
+    values: Vec<Value>,
+}
+
+impl ReplayStore {
+    pub(super) fn load(root: &Path, command: &LiveLoopCommand) -> Self {
+        if command.cache_mode != "verified-local" {
+            return Self { values: Vec::new() };
+        }
+        let values = [VALIDATION_CACHE_REL, NODE_TIMING_REL]
+            .into_iter()
+            .filter_map(|rel| crate::json_boundary::read_json(&root.join(rel)).ok())
+            .collect();
+        Self { values }
+    }
+}
+
+#[cfg(test)]
 pub(super) fn verified_local_hit(
     root: &Path,
     surface: LoopValidationSurface,
@@ -32,20 +52,42 @@ pub(super) fn verified_local_hit(
     started: Instant,
     observation_mode: ObservationMode,
 ) -> Option<CacheReplay> {
+    let store = ReplayStore::load(root, command);
+    verified_local_hit_from_store(
+        &store,
+        surface,
+        input_digest,
+        command,
+        cache_key,
+        started,
+        observation_mode,
+    )
+}
+
+pub(super) fn verified_local_hit_from_store(
+    store: &ReplayStore,
+    surface: LoopValidationSurface,
+    input_digest: &str,
+    command: &LiveLoopCommand,
+    cache_key: &str,
+    started: Instant,
+    observation_mode: ObservationMode,
+) -> Option<CacheReplay> {
     if command.cache_mode != "verified-local" {
         return None;
     }
-    let value = crate::json_boundary::read_json(&root.join(NODE_TIMING_REL)).ok()?;
-    node_rows(&value).into_iter().find_map(|row| {
-        replay_from_row(
-            row,
-            surface,
-            input_digest,
-            command,
-            cache_key,
-            started,
-            observation_mode,
-        )
+    store.values.iter().find_map(|value| {
+        node_rows(value).into_iter().find_map(|row| {
+            replay_from_row(
+                row,
+                surface,
+                input_digest,
+                command,
+                cache_key,
+                started,
+                observation_mode,
+            )
+        })
     })
 }
 
@@ -76,13 +118,13 @@ fn replay_from_row(
         return None;
     }
     let proof_kind = text(row, "proof_kind")?;
-    if !row_has_replayable_proof(row, proof_kind) {
+    if !has_replayable_proof(row, proof_kind) {
         return None;
     }
-    if !row_matches_observation_mode(row, observation_mode) {
+    if !matches_observation_mode(row, observation_mode) {
         return None;
     }
-    if !row_has_reconciled_duration(row) {
+    if !has_reconciled_duration(row) {
         return None;
     }
     let exit_code = row
@@ -143,91 +185,6 @@ fn replay_from_row(
             "cache_key_current_input_digest_command_versions_and_environment_matched".to_string(),
         telemetry_reconciliation: cached_telemetry,
     })
-}
-
-fn row_matches_observation_mode(row: &Value, observation_mode: ObservationMode) -> bool {
-    match observation_mode {
-        ObservationMode::LoopRunSnapshot => true,
-        ObservationMode::FullRoundtrip => text(row, "observability_status") == Some("pass"),
-    }
-}
-
-fn row_has_replayable_proof(row: &Value, proof_kind: &str) -> bool {
-    match proof_kind {
-        "executed" => row_has_executed_work(row),
-        "verified_cache_hit" => {
-            row.get("cache_hit").and_then(Value::as_bool) == Some(true)
-                && row.get("work_unit_count").and_then(Value::as_u64) == Some(0)
-                && row_has_required_versions(row)
-                && text(row, "equivalence_status") == Some("verified_same_candidate_cache_replay")
-                && text(row, "cache_equivalence_status") == Some("pass")
-                && text(row, "invalidation_proof").is_some_and(|value| !value.is_empty())
-                && text(row, "prior_result_digest") == text(row, "result_digest")
-                && text(row, "replayed_output_digest") == text(row, "output_digest")
-        }
-        _ => false,
-    }
-}
-
-fn row_has_executed_work(row: &Value) -> bool {
-    row.get("cache_hit").and_then(Value::as_bool) == Some(false)
-        && row
-            .get("work_unit_count")
-            .and_then(Value::as_u64)
-            .is_some_and(|value| value > 0)
-        && row
-            .get("actual_work_duration_ms")
-            .and_then(Value::as_u64)
-            .is_some_and(|value| value > 0)
-        && row
-            .get("graph_overhead_ms")
-            .and_then(Value::as_u64)
-            .is_some()
-        && row_has_required_versions(row)
-        && text(row, "equivalence_status") == Some("executed_current_candidate_not_cache_replay")
-        && text(row, "invalidation_proof").is_some_and(|value| !value.is_empty())
-        && row_has_command_argv(row)
-}
-
-fn row_has_reconciled_duration(row: &Value) -> bool {
-    let actual = row.get("actual_work_duration_ms").and_then(Value::as_u64);
-    let graph = row.get("graph_overhead_ms").and_then(Value::as_u64);
-    let telemetry = row
-        .get("telemetry_reconciliation_duration_ms")
-        .and_then(Value::as_u64);
-    let reconciled = row
-        .get("reconciled_command_duration_ms")
-        .and_then(Value::as_u64);
-    let product_latency = row.get("product_latency_ms").and_then(Value::as_u64);
-    match (actual, graph, telemetry, reconciled, product_latency) {
-        (Some(actual), Some(graph), Some(telemetry), Some(reconciled), Some(product_latency)) => {
-            reconciled == actual.saturating_add(graph).saturating_add(telemetry)
-                && product_latency == actual.saturating_add(graph)
-        }
-        _ => false,
-    }
-}
-
-fn row_has_required_versions(row: &Value) -> bool {
-    [
-        "validator_version",
-        "law_version",
-        "schema_version",
-        "fixture_version",
-    ]
-    .into_iter()
-    .all(|key| text(row, key).is_some_and(|value| !value.is_empty()))
-}
-
-fn row_has_command_argv(row: &Value) -> bool {
-    row.get("command_argv")
-        .and_then(Value::as_array)
-        .is_some_and(|argv| {
-            !argv.is_empty()
-                && argv
-                    .iter()
-                    .all(|arg| arg.as_str().is_some_and(|value| !value.is_empty()))
-        })
 }
 
 #[cfg(test)]

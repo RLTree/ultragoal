@@ -59,6 +59,7 @@ fn explain_identifies_stale_missing_and_passed_target_events() {
     );
     let stale = super::run(&root, &command("run-stale")).expect("stale explain");
     assert_eq!(stale["status"], "fail");
+    assert_eq!(stale["observed_operation"], "coverage.prove");
     assert!(
         stale["explanation"]["known_current_failure"][0]
             .as_str()

@@ -1,4 +1,4 @@
-use super::super::{CacheReplay, NODE_TIMING_REL, verified_local_hit};
+use super::super::{CacheReplay, NODE_TIMING_REL, VALIDATION_CACHE_REL, verified_local_hit};
 use crate::cli::live_loop::nodes::measurement::ObservationMode;
 use crate::cli::live_loop::{LiveLoopAction, LiveLoopCommand, surfaces::surface_by_id};
 use crate::self_tests::boundaries::workspace_fixtures::temp_root;
@@ -149,6 +149,11 @@ pub(super) fn digest(label: &str) -> String {
 pub(super) fn write_timing_row(root: &Path, row: serde_json::Value) {
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({"nodes": [row]}))
         .expect("timing row");
+}
+
+pub(super) fn write_validation_cache_row(root: &Path, row: serde_json::Value) {
+    crate::json_boundary::write_json(&root.join(VALIDATION_CACHE_REL), &json!({"records": [row]}))
+        .expect("validation cache row");
 }
 
 pub(super) trait WithValue {

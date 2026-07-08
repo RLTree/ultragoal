@@ -9,9 +9,9 @@ use std::path::Path;
 use std::time::Instant;
 
 pub(super) fn cached_verified_local(
-    root: &Path,
+    replay_store: &cache_replay::ReplayStore,
     surface: LoopValidationSurface,
-    candidate: &str,
+    _candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     observation_mode: ObservationMode,
@@ -25,10 +25,9 @@ pub(super) fn cached_verified_local(
     );
     let graph_overhead_ms = elapsed_ms(started);
     let replay_started = Instant::now();
-    let mut cached = cache_replay::verified_local_hit(
-        root,
+    let mut cached = cache_replay::verified_local_hit_from_store(
+        replay_store,
         surface,
-        candidate,
         input_digest,
         command,
         &cache_key,

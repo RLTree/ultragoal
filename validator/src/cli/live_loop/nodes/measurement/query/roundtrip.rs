@@ -6,6 +6,8 @@ pub(in crate::cli::live_loop::nodes::measurement::observation) const LIVE_BACKEN
     u64 = 3_000;
 pub(in crate::cli::live_loop::nodes::measurement::observation) const TRACE_QUERY_TIMEOUT_MS: u64 =
     5_000;
+pub(in crate::cli::live_loop::nodes::measurement::observation) const METRICS_QUERY_TIMEOUT_MS: u64 =
+    10_000;
 pub(in crate::cli::live_loop::nodes::measurement::observation) const ROW_LIMIT: usize = 100;
 pub(in crate::cli::live_loop::nodes::measurement::observation) const BYTE_LIMIT: usize = 262_144;
 pub(in crate::cli::live_loop::nodes::measurement::observation) const RECEIPT_DIR: &str =
@@ -95,7 +97,8 @@ impl RoundtripQuery {
 
     pub(in crate::cli::live_loop::nodes::measurement::observation) fn timeout_ms(self) -> u64 {
         match self {
-            Self::Logs | Self::Metrics => LIVE_BACKEND_QUERY_TIMEOUT_MS,
+            Self::Logs => LIVE_BACKEND_QUERY_TIMEOUT_MS,
+            Self::Metrics => METRICS_QUERY_TIMEOUT_MS,
             Self::Traces => TRACE_QUERY_TIMEOUT_MS,
             Self::ExplainFailure => EXPLAIN_TIMEOUT_MS,
         }

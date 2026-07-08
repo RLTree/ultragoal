@@ -10,9 +10,19 @@ pub(super) fn boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) 
         RawAuthorityMarker::RawMap => {
             classified_product_projection_boundary(rel, text) || product_map_projection_text(text)
         }
-        RawAuthorityMarker::RawPath => classified_product_projection_boundary(rel, text),
+        RawAuthorityMarker::RawPath => {
+            classified_product_projection_boundary(rel, text)
+                || execution_projection_text(rel, text)
+        }
         RawAuthorityMarker::RawObservation | RawAuthorityMarker::RawString => false,
     }
+}
+
+fn execution_projection_text(rel: &str, text: &str) -> bool {
+    rel == "validator/src/command/mod.rs"
+        && text.contains("EXECUTION_PROJECTION_ROLE")
+        && text.contains("execution_projection_from_typed_cli_authority")
+        && text.contains("pub(crate) enum Command")
 }
 
 fn classified_product_projection_boundary(rel: &str, text: &str) -> bool {

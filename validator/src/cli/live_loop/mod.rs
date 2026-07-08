@@ -17,6 +17,7 @@ mod receipt;
 mod receipt_tests;
 #[cfg(test)]
 mod run_node_timing_refresh_tests;
+mod rust_format;
 mod stdout;
 #[cfg(test)]
 mod stdout_tests;
@@ -42,6 +43,7 @@ use std::time::Instant;
 pub(crate) enum LiveLoopAction {
     Run,
     Measure,
+    FormatCheck,
 }
 
 #[derive(Debug)]
@@ -92,6 +94,20 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
                 measure_all,
             }))
         }
+        [a, b, c, ..] if a == "loop" && b == "format" && c == "check" => {
+            if !has_flag(&raw[3..], "--changed-rust") {
+                return Err("loop format check requires --changed-rust".to_string());
+            }
+            Ok(Some(LiveLoopCommand {
+                action: LiveLoopAction::FormatCheck,
+                tier: "hot".to_string(),
+                cache_mode: "verified-local".to_string(),
+                jobs: None,
+                receipt: PathBuf::from("validation_artifacts/observability/loop-format-check.json"),
+                node_id: None,
+                measure_all: false,
+            }))
+        }
         _ => Ok(None),
     }
 }
@@ -99,6 +115,9 @@ pub(crate) fn parse(raw: &[String]) -> Result<Option<LiveLoopCommand>, String> {
 pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String> {
     if command.action == LiveLoopAction::Measure {
         return nodes::measure(root, command);
+    }
+    if command.action == LiveLoopAction::FormatCheck {
+        return rust_format::run(root);
     }
     let started = Instant::now();
     let candidate = crate::package::inventory::package_digest(root)?;

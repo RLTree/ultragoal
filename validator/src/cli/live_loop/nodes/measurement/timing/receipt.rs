@@ -1,3 +1,4 @@
+use super::super::super::timing::VALIDATION_CACHE_REL;
 use super::cache_records::replayable_cache_records;
 use super::record::NodeTimingRow;
 use crate::cli::live_loop::LiveLoopCommand;
@@ -34,6 +35,21 @@ pub(crate) fn write_node_timings(
     nodes.extend(rows.into_iter().map(NodeTimingRow::into_value));
     nodes.sort_by(|left, right| text(left, "node_id").cmp(&text(right, "node_id")));
     let cache_records = replayable_cache_records(&existing, &nodes, tier, cache_mode);
+    let cache_path = crate::output_path::literal_claim_artifact_path(
+        root,
+        VALIDATION_CACHE_REL,
+        "live loop validation cache",
+    );
+    crate::json_boundary::write_json(
+        &cache_path,
+        &json!({
+            "schema": "harness-ultragoal.live-loop-validation-cache.v1",
+            "candidate_digest": candidate,
+            "tier": tier,
+            "cache_mode": cache_mode,
+            "records": cache_records.clone()
+        }),
+    )?;
     crate::json_boundary::write_json(
         &path,
         &json!({
@@ -167,5 +183,5 @@ fn telemetry_json(value: &Value, key: &str) -> String {
 }
 
 #[cfg(test)]
-#[path = "../cache/record_tests.rs"]
+#[path = "../../../node_timing/tests/mod.rs"]
 mod tests;

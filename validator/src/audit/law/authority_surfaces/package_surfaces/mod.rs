@@ -5,6 +5,8 @@ use std::path::Path;
 mod cargo;
 mod document;
 mod module_ownership;
+mod proof_binding;
+mod role;
 mod row;
 mod source;
 
@@ -105,11 +107,13 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
             );
         }
     }
-    if source::contains(
-        root,
+    if [
         "validator/src/argument_parser.rs",
-        "\"package-digest\"",
-    ) {
+        "validator/src/argument_parser/mod.rs",
+    ]
+    .iter()
+    .any(|rel| source::contains(root, rel, "\"package-digest\""))
+    {
         push(
             &mut out,
             "command-alias:package-digest",
@@ -132,6 +136,14 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
                 &surface.surface_id,
                 "surface name describes coverage/no-op preservation instead of product behavior",
                 "delete the wrapper/test or rename it around the product behavior it actually validates",
+            );
+        }
+        if let Some(reason) = row::contract_failure(surface) {
+            push(
+                &mut out,
+                &surface.surface_id,
+                reason,
+                "bind the active surface to product-role semantics plus fixture and receipt reconciliation before it can support claims",
             );
         }
     }

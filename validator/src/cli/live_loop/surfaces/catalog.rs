@@ -40,9 +40,9 @@ pub(crate) const LOOP_VALIDATION_SURFACES: &[LoopValidationSurface] = &[
     hot_loop_read_surface(
         "fmt_check",
         "rust_format",
+        "ultragoal loop format check --changed-rust",
         "cargo fmt --all --check",
-        "cargo fmt --all --check",
-        "cargo fmt --all --check",
+        "target/debug/ultragoal --root . loop format check --changed-rust",
     ),
     hot_loop_authority_artifact_surface(
         "build_check",

@@ -1,4 +1,4 @@
-use super::{CHECK_ID, source::SourceSymbol};
+use super::{CHECK_ID, proof_binding, role, source::SourceSymbol};
 use serde_json::{Value, json};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -42,7 +42,7 @@ pub(super) fn source_module(rel: &str, test_only: bool) -> PackageSurfaceRow {
     from_parts(
         "rust_module",
         rel,
-        &format!("rust module {}", product_role_from_path(rel)),
+        &role::product_role_from_path(rel),
         if test_only {
             "test_only_validation_surface"
         } else {
@@ -60,7 +60,11 @@ pub(super) fn source_symbol(
     from_parts(
         symbol.kind,
         &format!("{rel}::{}", symbol.name),
-        &format!("{} in {}", symbol.kind, product_role_from_path(rel)),
+        &format!(
+            "{} supporting {}",
+            symbol.kind,
+            role::product_role_from_path(rel)
+        ),
         if symbol.test_only || module_test_only {
             "test_only_validation_surface"
         } else {
@@ -74,13 +78,15 @@ pub(super) fn package_resource(rel: &str) -> PackageSurfaceRow {
     from_parts(
         surface_kind_for_path(rel),
         rel,
-        &product_role_from_path(rel),
+        &role::product_role_from_path(rel),
         authority_level_for_path(rel),
         None,
     )
 }
 
 pub(super) fn value(row: PackageSurfaceRow) -> Value {
+    let fixture_ids = proof_binding::fixture_ids(&row);
+    let receipt_ids = proof_binding::receipt_ids(&row);
     json!({
         "surface_id": row.surface_id,
         "surface_kind": row.surface_kind,
@@ -95,19 +101,27 @@ pub(super) fn value(row: PackageSurfaceRow) -> Value {
         "proof_surface": row.proof_surface,
         "law_ids": [CHECK_ID],
         "validator_check_ids": [CHECK_ID],
-        "fixture_ids": [],
-        "receipt_ids": [],
+        "fixture_ids": fixture_ids,
+        "receipt_ids": receipt_ids,
         "package_inventory_binding": row.package_inventory_binding,
         "setup_retrofit_output_binding": "not_applicable_unless_setup_surface",
         "claim_guard_ids": ["claim-ceiling-package-surface-guard"],
         "final_packet_blockers": ["package_surface_violation"],
         "update_goal_blockers": ["package_surface_violation"],
-        "provenance": {"generator_owner": "ultragoal package surface scanner"},
+        "provenance": {
+            "generator_owner": "ultragoal package surface scanner",
+            "product_role_source": "package path and Rust symbol taxonomy",
+            "manual_edit_status": "generated_rows_must_be_recomputed_not_hand_edited"
+        },
         "stale_evidence_rules": ["recompute when package source or manifest changes"]
     })
 }
 
-fn claim_surfaces(proof_surface: &str) -> Vec<&'static str> {
+pub(super) fn contract_failure(row: &PackageSurfaceRow) -> Option<&'static str> {
+    proof_binding::contract_failure(row)
+}
+
+pub(super) fn claim_surfaces(proof_surface: &str) -> Vec<&'static str> {
     match proof_surface {
         "test_validation" | "fixture_catalog" => vec!["validation"],
         "generated_projection" => vec!["source_local_projection"],
@@ -149,7 +163,10 @@ fn authority_level_for_path(rel: &str) -> &'static str {
         || rel.contains("/tests/")
     {
         "test_only_validation_surface"
-    } else if rel.starts_with("schemas/") || rel == "validator/src/argument_parser.rs" {
+    } else if rel.starts_with("schemas/")
+        || rel == "validator/src/argument_parser.rs"
+        || rel.starts_with("validator/src/argument_parser/")
+    {
         "parser_boundary"
     } else if rel.starts_with("fixtures/") {
         "fixture_catalog_materialization"
@@ -170,21 +187,6 @@ fn proof_surface(authority_level: &str) -> &'static str {
         "external_debug_no_claim" => "external_debug_no_claim",
         _ => "source",
     }
-}
-
-fn product_role_from_path(rel: &str) -> String {
-    rel.trim_end_matches(".schema")
-        .trim_end_matches(".rs")
-        .trim_end_matches(".json")
-        .trim_end_matches(".md")
-        .trim_end_matches(".sh")
-        .trim_end_matches(".toml")
-        .trim_start_matches("validator/src/")
-        .trim_start_matches("validator/tests/")
-        .trim_start_matches("fixtures/")
-        .trim_start_matches("schemas/")
-        .replace('/', "::")
-        .replace('-', "_")
 }
 
 fn sanitize(value: &str) -> String {

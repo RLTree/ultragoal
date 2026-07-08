@@ -15,8 +15,10 @@ pub(super) fn replayable_cache_records(
         if !is_replayable_cache_record(row, tier, cache_mode) {
             continue;
         }
-        if let Some(key) = cache_record_key(row) {
-            records.insert(key, row.clone());
+        if let Some(key) = cache_record_key(row)
+            && let Some(record) = compact_cache_record(row)
+        {
+            records.insert(key, record);
         }
     }
     records.into_values().collect()
@@ -98,6 +100,132 @@ fn cache_record_key(row: &Value) -> Option<String> {
         text(row, "cache_key")?
     ))
 }
+
+fn compact_cache_record(row: &Value) -> Option<Value> {
+    let object = row.as_object()?;
+    let mut record = Map::new();
+    for field in CACHE_RECORD_FIELDS {
+        if let Some(value) = object.get(*field) {
+            record.insert(field.to_string(), value.clone());
+        }
+    }
+    let telemetry = compact_telemetry(object.get("telemetry_reconciliation")?)?;
+    record.insert("telemetry_reconciliation".to_string(), telemetry);
+    Some(Value::Object(record))
+}
+
+fn compact_telemetry(value: &Value) -> Option<Value> {
+    let object = value.as_object()?;
+    let mut telemetry = Map::new();
+    for field in TELEMETRY_CACHE_FIELDS {
+        if let Some(value) = object.get(*field) {
+            telemetry.insert(field.to_string(), value.clone());
+        }
+    }
+    Some(Value::Object(telemetry))
+}
+
+const CACHE_RECORD_FIELDS: &[&str] = &[
+    "node_id",
+    "surface",
+    "candidate_digest",
+    "tier",
+    "cache_mode",
+    "changed_files_digest",
+    "audit_context_digest",
+    "input_digest",
+    "current_input_digest",
+    "canonical_full_command",
+    "receipt_path",
+    "timing_status",
+    "failure_class",
+    "where_failed",
+    "why_failed",
+    "next_repair",
+    "baseline_duration_ms",
+    "baseline_proof_kind",
+    "baseline_invalidation_proof",
+    "verified_local_duration_ms",
+    "telemetry_reconciliation_duration_ms",
+    "reconciled_command_duration_ms",
+    "product_latency_ms",
+    "speedup_ratio",
+    "required_speedup",
+    "baseline_exit_code",
+    "baseline_launch_error",
+    "baseline_stdout_digest",
+    "baseline_stderr_digest",
+    "baseline_failure",
+    "claim_name",
+    "product_behavior_observed",
+    "proof_surface",
+    "independent_reconciliation_surface",
+    "claim_ceiling",
+    "affected_set_status",
+    "cache_honesty",
+    "timing_source",
+    "claim_impact",
+    "validation_status",
+    "validation_cache_status",
+    "observability_status",
+    "speed_claim_status",
+    "observability_failure_class",
+    "claim_status",
+    "proof_kind",
+    "cache_hit",
+    "cache_key",
+    "graph_overhead_ms",
+    "actual_work_duration_ms",
+    "work_unit_count",
+    "equivalence_status",
+    "invalidation_proof",
+    "telemetry_reconciliation_status",
+    "current_input_digest",
+    "validator_version",
+    "law_version",
+    "schema_version",
+    "fixture_version",
+    "verified_local_command",
+    "command_argv",
+    "receipt_paths",
+    "artifact_paths",
+    "queue_depth",
+    "worker_count",
+    "task_count",
+    "execution_class",
+    "exit_status",
+    "verified_local_launch_error",
+    "verified_local_stdout_digest",
+    "verified_local_stderr_digest",
+    "verified_local_output_digest",
+    "verified_local_result_digest",
+    "output_digest",
+    "result_digest",
+    "prior_result_digest",
+    "replayed_output_digest",
+    "cache_equivalence_status",
+];
+
+const TELEMETRY_CACHE_FIELDS: &[&str] = &[
+    "status",
+    "run_id",
+    "correlation_id",
+    "trace_id",
+    "span_id",
+    "command_observation_receipt",
+    "logs_query",
+    "metrics_query",
+    "traces_query",
+    "explain_failure",
+    "cached_reconciliation",
+    "first_failed_roundtrip",
+    "observability_failure_class",
+    "failure_class",
+    "where_failed",
+    "why_failed",
+    "next_repair",
+    "claim_impact",
+];
 
 fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
     value.get(key).and_then(Value::as_str)

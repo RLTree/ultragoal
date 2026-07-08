@@ -1,4 +1,4 @@
-use super::*;
+use super::super::replayable_cache_records;
 use serde_json::json;
 
 #[test]
@@ -60,58 +60,31 @@ fn existing_cache_records_remain_available_when_latest_node_is_unusable() {
 }
 
 #[test]
-fn telemetry_stdout_fields_fall_back_to_cached_reconciliation() {
-    let row = json!({
-        "telemetry_reconciliation": {
+fn compact_cache_records_preserve_cached_reconciliation_evidence() {
+    let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    let row = row(candidate, "pass", "none").with_value(
+        "telemetry_reconciliation",
+        json!({
             "status": "pass",
             "reconciliation_mode": "verified_same_candidate_telemetry_reuse",
             "cached_reconciliation": {
                 "run_id": "run-cached",
-                "correlation_id": "corr-cached",
-                "trace_id": "trace-cached",
-                "command_observation_receipt": "validation_artifacts/observability/live-loop/commands/fmt.json",
                 "logs_query": {"value": {"query": "logs query"}},
-                "metrics_query": {"value": {"query": "metrics query"}},
-                "traces_query": {"value": {"query": "traces query"}},
-                "first_failed_roundtrip": {"roundtrip": "metrics"}
+                "explain_failure": {"value": {"root_cause": "cached root cause"}}
             }
-        }
-    });
-
-    assert_eq!(telemetry_text(&row, "run_id"), Some("run-cached"));
-    assert_eq!(telemetry_text(&row, "correlation_id"), Some("corr-cached"));
-    assert_eq!(telemetry_text(&row, "trace_id"), Some("trace-cached"));
-    assert_eq!(telemetry_query(&row, "logs_query"), Some("logs query"));
-    assert_eq!(
-        telemetry_json(&row, "first_failed_roundtrip"),
-        "{\"roundtrip\":\"metrics\"}"
+        }),
     );
-}
 
-#[test]
-fn telemetry_stdout_fields_read_direct_query_receipt_shape() {
-    let row = json!({
-        "telemetry_reconciliation": {
-            "status": "pass",
-            "run_id": "run-direct",
-            "logs_query": {"query": "logs direct query"},
-            "metrics_query": {"query": "metrics direct query"},
-            "traces_query": {"query": "traces direct query"}
-        }
-    });
+    let records = replayable_cache_records(&json!({}), &[row], "hot", "verified-local");
 
-    assert_eq!(telemetry_text(&row, "run_id"), Some("run-direct"));
+    assert_eq!(records.len(), 1);
     assert_eq!(
-        telemetry_query(&row, "logs_query"),
-        Some("logs direct query")
+        records[0]["telemetry_reconciliation"]["cached_reconciliation"]["run_id"],
+        "run-cached"
     );
     assert_eq!(
-        telemetry_query(&row, "metrics_query"),
-        Some("metrics direct query")
-    );
-    assert_eq!(
-        telemetry_query(&row, "traces_query"),
-        Some("traces direct query")
+        records[0]["telemetry_reconciliation"]["cached_reconciliation"]["logs_query"]["value"]["query"],
+        "logs query"
     );
 }
 

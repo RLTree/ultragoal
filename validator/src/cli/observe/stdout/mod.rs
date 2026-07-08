@@ -2,6 +2,8 @@ use crate::cli::observe::types::{self, ObserveCommand, ObserveOperation};
 use serde_json::Value;
 use std::path::Path;
 
+mod query_hint;
+
 pub(super) fn write_and_print(
     root: &Path,
     command: &ObserveCommand,
@@ -76,9 +78,7 @@ fn print_metrics_query(value: &Value) {
 }
 
 fn print_failure(command: &ObserveCommand, value: &Value, receipt: &std::path::Path) {
-    let metric_query = crate::cli::observe::query::bounded_failure_metric_query_for_operation(
-        command.operation.id(),
-    );
+    let metric_query = query_hint::failure_metric_query(command, value);
     println!(
         "failed_check={} failure_class={} why={} where={} claim_impact={} next_repair={} receipt={} run_id={} correlation_id={} trace_id={} query_logs='ultragoal observe logs query --run-id {} --correlation-id {} --limit 100' query_metrics='ultragoal observe metrics query --run-id {} --correlation-id {} --query '{}' --limit 100' query_traces='ultragoal observe traces query --run-id {} --correlation-id {} --limit 100'",
         text(value, "check_id", types::CHECK_ID),
@@ -234,5 +234,5 @@ fn csv(value: Option<&Value>) -> String {
 }
 
 #[cfg(test)]
-#[path = "stdout_tests.rs"]
+#[path = "../stdout_tests.rs"]
 mod tests;

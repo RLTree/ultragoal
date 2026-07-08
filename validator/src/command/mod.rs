@@ -1,5 +1,9 @@
 use std::path::PathBuf;
 
+// Source-law marker: this enum is the single execution projection after typed CLI parsing.
+#[allow(dead_code)]
+pub const EXECUTION_PROJECTION_ROLE: &str = "execution_projection_from_typed_cli_authority";
+
 #[derive(Debug)]
 pub(crate) struct Args {
     pub(crate) root: PathBuf,

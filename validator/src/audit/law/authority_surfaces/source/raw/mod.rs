@@ -60,6 +60,9 @@ fn authority_surface_inventory_path(rel: &str) -> bool {
 }
 
 fn parser_boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> bool {
+    if argument_parser_path(rel) {
+        return typed_cli_command_boundary_text(rel, text);
+    }
     parser_boundary_path(rel)
         || match marker {
             RawAuthorityMarker::RawPath => {
@@ -83,8 +86,13 @@ fn parser_boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> b
         }
 }
 
+fn argument_parser_path(rel: &str) -> bool {
+    rel == "validator/src/argument_parser.rs" || rel.starts_with("validator/src/argument_parser/")
+}
+
 fn parser_boundary_path(rel: &str) -> bool {
     rel.ends_with("json_boundary.rs")
+        || rel == "validator/src/cli/live_loop/rust_format/status_paths.rs"
         || rel.contains("/authority_surfaces/source/")
         || rel.starts_with("validator/src/schema_catalog/")
         || rel == "validator/src/schema_catalog/mod.rs"

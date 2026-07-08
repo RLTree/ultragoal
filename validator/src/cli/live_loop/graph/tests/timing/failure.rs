@@ -135,6 +135,30 @@ fn live_loop_graph_blocks_pass_shaped_timing_without_reconciliation() {
 }
 
 #[test]
+fn live_loop_graph_keeps_validation_result_when_observability_claim_is_withheld() {
+    let mut timing = node_timing(1_000, 1, "pass".to_string(), "none".to_string());
+    timing.telemetry_reconciliation_status = "query_failed".to_string();
+    timing.observability_status = "partial".to_string();
+    timing.speed_claim_status = "withheld".to_string();
+    timing.observability_failure_class = "observability_trace_tree_unavailable".to_string();
+
+    let node = projected_node(timing);
+
+    assert_eq!(node["status"], "partial");
+    assert_eq!(node["validation_status"], "pass");
+    assert_eq!(node["observability_status"], "partial");
+    assert_eq!(node["speed_claim_status"], "withheld");
+    assert_eq!(
+        node["failure_class"],
+        "live_loop_telemetry_reconciliation_missing"
+    );
+    assert_eq!(
+        node["claim_impact"],
+        "source_local_validation_available_speed_or_observability_claim_withheld"
+    );
+}
+
+#[test]
 fn live_loop_graph_uses_baseline_failure_details_without_duplicate_rerun() {
     let rerun = "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot";
     let mut timing = node_timing(

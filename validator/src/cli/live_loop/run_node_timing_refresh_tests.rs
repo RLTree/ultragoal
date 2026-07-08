@@ -81,9 +81,14 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
         .iter()
         .find(|node| node["node_id"] == "fmt_check")
         .expect("fmt node");
-    assert_eq!(fmt_node["validation_status"], "pass");
-    assert_eq!(fmt_node["validation_cache_status"], "reusable");
-    assert_ne!(fmt_node["status"], "fail");
+    match fmt_node["validation_status"].as_str().unwrap_or("") {
+        "pass" => {
+            assert_eq!(fmt_node["validation_cache_status"], "reusable");
+            assert_ne!(fmt_node["status"], "fail");
+        }
+        "fail" => assert_temp_root_format_check_blocked(fmt_node),
+        other => panic!("unexpected fmt validation status: {other}"),
+    }
     let build_node = receipt["nodes"]
         .as_array()
         .expect("nodes")
@@ -111,6 +116,9 @@ fn live_loop_run_refreshes_node_timing_or_stays_on_reconciliation_failure() {
         }
         ("fmt_check", "live_loop_telemetry_reconciliation_missing") => {
             assert_reconciliation_failed(fmt_node);
+        }
+        ("fmt_check", "verified_local_command_failed") => {
+            assert_temp_root_format_check_blocked(fmt_node);
         }
         (
             "line_caps_check" | "namespace_check" | "schema_validation" | "package_inventory",
@@ -183,6 +191,18 @@ fn assert_reconciliation_failed(fmt_node: &serde_json::Value) {
         fmt_node["telemetry_reconciliation_status"],
         "query_or_explain_reconciliation_failed"
     );
+}
+
+fn assert_temp_root_format_check_blocked(fmt_node: &serde_json::Value) {
+    assert_eq!(fmt_node["validation_status"], "fail");
+    assert_eq!(fmt_node["validation_cache_status"], "not_reusable");
+    assert_eq!(fmt_node["failure_class"], "verified_local_command_failed");
+    assert_eq!(
+        fmt_node["where_failed"],
+        "loop.measure.fmt_check.verified_local_command"
+    );
+    let next_repair = fmt_node["next_repair"].as_str().expect("next repair text");
+    assert!(next_repair.contains("loop format check --changed-rust"));
 }
 
 fn assert_temp_root_cli_node_failed_with_agent_legible_repair(receipt: &serde_json::Value) {

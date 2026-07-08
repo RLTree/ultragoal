@@ -17,11 +17,14 @@ pub(super) fn path_affects_surface(path: &str, surface_id: &str) -> bool {
 }
 
 fn is_rust_source(path: &str) -> bool {
-    path.starts_with("validator/src/") && path.ends_with(".rs")
+    path.starts_with("validator/") && path.ends_with(".rs")
 }
 
 fn is_rust_format_config(path: &str) -> bool {
-    matches!(path, "rustfmt.toml" | ".rustfmt.toml")
+    matches!(
+        path,
+        "rustfmt.toml" | ".rustfmt.toml" | "validator/rustfmt.toml" | "validator/.rustfmt.toml"
+    )
 }
 
 fn is_rust_build_input(path: &str) -> bool {

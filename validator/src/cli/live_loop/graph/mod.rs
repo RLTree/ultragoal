@@ -172,7 +172,7 @@ pub(crate) fn surface_input_digest(
         "changed_files" => surface_changed_digest.to_string(),
         "audit_context" => audit_context_digest.to_string(),
         _ if surface.high_frequency => format!(
-            "candidate={candidate_digest};affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
+            "affected-input={surface_changed_digest};context={audit_context_digest};surface={}",
             surface.id
         ),
         _ => format!(

@@ -43,6 +43,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
         &json!({"nodes": [cache_row(&candidate, &input_digest, &cache_key)]}),
     )
     .expect("prior timing row");
+    let replay_store = super::super::cache_replay::ReplayStore::load(&root, &command);
 
     let row = super::super::measure_surface(
         &root,
@@ -50,6 +51,7 @@ fn live_loop_measure_replays_current_input_cache_row_into_timing_output() {
         surface,
         &candidate,
         &inputs,
+        &replay_store,
         super::super::timing::receipt::affected_set_status(inputs.changed_file_count),
         super::super::ObservationMode::FullRoundtrip,
     );

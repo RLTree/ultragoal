@@ -49,6 +49,7 @@ pub(crate) fn measure_surfaces_with_observation(
 ) -> Result<i32, String> {
     let candidate = crate::package::inventory::package_digest(root)?;
     let inputs = ChangedInputs::collect(root, &candidate, &command.tier, &command.cache_mode);
+    let replay_store = cache_replay::ReplayStore::load(root, command);
     let mut rows = Vec::new();
     for surface in surfaces {
         println!(
@@ -61,6 +62,7 @@ pub(crate) fn measure_surfaces_with_observation(
             surface,
             &candidate,
             &inputs,
+            &replay_store,
             affected_set_status(inputs.changed_file_count),
             observation_mode,
         );
@@ -85,6 +87,7 @@ fn measure_surface(
     surface: LoopValidationSurface,
     candidate: &str,
     inputs: &ChangedInputs,
+    replay_store: &cache_replay::ReplayStore,
     affected_set_status: &'static str,
     observation_mode: ObservationMode,
 ) -> NodeTimingRow {
@@ -95,7 +98,7 @@ fn measure_surface(
         &inputs.audit_context_digest,
     );
     if let Some((baseline, verified_local)) = cached_verified_local(
-        root,
+        replay_store,
         surface,
         candidate,
         &input_digest,
