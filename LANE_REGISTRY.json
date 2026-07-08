@@ -132,7 +132,7 @@
     },
     {
       "id": "LANE-002",
-      "status": "changes_requested",
+      "status": "ready_for_parent_reconciliation",
       "lane_type": "implementation",
       "lane_objective": "Build coverage lineage and routine coverage intelligence while preserving strict exact coverage authority.",
       "macro_lane_rationale": "Coverage lineage is independent from live-loop input specs and active-surface topology, but it blocks fast-loop honesty because routine coverage cannot substitute for strict boundary proof.",
@@ -182,12 +182,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b",
+      "current_commit": "d30fbf1df105887dfd3927b649035f6ea46b4c9b",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T19:02:19Z",
+      "last_heartbeat": "2026-07-08T19:08:52Z",
       "owned_paths": [
         "validator/src/cli/coverage/**",
         "validator/src/audit/coverage/**",
@@ -244,15 +244,15 @@
         "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
         "observed_branch": "codex/gate92-coverage-lineage-routine",
-        "observed_head": "ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b",
+        "observed_head": "d30fbf1df105887dfd3927b649035f6ea46b4c9b",
         "dirty_paths": [],
         "preserved_dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "changes_requested",
-        "observed_at": "2026-07-08T19:02:19Z",
-        "finding": "Lane 2 is clean at ac5ec1858ae41be0b6bb9d63c7192bc656e5ce7b, but adversarial review found stale coverage-manifest references to deleted authority surface inventory paths.",
-        "action": "Parent sent Lane 2 a classification request for .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json ownership or fail-closed coverage-lineage guard work before acceptance."
+        "status": "ready_for_parent_reconciliation",
+        "observed_at": "2026-07-08T19:08:52Z",
+        "finding": "Lane 2 is clean at d30fbf1df105887dfd3927b649035f6ea46b4c9b. It added a coverage-lineage guard that classifies missing changed-file references as coverage_manifest_stale_source_path and left .harness coverage manifests untouched because they were outside lane ownership.",
+        "action": "Parent must inspect the lane diff and decide whether direct .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json repair is root-owned, Lane 2 ownership expansion, or a separate manifest-maintenance lane before accepting or merging."
       },
       "teardown": {
         "required": true,
@@ -262,7 +262,7 @@
     },
     {
       "id": "LANE-003",
-      "status": "changes_requested",
+      "status": "ready_for_parent_reconciliation",
       "lane_type": "implementation",
       "lane_objective": "Build product-semantic active-surface inventory and authority-topology enforcement.",
       "macro_lane_rationale": "Active-surface authority is independent from coverage lineage and live-loop input specs, but it controls namespace, duplicate authority, alias, orphan, and row-shape theater risks before broader Gate 92 fitting.",
@@ -312,12 +312,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/ba58/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "current_commit": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
+      "current_commit": "28b00acddae48a030aaab16cbd0a67fde904fcfc",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "target_head_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
       "merge_base_at_validation": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
-      "last_heartbeat": "2026-07-08T19:02:19Z",
+      "last_heartbeat": "2026-07-08T19:08:52Z",
       "owned_paths": [
         "validator/src/audit/law/authority_surfaces/**",
         "validator/src/audit/namespace/**",
@@ -377,15 +377,15 @@
         "observed_clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/ba58/harness-ultragoal-plugin-proposal",
         "observed_branch": "HEAD",
-        "observed_head": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
+        "observed_head": "28b00acddae48a030aaab16cbd0a67fde904fcfc",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "changes_requested",
-        "observed_at": "2026-07-08T19:02:19Z",
-        "candidate_commit": "9ecb85da048b1c04b8825600cc5523fd3b2b6aa4",
-        "finding": "Lane 3 repaired pending runtime materialization state, but adversarial review found top-level validation_artifacts/** still listed as package inventory resources and stale moved-path references in package/coverage manifests.",
-        "action": "Parent sent Lane 3 a changes-requested follow-up to classify or repair top-level validation_artifacts package-boundary handling and owned stale inventory references before acceptance."
+        "status": "ready_for_parent_reconciliation",
+        "observed_at": "2026-07-08T19:08:52Z",
+        "candidate_commit": "28b00acddae48a030aaab16cbd0a67fde904fcfc",
+        "finding": "Lane 3 is clean at 28b00acddae48a030aaab16cbd0a67fde904fcfc. It rejects top-level validation_artifacts/** as package resources, preserves fixture-contained validation_artifacts paths, removes top-level live proof resources from plugin-manifest-draft.json, and registers the new package-surface helper.",
+        "action": "Parent must inspect the lane diff and rerun root reconciliation before accepting or merging. Stale inventory_requirements.rs references remain in .harness/coverage-manifest.json and templates/.harness/coverage-manifest.json outside Lane 3 ownership."
       },
       "teardown": {
         "required": true,
