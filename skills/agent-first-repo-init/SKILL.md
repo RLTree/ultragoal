@@ -39,7 +39,7 @@ runtime checklist into this skill.
 7. Install `PLANS.md` as stable ExecPlan law. Adapt only repo terminology or
    path conventions; do not rewrite it as active project state. Project status,
    worker/thread ids, phase progress, backlog items, receipt state, and
-   completion claims belong in active ExecPlans, `LANE_REGISTRY.json`,
+   completion claims belong in active ExecPlans, `../../LANE_REGISTRY.json`,
    `VERIFICATION_BACKLOG.json`, `COMPLETION_MANIFEST.json`, receipts, or
    `AMENDMENTS.jsonl`.
 8. Add `DESIGN.md`, `FRONTEND.md`, `PRODUCT_SENSE.md`, `QUALITY_SCORE.md`,

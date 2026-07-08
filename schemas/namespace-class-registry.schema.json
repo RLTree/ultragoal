@@ -24,6 +24,7 @@
               "external_compatibility",
               "fixture_catalog",
               "generated_artifact",
+              "orchestration_state",
               "public_distribution",
               "repo_source",
               "template"

@@ -1,0 +1,26 @@
+{
+  "schema": "harness-ultragoal.lane-launch-status.v1",
+  "lane_id": "LANE-002",
+  "lane_title": "Coverage lineage and routine coverage intelligence",
+  "thread_or_session_id": "019f4303-d1bc-7f61-964b-b6581de422a2",
+  "pending_worktree_id": "local:dd6149ad-a4e8-4463-9db9-1fd34f94a90f",
+  "workspace": "/Users/terrynoblin/.codex/worktrees/e3f2/harness-ultragoal-plugin-proposal",
+  "observed_branch": "codex/gate92-coverage-lineage-routine",
+  "observed_head": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
+  "target_branch": "codex/gate92-product-fitness-telemetry",
+  "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
+  "status": "active",
+  "observed_clean": true,
+  "dirty_paths": [],
+  "claim_ceiling": "source_local_orchestration_only",
+  "forbidden_claims": [
+    "readiness",
+    "release",
+    "completion",
+    "final_packet_correctness",
+    "install_cache_parity",
+    "registry_or_reviewer_exposure",
+    "update_goal_eligibility"
+  ],
+  "recorded_at": "2026-07-08T18:38:51Z"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "harness-ultragoal.lane-launch-status.v1",
+  "lane_id": "LANE-001",
+  "lane_title": "AuditContext and product-surface input specs",
+  "thread_or_session_id": "019f4303-8945-7d22-b380-790b049c0cbd",
+  "pending_worktree_id": "local:543090ba-e0dc-406b-8cf0-02b3eb46e309",
+  "workspace": "/Users/terrynoblin/.codex/worktrees/73e9/harness-ultragoal-plugin-proposal",
+  "observed_branch": "HEAD",
+  "observed_head": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
+  "target_branch": "codex/gate92-product-fitness-telemetry",
+  "target_head_at_launch": "ea6fd1b1fab864842d78ac91de2bb2be3a1dd952",
+  "status": "active",
+  "observed_clean": false,
+  "dirty_paths": [
+    "validator/src/cli/live_loop/changed_inputs/path_rules.rs",
+    "validator/src/cli/live_loop/surfaces/mod.rs",
+    "validator/src/cli/live_loop/surfaces/input_spec.rs"
+  ],
+  "claim_ceiling": "source_local_orchestration_only",
+  "forbidden_claims": [
+    "readiness",
+    "release",
+    "completion",
+    "final_packet_correctness",
+    "install_cache_parity",
+    "registry_or_reviewer_exposure",
+    "update_goal_eligibility"
+  ],
+  "recorded_at": "2026-07-08T18:38:51Z"
+}

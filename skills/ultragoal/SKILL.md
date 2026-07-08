@@ -24,7 +24,7 @@ It never silently downgrades to a smaller planning mode.
 An ultragoal run creates or verifies canonical artifacts:
 
 - `GOAL_CONTRACT.md`
-- `LANE_REGISTRY.json`
+- `../../LANE_REGISTRY.json`
 - `VERIFICATION_BACKLOG.json`
 - `COMPLETION_MANIFEST.json`
 - lane `EXECPLAN.md` files
@@ -37,7 +37,7 @@ An ultragoal run creates or verifies canonical artifacts:
 
 Generated or optional projections may exist, but they are not authorities:
 
-- `LANE_REGISTRY.md`
+- `../../LANE_REGISTRY.md`
 - `VERIFICATION_BACKLOG.md`
 - `CONTRACT_AMENDMENT.md`
 - validator receipts and ready receipts emitted by the validator

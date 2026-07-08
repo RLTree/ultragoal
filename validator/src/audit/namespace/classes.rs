@@ -16,6 +16,7 @@ enum NamespaceClassKind {
     FixtureCatalog,
     RepoSource,
     GeneratedArtifact,
+    OrchestrationState,
     PublicDistribution,
     Template,
 }
@@ -145,6 +146,7 @@ fn parse_kind(raw: &str) -> Option<NamespaceClassKind> {
         "fixture_catalog" => Some(NamespaceClassKind::FixtureCatalog),
         "repo_source" => Some(NamespaceClassKind::RepoSource),
         "generated_artifact" => Some(NamespaceClassKind::GeneratedArtifact),
+        "orchestration_state" => Some(NamespaceClassKind::OrchestrationState),
         "public_distribution" => Some(NamespaceClassKind::PublicDistribution),
         "template" => Some(NamespaceClassKind::Template),
         _ => None,

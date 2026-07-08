@@ -14,7 +14,7 @@ The parent is not a general implementation worker. It coordinates, monitors, rec
 ## Duties
 
 - Keep the goal contract current.
-- Keep `LANE_REGISTRY.json` current as the canonical lane, dependency, and root-verification authority.
+- Keep `../../LANE_REGISTRY.json` current as the canonical lane, dependency, and root-verification authority.
 - Keep any markdown lane registry view reconciled to the JSON authority.
 - Ensure each lane is goal-bound when tools allow.
 - Ensure each lane has an ExecPlan-scale contract.
