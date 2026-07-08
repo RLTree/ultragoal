@@ -101,9 +101,9 @@
       {
         "id": "red_green_tamper_fixture_scheduler",
         "product_role": "Isolated fixture scheduler for red, green, and tamper fixtures with deterministic aggregation and no shared validation_artifacts writes from parallel workers.",
-        "status": "in_progress",
-        "current_evidence": "Red fixture infrastructure exists, but the custom scheduler authority is not proven as a current-candidate product tool for all required fixture classes. Lane 6 is active for this custom tool.",
-        "next_required_proof": "Real fixture command or scheduler path proves isolated temp roots, deterministic ordering, typed task classes, no shared receipt writes, leak checks, and fail-closed stale or mutation behavior."
+        "status": "implemented_pending_parent_reconciliation",
+        "current_evidence": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d with real scheduler run over 1280 fixture tasks, deterministic ordering, package truth unchanged, and source-local claim ceiling. Parent has not merged or rerun root proof.",
+        "next_required_proof": "Parent reconciliation must inspect the Lane 6 diff, replay or merge onto current root, rerun focused scheduler proof and strict root checks, and preserve the source-local claim ceiling."
       },
       {
         "id": "command_telemetry_roundtrip_reconciliation",
@@ -143,9 +143,9 @@
       {
         "id": "impacted_rust_test_mapping",
         "product_role": "Impacted Rust test map that feeds nextest or the canonical test runner with legally sufficient focused tests instead of broad cargo sweeps or fake parallelism.",
-        "status": "in_progress",
-        "current_evidence": "Focused tests are run manually or by broad filters; no Harness-owned impacted-test map is proven as a current product tool. Lane 6 is active for this custom tool.",
-        "next_required_proof": "Current-candidate command maps changed source surfaces to impacted Rust tests, invokes one legal runner path, records input digests and result digests, and fails closed on unknown or unsafe mappings."
+        "status": "implemented_pending_parent_reconciliation",
+        "current_evidence": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d with mapped Rust source execution through one canonical cargo invocation and fail-closed unknown README.md mapping. Parent has not merged or rerun root proof.",
+        "next_required_proof": "Parent reconciliation must inspect the Lane 6 diff, replay or merge onto current root, rerun focused impacted-test mapping proof and strict root checks, and preserve the source-local claim ceiling."
       }
     ]
   },
@@ -767,7 +767,7 @@
     },
     {
       "id": "LANE-006",
-      "status": "active",
+      "status": "ready_for_parent_reconciliation",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite isolated red/green/tamper fixture scheduler and impacted Rust test mapping.",
       "macro_lane_rationale": "Fixture execution and impacted-test selection must be Harness-owned authority rather than broad red reports, broad cargo sweeps, or fake parallel subprocesses.",
@@ -781,8 +781,8 @@
         "actor_id": "codex-app-worktree-lane-006",
         "thread_or_session_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
         "pending_worktree_id": "local:b17000a1-9f17-45cc-81fa-f41281c5c59f",
-        "actor_status": "active",
-        "validated_at": "2026-07-08T22:26:23Z"
+        "actor_status": "completed_waiting_parent_reconciliation",
+        "validated_at": "2026-07-08T22:54:32Z"
       },
       "goal_binding": {
         "binding_surface": "codex_delegation_goal_prompt",
@@ -805,12 +805,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "current_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
+      "current_commit": "69f23be05ed30edfd801aaa0ec5a8228fe9cea3d",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
       "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
       "merge_base_at_validation": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "last_heartbeat": "2026-07-08T22:26:23Z",
+      "last_heartbeat": "2026-07-08T22:54:32Z",
       "owned_paths": [
         "validator/src/red/**",
         "validator/src/audit/red/**",
@@ -842,32 +842,21 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "workspace_status": {
-        "clean": false,
+        "clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
-        "observed_head": "a650a59562725d30ae631da7fc24c151c8e51973",
-        "dirty_paths": [
-          "plugin-manifest-draft.json",
-          "validator/src/argument_parser/specialized.rs",
-          "validator/src/cli/live_loop/mod.rs",
-          "validator/src/command/mod.rs",
-          "validator/src/command_run.rs",
-          "validator/src/red/fixture/mod.rs",
-          "validator/src/cli/live_loop/rust_tests/args.rs",
-          "validator/src/cli/live_loop/rust_tests/mod.rs",
-          "validator/src/cli/live_loop/rust_tests/tests.rs",
-          "validator/src/red/fixture/scheduler.rs"
-        ]
+        "observed_head": "69f23be05ed30edfd801aaa0ec5a8228fe9cea3d",
+        "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active_requires_overlap_steer",
-        "observed_at": "2026-07-08T22:26:23Z",
-        "finding": "Lane 6 is active and dirty. It owns fixture scheduler and impacted Rust test mapping, but has also touched shared CLI dispatch/router files that require parent-serialized integration.",
-        "action": "Send corrective steer: keep command-dispatch edits minimal, do not claim those files as lane-owned authority, report them as shared integration, and do not commit until focused validation and real product behavior proof are complete."
+        "status": "ready_for_parent_reconciliation",
+        "observed_at": "2026-07-08T22:54:32Z",
+        "finding": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d and the worktree is clean. It confirmed shared dispatch edits are minimal command exposure and parent-serialized integration, not lane-owned authority.",
+        "action": "Do not accept without root source inspection, current-root merge/replay, focused scheduler and impacted-test-map validation, real product proof on the reconciled candidate, and explicit source-local claim ceiling."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Active custom-tooling prerequisite lane."
+        "status": "blocked_until_parent_reconciliation",
+        "reason": "Clean lane commit exists, but root has not inspected, merged, validated, or torn down the worktree."
       }
     },
     {
@@ -887,7 +876,7 @@
         "thread_or_session_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
         "pending_worktree_id": "local:00717311-30d7-4bef-843e-5e1779c87b04",
         "actor_status": "active",
-        "validated_at": "2026-07-08T22:26:23Z"
+        "validated_at": "2026-07-08T22:54:32Z"
       },
       "goal_binding": {
         "binding_surface": "codex_delegation_goal_prompt",
@@ -910,12 +899,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "current_commit": "67eb340862b705cdce0ce237745289841a3e34a5",
+      "current_commit": "040f26c482c6f647367c40867ede3df44cf78fbc",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
       "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
       "merge_base_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
-      "last_heartbeat": "2026-07-08T22:26:23Z",
+      "last_heartbeat": "2026-07-08T22:54:32Z",
       "owned_paths": [
         "validator/src/cli/observe/command_roundtrip/**",
         "validator/src/cli/observe/telemetry/**",
@@ -937,24 +926,16 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "workspace_status": {
-        "clean": false,
+        "clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
-        "observed_head": "67eb340862b705cdce0ce237745289841a3e34a5",
-        "dirty_paths": [
-          "validator/src/cli/observe/command_roundtrip/checks.rs",
-          "validator/src/cli/observe/command_roundtrip/mod.rs",
-          "validator/src/cli/observe/command_roundtrip/receipt.rs",
-          "validator/src/cli/observe/command_roundtrip/tests/mod.rs",
-          "validator/src/cli/observe/command_roundtrip/tests/reconciliation.rs",
-          "validator/src/cli/observe/command_roundtrip/reconciliation.rs",
-          "validator/src/cli/observe/command_roundtrip/tests/tamper.rs"
-        ]
+        "observed_head": "040f26c482c6f647367c40867ede3df44cf78fbc",
+        "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active",
-        "observed_at": "2026-07-08T22:26:23Z",
-        "finding": "Lane 7 is active and rebased to current parent commit 67eb340862b705cdce0ce237745289841a3e34a5 with dirty command-roundtrip reconciliation source only.",
-        "action": "Do not accept without clean lane commit, focused tests, real current-candidate roundtrip or explicit blocker, red/green/tamper proof for proxy-proof rejection, and root reconciliation."
+        "status": "active_failure_output_review",
+        "observed_at": "2026-07-08T22:54:32Z",
+        "finding": "Lane 7 has clean commit 040f26c482c6f647367c40867ede3df44cf78fbc and is still actively reviewing failure-path output. The lane thread is not complete, so parent must not mark it merge-ready yet.",
+        "action": "Wait for the lane final report, then require root source inspection, current-root merge/replay, focused validation, real command-roundtrip proof on the reconciled candidate, and explicit source-local claim ceiling."
       },
       "teardown": {
         "required": true,
