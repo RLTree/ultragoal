@@ -108,16 +108,16 @@
       {
         "id": "command_telemetry_roundtrip_reconciliation",
         "product_role": "Command roundtrip authority that runs real commands, captures stdout and receipts, queries telemetry, reconciles same-candidate proof, and refuses generic rows.",
-        "status": "in_progress",
-        "current_evidence": "observe command_roundtrip source exists, but full production behavior for command families is not proven on the current candidate.",
-        "next_required_proof": "Real current-candidate command roundtrip captures stdout, receipt, logs, metrics, traces or wide events, explain output, current-state linkage, and explicit claim ceiling."
+        "status": "implemented_pending_parent_reconciliation",
+        "current_evidence": "Lane 7 reported source-local commit 3fbff558d with real observe command-roundtrip package proof, roundtrip_status=observable, explicit blocked claims, and source-local claim ceiling. Parent has not merged or rerun root proof.",
+        "next_required_proof": "Parent reconciliation must inspect the Lane 7 diff, replay or merge onto current root, rerun focused command-roundtrip proof and strict root checks, and preserve the source-local claim ceiling."
       },
       {
         "id": "receipt_artifact_dereference_reconciliation",
         "product_role": "Receipt and artifact reconciliation authority that names product behavior, proof surface, independent reconciliation surface, stale or wrong-digest state, and claim ceiling.",
-        "status": "in_progress",
-        "current_evidence": "Receipt dereference and explanation code exists in several surfaces, but there is no complete current-candidate custom authority proof for all receipt/proof paths.",
-        "next_required_proof": "Real current-candidate command rejects receipt existence as proof, dereferences receipts/artifacts, compares digest/run/correlation fields, and names the exact stale or missing proof surface."
+        "status": "implemented_pending_parent_reconciliation",
+        "current_evidence": "Lane 7 reported source-local commit 3fbff558d with receipt/artifact reconciliation source and real command-roundtrip proof that rejects proxy proof at the lane ceiling. Parent has not merged or rerun root proof.",
+        "next_required_proof": "Parent reconciliation must inspect the Lane 7 diff, replay or merge onto current root, rerun focused receipt/artifact reconciliation proof and strict root checks, and preserve the source-local claim ceiling."
       },
       {
         "id": "current_state_read_model",
@@ -861,7 +861,7 @@
     },
     {
       "id": "LANE-007",
-      "status": "active",
+      "status": "ready_for_parent_reconciliation",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite command telemetry roundtrip and receipt/artifact reconciliation authority.",
       "macro_lane_rationale": "Command telemetry and receipt reconciliation must reject proxy proof before any later Gate 92 command family can be fitted.",
@@ -875,8 +875,8 @@
         "actor_id": "codex-app-worktree-lane-007",
         "thread_or_session_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
         "pending_worktree_id": "local:00717311-30d7-4bef-843e-5e1779c87b04",
-        "actor_status": "active",
-        "validated_at": "2026-07-08T22:54:32Z"
+        "actor_status": "blocked_pending_parent_reconciliation",
+        "validated_at": "2026-07-08T23:54:32Z"
       },
       "goal_binding": {
         "binding_surface": "codex_delegation_goal_prompt",
@@ -895,16 +895,16 @@
           "receipt_existence"
         ]
       },
-      "branch": "codex/gate92-product-fitness-telemetry worktree",
+      "branch": "codex/lane-007-command-roundtrip-reconciliation",
       "workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "current_commit": "040f26c482c6f647367c40867ede3df44cf78fbc",
+      "current_commit": "3fbff558dc3b98f4da22403d834889dff7a997c0",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
       "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
       "merge_base_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
-      "last_heartbeat": "2026-07-08T22:54:32Z",
+      "last_heartbeat": "2026-07-08T23:54:32Z",
       "owned_paths": [
         "validator/src/cli/observe/command_roundtrip/**",
         "validator/src/cli/observe/telemetry/**",
@@ -928,19 +928,19 @@
       "workspace_status": {
         "clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal",
-        "observed_head": "040f26c482c6f647367c40867ede3df44cf78fbc",
+        "observed_head": "3fbff558dc3b98f4da22403d834889dff7a997c0",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "active_failure_output_review",
-        "observed_at": "2026-07-08T22:54:32Z",
-        "finding": "Lane 7 has clean commit 040f26c482c6f647367c40867ede3df44cf78fbc and is still actively reviewing failure-path output. The lane thread is not complete, so parent must not mark it merge-ready yet.",
-        "action": "Wait for the lane final report, then require root source inspection, current-root merge/replay, focused validation, real command-roundtrip proof on the reconciled candidate, and explicit source-local claim ceiling."
+        "status": "ready_for_parent_reconciliation",
+        "observed_at": "2026-07-08T23:54:32Z",
+        "finding": "Lane 7 marked its lane goal blocked because the remaining action is parent-owned reconciliation. Worktree is clean at commit 3fbff558dc3b98f4da22403d834889dff7a997c0, with lane-reported real observe command-roundtrip package proof and source-local claim ceiling.",
+        "action": "Parent must inspect the Lane 7 diff, reconcile or replay onto current root, rerun focused command-roundtrip and receipt/artifact proof on the reconciled candidate, run strict root checks, and preserve source-local claim ceiling before acceptance."
       },
       "teardown": {
         "required": true,
-        "status": "not_ready",
-        "reason": "Active custom-tooling prerequisite lane."
+        "status": "blocked_until_parent_reconciliation",
+        "reason": "Lane work appears ready, but standard parent merge/reconciliation and root proof are still required."
       }
     },
     {
