@@ -1,22 +1,19 @@
 use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
-
 mod cargo;
 mod document;
+mod inventory_resource;
 mod module_ownership;
 mod proof_binding;
 mod role;
 mod row;
 mod source;
-
 pub(crate) use document::InventoryArtifactBinding;
-
 pub(super) const CHECK_ID: &str = "purpose-backed-active-files";
 const CLAIM_IMPACT: &str =
     "blocks completion,review,package,readiness,release,final_packet,update_goal";
 const NARROW_RERUN: &str = "target/debug/ultragoal --root . typed-boundaries check --strict";
-
 pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String, String)> {
     let mut out = Vec::new();
     let source_paths = source::actual_paths(root).unwrap_or_else(|err| {
@@ -98,6 +95,14 @@ pub(super) fn failures(root: &Path, inventory: &BTreeSet<String>) -> Vec<(String
         }
     }
     for rel in inventory {
+        if inventory_resource::live_proof_package_resource(rel) {
+            push(
+                &mut out,
+                &format!("live-proof-package-resource:{rel}"),
+                inventory_resource::live_proof_resource_reason(),
+                inventory_resource::live_proof_resource_repair(),
+            );
+        }
         if rel.starts_with("validator/src/bin/") && !bins.values().any(|path| path == rel) {
             push(
                 &mut out,

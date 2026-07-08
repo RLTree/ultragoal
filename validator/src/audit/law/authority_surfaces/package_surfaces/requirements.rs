@@ -9,6 +9,12 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
     },
     RequiredSurface {
         role: "source",
+        rel: "validator/src/audit/law/authority_surfaces/package_surfaces/inventory_resource.rs",
+        package_inventory_required: true,
+        existence_required: true,
+    },
+    RequiredSurface {
+        role: "source",
         rel: "validator/src/audit/law/authority_surfaces/package_surfaces/mod.rs",
         package_inventory_required: true,
         existence_required: true,

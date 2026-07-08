@@ -89,14 +89,12 @@ fn inventoried_control_resources_receive_product_roles() {
     write_canonical_bin(&root);
     write_file(&root, "templates/final-packet-blocker.json", "{}\n");
     write_file(&root, "templates/update-goal-blocker.json", "{}\n");
-    write_file(&root, "validation_artifacts/review/report.json", "{}\n");
     write_manifest(
         &root,
         &[
             "validator/src/bin/ultragoal.rs",
             "templates/final-packet-blocker.json",
             "templates/update-goal-blocker.json",
-            "validation_artifacts/review/report.json",
         ],
     );
 
@@ -114,11 +112,45 @@ fn inventoried_control_resources_receive_product_roles() {
         "update_goal_blocker",
         "canonical",
     );
-    assert_row(
-        &inventory,
-        "validation_artifacts/review/report.json",
-        "receipt_or_report",
-        "external_debug_no_claim",
+    cleanup(root);
+}
+
+#[test]
+fn top_level_validation_artifacts_cannot_be_package_resources() {
+    let root = temp_root("live-proof-package-resource");
+    write_canonical_bin(&root);
+    write_file(&root, "validation_artifacts/review/report.json", "{}\n");
+    write_file(
+        &root,
+        "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+        "{}\n",
+    );
+    write_manifest(
+        &root,
+        &[
+            "validator/src/bin/ultragoal.rs",
+            "validation_artifacts/review/report.json",
+            "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+        ],
+    );
+
+    let failures = failures(
+        &root,
+        inventory(&[
+            "validator/src/bin/ultragoal.rs",
+            "validation_artifacts/review/report.json",
+            "fixtures/target-repo/valid/validation_artifacts/review/report.json",
+        ]),
+    );
+    assert_contains(
+        &failures,
+        "surface=live-proof-package-resource:validation_artifacts/review/report.json",
+    );
+    assert!(
+        !failure_text(&failures).contains(
+            "live-proof-package-resource:fixtures/target-repo/valid/validation_artifacts/review/report.json"
+        ),
+        "fixture-contained validation artifacts are fixture resources, not top-level live proof artifacts: {failures:?}"
     );
     cleanup(root);
 }
