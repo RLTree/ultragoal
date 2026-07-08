@@ -24,6 +24,16 @@ fn coverage_prove_parse_supports_receipt_jobs_and_validate_existing() {
     );
     assert_eq!(command.jobs, Some(2));
     assert!(command.validate_existing);
+    assert_eq!(command.mode, CoverageMode::Strict);
+    let routine = parse(&[
+        "coverage".into(),
+        "prove".into(),
+        "--mode".into(),
+        "routine".into(),
+    ])
+    .expect("parse routine")
+    .expect("routine command");
+    assert_eq!(routine.mode, CoverageMode::Routine);
     assert!(parse(&["source".into(), "audit".into()]).unwrap().is_none());
     assert!(
         parse(&["coverage".into(), "prove".into(), "--bad".into()])
@@ -41,6 +51,7 @@ fn coverage_prove_command_writes_pass_and_fail_observability() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(4),
         validate_existing: true,
+        mode: CoverageMode::Strict,
     };
     assert_eq!(run(&root, &command).expect("pass run"), 0);
     let pass =
@@ -94,6 +105,7 @@ fn coverage_prove_records_authoritative_command_failure() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: None,
         validate_existing: false,
+        mode: CoverageMode::Strict,
     };
     assert_eq!(
         run_with_executor(&root, &command, failing_executor).expect("run"),

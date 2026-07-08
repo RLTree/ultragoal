@@ -12,6 +12,7 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
     assert_eq!(default.receipt, PathBuf::from(COVERAGE_RECEIPT_REL));
     assert!(default.jobs.is_none());
     assert!(!default.validate_existing);
+    assert_eq!(default.mode, CoverageMode::Strict);
 
     assert!(
         parse(&["coverage".into(), "prove".into(), "--receipt".into()])
@@ -33,6 +34,21 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
         .expect_err("invalid jobs")
         .contains("invalid numeric value for --jobs")
     );
+    assert!(
+        parse(&["coverage".into(), "prove".into(), "--mode".into()])
+            .expect_err("missing mode")
+            .contains("missing value for --mode")
+    );
+    assert!(
+        parse(&[
+            "coverage".into(),
+            "prove".into(),
+            "--mode".into(),
+            "warm".into()
+        ])
+        .expect_err("invalid mode")
+        .contains("unknown coverage mode")
+    );
 
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("coverage-jobs-zero");
     super::write_coverage_root(&root, 100.0, json!([]));
@@ -40,6 +56,7 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(0),
         validate_existing: true,
+        mode: CoverageMode::Strict,
     };
     assert!(
         run(&root, &command)
@@ -52,6 +69,7 @@ fn coverage_parse_and_scheduler_edges_are_typed() {
         receipt: outside_receipt,
         jobs: Some(1),
         validate_existing: false,
+        mode: CoverageMode::Strict,
     };
     let err = run_with_executor(&root, &command, panic_executor)
         .expect_err("absolute coverage receipt rejected before executor");
@@ -98,6 +116,7 @@ fn coverage_dispatch_and_receipt_write_failures_are_observable() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(1),
         validate_existing: true,
+        mode: CoverageMode::Strict,
     };
     let err = run(&write_error_root, &command).expect_err("receipt write blocked");
     assert!(
@@ -121,6 +140,7 @@ fn coverage_authoritative_script_and_package_mutation_are_observed() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(1),
         validate_existing: false,
+        mode: CoverageMode::Strict,
     };
     assert_eq!(run(&root, &command).expect("authoritative pass"), 0);
 
@@ -131,6 +151,7 @@ fn coverage_authoritative_script_and_package_mutation_are_observed() {
         receipt: PathBuf::from(COVERAGE_RECEIPT_REL),
         jobs: Some(1),
         validate_existing: false,
+        mode: CoverageMode::Strict,
     };
     assert_eq!(
         run_with_executor(&mutation_root, &mutation_command, mutating_executor).expect("run"),

@@ -27,7 +27,7 @@ bash -lc "$coverage_cmd" || {
   exit 2
 }
 
-python3 - "$manifest" "$command_path" "$receipt" "$root" source_local_iteration <<'PY'
+python3 - "$manifest" "$command_path" "$receipt" "$root" routine_repair_only <<'PY'
 import hashlib
 import json
 import sys
@@ -187,9 +187,32 @@ if not resolved_report.is_file():
 load_json(resolved_report, "coverage_report_not_machine_readable")
 if report.get("digest") != sha256_file(resolved_report):
     fail("coverage_report_digest_mismatch")
-if (
-    claim_context != "source_local_iteration"
-    and receipt.get("coverage", {}).get("policy") != "100_percent_required"
-):
+if claim_context != "routine_repair_only":
     fail("coverage_fast_gate_used_for_completion")
+if receipt.get("claim_ceiling") != "routine_repair_only":
+    fail("coverage_fast_claim_ceiling_not_routine_only")
+if "complete_coverage" in (receipt.get("supported_claim_classes") or []):
+    fail("coverage_fast_supports_complete_coverage")
+for blocked in [
+    "complete_coverage",
+    "completion",
+    "package_readiness",
+    "review_readiness",
+    "release_readiness",
+    "final_packet_correctness",
+    "update_goal_eligibility",
+    "app_registry_or_reviewer_exposure",
+]:
+    if blocked not in (receipt.get("blocked_claim_classes") or []):
+        fail("coverage_fast_blocked_claim_missing")
+if not receipt.get("coverage_cache_class"):
+    fail("coverage_fast_cache_class_missing")
+if not receipt.get("boundary_lineage_digest"):
+    fail("coverage_fast_boundary_lineage_missing")
+if receipt.get("boundary_lineage_digest") == receipt.get("source_tree_digest"):
+    fail("coverage_fast_boundary_lineage_not_independent")
+if receipt.get("equivalence_status") != "verified_current_input_equivalent":
+    fail("coverage_fast_equivalence_unverified")
+if "uncovered_records" not in receipt:
+    fail("coverage_fast_uncovered_records_missing")
 PY
