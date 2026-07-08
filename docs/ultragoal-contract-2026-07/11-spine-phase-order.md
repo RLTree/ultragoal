@@ -70,15 +70,33 @@ article-to-law trace, source obligations, foundational trace, standards rows,
 validators, fixtures, package inventory, claim guards, and setup/retrofit
 outputs, repair that mapping before claiming Gate 92 progress.
 
-Before continuing broad command-by-command fitting, insert a parent-owned
-acceleration slice inside Phase 2. The dynamic workflow engine is currently a
-tooling dependency under review, not the owner of this work. The parent may use
-it only for bounded design assistance after inspecting and supplementing the
-generated plan; the actual source changes, commands, telemetry proof, and claim
-ceilings remain parent-owned and must route through canonical `ultragoal`
-surfaces. Workflow output, worker output, or generated plans cannot satisfy Gate
-92, Product Usage, Phase 4, readiness, release, final packet, worktree
-eligibility, or update_goal claims.
+Before continuing broad command-by-command fitting, insert a parent-orchestrated
+custom tooling acceleration program inside Phase 2. The parent owns the root
+contract, dependency graph, lane launch order, reconciliation, final source
+audit, claim ceilings, and merge decisions. It should not personally implement
+every custom tool once Phase 1A is cleanly closed, explicitly blocked, or
+isolated away from root authority. Instead, it may launch a small number of
+source-local worktree lanes for dependency-closed custom tooling surfaces.
+
+Every Phase 2 custom-tooling lane must be created with `create_goal()` and a
+lane goal that names owned paths, forbidden paths, source-local claim ceiling,
+validation proof, production proof, stop conditions, expected commit shape, and
+what the parent must rerun before accepting the lane. Lanes are implementation
+owners, not claim authorities. They may not refresh install/cache, finalize
+packets, claim readiness/release/completion, call update_goal, or write shared
+`validation_artifacts/**`. The parent finalizes lane work only after inspecting
+source, checking proof-vs-validation labels, confirming current product behavior
+or verified current-input reuse, reconciling lane output against root
+`ultragoal` commands, and committing source-local/not-readiness work.
+
+The dynamic workflow engine is currently a tooling dependency under review, not
+the owner of this work. The parent may use it only for bounded design assistance
+after inspecting and supplementing the generated plan; the actual source
+changes, commands, telemetry proof, and claim ceilings remain governed by
+canonical `ultragoal` surfaces and the lane `create_goal()` contracts. Workflow
+output, worker output, or generated plans cannot satisfy Gate 92, Product Usage,
+Phase 4, readiness, release, final packet, worktree eligibility, or update_goal
+claims.
 
 The acceleration slice is: Gate 92 Fast Loop, Verified Incremental Audit, And
 Command Telemetry Roundtrip/Reconciliation. It must produce one routine
@@ -109,6 +127,33 @@ commands remain slow side channels. The required internal order is:
    exporter flushes, and compact hot-path timing receipts.
 9. Consider crate/workspace splitting only after measured residual test/build
    cost proves it is still needed.
+
+Recommended lane decomposition, after step 1 is satisfied:
+
+1. AuditContext and product-surface input specs: changed inputs, law/schema/
+   fixture/validator version digests, cache keys, invalidation reasons, and
+   immutable command snapshot.
+2. Routine hot-loop executor: typed task classes, validation/observability/
+   speed status separation, current-state emission, first product blocker, first
+   observability blocker, and exact narrow rerun.
+3. Coverage lineage/intelligence: strict full-clean coverage proof separated
+   from routine repair feedback over llvm-cov output, with dead-code and
+   coverage-theater guards.
+4. Product-semantic surface inventory: namespace/symbol/active-surface
+   authority, duplicate/alias/orphan detection, and product-role proof.
+5. Command telemetry roundtrip/reconciliation: stdout, receipts, logs, metrics,
+   traces or wide events, explain output, and claim ceiling for real commands.
+6. Observe explain/current-state/next-action: agent-legible repair compiler,
+   current-state read model, and `ultragoal next`.
+7. Fixture scheduler and package truth snapshotter: isolated red/green/tamper
+   roots, deterministic aggregation, no shared receipt writes, and package
+   boundary correctness.
+
+The parent should launch only the lanes whose upstream contracts are ready. It
+must keep the number of concurrent lanes low enough that merge/reconciliation
+quality stays high. Parallelism is a product law, but uncontrolled lane fan-out
+that produces conflicting source, duplicate abstractions, or proof theater is a
+failure of orchestration.
 
 Each sub-slice must have focused tests, red/green/tamper fixtures for the
 semantics it changes, source inspection, measured before/after timing, explicit
@@ -396,8 +441,11 @@ honesty, resource discipline, GC classification, CI/local parity, migration
 phases, and Agent Cockpit status or explicit blocker. Do not pull these forward
 to block Phase 2 unless the current Gate 92 implementation depends on them.
 
-Worktrees may start only after Phase 4 is committed and parent owns all
-`validation_artifacts/**` writes.
+General downstream worktrees for Gates 98-103 may start only after Phase 4 is
+committed and parent owns all `validation_artifacts/**` writes. This does not
+forbid the Phase 2 custom-tooling lane exception above, which is source-local,
+goal-bound through `create_goal()`, and limited to Gate 92 acceleration surfaces
+after Phase 1A is resolved.
 
 ### Phase 7 - Gate 92 Regression And Propagation Guard
 

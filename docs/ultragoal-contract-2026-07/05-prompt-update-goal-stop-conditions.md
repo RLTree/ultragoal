@@ -56,6 +56,8 @@ These stop conditions are additive. Existing stop conditions remain fully mandat
 
 118. Genuine proof and proxy-claim rejection are enforced across all gates. No completion, readiness, release, final-packet, update_goal, performance, observability, Product Fitness, Product Success, install/cache, registry/reviewer, or source-local gate claim may pass from parser/unit tests, schema-valid JSON, receipt existence, generated rows, current-state projections, workflow output, local spool output, cache-key construction, synthetic timing, graph scheduling overhead, dry-run planning, or CLI pass text unless the proof dereferences actual current-candidate product behavior or verified current-input reuse/equivalence with explicit claim limits. A reused row from an older package candidate can support routine verified-local acceleration only; it is not same-candidate production proof. Speed claims require per-node `proof_kind=executed` or `proof_kind=verified_cache_hit`, actual-work duration separated from graph overhead, result/output digests, current input digests, cache invalidation proof when reused, and stdout/receipt/log/metric/trace/explain reconciliation. Unsupported proof-shaped output must fail the row and lower the claim ceiling.
 
+119. Harness-owned custom tooling authority is enforced wherever generic Rust ecosystem tools cannot encode Harness product truth. Cargo, nextest, rustfmt, llvm-cov, tracing/OpenTelemetry, serde/schema parsers, file watchers, shell runners, workflow workers, and external task engines may emit observations only. The CLI must route those observations through Harness-owned authority surfaces such as `AuditContext`, product-surface input specs, verified incremental query graph, node-local cache authority, product-semantic active-surface inventory, coverage lineage/intelligence, fixture scheduler, package truth snapshotter, command telemetry roundtrip/reconciliation, receipt/artifact reconciliation, current-state, `ultragoal next`, and observe query/explain before any speed, observability, source-local, product, final-packet, readiness, release, completion, or update_goal claim can pass. Missing custom-tool authority, direct raw-tool-output claims, workflow-output-as-proof, tests-only custom-tool fitting, local-spool-only observability, raw llvm-cov JSON treated as behavior proof, nextest output treated as product proof, or lane output accepted without parent reconciliation blocks every affected claim. Any Phase 2 custom-tooling worktree lane must be launched by `create_goal()`, own disjoint product-semantic paths, write no shared `validation_artifacts/**`, return source-local/not-readiness proof, and be reconciled by the parent through root `ultragoal` commands before acceptance.
+
 Final response must include:
 - exact files changed
 - exact commands run and results
@@ -106,6 +108,9 @@ Final response must include:
 - one-command fresh environment bootstrap/concurrency status
 - agent-queryable observability status
 - Harness Product Doctrine status
+- Harness-owned custom tooling authority status
+- custom tooling validation-versus-production-proof status
+- Phase 2 custom-tooling worktree lane/create_goal orchestration status
 - observability channel model status: metrics for alerting, traces/events for
   investigation, logs for forensic reconstruction, and evals for behavioral
   quality

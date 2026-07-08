@@ -102,6 +102,24 @@ Checklist tracking:
   verified-local acceleration only; it cannot be called same-candidate
   production proof. Any unsupported proof-shaped output must lower the claim
   ceiling and fail the affected row.
+- Harness-owned custom tooling is required wherever Rust ecosystem tools expose
+  useful raw observations but cannot encode Harness product truth. Cargo,
+  nextest, rustfmt, llvm-cov, tracing, OpenTelemetry, serde, schema parsers, and
+  file watchers are execution substrate. They do not own law affected sets,
+  proof-surface separation, verified reuse, claim ceilings, semantic namespace
+  roles, receipt/artifact reconciliation, or agent-legible repair plans. Those
+  authorities belong in `ultragoal` product tools such as `AuditContext`, the
+  verified incremental query graph, product-surface input specs, command
+  telemetry roundtrip/reconciliation, current-state, `ultragoal next`, and
+  observe query/explain.
+- Validation and proof remain separate for custom tools. Unit tests,
+  schema-valid generated rows, fixture mechanics, cache-key construction,
+  nextest output, llvm-cov JSON, tracing spans, workflow output, or local spool
+  rows validate mechanics or emit observations. Production proof requires real
+  current-candidate command behavior or verified current-input reuse with
+  explicit claim limits, reconciled against independent surfaces such as stdout,
+  receipts, source inspection, logs, metrics, traces/wide events, evals where
+  applicable, and claim guards.
 - Claim ceiling remains source-local until same-candidate source, install,
   cache, app-registry, reviewer, final-packet, and update_goal surfaces support
   stronger claims.
@@ -109,13 +127,25 @@ Checklist tracking:
 ## Current Parent Priority
 
 The current next broad source-local priority is Gate 92 production
-observability and agent legibility, including the parent-owned fast-loop,
-verified incremental audit engine, and command telemetry roundtrip/
-reconciliation surfaces. Before Gate 92 work continues, resolve any active
-Gate 90 semantic-namespace violations in paths, modules, functions, tests,
-helpers, ids, and artifact paths. Do not launch worktrees, refresh install/
-cache, finalize packets, claim readiness/release/completion, or call
-`update_goal` before the applicable phase gates allow it.
+observability and agent legibility, including the Harness-owned custom tooling
+layer for the fast-loop, verified incremental audit engine, and command
+telemetry roundtrip/reconciliation surfaces. Before broad Gate 92 work
+continues, resolve any active Gate 90 semantic-namespace violations in paths,
+modules, functions, tests, helpers, ids, and artifact paths.
+
+Once the active Phase 1A/source-topology slice is cleanly closed, explicitly
+blocked, or isolated away from root authority, the parent becomes an
+orchestrator/reconciler for the Gate 92 custom-tooling program. It should launch
+a small number of dependency-closed source-local worktree lanes instead of
+implementing every custom tool itself. Every lane must be started through
+`create_goal()` with a goal-specific contract, owned paths, forbidden paths,
+proof-vs-validation requirements, no shared `validation_artifacts/**` writes,
+and a source-local claim ceiling. The parent finalizes only after a lane returns
+clean source, focused validation, production proof where the lane claims product
+behavior, source inspection, and a not-readiness commit.
+
+Do not refresh install/cache, finalize packets, claim readiness/release/
+completion, or call `update_goal` before the applicable phase gates allow it.
 
 ## Done Means
 

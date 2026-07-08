@@ -422,5 +422,15 @@ parallelization slice is dirty, close it immediately with focused proof and a
 source-local/not-readiness commit, or explicitly stale-mark/shelve it without
 claiming closure. After the current dirty slice is no longer ambiguous, full
 research-rooted Gate 92 observability and agent legibility is the next broad
-slice. Product Usage Fitness, Phase 4 rebinding, final proof assembly, and
-worktree lanes wait until Gate 92 is fully fitted and committed.
+slice.
+
+Gate 92 custom tooling is an allowed orchestration exception after Phase 1A is
+cleanly closed, explicitly blocked, or isolated away from root authority. The
+parent becomes orchestrator/reconciler for that program: it may launch a small
+number of source-local worktree lanes through `create_goal()`, each with owned
+paths, forbidden paths, proof-vs-validation requirements, no shared
+`validation_artifacts/**` writes, and source-local/not-readiness claim ceiling.
+The parent must reconcile lane output through root `ultragoal` commands before
+accepting a lane. Product Usage Fitness, Phase 4 rebinding, final proof assembly,
+general downstream worktree lanes, install/cache refresh, final packet work,
+readiness/release/completion, and update_goal still wait until their phase gates.

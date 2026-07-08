@@ -183,6 +183,51 @@ Required CLI authority:
   readiness, release, final-packet, install/cache, app-registry, reviewer,
   completion, or update_goal claims.
 
+Harness-owned custom tooling requirements:
+
+- Gate 92 requires a custom Harness authority layer above existing Rust tools.
+  Existing ecosystem tools remain the execution substrate: Cargo compiles and
+  runs tests, rustfmt formats, nextest may run filtered tests, llvm-cov produces
+  raw coverage observations, tracing/OpenTelemetry emit telemetry primitives,
+  serde/schema libraries parse structured data, and file-watch/process libraries
+  can support detection. None of those tools can decide Harness claim authority,
+  law affected sets, proof-surface separation, semantic product roles, receipt
+  reconciliation, verified-local cache equivalence, or agent repair plans.
+- The required custom product components are: `AuditContext`;
+  product-surface input specs; verified incremental query graph; node-local
+  cache authority; product-semantic active-surface inventory; semantic namespace
+  and symbol inventory; package truth snapshotter; coverage lineage/intelligence
+  over llvm-cov output; red/green/tamper fixture scheduler; command telemetry
+  roundtrip/reconciliation; receipt/artifact dereference and reconciliation;
+  current-state read model; `ultragoal next`; and observe query/explain repair
+  compiler.
+- These components must be product-semantic and CLI-routed. Source paths,
+  module names, function names, fixtures, receipts, and generated artifacts must
+  describe the product behavior they own. Goal-work labels such as `fitting`,
+  `production_proof`, `phase`, `slice`, `workstream`, `checkpoint`, or
+  `progress` are allowed only as compatibility/status fields at schema or CLI
+  boundary surfaces when existing public vocabulary requires them.
+- Custom tooling must not weaken proof. A custom cache, scheduler, compiler,
+  workflow lane, or generated row is not proof unless it dereferences real
+  current-candidate product behavior or verified current-input equivalence with
+  explicit routine-only claim limits. Production fitting still requires real
+  command runs, stdout/receipt/logs/metrics/traces/explain reconciliation,
+  source inspection, and claim ceilings.
+- Custom tooling must make dirty-tree repair faster, not only perfect green
+  reruns. A useful hot loop reports changed inputs, affected nodes, legal cache
+  reuse, executed nodes, first product blocker, first observability blocker,
+  partial proof surfaces, exact next repair, exact narrow rerun, and claim
+  ceiling even when some checks fail or live telemetry is partial.
+- The parent may split this custom tooling into worktree lanes after Phase 1A is
+  cleanly closed, explicitly blocked, or isolated from root authority. Lanes are
+  implementation owners, not claim authorities. Each lane must be launched with
+  `create_goal()`, own disjoint product-semantic paths, avoid shared
+  `validation_artifacts/**` writes, record validation and production proof
+  obligations, and return a source-local/not-readiness commit. The parent
+  reconciles lane output, reruns root proof, and refuses to finalize any lane
+  that offers tests, generated rows, workflow output, or local spool records as
+  production proof.
+
 Required fast-loop speed architecture and dependency order:
 
 1. Speed law arithmetic and baseline provenance must be repaired before any

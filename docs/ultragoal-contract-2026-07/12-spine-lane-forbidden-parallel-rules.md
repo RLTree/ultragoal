@@ -1,6 +1,35 @@
 ## Lane Rules
 
-No lanes before Phase 4 is committed.
+No general downstream lanes before Phase 4 is committed.
+
+Exception: Phase 2 may use source-local custom-tooling worktree lanes after
+Phase 1A active-surface/namespace work is cleanly closed, explicitly blocked, or
+isolated away from root authority. This exception exists to build the Harness
+authority layer required for Gate 92: `AuditContext`, product-surface input
+specs, verified incremental query graph, routine hot-loop executor, coverage
+lineage/intelligence, product-semantic surface inventory, command telemetry
+roundtrip/reconciliation, observe explain/current-state/next-action, fixture
+scheduling, and package truth snapshotting.
+
+Every exception lane must:
+
+- be launched by the parent through `create_goal()` with a lane-specific goal;
+- own disjoint source paths and product-semantic module names;
+- name forbidden paths, including shared root receipts and unrelated source;
+- declare validation proof and production proof separately;
+- forbid install/cache refresh, version bump, final packet finalization,
+  registry/reviewer exposure claims, readiness/release/completion claims, and
+  update_goal calls;
+- avoid shared `validation_artifacts/**` writes from lane workers;
+- preserve source-local/not-readiness claim ceiling;
+- return a clean lane worktree, focused tests, red/green/tamper proof where
+  touched, source inspection notes, and a not-readiness commit; and
+- wait for the parent to reconcile root proof before any row or claim is marked
+  validated/fitted/current.
+
+The exception does not allow broad Phase 4 rebinding, install/cache proof,
+reviewer exposure, final-packet work, Product Usage closure, or update_goal
+eligibility before their normal phase gates.
 
 After Phase 4:
 

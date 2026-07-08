@@ -278,6 +278,30 @@ This checklist section is a tracking surface only. It does not weaken Gate 92 an
   - Working means the parent owns execution, source changes, command runs, telemetry proof, and claim ceilings. The dynamic workflow engine may design or suggest a workflow only when the parent inspects, supplements, and verifies it through canonical `ultragoal` surfaces. Workflow output, worker output, or generated plans cannot satisfy Gate 92, Product Usage, Phase 4, readiness, release, final packet, worktree eligibility, or update_goal claims.
   - Status: not started
 
+- [ ] Harness-owned custom tooling authority layer is implemented above Rust ecosystem substrate.
+  - Working means Cargo, nextest, rustfmt, llvm-cov, tracing/OpenTelemetry, serde/schema parsing, and file/process watchers are treated as raw execution or observation substrate, while Harness-owned `ultragoal` tools own law affected sets, semantic product roles, package-boundary truth, verified-local cache equivalence, proof-surface separation, receipt/artifact reconciliation, claim ceilings, current-state, next-action, and agent-legible repair explanations.
+  - Validation means parser/help/schema/unit/table tests and red/green/tamper fixtures reject direct ecosystem-tool output as claim authority.
+  - Production proof means real current-candidate `ultragoal` command runs show ecosystem observations reconciled through Harness authority surfaces before any speed, observability, fitting, or claim status is emitted.
+  - Status: not started
+
+- [ ] Custom tooling pain-point map is represented in law surfaces.
+  - Working means the contract requirements for `AuditContext`, product-surface input specs, verified incremental query graph, node-local cache authority, product-semantic surface inventory, coverage lineage/intelligence over llvm-cov output, fixture scheduler, package truth snapshotter, command telemetry roundtrip/reconciliation, receipt/artifact reconciliation, observe explain, current-state, `ultragoal next`, and impacted Rust test mapping are mapped through law ids, standards rows, source obligations, foundational trace, schemas, validator ids, fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet blockers, and update_goal blockers.
+  - Validation means schema/fixture/source-obligation checks prove the mapping mechanics.
+  - Production proof means the real CLI/source-audit/current-state surfaces detect missing custom-tool authority or proxy-proof substitution on the current candidate.
+  - Status: not started
+
+- [ ] Custom tool validation and production proof are kept separate.
+  - Working means tests, schema-valid rows, generated rows, workflow output, local spool rows, nextest output, llvm-cov JSON, OpenTelemetry/tracing emit tests, cache-key construction, and dry-run planning are observations or validation only unless they reconcile to actual current-candidate behavior or verified current-input reuse with explicit claim limits.
+  - Validation means fixtures fail completion theater: tests-only fitting, local-spool-only observability, generated-row-only command coverage, workflow-output-as-proof, cache-hit-without-equivalence, graph-overhead-only speed, and raw coverage JSON treated as behavior proof.
+  - Production proof means a real current-candidate command or routine loop records product behavior, proof surface, independent reconciliation surface, and explicit claim ceiling for every custom-tool row it claims.
+  - Status: not started
+
+- [ ] Phase 2 custom-tooling worktree lanes are goal-bound and parent-reconciled.
+  - Working means after Phase 1A is closed, blocked, or isolated, the parent launches only dependency-closed source-local custom-tooling lanes with `create_goal()`, owned paths, forbidden paths, validation/proof obligations, no shared `validation_artifacts/**` writes, source-local claim ceiling, and no forbidden downstream surfaces. The parent reconciles lane commits through root `ultragoal` commands before accepting them.
+  - Validation means lane contract/schema checks and red fixtures reject missing `create_goal()` binding, overlapping owned paths, shared receipt writes, lane output treated as proof, missing proof-vs-validation labels, and premature readiness/update_goal/final-packet claims.
+  - Production proof means at least one real lane completes a custom-tooling goal, returns a clean source-local/not-readiness commit, and the parent independently verifies the named product behavior before merging or marking the lane accepted.
+  - Status: not started
+
 ### Gate 92.6: Receipt Binding And Agent-Queryable Proof
 
 - [ ] Every law-bearing receipt references observability receipt path, log stream digest, metric snapshot digest, trace bundle digest, query examples, redaction proof, retention/bounds proof, candidate digest, and run/correlation ids.

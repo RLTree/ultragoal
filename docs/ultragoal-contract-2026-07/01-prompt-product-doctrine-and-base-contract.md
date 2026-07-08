@@ -619,6 +619,116 @@ Mandatory integration objectives from the synthesis:
      architectural evidence, so strict final proof remains a separate
      claim-boundary budget rather than the routine-loop speed target.
 
+19A. Harness-Owned Custom Tooling Doctrine
+   - Rule: Existing Rust ecosystem tools are substrate, not Harness authority.
+     Cargo, nextest, rustfmt, llvm-cov, tracing, OpenTelemetry, serde, schema
+     validators, file watchers, and shell runners may execute work and produce
+     raw observations. They do not decide Harness law affected sets, semantic
+     product roles, package-boundary truth, verified-local cache equivalence,
+     proof-surface separation, receipt/artifact authority, claim ceilings,
+     command repair plans, or Gate 92 row status. Those product semantics must
+     live in Harness-owned custom tools routed through `ultragoal`.
+   - Rule: Build custom tooling when the bottleneck is Harness-specific truth
+     rather than a generic Rust primitive. Mandatory custom tools include:
+     `AuditContext` and the verified incremental query graph; product-surface
+     input specs; the routine hot-loop executor; product-semantic active-surface
+     and namespace inventory; receipt/artifact reconciliation; command telemetry
+     roundtrip/reconciliation; observe query/explain; current-state; `ultragoal
+     next`; coverage intelligence over llvm-cov output; fixture scheduling over
+     isolated roots; package truth snapshotting; and impacted Rust test mapping
+     that feeds nextest or the canonical test runner.
+   - Rule: Do not replace ecosystem primitives until residual measurements prove
+     the primitive is the bottleneck after the Harness authority layer is in
+     place. Do not custom-build a Rust compiler, formatter, package manager,
+     low-level coverage counter engine, tracing protocol, OpenTelemetry data
+     model, JSON parser, or process-per-test runner merely because Harness is
+     strict. Wrap and govern those tools first; replace only with current timing
+     and correctness proof.
+   - Rule: Custom tool names, modules, functions, receipt paths, fixture ids, and
+     generated artifacts must describe product behavior, not the contract work
+     being satisfied. Good product names include `audit_context`,
+     `changed_inputs`, `cache_invalidation`, `command_roundtrip`,
+     `telemetry_reconciliation`, `receipt_dereference`, `span_parentage`,
+     `coverage_lineage`, `current_state`, `next_action`, `surface_inventory`,
+     and `repair_explanation`. Goal-work names such as `fitting`,
+     `production_proof`, `phase2`, `speed_slice`, `workstream`,
+     `checkpoint_progress`, or row-status labels may appear only at schema or
+     compatibility boundaries where the product contract requires them and the
+     implementation namespace remains product-semantic.
+   - Required pain-point mapping:
+     - Slow dirty-tree repair maps to `AuditContext`, product-surface input
+       specs, node-local cache authority, changed-input indexes, and a typed
+       hot-loop executor. Confidence 94%.
+     - Full-world invalidation maps to verified current-input cache equivalence,
+       law/schema/fixture/validator version digests, result/output digests, and
+       invalidation proof. Confidence 92%.
+     - Coverage as a slow strict-only law maps to a coverage intelligence layer
+       over llvm-cov JSON, with strict full-clean proof separated from
+       routine-repair feedback and dead-code detection. Confidence 88%.
+     - Namespace and active-surface violations map to a product surface
+       inventory compiler that detects untyped binaries, commands, modules,
+       functions, helpers, schemas, fixtures, receipt producers, aliases,
+       generated rows, coverage-only wrappers, and orphan surfaces. Confidence
+       97%.
+     - Receipt/proof theater maps to receipt/artifact reconciliation that names
+       product behavior, proof surface, independent reconciliation surface,
+       stale/wrong-digest state, and claim ceiling. Confidence 95%.
+     - Generic observability maps to an observe explain compiler that turns
+       run/correlation/digest telemetry into root cause, implicated source or
+       artifact, blocked claim, smallest repair, narrow rerun, broad rerun
+       allowance, and explicit claim ceiling. Confidence 95%.
+     - Expensive red fixture reports map to isolated fixture scheduling,
+       semantic fixture indexes, deterministic aggregation, and no shared
+       `validation_artifacts/**` worker writes. Confidence 89%.
+     - Package digest and package inventory churn map to one package truth
+       snapshot per immutable command run and product-boundary-aware digest
+       inputs that exclude builder-contract docs. Confidence 91%.
+     - Too-broad Rust tests map to an impacted-test map feeding nextest or one
+       filtered cargo invocation, avoiding fake parallelism through contending
+       Cargo processes. Confidence 78%.
+     - Workflow output treated as proof maps to a command-state ledger where
+       workflows may coordinate lanes but only `ultragoal` current-candidate
+       commands, receipts, telemetry, source inspection, and verified reuse can
+       support claims. Confidence 90%.
+   - Validation versus proof for custom tooling:
+     - Validation includes parser/help/unit tests, schema checks, table-driven
+       generated-row tests, cache-key tests, fixture mechanics, red/green/tamper
+       fixture execution, nextest output, llvm-cov raw JSON, OpenTelemetry/tracing
+       emit tests, and workflow design output. These prove implementation
+       mechanics only.
+     - Production proof requires the product behavior named by the claim:
+       real current-candidate `ultragoal` command execution or verified
+       current-input reuse; command argv and exit status when executed; result
+       and output digests; same-candidate stdout/receipt/logs/metrics/traces or
+       wide events/evals where applicable; source inspection of the authority
+       path; specific failure/repair output; and explicit claim ceiling.
+     - Speed proof requires `proof_kind=executed` or
+       `proof_kind=verified_cache_hit` for every node. Graph overhead,
+       cache-key construction, current-state projection, dry-run workflow
+       planning, local JSON shape, synthetic no-op timing, or generated-row
+       materialization cannot support speed claims.
+     - Observability proof requires queryable, bounded, redacted,
+       same-candidate logs, metrics, traces/wide events, and explain output that
+       reconciles with stdout and receipts. Local spool output is transition or
+       debug evidence unless live ingestion is explicitly unavailable and the
+       row remains claim-blocked.
+   - Required adoption path: each custom tooling requirement must map through
+     law ids, standards rows, source obligations, foundational trace, schemas,
+     validator ids, red/green/tamper fixtures, receipts, package inventory,
+     setup/retrofit outputs, claim guards, final-packet blockers, and
+     update_goal blockers before it can close a gate. Markdown adoption,
+     checklist status, workflow output, or one successful command run is not
+     enough.
+   - Evidence and confidence: OpenAI Harness Engineering supports the premise
+     that agent velocity depends on agent-legible scaffolding, internal tooling,
+     tests, observability, and feedback loops; Symphony supports higher-level
+     orchestration only after harness engineering exists; nextest and llvm-cov
+     show useful Rust substrate capabilities while leaving Harness product truth
+     outside their scope. Confidence 96% that Harness-owned authority tooling is
+     required; 86% that wrapping ecosystem tools before replacing them is the
+     fastest safe route; 40% that replacing generic Rust primitives first would
+     improve end-to-end speed before the Harness authority layer exists.
+
 20. Builder-Contract Modularization Without Semantic Loss
    - Rule: The parent prompt, checklist, and spine are builder contracts. They
      are overloaded enough that a governed split is now warranted, but the split
