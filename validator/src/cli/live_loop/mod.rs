@@ -18,6 +18,7 @@ mod receipt_tests;
 #[cfg(test)]
 mod run_node_timing_refresh_tests;
 mod rust_format;
+pub(crate) mod rust_tests;
 mod stdout;
 #[cfg(test)]
 mod stdout_tests;

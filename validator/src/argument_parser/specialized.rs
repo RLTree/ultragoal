@@ -18,6 +18,8 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::ImprovementLoop(command))
     } else if let Some(command) = cli::line_caps::parse(raw)? {
         Ok(Command::LineCaps(command))
+    } else if let Some(command) = cli::live_loop::rust_tests::parse(raw)? {
+        Ok(Command::ImpactedRustTests(command))
     } else if let Some(command) = cli::live_loop::parse(raw)? {
         Ok(Command::LiveLoop(command))
     } else if let Some(command) = cli::mandatory_law_validation::parse(raw)? {
@@ -30,6 +32,8 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::OpenAi(command))
     } else if let Some(command) = cli::promptfoo::parse(raw)? {
         Ok(Command::Promptfoo(command))
+    } else if let Some(command) = crate::red::fixture::scheduler::parse(raw)? {
+        Ok(Command::FixtureSchedule(command))
     } else if let Some(command) = cli::red_report::parse(raw)? {
         Ok(Command::RedReport(command))
     } else if let Some(command) = cli::schema_validation::parse(raw)? {

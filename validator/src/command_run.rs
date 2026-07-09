@@ -98,6 +98,9 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::ImprovementLoop(command) => crate::cli::improvement_loop::run(&root, &command),
         Command::LineCaps(command) => crate::cli::line_caps::run(&root, &command),
         Command::LiveLoop(command) => crate::cli::live_loop::run(&root, &command),
+        Command::ImpactedRustTests(command) => {
+            crate::cli::live_loop::rust_tests::run(&root, &command)
+        }
         Command::MandatoryLawValidation(command) => {
             crate::cli::mandatory_law_validation::run(&root, &command)
         }
@@ -106,6 +109,7 @@ pub(crate) fn run_with_exit_code(args: Args) -> Result<i32, String> {
         Command::OpenAi(command) => crate::cli::openai::run(&root, &command),
         Command::Promptfoo(command) => crate::cli::promptfoo::run(&root, &command),
         Command::RedReport(command) => crate::cli::red_report::run(&root, &command),
+        Command::FixtureSchedule(command) => crate::red::fixture::scheduler::run(&root, &command),
         Command::SchemaValidation(command) => crate::cli::schema_validation::run(&root, &command),
         Command::Routine(command) => crate::cli::routine::run(&root, &command),
         Command::Session(command) => crate::cli::session::run(&root, &command),
