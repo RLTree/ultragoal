@@ -1,6 +1,10 @@
 use super::{NODE_TIMING_REL, read_current};
 use serde_json::{Value, json};
 
+#[path = "test_rows.rs"]
+mod test_rows;
+use self::test_rows::{current_timing_row, digest, expected_output_digest, expected_result_digest};
+
 #[test]
 fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
     let timings = read_with_patch(json!({
@@ -11,8 +15,8 @@ fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
         "work_unit_count": 0,
         "equivalence_status": "verified_same_candidate_cache_replay",
         "invalidation_proof": "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched",
-        "prior_result_digest": digest("result"),
-        "replayed_output_digest": digest("output"),
+        "prior_result_digest": expected_result_digest(0, false, &expected_output_digest()),
+        "replayed_output_digest": expected_output_digest(),
         "cache_equivalence_status": "pass"
     }));
 
@@ -52,9 +56,12 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
         json!({"output_digest": serde_json::Value::Null}),
         json!({"result_digest": digest("different-result")}),
         json!({"output_digest": digest("different-output")}),
+        forged_digest_pair_patch(),
         json!({"verified_local_result_digest": "sha256:short"}),
         json!({"verified_local_output_digest": "sha256:short"}),
         json!({"verified_local_stdout_digest": "sha256:short"}),
+        json!({"claim_ceiling": "readiness_overclaim"}),
+        json!({"claim_impact": "supports_readiness"}),
         json!({"timing_status": "pass", "failure_class": "live_loop_speedup_target_missed"}),
         json!({"timing_status": "pass", "telemetry_reconciliation_status": "missing"}),
         json!({"equivalence_status": "unknown"}),
@@ -71,6 +78,20 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
     for patch in cases {
         assert_eq!(read_with_patch(patch), 0);
     }
+}
+
+#[test]
+fn measurement_rust_test_zero_or_missing_count_is_rejected_by_timing_reader() {
+    assert_eq!(
+        read_with_patch(measurement_rust_test_patch(json!(0))),
+        0,
+        "zero-test pass rows must not project validation or speed support"
+    );
+    assert_eq!(
+        read_with_patch(measurement_rust_test_patch(serde_json::Value::Null)),
+        0,
+        "missing test counts must not project validation or speed support"
+    );
 }
 
 #[test]
@@ -105,7 +126,7 @@ fn read_with_patch(patch: Value) -> usize {
         &changed,
         &context,
     );
-    let mut row = current_timing_row(candidate, &input);
+    let mut row = current_timing_row(candidate, &input, "pass", "none");
     let object = row.as_object_mut().expect("current timing row object");
     for (key, value) in patch.as_object().expect("patch object") {
         object.insert(key.clone(), value.clone());
@@ -117,131 +138,46 @@ fn read_with_patch(patch: Value) -> usize {
     timings.len()
 }
 
-fn current_timing_row(candidate: &str, input: &str) -> Value {
-    let stdout_digest = digest("stdout");
-    let stderr_digest = digest("stderr");
-    let output_digest = digest("output");
-    let result_digest = digest("result");
-    let surface = crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("fmt surface");
-    let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
-        surface,
-        input,
-        "hot",
-        "verified-local",
+fn forged_digest_pair_patch() -> Value {
+    let output_digest = digest("self-consistent-wrong-output");
+    let result_digest = digest("self-consistent-wrong-result");
+    json!({
+        "output_digest": output_digest,
+        "verified_local_output_digest": output_digest,
+        "result_digest": result_digest,
+        "verified_local_result_digest": result_digest
+    })
+}
+
+fn measurement_rust_test_patch(test_count: Value) -> Value {
+    let candidate = "sha256:current";
+    let changed = crate::digest::bytes(b"");
+    let context = crate::digest::bytes(
+        format!(
+            "validator={};law={};schema={};fixture={};tier=hot;cache=verified-local",
+            crate::cli::live_loop::graph::validator_version(),
+            crate::cli::live_loop::graph::law_version(),
+            crate::cli::live_loop::graph::schema_version(),
+            crate::cli::live_loop::graph::fixture_version()
+        )
+        .as_bytes(),
     );
-    let mut row = json!({
-        "node_id": "fmt_check",
-        "candidate_digest": candidate,
-        "tier": "hot",
-        "cache_mode": "verified-local",
+    let surface = super::surface_by_id("live_loop_measurement_rust_tests")
+        .expect("measurement rust test surface");
+    let input = super::graph::surface_input_digest(surface, candidate, &changed, &context);
+    let cache_key =
+        super::graph::verified_local_cache_key(surface, &input, "hot", "verified-local");
+    json!({
+        "node_id": "live_loop_measurement_rust_tests",
         "input_digest": input,
         "current_input_digest": input,
-        "canonical_full_command": "cargo fmt --all --check",
-        "timing_status": "pass",
-        "failure_class": "none",
-        "baseline_exit_code": 0,
-        "baseline_launch_error": false,
-        "cache_honesty": "pass",
-        "baseline_duration_ms": 1000,
-        "verified_local_duration_ms": 2,
-        "proof_kind": "executed",
-        "cache_hit": false,
+        "canonical_full_command": surface.canonical_full_command,
+        "verified_local_command": surface.canonical_full_command,
+        "command_argv": ["cargo", "test", "--offline", "live_loop::nodes::measurement", "--lib", "--quiet"],
         "cache_key": cache_key,
-        "validator_version": crate::cli::live_loop::graph::validator_version(),
-        "law_version": crate::cli::live_loop::graph::law_version(),
-        "schema_version": crate::cli::live_loop::graph::schema_version(),
-        "fixture_version": crate::cli::live_loop::graph::fixture_version(),
-        "work_unit_count": 1,
-        "actual_work_duration_ms": 2,
-        "graph_overhead_ms": 1,
-        "equivalence_status": "executed_current_candidate_not_cache_replay",
-        "invalidation_proof": "cache_not_used_current_command_executed",
-        "telemetry_reconciliation_status": "pass",
-        "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["cargo", "fmt", "--all", "--check"],
-        "verified_local_stdout_digest": stdout_digest,
-        "verified_local_stderr_digest": stderr_digest,
-        "verified_local_exit_code": 0,
-        "output_digest": output_digest,
-        "result_digest": result_digest,
-        "verified_local_output_digest": output_digest,
-        "verified_local_result_digest": result_digest,
-        "where_failed": "none",
-        "why_failed": "none",
-        "next_repair": "none",
-        "telemetry_reconciliation": {"status": "pass"},
-        "affected_set_status": "clean_worktree_no_affected_files"
-    });
-    let object = row.as_object_mut().expect("timing row object");
-    object.insert(
-        "runtime_execution_model".to_string(),
-        json!(crate::cli::live_loop::graph::runtime_execution_model()),
-    );
-    object.insert(
-        "baseline_proof_kind".to_string(),
-        json!("executed_same_command_reuse"),
-    );
-    object.insert(
-        "baseline_invalidation_proof".to_string(),
-        json!(
-            "baseline_reused_from_executed_narrow_command_because_canonical_full_command_matches"
-        ),
-    );
-    object.insert(
-        "command_argv".to_string(),
-        json!(["cargo", "fmt", "--all", "--check"]),
-    );
-    insert_scheduler_fields(object);
-    object.insert("exit_status".to_string(), json!(0));
-    object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
-    object.insert("reconciled_command_duration_ms".to_string(), json!(6));
-    object.insert("product_latency_ms".to_string(), json!(3));
-    object.insert("receipt_paths".to_string(), json!([NODE_TIMING_REL]));
-    object.insert("artifact_paths".to_string(), json!([NODE_TIMING_REL]));
-    object.insert("validation_status".to_string(), json!("pass"));
-    object.insert("validation_cache_status".to_string(), json!("reusable"));
-    object.insert("observability_status".to_string(), json!("pass"));
-    object.insert("speed_claim_status".to_string(), json!("supported"));
-    object.insert("observability_failure_class".to_string(), json!("none"));
-    row
-}
-
-fn insert_scheduler_fields(object: &mut serde_json::Map<String, Value>) {
-    object.insert("graph_task_class".to_string(), json!("pure_read_parallel"));
-    object.insert(
-        "execution_task_class".to_string(),
-        json!("pure_read_parallel"),
-    );
-    object.insert("execution_serial_reason".to_string(), json!("none"));
-    object.insert("worker_count".to_string(), json!(1));
-    object.insert("task_count".to_string(), json!(1));
-    object.insert("queue_depth".to_string(), json!(1));
-    object.insert(
-        "worker_state".to_string(),
-        json!("single_surface_measurement_worker"),
-    );
-    object.insert(
-        "task_state".to_string(),
-        json!("surface_measurement_completed"),
-    );
-    object.insert(
-        "queue_state".to_string(),
-        json!("deterministic_measurement_batch_order"),
-    );
-    object.insert(
-        "executor_behavior".to_string(),
-        json!("measure_surface_invokes_one_node_command_at_a_time"),
-    );
-    object.insert(
-        "executor_scope".to_string(),
-        json!("source_local_custom_tooling_prerequisite_measurement_runner"),
-    );
-    object.insert(
-        "parallel_write_policy".to_string(),
-        json!("no_shared_validation_artifact_parallel_write"),
-    );
-}
-
-fn digest(label: &str) -> String {
-    crate::digest::bytes(label.as_bytes())
+        "graph_task_class": surface.execution_task_class.id(),
+        "execution_task_class": surface.execution_task_class.id(),
+        "execution_serial_reason": surface.execution_serial_reason,
+        "verified_local_executed_test_count": test_count
+    })
 }

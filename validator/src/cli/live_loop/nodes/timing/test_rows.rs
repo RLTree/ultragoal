@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use serde_json::json;
 
 pub(super) fn current_timing_row(
@@ -9,8 +11,8 @@ pub(super) fn current_timing_row(
     let exit_code = if timing_status == "pass" { 0 } else { 101 };
     let stdout_digest = digest("stdout");
     let stderr_digest = digest("stderr");
-    let output_digest = digest("output");
-    let result_digest = digest("result");
+    let output_digest = output_digest(&stdout_digest, &stderr_digest);
+    let result_digest = expected_result_digest(exit_code, false, &output_digest);
     let surface = crate::cli::live_loop::surfaces::surface_by_id("fmt_check").expect("fmt surface");
     let cache_key = crate::cli::live_loop::graph::verified_local_cache_key(
         surface,
@@ -69,6 +71,26 @@ pub(super) fn current_timing_row(
     row
 }
 
+fn output_digest(stdout_digest: &str, stderr_digest: &str) -> String {
+    crate::digest::bytes(format!("stdout={stdout_digest};stderr={stderr_digest}").as_bytes())
+}
+
+pub(super) fn expected_output_digest() -> String {
+    let stdout_digest = digest("stdout");
+    let stderr_digest = digest("stderr");
+    output_digest(&stdout_digest, &stderr_digest)
+}
+
+pub(super) fn expected_result_digest(
+    exit_code: i32,
+    launch_error: bool,
+    output_digest: &str,
+) -> String {
+    crate::digest::bytes(
+        format!("exit={exit_code};launch={launch_error};output={output_digest}").as_bytes(),
+    )
+}
+
 fn insert_derived_fields(
     object: &mut serde_json::Map<String, serde_json::Value>,
     timing_status: &str,
@@ -94,6 +116,7 @@ fn insert_derived_fields(
         json!(crate::cli::live_loop::graph::runtime_execution_model()),
     );
     object.insert("exit_status".to_string(), json!(exit_code));
+    object.insert("verified_local_launch_error".to_string(), json!(false));
     object.insert("telemetry_reconciliation_duration_ms".to_string(), json!(3));
     object.insert("reconciled_command_duration_ms".to_string(), json!(6));
     object.insert("product_latency_ms".to_string(), json!(3));
@@ -131,6 +154,14 @@ fn insert_derived_fields(
         }),
     );
     object.insert("observability_failure_class".to_string(), json!("none"));
+    object.insert(
+        "claim_ceiling".to_string(),
+        json!(crate::cli::live_loop::nodes::timing::row_authority::SOURCE_LOCAL_CLAIM_CEILING),
+    );
+    object.insert(
+        "claim_impact".to_string(),
+        json!("supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal"),
+    );
 }
 
 fn insert_scheduler_fields(object: &mut serde_json::Map<String, serde_json::Value>) {

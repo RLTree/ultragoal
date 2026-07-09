@@ -8,6 +8,7 @@ use std::path::Path;
 
 mod node_timing;
 mod record_fields;
+pub(crate) mod row_authority;
 
 pub(crate) const NODE_TIMING_REL: &str =
     "validation_artifacts/observability/live-loop-node-timing.json";
@@ -114,25 +115,12 @@ pub(crate) fn read_current(
             let where_failed = record_fields::nonempty_text(row, "where_failed")?;
             let why_failed = record_fields::nonempty_text(row, "why_failed")?;
             let next_repair = record_fields::nonempty_text(row, "next_repair")?;
-            let verified_local_result_digest = record_fields::valid_digest(record_fields::text(
-                row,
-                "verified_local_result_digest",
-            )?)?;
-            let verified_local_output_digest = record_fields::valid_digest(record_fields::text(
-                row,
-                "verified_local_output_digest",
-            )?)?;
-            let result_digest =
-                record_fields::valid_digest(record_fields::text(row, "result_digest")?)?;
-            let output_digest =
-                record_fields::valid_digest(record_fields::text(row, "output_digest")?)?;
-            if result_digest != verified_local_result_digest
-                || output_digest != verified_local_output_digest
+            let digests = row_authority::verified_local_digests(row)?;
+            if !row_authority::rust_test_count_is_claim_safe(row, node_id)
+                || !row_authority::claim_ceiling_is_source_local(row)
             {
                 return None;
             }
-            record_fields::valid_digest(record_fields::text(row, "verified_local_stdout_digest")?)?;
-            record_fields::valid_digest(record_fields::text(row, "verified_local_stderr_digest")?)?;
             let timing_status = record_fields::text(row, "timing_status").unwrap_or("fail");
             let failure_class = record_fields::text(row, "failure_class")
                 .unwrap_or("live_loop_node_measurement_failed");
@@ -172,8 +160,8 @@ pub(crate) fn read_current(
                         .and_then(record_fields::valid_digest)?;
                     if !cache_hit
                         || work_unit_count != 0
-                        || prior_result_digest != result_digest
-                        || replayed_output_digest != output_digest
+                        || prior_result_digest != digests.result_digest
+                        || replayed_output_digest != digests.output_digest
                         || record_fields::text(row, "cache_equivalence_status") != Some("pass")
                         || equivalence_status != "verified_same_candidate_cache_replay"
                         || invalidation_proof.is_empty()
@@ -213,10 +201,10 @@ pub(crate) fn read_current(
                     speed_claim_status: speed_claim_status.to_string(),
                     observability_failure_class: observability_failure_class.to_string(),
                     verified_local_command: verified_local_command.to_string(),
-                    result_digest: result_digest.to_string(),
-                    output_digest: output_digest.to_string(),
-                    verified_local_result_digest: verified_local_result_digest.to_string(),
-                    verified_local_output_digest: verified_local_output_digest.to_string(),
+                    result_digest: digests.result_digest,
+                    output_digest: digests.output_digest,
+                    verified_local_result_digest: digests.verified_local_result_digest,
+                    verified_local_output_digest: digests.verified_local_output_digest,
                     where_failed: where_failed.to_string(),
                     why_failed: why_failed.to_string(),
                     next_repair: next_repair.to_string(),

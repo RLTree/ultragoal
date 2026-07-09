@@ -88,10 +88,36 @@ fn compact_cache_records_preserve_cached_reconciliation_evidence() {
     );
 }
 
+#[test]
+fn compact_cache_records_drop_bad_proof_shaped_rows() {
+    let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    let forged_output_digest = crate::digest::bytes(b"self-consistent-wrong-output");
+    let forged_result_digest = crate::digest::bytes(b"self-consistent-wrong-result");
+    let forged_digest_row = row(candidate, "pass", "none")
+        .with_value("output_digest", json!(forged_output_digest))
+        .with_value("verified_local_output_digest", json!(forged_output_digest))
+        .with_value("result_digest", json!(forged_result_digest))
+        .with_value("verified_local_result_digest", json!(forged_result_digest));
+    let zero_test_row = row(candidate, "pass", "none")
+        .with_value("node_id", json!("live_loop_measurement_rust_tests"))
+        .with_value("verified_local_executed_test_count", json!(0));
+
+    let records = replayable_cache_records(
+        &json!({}),
+        &[forged_digest_row, zero_test_row],
+        "hot",
+        "verified-local",
+    );
+
+    assert!(records.is_empty());
+}
+
 fn row(candidate: &str, timing_status: &str, failure_class: &str) -> serde_json::Value {
     let digest = crate::digest::bytes;
-    let output_digest = digest(b"output");
-    let result_digest = digest(b"result");
+    let stdout_digest = digest(b"stdout");
+    let stderr_digest = digest(b"stderr");
+    let output_digest = digest(format!("stdout={stdout_digest};stderr={stderr_digest}").as_bytes());
+    let result_digest = digest(format!("exit=0;launch=false;output={output_digest}").as_bytes());
     json!({
         "node_id": "fmt_check",
         "candidate_digest": candidate,
@@ -124,10 +150,12 @@ fn row(candidate: &str, timing_status: &str, failure_class: &str) -> serde_json:
         "output_digest": output_digest,
         "verified_local_result_digest": result_digest,
         "verified_local_output_digest": output_digest,
-        "verified_local_stdout_digest": digest(b"stdout"),
-        "verified_local_stderr_digest": digest(b"stderr"),
+        "verified_local_stdout_digest": stdout_digest,
+        "verified_local_stderr_digest": stderr_digest,
         "baseline_stdout_digest": digest(b"baseline-stdout"),
-        "baseline_stderr_digest": digest(b"baseline-stderr")
+        "baseline_stderr_digest": digest(b"baseline-stderr"),
+        "claim_ceiling": crate::cli::live_loop::nodes::timing::row_authority::SOURCE_LOCAL_CLAIM_CEILING,
+        "claim_impact": "supports_live_loop_node_timing_only_no_readiness_release_completion_update_goal"
     })
 }
 

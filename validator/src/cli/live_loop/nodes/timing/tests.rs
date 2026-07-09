@@ -62,8 +62,8 @@ fn node_timing_reader_accepts_prior_candidate_verified_cache_hit_with_current_in
     let context = context_digest();
     let input = fmt_input(candidate, &changed, &context);
     let mut row = current_timing_row("sha256:prior", &input, "pass", "none");
-    let result_digest = digest("result");
-    let output_digest = digest("output");
+    let output_digest = expected_output_digest();
+    let result_digest = expected_result_digest(0, false, &output_digest);
     {
         let object = row.as_object_mut().expect("timing row object");
         object.insert("proof_kind".to_string(), json!("verified_cache_hit"));
@@ -207,5 +207,17 @@ fn context_digest() -> String {
             crate::cli::live_loop::graph::fixture_version()
         )
         .as_bytes(),
+    )
+}
+
+fn expected_output_digest() -> String {
+    let stdout_digest = digest("stdout");
+    let stderr_digest = digest("stderr");
+    crate::digest::bytes(format!("stdout={stdout_digest};stderr={stderr_digest}").as_bytes())
+}
+
+fn expected_result_digest(exit_code: i32, launch_error: bool, output_digest: &str) -> String {
+    crate::digest::bytes(
+        format!("exit={exit_code};launch={launch_error};output={output_digest}").as_bytes(),
     )
 }

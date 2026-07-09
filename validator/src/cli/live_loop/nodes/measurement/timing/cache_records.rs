@@ -1,6 +1,8 @@
 use serde_json::{Map, Value};
 use std::collections::BTreeMap;
 
+use crate::cli::live_loop::nodes::timing::row_authority;
+
 pub(super) fn replayable_cache_records(
     existing: &Value,
     latest_nodes: &[Value],
@@ -50,6 +52,10 @@ fn is_replayable_cache_record(row: &Value, tier: &str, cache_mode: &str) -> bool
             text(row, "proof_kind"),
             Some("executed" | "verified_cache_hit")
         )
+        && row_authority::verified_local_digests(row).is_some()
+        && text(row, "node_id")
+            .is_some_and(|node_id| row_authority::rust_test_count_is_claim_safe(row, node_id))
+        && row_authority::claim_ceiling_is_source_local(row)
         && row
             .get("telemetry_reconciliation")
             .and_then(Value::as_object)
