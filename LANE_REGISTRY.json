@@ -417,7 +417,7 @@
         "product_role": "Routine Rust build validation authority that turns the canonical Cargo build command into fast executed or verified-local hot-loop feedback without hiding build failures or substituting proxy timing proof.",
         "status": "implemented_current_source_local",
         "current_evidence": "Parent replayed Lane 013 commit a35bb316f17ad6c8f99a77a559b99e2706ab0a95 into root as dd456ef80 Harden build check verified-local replay on digest sha256:0c3365c83c52e81c88577f6961766b678ccbd4ff4be47e2206c1a477027d4759. Focused measurement tests passed 109/109, changed-input tests passed 9/9, cargo fmt, cargo build, raw line-cap scan, strict line-caps, namespace, and package inventory passed. Real `ultragoal loop measure --node build_check --tier hot --cache-mode verified-local` first executed the canonical `cargo build --offline --bin ultragoal --quiet` and correctly withheld the speed claim, then passed on verified current-input cache replay with proof_kind=verified_cache_hit, cache_hit=true, work_unit_count=0, validation_status=pass, observability_status=pass, speed_claim_status=supported, actual_work_duration_ms=8, baseline_duration_ms=737, speedup_ratio=81, and source-local loop timing ceiling. Real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` moved the first product blocker from build_check to live_loop_measurement_rust_tests.",
-        "next_required_proof": "The next bounded custom-tooling blocker is live_loop_measurement_rust_tests routine validation cache or an explicit strict-boundary-only claim limiter, followed by cross-lane integration proof across all accepted custom tools before any Gate 92 speed or fitting work resumes."
+        "next_required_proof": "Lane 014 produced fail-closed source-local repairs at bb300618a but surfaced a parent-owned command-result authority blocker for live_loop_measurement_rust_tests. The next proof is a non-self-authored command-result authority surface, such as retained raw process output with typed receipt binding or a process receipt digest contract, followed by cross-lane integration proof across all accepted custom tools before any Gate 92 speed or fitting work resumes."
       },
       {
         "id": "product_semantic_active_surface_inventory",
@@ -1613,7 +1613,7 @@
     },
     {
       "id": "LANE-014",
-      "status": "sent_back_repair_in_progress",
+      "status": "blocked_parent_authority_required",
       "lane_type": "implementation",
       "lane_objective": "Make live_loop_measurement_rust_tests provide fast verified-local source-local repair feedback for the routine hot loop or emit an explicit strict-boundary-only blocker without hiding Rust test failures or using proxy timing.",
       "macro_lane_rationale": "After Lane 013, the real root hot loop moved to first_product_blocker=live_loop_measurement_rust_tests. This is the next bounded custom-tooling prerequisite blocker before cross-lane integration or Gate 92 speed/fitting can resume.",
@@ -1869,7 +1869,7 @@
         "actor_id": "codex-app-worktree-lane-014",
         "thread_or_session_id": "019f451a-93ad-7891-8a69-9542fb885b02",
         "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
-        "actor_status": "sent_back_repair_in_progress",
+        "actor_status": "blocked_parent_authority_required",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T04:38:00Z",
         "delivery_confirmed": true,
@@ -1889,7 +1889,9 @@
         "objective_v5_reviewer_sendback_confirmed": true,
         "objective_v5_reviewer_sendback_evidence": "After adversarial reviewer Godel rejected Lane 014 commit ef3b12ea6, parent sent Lane 014 a V5 reviewer send-back requiring canonical command authority, non-self-authored command observation or explicit legal blocker, symlink-safe receipt containment, and executed-test-count preservation through compact cache. codex_app.read_thread confirmed delivery as userMessage item-187 and lane resumption through agentMessages item-188 through item-194.",
         "objective_v6_operational_proof_gates_confirmed": true,
-        "objective_v6_operational_proof_gates_evidence": "Parent sent Lane 014 the V6 operational proof gates packet as userMessage item-252 and codex_app.read_thread confirmed lane acknowledgment/re-anchoring as agentMessage item-253. The next Lane 014 final packet must include operational_proof_gates rows for command identity authority, command result authority, receipt path containment, executed-test-count authority, product command roundtrip, and hot-loop blocker movement with claim ceiling."
+        "objective_v6_operational_proof_gates_evidence": "Parent sent Lane 014 the V6 operational proof gates packet as userMessage item-252 and codex_app.read_thread confirmed lane acknowledgment/re-anchoring as agentMessage item-253. Lane then produced item-268 operational_proof_gates, item-272 narrowed the authority gap, and item-275 marked the active lane goal blocked. Command identity, receipt containment, executed-test-count authority, and hot-loop blocker movement are source-local repaired in bb300618a, but command-result authority remains parent-owned because local timing JSON plus sibling command-observation JSON is not an independent reconciliation surface.",
+        "objective_v6_blocked_confirmed": true,
+        "objective_v6_blocked_evidence": "codex_app.read_thread showed Lane 014 item-275 marking the goal blocked at clean commit bb300618a. Smallest unblock: parent defines or approves a non-self-authored command-result authority for live_loop_measurement_rust_tests, such as retained raw stdout/stderr with typed receipt binding, a process receipt digest contract, or another non-local authority surface."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",
@@ -2009,10 +2011,10 @@
         "parent_rejects_complete_when": "Any operational proof gate is absent, marked pass without product evidence or explicit legal blocker, reconciled by the same local JSON row it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
       },
       "parent_orchestrator_state": {
-        "status": "sent_back_repair_in_progress",
-        "observed_at": "2026-07-09T06:08:21Z",
-        "finding": "Parent attempted reconciliation of Lane 014 commit ef3b12ea6 after the V5 outcome packet. A fresh adversarial reviewer rejected it because timing::read_current still allowed row-controlled command identity, command-result authority still depended on self-authored local JSON, receipt path containment did not prove symlink-parent/private-path safety before reading, and executed Rust test count was not bound to command authority or preserved through compact cache records. After the lane produced commit bb300618a, parent tightened the owner objective again into V6 operational proof gates so final acceptance can be evaluated row-by-row instead of from broad completion prose.",
-        "action": "Lane 014 was sent back with concrete V5 reviewer blockers and confirmed receipt as userMessage item-187. Parent then sent V6 operational proof gates and confirmed receipt as userMessage item-252 plus lane acknowledgment as agentMessage item-253. Parent must not accept Lane 014 until the next final packet includes operational_proof_gates rows for command identity authority, command result authority, receipt path containment, executed-test-count authority, product command roundtrip, and hot-loop blocker movement, followed by reviewer recheck and fresh parent reruns. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "status": "blocked_parent_authority_required",
+        "observed_at": "2026-07-09T15:35:11Z",
+        "finding": "Lane 014 completed the V6 audit at clean commit bb300618a and marked its active goal blocked. Its operational proof gates show command identity authority, receipt path containment, executed-test-count authority, and hot-loop blocker movement are source-local repaired or fail-closed; lane014-command-result-authority remains blocked because the product has no lane-owned non-self-authored command-result authority. Local timing JSON plus sibling command-observation JSON cannot be both claim and reconciliation surface.",
+        "action": "Parent must define or launch a root-owned authority lane for non-self-authored command-result evidence for live_loop_measurement_rust_tests, such as retained raw stdout/stderr with typed receipt binding, a process receipt digest contract, or equivalent independent command-result authority. Do not accept Lane 014 as complete, do not merge it as a pass, and do not start Gate 92 speed/fitting until this parent-owned authority blocker is resolved or explicitly integrated as a legal blocker. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
