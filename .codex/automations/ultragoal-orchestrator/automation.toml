@@ -8,9 +8,12 @@ source_root = "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
 branch = "codex/gate92-product-fitness-telemetry"
 lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
-created_from_parent_commit = "9739144da24f1973a6c29068bf4de4b6e83d9fd4"
-created_from_package_digest = "sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e"
+created_from_parent_commit = "9331f6733 Harden line-cap replay proof gates"
+created_from_package_digest = "sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3"
 live_candidate_policy = "recompute package digest at heartbeat start; do not treat this automation file as package proof or a digest ledger"
+latest_validated_parent_source_commit = "9331f6733"
+latest_validated_parent_source_digest = "sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3"
+lane_objective_standard = "Every new lane must get falsifiable product-behavior objectives with positive proof, negative falsification cases, source inspection, old-surface retirement or routing, parent acceptance reruns, and explicit claim ceiling."
 
 [cadence]
 kind = "heartbeat"
@@ -27,6 +30,7 @@ allowed_actions = [
   "poll Codex lane threads",
   "send corrective steering to blocked or drifting lanes",
   "after every corrective lane message, read the recipient thread and confirm the exact message landed before recording or reporting that the lane was steered",
+  "give every new lane operationalized verification-oriented objectives: product behavior target, owned paths, forbidden paths, upstream authorities, positive proof commands, negative falsification cases, validation proof, production proof, source inspection checklist, old-surface retirement/routing, parent acceptance reruns, residual blocker expectations, and explicit claim ceiling",
   "mark merge-ready lanes for parent reconciliation",
   "when root is clean and lanes are ready, advance one bounded parent reconciliation or merge slice instead of only reporting readiness",
   "require custom-tool lanes to retire, route through, or explicitly justify older surfaces they replace",
@@ -94,10 +98,10 @@ accepted_source_local_lanes = [
   "LANE-008",
   "LANE-009",
   "LANE-010",
-  "LANE-011"
+  "LANE-011",
+  "LANE-012"
 ]
 remaining_current_proof_blockers = [
-  "line_cap_routine_validation_cache",
   "cross_lane_integration_all_custom_tools"
 ]
 retired_surfaces = [
@@ -141,7 +145,7 @@ id = "LANE-012"
 thread_id = "019f44d0-12ff-7523-8c56-27a9f702cd44"
 pending_worktree_id = "local:323676a7-63c9-407e-b6e3-68f7a8bae641"
 worktree = "/Users/terrynoblin/.codex/worktrees/7a95/harness-ultragoal-plugin-proposal"
-status = "active"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "line_cap_routine_validation_cache"
 ]

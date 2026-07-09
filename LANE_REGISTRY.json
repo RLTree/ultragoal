@@ -11,6 +11,29 @@
     "gate92_status": "blocked_until_all_custom_tools_have_current_product_proof",
     "correction": "Custom tooling is a prerequisite acceleration and authority layer for Gate 92. It must not be reported as Gate 92 fitting, Gate 92 closure, Product Usage, Phase 4, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal evidence.",
     "gate92_speed_or_fitting_unblock_rule": "Every required custom tool must be built, mapped through law surfaces, validated mechanically, and proven through real current-candidate ultragoal behavior or verified current-input equivalence with explicit claim limits. Proxy proof, tests-only proof, generated rows, workflow output, local spool output, or stale lane receipts keep Gate 92 speed and fitting blocked.",
+    "lane_objective_standard": {
+      "status": "required_for_future_lanes",
+      "purpose": "Lane owners must receive operational, falsifiable completion objectives that define product behavior and proof surfaces before implementation begins.",
+      "required_contract_fields": [
+        "one sentence product behavior objective that avoids goal labels and names the user-visible or CLI-visible behavior being changed",
+        "owned product surfaces and exact owned paths",
+        "forbidden paths and forbidden claim surfaces",
+        "upstream authorities consumed and exact digest or command anchors available at launch",
+        "positive behavior targets with exact commands or APIs that must work",
+        "negative falsification targets covering stale or wrong digest, command identity mismatch, input-scope mismatch, proof-promotion mismatch, old-surface bypass, and row-shape/proxy-proof pass",
+        "validation proof commands with expected exit semantics",
+        "production proof commands with required stdout or receipt fields",
+        "red/green/tamper fixture obligations where semantics change",
+        "source inspection checklist naming the files/functions that must be reviewed",
+        "old-surface retirement or routing requirement",
+        "line-cap, namespace, package inventory, and package-boundary checks when paths/resources change",
+        "claim ceiling and explicit unsupported claims",
+        "parent acceptance reruns and blocker movement expected after merge",
+        "final report fields: digest, commit, files changed, validation proof, production proof, falsification proof, residual blockers, and claim ceiling"
+      ],
+      "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
+      "reviewer_feedback": "Lane 012 revealed three objective gaps: watched-input scope must match the law being replayed, retained proof must bind to the exact command identity it claims, and validation replay must not promote withheld speed or observability claims without explicit eligibility."
+    },
     "orchestrator_automation": {
       "id": "ultragoal-orchestrator",
       "status": "active",
@@ -73,9 +96,9 @@
       {
         "id": "line_cap_routine_validation_cache",
         "product_role": "Routine line-cap validation authority that turns the strict line-cap command into fast affected-set or verified-local cache feedback for the hot loop without weakening the source line-count law.",
-        "status": "lane_active",
-        "current_evidence": "Cross-lane integration on digest sha256:3197d56ed51c1c27de2ded47dcadd44a4e4bc1f535ba2068d11f72e043ac7689 showed `line_caps_check` passes validation and observability but fails the routine speed law: `target/debug/ultragoal --root . loop measure --node line_caps_check --tier hot --cache-mode verified-local` reported actual_work_duration_ms=1165, baseline_duration_ms=1165, speedup_ratio=0, failure_class=live_loop_speedup_target_missed. Parent launched Lane 012 with pending worktree id local:323676a7-63c9-407e-b6e3-68f7a8bae641, resolved thread 019f44d0-12ff-7523-8c56-27a9f702cd44 in worktree /Users/terrynoblin/.codex/worktrees/7a95/harness-ultragoal-plugin-proposal, and confirmed the initial contract landed in the lane thread.",
-        "next_required_proof": "Lane 012 must produce source-local not-readiness proof that `line_caps_check` either executes affected line-cap work fast enough or reuses verified-local current-input cache with result/output digests, invalidation proof, observability reconciliation, and explicit routine-only claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 012 commit 1fe2af560 into root as ff1cda903, then patched adversarial reviewer blockers in 9331f6733 Harden line-cap replay proof gates on digest sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3. The corrective source commit aligns the line-cap cache input scope with the source line-count law, prevents noncanonical --jobs values from minting canonical routine cache authority, and requires explicit routine replay speed authority before a withheld source row can support a speed claim. Focused line_caps tests passed 12/12, changed_inputs tests passed 9/9, timing::state tests passed 3/3, cargo fmt, raw line-count scan, strict line-caps, namespace, and package inventory passed. Real `ultragoal loop measure --node line_caps_check --tier hot --cache-mode verified-local` passed with proof_kind=verified_cache_hit, cache_hit=true, work_unit_count=0, actual_work_duration_ms=1, baseline_duration_ms=1262, speedup_ratio=631, current input/result/output digest reconciliation, and source-local loop timing claim ceiling.",
+        "next_required_proof": "Cross-lane integration must prove all accepted custom tools run together on one current digest, with remaining hot-loop blockers repaired or explicitly claim-limited, before any Gate 92 speed or fitting work resumes."
       },
       {
         "id": "product_semantic_active_surface_inventory",
@@ -1175,7 +1198,7 @@
     },
     {
       "id": "LANE-012",
-      "status": "active",
+      "status": "accepted_source_local_commit",
       "lane_type": "implementation",
       "lane_objective": "Repair routine line-cap validation so line_caps_check satisfies verified-local hot-loop speed and observability requirements without weakening line-cap law.",
       "macro_lane_rationale": "Cross-lane custom-tooling integration remains blocked because line_caps_check passes product validation and observability but misses the routine 20x speed law with speedup_ratio=0.",
@@ -1188,9 +1211,9 @@
         "actor_id": "codex-app-worktree-lane-012",
         "thread_or_session_id": "019f44d0-12ff-7523-8c56-27a9f702cd44",
         "pending_worktree_id": "local:323676a7-63c9-407e-b6e3-68f7a8bae641",
-        "actor_status": "active",
+        "actor_status": "accepted_archived_pending_app_worktree_removal_tool",
         "goal_binding_required_first_action": true,
-        "validated_at": "2026-07-09T03:03:37Z",
+        "validated_at": "2026-07-09T03:30:14Z",
         "delivery_confirmed": true
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
@@ -1210,10 +1233,10 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "active",
-        "observed_at": "2026-07-09T03:03:37Z",
-        "finding": "Parent resolved Lane 012 thread 019f44d0-12ff-7523-8c56-27a9f702cd44 and worktree /Users/terrynoblin/.codex/worktrees/7a95/harness-ultragoal-plugin-proposal from pendingWorktreeId local:323676a7-63c9-407e-b6e3-68f7a8bae641. `read_thread` confirmed the delegated lane contract landed, the lane created its goal, built the missing local CLI, recomputed the launch digest, reproduced the line_caps_check speed blocker, and started patching owned line-cap surfaces.",
-        "action": "Heartbeat must poll Lane 012 by thread id, confirm any future steering delivery with read_thread, and reconcile only after a source-local/not-readiness commit plus required validation and production proof."
+        "status": "accepted_source_local_commit",
+        "observed_at": "2026-07-09T03:30:14Z",
+        "finding": "Parent accepted Lane 012 by replaying commit 1fe2af560 into root as ff1cda903, then closed adversarial reviewer blockers in 9331f6733. The final accepted source aligns line-cap watched inputs with the line-count law, rejects noncanonical command identity from canonical cache authority, and blocks withheld source timing rows from becoming speed-supporting cache hits without explicit routine replay speed authority. Root proof passed package digest, cargo fmt, focused line_caps tests, focused changed_inputs tests, focused timing::state tests, raw line-count scan, strict line-caps, namespace, package inventory, and real loop measure for line_caps_check on digest sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3.",
+        "action": "Archive the lane thread if not already archived and keep app worktree-removal gap recorded. Parent must launch or reconcile the next bounded custom-tooling lane with the operationalized objective standard before any Gate 92 speed or fitting claim."
       }
     }
   ],
