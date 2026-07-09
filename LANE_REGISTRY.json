@@ -31,6 +31,43 @@
         "parent acceptance reruns and blocker movement expected after merge",
         "final report fields: digest, commit, files changed, validation proof, production proof, falsification proof, residual blockers, and claim ceiling"
       ],
+      "operational_completion_packet": {
+        "purpose": "Convert each lane objective into yes/no completion evidence that a lane owner can execute and a parent reviewer can falsify without inferring intent.",
+        "lane_owner_done_only_when": [
+          "the lane names the exact product behavior it changed and the exact old behavior it replaced, routed, or intentionally left with a typed compatibility limit",
+          "every owned path changed by the lane maps to a product role and no changed path is outside the lane contract without an explicit stop-and-parent-approval note",
+          "the lane demonstrates at least one positive current-candidate product run for the claimed behavior, or a verified current-input reuse chain with explicit routine-only claim limits",
+          "the lane demonstrates negative falsification for the highest-risk ways the new authority could lie, including stale or wrong digest, wrong command identity, wrong input scope, mismatched result/output digest, proof-promotion mismatch, and row-shape or proxy pass",
+          "the lane separates validation result, production proof, observability proof, speed proof, and claim ceiling instead of collapsing them into one pass/fail word",
+          "the lane records exact commands, exit statuses, current digest, changed files, result/output digests where applicable, and the first remaining blocker after its repair",
+          "the lane leaves a clean worktree with one source-local/not-readiness commit or a no-delta blocker report naming the parent-owned blocker"
+        ],
+        "parent_rejects_when": [
+          "the final report says complete but lacks a real product run or verified current-input reuse",
+          "the lane proves parser, unit, schema, generated-row, or local JSON mechanics but does not prove the product behavior named by the objective",
+          "the lane omits a negative falsification case for a known high-risk lie surface",
+          "the lane preserves an old helper, alias, command, cache, generated surface, or fallback without product-role proof, explicit routing, claim ceiling, and sunset rule",
+          "the lane marks Gate 92, Product Usage, Phase 4, readiness, release, completion, install/cache, final packet, registry/reviewer exposure, or update_goal as supported"
+        ],
+        "final_report_required_fields": [
+          "objective_result: pass | blocked | partial",
+          "product_behavior_observed",
+          "replaced_or_routed_surfaces",
+          "current_digest",
+          "commit",
+          "files_changed",
+          "validation_commands_and_exit_statuses",
+          "production_commands_and_exit_statuses",
+          "positive_proof_summary",
+          "negative_falsification_summary",
+          "source_inspection_notes",
+          "remaining_product_blocker",
+          "remaining_observability_blocker",
+          "remaining_speed_blocker",
+          "claim_ceiling",
+          "unsupported_claims"
+        ]
+      },
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
       "reviewer_feedback": "Lane 012 revealed three objective gaps: watched-input scope must match the law being replayed, retained proof must bind to the exact command identity it claims, and validation replay must not promote withheld speed or observability claims without explicit eligibility."
     },
