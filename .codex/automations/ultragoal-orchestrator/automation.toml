@@ -161,6 +161,24 @@ v5_parent_rejects = [
   "reviewer questions are generic instead of row-specific and tied to exact files/functions",
   "parent reruns cannot reproduce claimed behavior or blocker movement"
 ]
+v6_operational_proof_gates_required = "Every active and future lane must return an operational_proof_gates table. Each row must include gate_id, state, agent_trigger, product_behavior_observed, owner_evidence_command_or_api, owner_exit_status_or_blocker, required_fields_or_digests, independent_reconciliation_surface, false_pass_case, expected_fail_closed_signal, source_guard_files_and_functions, old_surface_removed_or_routed, reviewer_attack_question, parent_rerun_command_or_inspection, expected_parent_observation_or_blocker_movement, claim_ceiling, and unsupported_claims."
+v6_required_gate_rows = [
+  "product_trigger_gate",
+  "authority_binding_gate",
+  "failure_visibility_gate",
+  "reuse_legality_gate",
+  "old_surface_retirement_gate",
+  "claim_ceiling_gate"
+]
+v6_parent_rejects = [
+  "a gate row is missing or collapsed into prose",
+  "a row is marked pass without concrete owner evidence and independent reconciliation",
+  "a false-pass case lacks an expected fail-closed signal",
+  "source guards are unnamed or not tied to changed files/functions",
+  "old surfaces touched by the lane are not removed, routed, or kept only with typed compatibility plus sunset",
+  "reviewer questions are not mapped to gate ids",
+  "parent rerun cannot reproduce the claimed behavior, falsification, old-surface disposition, blocker movement, or claim ceiling"
+]
 
 [cadence]
 kind = "heartbeat"
@@ -178,6 +196,7 @@ allowed_actions = [
   "send corrective steering to blocked or drifting lanes",
   "after every corrective lane message, read the recipient thread and confirm the exact message landed before recording or reporting that the lane was steered",
   "give every new lane operationalized verification-oriented objectives: product behavior target, owned paths, forbidden paths, upstream authorities, positive proof commands, negative falsification cases, validation proof, production proof, source inspection checklist, old-surface retirement/routing, parent acceptance reruns, residual blocker expectations, and explicit claim ceiling",
+  "require every active lane to provide operational_proof_gates rows for product trigger, authority binding, failure visibility, reuse legality, old-surface retirement, and claim ceiling before reviewer handoff or parent acceptance",
   "give every send-back lane a missing-row list keyed to the operational objective packet, not a generic retry request",
   "send each lane reviewer packet with exact files/functions and adversarial questions before treating reviewer feedback as meaningful",
   "mark merge-ready lanes for parent reconciliation",

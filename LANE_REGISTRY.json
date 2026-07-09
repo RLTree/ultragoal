@@ -306,6 +306,41 @@
             "the parent rerun cannot reproduce the claimed behavior or blocker movement"
           ],
           "reviewer_rule": "Reviewers must receive the verification_outcomes table, changed files, exact source guards, and row-specific attack questions. A generic code review is insufficient for lane acceptance."
+        },
+        "lane_objective_v6_operational_proof_gates": {
+          "status": "required_for_active_and_future_custom_tooling_lanes",
+          "purpose": "Replace broad lane success prose with row-owned proof gates that the lane owner can execute, the reviewer can falsify, and the parent can rerun.",
+          "owner_rule": "A lane may report pass only by providing an operational_proof_gates table. Every row must have concrete owner evidence, a named false-pass case, a source guard, a reviewer attack question, and a parent rerun. Missing evidence is partial or blocked, never complete.",
+          "required_gate_rows": [
+            "product_trigger_gate: the real command, API, or edit that exercises the product behavior",
+            "authority_binding_gate: the non-self-authored or recomputed authority that prevents row-shape proof",
+            "failure_visibility_gate: the failure remains visible and actionable instead of being hidden by cache, generated rows, broad helpers, or local JSON",
+            "reuse_legality_gate: executed work or verified current-input reuse is proven with result/output digests and invalidation proof",
+            "old_surface_retirement_gate: replaced helpers, aliases, broad runners, caches, generated rows, and fallback paths are removed or routed through the new authority",
+            "claim_ceiling_gate: validation success does not promote forbidden downstream claims"
+          ],
+          "required_columns": [
+            "gate_id",
+            "state: pass | partial | blocked",
+            "agent_trigger",
+            "product_behavior_observed",
+            "owner_evidence_command_or_api",
+            "owner_exit_status_or_blocker",
+            "required_fields_or_digests",
+            "independent_reconciliation_surface",
+            "false_pass_case",
+            "expected_fail_closed_signal",
+            "source_guard_files_and_functions",
+            "old_surface_removed_or_routed",
+            "reviewer_attack_question",
+            "parent_rerun_command_or_inspection",
+            "expected_parent_observation_or_blocker_movement",
+            "claim_ceiling",
+            "unsupported_claims"
+          ],
+          "reviewer_rule": "Reviewers must answer each reviewer_attack_question against the named source guards and changed files. A reviewer response that does not map findings to operational gate ids is insufficient for parent acceptance.",
+          "parent_rule": "Parent accepts only rows it can independently rerun or inspect. If parent cannot reproduce the claimed behavior, falsification, old-surface disposition, or blocker movement, the lane is sent back with the missing gate ids.",
+          "send_back_rule": "Send-backs must name the exact missing gate ids and false-pass cases rather than asking the owner to broadly rework the lane."
         }
       },
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
@@ -1852,7 +1887,9 @@
         "objective_v5_verification_outcomes_confirmed": true,
         "objective_v5_verification_outcomes_evidence": "Parent sent the V5 verification-outcomes packet to Lane 014 as userMessage item-181 and codex_app.read_thread confirmed lane acknowledgment as agentMessage item-182. The next Lane 014 final packet must include verification_outcomes rows for executed_measurement_path, command_observation_authority, verified_cache_reuse_legality, rust_test_failure_preservation, and full_hot_loop_blocker_movement.",
         "objective_v5_reviewer_sendback_confirmed": true,
-        "objective_v5_reviewer_sendback_evidence": "After adversarial reviewer Godel rejected Lane 014 commit ef3b12ea6, parent sent Lane 014 a V5 reviewer send-back requiring canonical command authority, non-self-authored command observation or explicit legal blocker, symlink-safe receipt containment, and executed-test-count preservation through compact cache. codex_app.read_thread confirmed delivery as userMessage item-187 and lane resumption through agentMessages item-188 through item-194."
+        "objective_v5_reviewer_sendback_evidence": "After adversarial reviewer Godel rejected Lane 014 commit ef3b12ea6, parent sent Lane 014 a V5 reviewer send-back requiring canonical command authority, non-self-authored command observation or explicit legal blocker, symlink-safe receipt containment, and executed-test-count preservation through compact cache. codex_app.read_thread confirmed delivery as userMessage item-187 and lane resumption through agentMessages item-188 through item-194.",
+        "objective_v6_operational_proof_gates_confirmed": true,
+        "objective_v6_operational_proof_gates_evidence": "Parent sent Lane 014 the V6 operational proof gates packet as userMessage item-252 and codex_app.read_thread confirmed lane acknowledgment/re-anchoring as agentMessage item-253. The next Lane 014 final packet must include operational_proof_gates rows for command identity authority, command result authority, receipt path containment, executed-test-count authority, product command roundtrip, and hot-loop blocker movement with claim ceiling."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",
@@ -1870,11 +1907,112 @@
         "validator/src/cli/current_state/** except read-only inspection",
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
+      "operational_proof_gates_v6_required": {
+        "status": "required_in_next_lane014_final_packet",
+        "purpose": "Make Lane 014 completion executable by the owner and falsifiable by reviewer and parent after the V5 reviewer rejection.",
+        "allowed_done_claim": "Lane 014 may claim only that live_loop_measurement_rust_tests gives source-local routine repair feedback or a legal blocker without hiding Rust test failures, accepting row-controlled command identity, trusting self-authored local JSON authority, reading unsafe receipt paths, dropping executed-test-count authority, or promoting downstream claims.",
+        "required_gates": [
+          {
+            "gate_id": "lane014-command-identity-authority",
+            "agent_trigger": "Read or replay a timing row for live_loop_measurement_rust_tests.",
+            "product_behavior": "The timing reader and compact-cache path accept the row only when command identity is derived from the canonical node command authority, not from the row's own command_argv or verified_local_command fields.",
+            "owner_evidence": "Focused test or product replay showing a row-controlled command mismatch fails closed, plus source inspection of the command identity guard.",
+            "false_pass_case": "A row mutates command_argv and verified_local_command to a self-consistent but wrong command and still passes.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/timing/command_identity.rs",
+              "validator/src/cli/live_loop/nodes/timing/row_authority.rs",
+              "validator/src/cli/live_loop/nodes/timing/mod.rs"
+            ],
+            "reviewer_question": "Can command identity for live_loop_measurement_rust_tests still be satisfied entirely by values authored inside the timing row?",
+            "parent_rerun": "cargo test --offline live_loop::nodes::timing --lib --quiet",
+            "expected_parent_observation": "Wrong-command timing rows fail closed while canonical live_loop_measurement_rust_tests rows remain eligible only under the canonical command."
+          },
+          {
+            "gate_id": "lane014-command-result-authority",
+            "agent_trigger": "Read or replay a timing row whose command output/result digest fields are internally self-consistent.",
+            "product_behavior": "The row is accepted only when command result authority comes from actual command output, a non-self-authored command observation or receipt, or an explicit legal blocker; self-authored local JSON cannot prove itself.",
+            "owner_evidence": "Focused falsification proving a forged self-consistent stdout/stderr/output/result digest chain is rejected, or explicit legal blocker output if no lane-owned non-self-authored authority exists.",
+            "false_pass_case": "A fully forged but internally consistent local JSON row passes as verified current-input reuse.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/timing/authority_falsification.rs",
+              "validator/src/cli/live_loop/nodes/timing/row_authority.rs",
+              "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs"
+            ],
+            "reviewer_question": "Does any accepted row still use the same local JSON payload as both claim and reconciliation surface?",
+            "parent_rerun": "cargo test --offline live_loop::nodes::timing --lib --quiet",
+            "expected_parent_observation": "Self-authored command-result authority is rejected or reported as a legal source-local blocker, not accepted as proof."
+          },
+          {
+            "gate_id": "lane014-receipt-path-containment",
+            "agent_trigger": "Dereference a command-observation or timing receipt path supplied by a timing row.",
+            "product_behavior": "Receipt paths are canonicalized against the lane root before read; absolute paths, parent traversal, symlink-parent traversal, private host paths, and wrong artifact roots cannot support claims.",
+            "owner_evidence": "Focused temp-root/symlink falsification test plus source inspection of the containment guard before file read.",
+            "false_pass_case": "A row supplies a path under the allowed prefix that resolves through a symlink parent outside the repo and is read as claim evidence.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/timing/receipt_path.rs",
+              "validator/src/cli/live_loop/nodes/timing/row_authority.rs"
+            ],
+            "reviewer_question": "Can a symlinked parent or canonicalized outside-repo path be read before containment is proven?",
+            "parent_rerun": "cargo test --offline live_loop::nodes::timing --lib --quiet",
+            "expected_parent_observation": "Unsafe receipt paths fail closed before read and cannot become source-local proof."
+          },
+          {
+            "gate_id": "lane014-executed-test-count-authority",
+            "agent_trigger": "Project, compact, or replay a live_loop_measurement_rust_tests timing row.",
+            "product_behavior": "Executed Rust test count is preserved through command authority and compact cache, and zero/missing/mismatched counts cannot become validation pass, reusable cache, or supported speed claim.",
+            "owner_evidence": "Focused tests proving compact-cache records retain verified_local_executed_test_count and reject missing, zero, and mismatched authority.",
+            "false_pass_case": "A row with exit 0 and missing or zero executed_test_count is cached or replayed as pass.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs",
+              "validator/src/cli/live_loop/nodes/measurement/timing/record_fields.rs",
+              "validator/src/cli/live_loop/nodes/timing/row_authority.rs"
+            ],
+            "reviewer_question": "Can compact cache replay drop executed-test-count authority and still support a pass or speed claim?",
+            "parent_rerun": "cargo test --offline live_loop::nodes::measurement --lib --quiet",
+            "expected_parent_observation": "Executed-test-count authority survives compacting and replay; zero or missing counts remain blockers."
+          },
+          {
+            "gate_id": "lane014-product-command-roundtrip",
+            "agent_trigger": "Run `target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local`.",
+            "product_behavior": "The real product command reports executed work, verified current-input reuse, or a legal blocker with validation/cache/observability/speed/claim-ceiling states separated.",
+            "owner_evidence": "Real current-candidate command run with exit status and required stdout or receipt fields: candidate digest, node id, proof_kind or blocker, validation_status, validation_cache_status, observability_status, speed_claim_status, work_unit_count, result/output digest or explicit blocker, next repair, and claim ceiling.",
+            "false_pass_case": "The command reports pass or speed support from graph overhead, generated rows, local JSON shape, cache_hit=false without execution, or work_unit_count=0 without verified reuse.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/measurement/timing/mod.rs",
+              "validator/src/cli/live_loop/nodes/timing/mod.rs"
+            ],
+            "reviewer_question": "Does the real loop measure output show product behavior, or only timing-row mechanics?",
+            "parent_rerun": "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local",
+            "expected_parent_observation": "The command either reports legal source-local repair feedback or a specific legal blocker; no Gate 92/readiness/update_goal support."
+          },
+          {
+            "gate_id": "lane014-hot-loop-blocker-movement-and-claim-ceiling",
+            "agent_trigger": "Run `target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto`.",
+            "product_behavior": "The hot loop no longer has live_loop_measurement_rust_tests as first_product_blocker, or it names the exact legal blocker and narrow next repair; downstream claims stay unsupported.",
+            "owner_evidence": "Real hot-loop run with first_product_blocker, first_observability_blocker, first_speed_blocker, next_repair, claim_ceiling, and unsupported_claims.",
+            "false_pass_case": "Validation success, cached rows, local spool output, or generic pass text promotes Gate 92, Product Usage, Phase 4, readiness, final packet, install/cache, registry/reviewer, release, completion, or update_goal claims.",
+            "source_guards": [
+              "validator/src/cli/live_loop/nodes/measurement/timing/mod.rs",
+              "validator/src/cli/live_loop/nodes/timing/row_authority.rs"
+            ],
+            "reviewer_question": "Does blocker movement come from real product behavior or from proxy output, and are forbidden claims still explicitly unsupported?",
+            "parent_rerun": "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto",
+            "expected_parent_observation": "Blocker moves or remains as an explicit legal blocker with exact next repair and source-local custom-tooling prerequisite claim ceiling."
+          }
+        ],
+        "owner_final_packet_required": [
+          "operational_proof_gates table with all six gate ids",
+          "for every gate: state, owner evidence command/API, exit status or blocker, required fields/digests, independent reconciliation surface, false-pass case, fail-closed signal, source guards, old-surface disposition, reviewer question, parent rerun, expected parent observation, claim ceiling, unsupported claims",
+          "explicit list of old helpers, broad runners, OR filters, local JSON projection paths, compact-cache paths, generated rows, and fallback paths touched, each marked removed, routed through new authority, or kept only with typed compatibility and sunset",
+          "residual blockers split into product, observability, speed, and parent-owned blockers"
+        ],
+        "parent_rejects_complete_when": "Any operational proof gate is absent, marked pass without product evidence or explicit legal blocker, reconciled by the same local JSON row it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
+      },
       "parent_orchestrator_state": {
         "status": "sent_back_repair_in_progress",
-        "observed_at": "2026-07-09T05:49:18Z",
-        "finding": "Parent attempted reconciliation of Lane 014 commit ef3b12ea6 after the V5 outcome packet. A fresh adversarial reviewer rejected it because timing::read_current still allowed row-controlled command identity, command-result authority still depended on self-authored local JSON, receipt path containment did not prove symlink-parent/private-path safety before reading, and executed Rust test count was not bound to command authority or preserved through compact cache records.",
-        "action": "Lane 014 was sent back with concrete V5 reviewer blockers and confirmed receipt as userMessage item-187. Lane 014 acknowledged and resumed repair in agentMessages item-188 through item-194, including the explicit decision to return a legal blocker rather than inventing non-self-authored authority if the product cannot provide one inside lane-owned paths. Parent must not merge ef3b12ea6. Acceptance now requires V5 verification_outcomes rows, focused falsification for canonical command identity, non-self-authored authority or explicit legal blocker, symlink-safe receipt containment, executed-test-count preservation through compact cache, reviewer recheck, and fresh parent reruns. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "observed_at": "2026-07-09T06:08:21Z",
+        "finding": "Parent attempted reconciliation of Lane 014 commit ef3b12ea6 after the V5 outcome packet. A fresh adversarial reviewer rejected it because timing::read_current still allowed row-controlled command identity, command-result authority still depended on self-authored local JSON, receipt path containment did not prove symlink-parent/private-path safety before reading, and executed Rust test count was not bound to command authority or preserved through compact cache records. After the lane produced commit bb300618a, parent tightened the owner objective again into V6 operational proof gates so final acceptance can be evaluated row-by-row instead of from broad completion prose.",
+        "action": "Lane 014 was sent back with concrete V5 reviewer blockers and confirmed receipt as userMessage item-187. Parent then sent V6 operational proof gates and confirmed receipt as userMessage item-252 plus lane acknowledgment as agentMessage item-253. Parent must not accept Lane 014 until the next final packet includes operational_proof_gates rows for command identity authority, command result authority, receipt path containment, executed-test-count authority, product command roundtrip, and hot-loop blocker movement, followed by reviewer recheck and fresh parent reruns. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
