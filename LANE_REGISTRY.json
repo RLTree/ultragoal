@@ -1659,7 +1659,9 @@
         "objective_v2_addendum_confirmed": true,
         "objective_v2_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-37 with the five required V2 behavior rows.",
         "objective_v3_addendum_confirmed": true,
-        "objective_v3_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-77 with the required V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, unsupported-claims row, and state discipline."
+        "objective_v3_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-77 with the required V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, unsupported-claims row, and state discipline.",
+        "objective_v3_reviewer_sendback_confirmed": true,
+        "objective_v3_reviewer_sendback_evidence": "After adversarial review rejected commit cba572ce1, parent sent Lane 014 a V3 send-back for the local timing reader, zero-test local timing row, and compact cache preservation gaps. codex_app.read_thread confirmed delivery as userMessage item-87 and lane acknowledgment as agentMessage item-88."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",
@@ -1679,9 +1681,9 @@
       ],
       "parent_orchestrator_state": {
         "status": "sent_back_repair_in_progress",
-        "observed_at": "2026-07-09T06:20:00Z",
-        "finding": "Parent attempted reconciliation of Lane 014 commit 66753c039 on root digest sha256:6cef728194cdc3a15758d4f4fee107484a01b5c3d7645661230313ff7085cb3c. Parent reruns showed focused measurement tests 111/111, rust_tests 5/5, fmt, line-caps, namespace, package inventory, cold node measure preserving validation while failing speed, hot verified-local replay passing, and full hot-loop movement to first_product_blocker=none. Adversarial review then found two acceptance blockers: result digest replay compared self-consistent row fields instead of recomputing the expected result digest from accepted replay fields, and zero-test pass was rejected only during replay rather than as current product measurement behavior. Parent restored the provisional root cherry-pick and sent Lane 014 back with those exact required repairs; codex_app.read_thread confirmed delivery as userMessage item-53 and lane response item-54.",
-        "action": "Poll Lane 014 for a new repair commit. Parent must not merge 66753c039. Acceptance now requires recomputed result-digest validation, current zero-test execution blocking, focused negative tests for both gaps, clean lane worktree, updated V3 verification packet, and fresh parent reruns. The V3 packet was sent and delivery-confirmed as userMessage item-77. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "observed_at": "2026-07-09T05:01:51Z",
+        "finding": "Parent attempted reconciliation of Lane 014 commit 66753c039, then Lane 014 returned repair commit cba572ce1. A fresh adversarial reviewer rejected cba572ce1 because the direct replay fix did not cover the local timing reader/projection path or compact cache preservation. Specific remaining gaps: validator/src/cli/live_loop/nodes/timing/mod.rs can still accept self-consistent wrong result/output digest fields without recomputing from stdout/stderr/exit/launch evidence; node_timing.rs/timing reader paths do not require verified_local_executed_test_count so a live_loop_measurement_rust_tests zero-test row can still project pass/reusable state; measurement/timing/cache_records.rs can preserve bad proof-shaped cache rows without the same authority checks.",
+        "action": "Lane 014 was sent back again with the exact V3 reviewer findings. Parent must not merge 66753c039 or cba572ce1. Poll Lane 014 for a new repair commit after item-87. Acceptance now requires focused falsification proof for local timing reader self-consistent wrong digests, local timing reader zero-test rows, and compact cache preservation of bad proof-shaped rows; clean lane worktree; updated V3 verification packet; reviewer recheck; and fresh parent reruns. Delivery was confirmed as userMessage item-87 with lane acknowledgment item-88. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
