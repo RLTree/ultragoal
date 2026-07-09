@@ -2016,6 +2016,63 @@
         "finding": "Lane 014 completed the V6 audit at clean commit bb300618a and marked its active goal blocked. Its operational proof gates show command identity authority, receipt path containment, executed-test-count authority, and hot-loop blocker movement are source-local repaired or fail-closed; lane014-command-result-authority remains blocked because the product has no lane-owned non-self-authored command-result authority. Local timing JSON plus sibling command-observation JSON cannot be both claim and reconciliation surface.",
         "action": "Parent must define or launch a root-owned authority lane for non-self-authored command-result evidence for live_loop_measurement_rust_tests, such as retained raw stdout/stderr with typed receipt binding, a process receipt digest contract, or equivalent independent command-result authority. Do not accept Lane 014 as complete, do not merge it as a pass, and do not start Gate 92 speed/fitting until this parent-owned authority blocker is resolved or explicitly integrated as a legal blocker. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
+    },
+    {
+      "id": "LANE-015",
+      "status": "pending_worktree_creation",
+      "lane_type": "implementation",
+      "lane_objective": "Build a Harness-owned non-self-authored command-result authority for live-loop command execution so timing/cache rows can reconcile against real process output without using local JSON as its own proof.",
+      "macro_lane_rationale": "Lane 014 blocked at clean commit bb300618a because live_loop_measurement_rust_tests cannot legally prove command-result authority from local timing JSON plus sibling command-observation JSON. This lane owns the parent-required command-result authority surface that Lane 014 needs next.",
+      "covered_custom_tools": [
+        "command_result_authority_for_live_loop_measurement"
+      ],
+      "owner": "codex-app-worktree-lane-015",
+      "thread_or_session_id": null,
+      "pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-015",
+        "thread_or_session_id": null,
+        "pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26",
+        "actor_status": "pending_worktree_creation",
+        "goal_binding_required_first_action": true,
+        "delivery_confirmed": false,
+        "delivery_confirmation_evidence": "codex_app.create_thread returned pendingWorktreeId local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26. Next heartbeat must resolve the materialized thread, confirm the initial lane contract is present, and confirm the lane called create_goal."
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "pending Codex app worktree for /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "f28aecb94 Record lane 014 parent authority blocker",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "broad Gate 92 fitting/control-board generated rows",
+        "Lane 014 timing-row consumption surfaces unless the lane stops for parent approval"
+      ],
+      "operational_proof_gates_required": {
+        "status": "required_in_lane015_final_packet",
+        "required_gates": [
+          "lane015-process-result-capture",
+          "lane015-independent-reconciliation",
+          "lane015-redaction-boundedness",
+          "lane015-command-identity-binding",
+          "lane015-digest-and-status-binding",
+          "lane015-old-surface-retirement",
+          "lane015-lane014-unblock-contract",
+          "lane015-claim-ceiling"
+        ],
+        "parent_rejects_complete_when": "Any gate is absent, prose-only, tests-only without product behavior or verified current-input reuse, self-reconciled by the same local JSON payload it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
+      },
+      "parent_orchestrator_state": {
+        "status": "launch_pending",
+        "observed_at": "2026-07-09T15:35:11Z",
+        "finding": "No existing lane owned the parent-required non-self-authored command-result authority for live_loop_measurement_rust_tests. Parent launched a Codex app worktree thread with create_thread; app returned pendingWorktreeId local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26.",
+        "action": "Next heartbeat must resolve the materialized Lane 015 thread, confirm delivery/read receipt, confirm create_goal binding, then poll for progress. If the worktree never materializes, escalate the Codex app worktree tooling gap. Do not start Gate 92 speed/fitting while this lane is pending."
+      }
     }
   ],
   "root_verification_stages": {
