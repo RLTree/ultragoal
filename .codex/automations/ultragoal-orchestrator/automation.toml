@@ -76,7 +76,7 @@ owned_custom_tools = [
 id = "LANE-008"
 thread_id = "019f43cc-e0e9-7432-aa7f-2d56ab16242a"
 worktree = "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal"
-status = "ready_for_parent_reconciliation"
+status = "blocked_returned_for_repair_compatibility_alias_rerun"
 owned_custom_tools = [
   "current_state_read_model",
   "ultragoal_next",
