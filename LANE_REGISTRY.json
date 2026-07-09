@@ -94,9 +94,9 @@
       {
         "id": "coverage_lineage_intelligence",
         "product_role": "Coverage lineage layer over llvm-cov output separating strict full-clean coverage proof from routine repair feedback.",
-        "status": "implemented_pending_validation",
-        "current_evidence": "Lane 2 coverage-lineage work was previously accepted with routine-only claim limits on an older digest; current exact coverage and current lineage proof remain separate.",
-        "next_required_proof": "Current-candidate coverage command proves strict 100 percent boundary only when exact coverage runs, and routine coverage feedback carries lineage, equivalence, stale/warm substitution guards, and routine-only claim ceiling."
+        "status": "steered_for_parent_reconciliation",
+        "current_evidence": "Lane 011 thread 019f44ac-215b-7100-8a71-d6bb35e43da7 reported source-local commit 57f5b106f Repair routine coverage lineage authority, clean worktree, digest sha256:a80d90e971ab7a546392613baceddf2ebc58fa9c4f95465a3320df512bc7bee3, focused coverage tests, real routine coverage command proof, fast helper proof, fmt, namespace, line-caps, raw line-cap scan, and routine-only claim ceiling. The lane incorrectly marked itself blocked on update_goal eligibility; parent steered it to return a MERGE_READY package because update_goal is forbidden and blocked by design for this lane.",
+        "next_required_proof": "Parent must wait for Lane 011's corrected merge-ready package or explicit no-delta rationale, then inspect the diff, verify owned-path discipline and no committed validation_artifacts, replay or merge the commit in root, rerun integrated coverage routine checks plus namespace and line-cap checks, and preserve strict coverage as not-current unless exact full-clean coverage actually runs."
       },
       {
         "id": "red_green_tamper_fixture_scheduler",
@@ -1126,7 +1126,7 @@
     },
     {
       "id": "LANE-011",
-      "status": "active_in_progress_parent_registry_reconciled",
+      "status": "steered_after_procedural_block",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair coverage lineage intelligence that separates strict coverage proof from routine repair feedback.",
       "macro_lane_rationale": "Coverage lineage remains implemented_pending_validation; strict coverage law must stay exact while routine repair feedback gets its own verified-local claim ceiling.",
@@ -1139,7 +1139,7 @@
         "actor_id": "codex-app-worktree-lane-011",
         "thread_or_session_id": "019f44ac-215b-7100-8a71-d6bb35e43da7",
         "pending_worktree_id": "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351",
-        "actor_status": "goal_bound_in_progress",
+        "actor_status": "goal_bound_blocked_on_forbidden_update_goal_path_steered",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1160,10 +1160,10 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "active_in_progress_parent_registry_reconciled",
-        "observed_at": "2026-07-09T02:55:00Z",
-        "finding": "Lane 011 is goal-bound and actively repairing routine coverage lineage. Its worktree observed the older registry mapping before this root reconciliation; parent now records the actual LANE-011 thread/worktree and custom-tool ownership.",
-        "action": "Heartbeat must poll for focused validation, product proof, source-local commit, old-surface retirement, and claim ceiling. If the lane blocks on registry staleness, steer it to treat that mismatch as parent-resolved root bookkeeping."
+        "status": "steered_after_procedural_block",
+        "observed_at": "2026-07-09T02:31:33Z",
+        "finding": "Lane 011 reported source-local commit 57f5b106f with focused coverage validation, real routine coverage command proof, fast helper proof, fmt, namespace, line-caps, raw line-cap scan, clean worktree, and routine-only claim ceiling. It then marked the goal blocked because update_goal eligibility remained blocked, but the lane contract explicitly forbids update_goal and requires that claim ceiling.",
+        "action": "Parent sent corrective steering to rebind to the lane contract and return a MERGE_READY package without calling update_goal, without inventing a proof-only commit, and without claiming strict coverage, Gate 92, readiness, release, completion, final packet, install/cache, registry/reviewer exposure, or update_goal."
       }
     }
   ],
