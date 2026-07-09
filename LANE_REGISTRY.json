@@ -33,11 +33,49 @@
       ],
       "operational_completion_packet": {
         "purpose": "Convert each lane objective into yes/no completion evidence that a lane owner can execute and a parent reviewer can falsify without inferring intent.",
+        "objective_quality_gate": [
+          "a lane objective is not launchable unless it can be evaluated as pass, partial, or blocked from explicit commands and source paths",
+          "each objective must name the product behavior in the form: when an agent runs this command or edits this input, the Harness product returns this validation, cache, telemetry, repair, or claim-ceiling behavior",
+          "each objective must define the old behavior to retire, route through the new authority, or keep only as a typed compatibility surface with a sunset rule",
+          "each objective must include at least one positive current-candidate run and at least one negative falsification run or focused fixture for every authority the lane changes",
+          "each objective must name the exact parent-visible blocker that should move if the lane succeeds, and the exact downstream blocker that may remain outside lane ownership"
+        ],
+        "acceptance_matrix_required_columns": [
+          "behavior_id",
+          "product_behavior",
+          "owned_command_or_api",
+          "required_inputs",
+          "expected_stdout_or_receipt_fields",
+          "proof_kind: executed | verified_cache_hit | explicit_blocker",
+          "independent_reconciliation_surface",
+          "negative_falsification_case",
+          "old_surface_retirement_or_routing",
+          "parent_rerun",
+          "claim_ceiling"
+        ],
+        "completion_state_definitions": [
+          "pass means the named product behavior works on the lane current candidate, required falsification fails closed, old surfaces are retired or routed, and the lane has a clean source-local/not-readiness commit",
+          "partial means mechanics or source changes exist, but one or more product runs, falsification cases, reconciliation surfaces, or old-surface retirement checks are missing",
+          "blocked means the lane cannot proceed without a parent-owned path, unavailable tool, explicit product decision, or external state; the final report must name the smallest unblock action"
+        ],
+        "minimum_falsification_library": [
+          "stale_or_wrong_digest_rejected",
+          "wrong_command_identity_rejected",
+          "input_scope_mismatch_rejected",
+          "result_or_output_digest_mismatch_rejected",
+          "cache_hit_false_without_execution_rejected",
+          "work_unit_zero_without_verified_reuse_rejected",
+          "validation_result_not_promoted_to_speed_or_observability_claim",
+          "row_shape_or_generated_output_only_rejected",
+          "old_surface_bypass_rejected_or_routed",
+          "forbidden_claim_surface_rejected"
+        ],
         "lane_owner_done_only_when": [
           "the lane names the exact product behavior it changed and the exact old behavior it replaced, routed, or intentionally left with a typed compatibility limit",
           "every owned path changed by the lane maps to a product role and no changed path is outside the lane contract without an explicit stop-and-parent-approval note",
           "the lane demonstrates at least one positive current-candidate product run for the claimed behavior, or a verified current-input reuse chain with explicit routine-only claim limits",
           "the lane demonstrates negative falsification for the highest-risk ways the new authority could lie, including stale or wrong digest, wrong command identity, wrong input scope, mismatched result/output digest, proof-promotion mismatch, and row-shape or proxy pass",
+          "the lane provides an acceptance matrix row for each product behavior it claims and marks each row pass, partial, or blocked with an exact reason",
           "the lane separates validation result, production proof, observability proof, speed proof, and claim ceiling instead of collapsing them into one pass/fail word",
           "the lane records exact commands, exit statuses, current digest, changed files, result/output digests where applicable, and the first remaining blocker after its repair",
           "the lane leaves a clean worktree with one source-local/not-readiness commit or a no-delta blocker report naming the parent-owned blocker"
@@ -61,6 +99,7 @@
           "positive_proof_summary",
           "negative_falsification_summary",
           "source_inspection_notes",
+          "acceptance_matrix",
           "remaining_product_blocker",
           "remaining_observability_blocker",
           "remaining_speed_blocker",
@@ -1301,9 +1340,11 @@
         "pending_worktree_id": "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d",
         "actor_status": "active_delivery_confirmed",
         "goal_binding_required_first_action": true,
-        "validated_at": "2026-07-09T03:52:13Z",
+        "validated_at": "2026-07-09T04:11:14Z",
         "delivery_confirmed": true,
-        "delivery_confirmation_evidence": "codex_app.list_threads returned thread 019f4500-6a74-7373-bc36-46805fb3d951 with the Lane 013 contract preview and cwd /Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal."
+        "delivery_confirmation_evidence": "codex_app.list_threads returned thread 019f4500-6a74-7373-bc36-46805fb3d951 with the Lane 013 contract preview and cwd /Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal.",
+        "objective_addendum_confirmed": true,
+        "objective_addendum_evidence": "codex_app.read_thread turn 019f4512-9a42-78c2-ab20-23bf8a6dac67 showed userMessage item-66 with the operational acceptance matrix addendum for Lane 013."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal",
@@ -1323,9 +1364,9 @@
       ],
       "parent_orchestrator_state": {
         "status": "active_delivery_confirmed",
-        "observed_at": "2026-07-09T03:52:13Z",
-        "finding": "Parent launched Lane 013 through Codex app create_thread with gpt-5.5 medium and a falsifiable build_check contract, then confirmed thread delivery through codex_app.list_threads. The contract names positive product proof, negative falsification targets, validation proof, production proof, source inspection, old-surface retirement/routing, and source-local claim ceiling.",
-        "action": "Poll Lane 013. If it is blocked, idle, lacks create_goal binding, drifts from its objective, or makes proof-theater claims, steer it immediately and confirm delivery with read_thread."
+        "observed_at": "2026-07-09T04:11:14Z",
+        "finding": "Parent launched Lane 013 through Codex app create_thread with gpt-5.5 medium and a falsifiable build_check contract, then confirmed thread delivery. Parent later sent and confirmed an operational acceptance-matrix addendum requiring pass/partial/blocked rows, current-candidate product proof or verified reuse, negative falsification cases, source inspection, old-surface routing or retirement, residual blockers, and source-local claim ceiling.",
+        "action": "Poll Lane 013 for an acceptance-matrix final report. If the lane says complete without the matrix, lacks negative falsification, broadens beyond build_check, or makes proof-theater claims, steer it back immediately and confirm delivery with read_thread."
       }
     }
   ],

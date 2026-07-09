@@ -17,11 +17,49 @@ lane_objective_standard = "Every new lane must get falsifiable product-behavior 
 
 [lane_completion_contract]
 purpose = "Give lane owners yes/no objectives that prove product behavior and expose false positives before parent acceptance."
+objective_quality_gate = [
+  "a lane objective is not launchable unless it can be evaluated as pass, partial, or blocked from explicit commands and source paths",
+  "each objective states product behavior as: when an agent runs this command or edits this input, Harness returns this validation, cache, telemetry, repair, or claim-ceiling behavior",
+  "each objective names the old behavior to retire, route through the new authority, or keep only as a typed compatibility surface with a sunset rule",
+  "each objective includes at least one positive current-candidate run and one negative falsification run or focused fixture for every changed authority",
+  "each objective names the exact parent-visible blocker that should move if the lane succeeds and the exact downstream blocker that may remain outside lane ownership"
+]
+acceptance_matrix_required_columns = [
+  "behavior_id",
+  "product_behavior",
+  "owned_command_or_api",
+  "required_inputs",
+  "expected_stdout_or_receipt_fields",
+  "proof_kind: executed | verified_cache_hit | explicit_blocker",
+  "independent_reconciliation_surface",
+  "negative_falsification_case",
+  "old_surface_retirement_or_routing",
+  "parent_rerun",
+  "claim_ceiling"
+]
+completion_state_definitions = [
+  "pass means the named product behavior works on the lane current candidate, required falsification fails closed, old surfaces are retired or routed, and the lane has a clean source-local/not-readiness commit",
+  "partial means mechanics or source changes exist, but one or more product runs, falsification cases, reconciliation surfaces, or old-surface retirement checks are missing",
+  "blocked means the lane cannot proceed without a parent-owned path, unavailable tool, explicit product decision, or external state; the final report must name the smallest unblock action"
+]
+minimum_falsification_library = [
+  "stale_or_wrong_digest_rejected",
+  "wrong_command_identity_rejected",
+  "input_scope_mismatch_rejected",
+  "result_or_output_digest_mismatch_rejected",
+  "cache_hit_false_without_execution_rejected",
+  "work_unit_zero_without_verified_reuse_rejected",
+  "validation_result_not_promoted_to_speed_or_observability_claim",
+  "row_shape_or_generated_output_only_rejected",
+  "old_surface_bypass_rejected_or_routed",
+  "forbidden_claim_surface_rejected"
+]
 lane_owner_done_only_when = [
   "the lane names the exact product behavior changed and the exact old behavior replaced, routed, or intentionally left with a typed compatibility limit",
   "every changed path maps to a product role and no changed path is outside the lane contract without stop-and-parent-approval evidence",
   "the lane demonstrates at least one positive current-candidate product run for the claimed behavior, or verified current-input reuse with explicit routine-only claim limits",
   "the lane demonstrates negative falsification for stale or wrong digest, wrong command identity, wrong input scope, mismatched result/output digest, proof-promotion mismatch, and row-shape or proxy pass",
+  "the lane provides an acceptance matrix row for each product behavior it claims and marks each row pass, partial, or blocked with an exact reason",
   "the lane separates validation result, production proof, observability proof, speed proof, and claim ceiling",
   "the lane records exact commands, exit statuses, current digest, changed files, result/output digests where applicable, and the first remaining blocker after repair",
   "the lane leaves a clean worktree with one source-local/not-readiness commit or a no-delta blocker report naming the parent-owned blocker"
@@ -45,6 +83,7 @@ final_report_required_fields = [
   "positive_proof_summary",
   "negative_falsification_summary",
   "source_inspection_notes",
+  "acceptance_matrix",
   "remaining_product_blocker",
   "remaining_observability_blocker",
   "remaining_speed_blocker",
@@ -223,4 +262,4 @@ status = "active_delivery_confirmed"
 owned_custom_tools = [
   "build_check_routine_validation_cache"
 ]
-objective_standard = "Falsifiable product-behavior contract sent through create_thread and delivery confirmed through codex_app.list_threads; parent must now poll and steer this thread until completion or blocker."
+objective_standard = "Falsifiable product-behavior contract and operational acceptance-matrix addendum delivered and confirmed in thread 019f4500-6a74-7373-bc36-46805fb3d951. Parent must now require a pass/partial/blocked acceptance matrix, negative falsification proof, source inspection, old-surface routing or retirement, clean source-local/not-readiness commit, and explicit claim ceiling before accepting Lane 013."
