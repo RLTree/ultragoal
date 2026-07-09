@@ -264,3 +264,14 @@ owned_custom_tools = [
   "build_check_routine_validation_cache"
 ]
 objective_standard = "Lane 013 accepted source-local at root commit dd456ef80 after operational acceptance-matrix proof and parent reruns, and its thread is archived. Heartbeat must preserve the app worktree-removal tooling gap and advance to the next bounded custom-tooling blocker: live_loop_measurement_rust_tests routine validation cache or explicit strict-boundary-only claim limiter."
+
+[[active_lanes]]
+id = "LANE-014"
+thread_id = "pending_app_worktree_thread"
+pending_worktree_id = "local:72a7a7c6-70f8-4e92-8053-847540362288"
+worktree = "pending_app_worktree_setup"
+status = "pending_worktree_setup"
+owned_custom_tools = [
+  "live_loop_measurement_rust_tests_routine_validation_cache"
+]
+objective_standard = "Lane 014 queued through Codex app worktree-thread tooling. Heartbeat must poll for the created thread id, confirm the operational lane contract landed with read_thread, then require acceptance-matrix proof for live_loop_measurement_rust_tests before parent acceptance."

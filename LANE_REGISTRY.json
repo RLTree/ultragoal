@@ -1374,6 +1374,49 @@
         "status": "thread_archived_worktree_removal_tool_unavailable",
         "reason": "Parent accepted Lane 013 source-local, archived thread 019f4500-6a74-7373-bc36-46805fb3d951 through Codex app tooling, and did not use ad hoc shell worktree removal because no app worktree-removal tool is exposed."
       }
+    },
+    {
+      "id": "LANE-014",
+      "status": "pending_worktree_setup",
+      "lane_type": "implementation",
+      "lane_objective": "Make live_loop_measurement_rust_tests provide fast verified-local source-local repair feedback for the routine hot loop or emit an explicit strict-boundary-only blocker without hiding Rust test failures or using proxy timing.",
+      "macro_lane_rationale": "After Lane 013, the real root hot loop moved to first_product_blocker=live_loop_measurement_rust_tests. This is the next bounded custom-tooling prerequisite blocker before cross-lane integration or Gate 92 speed/fitting can resume.",
+      "covered_custom_tools": [
+        "live_loop_measurement_rust_tests_routine_validation_cache"
+      ],
+      "owner": "codex-app-worktree-lane-014",
+      "thread_or_session_id": "pending_app_worktree_thread",
+      "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-014",
+        "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
+        "actor_status": "pending_worktree_setup",
+        "goal_binding_required_first_action": true,
+        "validated_at": "2026-07-09T04:32:00Z",
+        "delivery_confirmed": false,
+        "delivery_confirmation_evidence": "codex_app.create_thread returned pendingWorktreeId local:72a7a7c6-70f8-4e92-8053-847540362288; codex_app.list_threads had not yet returned a thread id for Lane 014."
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "142ab02d3 Record lane 013 acceptance",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/audit/law/authority_surfaces/** without parent approval",
+        "validator/src/cli/observe/** except read-only inspection",
+        "validator/src/cli/current_state/** except read-only inspection",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "parent_orchestrator_state": {
+        "status": "pending_worktree_setup",
+        "observed_at": "2026-07-09T04:32:00Z",
+        "finding": "Parent queued Lane 014 through Codex app worktree-thread tooling after Lane 013 moved the full hot-loop blocker to live_loop_measurement_rust_tests. Delivery is not yet confirmed because the app has returned only a pendingWorktreeId.",
+        "action": "Heartbeat must poll Codex app threads for pendingWorktreeId local:72a7a7c6-70f8-4e92-8053-847540362288 or Lane 014 title, then confirm the lane contract landed before treating the lane as active."
+      }
     }
   ],
   "root_verification_stages": {
