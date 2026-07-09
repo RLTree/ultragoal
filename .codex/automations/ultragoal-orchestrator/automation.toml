@@ -102,7 +102,7 @@ accepted_source_local_lanes = [
   "LANE-012"
 ]
 remaining_current_proof_blockers = [
-  "LANE-013 build_check routine validation cache pending worktree setup and delivery confirmation",
+  "LANE-013 build_check routine validation cache active in thread 019f4500-6a74-7373-bc36-46805fb3d951",
   "cross_lane_integration_all_custom_tools"
 ]
 retired_surfaces = [
@@ -179,11 +179,11 @@ replacement_policy = "As Harness-owned custom tooling replaces older code, comma
 
 [[active_lanes]]
 id = "LANE-013"
-thread_id = ""
+thread_id = "019f4500-6a74-7373-bc36-46805fb3d951"
 pending_worktree_id = "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d"
-worktree = "pending_codex_app_worktree"
-status = "pending_worktree_setup_delivery_confirmation_required"
+worktree = "/Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal"
+status = "active_delivery_confirmed"
 owned_custom_tools = [
   "build_check_routine_validation_cache"
 ]
-objective_standard = "Falsifiable product-behavior contract already sent through create_thread; parent must confirm thread id and prompt delivery before treating the lane as active."
+objective_standard = "Falsifiable product-behavior contract sent through create_thread and delivery confirmed through codex_app.list_threads; parent must now poll and steer this thread until completion or blocker."
