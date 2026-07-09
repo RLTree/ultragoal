@@ -73,16 +73,16 @@
       {
         "id": "product_semantic_active_surface_inventory",
         "product_role": "Inventory of active package-owned surfaces with typed product roles, duplicate authority detection, aliases, orphans, and no coverage-only wrappers.",
-        "status": "ready_for_parent_reconciliation",
-        "current_evidence": "Lane 010 thread 019f44ab-baa5-7c02-b119-ad8d330f195c completed source-local commit 3a3893a7d with narrow authority-surface classifier and compatibility-alias sunset enforcement repairs, clean worktree, digest sha256:c8f7022676a1a1e2e2ffcabad5a0692e64c55438ed37babe3845cbb368c5c220, focused red/green/tamper tests, and real namespace/typed-boundaries/line-caps proof. Parent has not replayed or accepted this commit yet.",
-        "next_required_proof": "Parent pre-merge reconciliation must inspect Lane 010 diff, replay or merge the commit, and rerun root integrated namespace, typed-boundary, line-cap, and relevant authority tests before this tool can become implemented_current_source_local."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 010 commit 3a3893a7d into root as b8c3c9371 Accept lane 010 semantic authority on digest sha256:8c2b65916c883c14036941a7633851ca36196053775892011d3a636a72d5d113. The diff touched only six owned authority-surface/test files. Rebuilt CLI passed package digest, namespace, typed-boundaries with authority_surface_count=8446 and missing_surfaces=0, line-caps, cargo fmt, focused namespace tests, raw_authority_scanner tests, and raw line-count scan.",
+        "next_required_proof": "Cross-lane integration must prove active-surface authority consumes Lane 011 coverage lineage and accepted telemetry/current-state tools without duplicate authorities or compatibility overclaim before any Gate 92 speed or fitting claim."
       },
       {
         "id": "semantic_namespace_symbol_inventory",
         "product_role": "Product-semantic namespace and symbol inventory for paths, modules, functions, helpers, tests, schemas, fixtures, and generated artifacts.",
-        "status": "ready_for_parent_reconciliation",
-        "current_evidence": "Lane 010 thread 019f44ab-baa5-7c02-b119-ad8d330f195c completed source-local commit 3a3893a7d proving product-semantic raw-authority classification and compatibility-alias sunset enforcement with focused tests and rebuilt CLI production checks. Parent has not replayed or accepted this commit yet.",
-        "next_required_proof": "Parent pre-merge reconciliation must inspect Lane 010 diff, replay or merge the commit, and rerun root integrated namespace, typed-boundary, line-cap, and relevant authority tests before this tool can become implemented_current_source_local."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 010 commit 3a3893a7d into root as b8c3c9371 Accept lane 010 semantic authority on digest sha256:8c2b65916c883c14036941a7633851ca36196053775892011d3a636a72d5d113. The accepted source adds narrow raw-authority classifications for impacted Rust test and command-roundtrip product projections and tightens compatibility alias sunset enforcement. Focused namespace and raw_authority_scanner tests plus rebuilt-CLI namespace, typed-boundaries, and line-cap checks passed.",
+        "next_required_proof": "Cross-lane integration must prove semantic namespace/symbol authority remains current after Lane 011 coverage lineage is accepted and before custom-tooling completion can unblock Gate 92 speed or fitting."
       },
       {
         "id": "package_truth_snapshotter",
@@ -1083,7 +1083,7 @@
     },
     {
       "id": "LANE-010",
-      "status": "ready_for_parent_reconciliation_source_commit",
+      "status": "accepted_source_local_commit",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-semantic active-surface inventory and semantic namespace/symbol authority.",
       "macro_lane_rationale": "Active-surface and namespace/symbol authority remain implemented_pending_validation; custom tooling must reject duplicate/alias/orphan/goal-work surfaces before downstream Gate 92 work resumes.",
@@ -1097,7 +1097,7 @@
         "actor_id": "codex-app-worktree-lane-010",
         "thread_or_session_id": "019f44ab-baa5-7c02-b119-ad8d330f195c",
         "pending_worktree_id": "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2",
-        "actor_status": "goal_bound_complete_source_commit",
+        "actor_status": "goal_bound_complete_source_commit_parent_accepted",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1118,10 +1118,10 @@
         "validator/src/cli/next_action/**"
       ],
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation_source_commit",
+        "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T02:31:33Z",
-        "finding": "Lane 010 returned goal complete at commit 3a3893a7d Classify active surface raw authority projections, clean worktree, digest sha256:c8f7022676a1a1e2e2ffcabad5a0692e64c55438ed37babe3845cbb368c5c220, focused red/green/tamper tests, and real rebuilt-CLI namespace, typed-boundaries, line-caps, and digest proof. It tightened compatibility aliases so retained aliases require external contract and sunset/removal rule.",
-        "action": "Parent must run the pre-merge reconciliation gate: inspect diff, verify owned-path discipline, replay or merge the commit in root, rerun integrated checks, and preserve source-local custom-tooling claim ceiling."
+        "finding": "Parent accepted Lane 010 by replaying commit 3a3893a7d into root as b8c3c9371. The replay touched only owned authority-surface/test files and passed rebuilt-CLI package digest, namespace, typed-boundaries, line-caps, cargo fmt, focused namespace tests, raw_authority_scanner tests, and raw line-count scan on digest sha256:8c2b65916c883c14036941a7633851ca36196053775892011d3a636a72d5d113.",
+        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next reconcile Lane 011 source commit, then run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
       }
     },
     {
