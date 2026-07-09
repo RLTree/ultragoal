@@ -101,9 +101,9 @@
       {
         "id": "red_green_tamper_fixture_scheduler",
         "product_role": "Isolated fixture scheduler for red, green, and tamper fixtures with deterministic aggregation and no shared validation_artifacts writes from parallel workers.",
-        "status": "blocked_returned_for_lane_repair",
-        "current_evidence": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d found the fixture scheduler command produced useful source-local scheduler proof over 1280 tasks, but the same lane's impacted Rust test mapper used a Cargo filter shape that exited 0 while running zero tests. The lane cannot be accepted as a coherent custom-tooling slice.",
-        "next_required_proof": "Lane 6 must repair the impacted Rust test mapper, prove every selected mapped filter executes nonzero expected tests or fails closed, and then return both scheduler and impacted-test tooling with explicit retirement/routing notes for any older replaced fixture/test surfaces."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 006 commits 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d..1a81f4804892a229fd0b57712c47717c4412d193 onto current root and committed the accepted source as c75b518b781e70df55361e820b5318e34cced69d. Real `ultragoal red fixture schedule --report target/parent-lane006-fixture-scheduler.json --jobs 8` passed on digest sha256:4662e03e923c0330c1db32ae94484d450a872f424a1c3644c199b036c518fa5b with task_count=1280, deterministic_ordering=true, per_fixture_temp_roots=true, leak_check=pass, package_truth.mutated=false, and shared_validation_artifacts_worker_writes_allowed=false.",
+        "next_required_proof": "Cross-lane integration must prove the fixture scheduler consumes the shared package truth snapshot and routine loop authority without replacing strict boundary red fixture report proof or raising the source-local custom-tooling prerequisite claim ceiling."
       },
       {
         "id": "command_telemetry_roundtrip_reconciliation",
@@ -143,9 +143,9 @@
       {
         "id": "impacted_rust_test_mapping",
         "product_role": "Impacted Rust test map that feeds nextest or the canonical test runner with legally sufficient focused tests instead of broad cargo sweeps or fake parallelism.",
-        "status": "blocked_returned_for_lane_repair",
-        "current_evidence": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d rejected the impacted Rust test mapper because `cargo test -p ultragoal 'cli::live_loop::rust_tests::|red::'` exited 0 while running zero tests. This is proof-shaped output, not product proof.",
-        "next_required_proof": "Lane 6 must use a supported runner shape, record per-filter argv/exit/executed-test counts/result digests, fail closed on zero executed expected tests, and add red fixtures for pass-shaped zero-test output and invalid OR-style Cargo filters."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 006 repair commit 1a81f4804892a229fd0b57712c47717c4412d193 and validated real `ultragoal loop rust-tests impacted --changed validator/src/cli/live_loop/rust_tests/mod.rs --changed validator/src/red/fixture/scheduler.rs --receipt target/parent-lane006-impacted-rust-tests.json --jobs 8 --run` on digest sha256:4662e03e923c0330c1db32ae94484d450a872f424a1c3644c199b036c518fa5b. The receipt records runner.kind=typed_serial_multi_filter_cargo, task_class=shared_authority_write_serial, work_unit_count=2, total_executed_test_count=6, per-filter argv/exit/result digests, executed_test_count 5 and 1, and unknown mapping `README.md` failed closed with impacted_rust_tests_unknown_mapping.",
+        "next_required_proof": "Cross-lane integration must prove impacted-test mapping feeds the routine loop executor and does not preserve broad cargo sweeps, OR-style cargo filters, zero-test pass-shaped output, or fake parallel Cargo contention as valid proof."
       }
     ]
   },
@@ -767,7 +767,7 @@
     },
     {
       "id": "LANE-006",
-      "status": "blocked_returned_for_repair",
+      "status": "merged_source_local_thread_archived_worktree_tooling_gap",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite isolated red/green/tamper fixture scheduler and impacted Rust test mapping.",
       "macro_lane_rationale": "Fixture execution and impacted-test selection must be Harness-owned authority rather than broad red reports, broad cargo sweeps, or fake parallel subprocesses.",
@@ -781,8 +781,8 @@
         "actor_id": "codex-app-worktree-lane-006",
         "thread_or_session_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
         "pending_worktree_id": "local:b17000a1-9f17-45cc-81fa-f41281c5c59f",
-        "actor_status": "parent_rejected_zero_test_runner",
-        "validated_at": "2026-07-08T22:54:32Z"
+        "actor_status": "parent_accepted_thread_archived",
+        "validated_at": "2026-07-09T02:01:39Z"
       },
       "goal_binding": {
         "binding_surface": "codex_delegation_goal_prompt",
@@ -805,12 +805,12 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "current_commit": "69f23be05ed30edfd801aaa0ec5a8228fe9cea3d",
+      "current_commit": "c75b518b781e70df55361e820b5318e34cced69d",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
+      "target_head_at_validation": "c75b518b781e70df55361e820b5318e34cced69d",
       "merge_base_at_validation": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "last_heartbeat": "2026-07-08T22:54:32Z",
+      "last_heartbeat": "2026-07-09T02:01:39Z",
       "owned_paths": [
         "validator/src/red/**",
         "validator/src/audit/red/**",
@@ -844,19 +844,19 @@
       "workspace_status": {
         "clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal",
-        "observed_head": "69f23be05ed30edfd801aaa0ec5a8228fe9cea3d",
+        "observed_head": "1a81f4804892a229fd0b57712c47717c4412d193",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "blocked_returned_for_repair",
-        "observed_at": "2026-07-09T00:54:32Z",
-        "finding": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d proved the fixture scheduler path has useful source-local behavior, but also proved the impacted Rust mapper can report pass while Cargo runs zero tests. Exact blocker: `cargo test -p ultragoal 'cli::live_loop::rust_tests::|red::'` exits 0 with `running 0 tests`.",
-        "action": "Lane 6 was sent corrective steering. Parent must not merge this lane until the owner repairs the impacted Rust mapper, adds zero-test and invalid-filter red fixtures, records nonzero executed-test counts or typed fail-closed blockers, and explains retirement/routing of any old replaced test or fixture surfaces."
+        "status": "accepted_source_local",
+        "observed_at": "2026-07-09T02:01:39Z",
+        "finding": "Parent replayed Lane 006 repair commit 1a81f4804892a229fd0b57712c47717c4412d193 and accepted it at root commit c75b518b781e70df55361e820b5318e34cced69d on digest sha256:4662e03e923c0330c1db32ae94484d450a872f424a1c3644c199b036c518fa5b. Focused tests, fmt, build, line caps, namespace, package inventory, real impacted Rust test proof, fail-closed unknown mapping proof, and real fixture scheduler proof passed. The old fake `filters.join(\"|\")` Cargo runner was retired rather than preserved.",
+        "action": "Lane 006 thread archived through Codex app tooling. No app worktree-removal tool was exposed, so physical worktree teardown remains a tooling gap. Parent must advance to Lane 008 repair reconciliation next."
       },
       "teardown": {
         "required": true,
-        "status": "blocked_until_lane_repair",
-        "reason": "Parent rejected the lane because impacted Rust test mapping produced proof-shaped zero-test output. Worktree teardown is blocked until the owning lane repairs and returns a new source-local commit or the parent explicitly kills the lane."
+        "status": "thread_archived_worktree_removal_tool_unavailable",
+        "reason": "Parent committed Lane 006 source-local reconciliation and archived thread 019f43cc-0202-7f82-9464-340f3a3ee8f1 through Codex app tooling. Tool discovery exposed archive/handoff/fork controls but no app worktree-removal control, so shell worktree removal is intentionally not used."
       }
     },
     {

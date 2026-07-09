@@ -8,8 +8,8 @@ source_root = "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
 branch = "codex/gate92-product-fitness-telemetry"
 lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
-created_from_parent_commit = "5f9dd46700ebc3f01fb8b6911ff877624fe5cec3"
-created_from_package_digest = "sha256:fe3ca18ca3291b668f25d3941d7c099ba4b52dce4a26b5d91d0a41c1f202be2a"
+created_from_parent_commit = "c75b518b781e70df55361e820b5318e34cced69d"
+created_from_package_digest = "sha256:4662e03e923c0330c1db32ae94484d450a872f424a1c3644c199b036c518fa5b"
 
 [cadence]
 kind = "heartbeat"
@@ -56,7 +56,7 @@ owned_custom_tools = [
 id = "LANE-006"
 thread_id = "019f43cc-0202-7f82-9464-340f3a3ee8f1"
 worktree = "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal"
-status = "blocked_returned_for_repair_zero_test_runner"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "red_green_tamper_fixture_scheduler",
   "impacted_rust_test_mapping"
