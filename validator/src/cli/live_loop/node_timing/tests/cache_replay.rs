@@ -10,7 +10,7 @@ use self::replay_rows::{
 };
 
 #[test]
-fn telemetry_partial_latest_measurement_remains_replayable_for_validation() {
+fn telemetry_partial_latest_measurement_without_external_authority_is_not_replayable() {
     let root = temp_root("live-loop-cache-records-telemetry-partial");
     let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     let prior = row(candidate, "pass", "none");
@@ -43,19 +43,12 @@ fn telemetry_partial_latest_measurement_remains_replayable_for_validation() {
         "verified-local",
     );
 
-    assert_eq!(records.len(), 1);
-    assert_eq!(records[0]["timing_status"], "partial");
-    assert_eq!(records[0]["validation_status"], "pass");
-    assert_eq!(records[0]["validation_cache_status"], "reusable");
-    assert_eq!(
-        records[0]["telemetry_reconciliation_status"],
-        "query_failed"
-    );
+    assert!(records.is_empty());
     std::fs::remove_dir_all(root).expect("cleanup cache records");
 }
 
 #[test]
-fn existing_cache_records_remain_available_when_latest_node_is_unusable() {
+fn existing_local_only_cache_records_are_not_available_when_latest_node_is_unusable() {
     let root = temp_root("live-loop-cache-records-prior");
     let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     let prior = row(candidate, "pass", "none");
@@ -72,14 +65,12 @@ fn existing_cache_records_remain_available_when_latest_node_is_unusable() {
         "verified-local",
     );
 
-    assert_eq!(records.len(), 1);
-    assert_eq!(records[0]["validation_status"], "pass");
-    assert_eq!(records[0]["timing_status"], "pass");
+    assert!(records.is_empty());
     std::fs::remove_dir_all(root).expect("cleanup cache records");
 }
 
 #[test]
-fn compact_cache_records_preserve_cached_reconciliation_evidence() {
+fn compact_cache_records_drop_cached_reconciliation_without_external_authority() {
     let root = temp_root("live-loop-cache-records-reconciliation");
     let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     let row = row(candidate, "pass", "none").with_value(
@@ -99,15 +90,7 @@ fn compact_cache_records_preserve_cached_reconciliation_evidence() {
 
     let records = replayable_cache_records(&root, &json!({}), &[row], "hot", "verified-local");
 
-    assert_eq!(records.len(), 1);
-    assert_eq!(
-        records[0]["telemetry_reconciliation"]["cached_reconciliation"]["run_id"],
-        "run-cached"
-    );
-    assert_eq!(
-        records[0]["telemetry_reconciliation"]["cached_reconciliation"]["logs_query"]["value"]["query"],
-        "logs query"
-    );
+    assert!(records.is_empty());
     std::fs::remove_dir_all(root).expect("cleanup cache records");
 }
 

@@ -1,6 +1,6 @@
 use super::record_fields;
 use serde_json::Value;
-use std::path::{Component, Path};
+use std::path::Path;
 
 pub(crate) const SOURCE_LOCAL_CLAIM_CEILING: &str = concat!(
     "source-local loop timing only; ",
@@ -16,7 +16,15 @@ pub(crate) struct VerifiedLocalDigests {
     pub(crate) verified_local_output_digest: String,
 }
 
-pub(crate) fn verified_local_digests(root: &Path, row: &Value) -> Option<VerifiedLocalDigests> {
+pub(crate) fn verified_local_digests(
+    root: &Path,
+    row: &Value,
+    expected_command: &str,
+    expected_argv: &[String],
+) -> Option<VerifiedLocalDigests> {
+    if !command_identity_matches(row, expected_command, expected_argv) {
+        return None;
+    }
     let stdout_digest =
         record_fields::valid_digest(record_fields::text(row, "verified_local_stdout_digest")?)?;
     let stderr_digest =
@@ -29,18 +37,29 @@ pub(crate) fn verified_local_digests(root: &Path, row: &Value) -> Option<Verifie
         record_fields::valid_digest(record_fields::text(row, "verified_local_result_digest")?)?;
     let expected_output_digest = expected_output_digest(stdout_digest, stderr_digest);
     let expected_result_digest = expected_result_digest(row, &expected_output_digest)?;
-    let authority = command_result_authority(root, row)?;
+    let authority = command_result_authority(root, row, expected_argv)?;
     (output_digest == expected_output_digest
         && verified_local_output_digest == expected_output_digest
         && result_digest == expected_result_digest
         && verified_local_result_digest == expected_result_digest
-        && authority_matches_row(row, &authority, stdout_digest, stderr_digest))
+        && authority_matches_row(row, &authority, stdout_digest, stderr_digest)
+        && authority_has_non_self_authored_binding(row, &authority))
     .then(|| VerifiedLocalDigests {
         result_digest: result_digest.to_string(),
         output_digest: output_digest.to_string(),
         verified_local_result_digest: verified_local_result_digest.to_string(),
         verified_local_output_digest: verified_local_output_digest.to_string(),
     })
+}
+
+pub(crate) fn command_identity_matches(
+    row: &Value,
+    expected_command: &str,
+    expected_argv: &[String],
+) -> bool {
+    record_fields::text(row, "verified_local_command") == Some(expected_command)
+        && string_array_matches(row, "command_argv", expected_argv)
+        && string_array_matches(row, "verified_local_command_argv", expected_argv)
 }
 
 pub(crate) fn proof_kind_is_claim_safe(row: &Value, digests: &VerifiedLocalDigests) -> bool {
@@ -97,31 +116,17 @@ fn expected_result_digest(row: &Value, output_digest: &str) -> Option<String> {
     ))
 }
 
-fn command_result_authority(root: &Path, row: &Value) -> Option<Value> {
+fn command_result_authority(root: &Path, row: &Value, expected_argv: &[String]) -> Option<Value> {
     let rel = first_text_field(
         row.get("telemetry_reconciliation")?,
         "command_observation_receipt",
     )?;
-    let path = safe_observation_receipt_path(root, rel)?;
+    let path = super::receipt_path::safe_observation_receipt_path(root, rel)?;
     let receipt = crate::json_boundary::read_json(&path).ok()?;
-    if !command_observation_matches_row(row, rel, &receipt) {
+    if !command_observation_matches_row(row, rel, &receipt, expected_argv) {
         return None;
     }
     receipt.get("command_result_authority").cloned()
-}
-
-fn safe_observation_receipt_path(root: &Path, rel: &str) -> Option<std::path::PathBuf> {
-    let rel_path = Path::new(rel);
-    if rel_path.is_absolute()
-        || !rel.starts_with("validation_artifacts/observability/live-loop/commands/")
-        || !rel.ends_with("-command-observation.json")
-        || rel_path
-            .components()
-            .any(|component| matches!(component, Component::ParentDir))
-    {
-        return None;
-    }
-    Some(root.join(rel_path))
 }
 
 fn first_text_field<'a>(value: &'a Value, field: &str) -> Option<&'a str> {
@@ -156,9 +161,34 @@ fn authority_matches_row(
             == row
                 .get("verified_local_launch_error")
                 .and_then(Value::as_bool)
+        && rust_test_count_matches_authority(row, authority)
 }
 
-fn command_observation_matches_row(row: &Value, rel: &str, receipt: &Value) -> bool {
+fn authority_has_non_self_authored_binding(row: &Value, authority: &Value) -> bool {
+    if record_fields::text(row, "node_id") != Some("live_loop_measurement_rust_tests") {
+        return true;
+    }
+    record_fields::text(authority, "authority_binding")
+        == Some("non_self_authored_command_observation_receipt")
+}
+
+fn rust_test_count_matches_authority(row: &Value, authority: &Value) -> bool {
+    if record_fields::text(row, "node_id") != Some("live_loop_measurement_rust_tests") {
+        return true;
+    }
+    let row_count = row
+        .get("verified_local_executed_test_count")
+        .and_then(Value::as_u64);
+    let authority_count = authority.get("executed_test_count").and_then(Value::as_u64);
+    row_count.is_some_and(|count| count > 0) && row_count == authority_count
+}
+
+fn command_observation_matches_row(
+    row: &Value,
+    rel: &str,
+    receipt: &Value,
+    expected_argv: &[String],
+) -> bool {
     let Some(node_id) = record_fields::text(row, "node_id") else {
         return false;
     };
@@ -170,17 +200,21 @@ fn command_observation_matches_row(row: &Value, rel: &str, receipt: &Value) -> b
         && record_fields::text(receipt, "candidate_digest") == Some(candidate)
         && record_fields::text(receipt, "receipt_path") == Some(rel)
         && record_fields::text(receipt, "operation") == Some(operation.as_str())
-        && receipt
-            .get("event")
-            .is_some_and(|event| command_observation_event_matches_row(row, node_id, event))
+        && receipt.get("event").is_some_and(|event| {
+            command_observation_event_matches_row(row, node_id, event, expected_argv)
+        })
 }
 
-fn command_observation_event_matches_row(row: &Value, node_id: &str, event: &Value) -> bool {
-    let argv = command_argv(row);
-    let Some(command) = argv.first().map(String::as_str) else {
+fn command_observation_event_matches_row(
+    row: &Value,
+    node_id: &str,
+    event: &Value,
+    expected_argv: &[String],
+) -> bool {
+    let Some(command) = expected_argv.first().map(String::as_str) else {
         return false;
     };
-    let subcommand = argv[1..].join(" ");
+    let subcommand = expected_argv[1..].join(" ");
     let operation = format!("loop.measure.{node_id}");
     record_fields::text(event, "operation") == Some(operation.as_str())
         && record_fields::text(event, "status") == Some("pass")
@@ -191,14 +225,12 @@ fn command_observation_event_matches_row(row: &Value, node_id: &str, event: &Val
         && record_fields::text(event, "subcommand") == Some(subcommand.as_str())
 }
 
-fn command_argv(row: &Value) -> Vec<String> {
-    row.get("command_argv")
-        .and_then(Value::as_array)
-        .map(|items| {
-            items
-                .iter()
-                .filter_map(|item| item.as_str().map(ToString::to_string))
-                .collect()
-        })
-        .unwrap_or_default()
+fn string_array_matches(row: &Value, key: &str, expected: &[String]) -> bool {
+    row.get(key).and_then(Value::as_array).is_some_and(|items| {
+        let actual = items
+            .iter()
+            .filter_map(|item| item.as_str().map(ToString::to_string))
+            .collect::<Vec<_>>();
+        actual == expected
+    })
 }

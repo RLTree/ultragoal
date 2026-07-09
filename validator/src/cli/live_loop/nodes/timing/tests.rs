@@ -10,7 +10,7 @@ use self::observation_fixture::write_command_observation;
 use self::test_rows::{changed_inputs, current_timing_row, digest, fmt_input};
 
 #[test]
-fn node_timing_reader_accepts_current_candidate_rows_and_rejects_wrong_inputs() {
+fn node_timing_reader_accepts_current_non_lane_rows_and_rejects_wrong_inputs() {
     let root = temp_root("live-loop-node-timing");
     let candidate = "sha256:current";
     let changed = crate::digest::bytes(b"");
@@ -60,7 +60,7 @@ fn node_timing_reader_accepts_current_candidate_rows_and_rejects_wrong_inputs() 
 }
 
 #[test]
-fn node_timing_reader_accepts_prior_candidate_verified_cache_hit_with_current_input_equivalence() {
+fn node_timing_reader_accepts_non_lane_verified_cache_hit_with_current_input_equivalence() {
     let root = temp_root("live-loop-prior-candidate-cache-timing");
     let candidate = "sha256:current";
     let changed = crate::digest::bytes(b"");
@@ -107,7 +107,7 @@ fn node_timing_reader_accepts_prior_candidate_verified_cache_hit_with_current_in
 }
 
 #[test]
-fn node_timing_reader_preserves_current_failed_measurement_rows() {
+fn node_timing_reader_preserves_current_non_lane_failed_measurement_rows() {
     let root = temp_root("live-loop-failed-timing");
     let candidate = "sha256:current";
     let changed = crate::digest::bytes(b"");

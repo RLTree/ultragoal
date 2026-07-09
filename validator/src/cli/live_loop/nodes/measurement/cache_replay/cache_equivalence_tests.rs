@@ -90,7 +90,10 @@ fn build_check_replay_requires_canonical_cargo_build_identity() {
 fn measurement_rust_tests_replay_requires_canonical_test_identity_and_nonzero_tests() {
     let fixture = ReplayFixture::measurement_rust_tests();
     write_timing_row(&fixture.root, timing_row(&fixture));
-    assert!(cache_hit(&fixture, &fixture.input_digest).is_some());
+    assert!(
+        cache_hit(&fixture, &fixture.input_digest).is_none(),
+        "Lane 014 replay must not accept local-only timing/cache rows without non-self-authored command authority"
+    );
 
     for bad_row in [
         timing_row(&fixture).with_value(

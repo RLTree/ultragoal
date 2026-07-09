@@ -141,6 +141,7 @@ fn replay_from_row(
     }
     if !node_guards::matches_command_identity(row, surface)
         || !node_guards::matches_node_specific_result(row, surface)
+        || !node_guards::has_non_self_authored_command_authority(row, surface)
     {
         return None;
     }

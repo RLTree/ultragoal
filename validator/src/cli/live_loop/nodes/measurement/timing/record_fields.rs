@@ -81,6 +81,7 @@ pub(super) const CACHE_RECORD_FIELDS: &[&str] = &[
     "verified_local_stderr_digest",
     "verified_local_output_digest",
     "verified_local_result_digest",
+    "verified_local_executed_test_count",
     "output_digest",
     "result_digest",
     "prior_result_digest",

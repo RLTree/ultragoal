@@ -9,7 +9,7 @@ use self::observation_fixture::write_command_observation;
 use self::test_rows::{current_timing_row, digest, expected_output_digest, expected_result_digest};
 
 #[test]
-fn node_timing_reader_accepts_verified_cache_hit_with_equivalence() {
+fn node_timing_reader_accepts_non_lane_verified_cache_hit_with_equivalence() {
     let timings = read_with_patch(json!({
         "proof_kind": "verified_cache_hit",
         "baseline_proof_kind": "verified_baseline_reuse",
@@ -86,19 +86,24 @@ fn node_timing_reader_rejects_proof_shaped_rows_without_current_work_or_equivale
 #[test]
 fn measurement_rust_test_zero_or_missing_count_is_rejected_by_timing_reader() {
     assert_eq!(
-        read_with_patch(measurement_rust_test_patch(json!(0))),
+        read_measurement_rust_test_with_count(json!(0)),
         0,
         "zero-test pass rows must not project validation or speed support"
     );
     assert_eq!(
-        read_with_patch(measurement_rust_test_patch(serde_json::Value::Null)),
+        read_measurement_rust_test_with_count(serde_json::Value::Null),
         0,
         "missing test counts must not project validation or speed support"
+    );
+    assert_eq!(
+        read_measurement_rust_test_with_count(json!(114)),
+        0,
+        "local-only command receipts must not project Lane 014 validation or speed support"
     );
 }
 
 #[test]
-fn node_timing_reader_accepts_batch_derived_measurement_queue_state() {
+fn node_timing_reader_accepts_non_lane_batch_derived_measurement_queue_state() {
     assert_eq!(
         read_with_patch(json!({"task_count": 3, "queue_depth": 2})),
         1
@@ -142,6 +147,41 @@ fn read_with_patch(patch: Value) -> usize {
     timings.len()
 }
 
+fn read_measurement_rust_test_with_count(test_count: Value) -> usize {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "live-loop-measurement-rust-test-count",
+    );
+    let candidate = "sha256:current";
+    let changed = crate::digest::bytes(b"");
+    let context = crate::digest::bytes(
+        format!(
+            "validator={};law={};schema={};fixture={};tier=hot;cache=verified-local",
+            crate::cli::live_loop::graph::validator_version(),
+            crate::cli::live_loop::graph::law_version(),
+            crate::cli::live_loop::graph::schema_version(),
+            crate::cli::live_loop::graph::fixture_version()
+        )
+        .as_bytes(),
+    );
+    let changed_inputs =
+        crate::cli::live_loop::changed_inputs::ChangedInputs::for_tests(&changed, &context);
+    let surface = super::surface_by_id("live_loop_measurement_rust_tests")
+        .expect("measurement rust test surface");
+    let input = super::graph::surface_input_digest(surface, candidate, &changed, &context);
+    let mut row = current_timing_row(candidate, &input, "pass", "none");
+    let patch = measurement_rust_test_patch(test_count);
+    let object = row.as_object_mut().expect("current timing row object");
+    for (key, value) in patch.as_object().expect("patch object") {
+        object.insert(key.clone(), value.clone());
+    }
+    write_command_observation(&root, &row);
+    crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({"nodes": [row]}))
+        .expect("timing artifact");
+    let timings = read_current(&root, candidate, "hot", "verified-local", &changed_inputs);
+    std::fs::remove_dir_all(root).expect("cleanup measurement rust test count");
+    timings.len()
+}
+
 fn forged_digest_pair_patch() -> Value {
     let output_digest = digest("self-consistent-wrong-output");
     let result_digest = digest("self-consistent-wrong-result");
@@ -178,6 +218,7 @@ fn measurement_rust_test_patch(test_count: Value) -> Value {
         "canonical_full_command": surface.canonical_full_command,
         "verified_local_command": surface.canonical_full_command,
         "command_argv": ["cargo", "test", "--offline", "live_loop::nodes::measurement", "--lib", "--quiet"],
+        "verified_local_command_argv": ["cargo", "test", "--offline", "live_loop::nodes::measurement", "--lib", "--quiet"],
         "cache_key": cache_key,
         "graph_task_class": surface.execution_task_class.id(),
         "execution_task_class": surface.execution_task_class.id(),

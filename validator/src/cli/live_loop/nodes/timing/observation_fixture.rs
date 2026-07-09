@@ -17,6 +17,10 @@ pub(super) fn write_command_observation(root: &Path, row: &serde_json::Value) {
     let output_digest = row["output_digest"].as_str().expect("output digest");
     let result_digest = row["result_digest"].as_str().expect("result digest");
     let rel = FMT_COMMAND_OBSERVATION_REL;
+    let executed_test_count = row
+        .get("verified_local_executed_test_count")
+        .cloned()
+        .unwrap_or(serde_json::Value::Null);
     let receipt = json!({
         "schema": "harness-ultragoal.observability-receipt.v1",
         "status": "pass",
@@ -39,7 +43,7 @@ pub(super) fn write_command_observation(root: &Path, row: &serde_json::Value) {
             "stderr_digest": row["verified_local_stderr_digest"],
             "output_digest": output_digest,
             "result_digest": result_digest,
-            "executed_test_count": serde_json::Value::Null
+            "executed_test_count": executed_test_count
         }
     });
     crate::json_boundary::write_json(&root.join(rel), &receipt)

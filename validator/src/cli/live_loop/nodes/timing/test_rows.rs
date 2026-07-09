@@ -112,6 +112,10 @@ fn insert_derived_fields(
         "command_argv".to_string(),
         json!(["cargo", "fmt", "--all", "--check"]),
     );
+    object.insert(
+        "verified_local_command_argv".to_string(),
+        json!(["cargo", "fmt", "--all", "--check"]),
+    );
     insert_scheduler_fields(object);
     object.insert(
         "runtime_execution_model".to_string(),

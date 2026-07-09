@@ -23,6 +23,13 @@ pub(super) fn matches_node_specific_result(row: &Value, surface: LoopValidationS
         .is_some_and(|count| count > 0)
 }
 
+pub(super) fn has_non_self_authored_command_authority(
+    _row: &Value,
+    surface: LoopValidationSurface,
+) -> bool {
+    surface.id != "live_loop_measurement_rust_tests"
+}
+
 pub(super) fn executed_test_count(row: &Value, surface: LoopValidationSurface) -> Option<u64> {
     if surface.id == "live_loop_measurement_rust_tests" {
         row.get("verified_local_executed_test_count")

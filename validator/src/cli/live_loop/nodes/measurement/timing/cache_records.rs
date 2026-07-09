@@ -1,7 +1,8 @@
 use serde_json::{Map, Value};
 use std::collections::BTreeMap;
 
-use crate::cli::live_loop::nodes::timing::row_authority;
+use crate::cli::live_loop::nodes::timing::{command_identity, row_authority};
+use crate::cli::live_loop::surfaces::surface_by_id;
 use std::path::Path;
 
 use super::record_fields::{CACHE_RECORD_FIELDS, TELEMETRY_CACHE_FIELDS};
@@ -42,7 +43,17 @@ fn cache_row_sources(value: &Value) -> Vec<&Value> {
 }
 
 fn is_replayable_cache_record(root: &Path, row: &Value, tier: &str, cache_mode: &str) -> bool {
-    let Some(digests) = row_authority::verified_local_digests(root, row) else {
+    let Some(surface) = text(row, "node_id").and_then(surface_by_id) else {
+        return false;
+    };
+    let Some((expected_command, expected_argv)) =
+        command_identity::expected(row, surface.id, surface)
+    else {
+        return false;
+    };
+    let Some(digests) =
+        row_authority::verified_local_digests(root, row, &expected_command, &expected_argv)
+    else {
         return false;
     };
     text(row, "tier") == Some(tier)
@@ -104,6 +115,11 @@ fn required_cache_fields_present(row: &Value) -> bool {
     ]
     .into_iter()
     .all(|field| text(row, field).is_some_and(|value| !value.is_empty()))
+        && (text(row, "node_id") != Some("live_loop_measurement_rust_tests")
+            || row
+                .get("verified_local_executed_test_count")
+                .and_then(Value::as_u64)
+                .is_some_and(|count| count > 0))
 }
 
 fn cache_record_key(row: &Value) -> Option<String> {

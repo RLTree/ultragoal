@@ -6,7 +6,9 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::path::Path;
 
+pub(crate) mod command_identity;
 mod node_timing;
+mod receipt_path;
 mod record_fields;
 pub(crate) mod row_authority;
 
@@ -100,9 +102,12 @@ pub(crate) fn read_current(
             if !record_fields::scheduler_contract_matches(row, surface) {
                 return None;
             }
+            let (expected_command, expected_argv) =
+                command_identity::expected(row, node_id, surface)?;
             let verified_local_command = record_fields::text(row, "verified_local_command")?;
             if verified_local_command.is_empty()
-                || !record_fields::has_nonempty_string_array(row, "command_argv")
+                || expected_argv.is_empty()
+                || !row_authority::command_identity_matches(row, &expected_command, &expected_argv)
             {
                 return None;
             }
@@ -115,7 +120,12 @@ pub(crate) fn read_current(
             let where_failed = record_fields::nonempty_text(row, "where_failed")?;
             let why_failed = record_fields::nonempty_text(row, "why_failed")?;
             let next_repair = record_fields::nonempty_text(row, "next_repair")?;
-            let digests = row_authority::verified_local_digests(root, row)?;
+            let digests = row_authority::verified_local_digests(
+                root,
+                row,
+                &expected_command,
+                &expected_argv,
+            )?;
             if !row_authority::rust_test_count_is_claim_safe(row, node_id)
                 || !row_authority::claim_ceiling_is_source_local(row)
                 || !row_authority::proof_kind_is_claim_safe(row, &digests)
@@ -229,6 +239,8 @@ pub(crate) fn read_current(
         .collect()
 }
 
+#[cfg(test)]
+mod authority_falsification;
 #[cfg(test)]
 mod candidate_boundary_tests;
 #[cfg(test)]
