@@ -93,12 +93,12 @@ accepted_source_local_lanes = [
   "LANE-007",
   "LANE-008"
 ]
-active_goal_binding_required_lanes = [
-  "LANE-010",
-  "LANE-011"
+ready_for_parent_reconciliation_lanes = [
+  "LANE-009",
+  "LANE-010"
 ]
-post_steer_active_lanes = [
-  "LANE-009"
+active_goal_binding_required_lanes = [
+  "LANE-011"
 ]
 remaining_current_proof_blockers = [
   "product_surface_input_specs",
@@ -117,7 +117,7 @@ id = "LANE-009"
 thread_id = "019f44ab-5232-7ab1-8c82-ff547d67375e"
 pending_worktree_id = "local:56d540f0-76fa-4733-b370-167e6e75bfcb"
 worktree = "/Users/terrynoblin/.codex/worktrees/451a/harness-ultragoal-plugin-proposal"
-status = "active_post_steer_refreshing_proof"
+status = "ready_for_parent_reconciliation_no_delta"
 owned_custom_tools = [
   "product_surface_input_specs",
   "routine_hot_loop_executor"
@@ -128,7 +128,7 @@ id = "LANE-010"
 thread_id = "019f44ab-baa5-7c02-b119-ad8d330f195c"
 pending_worktree_id = "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2"
 worktree = "/Users/terrynoblin/.codex/worktrees/c283/harness-ultragoal-plugin-proposal"
-status = "active_in_progress_parent_registry_reconciled"
+status = "ready_for_parent_reconciliation_source_commit"
 owned_custom_tools = [
   "product_semantic_active_surface_inventory",
   "semantic_namespace_symbol_inventory"

@@ -45,9 +45,9 @@
       {
         "id": "product_surface_input_specs",
         "product_role": "Typed product-surface input authority for affected-set selection, cache keys, invalidation reasons, command args, environment class, output digests, and claim surface.",
-        "status": "implemented_pending_validation",
-        "current_evidence": "Lane 1 source was accepted for changed-input, cache-key, and timing-row input-spec binding, but registry changes require a fresh current-candidate proof before any broader claim.",
-        "next_required_proof": "Current digest plus focused tests and real loop or measure command showing input specs drive affected nodes and cache invalidation without hand-edited rows."
+        "status": "ready_for_parent_reconciliation",
+        "current_evidence": "Lane 009 thread 019f44ab-5232-7ab1-8c82-ff547d67375e returned MERGE_READY with no source delta, clean worktree at d668f964f25985b486d62fe72e172533a4eae210, digest sha256:13604011ead744fb75b0c0fc7929cf7e74fc645a61f895b465b7c726c88bed4e, focused live-loop input/cache/status tests, real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto`, and explicit downstream blockers. Parent has not accepted this lane yet.",
+        "next_required_proof": "Parent pre-merge reconciliation must verify Lane 009 no-delta proof, root-equivalent source state, and integrated loop behavior before this tool can become implemented_current_source_local."
       },
       {
         "id": "verified_incremental_query_graph",
@@ -66,23 +66,23 @@
       {
         "id": "routine_hot_loop_executor",
         "product_role": "Typed executor for routine repair loops that separates validation, cache, observability, speed, and claim-ceiling state.",
-        "status": "implemented_pending_validation",
-        "current_evidence": "Lane 4 source-equivalent measurement authority is present in root and old proof showed fail-closed hot-loop behavior, but current registry changes require fresh proof.",
-        "next_required_proof": "Current-candidate loop run reports validation results, cache status, observability status, speed claim status, first product blocker, first observability blocker, exact rerun, and explicit source-local claim ceiling."
+        "status": "ready_for_parent_reconciliation",
+        "current_evidence": "Lane 009 thread 019f44ab-5232-7ab1-8c82-ff547d67375e returned MERGE_READY with real hot-loop fail-closed behavior separating validation_status, validation_cache_status, observability_status, speed_claim_status, executed-node proof, and source-local claim ceiling. Parent has not accepted this lane yet.",
+        "next_required_proof": "Parent pre-merge reconciliation must verify Lane 009 no-delta proof, root-equivalent source state, and integrated routine-loop command behavior before this tool can become implemented_current_source_local."
       },
       {
         "id": "product_semantic_active_surface_inventory",
         "product_role": "Inventory of active package-owned surfaces with typed product roles, duplicate authority detection, aliases, orphans, and no coverage-only wrappers.",
-        "status": "implemented_pending_validation",
-        "current_evidence": "Lane 3 source-local active-surface work was previously accepted, but its receipts were bound to an older digest and require current-candidate reconciliation.",
-        "next_required_proof": "Current namespace/source-audit or dedicated active-surface command detects actual binaries, commands, modules, functions, helpers, schemas, fixtures, receipt producers, generated rows, aliases, and orphans."
+        "status": "ready_for_parent_reconciliation",
+        "current_evidence": "Lane 010 thread 019f44ab-baa5-7c02-b119-ad8d330f195c completed source-local commit 3a3893a7d with narrow authority-surface classifier and compatibility-alias sunset enforcement repairs, clean worktree, digest sha256:c8f7022676a1a1e2e2ffcabad5a0692e64c55438ed37babe3845cbb368c5c220, focused red/green/tamper tests, and real namespace/typed-boundaries/line-caps proof. Parent has not replayed or accepted this commit yet.",
+        "next_required_proof": "Parent pre-merge reconciliation must inspect Lane 010 diff, replay or merge the commit, and rerun root integrated namespace, typed-boundary, line-cap, and relevant authority tests before this tool can become implemented_current_source_local."
       },
       {
         "id": "semantic_namespace_symbol_inventory",
         "product_role": "Product-semantic namespace and symbol inventory for paths, modules, functions, helpers, tests, schemas, fixtures, and generated artifacts.",
-        "status": "implemented_pending_validation",
-        "current_evidence": "Namespace hardening exists and strict namespace check passed before this registry update, but symbol-level current proof and full custom-tool mapping remain pending.",
-        "next_required_proof": "Current-candidate namespace and typed-boundary checks reject goal-work names, orphan symbols, alias overclaim, broad exceptions, and function/module names that do not describe product behavior."
+        "status": "ready_for_parent_reconciliation",
+        "current_evidence": "Lane 010 thread 019f44ab-baa5-7c02-b119-ad8d330f195c completed source-local commit 3a3893a7d proving product-semantic raw-authority classification and compatibility-alias sunset enforcement with focused tests and rebuilt CLI production checks. Parent has not replayed or accepted this commit yet.",
+        "next_required_proof": "Parent pre-merge reconciliation must inspect Lane 010 diff, replay or merge the commit, and rerun root integrated namespace, typed-boundary, line-cap, and relevant authority tests before this tool can become implemented_current_source_local."
       },
       {
         "id": "package_truth_snapshotter",
@@ -1039,7 +1039,7 @@
     },
     {
       "id": "LANE-009",
-      "status": "active_post_steer_refreshing_proof",
+      "status": "ready_for_parent_reconciliation_no_delta",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-surface input specs and routine hot-loop executor for the source-local custom-tooling prerequisite.",
       "macro_lane_rationale": "Input specs and the routine loop executor are still implemented_pending_validation; Gate 92 speed/fitting remains blocked until these custom tools have real current-candidate product proof.",
@@ -1053,7 +1053,7 @@
         "actor_id": "codex-app-worktree-lane-009",
         "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
         "pending_worktree_id": "local:56d540f0-76fa-4733-b370-167e6e75bfcb",
-        "actor_status": "goal_bound_post_steer_refreshing_proof",
+        "actor_status": "goal_bound_complete_no_delta",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1075,15 +1075,15 @@
         "validator/src/red/**"
       ],
       "parent_orchestrator_state": {
-        "status": "post_steer_lane_refreshing_proof",
-        "observed_at": "2026-07-09T03:05:00Z",
-        "finding": "Lane 009 accepted the parent steer and is refreshing focused validation and live-loop product proof. It confirmed parent commit 7707303a5 exists as bookkeeping only and is not merging that commit into lane source proof.",
-        "action": "Heartbeat must poll Lane 009 for a merge-ready package or exact remaining blocker. Accept no proof-only commit; if no source delta exists, require exact validation/product proof, explicit remaining blockers, and source-local custom-tooling claim ceiling."
+        "status": "ready_for_parent_reconciliation_no_delta",
+        "observed_at": "2026-07-09T02:31:33Z",
+        "finding": "Lane 009 returned MERGE_READY after parent steer. It is goal-complete, clean, no source delta, digest sha256:13604011ead744fb75b0c0fc7929cf7e74fc645a61f895b465b7c726c88bed4e, and has focused validation plus real hot-loop fail-closed product proof. Remaining blockers are explicit downstream loop/observability/speed/control-board blockers, not Lane 009 source failures.",
+        "action": "Parent must run the pre-merge reconciliation gate. Because there is no lane source delta, acceptance should verify root-equivalent source state and command behavior, then mark the owned custom tools accepted or record a precise parent blocker."
       }
     },
     {
       "id": "LANE-010",
-      "status": "active_in_progress_parent_registry_reconciled",
+      "status": "ready_for_parent_reconciliation_source_commit",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-semantic active-surface inventory and semantic namespace/symbol authority.",
       "macro_lane_rationale": "Active-surface and namespace/symbol authority remain implemented_pending_validation; custom tooling must reject duplicate/alias/orphan/goal-work surfaces before downstream Gate 92 work resumes.",
@@ -1097,7 +1097,7 @@
         "actor_id": "codex-app-worktree-lane-010",
         "thread_or_session_id": "019f44ab-baa5-7c02-b119-ad8d330f195c",
         "pending_worktree_id": "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2",
-        "actor_status": "goal_bound_in_progress",
+        "actor_status": "goal_bound_complete_source_commit",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1118,10 +1118,10 @@
         "validator/src/cli/next_action/**"
       ],
       "parent_orchestrator_state": {
-        "status": "active_in_progress_parent_registry_reconciled",
-        "observed_at": "2026-07-09T02:55:00Z",
-        "finding": "Lane 010 is goal-bound and actively repairing authority-surface classifiers. Its worktree observed the older registry mapping before this root reconciliation; parent now records the actual LANE-010 thread/worktree and custom-tool ownership.",
-        "action": "Heartbeat must poll for focused validation, product proof, source-local commit, old-surface retirement, and claim ceiling. If the lane blocks on registry staleness, steer it to treat that mismatch as parent-resolved root bookkeeping."
+        "status": "ready_for_parent_reconciliation_source_commit",
+        "observed_at": "2026-07-09T02:31:33Z",
+        "finding": "Lane 010 returned goal complete at commit 3a3893a7d Classify active surface raw authority projections, clean worktree, digest sha256:c8f7022676a1a1e2e2ffcabad5a0692e64c55438ed37babe3845cbb368c5c220, focused red/green/tamper tests, and real rebuilt-CLI namespace, typed-boundaries, line-caps, and digest proof. It tightened compatibility aliases so retained aliases require external contract and sunset/removal rule.",
+        "action": "Parent must run the pre-merge reconciliation gate: inspect diff, verify owned-path discipline, replay or merge the commit in root, rerun integrated checks, and preserve source-local custom-tooling claim ceiling."
       }
     },
     {
