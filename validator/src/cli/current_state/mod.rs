@@ -2,8 +2,11 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+mod receipt_status;
 #[cfg(test)]
 mod tests;
+
+pub(crate) use receipt_status::receipt_state;
 
 #[derive(Debug)]
 pub(crate) struct CurrentStateCommand {
@@ -73,6 +76,7 @@ pub(crate) fn snapshot_for_candidate(root: &Path, candidate: String) -> Value {
         "schema": "harness-ultragoal.current-state.v1",
         "status": if first_blocker["id"].as_str() == Some("none") { "pass" } else { "fail" },
         "candidate_digest": candidate,
+        "active_stage": "custom_tooling_prerequisite",
         "git": git,
         "coverage": coverage,
         "source_audit": source_audit,
@@ -81,7 +85,7 @@ pub(crate) fn snapshot_for_candidate(root: &Path, candidate: String) -> Value {
         "first_blocker": first_blocker,
         "next_repair": first_blocker["next_repair"],
         "narrow_rerun": first_blocker["narrow_rerun"],
-        "claim_ceiling": "source-local only; no readiness release completion final-packet install/cache registry reviewer or update_goal claim",
+        "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
         "source_receipts": [
             "validation_artifacts/coverage/coverage-receipt.json",
             "validation_artifacts/ultragoal-audit/validator-receipt.json",
@@ -89,32 +93,6 @@ pub(crate) fn snapshot_for_candidate(root: &Path, candidate: String) -> Value {
             "docs/generated/observability/command-inventory.json"
         ]
     })
-}
-
-fn receipt_state(root: &Path, rel: &str, candidate: &str) -> Value {
-    let path = root.join(rel);
-    let Ok(value) = crate::json_boundary::read_json(&path) else {
-        return json!({"path": rel, "status": "missing", "current": false});
-    };
-    let observed = digest_field(&value).unwrap_or("missing");
-    json!({
-        "path": rel,
-        "status": value.get("status").and_then(Value::as_str).unwrap_or("unknown"),
-        "current": observed == candidate,
-        "target_digest": observed,
-        "first_detail": value.pointer("/failures/0/detail")
-            .or_else(|| value.pointer("/details/0"))
-            .and_then(Value::as_str)
-            .unwrap_or("none")
-    })
-}
-
-fn digest_field(value: &Value) -> Option<&str> {
-    value
-        .pointer("/target_revision/value")
-        .or_else(|| value.get("target_digest"))
-        .or_else(|| value.get("candidate_digest"))
-        .and_then(Value::as_str)
 }
 
 fn observability_control_board(root: &Path) -> Value {
@@ -139,6 +117,7 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
         return json!({
             "id": id,
             "surface": text(&incomplete, "family", "observability"),
+            "failure_class": "unobservable_authority_surface",
             "why_failed": format!("observability control board is {}", text(board, "status", "missing")),
             "next_repair": next_repair,
             "narrow_rerun": narrow_rerun,
@@ -155,14 +134,15 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
             return json!({
                 "id": receipt.get("path").and_then(Value::as_str).unwrap_or("receipt"),
                 "surface": "source-local receipt",
+                "failure_class": text(receipt, "failure_class", "stale_or_missing_source_local_authority"),
                 "why_failed": format!(
                     "{} status={} current={}",
                     receipt.get("path").and_then(Value::as_str).unwrap_or("receipt"),
                     text(receipt, "status", "unknown"),
                     receipt.get("current").and_then(Value::as_bool).unwrap_or(false)
                 ),
-                "next_repair": "repair the named source-local receipt on the current digest",
-                "narrow_rerun": "rerun the failing receipt command only",
+                "next_repair": receipt_repair(receipt),
+                "narrow_rerun": receipt_rerun(receipt),
                 "broad_rerun": "source audit once after narrow proof passes"
             });
         }
@@ -171,7 +151,7 @@ fn first_blocker(board: &Value, coverage: &Value, audit: &Value, red: &Value) ->
 }
 
 fn observability_repair(id: &str) -> (String, String) {
-    let narrow_rerun = format!("ultragoal observe fit --command \"{id}\"");
+    let narrow_rerun = format!("ultragoal observe command-roundtrip --command \"{id}\"");
     if crate::audit::observability::specs::command(id).is_some() {
         (
             format!(
@@ -187,6 +167,40 @@ fn observability_repair(id: &str) -> (String, String) {
             narrow_rerun,
         )
     }
+}
+
+fn receipt_repair(receipt: &Value) -> String {
+    match receipt.get("path").and_then(Value::as_str).unwrap_or("") {
+        "validation_artifacts/coverage/coverage-receipt.json" => {
+            "rerun strict coverage proof for the current candidate or leave coverage claim blocked"
+                .to_string()
+        }
+        "validation_artifacts/ultragoal-audit/validator-receipt.json" => {
+            "rerun source audit for the current candidate after the narrow source repair passes"
+                .to_string()
+        }
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json" => {
+            "rerun red fixture report for the current candidate after the implicated fixture or validator repair"
+                .to_string()
+        }
+        path => format!("rebuild typed authority for {path} on the current candidate digest"),
+    }
+}
+
+fn receipt_rerun(receipt: &Value) -> String {
+    match receipt.get("path").and_then(Value::as_str).unwrap_or("") {
+        "validation_artifacts/coverage/coverage-receipt.json" => {
+            "ultragoal coverage prove --receipt validation_artifacts/coverage/coverage-receipt.json"
+        }
+        "validation_artifacts/ultragoal-audit/validator-receipt.json" => {
+            "ultragoal source audit --receipt validation_artifacts/ultragoal-audit/validator-receipt.json --red-report validation_artifacts/ultragoal-audit/red-fixture-report.json"
+        }
+        "validation_artifacts/ultragoal-audit/red-fixture-report.json" => {
+            "ultragoal red fixture report --report validation_artifacts/ultragoal-audit/red-fixture-report.json"
+        }
+        _ => "ultragoal current-state --json",
+    }
+    .to_string()
 }
 
 fn git_status(root: &Path) -> Value {

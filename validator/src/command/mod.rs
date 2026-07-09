@@ -71,6 +71,7 @@ pub(crate) enum Command {
     ImpactedRustTests(crate::cli::live_loop::rust_tests::ImpactedRustTestsCommand),
     MandatoryLawValidation(crate::cli::mandatory_law_validation::MandatoryLawValidationCommand),
     Namespace(crate::cli::namespace::NamespaceCommand),
+    NextAction(crate::cli::next_action::NextActionCommand),
     Observe(crate::cli::observe::types::ObserveCommand),
     OpenAi(crate::cli::openai::OpenAiCommand),
     Promptfoo(crate::cli::promptfoo::PromptfooCommand),

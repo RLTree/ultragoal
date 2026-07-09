@@ -24,7 +24,6 @@ fn required_command_authority_includes_help_visible_operator_surfaces() {
         ("ultragoal package inventory", "package inventory"),
         ("ultragoal performance prove", "performance prove"),
         ("ultragoal improvement-loop prove", "improvement-loop prove"),
-        ("ultragoal observe fit --command", "observe fit"),
         (
             "ultragoal observe command-roundtrip --command",
             "observe command-roundtrip",

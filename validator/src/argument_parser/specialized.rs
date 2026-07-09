@@ -26,6 +26,8 @@ pub(super) fn parse(raw: &[String]) -> Result<Command, String> {
         Ok(Command::MandatoryLawValidation(command))
     } else if let Some(command) = cli::namespace::parse(raw)? {
         Ok(Command::Namespace(command))
+    } else if let Some(command) = cli::next_action::parse(raw)? {
+        Ok(Command::NextAction(command))
     } else if let Some(command) = cli::observe::parse(raw)? {
         Ok(Command::Observe(command))
     } else if let Some(command) = cli::openai::parse(raw)? {

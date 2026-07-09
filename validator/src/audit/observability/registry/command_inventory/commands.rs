@@ -68,7 +68,6 @@ pub(crate) const REQUIRED_COMMANDS: &[&str] = &[
     "loop run",
     "observe command-roundtrip",
     "observe explain --next",
-    "observe fit",
     "package inventory",
     "performance prove",
     "routine check",

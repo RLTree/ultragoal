@@ -5,8 +5,15 @@ use std::path::Path;
 
 const INVENTORY_REL: &str = "docs/generated/observability/command-inventory.json";
 
+#[cfg(test)]
+mod tests;
+
 pub(super) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String> {
     let state = crate::cli::current_state::snapshot(root)?;
+    plan(root, command, &state)
+}
+
+pub(super) fn plan(root: &Path, command: &ObserveCommand, state: &Value) -> Result<Value, String> {
     let inventory =
         crate::json_boundary::read_json(&root.join(INVENTORY_REL)).unwrap_or(Value::Null);
     let candidate = text(&state, "candidate_digest", "missing");
@@ -194,55 +201,4 @@ fn repair_text(row_id: &str, family: &str, next_surface: &str, narrow_rerun: &st
 
 fn text<'a>(value: &'a Value, field: &str, default: &'a str) -> &'a str {
     value.get(field).and_then(Value::as_str).unwrap_or(default)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{inventory_row, missing_surfaces};
-    use serde_json::json;
-
-    #[test]
-    fn inventory_row_routes_each_control_board_family_to_product_inventory() {
-        let inventory = json!({
-            "command_observability_inventory": {"row": {"family": "commands"}},
-            "surface_inventory": {"row": {"family": "surfaces"}},
-            "operating_loop_inventory": {"row": {"family": "operating_loop"}},
-            "signal_inventory": {"row": {"family": "signals"}},
-            "validator_check_inventory": {"row": {"family": "validator_checks"}},
-            "receipt_proof_inventory": {"row": {"family": "receipts"}},
-            "fixture_report_inventory": {"row": {"family": "fixtures"}},
-            "package_plugin_setup_retrofit_inventory": {"row": {"family": "package_setup"}},
-            "long_running_path_inventory": {"row": {"family": "long_running"}},
-            "external_live_path_inventory": {"row": {"family": "external_live"}},
-            "claim_guard_inventory": {"row": {"family": "claim_guards"}}
-        });
-
-        for family in [
-            "commands",
-            "surfaces",
-            "operating_loop",
-            "signals",
-            "validator_checks",
-            "receipts",
-            "fixtures",
-            "package_setup",
-            "long_running",
-            "external_live",
-            "claim_guards",
-        ] {
-            assert_eq!(inventory_row(&inventory, family, "row")["family"], family);
-        }
-        assert!(inventory_row(&inventory, "unknown", "row").is_null());
-    }
-
-    #[test]
-    fn missing_surfaces_falls_back_to_first_incomplete_next_surface() {
-        let missing = missing_surfaces(
-            &json!({}),
-            &json!({"next_unobservable_surface": "same-candidate trace proof"}),
-        );
-
-        assert_eq!(missing, vec!["same-candidate trace proof".to_string()]);
-        assert!(missing_surfaces(&json!({}), &json!({})).is_empty());
-    }
 }

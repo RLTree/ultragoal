@@ -81,7 +81,7 @@ fn explain_next_reports_control_board_repair_plan() {
         receipt["explanation"]["smallest_repair"]
             .as_str()
             .unwrap()
-            .contains("ultragoal observe fit --command \"install audit\"")
+            .contains("ultragoal observe command-roundtrip --command \"install audit\"")
     );
     assert_eq!(
         receipt["explanation"]["row"]["validator_check_id"],

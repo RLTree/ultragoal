@@ -65,7 +65,6 @@ fn observe_parser_covers_required_command_inventory() {
             &["observe", "command-roundtrip"][..],
             ObserveOperation::CommandRoundtrip,
         ),
-        (&["observe", "fit"][..], ObserveOperation::CommandRoundtrip),
         (
             &["observe", "explain", "--next"][..],
             ObserveOperation::ExplainNext,

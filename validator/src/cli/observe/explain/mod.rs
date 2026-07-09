@@ -99,6 +99,14 @@ pub(crate) fn run(root: &Path, command: &ObserveCommand) -> Result<Value, String
     Ok(receipt)
 }
 
+pub(crate) fn build_next_plan(
+    root: &Path,
+    command: &ObserveCommand,
+    state: &Value,
+) -> Result<Value, String> {
+    next::plan(root, command, state)
+}
+
 fn known_failure(
     root: &Path,
     observed: Option<&Value>,

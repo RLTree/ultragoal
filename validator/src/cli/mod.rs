@@ -13,6 +13,7 @@ pub(crate) mod line_caps;
 pub(crate) mod live_loop;
 pub(crate) mod mandatory_law_validation;
 pub(crate) mod namespace;
+pub(crate) mod next_action;
 pub(crate) mod observe;
 pub(crate) mod openai;
 pub(crate) mod package;

@@ -79,7 +79,6 @@ fn nested_help_requests_do_not_execute_product_commands() {
         ["loop", "format", "check", "--changed-rust", "--help"].as_slice(),
         ["loop", "format", "check", "--help", "--changed-rust"].as_slice(),
         ["namespace", "check", "--strict", "--help"].as_slice(),
-        ["observe", "fit", "--help"].as_slice(),
         ["observe", "command-roundtrip", "--help"].as_slice(),
         ["loop", "help"].as_slice(),
     ] {

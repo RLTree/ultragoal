@@ -1,6 +1,4 @@
-use super::{
-    CurrentStateCommand, digest_field, first_blocker, git_status, parse, receipt_state, run,
-};
+use super::{CurrentStateCommand, first_blocker, git_status, parse, receipt_state, run};
 use serde_json::json;
 
 #[test]
@@ -19,18 +17,18 @@ fn parser_defaults_to_bounded_current_state_receipt() {
 #[test]
 fn digest_fields_cover_known_receipt_shapes() {
     assert_eq!(
-        digest_field(&json!({"target_revision": {"value": "sha256:a"}})),
+        super::receipt_status::digest_field(&json!({"target_revision": {"value": "sha256:a"}})),
         Some("sha256:a")
     );
     assert_eq!(
-        digest_field(&json!({"target_digest": "sha256:b"})),
+        super::receipt_status::digest_field(&json!({"target_digest": "sha256:b"})),
         Some("sha256:b")
     );
     assert_eq!(
-        digest_field(&json!({"candidate_digest": "sha256:c"})),
+        super::receipt_status::digest_field(&json!({"candidate_digest": "sha256:c"})),
         Some("sha256:c")
     );
-    assert_eq!(digest_field(&json!({})), None);
+    assert_eq!(super::receipt_status::digest_field(&json!({})), None);
 }
 
 #[test]
