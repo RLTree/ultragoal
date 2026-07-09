@@ -254,6 +254,58 @@
           ],
           "reviewer_packet_rule": "The reviewer must receive the completion_grid, changed files, and row-specific attack questions. A generic reviewer prompt is insufficient.",
           "parent_acceptance_rule": "Parent acceptance requires re-running the parent_rerun_command for each claim-bearing row or documenting a concrete external/tooling blocker. Parent rejects complete reports that cannot be evaluated row-by-row."
+        },
+        "lane_objective_v5_verification_outcomes": {
+          "status": "required_for_active_and_future_custom_tooling_lanes",
+          "purpose": "Turn lane work from broad implementation goals into concrete verification outcomes that the owner can execute, a reviewer can attack, and the parent can rerun.",
+          "owner_instruction": "Before reporting pass, every lane must provide a verification_outcomes table. Each row names the product behavior, the old behavior displaced, the positive proof, the false-pass proof, the source guard, the independent reconciliation surface, the reviewer attack, the parent rerun, the expected blocker movement, and the exact claim ceiling.",
+          "objective_contract_required_fields": [
+            "trigger: the exact command, API, file edit, or input change that exercises the product behavior",
+            "product_behavior: what the Harness product must return to an agent, not what checklist row the lane satisfies",
+            "old_behavior_disposition: removed, routed through the new authority, or kept only with typed compatibility, claim ceiling, and sunset",
+            "positive_owner_proof: real current-candidate command/API execution or verified current-input reuse, with exit status and required fields",
+            "negative_owner_proof: the most likely false-pass cases fail closed",
+            "independent_reconciliation_surface: stdout, receipt, command observation, result/output digest, source guard, telemetry/current-state, or explicit blocker that is not the same row proving itself",
+            "parent_rerun: the exact command or source inspection the parent will perform",
+            "blocker_movement: the previous parent-visible blocker that should move, or the legal blocker that should remain",
+            "unsupported_claims: downstream claims still blocked even when the row passes"
+          ],
+          "verification_outcomes_required_columns": [
+            "outcome_id",
+            "state: pass | partial | blocked",
+            "agent_trigger",
+            "product_behavior_observed",
+            "old_behavior_disposition",
+            "owner_positive_proof_command_or_api",
+            "owner_exit_status",
+            "required_fields_digests_or_blocker",
+            "false_pass_case",
+            "expected_fail_closed_signal",
+            "source_guard_files_and_functions",
+            "independent_reconciliation_surface",
+            "reviewer_attack_question",
+            "parent_rerun_command_or_inspection",
+            "expected_parent_observation_or_blocker_movement",
+            "claim_ceiling",
+            "unsupported_claims"
+          ],
+          "minimum_outcomes": [
+            "primary_behavior: the real product command/API behavior the lane exists to change",
+            "authority_binding: proof binds to a non-self-authored or recomputed authority, not row shape",
+            "failure_preservation: real failures remain visible and actionable",
+            "verified_reuse_or_execution: speed/cache rows are either executed work or verified current-input reuse",
+            "old_surface_retirement: replaced helpers, aliases, runners, caches, fallbacks, and generated surfaces cannot bypass the new authority",
+            "claim_ceiling: validation success cannot promote forbidden downstream claims"
+          ],
+          "parent_rejects_when": [
+            "any row is marked pass without a real current-candidate product run, verified current-input reuse, or explicit legal blocker",
+            "the independent reconciliation surface is authored by the same local row it is supposed to verify",
+            "a known false-pass case is absent or only described in prose",
+            "old code, helpers, aliases, broad runners, caches, or fallback paths remain without typed product role, route-through proof, claim ceiling, and sunset",
+            "the reviewer packet cannot ask a row-specific adversarial question tied to files and functions",
+            "the parent rerun cannot reproduce the claimed behavior or blocker movement"
+          ],
+          "reviewer_rule": "Reviewers must receive the verification_outcomes table, changed files, exact source guards, and row-specific attack questions. A generic code review is insufficient for lane acceptance."
         }
       },
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
@@ -1696,6 +1748,83 @@
             "routine reuse overpromoted to Gate 92, readiness, final, install/cache, reviewer, or update_goal proof"
           ],
           "parent_rejects_complete_when": "Any completion_grid row is missing owner command/API, exit status, required fields or digests, falsification proof, source guard file/function, independent reconciliation surface, reviewer attack question, parent rerun, expected blocker movement, or explicit claim ceiling."
+        },
+        "verification_outcomes_v5_required": {
+          "status": "required_in_next_lane014_final_packet",
+          "purpose": "Make Lane 014 prove concrete hot-loop product behavior, not just timing-row mechanics.",
+          "allowed_done_claim": "Lane 014 may claim only that the live_loop_measurement_rust_tests routine node provides source-local repair feedback or a legal blocker without hiding Rust test failures, zero-test executions, forged digest chains, bad cache replay, proxy timing, or downstream overclaim.",
+          "required_outcomes": [
+            {
+              "outcome_id": "lane014-executed-measurement-path",
+              "agent_trigger": "Run `target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local` on a cold or invalidated current candidate.",
+              "product_behavior": "The node executes the canonical Rust test work or emits an explicit legal blocker, preserves validation/cache/observability/speed separation, records work_unit_count and actual_work_duration_ms, and does not claim speed from graph overhead.",
+              "false_pass_case": "proof_kind=executed with cache_hit=false but no execution, zero work, missing result/output digest, or proxy timing must fail closed.",
+              "source_guards": [
+                "validator/src/cli/live_loop/nodes/measurement/timing/receipt.rs",
+                "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs",
+                "validator/src/cli/live_loop/nodes/timing/mod.rs"
+              ],
+              "parent_rerun": "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local",
+              "expected_parent_observation": "executed proof either exits as a legal speed miss with validation retained or passes with legal execution fields; no downstream claim promotion."
+            },
+            {
+              "outcome_id": "lane014-command-observation-authority",
+              "agent_trigger": "Read or replay a local timing row for live_loop_measurement_rust_tests.",
+              "product_behavior": "The row is accepted only when it binds to actual command output or a non-self-authored command-observation or receipt authority that matches command identity, candidate digest, status, result/output authority, and claim ceiling.",
+              "false_pass_case": "A fully self-consistent forged stdout/stderr/output/result digest chain authored inside the same local JSON row must be rejected by timing::read_current and compact cache preservation.",
+              "source_guards": [
+                "validator/src/cli/live_loop/nodes/timing/row_authority.rs",
+                "validator/src/cli/live_loop/nodes/timing/mod.rs",
+                "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs"
+              ],
+              "parent_rerun": "cargo test --offline live_loop::nodes::timing --lib --quiet",
+              "expected_parent_observation": "forged-chain reader and compact-cache falsification tests pass by rejecting the row."
+            },
+            {
+              "outcome_id": "lane014-verified-cache-reuse-legality",
+              "agent_trigger": "Run the measure command again after legal current-candidate evidence exists.",
+              "product_behavior": "The node may report proof_kind=verified_cache_hit only when cache_hit=true, work_unit_count=0, command argv/input digests/version authorities/result digest/replayed output digest/equivalence status/invalidation proof reconcile.",
+              "false_pass_case": "verified_cache_hit with cache_hit=false, stale or wrong digest, wrong command identity, input-scope mismatch, result/output mismatch, missing invalidation proof, or work_unit_count nonzero must fail closed.",
+              "source_guards": [
+                "validator/src/cli/live_loop/nodes/measurement/timing/cache_records.rs",
+                "validator/src/cli/live_loop/nodes/timing/row_authority.rs"
+              ],
+              "parent_rerun": "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local",
+              "expected_parent_observation": "hot replay passes only as verified current-input reuse with explicit source-local routine claim ceiling."
+            },
+            {
+              "outcome_id": "lane014-rust-test-failure-preservation",
+              "agent_trigger": "Project, cache, or replay a Rust-test timing row with failing, zero-test, or missing-test-count evidence.",
+              "product_behavior": "Failing Rust tests and zero or missing executed test counts remain product blockers and cannot become validation pass, reusable cache, or supported speed claim.",
+              "false_pass_case": "zero_test_pass, failing_test_hidden_by_cache, row_shape_only_pass, broad cargo sweep, OR filter, or local JSON projection must fail closed.",
+              "source_guards": [
+                "validator/src/cli/live_loop/nodes/timing/row_authority.rs",
+                "validator/src/cli/live_loop/node_timing/tests/replay_rows.rs",
+                "validator/src/cli/live_loop/nodes/timing/observation_fixture.rs"
+              ],
+              "parent_rerun": "cargo test --offline live_loop::nodes::measurement --lib --quiet && cargo test --offline live_loop::rust_tests --lib --quiet",
+              "expected_parent_observation": "focused tests preserve the Rust-test failure or zero-test blocker instead of creating reusable pass evidence."
+            },
+            {
+              "outcome_id": "lane014-full-hot-loop-blocker-movement",
+              "agent_trigger": "Run `target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto`.",
+              "product_behavior": "The full hot loop no longer reports live_loop_measurement_rust_tests as first_product_blocker, or it reports a specific legal blocker for that node without Gate 92/readiness overclaim.",
+              "false_pass_case": "Hot-loop pass text, local JSON, or validation-only success must not support Gate 92, Product Usage, Phase 4, readiness, final packet, install/cache, registry/reviewer, release, completion, or update_goal claims.",
+              "source_guards": [
+                "validator/src/cli/live_loop/nodes/measurement/timing/mod.rs",
+                "validator/src/cli/live_loop/nodes/timing/row_authority.rs"
+              ],
+              "parent_rerun": "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto",
+              "expected_parent_observation": "first_product_blocker moves off live_loop_measurement_rust_tests or remains as a legal explicit blocker; claim ceiling stays source-local custom-tooling prerequisite."
+            }
+          ],
+          "final_report_must_include": [
+            "verification_outcomes table using the V5 columns",
+            "for each outcome: owner command/API, exit status, required fields or digests, false-pass case, source guards, independent reconciliation, reviewer attack, parent rerun, expected blocker movement, claim ceiling, unsupported claims",
+            "explicit old-surface disposition for every touched reader, compact-cache helper, local JSON projection, broad runner, OR filter, generated row, or test-selection path",
+            "residual blockers separated as product blocker, observability blocker, speed blocker, and parent-owned blocker"
+          ],
+          "parent_rejects_complete_when": "Any V5 outcome is absent, prose-only, tests-only without product proof, self-reconciled by the same local JSON row, missing old-surface disposition, missing reviewer attack, missing parent rerun, or missing explicit unsupported claims."
         }
       },
       "owner": "codex-app-worktree-lane-014",
@@ -1719,7 +1848,9 @@
         "objective_v3_command_authority_sendback_confirmed": true,
         "objective_v3_command_authority_sendback_evidence": "After adversarial review rejected commit aa6cefd92, parent sent Lane 014 a V3 send-back requiring local timing authority to bind to actual command output or non-self-authored command-observation/receipt authority. codex_app.read_thread confirmed delivery as userMessage item-127 and lane acknowledgment as agentMessage item-128.",
         "objective_v4_completion_grid_confirmed": true,
-        "objective_v4_completion_grid_evidence": "Parent sent the V4 operational completion grid to Lane 014 as userMessage item-145 and codex_app.read_thread confirmed lane acknowledgment as agentMessage item-146. The next Lane 014 final packet must include completion_grid rows for primary_product_run, authority_binding, false_pass_rejection, failure_preservation, old_surface_disposition, and claim_ceiling."
+        "objective_v4_completion_grid_evidence": "Parent sent the V4 operational completion grid to Lane 014 as userMessage item-145 and codex_app.read_thread confirmed lane acknowledgment as agentMessage item-146. The next Lane 014 final packet must include completion_grid rows for primary_product_run, authority_binding, false_pass_rejection, failure_preservation, old_surface_disposition, and claim_ceiling.",
+        "objective_v5_verification_outcomes_confirmed": true,
+        "objective_v5_verification_outcomes_evidence": "Parent sent the V5 verification-outcomes packet to Lane 014 as userMessage item-181 and codex_app.read_thread confirmed lane acknowledgment as agentMessage item-182. The next Lane 014 final packet must include verification_outcomes rows for executed_measurement_path, command_observation_authority, verified_cache_reuse_legality, rust_test_failure_preservation, and full_hot_loop_blocker_movement."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",

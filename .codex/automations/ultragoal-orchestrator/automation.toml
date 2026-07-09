@@ -144,6 +144,23 @@ v4_required_row_families = [
 ]
 v4_reviewer_rule = "Send reviewers the completion_grid, changed files, and row-specific attack questions. Generic reviewer prompts are insufficient."
 v4_parent_acceptance_rule = "Parent acceptance requires rerunning each claim-bearing parent_rerun_command or documenting a concrete external/tooling blocker. Reject complete reports that cannot be evaluated row-by-row."
+v5_verification_outcomes_required = "Every active and future lane must return a verification_outcomes table. Each row must include outcome_id, state, agent_trigger, product_behavior_observed, old_behavior_disposition, owner_positive_proof_command_or_api, owner_exit_status, required_fields_digests_or_blocker, false_pass_case, expected_fail_closed_signal, source_guard_files_and_functions, independent_reconciliation_surface, reviewer_attack_question, parent_rerun_command_or_inspection, expected_parent_observation_or_blocker_movement, claim_ceiling, and unsupported_claims."
+v5_minimum_outcomes = [
+  "primary_behavior",
+  "authority_binding",
+  "failure_preservation",
+  "verified_reuse_or_execution",
+  "old_surface_retirement",
+  "claim_ceiling"
+]
+v5_parent_rejects = [
+  "any row marked pass without current-candidate product behavior, verified current-input reuse, or explicit legal blocker",
+  "the reconciliation surface is authored by the same local row it verifies",
+  "a known false-pass case is absent or prose-only",
+  "old surfaces remain without removed/routed/typed-compatibility disposition, claim ceiling, and sunset",
+  "reviewer questions are generic instead of row-specific and tied to exact files/functions",
+  "parent reruns cannot reproduce claimed behavior or blocker movement"
+]
 
 [cadence]
 kind = "heartbeat"
@@ -335,6 +352,8 @@ objective_v3_standard = "Lane 014 must report a V3 verification packet before pa
 objective_v3_delivery = "Confirmed with codex_app.read_thread: Lane 014 received the V3 addendum as userMessage item-77, reviewer send-back item-87 with acknowledgment item-88, and command-authority send-back item-127 with acknowledgment item-128 in thread 019f451a-93ad-7891-8a69-9542fb885b02. Future heartbeat acceptance must reject any Lane 014 report missing the V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, unsupported-claims row, or focused proof for the item-127 command-authority and compact-cache legality gaps."
 objective_v4_standard = "Lane 014 must include the V4 completion_grid in its next final packet. Required row families: primary_product_run, authority_binding, false_pass_rejection, failure_preservation, old_surface_disposition, and claim_ceiling. For this lane, authority_binding means local timing/cache rows bind to actual command output or non-self-authored command-observation/receipt authority; false_pass_rejection includes the fully self-consistent forged digest chain and proof-kind-specific bad compact-cache record; parent rejects any row marked pass without concrete owner command/API, source guard, independent reconciliation surface, reviewer attack question, parent rerun, and expected blocker movement."
 objective_v4_delivery = "Confirmed with codex_app.read_thread: Lane 014 received the V4 operational completion grid as userMessage item-145 and acknowledged it as agentMessage item-146. The owner stated it will keep the current repair target and return the final report with the required completion_grid rows."
+objective_v5_standard = "Lane 014 must include a V5 verification_outcomes table in its next final packet. Required outcomes: executed_measurement_path, command_observation_authority, verified_cache_reuse_legality, rust_test_failure_preservation, and full_hot_loop_blocker_movement. Each outcome must name the agent trigger, product behavior, old behavior disposition, owner proof command/API and exit status, required fields/digests/blocker, false-pass case, fail-closed signal, source guards, independent reconciliation surface, reviewer attack question, parent rerun, expected blocker movement, claim ceiling, and unsupported claims."
+objective_v5_delivery = "Confirmed with codex_app.read_thread: Lane 014 received the V5 verification-outcomes packet as userMessage item-181 and acknowledged it as agentMessage item-182. Future heartbeat acceptance must reject any Lane 014 report missing the V5 verification_outcomes table or any row that is prose-only, tests-only without product proof, self-reconciled by local JSON, missing old-surface disposition, missing reviewer attack, missing parent rerun, or missing explicit unsupported claims."
 required_behavior_rows = [
   "lane014-primary-hot-loop-node",
   "lane014-rust-test-failure-preservation",
