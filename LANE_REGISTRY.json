@@ -45,9 +45,9 @@
       {
         "id": "product_surface_input_specs",
         "product_role": "Typed product-surface input authority for affected-set selection, cache keys, invalidation reasons, command args, environment class, output digests, and claim surface.",
-        "status": "ready_for_parent_reconciliation",
-        "current_evidence": "Lane 009 thread 019f44ab-5232-7ab1-8c82-ff547d67375e returned MERGE_READY with no source delta, clean worktree at d668f964f25985b486d62fe72e172533a4eae210, digest sha256:13604011ead744fb75b0c0fc7929cf7e74fc645a61f895b465b7c726c88bed4e, focused live-loop input/cache/status tests, real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto`, and explicit downstream blockers. Parent has not accepted this lane yet.",
-        "next_required_proof": "Parent pre-merge reconciliation must verify Lane 009 no-delta proof, root-equivalent source state, and integrated loop behavior before this tool can become implemented_current_source_local."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent accepted Lane 009 as a no-delta source-local lane on digest sha256:cc00ab05dfa6df52a0eb9aac2757a3cafcde02f80a652b6019a249084c5abea6. Root `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` ran real current-candidate product behavior in 3763 ms, separated validation/cache/observability/speed claim states, retained a reusable fmt validation result, and failed closed on the downstream build_check baseline proof instead of claiming Gate 92 speed. Focused `cargo test --offline live_loop --manifest-path validator/Cargo.toml --lib` passed 227 tests; root line-caps, namespace, and raw line-count gates passed.",
+        "next_required_proof": "Cross-lane integration must prove these input specs feed Lane 010 authority surfaces, Lane 011 coverage lineage, and the already accepted telemetry/current-state tools before any Gate 92 speed or fitting claim."
       },
       {
         "id": "verified_incremental_query_graph",
@@ -66,9 +66,9 @@
       {
         "id": "routine_hot_loop_executor",
         "product_role": "Typed executor for routine repair loops that separates validation, cache, observability, speed, and claim-ceiling state.",
-        "status": "ready_for_parent_reconciliation",
-        "current_evidence": "Lane 009 thread 019f44ab-5232-7ab1-8c82-ff547d67375e returned MERGE_READY with real hot-loop fail-closed behavior separating validation_status, validation_cache_status, observability_status, speed_claim_status, executed-node proof, and source-local claim ceiling. Parent has not accepted this lane yet.",
-        "next_required_proof": "Parent pre-merge reconciliation must verify Lane 009 no-delta proof, root-equivalent source state, and integrated routine-loop command behavior before this tool can become implemented_current_source_local."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent accepted Lane 009 as a no-delta source-local lane on digest sha256:cc00ab05dfa6df52a0eb9aac2757a3cafcde02f80a652b6019a249084c5abea6. The real root hot-loop command emitted validation_status, validation_cache_status, observability_status, speed_claim_status, duration, worker_count, task_count, queue_depth, first product/observability/speed/control-board blockers, next repair, narrow rerun, broad rerun allowance, run/correlation/trace identifiers, and source-local loop proof claim ceiling. Focused live_loop tests and static gates passed.",
+        "next_required_proof": "The next integration proof must show the routine executor consumes Lane 010 and Lane 011 accepted surfaces without duplicate authorities, hidden strict-boundary substitution, or Gate 92 overclaim."
       },
       {
         "id": "product_semantic_active_surface_inventory",
@@ -1039,7 +1039,7 @@
     },
     {
       "id": "LANE-009",
-      "status": "ready_for_parent_reconciliation_no_delta",
+      "status": "accepted_source_local_no_delta",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-surface input specs and routine hot-loop executor for the source-local custom-tooling prerequisite.",
       "macro_lane_rationale": "Input specs and the routine loop executor are still implemented_pending_validation; Gate 92 speed/fitting remains blocked until these custom tools have real current-candidate product proof.",
@@ -1053,7 +1053,7 @@
         "actor_id": "codex-app-worktree-lane-009",
         "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
         "pending_worktree_id": "local:56d540f0-76fa-4733-b370-167e6e75bfcb",
-        "actor_status": "goal_bound_complete_no_delta",
+        "actor_status": "goal_bound_complete_no_delta_parent_accepted",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1075,10 +1075,10 @@
         "validator/src/red/**"
       ],
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation_no_delta",
+        "status": "accepted_source_local_no_delta",
         "observed_at": "2026-07-09T02:31:33Z",
-        "finding": "Lane 009 returned MERGE_READY after parent steer. It is goal-complete, clean, no source delta, digest sha256:13604011ead744fb75b0c0fc7929cf7e74fc645a61f895b465b7c726c88bed4e, and has focused validation plus real hot-loop fail-closed product proof. Remaining blockers are explicit downstream loop/observability/speed/control-board blockers, not Lane 009 source failures.",
-        "action": "Parent must run the pre-merge reconciliation gate. Because there is no lane source delta, acceptance should verify root-equivalent source state and command behavior, then mark the owned custom tools accepted or record a precise parent blocker."
+        "finding": "Parent accepted Lane 009 with no source delta after verifying root-equivalent product behavior on digest sha256:cc00ab05dfa6df52a0eb9aac2757a3cafcde02f80a652b6019a249084c5abea6. Real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` failed closed on downstream build_check baseline proof while preserving separated validation/cache/observability/speed states and source-local claim ceiling. Focused live_loop tests passed 227/227; line-caps, namespace, and raw line-count scan passed.",
+        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next reconcile Lane 010 source commit, then Lane 011 source commit, then run cross-lane integration proof before any Gate 92 speed or fitting claim."
       }
     },
     {

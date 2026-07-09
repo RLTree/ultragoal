@@ -91,16 +91,14 @@ accepted_source_local_lanes = [
   "LANE-005",
   "LANE-006",
   "LANE-007",
-  "LANE-008"
+  "LANE-008",
+  "LANE-009"
 ]
 ready_for_parent_reconciliation_lanes = [
-  "LANE-009",
   "LANE-010",
   "LANE-011"
 ]
 remaining_current_proof_blockers = [
-  "product_surface_input_specs",
-  "routine_hot_loop_executor",
   "product_semantic_active_surface_inventory",
   "semantic_namespace_symbol_inventory",
   "coverage_lineage_intelligence",
@@ -115,7 +113,7 @@ id = "LANE-009"
 thread_id = "019f44ab-5232-7ab1-8c82-ff547d67375e"
 pending_worktree_id = "local:56d540f0-76fa-4733-b370-167e6e75bfcb"
 worktree = "/Users/terrynoblin/.codex/worktrees/451a/harness-ultragoal-plugin-proposal"
-status = "ready_for_parent_reconciliation_no_delta"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "product_surface_input_specs",
   "routine_hot_loop_executor"
