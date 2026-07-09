@@ -26,6 +26,7 @@ first_actions = [
 allowed_actions = [
   "poll Codex lane threads",
   "send corrective steering to blocked or drifting lanes",
+  "after every corrective lane message, read the recipient thread and confirm the exact message landed before recording or reporting that the lane was steered",
   "mark merge-ready lanes for parent reconciliation",
   "when root is clean and lanes are ready, advance one bounded parent reconciliation or merge slice instead of only reporting readiness",
   "require custom-tool lanes to retire, route through, or explicitly justify older surfaces they replace",
@@ -157,6 +158,7 @@ lane_order = [
 do_not_return_dont_notify_when = [
   "any lane is ready_for_parent_reconciliation",
   "any active lane is blocked, idle with no recent progress, missing goal binding, or drifting from its contract",
+  "a lane steering message was sent but recipient-thread delivery has not been confirmed with read_thread",
   "any accepted lane still needs teardown",
   "LANE_REGISTRY.json is stale relative to lane thread/worktree state",
   "the app automation prompt is stale relative to this config"
