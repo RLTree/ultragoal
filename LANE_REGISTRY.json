@@ -71,6 +71,13 @@
         "next_required_proof": "The next integration proof must show the routine executor consumes Lane 010 and Lane 011 accepted surfaces without duplicate authorities, hidden strict-boundary substitution, or Gate 92 overclaim."
       },
       {
+        "id": "line_cap_routine_validation_cache",
+        "product_role": "Routine line-cap validation authority that turns the strict line-cap command into fast affected-set or verified-local cache feedback for the hot loop without weakening the source line-count law.",
+        "status": "lane_launched_pending_worktree",
+        "current_evidence": "Cross-lane integration on digest sha256:3197d56ed51c1c27de2ded47dcadd44a4e4bc1f535ba2068d11f72e043ac7689 showed `line_caps_check` passes validation and observability but fails the routine speed law: `target/debug/ultragoal --root . loop measure --node line_caps_check --tier hot --cache-mode verified-local` reported actual_work_duration_ms=1165, baseline_duration_ms=1165, speedup_ratio=0, failure_class=live_loop_speedup_target_missed. Parent launched Lane 012 with pending worktree id local:323676a7-63c9-407e-b6e3-68f7a8bae641.",
+        "next_required_proof": "Lane 012 must produce source-local not-readiness proof that `line_caps_check` either executes affected line-cap work fast enough or reuses verified-local current-input cache with result/output digests, invalidation proof, observability reconciliation, and explicit routine-only claim ceiling."
+      },
+      {
         "id": "product_semantic_active_surface_inventory",
         "product_role": "Inventory of active package-owned surfaces with typed product roles, duplicate authority detection, aliases, orphans, and no coverage-only wrappers.",
         "status": "implemented_current_source_local",
@@ -1164,6 +1171,48 @@
         "observed_at": "2026-07-09T02:31:33Z",
         "finding": "Parent accepted Lane 011 by replaying commit 57f5b106f into root as 683d73ba9. The replay touched only owned coverage/script paths and passed focused routine coverage validation, full coverage tests, real routine coverage command, fast helper wrapper, script syntax, cargo fmt, namespace, line-caps, raw line-count scan, and source inspection on digest sha256:e10aee032cbe96907bd6c5aab20a57e48a1e423b5efdafdec06361e42c811e79. Strict coverage is not claimed current.",
         "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
+      }
+    },
+    {
+      "id": "LANE-012",
+      "status": "pending_worktree_setup",
+      "lane_type": "implementation",
+      "lane_objective": "Repair routine line-cap validation so line_caps_check satisfies verified-local hot-loop speed and observability requirements without weakening line-cap law.",
+      "macro_lane_rationale": "Cross-lane custom-tooling integration remains blocked because line_caps_check passes product validation and observability but misses the routine 20x speed law with speedup_ratio=0.",
+      "covered_custom_tools": [
+        "line_cap_routine_validation_cache"
+      ],
+      "owner": "codex-app-worktree-lane-012",
+      "thread_or_session_id": "pending",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-012",
+        "thread_or_session_id": "pending",
+        "pending_worktree_id": "local:323676a7-63c9-407e-b6e3-68f7a8bae641",
+        "actor_status": "pending_worktree_setup",
+        "goal_binding_required_first_action": true,
+        "validated_at": "2026-07-09T03:20:00Z"
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "pending Codex app worktree for /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "aeb3c2cd8 Record lane 011 acceptance",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/audit/law/authority_surfaces/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "parent_orchestrator_state": {
+        "status": "pending_worktree_setup",
+        "observed_at": "2026-07-09T03:20:00Z",
+        "finding": "Parent launched Lane 012 through Codex app create_thread after cross-lane integration proved line_caps_check is the active routine-speed blocker. The app returned pendingWorktreeId local:323676a7-63c9-407e-b6e3-68f7a8bae641 but no thread id was visible yet in list_threads.",
+        "action": "Heartbeat must resolve the pending worktree to a thread id, confirm the lane received its initial contract, then poll or steer until it returns a merge-ready package. If no thread materializes, escalate missing app worktree delivery instead of silently assuming the lane started."
       }
     }
   ],

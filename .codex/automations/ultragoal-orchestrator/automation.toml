@@ -97,6 +97,7 @@ accepted_source_local_lanes = [
   "LANE-011"
 ]
 remaining_current_proof_blockers = [
+  "line_cap_routine_validation_cache",
   "cross_lane_integration_all_custom_tools"
 ]
 retired_surfaces = [
@@ -135,6 +136,16 @@ owned_custom_tools = [
   "coverage_lineage_intelligence"
 ]
 
+[[active_lanes]]
+id = "LANE-012"
+thread_id = "pending"
+pending_worktree_id = "local:323676a7-63c9-407e-b6e3-68f7a8bae641"
+worktree = "pending Codex app worktree"
+status = "pending_worktree_setup"
+owned_custom_tools = [
+  "line_cap_routine_validation_cache"
+]
+
 [reconciliation_policy]
 default_ready_lane_decision = "MERGE_READY"
 must_advance_when_root_clean = true
@@ -146,7 +157,8 @@ lane_order = [
   "LANE-008",
   "LANE-009",
   "LANE-010",
-  "LANE-011"
+  "LANE-011",
+  "LANE-012"
 ]
 do_not_return_dont_notify_when = [
   "any lane is ready_for_parent_reconciliation",
