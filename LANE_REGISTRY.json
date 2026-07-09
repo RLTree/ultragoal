@@ -1039,7 +1039,7 @@
     },
     {
       "id": "LANE-009",
-      "status": "blocked_parent_registry_reconciled_steer_required",
+      "status": "steered_parent_registry_reconciled_waiting_lane_response",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-surface input specs and routine hot-loop executor for the source-local custom-tooling prerequisite.",
       "macro_lane_rationale": "Input specs and the routine loop executor are still implemented_pending_validation; Gate 92 speed/fitting remains blocked until these custom tools have real current-candidate product proof.",
@@ -1053,7 +1053,7 @@
         "actor_id": "codex-app-worktree-lane-009",
         "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
         "pending_worktree_id": "local:56d540f0-76fa-4733-b370-167e6e75bfcb",
-        "actor_status": "goal_bound_blocked_on_stale_lane_registry",
+        "actor_status": "goal_bound_steered_after_parent_registry_reconciliation",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1075,10 +1075,10 @@
         "validator/src/red/**"
       ],
       "parent_orchestrator_state": {
-        "status": "parent_registry_reconciled_after_lane_blocker",
-        "observed_at": "2026-07-09T02:55:00Z",
-        "finding": "Lane 009 is goal-bound and produced source-local routine-loop/input-spec proof, but blocked because its worktree saw an older LANE_REGISTRY.json without LANE-009. Parent reconciled the root registry row with the actual thread/worktree. This is parent-owned bookkeeping, not a lane source failure.",
-        "action": "After parent commits registry reconciliation, send Lane 009 a steering message to rebind to the lane contract, treat the stale worktree registry mismatch as parent-resolved root bookkeeping, and return a merge-ready package or exact remaining source blocker without inventing a proof-only commit."
+        "status": "parent_registry_reconciled_and_lane_steered",
+        "observed_at": "2026-07-09T03:00:00Z",
+        "finding": "Lane 009 is goal-bound and produced source-local routine-loop/input-spec proof, but blocked because its worktree saw an older LANE_REGISTRY.json without LANE-009. Parent reconciled the root registry row with the actual thread/worktree in commit 7707303a5 and sent a corrective message to thread 019f44ab-5232-7ab1-8c82-ff547d67375e.",
+        "action": "Heartbeat must poll Lane 009 for its post-steer response. Accept no proof-only commit; if no source delta exists, require a merge-ready package with exact validation/product proof, explicit remaining blockers, and source-local custom-tooling claim ceiling."
       }
     },
     {
