@@ -101,9 +101,9 @@
       {
         "id": "red_green_tamper_fixture_scheduler",
         "product_role": "Isolated fixture scheduler for red, green, and tamper fixtures with deterministic aggregation and no shared validation_artifacts writes from parallel workers.",
-        "status": "implemented_pending_parent_reconciliation",
-        "current_evidence": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d with real scheduler run over 1280 fixture tasks, deterministic ordering, package truth unchanged, and source-local claim ceiling. Parent has not merged or rerun root proof.",
-        "next_required_proof": "Parent reconciliation must inspect the Lane 6 diff, replay or merge onto current root, rerun focused scheduler proof and strict root checks, and preserve the source-local claim ceiling."
+        "status": "blocked_returned_for_lane_repair",
+        "current_evidence": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d found the fixture scheduler command produced useful source-local scheduler proof over 1280 tasks, but the same lane's impacted Rust test mapper used a Cargo filter shape that exited 0 while running zero tests. The lane cannot be accepted as a coherent custom-tooling slice.",
+        "next_required_proof": "Lane 6 must repair the impacted Rust test mapper, prove every selected mapped filter executes nonzero expected tests or fails closed, and then return both scheduler and impacted-test tooling with explicit retirement/routing notes for any older replaced fixture/test surfaces."
       },
       {
         "id": "command_telemetry_roundtrip_reconciliation",
@@ -143,9 +143,9 @@
       {
         "id": "impacted_rust_test_mapping",
         "product_role": "Impacted Rust test map that feeds nextest or the canonical test runner with legally sufficient focused tests instead of broad cargo sweeps or fake parallelism.",
-        "status": "implemented_pending_parent_reconciliation",
-        "current_evidence": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d with mapped Rust source execution through one canonical cargo invocation and fail-closed unknown README.md mapping. Parent has not merged or rerun root proof.",
-        "next_required_proof": "Parent reconciliation must inspect the Lane 6 diff, replay or merge onto current root, rerun focused impacted-test mapping proof and strict root checks, and preserve the source-local claim ceiling."
+        "status": "blocked_returned_for_lane_repair",
+        "current_evidence": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d rejected the impacted Rust test mapper because `cargo test -p ultragoal 'cli::live_loop::rust_tests::|red::'` exited 0 while running zero tests. This is proof-shaped output, not product proof.",
+        "next_required_proof": "Lane 6 must use a supported runner shape, record per-filter argv/exit/executed-test counts/result digests, fail closed on zero executed expected tests, and add red fixtures for pass-shaped zero-test output and invalid OR-style Cargo filters."
       }
     ]
   },
@@ -767,7 +767,7 @@
     },
     {
       "id": "LANE-006",
-      "status": "ready_for_parent_reconciliation",
+      "status": "blocked_returned_for_repair",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite isolated red/green/tamper fixture scheduler and impacted Rust test mapping.",
       "macro_lane_rationale": "Fixture execution and impacted-test selection must be Harness-owned authority rather than broad red reports, broad cargo sweeps, or fake parallel subprocesses.",
@@ -781,7 +781,7 @@
         "actor_id": "codex-app-worktree-lane-006",
         "thread_or_session_id": "019f43cc-0202-7f82-9464-340f3a3ee8f1",
         "pending_worktree_id": "local:b17000a1-9f17-45cc-81fa-f41281c5c59f",
-        "actor_status": "completed_waiting_parent_reconciliation",
+        "actor_status": "parent_rejected_zero_test_runner",
         "validated_at": "2026-07-08T22:54:32Z"
       },
       "goal_binding": {
@@ -848,15 +848,15 @@
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-08T22:54:32Z",
-        "finding": "Lane 6 reported source-local commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d and the worktree is clean. It confirmed shared dispatch edits are minimal command exposure and parent-serialized integration, not lane-owned authority.",
-        "action": "Do not accept without root source inspection, current-root merge/replay, focused scheduler and impacted-test-map validation, real product proof on the reconciled candidate, and explicit source-local claim ceiling."
+        "status": "blocked_returned_for_repair",
+        "observed_at": "2026-07-09T00:54:32Z",
+        "finding": "Parent replay of Lane 6 commit 69f23be05ed30edfd801aaa0ec5a8228fe9cea3d proved the fixture scheduler path has useful source-local behavior, but also proved the impacted Rust mapper can report pass while Cargo runs zero tests. Exact blocker: `cargo test -p ultragoal 'cli::live_loop::rust_tests::|red::'` exits 0 with `running 0 tests`.",
+        "action": "Lane 6 was sent corrective steering. Parent must not merge this lane until the owner repairs the impacted Rust mapper, adds zero-test and invalid-filter red fixtures, records nonzero executed-test counts or typed fail-closed blockers, and explains retirement/routing of any old replaced test or fixture surfaces."
       },
       "teardown": {
         "required": true,
-        "status": "blocked_until_parent_reconciliation",
-        "reason": "Clean lane commit exists, but root has not inspected, merged, validated, or torn down the worktree."
+        "status": "blocked_until_lane_repair",
+        "reason": "Parent rejected the lane because impacted Rust test mapping produced proof-shaped zero-test output. Worktree teardown is blocked until the owning lane repairs and returns a new source-local commit or the parent explicitly kills the lane."
       }
     },
     {

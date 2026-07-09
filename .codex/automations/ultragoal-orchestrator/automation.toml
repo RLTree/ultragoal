@@ -27,6 +27,7 @@ allowed_actions = [
   "send corrective steering to blocked or drifting lanes",
   "mark merge-ready lanes for parent reconciliation",
   "when root is clean and lanes are ready, advance one bounded parent reconciliation or merge slice instead of only reporting readiness",
+  "require custom-tool lanes to retire, route through, or explicitly justify older surfaces they replace",
   "update LANE_REGISTRY.json with concise orchestration state",
   "reconcile completed lanes only after parent validation",
   "teardown clean accepted worktrees after merge"
@@ -55,7 +56,7 @@ owned_custom_tools = [
 id = "LANE-006"
 thread_id = "019f43cc-0202-7f82-9464-340f3a3ee8f1"
 worktree = "/Users/terrynoblin/.codex/worktrees/7810/harness-ultragoal-plugin-proposal"
-status = "ready_for_parent_reconciliation"
+status = "blocked_returned_for_repair_zero_test_runner"
 owned_custom_tools = [
   "red_green_tamper_fixture_scheduler",
   "impacted_rust_test_mapping"
