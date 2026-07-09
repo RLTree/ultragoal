@@ -47,6 +47,10 @@ pub(super) fn insert_authority(
             ("validation_cache_status", json!("reusable")),
             ("observability_status", json!("pass")),
             ("speed_claim_status", json!("withheld")),
+            (
+                "routine_replay_speed_claim_status",
+                json!("eligible_after_verified_cache_hit"),
+            ),
             ("observability_failure_class", json!("none")),
             (
                 "claim_status",

@@ -15,4 +15,6 @@ pub(crate) struct VerifiedLocalProof {
     pub(crate) prior_result_digest: Option<String>,
     pub(crate) replayed_output_digest: Option<String>,
     pub(crate) cache_equivalence_status: Option<String>,
+    pub(crate) source_speed_claim_status: Option<String>,
+    pub(crate) routine_replay_speed_claim_status: Option<String>,
 }

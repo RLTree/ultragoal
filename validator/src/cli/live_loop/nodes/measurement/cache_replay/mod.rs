@@ -27,6 +27,8 @@ pub(super) struct CacheReplay {
     pub(super) replayed_output_digest: String,
     pub(super) invalidation_proof: String,
     pub(super) telemetry_reconciliation: TelemetryReconciliation,
+    pub(super) source_speed_claim_status: Option<String>,
+    pub(super) routine_replay_speed_claim_status: Option<String>,
 }
 
 pub(super) struct ReplayStore {
@@ -199,6 +201,9 @@ fn replay_from_row(
             "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
                 .to_string(),
         telemetry_reconciliation: cached_telemetry,
+        source_speed_claim_status: text(row, "speed_claim_status").map(str::to_string),
+        routine_replay_speed_claim_status: text(row, "routine_replay_speed_claim_status")
+            .map(str::to_string),
     })
 }
 

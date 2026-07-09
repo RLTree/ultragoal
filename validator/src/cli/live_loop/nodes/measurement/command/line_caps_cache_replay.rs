@@ -18,7 +18,7 @@ fn live_loop_measure_replays_line_caps_strict_receipt_as_routine_cache() {
     .expect("manifest");
     let line_caps = crate::cli::line_caps::LineCapsCommand {
         receipt: PathBuf::from("validation_artifacts/observability/line-cap-check.json"),
-        jobs: Some(1),
+        jobs: Some(8),
     };
     assert_eq!(
         crate::cli::line_caps::run(&root, &line_caps).expect("line caps command"),

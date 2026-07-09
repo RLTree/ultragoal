@@ -54,7 +54,7 @@ pub(crate) const SURFACE_INPUT_SPECS: &[SurfaceInputSpec] = &[
     spec(
         "line_caps_check",
         CacheBoundary::ChangedInputs,
-        path_rules::is_rust_source,
+        path_rules::is_line_cap_input,
         "source_line_caps",
         "line_cap_result_digest",
     ),

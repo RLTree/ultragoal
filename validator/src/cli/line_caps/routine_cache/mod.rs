@@ -7,8 +7,12 @@ mod routine_cache_fields;
 pub(super) fn attach(
     root: &Path,
     value: &mut Value,
+    command: &super::LineCapsCommand,
     actual_work_duration_ms: u64,
 ) -> Result<(), String> {
+    if command.jobs != Some(8) {
+        return Ok(());
+    }
     let candidate = text(value, "candidate_digest")?;
     let surface = crate::cli::live_loop::surface_by_id("line_caps_check")
         .ok_or_else(|| "line_caps_check live-loop surface is missing".to_string())?;

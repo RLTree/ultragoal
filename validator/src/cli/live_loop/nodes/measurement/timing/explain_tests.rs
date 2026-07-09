@@ -151,6 +151,8 @@ fn proof_with(
         prior_result_digest: None,
         replayed_output_digest: None,
         cache_equivalence_status: None,
+        source_speed_claim_status: None,
+        routine_replay_speed_claim_status: None,
     };
     update(&mut proof);
     proof

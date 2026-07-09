@@ -13,6 +13,8 @@ use surface_inputs::{
 #[cfg(test)]
 pub(super) use git_status::{changed_path, git_root_matches_requested_root};
 #[cfg(test)]
+mod line_cap_input_tests;
+#[cfg(test)]
 pub(super) use surface_inputs::file_digest;
 
 pub(crate) struct ChangedInputs {

@@ -61,6 +61,8 @@ fn cache_hit_proof(update: impl FnOnce(&mut VerifiedLocalProof)) -> VerifiedLoca
         prior_result_digest: Some(digest("prior")),
         replayed_output_digest: Some(digest("replayed")),
         cache_equivalence_status: Some("pass".to_string()),
+        source_speed_claim_status: Some("supported".to_string()),
+        routine_replay_speed_claim_status: None,
     };
     update(&mut proof);
     proof

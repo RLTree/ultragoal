@@ -78,7 +78,7 @@ pub(crate) fn run(root: &Path, command: &LineCapsCommand) -> Result<i32, String>
         },
     )?;
     if status == "pass" {
-        routine_cache::attach(root, &mut value, elapsed_ms(started))?;
+        routine_cache::attach(root, &mut value, command, elapsed_ms(started))?;
     }
     write_receipt(root, &command.receipt, &value)?;
     stdout::print(&value);

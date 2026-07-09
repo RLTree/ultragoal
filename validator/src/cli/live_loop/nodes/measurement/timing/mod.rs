@@ -14,4 +14,6 @@ pub(super) mod receipt;
 pub(super) mod record;
 pub(super) mod repair;
 mod state;
+#[cfg(test)]
+mod state_tests;
 pub(super) mod verified_work;

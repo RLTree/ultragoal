@@ -2,6 +2,8 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 mod edges;
+mod parser_tests;
+mod routine_cache_tests;
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {
@@ -17,7 +19,7 @@ fn write_file(path: &Path, body: &str) {
     std::fs::write(path, body).expect("write file");
 }
 
-fn package_root(label: &str, files: &[(&str, String)]) -> PathBuf {
+pub(super) fn package_root(label: &str, files: &[(&str, String)]) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     let resources = files
         .iter()
@@ -33,46 +35,12 @@ fn package_root(label: &str, files: &[(&str, String)]) -> PathBuf {
     root
 }
 
-fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
+pub(super) fn args(root: PathBuf, raw: &[&str]) -> crate::Args {
     crate::Args {
         root,
         command: crate::parse_command(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
             .expect("parse command"),
     }
-}
-
-#[test]
-fn line_caps_parser_routes_to_dedicated_command() {
-    let raw = ["line-caps", "check", "--strict", "--jobs", "2"];
-    let command =
-        crate::cli::line_caps::parse(&raw.iter().map(|s| s.to_string()).collect::<Vec<_>>())
-            .expect("line caps parse")
-            .expect("line caps command");
-    assert_eq!(command.jobs, Some(2));
-    assert_eq!(
-        command.receipt,
-        PathBuf::from("validation_artifacts/observability/line-cap-check.json")
-    );
-    let missing = ["line-caps", "check"];
-    let err = crate::parse_command(&missing.iter().map(|s| s.to_string()).collect::<Vec<_>>())
-        .expect_err("strict flag required");
-    assert!(err.contains("requires --strict"), "{err}");
-    let err = crate::parse_command(
-        &["line-caps", "check", "--strict", "--jobs"]
-            .into_iter()
-            .map(str::to_string)
-            .collect::<Vec<_>>(),
-    )
-    .expect_err("missing jobs value");
-    assert!(err.contains("missing value for --jobs"), "{err}");
-    let err = crate::parse_command(
-        &["line-caps", "check", "--strict", "--bogus"]
-            .into_iter()
-            .map(str::to_string)
-            .collect::<Vec<_>>(),
-    )
-    .expect_err("unknown argument");
-    assert!(err.contains("unknown line-caps check argument"), "{err}");
 }
 
 #[test]
@@ -83,7 +51,7 @@ fn line_caps_command_writes_pass_observability_receipt() {
     );
     let code = crate::command_run::run_with_exit_code(args(
         root.clone(),
-        &["line-caps", "check", "--strict", "--jobs", "2"],
+        &["line-caps", "check", "--strict", "--jobs", "8"],
     ))
     .expect("line caps pass");
     assert_eq!(code, 0);

@@ -22,6 +22,7 @@ impl NodeTimingState {
         let observability_status = observability_status(verified_local);
         let speed_claim_status = speed_claim_status(
             surface,
+            verified_local,
             validation_status,
             observability_status,
             failure_class,
@@ -101,6 +102,7 @@ fn observability_status(verified_local: &VerifiedLocalProof) -> &'static str {
 
 fn speed_claim_status(
     surface: LoopValidationSurface,
+    verified_local: &VerifiedLocalProof,
     validation_status: &str,
     observability_status: &str,
     failure_class: &str,
@@ -111,10 +113,27 @@ fn speed_claim_status(
     if !surface.high_frequency {
         return "withheld";
     }
+    if !routine_cache_replay_carries_speed_claim_authority(verified_local) {
+        return "withheld";
+    }
     match failure_class {
         "none" => "supported",
         "live_loop_speedup_target_missed" => "failed",
         _ => "failed",
+    }
+}
+
+fn routine_cache_replay_carries_speed_claim_authority(verified_local: &VerifiedLocalProof) -> bool {
+    if verified_local.proof_kind != "verified_cache_hit" {
+        return true;
+    }
+    match verified_local.source_speed_claim_status.as_deref() {
+        Some("supported" | "failed") => true,
+        Some("withheld") => {
+            verified_local.routine_replay_speed_claim_status.as_deref()
+                == Some("eligible_after_verified_cache_hit")
+        }
+        _ => false,
     }
 }
 
@@ -138,94 +157,4 @@ fn valid_digest(digest: &str) -> bool {
     digest.len() == 71
         && digest.starts_with("sha256:")
         && digest[7..].bytes().all(|byte| byte.is_ascii_hexdigit())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::cli::live_loop::nodes::command_failure::CommandFailureSummary;
-    use crate::cli::live_loop::nodes::measurement::full_command::FullCommandRun;
-    use crate::cli::live_loop::nodes::measurement::observation::TelemetryReconciliation;
-    use crate::cli::live_loop::surfaces::surface_by_id;
-
-    #[test]
-    fn validation_state_distinguishes_blocked_launch_from_failed_product_command() {
-        let blocked = NodeTimingState::from_measurement(
-            surface_by_id("fmt_check").expect("fmt surface"),
-            &proof(|run| {
-                run.launch_error = true;
-                run.status_success = false;
-                run.exit_code = 1;
-            }),
-            "canonical_full_command_failed",
-        );
-        assert_eq!(blocked.validation_status, "blocked");
-        assert_eq!(blocked.validation_cache_status, "not_reusable");
-        assert_eq!(blocked.speed_claim_status, "withheld");
-        assert_eq!(blocked.claim_status, "withheld_validation_result_available");
-
-        let failed = NodeTimingState::from_measurement(
-            surface_by_id("fmt_check").expect("fmt surface"),
-            &proof(|run| {
-                run.status_success = false;
-                run.exit_code = 2;
-            }),
-            "canonical_full_command_failed",
-        );
-        assert_eq!(failed.validation_status, "fail");
-        assert_eq!(failed.validation_cache_status, "not_reusable");
-        assert_eq!(failed.timing_status, "fail");
-    }
-
-    #[test]
-    fn context_observation_does_not_claim_or_fail_speed() {
-        let state = NodeTimingState::from_measurement(
-            surface_by_id("changed_files").expect("changed files surface"),
-            &proof(|_| {}),
-            "live_loop_speedup_target_missed",
-        );
-
-        assert_eq!(state.validation_status, "pass");
-        assert_eq!(state.observability_status, "pass");
-        assert_eq!(state.speed_claim_status, "withheld");
-        assert_eq!(state.timing_status, "partial");
-        assert_eq!(state.claim_status, "withheld_validation_result_available");
-    }
-
-    fn proof(update: impl FnOnce(&mut FullCommandRun)) -> VerifiedLocalProof {
-        let mut actual_work = FullCommandRun {
-            exit_code: 0,
-            status_success: true,
-            launch_error: false,
-            duration_ms: 1,
-            stdout_digest: digest("stdout"),
-            stderr_digest: digest("stderr"),
-            failure: CommandFailureSummary::default(),
-        };
-        update(&mut actual_work);
-        VerifiedLocalProof {
-            proof_kind: "executed",
-            cache_hit: false,
-            cache_key: digest("cache"),
-            graph_overhead_ms: 1,
-            actual_work,
-            work_unit_count: 1,
-            equivalence_status: "executed_current_candidate_not_cache_replay".to_string(),
-            invalidation_proof: "executed current command".to_string(),
-            telemetry_reconciliation_status: "pass".to_string(),
-            telemetry_reconciliation_duration_ms: 1,
-            telemetry_reconciliation: TelemetryReconciliation {
-                status: "pass".to_string(),
-                duration_ms: 1,
-                value: serde_json::json!({"status":"pass"}),
-            },
-            prior_result_digest: None,
-            replayed_output_digest: None,
-            cache_equivalence_status: None,
-        }
-    }
-
-    fn digest(label: &str) -> String {
-        crate::digest::bytes(label.as_bytes())
-    }
 }

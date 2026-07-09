@@ -179,6 +179,19 @@ pub(super) fn is_rust_build_surface_input(path: &str) -> bool {
     is_rust_source(path) || is_rust_build_input(path)
 }
 
+pub(super) fn is_line_cap_input(path: &str) -> bool {
+    is_rust_source(path)
+        || (path.starts_with(".harness/") && path.ends_with(".sh"))
+        || matches!(
+            path,
+            ".harness/coverage-command"
+                | "scripts/check"
+                | "scripts/check-agent-standards"
+                | "scripts/check-coverage-fast"
+                | "scripts/check-coverage-full"
+        )
+}
+
 pub(super) fn is_namespace_input(path: &str) -> bool {
     is_rust_source(path)
         || path == "docs/namespace-law-exceptions.json"

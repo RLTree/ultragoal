@@ -170,6 +170,7 @@ const CACHE_RECORD_FIELDS: &[&str] = &[
     "validation_cache_status",
     "observability_status",
     "speed_claim_status",
+    "routine_replay_speed_claim_status",
     "observability_failure_class",
     "claim_status",
     "proof_kind",

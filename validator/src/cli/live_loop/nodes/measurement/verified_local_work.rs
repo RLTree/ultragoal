@@ -47,6 +47,8 @@ pub(super) fn cached_verified_local(
         prior_result_digest: Some(cached.prior_result_digest),
         replayed_output_digest: Some(cached.replayed_output_digest),
         cache_equivalence_status: Some("pass".to_string()),
+        source_speed_claim_status: cached.source_speed_claim_status,
+        routine_replay_speed_claim_status: cached.routine_replay_speed_claim_status,
     };
     Some((cached.baseline, proof))
 }
@@ -91,6 +93,8 @@ pub(super) fn executed_verified_local(
         prior_result_digest: None,
         replayed_output_digest: None,
         cache_equivalence_status: None,
+        source_speed_claim_status: None,
+        routine_replay_speed_claim_status: None,
     }
 }
 

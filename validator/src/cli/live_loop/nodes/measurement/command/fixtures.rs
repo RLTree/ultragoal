@@ -69,5 +69,7 @@ pub(super) fn verified_local_proof(
         prior_result_digest: None,
         replayed_output_digest: None,
         cache_equivalence_status: None,
+        source_speed_claim_status: None,
+        routine_replay_speed_claim_status: None,
     }
 }
