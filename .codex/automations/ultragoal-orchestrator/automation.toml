@@ -175,10 +175,11 @@ accepted_source_local_lanes = [
   "LANE-009",
   "LANE-010",
   "LANE-011",
-  "LANE-012"
+  "LANE-012",
+  "LANE-013"
 ]
 remaining_current_proof_blockers = [
-  "LANE-013 build_check routine validation cache active in thread 019f4500-6a74-7373-bc36-46805fb3d951",
+  "live_loop_measurement_rust_tests routine validation cache or explicit strict-boundary-only claim limiter",
   "cross_lane_integration_all_custom_tools"
 ]
 retired_surfaces = [
@@ -258,8 +259,8 @@ id = "LANE-013"
 thread_id = "019f4500-6a74-7373-bc36-46805fb3d951"
 pending_worktree_id = "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d"
 worktree = "/Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal"
-status = "active_delivery_confirmed"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "build_check_routine_validation_cache"
 ]
-objective_standard = "Falsifiable product-behavior contract and operational acceptance-matrix addendum delivered and confirmed in thread 019f4500-6a74-7373-bc36-46805fb3d951. Parent must now require a pass/partial/blocked acceptance matrix, negative falsification proof, source inspection, old-surface routing or retirement, clean source-local/not-readiness commit, and explicit claim ceiling before accepting Lane 013."
+objective_standard = "Lane 013 accepted source-local at root commit dd456ef80 after operational acceptance-matrix proof and parent reruns, and its thread is archived. Heartbeat must preserve the app worktree-removal tooling gap and advance to the next bounded custom-tooling blocker: live_loop_measurement_rust_tests routine validation cache or explicit strict-boundary-only claim limiter."

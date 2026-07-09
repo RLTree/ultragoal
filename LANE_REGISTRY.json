@@ -179,9 +179,9 @@
       {
         "id": "build_check_routine_validation_cache",
         "product_role": "Routine Rust build validation authority that turns the canonical Cargo build command into fast executed or verified-local hot-loop feedback without hiding build failures or substituting proxy timing proof.",
-        "status": "in_progress_lane_013_delivery_confirmed",
-        "current_evidence": "Parent clean-root hot loop on digest sha256:69b9aee862c87ed5967615a86d33faa9821ea58f6572edf0caff3cd0a4e43be4 moved past fmt_check and line_caps_check, then failed with first_blocker=build_check and first_product_blocker=build_check because the high-frequency node lacks current full-command baseline and verified-local 20x timing proof. Parent queued Lane 013 via Codex app worktree pendingWorktreeId local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d, then confirmed the prompt landed in thread 019f4500-6a74-7373-bc36-46805fb3d951 at /Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal.",
-        "next_required_proof": "Lane 013 must prove canonical Cargo build command identity, current-input equivalence, stale/wrong-digest rejection, input-scope mismatch rejection, result/output digest reconciliation, validation-vs-speed-vs-observability separation, and real hot-loop blocker movement before parent acceptance."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 013 commit a35bb316f17ad6c8f99a77a559b99e2706ab0a95 into root as dd456ef80 Harden build check verified-local replay on digest sha256:0c3365c83c52e81c88577f6961766b678ccbd4ff4be47e2206c1a477027d4759. Focused measurement tests passed 109/109, changed-input tests passed 9/9, cargo fmt, cargo build, raw line-cap scan, strict line-caps, namespace, and package inventory passed. Real `ultragoal loop measure --node build_check --tier hot --cache-mode verified-local` first executed the canonical `cargo build --offline --bin ultragoal --quiet` and correctly withheld the speed claim, then passed on verified current-input cache replay with proof_kind=verified_cache_hit, cache_hit=true, work_unit_count=0, validation_status=pass, observability_status=pass, speed_claim_status=supported, actual_work_duration_ms=8, baseline_duration_ms=737, speedup_ratio=81, and source-local loop timing ceiling. Real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` moved the first product blocker from build_check to live_loop_measurement_rust_tests.",
+        "next_required_proof": "The next bounded custom-tooling blocker is live_loop_measurement_rust_tests routine validation cache or an explicit strict-boundary-only claim limiter, followed by cross-lane integration proof across all accepted custom tools before any Gate 92 speed or fitting work resumes."
       },
       {
         "id": "product_semantic_active_surface_inventory",
@@ -1324,7 +1324,7 @@
     },
     {
       "id": "LANE-013",
-      "status": "active_delivery_confirmed",
+      "status": "accepted_source_local_commit",
       "lane_type": "implementation",
       "lane_objective": "Make build_check provide fast verified-local source-local repair feedback for the routine hot loop without hiding Cargo build failures or promoting proxy proof.",
       "macro_lane_rationale": "Clean-root hot loop on digest sha256:69b9aee862c87ed5967615a86d33faa9821ea58f6572edf0caff3cd0a4e43be4 now fails on first_blocker=build_check after fmt_check and line_caps_check pass.",
@@ -1338,9 +1338,9 @@
         "actor_id": "codex-app-worktree-lane-013",
         "thread_or_session_id": "019f4500-6a74-7373-bc36-46805fb3d951",
         "pending_worktree_id": "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d",
-        "actor_status": "active_delivery_confirmed",
+        "actor_status": "accepted_archived_pending_app_worktree_removal_tool",
         "goal_binding_required_first_action": true,
-        "validated_at": "2026-07-09T04:11:14Z",
+        "validated_at": "2026-07-09T04:24:30Z",
         "delivery_confirmed": true,
         "delivery_confirmation_evidence": "codex_app.list_threads returned thread 019f4500-6a74-7373-bc36-46805fb3d951 with the Lane 013 contract preview and cwd /Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal.",
         "objective_addendum_confirmed": true,
@@ -1350,6 +1350,7 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/3189/harness-ultragoal-plugin-proposal",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "41106bca8 Record lane objective proof standard",
+      "current_commit": "dd456ef80 Harden build check verified-local replay",
       "forbidden_paths": [
         "validation_artifacts/**",
         "LANE_REGISTRY.json",
@@ -1363,10 +1364,15 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "active_delivery_confirmed",
-        "observed_at": "2026-07-09T04:11:14Z",
-        "finding": "Parent launched Lane 013 through Codex app create_thread with gpt-5.5 medium and a falsifiable build_check contract, then confirmed thread delivery. Parent later sent and confirmed an operational acceptance-matrix addendum requiring pass/partial/blocked rows, current-candidate product proof or verified reuse, negative falsification cases, source inspection, old-surface routing or retirement, residual blockers, and source-local claim ceiling.",
-        "action": "Poll Lane 013 for an acceptance-matrix final report. If the lane says complete without the matrix, lacks negative falsification, broadens beyond build_check, or makes proof-theater claims, steer it back immediately and confirm delivery with read_thread."
+        "status": "accepted_source_local_commit",
+        "observed_at": "2026-07-09T04:24:30Z",
+        "finding": "Parent sent and confirmed an operational acceptance-matrix addendum, then accepted Lane 013 by replaying a35bb316f17ad6c8f99a77a559b99e2706ab0a95 into root as dd456ef80. Root proof passed package digest, focused measurement tests 109/109, changed-input tests 9/9, cargo fmt, cargo build, raw line-cap scan, strict line-caps, namespace, package inventory, cold executed build_check measurement with validation pass and speed claim withheld, verified-cache-hit build_check measurement with speed supported, and full hot-loop blocker movement to live_loop_measurement_rust_tests on digest sha256:0c3365c83c52e81c88577f6961766b678ccbd4ff4be47e2206c1a477027d4759.",
+        "action": "Lane 013 thread archived through Codex app tooling; app worktree-removal control remains unavailable, so physical worktree teardown remains a tooling gap. Parent must next create or reconcile a bounded lane for live_loop_measurement_rust_tests routine validation cache, then run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
+      },
+      "teardown": {
+        "required": true,
+        "status": "thread_archived_worktree_removal_tool_unavailable",
+        "reason": "Parent accepted Lane 013 source-local, archived thread 019f4500-6a74-7373-bc36-46805fb3d951 through Codex app tooling, and did not use ad hoc shell worktree removal because no app worktree-removal tool is exposed."
       }
     }
   ],
