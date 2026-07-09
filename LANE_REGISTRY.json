@@ -108,16 +108,16 @@
       {
         "id": "command_telemetry_roundtrip_reconciliation",
         "product_role": "Command roundtrip authority that runs real commands, captures stdout and receipts, queries telemetry, reconciles same-candidate proof, and refuses generic rows.",
-        "status": "implemented_pending_parent_reconciliation",
-        "current_evidence": "Lane 7 reported source-local commit 3fbff558d with real observe command-roundtrip package proof, roundtrip_status=observable, explicit blocked claims, and source-local claim ceiling. Parent has not merged or rerun root proof.",
-        "next_required_proof": "Parent reconciliation must inspect the Lane 7 diff, replay or merge onto current root, rerun focused command-roundtrip proof and strict root checks, and preserve the source-local claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 007 commit 3fbff558dc3b42e1f39cac67655e7b3c8c3fdfde onto current root and committed it as 5f9dd46700ebc3f01fb8b6911ff877624fe5cec3. Real `ultragoal observe command-roundtrip --family package` passed on digest sha256:fe3ca18ca3291b668f25d3941d7c099ba4b52dce4a26b5d91d0a41c1f202be2a with roundtrip_status=observable, command stdout, receipt, logs, metrics, traces, explain reconciliation, and explicit blocked claims.",
+        "next_required_proof": "Cross-lane integration must prove command roundtrip reconciliation consumes the shared package truth snapshot and feeds current-state/next-action surfaces before any Gate 92 command fitting or speed claim."
       },
       {
         "id": "receipt_artifact_dereference_reconciliation",
         "product_role": "Receipt and artifact reconciliation authority that names product behavior, proof surface, independent reconciliation surface, stale or wrong-digest state, and claim ceiling.",
-        "status": "implemented_pending_parent_reconciliation",
-        "current_evidence": "Lane 7 reported source-local commit 3fbff558d with receipt/artifact reconciliation source and real command-roundtrip proof that rejects proxy proof at the lane ceiling. Parent has not merged or rerun root proof.",
-        "next_required_proof": "Parent reconciliation must inspect the Lane 7 diff, replay or merge onto current root, rerun focused receipt/artifact reconciliation proof and strict root checks, and preserve the source-local claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 007 and verified receipt/artifact reconciliation through focused tests and real command-roundtrip proof on digest sha256:fe3ca18ca3291b668f25d3941d7c099ba4b52dce4a26b5d91d0a41c1f202be2a. The receipt records product_behavior_observed, proof_surface, independent_reconciliation_surface, same-candidate run/correlation/digest comparison, and rejects receipt-existence-only, generated-row-only, local-spool-only, stale/wrong-digest, mismatch, bounds/redaction, and high-cardinality metric-label proof.",
+        "next_required_proof": "Later Gate 92 work must prove this reconciliation across every command and non-command family; this source-local increment only proves the package command family and the custom authority path."
       },
       {
         "id": "current_state_read_model",
@@ -861,7 +861,7 @@
     },
     {
       "id": "LANE-007",
-      "status": "ready_for_parent_reconciliation",
+      "status": "merged_source_local_thread_archived_worktree_tooling_gap",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite command telemetry roundtrip and receipt/artifact reconciliation authority.",
       "macro_lane_rationale": "Command telemetry and receipt reconciliation must reject proxy proof before any later Gate 92 command family can be fitted.",
@@ -875,7 +875,7 @@
         "actor_id": "codex-app-worktree-lane-007",
         "thread_or_session_id": "019f43cc-6eb5-7b02-9074-4669427ad545",
         "pending_worktree_id": "local:00717311-30d7-4bef-843e-5e1779c87b04",
-        "actor_status": "blocked_pending_parent_reconciliation",
+        "actor_status": "parent_accepted_thread_archived",
         "validated_at": "2026-07-08T23:54:32Z"
       },
       "goal_binding": {
@@ -932,15 +932,15 @@
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-08T23:54:32Z",
-        "finding": "Lane 7 marked its lane goal blocked because the remaining action is parent-owned reconciliation. Worktree is clean at commit 3fbff558dc3b98f4da22403d834889dff7a997c0, with lane-reported real observe command-roundtrip package proof and source-local claim ceiling.",
-        "action": "Parent must inspect the Lane 7 diff, reconcile or replay onto current root, rerun focused command-roundtrip and receipt/artifact proof on the reconciled candidate, run strict root checks, and preserve source-local claim ceiling before acceptance."
+        "status": "parent_replayed_source_local",
+        "observed_at": "2026-07-09T01:30:00Z",
+        "finding": "Parent replayed Lane 007 commit 3fbff558dc3b42e1f39cac67655e7b3c8c3fdfde onto root as 5f9dd46700ebc3f01fb8b6911ff877624fe5cec3. Focused command-roundtrip/query/telemetry tests, build, line caps, namespace, package inventory, and real `observe command-roundtrip --family package` proof passed on digest sha256:fe3ca18ca3291b668f25d3941d7c099ba4b52dce4a26b5d91d0a41c1f202be2a. Claim ceiling remains source-local custom-tooling prerequisite only.",
+        "action": "Lane 007 thread was archived through Codex app tooling. No app worktree-removal tool was exposed by tool discovery, so physical worktree teardown remains a tooling gap; heartbeat must advance to Lane 008 while Lane 006 remains returned for repair."
       },
       "teardown": {
         "required": true,
-        "status": "blocked_until_parent_reconciliation",
-        "reason": "Lane work appears ready, but standard parent merge/reconciliation and root proof are still required."
+        "status": "thread_archived_worktree_removal_tool_unavailable",
+        "reason": "Parent committed Lane 007 source-local reconciliation and archived thread 019f43cc-6eb5-7b02-9074-4669427ad545 through Codex app tooling. Tool discovery exposed archive/handoff/fork controls but no app worktree-removal control, so shell worktree removal is intentionally not used."
       }
     },
     {

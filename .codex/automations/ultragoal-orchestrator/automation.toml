@@ -8,8 +8,8 @@ source_root = "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
 branch = "codex/gate92-product-fitness-telemetry"
 lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
-created_from_parent_commit = "67eb340862b705cdce0ce237745289841a3e34a5"
-created_from_package_digest = "sha256:225a334aa4102bdc1c82da35f27d51326b239b0c9bc9a997d6db3fd93d7918c0"
+created_from_parent_commit = "5f9dd46700ebc3f01fb8b6911ff877624fe5cec3"
+created_from_package_digest = "sha256:fe3ca18ca3291b668f25d3941d7c099ba4b52dce4a26b5d91d0a41c1f202be2a"
 
 [cadence]
 kind = "heartbeat"
@@ -66,7 +66,7 @@ owned_custom_tools = [
 id = "LANE-007"
 thread_id = "019f43cc-6eb5-7b02-9074-4669427ad545"
 worktree = "/Users/terrynoblin/.codex/worktrees/705e/harness-ultragoal-plugin-proposal"
-status = "ready_for_parent_reconciliation"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "command_telemetry_roundtrip_reconciliation",
   "receipt_artifact_dereference_reconciliation"
