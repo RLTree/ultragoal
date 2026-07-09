@@ -97,7 +97,7 @@ active_goal_binding_required_lanes = [
   "LANE-010",
   "LANE-011"
 ]
-steered_lanes_waiting_response = [
+post_steer_active_lanes = [
   "LANE-009"
 ]
 remaining_current_proof_blockers = [
@@ -117,7 +117,7 @@ id = "LANE-009"
 thread_id = "019f44ab-5232-7ab1-8c82-ff547d67375e"
 pending_worktree_id = "local:56d540f0-76fa-4733-b370-167e6e75bfcb"
 worktree = "/Users/terrynoblin/.codex/worktrees/451a/harness-ultragoal-plugin-proposal"
-status = "steered_parent_registry_reconciled_waiting_lane_response"
+status = "active_post_steer_refreshing_proof"
 owned_custom_tools = [
   "product_surface_input_specs",
   "routine_hot_loop_executor"
