@@ -31,6 +31,8 @@ install_surface_claim_ceiling = "unsupported_without_same_surface_receipts"
 default = "read_only"
 allowed_actions = [
   "send_one_steer_message_within_existing_scope",
+  "send_missing_objective_row_steer_to_lane_owner",
+  "send_reviewer_packet_to_lane_owner",
   "record_tick_receipt",
   "update_automation_cadence_when_contract_allows"
 ]
@@ -50,9 +52,26 @@ automation_thread = "validation_artifacts/automation/ultragoal-orchestrator-tick
 changed_receipts = "validation_artifacts/"
 
 [output_contract]
-allowed_statuses = ["DONT_NOTIFY", "STEER", "ESCALATE"]
+allowed_statuses = ["DONT_NOTIFY", "STEER", "MERGE_READY", "BLOCKED", "ESCALATE"]
 default_status = "DONT_NOTIFY"
 material_delta_required_for_notification = true
+
+[lane_objective_packet]
+required_before_lane_work = true
+required_for_send_back_steer = true
+required_sections = [
+  "Objective: one product-behavior sentence beginning with When an agent runs... or When an agent edits...",
+  "Owned authority: exact commands, APIs, source files, manifests, fixtures, schemas, and old surfaces the lane may change",
+  "Forbidden authority: exact paths and claim surfaces the lane must stop before touching",
+  "Behavior rows: one row per product behavior, with pass/partial/blocked state and exact proof",
+  "Positive proof: real current-candidate product run or verified current-input reuse chain",
+  "Negative proof: highest-risk false-pass cases fail closed",
+  "Independent reconciliation: stdout, receipt, source inspection, result/output digest, telemetry, or current-state surface",
+  "Old-surface disposition: removed, routed, or typed compatibility with claim ceiling and sunset",
+  "Reviewer packet: exact files/functions to inspect and adversarial questions to answer",
+  "Parent acceptance: exact reruns and blocker movement expected after merge"
+]
+send_back_rule = "Name missing behavior rows and exact proof gaps. Do not send generic retry requests."
 
 [freshness_policy]
 max_tick_age_minutes = 45

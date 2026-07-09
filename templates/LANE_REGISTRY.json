@@ -5,6 +5,9 @@
   "authority": "authoring-template-only; not evidence until generated from actual lanes",
   "required_generation": [
     "Register every active lane exactly once with owned paths, target freshness, actor binding, and teardown rules.",
+    "Every active lane must receive an operational objective packet before work starts or before a send-back steer: product-behavior objective, owned/forbidden authority, behavior rows, positive current-candidate proof or verified current-input reuse, negative false-pass proof, independent reconciliation, old-surface disposition, reviewer packet, parent reruns, blocker movement, claim ceiling, and unsupported claims.",
+    "Each behavior row must be evaluable as pass, partial, or blocked from exact commands, source paths, output fields, and falsification cases; broad prose, tests-only evidence, receipt existence, generated rows, or local JSON are not enough.",
+    "Parent acceptance must reject missing behavior rows, missing product run or verified reuse chain, missing negative falsification, missing old-surface disposition, missing reviewer packet, or unclear claim ceiling.",
     "Terminal lanes require merge/supersession/abandonment evidence and cleanup receipts.",
     "Do not treat status complete as merged."
   ]

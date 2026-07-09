@@ -129,7 +129,47 @@
             "claim ceiling and unsupported claims"
           ],
           "owner_stop_rule": "If any required behavior row is missing, ambiguous, tests-only, or cannot be run on the current candidate, the lane reports partial or blocked instead of complete.",
-          "parent_acceptance_rule": "Parent acceptance requires the acceptance matrix, product run or verified-current-input reuse, negative falsification, source inspection notes, clean worktree, and one source-local/not-readiness commit or explicit no-delta blocker report."
+          "parent_acceptance_rule": "Parent acceptance requires the acceptance matrix, product run or verified-current-input reuse, negative falsification, source inspection notes, clean worktree, and one source-local/not-readiness commit or explicit no-delta blocker report.",
+          "operational_objective_packet_required": {
+            "status": "required_before_lane_work_and_required_for_send_back_steers",
+            "purpose": "Make the lane owner work toward executable product behavior, not a broad goal label or test bundle.",
+            "required_sections": [
+              "Objective: one product-behavior sentence beginning with 'When an agent runs...' or 'When an agent edits...'",
+              "Owned authority: exact commands, APIs, source files, manifests, fixtures, schemas, and old surfaces the lane may change",
+              "Forbidden authority: exact paths and claim surfaces the lane must stop before touching",
+              "Behavior rows: one row per product behavior, with pass/partial/blocked state and exact proof",
+              "Positive proof: at least one real current-candidate product run or verified current-input reuse chain per behavior",
+              "Negative proof: the highest-risk false-pass paths for the changed authority fail closed",
+              "Independent reconciliation: stdout, receipt, source inspection, result/output digest, telemetry, or current-state surface that confirms the product behavior",
+              "Old-surface disposition: removed, routed through new authority, or kept only as a typed compatibility surface with claim ceiling and sunset",
+              "Reviewer packet: exact files/functions to inspect and the adversarial questions the reviewer must answer",
+              "Parent acceptance: exact commands the parent reruns and the blocker movement expected after merge"
+            ],
+            "proof_surface_requirements": [
+              "validation proof never substitutes for product behavior proof",
+              "a speed row must show proof_kind=executed or proof_kind=verified_cache_hit; graph overhead, cache-key construction, generated rows, or local JSON are not speed proof",
+              "a cache row must name current input digests, command argv or source API, version authorities, prior result digest, replayed output digest, equivalence status, and invalidation proof",
+              "a failure-preservation row must prove the product still blocks on the real failure instead of passing through cache, row shape, broad helper output, or receipt existence",
+              "a claim-ceiling row must explicitly list unsupported downstream claims even when validation passes"
+            ],
+            "owner_final_report_shape": [
+              "objective_result",
+              "acceptance_matrix with behavior rows",
+              "commands and exit statuses",
+              "current digest",
+              "commit",
+              "files changed",
+              "positive proof summary",
+              "negative falsification summary",
+              "source inspection notes",
+              "old-surface disposition",
+              "reviewer packet",
+              "remaining blocker movement",
+              "claim ceiling",
+              "unsupported claims"
+            ],
+            "send_back_rule": "If the lane final report lacks any required behavior row, positive product run or verified reuse chain, negative falsification, old-surface disposition, reviewer packet, or claim-ceiling row, the parent sends the lane back with the missing row names instead of accepting the lane."
+          }
         }
       },
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
@@ -1402,7 +1442,7 @@
     },
     {
       "id": "LANE-014",
-      "status": "active_delivery_confirmed",
+      "status": "ready_for_parent_reconciliation",
       "lane_type": "implementation",
       "lane_objective": "Make live_loop_measurement_rust_tests provide fast verified-local source-local repair feedback for the routine hot loop or emit an explicit strict-boundary-only blocker without hiding Rust test failures or using proxy timing.",
       "macro_lane_rationale": "After Lane 013, the real root hot loop moved to first_product_blocker=live_loop_measurement_rust_tests. This is the next bounded custom-tooling prerequisite blocker before cross-lane integration or Gate 92 speed/fitting can resume.",
@@ -1471,7 +1511,7 @@
         "actor_id": "codex-app-worktree-lane-014",
         "thread_or_session_id": "019f451a-93ad-7891-8a69-9542fb885b02",
         "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
-        "actor_status": "active_delivery_confirmed",
+        "actor_status": "ready_for_parent_reconciliation",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T04:38:00Z",
         "delivery_confirmed": true,
@@ -1496,10 +1536,10 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "active_delivery_confirmed",
-        "observed_at": "2026-07-09T04:38:00Z",
-        "finding": "Parent queued Lane 014 through Codex app worktree-thread tooling after Lane 013 moved the full hot-loop blocker to live_loop_measurement_rust_tests, then confirmed thread 019f451a-93ad-7891-8a69-9542fb885b02 and worktree /Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal. The lane reported it had bound the goal, rebuilt the missing local ultragoal binary, matched the parent digest sha256:6749c6bfea70771e894a585fc2a631cda9ecafbcd23f9ce871f6189920194738 before edits, and started scoped source work.",
-        "action": "Poll Lane 014. If it edits forbidden paths, omits acceptance-matrix proof, fails to preserve real Rust test failures, or makes proof-theater claims, steer it immediately and confirm delivery with read_thread."
+        "status": "ready_for_parent_reconciliation",
+        "observed_at": "2026-07-09T05:18:00Z",
+        "finding": "Parent read Lane 014 final report in thread 019f451a-93ad-7891-8a69-9542fb885b02. The lane reports source-local/not-readiness commit 66753c039, clean worktree, current lane digest sha256:8caaeee5208b8e5bb8e1c8bd2beb3ecdf3e1d195842fc43dd8d2e20452cbf9a1, V2 acceptance matrix rows all marked pass, cold executed Rust-test measurement preserving validation while withholding speed, hot verified-local replay with exact argv/result/output digests and executed_test_count=111, and full hot-loop movement past live_loop_measurement_rust_tests to first_product_blocker=none with remaining observability blocker fmt_check. This is merge-ready evidence only, not parent acceptance.",
+        "action": "Parent must inspect Lane 014 diff, cherry-pick or otherwise reconcile commit 66753c039 into root, run the required parent acceptance commands, inspect source/old-surface disposition, then update registry and teardown/archive state. Do not claim Gate 92 speed/fitting or downstream readiness from the lane report alone."
       }
     }
   ],

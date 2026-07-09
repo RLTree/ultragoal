@@ -87,9 +87,37 @@ Action policy:
 - `DONT_NOTIFY` is the default when no material delta exists.
 - `STEER` sends at most one exact corrective message when action is within the
   existing scope.
+- `MERGE_READY` is required when a lane appears ready for parent reconciliation
+  but has not been root-verified yet.
+- `BLOCKED` is required when the lane or parent cannot proceed without a named
+  parent-owned path, product decision, unavailable tool, or external state.
 - `ESCALATE` is required for scope changes, destructive or risky action,
   missing access, contradictory evidence, unresolved user decisions, raw
   private artifact access, or package/cache/install mutation.
+
+Lane objective packets:
+
+- Every new lane and every send-back steer must include an operational objective
+  packet, not broad prose.
+- The packet must name one product behavior in the form "When an agent runs..."
+  or "When an agent edits...", exact owned authority, exact forbidden authority,
+  behavior rows, positive proof, negative false-pass proof, independent
+  reconciliation, old-surface disposition, reviewer packet, parent reruns,
+  expected blocker movement, claim ceiling, and unsupported claims.
+- Each behavior row must be evaluable as `pass`, `partial`, or `blocked` from
+  exact commands, source paths, output fields, and falsification cases.
+- Validation output, tests, receipt existence, generated rows, local JSON,
+  workflow output, or status prose cannot substitute for a real product run or a
+  verified current-input reuse chain with explicit claim limits.
+- A lane is sent back when it omits any behavior row, positive product proof,
+  negative falsification, old-surface disposition, reviewer packet, source
+  inspection notes, parent rerun, or claim-ceiling row. The send-back message
+  names the missing rows and proof gaps.
+- After every lane message, read the recipient thread and confirm that the
+  message landed before recording the steer.
+- A reviewer packet must name the exact files/functions to inspect and the
+  adversarial questions the reviewer must answer. Reviewer output is not useful
+  if it reviews a broad theme instead of the lane-owned product behavior.
 
 Cadence rules:
 
@@ -102,7 +130,7 @@ Cadence rules:
 Output exactly:
 
 ```text
-Status: DONT_NOTIFY | STEER | ESCALATE
+Status: DONT_NOTIFY | STEER | MERGE_READY | BLOCKED | ESCALATE
 Material delta: yes/no
 Evidence inspected:
 - goal/contract cursor:
