@@ -1,18 +1,21 @@
 use crate::audit::observability::specs::{self, CommandObservabilitySpec};
 use crate::cli::observe::query::{self, QueryKind};
 use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::path::Path;
 use std::time::Instant;
 
 mod checks;
+mod expected;
+mod guards;
+mod identity;
+mod live_rows;
 mod process;
 mod receipt;
+mod reconciliation;
+mod row;
 #[cfg(test)]
 mod tests;
-
-const QUERY_ROUNDTRIP_RECEIPT_LABEL: &str = "observe query roundtrip receipt";
-const EXPLAIN_ROUNDTRIP_RECEIPT_LABEL: &str = "observe explain roundtrip receipt";
 
 #[derive(Clone, Debug)]
 pub(super) struct CommandRoundtripRecord {
@@ -126,6 +129,15 @@ where
     );
     let traces = traces_result?;
     let explain = explain_roundtrip(root, spec, run_id, correlation_id, timeout_ms)?;
+    let reconciliation = reconciliation::report_for_spec(
+        &production,
+        &command_receipt,
+        &logs,
+        &metrics,
+        &traces,
+        &explain,
+        spec,
+    );
     let observable = checks::is_command_observable(
         &production,
         &command_receipt,
@@ -133,33 +145,17 @@ where
         &metrics,
         &traces,
         &explain,
-    );
+    ) && reconciliation.is_reconciled();
     Ok(CommandRoundtripRecord::new(
         observable,
-        json!({
-            "command_id": spec.id,
-            "family": spec.family,
-            "operation": spec.operation,
-            "roundtrip_status": roundtrip_status(observable),
-            "production_exit_status": production.exit_code,
-            "production_stdout": production.stdout,
-            "production_stderr": production.stderr,
-            "receipt_path": spec.receipt_rel,
-            "validator_check_id": spec.validator_check_id,
-            "query_roundtrip_paths": checks::query_paths(spec),
-            "explain_roundtrip_path": checks::roundtrip_path(spec, "explain-failure"),
-            "stdout_receipt_same_candidate": checks::same_candidate(&command_receipt, &logs, &metrics, &traces, &explain),
-            "logs_query_status": checks::status(&logs),
-            "metrics_query_status": checks::status(&metrics),
-            "traces_query_status": checks::status(&traces),
-            "explain_status": checks::status(&explain),
-            "claim_name": "source-local command telemetry roundtrip claim",
-            "product_behavior_observed": format!("real ultragoal command run: {}", spec.command_args.join(" ")),
-            "proof_surface": "production stdout, command receipt, logs query receipt, metrics query receipt, traces query receipt, and explain receipt",
-            "independent_reconciliation_surface": "same-candidate run/correlation/digest reconciliation across stdout, receipt, logs, metrics, traces, and explain output",
-            "claim_status": if observable { "supported_source_local" } else { "partial_no_claim" },
-            "claim_impact": spec.claim_impact
-        }),
+        row::build(
+            spec,
+            &production,
+            &command_receipt,
+            [&logs, &metrics, &traces, &explain],
+            &reconciliation,
+            observable,
+        ),
     ))
 }
 
@@ -196,10 +192,7 @@ fn query_roundtrip(
         timeout_ms,
     };
     let value = query::run(root, &command, kind)?;
-    let receipt_rel = command.receipt_rel();
-    let receipt_path =
-        generated_roundtrip_receipt_path(root, &receipt_rel, QUERY_ROUNDTRIP_RECEIPT_LABEL);
-    crate::json_boundary::write_json(&receipt_path, &value)?;
+    receipt::write_generated_roundtrip(root, &command.receipt_rel(), "query", &value)?;
     Ok(value)
 }
 
@@ -226,14 +219,6 @@ fn explain_roundtrip(
         timeout_ms,
     };
     let value = super::explain::run(root, &command)?;
-    let receipt_rel = command.receipt_rel();
-    let receipt_path =
-        generated_roundtrip_receipt_path(root, &receipt_rel, EXPLAIN_ROUNDTRIP_RECEIPT_LABEL);
-    crate::json_boundary::write_json(&receipt_path, &value)?;
+    receipt::write_generated_roundtrip(root, &command.receipt_rel(), "explain", &value)?;
     Ok(value)
-}
-
-fn generated_roundtrip_receipt_path(root: &Path, rel: &Path, label: &str) -> std::path::PathBuf {
-    crate::output_path::claim_artifact_path(root, rel, label)
-        .expect("observe roundtrip receipt paths are generated package-relative paths")
 }

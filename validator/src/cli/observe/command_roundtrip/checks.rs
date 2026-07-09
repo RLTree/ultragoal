@@ -1,4 +1,4 @@
-use super::process::CommandOutput;
+use super::{process::CommandOutput, reconciliation};
 use crate::audit::observability::specs::CommandObservabilitySpec;
 use serde_json::Value;
 use std::path::PathBuf;
@@ -40,11 +40,13 @@ pub(super) fn is_command_observable(
     traces: &Value,
     explain: &Value,
 ) -> bool {
+    let report =
+        reconciliation::report(production, command_receipt, logs, metrics, traces, explain);
     query_passed(logs)
         && query_passed(metrics)
         && query_passed(traces)
         && explain.get("status").and_then(Value::as_str) == Some("pass")
-        && same_candidate(command_receipt, logs, metrics, traces, explain)
+        && report.is_reconciled()
         && production_and_receipt_are_legible(production, command_receipt, logs, traces, explain)
 }
 

@@ -3,6 +3,7 @@ use serde_json::Value;
 use std::path::Path;
 
 mod query_hint;
+mod roundtrip;
 
 pub(super) fn write_and_print(
     root: &Path,
@@ -31,6 +32,9 @@ pub(super) fn write_and_print(
     }
     if is_explain(command.operation) {
         print_explain(value);
+    }
+    if command.operation == ObserveOperation::CommandRoundtrip {
+        roundtrip::print(value);
     }
     if status != "pass" {
         print_failure(command, value, &receipt);

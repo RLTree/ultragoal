@@ -19,9 +19,39 @@ fn command_roundtrip_refuses_observable_status_without_same_candidate_query_roun
         "validation_artifacts/observability/package-digest.json"
     );
     assert_eq!(row["stdout_receipt_same_candidate"], true);
+    assert_eq!(
+        row["receipt_artifact_reconciliation"]["command_identity_reconciled_by"],
+        json!(["spec_command_id", "operation"])
+    );
+    assert!(
+        !row["receipt_artifact_reconciliation"]["compares_fields"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|field| field == "command_id")
+    );
+    assert!(
+        row["receipt_artifact_reconciliation"]["compares_fields"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|field| field == "spec_command_id")
+    );
     assert_eq!(row["logs_query_status"], "fail");
     assert_eq!(row["explain_status"], "fail");
     assert_eq!(row["claim_status"], "partial_no_claim");
+    assert_ne!(row["failure_class"], "none");
+    assert!(
+        row["why_failed"]
+            .as_str()
+            .unwrap()
+            .contains("reconciliation failed")
+    );
+    assert_eq!(
+        row["where_failed"],
+        "observe.command-roundtrip.receipt_artifact_reconciliation"
+    );
+    assert_ne!(row["next_repair"], "none");
     assert_eq!(
         row["claim_name"],
         "source-local command telemetry roundtrip claim"
@@ -62,6 +92,13 @@ fn observe_command_roundtrip_run_fails_closed_for_unknown_and_partial_targets() 
     assert_eq!(receipt["roundtrip_status"], "partial");
     assert_eq!(receipt["target_family"], "package");
     assert_eq!(receipt["claim_status"], "partial_no_claim");
+    assert_ne!(receipt["failure_class"], "none");
+    assert_ne!(
+        receipt["why_failed"],
+        "observability command roundtrip is incomplete"
+    );
+    assert_ne!(receipt["where_failed"], "none");
+    assert_ne!(receipt["next_repair"], "none");
     assert_eq!(receipt["supported_claims"], json!([]));
     assert!(
         receipt["blocked_claims"]
@@ -124,7 +161,13 @@ fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
         "sha256:fit".to_string(),
         vec![super::super::CommandRoundtripRecord::new(
             false,
-            json!({"roundtrip_status": "partial"}),
+            json!({
+                "roundtrip_status": "partial",
+                "failure_class": "logs_local_spool_or_empty_proof",
+                "why_failed": "command roundtrip withheld claim because reconciliation failed",
+                "where_failed": "observe.command-roundtrip.receipt_artifact_reconciliation",
+                "next_repair": "repair the named reconciliation failure class"
+            }),
         )],
         Instant::now(),
     )
@@ -134,6 +177,15 @@ fn command_roundtrip_receipt_keeps_source_local_claim_ceiling() {
     assert_eq!(partial["supported_claims"], json!([]));
     assert_eq!(
         partial["why_failed"],
-        "observability command roundtrip is incomplete"
+        "command roundtrip withheld claim because reconciliation failed"
+    );
+    assert_eq!(partial["failure_class"], "logs_local_spool_or_empty_proof");
+    assert_eq!(
+        partial["where_failed"],
+        "observe.command-roundtrip.receipt_artifact_reconciliation"
+    );
+    assert_eq!(
+        partial["next_repair"],
+        "repair the named reconciliation failure class"
     );
 }

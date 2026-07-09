@@ -6,6 +6,9 @@ use std::time::Instant;
 
 use super::CommandRoundtripRecord;
 
+const QUERY_ROUNDTRIP_RECEIPT_LABEL: &str = "observe query roundtrip receipt";
+const EXPLAIN_ROUNDTRIP_RECEIPT_LABEL: &str = "observe explain roundtrip receipt";
+
 pub(super) fn build(
     root: &Path,
     command: &ObserveCommand,
@@ -20,6 +23,7 @@ pub(super) fn build(
         .collect();
     let status = if observable { "pass" } else { "fail" };
     let failure = (!observable).then_some("observability command roundtrip is incomplete");
+    let first_failure = (!observable).then(|| first_failure_row(&rows)).flatten();
     let mut receipt = super::super::telemetry::base_receipt(root, command, status, failure)?;
     receipt["schema"] = json!("harness-ultragoal.observe-roundtrip-receipt.v1");
     receipt["candidate_digest"] = json!(candidate);
@@ -48,6 +52,16 @@ pub(super) fn build(
     } else {
         "partial_no_claim"
     });
+    if let Some(row) = first_failure {
+        receipt["failure_class"] = row_field(row, "failure_class", "command_roundtrip_partial");
+        receipt["why_failed"] = row_field(row, "why_failed", "command roundtrip is incomplete");
+        receipt["where_failed"] = row_field(row, "where_failed", "observe.command-roundtrip");
+        receipt["next_repair"] = row_field(
+            row,
+            "next_repair",
+            "repair the first partial command roundtrip row and rerun command-roundtrip",
+        );
+    }
     receipt["claim_ceiling"] = json!(
         "source-local observability command roundtrip only; observability product closure remains blocked until every row has same-candidate telemetry reconciliation"
     );
@@ -68,4 +82,38 @@ pub(super) fn build(
         "update_goal_eligibility"
     ]);
     Ok(receipt)
+}
+
+fn first_failure_row(rows: &[Value]) -> Option<&Value> {
+    rows.iter().find(|row| {
+        row.get("roundtrip_status").and_then(Value::as_str) != Some("observable")
+            || row
+                .get("failure_class")
+                .and_then(Value::as_str)
+                .is_some_and(|class| class != "none")
+    })
+}
+
+fn row_field(row: &Value, field: &str, fallback: &str) -> Value {
+    row.get(field)
+        .and_then(Value::as_str)
+        .filter(|value| !value.is_empty() && *value != "none")
+        .map(|value| json!(value))
+        .unwrap_or_else(|| json!(fallback))
+}
+
+pub(super) fn write_generated_roundtrip(
+    root: &Path,
+    rel: &Path,
+    kind: &str,
+    value: &Value,
+) -> Result<(), String> {
+    let label = match kind {
+        "query" => QUERY_ROUNDTRIP_RECEIPT_LABEL,
+        "explain" => EXPLAIN_ROUNDTRIP_RECEIPT_LABEL,
+        _ => "observe command roundtrip receipt",
+    };
+    let path = crate::output_path::claim_artifact_path(root, rel, label)
+        .expect("observe roundtrip receipt paths are generated package-relative paths");
+    crate::json_boundary::write_json(&path, value)
 }

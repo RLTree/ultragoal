@@ -141,3 +141,62 @@ fn stdout_failure_hint_uses_observed_product_operation_for_explain_targets() {
     assert!(query.contains("operation=\"loop.run\""));
     assert!(query.contains("status=\"blocked\""));
 }
+
+#[test]
+fn stdout_command_roundtrip_line_names_product_and_reconciliation_surfaces() {
+    let value = json!({
+        "claim_ceiling": "source-local observability command roundtrip only",
+        "results": [{
+            "command_id": "package digest",
+            "product_behavior_observed": "real ultragoal command run: package digest",
+            "proof_surface": "production stdout, command receipt, logs query receipt, metrics query receipt, traces query receipt, and explain receipt",
+            "independent_reconciliation_surface": "same-candidate run/correlation/digest reconciliation across stdout, receipt, logs, metrics, traces, and explain output",
+            "candidate_digest": "sha256:current",
+            "run_id": "run-command",
+            "correlation_id": "corr-command",
+            "receipt_path": "validation_artifacts/observability/package-digest.json",
+            "artifact_path": "plugin-manifest-draft.json",
+            "failure_class": "none",
+            "why_failed": "none",
+            "where_failed": "none",
+            "next_repair": "none",
+            "claim_status": "supported_source_local"
+        }]
+    });
+    let lines = roundtrip::lines(&value);
+    assert_eq!(lines.len(), 1);
+    let line = &lines[0];
+    for needle in [
+        "command_id=package digest",
+        "product_behavior='real ultragoal command run: package digest'",
+        "proof_surface='production stdout, command receipt",
+        "independent_reconciliation_surface='same-candidate run/correlation/digest",
+        "candidate=sha256:current",
+        "run_id=run-command",
+        "correlation_id=corr-command",
+        "command_receipt=validation_artifacts/observability/package-digest.json",
+        "artifact_path=plugin-manifest-draft.json",
+        "failure_class=none",
+        "where_failed=none",
+        "claim_status=supported_source_local",
+        "claim_ceiling='source-local observability command roundtrip only'",
+    ] {
+        assert!(line.contains(needle), "{line}");
+    }
+}
+
+#[test]
+fn stdout_command_roundtrip_line_reports_each_result_row() {
+    let value = json!({
+        "claim_ceiling": "source-local observability command roundtrip only",
+        "results": [
+            {"command_id": "package digest", "claim_status": "supported_source_local"},
+            {"command_id": "install audit", "claim_status": "partial_no_claim"}
+        ]
+    });
+    let lines = roundtrip::lines(&value);
+    assert_eq!(lines.len(), 2);
+    assert!(lines[0].contains("command_id=package digest"));
+    assert!(lines[1].contains("command_id=install audit"));
+    assert!(lines[1].contains("claim_status=partial_no_claim"));
+}

@@ -2,11 +2,16 @@ use crate::cli::observe::types::{ObserveCommand, ObserveOperation};
 use serde_json::json;
 use std::path::PathBuf;
 
+mod bounds_redaction;
+mod failure_reconciliation;
 mod failures;
+mod identity;
 mod proof;
 mod reconciliation;
 mod runner;
 mod selection;
+mod spec_binding;
+mod tamper;
 
 fn command() -> ObserveCommand {
     ObserveCommand {
