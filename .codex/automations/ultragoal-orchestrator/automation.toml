@@ -43,7 +43,7 @@ forbidden_actions = [
 id = "LANE-005"
 thread_id = "019f43cb-9975-7c93-9b58-53b0a75b2ca2"
 worktree = "/Users/terrynoblin/.codex/worktrees/1133/harness-ultragoal-plugin-proposal"
-status = "ready_for_parent_reconciliation"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "audit_context",
   "verified_incremental_query_graph",

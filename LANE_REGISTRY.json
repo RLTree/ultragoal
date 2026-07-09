@@ -681,7 +681,7 @@
     },
     {
       "id": "LANE-005",
-      "status": "merged_source_local_pending_teardown",
+      "status": "merged_source_local_thread_archived_worktree_tooling_gap",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite AuditContext, package truth snapshotter, verified incremental query graph, and node-local cache authority.",
       "macro_lane_rationale": "These tools own immutable command snapshot truth, affected-set graph legality, package-boundary truth, and verified-local reuse. Gate 92 speed or fitting remains blocked until this authority exists and is proven through current product behavior.",
@@ -697,7 +697,7 @@
         "actor_id": "codex-app-worktree-lane-005",
         "thread_or_session_id": "019f43cb-9975-7c93-9b58-53b0a75b2ca2",
         "pending_worktree_id": "local:e5fbf4a3-2556-47cd-aa8d-b8e1f2521164",
-        "actor_status": "parent_replayed_source_local",
+        "actor_status": "parent_replayed_source_local_thread_archived",
         "validated_at": "2026-07-08T22:26:23Z"
       },
       "goal_binding": {
@@ -757,12 +757,12 @@
         "status": "parent_replayed_source_local",
         "observed_at": "2026-07-09T01:00:00Z",
         "finding": "Parent replayed Lane 005 commit 11bb5680a1543d458a20341932007b6ce2cb19a0 onto root, resolved the active automation package-boundary orphan as orchestration authority, and reran focused source-local proof on digest sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec. Product validation blockers cleared; loop-level observability remains partial and claim ceiling remains source-local custom-tooling prerequisite only.",
-        "action": "Commit the source-local reconciliation, then teardown Lane 005 through the standard accepted-lane protocol before advancing Lane 006."
+        "action": "Lane 005 thread was archived through Codex app tooling. No app worktree-removal tool was exposed by tool discovery, so physical worktree teardown remains a tooling gap; heartbeat must advance to Lane 006 rather than reprocessing Lane 005."
       },
       "teardown": {
         "required": true,
-        "status": "pending_after_root_commit",
-        "reason": "Lane 005 source has been parent-replayed and focused proof has run, but the root reconciliation commit and app-managed teardown/archive step are still pending."
+        "status": "thread_archived_worktree_removal_tool_unavailable",
+        "reason": "Parent committed Lane 005 source-local reconciliation and archived thread 019f43cb-9975-7c93-9b58-53b0a75b2ca2 through Codex app tooling. Tool discovery exposed archive/handoff/fork controls but no app worktree-removal control, so shell worktree removal is intentionally not used."
       }
     },
     {
