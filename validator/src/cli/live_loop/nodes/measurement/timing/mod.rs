@@ -14,6 +14,7 @@ mod explain_tests;
 pub(super) mod failure;
 pub(super) mod receipt;
 pub(super) mod record;
+mod record_fields;
 pub(super) mod repair;
 mod state;
 #[cfg(test)]

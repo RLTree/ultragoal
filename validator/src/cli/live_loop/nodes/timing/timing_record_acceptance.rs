@@ -1,8 +1,11 @@
 use super::{NODE_TIMING_REL, read_current};
 use serde_json::{Value, json};
 
+#[path = "observation_fixture.rs"]
+mod observation_fixture;
 #[path = "test_rows.rs"]
 mod test_rows;
+use self::observation_fixture::write_command_observation;
 use self::test_rows::{current_timing_row, digest, expected_output_digest, expected_result_digest};
 
 #[test]
@@ -127,6 +130,7 @@ fn read_with_patch(patch: Value) -> usize {
         &context,
     );
     let mut row = current_timing_row(candidate, &input, "pass", "none");
+    write_command_observation(&root, &row);
     let object = row.as_object_mut().expect("current timing row object");
     for (key, value) in patch.as_object().expect("patch object") {
         object.insert(key.clone(), value.clone());

@@ -2,6 +2,9 @@
 
 use serde_json::json;
 
+pub(super) const FMT_COMMAND_OBSERVATION_REL: &str =
+    "validation_artifacts/observability/live-loop/commands/fmt_check-command-observation.json";
+
 pub(super) fn current_timing_row(
     candidate: &str,
     input: &str,
@@ -60,7 +63,6 @@ pub(super) fn current_timing_row(
         "where_failed": "loop.measure.fmt_check.canonical_full_command",
         "why_failed": "canonical full command exited nonzero while measuring live-loop node",
         "next_repair": "run cargo fmt and rerun loop measure",
-        "telemetry_reconciliation": {"status": "pass"},
         "affected_set_status": "clean_worktree_no_affected_files"
     });
     insert_derived_fields(
@@ -154,6 +156,13 @@ fn insert_derived_fields(
         }),
     );
     object.insert("observability_failure_class".to_string(), json!("none"));
+    object.insert(
+        "telemetry_reconciliation".to_string(),
+        json!({
+            "status": "pass",
+            "command_observation_receipt": FMT_COMMAND_OBSERVATION_REL
+        }),
+    );
     object.insert(
         "claim_ceiling".to_string(),
         json!(crate::cli::live_loop::nodes::timing::row_authority::SOURCE_LOCAL_CLAIM_CEILING),

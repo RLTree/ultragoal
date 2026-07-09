@@ -34,7 +34,7 @@ pub(crate) fn write_node_timings(
         .collect();
     nodes.extend(rows.into_iter().map(NodeTimingRow::into_value));
     nodes.sort_by(|left, right| text(left, "node_id").cmp(&text(right, "node_id")));
-    let cache_records = replayable_cache_records(&existing, &nodes, tier, cache_mode);
+    let cache_records = replayable_cache_records(root, &existing, &nodes, tier, cache_mode);
     let cache_path = crate::output_path::literal_claim_artifact_path(
         root,
         VALIDATION_CACHE_REL,

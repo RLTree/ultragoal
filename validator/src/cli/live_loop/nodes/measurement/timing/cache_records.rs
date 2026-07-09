@@ -2,8 +2,12 @@ use serde_json::{Map, Value};
 use std::collections::BTreeMap;
 
 use crate::cli::live_loop::nodes::timing::row_authority;
+use std::path::Path;
+
+use super::record_fields::{CACHE_RECORD_FIELDS, TELEMETRY_CACHE_FIELDS};
 
 pub(super) fn replayable_cache_records(
+    root: &Path,
     existing: &Value,
     latest_nodes: &[Value],
     tier: &str,
@@ -14,7 +18,7 @@ pub(super) fn replayable_cache_records(
         .into_iter()
         .chain(latest_nodes.iter())
     {
-        if !is_replayable_cache_record(row, tier, cache_mode) {
+        if !is_replayable_cache_record(root, row, tier, cache_mode) {
             continue;
         }
         if let Some(key) = cache_record_key(row)
@@ -37,7 +41,10 @@ fn cache_row_sources(value: &Value) -> Vec<&Value> {
     rows
 }
 
-fn is_replayable_cache_record(row: &Value, tier: &str, cache_mode: &str) -> bool {
+fn is_replayable_cache_record(root: &Path, row: &Value, tier: &str, cache_mode: &str) -> bool {
+    let Some(digests) = row_authority::verified_local_digests(root, row) else {
+        return false;
+    };
     text(row, "tier") == Some(tier)
         && text(row, "cache_mode") == Some(cache_mode)
         && text(row, "cache_honesty") == Some("pass")
@@ -52,7 +59,7 @@ fn is_replayable_cache_record(row: &Value, tier: &str, cache_mode: &str) -> bool
             text(row, "proof_kind"),
             Some("executed" | "verified_cache_hit")
         )
-        && row_authority::verified_local_digests(row).is_some()
+        && row_authority::proof_kind_is_claim_safe(row, &digests)
         && text(row, "node_id")
             .is_some_and(|node_id| row_authority::rust_test_count_is_claim_safe(row, node_id))
         && row_authority::claim_ceiling_is_source_local(row)
@@ -131,118 +138,6 @@ fn compact_telemetry(value: &Value) -> Option<Value> {
     }
     Some(Value::Object(telemetry))
 }
-
-const CACHE_RECORD_FIELDS: &[&str] = &[
-    "node_id",
-    "surface",
-    "candidate_digest",
-    "tier",
-    "cache_mode",
-    "changed_files_digest",
-    "audit_context_digest",
-    "input_digest",
-    "current_input_digest",
-    "canonical_full_command",
-    "receipt_path",
-    "timing_status",
-    "failure_class",
-    "where_failed",
-    "why_failed",
-    "next_repair",
-    "baseline_duration_ms",
-    "baseline_proof_kind",
-    "baseline_invalidation_proof",
-    "verified_local_duration_ms",
-    "telemetry_reconciliation_duration_ms",
-    "reconciled_command_duration_ms",
-    "product_latency_ms",
-    "speedup_ratio",
-    "required_speedup",
-    "baseline_exit_code",
-    "baseline_launch_error",
-    "baseline_stdout_digest",
-    "baseline_stderr_digest",
-    "baseline_failure",
-    "claim_name",
-    "product_behavior_observed",
-    "proof_surface",
-    "independent_reconciliation_surface",
-    "claim_ceiling",
-    "affected_set_status",
-    "cache_honesty",
-    "timing_source",
-    "claim_impact",
-    "validation_status",
-    "validation_cache_status",
-    "observability_status",
-    "speed_claim_status",
-    "routine_replay_speed_claim_status",
-    "observability_failure_class",
-    "claim_status",
-    "proof_kind",
-    "cache_hit",
-    "cache_key",
-    "graph_overhead_ms",
-    "actual_work_duration_ms",
-    "work_unit_count",
-    "equivalence_status",
-    "invalidation_proof",
-    "telemetry_reconciliation_status",
-    "current_input_digest",
-    "validator_version",
-    "law_version",
-    "schema_version",
-    "fixture_version",
-    "runtime_execution_model",
-    "surface_input_spec_status",
-    "surface_input_spec_node_id",
-    "surface_input_spec_cache_boundary",
-    "validator_authority",
-    "environment_class",
-    "cache_class",
-    "claim_surface",
-    "output_digest_expectation",
-    "verified_local_command",
-    "command_argv",
-    "receipt_paths",
-    "artifact_paths",
-    "queue_depth",
-    "worker_count",
-    "task_count",
-    "execution_class",
-    "exit_status",
-    "verified_local_launch_error",
-    "verified_local_stdout_digest",
-    "verified_local_stderr_digest",
-    "verified_local_output_digest",
-    "verified_local_result_digest",
-    "output_digest",
-    "result_digest",
-    "prior_result_digest",
-    "replayed_output_digest",
-    "cache_equivalence_status",
-];
-
-const TELEMETRY_CACHE_FIELDS: &[&str] = &[
-    "status",
-    "run_id",
-    "correlation_id",
-    "trace_id",
-    "span_id",
-    "command_observation_receipt",
-    "logs_query",
-    "metrics_query",
-    "traces_query",
-    "explain_failure",
-    "cached_reconciliation",
-    "first_failed_roundtrip",
-    "observability_failure_class",
-    "failure_class",
-    "where_failed",
-    "why_failed",
-    "next_repair",
-    "claim_impact",
-];
 
 fn text<'a>(value: &'a Value, key: &str) -> Option<&'a str> {
     value.get(key).and_then(Value::as_str)

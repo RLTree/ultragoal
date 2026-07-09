@@ -2,8 +2,11 @@ use super::{NODE_TIMING_REL, read_current};
 use crate::self_tests::boundaries::workspace_fixtures::temp_root;
 use serde_json::json;
 
+#[path = "observation_fixture.rs"]
+mod observation_fixture;
 #[path = "test_rows.rs"]
 mod test_rows;
+use self::observation_fixture::write_command_observation;
 use self::test_rows::{changed_inputs, current_timing_row, digest, fmt_input};
 
 #[test]
@@ -13,11 +16,13 @@ fn node_timing_reader_accepts_current_candidate_rows_and_rejects_wrong_inputs() 
     let changed = crate::digest::bytes(b"");
     let context = context_digest();
     let input = fmt_input(candidate, &changed, &context);
+    let current_row = current_timing_row(candidate, &input, "pass", "none");
+    write_command_observation(&root, &current_row);
     crate::json_boundary::write_json(
         &root.join(NODE_TIMING_REL),
         &json!({
             "nodes": [
-                current_timing_row(candidate, &input, "pass", "none"),
+                current_row,
                 {
                     "node_id": "build_check",
                     "candidate_digest": "sha256:stale",
@@ -81,6 +86,7 @@ fn node_timing_reader_accepts_prior_candidate_verified_cache_hit_with_current_in
         object.insert("replayed_output_digest".to_string(), json!(output_digest));
         object.insert("cache_equivalence_status".to_string(), json!("pass"));
     }
+    write_command_observation(&root, &row);
     crate::json_boundary::write_json(&root.join(NODE_TIMING_REL), &json!({ "nodes": [row] }))
         .expect("timing artifact");
 
@@ -107,11 +113,13 @@ fn node_timing_reader_preserves_current_failed_measurement_rows() {
     let changed = crate::digest::bytes(b"");
     let context = context_digest();
     let input = fmt_input(candidate, &changed, &context);
+    let failed_row = current_timing_row(candidate, &input, "fail", "canonical_full_command_failed");
+    write_command_observation(&root, &failed_row);
     crate::json_boundary::write_json(
         &root.join(NODE_TIMING_REL),
         &json!({
             "nodes": [
-                current_timing_row(candidate, &input, "fail", "canonical_full_command_failed")
+                failed_row
             ]
         }),
     )
@@ -180,6 +188,7 @@ fn node_timing_reader_rejects_launched_rows_without_baseline_exit_code() {
     let context = context_digest();
     let input = fmt_input(candidate, &changed, &context);
     let mut row = current_timing_row(candidate, &input, "fail", "canonical_full_command_failed");
+    write_command_observation(&root, &row);
     row.as_object_mut()
         .expect("timing row object")
         .remove("baseline_exit_code");

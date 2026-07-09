@@ -115,9 +115,10 @@ pub(crate) fn read_current(
             let where_failed = record_fields::nonempty_text(row, "where_failed")?;
             let why_failed = record_fields::nonempty_text(row, "why_failed")?;
             let next_repair = record_fields::nonempty_text(row, "next_repair")?;
-            let digests = row_authority::verified_local_digests(row)?;
+            let digests = row_authority::verified_local_digests(root, row)?;
             if !row_authority::rust_test_count_is_claim_safe(row, node_id)
                 || !row_authority::claim_ceiling_is_source_local(row)
+                || !row_authority::proof_kind_is_claim_safe(row, &digests)
             {
                 return None;
             }

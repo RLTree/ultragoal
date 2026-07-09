@@ -3,7 +3,7 @@ use crate::cli::live_loop::{
     LiveLoopCommand, nodes::measurement::full_command::FullCommandRun,
     nodes::measurement::observation::query, surfaces::LoopValidationSurface,
 };
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
@@ -51,7 +51,7 @@ pub(super) fn write(
     );
     let command_name = telemetry_command_name(surface.narrow_rerun, &argv);
     let subcommand = argv.iter().skip(1).cloned().collect::<Vec<_>>().join(" ");
-    let observation = crate::cli::observe::telemetry::command_receipt_for_candidate(
+    let mut observation = crate::cli::observe::telemetry::command_receipt_for_candidate(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
             command: &command_name,
@@ -76,9 +76,43 @@ pub(super) fn write(
         },
         candidate.to_string(),
     )?;
+    insert_command_result_authority(&mut observation, actual_work);
     let observation = CommandObservation::from_receipt(observation)?;
     write_receipt(root, receipt_path, &observation.value)?;
     Ok(observation)
+}
+
+fn insert_command_result_authority(observation: &mut Value, actual_work: &FullCommandRun) {
+    let output_digest = crate::digest::bytes(
+        format!(
+            "stdout={};stderr={}",
+            actual_work.stdout_digest, actual_work.stderr_digest
+        )
+        .as_bytes(),
+    );
+    let result_digest = crate::digest::bytes(
+        format!(
+            "exit={};launch={};output={output_digest}",
+            actual_work.exit_code, actual_work.launch_error
+        )
+        .as_bytes(),
+    );
+    let authority = json!({
+        "authority": "live_loop_command_observation_actual_work",
+        "exit_status": actual_work.exit_code,
+        "launch_error": actual_work.launch_error,
+        "stdout_digest": actual_work.stdout_digest,
+        "stderr_digest": actual_work.stderr_digest,
+        "output_digest": output_digest,
+        "result_digest": result_digest,
+        "executed_test_count": actual_work.executed_test_count
+    });
+    if let Some(object) = observation.as_object_mut() {
+        object.insert("command_result_authority".to_string(), authority.clone());
+        if let Some(event) = object.get_mut("event").and_then(Value::as_object_mut) {
+            event.insert("command_result_authority".to_string(), authority);
+        }
+    }
 }
 
 fn telemetry_command_name(command_text: &str, argv: &[String]) -> String {
