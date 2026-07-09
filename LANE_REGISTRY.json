@@ -101,6 +101,13 @@
         "next_required_proof": "Cross-lane integration must prove all accepted custom tools run together on one current digest, with remaining hot-loop blockers repaired or explicitly claim-limited, before any Gate 92 speed or fitting work resumes."
       },
       {
+        "id": "build_check_routine_validation_cache",
+        "product_role": "Routine Rust build validation authority that turns the canonical Cargo build command into fast executed or verified-local hot-loop feedback without hiding build failures or substituting proxy timing proof.",
+        "status": "in_progress_lane_013_pending_worktree_setup",
+        "current_evidence": "Parent clean-root hot loop on digest sha256:69b9aee862c87ed5967615a86d33faa9821ea58f6572edf0caff3cd0a4e43be4 moved past fmt_check and line_caps_check, then failed with first_blocker=build_check and first_product_blocker=build_check because the high-frequency node lacks current full-command baseline and verified-local 20x timing proof. Parent queued Lane 013 via Codex app worktree pendingWorktreeId local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d with a falsifiable objective contract.",
+        "next_required_proof": "Lane 013 must prove canonical Cargo build command identity, current-input equivalence, stale/wrong-digest rejection, input-scope mismatch rejection, result/output digest reconciliation, validation-vs-speed-vs-observability separation, and real hot-loop blocker movement before parent acceptance."
+      },
+      {
         "id": "product_semantic_active_surface_inventory",
         "product_role": "Inventory of active package-owned surfaces with typed product roles, duplicate authority detection, aliases, orphans, and no coverage-only wrappers.",
         "status": "implemented_current_source_local",
@@ -1237,6 +1244,51 @@
         "observed_at": "2026-07-09T03:30:14Z",
         "finding": "Parent accepted Lane 012 by replaying commit 1fe2af560 into root as ff1cda903, then closed adversarial reviewer blockers in 9331f6733. The final accepted source aligns line-cap watched inputs with the line-count law, rejects noncanonical command identity from canonical cache authority, and blocks withheld source timing rows from becoming speed-supporting cache hits without explicit routine replay speed authority. Root proof passed package digest, cargo fmt, focused line_caps tests, focused changed_inputs tests, focused timing::state tests, raw line-count scan, strict line-caps, namespace, package inventory, and real loop measure for line_caps_check on digest sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3.",
         "action": "Archive the lane thread if not already archived and keep app worktree-removal gap recorded. Parent must launch or reconcile the next bounded custom-tooling lane with the operationalized objective standard before any Gate 92 speed or fitting claim."
+      }
+    },
+    {
+      "id": "LANE-013",
+      "status": "pending_worktree_setup",
+      "lane_type": "implementation",
+      "lane_objective": "Make build_check provide fast verified-local source-local repair feedback for the routine hot loop without hiding Cargo build failures or promoting proxy proof.",
+      "macro_lane_rationale": "Clean-root hot loop on digest sha256:69b9aee862c87ed5967615a86d33faa9821ea58f6572edf0caff3cd0a4e43be4 now fails on first_blocker=build_check after fmt_check and line_caps_check pass.",
+      "covered_custom_tools": [
+        "build_check_routine_validation_cache"
+      ],
+      "owner": "codex-app-worktree-lane-013",
+      "thread_or_session_id": null,
+      "pending_worktree_id": "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-013",
+        "thread_or_session_id": null,
+        "pending_worktree_id": "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d",
+        "actor_status": "pending_worktree_setup_thread_id_unknown",
+        "goal_binding_required_first_action": true,
+        "validated_at": null,
+        "delivery_confirmed": false,
+        "delivery_confirmation_blocker": "Codex app create_thread returned only pendingWorktreeId; parent must confirm with read_thread after the thread id becomes available."
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "pending_codex_app_worktree",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "41106bca8 Record lane objective proof standard",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/audit/law/authority_surfaces/** without parent approval",
+        "validator/src/cli/observe/** except read-only inspection",
+        "validator/src/cli/current_state/** except read-only inspection",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "parent_orchestrator_state": {
+        "status": "queued_pending_thread_delivery_confirmation",
+        "observed_at": "2026-07-09T03:52:13Z",
+        "finding": "Parent launched Lane 013 through Codex app create_thread with gpt-5.5 medium and a falsifiable build_check contract. The contract names positive product proof, negative falsification targets, validation proof, production proof, source inspection, old-surface retirement/routing, and source-local claim ceiling.",
+        "action": "Confirm the Lane 013 thread id and initial prompt delivery once the Codex app worktree setup completes. If delivery fails or the lane starts without goal binding, steer it immediately."
       }
     }
   ],

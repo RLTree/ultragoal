@@ -102,6 +102,7 @@ accepted_source_local_lanes = [
   "LANE-012"
 ]
 remaining_current_proof_blockers = [
+  "LANE-013 build_check routine validation cache pending worktree setup and delivery confirmation",
   "cross_lane_integration_all_custom_tools"
 ]
 retired_surfaces = [
@@ -162,7 +163,8 @@ lane_order = [
   "LANE-009",
   "LANE-010",
   "LANE-011",
-  "LANE-012"
+  "LANE-012",
+  "LANE-013"
 ]
 do_not_return_dont_notify_when = [
   "any lane is ready_for_parent_reconciliation",
@@ -174,3 +176,14 @@ do_not_return_dont_notify_when = [
 ]
 required_parent_action = "Advance the next dependency-ordered ready lane, or record the exact blocker that prevents advancing it."
 replacement_policy = "As Harness-owned custom tooling replaces older code, commands, helpers, packages, or generated surfaces, the replaced surface must be removed or routed through the custom authority. Compatibility aliases require an external contract, explicit claim ceiling, bypass/overclaim fixtures, and sunset/removal rule."
+
+[[active_lanes]]
+id = "LANE-013"
+thread_id = ""
+pending_worktree_id = "local:5512cfb5-5901-4b77-b0d0-230cb6f18f0d"
+worktree = "pending_codex_app_worktree"
+status = "pending_worktree_setup_delivery_confirmation_required"
+owned_custom_tools = [
+  "build_check_routine_validation_cache"
+]
+objective_standard = "Falsifiable product-behavior contract already sent through create_thread; parent must confirm thread id and prompt delivery before treating the lane as active."
