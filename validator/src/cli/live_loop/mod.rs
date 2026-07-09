@@ -30,10 +30,13 @@ mod tests;
 mod timing_refresh_policy_tests;
 
 use context::AuditContext;
-#[cfg(test)]
-pub(crate) use graph::{fixture_version, law_version, schema_version, validator_version};
+pub(crate) use graph::{
+    fixture_version, law_version, runtime_execution_model, schema_version, surface_input_digest,
+    validator_version, verified_local_cache_key,
+};
 use receipt::loop_receipt;
 pub(crate) use surface_context::validation_surface_context;
+pub(crate) use surfaces::{LoopValidationSurface, SurfaceInputSpec, input_spec_for, surface_by_id};
 
 use crate::scheduler::{SchedulerConfig, TaskClass};
 use serde_json::Value;

@@ -118,6 +118,30 @@ fn line_caps_command_writes_pass_observability_receipt() {
             .iter()
             .any(|item| item.as_str() == Some("line_cap_check"))
     );
+    let cache_records = receipt["cache_records"].as_array().expect("cache records");
+    assert_eq!(cache_records.len(), 1);
+    let cache = &cache_records[0];
+    assert_eq!(cache["node_id"], "line_caps_check");
+    assert_eq!(cache["cache_mode"], "verified-local");
+    assert_eq!(cache["validation_status"], "pass");
+    assert_eq!(cache["validation_cache_status"], "reusable");
+    assert_eq!(cache["proof_kind"], "executed");
+    assert_eq!(cache["cache_hit"], false);
+    assert_eq!(
+        cache["claim_ceiling"],
+        "routine line-cap validation reuse only; no readiness release completion final-packet or update_goal claim"
+    );
+    assert_eq!(
+        cache["surface_input_spec_status"],
+        "surface_input_spec_bound"
+    );
+    assert_eq!(cache["cache_honesty"], "pass");
+    assert!(
+        cache["result_digest"]
+            .as_str()
+            .expect("result digest")
+            .starts_with("sha256:")
+    );
     let absolute_receipt = root.join("target/absolute-line-cap-check.json");
     let absolute_error = crate::command_run::run_with_exit_code(args(
         root.clone(),

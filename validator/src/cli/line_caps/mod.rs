@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 mod claims;
+mod routine_cache;
 mod runtime;
 mod stdout;
 
@@ -41,7 +42,7 @@ pub(crate) fn run(root: &Path, command: &LineCapsCommand) -> Result<i32, String>
     };
     let receipt_rel = command.receipt.to_string_lossy().to_string();
     let why_failed = claims::why_failed(status, &result.failures);
-    let value = crate::cli::observe::telemetry::command_receipt(
+    let mut value = crate::cli::observe::telemetry::command_receipt(
         root,
         crate::cli::observe::telemetry::CommandTelemetry {
             command: "ultragoal line-caps",
@@ -76,6 +77,9 @@ pub(crate) fn run(root: &Path, command: &LineCapsCommand) -> Result<i32, String>
             emit: true,
         },
     )?;
+    if status == "pass" {
+        routine_cache::attach(root, &mut value, elapsed_ms(started))?;
+    }
     write_receipt(root, &command.receipt, &value)?;
     stdout::print(&value);
     Ok(i32::from(status != "pass"))

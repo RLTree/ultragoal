@@ -18,6 +18,8 @@ mod telemetry_reuse;
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
 use fields::{elapsed_ms, node_rows, text, valid_digest};
 
+const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
+
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,
     pub(super) baseline: FullCommandRun,
@@ -36,10 +38,14 @@ impl ReplayStore {
         if command.cache_mode != "verified-local" {
             return Self { values: Vec::new() };
         }
-        let values = [VALIDATION_CACHE_REL, NODE_TIMING_REL]
-            .into_iter()
-            .filter_map(|rel| crate::json_boundary::read_json(&root.join(rel)).ok())
-            .collect();
+        let values = [
+            VALIDATION_CACHE_REL,
+            NODE_TIMING_REL,
+            LINE_CAP_CHECK_RECEIPT_REL,
+        ]
+        .into_iter()
+        .filter_map(|rel| crate::json_boundary::read_json(&root.join(rel)).ok())
+        .collect();
         Self { values }
     }
 }

@@ -6,6 +6,12 @@ pub(super) fn print(value: &Value) {
     }
 }
 
+pub(super) fn rendered_output(value: &Value) -> Vec<u8> {
+    let mut output = contract(value).join("\n");
+    output.push('\n');
+    output.into_bytes()
+}
+
 fn contract(value: &Value) -> Vec<String> {
     let status = text(value, "status");
     let run_id = text(value, "run_id");
