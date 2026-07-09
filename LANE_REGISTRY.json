@@ -94,9 +94,9 @@
       {
         "id": "coverage_lineage_intelligence",
         "product_role": "Coverage lineage layer over llvm-cov output separating strict full-clean coverage proof from routine repair feedback.",
-        "status": "ready_for_parent_reconciliation",
-        "current_evidence": "Lane 011 thread 019f44ac-215b-7100-8a71-d6bb35e43da7 returned MERGE_READY after parent steering. It reports source-local commit 57f5b106f Repair routine coverage lineage authority, clean worktree, digest sha256:a80d90e971ab7a546392613baceddf2ebc58fa9c4f95465a3320df512bc7bee3, focused coverage tests, real routine coverage command proof, fast helper proof, fmt, namespace, line-caps, raw line-cap scan, script syntax, source inspection, strict coverage explicitly not current, and routine-only claim ceiling. Parent verified the lane worktree is clean and the diff touches only owned coverage/script paths.",
-        "next_required_proof": "Parent must inspect and replay or merge commit 57f5b106f in root, rerun integrated coverage routine checks plus namespace and line-cap checks, verify no committed validation_artifacts, preserve strict coverage as not-current unless exact full-clean coverage actually runs, and keep source-local custom-tooling claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 011 commit 57f5b106f into root as 683d73ba9 Accept lane 011 coverage lineage on digest sha256:e10aee032cbe96907bd6c5aab20a57e48a1e423b5efdafdec06361e42c811e79. The replay touched only scripts/check-coverage-fast and validator/src/cli/coverage/**. Focused routine coverage validation passed, full coverage test family passed 13/13, real routine coverage command passed with routine_repair_only_blocks_completion_adjacent_claims, the fast helper wrapper passed through routine mode, script syntax, cargo fmt, namespace, line-caps, raw line-count scan, and direct source inspection passed. Strict coverage remains explicitly not current.",
+        "next_required_proof": "Cross-lane integration must prove coverage lineage consumes accepted input specs, active-surface authority, package truth, fixture scheduling, telemetry reconciliation, and current-state/next-action tooling without strict-boundary substitution before any Gate 92 speed or fitting claim."
       },
       {
         "id": "red_green_tamper_fixture_scheduler",
@@ -1126,7 +1126,7 @@
     },
     {
       "id": "LANE-011",
-      "status": "ready_for_parent_reconciliation_source_commit",
+      "status": "accepted_source_local_commit",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair coverage lineage intelligence that separates strict coverage proof from routine repair feedback.",
       "macro_lane_rationale": "Coverage lineage remains implemented_pending_validation; strict coverage law must stay exact while routine repair feedback gets its own verified-local claim ceiling.",
@@ -1139,7 +1139,7 @@
         "actor_id": "codex-app-worktree-lane-011",
         "thread_or_session_id": "019f44ac-215b-7100-8a71-d6bb35e43da7",
         "pending_worktree_id": "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351",
-        "actor_status": "goal_bound_merge_ready_source_commit",
+        "actor_status": "goal_bound_merge_ready_source_commit_parent_accepted",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1160,10 +1160,10 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation_source_commit",
+        "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T02:31:33Z",
-        "finding": "Lane 011 returned MERGE_READY after corrective steering. Parent verified clean worktree, commit 57f5b106f0df91bf485ba936d195cc08672f2809, and owned-path-only diff across scripts/check-coverage-fast and validator/src/cli/coverage/**. Lane proof reports routine-only production coverage behavior, retired the old fast helper's full-coverage shortcut, and keeps strict coverage explicitly not current.",
-        "action": "Parent must run the pre-merge reconciliation gate: inspect the Lane 011 diff, verify no validation_artifacts are committed, replay or merge the commit in root, rerun integrated routine coverage, fast helper, namespace, line-cap, and focused coverage tests, and preserve source-local custom-tooling claim ceiling."
+        "finding": "Parent accepted Lane 011 by replaying commit 57f5b106f into root as 683d73ba9. The replay touched only owned coverage/script paths and passed focused routine coverage validation, full coverage tests, real routine coverage command, fast helper wrapper, script syntax, cargo fmt, namespace, line-caps, raw line-count scan, and source inspection on digest sha256:e10aee032cbe96907bd6c5aab20a57e48a1e423b5efdafdec06361e42c811e79. Strict coverage is not claimed current.",
+        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
       }
     }
   ],
