@@ -1,5 +1,7 @@
 use super::{changed_path, git_root_matches_requested_root, path_affects_surface};
 
+const MODULAR_CONTRACT_PATH: &str = "docs/ultragoal-contract-2026-07/README.md";
+
 #[test]
 fn changed_path_extracts_status_and_rename_target() {
     assert_eq!(changed_path("   "), None);
@@ -40,6 +42,18 @@ fn changed_inputs_are_surface_local_for_hot_repair_nodes() {
         "docs/namespace-law-exceptions.json",
         "namespace_check"
     ));
+    for path in [
+        "validator/src/cli/live_loop/mod.rs",
+        "Cargo.toml",
+        "Cargo.lock",
+        "validator/Cargo.toml",
+        "validator/build.rs",
+        "build.rs",
+        "rust-toolchain.toml",
+        ".cargo/config.toml",
+    ] {
+        assert!(path_affects_surface(path, "build_check"), "{path}");
+    }
     assert!(!path_affects_surface(
         "dev/observability/compose.yml",
         "build_check"
@@ -48,14 +62,13 @@ fn changed_inputs_are_surface_local_for_hot_repair_nodes() {
 
 #[test]
 fn changed_input_rules_reject_unknown_surfaces_and_builder_contract_inputs() {
-    let modular = modular_contract_path();
     for (path, surface) in [
         (
             "validator/src/cli/live_loop/mod.rs",
             "unknown_product_surface",
         ),
-        (modular.as_str(), "package_inventory"),
-        (modular.as_str(), "source_audit"),
+        (MODULAR_CONTRACT_PATH, "package_inventory"),
+        (MODULAR_CONTRACT_PATH, "source_audit"),
     ] {
         assert!(!path_affects_surface(path, surface), "{path} {surface}");
     }
@@ -110,7 +123,7 @@ fn product_input_specs_are_role_specific_and_inventory_closes_unknown_paths() {
         "package_digest"
     ));
     assert!(!path_affects_surface(
-        &modular_contract_path(),
+        MODULAR_CONTRACT_PATH,
         "package_digest"
     ));
     let coverage_receipt = "validation_artifacts/coverage/coverage-receipt.json";
@@ -148,10 +161,6 @@ fn product_input_specs_are_role_specific_and_inventory_closes_unknown_paths() {
             "{surface}"
         );
     }
-}
-
-fn modular_contract_path() -> String {
-    "docs/ultragoal-contract-2026-07/README.md".to_string()
 }
 
 #[test]

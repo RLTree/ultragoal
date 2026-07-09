@@ -11,7 +11,7 @@ use std::time::Instant;
 pub(super) fn cached_verified_local(
     replay_store: &cache_replay::ReplayStore,
     surface: LoopValidationSurface,
-    _candidate: &str,
+    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     observation_mode: ObservationMode,
@@ -24,6 +24,7 @@ pub(super) fn cached_verified_local(
     let mut cached = cache_replay::verified_local_hit_from_store(
         replay_store,
         surface,
+        candidate,
         input_digest,
         command,
         &cache_key,

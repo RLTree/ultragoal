@@ -33,6 +33,17 @@ pub(in crate::cli::live_loop::nodes::measurement::cache_replay) fn valid_digest(
     .then_some(value)
 }
 
+pub(in crate::cli::live_loop::nodes::measurement::cache_replay) fn json_string_array(
+    row: &Value,
+    field: &str,
+) -> Option<Vec<String>> {
+    row.get(field)?
+        .as_array()?
+        .iter()
+        .map(|item| item.as_str().map(ToString::to_string))
+        .collect()
+}
+
 pub(in crate::cli::live_loop::nodes::measurement::cache_replay) fn elapsed_ms(
     started: Instant,
 ) -> u64 {

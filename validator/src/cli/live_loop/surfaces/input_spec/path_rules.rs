@@ -214,7 +214,17 @@ fn is_rust_format_config(path: &str) -> bool {
 }
 
 fn is_rust_build_input(path: &str) -> bool {
-    matches!(path, "Cargo.toml" | "Cargo.lock" | "validator/Cargo.toml")
+    matches!(
+        path,
+        "Cargo.toml"
+            | "Cargo.lock"
+            | "rust-toolchain.toml"
+            | ".cargo/config.toml"
+            | ".cargo/config"
+            | "build.rs"
+            | "validator/Cargo.toml"
+            | "validator/build.rs"
+    )
 }
 
 fn is_json_surface(path: &str) -> bool {

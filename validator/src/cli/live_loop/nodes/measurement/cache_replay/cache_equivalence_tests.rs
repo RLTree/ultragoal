@@ -36,3 +36,71 @@ fn cache_replay_rejects_verified_cache_rows_without_current_input_equivalence() 
 
     std::fs::remove_dir_all(fixture.root).expect("cleanup bad verified cache replay");
 }
+
+#[test]
+fn build_check_replay_requires_canonical_cargo_build_identity() {
+    let fixture = ReplayFixture::build_check();
+    write_timing_row(&fixture.root, timing_row(&fixture));
+    assert!(cache_hit(&fixture, &fixture.input_digest).is_some());
+
+    for bad_row in [
+        timing_row(&fixture).with_value(
+            "canonical_full_command",
+            json!("cargo build --bin ultragoal --quiet"),
+        ),
+        timing_row(&fixture).with_value(
+            "verified_local_command",
+            json!("cargo build --bin ultragoal --quiet"),
+        ),
+        timing_row(&fixture).with_value(
+            "verified_local_command_argv",
+            json!(["cargo", "build", "--bin", "ultragoal", "--quiet"]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!(["cargo", "build", "--bin", "ultragoal", "--quiet"]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!(["cargo", "build", "--offline", "--quiet"]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!(["cargo", "build", "--offline", "--bin", "ultragoal"]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!([
+                "cargo",
+                "check",
+                "--offline",
+                "--bin",
+                "ultragoal",
+                "--quiet"
+            ]),
+        ),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
+    }
+    std::fs::remove_dir_all(fixture.root).expect("cleanup build command identity replay");
+}
+
+#[test]
+fn build_check_replay_rejects_stale_input_result_and_no_execution_rows() {
+    let fixture = ReplayFixture::build_check();
+    for bad_row in [
+        timing_row(&fixture).with_value("input_digest", json!(digest("stale-build-input"))),
+        timing_row(&fixture).with_value("current_input_digest", json!(digest("stale-build-input"))),
+        timing_row(&fixture).with_value("result_digest", json!(digest("wrong-result"))),
+        timing_row(&fixture).with_value("output_digest", json!(digest("wrong-output"))),
+        timing_row(&fixture)
+            .with_value("cache_hit", json!(true))
+            .with_value("proof_kind", json!("executed"))
+            .with_value("work_unit_count", json!(0)),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
+    }
+    std::fs::remove_dir_all(fixture.root).expect("cleanup stale build replay");
+}

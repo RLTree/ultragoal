@@ -140,18 +140,16 @@ fn cache_replay_rejects_cached_reconciliation_without_status() {
 }
 
 #[test]
-fn cache_replay_reuses_same_input_from_prior_candidate() {
-    let fixture = ReplayFixture::new();
+fn cache_replay_rejects_same_input_from_wrong_candidate() {
+    let fixture = ReplayFixture::build_check();
     write_timing_row(
         &fixture.root,
         timing_row(&fixture).with_value("candidate_digest", json!(digest("prior-candidate"))),
     );
 
-    let replay = cache_hit(&fixture, &fixture.input_digest)
-        .expect("same-input prior-candidate cache replay");
-    assert_eq!(
-        replay.invalidation_proof,
-        "cache_key_current_input_digest_command_contract_runtime_model_versions_and_environment_matched"
+    assert!(
+        cache_hit(&fixture, &fixture.input_digest).is_none(),
+        "candidate digest mismatch cannot satisfy verified-local replay"
     );
     std::fs::remove_dir_all(fixture.root).expect("cleanup prior candidate cache replay");
 }

@@ -1,5 +1,6 @@
 use super::super::command_failure::CommandFailureSummary;
 use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
+use super::full_command;
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
@@ -16,7 +17,7 @@ mod fields;
 mod telemetry_reuse;
 
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
-use fields::{elapsed_ms, node_rows, text, valid_digest};
+use fields::{elapsed_ms, json_string_array, node_rows, text, valid_digest};
 
 const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
 
@@ -56,7 +57,7 @@ impl ReplayStore {
 pub(super) fn verified_local_hit(
     root: &Path,
     surface: LoopValidationSurface,
-    _candidate: &str,
+    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     cache_key: &str,
@@ -67,6 +68,7 @@ pub(super) fn verified_local_hit(
     verified_local_hit_from_store(
         &store,
         surface,
+        candidate,
         input_digest,
         command,
         cache_key,
@@ -78,6 +80,7 @@ pub(super) fn verified_local_hit(
 pub(super) fn verified_local_hit_from_store(
     store: &ReplayStore,
     surface: LoopValidationSurface,
+    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     cache_key: &str,
@@ -92,6 +95,7 @@ pub(super) fn verified_local_hit_from_store(
             replay_from_row(
                 row,
                 surface,
+                candidate,
                 input_digest,
                 command,
                 cache_key,
@@ -105,6 +109,7 @@ pub(super) fn verified_local_hit_from_store(
 fn replay_from_row(
     row: &Value,
     surface: LoopValidationSurface,
+    candidate: &str,
     input_digest: &str,
     command: &LiveLoopCommand,
     cache_key: &str,
@@ -112,6 +117,7 @@ fn replay_from_row(
     observation_mode: ObservationMode,
 ) -> Option<CacheReplay> {
     if text(row, "node_id")? != surface.id
+        || build_candidate_mismatch(row, surface, candidate)
         || text(row, "tier")? != command.tier
         || text(row, "cache_mode")? != command.cache_mode
         || text(row, "input_digest")? != input_digest
@@ -131,6 +137,9 @@ fn replay_from_row(
         return None;
     }
     if !matches_surface_input_spec(row, surface) {
+        return None;
+    }
+    if !matches_command_identity(row, surface) {
         return None;
     }
     let proof_kind = text(row, "proof_kind")?;
@@ -205,6 +214,21 @@ fn replay_from_row(
         routine_replay_speed_claim_status: text(row, "routine_replay_speed_claim_status")
             .map(str::to_string),
     })
+}
+
+fn matches_command_identity(row: &Value, surface: LoopValidationSurface) -> bool {
+    if surface.id != "build_check" {
+        return true;
+    }
+    let expected_argv = full_command::product_command_argv(surface.narrow_rerun);
+    text(row, "verified_local_command")
+        == Some(full_command::product_command_text(surface.narrow_rerun).as_str())
+        && json_string_array(row, "command_argv").as_ref() == Some(&expected_argv)
+        && json_string_array(row, "verified_local_command_argv").as_ref() == Some(&expected_argv)
+}
+
+fn build_candidate_mismatch(row: &Value, surface: LoopValidationSurface, candidate: &str) -> bool {
+    surface.id == "build_check" && text(row, "candidate_digest") != Some(candidate)
 }
 
 fn matches_surface_input_spec(row: &Value, surface: LoopValidationSurface) -> bool {

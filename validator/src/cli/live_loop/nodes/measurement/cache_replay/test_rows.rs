@@ -16,15 +16,23 @@ pub(super) struct ReplayFixture {
 
 impl ReplayFixture {
     pub(super) fn new() -> Self {
+        Self::for_surface("fmt_check")
+    }
+
+    pub(super) fn build_check() -> Self {
+        Self::for_surface("build_check")
+    }
+
+    fn for_surface(surface_id: &'static str) -> Self {
         let root = temp_root("live-loop-cache-replay");
-        let surface = surface_by_id("fmt_check").expect("fmt surface");
+        let surface = surface_by_id(surface_id).expect("replay fixture surface");
         let command = LiveLoopCommand {
             action: LiveLoopAction::Measure,
             tier: "hot".to_string(),
             cache_mode: "verified-local".to_string(),
             jobs: None,
             receipt: PathBuf::from(NODE_TIMING_REL),
-            node_id: Some("fmt_check".to_string()),
+            node_id: Some(surface_id.to_string()),
             measure_all: false,
         };
         Self {
@@ -62,6 +70,14 @@ pub(super) fn cache_hit_for_observation(
 pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
     let input_spec = crate::cli::live_loop::surfaces::input_spec_for(fixture.surface.id)
         .expect("fixture surface input spec");
+    let command_text =
+        crate::cli::live_loop::nodes::measurement::full_command::product_command_text(
+            fixture.surface.narrow_rerun,
+        );
+    let command_argv =
+        crate::cli::live_loop::nodes::measurement::full_command::product_command_argv(
+            fixture.surface.narrow_rerun,
+        );
     json!({
         "node_id": fixture.surface.id,
         "candidate_digest": fixture.candidate,
@@ -69,7 +85,7 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "cache_mode": "verified-local",
         "input_digest": fixture.input_digest,
         "current_input_digest": fixture.input_digest,
-        "canonical_full_command": "cargo fmt --all --check",
+        "canonical_full_command": fixture.surface.canonical_full_command,
         "proof_kind": "executed",
         "cache_hit": false,
         "cache_key": fixture.cache_key,
@@ -97,9 +113,9 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "graph_overhead_ms": 1,
         "equivalence_status": "executed_current_candidate_not_cache_replay",
         "invalidation_proof": "input_digest_and_candidate_checked",
-        "verified_local_command": "cargo fmt --all --check",
-        "verified_local_command_argv": ["cargo", "fmt", "--all", "--check"],
-        "command_argv": ["cargo", "fmt", "--all", "--check"]
+        "verified_local_command": command_text,
+        "verified_local_command_argv": command_argv.clone(),
+        "command_argv": command_argv
     })
     .with_value("validation_status", json!("pass"))
     .with_value("validation_cache_status", json!("reusable"))
