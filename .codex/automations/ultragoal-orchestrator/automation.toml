@@ -138,10 +138,10 @@ owned_custom_tools = [
 
 [[active_lanes]]
 id = "LANE-012"
-thread_id = "pending"
+thread_id = "019f44d0-12ff-7523-8c56-27a9f702cd44"
 pending_worktree_id = "local:323676a7-63c9-407e-b6e3-68f7a8bae641"
-worktree = "pending Codex app worktree"
-status = "pending_worktree_setup"
+worktree = "/Users/terrynoblin/.codex/worktrees/7a95/harness-ultragoal-plugin-proposal"
+status = "active"
 owned_custom_tools = [
   "line_cap_routine_validation_cache"
 ]
