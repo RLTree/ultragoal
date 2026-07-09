@@ -17,7 +17,7 @@ mod node_guards;
 mod telemetry_reuse;
 
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
-use fields::{elapsed_ms, node_rows, text, valid_digest};
+use fields::{elapsed_ms, expected_result_digest, node_rows, text, valid_digest};
 
 const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
 
@@ -171,8 +171,12 @@ fn replay_from_row(
     {
         return None;
     }
+    let expected_result_digest =
+        expected_result_digest(exit_code, launch_error, &replayed_output_digest);
     let prior_result_digest = valid_digest(text(row, "result_digest")?)?;
-    if text(row, "verified_local_result_digest")? != prior_result_digest {
+    if prior_result_digest != expected_result_digest
+        || text(row, "verified_local_result_digest")? != expected_result_digest
+    {
         return None;
     }
     let cached_telemetry = telemetry_reuse::reconciliation(row)?;

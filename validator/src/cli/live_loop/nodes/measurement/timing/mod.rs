@@ -1,4 +1,6 @@
 #[cfg(test)]
+mod authority_tests;
+#[cfg(test)]
 #[path = "../cache/mod.rs"]
 mod cache;
 mod cache_records;
@@ -17,3 +19,5 @@ mod state;
 #[cfg(test)]
 mod state_tests;
 pub(super) mod verified_work;
+#[cfg(test)]
+mod zero_test_execution_tests;

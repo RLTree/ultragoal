@@ -50,6 +50,10 @@ fn measurement_next_repair_base(
             "run `{}` directly, repair the narrow command behavior, then rerun `target/debug/ultragoal --root . loop measure --node {} --tier hot --cache-mode verified-local`",
             surface.narrow_rerun, surface.id
         ),
+        "verified_local_zero_tests_executed" => format!(
+            "repair `{}` so it executes at least one Rust test before caching or claiming validation, then rerun node `{}`",
+            surface.narrow_rerun, surface.id
+        ),
         "verified_local_work_unit_missing" => format!(
             "execute `{}` or provide verified same-candidate cache equivalence before recomputing the speed row",
             surface.narrow_rerun

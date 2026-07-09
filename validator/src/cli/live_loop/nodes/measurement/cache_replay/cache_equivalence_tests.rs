@@ -148,6 +148,15 @@ fn measurement_rust_tests_replay_rejects_stale_and_mismatched_results() {
         timing_row(&fixture).with_value("result_digest", json!(digest("wrong-result"))),
         timing_row(&fixture).with_value("output_digest", json!(digest("wrong-output"))),
         timing_row(&fixture)
+            .with_value(
+                "result_digest",
+                json!(digest("self-consistent-wrong-result")),
+            )
+            .with_value(
+                "verified_local_result_digest",
+                json!(digest("self-consistent-wrong-result")),
+            ),
+        timing_row(&fixture)
             .with_value("proof_kind", json!("executed"))
             .with_value("cache_hit", json!(true))
             .with_value("work_unit_count", json!(0)),

@@ -17,8 +17,8 @@ impl NodeTimingState {
         verified_local: &VerifiedLocalProof,
         failure_class: &str,
     ) -> Self {
-        let validation_status = validation_status(verified_local);
-        let validation_cache_status = validation_cache_status(verified_local);
+        let validation_status = validation_status(verified_local, failure_class);
+        let validation_cache_status = validation_cache_status(verified_local, failure_class);
         let observability_status = observability_status(verified_local);
         let speed_claim_status = speed_claim_status(
             surface,
@@ -47,9 +47,11 @@ pub(crate) fn timing_status(validation_status: &str, speed_claim_status: &str) -
     }
 }
 
-fn validation_status(verified_local: &VerifiedLocalProof) -> &'static str {
+fn validation_status(verified_local: &VerifiedLocalProof, failure_class: &str) -> &'static str {
     if verified_local.actual_work.launch_error {
         "blocked"
+    } else if failure_class == "verified_local_zero_tests_executed" {
+        "fail"
     } else if verified_local.actual_work.status_success {
         "pass"
     } else {
@@ -57,8 +59,11 @@ fn validation_status(verified_local: &VerifiedLocalProof) -> &'static str {
     }
 }
 
-fn validation_cache_status(verified_local: &VerifiedLocalProof) -> &'static str {
-    if validation_status(verified_local) != "pass" {
+fn validation_cache_status(
+    verified_local: &VerifiedLocalProof,
+    failure_class: &str,
+) -> &'static str {
+    if validation_status(verified_local, failure_class) != "pass" {
         return "not_reusable";
     }
     match verified_local.proof_kind {

@@ -51,3 +51,13 @@ pub(in crate::cli::live_loop::nodes::measurement::cache_replay) fn elapsed_ms(
         .unwrap_or(u64::MAX)
         .max(1)
 }
+
+pub(in crate::cli::live_loop::nodes::measurement::cache_replay) fn expected_result_digest(
+    exit_code: i32,
+    launch_error: bool,
+    output_digest: &str,
+) -> String {
+    crate::digest::bytes(
+        format!("exit={exit_code};launch={launch_error};output={output_digest}").as_bytes(),
+    )
+}

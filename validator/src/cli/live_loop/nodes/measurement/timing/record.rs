@@ -115,7 +115,11 @@ pub(crate) fn node_timing_row(
     let speedup_ratio = baseline.duration_ms / product_latency_ms.max(1);
     let output_digest = derived_fields::output_digest(verified_local);
     let result_digest = derived_fields::result_digest(verified_local, &output_digest);
-    let raw_failure_class = measurement_failure_class(baseline, verified_local, speedup_ratio);
+    let raw_failure_class = surface_specific_failure_class(
+        surface,
+        verified_local,
+        measurement_failure_class(baseline, verified_local, speedup_ratio),
+    );
     let failure_class = claim_bearing_failure_class(surface, raw_failure_class);
     let state = NodeTimingState::from_measurement(surface, verified_local, failure_class);
     let blocks_hot_loop = state.validation_status != "pass"
@@ -221,29 +225,18 @@ fn claim_bearing_failure_class(
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::cli::live_loop::surfaces::surface_by_id;
-
-    #[test]
-    fn measurement_authority_is_derived_from_surface_and_batch_position() {
-        let fmt = surface_by_id("fmt_check").expect("fmt surface");
-        let build = surface_by_id("build_check").expect("build surface");
-
-        let fmt_authority = MeasurementExecutionAuthority::from_measurement_batch(fmt, 3, 1);
-        let build_authority = MeasurementExecutionAuthority::from_measurement_batch(build, 3, 0);
-
-        assert_eq!(fmt_authority.execution_task_class, "pure_read_parallel");
-        assert_eq!(fmt_authority.execution_serial_reason, "none");
-        assert_eq!(fmt_authority.task_count, 3);
-        assert_eq!(fmt_authority.queue_depth, 2);
-        assert_eq!(
-            build_authority.execution_task_class,
-            "shared_authority_write_serial"
-        );
-        let reason = build_authority.execution_serial_reason;
-        assert!(reason.starts_with("writes"));
-        assert_eq!(build_authority.worker_count, 1);
+fn surface_specific_failure_class(
+    surface: LoopValidationSurface,
+    verified_local: &VerifiedLocalProof,
+    failure_class: &'static str,
+) -> &'static str {
+    if surface.id == "live_loop_measurement_rust_tests"
+        && verified_local.proof_kind == "executed"
+        && verified_local.actual_work.status_success
+        && verified_local.actual_work.executed_test_count.unwrap_or(0) == 0
+    {
+        "verified_local_zero_tests_executed"
+    } else {
+        failure_class
     }
 }

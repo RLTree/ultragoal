@@ -116,6 +116,7 @@ fn measurement_where_failed_base(
         "verified_local_command_launch_failed" | "verified_local_command_failed" => {
             "verified_local_command"
         }
+        "verified_local_zero_tests_executed" => "zero_test_validation",
         "verified_local_work_unit_missing" => "work_unit",
         "verified_local_proof_kind_invalid" => "proof_kind",
         "verified_local_cache_equivalence_missing" => "cache_equivalence",
@@ -169,6 +170,10 @@ fn measurement_why_failed_base(baseline: &FullCommandRun, failure_class: &str) -
         }
         "verified_local_command_failed" => {
             "verified-local narrow command exited nonzero, so speed proof is not claimable"
+                .to_string()
+        }
+        "verified_local_zero_tests_executed" => {
+            "verified-local Rust test command exited zero but reported no executed tests"
                 .to_string()
         }
         "verified_local_work_unit_missing" => {
