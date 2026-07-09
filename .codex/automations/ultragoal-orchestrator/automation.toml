@@ -10,8 +10,7 @@ lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
 created_from_parent_commit = "9739144da24f1973a6c29068bf4de4b6e83d9fd4"
 created_from_package_digest = "sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e"
-current_parent_commit = "e0f49981c36b96022e5f303d02f69474dcde19b0"
-current_package_digest = "sha256:9c79d0268078356a89d8424354835f870f844d3e11651a1f8c3ee28fd88527bb"
+live_candidate_policy = "recompute package digest at heartbeat start; do not treat this automation file as package proof or a digest ledger"
 
 [cadence]
 kind = "heartbeat"
