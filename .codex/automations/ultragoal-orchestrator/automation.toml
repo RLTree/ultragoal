@@ -15,6 +15,7 @@ latest_validated_parent_source_commit = "9331f6733"
 latest_validated_parent_source_digest = "sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3"
 lane_objective_standard = "Every new lane must get falsifiable product-behavior objectives with positive proof, negative falsification cases, source inspection, old-surface retirement or routing, parent acceptance reruns, and explicit claim ceiling."
 lane_objective_v2_standard = "Every active custom-tooling lane must carry executable behavior rows: primary positive product behavior, cache/reuse legality, failure preservation, old-surface retirement or routing, and claim-ceiling enforcement. Each row needs exact command/API, input authorities, expected output fields, independent reconciliation, positive proof, negative falsification, source inspection, old-surface disposition, parent rerun, and explicit unsupported claims."
+lane_objective_v3_standard = "Every active send-back and future custom-tooling lane must carry a verification packet with: done_claim, not_claimed, acceptance_table, falsification_table, old_surface_table, reviewer_questions, and parent_rerun_plan. The owner, reviewer, and parent must be able to mark each row pass, partial, or blocked from exact commands, source guards, digests, and claim ceilings."
 lane_objective_packet_standard = "Before lane work or send-back steering, give the owner a packet with: one product-behavior objective, owned and forbidden authority, explicit behavior rows, positive current-candidate product proof or verified current-input reuse, negative false-pass proof, independent reconciliation, old-surface disposition, reviewer packet, parent reruns, remaining blocker movement, and explicit claim ceiling."
 
 [lane_completion_contract]
@@ -100,6 +101,24 @@ lane_objective_v2_rejects = [
   "old helpers, aliases, broad runners, cache paths, generated surfaces, or fallbacks survive without typed product role, route-through proof, claim ceiling, and sunset rule",
   "parent rerun cannot independently observe blocker movement or legal explicit blocker output"
 ]
+lane_objective_v3_required_sections = [
+  "done_claim: one exact source-local product behavior that may be true only if all rows pass",
+  "not_claimed: forbidden downstream claims that remain unsupported even if the lane passes",
+  "acceptance_table: row_id, state, product behavior, command/API, exit status, required fields, proof_kind, result/output digest, independent reconciliation, parent rerun, expected parent observation, claim ceiling",
+  "falsification_table: false-positive risk, why the lane could lie, rejecting test/fixture/command, expected fail-closed signal, source guard function, reviewer question",
+  "old_surface_table: old helpers, aliases, broad runners, generated surfaces, cache paths, and fallbacks removed, routed, or kept with typed compatibility and sunset",
+  "reviewer_questions: exact files/functions and adversarial questions",
+  "parent_rerun_plan: exact commands and expected blocker movement"
+]
+lane_objective_v3_rejects = [
+  "the final report lacks the acceptance table or any row is marked pass without a current-candidate product run, verified current-input reuse, or explicit legal blocker",
+  "the falsification table omits a known false-positive risk for the changed authority",
+  "old surfaces survive without removed/routed/typed-compatibility disposition",
+  "source inspection does not name the functions that enforce the product behavior",
+  "reviewer packet lacks adversarial questions tied to the lane's specific lie surfaces",
+  "parent rerun plan cannot independently reproduce the claimed blocker movement",
+  "unsupported downstream claims are missing or softened"
+]
 operational_objective_packet_required = [
   "Objective: one product-behavior sentence beginning with When an agent runs... or When an agent edits...",
   "Owned authority: exact commands, APIs, source files, manifests, fixtures, schemas, and old surfaces the lane may change",
@@ -113,6 +132,7 @@ operational_objective_packet_required = [
   "Parent acceptance: exact commands the parent reruns and blocker movement expected after merge"
 ]
 send_back_rule = "If a lane final report lacks any required behavior row, positive product run or verified reuse chain, negative falsification, old-surface disposition, reviewer packet, or claim-ceiling row, send it back with the missing row names instead of accepting the lane."
+v3_send_back_rule = "If a lane final report lacks any V3 acceptance-table row, falsification-table row, old-surface disposition, reviewer question, parent rerun command, expected parent observation, or unsupported-claims row, send it back by naming the missing row ids and false-positive risks."
 
 [cadence]
 kind = "heartbeat"
@@ -300,6 +320,8 @@ owned_custom_tools = [
   "live_loop_measurement_rust_tests_routine_validation_cache"
 ]
 objective_standard = "Lane 014 commit 66753c039 was reviewed and sent back. Heartbeat must poll for a new repair commit, not merge 66753c039. Required repairs: recompute expected result digest from accepted replay fields instead of comparing self-consistent row fields, and reject zero-test current execution as product measurement behavior rather than only during replay. Delivery was confirmed in thread item-53 with lane response item-54. Reject zero-test pass, proxy timing, test-failure hiding, generic proof rows, forbidden path edits, and forbidden claims."
+objective_v3_standard = "Lane 014 must report a V3 verification packet before parent acceptance: done_claim, not_claimed, acceptance table, falsification table, old-surface table, reviewer questions, and parent rerun plan. Specific false-positive risks to prove rejected: self-consistent wrong result digest pair, zero-test current execution cached as pass, Rust test failure hidden by cache/row shape, old test-selection bypass surviving, and downstream claim overpromotion from routine reuse."
+objective_v3_delivery = "Confirmed with codex_app.read_thread: Lane 014 received the V3 addendum as userMessage item-77 in thread 019f451a-93ad-7891-8a69-9542fb885b02. Future heartbeat acceptance must reject any Lane 014 report missing the V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, or unsupported-claims row."
 required_behavior_rows = [
   "lane014-primary-hot-loop-node",
   "lane014-rust-test-failure-preservation",

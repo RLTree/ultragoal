@@ -170,6 +170,58 @@
             ],
             "send_back_rule": "If the lane final report lacks any required behavior row, positive product run or verified reuse chain, negative falsification, old-surface disposition, reviewer packet, or claim-ceiling row, the parent sends the lane back with the missing row names instead of accepting the lane."
           }
+        },
+        "lane_objective_v3_verification_packet": {
+          "status": "required_for_active_sendbacks_and_future_custom_tooling_lanes",
+          "purpose": "Convert each lane from broad implementation intent into a verification plan that the owner can execute, the reviewer can attack, and the parent can rerun without inferring missing proof.",
+          "required_packet_sections": [
+            "done_claim: one exact sentence naming the product behavior that may be true if all rows pass",
+            "not_claimed: explicit downstream claims still unsupported even if the lane passes",
+            "acceptance_table: one row per observable behavior with owner evidence and parent evidence",
+            "falsification_table: one row per known false-positive risk with the fixture, test, command, or source inspection that rejects it",
+            "old_surface_table: every old helper, alias, fallback, generated surface, broad runner, cache path, or duplicate authority touched by the lane is removed, routed, or kept only with typed compatibility plus sunset",
+            "reviewer_questions: exact adversarial questions and files/functions the reviewer must inspect",
+            "parent_rerun_plan: exact commands the parent must run and the blocker movement expected after merge"
+          ],
+          "acceptance_table_required_columns": [
+            "row_id",
+            "state: pass | partial | blocked",
+            "product_behavior_observed",
+            "owner_command_or_api",
+            "owner_exit_status",
+            "required_stdout_or_receipt_fields",
+            "proof_kind: executed | verified_cache_hit | explicit_blocker",
+            "result_digest_or_output_digest",
+            "independent_reconciliation_surface",
+            "parent_rerun_command",
+            "expected_parent_observation",
+            "claim_ceiling"
+          ],
+          "falsification_table_required_columns": [
+            "false_positive_risk",
+            "why_this_lane_could_lie",
+            "rejecting_test_fixture_or_command",
+            "expected_fail_closed_signal",
+            "source_guard_function",
+            "parent_reviewer_question"
+          ],
+          "minimum_false_positive_risks": [
+            "stale_or_wrong_digest_accepted",
+            "wrong_command_identity_accepted",
+            "input_scope_mismatch_accepted",
+            "result_or_output_digest_mismatch_accepted",
+            "cache_hit_false_without_execution_accepted",
+            "work_unit_zero_without_verified_reuse_accepted",
+            "validation_result_promoted_to_speed_or_observability_claim",
+            "row_shape_or_generated_output_only_passed",
+            "old_surface_bypass_survived",
+            "forbidden_downstream_claim_supported"
+          ],
+          "pass_rule": "A lane can report pass only when every acceptance row is pass, every applicable falsification risk has fail-closed evidence, old surfaces are retired or routed, the worktree is clean, and the lane has one source-local/not-readiness commit or an explicit no-delta blocker report.",
+          "partial_rule": "Any missing current-candidate product run, missing verified-current-input reuse chain, missing falsification row, missing source inspection, ambiguous old-surface disposition, or missing parent rerun observation makes the lane partial even when tests pass.",
+          "blocked_rule": "Blocked means the lane names a parent-owned path, unavailable app/tool, external state, or product decision that prevents one required row; the report must name the smallest unblock action and must not say complete.",
+          "reviewer_rule": "The reviewer receives the acceptance table, falsification table, changed files, and exact adversarial questions. Reviewer findings are considered against these rows, not against broad lane prose.",
+          "send_back_rule": "Parent sends back any lane whose report lacks the V3 acceptance table, falsification table, old-surface table, reviewer questions, parent rerun plan, or explicit unsupported-claims row."
         }
       },
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
@@ -1451,9 +1503,23 @@
       ],
       "operational_objectives": {
         "status": "active_lane_owner_acceptance_packet",
-        "objective_version": "v2",
+        "objective_version": "v3",
         "parent_live_digest_at_packet": "sha256:5e3e9327c99ff4a8b5034fc3ccb3367d0e58bd13db9c18517d543ff0a6ff1765",
         "product_behavior_objective": "When an agent runs the routine hot loop, the live_loop_measurement_rust_tests node either executes or legally reuses the current-input Rust test validation result and reports exact validation/cache/observability/speed/claim state without hiding Rust test failures.",
+        "done_claim": "Lane 014 may claim only that the live_loop_measurement_rust_tests routine validation node provides source-local repair feedback or an explicit legal blocker without hiding Rust test failures, zero-test executions, digest mismatches, or proxy timing.",
+        "not_claimed": [
+          "Gate 92 closure",
+          "Gate 92 command fitting",
+          "Product Usage Fitness",
+          "Phase 4",
+          "readiness",
+          "release",
+          "completion",
+          "install/cache proof",
+          "final-packet correctness",
+          "registry/reviewer exposure",
+          "update_goal eligibility"
+        ],
         "acceptance_matrix_rows_required": [
           {
             "behavior_id": "lane014-primary-hot-loop-node",
@@ -1502,6 +1568,80 @@
           "highest-risk falsification cases are represented by focused tests, fixtures, or explicit legal blocker output",
           "changed files stay inside owned paths or the lane stops for parent approval",
           "final report includes objective_result, digest, commit, files changed, commands/exits, acceptance matrix, source inspection notes, remaining blockers, claim ceiling, and unsupported claims"
+        ],
+        "acceptance_table_required_columns": [
+          "row_id",
+          "state: pass | partial | blocked",
+          "product_behavior_observed",
+          "owner_command_or_api",
+          "owner_exit_status",
+          "required_stdout_or_receipt_fields",
+          "proof_kind: executed | verified_cache_hit | explicit_blocker",
+          "result_digest_or_output_digest",
+          "independent_reconciliation_surface",
+          "parent_rerun_command",
+          "expected_parent_observation",
+          "claim_ceiling"
+        ],
+        "falsification_table_required_rows": [
+          {
+            "false_positive_risk": "self_consistent_wrong_result_digest_pair_accepted",
+            "why_this_lane_could_lie": "Replay could compare result_digest to verified_local_result_digest without deriving the expected result digest from accepted replay fields.",
+            "rejecting_test_or_fixture": "Focused cache replay negative test mutates both stored result fields to the same wrong digest and expects fail-closed.",
+            "source_guard_expected": "Replay recomputes the expected result digest from accepted exit status, launch-error state, and recomputed output digest, then requires both stored fields to match.",
+            "reviewer_question": "Can a row with matching but wrong result_digest and verified_local_result_digest still replay as valid?"
+          },
+          {
+            "false_positive_risk": "zero_test_current_execution_cached_as_pass",
+            "why_this_lane_could_lie": "A current command exiting 0 with no counted tests could be serialized as validation pass before replay rejects it later.",
+            "rejecting_test_or_fixture": "Focused timing/current-row test proves exit 0 plus executed_test_count None or 0 is validation fail or blocked and not reusable.",
+            "source_guard_expected": "Current timing row construction classifies zero-test execution before cacheability or speed support is computed.",
+            "reviewer_question": "Can a zero-test current execution create a reusable validation pass row?"
+          },
+          {
+            "false_positive_risk": "rust_test_failure_hidden_by_cache_or_row_shape",
+            "why_this_lane_could_lie": "A failing test could be hidden by stale cache, row shape, graph overhead, local JSON, or broad cargo sweep output.",
+            "rejecting_test_or_fixture": "Focused measurement/rust-test tests prove failing exit, cache_hit=false without execution, work_unit=0 without verified reuse, and row-shape-only proof fail closed.",
+            "source_guard_expected": "Failure class and validation/cache/speed statuses preserve the Rust test failure as product blocker.",
+            "reviewer_question": "Does any path turn a failing or unexecuted Rust test command into validation_status=pass or speed_claim_status=supported?"
+          },
+          {
+            "false_positive_risk": "old_test_selection_surface_bypasses_custom_authority",
+            "why_this_lane_could_lie": "A broad cargo sweep, OR-style filter, duplicate helper, or fake parallel runner could bypass impacted-test/test-cache authority.",
+            "rejecting_test_or_fixture": "Source inspection plus existing or new tests reject OR filters, zero-test pass surfaces, and broad-runner bypasses.",
+            "source_guard_expected": "Touched old surfaces are removed or routed through the Harness-owned impacted-test/test-cache authority.",
+            "reviewer_question": "Did the lane preserve any old command-selection path that can still support claims without the new authority?"
+          },
+          {
+            "false_positive_risk": "downstream_claim_overpromoted_from_routine_reuse",
+            "why_this_lane_could_lie": "Routine verified-local reuse could be described as Gate 92, readiness, strict coverage, final packet, install/cache, reviewer, or update_goal proof.",
+            "rejecting_test_or_fixture": "Final output and tests preserve source-local routine claim ceiling and unsupported-claims list even when validation and speed rows pass.",
+            "source_guard_expected": "Claim ceiling is explicit in stdout/receipt/state and forbidden claims remain unsupported.",
+            "reviewer_question": "Does any lane output claim more than source-local custom-tooling prerequisite support?"
+          }
+        ],
+        "old_surface_table_required": [
+          "For every touched broad cargo runner, OR-filter builder, zero-test parser, cache replay helper, generated timing row, local JSON replay path, or duplicate helper, final report must say removed, routed through new authority, or kept with typed compatibility limit and sunset.",
+          "If no old surface was touched, final report must say no old surface touched and name the inspected files/functions that support that statement."
+        ],
+        "reviewer_packet_required": [
+          "Inspect cache replay result digest derivation and self-consistent wrong-pair rejection.",
+          "Inspect current execution zero-test classification before cacheability and speed support.",
+          "Inspect Rust-test failure preservation across validation, cache, observability, and speed status fields.",
+          "Inspect old-surface retirement/routing for broad cargo sweeps, OR filters, and zero-test surfaces.",
+          "Inspect unsupported-claim output and source-local claim ceiling."
+        ],
+        "parent_rerun_plan": [
+          "target/debug/ultragoal --root . package digest",
+          "cargo test --offline live_loop::nodes::measurement --lib --quiet",
+          "cargo test --offline live_loop::rust_tests --lib --quiet",
+          "cargo fmt --all --check",
+          "find validator/src -name '*.rs' -exec wc -l {} + | awk '$2 != \"total\" && $1 > 250 { print }'",
+          "target/debug/ultragoal --root . line-caps check --strict --jobs 8",
+          "target/debug/ultragoal --root . namespace check --strict --jobs 8",
+          "target/debug/ultragoal --root . package inventory",
+          "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local",
+          "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto"
         ]
       },
       "owner": "codex-app-worktree-lane-014",
@@ -1517,7 +1657,9 @@
         "delivery_confirmed": true,
         "delivery_confirmation_evidence": "codex_app.list_threads returned Lane 014 thread 019f451a-93ad-7891-8a69-9542fb885b02 with cwd /Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal, and codex_app.read_thread showed the lane contract as userMessage item-1.",
         "objective_v2_addendum_confirmed": true,
-        "objective_v2_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-37 with the five required V2 behavior rows."
+        "objective_v2_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-37 with the five required V2 behavior rows.",
+        "objective_v3_addendum_confirmed": true,
+        "objective_v3_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-77 with the required V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, unsupported-claims row, and state discipline."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",
@@ -1537,9 +1679,9 @@
       ],
       "parent_orchestrator_state": {
         "status": "sent_back_repair_in_progress",
-        "observed_at": "2026-07-09T05:38:00Z",
+        "observed_at": "2026-07-09T06:20:00Z",
         "finding": "Parent attempted reconciliation of Lane 014 commit 66753c039 on root digest sha256:6cef728194cdc3a15758d4f4fee107484a01b5c3d7645661230313ff7085cb3c. Parent reruns showed focused measurement tests 111/111, rust_tests 5/5, fmt, line-caps, namespace, package inventory, cold node measure preserving validation while failing speed, hot verified-local replay passing, and full hot-loop movement to first_product_blocker=none. Adversarial review then found two acceptance blockers: result digest replay compared self-consistent row fields instead of recomputing the expected result digest from accepted replay fields, and zero-test pass was rejected only during replay rather than as current product measurement behavior. Parent restored the provisional root cherry-pick and sent Lane 014 back with those exact required repairs; codex_app.read_thread confirmed delivery as userMessage item-53 and lane response item-54.",
-        "action": "Poll Lane 014 for a new repair commit. Parent must not merge 66753c039. Acceptance now requires recomputed result-digest validation, current zero-test execution blocking, focused negative tests for both gaps, clean lane worktree, updated final matrix, and fresh parent reruns. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "action": "Poll Lane 014 for a new repair commit. Parent must not merge 66753c039. Acceptance now requires recomputed result-digest validation, current zero-test execution blocking, focused negative tests for both gaps, clean lane worktree, updated V3 verification packet, and fresh parent reruns. The V3 packet was sent and delivery-confirmed as userMessage item-77. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
