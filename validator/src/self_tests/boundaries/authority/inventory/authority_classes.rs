@@ -17,6 +17,8 @@ fn authority_surface_inventory_discovers_required_authority_classes() {
         "plugin-manifest-draft.json",
         "docs/plugin-cohesion-manifest.json",
         ".codex-plugin/plugin.json",
+        ".codex/automations/ultragoal-orchestrator/automation.toml",
+        ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
     ];
     for rel in package_paths {
         let path = root.join(rel);
@@ -116,6 +118,16 @@ fn required_authority_rows(runtime_receipt: &str) -> Vec<(&'static str, &str, bo
             true,
         ),
         ("claim_guard", "validator/src/cli/package/digest.rs", true),
+        (
+            "orchestration_authority",
+            ".codex/automations/ultragoal-orchestrator/automation.toml",
+            true,
+        ),
+        (
+            "orchestration_authority",
+            ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
+            true,
+        ),
         ("runtime_receipt", runtime_receipt, false),
     ]
 }

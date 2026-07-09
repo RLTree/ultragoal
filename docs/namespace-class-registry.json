@@ -135,6 +135,19 @@
       "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
     },
     {
+      "id": "orchestrator-automation-authority",
+      "kind": "orchestration_state",
+      "surface_globs": [
+        ".codex/automations/**"
+      ],
+      "description": "Parent-owned heartbeat automation files bind orchestrator duties, evidence cursors, lane reconciliation actions, and source-local claim ceilings; they cannot substitute for lane production proof, install/cache proof, readiness, release, completion, or update_goal eligibility.",
+      "authority": "orchestrator_automation_contract",
+      "authority_path": ".codex/automations/ultragoal-orchestrator/automation.toml",
+      "maximal_factoring_required": true,
+      "waiver_allowed": false,
+      "claim_ceiling_impact": "classifies_surface_without_raising_claim_ceiling"
+    },
+    {
       "id": "executable-and-local-config-surfaces",
       "kind": "executable_script",
       "surface_globs": [

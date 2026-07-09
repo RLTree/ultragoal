@@ -1,5 +1,6 @@
 use super::{
     LiveLoopAction, LiveLoopCommand,
+    context::{PackageTruthSnapshot, package_digest_baseline_ms, verify_cache_hit},
     receipt::{claim_evaluation, failure_class, telemetry_status, where_failed},
 };
 use serde_json::json;
@@ -87,4 +88,119 @@ fn partial_loop_status_maps_to_schema_valid_telemetry_blocked_status() {
     assert_eq!(telemetry_status("fail"), "fail");
     assert_eq!(telemetry_status("partial"), "blocked");
     assert_eq!(telemetry_status("unknown"), "blocked");
+}
+
+#[test]
+fn cache_hit_verification_fails_stale_or_wrong_digest() {
+    assert_eq!(verify_cache_hit("key-a", "key-a"), "pass");
+    assert_eq!(
+        verify_cache_hit("key-a", "key-b"),
+        "fail_stale_or_wrong_digest_cache_hit"
+    );
+}
+
+#[test]
+fn package_digest_baseline_uses_same_candidate_telemetry_only() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-package-baseline");
+    let receipt_path = root.join("validation_artifacts/observability/package-digest.json");
+    crate::json_boundary::write_json(
+        &receipt_path,
+        &json!({
+            "candidate_digest": "sha256:current",
+            "event": {"duration_ms": 123}
+        }),
+    )
+    .expect("package digest telemetry receipt");
+
+    assert_eq!(
+        package_digest_baseline_ms(&root, "sha256:current"),
+        Some(123)
+    );
+    assert_eq!(package_digest_baseline_ms(&root, "sha256:stale"), None);
+    crate::json_boundary::write_json(
+        &receipt_path,
+        &json!({
+            "candidate_digest": 7,
+            "event": {"duration_ms": 123}
+        }),
+    )
+    .expect("malformed package digest telemetry receipt");
+    assert_eq!(package_digest_baseline_ms(&root, "sha256:current"), None);
+}
+
+#[test]
+fn package_truth_snapshot_excludes_builder_contract_resources() {
+    let root =
+        crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-package-truth");
+    std::fs::create_dir_all(root.join("docs/ultragoal-contract-2026-07")).expect("docs");
+    std::fs::write(root.join("docs/package.md"), "package").expect("package doc");
+    std::fs::write(
+        root.join("docs/ultragoal-contract-2026-07/README.md"),
+        "builder contract",
+    )
+    .expect("builder doc");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({
+            "resources": [
+                "docs/package.md",
+                "validation_artifacts/observability/package-digest.json",
+                "docs/ultragoal-contract-2026-07/README.md"
+            ]
+        }),
+    )
+    .expect("manifest");
+    let digest = crate::package::inventory::package_digest(&root)
+        .expect_err("builder contract listed as resource is rejected");
+    assert!(
+        digest.contains("builder contract resource is not a package resource"),
+        "{digest}"
+    );
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({
+            "resources": [
+                "docs/package.md",
+                "validation_artifacts/observability/package-digest.json"
+            ],
+            "generated_examples": ["docs/ultragoal-contract-2026-07/README.md"]
+        }),
+    )
+    .expect("manifest");
+    let package_digest = crate::digest::bytes(b"package");
+    let snapshot = PackageTruthSnapshot::new(&root, &package_digest);
+    let summary = snapshot.summary();
+    assert_eq!(
+        summary["builder_contract_exclusion_status"],
+        "excluded_from_package_truth"
+    );
+    assert_eq!(summary["package_resource_count"], 1);
+    assert_eq!(summary["builder_contract_resource_count"], 1);
+}
+
+#[test]
+fn package_truth_snapshot_fails_closed_after_package_mutation() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root("live-loop-mutation");
+    std::fs::create_dir_all(root.join("docs")).expect("docs");
+    std::fs::write(root.join("docs/package.md"), "before").expect("package doc");
+    crate::json_boundary::write_json(
+        &root.join("plugin-manifest-draft.json"),
+        &json!({"resources": ["docs/package.md"]}),
+    )
+    .expect("manifest");
+    let digest = crate::package::inventory::package_digest(&root).expect("digest");
+    let snapshot = PackageTruthSnapshot::new(&root, &digest);
+    snapshot
+        .verify_current(&root)
+        .expect("unchanged package truth");
+    std::fs::write(root.join("docs/package.md"), "after").expect("mutate package doc");
+    let err = snapshot
+        .verify_current(&root)
+        .expect_err("mutation after snapshot fails closed");
+    assert!(
+        err.contains("AuditContext package truth snapshot mutated"),
+        "{err}"
+    );
+    assert!(err.contains("fail_closed_start_new_snapshot"), "{err}");
 }

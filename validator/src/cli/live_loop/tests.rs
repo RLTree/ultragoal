@@ -25,6 +25,14 @@ fn live_loop_run_writes_source_local_blocker_receipt() {
     assert_eq!(receipt["schema"], "harness-ultragoal.loop-run-receipt.v1");
     assert_eq!(receipt["cache_mode"], "verified-local");
     assert_eq!(receipt["claim_ceiling"], "source-local loop proof only");
+    assert_eq!(
+        receipt["audit_context"]["package_truth"]["snapshot_authority"],
+        "AuditContext.package_truth_snapshot"
+    );
+    assert_eq!(
+        receipt["audit_context"]["package_truth"]["claim_limit"],
+        "source_package_truth_only_not_install_cache_registry_or_readiness"
+    );
     assert!(receipt["worker_count"].as_u64().unwrap() >= 1);
 }
 

@@ -141,6 +141,7 @@ pub(crate) fn run(root: &Path, command: &LiveLoopCommand) -> Result<i32, String>
     if !timing_refreshes.is_empty() {
         snapshot = loop_snapshot(root, &candidate, command, config);
     }
+    snapshot.context.verify_package_truth_current(root)?;
     crate::json_boundary::write_json(&current_state_path, &snapshot.current_state)?;
     let first_blocker = snapshot.first_blocker.clone();
     let status = blockers::status_for_blockers(&snapshot.first_product_blocker, &first_blocker);

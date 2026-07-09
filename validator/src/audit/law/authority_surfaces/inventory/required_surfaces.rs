@@ -119,6 +119,14 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
     package("package_manifest", ".codex-plugin/plugin.json"),
     package("package_inventory", "plugin-manifest-draft.json"),
     package("package_inventory", "docs/plugin-cohesion-manifest.json"),
+    package(
+        "orchestration_authority",
+        ".codex/automations/ultragoal-orchestrator/automation.toml",
+    ),
+    package(
+        "orchestration_authority",
+        ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
+    ),
     package("setup_retrofit_output", ".codex/setup-worktree-env.sh"),
     package(
         "generated_artifact",

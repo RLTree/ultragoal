@@ -38,9 +38,9 @@
       {
         "id": "audit_context",
         "product_role": "Immutable command snapshot authority for package digest, changed inputs, parsed indexes, law/schema/fixture/validator versions, and shared read-only state.",
-        "status": "in_progress",
-        "current_evidence": "AuditContext source exists and is consumed by live-loop receipt paths, but full parsed-index and digest-once product behavior is not fully proven on the current candidate.",
-        "next_required_proof": "Real current-candidate ultragoal command shows AuditContext owns one immutable snapshot across affected nodes, fails closed on mutation, and reconciles stdout, receipt, source inspection, and typed claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 005 commit 11bb5680a1543d458a20341932007b6ce2cb19a0 onto current root, then ran focused live_loop tests and a real current-candidate `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto`. The loop emitted `current_digest -> AuditContext -> hot_loop_graph -> current_state_downstream_claims`, retained validation results, and reported no product blocker on digest sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec. Observability remains partial and claim ceiling remains source-local custom-tooling only.",
+        "next_required_proof": "Cross-lane integration must prove the immutable snapshot feeds the fixture scheduler, command telemetry reconciliation, current-state, and next-action tools without duplicate authority before any Gate 92 speed or fitting claim."
       },
       {
         "id": "product_surface_input_specs",
@@ -52,16 +52,16 @@
       {
         "id": "verified_incremental_query_graph",
         "product_role": "Query graph that selects legally sufficient affected validation nodes and deterministic dependencies for dirty-tree repair.",
-        "status": "in_progress",
-        "current_evidence": "Live-loop graph modules exist and some graph tests pass, but all high-frequency law nodes and command families are not proven through the graph.",
-        "next_required_proof": "Real current-candidate loop run shows changed inputs, affected nodes, skipped/reused nodes, first blockers, and deterministic output produced by the graph."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 005 and ran real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` on digest sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec. The loop reported changed_file_count=10, affected_node_count=19, unaffected_node_count=2, worker_count=15, queue_depth=21, first_product_blocker=none, and first_observability_blocker=fmt_check. Source-local validation succeeded; observability proof remains partial.",
+        "next_required_proof": "The graph still needs cross-lane integration with fixture scheduling, command telemetry reconciliation, current-state, and next-action tools before Gate 92 speed or fitting can start."
       },
       {
         "id": "node_local_cache_authority",
         "product_role": "Verified-local cache authority that proves current-input equivalence per node without whole-package invalidation theater.",
-        "status": "in_progress",
-        "current_evidence": "Measurement cache replay and input-spec fields exist for selected live-loop nodes, but full node-local cache authority is not proven across required routine nodes.",
-        "next_required_proof": "Real two-edit sequence proves cache hit and miss legality with cache key, input digests, validator/law/schema/fixture versions, result/output digests, equivalence, invalidation proof, and claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Focused live_loop tests passed, including cache equivalence, stale/wrong-digest rejection, partial-observability validation reuse, and proof-shaped row rejection. Real loop output on digest sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec reported reusable validation rows while withholding speed claims where observability was partial.",
+        "next_required_proof": "A later cross-lane run must prove cache hit and miss legality across all required routine nodes and telemetry reconciliation surfaces before any broader speed claim."
       },
       {
         "id": "routine_hot_loop_executor",
@@ -87,9 +87,9 @@
       {
         "id": "package_truth_snapshotter",
         "product_role": "Package-boundary truth snapshotter that computes digest and package inventory once per immutable command snapshot while excluding builder-contract docs from package evidence.",
-        "status": "in_progress",
-        "current_evidence": "Package digest and package inventory surfaces exist, but one-shot snapshot reuse across routine nodes and builder-contract exclusion proof are not fully proven for the custom-tooling program.",
-        "next_required_proof": "Real current-candidate command shows one package truth snapshot consumed by downstream nodes, with mutation detection, package-boundary inputs, inventory reconciliation, and claim ceiling."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 005, fixed active automation package-boundary classification, and reran current package digest, namespace, and package inventory. The Lane 005 focused tests passed package truth snapshot exclusion and mutation fail-closed coverage; current digest is sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec.",
+        "next_required_proof": "Cross-lane integration must prove this snapshot is shared by fixture scheduler, command telemetry, current-state, and next-action tools before Gate 92 speed or fitting work starts."
       },
       {
         "id": "coverage_lineage_intelligence",
@@ -681,7 +681,7 @@
     },
     {
       "id": "LANE-005",
-      "status": "ready_for_parent_reconciliation",
+      "status": "merged_source_local_pending_teardown",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite AuditContext, package truth snapshotter, verified incremental query graph, and node-local cache authority.",
       "macro_lane_rationale": "These tools own immutable command snapshot truth, affected-set graph legality, package-boundary truth, and verified-local reuse. Gate 92 speed or fitting remains blocked until this authority exists and is proven through current product behavior.",
@@ -697,7 +697,7 @@
         "actor_id": "codex-app-worktree-lane-005",
         "thread_or_session_id": "019f43cb-9975-7c93-9b58-53b0a75b2ca2",
         "pending_worktree_id": "local:e5fbf4a3-2556-47cd-aa8d-b8e1f2521164",
-        "actor_status": "completed_waiting_parent_reconciliation",
+        "actor_status": "parent_replayed_source_local",
         "validated_at": "2026-07-08T22:26:23Z"
       },
       "goal_binding": {
@@ -724,7 +724,7 @@
       "current_commit": "11bb5680a1543d458a20341932007b6ce2cb19a0",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
+      "target_head_at_validation": "87fc0d9b47f8d436ae3b28349ec1fe18f00bda57",
       "merge_base_at_validation": "a650a59562725d30ae631da7fc24c151c8e51973",
       "last_heartbeat": "2026-07-08T22:26:23Z",
       "owned_paths": [
@@ -754,15 +754,15 @@
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-08T22:26:23Z",
-        "finding": "Lane 5 reported source-local commit 11bb5680a1543d458a20341932007b6ce2cb19a0 and the worktree is clean. It is based before registry commit 67eb340862b705cdce0ce237745289841a3e34a5, so parent must reconcile against current root before accepting.",
-        "action": "Do not accept without root source inspection, current-root merge/replay, focused validation, and current-candidate ultragoal product proof or verified current-input equivalence."
+        "status": "parent_replayed_source_local",
+        "observed_at": "2026-07-09T01:00:00Z",
+        "finding": "Parent replayed Lane 005 commit 11bb5680a1543d458a20341932007b6ce2cb19a0 onto root, resolved the active automation package-boundary orphan as orchestration authority, and reran focused source-local proof on digest sha256:22429d8913678169ea709f4fcae9dfe14b2768530e8101cf9902885c2abbfeec. Product validation blockers cleared; loop-level observability remains partial and claim ceiling remains source-local custom-tooling prerequisite only.",
+        "action": "Commit the source-local reconciliation, then teardown Lane 005 through the standard accepted-lane protocol before advancing Lane 006."
       },
       "teardown": {
         "required": true,
-        "status": "blocked_until_parent_reconciliation",
-        "reason": "Clean lane commit exists, but root has not inspected, merged, validated, or torn down the worktree."
+        "status": "pending_after_root_commit",
+        "reason": "Lane 005 source has been parent-replayed and focused proof has run, but the root reconciliation commit and app-managed teardown/archive step are still pending."
       }
     },
     {

@@ -24,6 +24,7 @@ pub(crate) fn loop_receipt(
         (status != "pass").then(|| text(&first_blocker, "why_failed", "loop blocker").to_string());
     let runtime = runtime(command, &scheduled, started);
     let changed_inputs = context.changed_input_summary();
+    let package_truth = context.package_truth_summary();
     let receipt_path = command.receipt.to_string_lossy();
     let telemetry_status = telemetry_status(status);
     let telemetry = crate::cli::observe::telemetry::CommandTelemetry {
@@ -74,6 +75,7 @@ pub(crate) fn loop_receipt(
             "changed_files_digest": context.changed_files_digest,
             "input_digest": context.input_digest,
             "typed_context": "AuditContext",
+            "package_truth": package_truth,
             "changed_inputs": changed_inputs
         },
         "duration_ms": observability["event"]["duration_ms"],

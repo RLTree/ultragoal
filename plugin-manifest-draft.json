@@ -3601,6 +3601,8 @@
   "resources": [
     ".cargo/config.toml",
     ".codex-plugin/plugin.json",
+    ".codex/automations/ultragoal-orchestrator/automation.toml",
+    ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
     ".codex/environments/environment.toml",
     ".codex/lane-registry/lane-001-launch-status.json",
     ".codex/lane-registry/lane-002-launch-status.json",
