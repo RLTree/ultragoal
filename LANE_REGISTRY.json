@@ -1036,6 +1036,135 @@
         "status": "thread_archived_worktree_removal_tool_unavailable",
         "reason": "Parent committed Lane 008 source-local reconciliation and archived thread 019f43cc-e0e9-7432-aa7f-2d56ab16242a through Codex app tooling. Tool discovery exposed archive/fork/automation controls but no app worktree-removal control, so shell worktree removal is intentionally not used."
       }
+    },
+    {
+      "id": "LANE-009",
+      "status": "blocked_parent_registry_reconciled_steer_required",
+      "lane_type": "implementation",
+      "lane_objective": "Prove and repair product-surface input specs and routine hot-loop executor for the source-local custom-tooling prerequisite.",
+      "macro_lane_rationale": "Input specs and the routine loop executor are still implemented_pending_validation; Gate 92 speed/fitting remains blocked until these custom tools have real current-candidate product proof.",
+      "covered_custom_tools": [
+        "product_surface_input_specs",
+        "routine_hot_loop_executor"
+      ],
+      "owner": "codex-app-worktree-lane-009",
+      "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-009",
+        "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
+        "pending_worktree_id": "local:56d540f0-76fa-4733-b370-167e6e75bfcb",
+        "actor_status": "goal_bound_blocked_on_stale_lane_registry",
+        "goal_binding_required_first_action": true,
+        "validated_at": "2026-07-09T02:55:00Z"
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/451a/harness-ultragoal-plugin-proposal",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "d668f964f5fb40b2b130b2862af20f8b49644d40",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/audit/namespace/**",
+        "validator/src/audit/law/authority_surfaces/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "validator/src/red/**"
+      ],
+      "parent_orchestrator_state": {
+        "status": "parent_registry_reconciled_after_lane_blocker",
+        "observed_at": "2026-07-09T02:55:00Z",
+        "finding": "Lane 009 is goal-bound and produced source-local routine-loop/input-spec proof, but blocked because its worktree saw an older LANE_REGISTRY.json without LANE-009. Parent reconciled the root registry row with the actual thread/worktree. This is parent-owned bookkeeping, not a lane source failure.",
+        "action": "After parent commits registry reconciliation, send Lane 009 a steering message to rebind to the lane contract, treat the stale worktree registry mismatch as parent-resolved root bookkeeping, and return a merge-ready package or exact remaining source blocker without inventing a proof-only commit."
+      }
+    },
+    {
+      "id": "LANE-010",
+      "status": "active_in_progress_parent_registry_reconciled",
+      "lane_type": "implementation",
+      "lane_objective": "Prove and repair product-semantic active-surface inventory and semantic namespace/symbol authority.",
+      "macro_lane_rationale": "Active-surface and namespace/symbol authority remain implemented_pending_validation; custom tooling must reject duplicate/alias/orphan/goal-work surfaces before downstream Gate 92 work resumes.",
+      "covered_custom_tools": [
+        "product_semantic_active_surface_inventory",
+        "semantic_namespace_symbol_inventory"
+      ],
+      "owner": "codex-app-worktree-lane-010",
+      "thread_or_session_id": "019f44ab-baa5-7c02-b119-ad8d330f195c",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-010",
+        "thread_or_session_id": "019f44ab-baa5-7c02-b119-ad8d330f195c",
+        "pending_worktree_id": "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2",
+        "actor_status": "goal_bound_in_progress",
+        "goal_binding_required_first_action": true,
+        "validated_at": "2026-07-09T02:55:00Z"
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/c283/harness-ultragoal-plugin-proposal",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "d668f964f5fb40b2b130b2862af20f8b49644d40",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/live_loop/**",
+        "validator/src/cli/coverage/**",
+        "validator/src/audit/coverage/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "validator/src/cli/next_action/**"
+      ],
+      "parent_orchestrator_state": {
+        "status": "active_in_progress_parent_registry_reconciled",
+        "observed_at": "2026-07-09T02:55:00Z",
+        "finding": "Lane 010 is goal-bound and actively repairing authority-surface classifiers. Its worktree observed the older registry mapping before this root reconciliation; parent now records the actual LANE-010 thread/worktree and custom-tool ownership.",
+        "action": "Heartbeat must poll for focused validation, product proof, source-local commit, old-surface retirement, and claim ceiling. If the lane blocks on registry staleness, steer it to treat that mismatch as parent-resolved root bookkeeping."
+      }
+    },
+    {
+      "id": "LANE-011",
+      "status": "active_in_progress_parent_registry_reconciled",
+      "lane_type": "implementation",
+      "lane_objective": "Prove and repair coverage lineage intelligence that separates strict coverage proof from routine repair feedback.",
+      "macro_lane_rationale": "Coverage lineage remains implemented_pending_validation; strict coverage law must stay exact while routine repair feedback gets its own verified-local claim ceiling.",
+      "covered_custom_tools": [
+        "coverage_lineage_intelligence"
+      ],
+      "owner": "codex-app-worktree-lane-011",
+      "thread_or_session_id": "019f44ac-215b-7100-8a71-d6bb35e43da7",
+      "actor_binding": {
+        "actor_id": "codex-app-worktree-lane-011",
+        "thread_or_session_id": "019f44ac-215b-7100-8a71-d6bb35e43da7",
+        "pending_worktree_id": "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351",
+        "actor_status": "goal_bound_in_progress",
+        "goal_binding_required_first_action": true,
+        "validated_at": "2026-07-09T02:55:00Z"
+      },
+      "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
+      "workspace": "/Users/terrynoblin/.codex/worktrees/dc47/harness-ultragoal-plugin-proposal",
+      "target_branch": "codex/gate92-product-fitness-telemetry",
+      "target_head_at_launch": "d668f964f5fb40b2b130b2862af20f8b49644d40",
+      "forbidden_paths": [
+        "validation_artifacts/**",
+        "LANE_REGISTRY.json",
+        ".codex/automations/**",
+        "docs/ultragoal-contract-2026-07/**",
+        "validator/src/cli/live_loop/**",
+        "validator/src/audit/namespace/**",
+        "validator/src/audit/law/authority_surfaces/**",
+        "validator/src/cli/observe/**",
+        "validator/src/cli/current_state/**",
+        "install/cache/final-packet/review/archive/registry/app surfaces"
+      ],
+      "parent_orchestrator_state": {
+        "status": "active_in_progress_parent_registry_reconciled",
+        "observed_at": "2026-07-09T02:55:00Z",
+        "finding": "Lane 011 is goal-bound and actively repairing routine coverage lineage. Its worktree observed the older registry mapping before this root reconciliation; parent now records the actual LANE-011 thread/worktree and custom-tool ownership.",
+        "action": "Heartbeat must poll for focused validation, product proof, source-local commit, old-surface retirement, and claim ceiling. If the lane blocks on registry staleness, steer it to treat that mismatch as parent-resolved root bookkeeping."
+      }
     }
   ],
   "root_verification_stages": {

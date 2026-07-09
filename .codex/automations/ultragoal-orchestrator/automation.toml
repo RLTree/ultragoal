@@ -10,6 +10,8 @@ lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
 created_from_parent_commit = "9739144da24f1973a6c29068bf4de4b6e83d9fd4"
 created_from_package_digest = "sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e"
+current_parent_commit = "d668f964f5fb40b2b130b2862af20f8b49644d40"
+current_package_digest = "sha256:617683d2e508cdf41776fdcf7be27adb7aa7de80fb7a5a23ab484ed13a10c988"
 
 [cadence]
 kind = "heartbeat"
@@ -91,6 +93,13 @@ accepted_source_local_lanes = [
   "LANE-007",
   "LANE-008"
 ]
+active_goal_binding_required_lanes = [
+  "LANE-010",
+  "LANE-011"
+]
+blocked_lanes_requiring_steer = [
+  "LANE-009"
+]
 remaining_current_proof_blockers = [
   "product_surface_input_specs",
   "routine_hot_loop_executor",
@@ -103,6 +112,38 @@ retired_surfaces = [
   "observe fit public command alias"
 ]
 
+[[active_lanes]]
+id = "LANE-009"
+thread_id = "019f44ab-5232-7ab1-8c82-ff547d67375e"
+pending_worktree_id = "local:56d540f0-76fa-4733-b370-167e6e75bfcb"
+worktree = "/Users/terrynoblin/.codex/worktrees/451a/harness-ultragoal-plugin-proposal"
+status = "blocked_parent_registry_reconciled_steer_required"
+owned_custom_tools = [
+  "product_surface_input_specs",
+  "routine_hot_loop_executor"
+]
+
+[[active_lanes]]
+id = "LANE-010"
+thread_id = "019f44ab-baa5-7c02-b119-ad8d330f195c"
+pending_worktree_id = "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2"
+worktree = "/Users/terrynoblin/.codex/worktrees/c283/harness-ultragoal-plugin-proposal"
+status = "active_in_progress_parent_registry_reconciled"
+owned_custom_tools = [
+  "product_semantic_active_surface_inventory",
+  "semantic_namespace_symbol_inventory"
+]
+
+[[active_lanes]]
+id = "LANE-011"
+thread_id = "019f44ac-215b-7100-8a71-d6bb35e43da7"
+pending_worktree_id = "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351"
+worktree = "/Users/terrynoblin/.codex/worktrees/dc47/harness-ultragoal-plugin-proposal"
+status = "active_in_progress_parent_registry_reconciled"
+owned_custom_tools = [
+  "coverage_lineage_intelligence"
+]
+
 [reconciliation_policy]
 default_ready_lane_decision = "MERGE_READY"
 must_advance_when_root_clean = true
@@ -111,12 +152,17 @@ lane_order = [
   "LANE-005",
   "LANE-006",
   "LANE-007",
-  "LANE-008"
+  "LANE-008",
+  "LANE-009",
+  "LANE-010",
+  "LANE-011"
 ]
 do_not_return_dont_notify_when = [
   "any lane is ready_for_parent_reconciliation",
+  "any active lane is blocked, idle with no recent progress, missing goal binding, or drifting from its contract",
   "any accepted lane still needs teardown",
   "LANE_REGISTRY.json is stale relative to lane thread/worktree state",
   "the app automation prompt is stale relative to this config"
 ]
 required_parent_action = "Advance the next dependency-ordered ready lane, or record the exact blocker that prevents advancing it."
+replacement_policy = "As Harness-owned custom tooling replaces older code, commands, helpers, packages, or generated surfaces, the replaced surface must be removed or routed through the custom authority. Compatibility aliases require an external contract, explicit claim ceiling, bypass/overclaim fixtures, and sunset/removal rule."
