@@ -94,9 +94,7 @@ accepted_source_local_lanes = [
 ]
 ready_for_parent_reconciliation_lanes = [
   "LANE-009",
-  "LANE-010"
-]
-steered_after_procedural_block_lanes = [
+  "LANE-010",
   "LANE-011"
 ]
 remaining_current_proof_blockers = [
@@ -138,7 +136,7 @@ id = "LANE-011"
 thread_id = "019f44ac-215b-7100-8a71-d6bb35e43da7"
 pending_worktree_id = "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351"
 worktree = "/Users/terrynoblin/.codex/worktrees/dc47/harness-ultragoal-plugin-proposal"
-status = "steered_after_procedural_block"
+status = "ready_for_parent_reconciliation_source_commit"
 owned_custom_tools = [
   "coverage_lineage_intelligence"
 ]
