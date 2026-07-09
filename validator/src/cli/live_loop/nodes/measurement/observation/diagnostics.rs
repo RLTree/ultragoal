@@ -104,6 +104,7 @@ mod tests {
             duration_ms: 17,
             stdout_digest: "sha256:stdout".to_string(),
             stderr_digest: "sha256:stderr".to_string(),
+            executed_test_count: None,
             failure: Default::default(),
         }
     }

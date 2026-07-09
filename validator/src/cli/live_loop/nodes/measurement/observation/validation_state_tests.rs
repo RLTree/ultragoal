@@ -24,6 +24,7 @@ fn actual_work(success: bool) -> FullCommandRun {
         duration_ms: 11,
         stdout_digest: crate::digest::bytes(b"stdout"),
         stderr_digest: crate::digest::bytes(b"stderr"),
+        executed_test_count: None,
         failure: Default::default(),
     }
 }

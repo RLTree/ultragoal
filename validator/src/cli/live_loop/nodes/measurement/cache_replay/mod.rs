@@ -1,6 +1,5 @@
 use super::super::command_failure::CommandFailureSummary;
 use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
-use super::full_command;
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
@@ -14,10 +13,11 @@ use std::time::Instant;
 
 mod acceptance;
 mod fields;
+mod node_guards;
 mod telemetry_reuse;
 
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
-use fields::{elapsed_ms, json_string_array, node_rows, text, valid_digest};
+use fields::{elapsed_ms, node_rows, text, valid_digest};
 
 const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
 
@@ -117,7 +117,7 @@ fn replay_from_row(
     observation_mode: ObservationMode,
 ) -> Option<CacheReplay> {
     if text(row, "node_id")? != surface.id
-        || build_candidate_mismatch(row, surface, candidate)
+        || candidate_mismatch(row, surface, candidate)
         || text(row, "tier")? != command.tier
         || text(row, "cache_mode")? != command.cache_mode
         || text(row, "input_digest")? != input_digest
@@ -139,7 +139,9 @@ fn replay_from_row(
     if !matches_surface_input_spec(row, surface) {
         return None;
     }
-    if !matches_command_identity(row, surface) {
+    if !node_guards::matches_command_identity(row, surface)
+        || !node_guards::matches_node_specific_result(row, surface)
+    {
         return None;
     }
     let proof_kind = text(row, "proof_kind")?;
@@ -193,6 +195,7 @@ fn replay_from_row(
             duration_ms: elapsed_ms(started),
             stdout_digest: stdout_digest.to_string(),
             stderr_digest: stderr_digest.to_string(),
+            executed_test_count: node_guards::executed_test_count(row, surface),
             failure: Default::default(),
         },
         baseline: FullCommandRun {
@@ -202,6 +205,7 @@ fn replay_from_row(
             duration_ms: baseline_duration_ms,
             stdout_digest: baseline_stdout_digest.to_string(),
             stderr_digest: baseline_stderr_digest.to_string(),
+            executed_test_count: None,
             failure: CommandFailureSummary::from_value(row.get("baseline_failure")),
         },
         prior_result_digest: prior_result_digest.to_string(),
@@ -216,19 +220,9 @@ fn replay_from_row(
     })
 }
 
-fn matches_command_identity(row: &Value, surface: LoopValidationSurface) -> bool {
-    if surface.id != "build_check" {
-        return true;
-    }
-    let expected_argv = full_command::product_command_argv(surface.narrow_rerun);
-    text(row, "verified_local_command")
-        == Some(full_command::product_command_text(surface.narrow_rerun).as_str())
-        && json_string_array(row, "command_argv").as_ref() == Some(&expected_argv)
-        && json_string_array(row, "verified_local_command_argv").as_ref() == Some(&expected_argv)
-}
-
-fn build_candidate_mismatch(row: &Value, surface: LoopValidationSurface, candidate: &str) -> bool {
-    surface.id == "build_check" && text(row, "candidate_digest") != Some(candidate)
+fn candidate_mismatch(row: &Value, surface: LoopValidationSurface, candidate: &str) -> bool {
+    node_guards::requires_exact_cargo_identity(surface)
+        && text(row, "candidate_digest") != Some(candidate)
 }
 
 fn matches_surface_input_spec(row: &Value, surface: LoopValidationSurface) -> bool {

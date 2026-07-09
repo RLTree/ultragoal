@@ -87,6 +87,81 @@ fn build_check_replay_requires_canonical_cargo_build_identity() {
 }
 
 #[test]
+fn measurement_rust_tests_replay_requires_canonical_test_identity_and_nonzero_tests() {
+    let fixture = ReplayFixture::measurement_rust_tests();
+    write_timing_row(&fixture.root, timing_row(&fixture));
+    assert!(cache_hit(&fixture, &fixture.input_digest).is_some());
+
+    for bad_row in [
+        timing_row(&fixture).with_value(
+            "canonical_full_command",
+            json!("cargo test --offline live_loop::nodes::measurement --lib"),
+        ),
+        timing_row(&fixture).with_value(
+            "verified_local_command",
+            json!(
+                "cargo test --offline live_loop::nodes::measurement|live_loop::graph --lib --quiet"
+            ),
+        ),
+        timing_row(&fixture).with_value(
+            "verified_local_command_argv",
+            json!([
+                "cargo",
+                "test",
+                "--offline",
+                "live_loop::nodes::measurement|live_loop::graph",
+                "--lib",
+                "--quiet"
+            ]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!(["cargo", "test", "--offline", "--lib", "--quiet"]),
+        ),
+        timing_row(&fixture).with_value(
+            "command_argv",
+            json!([
+                "cargo",
+                "test",
+                "--offline",
+                "live_loop::nodes",
+                "--lib",
+                "--quiet"
+            ]),
+        ),
+        timing_row(&fixture).with_value("verified_local_executed_test_count", json!(0)),
+        timing_row(&fixture).without_key("verified_local_executed_test_count"),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
+    }
+    std::fs::remove_dir_all(fixture.root).expect("cleanup measurement rust test identity replay");
+}
+
+#[test]
+fn measurement_rust_tests_replay_rejects_stale_and_mismatched_results() {
+    let fixture = ReplayFixture::measurement_rust_tests();
+    for bad_row in [
+        timing_row(&fixture).with_value("candidate_digest", json!(digest("prior-candidate"))),
+        timing_row(&fixture).with_value("input_digest", json!(digest("stale-test-input"))),
+        timing_row(&fixture).with_value("current_input_digest", json!(digest("stale-test-input"))),
+        timing_row(&fixture).with_value("result_digest", json!(digest("wrong-result"))),
+        timing_row(&fixture).with_value("output_digest", json!(digest("wrong-output"))),
+        timing_row(&fixture)
+            .with_value("proof_kind", json!("executed"))
+            .with_value("cache_hit", json!(true))
+            .with_value("work_unit_count", json!(0)),
+        timing_row(&fixture)
+            .with_value("exit_status", json!(1))
+            .with_value("validation_status", json!("fail")),
+    ] {
+        write_timing_row(&fixture.root, bad_row);
+        assert!(cache_hit(&fixture, &fixture.input_digest).is_none());
+    }
+    std::fs::remove_dir_all(fixture.root).expect("cleanup stale measurement replay");
+}
+
+#[test]
 fn build_check_replay_rejects_stale_input_result_and_no_execution_rows() {
     let fixture = ReplayFixture::build_check();
     for bad_row in [

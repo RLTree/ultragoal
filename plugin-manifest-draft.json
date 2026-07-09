@@ -4234,6 +4234,7 @@
     "validator/src/cli/live_loop/nodes/measurement/cache_replay/fields.rs",
     "validator/src/cli/live_loop/nodes/measurement/cache_replay/test_rows.rs",
     "validator/src/cli/live_loop/nodes/measurement/cache_replay/tests.rs",
+    "validator/src/cli/live_loop/nodes/measurement/cache_replay/node_guards.rs",
     "validator/src/cli/live_loop/nodes/measurement/cache_replay/telemetry_reuse.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/cache_replay.rs",
     "validator/src/cli/live_loop/nodes/measurement/command/command_receipt_tests.rs",

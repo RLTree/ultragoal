@@ -35,6 +35,7 @@ fn run_surface_command_with_argv(root: &Path, argv: &[String]) -> FullCommandRun
                 stderr_digest: crate::digest::bytes(
                     format!("{runtime_command} launch failed: {err}").as_bytes(),
                 ),
+                executed_test_count: None,
                 failure: CommandFailureSummary::default(),
             };
         }
@@ -47,8 +48,25 @@ fn run_surface_command_with_argv(root: &Path, argv: &[String]) -> FullCommandRun
         duration_ms: elapsed_ms(started),
         stdout_digest: crate::digest::bytes(&output.stdout),
         stderr_digest: crate::digest::bytes(&output.stderr),
+        executed_test_count: executed_test_count(&output.stdout),
         failure,
     }
+}
+
+fn executed_test_count(stdout: &[u8]) -> Option<u64> {
+    let count = String::from_utf8_lossy(stdout)
+        .lines()
+        .filter_map(running_test_count)
+        .sum::<u64>();
+    (count > 0).then_some(count)
+}
+
+fn running_test_count(line: &str) -> Option<u64> {
+    let rest = line.trim().strip_prefix("running ")?;
+    let raw = rest
+        .strip_suffix(" tests")
+        .or_else(|| rest.strip_suffix(" test"))?;
+    raw.parse().ok()
 }
 
 fn nonempty_runtime_argv(argv: &[String]) -> (&String, &[String]) {

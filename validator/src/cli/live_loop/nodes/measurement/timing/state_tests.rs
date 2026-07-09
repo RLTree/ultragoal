@@ -90,6 +90,7 @@ fn proof(update: impl FnOnce(&mut FullCommandRun)) -> VerifiedLocalProof {
         duration_ms: 1,
         stdout_digest: digest("stdout"),
         stderr_digest: digest("stderr"),
+        executed_test_count: None,
         failure: CommandFailureSummary::default(),
     };
     update(&mut actual_work);

@@ -94,6 +94,12 @@ pub(crate) fn insert(
         "verified_local_failure".to_string(),
         json!(verified_local.actual_work.failure.to_value()),
     );
+    if surface.id == "live_loop_measurement_rust_tests" {
+        object.insert(
+            "verified_local_executed_test_count".to_string(),
+            json!(verified_local.actual_work.executed_test_count.unwrap_or(0)),
+        );
+    }
     insert_cache_replay_fields(object, verified_local);
 }
 

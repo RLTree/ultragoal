@@ -124,6 +124,7 @@ fn command_run(
         duration_ms,
         stdout_digest: "sha256:stdout".to_string(),
         stderr_digest: "sha256:stderr".to_string(),
+        executed_test_count: None,
         failure: CommandFailureSummary::default(),
     }
 }

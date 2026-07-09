@@ -76,6 +76,7 @@ fn command_run(duration_ms: u64) -> FullCommandRun {
         duration_ms,
         stdout_digest: digest("stdout"),
         stderr_digest: digest("stderr"),
+        executed_test_count: None,
         failure: CommandFailureSummary::default(),
     }
 }

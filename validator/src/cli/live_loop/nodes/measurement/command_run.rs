@@ -8,5 +8,6 @@ pub(super) struct FullCommandRun {
     pub(super) duration_ms: u64,
     pub(super) stdout_digest: String,
     pub(super) stderr_digest: String,
+    pub(super) executed_test_count: Option<u64>,
     pub(super) failure: CommandFailureSummary,
 }

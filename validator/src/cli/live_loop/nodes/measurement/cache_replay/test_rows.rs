@@ -23,6 +23,10 @@ impl ReplayFixture {
         Self::for_surface("build_check")
     }
 
+    pub(super) fn measurement_rust_tests() -> Self {
+        Self::for_surface("live_loop_measurement_rust_tests")
+    }
+
     fn for_surface(surface_id: &'static str) -> Self {
         let root = temp_root("live-loop-cache-replay");
         let surface = surface_by_id(surface_id).expect("replay fixture surface");
@@ -99,6 +103,7 @@ pub(super) fn timing_row(fixture: &ReplayFixture) -> serde_json::Value {
         "artifact_paths": [NODE_TIMING_REL],
         "verified_local_stdout_digest": stdout_digest(),
         "verified_local_stderr_digest": digest("stderr"),
+        "verified_local_executed_test_count": if fixture.surface.id == "live_loop_measurement_rust_tests" { 1 } else { 0 },
         "output_digest": output_digest(),
         "verified_local_output_digest": output_digest(),
         "result_digest": result_digest(),
