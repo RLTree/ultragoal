@@ -14,6 +14,7 @@ live_candidate_policy = "recompute package digest at heartbeat start; do not tre
 latest_validated_parent_source_commit = "9331f6733"
 latest_validated_parent_source_digest = "sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3"
 lane_objective_standard = "Every new lane must get falsifiable product-behavior objectives with positive proof, negative falsification cases, source inspection, old-surface retirement or routing, parent acceptance reruns, and explicit claim ceiling."
+lane_objective_v2_standard = "Every active custom-tooling lane must carry executable behavior rows: primary positive product behavior, cache/reuse legality, failure preservation, old-surface retirement or routing, and claim-ceiling enforcement. Each row needs exact command/API, input authorities, expected output fields, independent reconciliation, positive proof, negative falsification, source inspection, old-surface disposition, parent rerun, and explicit unsupported claims."
 
 [lane_completion_contract]
 purpose = "Give lane owners yes/no objectives that prove product behavior and expose false positives before parent acceptance."
@@ -89,6 +90,14 @@ final_report_required_fields = [
   "remaining_speed_blocker",
   "claim_ceiling",
   "unsupported_claims"
+]
+lane_objective_v2_rejects = [
+  "any required behavior row is missing or collapsed into prose",
+  "positive proof is tests-only, generated-row-only, local-json-only, or receipt-existence-only",
+  "negative falsification omits the highest-risk lie surface changed by the lane",
+  "source inspection does not name the files/functions that implement the claimed authority",
+  "old helpers, aliases, broad runners, cache paths, generated surfaces, or fallbacks survive without typed product role, route-through proof, claim ceiling, and sunset rule",
+  "parent rerun cannot independently observe blocker movement or legal explicit blocker output"
 ]
 
 [cadence]
@@ -274,4 +283,22 @@ status = "active_delivery_confirmed"
 owned_custom_tools = [
   "live_loop_measurement_rust_tests_routine_validation_cache"
 ]
-objective_standard = "Lane 014 delivered and confirmed through read_thread. Heartbeat must require acceptance-matrix proof for live_loop_measurement_rust_tests, preserve source-local claim ceiling, and reject zero-test pass, proxy timing, test-failure hiding, forbidden path edits, and forbidden claims."
+objective_standard = "Lane 014 delivered and confirmed through read_thread. Heartbeat must require the Lane 014 V2 acceptance matrix: primary node output, Rust-test failure preservation, verified-local reuse, old test-selection surface retirement/routing, and full hot-loop blocker movement. Reject zero-test pass, proxy timing, test-failure hiding, generic proof rows, forbidden path edits, and forbidden claims."
+required_behavior_rows = [
+  "lane014-primary-hot-loop-node",
+  "lane014-rust-test-failure-preservation",
+  "lane014-verified-local-reuse",
+  "lane014-old-test-selection-surface",
+  "lane014-full-hot-loop-blocker-movement"
+]
+parent_acceptance_reruns = [
+  "target/debug/ultragoal --root . package digest",
+  "focused lane-reported tests for measurement/rust-test cache semantics",
+  "cargo fmt --all --check",
+  "raw validator/src line-cap scan",
+  "target/debug/ultragoal --root . line-caps check --strict --jobs 8",
+  "target/debug/ultragoal --root . namespace check --strict --jobs 8",
+  "target/debug/ultragoal --root . package inventory",
+  "target/debug/ultragoal --root . loop measure --node live_loop_measurement_rust_tests --tier hot --cache-mode verified-local",
+  "target/debug/ultragoal --root . loop run --tier hot --cache-mode verified-local --jobs auto"
+]
