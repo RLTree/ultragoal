@@ -4,6 +4,12 @@ pub(super) fn contract_failure(row: &PackageSurfaceRow) -> Option<&'static str> 
     if role::weak_product_role(&row.product_role) {
         return Some("surface_product_role_is_goal_or_path_shape_not_product_behavior");
     }
+    if row.authority_level == "compatibility_alias" && row.compatibility_contract_id.is_none() {
+        return Some("compatibility_alias_missing_external_contract");
+    }
+    if row.authority_level == "compatibility_alias" && row.sunset_condition.is_none() {
+        return Some("compatibility_alias_missing_sunset_removal_rule");
+    }
     if super::row::claim_surfaces(&row.proof_surface).is_empty() {
         return None;
     }
@@ -116,7 +122,17 @@ mod tests {
         );
         assert_eq!(
             super::contract_failure(&row),
-            Some("surface_missing_receipt_or_inventory_reconciliation_binding")
+            Some("compatibility_alias_missing_external_contract")
         );
+
+        row.compatibility_contract_id = Some("legacy-ultragoal-validator-cli".to_string());
+        assert_eq!(
+            super::contract_failure(&row),
+            Some("compatibility_alias_missing_sunset_removal_rule")
+        );
+
+        row.sunset_condition =
+            Some("remove after downstream callers migrate to ultragoal".to_string());
+        assert_eq!(super::contract_failure(&row), None);
     }
 }

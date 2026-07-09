@@ -107,6 +107,12 @@ pub(in crate::audit::law::authority_surfaces::source::raw) fn required_projectio
             "CommandTelemetry",
             "live_loop_hot_repair_feedback",
         ]),
+        "validator/src/cli/live_loop/rust_tests/mod.rs" => Some(&[
+            "ImpactedRustTestsCommand",
+            "source_local_custom_tooling_prerequisite_only",
+            "typed_serial_multi_filter_cargo",
+            "fake_parallel_cargo_contention_rejected",
+        ]),
         _ => None,
     }
 }

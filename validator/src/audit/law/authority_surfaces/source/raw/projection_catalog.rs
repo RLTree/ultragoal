@@ -152,6 +152,12 @@ pub(super) fn required_projection_markers(rel: &str) -> Option<&'static [&'stati
             "CommandObservabilitySpec",
             "spec_driven_observability_command_roundtrip_increment",
         ]),
+        "validator/src/cli/observe/command_roundtrip/row.rs" => Some(&[
+            "CommandObservabilitySpec",
+            "ReconciliationReport",
+            "source-local command telemetry roundtrip claim",
+            "rejects_generated_rows_only",
+        ]),
         "validator/src/cli/product/cohesion.rs" => Some(&[
             "product-cohesion",
             "source_local_product_cohesion_only",

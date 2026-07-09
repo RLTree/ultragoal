@@ -37,6 +37,22 @@ fn raw_authority_scanner_allows_typed_cli_command_path_boundaries() {
         "use std::path::PathBuf;\npub(crate) struct PerformanceCommand { receipt: Option<PathBuf> }\npub(crate) fn parse(raw: &[String]) -> Result<Option<PerformanceCommand>, String> { Ok(None) }\n",
     );
     assert!(parser.is_empty(), "{parser:?}");
+
+    let impacted_rust_test_parser =
+        crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+            "validator/src/cli/live_loop/rust_tests/args.rs",
+            "use std::path::PathBuf;\n\
+             pub(super) struct ImpactedRustTestsCommand { changed_paths: Vec<PathBuf> }\n\
+             pub(super) fn parse(raw: &[String]) -> Result<Option<ImpactedRustTestsCommand>, String> {\n\
+                 let args = raw;\n\
+                 let _ = opt_paths(args, \"--changed\")?;\n\
+                 Err(\"unknown impacted Rust test argument\".to_string())\n\
+             }\n",
+        );
+    assert!(
+        impacted_rust_test_parser.is_empty(),
+        "{impacted_rust_test_parser:?}"
+    );
 }
 
 #[test]

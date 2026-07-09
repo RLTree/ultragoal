@@ -155,3 +155,58 @@ fn raw_authority_scanner_classifies_command_roundtrip_receipt_projection_by_prod
     );
     assert!(projection.is_empty(), "{projection:?}");
 }
+
+#[test]
+fn raw_authority_scanner_classifies_impacted_rust_tests_product_projection() {
+    let projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/live_loop/rust_tests/mod.rs",
+        "use serde_json::{Value,json};\n\
+         pub(crate) struct ImpactedRustTestsCommand;\n\
+         fn receipt() -> Value {\n\
+             json!({\n\
+                 \"claim_ceiling\":\"source_local_custom_tooling_prerequisite_only\",\n\
+                 \"runner\":{\"kind\":\"typed_serial_multi_filter_cargo\",\"fake_parallel_cargo_contention_rejected\":true}\n\
+             })\n\
+         }\n",
+    );
+    assert!(projection.is_empty(), "{projection:?}");
+
+    let generic = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/live_loop/rust_tests/mod.rs",
+        "use serde_json::{Value,json};\nfn receipt() -> Value { json!({\"status\":\"pass\"}) }\n",
+    );
+    assert!(
+        generic
+            .iter()
+            .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+        "{generic:?}"
+    );
+}
+
+#[test]
+fn raw_authority_scanner_classifies_command_roundtrip_row_projection_by_reconciliation_fields() {
+    let projection = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/observe/command_roundtrip/row.rs",
+        "use serde_json::{Value,json};\n\
+         pub struct CommandObservabilitySpec;\n\
+         pub struct ReconciliationReport;\n\
+         fn row() -> Value {\n\
+             json!({\n\
+                 \"claim_name\":\"source-local command telemetry roundtrip claim\",\n\
+                 \"receipt_artifact_reconciliation\":{\"rejects_generated_rows_only\":true}\n\
+             })\n\
+         }\n",
+    );
+    assert!(projection.is_empty(), "{projection:?}");
+
+    let generic = crate::audit::law::authority_surfaces::raw_authority_failures_for_test(
+        "validator/src/cli/observe/command_roundtrip/row.rs",
+        "use serde_json::{Value,json};\nfn row() -> Value { json!({\"status\":\"pass\"}) }\n",
+    );
+    assert!(
+        generic
+            .iter()
+            .any(|failure| failure.contains("raw_downstream_authority_unclassified")),
+        "{generic:?}"
+    );
+}

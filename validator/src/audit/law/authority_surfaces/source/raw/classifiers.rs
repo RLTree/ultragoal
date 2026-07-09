@@ -1,5 +1,6 @@
 pub(super) fn typed_cli_command_boundary_text(rel: &str, text: &str) -> bool {
     typed_argument_parser_boundary(rel, text)
+        || impacted_rust_tests_parser_boundary(rel, text)
         || typed_execution_projection_boundary(rel, text)
         || (rel.starts_with("validator/src/cli/")
             && text.contains("PathBuf")
@@ -17,6 +18,14 @@ fn typed_argument_parser_boundary(rel: &str, text: &str) -> bool {
             || text.contains("CliArtifactPath")
             || text.contains("CliText")
             || text.contains("typed_path("))
+}
+
+fn impacted_rust_tests_parser_boundary(rel: &str, text: &str) -> bool {
+    rel == "validator/src/cli/live_loop/rust_tests/args.rs"
+        && text.contains("ImpactedRustTestsCommand")
+        && text.contains("pub(super) fn parse(raw: &[String])")
+        && text.contains("opt_paths(args, \"--changed\")?")
+        && text.contains("unknown impacted Rust test argument")
 }
 
 fn typed_execution_projection_boundary(rel: &str, text: &str) -> bool {
