@@ -8,8 +8,8 @@ source_root = "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
 branch = "codex/gate92-product-fitness-telemetry"
 lane_registry = "LANE_REGISTRY.json"
 claim_ceiling = "source_local_orchestration_only"
-created_from_parent_commit = "c75b518b781e70df55361e820b5318e34cced69d"
-created_from_package_digest = "sha256:4662e03e923c0330c1db32ae94484d450a872f424a1c3644c199b036c518fa5b"
+created_from_parent_commit = "9739144da24f1973a6c29068bf4de4b6e83d9fd4"
+created_from_package_digest = "sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e"
 
 [cadence]
 kind = "heartbeat"
@@ -76,11 +76,31 @@ owned_custom_tools = [
 id = "LANE-008"
 thread_id = "019f43cc-e0e9-7432-aa7f-2d56ab16242a"
 worktree = "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal"
-status = "blocked_returned_for_repair_compatibility_alias_rerun"
+status = "accepted_archived_pending_app_worktree_removal_tool"
 owned_custom_tools = [
   "current_state_read_model",
   "ultragoal_next",
   "observe_query_explain_repair_compiler"
+]
+
+[custom_tooling_status]
+overall = "incomplete_do_not_start_gate92_speed_or_fitting"
+accepted_source_local_lanes = [
+  "LANE-005",
+  "LANE-006",
+  "LANE-007",
+  "LANE-008"
+]
+remaining_current_proof_blockers = [
+  "product_surface_input_specs",
+  "routine_hot_loop_executor",
+  "product_semantic_active_surface_inventory",
+  "semantic_namespace_symbol_inventory",
+  "coverage_lineage_intelligence",
+  "cross_lane_integration_all_custom_tools"
+]
+retired_surfaces = [
+  "observe fit public command alias"
 ]
 
 [reconciliation_policy]

@@ -21,9 +21,9 @@
       "claim_ceiling": "source_local_orchestration_only"
     },
     "shared_integration_policy": {
-      "status": "active_blocker_until_parent_reconciliation",
+      "status": "resolved_for_lanes_006_008_active_for_future_lane_reconciliation",
       "owner": "parent-orchestrator",
-      "reason": "Active lanes 006 and 008 need command exposure through shared CLI dispatch/router/help files. Those files are not lane-owned source authority; parent must serialize and reconcile them before accepting either lane.",
+      "reason": "Lanes 006 and 008 required command exposure through shared CLI dispatch/router/help files. Parent serialized and reconciled those edits in root commits c75b518b781e70df55361e820b5318e34cced69d and 9739144da24f1973a6c29068bf4de4b6e83d9fd4. Future lanes touching these paths still require parent reconciliation.",
       "paths": [
         "plugin-manifest-draft.json",
         "validator/src/argument_parser/specialized.rs",
@@ -122,23 +122,23 @@
       {
         "id": "current_state_read_model",
         "product_role": "Typed current-state read model for candidate digest, dirty/stale state, first legal blocker, proof surfaces, claim ceiling, and next narrow repair.",
-        "status": "blocked_returned_for_lane_repair",
-        "current_evidence": "Lane 008 reported commit 631d34d3d5fdd209bfe7217927ff22b6d1de46a5, but parent source inspection found current-state generated `ultragoal observe fit --command <id>` as the canonical narrow rerun. `observe fit` is a compatibility spelling for the command telemetry roundtrip runner, so new current-state output must not depend on it.",
-        "next_required_proof": "Lane 008 must emit canonical `ultragoal observe command-roundtrip --command <id>` or the correct family form, rerun focused current-state/next/explain tests and real product probes, and include an old-surface retirement note for the compatibility alias."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent replayed Lane 008 repair commit 684c82a0d003ea4f3dabb127bf895455a058531d and committed the reconciled root source as 9739144da24f1973a6c29068bf4de4b6e83d9fd4. Real `ultragoal current-state --json` on digest sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e failed closed with first_blocker install audit, current command inventory counts 73/73 rows, canonical `ultragoal observe command-roundtrip --command \"install audit\"` narrow rerun, and source-local custom-tooling claim ceiling.",
+        "next_required_proof": "Cross-lane integration must prove current-state consumes all accepted custom authorities without duplicate command surfaces before any Gate 92 speed or fitting claim."
       },
       {
         "id": "ultragoal_next",
         "product_role": "Agent next-action command that consumes current-state and observe explain output to identify the first legal move without manual spelunking.",
-        "status": "blocked_returned_for_lane_repair",
-        "current_evidence": "Lane 008 added `ultragoal next`, but parent rejected the lane because the next-action output names the old `observe fit` compatibility alias instead of the canonical command-roundtrip authority.",
-        "next_required_proof": "Real `ultragoal next` and `ultragoal next --json` current-candidate runs must name digest, blocker, repair, canonical command-roundtrip rerun, forbidden actions, and claim ceiling without relying on compatibility aliases or generic repair text."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent verified real `ultragoal next` and `ultragoal next --json` on digest sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e. Both failed closed on the first legal blocker install audit, named the command-roundtrip narrow rerun, preserved forbidden claims, and kept the source-local custom-tooling prerequisite claim ceiling.",
+        "next_required_proof": "Later orchestration must prove `ultragoal next` remains aligned after the remaining custom tools are accepted and before Product Usage or Gate 92 work resumes."
       },
       {
         "id": "observe_query_explain_repair_compiler",
         "product_role": "Observe query and explain compiler that turns run/correlation/digest telemetry into root cause, implicated source or artifact, blocked claim, smallest repair, and narrow rerun.",
-        "status": "blocked_returned_for_lane_repair",
-        "current_evidence": "Lane 008 explain/next work is not accepted because its repair compiler points agents at `observe fit` rather than canonical command-roundtrip behavior. The explanation surface cannot preserve old compatibility aliases as the recommended repair path.",
-        "next_required_proof": "Repair compiler output must produce root cause, implicated path, blocked claim, smallest repair, exact canonical command-roundtrip rerun, broad-rerun allowance, forbidden actions, and claim ceiling on the current candidate."
+        "status": "implemented_current_source_local",
+        "current_evidence": "Parent verified real `ultragoal observe explain --next` on digest sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e. Output identified commands/install audit, missing red/green/tamper fixture proof, implicated install-audit receipts/query artifacts, smallest repair, canonical `ultragoal observe command-roundtrip --command \"install audit\"`, broad rerun only after narrow proof, and explicit blocked readiness/release/completion/final-packet/install-cache/update_goal claims.",
+        "next_required_proof": "Gate 92 remains blocked until this compiler is proven across every required command and non-command family with same-candidate logs, metrics, traces, receipts, and explain reconciliation."
       },
       {
         "id": "impacted_rust_test_mapping",
@@ -945,7 +945,7 @@
     },
     {
       "id": "LANE-008",
-      "status": "blocked_returned_for_repair",
+      "status": "merged_source_local_thread_archived_worktree_tooling_gap",
       "lane_type": "implementation",
       "lane_objective": "Build custom tooling prerequisite current-state read model, ultragoal next, and repair explanation compiler.",
       "macro_lane_rationale": "Agent next-action and repair explanation must be Harness-owned product tools before later Gate 92 fitting can be operationally useful.",
@@ -960,8 +960,8 @@
         "actor_id": "codex-app-worktree-lane-008",
         "thread_or_session_id": "019f43cc-e0e9-7432-aa7f-2d56ab16242a",
         "pending_worktree_id": "local:7afe0bcf-3435-4e84-a29d-7f18c00be8e4",
-        "actor_status": "parent_rejected_compatibility_alias_rerun",
-        "validated_at": "2026-07-08T22:26:23Z"
+        "actor_status": "parent_accepted_thread_archived",
+        "validated_at": "2026-07-09T02:15:00Z"
       },
       "goal_binding": {
         "binding_surface": "codex_delegation_goal_prompt",
@@ -984,10 +984,10 @@
       "workspace": "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal",
       "execplan": "docs/ultragoal-contract-2026-07/03-prompt-gate-092-observability-fast-loop.md",
       "base_commit": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "current_commit": "631d34d3d5fdd209bfe7217927ff22b6d1de46a5",
+      "current_commit": "9739144da24f1973a6c29068bf4de4b6e83d9fd4",
       "target_branch": "codex/gate92-product-fitness-telemetry",
       "target_head_at_launch": "a650a59562725d30ae631da7fc24c151c8e51973",
-      "target_head_at_validation": "67eb340862b705cdce0ce237745289841a3e34a5",
+      "target_head_at_validation": "9739144da24f1973a6c29068bf4de4b6e83d9fd4",
       "merge_base_at_validation": "a650a59562725d30ae631da7fc24c151c8e51973",
       "last_heartbeat": "2026-07-08T22:26:23Z",
       "owned_paths": [
@@ -1022,19 +1022,19 @@
       "workspace_status": {
         "clean": true,
         "observed_workspace": "/Users/terrynoblin/.codex/worktrees/775e/harness-ultragoal-plugin-proposal",
-        "observed_head": "631d34d3d5fdd209bfe7217927ff22b6d1de46a5",
+        "observed_head": "684c82a0d003ea4f3dabb127bf895455a058531d",
         "dirty_paths": []
       },
       "parent_orchestrator_state": {
-        "status": "blocked_returned_for_repair",
-        "observed_at": "2026-07-09T01:45:00Z",
-        "finding": "Parent inspected Lane 008 commit 631d34d3d5fdd209bfe7217927ff22b6d1de46a5 and found the current-state/next-action repair path emits `ultragoal observe fit --command <id>`. Parent verified `observe fit` is a compatibility spelling for `observe command-roundtrip`; new custom tooling must route agents to the canonical command-roundtrip product command and should not keep old aliases alive as the recommended path.",
-        "action": "Lane 008 was sent corrective steering. Parent must not merge this lane until it emits canonical command-roundtrip reruns, updates tests, reruns focused validation and real current-state/explain/next probes, and reports old-surface retirement/compatibility status."
+        "status": "parent_replayed_source_local_and_retired_old_alias",
+        "observed_at": "2026-07-09T02:15:00Z",
+        "finding": "Parent replayed Lane 008 repair range a650a59562725d30ae631da7fc24c151c8e51973..684c82a0d003ea4f3dabb127bf895455a058531d and retired the old public `observe fit` command from parser, help, self-tests, command inventory source, and generated command inventory because no external compatibility contract was accepted. Root commit 9739144da24f1973a6c29068bf4de4b6e83d9fd4 proves current-state, observe explain --next, and ultragoal next now route agents to canonical command-roundtrip repair paths on digest sha256:b23334594f4bf8c10301f01ca7bae5d833ae478fd011bcb5bc680d63be9afa1e.",
+        "action": "Lane 008 thread was archived through Codex app tooling. No app worktree-removal tool was exposed by tool discovery, so physical worktree teardown remains a tooling gap. Gate 92 remains blocked until all custom tools have current product proof."
       },
       "teardown": {
         "required": true,
-        "status": "blocked_until_lane_repair",
-        "reason": "Parent rejected the lane because next-action output preserved an old compatibility alias as the canonical repair path. Worktree teardown is blocked until the owning lane repairs and returns a new source-local commit or the parent explicitly kills the lane."
+        "status": "thread_archived_worktree_removal_tool_unavailable",
+        "reason": "Parent committed Lane 008 source-local reconciliation and archived thread 019f43cc-e0e9-7432-aa7f-2d56ab16242a through Codex app tooling. Tool discovery exposed archive/fork/automation controls but no app worktree-removal control, so shell worktree removal is intentionally not used."
       }
     }
   ],
