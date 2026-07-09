@@ -1442,7 +1442,7 @@
     },
     {
       "id": "LANE-014",
-      "status": "ready_for_parent_reconciliation",
+      "status": "sent_back_repair_in_progress",
       "lane_type": "implementation",
       "lane_objective": "Make live_loop_measurement_rust_tests provide fast verified-local source-local repair feedback for the routine hot loop or emit an explicit strict-boundary-only blocker without hiding Rust test failures or using proxy timing.",
       "macro_lane_rationale": "After Lane 013, the real root hot loop moved to first_product_blocker=live_loop_measurement_rust_tests. This is the next bounded custom-tooling prerequisite blocker before cross-lane integration or Gate 92 speed/fitting can resume.",
@@ -1511,7 +1511,7 @@
         "actor_id": "codex-app-worktree-lane-014",
         "thread_or_session_id": "019f451a-93ad-7891-8a69-9542fb885b02",
         "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
-        "actor_status": "ready_for_parent_reconciliation",
+        "actor_status": "sent_back_repair_in_progress",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T04:38:00Z",
         "delivery_confirmed": true,
@@ -1536,10 +1536,10 @@
         "install/cache/final-packet/review/archive/registry/app surfaces"
       ],
       "parent_orchestrator_state": {
-        "status": "ready_for_parent_reconciliation",
-        "observed_at": "2026-07-09T05:18:00Z",
-        "finding": "Parent read Lane 014 final report in thread 019f451a-93ad-7891-8a69-9542fb885b02. The lane reports source-local/not-readiness commit 66753c039, clean worktree, current lane digest sha256:8caaeee5208b8e5bb8e1c8bd2beb3ecdf3e1d195842fc43dd8d2e20452cbf9a1, V2 acceptance matrix rows all marked pass, cold executed Rust-test measurement preserving validation while withholding speed, hot verified-local replay with exact argv/result/output digests and executed_test_count=111, and full hot-loop movement past live_loop_measurement_rust_tests to first_product_blocker=none with remaining observability blocker fmt_check. This is merge-ready evidence only, not parent acceptance.",
-        "action": "Parent must inspect Lane 014 diff, cherry-pick or otherwise reconcile commit 66753c039 into root, run the required parent acceptance commands, inspect source/old-surface disposition, then update registry and teardown/archive state. Do not claim Gate 92 speed/fitting or downstream readiness from the lane report alone."
+        "status": "sent_back_repair_in_progress",
+        "observed_at": "2026-07-09T05:38:00Z",
+        "finding": "Parent attempted reconciliation of Lane 014 commit 66753c039 on root digest sha256:6cef728194cdc3a15758d4f4fee107484a01b5c3d7645661230313ff7085cb3c. Parent reruns showed focused measurement tests 111/111, rust_tests 5/5, fmt, line-caps, namespace, package inventory, cold node measure preserving validation while failing speed, hot verified-local replay passing, and full hot-loop movement to first_product_blocker=none. Adversarial review then found two acceptance blockers: result digest replay compared self-consistent row fields instead of recomputing the expected result digest from accepted replay fields, and zero-test pass was rejected only during replay rather than as current product measurement behavior. Parent restored the provisional root cherry-pick and sent Lane 014 back with those exact required repairs; codex_app.read_thread confirmed delivery as userMessage item-53 and lane response item-54.",
+        "action": "Poll Lane 014 for a new repair commit. Parent must not merge 66753c039. Acceptance now requires recomputed result-digest validation, current zero-test execution blocking, focused negative tests for both gaps, clean lane worktree, updated final matrix, and fresh parent reruns. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
