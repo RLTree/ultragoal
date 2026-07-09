@@ -59,6 +59,47 @@ fn routine_coverage_accepts_verified_lineage_and_rejects_claim_overreach() {
         &wrong_candidate,
         "coverage_routine_current_candidate_digest_mismatch"
     ));
+
+    let wrong_lineage = routine_failures(|_root, receipt| {
+        receipt["boundary_lineage_digest"] = json!("sha256:wrong");
+    });
+    assert!(has(
+        &wrong_lineage,
+        "coverage_routine_boundary_lineage_digest_mismatch"
+    ));
+
+    let false_strict_substitution = routine_failures(|_root, receipt| {
+        receipt["equivalence_status"] = json!("verified_current_input_equivalent");
+        receipt["strict_boundary_authority_status"] = json!("strict_boundary_not_run");
+    });
+    assert!(has(
+        &false_strict_substitution,
+        "coverage_routine_strict_boundary_authority_missing"
+    ));
+
+    let verified_strict_boundary = routine_failures(|_root, receipt| {
+        receipt["equivalence_status"] = json!("verified_current_input_equivalent");
+        receipt["strict_boundary_authority_status"] =
+            json!("strict_boundary_current_input_equivalent");
+        receipt["strict_boundary_receipt_path"] =
+            json!("validation_artifacts/coverage/strict.json");
+        receipt["strict_boundary_receipt_digest"] = json!(crate::digest::ZERO);
+    });
+    assert!(
+        !has(
+            &verified_strict_boundary,
+            "coverage_routine_strict_boundary_authority_missing"
+        ),
+        "{verified_strict_boundary:?}"
+    );
+
+    let warm_cache = routine_failures(|_root, receipt| {
+        receipt["coverage_cache_class"] = json!("warm_cache");
+    });
+    assert!(has(
+        &warm_cache,
+        "coverage_routine_cache_class_not_verified_local"
+    ));
 }
 
 fn routine_failures(mut mutate: impl FnMut(&Path, &mut Value)) -> Vec<String> {
@@ -97,8 +138,27 @@ fn make_routine(receipt: &mut Value) {
     receipt["coverage_cache_class"] = json!("retained_artifact_verified_local");
     receipt["cargo_version"] = json!("cargo test");
     receipt["rustc_version"] = json!("rustc test");
-    receipt["boundary_lineage_digest"] = json!("sha256:boundary");
-    receipt["equivalence_status"] = json!("verified_current_input_equivalent");
+    let source_tree = receipt["source_tree_digest"]
+        .as_str()
+        .expect("source tree")
+        .to_string();
+    let manifest = receipt["coverage_manifest_digest"]
+        .as_str()
+        .expect("manifest")
+        .to_string();
+    let command = receipt["coverage_command_digest"]
+        .as_str()
+        .expect("command")
+        .to_string();
+    receipt["boundary_lineage_digest"] = json!(crate::digest::canonical_json(&json!({
+        "mode": "routine_repair_only",
+        "strict_boundary_mode": "full_clean_exact_100_uncovered_records_empty",
+        "source_tree_digest": source_tree,
+        "coverage_manifest_digest": manifest,
+        "coverage_command_digest": command
+    })));
+    receipt["strict_boundary_authority_status"] = json!("strict_boundary_not_run");
+    receipt["equivalence_status"] = json!("routine_feedback_only_no_strict_boundary_substitution");
 }
 
 fn has(failures: &[String], needle: &str) -> bool {

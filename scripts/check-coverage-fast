@@ -22,8 +22,12 @@ if [[ -z "${coverage_cmd// }" ]]; then
   exit 2
 fi
 
-bash -lc "$coverage_cmd" || {
-  echo "coverage_command_failed: $command_path" >&2
+if [[ ! -x target/debug/ultragoal ]]; then
+  cargo build --offline --bin ultragoal --quiet
+fi
+
+target/debug/ultragoal --root . coverage prove --mode routine --receipt "$receipt" || {
+  echo "coverage_command_failed: ultragoal coverage prove --mode routine" >&2
   exit 2
 }
 
@@ -207,11 +211,27 @@ for blocked in [
         fail("coverage_fast_blocked_claim_missing")
 if not receipt.get("coverage_cache_class"):
     fail("coverage_fast_cache_class_missing")
+if receipt.get("coverage_cache_class") != "retained_artifact_verified_local":
+    fail("coverage_fast_cache_class_not_verified_local")
 if not receipt.get("boundary_lineage_digest"):
     fail("coverage_fast_boundary_lineage_missing")
-if receipt.get("boundary_lineage_digest") == receipt.get("source_tree_digest"):
-    fail("coverage_fast_boundary_lineage_not_independent")
-if receipt.get("equivalence_status") != "verified_current_input_equivalent":
+expected_lineage = "sha256:" + hashlib.sha256(json.dumps({
+    "coverage_command_digest": receipt.get("coverage_command_digest"),
+    "coverage_manifest_digest": receipt.get("coverage_manifest_digest"),
+    "mode": "routine_repair_only",
+    "source_tree_digest": receipt.get("source_tree_digest"),
+    "strict_boundary_mode": "full_clean_exact_100_uncovered_records_empty",
+}, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+if receipt.get("boundary_lineage_digest") != expected_lineage:
+    fail("coverage_fast_boundary_lineage_digest_mismatch")
+equivalence = receipt.get("equivalence_status")
+strict_status = receipt.get("strict_boundary_authority_status")
+if equivalence == "verified_current_input_equivalent":
+    if strict_status != "strict_boundary_current_input_equivalent":
+        fail("coverage_fast_strict_boundary_authority_missing")
+    if not receipt.get("strict_boundary_receipt_path") or not receipt.get("strict_boundary_receipt_digest"):
+        fail("coverage_fast_strict_boundary_authority_missing")
+elif equivalence != "routine_feedback_only_no_strict_boundary_substitution":
     fail("coverage_fast_equivalence_unverified")
 if "uncovered_records" not in receipt:
     fail("coverage_fast_uncovered_records_missing")

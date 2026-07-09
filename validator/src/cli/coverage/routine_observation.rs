@@ -1,4 +1,5 @@
 use serde_json::Value;
+use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -19,6 +20,8 @@ const ROUTINE_BLOCKED: &[&str] = &[
     "update_goal_eligibility",
     "app_registry_or_reviewer_exposure",
 ];
+const ROUTINE_EQUIVALENCE_STATUS: &str = "routine_feedback_only_no_strict_boundary_substitution";
+const STRICT_BOUNDARY_AUTHORITY_STATUS: &str = "strict_boundary_not_run";
 
 pub(super) fn execute(root: &Path, receipt: &Path, candidate: &str) -> CoverageExecution {
     match execute_inner(root, receipt, candidate) {
@@ -43,6 +46,9 @@ fn execute_inner(root: &Path, receipt: &Path, candidate: &str) -> Result<(), Str
         ROUTINE_REPORT_REL,
         "routine coverage report",
     );
+    if let Some(parent) = report.parent() {
+        fs::create_dir_all(parent).map_err(|err| format!("create routine report dir: {err}"))?;
+    }
     let output = Command::new("cargo")
         .arg("llvm-cov")
         .arg("--workspace")
@@ -79,6 +85,8 @@ fn write_receipt(
         crate::claim_semantics::coverage::digests::source_tree_digest(root, &manifest)?;
     let manifest_digest = crate::digest::file(&manifest_path)?;
     let command_digest = crate::digest::file(&command_path)?;
+    let changed_files_digest =
+        crate::claim_semantics::coverage::digests::changed_files_digest(root, &manifest)?;
     let uncovered_records = uncovered_records(root, &report_value);
     let dimensions = measured_dimensions(&manifest);
     let receipt_value = serde_json::json!({
@@ -92,11 +100,24 @@ fn write_receipt(
         "flags": ["--json", "--summary-only", "--offline", "--no-clean", "--", "coverage"],
         "coverage_target_dir": ROUTINE_TARGET_DIR,
         "coverage_cache_class": "retained_artifact_verified_local",
+        "workspace_root": root.canonicalize().unwrap_or_else(|_| root.to_path_buf()).to_string_lossy().to_string(),
         "source_tree_digest": source_tree_digest,
         "coverage_manifest_digest": manifest_digest,
         "coverage_command_digest": command_digest,
+        "changed_files_digest": changed_files_digest,
+        "boundary_lineage": lineage_value(&source_tree_digest, &manifest_digest, &command_digest),
         "boundary_lineage_digest": lineage_digest(&source_tree_digest, &manifest_digest, &command_digest),
-        "equivalence_status": "verified_current_input_equivalent",
+        "strict_boundary_authority_status": STRICT_BOUNDARY_AUTHORITY_STATUS,
+        "strict_boundary_required_for_claims": [
+            "complete_coverage",
+            "completion",
+            "package_readiness",
+            "review_readiness",
+            "release_readiness",
+            "final_packet_correctness",
+            "update_goal_eligibility"
+        ],
+        "equivalence_status": ROUTINE_EQUIVALENCE_STATUS,
         "current_candidate_digest": candidate,
         "target_revision": {"kind": "package_digest", "value": candidate},
         "command_exit": 0,
@@ -114,6 +135,9 @@ fn write_receipt(
         "blocked_claim_classes": ROUTINE_BLOCKED
     });
     let resolved = receipt_fields::resolve_receipt(root, receipt)?;
+    if let Some(parent) = resolved.parent() {
+        fs::create_dir_all(parent).map_err(|err| format!("create routine receipt dir: {err}"))?;
+    }
     crate::json_boundary::write_json(&resolved, &receipt_value)
 }
 
@@ -135,12 +159,17 @@ fn coverage_percent(report: &Value) -> f64 {
 }
 
 fn lineage_digest(source_tree: &str, manifest: &str, command: &str) -> String {
-    crate::digest::canonical_json(&serde_json::json!({
+    crate::digest::canonical_json(&lineage_value(source_tree, manifest, command))
+}
+
+fn lineage_value(source_tree: &str, manifest: &str, command: &str) -> Value {
+    serde_json::json!({
         "mode": "routine_repair_only",
+        "strict_boundary_mode": "full_clean_exact_100_uncovered_records_empty",
         "source_tree_digest": source_tree,
         "coverage_manifest_digest": manifest,
         "coverage_command_digest": command
-    }))
+    })
 }
 
 fn uncovered_records(root: &Path, report: &Value) -> Vec<Value> {

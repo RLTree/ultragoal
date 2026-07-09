@@ -15,6 +15,8 @@ const ROUTINE_BLOCKED: &[&str] = &[
     "update_goal_eligibility",
     "app_registry_or_reviewer_exposure",
 ];
+const ROUTINE_EQUIVALENCE_STATUS: &str = "routine_feedback_only_no_strict_boundary_substitution";
+const STRICT_BOUNDARY_CURRENT_INPUT_EQUIVALENT: &str = "strict_boundary_current_input_equivalent";
 
 pub(super) fn failures(root: &Path, receipt: &Path, candidate: &str) -> Vec<String> {
     let path = match receipt_fields::resolve_receipt(root, receipt) {
@@ -74,6 +76,10 @@ fn scalar_failures(root: &Path, receipt: &Value, candidate: &str, out: &mut Vec<
         if bad {
             out.push(code.to_string());
         }
+    }
+    let cache_class = receipt_fields::string(receipt, "coverage_cache_class");
+    if !cache_class.is_empty() && cache_class != "retained_artifact_verified_local" {
+        out.push("coverage_routine_cache_class_not_verified_local".to_string());
     }
     match target_dir::status(
         root,
@@ -161,11 +167,26 @@ fn lineage_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
     if lineage.is_empty() {
         out.push("coverage_routine_boundary_lineage_missing".to_string());
     }
-    if lineage == receipt_fields::string(receipt, "source_tree_digest") {
-        out.push("coverage_routine_boundary_lineage_not_independent".to_string());
+    let expected_lineage = lineage_digest(
+        &receipt_fields::string(receipt, "source_tree_digest"),
+        &receipt_fields::string(receipt, "coverage_manifest_digest"),
+        &receipt_fields::string(receipt, "coverage_command_digest"),
+    );
+    if !lineage.is_empty() && lineage != expected_lineage {
+        out.push("coverage_routine_boundary_lineage_digest_mismatch".to_string());
     }
-    if receipt_fields::string(receipt, "equivalence_status") != "verified_current_input_equivalent"
-    {
+    let equivalence = receipt_fields::string(receipt, "equivalence_status");
+    let strict_status = receipt_fields::string(receipt, "strict_boundary_authority_status");
+    if equivalence == "verified_current_input_equivalent" {
+        if strict_status != STRICT_BOUNDARY_CURRENT_INPUT_EQUIVALENT {
+            out.push("coverage_routine_strict_boundary_authority_missing".to_string());
+        }
+        if receipt_fields::string(receipt, "strict_boundary_receipt_path").is_empty()
+            || receipt_fields::string(receipt, "strict_boundary_receipt_digest").is_empty()
+        {
+            out.push("coverage_routine_strict_boundary_authority_missing".to_string());
+        }
+    } else if equivalence != ROUTINE_EQUIVALENCE_STATUS {
         out.push("coverage_routine_equivalence_unverified".to_string());
     }
     if receipt
@@ -182,6 +203,16 @@ fn lineage_failures(root: &Path, receipt: &Value, out: &mut Vec<String>) {
     {
         out.push("coverage_routine_uncovered_records_missing".to_string());
     }
+}
+
+fn lineage_digest(source_tree: &str, manifest: &str, command: &str) -> String {
+    crate::digest::canonical_json(&serde_json::json!({
+        "mode": "routine_repair_only",
+        "strict_boundary_mode": "full_clean_exact_100_uncovered_records_empty",
+        "source_tree_digest": source_tree,
+        "coverage_manifest_digest": manifest,
+        "coverage_command_digest": command
+    }))
 }
 
 fn routine_claim_failures(receipt: &Value, out: &mut Vec<String>) {
