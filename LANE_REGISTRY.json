@@ -1661,7 +1661,9 @@
         "objective_v3_addendum_confirmed": true,
         "objective_v3_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-77 with the required V3 acceptance table, falsification table, old-surface table, reviewer packet, parent rerun plan, unsupported-claims row, and state discipline.",
         "objective_v3_reviewer_sendback_confirmed": true,
-        "objective_v3_reviewer_sendback_evidence": "After adversarial review rejected commit cba572ce1, parent sent Lane 014 a V3 send-back for the local timing reader, zero-test local timing row, and compact cache preservation gaps. codex_app.read_thread confirmed delivery as userMessage item-87 and lane acknowledgment as agentMessage item-88."
+        "objective_v3_reviewer_sendback_evidence": "After adversarial review rejected commit cba572ce1, parent sent Lane 014 a V3 send-back for the local timing reader, zero-test local timing row, and compact cache preservation gaps. codex_app.read_thread confirmed delivery as userMessage item-87 and lane acknowledgment as agentMessage item-88.",
+        "objective_v3_command_authority_sendback_confirmed": true,
+        "objective_v3_command_authority_sendback_evidence": "After adversarial review rejected commit aa6cefd92, parent sent Lane 014 a V3 send-back requiring local timing authority to bind to actual command output or non-self-authored command-observation/receipt authority. codex_app.read_thread confirmed delivery as userMessage item-127 and lane acknowledgment as agentMessage item-128."
       },
       "claim_ceiling": "source_local_custom_tooling_prerequisite_only",
       "workspace": "/Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal",
@@ -1681,9 +1683,9 @@
       ],
       "parent_orchestrator_state": {
         "status": "sent_back_repair_in_progress",
-        "observed_at": "2026-07-09T05:01:51Z",
-        "finding": "Parent attempted reconciliation of Lane 014 commit 66753c039, then Lane 014 returned repair commit cba572ce1. A fresh adversarial reviewer rejected cba572ce1 because the direct replay fix did not cover the local timing reader/projection path or compact cache preservation. Specific remaining gaps: validator/src/cli/live_loop/nodes/timing/mod.rs can still accept self-consistent wrong result/output digest fields without recomputing from stdout/stderr/exit/launch evidence; node_timing.rs/timing reader paths do not require verified_local_executed_test_count so a live_loop_measurement_rust_tests zero-test row can still project pass/reusable state; measurement/timing/cache_records.rs can preserve bad proof-shaped cache rows without the same authority checks.",
-        "action": "Lane 014 was sent back again with the exact V3 reviewer findings. Parent must not merge 66753c039 or cba572ce1. Poll Lane 014 for a new repair commit after item-87. Acceptance now requires focused falsification proof for local timing reader self-consistent wrong digests, local timing reader zero-test rows, and compact cache preservation of bad proof-shaped rows; clean lane worktree; updated V3 verification packet; reviewer recheck; and fresh parent reruns. Delivery was confirmed as userMessage item-87 with lane acknowledgment item-88. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "observed_at": "2026-07-09T05:20:23Z",
+        "finding": "Parent attempted reconciliation of Lane 014 commits 66753c039, cba572ce1, and aa6cefd92. A fresh adversarial reviewer rejected aa6cefd92 because row_authority::verified_local_digests still trusted forgeable stdout/stderr/output/result digest fields copied from the same local JSON row. A fully self-consistent forged digest chain can still pass the local timing reader and compact cache preservation without binding to actual command output or a non-self-authored command-observation/receipt authority. Parent also observed compact-cache preservation must enforce proof-kind-specific replay/execution legality before retaining claim-supporting cache records.",
+        "action": "Lane 014 was sent back again with the exact V3 command-authority findings. Parent must not merge 66753c039, cba572ce1, or aa6cefd92. Poll Lane 014 for a new repair commit after item-127. Acceptance now requires focused falsification proof for fully self-consistent forged digest chains rejected by timing::read_current and replayable_cache_records, proof-kind-specific compact-cache legality, clean lane worktree, updated V3 verification packet, reviewer recheck, and fresh parent reruns. Delivery was confirmed as userMessage item-127 with lane acknowledgment item-128. Claim ceiling remains source-local custom-tooling prerequisite only."
       }
     }
   ],
