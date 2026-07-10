@@ -1,4 +1,5 @@
 use super::super::command_failure::CommandFailureSummary;
+use super::super::timing::{NODE_TIMING_REL, VALIDATION_CACHE_REL};
 use super::full_command::FullCommandRun;
 use super::observation::TelemetryReconciliation;
 use super::observation_mode::ObservationMode;
@@ -19,7 +20,7 @@ mod telemetry_reuse;
 
 use acceptance::{has_reconciled_duration, has_replayable_proof, matches_observation_mode};
 use fields::{elapsed_ms, expected_result_digest, node_rows, text, valid_digest};
-pub(super) use store::ReplayStore;
+pub(crate) use store::ReplayStore;
 
 pub(super) struct CacheReplay {
     pub(super) run: FullCommandRun,

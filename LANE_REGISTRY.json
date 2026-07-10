@@ -346,15 +346,6 @@
       "acceptance_rule": "Parent must reject or send back any lane final report that lacks falsification proof for its highest-risk failure modes, even if focused tests pass or the lane says complete.",
       "reviewer_feedback": "Lane 012 revealed three objective gaps: watched-input scope must match the law being replayed, retained proof must bind to the exact command identity it claims, and validation replay must not promote withheld speed or observability claims without explicit eligibility."
     },
-    "orchestrator_automation": {
-      "id": "ultragoal-orchestrator",
-      "status": "active",
-      "kind": "heartbeat",
-      "target_thread_id": "019f1a7d-ad26-7081-ad9b-e7e7769b4c58",
-      "config_path": ".codex/automations/ultragoal-orchestrator/automation.toml",
-      "transition_receipt": ".codex/automations/ultragoal-orchestrator/transition-receipt.json",
-      "claim_ceiling": "source_local_orchestration_only"
-    },
     "shared_integration_policy": {
       "status": "resolved_for_lanes_006_008_active_for_future_lane_reconciliation",
       "owner": "parent-orchestrator",
@@ -1388,7 +1379,7 @@
     },
     {
       "id": "LANE-009",
-      "status": "accepted_source_local_no_delta",
+      "status": "accepted_source_local_archived",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-surface input specs and routine hot-loop executor for the source-local custom-tooling prerequisite.",
       "macro_lane_rationale": "Input specs and the routine loop executor are still implemented_pending_validation; Gate 92 speed/fitting remains blocked until these custom tools have real current-candidate product proof.",
@@ -1402,7 +1393,7 @@
         "actor_id": "codex-app-worktree-lane-009",
         "thread_or_session_id": "019f44ab-5232-7ab1-8c82-ff547d67375e",
         "pending_worktree_id": "local:56d540f0-76fa-4733-b370-167e6e75bfcb",
-        "actor_status": "goal_bound_complete_no_delta_parent_accepted",
+        "actor_status": "inactive_archive_not_persisted_worktree_absent",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1427,12 +1418,17 @@
         "status": "accepted_source_local_no_delta",
         "observed_at": "2026-07-09T02:31:33Z",
         "finding": "Parent accepted Lane 009 with no source delta after verifying root-equivalent product behavior on digest sha256:cc00ab05dfa6df52a0eb9aac2757a3cafcde02f80a652b6019a249084c5abea6. Real `ultragoal loop run --tier hot --cache-mode verified-local --jobs auto` failed closed on downstream build_check baseline proof while preserving separated validation/cache/observability/speed states and source-local claim ceiling. Focused live_loop tests passed 227/227; line-caps, namespace, and raw line-count scan passed.",
-        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next reconcile Lane 010 source commit, then Lane 011 source commit, then run cross-lane integration proof before any Gate 92 speed or fitting claim."
+        "action": "Codex app reported inactive thread archive did not persist. The lane worktree is absent from the current git worktree list; no further lane work remains."
+      },
+      "teardown": {
+        "required": true,
+        "status": "worktree_absent_thread_archive_not_persisted",
+        "reason": "Lane accepted with no source delta; app archive did not persist for the inactive thread, but its worktree is absent from git worktree list."
       }
     },
     {
       "id": "LANE-010",
-      "status": "accepted_source_local_commit",
+      "status": "accepted_source_local_archived",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair product-semantic active-surface inventory and semantic namespace/symbol authority.",
       "macro_lane_rationale": "Active-surface and namespace/symbol authority remain implemented_pending_validation; custom tooling must reject duplicate/alias/orphan/goal-work surfaces before downstream Gate 92 work resumes.",
@@ -1446,7 +1442,7 @@
         "actor_id": "codex-app-worktree-lane-010",
         "thread_or_session_id": "019f44ab-baa5-7c02-b119-ad8d330f195c",
         "pending_worktree_id": "local:d35bcad2-c91e-4881-9b54-8f7322c0c8e2",
-        "actor_status": "goal_bound_complete_source_commit_parent_accepted",
+        "actor_status": "inactive_archive_not_persisted_worktree_absent",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1470,12 +1466,17 @@
         "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T02:31:33Z",
         "finding": "Parent accepted Lane 010 by replaying commit 3a3893a7d into root as b8c3c9371. The replay touched only owned authority-surface/test files and passed rebuilt-CLI package digest, namespace, typed-boundaries, line-caps, cargo fmt, focused namespace tests, raw_authority_scanner tests, and raw line-count scan on digest sha256:8c2b65916c883c14036941a7633851ca36196053775892011d3a636a72d5d113.",
-        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next reconcile Lane 011 source commit, then run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
+        "action": "Codex app reported inactive thread archive did not persist. The lane worktree is absent from the current git worktree list; its accepted source commit is already in root."
+      },
+      "teardown": {
+        "required": true,
+        "status": "worktree_absent_thread_archive_not_persisted",
+        "reason": "Lane source was accepted into root; app archive did not persist for the inactive thread, but its worktree is absent from git worktree list."
       }
     },
     {
       "id": "LANE-011",
-      "status": "accepted_source_local_commit",
+      "status": "accepted_source_local_archived",
       "lane_type": "implementation",
       "lane_objective": "Prove and repair coverage lineage intelligence that separates strict coverage proof from routine repair feedback.",
       "macro_lane_rationale": "Coverage lineage remains implemented_pending_validation; strict coverage law must stay exact while routine repair feedback gets its own verified-local claim ceiling.",
@@ -1488,7 +1489,7 @@
         "actor_id": "codex-app-worktree-lane-011",
         "thread_or_session_id": "019f44ac-215b-7100-8a71-d6bb35e43da7",
         "pending_worktree_id": "local:6fe5dca1-2195-4a1c-807b-8c7a260a6351",
-        "actor_status": "goal_bound_merge_ready_source_commit_parent_accepted",
+        "actor_status": "inactive_archive_not_persisted_worktree_absent",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T02:55:00Z"
       },
@@ -1512,12 +1513,17 @@
         "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T02:31:33Z",
         "finding": "Parent accepted Lane 011 by replaying commit 57f5b106f into root as 683d73ba9. The replay touched only owned coverage/script paths and passed focused routine coverage validation, full coverage tests, real routine coverage command, fast helper wrapper, script syntax, cargo fmt, namespace, line-caps, raw line-count scan, and source inspection on digest sha256:e10aee032cbe96907bd6c5aab20a57e48a1e423b5efdafdec06361e42c811e79. Strict coverage is not claimed current.",
-        "action": "Archive the lane thread if not already archived and keep the app worktree-removal gap recorded. Parent must next run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
+        "action": "Codex app reported inactive thread archive did not persist. The lane worktree is absent from the current git worktree list; its accepted source commit is already in root."
+      },
+      "teardown": {
+        "required": true,
+        "status": "worktree_absent_thread_archive_not_persisted",
+        "reason": "Lane source was accepted into root; app archive did not persist for the inactive thread, but its worktree is absent from git worktree list."
       }
     },
     {
       "id": "LANE-012",
-      "status": "accepted_source_local_commit",
+      "status": "accepted_source_local_archived",
       "lane_type": "implementation",
       "lane_objective": "Repair routine line-cap validation so line_caps_check satisfies verified-local hot-loop speed and observability requirements without weakening line-cap law.",
       "macro_lane_rationale": "Cross-lane custom-tooling integration remains blocked because line_caps_check passes product validation and observability but misses the routine 20x speed law with speedup_ratio=0.",
@@ -1530,7 +1536,7 @@
         "actor_id": "codex-app-worktree-lane-012",
         "thread_or_session_id": "019f44d0-12ff-7523-8c56-27a9f702cd44",
         "pending_worktree_id": "local:323676a7-63c9-407e-b6e3-68f7a8bae641",
-        "actor_status": "accepted_archived_pending_app_worktree_removal_tool",
+        "actor_status": "inactive_archive_not_persisted_worktree_absent",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T03:30:14Z",
         "delivery_confirmed": true
@@ -1555,7 +1561,12 @@
         "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T03:30:14Z",
         "finding": "Parent accepted Lane 012 by replaying commit 1fe2af560 into root as ff1cda903, then closed adversarial reviewer blockers in 9331f6733. The final accepted source aligns line-cap watched inputs with the line-count law, rejects noncanonical command identity from canonical cache authority, and blocks withheld source timing rows from becoming speed-supporting cache hits without explicit routine replay speed authority. Root proof passed package digest, cargo fmt, focused line_caps tests, focused changed_inputs tests, focused timing::state tests, raw line-count scan, strict line-caps, namespace, package inventory, and real loop measure for line_caps_check on digest sha256:ebac98eb3eed773fc130301616ce25ccc525f9e00de67635578c63d3b1e9fcd3.",
-        "action": "Archive the lane thread if not already archived and keep app worktree-removal gap recorded. Parent must launch or reconcile the next bounded custom-tooling lane with the operationalized objective standard before any Gate 92 speed or fitting claim."
+        "action": "Codex app reported inactive thread archive did not persist. The lane worktree is absent from the current git worktree list; its accepted source commit is already in root."
+      },
+      "teardown": {
+        "required": true,
+        "status": "worktree_absent_thread_archive_not_persisted",
+        "reason": "Lane source was accepted into root; app archive did not persist for the inactive thread, but its worktree is absent from git worktree list."
       }
     },
     {
@@ -1603,17 +1614,17 @@
         "status": "accepted_source_local_commit",
         "observed_at": "2026-07-09T04:24:30Z",
         "finding": "Parent sent and confirmed an operational acceptance-matrix addendum, then accepted Lane 013 by replaying a35bb316f17ad6c8f99a77a559b99e2706ab0a95 into root as dd456ef80. Root proof passed package digest, focused measurement tests 109/109, changed-input tests 9/9, cargo fmt, cargo build, raw line-cap scan, strict line-caps, namespace, package inventory, cold executed build_check measurement with validation pass and speed claim withheld, verified-cache-hit build_check measurement with speed supported, and full hot-loop blocker movement to live_loop_measurement_rust_tests on digest sha256:0c3365c83c52e81c88577f6961766b678ccbd4ff4be47e2206c1a477027d4759.",
-        "action": "Lane 013 thread archived through Codex app tooling; app worktree-removal control remains unavailable, so physical worktree teardown remains a tooling gap. Parent must next create or reconcile a bounded lane for live_loop_measurement_rust_tests routine validation cache, then run cross-lane custom-tooling integration proof before any Gate 92 speed or fitting claim."
+        "action": "Lane 013 thread archived through Codex app tooling. The lane worktree is absent from the current git worktree list; no further lane work remains."
       },
       "teardown": {
         "required": true,
-        "status": "thread_archived_worktree_removal_tool_unavailable",
-        "reason": "Parent accepted Lane 013 source-local, archived thread 019f4500-6a74-7373-bc36-46805fb3d951 through Codex app tooling, and did not use ad hoc shell worktree removal because no app worktree-removal tool is exposed."
+        "status": "thread_archived_worktree_absent",
+        "reason": "Lane 013 thread was archived through Codex app tooling; git worktree list now contains only the root checkout, so the lane worktree is absent."
       }
     },
     {
       "id": "LANE-014",
-      "status": "blocked_parent_authority_required",
+      "status": "merged_source_local_blocked",
       "lane_type": "implementation",
       "lane_objective": "Make live_loop_measurement_rust_tests provide fast verified-local source-local repair feedback for the routine hot loop or emit an explicit strict-boundary-only blocker without hiding Rust test failures or using proxy timing.",
       "macro_lane_rationale": "After Lane 013, the real root hot loop moved to first_product_blocker=live_loop_measurement_rust_tests. This is the next bounded custom-tooling prerequisite blocker before cross-lane integration or Gate 92 speed/fitting can resume.",
@@ -1869,11 +1880,13 @@
         "actor_id": "codex-app-worktree-lane-014",
         "thread_or_session_id": "019f451a-93ad-7891-8a69-9542fb885b02",
         "pending_worktree_id": "local:72a7a7c6-70f8-4e92-8053-847540362288",
-        "actor_status": "blocked_parent_authority_required",
+        "actor_status": "archived_merged_source_local_worktree_removal_unavailable",
         "goal_binding_required_first_action": true,
         "validated_at": "2026-07-09T04:38:00Z",
         "delivery_confirmed": true,
         "delivery_confirmation_evidence": "codex_app.list_threads returned Lane 014 thread 019f451a-93ad-7891-8a69-9542fb885b02 with cwd /Users/terrynoblin/.codex/worktrees/98ed/harness-ultragoal-plugin-proposal, and codex_app.read_thread showed the lane contract as userMessage item-1.",
+        "archived": true,
+        "archive_evidence": "codex_app.set_thread_archived returned archived=true for thread 019f451a-93ad-7891-8a69-9542fb885b02.",
         "objective_v2_addendum_confirmed": true,
         "objective_v2_addendum_evidence": "codex_app.read_thread showed the parent orchestration addendum as Lane 014 userMessage item-37 with the five required V2 behavior rows.",
         "objective_v3_addendum_confirmed": true,
@@ -2011,15 +2024,20 @@
         "parent_rejects_complete_when": "Any operational proof gate is absent, marked pass without product evidence or explicit legal blocker, reconciled by the same local JSON row it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
       },
       "parent_orchestrator_state": {
-        "status": "blocked_parent_authority_required",
-        "observed_at": "2026-07-09T15:35:11Z",
-        "finding": "Lane 014 completed the V6 audit at clean commit bb300618a and marked its active goal blocked. Its operational proof gates show command identity authority, receipt path containment, executed-test-count authority, and hot-loop blocker movement are source-local repaired or fail-closed; lane014-command-result-authority remains blocked because the product has no lane-owned non-self-authored command-result authority. Local timing JSON plus sibling command-observation JSON cannot be both claim and reconciliation surface.",
-        "action": "Parent must define or launch a root-owned authority lane for non-self-authored command-result evidence for live_loop_measurement_rust_tests, such as retained raw stdout/stderr with typed receipt binding, a process receipt digest contract, or equivalent independent command-result authority. Do not accept Lane 014 as complete, do not merge it as a pass, and do not start Gate 92 speed/fitting until this parent-owned authority blocker is resolved or explicitly integrated as a legal blocker. Claim ceiling remains source-local custom-tooling prerequisite only."
+        "status": "merged_source_local_blocked",
+        "observed_at": "2026-07-10T02:00:00Z",
+        "finding": "Parent merged Lane 014 source range 66753c039..bb300618a as commits 2ccd1e0d7, 46473deb1, 5e413316e, cd0dd832f, and 07c2d46d8. The source repairs remain blocked on independent non-self-authored command-result authority; no Gate 92 or downstream claim is supported.",
+        "action": "Fresh session must revalidate the merged timing authority and repair or replace the remaining independent command-result blocker before any Gate 92 work. The lane is archived and its worktree is absent from git worktree list."
+      }
+      ,"teardown": {
+        "required": true,
+        "status": "thread_archived_worktree_absent",
+        "reason": "Thread archived through Codex app tooling; git worktree list now contains only the root checkout, so the lane worktree is absent."
       }
     },
     {
       "id": "LANE-015",
-      "status": "in_progress_goal_bound",
+      "status": "merged_source_local_partial",
       "lane_type": "implementation",
       "lane_objective": "Build a Harness-owned non-self-authored command-result authority for live-loop command execution so timing/cache rows can reconcile against real process output without using local JSON as its own proof.",
       "macro_lane_rationale": "Lane 014 blocked at clean commit bb300618a because live_loop_measurement_rust_tests cannot legally prove command-result authority from local timing JSON plus sibling command-observation JSON. This lane owns the parent-required command-result authority surface that Lane 014 needs next.",
@@ -2033,12 +2051,14 @@
         "actor_id": "codex-app-worktree-lane-015",
         "thread_or_session_id": "019f47a2-2136-70e1-8321-081b8042450a",
         "pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26",
-        "actor_status": "in_progress_goal_bound",
+        "actor_status": "archived_merged_source_local_partial",
         "goal_binding_required_first_action": true,
         "delivery_confirmed": true,
         "delivery_confirmation_evidence": "codex_app.read_thread confirmed userMessage item-15 was received by thread 019f47a2-2136-70e1-8321-081b8042450a in /Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal; the thread is active.",
         "goal_binding_status": "confirmed_existing_active_goal",
         "goal_binding_evidence": "codex_app.read_thread agentMessage item-16 reports create_goal() refused because the same unfinished Lane 015 goal is already active; the lane continued under that existing goal.",
+        "archived": true,
+        "archive_evidence": "codex_app.set_thread_archived returned archived=true for thread 019f47a2-2136-70e1-8321-081b8042450a.",
         "materialized_workspace": "/Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal",
         "materialized_from_pending_worktree_id": "local:5ae1f6ac-b70e-4b69-9926-05a5c55f9a26"
       },
@@ -2072,10 +2092,15 @@
         "parent_rejects_complete_when": "Any gate is absent, prose-only, tests-only without product behavior or verified current-input reuse, self-reconciled by the same local JSON payload it claims, missing false-pass proof, missing source guard, missing old-surface disposition, missing reviewer question, missing parent rerun, or missing explicit unsupported claims."
       },
       "parent_orchestrator_state": {
-        "status": "in_progress_goal_bound",
-        "observed_at": "2026-07-10T01:13:53Z",
-        "finding": "Lane 015 materialized as thread 019f47a2-2136-70e1-8321-081b8042450a in /Users/terrynoblin/.codex/worktrees/6c42/harness-ultragoal-plugin-proposal. Parent sent a rebind/resume contract as userMessage item-15, read_thread confirmed delivery, and agentMessage item-16 confirmed the existing unfinished Lane 015 goal is active because create_goal() rejected a duplicate binding. The lane resumed owned-path source work.",
-        "action": "Poll the active goal-bound lane for its V6 packet and independent product proof. Parent must not accept or start Gate 92 speed/fitting until command-result authority, independent reconciliation, and every required falsification/claim-ceiling gate are proven."
+        "status": "merged_source_local_partial",
+        "observed_at": "2026-07-10T02:00:00Z",
+        "finding": "Parent merged Lane 015 partial checkpoint 4e474349b as 054722c3e. The checkpoint preserves the command-observation receipt and replay-boundary changes but is explicitly incomplete: cargo fmt reports drift and focused tests do not compile because the ReplayStore re-export was private at checkpoint time.",
+        "action": "Fresh session must treat the merged source as partial repair material, fix the known compile/format issues, rerun focused and production proof, and keep the source-local claim ceiling. The lane is archived and its worktree is absent from git worktree list."
+      }
+      ,"teardown": {
+        "required": true,
+        "status": "thread_archived_worktree_absent",
+        "reason": "Thread archived through Codex app tooling; git worktree list now contains only the root checkout, so the lane worktree is absent."
       }
     }
   ],

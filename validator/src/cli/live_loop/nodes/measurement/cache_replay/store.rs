@@ -5,13 +5,13 @@ use std::path::{Path, PathBuf};
 
 const LINE_CAP_CHECK_RECEIPT_REL: &str = "validation_artifacts/observability/line-cap-check.json";
 
-pub(super) struct ReplayStore {
+pub(crate) struct ReplayStore {
     pub(super) root: PathBuf,
     pub(super) values: Vec<Value>,
 }
 
 impl ReplayStore {
-    pub(super) fn load(root: &Path, command: &LiveLoopCommand) -> Self {
+    pub(crate) fn load(root: &Path, command: &LiveLoopCommand) -> Self {
         if command.cache_mode != "verified-local" {
             return Self {
                 root: root.to_path_buf(),
