@@ -1,0 +1,184 @@
+{
+  "schema_version": "AuthorityRoutingRegistry-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "destructive_cleanup_authorized": false,
+  "authority_rule": "Matched legacy surfaces are preserved as context-only, non-authoritative inputs. This registry does not prove compatibility behavior, retirement, removal, or any product claim.",
+  "routes": [
+    {
+      "route_id": "legacy-contracts-to-successor-v2",
+      "match": { "kind": "legacy-contract-authority" },
+      "canonical_target": "CONTRACT-REGISTRY:CONTRACT_MANIFEST.json",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-manifest-to-supported-projection",
+      "match": { "kind": "legacy-manifest-projection-authority" },
+      "canonical_target": "PS-PLUGIN-MANIFEST",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-agents-to-current-discovery",
+      "match": { "kind": "legacy-agent-authority" },
+      "canonical_target": "PS-AGENTS",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-lanes-to-dependency-graph",
+      "match": { "kind": "legacy-lane-authority" },
+      "canonical_target": "PS-ORCHESTRATION",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-gates-to-claim-graph",
+      "match": { "kind": "legacy-gate-authority" },
+      "canonical_target": "HCT-CLAIMS",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-command-catalogs-to-typed-cli",
+      "match": { "kind": "legacy-command-authority" },
+      "canonical_target": "PS-CLI",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-finalizers-to-claim-graph",
+      "match": { "kind": "legacy-finalizer-authority" },
+      "canonical_target": "HCT-CLAIMS",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "legacy-model-pins-to-live-context",
+      "match": { "kind": "legacy-model-authority" },
+      "canonical_target": "HCT-CONTEXT",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-ultragoal-to-harness-ultragoal",
+      "match": { "stable_id": "LEGACY-SKILL:ultragoal" },
+      "canonical_target": "SKILL:harness-ultragoal",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-harness-engineering-to-harness-ultragoal",
+      "match": { "stable_id": "LEGACY-SKILL:harness-engineering" },
+      "canonical_target": "SKILL:harness-ultragoal",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-agent-first-init-to-repository-fit",
+      "match": { "stable_id": "LEGACY-SKILL:agent-first-repo-init" },
+      "canonical_target": "SKILL:repository-fit",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-agent-first-retrofit-to-repository-fit",
+      "match": { "stable_id": "LEGACY-SKILL:agent-first-repo-retrofit" },
+      "canonical_target": "SKILL:repository-fit",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-fit-repo-to-repository-fit",
+      "match": { "stable_id": "LEGACY-SKILL:fit-repo" },
+      "canonical_target": "SKILL:repository-fit",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-execplan-lane-to-routine-work",
+      "match": { "stable_id": "LEGACY-SKILL:execplan-lane" },
+      "canonical_target": "SKILL:routine-work",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-runtime-legibility-to-routine-work",
+      "match": { "stable_id": "LEGACY-SKILL:agent-runtime-legibility" },
+      "canonical_target": "SKILL:routine-work",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-observability-to-diagnose-and-observe",
+      "match": { "stable_id": "LEGACY-SKILL:agent-observability-stack" },
+      "canonical_target": "SKILL:diagnose-and-observe",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-orchestrator-to-goal-run",
+      "match": { "stable_id": "LEGACY-SKILL:orchestrator-reconciler" },
+      "canonical_target": "SKILL:goal-run",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-proof-gate-to-prove",
+      "match": { "stable_id": "LEGACY-SKILL:proof-gate" },
+      "canonical_target": "SKILL:prove",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-cohesion-gate-to-prove",
+      "match": { "stable_id": "LEGACY-SKILL:product-cohesion-gate" },
+      "canonical_target": "SKILL:prove",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-fitness-gate-to-prove",
+      "match": { "stable_id": "LEGACY-SKILL:product-fitness-gate" },
+      "canonical_target": "SKILL:prove",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-improvement-loop-to-improve-and-maintain",
+      "match": { "stable_id": "LEGACY-SKILL:agent-improvement-loop" },
+      "canonical_target": "SKILL:improve-and-maintain",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    },
+    {
+      "route_id": "skill-standards-gardener-to-improve-and-maintain",
+      "match": { "stable_id": "LEGACY-SKILL:standards-gardener" },
+      "canonical_target": "SKILL:improve-and-maintain",
+      "disposition": "non-authoritative",
+      "compatibility_behavior": "unverified",
+      "retirement_state": "blocked-by-OD-009"
+    }
+  ]
+}

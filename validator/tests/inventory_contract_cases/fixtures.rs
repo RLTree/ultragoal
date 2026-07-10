@@ -1,0 +1,298 @@
+use crate::context::LiveContext;
+use crate::inventory::{AuthorityCatalog, InventoryBuilder};
+use crate::repository_fixture::{TestRepo, inventory_request, snapshot};
+use sha2::{Digest, Sha256};
+use std::fs;
+
+fn catalog(repo: &TestRepo) -> AuthorityCatalog {
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    InventoryBuilder::new(&context).build().unwrap()
+}
+
+fn has_code(catalog: &AuthorityCatalog, code: &str) -> bool {
+    catalog
+        .findings()
+        .iter()
+        .any(|finding| finding.code == code)
+}
+
+#[test]
+fn declared_routes_do_not_suppress_live_legacy_authority() {
+    let repo = TestRepo::new("legacy-routes");
+    repo.skill("ultragoal", "ultragoal");
+    repo.write("plugin-manifest-draft.json", br#"{"legacy":true}"#);
+    repo.write("agents/old-agent.md", b"legacy agent\n");
+    repo.write("legacy/lane/owner.md", b"legacy lane\n");
+    repo.write("legacy/gate/rule.md", b"legacy gate\n");
+    repo.write("legacy/command-catalog.json", b"{}\n");
+    repo.write("legacy/finalizer.md", b"legacy finalizer\n");
+    repo.write("legacy/model.md", b"obsolete gpt-5.5 pin\n");
+    repo.write(
+        "docs/ultragoal-contract-2026-07/legacy.md",
+        b"legacy contract\n",
+    );
+    repo.commit();
+    let catalog = catalog(&repo);
+    let legacy = catalog
+        .entries()
+        .iter()
+        .filter(|entry| entry.authority_state == crate::inventory::AuthorityState::Legacy)
+        .collect::<Vec<_>>();
+    assert!(legacy.len() >= 8);
+    assert!(
+        legacy
+            .iter()
+            .all(|entry| entry.active_status == crate::inventory::ActiveStatus::Active)
+    );
+    assert!(has_code(&catalog, "parallel_authority"));
+    assert!(!has_code(&catalog, "unrouted_legacy_authority"));
+    assert!(!has_code(&catalog, "ambiguous_authority_route"));
+}
+
+#[test]
+fn routing_registry_cannot_claim_cleanup_or_compatibility() {
+    let repo = TestRepo::new("route-overclaim");
+    let path = repo.root.join("migration/authority-routes.json");
+    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    value["destructive_cleanup_authorized"] = serde_json::json!(true);
+    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    repo.commit();
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(error.to_string().contains("OD-009"));
+
+    let repo = TestRepo::new("route-compatibility-overclaim");
+    let path = repo.root.join("migration/authority-routes.json");
+    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    value["routes"][0]["compatibility_behavior"] = serde_json::json!("verified");
+    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    repo.commit();
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(error.to_string().contains("overstates"));
+
+    let repo = TestRepo::new("route-canary");
+    let path = repo.root.join("migration/authority-routes.json");
+    let mut value: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    value["routes"][0]["route_id"] = serde_json::json!("SECRET_CANARY");
+    value["routes"][0]["canonical_target"] = serde_json::json!("SECRET_CANARY");
+    fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    repo.commit();
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(!error.to_string().contains("SECRET_CANARY"));
+}
+
+#[test]
+fn deterministic_repeat_and_byte_exact_projection() {
+    let repo = TestRepo::new("repeat");
+    repo.skill("harness-ultragoal", "harness-ultragoal");
+    repo.commit();
+    let first = catalog(&repo);
+    let second = catalog(&repo);
+    assert_eq!(first.catalog_id(), second.catalog_id());
+    assert_eq!(
+        first.to_canonical_json().unwrap(),
+        second.to_canonical_json().unwrap()
+    );
+    let projection = first.to_canonical_json().unwrap();
+    assert!(first.compare_projection(&projection).unwrap().matches);
+}
+
+#[test]
+fn omitted_duplicate_and_renamed_components_are_findings() {
+    let repo = TestRepo::new("component-errors");
+    repo.skill("renamed-front-door", "harness-ultragoal");
+    repo.skill("duplicate-front-door", "harness-ultragoal");
+    repo.commit();
+    let catalog = catalog(&repo);
+    assert!(has_code(&catalog, "missing_required_component"));
+    assert!(has_code(&catalog, "duplicate_stable_id"));
+    assert!(has_code(&catalog, "renamed_required_component"));
+}
+
+#[test]
+fn stale_or_tampered_projection_is_rejected() {
+    let repo = TestRepo::new("projection");
+    repo.commit();
+    let catalog = catalog(&repo);
+    let mut value: serde_json::Value =
+        serde_json::from_slice(&catalog.to_canonical_json().unwrap()).unwrap();
+    value["catalog_id"] = serde_json::json!("sha256:tampered");
+    let comparison = catalog
+        .compare_projection(&serde_json::to_vec(&value).unwrap())
+        .unwrap();
+    assert!(!comparison.matches);
+    assert_eq!(comparison.findings[0].code, "stale_or_tampered_projection");
+    let canonical_value: serde_json::Value =
+        serde_json::from_slice(&catalog.to_canonical_json().unwrap()).unwrap();
+    let reformatted = serde_json::to_vec_pretty(&canonical_value).unwrap();
+    assert!(!catalog.compare_projection(&reformatted).unwrap().matches);
+    let duplicate_key = br#"{"catalog_id":"first","catalog_id":"second"}"#;
+    assert!(!catalog.compare_projection(duplicate_key).unwrap().matches);
+}
+
+#[cfg(unix)]
+#[test]
+fn symlink_escape_is_a_causal_finding() {
+    let repo = TestRepo::new("symlink");
+    let outside = repo.root.with_file_name(format!(
+        "{}-outside",
+        repo.root.file_name().unwrap().to_string_lossy()
+    ));
+    fs::create_dir_all(&outside).unwrap();
+    fs::write(outside.join("SKILL.md"), b"---\nname: escape\n---\n").unwrap();
+    let skill = repo.root.join("skills/escape");
+    fs::create_dir_all(&skill).unwrap();
+    std::os::unix::fs::symlink(outside.join("SKILL.md"), skill.join("SKILL.md")).unwrap();
+    repo.commit();
+    let catalog = catalog(&repo);
+    assert!(has_code(&catalog, "symlink_path_escape"));
+    let _ = fs::remove_dir_all(outside);
+}
+
+#[cfg(unix)]
+#[test]
+fn escaped_inventory_symlinks_are_not_dereferenced() {
+    let repo = TestRepo::new("symlink-no-dereference");
+    let outside = repo.root.with_file_name(format!(
+        "{}-outside",
+        repo.root.file_name().unwrap().to_string_lossy()
+    ));
+    fs::create_dir_all(&outside).unwrap();
+    let outside_json = outside.join("private.json");
+    fs::write(
+        &outside_json,
+        br#"{"_meta":{"generator":"OUTSIDE-GENERATOR","inputs":["OUTSIDE-INPUT"]},"$ref":"OUTSIDE-REF"}"#,
+    )
+    .unwrap();
+    fs::remove_file(repo.root.join(".codex-plugin/plugin.json")).unwrap();
+    std::os::unix::fs::symlink(&outside_json, repo.root.join(".codex-plugin/plugin.json")).unwrap();
+    fs::create_dir_all(repo.root.join("schemas")).unwrap();
+    std::os::unix::fs::symlink(&outside_json, repo.root.join("schemas/escaped.schema.json"))
+        .unwrap();
+    fs::create_dir_all(repo.root.join("generated")).unwrap();
+    std::os::unix::fs::symlink(&outside_json, repo.root.join("generated/escaped.json")).unwrap();
+    repo.commit();
+    let catalog = catalog(&repo);
+    assert!(has_code(&catalog, "symlink_path_escape"));
+    let json = String::from_utf8(catalog.to_canonical_json().unwrap()).unwrap();
+    for secret in ["OUTSIDE-GENERATOR", "OUTSIDE-INPUT", "OUTSIDE-REF"] {
+        assert!(!json.contains(secret));
+    }
+    let _ = fs::remove_dir_all(outside);
+}
+
+#[test]
+fn declared_name_and_reference_canaries_are_not_emitted() {
+    let repo = TestRepo::new("metadata-canary");
+    repo.skill("safe-skill", "SECRET_CANARY");
+    repo.write("schemas/canary.schema.json", br#"{"$ref":"SECRET_CANARY"}"#);
+    repo.write(
+        "schemas/fragment-canary.schema.json",
+        br#"{"$ref":"safe.schema.json#/$defs/SECRET_CANARY"}"#,
+    );
+    repo.write(
+        ".codex-plugin/plugin.json",
+        br#"{"name":"harness-ultragoal","$ref":"SECRET_CANARY"}"#,
+    );
+    repo.commit();
+    let catalog = catalog(&repo);
+    let json = String::from_utf8(catalog.to_canonical_json().unwrap()).unwrap();
+    assert!(!json.contains("SECRET_CANARY"));
+    assert!(has_code(&catalog, "invalid_component_metadata"));
+    assert!(catalog.entries().iter().any(|entry| {
+        entry.stable_id == "INVALID-SKILL:safe-skill"
+            && entry.active_status == crate::inventory::ActiveStatus::ContextOnly
+    }));
+}
+
+#[cfg(unix)]
+#[test]
+fn hardlinked_inventory_content_is_rejected() {
+    let repo = TestRepo::new("hardlink");
+    let outside = repo.root.with_file_name(format!(
+        "{}-outside",
+        repo.root.file_name().unwrap().to_string_lossy()
+    ));
+    fs::create_dir_all(&outside).unwrap();
+    let outside_json = outside.join("private.json");
+    fs::write(&outside_json, br#"{"private":"content"}"#).unwrap();
+    fs::create_dir_all(repo.root.join("generated")).unwrap();
+    fs::hard_link(&outside_json, repo.root.join("generated/hardlink.json")).unwrap();
+    repo.commit();
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(error.to_string().contains("hard links"));
+    let _ = fs::remove_dir_all(outside);
+}
+
+#[test]
+fn overdeep_inventory_walk_fails_causally() {
+    let repo = TestRepo::new("walk-depth");
+    let mut path = repo.root.join("schemas");
+    for _ in 0..65 {
+        path.push("d");
+    }
+    fs::create_dir_all(&path).unwrap();
+    fs::write(path.join("deep.schema.json"), b"{}\n").unwrap();
+    repo.commit();
+    let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
+    let error = InventoryBuilder::new(&context).build().unwrap_err();
+    assert!(error.to_string().contains("exceeds depth"));
+}
+
+#[test]
+fn generated_and_schema_drift_are_discovered() {
+    let repo = TestRepo::new("generated");
+    let source = b"current source";
+    repo.write("source.txt", source);
+    repo.write(
+        "migration/generated-surface-authority.json",
+        br#"{"schema_version":"GeneratedSurfaceAuthority-v1","contract_id":"harness-ultragoal-successor-contract-v2","surfaces":[{"output":"docs/generated/current-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},{"output":"docs/generated/stale-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}]}"#,
+    );
+    repo.write("docs/generated/stale.json", br#"{"value":1}"#);
+    repo.write(
+        "docs/generated/stale-input.json",
+        br#"{"_meta":{"generator":"HCT-INVENTORY","inputs":[{"path":"source.txt","sha256":"0000000000000000000000000000000000000000000000000000000000000000"}],"recipe":"input-digest-index-v1"},"entries":[]}"#,
+    );
+    repo.write(
+        "docs/generated/canary.json",
+        br#"{"_meta":{"generator":"SECRET_CANARY","inputs":[{"path":"SECRET_CANARY","sha256":"0000000000000000000000000000000000000000000000000000000000000000"}]}}"#,
+    );
+    let source_digest = format!("{:x}", Sha256::digest(source));
+    let current = format!(
+        "{{\"_meta\":{{\"generator\":\"HCT-INVENTORY\",\"inputs\":[{{\"path\":\"source.txt\",\"sha256\":\"{source_digest}\"}}]}}}}"
+    );
+    repo.write("docs/generated/current-input.json", current.as_bytes());
+    repo.write(
+        "schemas/broken.schema.json",
+        br#"{"$schema":"https://json-schema.org/draft/2020-12/schema","$ref":"missing.schema.json"}"#,
+    );
+    repo.commit();
+    let catalog = catalog(&repo);
+    assert!(has_code(&catalog, "generated_surface_missing_provenance"));
+    assert!(has_code(&catalog, "generated_output_drift"));
+    assert!(has_code(&catalog, "unregistered_generated_surface"));
+    assert!(has_code(&catalog, "generated_output_regeneration_required"));
+    assert!(has_code(&catalog, "invalid_json_reference_source"));
+    let catalog_json = String::from_utf8(catalog.to_canonical_json().unwrap()).unwrap();
+    assert!(!catalog_json.contains("SECRET_CANARY"));
+    assert!(
+        catalog
+            .generated_surfaces()
+            .entries()
+            .iter()
+            .any(|entry| entry.relative_path == "docs/generated/stale.json")
+    );
+}
+
+#[test]
+fn inventory_build_is_zero_write_across_worktree_and_git() {
+    let repo = TestRepo::new("zero-write");
+    repo.commit();
+    let before = snapshot(&repo.root);
+    let _catalog = catalog(&repo);
+    let after = snapshot(&repo.root);
+    assert_eq!(before, after);
+}

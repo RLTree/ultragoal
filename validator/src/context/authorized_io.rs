@@ -190,14 +190,37 @@ fn open_anchored(
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
+pub(crate) fn open_anchored_read(
+    worktree: &Path,
+    recorded_worktree_identity: Option<(u64, u64)>,
+    target: &Path,
+) -> Result<File, ContextError> {
+    open_anchored(worktree, recorded_worktree_identity, target, false, false)
+}
+
 #[cfg(any(target_os = "macos", target_os = "linux"))]
-fn open_directory_at(
+pub(crate) fn open_directory_at(
     directory: &File,
     name: &std::ffi::OsStr,
     target: &Path,
 ) -> Result<File, ContextError> {
     let name = c_name(name, target)?;
     let flags = O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC;
+    let descriptor = unsafe { openat(directory.as_raw_fd(), name.as_ptr(), flags) };
+    if descriptor < 0 {
+        return Err(io_error(target, std::io::Error::last_os_error()));
+    }
+    Ok(unsafe { File::from_raw_fd(descriptor) })
+}
+
+#[cfg(any(target_os = "macos", target_os = "linux"))]
+pub(crate) fn open_regular_at(
+    directory: &File,
+    name: &std::ffi::OsStr,
+    target: &Path,
+) -> Result<File, ContextError> {
+    let name = c_name(name, target)?;
+    let flags = O_RDONLY | O_NOFOLLOW | O_CLOEXEC;
     let descriptor = unsafe { openat(directory.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return Err(io_error(target, std::io::Error::last_os_error()));

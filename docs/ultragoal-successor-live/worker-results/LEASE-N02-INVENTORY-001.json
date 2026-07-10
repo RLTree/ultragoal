@@ -1,0 +1,222 @@
+{
+  "worker": "/root/n01_context_worker",
+  "lease_id": "LEASE-N02-INVENTORY-001",
+  "context_id": "sha256:383a73c729a8757efa6abec9c0f9cc580b56fc3fae82446502838bba8711b90a",
+  "candidate_identity": {
+    "head_commit": "697b179f7b19641ade8e512753ad471269d75328",
+    "head_tree": "cdc0ac9df099e58dcad359f1bdb3bbec036943d9",
+    "head_unchanged": true,
+    "worktree_state": "leased inventory additions untracked; user .DS_Store preserved"
+  },
+  "base_state": {
+    "head_commit": "697b179f7b19641ade8e512753ad471269d75328",
+    "head_tree": "cdc0ac9df099e58dcad359f1bdb3bbec036943d9",
+    "pre_existing_user_dirt": [
+      ".DS_Store"
+    ]
+  },
+  "final_state": {
+    "head_commit": "697b179f7b19641ade8e512753ad471269d75328",
+    "head_tree": "cdc0ac9df099e58dcad359f1bdb3bbec036943d9",
+    "pre_existing_user_dirt_preserved": [
+      ".DS_Store"
+    ],
+    "leased_rust_lines": 1910,
+    "maximum_file_lines": 284,
+    "files_over_300_lines": 0
+  },
+  "touched_paths": [
+    "validator/src/inventory/builder.rs",
+    "validator/src/inventory/digest.rs",
+    "validator/src/inventory/discovery.rs",
+    "validator/src/inventory/fs.rs",
+    "validator/src/inventory/legacy.rs",
+    "validator/src/inventory/mod.rs",
+    "validator/src/inventory/projection.rs",
+    "validator/src/inventory/registry.rs",
+    "validator/src/inventory/types.rs",
+    "validator/src/inventory/validate.rs",
+    "validator/tests/inventory_contract.rs",
+    "validator/tests/inventory_contract/fixtures.rs",
+    "validator/tests/inventory_contract/support.rs"
+  ],
+  "touched_semantics": [
+    "HCT-INVENTORY",
+    "InventoryBuilder",
+    "AuthorityCatalog",
+    "GeneratedSurfaceIndex",
+    "InventoryEntry",
+    "InventoryFinding",
+    "ProjectionComparison",
+    "canonical registry loading",
+    "required placeholder reconciliation",
+    "active and legacy component discovery",
+    "source-to-projection drift detection",
+    "parallel-authority detection",
+    "migration-route disposition recognition"
+  ],
+  "generated_outputs": [],
+  "fixtures": [
+    "current_live_source_covers_contract_registries_and_component_topology",
+    "deterministic_repeat_and_semantically_equal_projection",
+    "omitted_duplicate_and_renamed_components_are_findings",
+    "stale_or_tampered_projection_is_rejected",
+    "symlink_escape_is_a_causal_finding",
+    "generated_and_schema_drift_are_discovered",
+    "inventory_build_is_zero_write_across_worktree_and_git"
+  ],
+  "effects": [
+    {
+      "class": "workspace-write",
+      "scope": "leased source and test files"
+    },
+    {
+      "class": "workspace-write",
+      "scope": "normal Cargo target artifacts and isolated temporary fixtures"
+    },
+    {
+      "class": "network",
+      "performed": false
+    },
+    {
+      "class": "external-write",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-PRODUCT-004",
+    "REQ-PLUGIN-004",
+    "REQ-PLUGIN-006",
+    "REQ-CLI-002",
+    "REQ-PROOF-001",
+    "REQ-SUPPLY-001",
+    "REQ-MAINT-001",
+    "REQ-MAINT-003",
+    "REQ-MAINT-005",
+    "REQ-MAINT-006",
+    "HCT-INVENTORY implementation contract",
+    "HCT-INVENTORY negative proof requirement"
+  ],
+  "dependency_nodes": [
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "registry authority",
+      "rationale": "Loads counts and rows from the adopted machine registries, validates declared counts, and derives stable entries rather than hard-coding catalog counts."
+    },
+    {
+      "area": "component topology",
+      "rationale": "Covers 24 surfaces, 12 tools, 14 claims, 105 requirements, ten command groups, eight canonical skills, and six required read-only agent roles."
+    },
+    {
+      "area": "live discovery",
+      "rationale": "Inventories plugin, skills, current agents, schemas, fixtures, and generated surfaces with path, digest, mode, status, ownership, provenance, references, and authority state."
+    },
+    {
+      "area": "projection treatment",
+      "rationale": "Treats .codex-plugin/plugin.json and generated trees as projections, reports missing provenance and drift, and prevents projections from authoring the canonical catalog."
+    },
+    {
+      "area": "legacy authority",
+      "rationale": "Discovers historical contract trees, plugin-manifest-draft, LANE_REGISTRY, agents/custom-agents, lane, gate, model, command, finalizer, final-packet, and finalization surfaces."
+    },
+    {
+      "area": "validation",
+      "rationale": "Detects duplicate IDs and paths, omitted or renamed requirements, unresolved semantic/schema references, symlink escape, stale projections, and parallel authority."
+    },
+    {
+      "area": "migration readiness",
+      "rationale": "Parallel-authority findings can be reconciled by a future explicit root-owned non-authoritative migration disposition."
+    },
+    {
+      "area": "purity",
+      "rationale": "Inventory consumes one immutable LiveContext, revalidates before and after discovery, and passes an exact worktree/.git zero-write snapshot."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "rustfmt --edition 2024 --check validator/src/inventory/*.rs validator/tests/inventory_contract.rs validator/tests/inventory_contract/*.rs",
+      "result": "pass"
+    },
+    {
+      "command": "cargo check --manifest-path validator/Cargo.toml --all-targets",
+      "result": "pass"
+    },
+    {
+      "command": "cargo test --manifest-path validator/Cargo.toml --test inventory_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "7 passed; 0 failed"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "validator/src/inventory/** and validator/tests/inventory_contract/**",
+      "digest": "103d0a20775835e05e81f813a55f732c1cf55e8e3d91d9cbd2182d6e1aa9e3aa",
+      "digest_method": "SHA-256 of sorted per-file shasum lines"
+    },
+    {
+      "path": "validator/src/inventory/builder.rs",
+      "sha256": "5be88d4d8b1f549b2d35d9d84615af513f89c30affef325bd87dc364b7229f17"
+    },
+    {
+      "path": "validator/src/inventory/registry.rs",
+      "sha256": "8a8480c9fe6dd905c64b68a87ddd477f60168918fe21e25e69645cd11dc78ecc"
+    },
+    {
+      "path": "validator/src/inventory/discovery.rs",
+      "sha256": "81bb1ccf2b4eb741f92c4957f68598bad38aeeeba47d934a2e1b7e7d5e359d22"
+    },
+    {
+      "path": "validator/src/inventory/validate.rs",
+      "sha256": "b0b4b7dedeb6f9d13645fb1f74ede90ecd2bcfccbeb686ebe91c33822dcda0d8"
+    },
+    {
+      "path": "validator/tests/inventory_contract.rs",
+      "sha256": "0905d0ef26041acf6b9c02f61c219f2d28d7ea84002d16bf600285a0ea9b801e"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "integration-required",
+      "finding": "validator/src/lib.rs intentionally does not expose inventory; root integration is required."
+    },
+    {
+      "severity": "claim-boundary",
+      "finding": "The live baseline is inventoried with honest missing, legacy, projection-drift, and parallel-authority findings; this worker did not reconcile them away."
+    },
+    {
+      "severity": "proof-boundary",
+      "finding": "Root and independent review must reproduce the catalog and accept or rework N02 before downstream use."
+    }
+  ],
+  "unresolved_dependencies": [
+    "Root integration of pub mod inventory.",
+    "Root-owned generated canonical inventory and command/effect projections.",
+    "Root-owned migration routing registry adoption.",
+    "Independent live-source reconciliation and acceptance."
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/lib.rs",
+      "request": "Expose the module with `pub mod inventory;` after independent review."
+    },
+    {
+      "path": "generated authority",
+      "request": "Generate canonical projections from accepted AuthorityCatalog through root-owned output paths."
+    },
+    {
+      "path": "migration authority",
+      "request": "Adopt explicit dispositions for legacy and parallel surfaces rather than suppressing findings."
+    }
+  ],
+  "limitations": [
+    "The module was tested through a path-mounted integration boundary because validator/src/lib.rs is root-owned.",
+    "Legacy model scanning is bounded to UTF-8 files no larger than 2 MiB and the known GPT-5.5 assumption.",
+    "Cargo metadata is not executed; package/component identity comes from confined filesystem and adopted registries.",
+    "Schema references are resolved only when their existing canonical target remains under the worktree root.",
+    "No generated catalog was written because generated authority is root-owned.",
+    "No source, package, release, readiness, or completion claim was reconciled."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

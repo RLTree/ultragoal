@@ -10,6 +10,7 @@ const PUBLIC_CONFIGURATION_KEYS: &[&str] = &[
     "output_format",
     "plugin_version",
     "profile",
+    "ultragoal.adopted_handoff_manifest_sha256",
 ];
 
 fn secret_like(value: &str) -> bool {

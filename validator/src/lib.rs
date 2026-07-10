@@ -1,3 +1,4 @@
+mod api_witness;
 mod archive;
 mod argument_parser;
 mod audit;
@@ -9,6 +10,7 @@ mod command_run;
 pub mod context;
 mod contract_check_ids;
 mod digest;
+pub mod inventory;
 mod json_boundary;
 mod output_path;
 mod package;

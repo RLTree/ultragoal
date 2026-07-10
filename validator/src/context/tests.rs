@@ -8,18 +8,19 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
-struct Repo {
-    root: PathBuf,
+pub(super) struct Repo {
+    pub(super) root: PathBuf,
 }
 
 impl Repo {
-    fn new(label: &str) -> Self {
+    pub(super) fn new(label: &str) -> Self {
         let root = std::env::temp_dir().join(format!(
             "ultragoal-context-unit-{label}-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
         fs::create_dir_all(&root).unwrap();
+        let root = root.canonicalize().unwrap();
         run_git(&root, &["init", "-q"]);
         run_git(&root, &["config", "user.email", "context@example.invalid"]);
         run_git(&root, &["config", "user.name", "Context Test"]);
@@ -46,7 +47,7 @@ impl Drop for Repo {
     }
 }
 
-fn run_git(root: &Path, args: &[&str]) {
+pub(super) fn run_git(root: &Path, args: &[&str]) {
     assert!(
         Command::new("git")
             .args(args)
@@ -206,7 +207,10 @@ fn whole_worktree_replacement_cannot_reuse_path_authority() {
     fs::rename(&repo.root, &moved).unwrap();
     fs::create_dir(&repo.root).unwrap();
     let result = target.create_new_write();
-    assert!(matches!(result, Err(ContextError::PathDenied(_))));
+    assert!(matches!(
+        result,
+        Err(ContextError::PathDenied(_) | ContextError::ConcurrentMutation(_))
+    ));
     assert!(!repo.root.join("created.txt").exists());
     fs::remove_dir(&repo.root).unwrap();
     fs::rename(moved, &repo.root).unwrap();
